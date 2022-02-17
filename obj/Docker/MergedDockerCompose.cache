@@ -1,0 +1,30 @@
+services:
+  masa.auth.admin:
+    build:
+      context: C:\Users\mayue\Desktop\MASA.Auth
+      dockerfile: src/Web/MASA.Auth.Admin/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: masaauthadmin
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+  masa.auth.service.order:
+    build:
+      context: C:\Users\mayue\Desktop\MASA.Auth
+      dockerfile: src/Services/MASA.Auth.Service/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: masaauthserviceorder
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+version: '3.4'

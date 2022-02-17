@@ -1,0 +1,84 @@
+services:
+  masa.auth.admin:
+    build:
+      context: C:\Users\mayue\Desktop\MASA.Auth
+      dockerfile: src/Web/MASA.Auth.Admin/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: MASA.Auth.Admin
+      target: base
+    container_name: MASA.Auth.Admin
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: masaauthadmin:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net6.0/MASA.Auth.Admin.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - target: 80
+    - target: 443
+    tty: true
+    volumes:
+    - C:\Users\mayue\Desktop\MASA.Auth\src\Web\MASA.Auth.Admin:/app:rw
+    - C:\Users\mayue\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\mayue\.nuget\packages:/root/.nuget/packages:ro
+    - C:\Users\mayue\Desktop\MASA.Auth:/src:rw
+  masa.auth.rolepermission:
+    build:
+      context: C:\Users\mayue\Desktop\MASA.Auth
+      dockerfile: src/Services/MASA.Auth.RolePermission.Service/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: MASA.Auth.RolePermission
+      target: base
+    container_name: MASA.Auth.RolePermission
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: masaauthrolepermission:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net6.0/MASA.Auth.RolePermission.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - target: 80
+    - target: 443
+    tty: true
+    volumes:
+    - C:\Users\mayue\Desktop\MASA.Auth\src\Services\MASA.Auth.RolePermission.Service:/app:rw
+    - C:\Users\mayue\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\mayue\.nuget\packages:/root/.nuget/packages:ro
+    - C:\Users\mayue\Desktop\MASA.Auth:/src:rw
+  masa.auth.service.order:
+    build:
+      context: C:\Users\mayue\Desktop\MASA.Auth
+      dockerfile: src/Services/MASA.Auth.Service/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: masaauthserviceorder
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+version: '3.4'

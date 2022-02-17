@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+
+  redis:
+    image: redis:alpine
+
+  masa.admin.database:
+     image: mcr.microsoft.com/mssql/server:2019-latest
+     ports:
+       - "1433:1433"
+     environment:
+      - SA_PASSWORD=P@ssw0rd
+      - ACCEPT_EULA=Y
+
+  masa.auth.admin:
+    image: ${DOCKER_REGISTRY-}masaauthadmin
+    build:
+      context: .
+      dockerfile: src/Web/MASA.Auth.Admin/Dockerfile
+
+  masa.auth.rolepermission:
+    image: ${DOCKER_REGISTRY-}masaauthrolepermission
+    build:
+      context: .
+      dockerfile: src/Services/MASA.Auth.RolePermission.Service/Dockerfile
+
+  
+  dapr-placement:
+    image: "daprio/dapr:1.5.1"
