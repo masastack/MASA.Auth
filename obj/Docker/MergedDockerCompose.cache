@@ -1,7 +1,26 @@
 services:
+  dapr-placement:
+    command:
+    - ./placement
+    - -port
+    - '50000'
+    - -log-level
+    - debug
+    image: daprio/dapr:1.5.1
+    ports:
+    - published: 50000
+      target: 50000
+  masa.admin.database:
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: P@ssw0rd
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+    - published: 1433
+      target: 1433
   masa.auth.admin:
     build:
-      context: C:\Users\mayue\Desktop\MASA.Auth
+      context: D:\Source\Repos\MASA.Auth-v2
       dockerfile: src/Web/MASA.Auth.Admin/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Development
@@ -13,18 +32,36 @@ services:
     volumes:
     - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
     - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
-  masa.auth.service.order:
+  masa.auth.rolepermission:
     build:
-      context: C:\Users\mayue\Desktop\MASA.Auth
-      dockerfile: src/Services/MASA.Auth.Service/Dockerfile
+      context: D:\Source\Repos\MASA.Auth-v2
+      dockerfile: src/Services/MASA.Auth.RolePermission.Service/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: https://+:443;http://+:80
-    image: masaauthserviceorder
+    image: masaauthrolepermission
     ports:
     - target: 80
     - target: 443
     volumes:
     - C:\Users\mayue\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
     - C:\Users\mayue\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+  masa.auth.rolepermission.dapr:
+    command:
+    - ./daprd
+    - -app-id
+    - masa-auth-services-rolepermission
+    - -app-port
+    - '80'
+    - -components-path
+    - /components
+    depends_on:
+      masa.auth.rolepermission:
+        condition: service_started
+    image: daprio/daprd:1.5.1
+    network_mode: service:masa.auth.rolepermission
+    volumes:
+    - D:\Source\Repos\MASA.Auth-v2\dapr\components:/components:rw
+  redis:
+    image: redis:alpine
 version: '3.4'
