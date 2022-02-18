@@ -51,10 +51,10 @@ var app = builder.Services
     .AddDomainEventBus(options =>
     {
         options.UseEventBus()
-               .UseUoW<ShopDbContext>(dbOptions => dbOptions.UseSqlite("DataSource=:memory:"))
+               .UseUoW<RolePermissionDbContext>(dbOptions => dbOptions.UseSqlServer("server=.;uid=sa;pwd=P@ssw0rd;database=auth_v2"))
                .UseDaprEventBus<IntegrationEventLogService>()
-               .UseEventLog<ShopDbContext>()
-               .UseRepository<ShopDbContext>();
+               .UseEventLog<RolePermissionDbContext>()
+               .UseRepository<RolePermissionDbContext>();
     })
     .AddServices(builder);
 

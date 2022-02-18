@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Services/MASA.Auth.RolePermission.Service/MASA.Auth.RolePermission.csproj", "src/Services/MASA.Auth.RolePermission.Service/"]
-RUN dotnet restore "src/Services/MASA.Auth.RolePermission.Service/MASA.Auth.RolePermission.csproj"
+COPY ["src/Services/MASA.Auth.RolePermission/MASA.Auth.RolePermission.csproj", "src/Services/MASA.Auth.RolePermission/"]
+RUN dotnet restore "src/Services/MASA.Auth.RolePermission/MASA.Auth.RolePermission.csproj"
 COPY . .
-WORKDIR "/src/src/Services/MASA.Auth.RolePermission.Service"
+WORKDIR "/src/src/Services/MASA.Auth.RolePermission"
 RUN dotnet build "MASA.Auth.RolePermission.csproj" -c Release -o /app/build
 
 FROM build AS publish

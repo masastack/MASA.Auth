@@ -4,8 +4,10 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
-        builder.ToTable("permissions", RolePermissionDbContext.DEFAULT_SCHEMA);
+        builder.ToTable(nameof(Permission), RolePermissionDbContext.DEFAULT_SCHEMA);
         builder.HasKey(c => c.Id);
+
+        builder.HasMany(a => a.PermissionApiItems).WithOne(p => p.Permission);
     }
 }
 

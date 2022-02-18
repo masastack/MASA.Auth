@@ -4,8 +4,10 @@ public class RolePermissionEntityTypeConfiguration : IEntityTypeConfiguration<Do
 {
     public void Configure(EntityTypeBuilder<Domain.Aggregate.RolePermission> builder)
     {
-        builder.ToTable("role_permissions", RolePermissionDbContext.DEFAULT_SCHEMA);
+        builder.ToTable(nameof(RolePermission), RolePermissionDbContext.DEFAULT_SCHEMA);
         builder.HasKey(c => c.Id);
+
+        builder.HasOne(a => a.Permission).WithMany().HasForeignKey(x => x.PermissionId);
     }
 }
 

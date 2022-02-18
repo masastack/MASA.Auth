@@ -1,6 +1,4 @@
-﻿using MASA.Auth.Contracts.Order.Model;
-
-namespace MASA.Auth.Caller.Callers
+﻿namespace MASA.Auth.Caller.Callers
 {
     public class OrderCaller : HttpClientCallerBase
     {
