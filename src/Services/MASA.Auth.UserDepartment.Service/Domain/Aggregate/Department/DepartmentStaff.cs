@@ -1,8 +1,8 @@
 ﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
-    public class StaffDepartment : AuditAggregateRoot<Guid, Guid>
+    public class DepartmentStaff : AuditAggregateRoot<Guid, Guid>
     {
-        public Guid UserId { get; set; }
+        public Guid StaffId { get; set; }
 
         public Guid DepartmentId { get; set; }
     }

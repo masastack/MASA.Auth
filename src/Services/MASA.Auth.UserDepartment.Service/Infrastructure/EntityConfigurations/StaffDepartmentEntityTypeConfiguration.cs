@@ -2,9 +2,9 @@
 
 namespace MASA.Auth.RolePermission.Infrastructure.EntityConfigurations
 {
-    public class StaffDepartmentEntityTypeConfiguration : IEntityTypeConfiguration<StaffDepartment>
+    public class StaffDepartmentEntityTypeConfiguration : IEntityTypeConfiguration<DepartmentStaff>
     {
-        public void Configure(EntityTypeBuilder<StaffDepartment> builder)
+        public void Configure(EntityTypeBuilder<DepartmentStaff> builder)
         {
             builder.ToTable("staffDepartments", UserDepartmentDbContext.DEFAULT_SCHEMA);
             builder.HasKey(c => c.Id);
