@@ -1,4 +1,4 @@
-namespace MASA.Auth.UserDepartment.Domain.Aggregate.Users;
+namespace MASA.Auth.UserDepartment.Domain.Aggregate;
 
 public class User : AuditAggregateRoot<Guid, Guid>
 {

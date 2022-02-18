@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Platform
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     public class Platform : AuditAggregateRoot<Guid, Guid>
     {
@@ -19,6 +19,14 @@
         public VerifyType VerifyType { get; set; }
 
         public IdentificationType IdentificationType { get; set; }
+
+        private Platform()
+        {
+            Name = "";
+            Code = "";
+            ClientId = "";
+            ClientSecret = "";
+        }
 
         public Platform(string name, string code, string clientId, string clientSecret)
         {

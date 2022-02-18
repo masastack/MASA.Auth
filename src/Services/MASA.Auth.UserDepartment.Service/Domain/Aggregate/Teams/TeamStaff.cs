@@ -1,6 +1,6 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Teams
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
-    public class TeamStaff
+    public class TeamStaff : AuditAggregateRoot<Guid, Guid>
     {
         public Guid TeamId { get; set; }
         

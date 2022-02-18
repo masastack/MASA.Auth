@@ -1,6 +1,4 @@
-﻿using MASA.Auth.UserDepartment.Domain.Aggregate.Platform;
-
-namespace MASA.Auth.UserDepartment.Domain.Aggregate.Staff
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     /// <summary>
     /// Staff
@@ -30,6 +28,11 @@ namespace MASA.Auth.UserDepartment.Domain.Aggregate.Staff
         /// unit yuan
         /// </summary>
         public int Salary { get; set; }
+
+        private Staff()
+        {
+            Account = "";
+        }
 
         public Staff(string account) => Account = account;
     }

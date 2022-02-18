@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Department
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     public class Department : AuditAggregateRoot<Guid, Guid>
     {
@@ -9,6 +9,11 @@
         public Guid? ParentId { get; set; }
 
         public string? Describe { get; set; }
+
+        private Department() 
+        {
+            Name = "";
+        }
 
         public Department(string name, int sort) => (Name, Sort) = (name, sort);
     }
