@@ -1,6 +1,4 @@
-﻿using MASA.Auth.UserDepartment.Domain.Aggregate.Orders;
-
-namespace MASA.Auth.UserDepartment.Infrastructure
+﻿namespace MASA.Auth.UserDepartment.Infrastructure
 {
     public class ShopDbContext : IntegrationEventLogContext
     {
