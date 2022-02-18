@@ -1,0 +1,48 @@
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Platform
+{
+    public class Platform : AuditAggregateRoot<Guid, Guid>
+    {
+        public string Name { get; set; }
+
+        public string Code { get; set; }
+
+        public string ClientId { get; set; }
+
+        public string ClientSecret { get; set; }
+
+        public string? Url { get; set; }
+
+        public string? Icon { get; set; }
+
+        public PlatformType PlatformType { get; set; }
+
+        public VerifyType VerifyType { get; set; }
+
+        public IdentificationType IdentificationType { get; set; }
+
+        public Platform(string name, string code, string clientId, string clientSecret)
+        {
+            Name = name;
+            Code = code;
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+        }
+    }
+
+    public enum PlatformType
+    {
+        ThirdParty,
+        Private
+    }
+
+    public enum IdentificationType
+    {
+        MobilePhone,
+        Email
+    }
+
+    public enum VerifyType
+    {
+        OAuth
+    }
+}
