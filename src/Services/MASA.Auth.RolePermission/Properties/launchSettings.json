@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "MASA.Auth.RolePermission.Services": {
+    "MASA.Auth.RolePermission": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

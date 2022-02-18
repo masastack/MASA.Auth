@@ -4,7 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.ToTable("roles", RolePermissionDbContext.DEFAULT_SCHEMA);
+            builder.ToTable(nameof(Role), RolePermissionDbContext.DEFAULT_SCHEMA);
             builder.HasKey(c => c.Id);
 
             builder.HasMany(a => a.RolePermissions).WithOne(p => p.Role);

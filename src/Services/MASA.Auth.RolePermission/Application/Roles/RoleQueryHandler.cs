@@ -1,17 +1,13 @@
-﻿namespace MASA.Auth.RolePermission.Service.Application.Orders
+﻿using MASA.Auth.RolePermission.Domain.RoleRepository;
+
+namespace MASA.Auth.RolePermission.Application.Orders
 {
     public class RoleQueryHandler
     {
-        readonly IOrderRepository _orderRepository;
-        public RoleQueryHandler(IOrderRepository orderRepository)
+        readonly IRoleRepository _roleRepository;
+        public RoleQueryHandler(IRoleRepository roleRepository)
         {
-            _orderRepository = orderRepository;
-        }
-
-        [EventHandler]
-        public async Task OrderListHandleAsync(OrderQuery query)
-        {
-            query.Result = await _orderRepository.GetListAsync();
+            _roleRepository = roleRepository;
         }
     }
 }
