@@ -7,7 +7,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.ToTable(nameof(Permission), RolePermissionDbContext.DEFAULT_SCHEMA);
         builder.HasKey(c => c.Id);
 
-        builder.HasMany(a => a.PermissionApiItems).WithOne(p => p.Permission);
+        builder.HasMany(a => a.PermissionItems).WithOne(p => p.Permission);
     }
 }
 
