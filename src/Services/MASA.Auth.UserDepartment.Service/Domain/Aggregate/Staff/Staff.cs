@@ -1,6 +1,4 @@
-﻿using MASA.Auth.UserDepartment.Domain.Aggregate.Platform;
-
-namespace MASA.Auth.UserDepartment.Domain.Aggregate.Staff
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     /// <summary>
     /// Staff

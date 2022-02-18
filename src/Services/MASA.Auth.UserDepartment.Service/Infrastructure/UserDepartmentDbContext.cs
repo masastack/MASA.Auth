@@ -1,10 +1,10 @@
 ﻿namespace MASA.Auth.UserDepartment.Infrastructure
 {
-    public class ShopDbContext : IntegrationEventLogContext
+    public class UserDepartmentDbContext : IntegrationEventLogContext
     {
-        public DbSet<Order> Orders { get; set; } = default!;
+        public const string DEFAULT_SCHEMA = "user";
 
-        public ShopDbContext(MasaDbContextOptions<ShopDbContext> options) : base(options)
+        public UserDepartmentDbContext(MasaDbContextOptions<UserDepartmentDbContext> options) : base(options)
         {
 
         }

@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Teams
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     public class Team : AuditAggregateRoot<Guid, Guid>
     {

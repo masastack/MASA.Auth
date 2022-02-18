@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Staff
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     public class StaffPermission : AuditAggregateRoot<Guid, Guid>
     {

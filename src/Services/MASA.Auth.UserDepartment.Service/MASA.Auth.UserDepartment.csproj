@@ -32,5 +32,6 @@
 	
 	<ItemGroup>
 	  <Folder Include="Application\User\" />
+	  <Folder Include="Infrastructure\Repositories\" />
 	</ItemGroup>
 </Project>

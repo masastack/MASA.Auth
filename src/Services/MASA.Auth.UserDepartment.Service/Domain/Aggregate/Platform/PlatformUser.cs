@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Platform
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     public class PlatformUser : AuditAggregateRoot<Guid, Guid>
     {

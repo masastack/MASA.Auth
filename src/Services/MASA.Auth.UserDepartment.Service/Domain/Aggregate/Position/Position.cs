@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate.Position
+﻿namespace MASA.Auth.UserDepartment.Domain.Aggregate
 {
     public class Position : AuditAggregateRoot<Guid, Guid>
     {

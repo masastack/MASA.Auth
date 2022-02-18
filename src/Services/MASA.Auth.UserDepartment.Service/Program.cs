@@ -54,10 +54,10 @@ var app = builder.Services
     .AddDomainEventBus(options =>
     {
         options.UseEventBus()
-               .UseUoW<ShopDbContext>(dbOptions => dbOptions.UseSqlite("DataSource=:memory:"))
+               .UseUoW<UserDepartmentDbContext>(dbOptions => dbOptions.UseSqlite("DataSource=:memory:"))
                .UseDaprEventBus<IntegrationEventLogService>()
-               .UseEventLog<ShopDbContext>()
-               .UseRepository<ShopDbContext>();
+               .UseEventLog<UserDepartmentDbContext>()
+               .UseRepository<UserDepartmentDbContext>();
     })
     .AddServices(builder);
 
