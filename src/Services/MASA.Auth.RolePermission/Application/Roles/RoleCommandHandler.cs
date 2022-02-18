@@ -1,10 +1,10 @@
 ﻿namespace MASA.Auth.RolePermission.Service.Application.Orders
 {
-    public class OrderCommandHandler
+    public class RoleCommandHandler
     {
         private readonly OrderDomainService _domainService;
 
-        public OrderCommandHandler(OrderDomainService domainService)
+        public RoleCommandHandler(OrderDomainService domainService)
         {
             _domainService = domainService;
         }

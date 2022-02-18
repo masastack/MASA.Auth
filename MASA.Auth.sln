@@ -27,9 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F17CC0A5-E77B-48A8-907C-90CB0020F869}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.RolePermission", "src\Services\MASA.Auth.RolePermission.Service\MASA.Auth.RolePermission.csproj", "{2688169C-2C69-4A54-86BF-4B8E3F8F7EC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.RolePermission", "src\Services\MASA.Auth.RolePermission\MASA.Auth.RolePermission.csproj", "{2688169C-2C69-4A54-86BF-4B8E3F8F7EC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.RolePermission", "src\Contracts\MASA.Auth.RolePermission.Contracts.Order\MASA.Auth.RolePermission.csproj", "{593824F2-6526-484A-95C2-DD61B38EE6D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.RolePermission", "src\Contracts\MASA.Auth.RolePermission\MASA.Auth.RolePermission.csproj", "{593824F2-6526-484A-95C2-DD61B38EE6D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

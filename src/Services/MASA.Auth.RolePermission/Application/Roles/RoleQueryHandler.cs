@@ -1,9 +1,9 @@
 ﻿namespace MASA.Auth.RolePermission.Service.Application.Orders
 {
-    public class OrderQueryHandler
+    public class RoleQueryHandler
     {
         readonly IOrderRepository _orderRepository;
-        public OrderQueryHandler(IOrderRepository orderRepository)
+        public RoleQueryHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
