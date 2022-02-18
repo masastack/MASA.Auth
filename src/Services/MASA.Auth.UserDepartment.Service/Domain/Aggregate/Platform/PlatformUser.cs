@@ -12,6 +12,11 @@
 
         public Guid PlatformId { get; set; }
 
+        private PlatformUser()
+        {
+            Account = "";
+        }
+
         public PlatformUser(string account) => Account = account;
     }
 

@@ -20,6 +20,14 @@
 
         public IdentificationType IdentificationType { get; set; }
 
+        private Platform()
+        {
+            Name = "";
+            Code = "";
+            ClientId = "";
+            ClientSecret = "";
+        }
+
         public Platform(string name, string code, string clientId, string clientSecret)
         {
             Name = name;

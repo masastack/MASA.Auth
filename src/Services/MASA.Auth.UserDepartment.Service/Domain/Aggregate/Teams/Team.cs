@@ -8,6 +8,11 @@
 
         public string? Describe { get; set; }
 
+        public Team()
+        {
+            Name = "";
+        }
+
         public Team(string name)
         {
             Name = name;

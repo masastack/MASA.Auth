@@ -6,6 +6,12 @@
 
         public string Code { get; set; }
 
+        public Position()
+        {
+            Name = "";
+            Code = "";
+        }
+
         public Position(string name, string code)
         {
             Name = name;

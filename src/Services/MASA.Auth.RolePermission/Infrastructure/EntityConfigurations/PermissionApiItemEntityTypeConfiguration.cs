@@ -6,8 +6,6 @@ public class PermissionApiItemEntityTypeConfiguration : IEntityTypeConfiguration
     {
         builder.ToTable(nameof(PermissionApiItem), RolePermissionDbContext.DEFAULT_SCHEMA);
         builder.HasKey(c => c.Id);
-
-
     }
 }
 

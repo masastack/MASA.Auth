@@ -17,3 +17,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.OpenApi.Models;
 global using MASA.Auth.UserDepartment.Domain.Aggregate;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using System.Reflection;

@@ -29,6 +29,11 @@
         /// </summary>
         public int Salary { get; set; }
 
+        private Staff()
+        {
+            Account = "";
+        }
+
         public Staff(string account) => Account = account;
     }
 }

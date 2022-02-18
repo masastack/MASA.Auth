@@ -12,6 +12,7 @@
         protected override void OnModelCreatingExecuting(ModelBuilder builder)
         {
             base.OnModelCreatingExecuting(builder);
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
