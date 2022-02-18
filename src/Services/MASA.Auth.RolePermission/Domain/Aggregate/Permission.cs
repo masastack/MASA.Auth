@@ -2,6 +2,8 @@
 
 public class Permission : Entity<int>
 {
+    public string AppId { get; set; } = "";
+
     public string Name { get; set; } = "";
 
     public string Code { get; set; } = "";
@@ -16,13 +18,9 @@ public class Permission : Entity<int>
 
     public PermissionType Type { get; set; }
 
-    public int? ParentId { get; set; }
+    private List<PermissionItem> permissionItems = new();
 
-    public Permission? ParentPermission { get; set; }
-
-    private List<PermissionApiItem> permissionApiItems = new();
-
-    public IReadOnlyCollection<PermissionApiItem> PermissionApiItems => permissionApiItems;
+    public IReadOnlyCollection<PermissionItem> PermissionItems => permissionItems;
 
 }
 
