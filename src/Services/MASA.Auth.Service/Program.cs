@@ -1,7 +1,4 @@
-﻿using MASA.Auth.Service.Infrastructure;
-using MASA.Auth.Service.Infrastructure.Middleware;
-
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -54,10 +51,10 @@ var app = builder.Services
     .AddDomainEventBus(options =>
     {
         options.UseEventBus()
-               .UseUoW<UserDepartmentDbContext>(dbOptions => dbOptions.UseSqlite("DataSource=:memory:"))
+               .UseUoW<AuthDbContext>(dbOptions => dbOptions.UseSqlServer("server=masa.admin.database;uid=sa;pwd=P@ssw0rd;database=masa_auth"))
                .UseDaprEventBus<IntegrationEventLogService>()
-               .UseEventLog<UserDepartmentDbContext>()
-               .UseRepository<UserDepartmentDbContext>();
+               .UseEventLog<AuthDbContext>()
+               .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
 

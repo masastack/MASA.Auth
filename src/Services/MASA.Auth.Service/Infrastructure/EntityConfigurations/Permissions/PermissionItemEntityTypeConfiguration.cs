@@ -1,10 +1,10 @@
-﻿namespaceMASA.Auth.Service.Infrastructure.EntityConfigurations;
+﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations;
 
 public class PermissionItemEntityTypeConfiguration : IEntityTypeConfiguration<PermissionItem>
 {
     public void Configure(EntityTypeBuilder<PermissionItem> builder)
     {
-        builder.ToTable(nameof(PermissionItem), RolePermissionDbContext.DEFAULT_SCHEMA);
+        builder.ToTable(nameof(PermissionItem), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(c => c.Id);
 
 
