@@ -44,6 +44,8 @@
 	  <Folder Include="Application\Roles\Commands\" />
 	  <Folder Include="Application\Roles\Queries\" />
 	  <Folder Include="Application\User\" />
-	  <Folder Include="Domain\Aggregate\SSO\" />
+	  <Folder Include="Domain\Aggregates\SSO\" />
+	  <Folder Include="Domain\Repositories\" />
+	  <Folder Include="Infrastructure\Repositories\" />
 	</ItemGroup>
 </Project>

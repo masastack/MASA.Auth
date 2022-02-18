@@ -1,10 +1,12 @@
 ﻿namespace MASA.Auth.Service.Infrastructure;
 
-public class RolePermissionDbContext : IntegrationEventLogContext
+public class AuthDbContext : IntegrationEventLogContext
 {
-    public const string DEFAULT_SCHEMA = "role";
+    public const string ROLE_SCHEMA = "role";
+    public const string SUBJECT_SCHEMA = "subject";
+    public const string SSO_SCHEMA = "sso";
 
-    public RolePermissionDbContext(MasaDbContextOptions<RolePermissionDbContext> options) : base(options)
+    public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)
     {
 
     }
