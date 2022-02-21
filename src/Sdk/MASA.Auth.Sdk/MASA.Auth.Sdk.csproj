@@ -1,9 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Response\Permissions\" />
+		<Folder Include="Response\Subjects\" />
+		<Folder Include="Response\SSO\" />
+		<Folder Include="Request\Permissions\" />
+		<Folder Include="Request\SSO\" />
+		<Folder Include="Request\Subjects\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="MASA.Utils.Caller.HttpClient" Version="0.0.1705937119" />
+	</ItemGroup>
 
 </Project>
