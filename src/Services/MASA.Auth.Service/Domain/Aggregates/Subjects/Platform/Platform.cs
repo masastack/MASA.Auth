@@ -2,23 +2,23 @@
 {
     public class Platform : AuditAggregateRoot<Guid, Guid>
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public string Code { get; set; }
+        public string Code { get; private set; }
 
-        public string ClientId { get; set; }
+        public string ClientId { get; private set; }
 
-        public string ClientSecret { get; set; }
+        public string ClientSecret { get; private set; }
 
-        public string? Url { get; set; }
+        public string? Url { get; private set; }
 
-        public string? Icon { get; set; }
+        public string? Icon { get; private set; }
 
-        public PlatformType PlatformType { get; set; }
+        public PlatformType PlatformType { get; private set; }
 
-        public VerifyType VerifyType { get; set; }
+        public VerifyType VerifyType { get; private set; }
 
-        public IdentificationType IdentificationType { get; set; }
+        public IdentificationType IdentificationType { get; private set; }
 
         private Platform()
         {
@@ -28,12 +28,17 @@
             ClientSecret = "";
         }
 
-        public Platform(string name, string code, string clientId, string clientSecret)
+        public Platform(string name, string code, string clientId, string clientSecret, string? url, string? icon, PlatformType platformType, VerifyType verifyType, IdentificationType identificationType)
         {
             Name = name;
             Code = code;
             ClientId = clientId;
             ClientSecret = clientSecret;
+            Url = url;
+            Icon = icon;
+            PlatformType = platformType;
+            VerifyType = verifyType;
+            IdentificationType = identificationType;
         }
     }
 

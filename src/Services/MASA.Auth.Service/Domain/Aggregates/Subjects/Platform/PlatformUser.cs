@@ -2,22 +2,32 @@
 {
     public class PlatformUser : AuditAggregateRoot<Guid, Guid>
     {
-        public string Account { get; set; }
+        public Guid PlatformId { get; private set;}
 
-        public string? Password { get; set; }
+        public Guid UserId { get; private set;}
 
-        public UserState UserState { get; set; }
+        public string Account { get; private set;}
 
-        public string? Avatar { get; set; }
+        public string? Password { get; private set;}
 
-        public Guid PlatformId { get; set; }
+        public string? Avatar { get; private set;}
 
-        private PlatformUser()
+        public UserState UserState { get; private set;}
+
+        protected PlatformUser()
         {
             Account = "";
         }
 
-        public PlatformUser(string account) => Account = account;
+        public PlatformUser(Guid platformId, Guid userId, string account, string? password, string? avatar, UserState userState)
+        {
+            PlatformId = platformId;
+            UserId = userId;
+            Account = account;
+            Password = password;
+            Avatar = avatar;
+            UserState = userState;
+        }
     }
 
     public enum UserState
