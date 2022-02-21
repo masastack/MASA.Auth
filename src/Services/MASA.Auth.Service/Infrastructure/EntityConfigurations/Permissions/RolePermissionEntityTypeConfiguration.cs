@@ -1,13 +1,11 @@
-﻿namespaceMASA.Auth.Service.Infrastructure.EntityConfigurations;
+﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations;
 
-public class RolePermissionEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregate.RolePermission>
+public class RolePermissionEntityTypeConfiguration : IEntityTypeConfiguration<RolePermission>
 {
-    public void Configure(EntityTypeBuilder<Domain.Aggregate.RolePermission> builder)
+    public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
-        builder.ToTable(nameof(RolePermission), RolePermissionDbContext.DEFAULT_SCHEMA);
+        builder.ToTable(nameof(RolePermission), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(c => c.Id);
-
-        builder.HasOne(a => a.Permission).WithMany().HasForeignKey(x => x.PermissionId);
     }
 }
 
