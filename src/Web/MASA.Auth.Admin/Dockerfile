@@ -9,7 +9,6 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Web/MASA.Auth.Admin/MASA.Auth.Admin.csproj", "src/Web/MASA.Auth.Admin/"]
 COPY ["src/ApiGateways/Caller/MASA.Auth.Caller/MASA.Auth.Caller.csproj", "src/ApiGateways/Caller/MASA.Auth.Caller/"]
-COPY ["src/Contracts/MASA.Auth.Contracts.Order/MASA.Auth.Contracts.Order.csproj", "src/Contracts/MASA.Auth.Contracts.Order/"]
 RUN dotnet restore "src/Web/MASA.Auth.Admin/MASA.Auth.Admin.csproj"
 COPY . .
 WORKDIR "/src/src/Web/MASA.Auth.Admin"

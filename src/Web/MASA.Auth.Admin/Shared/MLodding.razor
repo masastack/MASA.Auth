@@ -1,0 +1,30 @@
+﻿@implements IDisposable
+@inject GlobalConfig GlobalConfig;
+
+<MOverlay ZIndex=9999999 Value="IsLodding">
+    <MProgressCircular Indeterminate Size="64"></MProgressCircular>
+</MOverlay>
+
+@code {
+    [Parameter]
+    public bool IsLodding { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> LoddingChanged { get; set; }
+
+    void Lodding(bool lodding)
+    {
+        IsLodding = lodding;
+        base.StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        GlobalConfig.OnLoddingChanged += Lodding;
+    }
+
+    public void Dispose()
+    {
+        GlobalConfig.OnLoddingChanged -= Lodding;
+    }
+}

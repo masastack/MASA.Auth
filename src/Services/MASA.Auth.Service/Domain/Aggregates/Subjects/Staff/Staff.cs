@@ -1,42 +1,36 @@
-﻿using MASA.Auth.Service.Domain.Aggregate;
-
-namespace MASA.Auth.Service.Domain.Aggregate.Staff
+﻿namespace MASA.Auth.Service.Domain.Aggregate.Staff
 {
-    /// <summary>
-    /// Staff
-    /// <para>Staff Implicitly belongs to the Auth platform</para> 
-    /// </summary>
-    public class Staff : AuditAggregateRoot<Guid, Guid>
+    public class Staff : PlatformUser
     {
-        public Guid UserId { get; set; }
+        public string? FlowerName { get; private set;}
 
-        public string Account { get; set; }
+        public string? JobNumber { get; private set;}
 
-        public string? Password { get; set; }
+        public StaffType StaffType { get; private set;}
 
-        public UserState UserState { get; set; }
+        public StaffState StaffState { get; private set;}
 
-        public string? FlowerName { get; set; }
-
-        public string? JobNumber { get; set; }
-
-        public StaffType StaffType { get; set; }
-
-        public StaffState StaffState { get; set; }
-
-        public DateOnly? OnboardingTime { get; set; }
+        public DateOnly? OnboardingTime { get; private set;}
 
         /// <summary>
         /// unit yuan
         /// </summary>
-        public int Salary { get; set; }
+        public int Salary { get; private set;}
 
-        private Staff()
+        private Staff() :base()
         {
-            Account = "";
+
         }
 
-        public Staff(string account) => Account = account;
+        public Staff(Guid platformId, Guid userId, string account, string? password, string? avatar, UserState userState, string? flowerName, string? jobNumber, StaffType staffType, StaffState staffState, DateOnly? onboardingTime, int salary) : base(platformId, userId, account, password, avatar, userState)
+        {
+            FlowerName = flowerName;
+            JobNumber = jobNumber;
+            StaffType = staffType;
+            StaffState = staffState;
+            OnboardingTime = onboardingTime;
+            Salary = salary;
+        }
     }
 }
 
