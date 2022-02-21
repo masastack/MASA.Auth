@@ -51,7 +51,7 @@ var app = builder.Services
     .AddDomainEventBus(options =>
     {
         options.UseEventBus()
-               .UseUoW<AuthDbContext>(dbOptions => dbOptions.UseSqlServer("server=masa.admin.database;uid=sa;pwd=P@ssw0rd;database=masa_auth"))
+               .UseUoW<AuthDbContext>(dbOptions => dbOptions.UseSqlServer("server=masa.auth.database;uid=sa;pwd=P@ssw0rd;database=masa_auth"))
                .UseDaprEventBus<IntegrationEventLogService>()
                .UseEventLog<AuthDbContext>()
                .UseRepository<AuthDbContext>();

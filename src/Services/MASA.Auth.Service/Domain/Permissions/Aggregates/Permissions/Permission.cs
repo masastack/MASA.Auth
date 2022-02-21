@@ -8,15 +8,15 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public string Code { get; private set; } = "";
 
-    public string Description { get; private set; } = "";
-
-    public bool Enabled { get; private set; }
-
     public string Url { get; private set; } = "";
 
     public string Icon { get; private set; } = "";
 
     public PermissionType Type { get; private set; }
+
+    public string Description { get; private set; } = "";
+
+    public bool Enabled { get; private set; }
 
     private List<PermissionItem> permissionItems = new();
 
@@ -25,6 +25,11 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     private List<RolePermission> rolePermissions = new();
 
     public IReadOnlyCollection<RolePermission> RolePermissions => rolePermissions;
+
+    private Permission()
+    {
+
+    }
 }
 
 public enum PermissionType

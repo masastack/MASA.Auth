@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
 {
-    public class PlatformUser : AuditAggregateRoot<Guid, Guid>
+    public class PlatformUser : Entity<Guid>
     {
         public Guid PlatformId { get; private set; }
 

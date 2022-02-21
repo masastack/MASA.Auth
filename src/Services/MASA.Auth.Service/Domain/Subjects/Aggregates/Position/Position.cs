@@ -2,9 +2,12 @@
 {
     public class Position : AuditAggregateRoot<Guid, Guid>
     {
-        public string Name { get; private set; }
+        public string Name { get; private set; } = "";
 
-        public Position() => Name = "";
+        private Position()
+        {
+
+        }
 
         public Position(string name) => Name = name;
     }

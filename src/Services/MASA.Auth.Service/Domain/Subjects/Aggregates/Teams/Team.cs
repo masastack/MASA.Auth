@@ -8,7 +8,7 @@
 
         public string? Describe { get; private set; }
 
-        public Team()
+        private Team()
         {
             Name = "";
         }

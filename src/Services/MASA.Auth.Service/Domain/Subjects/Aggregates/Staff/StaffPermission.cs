@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
 {
-    public class StaffPermission : AuditAggregateRoot<Guid, Guid>
+    public class StaffPermission : Entity<Guid>
     {
         public Guid StaffId { get; private set; }
 
