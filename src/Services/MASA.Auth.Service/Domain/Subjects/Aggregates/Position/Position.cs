@@ -1,0 +1,11 @@
+﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
+{
+    public class Position : AuditAggregateRoot<Guid, Guid>
+    {
+        public string Name { get; private set; }
+
+        public Position() => Name = "";
+
+        public Position(string name) => Name = name;
+    }
+}
