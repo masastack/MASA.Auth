@@ -2,6 +2,7 @@
 global using FluentValidation.AspNetCore;
 global using MASA.Auth.Service.Domain.Aggregate;
 global using MASA.Auth.Service.Domain.Aggregate.Permissions;
+global using MASA.Auth.Service.Domain.Aggregate.Staff;
 global using MASA.Auth.Service.Infrastructure;
 global using MASA.Auth.Service.Infrastructure.Middleware;
 global using MASA.BuildingBlocks.DDD.Domain.Entities;

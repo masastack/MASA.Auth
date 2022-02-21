@@ -4,7 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<Team> builder)
         {
-            builder.ToTable("teams", UserDepartmentDbContext.DEFAULT_SCHEMA);
+            builder.ToTable("teams", AuthDbContext.PERMISSION_SCHEMA);
             builder.HasKey(c => c.Id);
         }
     }

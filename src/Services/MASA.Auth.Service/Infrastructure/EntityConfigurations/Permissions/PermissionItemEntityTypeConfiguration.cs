@@ -5,7 +5,7 @@ public class PermissionItemEntityTypeConfiguration : IEntityTypeConfiguration<Pe
     public void Configure(EntityTypeBuilder<PermissionItem> builder)
     {
         builder.ToTable(nameof(PermissionItem), AuthDbContext.PERMISSION_SCHEMA);
-        builder.HasKey(c => c.Id);
+        builder.HasKey(pi => pi.Id);
 
 
     }

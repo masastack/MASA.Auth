@@ -5,10 +5,10 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.ToTable(nameof(Role), AuthDbContext.PERMISSION_SCHEMA);
-        builder.HasKey(c => c.Id);
+        builder.HasKey(r => r.Id);
 
-        builder.HasMany(a => a.RolePermissions).WithOne(p => p.Role);
-        builder.HasMany(a => a.RoleItems).WithOne(p => p.Role);
+        builder.HasMany(r => r.RolePermissions).WithOne(rp => rp.Role);
+        builder.HasMany(r => r.RoleItems).WithOne(ri => ri.Role);
     }
 }
 

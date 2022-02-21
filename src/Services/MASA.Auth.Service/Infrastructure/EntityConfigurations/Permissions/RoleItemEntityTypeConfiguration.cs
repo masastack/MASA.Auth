@@ -5,7 +5,7 @@ public class RoleItemEntityTypeConfiguration : IEntityTypeConfiguration<RoleItem
     public void Configure(EntityTypeBuilder<RoleItem> builder)
     {
         builder.ToTable(nameof(RoleItem), AuthDbContext.PERMISSION_SCHEMA);
-        builder.HasKey(c => c.Id);
+        builder.HasKey(ri => ri.Id);
     }
 }
 

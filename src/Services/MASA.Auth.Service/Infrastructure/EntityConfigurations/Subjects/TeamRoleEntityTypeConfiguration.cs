@@ -4,7 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<TeamRole> builder)
         {
-            builder.ToTable("teamRoles", UserDepartmentDbContext.DEFAULT_SCHEMA);
+            builder.ToTable("teamRoles", AuthDbContext.PERMISSION_SCHEMA);
             builder.HasKey(c => c.Id);
         }
     }

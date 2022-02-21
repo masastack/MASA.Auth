@@ -9,8 +9,4 @@
   <ItemGroup>
     <PackageReference Include="MASA.Utils.Caller.HttpClient" Version="0.0.1705937119" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Contracts\MASA.Auth.RolePermission\MASA.Auth.RolePermission.csproj" />
-  </ItemGroup>
 </Project>

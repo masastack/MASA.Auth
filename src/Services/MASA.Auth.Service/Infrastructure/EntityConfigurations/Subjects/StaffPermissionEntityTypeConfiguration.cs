@@ -4,7 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<StaffPermission> builder)
         {
-            builder.ToTable("staffPermission", UserDepartmentDbContext.DEFAULT_SCHEMA);
+            builder.ToTable("staffPermission", AuthDbContext.PERMISSION_SCHEMA);
             builder.HasKey(c => c.Id);
         }
     }
