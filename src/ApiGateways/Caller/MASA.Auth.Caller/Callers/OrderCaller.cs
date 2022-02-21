@@ -1,4 +1,6 @@
-﻿namespace MASA.Auth.Caller.Callers
+﻿using MASA.Auth.RolePermission.Contracts.Order.Model;
+
+namespace MASA.Auth.Caller.Callers
 {
     public class OrderCaller : HttpClientCallerBase
     {

@@ -1,8 +1,10 @@
 ﻿@page "/"
 @namespace MASA.Auth.Admin.Pages
+@using MASA.Auth.Admin.Global
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "_Layout";
 }
 
-<component type="typeof(App)" render-mode="ServerPrerendered" />
+<component type="typeof(MASA.Auth.Admin.App)" render-mode="ServerPrerendered" />
+
