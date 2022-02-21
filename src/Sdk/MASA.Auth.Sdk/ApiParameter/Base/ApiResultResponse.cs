@@ -1,4 +1,4 @@
-namespace MASA.Auth.Sdk.Response;
+namespace MASA.Auth.Sdk.ApiParameter;
 
 public class ApiResultResponse<TEntity> : ApiResultResponseBase
 {

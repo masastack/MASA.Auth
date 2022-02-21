@@ -4,15 +4,15 @@
     {
         public string Name { get; private set; }
 
-        public string Code { get; private set; }
+        public string DisplayName { get; private set; }
 
         public string ClientId { get; private set; }
 
         public string ClientSecret { get; private set; }
 
-        public string? Url { get; private set; }
+        public string Url { get; private set; }
 
-        public string? Icon { get; private set; }
+        public string Icon { get; private set; }
 
         public PlatformType PlatformType { get; private set; }
 
@@ -23,15 +23,17 @@
         private Platform()
         {
             Name = "";
-            Code = "";
+            DisplayName = "";
             ClientId = "";
             ClientSecret = "";
+            Url = "";
+            Icon = "";
         }
 
-        public Platform(string name, string code, string clientId, string clientSecret, string? url, string? icon, PlatformType platformType, VerifyType verifyType, IdentificationType identificationType)
+        public Platform(string name, string displayName, string clientId, string clientSecret, string url, string icon, PlatformType platformType, VerifyType verifyType, IdentificationType identificationType)
         {
             Name = name;
-            Code = code;
+            DisplayName = displayName;
             ClientId = clientId;
             ClientSecret = clientSecret;
             Url = url;

@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
 {
-    public class TeamStaff : AuditAggregateRoot<Guid, Guid>
+    public class TeamStaff : Entity<Guid>
     {
         public Guid TeamId { get; private set; }
 

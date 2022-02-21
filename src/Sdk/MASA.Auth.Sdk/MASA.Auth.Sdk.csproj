@@ -7,12 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Response\Permissions\" />
-		<Folder Include="Response\Subjects\" />
-		<Folder Include="Response\SSO\" />
-		<Folder Include="Request\Permissions\" />
-		<Folder Include="Request\SSO\" />
-		<Folder Include="Request\Subjects\" />
+		<Folder Include="ApiParameter\Permissions\" />
+		<Folder Include="ApiParameter\SSO\" />
 	</ItemGroup>
 
 	<ItemGroup>
