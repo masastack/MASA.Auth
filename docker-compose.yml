@@ -5,7 +5,7 @@ services:
   redis:
     image: redis:alpine
 
-  masa.admin.database:
+  masa.auth.database:
      image: mcr.microsoft.com/mssql/server:2019-latest
      ports:
        - "1433:1433"
@@ -19,11 +19,11 @@ services:
       context: .
       dockerfile: src/Web/MASA.Auth.Admin/Dockerfile
 
-  masa.auth.rolepermission:
-    image: ${DOCKER_REGISTRY-}masaauthrolepermission
+  masa.auth.service:
+    image: ${DOCKER_REGISTRY-}masaauthservice
     build:
       context: .
-      dockerfile: src/Services/MASA.Auth.RolePermission.Service/Dockerfile
+      dockerfile: src/Services/MASA.Auth.Service/Dockerfile
 
   
   dapr-placement:

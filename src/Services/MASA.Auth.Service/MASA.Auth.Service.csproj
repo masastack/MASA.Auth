@@ -9,6 +9,13 @@
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Application\User\**" />
+	  <Content Remove="Application\User\**" />
+	  <EmbeddedResource Remove="Application\User\**" />
+	  <None Remove="Application\User\**" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.0.1681936502" />

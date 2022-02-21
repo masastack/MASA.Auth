@@ -26,7 +26,7 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public byte? Age { get; set; }
 
-    public DateOnly? BirthDay { get; set; }
+    public DateTime? BirthDay { get; set; }
 
     /// <summary>
     /// unit cm
