@@ -9,6 +9,13 @@
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Application\User\**" />
+	  <Content Remove="Application\User\**" />
+	  <EmbeddedResource Remove="Application\User\**" />
+	  <None Remove="Application\User\**" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.0.1681936502" />
@@ -41,13 +48,13 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Application\Roles\Commands\" />
-	  <Folder Include="Application\Roles\Queries\" />
-	  <Folder Include="Application\User\" />
-	  <Folder Include="Domain\Aggregates\Assists\" />
-	  <Folder Include="Domain\Aggregates\SSO\IdentityResources\" />
-	  <Folder Include="Domain\Aggregates\SSO\Clients\" />
-	  <Folder Include="Domain\Repositories\" />
+	  <Folder Include="Application\Permissions\" />
+	  <Folder Include="Application\Subjects\" />
+	  <Folder Include="Domain\Assists\Aggregates\" />
+	  <Folder Include="Domain\Assists\Repositories\" />
+	  <Folder Include="Domain\Permissions\Repositories\" />
+	  <Folder Include="Domain\SSO\Repositories\" />
+	  <Folder Include="Domain\Subjects\Repositories\" />
 	  <Folder Include="Infrastructure\Repositories\" />
 	</ItemGroup>
 </Project>
