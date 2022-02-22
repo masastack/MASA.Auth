@@ -22,7 +22,7 @@
 
         }
 
-        public Staff(Guid platformId, Guid userId, string account, string? password, string? avatar, UserState userState, string? flowerName, string? jobNumber, StaffType staffType, StaffState staffState, DateOnly? onboardingTime, int salary) : base(platformId, userId, account, password, avatar, userState)
+        public Staff(Guid platformId, Guid userId, string account, string? password, string? avatar, UserState userState, string? flowerName, string? jobNumber, StaffType staffType, StaffState staffState, DateTime? onboardingTime, int salary) : base(platformId, userId, account, password, avatar, userState)
         {
             FlowerName = flowerName;
             JobNumber = jobNumber;
