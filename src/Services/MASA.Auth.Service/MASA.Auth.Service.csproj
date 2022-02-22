@@ -51,7 +51,6 @@
 	  <Folder Include="Application\Roles\Commands\" />
 	  <Folder Include="Application\Roles\Queries\" />
 	  <Folder Include="Application\User\" />
-	  <Folder Include="Domain\Assists\Aggregates\" />
 	  <Folder Include="Domain\Assists\Repositories\" />
 	  <Folder Include="Domain\Permissions\Repositories\" />
 	  <Folder Include="Domain\SSO\Aggregates\Clients\" />

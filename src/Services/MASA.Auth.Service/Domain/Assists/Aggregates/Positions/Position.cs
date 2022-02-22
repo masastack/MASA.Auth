@@ -1,6 +1,6 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
+﻿namespace MASA.Auth.Service.Domain.Assists.Aggregates
 {
-    public class Position : AuditAggregateRoot<Guid, Guid>
+    public class Position : AggregateRoot<Guid>
     {
         public string Name { get; private set; } = "";
 

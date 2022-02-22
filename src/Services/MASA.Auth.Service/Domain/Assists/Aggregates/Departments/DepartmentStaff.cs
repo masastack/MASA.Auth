@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
+﻿namespace MASA.Auth.Service.Domain.Assists.Aggregates
 {
     public class DepartmentStaff : Entity<Guid>
     {
