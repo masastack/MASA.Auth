@@ -58,6 +58,5 @@
 	  <Folder Include="Domain\SSO\Repositories\" />
 	  <Folder Include="Domain\Subjects\Repositories\" />
 	  <Folder Include="Infrastructure\Repositories\" />
-	  <Folder Include="Migrations\" />
 	</ItemGroup>
 </Project>
