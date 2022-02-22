@@ -6,7 +6,7 @@ namespace MASA.Auth.Service.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.ToTable("departments", AuthDbContext.PERMISSION_SCHEMA);
-            builder.HasKey(c => c.Id);
+            builder.HasKey(d => d.Id);
         }
     }
 }

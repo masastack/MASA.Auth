@@ -2,62 +2,35 @@ namespace MASA.Auth.Sdk.ApiUri;
 
 internal class Routing
 {
-    #region Authorize
+    #region ServiceBaseAdress
 
-    public static readonly string AuthorizeList = string.Format(UrlRule.DEFAULT_SERVICE_LIST, UrlRule.AUTHORIZE_SERVICE);
-
-    #endregion
-
-    #region Permission
-
-    public static readonly string PermissionList = string.Format(UrlRule.DEFAULT_SERVICE_LIST, UrlRule.PERMISSION_SERVICE);
-
-    public static readonly string PermissionDetail = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.PERMISSION_SERVICE, "{id}");
-
-    public static readonly string OperatePermission = string.Format(UrlRule.DEFAULT_SERVICE, UrlRule.PERMISSION_SERVICE);
+    public const string AuthServiceBaseAdress = "http://localhost:8080/";
 
     #endregion
 
-    #region Role
+    #region UrlRule
 
-    public static readonly string RoleList = string.Format(UrlRule.DEFAULT_SERVICE_LIST, UrlRule.ROLE_SERVICE);
+    const string DEFAULT_SERVICE_BASE = "/api/{0}/{1}";
 
-    public static readonly string RoleListByIds = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.ROLE_SERVICE, "ids");
+    const string DEFAULT_SERVICE = "/api/{0}";
 
-    public static readonly string RoleDetail = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.ROLE_SERVICE, "{id}");
-
-    public static readonly string OperateRole = string.Format(UrlRule.DEFAULT_SERVICE, UrlRule.ROLE_SERVICE);
-
-    public static readonly string RoleSelect = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.ROLE_SERVICE, "select");
+    const string DEFAULT_SERVICE_LIST = "/api/{0}/items";
 
     #endregion
 
-    #region Object
+    #region Platform
 
-    public static string ObjectList = string.Format(UrlRule.DEFAULT_SERVICE_LIST, UrlRule.OBJECT_SERVICE);
+    const string PLATFORM = "platform";
 
-    public static string ObjectAll = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.OBJECT_SERVICE, "all");
+    public static readonly string PlatformList = string.Format(DEFAULT_SERVICE_LIST, PLATFORM);
 
-    public static string ContainsObject = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.OBJECT_SERVICE, "contains");
+    public static readonly string PlatformById = string.Format(DEFAULT_SERVICE_BASE, PLATFORM, "{id}");
 
-    public static string OperateObject = string.Format(UrlRule.DEFAULT_SERVICE, UrlRule.OBJECT_SERVICE);
+    //public static readonly string PlatformDetail = string.Format(DEFAULT_SERVICE_BASE, $"{PLATFORM}Detail", "{id}");
 
-    public static string BatchDeleteObject = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.OBJECT_SERVICE, "batchDelete");
+    public static readonly string OperatePlatform = string.Format(DEFAULT_SERVICE, PLATFORM);
 
-    #endregion
-
-    #region User
-
-    public static string UserList = string.Format(UrlRule.DEFAULT_SERVICE_LIST, UrlRule.USER_SERVICE);
-
-    public static string UserDetail = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.USER_SERVICE, "{id}");
-
-    /// <summary>
-    /// User additions, deletions and modifications use the same url
-    /// </summary>
-    public static string OperateUser = string.Format(UrlRule.DEFAULT_SERVICE, UrlRule.USER_SERVICE);
-
-    public static string UserRole = string.Format(UrlRule.DEFAULT_SERVICE_BASE, UrlRule.USER_SERVICE, "role");
+    //public static readonly string PlatformSelect = string.Format(DEFAULT_SERVICE_BASE, PLATFORM, "select");
 
     #endregion
 }
