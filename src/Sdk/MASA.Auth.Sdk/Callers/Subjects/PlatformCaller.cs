@@ -1,10 +1,10 @@
 ﻿namespace MASA.Auth.Caller.Callers;
 
-public class RoleCaller : HttpClientCallerBase
+internal class PlatformCaller : HttpClientCallerBase
 {
     protected override string BaseAddress { get; set; }
 
-    public RoleCaller(IServiceProvider serviceProvider) : base(serviceProvider)
+    internal PlatformCaller(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Name = nameof(PlatformCaller);
         BaseAddress = "";
