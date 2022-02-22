@@ -1,6 +1,10 @@
-﻿namespace MASA.Auth.Service.Domain.SSO.Aggregates.ApiResources;
+﻿using MASA.Auth.Service.Domain.SSO.Aggregates.Abstract;
 
-public class ApiResourceSecret
+namespace MASA.Auth.Service.Domain.SSO.Aggregates.ApiResources;
+
+public class ApiResourceSecret : Secret
 {
+    public int ApiResourceId { get; set; }
+    public ApiResource ApiResource { get; set; } = null!;
 }
 

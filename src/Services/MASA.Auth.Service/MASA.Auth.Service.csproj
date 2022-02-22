@@ -53,10 +53,9 @@
 	  <Folder Include="Application\User\" />
 	  <Folder Include="Domain\Assists\Repositories\" />
 	  <Folder Include="Domain\Permissions\Repositories\" />
-	  <Folder Include="Domain\SSO\Aggregates\Clients\" />
-	  <Folder Include="Domain\SSO\Aggregates\IdentityResources\" />
 	  <Folder Include="Domain\SSO\Repositories\" />
 	  <Folder Include="Domain\Subjects\Repositories\" />
+	  <Folder Include="Infrastructure\EntityConfigurations\SSO\" />
 	  <Folder Include="Infrastructure\Repositories\" />
 	</ItemGroup>
 </Project>
