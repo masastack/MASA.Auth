@@ -14,7 +14,7 @@
 
         public UserState UserState { get; private set; }
 
-        protected PlatformUser()
+        private PlatformUser()
         {
             Account = "";
         }

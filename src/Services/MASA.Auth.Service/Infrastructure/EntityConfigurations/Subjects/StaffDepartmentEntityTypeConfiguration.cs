@@ -4,8 +4,8 @@
     {
         public void Configure(EntityTypeBuilder<DepartmentStaff> builder)
         {
-            builder.ToTable("staffDepartments", AuthDbContext.PERMISSION_SCHEMA);
-            builder.HasKey(c => c.Id);
+            builder.ToTable(nameof(DepartmentStaff), AuthDbContext.SUBJECT_SCHEMA);
+            builder.HasKey(d => d.Id);
         }
     }
 }

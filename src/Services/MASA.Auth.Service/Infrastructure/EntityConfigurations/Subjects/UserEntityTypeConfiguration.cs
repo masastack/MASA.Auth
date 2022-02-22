@@ -4,8 +4,8 @@
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("users", AuthDbContext.PERMISSION_SCHEMA);
-            builder.HasKey(c => c.Id);
+            builder.ToTable(nameof(User), AuthDbContext.SUBJECT_SCHEMA);
+            builder.HasKey(u => u.Id);
         }
     }
 }
