@@ -38,7 +38,7 @@ var app = builder.Services
                         Id = "Bearer"
                     }
                 },
-                new string[] {}
+                Array.Empty<string>()
             }
         });
     })
