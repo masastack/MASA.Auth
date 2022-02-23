@@ -2,13 +2,13 @@
 {
     public class Department : AuditAggregateRoot<Guid, Guid>
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public int Sort { get; set; }
+        public int Sort { get; private set; }
 
-        public Guid? ParentId { get; set; }
+        public Guid? ParentId { get; private set; }
 
-        public string? Describe { get; set; }
+        public string? Describe { get; private set; }
 
         private Department()
         {
