@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Permissions.Aggregates.Permissions;
+﻿namespace MASA.Auth.Service.Domain.Permissions.Aggregates;
 
 public class PermissionItem : Entity<Guid>
 {

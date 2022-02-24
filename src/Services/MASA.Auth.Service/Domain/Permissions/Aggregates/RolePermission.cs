@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Permissions.Aggregates.Roles;
+﻿namespace MASA.Auth.Service.Domain.Permissions.Aggregates;
 
 public class RolePermission : Entity<Guid>
 {
@@ -7,5 +7,7 @@ public class RolePermission : Entity<Guid>
     public Permission Permission { get; set; } = null!;
 
     public bool Effect { get; private set; }
+
+    public bool Private { get; private set; }
 }
 

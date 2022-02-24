@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Permissions.Aggregates.Roles;
+﻿namespace MASA.Auth.Service.Domain.Permissions.Aggregates;
 
 public class Role : AuditAggregateRoot<Guid, Guid>
 {
