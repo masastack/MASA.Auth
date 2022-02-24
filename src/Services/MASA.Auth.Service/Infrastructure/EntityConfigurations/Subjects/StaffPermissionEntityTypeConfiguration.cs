@@ -1,11 +1,11 @@
-﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations
+﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations.Subjects;
+
+public class StaffPermissionEntityTypeConfiguration : IEntityTypeConfiguration<UserPermission>
 {
-    public class StaffPermissionEntityTypeConfiguration : IEntityTypeConfiguration<StaffPermission>
+    public void Configure(EntityTypeBuilder<UserPermission> builder)
     {
-        public void Configure(EntityTypeBuilder<StaffPermission> builder)
-        {
-            builder.ToTable(nameof(StaffPermission), AuthDbContext.SUBJECT_SCHEMA);
-            builder.HasKey(s => s.Id);
-        }
+        builder.ToTable(nameof(UserPermission), AuthDbContext.SUBJECT_SCHEMA);
+        builder.HasKey(s => s.Id);
     }
 }
+

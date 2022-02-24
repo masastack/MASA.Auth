@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Assists.Aggregates
+﻿namespace MASA.Auth.Service.Domain.Organizations.Aggregates
 {
     public class Department : AuditAggregateRoot<Guid, Guid>
     {

@@ -1,6 +1,6 @@
 ﻿global using FluentValidation;
 global using FluentValidation.AspNetCore;
-global using MASA.Auth.Service.Domain.Assists.Aggregates;
+global using MASA.Auth.Service.Domain.Organizations.Aggregates;
 global using MASA.Auth.Service.Domain.Permissions.Aggregates.Permissions;
 global using MASA.Auth.Service.Domain.Permissions.Aggregates.Roles;
 global using MASA.Auth.Service.Domain.Subjects.Aggregates;
@@ -22,3 +22,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.OpenApi.Models;
 global using System.Reflection;
+global using MASA.Auth.Service.Enums;

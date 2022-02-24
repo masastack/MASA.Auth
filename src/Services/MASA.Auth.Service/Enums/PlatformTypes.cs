@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Enum;
+﻿namespace MASA.Auth.Service.Enums;
 
 public enum PlatformTypes
 {

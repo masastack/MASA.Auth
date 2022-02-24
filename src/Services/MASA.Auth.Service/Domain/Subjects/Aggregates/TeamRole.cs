@@ -1,5 +1,5 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
-{
+﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates;
+
     public class TeamRole : Entity<Guid>
     {
         public Guid TeamId { get; private set; }
@@ -12,4 +12,4 @@
             RoleId = roleId;
         }
     }
-}
+
