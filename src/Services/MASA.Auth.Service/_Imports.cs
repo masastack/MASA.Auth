@@ -1,6 +1,6 @@
 ﻿global using FluentValidation;
 global using FluentValidation.AspNetCore;
-global using MASA.Auth.Service.Domain.Organization.Aggregates;
+global using MASA.Auth.Service.Domain.Organizations.Aggregates;
 global using MASA.Auth.Service.Domain.Permissions.Aggregates;
 global using MASA.Auth.Service.Domain.Subjects.Aggregates;
 global using MASA.Auth.Service.Infrastructure;
