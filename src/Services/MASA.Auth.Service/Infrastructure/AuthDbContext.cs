@@ -2,8 +2,8 @@
 
 public class AuthDbContext : IntegrationEventLogContext
 {
-    public const string PERMISSION_SCHEMA = "permission";
-    public const string SUBJECT_SCHEMA = "subject";
+    public const string PERMISSION_SCHEMA = "permissions";
+    public const string SUBJECT_SCHEMA = "subjects";
     public const string SSO_SCHEMA = "sso";
 
     public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)

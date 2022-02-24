@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.SSO.Aggregates.Clients
+﻿namespace MASA.Auth.Service.Domain.SSO.Aggregates
 {
     public class ClientRedirectUri
     {
