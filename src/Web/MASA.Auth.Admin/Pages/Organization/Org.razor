@@ -62,13 +62,13 @@
         <MDivider Vertical></MDivider>
         <MCol Cols="8">
             <MRow>
-                <MCol class="d-flex align-center">
+        @*        <MCol class="d-flex align-center">
                     <span>@_currentDepartmentName</span>
                     <span class="ml-2">
                         <MIcon>mdi-account-group</MIcon>
                         @_departmentUsers.Count(u=>u.Select)
                     </span>
-                </MCol>
+                </MCol>*@
                 <MSpacer />
                 <MCol Md="@("auto")">
                     <MButton Disabled="_disableDepartmentMemberBtn" OnClick="()=>_addDepartmentUserDialog = true">@T("AddMember")</MButton>
@@ -156,7 +156,7 @@
                     <MIcon>mdi-close</MIcon>
                 </MButton>
             </MCardTitle>
-            <MCardText class="pt-5">
+@*            <MCardText class="pt-5">
                 @if (_createDepartment.ParentId != Guid.Empty)
                 {
                     <MTextField @bind-Value="_createDepartment.ParentName" Disabled Class="mb-6" Label="所属部门" HideDetails="@("auto")" Dense Outlined />
@@ -164,7 +164,7 @@
                 <MTextField @bind-Value="_createDepartment.Name" Class="mb-6" Label="部门名称" HideDetails="@("auto")" Dense Outlined />
                 <MTextField @bind-Value="_createDepartment.Code" Class="mb-6" Label="部门标识" HideDetails="@("auto")" Dense Outlined />
                 <MTextField @bind-Value="_createDepartment.Describtion" Class="mb-6" Label="部门描述" HideDetails="@("auto")" Dense Outlined />
-            </MCardText>
+            </MCardText>*@
             <MDivider />
             <MCardActions class="mt-2 d-flex justify-end">
                 <MButton Color="primary" Width="100" class="rounded-pill" OnClick="() => _addOrgDialog = false">
