@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates;
 
-public class Platform : AuditAggregateRoot<Guid, Guid>
+public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
 
@@ -14,13 +14,23 @@ public class Platform : AuditAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; }
 
-    public PlatformType PlatformType { get; private set; }
+    public PlatformTypes PlatformType { get; private set; }
 
-    public VerifyType VerifyType { get; private set; }
+    public VerifyTypes VerifyType { get; private set; }
 
-    public IdentificationType IdentificationType { get; private set; }
+    public IdentificationTypes IdentificationType { get; private set; }
 
-    public Platform(string name, string displayName, string clientId, string clientSecret, string url, string icon, PlatformType platformType, VerifyType verifyType, IdentificationType identificationType)
+    private ThirdPartyPlatform()
+    {
+        Name = "";
+        DisplayName = "";
+        ClientId = "";
+        ClientSecret = "";
+        Url = "";
+        Icon = "";
+    }
+
+    public ThirdPartyPlatform(string name, string displayName, string clientId, string clientSecret, string url, string icon, PlatformTypes platformType, VerifyTypes verifyType, IdentificationTypes identificationType)
     {
         Name = name;
         DisplayName = displayName;
@@ -32,22 +42,5 @@ public class Platform : AuditAggregateRoot<Guid, Guid>
         VerifyType = verifyType;
         IdentificationType = identificationType;
     }
-}
-
-public enum PlatformType
-{
-    ThirdParty,
-    Private
-}
-
-public enum IdentificationType
-{
-    MobilePhone,
-    Email
-}
-
-public enum VerifyType
-{
-    OAuth
 }
 

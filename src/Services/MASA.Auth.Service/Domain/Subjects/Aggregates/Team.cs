@@ -8,6 +8,11 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public string? Describe { get; private set; }
 
+    private Team()
+    {
+        Name = "";
+    }
+
     public Team(string name, string? avatar, string? describe)
     {
         Name = name;

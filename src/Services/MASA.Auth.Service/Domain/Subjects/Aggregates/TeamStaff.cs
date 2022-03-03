@@ -6,10 +6,13 @@ public class TeamStaff : Entity<Guid>
 
     public Guid StaffId { get; private set; }
 
-    public TeamStaff(Guid teamId, Guid staffId)
+    public Guid UserId { get; private set; }
+
+    public TeamStaff(Guid teamId, Guid staffId, Guid userId)
     {
         TeamId = teamId;
         StaffId = staffId;
+        UserId = userId;
     }
 }
 
