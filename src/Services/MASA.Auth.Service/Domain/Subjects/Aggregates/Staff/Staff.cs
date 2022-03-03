@@ -22,11 +22,6 @@ public class Staff : Entity<Guid>
 
     public StaffState StaffState { get; private set; }
 
-    private Staff()
-    {
-        Account = "";
-    }
-
     public Staff(Guid platformId, Guid userId, string account, string? password, string? avatar, UserState userState, string? flowerName, string? jobNumber, StaffType staffType, StaffState staffState)
     {
         PlatformId = platformId;

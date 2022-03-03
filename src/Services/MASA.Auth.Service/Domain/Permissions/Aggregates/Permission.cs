@@ -25,12 +25,6 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     private List<RolePermission> rolePermissions = new();
 
     public IReadOnlyCollection<RolePermission> RolePermissions => rolePermissions;
-
-    //TODO 删除
-    private Permission()
-    {
-
-    }
 }
 
 public enum PermissionType

@@ -22,9 +22,4 @@ public class Role : AuditAggregateRoot<Guid, Guid>
     private List<RoleItem> roleItems = new();
 
     public IReadOnlyCollection<RoleItem> RoleItems => roleItems;
-
-    private Role()
-    {
-
-    }
 }

@@ -1,6 +1,4 @@
-﻿using MASA.Auth.Service.Domain.SSO.Aggregates.Abstract;
-
-namespace MASA.Auth.Service.Domain.SSO.Aggregates.ApiResources;
+﻿namespace MASA.Auth.Service.Domain.SSO.Aggregates.ApiResources;
 
 public class ApiResourceClaim : UserClaim
 {

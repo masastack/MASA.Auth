@@ -17,10 +17,5 @@ public class ApiResource : AggregateRoot<int>
     //public List<ApiResourceScope> Scopes { get; set; }
     //public List<ApiResourceClaim> UserClaims { get; set; }
     //public List<ApiResourceProperty> Properties { get; set; }
-
-    private ApiResource()
-    {
-
-    }
 }
 

@@ -1,0 +1,179 @@
+﻿@page "/org/index"
+@inherits AdminCompontentBase
+
+<MCard>
+    <MCardTitle class="text-h5">
+        @T("Department")
+        <MSpacer />
+        <MButton Text OnClick='()=>OpenAddDialog(Guid.Empty,"")'>
+            <MIcon Left>mdi-plus-circle-outline</MIcon>
+            @T("Add")
+        </MButton>
+    </MCardTitle>
+    <MDivider />
+    <MRow Class="pa-4"
+          Justify="JustifyTypes.SpaceBetween">
+        <MCol Cols="4">
+            <MTreeview Active="_active"
+                       Items="_departments"
+                       OnActiveUpdate="(List<DepartmentItem> e)=>ActiveUpdated(e)"
+                       Activatable
+                       ItemText="r=>r.Name"
+                       ItemKey="r=>r.Id"
+                       ItemChildren="r=>r.Children">
+                <PrependContent>
+                    @if (context.Item.Children == null)
+                    {
+                        <MIcon>
+                            mdi-account
+                        </MIcon>
+                    }
+                </PrependContent>
+                <LabelContent>
+                    <div class="d-flex justify-space-between align-center">
+                        <span>@context.Item.Name</span>
+                        <MMenu Right Bottom class="mr-2">
+                            <ActivatorContent Context="activatorContext">
+                                <MButton Icon @attributes="@activatorContext.Attrs">
+                                    <MIcon Small>fas fa-ellipsis-v</MIcon>
+                                </MButton>
+                            </ActivatorContent>
+                            <ChildContent>
+                                <MList>
+                                    <MListItem OnClick="()=>OpenAddDialog(context.Item.Id,context.Item.Name)">
+                                        <MIcon Small>mdi-plus-circle-outline</MIcon>
+                                        <MListItemTitle Class="ml-2"> @T("AddSubordinate") </MListItemTitle>
+                                    </MListItem>
+                                    <MListItem>
+                                        <MIcon Small>mdi-pencil-outline</MIcon>
+                                        <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
+                                    </MListItem>
+                                    <MListItem>
+                                        <MIcon Small>mdi-trash-can-outline</MIcon>
+                                        <MListItemTitle Class="ml-2"> @T("Delete") </MListItemTitle>
+                                    </MListItem>
+                                </MList>
+                            </ChildContent>
+                        </MMenu>
+                    </div>
+                </LabelContent>
+            </MTreeview>
+        </MCol>
+        <MDivider Vertical></MDivider>
+        <MCol Cols="8">
+            <MRow>
+                <MCol class="d-flex align-center">
+                    <span>@_currentDepartmentName</span>
+                    <span class="ml-2">
+                        <MIcon>mdi-account-group</MIcon>
+                        @_departmentUsers.Count(u=>u.Select)
+                    </span>
+                </MCol>
+                <MSpacer />
+                <MCol Md="@("auto")">
+                    <MButton Disabled="_disableDepartmentMemberBtn" OnClick="()=>_addDepartmentUserDialog = true">@T("AddMember")</MButton>
+                </MCol>
+            </MRow>
+  @*          <MDataTable Headers="_headers" Items="_departmentUsers.Where(u=>u.Select)" TItem="UserItemResponse" HideDefaultFooter Class="user mt-2 table-border-none">
+                <HeaderColContent Context="header">
+                    <span class="text-subtitle">@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(UserItemResponse.Gender):
+                            var genderText = "";
+                            if (context.Item.Gender.HasValue)
+                            {
+                                if (context.Item.Gender.Value)
+                                {
+                                    genderText = "男";
+                                }
+                                else
+                                {
+                                    genderText = "女";
+                                }
+                            }
+                            else
+                            {
+                                genderText = "未知";
+                            }
+                            <span>@genderText</span>
+                            break;
+                        case nameof(UserItemResponse.State):
+                            @if (context.Item.State == (int)State.Enable)
+                            {
+                                <MChip Color="green" TextColor="white" Ripple="false">
+                                    <span>@State.Enable.ToString()</span>
+                                </MChip>
+                            }
+                            else
+                            {
+                                <MChip Color="gray" Ripple="false">
+                                    <span>@State.Disabled.ToString()</span>
+                                </MChip>
+                            }
+                            break;
+                        case "Action":
+                            <MMenu Right Bottom>
+                                <ActivatorContent Context="activatorContext">
+                                    <MButton Icon @attributes="@activatorContext.Attrs">
+                                        <MIcon XSmall>fas fa-ellipsis-v</MIcon>
+                                    </MButton>
+                                </ActivatorContent>
+                                <ChildContent>
+                                    <MList>
+                                        <MListItem>
+                                            <MIcon Small>fas fa-user-tie</MIcon>
+                                            <MListItemTitle Class="ml-2"> Details </MListItemTitle>
+                                        </MListItem>
+                                        <MListItem>
+                                            <MIcon Small>far fa-trash-alt</MIcon>
+                                            <MListItemTitle Class="ml-2"> Delete </MListItemTitle>
+                                        </MListItem>
+                                    </MList>
+                                </ChildContent>
+                            </MMenu>
+                            break;
+                        default:
+                            @context.Value
+                            break;
+                    }
+                </ItemColContent>
+            </MDataTable>*@
+        </MCol>
+    </MRow>
+</MCard>
+
+
+<MDialog @bind-Value="_addOrgDialog" Persistent Width="500">
+    <ChildContent>
+        <MCard class="pa-6">
+            <MCardTitle class="pa-0 mb-2">
+                部门
+                <MSpacer></MSpacer>
+                <MButton Icon OnClick="() => _addOrgDialog = false">
+                    <MIcon>mdi-close</MIcon>
+                </MButton>
+            </MCardTitle>
+            <MCardText class="pt-5">
+                @if (_createDepartment.ParentId != Guid.Empty)
+                {
+                    <MTextField @bind-Value="_createDepartment.ParentName" Disabled Class="mb-6" Label="所属部门" HideDetails="@("auto")" Dense Outlined />
+                }
+                <MTextField @bind-Value="_createDepartment.Name" Class="mb-6" Label="部门名称" HideDetails="@("auto")" Dense Outlined />
+                <MTextField @bind-Value="_createDepartment.Code" Class="mb-6" Label="部门标识" HideDetails="@("auto")" Dense Outlined />
+                <MTextField @bind-Value="_createDepartment.Describtion" Class="mb-6" Label="部门描述" HideDetails="@("auto")" Dense Outlined />
+            </MCardText>
+            <MDivider />
+            <MCardActions class="mt-2 d-flex justify-end">
+                <MButton Color="primary" Width="100" class="rounded-pill" OnClick="() => _addOrgDialog = false">
+                    取消
+                </MButton>
+                <MButton Color="primary" Width="100" class="rounded-pill" OnClick="AddDepartment">
+                    保存
+                </MButton>
+            </MCardActions>
+        </MCard>
+    </ChildContent>
+</MDialog>

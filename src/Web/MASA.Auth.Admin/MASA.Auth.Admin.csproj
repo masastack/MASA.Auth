@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApiGateways\Caller\MASA.Auth.Caller\MASA.Auth.Caller.csproj" />
+    <ProjectReference Include="..\..\Sdk\MASA.Auth.Sdk\MASA.Auth.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>

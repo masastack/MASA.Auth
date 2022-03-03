@@ -1,9 +1,9 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates
-{
-    public class StaffPosition : Entity<Guid>
-    {
-        public Guid StaffId { get; set; }
+﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates;
 
-        public Guid? PositionId { get; set; }
-    }
+public class StaffPosition : Entity<Guid>
+{
+    public Guid StaffId { get; set; }
+
+    public Guid? PositionId { get; set; }
 }
+

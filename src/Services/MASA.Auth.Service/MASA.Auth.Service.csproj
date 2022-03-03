@@ -51,11 +51,10 @@
 	  <Folder Include="Application\Roles\Commands\" />
 	  <Folder Include="Application\Roles\Queries\" />
 	  <Folder Include="Application\User\" />
-	  <Folder Include="Domain\Organization\Repositories\" />
 	  <Folder Include="Domain\Permissions\Repositories\" />
+	  <Folder Include="Domain\Permissions\Services\" />
 	  <Folder Include="Domain\SSO\Repositories\" />
 	  <Folder Include="Domain\Subjects\Repositories\" />
 	  <Folder Include="Infrastructure\EntityConfigurations\SSO\" />
-	  <Folder Include="Infrastructure\Repositories\" />
 	</ItemGroup>
 </Project>

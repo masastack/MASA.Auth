@@ -1,4 +1,6 @@
-﻿namespace MASA.Auth.Sdk.ApiParameter;
+﻿using MASA.Auth.Sdk.Response.Subjects;
+
+namespace MASA.Auth.Sdk.Request.Subjects;
 
 public class AddPlatformRequest
 {
@@ -27,8 +29,8 @@ public class AddPlatformRequest
         VerifyType = verifyType;
     }
 
-    public static implicit operator AddPlatformRequest(PlatformItemResponse request)
+    public static implicit operator AddPlatformRequest(PlatformItem request)
     {
-        return new AddPlatformRequest(request.Name,request.DisplayName,request.ClientId,request.ClientSecret,request.Url,request.Icon,request.VerifyType);
+        return new AddPlatformRequest(request.Name, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
     }
 }

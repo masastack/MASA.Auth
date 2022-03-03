@@ -1,4 +1,6 @@
-﻿namespace MASA.Auth.Caller.Callers;
+﻿using MASA.Auth.Sdk.Response;
+
+namespace MASA.Auth.Sdk.Callers;
 
 public abstract class CallerBase : HttpClientCallerBase
 {
@@ -19,16 +21,16 @@ public abstract class CallerBase : HttpClientCallerBase
         }
     }
 
-    protected async Task<ApiResultResponseBase> ResultAsync(Func<Task> func)
+    protected async Task<ApiResultResponse> ResultAsync(Func<Task> func)
     {
         try
         {
             await func.Invoke();
-            return ApiResultResponseBase.ResponseSuccess("success");
+            return ApiResultResponse.ResponseSuccess("success");
         }
         catch (Exception ex)
         {
-            return ApiResultResponseBase.ResponseLose(ex.Message);
+            return ApiResultResponse.ResponseLose(ex.Message);
         }
     }
 }

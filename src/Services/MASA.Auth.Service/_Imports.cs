@@ -1,12 +1,16 @@
 ﻿global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using MASA.Auth.Service.Domain.Organization.Aggregates;
+global using MASA.Auth.Service.Domain.Organization.Repositories;
 global using MASA.Auth.Service.Domain.Permissions.Aggregates;
+global using MASA.Auth.Service.Domain.SSO.Aggregates.Abstract;
 global using MASA.Auth.Service.Domain.Subjects.Aggregates;
 global using MASA.Auth.Service.Infrastructure;
 global using MASA.Auth.Service.Infrastructure.Middleware;
+global using MASA.BuildingBlocks.Data.UoW;
 global using MASA.BuildingBlocks.DDD.Domain.Entities;
 global using MASA.BuildingBlocks.DDD.Domain.Entities.Auditing;
+global using MASA.BuildingBlocks.DDD.Domain.Repositories;
 global using MASA.BuildingBlocks.Dispatcher.Events;
 global using MASA.Contrib.Data.UoW.EF;
 global using MASA.Contrib.DDD.Domain;

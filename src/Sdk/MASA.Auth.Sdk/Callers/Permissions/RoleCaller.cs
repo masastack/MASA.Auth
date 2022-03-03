@@ -1,4 +1,7 @@
-﻿namespace MASA.Auth.Caller.Callers;
+﻿using MASA.Auth.Sdk.Callers;
+using MASA.Auth.Sdk.Callers.Subjects;
+
+namespace MASA.Auth.Sdk.Callers.Permissions;
 
 public class RoleCaller : CallerBase
 {
