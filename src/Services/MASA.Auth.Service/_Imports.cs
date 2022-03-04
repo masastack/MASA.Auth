@@ -1,5 +1,6 @@
 ﻿global using FluentValidation;
 global using FluentValidation.AspNetCore;
+global using MASA.Auth.Service.Application.Organizations.Models;
 global using MASA.Auth.Service.Domain.Organization.Aggregates;
 global using MASA.Auth.Service.Domain.Organization.Repositories;
 global using MASA.Auth.Service.Domain.Organizations.Aggregates;
@@ -20,6 +21,8 @@ global using MASA.Contrib.DDD.Domain.Repository.EF;
 global using MASA.Contrib.Dispatcher.Events;
 global using MASA.Contrib.Dispatcher.IntegrationEvents.Dapr;
 global using MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF;
+global using MASA.Contrib.ReadWriteSpliting.CQRS.Commands;
+global using MASA.Contrib.ReadWriteSpliting.CQRS.Queries;
 global using MASA.Contrib.Service.MinimalAPIs;
 global using MASA.Utils.Data.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;

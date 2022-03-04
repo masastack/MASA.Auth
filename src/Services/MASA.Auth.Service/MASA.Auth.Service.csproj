@@ -29,6 +29,7 @@
 		<PackageReference Include="MASA.Contrib.DDD.Domain.Repository.EF" Version="0.0.1685760477" />
 		<PackageReference Include="MASA.Contrib.ReadWriteSpliting.CQRS" Version="0.0.1685760477" />
 		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.0.1685760477" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="0.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="MASA.Contrib.Data.UoW.EF" Version="0.0.1685760477" />
 		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.0.1685760477" />
@@ -52,6 +53,7 @@
 	  <Folder Include="Application\Roles\Queries\" />
 	  <Folder Include="Application\User\" />
 	  <Folder Include="Domain\Organizations\Repositories\" />
+	  <Folder Include="Domain\Organizations\Services\" />
 	  <Folder Include="Domain\Permissions\Repositories\" />
 	  <Folder Include="Domain\Permissions\Services\" />
 	  <Folder Include="Domain\SSO\Repositories\" />

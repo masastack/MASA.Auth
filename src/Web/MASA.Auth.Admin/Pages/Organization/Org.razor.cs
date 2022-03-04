@@ -1,11 +1,13 @@
-﻿namespace MASA.Auth.Admin.Pages.Organization;
+﻿using MASA.Auth.Admin.Pages.Organization.ViewModels;
+
+namespace MASA.Auth.Admin.Pages.Organization;
 
 public partial class Org
 {
     bool _addOrgDialog, _addDepartmentUserDialog, _disableDepartmentMemberBtn = true;
     List<Guid> _active = new List<Guid>();
     List<DepartmentItem> _departments = new();
-    CreateDepartment _createDepartment = new();
+    CreateDepartmentModel _createDepartment = new();
     DepartmentItem _currentDepartment = new();
 
     [Parameter]
