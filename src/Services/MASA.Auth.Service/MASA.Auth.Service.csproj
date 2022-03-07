@@ -11,9 +11,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Application\Roles\**" />
 	  <Compile Remove="Application\User\**" />
+	  <Content Remove="Application\Roles\**" />
 	  <Content Remove="Application\User\**" />
+	  <EmbeddedResource Remove="Application\Roles\**" />
 	  <EmbeddedResource Remove="Application\User\**" />
+	  <None Remove="Application\Roles\**" />
 	  <None Remove="Application\User\**" />
 	</ItemGroup>
 	
@@ -49,15 +53,12 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Application\Roles\Commands\" />
-	  <Folder Include="Application\Roles\Queries\" />
-	  <Folder Include="Application\User\" />
+	  <Folder Include="Application\Subjects\Models\" />
 	  <Folder Include="Domain\Organizations\Repositories\" />
 	  <Folder Include="Domain\Organizations\Services\" />
 	  <Folder Include="Domain\Permissions\Repositories\" />
 	  <Folder Include="Domain\Permissions\Services\" />
 	  <Folder Include="Domain\SSO\Repositories\" />
-	  <Folder Include="Domain\Subjects\Repositories\" />
 	  <Folder Include="Infrastructure\EntityConfigurations\SSO\" />
 	</ItemGroup>
 </Project>

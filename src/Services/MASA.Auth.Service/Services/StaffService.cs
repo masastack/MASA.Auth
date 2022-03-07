@@ -1,12 +1,11 @@
 ﻿namespace MASA.Auth.Service.Services;
 
-public class DepartmentService : ServiceBase
+public class StaffService : ServiceBase
 {
-    public DepartmentService(IServiceCollection services) : base(services)
+    public StaffService(IServiceCollection services) : base(services)
     {
-        App.MapGet(Routing.DepartmentList, ListAsync);
-        App.MapPost(Routing.Department, CreateAsync);
-        App.MapDelete(Routing.Department, DeleteAsync);
+        App.MapGet(Routing.StaffList, ListAsync);
+        App.MapPost(Routing.Staff, CreateAsync);
     }
 
     private async Task CreateAsync([FromServices] IEventBus eventBus, [FromBody] CreateDepartmentCommand createDepartmentCommand)
@@ -20,10 +19,4 @@ public class DepartmentService : ServiceBase
         await eventBus.PublishAsync(query);
         return query.Result;
     }
-
-    private async Task DeleteAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
-    {
-        await eventBus.PublishAsync(new DeleteDepartmentCommand(id));
-    }
 }
-

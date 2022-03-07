@@ -6,9 +6,9 @@ public partial class Org
 {
     bool _addOrgDialog, _addDepartmentUserDialog, _disableDepartmentMemberBtn = true;
     List<Guid> _active = new List<Guid>();
-    List<DepartmentItem> _departments = new();
+    List<DepartmentItemResponse> _departments = new();
     CreateDepartmentModel _createDepartment = new();
-    DepartmentItem _currentDepartment = new();
+    DepartmentItemResponse _currentDepartment = new();
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
@@ -37,7 +37,7 @@ public partial class Org
         //});
     }
 
-    private async Task ActiveUpdated(List<DepartmentItem> activedItems)
+    private async Task ActiveUpdated(List<DepartmentItemResponse> activedItems)
     {
         _disableDepartmentMemberBtn = false;
         _currentDepartment = activedItems[0];

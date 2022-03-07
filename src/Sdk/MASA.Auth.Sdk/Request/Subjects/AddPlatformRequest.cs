@@ -29,7 +29,7 @@ public class AddPlatformRequest
         VerifyType = verifyType;
     }
 
-    public static implicit operator AddPlatformRequest(PlatformItem request)
+    public static implicit operator AddPlatformRequest(PlatformItemResponse request)
     {
         return new AddPlatformRequest(request.Name, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
     }

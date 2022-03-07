@@ -16,7 +16,7 @@
         <MCol Cols="4">
             <MTreeview Active="_active"
                        Items="_departments"
-                       OnActiveUpdate="(List<DepartmentItem> e)=>ActiveUpdated(e)"
+                       OnActiveUpdate="(List<DepartmentItemResponse> e)=>ActiveUpdated(e)"
                        Activatable
                        ItemText="r=>r.Name"
                        ItemKey="r=>r.Id"

@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Sdk.Request.Organizations;
 
-public class CreateDepartment
+public class CreateDepartmentRequest
 {
     public string Name { get; set; } = "";
 

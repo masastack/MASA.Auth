@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Sdk.Response.Subjects;
 
-public class PlatformItem
+public class PlatformItemResponse
 {
     public Guid Id { get; set; }
 
@@ -22,7 +22,7 @@ public class PlatformItem
 
     public DateTime? ModificationTime { get; set; }
 
-    public PlatformItem(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
+    public PlatformItemResponse(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
     {
         Id = id;
         Name = name;

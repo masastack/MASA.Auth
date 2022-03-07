@@ -26,7 +26,7 @@ public class EditPlatformRequest
         VerifyType = verifyType;
     }
 
-    public static implicit operator EditPlatformRequest(PlatformItem request)
+    public static implicit operator EditPlatformRequest(PlatformItemResponse request)
     {
         return new EditPlatformRequest(request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
     }

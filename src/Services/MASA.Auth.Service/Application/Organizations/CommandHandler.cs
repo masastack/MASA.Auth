@@ -1,6 +1,4 @@
-﻿using MASA.Auth.Service.Application.Organizations.Commands;
-
-namespace MASA.Auth.Service.Application.Organizations;
+﻿namespace MASA.Auth.Service.Application.Organizations;
 
 public class CommandHandler
 {
@@ -17,7 +15,28 @@ public class CommandHandler
         var department = new Department(createDepartmentCommand.Name, createDepartmentCommand.Description);
         department.AddStaffs(createDepartmentCommand.StaffIds.ToArray());
         department.Move(createDepartmentCommand.ParentId);
+        department.SetEnabled(createDepartmentCommand.Enabled);
         await _departmentRepository.AddAsync(department);
+    }
+
+    [EventHandler]
+    public async Task CopyDepartmentAsync(CopyDepartmentCommand copyDepartmentCommand)
+    {
+        var department = new Department(copyDepartmentCommand.Name, copyDepartmentCommand.Description);
+        department.AddStaffs(copyDepartmentCommand.StaffIds.ToArray());
+        department.Move(copyDepartmentCommand.ParentId);
+        department.SetEnabled(copyDepartmentCommand.Enabled);
+        await _departmentRepository.AddAsync(department);
+        if (copyDepartmentCommand.IsMigrate)
+        {
+            var originalDepartment = await _departmentRepository.FindAsync(copyDepartmentCommand.OriginalId);
+            if (originalDepartment is null)
+            {
+                throw new UserFriendlyException("The original department does not exist");
+            }
+            originalDepartment.RemoveStaffs(copyDepartmentCommand.StaffIds.ToArray());
+            await _departmentRepository.UpdateAsync(originalDepartment);
+        }
     }
 
     [EventHandler]

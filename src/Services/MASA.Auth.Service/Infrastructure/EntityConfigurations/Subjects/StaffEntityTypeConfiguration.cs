@@ -6,6 +6,10 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
     {
         builder.ToTable(nameof(Staff), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(s => s.Id);
+        builder.HasIndex(s => s.JobNumber);
+
+        builder.Property(s => s.JobNumber).HasMaxLength(20);
+        builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);
     }
 }
 

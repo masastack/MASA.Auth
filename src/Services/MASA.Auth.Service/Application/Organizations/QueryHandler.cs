@@ -1,6 +1,4 @@
-﻿using MASA.Auth.Service.Application.Organizations.Queries;
-
-namespace MASA.Auth.Service.Application.Organizations;
+﻿namespace MASA.Auth.Service.Application.Organizations;
 
 public class QueryHandler
 {
