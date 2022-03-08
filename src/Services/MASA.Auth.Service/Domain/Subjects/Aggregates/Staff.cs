@@ -1,23 +1,36 @@
 ﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates;
 
-public class Staff : Entity<Guid>
+public class Staff : AuditAggregateRoot<Guid, Guid>
 {
     public Guid UserId { get; private set; }
 
-    public string JobNumber { get; private set; }
+    private User? _user;
+
+    public virtual User User => LazyLoader.Load(this, ref _user)!;
+
+
+    public string JobNumber { get; private set; } = "";
+
+    /// <summary>
+    /// redundance user name
+    /// </summary>
+    public string Name { get; set; } = "";
 
     public StaffStates StaffState { get; private set; }
 
     public StaffTypes StaffType { get; private set; }
 
-    private Staff()
+    private ILazyLoader LazyLoader { get; set; } = null!;
+
+    private Staff(ILazyLoader lazyLoader)
     {
-        JobNumber = "";
+        LazyLoader = lazyLoader;
     }
 
-    public Staff(Guid userId, string jobNumber, StaffStates staffState, StaffTypes staffType)
+    public Staff(Guid userId, string name, string jobNumber, StaffStates staffState, StaffTypes staffType)
     {
         UserId = userId;
+        Name = name;
         JobNumber = jobNumber;
         StaffState = staffState;
         StaffType = staffType;

@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations.Subjects;
 
-public class StaffPermissionEntityTypeConfiguration : IEntityTypeConfiguration<UserPermission>
+public class UserPermissionEntityTypeConfiguration : IEntityTypeConfiguration<UserPermission>
 {
     public void Configure(EntityTypeBuilder<UserPermission> builder)
     {

@@ -16,7 +16,7 @@
         <MCol Cols="4">
             <MTreeview Active="_active"
                        Items="_departments"
-                       OnActiveUpdate="(List<DepartmentItem> e)=>ActiveUpdated(e)"
+                       OnActiveUpdate="(List<DepartmentItemResponse> e)=>ActiveUpdated(e)"
                        Activatable
                        ItemText="r=>r.Name"
                        ItemKey="r=>r.Id"
@@ -156,22 +156,18 @@
                     <MIcon>mdi-close</MIcon>
                 </MButton>
             </MCardTitle>
-@*            <MCardText class="pt-5">
+            <MCardText class="pt-5">
+                <MTextField @bind-Value="_createDepartment.Name" Class="mb-6" Label="部门名称" HideDetails="@("auto")" Dense Outlined />
                 @if (_createDepartment.ParentId != Guid.Empty)
                 {
                     <MTextField @bind-Value="_createDepartment.ParentName" Disabled Class="mb-6" Label="所属部门" HideDetails="@("auto")" Dense Outlined />
                 }
-                <MTextField @bind-Value="_createDepartment.Name" Class="mb-6" Label="部门名称" HideDetails="@("auto")" Dense Outlined />
-                <MTextField @bind-Value="_createDepartment.Code" Class="mb-6" Label="部门标识" HideDetails="@("auto")" Dense Outlined />
-                <MTextField @bind-Value="_createDepartment.Describtion" Class="mb-6" Label="部门描述" HideDetails="@("auto")" Dense Outlined />
-            </MCardText>*@
+                <MTextField @bind-Value="_createDepartment.Description" Class="mb-6" Label="部门描述" HideDetails="@("auto")" Dense Outlined />
+            </MCardText>
             <MDivider />
             <MCardActions class="mt-2 d-flex justify-end">
-                <MButton Color="primary" Width="100" class="rounded-pill" OnClick="() => _addOrgDialog = false">
-                    取消
-                </MButton>
                 <MButton Color="primary" Width="100" class="rounded-pill" OnClick="AddDepartment">
-                    保存
+                    @T("Submit")
                 </MButton>
             </MCardActions>
         </MCard>

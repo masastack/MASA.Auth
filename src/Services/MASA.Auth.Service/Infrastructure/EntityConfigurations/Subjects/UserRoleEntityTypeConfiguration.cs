@@ -1,6 +1,6 @@
 ﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations.Subjects;
 
-public class StaffRoleEntityTypeConfiguration : IEntityTypeConfiguration<UserRole>
+public class UserRoleEntityTypeConfiguration : IEntityTypeConfiguration<UserRole>
 {
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
