@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Infrastructure.Repositories;
+﻿using Masa.Auth.Service.Domain.Organizations.Repositories;
+
+namespace Masa.Auth.Service.Infrastructure.Repositories;
 
 public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>, IDepartmentRepository
 {

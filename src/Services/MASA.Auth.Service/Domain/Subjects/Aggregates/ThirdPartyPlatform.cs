@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
+﻿using Masa.Auth.Service.Infrastructure.Enums;
+
+namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
 public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
 {

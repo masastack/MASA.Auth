@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220308033532_init")]
+    [Migration("20220308054904_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Masa.Auth.Service.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Masa.Auth.Service.Domain.Organization.Aggregates.Department", b =>
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace Masa.Auth.Service.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Sort")
@@ -675,20 +675,18 @@ namespace Masa.Auth.Service.Migrations
                     b.ToTable("IntegrationEventLog", (string)null);
                 });
 
-            modelBuilder.Entity("Masa.Auth.Service.Domain.Organization.Aggregates.Department", b =>
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Domain.Organization.Aggregates.Department", "Parent")
+                    b.HasOne("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", "Parent")
                         .WithMany("SubDepartments")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.DepartmentStaff", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Domain.Organization.Aggregates.Department", "Department")
+                    b.HasOne("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", "Department")
                         .WithMany("DepartmentStaffs")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -749,7 +747,7 @@ namespace Masa.Auth.Service.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Masa.Auth.Service.Domain.Organization.Aggregates.Department", b =>
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", b =>
                 {
                     b.Navigation("DepartmentStaffs");
 
