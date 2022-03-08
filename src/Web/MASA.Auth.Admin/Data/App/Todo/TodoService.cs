@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.App.Todo
+﻿namespace Masa.Auth.Admin.Data.App.Todo
 {
     public class TodoService
     {

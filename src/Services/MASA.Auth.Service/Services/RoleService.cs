@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service;
+﻿namespace Masa.Auth.Service;
 
 public class RoleService : ServiceBase
 {

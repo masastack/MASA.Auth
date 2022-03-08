@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Services;
+﻿namespace Masa.Auth.Service.Services;
 
 public class DepartmentService : ServiceBase
 {

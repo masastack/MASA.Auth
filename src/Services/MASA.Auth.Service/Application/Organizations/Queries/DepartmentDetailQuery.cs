@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Organizations.Queries;
+﻿namespace Masa.Auth.Service.Application.Organizations.Queries;
 
 public record DepartmentDetailQuery(Guid DepartmentId) : Query<DepartmentDetail>
 {

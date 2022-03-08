@@ -7,17 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Web/MASA.Auth.Admin/MASA.Auth.Admin.csproj", "src/Web/MASA.Auth.Admin/"]
-COPY ["src/ApiGateways/Caller/MASA.Auth.Caller/MASA.Auth.Caller.csproj", "src/ApiGateways/Caller/MASA.Auth.Caller/"]
-RUN dotnet restore "src/Web/MASA.Auth.Admin/MASA.Auth.Admin.csproj"
+COPY ["src/Web/Masa.Auth.Admin/Masa.Auth.Admin.csproj", "src/Web/Masa.Auth.Admin/"]
+COPY ["src/ApiGateways/Caller/Masa.Auth.Caller/Masa.Auth.Caller.csproj", "src/ApiGateways/Caller/Masa.Auth.Caller/"]
+RUN dotnet restore "src/Web/Masa.Auth.Admin/Masa.Auth.Admin.csproj"
 COPY . .
-WORKDIR "/src/src/Web/MASA.Auth.Admin"
-RUN dotnet build "MASA.Auth.Admin.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Web/Masa.Auth.Admin"
+RUN dotnet build "Masa.Auth.Admin.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MASA.Auth.Admin.csproj" -c Release -o /app/publish
+RUN dotnet publish "Masa.Auth.Admin.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MASA.Auth.Admin.dll"]
+ENTRYPOINT ["dotnet", "Masa.Auth.Admin.dll"]

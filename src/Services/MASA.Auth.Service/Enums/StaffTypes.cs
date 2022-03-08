@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Enums;
+﻿namespace Masa.Auth.Service.Enums;
 
 public enum StaffTypes
 {

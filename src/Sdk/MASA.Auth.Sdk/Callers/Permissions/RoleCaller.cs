@@ -1,11 +1,10 @@
-﻿using MASA.Auth.Sdk.Callers;
-using MASA.Auth.Sdk.Callers.Subjects;
-
-namespace MASA.Auth.Sdk.Callers.Permissions;
+﻿namespace Masa.Auth.Sdk.Callers.Permissions;
 
 public class RoleCaller : CallerBase
 {
     protected override string BaseAddress { get; set; }
+
+    public override string Name { get; set; }
 
     public RoleCaller(IServiceProvider serviceProvider) : base(serviceProvider)
     {

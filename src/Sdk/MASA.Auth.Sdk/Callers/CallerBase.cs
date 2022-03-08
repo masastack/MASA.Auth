@@ -1,6 +1,6 @@
-﻿using MASA.Auth.Sdk.Response;
+﻿using Masa.Auth.Sdk.Response;
 
-namespace MASA.Auth.Sdk.Callers;
+namespace Masa.Auth.Sdk.Callers;
 
 public abstract class CallerBase : HttpClientCallerBase
 {

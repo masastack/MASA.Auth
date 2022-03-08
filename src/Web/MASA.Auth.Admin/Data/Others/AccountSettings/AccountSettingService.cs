@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.Others.AccountSettings
+﻿namespace Masa.Auth.Admin.Data.Others.AccountSettings
 {
     public static class AccountSettingService
     {

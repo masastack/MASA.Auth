@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.App.User.Dto
+﻿namespace Masa.Auth.Admin.Data.App.User.Dto
 {
     public class UserDto : IComparable
     {

@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Subjects.Queries;
+﻿namespace Masa.Auth.Service.Application.Subjects.Queries;
 
 public record StaffPaginationQuery(int PageIndex, int PageSize, string SearchKey) : Query<PaginationList<StaffItem>>
 {

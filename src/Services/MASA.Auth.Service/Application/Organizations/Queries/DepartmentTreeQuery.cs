@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Organizations.Queries;
+﻿namespace Masa.Auth.Service.Application.Organizations.Queries;
 
 public record DepartmentTreeQuery(string Name, Guid ParentId) : Query<List<DepartmentItem>>
 {

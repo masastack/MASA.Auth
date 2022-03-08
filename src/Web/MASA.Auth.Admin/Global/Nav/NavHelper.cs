@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Global
+﻿namespace Masa.Auth.Admin.Global
 {
     public class NavHelper
     {

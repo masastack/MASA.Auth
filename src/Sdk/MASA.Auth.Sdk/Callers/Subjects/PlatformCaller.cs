@@ -1,11 +1,13 @@
-﻿using MASA.Auth.Sdk.Response;
-using MASA.Auth.Sdk.Response.Subjects;
+﻿using Masa.Auth.Sdk.Response;
+using Masa.Auth.Sdk.Response.Subjects;
 
-namespace MASA.Auth.Sdk.Callers.Subjects;
+namespace Masa.Auth.Sdk.Callers.Subjects;
 
 internal class PlatformCaller : CallerBase
 {
     protected override string BaseAddress { get; set; }
+
+    public override string Name { get; set; }
 
     internal PlatformCaller(IServiceProvider serviceProvider) : base(serviceProvider)
     {

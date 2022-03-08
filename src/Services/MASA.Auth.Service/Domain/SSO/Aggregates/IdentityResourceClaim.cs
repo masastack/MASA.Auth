@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.SSO.Aggregates.IdentityResources;
+﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates.IdentityResources;
 
 public class IdentityResourceClaim : UserClaim
 {

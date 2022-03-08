@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure;
+﻿namespace Masa.Auth.Service.Infrastructure;
 
 public class AuthDbContext : IntegrationEventLogContext
 {

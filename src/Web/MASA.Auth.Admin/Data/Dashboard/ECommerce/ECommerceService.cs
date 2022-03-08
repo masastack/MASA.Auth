@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.Dashboard.ECommerce
+﻿namespace Masa.Auth.Admin.Data.Dashboard.ECommerce
 {
     public static class ECommerceService
     {

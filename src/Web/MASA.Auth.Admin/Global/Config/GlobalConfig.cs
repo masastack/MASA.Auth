@@ -1,4 +1,4 @@
-namespace MASA.Framework.Admin.Global;
+namespace Masa.Framework.Admin.Global;
 
 public class GlobalConfig
 {

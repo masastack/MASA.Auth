@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.Others.AccountSettings.Dto
+﻿namespace Masa.Auth.Admin.Data.Others.AccountSettings.Dto
 {
     public class InformationDto
     {

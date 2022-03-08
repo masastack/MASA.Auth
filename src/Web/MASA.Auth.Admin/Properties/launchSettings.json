@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "MASA.Auth.Admin": {
+    "Masa.Auth.Admin": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

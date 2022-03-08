@@ -5,7 +5,7 @@ services:
   redis:
     image: redis:alpine
 
-  masa.auth.database:
+  Masa.auth.database:
      image: mcr.microsoft.com/mssql/server:2019-latest
      ports:
        - "1433:1433"
@@ -13,7 +13,7 @@ services:
       - SA_PASSWORD=P@ssw0rd
       - ACCEPT_EULA=Y
 
-  masa.auth.admin:
+  Masa.auth.admin:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -25,7 +25,7 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
 
-  masa.auth.service:
+  Masa.auth.service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -35,7 +35,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  masa.auth.service.dapr:
+  Masa.auth.service.dapr:
     image: "daprio/daprd:1.5.1"
     command: ["./daprd",
       "-app-id", "masa-auth-service",
@@ -43,10 +43,10 @@ services:
       "-components-path", "/components"
       ]
     depends_on:
-      - masa.auth.service
+      - Masa.auth.service
     volumes:
       - "./dapr/components/:/components"
-    network_mode: "service:masa.auth.service"
+    network_mode: "service:Masa.auth.service"
 
 
   dapr-placement:

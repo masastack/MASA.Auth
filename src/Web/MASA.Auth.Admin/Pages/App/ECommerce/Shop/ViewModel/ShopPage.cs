@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Pages.App.ECommerce.Shop
+﻿namespace Masa.Auth.Admin.Pages.App.ECommerce.Shop
 {
     public class ShopPage
     {

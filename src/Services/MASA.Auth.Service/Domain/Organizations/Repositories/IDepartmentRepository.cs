@@ -1,6 +1,6 @@
-﻿namespace MASA.Auth.Service.Domain.Organization.Repositories;
+﻿namespace Masa.Auth.Service.Domain.Organization.Repositories;
 
-public interface IDepartmentRepository : IRepository<Department>
+public interface IDepartmentRepository : IRepository<Department, Guid>
 {
 }
 

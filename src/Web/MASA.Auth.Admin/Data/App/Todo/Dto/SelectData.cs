@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.App.Todo.Dto
+﻿namespace Masa.Auth.Admin.Data.App.Todo.Dto
 {
     public class SelectData
     {

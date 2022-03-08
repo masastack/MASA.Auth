@@ -1,4 +1,4 @@
-namespace MASA.Auth.Sdk.ApiUri;
+namespace Masa.Auth.Sdk.ApiUri;
 
 internal class Routing
 {

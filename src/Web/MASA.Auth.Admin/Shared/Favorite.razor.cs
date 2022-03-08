@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Shared
+﻿namespace Masa.Auth.Admin.Shared
 {
     public partial class Favorite
     {

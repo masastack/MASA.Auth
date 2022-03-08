@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Organizations.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Organizations.Aggregates;
 
 public class Position : AggregateRoot<Guid>
 {

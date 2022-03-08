@@ -1,4 +1,4 @@
-namespace MASA.Framework.Admin.Shared;
+namespace Masa.Framework.Admin.Shared;
 
 public enum MessageType
 {

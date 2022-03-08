@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Organizations;
+﻿namespace Masa.Auth.Service.Application.Organizations;
 
 public class CommandHandler
 {
@@ -47,6 +47,11 @@ public class CommandHandler
         {
             throw new UserFriendlyException("The current department does not exist");
         }
+        if (department.DepartmentStaffs.Any())
+        {
+            throw new UserFriendlyException("The current department has staff,delete failed");
+        }
+
         await _departmentRepository.RemoveAsync(department);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Pages.App.Invoice.Components
+﻿namespace Masa.Auth.Admin.Pages.App.Invoice.Components
 {
     public partial class InvoiceList
     {

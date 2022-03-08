@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.App.ECommerce.Dto
+﻿namespace Masa.Auth.Admin.Data.App.ECommerce.Dto
 {
     public class BasketItemDto
     {

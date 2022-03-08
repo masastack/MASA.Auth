@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Subjects.Queries;
+﻿namespace Masa.Auth.Service.Application.Subjects.Queries;
 
 public record StaffListQuery(string SearchKey) : Query<List<StaffItem>>
 {

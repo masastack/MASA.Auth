@@ -12,15 +12,15 @@
                             @if (string.IsNullOrEmpty(UserData.HeadImg))
                             {
                                 string color = UserData.Color;
-                                <MAvatar Size="120" Color="@($"{color}-lighten-5")">
-                                    <span class="@($"{color}--text text-h3")">@UserData.SampleName</span>
-                                </MAvatar>
+                                    <MAvatar Size="120" Color="@($"{color}-lighten-5")">
+                                        <span class="@($"{color}--text text-h3")">@UserData.SampleName</span>
+                                    </MAvatar>
                             }
                             else
                             {
-                                <MAvatar Size="120">
-                                    <MImage Contain Src="@UserData.HeadImg" />
-                                </MAvatar>
+                                    <MAvatar Size="120">
+                                        <MImage Contain Src="@UserData.HeadImg" />
+                                    </MAvatar>
                             }
                             <h5 class="mt-1">@UserData.FullName</h5>
                             <span class="mt-1 text-caption">@UserData.Email</span>
@@ -107,19 +107,19 @@
                         @switch (context.Header.Value)
                         {
                             case nameof(PermissionDto.Module):
-                                <span class="text-body neutral-lighten-2--text">@context.Value</span>
+                                        <span class="text-body neutral-lighten-2--text">@context.Value</span>
                                 break;
                             case nameof(PermissionDto.Read):
-                                <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Read"></MCheckbox>
+                                        <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Read"></MCheckbox>
                                 break;
                             case nameof(PermissionDto.Write):
-                                <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Write"></MCheckbox>
+                                        <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Write"></MCheckbox>
                                 break;
                             case nameof(PermissionDto.Create):
-                                <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Create"></MCheckbox>
+                                        <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Create"></MCheckbox>
                                 break;
                             case nameof(PermissionDto.Delete):
-                                <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Delete"></MCheckbox>
+                                        <MCheckbox Class="mt-0" Color="primary" @bind-Value="context.Item.Delete"></MCheckbox>
                                 break;
                             default:
                                 @context.Value
@@ -212,16 +212,16 @@
     </MCol>
 </MRow>
 
-<MASA.Auth.Admin.Pages.App.Invoice.Components.InvoiceList />
+<Masa.Auth.Admin.Pages.App.Invoice.Components.InvoiceList />
 
 @code {
     private List<DataTableHeader<PermissionDto>> _headers = new List<DataTableHeader<PermissionDto>>
     {
-        new (){ Text= "MODULE", Sortable= false, Value= nameof(PermissionDto.Module)},
-        new (){ Text= "READ", Sortable= false, Value= nameof(PermissionDto.Read),Align="center"},
-        new (){ Text= "WRITE", Sortable= false, Value= nameof(PermissionDto.Write),Align="center"},
-        new (){ Text= "CREATE", Sortable= false, Value= nameof(PermissionDto.Create),Align="center"},
-        new (){ Text= "DELETE", Sortable= false, Value= nameof(PermissionDto.Delete),Align="center"}
+    new (){ Text= "MODULE", Sortable= false, Value= nameof(PermissionDto.Module)},
+    new (){ Text= "READ", Sortable= false, Value= nameof(PermissionDto.Read),Align="center"},
+    new (){ Text= "WRITE", Sortable= false, Value= nameof(PermissionDto.Write),Align="center"},
+    new (){ Text= "CREATE", Sortable= false, Value= nameof(PermissionDto.Create),Align="center"},
+    new (){ Text= "DELETE", Sortable= false, Value= nameof(PermissionDto.Delete),Align="center"}
     };
     private List<PermissionDto> _permissions = UserService.GetPermissionsList();
     private UserDto? _userData;

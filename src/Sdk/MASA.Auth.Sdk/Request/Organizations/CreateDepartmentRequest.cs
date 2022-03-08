@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Sdk.Request.Organizations;
+﻿namespace Masa.Auth.Sdk.Request.Organizations;
 
 public class CreateDepartmentRequest
 {

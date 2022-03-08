@@ -10,13 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MASA.Blazor" Version="0.2.10426" />
+    <PackageReference Include="Masa.Blazor" Version="0.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ApiGateways\Caller\MASA.Auth.Caller\MASA.Auth.Caller.csproj" />
-    <ProjectReference Include="..\..\Sdk\MASA.Auth.Sdk\MASA.Auth.Sdk.csproj" />
+    <ProjectReference Include="..\..\ApiGateways\Caller\Masa.Auth.Caller\Masa.Auth.Caller.csproj" />
+    <ProjectReference Include="..\..\Sdk\Masa.Auth.Sdk\Masa.Auth.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>

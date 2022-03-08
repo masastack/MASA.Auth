@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
 public class UserRole : Entity<Guid>
 {

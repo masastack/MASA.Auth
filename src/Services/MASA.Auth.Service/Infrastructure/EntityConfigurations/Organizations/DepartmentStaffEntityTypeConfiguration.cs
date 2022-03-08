@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations.Organizations;
+﻿namespace Masa.Auth.Service.Infrastructure.EntityConfigurations.Organizations;
 
 public class DepartmentStaffEntityTypeConfiguration : IEntityTypeConfiguration<DepartmentStaff>
 {
