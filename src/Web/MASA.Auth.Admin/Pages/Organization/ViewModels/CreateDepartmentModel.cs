@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Pages.Organization.ViewModels;
+﻿namespace Masa.Auth.Admin.Pages.Organization.ViewModels;
 
 public class CreateDepartmentModel : CreateDepartmentRequest
 {

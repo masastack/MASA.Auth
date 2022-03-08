@@ -19,13 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F3986DD3-037
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{32774681-0D67-48A6-A379-D57015094F85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.Caller", "src\ApiGateways\Caller\MASA.Auth.Caller\MASA.Auth.Caller.csproj", "{40685EC0-64DF-4742-B8F6-602AFAEFC0EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Caller", "src\ApiGateways\Caller\Masa.Auth.Caller\Masa.Auth.Caller.csproj", "{40685EC0-64DF-4742-B8F6-602AFAEFC0EA}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F17CC0A5-E77B-48A8-907C-90CB0020F869}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.Service", "src\Services\MASA.Auth.Service\MASA.Auth.Service.csproj", "{6664812F-DE87-4A65-9C25-AD0FD4E6982E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Service", "src\Services\Masa.Auth.Service\Masa.Auth.Service.csproj", "{6664812F-DE87-4A65-9C25-AD0FD4E6982E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.Admin", "src\Web\MASA.Auth.Admin\MASA.Auth.Admin.csproj", "{1857D292-ADBD-4205-BA85-E68D6B6C61E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Admin", "src\Web\Masa.Auth.Admin\Masa.Auth.Admin.csproj", "{1857D292-ADBD-4205-BA85-E68D6B6C61E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{64B06D24-C53D-4C64-9CF1-98F9F4F2DBEE}"
 	ProjectSection(SolutionItems) = preProject
@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sdk", "Sdk", "{B1E94045-4DE1-4C4A-A03C-4B6F8D91425C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MASA.Auth.Sdk", "src\Sdk\MASA.Auth.Sdk\MASA.Auth.Sdk.csproj", "{BB090286-3756-4D15-B441-E973E903ECD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Sdk", "src\Sdk\Masa.Auth.Sdk\Masa.Auth.Sdk.csproj", "{BB090286-3756-4D15-B441-E973E903ECD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

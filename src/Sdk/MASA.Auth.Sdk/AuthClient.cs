@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Sdk;
+﻿namespace Masa.Auth.Sdk;
 
 public class AuthClient
 {

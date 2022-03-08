@@ -1,4 +1,6 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Aggregates;
+﻿using Masa.Auth.Service.Infrastructure.Enums;
+
+namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
 public class Staff : AuditAggregateRoot<Guid, Guid>
 {

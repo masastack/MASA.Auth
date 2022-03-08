@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.App.Invoice
+﻿namespace Masa.Auth.Admin.Data.App.Invoice
 {
     public static class InvoiceService
     {

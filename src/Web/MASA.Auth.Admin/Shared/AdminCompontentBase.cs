@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
-
-namespace MASA.Framework.Admin.Shared;
+namespace Masa.Framework.Admin.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
 {

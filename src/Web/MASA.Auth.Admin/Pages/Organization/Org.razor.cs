@@ -1,6 +1,6 @@
-﻿using MASA.Auth.Admin.Pages.Organization.ViewModels;
+﻿using Masa.Auth.Admin.Pages.Organization.ViewModels;
 
-namespace MASA.Auth.Admin.Pages.Organization;
+namespace Masa.Auth.Admin.Pages.Organization;
 
 public partial class Org
 {

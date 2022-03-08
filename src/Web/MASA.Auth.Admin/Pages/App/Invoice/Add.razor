@@ -38,21 +38,21 @@
             <MCardText class="px-8 py-6">
                 <MRow>
                     <MCol Md=6 Sm=12>
-                        @if(IsEdit is false)
+                        @if (IsEdit is false)
                         {
-                            <MSelect Items=_invoices ItemValue="u => u" Dense Label="Invoice To" ItemText="u => u" Outlined @bind-Value=_invoiceTo></MSelect>
+                                <MSelect Items=_invoices ItemValue="u => u" Dense Label="Invoice To" ItemText="u => u" Outlined @bind-Value=_invoiceTo></MSelect>
                         }
                         else
                         {
-                           <h3 class="mb-5 mt-n2 black--text">Invoice To:</h3> 
+                               <h3 class="mb-5 mt-n2 black--text">Invoice To:</h3>
                         }
-                        @if(IsEdit || _invoiceTo!="")
+                        @if (IsEdit || _invoiceTo != "")
                         {                            
-                            <h3 class="mb-0 black--text">@(InvoiceRecord.Client?.FullName??"Lori Wells")</h3>
-                            <h3 class="mb-0 body-1">Jenkins-Rosales Inc</h3>
-                            <h3 class="mb-0 body-1">075 Smith Views, Colombia</h3>
-                            <h3 class="mb-0 body-1">@(InvoiceRecord.Client?.Mobile??"(895) 401-4255")</h3>
-                            <h3 class="mb-0 body-1">@(InvoiceRecord.Client?.Email??"calvin07@joseph-edwards.org")</h3>
+                                <h3 class="mb-0 black--text">@(InvoiceRecord.Client?.FullName??"Lori Wells")</h3>
+                                <h3 class="mb-0 body-1">Jenkins-Rosales Inc</h3>
+                                <h3 class="mb-0 body-1">075 Smith Views, Colombia</h3>
+                                <h3 class="mb-0 body-1">@(InvoiceRecord.Client?.Mobile??"(895) 401-4255")</h3>
+                                <h3 class="mb-0 body-1">@(InvoiceRecord.Client?.Email??"calvin07@joseph-edwards.org")</h3>
                         }
                     </MCol>
                     <MCol Md=6 Sm=12 Class="d-flex mt-n8">
@@ -95,63 +95,63 @@
                 <div class="grey-light pa-4">
                     @foreach (var bill in _bills)
                     {
-                        <div class="d-flex mt-8">
-                            <div class="border-solid pa-5 max-width">
-                                <MRow Class="max-width">
-                                    <MCol Md=5 Sm=12>
-                                        <MSelect Items=InvoiceService.GetBillList() ItemValue="u => u" ItemText="u => u.Type" TItemValue="BillDto" TItem="BillDto" TValue="BillDto" Dense Label="Item" Outlined OnChange="newValue=>OnBillChange(bill,newValue)"></MSelect>
-                                    </MCol>
+                            <div class="d-flex mt-8">
+                                <div class="border-solid pa-5 max-width">
+                                    <MRow Class="max-width">
+                                        <MCol Md=5 Sm=12>
+                                            <MSelect Items=InvoiceService.GetBillList() ItemValue="u => u" ItemText="u => u.Type" TItemValue="BillDto" TItem="BillDto" TValue="BillDto" Dense Label="Item" Outlined OnChange="newValue=>OnBillChange(bill,newValue)"></MSelect>
+                                        </MCol>
 
-                                    <MCol Md=3 Sm=12>
-                                        <MTextField Label="Cost" Dense @bind-Value="bill.Cost" Outlined></MTextField>
-                                    </MCol>
+                                        <MCol Md=3 Sm=12>
+                                            <MTextField Label="Cost" Dense @bind-Value="bill.Cost" Outlined></MTextField>
+                                        </MCol>
 
-                                    <MCol Md=2 Sm=12>
-                                        <MTextField Label="Qty" Dense @bind-Value="bill.Qty" Outlined></MTextField>
-                                    </MCol>
+                                        <MCol Md=2 Sm=12>
+                                            <MTextField Label="Qty" Dense @bind-Value="bill.Qty" Outlined></MTextField>
+                                        </MCol>
 
-                                    <MCol Md=2 Sm=12>
-                                        $@bill.Price
-                                    </MCol>
-                                </MRow>
-                                <MRow Class="mb-n10 mt-n7 max-width">
-                                    <MCol Md=5 Sm=12>
-                                        <MTextarea Height=70 Label="Remark" Dense @bind-Value="bill.Remark" Outlined></MTextarea>
-                                    </MCol>
-                                    <MCol Md=7 Sm=12>
-                                        Discount: 0% 0% 0%
-                                    </MCol>
-                                </MRow>
+                                        <MCol Md=2 Sm=12>
+                                            $@bill.Price
+                                        </MCol>
+                                    </MRow>
+                                    <MRow Class="mb-n10 mt-n7 max-width">
+                                        <MCol Md=5 Sm=12>
+                                            <MTextarea Height=70 Label="Remark" Dense @bind-Value="bill.Remark" Outlined></MTextarea>
+                                        </MCol>
+                                        <MCol Md=7 Sm=12>
+                                            Discount: 0% 0% 0%
+                                        </MCol>
+                                    </MRow>
+                                </div>
+                                <div class="border-solid text-center" style="width:20px">
+                                    <MIcon Small OnClick="()=>_bills.Remove(bill)">fas fa-times</MIcon>
+                                    <div style="height:75%"></div>
+                                     <MMenu NudgeRight="40" CloseOnClick="false" CloseOnContentClick="false" @bind-Value="@bill.ShowMenu" Transition="scale-transition" Left Top OffsetY MinWidth="@("auto")">
+                                        <ActivatorContent>
+                                            <MIcon @attributes="context.Attrs" Small Class="mt-auto">fas fa-cog</MIcon>                                        
+                                        </ActivatorContent>
+                                        <ChildContent>                                     
+                                            <MCard>
+                                                <MCardText>   
+                                                    <MTextField Style="width:230px" Dense Label="Discount(%)" Outlined @bind-Value="bill.Discount" />
+                                                    <div class="d-flex">
+                                                        <div style="width:100px">
+                                                            <MSelect @bind-Value="bill.Tax1" Dense Label="Tax 1" Outlined Items="_taxs" ItemText="u => ConvertText(u)" ItemValue="u=>u" />
+                                                        </div>
+                                                        <div class="ml-auto" style="width:100px">
+                                                            <MSelect @bind-Value="bill.Tax2" Dense Label="Tax 2" Outlined Items="_taxs" ItemText="u => ConvertText(u)" ItemValue="u=>u"/>
+                                                        </div>    
+                                                    </div>                                                                                                     
+                                                    <div class="d-flex">
+                                                         <MButton Class="pro-primary--text mr-auto" Outlined OnClick="()=>bill.ShowMenu=false">Apply</MButton>
+                                                         <MButton OnClick="()=>bill.ShowMenu=false" Outlined Class="blue-grey--text ml-auto">Cancel</MButton>
+                                                    </div>                                            
+                                                </MCardText>
+                                            </MCard>
+                                        </ChildContent>
+                                    </MMenu>
+                                </div>
                             </div>
-                            <div class="border-solid text-center" style="width:20px">
-                                <MIcon Small OnClick="()=>_bills.Remove(bill)">fas fa-times</MIcon>
-                                <div style="height:75%"></div>
-                                 <MMenu NudgeRight="40" CloseOnClick="false" CloseOnContentClick="false" @bind-Value="@bill.ShowMenu" Transition="scale-transition" Left Top OffsetY MinWidth="@("auto")">
-                                    <ActivatorContent>
-                                        <MIcon @attributes="context.Attrs" Small Class="mt-auto">fas fa-cog</MIcon>                                        
-                                    </ActivatorContent>
-                                    <ChildContent>                                     
-                                        <MCard>
-                                            <MCardText>   
-                                                <MTextField Style="width:230px" Dense Label="Discount(%)" Outlined @bind-Value="bill.Discount" />
-                                                <div class="d-flex">
-                                                    <div style="width:100px">
-                                                        <MSelect @bind-Value="bill.Tax1" Dense Label="Tax 1" Outlined Items="_taxs" ItemText="u => ConvertText(u)" ItemValue="u=>u" />
-                                                    </div>
-                                                    <div class="ml-auto" style="width:100px">
-                                                        <MSelect @bind-Value="bill.Tax2" Dense Label="Tax 2" Outlined Items="_taxs" ItemText="u => ConvertText(u)" ItemValue="u=>u"/>
-                                                    </div>    
-                                                </div>                                                                                                     
-                                                <div class="d-flex">
-                                                     <MButton Class="pro-primary--text mr-auto" Outlined OnClick="()=>bill.ShowMenu=false">Apply</MButton>
-                                                     <MButton OnClick="()=>bill.ShowMenu=false" Outlined Class="blue-grey--text ml-auto">Cancel</MButton>
-                                                </div>                                            
-                                            </MCardText>
-                                        </MCard>
-                                    </ChildContent>
-                                </MMenu>
-                            </div>
-                        </div>
 
                     }
                     <MButton Small Class="white--text mt-4" Color="#7367f0" OnClick="()=>_bills.Add(new BillDto())">Add Item</MButton>
@@ -204,11 +204,11 @@
                 <div>
                     <MButton Outlined Class="pro-primary--text max-width">Save</MButton>
                 </div>
-                @if(IsEdit)
+                @if (IsEdit)
                 {
-                    <div class="mt-2">
-                        <MButton Block class="success" OnClick="()=>{ _showAddPayment = true; }">Add Payment</MButton>
-                    </div>
+                        <div class="mt-2">
+                            <MButton Block class="success" OnClick="()=>{ _showAddPayment = true; }">Add Payment</MButton>
+                        </div>
                 }
 
             </MCardText>
@@ -223,4 +223,4 @@
     </MCol>
 </MRow>
 
-<MASA.Auth.Admin.Pages.App.Invoice.Components.AddPayment @bind-Show="_showAddPayment" />
+<Masa.Auth.Admin.Pages.App.Invoice.Components.AddPayment @bind-Show="_showAddPayment" />

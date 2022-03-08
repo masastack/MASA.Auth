@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Global.Nav.Model
+﻿namespace Masa.Auth.Admin.Global.Nav.Model
 {
     public class NavModel
     {

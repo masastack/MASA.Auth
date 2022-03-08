@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace MASA.Auth.Sdk;
+namespace Masa.Auth.Sdk;
 
 public static class ServiceCollectionExtensions
 {

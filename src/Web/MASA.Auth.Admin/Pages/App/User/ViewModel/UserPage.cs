@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Pages.App.User
+﻿namespace Masa.Auth.Admin.Pages.App.User
 {
     public class UserPage
     {

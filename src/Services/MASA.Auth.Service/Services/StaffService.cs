@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Services;
+﻿namespace Masa.Auth.Service.Services;
 
 public class StaffService : ServiceBase
 {
@@ -8,15 +8,13 @@ public class StaffService : ServiceBase
         App.MapPost(Routing.Staff, CreateAsync);
     }
 
-    private async Task CreateAsync([FromServices] IEventBus eventBus, [FromBody] CreateDepartmentCommand createDepartmentCommand)
+    private async Task CreateAsync([FromServices] IEventBus eventBus, [FromBody] CreateStaffCommand createStaffCommand)
     {
-        await eventBus.PublishAsync(createDepartmentCommand);
+
     }
 
     private async Task<List<DepartmentItem>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
     {
-        var query = new DepartmentTreeQuery(name, Guid.Empty);
-        await eventBus.PublishAsync(query);
-        return query.Result;
+        throw new NotImplementedException();
     }
 }

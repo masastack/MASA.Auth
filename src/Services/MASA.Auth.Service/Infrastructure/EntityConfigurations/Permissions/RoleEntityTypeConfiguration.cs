@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations;
+﻿namespace Masa.Auth.Service.Infrastructure.EntityConfigurations.Permissions;
 
 public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
 {

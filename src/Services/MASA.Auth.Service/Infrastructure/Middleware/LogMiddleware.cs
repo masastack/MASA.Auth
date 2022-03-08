@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.Middleware
+﻿namespace Masa.Auth.Service.Infrastructure.Middleware
 {
     public class LogMiddleware<TEvent> : IMiddleware<TEvent>
         where TEvent : notnull, IEvent

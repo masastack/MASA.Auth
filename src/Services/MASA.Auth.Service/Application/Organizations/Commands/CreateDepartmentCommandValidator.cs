@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Organizations.Commands;
+﻿namespace Masa.Auth.Service.Application.Organizations.Commands;
 
 public class CreateDepartmentCommandValidator : AbstractValidator<CreateDepartmentCommand>
 {

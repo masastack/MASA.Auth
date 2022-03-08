@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Subjects.Commands;
+﻿namespace Masa.Auth.Service.Application.Subjects.Commands;
 
 public record UpdateUserCommand : Command
 {

@@ -17,13 +17,13 @@ services:
     image: ${DOCKER_REGISTRY-}masaauthadmin
     build:
       context: .
-      dockerfile: src/Web/MASA.Auth.Admin/Dockerfile
+      dockerfile: src/Web/masa.Auth.Admin/Dockerfile
 
   masa.auth.service:
     image: ${DOCKER_REGISTRY-}masaauthservice
     build:
       context: .
-      dockerfile: src/Services/MASA.Auth.Service/Dockerfile
+      dockerfile: src/Services/masa.Auth.Service/Dockerfile
 
   
   dapr-placement:

@@ -1,4 +1,4 @@
-# Rules in this file were initially inferred by Visual Studio IntelliCode from the D:\Source\Repos\MASA.Auth-v2 codebase based on best match to current usage at 2022/2/22
+# Rules in this file were initially inferred by Visual Studio IntelliCode from the D:\Source\Repos\Masa.Auth-v2 codebase based on best match to current usage at 2022/2/22
 # You can modify the rules from these initially generated values to suit your own policies
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
 [*.cs]

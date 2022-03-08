@@ -1,5 +1,5 @@
-﻿namespace MASA.Auth.Service.Domain.Subjects.Repositories;
+﻿namespace Masa.Auth.Service.Domain.Subjects.Repositories;
 
-public interface IStaffRepository : IRepository<Staff>
+public interface IStaffRepository : IRepository<Staff, Guid>
 {
 }

@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.Repositories;
+﻿namespace Masa.Auth.Service.Infrastructure.Repositories;
 
 public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
 {

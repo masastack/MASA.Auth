@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.App.ECommerce
+﻿namespace Masa.Auth.Admin.Data.App.ECommerce
 {
     public static class BasketService
     {

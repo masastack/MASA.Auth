@@ -22,21 +22,21 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.0.1681936502" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="0.0.1685760477" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.0.1685760477" />
+		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.3.1" />
 		<PackageReference Include="FluentValidation" Version="10.3.6" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
-		<PackageReference Include="MASA.BuildingBlocks.DDD.Domain" Version="0.0.1681936502" />
-		<PackageReference Include="MASA.Contrib.DDD.Domain" Version="0.0.1685760477" />
-		<PackageReference Include="MASA.Contrib.DDD.Domain.Repository.EF" Version="0.0.1685760477" />
-		<PackageReference Include="MASA.Contrib.ReadWriteSpliting.CQRS" Version="0.0.1685760477" />
-		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.0.1685760477" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.3.0" />
+		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.3.1" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="0.3.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
-		<PackageReference Include="MASA.Contrib.Data.UoW.EF" Version="0.0.1685760477" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.0.1685760477" />
+		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.3.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -53,7 +53,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Application\Subjects\Models\" />
 	  <Folder Include="Domain\Organizations\Repositories\" />
 	  <Folder Include="Domain\Organizations\Services\" />
 	  <Folder Include="Domain\Permissions\Repositories\" />

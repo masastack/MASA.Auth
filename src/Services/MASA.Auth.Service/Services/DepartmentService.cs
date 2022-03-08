@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Services;
+﻿namespace Masa.Auth.Service.Services;
 
 public class DepartmentService : ServiceBase
 {
@@ -14,9 +14,9 @@ public class DepartmentService : ServiceBase
         await eventBus.PublishAsync(createDepartmentCommand);
     }
 
-    private async Task<List<DepartmentItem>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<DepartmentItem>> ListAsync([FromServices] IEventBus eventBus)
     {
-        var query = new DepartmentTreeQuery(name, Guid.Empty);
+        var query = new DepartmentTreeQuery(Guid.Empty);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

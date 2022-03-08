@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Global.Config
+﻿namespace Masa.Auth.Admin.Global.Config
 {
     public static class PageModes
     {

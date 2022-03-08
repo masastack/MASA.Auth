@@ -6,7 +6,7 @@
     <ProjectGuid>f17cc0a5-e77b-48a8-907c-90cb0020f869</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>masa.auth.service.order</DockerServiceName>
+    <DockerServiceName>Masa.auth.service.order</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

@@ -1,14 +1,12 @@
-﻿using MASA.Auth.Service.Application.Subjects.Commands;
-
-namespace MASA.Auth.Service.Application.Subjects;
+﻿namespace Masa.Auth.Service.Application.Subjects;
 
 public class CommandHandler
 {
     readonly IStaffRepository _staffRepository;
     readonly IStaffRepository _userRepository;
-    readonly EventBus _eventBus;
+    readonly IEventBus _eventBus;
 
-    public CommandHandler(IStaffRepository staffRepository, IStaffRepository userRepository, EventBus eventBus)
+    public CommandHandler(IStaffRepository staffRepository, IStaffRepository userRepository, IEventBus eventBus)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;

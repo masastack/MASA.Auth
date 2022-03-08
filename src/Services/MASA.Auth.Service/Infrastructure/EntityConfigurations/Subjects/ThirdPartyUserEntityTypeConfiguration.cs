@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.EntityConfigurations.Subjects;
+﻿namespace Masa.Auth.Service.Infrastructure.EntityConfigurations.Subjects;
 
 public class ThirdPartyUserEntityTypeConfiguration : IEntityTypeConfiguration<ThirdPartyUser>
 {

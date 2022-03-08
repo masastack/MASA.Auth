@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Organizations;
+﻿namespace Masa.Auth.Service.Application.Organizations;
 
 public class CommandHandler
 {
@@ -42,10 +42,20 @@ public class CommandHandler
     [EventHandler]
     public async Task DeleteDepartmentAsync(DeleteDepartmentCommand deleteDepartmentCommand)
     {
-        var department = await _departmentRepository.FindAsync(deleteDepartmentCommand.DepartmentId);
-        if (department is null)
+        var department = await _departmentRepository.GetByIdAsync(deleteDepartmentCommand.DepartmentId);
+        await DeleteCheckAsync(department);
+    }
+
+    private async Task DeleteCheckAsync(Department department)
+    {
+        if (department.DepartmentStaffs.Any())
         {
-            throw new UserFriendlyException("The current department does not exist");
+            throw new UserFriendlyException("The current department has staff,delete failed");
+        }
+        var childDepartments = await _departmentRepository.QueryListAsync(d => d.ParentId == department.Id);
+        foreach (var childDepartment in childDepartments)
+        {
+            await DeleteCheckAsync(childDepartment);
         }
         await _departmentRepository.RemoveAsync(department);
     }

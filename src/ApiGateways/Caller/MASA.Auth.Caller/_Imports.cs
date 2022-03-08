@@ -1,1 +1,1 @@
-﻿global using MASA.Utils.Caller.HttpClient;
+﻿global using Masa.Utils.Caller.HttpClient;

@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.Const;
+﻿namespace Masa.Auth.Service.Infrastructure.Const;
 
 public class Routing
 {

@@ -1,16 +1,16 @@
-﻿namespace MASA.Auth.Service.Domain.Organization.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Organizations.Aggregates;
 
 public class Department : AuditAggregateRoot<Guid, Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
-    public Guid ParentId { get; set; } = Guid.Empty;
+    public Guid ParentId { get; private set; }
 
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; private set; } = true;
 
-    public int Sort { get; set; }
+    public int Sort { get; private set; }
 
-    public string Description { get; set; } = "";
+    public string Description { get; private set; } = "";
 
     private List<DepartmentStaff> _departmentStaffs = new();
 

@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Infrastructure.Models;
+﻿namespace Masa.Auth.Service.Infrastructure.Models;
 
 public class PaginationList<T> where T : class
 {

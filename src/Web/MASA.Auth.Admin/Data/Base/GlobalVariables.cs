@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Data.Base
+﻿namespace Masa.Auth.Admin.Data.Base
 {
     public static class GlobalVariables
     {

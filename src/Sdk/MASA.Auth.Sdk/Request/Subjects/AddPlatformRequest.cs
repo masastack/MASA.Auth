@@ -1,6 +1,6 @@
-﻿using MASA.Auth.Sdk.Response.Subjects;
+﻿using Masa.Auth.Sdk.Response.Subjects;
 
-namespace MASA.Auth.Sdk.Request.Subjects;
+namespace Masa.Auth.Sdk.Request.Subjects;
 
 public class AddPlatformRequest
 {

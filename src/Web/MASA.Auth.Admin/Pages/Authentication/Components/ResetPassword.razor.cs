@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Pages.Authentication.Components
+﻿namespace Masa.Auth.Admin.Pages.Authentication.Components
 {
     public partial class ResetPassword
     {

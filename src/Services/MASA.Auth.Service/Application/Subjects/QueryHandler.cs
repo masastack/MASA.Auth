@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Service.Application.Subjects;
+﻿namespace Masa.Auth.Service.Application.Subjects;
 
 public class QueryHandler
 {
