@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MASA.Framework.Admin.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
 {
     private I18n? _i18n;
+    private GlobalConfig? _globalConfig;
 
     [Inject]
     public I18n I18n
@@ -17,7 +20,62 @@ public abstract class AdminCompontentBase : ComponentBase
         }
     }
 
+    [Inject]
+    public GlobalConfig GlobalConfig
+    {
+        get
+        {
+            return _globalConfig ?? throw new Exception("please Inject GlobalConfig!");
+        }
+        set
+        {
+            _globalConfig = value;
+        }
+    }
+
+    public bool Lodding
+    {
+        get => GlobalConfig.Lodding;
+        set => GlobalConfig.Lodding = value;
+    }
+
     public string T(string key) => I18n.T(key);
+
+    public void OpenConfirmDialog(Func<bool, Task> confirmFunc, string messgae)
+    {
+        EventCallback<bool> callback = EventCallback.Factory.Create(this, confirmFunc);
+        GlobalConfig.OpenConfirmDialog(I18n.T("Operation confirmation"), messgae, callback);
+    }
+
+    public void OpenErrorDialog(string message)
+    {
+        GlobalConfig.OpenConfirmDialog(I18n.T("Error"), message, default);
+    }
+
+    public void OpenWarningDialog(string message)
+    {
+        GlobalConfig.OpenConfirmDialog(I18n.T("Warning"), message, default);
+    }
+
+    public void OpenInformationMessage(string message)
+    {
+        GlobalConfig.OpenMessage(message, MessageType.Information);
+    }
+
+    public void OpenSuccessMessage(string message)
+    {
+        GlobalConfig.OpenMessage(message, MessageType.Success);
+    }
+
+    public void OpenWarningMessage(string message)
+    {
+        GlobalConfig.OpenMessage(message, MessageType.Warning);
+    }
+
+    public void OpenErrorMessage(string message)
+    {
+        GlobalConfig.OpenMessage(message, MessageType.Error);
+    }
 
     public void RegisterPage(ComponentPageBase componentPage)
     {

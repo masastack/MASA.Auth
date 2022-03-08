@@ -13,7 +13,7 @@ internal class PlatformCaller : CallerBase
         BaseAddress = Routing.AuthServiceBaseAdress;
     }
 
-    public async Task<ApiResultResponse<PaginatedItemResponse<PlatformItem>>> GetListAsync(int pageIndex = 1, int pageSize = 20, string? search = null)
+    public async Task<ApiResultResponse<PaginatedItemResponse<PlatformItemResponse>>> GetListAsync(int pageIndex = 1, int pageSize = 20, string? search = null)
     {
         var queryArguments = new Dictionary<string, string>()
         {
@@ -25,7 +25,7 @@ internal class PlatformCaller : CallerBase
         return await ResultAsync(async () =>
         {
             //var url = QueryHelpers.AddQueryString(Routing.UserList, queryArguments);
-            var response = await CallerProvider.GetAsync<PaginatedItemResponse<PlatformItem>>(Routing.PlatformList, queryArguments);
+            var response = await CallerProvider.GetAsync<PaginatedItemResponse<PlatformItemResponse>>(Routing.PlatformList, queryArguments);
             return response!;
         });
     }

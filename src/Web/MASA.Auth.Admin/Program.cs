@@ -13,7 +13,7 @@ builder.Services.AddMasaBlazor(builder =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddCaller(Assembly.Load("MASA.Auth.Caller"));
+//builder.Services.AddCaller(Assembly.Load("MASA.Auth.Caller"));
 
 var app = builder.Build();
 
