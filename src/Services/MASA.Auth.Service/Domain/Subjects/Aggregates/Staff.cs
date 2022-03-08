@@ -6,10 +6,9 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     private User? _user;
 
-    public virtual User User => LazyLoader.Load(this, ref _user)!;
+    public virtual User User => LazyLoader.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to query user data");
 
-
-    public string JobNumber { get; private set; } = "";
+    public string JobNumber { get; private set; }
 
     /// <summary>
     /// redundance user name
