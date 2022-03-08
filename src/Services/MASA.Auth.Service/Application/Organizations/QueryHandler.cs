@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Domain.Organizations.Repositories;
-
-namespace Masa.Auth.Service.Application.Organizations;
+﻿namespace Masa.Auth.Service.Application.Organizations;
 
 public class QueryHandler
 {
@@ -20,7 +18,25 @@ public class QueryHandler
     [EventHandler]
     public async Task GetDepartmentTreeAsync(DepartmentTreeQuery departmentTreeQuery)
     {
+        departmentTreeQuery.Result = await GetDepartmentsAsync(departmentTreeQuery.ParentId);
+    }
 
+    private async Task<List<DepartmentItem>> GetDepartmentsAsync(Guid parentId)
+    {
+        var result = new List<DepartmentItem>();
+        //todo change memory
+        var departments = await _departmentRepository.GetListAsync(d => d.ParentId == parentId);
+        foreach (var department in departments)
+        {
+            var item = new DepartmentItem
+            {
+                Id = department.Id,
+                Name = department.Name,
+                Children = await GetDepartmentsAsync(department.Id)
+            };
+            result.Add(item);
+        }
+        return result;
     }
 }
 

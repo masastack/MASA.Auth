@@ -12,6 +12,5 @@ public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Depart
         builder.Property(d => d.Description).HasMaxLength(255);
 
         builder.HasMany(d => d.DepartmentStaffs).WithOne(ds => ds.Department);
-        builder.HasMany(d => d.SubDepartments).WithOne(d => d.Parent).HasForeignKey(d => d.ParentId);
     }
 }

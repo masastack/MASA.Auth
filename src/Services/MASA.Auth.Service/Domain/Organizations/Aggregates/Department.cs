@@ -4,19 +4,13 @@ public class Department : AuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
 
-    public Guid? ParentId { get; private set; }
-
-    public Department? Parent { get; private set; }
+    public Guid ParentId { get; private set; }
 
     public bool Enabled { get; private set; } = true;
 
     public int Sort { get; private set; }
 
     public string Description { get; private set; } = "";
-
-    private List<Department> _subDepartments = new();
-
-    public IReadOnlyCollection<Department> SubDepartments => _subDepartments;
 
     private List<DepartmentStaff> _departmentStaffs = new();
 

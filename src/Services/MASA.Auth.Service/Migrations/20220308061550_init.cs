@@ -25,7 +25,7 @@ namespace Masa.Auth.Service.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Sort = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -38,12 +38,6 @@ namespace Masa.Auth.Service.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Department", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Department_Department_ParentId",
-                        column: x => x.ParentId,
-                        principalSchema: "organizations",
-                        principalTable: "Department",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -422,12 +416,6 @@ namespace Masa.Auth.Service.Migrations
                 schema: "organizations",
                 table: "Department",
                 column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Department_ParentId",
-                schema: "organizations",
-                table: "Department",
-                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DepartmentStaff_DepartmentId",

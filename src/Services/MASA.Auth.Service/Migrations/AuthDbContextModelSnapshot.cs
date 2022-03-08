@@ -56,7 +56,7 @@ namespace Masa.Auth.Service.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid?>("ParentId")
+                    b.Property<Guid>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Sort")
@@ -65,8 +65,6 @@ namespace Masa.Auth.Service.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Department", "organizations");
                 });
@@ -673,15 +671,6 @@ namespace Masa.Auth.Service.Migrations
                     b.ToTable("IntegrationEventLog", (string)null);
                 });
 
-            modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", b =>
-                {
-                    b.HasOne("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", "Parent")
-                        .WithMany("SubDepartments")
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.DepartmentStaff", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", "Department")
@@ -748,8 +737,6 @@ namespace Masa.Auth.Service.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", b =>
                 {
                     b.Navigation("DepartmentStaffs");
-
-                    b.Navigation("SubDepartments");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Permissions.Aggregates.Permission", b =>
