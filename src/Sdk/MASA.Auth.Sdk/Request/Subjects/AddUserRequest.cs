@@ -1,9 +1,7 @@
-﻿namespace Masa.Auth.Sdk.Response.Subjects;
+﻿namespace Masa.Auth.Sdk.Request.Subjects;
 
-public class UserItemResponse
+public class AddUserRequest
 {
-    public Guid UserId { get; set; }
-
     public string Name { get; set; }
 
     public string DisplayName { get; set; }
@@ -11,8 +9,6 @@ public class UserItemResponse
     public string Avatar { get; set; }
 
     public string IDCard { get; set; }
-
-    public string Account { get; set; }
 
     public string CompanyName { get; set; }
 
@@ -42,14 +38,12 @@ public class UserItemResponse
 
     #endregion
 
-    public UserItemResponse(Guid userId, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public AddUserRequest(string name, string displayName, string avatar, string iDCard, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
     {
-        UserId = userId;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = idCard;
-        Account = account;
+        IDCard = iDCard;
         CompanyName = companyName;
         Enabled = enabled;
         PhoneNumber = phoneNumber;
@@ -64,5 +58,8 @@ public class UserItemResponse
         ResidentialDistrictCode = residentialDistrictCode;
     }
 
+    public static implicit operator AddUserRequest(UserItemResponse user)
+    {
+        return new AddUserRequest(user.Name,user.DisplayName,user.Avatar,user.IDCard,user.CompanyName,user.Enabled,user.PhoneNumber,user.Email,user.HouseholdRegisterAddress,user.HouseholdRegisterProvinceCode,user.HouseholdRegisterCityCode,user.HouseholdRegisterDistrictCode,user.ResidentialAddress,user.ResidentialProvinceCode,user.ResidentialCityCode,user.ResidentialDistrictCode);
+    }
 }
-

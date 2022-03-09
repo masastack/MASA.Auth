@@ -29,8 +29,8 @@ public class AddPlatformRequest
         VerifyType = verifyType;
     }
 
-    public static implicit operator AddPlatformRequest(PlatformItemResponse request)
+    public static implicit operator AddPlatformRequest(PlatformItemResponse platform)
     {
-        return new AddPlatformRequest(request.Name, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
+        return new AddPlatformRequest(platform.Name, platform.DisplayName, platform.ClientId, platform.ClientSecret, platform.Url, platform.Icon, platform.VerifyType);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Sdk.Request.Subjects;
 
-public class GetThirdPartyUserItemsRequest
+public class GetUserItemsRequest
 {
     public int PageIndex { get; set; }
 
@@ -8,14 +8,14 @@ public class GetThirdPartyUserItemsRequest
 
     public string Search { get; set; }
 
-    public UserStates UserState { get; set; }
+    public bool Enabled { get; set; }
 
-    public GetThirdPartyUserItemsRequest(int pageIndex, int pageSize, string search, UserStates userState)
+    public GetUserItemsRequest(int pageIndex, int pageSize, string search, bool enabled)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;
         Search = search;
-        UserState = userState;
+        Enabled = enabled;
     }
 }
 

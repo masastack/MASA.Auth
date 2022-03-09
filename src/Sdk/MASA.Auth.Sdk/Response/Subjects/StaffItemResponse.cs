@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Sdk.Response.Subjects;
+﻿namespace Masa.Auth.Sdk.Response.Subjects;
 
 public class StaffItemResponse
 {
