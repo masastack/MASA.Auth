@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Infrastructure.Enums;
-
-namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
 public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
 {
@@ -16,8 +14,6 @@ public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; }
 
-    public PlatformTypes PlatformType { get; private set; }
-
     public VerifyTypes VerifyType { get; private set; }
 
     public IdentificationTypes IdentificationType { get; private set; }
@@ -32,7 +28,7 @@ public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
         Icon = "";
     }
 
-    public ThirdPartyPlatform(string name, string displayName, string clientId, string clientSecret, string url, string icon, PlatformTypes platformType, VerifyTypes verifyType, IdentificationTypes identificationType)
+    public ThirdPartyPlatform(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyTypes verifyType, IdentificationTypes identificationType)
     {
         Name = name;
         DisplayName = displayName;
@@ -40,7 +36,6 @@ public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
         ClientSecret = clientSecret;
         Url = url;
         Icon = icon;
-        PlatformType = platformType;
         VerifyType = verifyType;
         IdentificationType = identificationType;
     }

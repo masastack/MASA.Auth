@@ -8,17 +8,13 @@ public class ThirdPartyUser : Entity<Guid>
 
     public Guid UserId { get; private set; }
 
-    public UserStates UserState { get; private set; }
+    public bool Enabled { get; private set; }
 
-    private ThirdPartyUser()
-    {
-    }
-
-    public ThirdPartyUser(Guid thirdPartyPlatformId, Guid userId, UserStates userState)
+    public ThirdPartyUser(Guid thirdPartyPlatformId, Guid userId, bool enabled)
     {
         ThirdPartyPlatformId = thirdPartyPlatformId;
         UserId = userId;
-        UserState = userState;
+        Enabled = enabled;
     }
 }
 

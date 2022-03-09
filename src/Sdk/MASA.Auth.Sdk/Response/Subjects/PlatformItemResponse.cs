@@ -2,7 +2,7 @@
 
 public class PlatformItemResponse
 {
-    public Guid Id { get; set; }
+    public Guid PlatformId { get; set; }
 
     public string Name { get; set; }
 
@@ -22,9 +22,9 @@ public class PlatformItemResponse
 
     public DateTime? ModificationTime { get; set; }
 
-    public PlatformItemResponse(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
+    public PlatformItemResponse(Guid platformId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
     {
-        Id = id;
+        PlatformId = platformId;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;
