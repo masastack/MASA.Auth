@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Infrastructure.Enums;
-
-namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
 public class Staff : AuditAggregateRoot<Guid, Guid>
 {
@@ -10,7 +8,7 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     public virtual User User => LazyLoader.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to query user data");
 
-    public string JobNumber { get; private set; }
+    public string JobNumber { get; private set; } = "";
 
     /// <summary>
     /// redundance user name

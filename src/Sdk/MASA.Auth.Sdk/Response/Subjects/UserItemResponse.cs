@@ -18,8 +18,6 @@ public class UserItemResponse
 
     public string CompanyName { get; private set; }
 
-    public bool Enabled { get; set; }
-
     #region Contact Property
 
     public string PhoneNumber { get; private set; }
@@ -42,7 +40,7 @@ public class UserItemResponse
 
     public string ResidentialDistrictCode { get; private set; } = "";
 
-    public UserItemResponse(Guid userId, string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public UserItemResponse(Guid userId, string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
     {
         UserId = userId;
         Name = name;
@@ -52,7 +50,6 @@ public class UserItemResponse
         Account = account;
         Password = password;
         CompanyName = companyName;
-        Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
         HouseholdRegisterAddress = householdRegisterAddress;
