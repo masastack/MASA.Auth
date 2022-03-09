@@ -1,8 +1,7 @@
-﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates.Abstract
+﻿namespace Masa.Auth.Service.Domain.Sso.Aggregates.Abstract
 {
-    public abstract class UserClaim
+    public abstract class UserClaim : Entity<int>
     {
-        public int Id { get; set; }
         public string Type { get; set; } = "";
     }
 }

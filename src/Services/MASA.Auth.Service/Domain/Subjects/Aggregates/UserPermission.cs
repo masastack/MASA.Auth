@@ -6,6 +6,8 @@ public class UserPermission : Entity<Guid>
 
     public Guid PermissionId { get; private set; }
 
+    public Permission Permission { get; private set; } = null!;
+
     public bool Effect { get; private set; }
 
     public UserPermission(Guid userId, Guid permissionId, bool effect)

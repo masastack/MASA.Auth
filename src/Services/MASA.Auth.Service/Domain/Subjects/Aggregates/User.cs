@@ -16,7 +16,6 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string CompanyName { get; private set; }
 
-    public bool Enabled { get; set; }
 
     #region Contact Property
 
@@ -42,17 +41,18 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     #endregion
 
-    public User(string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, string phoneNumber, string email)
+    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string phoneNumber, string email)
     {
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = iDCard;
+        IDCard = idCard;
         Account = account;
         Password = password;
         CompanyName = companyName;
         PhoneNumber = phoneNumber;
         Email = email;
     }
+
 }
 

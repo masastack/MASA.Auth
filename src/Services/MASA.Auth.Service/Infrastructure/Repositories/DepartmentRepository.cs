@@ -8,13 +8,13 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
     {
     }
 
-    public async Task<Department> GetByIdAsync(Guid Id)
+    public async Task<Department> GetByIdAsync(Guid id)
     {
         return await _context.Set<Department>()
-            .Where(d => d.Id == Id)
+            .Where(d => d.Id == id)
             .Include(d => d.DepartmentStaffs)
             .FirstOrDefaultAsync()
-            ?? throw new UserFriendlyException("The current department does not exist"); ;
+            ?? throw new UserFriendlyException("The current department does not exist");
     }
 
     public async Task<List<Department>> QueryListAsync(Expression<Func<Department, bool>> predicate)

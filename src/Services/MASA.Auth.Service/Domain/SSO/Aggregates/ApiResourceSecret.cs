@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Sso.Aggregates;
 
 public class ApiResourceSecret : Secret
 {

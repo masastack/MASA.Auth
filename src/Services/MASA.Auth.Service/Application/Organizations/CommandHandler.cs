@@ -12,21 +12,20 @@ public class CommandHandler
     [EventHandler]
     public async Task CreateDepartmentAsync(CreateDepartmentCommand createDepartmentCommand)
     {
-        var department = new Department(createDepartmentCommand.Name, createDepartmentCommand.Description);
-        department.AddStaffs(createDepartmentCommand.StaffIds.ToArray());
-        department.Move(createDepartmentCommand.ParentId);
-        department.SetEnabled(createDepartmentCommand.Enabled);
+        var department = DepartmentFactory.Create(createDepartmentCommand.Name, createDepartmentCommand.Description,
+            createDepartmentCommand.ParentId, createDepartmentCommand.Enabled, createDepartmentCommand.StaffIds.ToArray());
+
         await _departmentRepository.AddAsync(department);
     }
 
     [EventHandler]
     public async Task CopyDepartmentAsync(CopyDepartmentCommand copyDepartmentCommand)
     {
-        var department = new Department(copyDepartmentCommand.Name, copyDepartmentCommand.Description);
-        department.AddStaffs(copyDepartmentCommand.StaffIds.ToArray());
-        department.Move(copyDepartmentCommand.ParentId);
-        department.SetEnabled(copyDepartmentCommand.Enabled);
+        var department = DepartmentFactory.Create(copyDepartmentCommand.Name, copyDepartmentCommand.Description,
+        copyDepartmentCommand.ParentId, copyDepartmentCommand.Enabled, copyDepartmentCommand.StaffIds.ToArray());
+
         await _departmentRepository.AddAsync(department);
+
         if (copyDepartmentCommand.IsMigrate)
         {
             var originalDepartment = await _departmentRepository.FindAsync(copyDepartmentCommand.OriginalId);
@@ -48,10 +47,7 @@ public class CommandHandler
 
     private async Task DeleteCheckAsync(Department department)
     {
-        if (department.DepartmentStaffs.Any())
-        {
-            throw new UserFriendlyException("The current department has staff,delete failed");
-        }
+        department.DeleteCheck();
         var childDepartments = await _departmentRepository.QueryListAsync(d => d.ParentId == department.Id);
         foreach (var childDepartment in childDepartments)
         {

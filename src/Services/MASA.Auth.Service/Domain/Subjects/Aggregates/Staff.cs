@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Infrastructure.Enums;
-
-namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
 public class Staff : AuditAggregateRoot<Guid, Guid>
 {
@@ -21,6 +19,8 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
     public StaffStates StaffState { get; private set; }
 
     public StaffTypes StaffType { get; private set; }
+
+    public bool Enabled { get; private set; }
 
     private ILazyLoader LazyLoader { get; set; } = null!;
 

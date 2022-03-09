@@ -14,6 +14,7 @@ public class Routing
     const string ROLE = "role";
     const string TEAM = "team";
     const string USER = "user";
+    const string PERMISSION = "permission";
     #endregion
 
     #region #Department
@@ -29,6 +30,18 @@ public class Routing
     public static readonly string Staff = string.Format(DEFAULT_SERVICE, STAFF);
 
     public static readonly string StaffList = string.Format(DEFAULT_SERVICE_LIST, STAFF);
+
+    public static readonly string StaffPagination = string.Format(DEFAULT_SERVICE_BASE, STAFF, "pagination");
+
+    #endregion
+
+    #region Permission
+
+    public static readonly string Permission = string.Format(DEFAULT_SERVICE, PERMISSION);
+
+    public static readonly string PermissionList = string.Format(DEFAULT_SERVICE_LIST, PERMISSION);
+
+    public static readonly string PermissionDetail = string.Format(DEFAULT_SERVICE_BASE, PERMISSION, "{id}");
 
     #endregion
 }
