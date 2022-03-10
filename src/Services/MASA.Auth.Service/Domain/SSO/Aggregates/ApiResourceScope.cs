@@ -1,11 +1,11 @@
-﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Sso.Aggregates;
 
-public class ApiResourceScope
+public class ApiResourceScope : Entity<int>
 {
-    public int Id { get; set; }
     public string Scope { get; set; } = "";
 
     public int ApiResourceId { get; set; }
+
     public ApiResource ApiResource { get; set; } = null!;
 }
 

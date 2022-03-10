@@ -55,9 +55,7 @@
 	<ItemGroup>
 	  <Folder Include="Domain\Organizations\Repositories\" />
 	  <Folder Include="Domain\Organizations\Services\" />
-	  <Folder Include="Domain\Permissions\Repositories\" />
 	  <Folder Include="Domain\Permissions\Services\" />
-	  <Folder Include="Domain\SSO\Repositories\" />
-	  <Folder Include="Infrastructure\EntityConfigurations\SSO\" />
+	  <Folder Include="Domain\Sso\Repositories\" />
 	</ItemGroup>
 </Project>

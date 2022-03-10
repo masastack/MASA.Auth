@@ -44,5 +44,13 @@ public class Department : AuditAggregateRoot<Guid, Guid>
     {
         ParentId = parentId;
     }
+
+    public void DeleteCheck()
+    {
+        if (_departmentStaffs.Any())
+        {
+            throw new UserFriendlyException("The current department has staff,delete failed");
+        }
+    }
 }
 

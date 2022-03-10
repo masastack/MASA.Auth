@@ -19,7 +19,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<RolePermission> RolePermissions => rolePermissions;
 
-    private List<RoleItem> roleItems = new();
+    private List<RoleRelation> roleItems = new();
 
-    public IReadOnlyCollection<RoleItem> RoleItems => roleItems;
+    public IReadOnlyCollection<RoleRelation> RoleItems => roleItems;
 }

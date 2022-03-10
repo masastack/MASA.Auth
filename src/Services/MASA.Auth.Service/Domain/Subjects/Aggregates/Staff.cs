@@ -19,6 +19,8 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     public StaffTypes StaffType { get; private set; }
 
+    public bool Enabled { get; private set; }
+
     private ILazyLoader LazyLoader { get; set; } = null!;
 
     private Staff(ILazyLoader lazyLoader)

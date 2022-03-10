@@ -5,6 +5,7 @@ public class StaffService : ServiceBase
     public StaffService(IServiceCollection services) : base(services)
     {
         App.MapGet(Routing.StaffList, ListAsync);
+        App.MapGet(Routing.StaffPagination, PaginationAsync);
         App.MapPost(Routing.Staff, CreateAsync);
     }
 
@@ -13,8 +14,18 @@ public class StaffService : ServiceBase
 
     }
 
-    private async Task<List<DepartmentItem>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<StaffItem>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
     {
-        throw new NotImplementedException();
+        var query = new StaffListQuery(name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<PaginationList<StaffItem>> PaginationAsync([FromServices] IEventBus eventBus,
+        [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string name = "")
+    {
+        var query = new StaffPaginationQuery(pageIndex, pageSize, name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 }

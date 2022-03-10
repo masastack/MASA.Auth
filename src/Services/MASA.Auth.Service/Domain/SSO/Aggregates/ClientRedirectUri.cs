@@ -1,11 +1,11 @@
-﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Sso.Aggregates;
 
-public class ClientRedirectUri
+public class ClientRedirectUri : Entity<int>
 {
-    public int Id { get; set; }
     public string RedirectUri { get; set; } = "";
 
     public int ClientId { get; set; }
+
     public Client Client { get; set; } = null!;
 }
 

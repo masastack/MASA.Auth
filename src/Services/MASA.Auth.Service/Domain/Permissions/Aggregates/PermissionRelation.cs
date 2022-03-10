@@ -1,9 +1,9 @@
 ﻿namespace Masa.Auth.Service.Domain.Permissions.Aggregates;
 
-public class RoleItem : Entity<Guid>
+public class PermissionRelation : Entity<Guid>
 {
     public Guid ParentId { get; private set; }
 
-    public Role Role { get; set; } = null!;
+    public Permission Permission { get; private set; } = null!;
 }
 

@@ -1,10 +1,11 @@
-﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Sso.Aggregates;
 
-public class ClientGrantType
+public class ClientGrantType : Entity<int>
 {
-    public int Id { get; set; }
     public string GrantType { get; set; } = "";
+
     public int ClientId { get; set; }
+
     public Client Client { get; set; } = null!;
 }
 

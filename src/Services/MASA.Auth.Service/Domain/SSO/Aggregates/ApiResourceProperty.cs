@@ -1,6 +1,9 @@
-﻿namespace Masa.Auth.Service.Domain.SSO.Aggregates;
+﻿namespace Masa.Auth.Service.Domain.Sso.Aggregates;
 
-public class ApiResourceProperty
+public class ApiResourceProperty : Property
 {
+    public int ApiResourceId { get; set; }
+
+    public ApiResource ApiResource { get; set; } = null!;
 }
 
