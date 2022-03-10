@@ -6,7 +6,7 @@ public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Depart
     {
         builder.ToTable(nameof(Department), AuthDbContext.ORGANIZATION_SCHEMA);
         builder.HasKey(d => d.Id);
-        builder.HasIndex(d => d.Name);
+        builder.HasIndex(d => d.Name).IsUnique();
 
         builder.Property(d => d.Name).HasMaxLength(20).IsRequired();
         builder.Property(d => d.Description).HasMaxLength(255);

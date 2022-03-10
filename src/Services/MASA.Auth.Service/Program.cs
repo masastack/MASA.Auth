@@ -13,6 +13,21 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = false;
     options.Audience = "";
 });
+
+builder.AddMasaConfiguration(
+configurationBuilder =>
+{
+    configurationBuilder.UseMasaOptions(options =>
+    {
+        options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
+        //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
+    });
+});
+
+var serviceProvider = builder.Services.BuildServiceProvider()!;
+var redisOptions = serviceProvider.GetService<IOptions<RedisConfigurationOptions>>();
+builder.Services.AddMasaRedisCache(redisOptions!.Value);
+
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()
