@@ -4,6 +4,8 @@
   "Favorite": "收藏",
 
   //Common Start
+  "Source": "来源",
+  "Type": "类型",
   "CreationTime": "创建时间",
   "State": "状态",
   "Enable": "启用",
@@ -26,6 +28,12 @@
   //ThirdPartyUser end
 
   //Staff start
-  "Staff": "员工"
+  "Staff": "员工",
   //Staff end
+
+  //Platform start
+  "Platform": "平台",
+  "ThirdPartyPlatform.Name": "名称",
+  "ThirdPartyPlatform.DisplayName": "显示名称"
+  //Platform end
 }

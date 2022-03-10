@@ -44,25 +44,41 @@ public class AuthClient
 
     #region Platform
 
-    List<PlatformItemResponse> PlatformItems = new List<PlatformItemResponse>()
+    List<ThirdPartyPlatformItemResponse> PlatformItems = new List<ThirdPartyPlatformItemResponse>()
     {
-        new PlatformItemResponse(Guid.NewGuid(),"微信","weixin",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/weixin","",VerifyType.OAuth,DateTime.Now,null),
-        new PlatformItemResponse(Guid.NewGuid(),"QQ","qq",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/qq","",VerifyType.OAuth,DateTime.Now,null),
+        new ThirdPartyPlatformItemResponse(Guid.NewGuid(),"微信","weixin",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/weixin","",VerifyType.OAuth,DateTime.Now,null),
+        new ThirdPartyPlatformItemResponse(Guid.NewGuid(),"QQ","qq",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/qq","",VerifyType.OAuth,DateTime.Now,null),
     };
 
-    public async Task<ApiResultResponse<List<PlatformItemResponse>>> GetPlatformItemsAsync(GetPlatformItemsRequest request)
+    public async Task<ApiResultResponse<List<ThirdPartyPlatformItemResponse>>> GetThirdPartyPlatformItemsAsync(GetThirdPartyPlatformItemsRequest request)
     {
-        return await Task.FromResult(ApiResultResponse<List<PlatformItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
+        return await Task.FromResult(ApiResultResponse<List<ThirdPartyPlatformItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
     }
 
-    public async Task<ApiResultResponse<PlatformItemResponse>> GetPlatformDetailAsync(Guid id)
+    public async Task<ApiResultResponse<ThirdPartyPlatformItemResponse>> GetThirdPartyPlatformDetailAsync(Guid id)
     {
-        return await Task.FromResult(ApiResultResponse<PlatformItemResponse>.ResponseSuccess(PlatformItems.First(p => p.PlatformId == id), "查询成功"));
+        return await Task.FromResult(ApiResultResponse<ThirdPartyPlatformItemResponse>.ResponseSuccess(PlatformItems.First(p => p.ThirdPartyPlatformId == id), "查询成功"));
     }
 
-    public async Task<ApiResultResponse<List<PlatformItemResponse>>> SelectPlatformAsync()
+    public async Task<ApiResultResponse<List<ThirdPartyPlatformItemResponse>>> SelectThirdPartyPlatformAsync()
     {
-        return await Task.FromResult(ApiResultResponse<List<PlatformItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
+        return await Task.FromResult(ApiResultResponse<List<ThirdPartyPlatformItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse> AddThirdPartyPlatformAsync(AddThirdPartyPlatformRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
+    }
+
+    public async Task<ApiResultResponse> EditThirdPartyPlatformAsync(EditThirdPartyPlatformRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
+    }
+
+    public async Task<ApiResultResponse> DeleteThirdPartyPlatformAsync(Guid id)
+    {
+        PlatformItems.Remove(PlatformItems.First(p => p.ThirdPartyPlatformId == id));
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("删除成功"));
     }
 
     #endregion
@@ -71,13 +87,13 @@ public class AuthClient
 
     List<ThirdPartyUserItemResponse> ThirdPartyUserItems => new List<ThirdPartyUserItemResponse>()
     {
-        new ThirdPartyUserItemResponse(Guid.Parse("A446CD5D-B35F-7029-4A30-8232744A3A8E"),PlatformItems[0].PlatformId,true,UserItems[0]),
-        new ThirdPartyUserItemResponse(Guid.Parse("8056549B-7D96-E377-2D03-A27C77837EFB"),PlatformItems[1].PlatformId,false,UserItems[1]),
+        new ThirdPartyUserItemResponse(Guid.Parse("A446CD5D-B35F-7029-4A30-8232744A3A8E"),PlatformItems[0].ThirdPartyPlatformId,true,UserItems[0],DateTime.Now,DateTime.Now,Guid.Empty),
+        new ThirdPartyUserItemResponse(Guid.Parse("8056549B-7D96-E377-2D03-A27C77837EFB"),PlatformItems[1].ThirdPartyPlatformId,false,UserItems[1],DateTime.Now,DateTime.Now,Guid.Empty),
     };
 
-    public async Task<ApiResultResponse<List<ThirdPartyUserItemResponse>>> GetThirdPartyUserItemsAsync(GetUserItemsRequest request)
+    public async Task<ApiResultResponse<List<ThirdPartyUserItemResponse>>> GetThirdPartyUserItemsAsync(GetThirdPartyUserItemsRequest request)
     {
-        var thirdPartyUsers = ThirdPartyUserItems.Where(tpu => tpu.Enabled == request.Enabled && (tpu.User.Name.Contains(request.Search) || tpu.User.PhoneNumber.Contains(request.Search) || tpu.User.DisplayName.Contains(request.Search))).Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
+        var thirdPartyUsers = ThirdPartyUserItems.Where(tpu => tpu.Enabled == request.Enabled && tpu.ThirdPartyPlatformId == request.ThirdPartyPlatformId && (tpu.User.Name.Contains(request.Search) || tpu.User.PhoneNumber.Contains(request.Search) || tpu.User.DisplayName.Contains(request.Search))).Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
         return await Task.FromResult(ApiResultResponse<List<ThirdPartyUserItemResponse>>.ResponseSuccess(thirdPartyUsers, "查询成功"));
     }
 
@@ -89,7 +105,7 @@ public class AuthClient
     public async Task<ApiResultResponse> AddThirdPartyUserAsync(AddThirdPartyUserRequest request)
     {
         await AddUserAsync(request.User);
-        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(Guid.NewGuid(), request.ThirdPartyPlatformId,request.Enabled, UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
+        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(Guid.NewGuid(), request.ThirdPartyPlatformId,request.Enabled, UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber), DateTime.Now, DateTime.Now, Guid.Empty));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
@@ -98,9 +114,15 @@ public class AuthClient
         await EditUserAsync(request.User);
         var oldData = ThirdPartyUserItems.First(tpu => tpu.ThirdPartyUserId == request.ThirdPartyUserId);
         ThirdPartyUserItems.Remove(oldData);
-        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(request.ThirdPartyUserId, oldData.ThirdPartyPlatformId, request.Enabled, UserItems.First(u => u.UserId==request.User.UserId)));
+        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(request.ThirdPartyUserId, oldData.ThirdPartyPlatformId, request.Enabled, UserItems.First(u => u.UserId==request.User.UserId), DateTime.Now, DateTime.Now, Guid.Empty));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
     }
+
+    #endregion
+
+    #region Staff
+
+
 
     #endregion
 }

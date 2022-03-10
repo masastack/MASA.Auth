@@ -10,12 +10,21 @@ public class ThirdPartyUserItemResponse
 
     public UserItemResponse User { get; set; }
 
-    public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyPlatformId, bool enabled, UserItemResponse user)
+    public DateTime CreationTime { get; set; }
+
+    public DateTime ModificationTime { get; set; }
+
+    public Guid Creator { get; set; }
+
+    public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyPlatformId, bool enabled, UserItemResponse user, DateTime creationTime, DateTime modificationTime, Guid creator)
     {
         ThirdPartyUserId = thirdPartyUserId;
         ThirdPartyPlatformId = thirdPartyPlatformId;
-        User = user;
         Enabled = enabled;
+        User = user;
+        CreationTime = creationTime;
+        ModificationTime = modificationTime;
+        Creator = creator;
     }
 }
 

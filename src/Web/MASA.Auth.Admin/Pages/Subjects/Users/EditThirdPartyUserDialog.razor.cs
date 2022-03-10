@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Admin.Pages.Subjects.Users;
 
-public partial class AuthorizeDialog
+public partial class EditThirdPartyUserDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -12,7 +12,9 @@ public partial class AuthorizeDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid UserId { get; set; }
+    public Guid ThirdPartyUserUserId { get; set; } 
+
+    private bool IsAdd => ThirdPartyUserUserId == Guid.Empty;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -28,9 +30,9 @@ public partial class AuthorizeDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if(Visible is true)
         {
-            await Task.CompletedTask;
+            
         }
     }
 

@@ -120,5 +120,4 @@
     </MCardText>
 </MCard>*@
 
-<AddOrEditUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUserItemsAsync />
-<AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />
+<AddOrEditThirdPartyPlatformDialog ThirdPartyPlatformId=CurrentThirdPartyPlatformId @bind-Visible="ThirdPartyPlatformDialogVisible" OnSubmitSuccess=GetThirdPartyPlatformItemsAsync />

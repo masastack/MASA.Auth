@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Masa.Auth.Sdk.Response;
 
 public class ApiResultResponse
 {
-    public bool Success { get; }
+    public virtual bool Success { get; }
 
     public string Message { get; }
 
@@ -19,6 +21,9 @@ public class ApiResultResponse
 
 public class ApiResultResponse<TEntity> : ApiResultResponse
 {
+    [MemberNotNullWhen(true,nameof(Data))]
+    public override bool Success { get; }
+
     public TEntity? Data { get; }
 
     private ApiResultResponse(bool success, string message, TEntity? data) : base(success, message)

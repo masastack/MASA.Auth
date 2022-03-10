@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Admin.Pages.Subjects.Users;
 
-public partial class AddOrUpdateUserDialog
+public partial class AddOrEditUserDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -44,12 +44,12 @@ public partial class AddOrUpdateUserDialog
         var response = await AuthClient.GetUserDetailAsync(UserId);
         if (response.Success)
         {
-            User = response.Data ?? UserItemResponse.Default;
+            User = response.Data;
         }
         else OpenErrorMessage("Failed to query user data !");
     }
 
-    public async Task AddOrUpdateUserAsync()
+    public async Task AddOrEditUserAsync()
     {
         Lodding = true;
         if(IsAdd)
@@ -73,6 +73,11 @@ public partial class AddOrUpdateUserDialog
             else OpenErrorDialog("Failed to edit user !");
         }
         Lodding = false;
+    }
+
+    protected override bool ShouldRender()
+    {
+        return Visible;
     }
 }
 

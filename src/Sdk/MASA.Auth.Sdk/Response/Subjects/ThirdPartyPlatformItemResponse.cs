@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Sdk.Response.Subjects;
 
-public class PlatformItemResponse
+public class ThirdPartyPlatformItemResponse
 {
-    public Guid PlatformId { get; set; }
+    public Guid ThirdPartyPlatformId { get; set; }
 
     public string Name { get; set; }
 
@@ -22,9 +22,11 @@ public class PlatformItemResponse
 
     public DateTime? ModificationTime { get; set; }
 
-    public PlatformItemResponse(Guid platformId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
+    public static ThirdPartyPlatformItemResponse Default => new ThirdPartyPlatformItemResponse(Guid.Empty,"","","","","","",default,DateTime.Now,null);
+
+    public ThirdPartyPlatformItemResponse(Guid thirdPartyPlatformId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
     {
-        PlatformId = platformId;
+        ThirdPartyPlatformId = thirdPartyPlatformId;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;

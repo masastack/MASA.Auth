@@ -4,21 +4,21 @@ public class StaffItemResponse
 {
     public Guid StaffId { get; set; }
 
-    public UserItemResponse User { get; set; }
-
     public string JobNumber { get; private set; } 
 
-    public StaffStates StaffState { get; private set; }
+    public bool Enabled { get; private set; }
 
     public StaffTypes StaffType { get; private set; }
 
-    public StaffItemResponse(Guid staffId, UserItemResponse user, string jobNumber, StaffStates staffState, StaffTypes staffType)
+    public UserItemResponse User { get; set; }
+
+    public StaffItemResponse(Guid staffId, string jobNumber, bool enabled, StaffTypes staffType, UserItemResponse user)
     {
         StaffId = staffId;
-        User = user;
         JobNumber = jobNumber;
-        StaffState = staffState;
+        Enabled = enabled;
         StaffType = staffType;
+        User = user;
     }
 }
 

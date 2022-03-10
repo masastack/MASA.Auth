@@ -2,10 +2,8 @@
 
 namespace Masa.Auth.Sdk.Request.Subjects;
 
-public class AddPlatformRequest
+public class EditThirdPartyPlatformRequest
 {
-    public string Name { get; set; }
-
     public string DisplayName { get; set; }
 
     public string ClientId { get; set; }
@@ -18,9 +16,8 @@ public class AddPlatformRequest
 
     public VerifyType VerifyType { get; set; }
 
-    public AddPlatformRequest(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType)
+    public EditThirdPartyPlatformRequest(string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType)
     {
-        Name = name;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
@@ -29,8 +26,8 @@ public class AddPlatformRequest
         VerifyType = verifyType;
     }
 
-    public static implicit operator AddPlatformRequest(PlatformItemResponse platform)
+    public static implicit operator EditThirdPartyPlatformRequest(ThirdPartyPlatformItemResponse request)
     {
-        return new AddPlatformRequest(platform.Name, platform.DisplayName, platform.ClientId, platform.ClientSecret, platform.Url, platform.Icon, platform.VerifyType);
+        return new EditThirdPartyPlatformRequest(request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
     }
 }

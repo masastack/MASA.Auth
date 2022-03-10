@@ -55,7 +55,7 @@ public partial class User
 
     public List<UserItemResponse> Users { get; set; } = new();
 
-    public UserItemResponse CurrentUser { get; set; } = UserItemResponse.Default;
+    public Guid CurrentUserId { get; set; }
 
     public List<DataTableHeader<UserItemResponse>> Headers { get; set; } = new();
 
@@ -72,10 +72,10 @@ public partial class User
             new() { Text = T(nameof(UserItemResponse.Email)), Value = nameof(UserItemResponse.Email), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.PhoneNumber)), Value = nameof(UserItemResponse.PhoneNumber), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.CreationTime)), Value = nameof(UserItemResponse.CreationTime), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.Enabled)), Value = T("State"), Sortable = false },
+            new() { Text = T("State"), Value = T(nameof(UserItemResponse.Enabled)), Sortable = false },
             new() { Text = T("Action"), Value = T("Action"), Sortable = false },
         };
-
+       
         await GetUserItemsAsync();
     }
 
@@ -86,7 +86,7 @@ public partial class User
         var reponse = await AuthClient.GetUserItemsAsync(request);
         if (reponse.Success)
         {
-            Users = reponse.Data ?? new();
+            Users = reponse.Data;
         }
         else OpenErrorMessage(T("Failed to query user data !"));
         Lodding = false;
@@ -94,19 +94,19 @@ public partial class User
 
     public void OpenAddUserDialog()
     {
-        CurrentUser = UserItemResponse.Default;
+        CurrentUserId = Guid.Empty;
         UserDialogVisible = true;
     }
 
     public void OpenEditUserDialog(UserItemResponse user)
     {
-        CurrentUser = user;
+        CurrentUserId = user.UserId;
         UserDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserItemResponse user)
     {
-        CurrentUser = user;
+        CurrentUserId = user.UserId;
         AuthorizeDialogVisible = true;
     }
 }
