@@ -4,7 +4,7 @@ public class ClientGrantTypeEntityTypeConfiguration : IEntityTypeConfiguration<C
 {
     public void Configure(EntityTypeBuilder<ClientGrantType> builder)
     {
-        builder.ToTable(nameof(ClientGrantType));
+        builder.ToTable(nameof(ClientGrantType), AuthDbContext.SSO_SCHEMA);
         builder.Property(x => x.GrantType).HasMaxLength(250).IsRequired();
     }
 }

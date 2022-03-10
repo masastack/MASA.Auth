@@ -24,21 +24,21 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string Email { get; private set; }
 
-    public string HouseholdRegisterAddress { get; private set; } = string.Empty;
+    public string HouseholdRegisterAddress { get; private set; }
 
-    public string HouseholdRegisterProvinceCode { get; private set; } = string.Empty;
+    public string HouseholdRegisterProvinceCode { get; private set; }
 
-    public string HouseholdRegisterCityCode { get; private set; } = string.Empty;
+    public string HouseholdRegisterCityCode { get; private set; }
 
-    public string HouseholdRegisterDistrictCode { get; private set; } = string.Empty;
+    public string HouseholdRegisterDistrictCode { get; private set; }
 
-    public string ResidentialAddress { get; private set; } = string.Empty;
+    public string ResidentialAddress { get; private set; }
 
-    public string ResidentialProvinceCode { get; private set; } = string.Empty;
+    public string ResidentialProvinceCode { get; private set; }
 
-    public string ResidentialCityCode { get; private set; } = string.Empty;
+    public string ResidentialCityCode { get; private set; }
 
-    public string ResidentialDistrictCode { get; private set; } = string.Empty;
+    public string ResidentialDistrictCode { get; private set; }
 
 
     #endregion
@@ -66,17 +66,8 @@ public class User : AuditAggregateRoot<Guid, Guid>
     }
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
+        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, "", "", "", "", "", "", "", "")
     {
-        Name = name;
-        DisplayName = displayName;
-        Avatar = avatar;
-        IDCard = idCard;
-        Account = account;
-        Password = password;
-        CompanyName = companyName;
-        Enabled = enabled;
-        PhoneNumber = phoneNumber;
-        Email = email;
     }
 }
 

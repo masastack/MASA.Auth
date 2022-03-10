@@ -6,6 +6,9 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable(nameof(User), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(u => u.Id);
+        builder.HasIndex(u => u.IDCard).IsUnique();
+
+        builder.Property(u => u.IDCard).HasMaxLength(18);
     }
 }
 

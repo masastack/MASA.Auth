@@ -6,6 +6,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
     {
         builder.ToTable(nameof(Permission), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(p => p.Id);
+        builder.HasIndex(p => new { p.AppId, p.Code }).IsUnique();
 
         builder.Property(p => p.Name).HasMaxLength(20).IsRequired();
         builder.Property(p => p.Description).HasMaxLength(255);

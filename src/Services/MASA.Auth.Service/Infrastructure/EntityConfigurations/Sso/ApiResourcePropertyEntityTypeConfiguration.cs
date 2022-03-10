@@ -4,7 +4,7 @@ public class ApiResourcePropertyEntityTypeConfiguration : IEntityTypeConfigurati
 {
     public void Configure(EntityTypeBuilder<ApiResourceProperty> builder)
     {
-        builder.ToTable(nameof(ApiResourceProperty));
+        builder.ToTable(nameof(ApiResourceProperty), AuthDbContext.SSO_SCHEMA);
         builder.Property(x => x.Key).HasMaxLength(250).IsRequired();
         builder.Property(x => x.Value).HasMaxLength(2000).IsRequired();
     }

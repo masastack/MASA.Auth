@@ -4,7 +4,7 @@ public class ApiResourceClaimEntityTypeConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<ApiResourceClaim> builder)
     {
-        builder.ToTable(nameof(ApiResourceClaim)).HasKey(x => x.Id);
+        builder.ToTable(nameof(ApiResourceClaim), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
 
         builder.Property(x => x.Type).HasMaxLength(200).IsRequired();
     }
