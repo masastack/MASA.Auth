@@ -42,13 +42,17 @@ public class UserItemResponse
 
     #endregion
 
-    public UserItemResponse(Guid userId, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public DateTime CreationTime { get; set; }
+
+    public static UserItemResponse Default => new UserItemResponse(Guid.Empty, "", "", "", "", "", "", default, "", "", "", "", "", "", "", "", "", "", default);
+
+    public UserItemResponse(Guid userId, string name, string displayName, string avatar, string iDCard, string account, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode, DateTime creationTime)
     {
         UserId = userId;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = idCard;
+        IDCard = iDCard;
         Account = account;
         CompanyName = companyName;
         Enabled = enabled;
@@ -62,7 +66,7 @@ public class UserItemResponse
         ResidentialProvinceCode = residentialProvinceCode;
         ResidentialCityCode = residentialCityCode;
         ResidentialDistrictCode = residentialDistrictCode;
+        CreationTime = creationTime;
     }
-
 }
 

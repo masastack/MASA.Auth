@@ -1,6 +1,6 @@
-﻿@*@inherits AdminCompontentBase
+﻿@inherits AdminCompontentBase
 
-<MCard>
+@*<MCard>
     <MCardText Class="pa-6">
         <MRow>
             <MCol Md=6 Sm=12 Class="d-flex block-center">
@@ -119,3 +119,6 @@
         </div>
     </MCardText>
 </MCard>*@
+
+<AddOrUpdateUserDialog UserId=CurrentUser.UserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUserItemsAsync />
+<AuthorizeDialog UserId=CurrentUser.UserId @bind-Visible="AuthorizeDialogVisible" />
