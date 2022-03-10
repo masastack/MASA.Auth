@@ -6,9 +6,15 @@ public class ThirdPartyUser : Entity<Guid>
 
     public Guid UserId { get; private set; }
 
-    public User User { get; private set; } = null!;
-
     public bool Enabled { get; private set; }
+
+    private User? _user;
+
+    public User User
+    {
+        get => _user ?? throw new UserFriendlyException("Failed to get user data");
+        set => _user = value;
+    }
 
     public ThirdPartyUser(Guid thirdPartyPlatformId, Guid userId, bool enabled)
     {
