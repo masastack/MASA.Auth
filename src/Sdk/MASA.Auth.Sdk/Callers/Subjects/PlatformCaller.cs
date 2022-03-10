@@ -12,7 +12,7 @@ internal class PlatformCaller : CallerBase
     internal PlatformCaller(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Name = nameof(PlatformCaller);
-        BaseAddress = Routing.AuthServiceBaseAdress;
+        BaseAddress = Routing.AUTH_SERVICE_BASE_ADRESS;
     }
 
     public async Task<ApiResultResponse<PaginatedItemResponse<PlatformItemResponse>>> GetListAsync(int pageIndex = 1, int pageSize = 20, string? search = null)

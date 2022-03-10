@@ -4,7 +4,7 @@ internal class Routing
 {
     #region ServiceBaseAdress
 
-    public const string AuthServiceBaseAdress = "http://localhost:8080/";
+    public const string AUTH_SERVICE_BASE_ADRESS = "http://localhost:8080/";
 
     #endregion
 
@@ -18,19 +18,39 @@ internal class Routing
 
     #endregion
 
+    #region User
+
+    const string USER = "user";
+
+    public static readonly string UserList = string.Format(DEFAULT_SERVICE_LIST, USER);
+
+    public static readonly string UserDetail = string.Format(DEFAULT_SERVICE_BASE, USER, "{id}");
+
+    public static readonly string OperateUser = string.Format(DEFAULT_SERVICE_BASE, USER);
+
+    #endregion
+
     #region Platform
 
     const string PLATFORM = "platform";
 
     public static readonly string PlatformList = string.Format(DEFAULT_SERVICE_LIST, PLATFORM);
 
-    public static readonly string PlatformById = string.Format(DEFAULT_SERVICE_BASE, PLATFORM, "{id}");
-
-    //public static readonly string PlatformDetail = string.Format(DEFAULT_SERVICE_BASE, $"{PLATFORM}Detail", "{id}");
+    public static readonly string PlatformDetail = string.Format(DEFAULT_SERVICE_BASE, PLATFORM, "{id}");
 
     public static readonly string OperatePlatform = string.Format(DEFAULT_SERVICE, PLATFORM);
 
-    //public static readonly string PlatformSelect = string.Format(DEFAULT_SERVICE_BASE, PLATFORM, "select");
+    #endregion
+
+    #region PlatformUser
+
+    const string PLATFORM_USER = "platformUser";
+
+    public static readonly string PLATFORMUserList = string.Format(DEFAULT_SERVICE_LIST, PLATFORM_USER);
+
+    public static readonly string PLATFORMUserDetail = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER, "{id}");
+
+    public static readonly string OperatePlatformUser = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER);
 
     #endregion
 }

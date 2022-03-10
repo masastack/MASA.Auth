@@ -1,35 +1,31 @@
 {
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
-  "Dashboard": "仪表盘",
-  "eCommerce": "电子商务",
-  "Analytics": "分析",
-  "Apps": "应用",
-  "Shop": "购物",
-  "Details": "商品详情",
-  "Order": "订单",
-  "Todo": "工作事项",
-  "Invoice": "发票 ",
-  "List": "列表",
-  "Preview": "预览 ",
-  "Edit": "编辑",
-  "Add": "添加",
-  "View": "展示",
-  "Pages": "页面",
-  "Auth": "认证 ",
-  "Login v1": "登录版本1",
-  "Login v2": "登录版本2",
-  "Not Authorized": "没有授权",
-  "Register v1": "注册版本1",
-  "Register v2": "注册版本2",
-  "Forgot Password v1": "忘记密码版本1",
-  "Forgot Password v2": "忘记密码版本2",
-  "Reset Password v1": "重置密码版本1",
-  "Reset Password v2": "重置密码版本2",
-  "Others": "其他",
-  "Account Settings": "账户设置",
   "Favorite": "收藏",
+
+  //Common Start
+  "CreationTime": "创建时间",
+  "State": "状态",
+  "Enable": "启用",
+  "Disabled": "禁用",
+  "Action": "操作",
+  "Add": "新增",
+  //Common End
+
+  //user start
   "User": "用户",
+  "Avatr": "头像",
+  "User.DisplayName": "用户昵称",
+  "Email": "邮箱地址",
+  "PhoneNumber": "手机号码",
+  "Failed to query user data !": "查询用户数据失败",
+  //user end
+
+  //ThirdPartyUser start
   "ThirdPartyUser": "第三方用户",
+  //ThirdPartyUser end
+
+  //Staff start
   "Staff": "员工"
+  //Staff end
 }
