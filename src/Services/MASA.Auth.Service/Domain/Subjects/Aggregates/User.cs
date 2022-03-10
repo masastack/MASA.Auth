@@ -43,12 +43,12 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     #endregion
 
-    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public User(string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
     {
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = idCard;
+        IDCard = iDCard;
         Account = account;
         Password = password;
         CompanyName = companyName;
@@ -65,8 +65,8 @@ public class User : AuditAggregateRoot<Guid, Guid>
         ResidentialDistrictCode = residentialDistrictCode;
     }
 
-    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
-        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, "", "", "", "", "", "", "", "")
+    public User(string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
+        : this(name, displayName, avatar, iDCard, account, password, companyName, enabled, phoneNumber, email, "", "", "", "", "", "", "", "")
     {
     }
 }

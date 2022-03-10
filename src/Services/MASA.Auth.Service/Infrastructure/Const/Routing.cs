@@ -16,7 +16,7 @@ public class Routing
     const string PERMISSION = "permission";
     #endregion
 
-    #region #Department
+    #region Department
 
     public static readonly string DepartmentList = string.Format(DEFAULT_SERVICE_LIST, DEPARTMENT);
 
@@ -32,7 +32,7 @@ public class Routing
 
     public static readonly string UserDetail = string.Format(DEFAULT_SERVICE_BASE, USER, "{id}");
 
-    public static readonly string OperateUser = string.Format(DEFAULT_SERVICE_BASE, USER);
+    public static readonly string OperateUser = string.Format(DEFAULT_SERVICE, USER);
 
     #endregion
 
@@ -56,7 +56,7 @@ public class Routing
 
     public static readonly string PLATFORMUserDetail = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER, "{id}");
 
-    public static readonly string OperatePlatformUser = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER);
+    public static readonly string OperatePlatformUser = string.Format(DEFAULT_SERVICE, PLATFORM_USER);
 
     #endregion
 
