@@ -909,6 +909,11 @@ namespace Masa.Auth.Service.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AvatarName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTime")
@@ -918,6 +923,7 @@ namespace Masa.Auth.Service.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Describe")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -932,6 +938,9 @@ namespace Masa.Auth.Service.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeamType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -953,7 +962,12 @@ namespace Masa.Auth.Service.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TeamStaffType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("TeamPermission", "subjects");
                 });
@@ -970,7 +984,12 @@ namespace Masa.Auth.Service.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TeamStaffType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("TeamRole", "subjects");
                 });
@@ -987,10 +1006,15 @@ namespace Masa.Auth.Service.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TeamStaffType")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("TeamStaff", "subjects");
                 });
@@ -1108,23 +1132,7 @@ namespace Masa.Auth.Service.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("HouseholdRegisterAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HouseholdRegisterCityCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HouseholdRegisterDistrictCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HouseholdRegisterProvinceCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IDCard")
+                    b.Property<string>("IdCard")
                         .IsRequired()
                         .HasMaxLength(18)
                         .HasColumnType("nvarchar(18)");
@@ -1150,25 +1158,9 @@ namespace Masa.Auth.Service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ResidentialAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResidentialCityCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResidentialDistrictCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResidentialProvinceCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("IDCard")
+                    b.HasIndex("IdCard")
                         .IsUnique();
 
                     b.ToTable("User", "subjects");
@@ -1444,6 +1436,39 @@ namespace Masa.Auth.Service.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.TeamPermission", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.Team", "Team")
+                        .WithMany("Permissions")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.TeamRole", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.Team", "Team")
+                        .WithMany("Roles")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.TeamStaff", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.Team", "Team")
+                        .WithMany("Staffs")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.ThirdPartyUser", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.User", "User")
@@ -1453,6 +1478,73 @@ namespace Masa.Auth.Service.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.User", b =>
+                {
+                    b.OwnsOne("Masa.Auth.Service.Domain.Subjects.Aggregates.AddressValue", "Household", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("CityCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("DistrictCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ProvinceCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("User", "subjects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.OwnsOne("Masa.Auth.Service.Domain.Subjects.Aggregates.AddressValue", "Residential", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("CityCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("DistrictCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ProvinceCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("User", "subjects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("Household")
+                        .IsRequired();
+
+                    b.Navigation("Residential")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.UserPermission", b =>
@@ -1510,6 +1602,15 @@ namespace Masa.Auth.Service.Migrations
                     b.Navigation("Properties");
 
                     b.Navigation("UserClaims");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.Team", b =>
+                {
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Roles");
+
+                    b.Navigation("Staffs");
                 });
 #pragma warning restore 612, 618
         }

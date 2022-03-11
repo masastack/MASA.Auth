@@ -8,7 +8,7 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string Avatar { get; private set; }
 
-    public string IDCard { get; private set; }
+    public string IdCard { get; private set; }
 
     public string Account { get; private set; }
 
@@ -24,50 +24,32 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string Email { get; private set; }
 
-    public string HouseholdRegisterAddress { get; private set; }
+    public AddressValue Household { get; private set; }
 
-    public string HouseholdRegisterProvinceCode { get; private set; }
-
-    public string HouseholdRegisterCityCode { get; private set; }
-
-    public string HouseholdRegisterDistrictCode { get; private set; }
-
-    public string ResidentialAddress { get; private set; }
-
-    public string ResidentialProvinceCode { get; private set; }
-
-    public string ResidentialCityCode { get; private set; }
-
-    public string ResidentialDistrictCode { get; private set; }
-
+    public AddressValue Residential { get; private set; }
 
     #endregion
 
-    public User(string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public User(string name, string displayName, string avatar, string idCard, string account, string password,
+        string companyName, bool enabled, string phoneNumber, string email,
+        AddressValue householdAddress, AddressValue residentialAddress)
     {
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = iDCard;
+        IdCard = idCard;
         Account = account;
         Password = password;
         CompanyName = companyName;
         Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
-        HouseholdRegisterAddress = householdRegisterAddress;
-        HouseholdRegisterProvinceCode = householdRegisterProvinceCode;
-        HouseholdRegisterCityCode = householdRegisterCityCode;
-        HouseholdRegisterDistrictCode = householdRegisterDistrictCode;
-        ResidentialAddress = residentialAddress;
-        ResidentialProvinceCode = residentialProvinceCode;
-        ResidentialCityCode = residentialCityCode;
-        ResidentialDistrictCode = residentialDistrictCode;
+        Household = householdAddress;
+        Residential = residentialAddress;
     }
 
-    public User(string name, string displayName, string avatar, string iDCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
-        : this(name, displayName, avatar, iDCard, account, password, companyName, enabled, phoneNumber, email, "", "", "", "", "", "", "", "")
+    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
+        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, new AddressValue(), new AddressValue())
     {
     }
 }
-
