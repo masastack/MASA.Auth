@@ -16,6 +16,8 @@ public class ThirdPartyUserItemResponse
 
     public Guid Creator { get; set; }
 
+    public static ThirdPartyUserItemResponse Default = new(default, default, true, UserItemResponse.Default, default, default, default);
+
     public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyPlatformId, bool enabled, UserItemResponse user, DateTime creationTime, DateTime modificationTime, Guid creator)
     {
         ThirdPartyUserId = thirdPartyUserId;

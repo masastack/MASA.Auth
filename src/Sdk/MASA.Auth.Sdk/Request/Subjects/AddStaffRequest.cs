@@ -30,8 +30,8 @@ public class AddStaffRequest
         User = user;
     }
 
-    public static implicit operator AddStaffRequest(StaffItemResponse staff)
+    public static implicit operator AddStaffRequest(StaffDetailResponse staff)
     {
-        return new AddStaffRequest(staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId,staff.PositionId,staff.Position,staff.TeamIds,staff.User);
+        return new AddStaffRequest(staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, staff.TeamIds, staff.User);
     }
 }

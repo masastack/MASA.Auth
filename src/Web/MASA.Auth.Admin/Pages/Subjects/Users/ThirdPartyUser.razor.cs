@@ -86,12 +86,12 @@ public partial class ThirdPartyUser
     {
         Lodding = true;
         var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyPlatformId);
-        var reponse = await AuthClient.GetThirdPartyUserItemsAsync(request);
-        if (reponse.Success)
+        var response = await AuthClient.GetThirdPartyUserItemsAsync(request);
+        if (response.Success)
         {
-            ThirdPartyUsers = reponse.Data;
+            ThirdPartyUsers = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyUser data !"));
+        else OpenErrorMessage(T("Failed to query thirdPartyUserList data:") + response.Message);
         Lodding = false;
     }
 
@@ -103,7 +103,7 @@ public partial class ThirdPartyUser
         {
             ThirdPartyPlatforms = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyPlatform data !"));
+        else OpenErrorMessage(T("Failed to query thirdPartyPlatform data:") + response.Message);
         Lodding = false;
     }
 

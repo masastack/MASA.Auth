@@ -60,6 +60,6 @@ public class AddUserRequest
 
     public static implicit operator AddUserRequest(UserItemResponse user)
     {
-        return new AddUserRequest(user.Name,user.DisplayName,user.Avatar,user.IDCard,user.CompanyName,user.Enabled,user.PhoneNumber,user.Email,user.HouseholdRegisterAddress,user.HouseholdRegisterProvinceCode,user.HouseholdRegisterCityCode,user.HouseholdRegisterDistrictCode,user.ResidentialAddress,user.ResidentialProvinceCode,user.ResidentialCityCode,user.ResidentialDistrictCode);
+        return new AddUserRequest(user.Name, user.DisplayName, user.Avatar, user.IDCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.HouseholdRegisterAddress, user.HouseholdRegisterProvinceCode, user.HouseholdRegisterCityCode, user.HouseholdRegisterDistrictCode, user.ResidentialAddress, user.ResidentialProvinceCode, user.ResidentialCityCode, user.ResidentialDistrictCode);
     }
 }

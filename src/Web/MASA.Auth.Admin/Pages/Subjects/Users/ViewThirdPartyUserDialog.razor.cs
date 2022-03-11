@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Admin.Pages.Subjects.Users;
 
-public partial class EditThirdPartyUserDialog
+public partial class ViewThirdPartyUserDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -9,12 +9,9 @@ public partial class EditThirdPartyUserDialog
     public EventCallback<bool> VisibleChanged { get; set; }
 
     [Parameter]
-    public EventCallback OnSubmitSuccess { get; set; }
+    public Guid ThirdPartyUserId { get; set; }
 
-    [Parameter]
-    public Guid ThirdPartyUserUserId { get; set; } 
-
-    private bool IsAdd => ThirdPartyUserUserId == Guid.Empty;
+    private ThirdPartyUserItemResponse ThirdPartyUser { get; set; } = ThirdPartyUserItemResponse.Default;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -30,9 +27,14 @@ public partial class EditThirdPartyUserDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Visible is true)
+        if (Visible is true)
         {
-            
+            var response = await AuthClient.GetThirdPartyUserDetailAsync(ThirdPartyUserId);
+            if (response.Success)
+            {
+                ThirdPartyUser = response.Data;
+            }
+            else OpenErrorDialog(T("Failed to query thirdPartyUserDetail data:") + response.Message);
         }
     }
 

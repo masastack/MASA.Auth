@@ -12,7 +12,7 @@ public partial class AddOrEditUserDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid UserId { get; set; } 
+    public Guid UserId { get; set; }
 
     private bool IsAdd => UserId == Guid.Empty;
 
@@ -32,7 +32,7 @@ public partial class AddOrEditUserDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Visible is true)
+        if (Visible is true)
         {
             if (UserId == Guid.Empty) User = UserItemResponse.Default;
             else await GetUserDetailAsync();
@@ -46,31 +46,33 @@ public partial class AddOrEditUserDialog
         {
             User = response.Data;
         }
-        else OpenErrorMessage("Failed to query user data !");
+        else OpenErrorMessage(T("Failed to query userDetail data:") + response.Message);
     }
 
     public async Task AddOrEditUserAsync()
     {
         Lodding = true;
-        if(IsAdd)
+        if (IsAdd)
         {
-            var reponse = await AuthClient.AddUserAsync(User);
-            if (reponse.Success)
+            var response = await AuthClient.AddUserAsync(User);
+            if (response.Success)
             {
+                OpenSuccessMessage(T("Add user data success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog("Failed to add user !");
+            else OpenErrorDialog(T("Failed to add user:") + response.Message);
         }
         else
         {
-            var reponse = await AuthClient.EditUserAsync(User);
-            if (reponse.Success)
+            var response = await AuthClient.EditUserAsync(User);
+            if (response.Success)
             {
+                OpenSuccessMessage(T("Edit user data success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog("Failed to edit user !");
+            else OpenErrorDialog(T("Failed to edit user:") + response.Message);
         }
         Lodding = false;
     }

@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Sdk.Response.Subjects;
-
-namespace Masa.Auth.Sdk.Request.Subjects;
+﻿namespace Masa.Auth.Sdk.Request.Subjects;
 
 public class EditThirdPartyPlatformRequest
 {

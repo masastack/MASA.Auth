@@ -6,3 +6,5 @@ global using Masa.Auth.Sdk.Enums;
 global using Masa.Auth.Sdk.Request.Subjects;
 global using Masa.Auth.Sdk.Response.Subjects;
 global using Masa.Auth.Sdk.Response;
+global using Masa.Utils.Exceptions;
+global using System.Net;

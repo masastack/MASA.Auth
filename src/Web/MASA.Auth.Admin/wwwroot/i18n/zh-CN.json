@@ -24,11 +24,21 @@
   "User.DisplayName": "用户昵称",
   "Email": "邮箱地址",
   "PhoneNumber": "手机号码",
-  "Failed to query user data !": "查询用户数据失败",
+  "Failed to query userList data:": "查询用户列表数据失败:",
+  "Failed to query userDetail data:": "查询用户详情数据失败:",
+  "Add user data success": "新增用户数据成功",
+  "Failed to add user:": "新增用户数据失败:",
+  "Edit user data success": "编辑用户数据成功",
+  "Failed to edit user:": "编辑用户数据失败:",
+  "Authorized user succeeded": "授权用户成功",
+  "Failed to authorize user:": "授权用户失败:",
   //user end
 
   //ThirdPartyUser start
   "ThirdPartyUser": "第三方用户",
+  "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",
+  "Failed to query thirdPartyPlatform data:": "获取第三方平台数据失败:",
+  "Failed to query thirdPartyUserDetail data:": "获取第三方用户详情数据失败:",
   //ThirdPartyUser end
 
   //Staff start

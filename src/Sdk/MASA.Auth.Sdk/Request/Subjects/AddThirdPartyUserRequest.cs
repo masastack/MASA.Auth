@@ -17,6 +17,6 @@ public class AddThirdPartyUserRequest
 
     public static implicit operator AddThirdPartyUserRequest(ThirdPartyUserItemResponse thridPartyUser)
     {
-        return new AddThirdPartyUserRequest(thridPartyUser.ThirdPartyPlatformId,thridPartyUser.Enabled,thridPartyUser.User);
+        return new AddThirdPartyUserRequest(thridPartyUser.ThirdPartyPlatformId, thridPartyUser.Enabled, thridPartyUser.User);
     }
 }

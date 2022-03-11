@@ -67,7 +67,7 @@ public partial class Staff
         {
             new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.Name)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Department"), Value = nameof(StaffItemResponse.DepartmentId), Sortable = false },
+            new() { Text = T("Department"), Value = nameof(StaffItemResponse.Department), Sortable = false },
             new() { Text = T(nameof(StaffItemResponse.JobNumber)), Value = nameof(StaffItemResponse.JobNumber), Sortable = false },
             new() { Text = T(nameof(StaffItemResponse.Position)), Value = nameof(StaffItemResponse.Position), Sortable = false },
             new() { Text = T("State"), Value = nameof(StaffItemResponse.Enabled), Sortable = false },
@@ -88,7 +88,7 @@ public partial class Staff
         }
         else OpenErrorMessage(T("Failed to query staff data !"));
         Lodding = false;
-    }  
+    }
 
     public void OpenStaffDialog(StaffItemResponse staff)
     {
