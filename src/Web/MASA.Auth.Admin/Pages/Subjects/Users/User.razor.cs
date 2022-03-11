@@ -81,7 +81,7 @@ public partial class User
 
     public async Task GetUserItemsAsync()
     {
-        Lodding = true;
+        Loading = true;
         var request = new GetUserItemsRequest(PageIndex, PageSize, Search, Enabled);
         var response = await AuthClient.GetUserItemsAsync(request);
         if (response.Success)
@@ -89,7 +89,7 @@ public partial class User
             Users = response.Data;
         }
         else OpenErrorMessage(T("Failed to query userList data:") + response.Message);
-        Lodding = false;
+        Loading = false;
     }
 
     public void OpenAddUserDialog()

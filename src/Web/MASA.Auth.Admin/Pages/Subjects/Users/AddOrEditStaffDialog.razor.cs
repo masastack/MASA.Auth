@@ -51,7 +51,7 @@ public partial class AddOrEditStaffDialog
 
     public async Task AddOrEditStaffAsync()
     {
-        Lodding = true;
+        Loading = true;
         if (IsAdd)
         {
             var reponse = await AuthClient.AddStaffAsync(Staff);
@@ -74,7 +74,7 @@ public partial class AddOrEditStaffDialog
             }
             else OpenErrorDialog($"Failed to edit staff:{reponse.Message}");
         }
-        Lodding = false;
+        Loading = false;
     }
 
     public void OpenDeleteStaffDialog()
@@ -87,11 +87,11 @@ public partial class AddOrEditStaffDialog
 
     public async Task DeleteStaffAsync()
     {
-        Lodding = true;
+        Loading = true;
         var response = await AuthClient.DeleteStaffAsync(StaffId);
         if (response.Success) OpenSuccessMessage("Delete staff data success");
         else OpenErrorDialog($"Delete staff data failed:{response.Message}");
-        Lodding = false;
+        Loading = false;
     }
 
     protected override bool ShouldRender()

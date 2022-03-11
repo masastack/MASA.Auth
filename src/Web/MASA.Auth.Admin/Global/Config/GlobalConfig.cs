@@ -10,7 +10,7 @@ public class GlobalConfig
     private bool _navigationMini;
     private string? _favorite;
     private NavModel? _currentNav;
-    private bool _lodding;
+    private bool _Loading;
 
     #endregion
 
@@ -103,15 +103,15 @@ public class GlobalConfig
         }
     }
 
-    public bool Lodding
+    public bool Loading
     {
-        get => _lodding;
+        get => _Loading;
         set
         {
-            if (_lodding != value)
+            if (_Loading != value)
             {
-                _lodding = value;
-                OnLoddingChanged?.Invoke(_lodding);
+                _Loading = value;
+                OnLoadingChanged?.Invoke(_Loading);
             }
         }
     }
@@ -138,13 +138,13 @@ public class GlobalConfig
     #region event
 
     public delegate void GlobalConfigChanged();
-    public delegate void LoddingChanged(bool lodding);
+    public delegate void LoadingChanged(bool Loading);
     public delegate void MessageChanged(string message, MessageType messageType, int timeOut);
     public delegate void ConfirmChanged(string title, string message, EventCallback<bool> confirmFunc);
 
     public event GlobalConfigChanged? OnPageModeChanged;
     public event GlobalConfigChanged? OnCurrentNavChanged;
-    public event LoddingChanged? OnLoddingChanged;
+    public event LoadingChanged? OnLoadingChanged;
     public event ConfirmChanged? OnConfirmChanged;
     public event MessageChanged? OnMessageChanged;
 

@@ -51,7 +51,7 @@ public partial class AddOrEditThirdPartyPlatformDialog
 
     public async Task AddOrEditThirdPartyPlatformAsync()
     {
-        Lodding = true;
+        Loading = true;
         if(IsAdd)
         {
             var reponse = await AuthClient.AddThirdPartyPlatformAsync(ThirdPartyPlatform);
@@ -72,7 +72,7 @@ public partial class AddOrEditThirdPartyPlatformDialog
             }
             else OpenErrorDialog("Failed to edit thirdPartyPlatform !");
         }
-        Lodding = false;
+        Loading = false;
     }
 
     protected override bool ShouldRender()

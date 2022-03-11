@@ -79,7 +79,7 @@ public partial class ThirdPartyPlatform
 
     public async Task GetThirdPartyPlatformItemsAsync()
     {
-        Lodding = true;
+        Loading = true;
         var request = new GetThirdPartyPlatformItemsRequest(PageIndex, PageSize, Search);
         var reponse = await AuthClient.GetThirdPartyPlatformItemsAsync(request);
         if (reponse.Success)
@@ -87,7 +87,7 @@ public partial class ThirdPartyPlatform
             ThirdPartyPlatforms = reponse.Data;
         }
         else OpenErrorMessage(T("Failed to query thirdPartyPlatform data !"));
-        Lodding = false;
+        Loading = false;
     }
 
     public void OpenAddUserDialog()
@@ -114,14 +114,14 @@ public partial class ThirdPartyPlatform
 
     public async Task DeleteThirdPartyPlatformAsync()
     {
-        Lodding = true;
+        Loading = true;
         var reponse = await AuthClient.DeleteThirdPartyPlatformAsync(CurrentThirdPartyPlatformId);
         if (reponse.Success)
         {
             OpenSuccessMessage(T("Success to delete thirdPartyPlatform !"));
         }
         else OpenErrorMessage(T("Failed to delete thirdPartyPlatform !"));
-        Lodding = false;
+        Loading = false;
     }
 }
 

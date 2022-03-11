@@ -51,7 +51,7 @@ public partial class AddOrEditUserDialog
 
     public async Task AddOrEditUserAsync()
     {
-        Lodding = true;
+        Loading = true;
         if (IsAdd)
         {
             var response = await AuthClient.AddUserAsync(User);
@@ -74,7 +74,7 @@ public partial class AddOrEditUserDialog
             }
             else OpenErrorDialog(T("Failed to edit user:") + response.Message);
         }
-        Lodding = false;
+        Loading = false;
     }
 
     protected override bool ShouldRender()

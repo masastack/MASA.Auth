@@ -79,7 +79,7 @@ public partial class Staff
 
     public async Task GetStaffAsync()
     {
-        Lodding = true;
+        Loading = true;
         var request = new GetStaffItemsRequest(PageIndex, PageSize, Search, Enabled);
         var reponse = await AuthClient.GetStaffItemsAsync(request);
         if (reponse.Success)
@@ -87,7 +87,7 @@ public partial class Staff
             Staffs = reponse.Data;
         }
         else OpenErrorMessage(T("Failed to query staff data !"));
-        Lodding = false;
+        Loading = false;
     }
 
     public void OpenStaffDialog(StaffItemResponse staff)
