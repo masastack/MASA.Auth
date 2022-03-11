@@ -51,7 +51,7 @@ public partial class ThirdPartyPlatform
 
     public long TotalCount { get; set; }
 
-    public List<int> PageSizes = new() { 10, 25, 50, 100 }; 
+    public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
     public List<ThirdPartyPlatformItemResponse> ThirdPartyPlatforms { get; set; } = new();
 
@@ -81,12 +81,12 @@ public partial class ThirdPartyPlatform
     {
         Loading = true;
         var request = new GetThirdPartyPlatformItemsRequest(PageIndex, PageSize, Search);
-        var reponse = await AuthClient.GetThirdPartyPlatformItemsAsync(request);
-        if (reponse.Success)
+        var response = await AuthClient.GetThirdPartyPlatformItemsAsync(request);
+        if (response.Success)
         {
-            ThirdPartyPlatforms = reponse.Data;
+            ThirdPartyPlatforms = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyPlatform data !"));
+        else OpenErrorMessage(T("Failed to query thirdPartyPlatformList data:") + response.Message);
         Loading = false;
     }
 
@@ -105,22 +105,22 @@ public partial class ThirdPartyPlatform
     public void OpenDeteteThirdPartyPlatformDialog(ThirdPartyPlatformItemResponse thirdPartyPlatform)
     {
         CurrentThirdPartyPlatformId = thirdPartyPlatform.ThirdPartyPlatformId;
-        OpenConfirmDialog(async confirm => 
+        OpenConfirmDialog(async confirm =>
         {
             if (confirm) await DeleteThirdPartyPlatformAsync();
         },
-        "Are you sure delete data");
+        T("Are you sure delete data?"));
     }
 
     public async Task DeleteThirdPartyPlatformAsync()
     {
         Loading = true;
-        var reponse = await AuthClient.DeleteThirdPartyPlatformAsync(CurrentThirdPartyPlatformId);
-        if (reponse.Success)
+        var response = await AuthClient.DeleteThirdPartyPlatformAsync(CurrentThirdPartyPlatformId);
+        if (response.Success)
         {
-            OpenSuccessMessage(T("Success to delete thirdPartyPlatform !"));
+            OpenSuccessMessage(T("Success to delete thirdPartyPlatform"));
         }
-        else OpenErrorMessage(T("Failed to delete thirdPartyPlatform !"));
+        else OpenErrorMessage(T("Failed to delete thirdPartyPlatform:") + response.Message);
         Loading = false;
     }
 }

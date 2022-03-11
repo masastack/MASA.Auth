@@ -81,12 +81,12 @@ public partial class Staff
     {
         Loading = true;
         var request = new GetStaffItemsRequest(PageIndex, PageSize, Search, Enabled);
-        var reponse = await AuthClient.GetStaffItemsAsync(request);
-        if (reponse.Success)
+        var response = await AuthClient.GetStaffItemsAsync(request);
+        if (response.Success)
         {
-            Staffs = reponse.Data;
+            Staffs = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query staff data !"));
+        else OpenErrorMessage(T("Failed to query staff data:") + response.Message);
         Loading = false;
     }
 

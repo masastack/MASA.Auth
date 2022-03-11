@@ -57,7 +57,7 @@ public partial class AddOrEditStaffDialog
             var reponse = await AuthClient.AddStaffAsync(Staff);
             if (reponse.Success)
             {
-                OpenSuccessMessage("Add staff success");
+                OpenSuccessMessage(T("Add staff success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
@@ -82,15 +82,15 @@ public partial class AddOrEditStaffDialog
         OpenConfirmDialog(async confirm =>
         {
             if (confirm) await DeleteStaffAsync();
-        }, "Are you sure delete staff data ?");
+        }, T("Are you sure delete staff data"));
     }
 
     public async Task DeleteStaffAsync()
     {
         Loading = true;
         var response = await AuthClient.DeleteStaffAsync(StaffId);
-        if (response.Success) OpenSuccessMessage("Delete staff data success");
-        else OpenErrorDialog($"Delete staff data failed:{response.Message}");
+        if (response.Success) OpenSuccessMessage(T("Delete staff data success"));
+        else OpenErrorDialog(T("Delete staff data failed:") + response.Message);
         Loading = false;
     }
 

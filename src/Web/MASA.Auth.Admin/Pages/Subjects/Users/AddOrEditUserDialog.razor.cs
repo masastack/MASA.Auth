@@ -46,7 +46,7 @@ public partial class AddOrEditUserDialog
         {
             User = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query userDetail data:") + response.Message);
+        else OpenErrorMessage(T("Failed to query staffDetail data:") + response.Message);
     }
 
     public async Task AddOrEditUserAsync()
@@ -57,22 +57,22 @@ public partial class AddOrEditUserDialog
             var response = await AuthClient.AddUserAsync(User);
             if (response.Success)
             {
-                OpenSuccessMessage(T("Add user data success"));
+                OpenSuccessMessage(T("Add staff data success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog(T("Failed to add user:") + response.Message);
+            else OpenErrorDialog(T("Failed to add staff:") + response.Message);
         }
         else
         {
             var response = await AuthClient.EditUserAsync(User);
             if (response.Success)
             {
-                OpenSuccessMessage(T("Edit user data success"));
+                OpenSuccessMessage(T("Edit staff data success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog(T("Failed to edit user:") + response.Message);
+            else OpenErrorDialog(T("Failed to edit staff:") + response.Message);
         }
         Loading = false;
     }
