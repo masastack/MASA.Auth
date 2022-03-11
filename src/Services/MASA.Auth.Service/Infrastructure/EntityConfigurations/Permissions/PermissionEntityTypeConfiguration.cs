@@ -18,6 +18,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.HasMany(p => p.PermissionItems).WithOne(pi => pi.Permission);
         builder.HasMany(p => p.RolePermissions).WithOne(rp => rp.Permission);
         builder.HasMany(p => p.UserPermissions).WithOne(up => up.Permission);
+        builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission);
     }
 }
 

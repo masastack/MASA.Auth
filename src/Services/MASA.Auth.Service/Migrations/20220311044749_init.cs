@@ -253,8 +253,10 @@ namespace Masa.Auth.Service.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Describe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AvatarName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Describe = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TeamType = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -264,50 +266,6 @@ namespace Masa.Auth.Service.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Team", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamPermission",
-                schema: "subjects",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Effect = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamPermission", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamRole",
-                schema: "subjects",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamRole", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamStaff",
-                schema: "subjects",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamStaff", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -344,21 +302,21 @@ namespace Masa.Auth.Service.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IDCard = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    IdCard = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
                     Account = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseholdRegisterAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseholdRegisterProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseholdRegisterCityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseholdRegisterDistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResidentialAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResidentialProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResidentialCityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResidentialDistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Household_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Household_ProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Household_CityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Household_DistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Residential_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Residential_ProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Residential_CityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Residential_DistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -747,6 +705,81 @@ namespace Masa.Auth.Service.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TeamPermission",
+                schema: "subjects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Effect = table.Column<bool>(type: "bit", nullable: false),
+                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamPermission", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamPermission_Permission_PermissionId",
+                        column: x => x.PermissionId,
+                        principalSchema: "permissions",
+                        principalTable: "Permission",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeamPermission_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalSchema: "subjects",
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeamRole",
+                schema: "subjects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamRole", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamRole_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalSchema: "subjects",
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeamStaff",
+                schema: "subjects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamStaff", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamStaff_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalSchema: "subjects",
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Staff",
                 schema: "subjects",
                 columns: table => new
@@ -983,16 +1016,40 @@ namespace Masa.Auth.Service.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TeamPermission_PermissionId",
+                schema: "subjects",
+                table: "TeamPermission",
+                column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamPermission_TeamId",
+                schema: "subjects",
+                table: "TeamPermission",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamRole_TeamId",
+                schema: "subjects",
+                table: "TeamRole",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamStaff_TeamId",
+                schema: "subjects",
+                table: "TeamStaff",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ThirdPartyUser_UserId",
                 schema: "subjects",
                 table: "ThirdPartyUser",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_IDCard",
+                name: "IX_User_IdCard",
                 schema: "subjects",
                 table: "User",
-                column: "IDCard",
+                column: "IdCard",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1084,10 +1141,6 @@ namespace Masa.Auth.Service.Migrations
                 schema: "subjects");
 
             migrationBuilder.DropTable(
-                name: "Team",
-                schema: "subjects");
-
-            migrationBuilder.DropTable(
                 name: "TeamPermission",
                 schema: "subjects");
 
@@ -1137,6 +1190,10 @@ namespace Masa.Auth.Service.Migrations
             migrationBuilder.DropTable(
                 name: "Role",
                 schema: "permissions");
+
+            migrationBuilder.DropTable(
+                name: "Team",
+                schema: "subjects");
 
             migrationBuilder.DropTable(
                 name: "User",

@@ -34,6 +34,10 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<UserPermission> UserPermissions => userPermissions;
 
+    private List<TeamPermission> teamPermissions = new();
+
+    public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
+
     public void DeleteCheck()
     {
         if (rolePermissions.Any())

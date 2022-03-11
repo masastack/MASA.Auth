@@ -28,6 +28,7 @@ global using Masa.BuildingBlocks.Data.UoW;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities.Auditing;
 global using Masa.BuildingBlocks.Ddd.Domain.Repositories;
+global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
 global using Masa.Contrib.Configuration;
 global using Masa.Contrib.Data.UoW.EF;
