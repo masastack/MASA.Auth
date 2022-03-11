@@ -3,10 +3,10 @@
 public class CommandHandler
 {
     readonly IStaffRepository _staffRepository;
-    readonly IStaffRepository _userRepository;
+    readonly IUserRepository _userRepository;
     readonly IEventBus _eventBus;
 
-    public CommandHandler(IStaffRepository staffRepository, IStaffRepository userRepository, IEventBus eventBus)
+    public CommandHandler(IStaffRepository staffRepository, IUserRepository userRepository, IEventBus eventBus)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;
@@ -22,12 +22,13 @@ public class CommandHandler
     [EventHandler]
     public async Task CreateStaffAsync(CreateStaffCommand createStaffCommand)
     {
-        var user = await _userRepository.FindAsync(createStaffCommand.UserId);
-        if (user != null)
-        {
-            await _eventBus.PublishAsync(new UpdateUserCommand());
-        }
+        var users = await _userRepository.GetListAsync(u => u.PhoneNumber == createStaffCommand.CreateUserCommand.PhoneNumber);
+        //if (user != null)
+        //{
+        //    await _eventBus.PublishAsync(new UpdateUserCommand());
+        //}
         //
         //await _eventBus.PublishAsync(new CreateUserCommand());
+
     }
 }
