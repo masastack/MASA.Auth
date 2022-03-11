@@ -967,6 +967,8 @@ namespace Masa.Auth.Service.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PermissionId");
+
                     b.HasIndex("TeamId");
 
                     b.ToTable("TeamPermission", "subjects");
@@ -1438,11 +1440,19 @@ namespace Masa.Auth.Service.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.TeamPermission", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Domain.Permissions.Aggregates.Permission", "Permission")
+                        .WithMany("TeamPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.Team", "Team")
                         .WithMany("Permissions")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Permission");
 
                     b.Navigation("Team");
                 });
@@ -1568,6 +1578,8 @@ namespace Masa.Auth.Service.Migrations
                     b.Navigation("PermissionItems");
 
                     b.Navigation("RolePermissions");
+
+                    b.Navigation("TeamPermissions");
 
                     b.Navigation("UserPermissions");
                 });

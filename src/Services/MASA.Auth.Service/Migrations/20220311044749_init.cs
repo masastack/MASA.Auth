@@ -719,6 +719,13 @@ namespace Masa.Auth.Service.Migrations
                 {
                     table.PrimaryKey("PK_TeamPermission", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_TeamPermission_Permission_PermissionId",
+                        column: x => x.PermissionId,
+                        principalSchema: "permissions",
+                        principalTable: "Permission",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_TeamPermission_Team_TeamId",
                         column: x => x.TeamId,
                         principalSchema: "subjects",
@@ -1007,6 +1014,12 @@ namespace Masa.Auth.Service.Migrations
                 schema: "subjects",
                 table: "Staff",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamPermission_PermissionId",
+                schema: "subjects",
+                table: "TeamPermission",
+                column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamPermission_TeamId",

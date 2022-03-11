@@ -55,6 +55,10 @@ public class QueryHandler
     [EventHandler]
     public async Task PerimissionDetailQueryAsync(PermissionDetailQuery perimissionDetailQuery)
     {
+        var permission = await _permissionRepository.GetByIdAsync(perimissionDetailQuery.PermissionId);
+        perimissionDetailQuery.Result = new PermissionDetail
+        {
 
+        };
     }
 }

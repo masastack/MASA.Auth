@@ -19,4 +19,10 @@ public class PermissionDetail
     public string Url { get; set; } = "";
 
     public string Icon { get; set; } = "";
+
+    public List<RoleSelectItem> RoleItems { get; set; } = new();
+
+    public List<UserSelectItem> UserItems { get; set; } = new();
+
+    public List<TeamSelectItem> TeamItems { get; set; } = new();
 }

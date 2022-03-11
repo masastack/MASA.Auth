@@ -12,6 +12,7 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
             .Where(p => p.Id == id)
             .Include(p => p.UserPermissions)
             .Include(p => p.RolePermissions)
+            .Include(p => p.TeamPermissions)
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current permission does not exist");
     }
