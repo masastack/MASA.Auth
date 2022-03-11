@@ -124,8 +124,8 @@ public class AuthClient
 
     List<StaffItemResponse> StaffItems => new List<StaffItemResponse>()
     {
-        new StaffItemResponse(Guid.Parse("A446CD5D-B35F-7029-4A30-8232744A3A8E"),"0123",true,StaffTypes.InternalStaff,UserItems[0]),
-        new StaffItemResponse(Guid.Parse("8056549B-7D96-E377-2D03-A27C77837EFB"),"9527",false,StaffTypes.ExternalStaff,UserItems[1]),
+        new StaffItemResponse(Guid.Parse("A446CD5D-B35F-7029-4A30-8232744A3A8E"),Guid.Empty,Guid.Empty,"开发工程师",new(),"0123",true,StaffTypes.InternalStaff,UserItems[0]),
+        new StaffItemResponse(Guid.Parse("8056549B-7D96-E377-2D03-A27C77837EFB"),Guid.Empty,Guid.Empty,"开发工程师",new(),"9527",false,StaffTypes.ExternalStaff,UserItems[1]),
     };
 
     public async Task<ApiResultResponse<List<StaffItemResponse>>> GetStaffItemsAsync(GetStaffItemsRequest request)
@@ -142,7 +142,7 @@ public class AuthClient
     public async Task<ApiResultResponse> AddStaffAsync(AddStaffRequest request)
     {
         await AddUserAsync(request.User);
-        StaffItems.Add(new StaffItemResponse(Guid.NewGuid(), request.JobNumber, request.Enabled, request.StaffType, UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
+        StaffItems.Add(new StaffItemResponse(Guid.NewGuid(), request.DepartmentId,request.PositionId,request.Position,new(),request.JobNumber, request.Enabled, request.StaffType ,UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
@@ -151,7 +151,7 @@ public class AuthClient
         await EditUserAsync(request.User);
         var oldData = StaffItems.First(s => s.StaffId == request.StaffId);
         StaffItems.Remove(oldData);
-        StaffItems.Add(new StaffItemResponse(request.StaffId, request.JobNumber, request.Enabled, request.StaffType,UserItems.First(u => u.UserId == request.User.UserId)));
+       // StaffItems.Add(new StaffItemResponse(request.StaffId, request.JobNumber, request.Enabled, request.StaffType,UserItems.First(u => u.UserId == request.User.UserId)));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
     }
 

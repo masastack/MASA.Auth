@@ -46,9 +46,9 @@ internal class Routing
 
     const string PLATFORM_USER = "platformUser";
 
-    public static readonly string PLATFORMUserList = string.Format(DEFAULT_SERVICE_LIST, PLATFORM_USER);
+    public static readonly string PlatformUserList = string.Format(DEFAULT_SERVICE_LIST, PLATFORM_USER);
 
-    public static readonly string PLATFORMUserDetail = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER, "{id}");
+    public static readonly string PlatformUserDetail = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER, "{id}");
 
     public static readonly string OperatePlatformUser = string.Format(DEFAULT_SERVICE_BASE, PLATFORM_USER);
 
