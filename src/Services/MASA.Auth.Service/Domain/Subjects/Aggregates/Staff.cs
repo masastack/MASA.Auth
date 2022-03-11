@@ -45,4 +45,9 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
         StaffType = staffType;
         Enabled = enabled;
     }
+
+    public void BindUser(User user)
+    {
+
+    }
 }
