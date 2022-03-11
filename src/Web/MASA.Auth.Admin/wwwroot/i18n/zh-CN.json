@@ -1,9 +1,9 @@
 {
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
-  "Favorite": "收藏",
 
   //Common Start
+  "Favorite": "收藏",
   "Source": "来源",
   "Type": "类型",
   "CreationTime": "创建时间",
@@ -13,6 +13,10 @@
   "Action": "操作",
   "Add": "新增",
   //Common End
+
+  //Department start
+  "Department": "部门",
+  //Department end
 
   //user start
   "User": "用户",
@@ -29,11 +33,16 @@
 
   //Staff start
   "Staff": "员工",
+  "JobNumber": "员工工号",
   //Staff end
 
   //Platform start
   "Platform": "平台",
   "ThirdPartyPlatform.Name": "名称",
-  "ThirdPartyPlatform.DisplayName": "显示名称"
+  "ThirdPartyPlatform.DisplayName": "显示名称",
   //Platform end
+
+  //Position start
+  "Position": "职位"
+  //Position end
 }

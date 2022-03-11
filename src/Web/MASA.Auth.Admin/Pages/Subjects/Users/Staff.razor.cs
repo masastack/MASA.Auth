@@ -53,11 +53,11 @@ public partial class Staff
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<ThirdPartyUserItemResponse> Staffs { get; set; } = new();
+    public List<StaffItemResponse> Staffs { get; set; } = new();
 
     public Guid CurrentStaffId { get; set; }
 
-    public List<DataTableHeader<ThirdPartyUserItemResponse>> Headers { get; set; } = new();
+    public List<DataTableHeader<StaffItemResponse>> Headers { get; set; } = new();
 
     public bool StaffDialog { get; set; }
 
@@ -66,12 +66,12 @@ public partial class Staff
         Headers = new()
         {
             new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.DisplayName)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserItemResponse.ThirdPartyPlatformId), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserItemResponse.CreationTime)), Value = nameof(ThirdPartyUserItemResponse.CreationTime), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserItemResponse.Creator)), Value = nameof(ThirdPartyUserItemResponse.Creator), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserItemResponse.ModificationTime)), Value = nameof(ThirdPartyUserItemResponse.ModificationTime), Sortable = false },
-            new() { Text = T("State"), Value = T(nameof(UserItemResponse.Enabled)), Sortable = false },
+            new() { Text = T(nameof(UserItemResponse.Name)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
+            new() { Text = T("Department"), Value = nameof(StaffItemResponse.DepartmentId), Sortable = false },
+            new() { Text = T(nameof(StaffItemResponse.JobNumber)), Value = nameof(StaffItemResponse.JobNumber), Sortable = false },
+            new() { Text = T(nameof(StaffItemResponse.Position)), Value = nameof(StaffItemResponse.Position), Sortable = false },
+            new() { Text = T("State"), Value = nameof(StaffItemResponse.Enabled), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
         await GetStaffAsync();
@@ -79,22 +79,20 @@ public partial class Staff
 
     public async Task GetStaffAsync()
     {
-        //Lodding = true;
-        //var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyPlatformId);
-        //var reponse = await AuthClient.GetThirdPartyUserItemsAsync(request);
-        //if (reponse.Success)
-        //{
-        //    Staffs = reponse.Data;
-        //}
-        //else OpenErrorMessage(T("Failed to query thirdPartyUser data !"));
-        //Lodding = false;
-        await Task.CompletedTask;
-    }
+        Lodding = true;
+        var request = new GetStaffItemsRequest(PageIndex, PageSize, Search, Enabled);
+        var reponse = await AuthClient.GetStaffItemsAsync(request);
+        if (reponse.Success)
+        {
+            Staffs = reponse.Data;
+        }
+        else OpenErrorMessage(T("Failed to query staff data !"));
+        Lodding = false;
+    }  
 
-
-    public void OpenEditThirdPartyUserDialog(ThirdPartyUserItemResponse thirdPartyUser)
+    public void OpenStaffDialog(StaffItemResponse staff)
     {
-        CurrentStaffId = thirdPartyUser.ThirdPartyUserId;
+        CurrentStaffId = staff.StaffId;
         StaffDialog = true;
     }
 }
