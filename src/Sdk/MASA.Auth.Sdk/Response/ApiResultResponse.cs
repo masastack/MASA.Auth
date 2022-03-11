@@ -31,7 +31,7 @@ public class ApiResultResponse<TEntity> : ApiResultResponse
         Data = data;
     }
 
-    public static ApiResultResponse<TEntity> ResponseSuccess(TEntity? data, string message) => new(true, message, data);
+    public static ApiResultResponse<TEntity> ResponseSuccess(TEntity data, string message) => new(true, message, data);
 
-    public static ApiResultResponse<TEntity> ResponseLose(string message, TEntity? data) => new(false, message, data);
+    public static ApiResultResponse<TEntity> ResponseLose(string message, TEntity? data = default) => new(false, message, data);
 }
