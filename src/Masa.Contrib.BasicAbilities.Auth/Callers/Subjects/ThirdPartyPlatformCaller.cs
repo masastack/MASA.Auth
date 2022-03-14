@@ -5,16 +5,16 @@ using Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
 namespace Masa.Contrib.BasicAbilities.Auth.Callers.Subjects;
 
-internal class PlatformCaller : CallerBase
+internal class ThirdPartyPlatformCaller : CallerBase
 {
     protected override string BaseAddress { get; set; }
 
     public override string Name { get; set; }
 
-    internal PlatformCaller(IServiceProvider serviceProvider) : base(serviceProvider)
+    internal ThirdPartyPlatformCaller(IServiceProvider serviceProvider, Options options) : base(serviceProvider)
     {
-        Name = nameof(PlatformCaller);
-        BaseAddress = Routing.AUTH_SERVICE_BASE_ADRESS;
+        Name = nameof(ThirdPartyPlatformCaller);
+        BaseAddress = options.AuthServiceBaseAdress;
     }
 
     public async Task<ApiResultResponse<PaginatedItemResponse<ThirdPartyPlatformItemResponse>>> GetListAsync(int pageIndex = 1, int pageSize = 20, string? search = null)

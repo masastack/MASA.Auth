@@ -9,9 +9,9 @@ public class RoleCaller : CallerBase
 
     public override string Name { get; set; }
 
-    public RoleCaller(IServiceProvider serviceProvider) : base(serviceProvider)
+    public RoleCaller(IServiceProvider serviceProvider, Options options) : base(serviceProvider)
     {
-        Name = nameof(PlatformCaller);
-        BaseAddress = "";
+        Name = nameof(ThirdPartyPlatformCaller);
+        BaseAddress = options.AuthServiceBaseAdress;
     }
 }
