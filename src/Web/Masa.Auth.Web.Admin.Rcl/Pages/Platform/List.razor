@@ -1,0 +1,105 @@
+﻿@*@inherits AdminCompontentBase
+
+<MCard Class="mt-2">
+    <MCardText Class="pa-6">
+        <MRow>
+            <MCol Md=6 Sm=12 Class="d-flex block-center">
+                <span class="text-btn neutral-lighten-1--text">@T("Show"):</span>
+                <MSelect @bind-Value="Page.PageSize"
+                         Color="primary"
+                         Style="max-width:120px;"
+                         Dense
+                         Class="mx-6"
+                         HideDetails="@("auto")"
+                         Outlined
+                         Items="@Page.PageSizes"
+                         ItemText="u => u.ToString()"
+                         ItemValue="u => u">
+                </MSelect>
+                <span class="text-btn">@T("Entries")</span>
+            </MCol>
+            <MCol Md=6 Sm=12 Class="d-flex block-center">
+                @if (Page.SelectDatas.Count() > 0)
+                {
+                    <MButton Color="error" MinWidth=80 Height=32 Class="rounded-pill" OnClick="()=>Page.OpenBatchDeleteObjectDialog()">
+                        @T("Batch Delete")
+                    </MButton>
+                }
+                <MSelect @bind-Value="Page.ObjectTypeEnum"
+                         Color="primary"
+                         HideDetails="@("auto")"
+                         Clearable
+                         Dense
+                         Outlined
+                         Items="@Page.ObjectTypeSelect"
+                         ItemText="o => o.Item2"
+                         ItemValue="o => o.Item1"
+                         Class="ml-4"
+                         Label="@T("ObjectType")">
+                </MSelect>
+                <MTextField @bind-Value="Page.Search" Color="primary" Class="ml-4 rounded-2" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1" Placeholder="@T("Search")">
+                    <PrependInnerContent>
+                        <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                    </PrependInnerContent>
+                </MTextField>
+                <MButton Color="primary" MinWidth=80 Height=32 Class="ml-6 rounded-pill" OnClick="()=> Page.OpenObjectForm()">
+                    @T("Add Object")
+                </MButton>
+            </MCol>
+        </MRow>
+    </MCardText>
+</MCard>
+
+<MDataTable ShowSelect @bind-Value=Page.SelectDatas HideDefaultFooter Headers="Page.Headers" TItem="ObjectItemResponse" Items="Page.Datas" ItemsPerPage="Page.PageSize" ItemKey="o => o.Code" class="table-header-fill table-border-solid">
+    <HeaderColContent Context="header">
+        <span class="text-body neutral-lighten-1--text">@header.Text</span>
+    </HeaderColContent>
+
+    <ItemColContent>
+        @switch (context.Header.Value)
+        {
+            case nameof(ObjectItemResponse.Name):
+                <div class="hover-pointer d-flex my-2" @onclick="()=> Page.OpenObjectForm(context.Item)">
+                    <span style="color:blue">@context.Item.Name</span>
+                </div>
+                break;
+            case nameof(ObjectItemResponse.Code):
+                <span>@context.Item.Code</span>
+                break;
+            case nameof(ObjectItemResponse.State):
+                <span>@T(context.Item.State.ToString())</span>
+                break;
+            case nameof(ObjectItemResponse.ObjectType):
+                <span>@T(context.Item.ObjectType.ToString())</span>
+                break;
+            case "Action":
+                <MButton Color="primary" OnClick="()=> Page.OpenObjectForm(context.Item)">@T("Edit")</MButton>
+                <MButton Color="error" Class="ml-4" OnClick="()=> Page.OpenDeleteObjectDialog(context.Item)">@T("Delete")</MButton>
+                break;
+            default:
+                @context.Value
+                break;
+        }
+    </ItemColContent>
+</MDataTable>
+
+<div class="d-flex">
+    <div class="mr-auto pt-3 text-btn neutral-lighten-1--text">@T("Show") @((Page.PageIndex-1)*Page.PageSize+1) to @(Page.PageIndex*Page.PageSize) of @Page.TotalCount @T("Entries")</div>
+    @if (Page.PageCount > 0)
+    {
+        <MPagination @bind-Value="Page.PageIndex" Color="primary" Circle Length=@Page.PageCount></MPagination>
+    }
+</div>
+
+<AddOrEdit @bind-Visible=Page.IsOpenObjectForm />
+
+@code {
+    [Inject]
+    public Platform Page { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        RegisterPage(Page);
+        await Page.QueryPageDatasAsync();
+    }
+    }*@

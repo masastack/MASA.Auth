@@ -1,0 +1,40 @@
+﻿@page "/user"
+@using Masa.Auth.Admin.Pages.Subjects.Users
+@inherits AdminCompontentBase
+
+<MCard>
+    <MCardText Class="px-6 pb-6">
+        <MTabs @bind-Value="_pageTab" HideSlider Height=10 Color="sample-green">
+            <MTab Class="ml-2" Value="PageTab.User">
+                <MIcon Size=16 Color="@(_userActive?"sample-green":"fill")">mdi-circle</MIcon>
+                <span class="ml-2 text-btn @(_userActive?"neutral--text":"")">@T(PageTab.User)</span>
+            </MTab>
+            <MTab Class="ml-2" Value="PageTab.ThirdPartyUser">
+                <MIcon Size=16 Color="@(_thirdPartyuserActive?"sample-green":"fill")">mdi-circle</MIcon>
+                <span class="ml-2 text-btn @(_thirdPartyuserActive?"neutral--text":"")">@T(PageTab.ThirdPartyUser)</span>
+            </MTab>
+            <MTab Class="ml-2" Value="PageTab.Staff">
+                <MIcon Size=16 Color="@(_staffActive?"sample-green":"fill")">mdi-circle</MIcon>
+                <span class="ml-2 text-btn @(_staffActive?"neutral--text":"")">@T(PageTab.Staff)</span>
+            </MTab>
+        </MTabs>
+        <MTabsItems Value="_pageTab">
+            <MTabItem Value="PageTab.User">
+                <User />
+            </MTabItem>
+             <MTabItem Value="PageTab.ThirdPartyUser">
+                <ThirdPartyUser />
+            </MTabItem>
+             <MTabItem Value="PageTab.Staff">
+                <Staff />
+            </MTabItem>
+        </MTabsItems>
+    </MCardText>
+</MCard>
+
+@code {
+    StringNumber _pageTab = PageTab.User;
+    bool _userActive => _pageTab == PageTab.User;
+    bool _thirdPartyuserActive => _pageTab == PageTab.ThirdPartyUser;
+    bool _staffActive => _pageTab == PageTab.Staff;
+}

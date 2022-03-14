@@ -1,0 +1,1 @@
+﻿global using Masa.Utils.Caller.HttpClient;
