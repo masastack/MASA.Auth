@@ -3,5 +3,5 @@
 public record CreateStaffCommand(string JobNumber, string Positoon, bool Enabled = true)
     : Command
 {
-    public CreateUserCommand CreateUserCommand { get; set; } = null!;
+    public AddUserCommand CreateUserCommand { get; set; } = null!;
 }

@@ -2,7 +2,16 @@
 
 public class PaginationList<T> where T : class
 {
-    public float Total { get; set; }
+    public long Total { get; set; }
 
-    public List<T> Items { get; set; } = new();
+    public int TotalPage { get; set; }
+
+    public IEnumerable<T> Items { get; set; }
+
+    public PaginationList(long total, int totalPage, IEnumerable<T> items)
+    {
+        Total = total;
+        TotalPage = totalPage;
+        Items = items;
+    }
 }

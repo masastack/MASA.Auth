@@ -52,4 +52,9 @@ public class User : AuditAggregateRoot<Guid, Guid>
         : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, new AddressValue(), new AddressValue())
     {
     }
+
+    public void Update()
+    {
+
+    }
 }

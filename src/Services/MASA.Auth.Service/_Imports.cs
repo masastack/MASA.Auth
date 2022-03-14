@@ -52,3 +52,4 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Options;
 global using Microsoft.OpenApi.Models;
 global using System.Reflection;
+global using System.Linq.Expressions;
