@@ -1,0 +1,81 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "2688169c-2c69-4a54-86bf-4b8e3f8f7ec9": {
+      "ProjectGuid": "2688169c-2c69-4a54-86bf-4b8e3f8f7ec9",
+      "DisplayName": "MASA.Auth.RolePermission",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "杂项文件",
+      "ColorIndex": -1
+    },
+    "93ca3bb4-baf6-485c-aebd-452bd123d8e9": {
+      "ProjectGuid": "93ca3bb4-baf6-485c-aebd-452bd123d8e9",
+      "DisplayName": "MASA.Auth.RolePermission",
+      "ColorIndex": 1
+    },
+    "80fe27f8-7003-43db-ba90-b82060d47a72": {
+      "ProjectGuid": "80fe27f8-7003-43db-ba90-b82060d47a72",
+      "DisplayName": "MASA.Auth.UserDepartment",
+      "ColorIndex": 2
+    },
+    "40685ec0-64df-4742-b8f6-602afaefc0ea": {
+      "ProjectGuid": "40685ec0-64df-4742-b8f6-602afaefc0ea",
+      "DisplayName": "MASA.Auth.Caller",
+      "ColorIndex": 3
+    },
+    "e203d092-7256-432f-a311-a274c73aa460": {
+      "ProjectGuid": "e203d092-7256-432f-a311-a274c73aa460",
+      "DisplayName": "MASA.Auth.RolePermission",
+      "ColorIndex": 4
+    },
+    "3f0181ca-bdf5-4f56-a664-0e82dfd2a8c7": {
+      "ProjectGuid": "3f0181ca-bdf5-4f56-a664-0e82dfd2a8c7",
+      "DisplayName": "MASA.Auth.Admin",
+      "ColorIndex": 5
+    },
+    "6664812f-de87-4a65-9c25-ad0fd4e6982e": {
+      "ProjectGuid": "6664812f-de87-4a65-9c25-ad0fd4e6982e",
+      "DisplayName": "MASA.Auth.Service",
+      "ColorIndex": 6
+    },
+    "9c8f366d-8564-4b48-bb38-856dfc526948": {
+      "ProjectGuid": "9c8f366d-8564-4b48-bb38-856dfc526948",
+      "DisplayName": "MASA.Auth.RolePermission",
+      "ColorIndex": 7
+    },
+    "c7ae6933-b373-4117-8a75-24fba6e7a034": {
+      "ProjectGuid": "c7ae6933-b373-4117-8a75-24fba6e7a034",
+      "DisplayName": "Contracts",
+      "ColorIndex": 8
+    },
+    "d417367c-a8b2-4295-aff3-69514a6a62cd": {
+      "ProjectGuid": "d417367c-a8b2-4295-aff3-69514a6a62cd",
+      "DisplayName": "MASA.Auth.Contracts",
+      "ColorIndex": 9
+    },
+    "64b06d24-c53d-4c64-9cf1-98f9f4f2dbee": {
+      "ProjectGuid": "64b06d24-c53d-4c64-9cf1-98f9f4f2dbee",
+      "DisplayName": "Solution Items",
+      "ColorIndex": 10
+    },
+    "f17cc0a5-e77b-48a8-907c-90cb0020f869": {
+      "ProjectGuid": "f17cc0a5-e77b-48a8-907c-90cb0020f869",
+      "DisplayName": "docker-compose",
+      "ColorIndex": 11
+    },
+    "1857d292-adbd-4205-ba85-e68d6b6c61e0": {
+      "ProjectGuid": "1857d292-adbd-4205-ba85-e68d6b6c61e0",
+      "DisplayName": "MASA.Auth.Admin",
+      "ColorIndex": 12
+    },
+    "bb090286-3756-4d15-b441-e973e903ecd7": {
+      "ProjectGuid": "bb090286-3756-4d15-b441-e973e903ecd7",
+      "DisplayName": "MASA.Auth.Sdk",
+      "ColorIndex": 13
+    }
+  },
+  "NextColorIndex": 14
+}
