@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Response.Subjects;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
 public class ThirdPartyPlatformItemResponse
 {

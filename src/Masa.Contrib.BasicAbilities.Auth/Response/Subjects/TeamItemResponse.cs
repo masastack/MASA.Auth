@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Response.Subjects;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
 public class TeamItemResponse
 {
@@ -18,7 +18,7 @@ public class TeamItemResponse
 
     public DateTime ModificationTime { get; set; }
 
-    public TeamItemResponse(Guid teamId,string name, string avatar, string describe, string creatorUser, string creatorUserAvatar, string modifierUser, DateTime modificationTime)
+    public TeamItemResponse(Guid teamId, string name, string avatar, string describe, string creatorUser, string creatorUserAvatar, string modifierUser, DateTime modificationTime)
     {
         TeamId = teamId;
         Name = name;

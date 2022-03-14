@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Request.Subjects;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
 
 public class GetThirdPartyPlatformItemsRequest
 {

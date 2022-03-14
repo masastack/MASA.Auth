@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Sdk.Response.Subjects;
+﻿using Masa.Contrib.BasicAbilities.Auth.Enums;
+
+namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
 public class TeamDetailResponse
 {
@@ -20,7 +22,7 @@ public class TeamDetailResponse
 
     public List<Guid> Roles { get; set; }
 
-    public static TeamDetailResponse Default => new ("","","","",default,new(),new(),new());
+    public static TeamDetailResponse Default => new("", "", "", "", default, new(), new(), new());
 
     public TeamDetailResponse(string name, string avatar, string avatarName, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
     {

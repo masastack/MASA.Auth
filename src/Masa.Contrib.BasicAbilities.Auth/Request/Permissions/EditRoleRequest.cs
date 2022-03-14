@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Sdk.Request.Permissions;
+﻿using Masa.Contrib.BasicAbilities.Auth.Response.Permissions;
+
+namespace Masa.Contrib.BasicAbilities.Auth.Request.Permissions;
 
 public class EditRoleRequest
 {
@@ -35,7 +37,7 @@ public class EditRoleRequest
 
     public static implicit operator EditRoleRequest(RoleDetailResponse role)
     {
-        return new EditRoleRequest(role.RoleId,role.Name, role.Code, role.Limit, role.Description, role.Enabled, role.RolePermissions, role.ChildRoles, role.Users);
+        return new EditRoleRequest(role.RoleId, role.Name, role.Code, role.Limit, role.Description, role.Enabled, role.RolePermissions, role.ChildRoles, role.Users);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Response.Permissions;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Permissions;
 
 public class RoleItemResponse
 {

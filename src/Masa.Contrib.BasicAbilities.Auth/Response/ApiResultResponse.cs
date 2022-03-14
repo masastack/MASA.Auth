@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Masa.Auth.Sdk.Response;
+namespace Masa.Contrib.BasicAbilities.Auth.Response;
 
 public class ApiResultResponse
 {
@@ -21,7 +21,7 @@ public class ApiResultResponse
 
 public class ApiResultResponse<TEntity> : ApiResultResponse
 {
-    [MemberNotNullWhen(true,nameof(Data))]
+    [MemberNotNullWhen(true, nameof(Data))]
     public override bool Success { get; }
 
     public TEntity? Data { get; }

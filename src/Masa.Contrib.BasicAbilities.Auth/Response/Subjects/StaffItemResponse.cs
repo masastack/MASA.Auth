@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Sdk.Response.Subjects;
+﻿using Masa.Contrib.BasicAbilities.Auth.Enums;
+
+namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
 public class StaffItemResponse
 {

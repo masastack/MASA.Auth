@@ -1,4 +1,4 @@
-namespace Masa.Auth.Sdk.ApiUri;
+namespace Masa.Contrib.BasicAbilities.Auth.ApiUri;
 
 internal class Routing
 {
@@ -89,7 +89,7 @@ internal class Routing
     public static readonly string TeamList = string.Format(DEFAULT_SERVICE_LIST, TEAM);
 
     public static readonly string TeamDetail = string.Format(DEFAULT_SERVICE_BASE, TEAM, "{id}");
- 
+
     public static readonly string TeamSelect = string.Format(DEFAULT_SERVICE_BASE, TEAM, "select");
 
     public static readonly string OperateTeam = string.Format(DEFAULT_SERVICE_BASE, TEAM);

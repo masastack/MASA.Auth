@@ -1,4 +1,4 @@
-namespace Masa.Auth.Sdk.Response;
+namespace Masa.Contrib.BasicAbilities.Auth.Response;
 
 public class PaginatedItemResponse<TEntity> where TEntity : class
 {

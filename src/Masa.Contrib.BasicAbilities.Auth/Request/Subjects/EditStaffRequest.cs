@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Sdk.Request.Subjects;
+﻿using Masa.Contrib.BasicAbilities.Auth.Enums;
+using Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
+
+namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
 
 public class EditStaffRequest
 {

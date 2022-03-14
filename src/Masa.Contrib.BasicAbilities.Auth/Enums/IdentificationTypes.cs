@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Enums;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Enums;
 
 public enum IdentificationTypes
 {

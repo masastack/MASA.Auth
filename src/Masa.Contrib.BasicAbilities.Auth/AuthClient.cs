@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk;
+﻿namespace Masa.Contrib.BasicAbilities.Auth;
 
 public class AuthClient
 {
@@ -58,7 +58,7 @@ public class AuthClient
 
     public async Task<ApiResultResponse<List<UserItemResponse>>> GetUserItemsAsync(GetUserItemsRequest request)
     {
-        var users = UserItems.Where(u =>u.Enabled==request.Enabled && (u.Name.Contains(request.Search) || u.DisplayName.Contains(request.Search) || u.PhoneNumber.Contains(request.Search))).Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
+        var users = UserItems.Where(u => u.Enabled == request.Enabled && (u.Name.Contains(request.Search) || u.DisplayName.Contains(request.Search) || u.PhoneNumber.Contains(request.Search))).Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
         return await Task.FromResult(ApiResultResponse<List<UserItemResponse>>.ResponseSuccess(users, "查询成功"));
     }
 
@@ -69,7 +69,7 @@ public class AuthClient
 
     public async Task<ApiResultResponse> AddUserAsync(AddUserRequest request)
     {
-        UserItems.Add(new UserItemResponse(Guid.NewGuid(), request.Name, request.DisplayName, request.Avatar, request.IDCard, request.PhoneNumber,request.CompanyName, request.Enabled, request.PhoneNumber, request.Email, request.HouseholdRegisterAddress, request.HouseholdRegisterProvinceCode, request.HouseholdRegisterCityCode, request.HouseholdRegisterDistrictCode, request.ResidentialAddress, request.ResidentialProvinceCode, request.ResidentialCityCode, request.ResidentialDistrictCode, DateTime.Now));
+        UserItems.Add(new UserItemResponse(Guid.NewGuid(), request.Name, request.DisplayName, request.Avatar, request.IDCard, request.PhoneNumber, request.CompanyName, request.Enabled, request.PhoneNumber, request.Email, request.HouseholdRegisterAddress, request.HouseholdRegisterProvinceCode, request.HouseholdRegisterCityCode, request.HouseholdRegisterDistrictCode, request.ResidentialAddress, request.ResidentialProvinceCode, request.ResidentialCityCode, request.ResidentialDistrictCode, DateTime.Now));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
@@ -83,7 +83,7 @@ public class AuthClient
 
     public async Task<ApiResultResponse> DeleteUserAsync(Guid userId)
     {
-        UserItems.Remove(UserItems.First(u=> u.UserId == userId));
+        UserItems.Remove(UserItems.First(u => u.UserId == userId));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("删除成功"));
     }
     #endregion
@@ -110,7 +110,7 @@ public class AuthClient
     public async Task<ApiResultResponse> AddThirdPartyUserAsync(AddThirdPartyUserRequest request)
     {
         await AddUserAsync(request.User);
-        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(Guid.NewGuid(), request.ThirdPartyPlatformId,request.Enabled, UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber), DateTime.Now, DateTime.Now, Guid.Empty));
+        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(Guid.NewGuid(), request.ThirdPartyPlatformId, request.Enabled, UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber), DateTime.Now, DateTime.Now, Guid.Empty));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
@@ -138,7 +138,7 @@ public class AuthClient
     public async Task<ApiResultResponse> AddStaffAsync(AddStaffRequest request)
     {
         await AddUserAsync(request.User);
-        StaffItems.Add(new StaffItemResponse(Guid.NewGuid(), "",request.Position,request.JobNumber, request.Enabled, request.StaffType ,UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
+        StaffItems.Add(new StaffItemResponse(Guid.NewGuid(), "", request.Position, request.JobNumber, request.Enabled, request.StaffType, UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
@@ -147,7 +147,7 @@ public class AuthClient
         await EditUserAsync(request.User);
         var oldData = StaffItems.First(s => s.StaffId == request.StaffId);
         StaffItems.Remove(oldData);
-        StaffItems.Add(new StaffItemResponse(request.StaffId, "",  request.Position, request.JobNumber, request.Enabled, request.StaffType,UserItems.First(u => u.UserId == request.User.UserId)));
+        StaffItems.Add(new StaffItemResponse(request.StaffId, "", request.Position, request.JobNumber, request.Enabled, request.StaffType, UserItems.First(u => u.UserId == request.User.UserId)));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
     }
 

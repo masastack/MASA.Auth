@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Sdk.Callers;
+﻿using Masa.Contrib.BasicAbilities.Auth.Response;
+
+namespace Masa.Contrib.BasicAbilities.Auth.Callers;
 
 public abstract class CallerBase : HttpClientCallerBase
 {

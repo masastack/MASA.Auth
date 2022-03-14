@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Response.Organizations;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Organizations;
 
 public class DepartmentItemResponse
 {

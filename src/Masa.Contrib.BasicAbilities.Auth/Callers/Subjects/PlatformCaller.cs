@@ -1,7 +1,9 @@
-﻿using Masa.Auth.Sdk.Response;
-using Masa.Auth.Sdk.Response.Subjects;
+﻿using Masa.Contrib.BasicAbilities.Auth.ApiUri;
+using Masa.Contrib.BasicAbilities.Auth.Callers;
+using Masa.Contrib.BasicAbilities.Auth.Response;
+using Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
-namespace Masa.Auth.Sdk.Callers.Subjects;
+namespace Masa.Contrib.BasicAbilities.Auth.Callers.Subjects;
 
 internal class PlatformCaller : CallerBase
 {

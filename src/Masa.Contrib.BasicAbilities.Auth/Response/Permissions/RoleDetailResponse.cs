@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Response.Permissions;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Permissions;
 
 public class RoleDetailResponse
 {
@@ -28,7 +28,7 @@ public class RoleDetailResponse
 
     public string Modifier { get; set; }
 
-    public static RoleDetailResponse Default = new (default,"","",0,"",true,new(),new(),new(),default,default,"","");
+    public static RoleDetailResponse Default = new(default, "", "", 0, "", true, new(), new(), new(), default, default, "", "");
 
     public RoleDetailResponse(Guid roleId, string name, string code, int limit, string description, bool enabled, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {

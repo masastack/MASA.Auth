@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Sdk.Request.Permissions;
+﻿using Masa.Contrib.BasicAbilities.Auth.Response.Permissions;
+
+namespace Masa.Contrib.BasicAbilities.Auth.Request.Permissions;
 
 public class AddRoleRequest
 {
@@ -32,7 +34,7 @@ public class AddRoleRequest
 
     public static implicit operator AddRoleRequest(RoleDetailResponse role)
     {
-        return new AddRoleRequest(role.Name,role.Code,role.Limit,role.Description,role.Enabled,role.RolePermissions,role.ChildRoles,role.Users);
+        return new AddRoleRequest(role.Name, role.Code, role.Limit, role.Description, role.Enabled, role.RolePermissions, role.ChildRoles, role.Users);
     }
 }
 

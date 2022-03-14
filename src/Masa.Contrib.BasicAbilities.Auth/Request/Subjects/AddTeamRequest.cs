@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Sdk.Response.Subjects;
+﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
 
 public class AddTeamRequest
 {
@@ -32,7 +32,7 @@ public class AddTeamRequest
 
     public static implicit operator AddTeamRequest(TeamDetailResponse team)
     {
-        return new AddTeamRequest(team.Name,team.Avatar,team.AvatarName,team.Describe,team.TeamType,team.Staffs,team.Permissions,team.Roles);
+        return new AddTeamRequest(team.Name, team.Avatar, team.AvatarName, team.Describe, team.TeamType, team.Staffs, team.Permissions, team.Roles);
     }
 }
 

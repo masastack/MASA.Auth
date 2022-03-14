@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Masa.Auth.Sdk;
+namespace Masa.Contrib.BasicAbilities.Auth;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddAuthSdkServer(this IServiceCollection services,Action<Options>? configure = null)
+    public static IServiceCollection AddAuthSdkServer(this IServiceCollection services, Action<Options>? configure = null)
     {
         var options = new Options("http://localhost:8080/");
         //Todo default option
