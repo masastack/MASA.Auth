@@ -10,7 +10,7 @@ public class EditTeamRequest
 
     public string AvatarName { get; set; }
 
-    public string Describe { get; set; }
+    public string Description { get; set; }
 
     public TeamTypes TeamType { get; set; }
 
@@ -20,13 +20,13 @@ public class EditTeamRequest
 
     public List<Guid> Roles { get; set; }
 
-    public EditTeamRequest(Guid teamId,string name, string avatar, string avatarName, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
+    public EditTeamRequest(Guid teamId, string name, string avatar, string avatarName, string description, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
     {
         TeamId = teamId;
         Name = name;
         Avatar = avatar;
         AvatarName = avatarName;
-        Describe = describe;
+        Description = description;
         TeamType = teamType;
         Staffs = staffs;
         Permissions = permissions;
@@ -35,7 +35,7 @@ public class EditTeamRequest
 
     public static implicit operator EditTeamRequest(TeamDetailResponse team)
     {
-        return new EditTeamRequest(team.TeamId,team.Name,team.Avatar,team.AvatarName,team.Describe,team.TeamType,team.Staffs,team.Permissions,team.Roles);
+        return new EditTeamRequest(team.TeamId, team.Name, team.Avatar, team.AvatarName, team.Describe, team.TeamType, team.Staffs, team.Permissions, team.Roles);
     }
 }
 
