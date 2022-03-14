@@ -7,7 +7,7 @@ public class AuthClient
 
     }
 
-    #region Platform
+    #region ThirdPartyPlatform
 
     List<ThirdPartyPlatformItemResponse> PlatformItems = new List<ThirdPartyPlatformItemResponse>()
     {
