@@ -1,4 +1,8 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Callers.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller.Request.Subjects;
+using Masa.Auth.ApiGateways.Caller.Response;
+using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.ApiGateways.Caller.Callers.Subjects;
 
 public class UserCaller : CallerBase
 {

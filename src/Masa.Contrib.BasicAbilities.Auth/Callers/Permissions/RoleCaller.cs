@@ -1,7 +1,6 @@
-﻿using Masa.Contrib.BasicAbilities.Auth.Callers;
-using Masa.Contrib.BasicAbilities.Auth.Callers.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller.Callers.Subjects;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Callers.Permissions;
+namespace Masa.Auth.ApiGateways.Caller.Callers.Permissions;
 
 public class RoleCaller : CallerBase
 {

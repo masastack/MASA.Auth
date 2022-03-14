@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Permissions;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
 
 public partial class AddOrEditRoleDialog
 {

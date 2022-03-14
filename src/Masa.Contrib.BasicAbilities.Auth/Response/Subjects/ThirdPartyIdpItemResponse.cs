@@ -1,4 +1,4 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Response.Subjects;
 
 public class ThirdPartyIdpItemResponse
 {

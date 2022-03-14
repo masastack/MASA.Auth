@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class Staff
 {

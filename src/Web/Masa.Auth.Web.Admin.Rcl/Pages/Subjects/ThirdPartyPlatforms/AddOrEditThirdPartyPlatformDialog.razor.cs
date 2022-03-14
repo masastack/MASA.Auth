@@ -12,11 +12,11 @@ public partial class AddOrEditThirdPartyPlatformDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid ThirdPartyPlatformId { get; set; }
+    public Guid ThirdPartyIdpId { get; set; }
 
-    private bool IsAdd => ThirdPartyPlatformId == Guid.Empty;
+    private bool IsAdd => ThirdPartyIdpId == Guid.Empty;
 
-    private ThirdPartyPlatformItemResponse ThirdPartyPlatform { get; set; } = ThirdPartyPlatformItemResponse.Default;
+    private ThirdPartyIdpItemResponse ThirdPartyPlatform { get; set; } = ThirdPartyIdpItemResponse.Default;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -34,14 +34,14 @@ public partial class AddOrEditThirdPartyPlatformDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) ThirdPartyPlatform = ThirdPartyPlatformItemResponse.Default;
+            if (IsAdd) ThirdPartyPlatform = ThirdPartyIdpItemResponse.Default;
             else await GetThirdPartyPlatformDetailAsync();
         }
     }
 
     public async Task GetThirdPartyPlatformDetailAsync()
     {
-        var response = await AuthClient.GetThirdPartyPlatformDetailAsync(ThirdPartyPlatformId);
+        var response = await AuthClient.GetThirdPartyPlatformDetailAsync(ThirdPartyIdpId);
         if (response.Success)
         {
             ThirdPartyPlatform = response.Data;

@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Organizations;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class Org
 {

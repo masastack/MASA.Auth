@@ -1,4 +1,4 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth
+﻿namespace Masa.Auth.ApiGateways.Caller
 {
     public class Options
     {

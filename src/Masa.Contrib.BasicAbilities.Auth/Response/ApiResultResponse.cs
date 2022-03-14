@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Response;
+namespace Masa.Auth.ApiGateways.Caller.Response;
 
 public class ApiResultResponse
 {

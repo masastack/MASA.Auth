@@ -1,4 +1,4 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Permissions;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Permissions;
 
 public class GetRoleItemsRequest
 {

@@ -1,4 +1,4 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Organizations;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Organizations;
 
 public class CreateDepartmentRequest
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Masa.Contrib.BasicAbilities.Auth;
+namespace Masa.Auth.ApiGateways.Caller;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,6 +1,6 @@
-﻿using Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
+namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class EditThirdPartyIdpRequest
 {
@@ -31,6 +31,6 @@ public class EditThirdPartyIdpRequest
 
     public static implicit operator EditThirdPartyIdpRequest(ThirdPartyIdpItemResponse request)
     {
-        return new EditThirdPartyIdpRequest(request.ThirdPartyIdpId,request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
+        return new EditThirdPartyIdpRequest(request.ThirdPartyIdpId, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.VerifyType);
     }
 }

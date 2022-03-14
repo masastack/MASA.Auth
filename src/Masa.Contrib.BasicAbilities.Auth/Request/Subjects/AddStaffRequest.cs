@@ -1,4 +1,7 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller.Enums;
+using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class AddStaffRequest
 {
