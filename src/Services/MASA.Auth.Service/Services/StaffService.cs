@@ -7,11 +7,13 @@ public class StaffService : ServiceBase
         App.MapGet(Routing.StaffList, ListAsync);
         App.MapGet(Routing.StaffPagination, PaginationAsync);
         App.MapPost(Routing.Staff, CreateAsync);
+        App.MapDelete(Routing.Staff, DeleteAsync);
     }
 
-    private async Task CreateAsync([FromServices] IEventBus eventBus, [FromBody] CreateStaffCommand createStaffCommand)
+    private async Task CreateAsync([FromServices] IEventBus eventBus,
+        [FromHeader(Name = "user-id")] Guid userId, [FromBody] CreateStaffCommand createStaffCommand)
     {
-
+        await eventBus.PublishAsync(createStaffCommand);
     }
 
     private async Task<List<StaffItem>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
@@ -27,5 +29,12 @@ public class StaffService : ServiceBase
         var query = new StaffPaginationQuery(pageIndex, pageSize, name);
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    private async Task DeleteAsync([FromServices] IEventBus eventBus,
+        [FromHeader(Name = "user-id")] Guid userId, [FromQuery] Guid id)
+    {
+        var deleteCommand = new DeleteStaffCommand(id);
+        await eventBus.PublishAsync(deleteCommand);
     }
 }

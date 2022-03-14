@@ -4,11 +4,11 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 {
     public int SystemId { get; set; }
 
-    public string AppId { get; private set; } = "";
+    public string AppId { get; private set; }
 
-    public string Name { get; private set; } = "";
+    public string Name { get; private set; }
 
-    public string Code { get; private set; } = "";
+    public string Code { get; private set; }
 
     public Guid ParentId { get; set; }
 
@@ -38,6 +38,19 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
+    public Permission(int systemId, string appId, string name, string code, string url,
+        string icon, PermissionType type, string description)
+    {
+        SystemId = systemId;
+        AppId = appId;
+        Name = name;
+        Code = code;
+        Url = url;
+        Icon = icon;
+        Type = type;
+        Description = description;
+    }
+
     public void DeleteCheck()
     {
         if (rolePermissions.Any())
@@ -52,6 +65,34 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
         {
             throw new UserFriendlyException("current permission can`t delete,because PermissionItems not empty!");
         }
+    }
+
+    public void BindApiPermission(params Guid[] childrenId)
+    {
+        if (Type == PermissionType.Api)
+        {
+            throw new UserFriendlyException("the permission of api type can`t bind api permission");
+        }
+        foreach (var childId in childrenId)
+        {
+            permissionItems.Add(new PermissionRelation(childId));
+        }
+    }
+
+    public void MoveParent(Guid parentId)
+    {
+        if (Type == PermissionType.Api)
+        {
+            throw new UserFriendlyException("the permission of api type can`t set parent");
+        }
+        ParentId = parentId;
+    }
+
+    //todo change to property field
+    //eg. public DateTime HireDate { get; set => field = value.Date; }
+    public void SetEnabled(bool enabled)
+    {
+        Enabled = enabled;
     }
 }
 

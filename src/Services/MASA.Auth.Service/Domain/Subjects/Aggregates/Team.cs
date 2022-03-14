@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
-public class Team : AuditAggregateRoot<Guid, Guid>
+public class Team : AggregateRoot<Guid>
 {
     public string Name { get; private set; }
 
@@ -18,7 +18,7 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public List<TeamRole> Roles { get; private set; } = new();
 
-    public Team(string name, string avatar,string avatarName, string describe, TeamTypes teamType)
+    public Team(string name, string avatar, string avatarName, string describe, TeamTypes teamType)
     {
         Name = name;
         Avatar = avatar;

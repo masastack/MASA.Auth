@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220311044749_init")]
+    [Migration("20220314050512_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,12 +30,6 @@ namespace Masa.Auth.Service.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -43,15 +37,6 @@ namespace Masa.Auth.Service.Migrations
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Modifier")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -119,7 +104,8 @@ namespace Masa.Auth.Service.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -165,7 +151,8 @@ namespace Masa.Auth.Service.Migrations
 
                     b.Property<string>("Url")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
 
@@ -181,7 +168,7 @@ namespace Masa.Auth.Service.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<Guid>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PermissionId")
@@ -551,7 +538,7 @@ namespace Masa.Auth.Service.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Client");
+                    b.ToTable("Client", "sso");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Sso.Aggregates.ClientGrantType", b =>
@@ -744,7 +731,7 @@ namespace Masa.Auth.Service.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("builder", "sso");
+                    b.ToTable("IdentityResource", "sso");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Sso.Aggregates.IdentityResourceClaim", b =>
@@ -888,6 +875,9 @@ namespace Masa.Auth.Service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("StaffType")
                         .HasColumnType("int");
 
@@ -897,6 +887,9 @@ namespace Masa.Auth.Service.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("JobNumber")
+                        .IsUnique();
+
+                    b.HasIndex("PositionId")
                         .IsUnique();
 
                     b.HasIndex("UserId");
@@ -918,24 +911,9 @@ namespace Masa.Auth.Service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Describe")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Modifier")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1160,11 +1138,15 @@ namespace Masa.Auth.Service.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdCard")
+                        .IsUnique();
+
+                    b.HasIndex("PhoneNumber")
                         .IsUnique();
 
                     b.ToTable("User", "subjects");
@@ -1188,6 +1170,8 @@ namespace Masa.Auth.Service.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserPermission", "subjects");
                 });
@@ -1431,11 +1415,19 @@ namespace Masa.Auth.Service.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Subjects.Aggregates.Staff", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Domain.Organizations.Aggregates.Position", "Position")
+                        .WithOne()
+                        .HasForeignKey("Masa.Auth.Service.Domain.Subjects.Aggregates.Staff", "PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Position");
 
                     b.Navigation("User");
                 });
@@ -1567,7 +1559,15 @@ namespace Masa.Auth.Service.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Masa.Auth.Service.Domain.Subjects.Aggregates.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Permission");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Domain.Organizations.Aggregates.Department", b =>

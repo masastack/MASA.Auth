@@ -4,7 +4,7 @@ public class IdentityResourceEntityTypeConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<IdentityResource> builder)
     {
-        builder.ToTable(nameof(builder), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
+        builder.ToTable(nameof(IdentityResource), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
 
         builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
         builder.Property(x => x.DisplayName).HasMaxLength(200);

@@ -34,7 +34,7 @@ public class QueryHandler
         var paginationList = await _staffRepository.GetPaginatedListAsync(s => s.JobNumber.Contains(key) || s.Name.Contains(key), pageIndex, pageSize, null);
         return new PaginationList<StaffItem>
         {
-            Total = paginationList.Count,
+            Total = paginationList.Count(),
             Items = paginationList.Select(s => new StaffItem
             {
                 Name = s.Name,
