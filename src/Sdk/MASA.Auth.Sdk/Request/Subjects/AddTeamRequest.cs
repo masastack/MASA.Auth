@@ -1,9 +1,7 @@
 ﻿namespace Masa.Auth.Sdk.Response.Subjects;
 
-public class TeamDetailResponse
+public class AddTeamRequest
 {
-    public Guid TeamId { get; set; }
-
     public string Name { get; set; }
 
     public string Avatar { get; set; }
@@ -20,9 +18,7 @@ public class TeamDetailResponse
 
     public List<Guid> Roles { get; set; }
 
-    public static TeamDetailResponse Default => new ("","","","",default,new(),new(),new());
-
-    public TeamDetailResponse(string name, string avatar, string avatarName, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
+    public AddTeamRequest(string name, string avatar, string avatarName, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
     {
         Name = name;
         Avatar = avatar;
@@ -32,6 +28,11 @@ public class TeamDetailResponse
         Staffs = staffs;
         Permissions = permissions;
         Roles = roles;
+    }
+
+    public static implicit operator AddTeamRequest(TeamDetailResponse team)
+    {
+        return new AddTeamRequest(team.Name,team.Avatar,team.AvatarName,team.Describe,team.TeamType,team.Staffs,team.Permissions,team.Roles);
     }
 }
 

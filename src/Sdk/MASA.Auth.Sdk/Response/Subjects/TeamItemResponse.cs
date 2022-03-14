@@ -2,6 +2,8 @@
 
 public class TeamItemResponse
 {
+    public Guid TeamId { get; set; }
+
     public string Name { get; set; }
 
     public string Avatar { get; set; }
@@ -16,8 +18,9 @@ public class TeamItemResponse
 
     public DateTime ModificationTime { get; set; }
 
-    public TeamItemResponse(string name, string avatar, string describe, string creatorUser, string creatorUserAvatar, string modifierUser, DateTime modificationTime)
+    public TeamItemResponse(Guid teamId,string name, string avatar, string describe, string creatorUser, string creatorUserAvatar, string modifierUser, DateTime modificationTime)
     {
+        TeamId = teamId;
         Name = name;
         Avatar = avatar;
         Describe = describe;

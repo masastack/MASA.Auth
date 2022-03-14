@@ -70,6 +70,15 @@
   //ThirdPartyPlatform end
 
   //Position start
-  "Position": "职位"
+  "Position": "职位",
   //Position end
+
+  //Team start
+  "Failed to query teamList data:": "查询团队列表数据失败:",
+  "Failed to query teamDetail data:": "查询团队详情数据失败:",
+  "Add team data success": "添加团队数据成功",
+  "Failed to add team:": "添加团队数据失败:",
+  "Edit team data success": "编辑团队数据成功",
+  "Failed to edit team": "编辑团队数据失败:"
+  //Team end
 }

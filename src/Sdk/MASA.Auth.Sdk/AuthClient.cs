@@ -161,8 +161,39 @@ public class AuthClient
     #region Role
 
     #endregion
-    
+
     #region Team
+
+    List<TeamItemResponse> Teams = new List<TeamItemResponse>
+    {
+        new TeamItemResponse(Guid.NewGuid(),"Masa Stack","","Masa Stack Number One","cyy","","cyy",DateTime.Now.AddYears(-1)),
+        new TeamItemResponse(Guid.NewGuid(),"Lonsid","","Lonsid Number One","zjc","","zjc",DateTime.Now.AddYears(-10)),
+    };
+
+    public async Task<ApiResultResponse<List<TeamItemResponse>>> GetTeamItemsAsync()
+    {
+        return await Task.FromResult(ApiResultResponse<List<TeamItemResponse>>.ResponseSuccess(Teams, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<TeamDetailResponse>> GetTeamDetailAsync(Guid id)
+    {
+        return await Task.FromResult(ApiResultResponse<TeamDetailResponse>.ResponseSuccess(default!, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<List<TeamItemResponse>>> SelectTeamAsync()
+    {
+        return await Task.FromResult(ApiResultResponse<List<TeamItemResponse>>.ResponseSuccess(Teams, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse> AddTeamAsync(AddTeamRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
+    }
+
+    public async Task<ApiResultResponse> EditTeamAsync(EditTeamRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
+    }
 
     #endregion
 }
