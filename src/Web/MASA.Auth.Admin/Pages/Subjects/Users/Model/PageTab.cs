@@ -1,4 +1,4 @@
-﻿namespace MASA.Auth.Admin.Pages.Subjects.Users
+﻿namespace Masa.Auth.Admin.Pages.Subjects.Users
 {
     internal static class PageTab
     {

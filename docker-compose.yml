@@ -13,17 +13,17 @@ services:
       - SA_PASSWORD=P@ssw0rd
       - ACCEPT_EULA=Y
 
-  masa.auth.admin:
-    image: ${DOCKER_REGISTRY-}masaauthadmin
+  masa.auth.web.admin:
+    image: ${DOCKER_REGISTRY-}masaauthwebadmin
     build:
       context: .
-      dockerfile: src/Web/masa.Auth.Admin/Dockerfile
+      dockerfile: src/Web/Masa.Auth.Web.Admin.Server/Dockerfile
 
-  masa.auth.service:
+  masa.auth.service.admin:
     image: ${DOCKER_REGISTRY-}masaauthservice
     build:
       context: .
-      dockerfile: src/Services/masa.Auth.Service/Dockerfile
+      dockerfile: src/Services/masa.Auth.Service.Admin/Dockerfile
 
   
   dapr-placement:

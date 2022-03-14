@@ -13,7 +13,7 @@ services:
       - SA_PASSWORD=P@ssw0rd
       - ACCEPT_EULA=Y
 
-  masa.auth.admin:
+  masa.auth.web.admin:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -23,9 +23,10 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - masa.auth.service.admin
 
-
-  masa.auth.service:
+  masa.auth.service.admin:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -35,18 +36,18 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  masa.auth.service.dapr:
+  masa.auth.service.admin.dapr:
     image: "daprio/daprd:1.5.1"
     command: ["./daprd",
-      "-app-id", "masa-auth-service",
+      "-app-id", "masa-auth-service-admin",
       "-app-port", "80",
       "-components-path", "/components"
       ]
     depends_on:
-      - masa.auth.service
+      - masa.auth.service.admin
     volumes:
       - "./dapr/components/:/components"
-    network_mode: "service:masa.auth.service"
+    network_mode: "service:masa.auth.service.admin"
 
 
   dapr-placement:

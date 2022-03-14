@@ -80,7 +80,7 @@ public partial class Role
     public async Task GetRoleItemsAsync()
     {
         Loading = true;
-        var reuquest = new GetRoleItemsRequest(PageIndex,PageSize,Search,Enabled);
+        var reuquest = new GetRoleItemsRequest(PageIndex, PageSize, Search, Enabled);
         var response = await AuthClient.GetRoleItemsAsync(reuquest);
         if (response.Success)
         {
