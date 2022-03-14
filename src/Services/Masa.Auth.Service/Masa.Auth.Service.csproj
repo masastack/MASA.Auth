@@ -37,6 +37,7 @@
 		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.3.1" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.3.1.1" />
 		<PackageReference Include="Masa.Utils.Exceptions" Version="0.3.1" />
+		<PackageReference Include="Masa.Utils.Expressions" Version="0.3.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.3.1" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.3.1" />
