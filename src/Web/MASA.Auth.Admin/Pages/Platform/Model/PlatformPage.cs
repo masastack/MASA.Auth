@@ -87,7 +87,7 @@
 
 //    public async Task QueryPageDatasAsync()
 //    {
-//        Lodding = true;
+//        Loading = true;
 //        var result = await AuthenticationCaller.GetObjectItemsAsync(PageIndex, PageSize, ObjectTypeEnum is null ? -1 : Convert.ToInt32(ObjectTypeEnum), Search);
 //        if (result.Success)
 //        {
@@ -96,7 +96,7 @@
 //            TotalCount = pageData.Count;
 //            Datas = pageData.Items.ToList();
 //        }
-//        Lodding = false;
+//        Loading = false;
 //    }
 
 //    public async Task<List<ObjectItemResponse>> QueryAllAsync()
@@ -121,11 +121,11 @@
 
 //    public async Task<bool> AddOrUpdateAsync()
 //    {
-//        Lodding = true;
+//        Loading = true;
 //        if(await CheckCodeAsync())
 //        {
 //            OpenWarningDialog(I18n.T("Code already exists, cannot be added repeatedly"));
-//            Lodding = false;
+//            Loading = false;
 //            return false;
 //        }
 //        var result = default(ApiResultResponseBase);
@@ -143,7 +143,7 @@
 
 //            await CheckApiResult(result, I18n.T("Edit object successfully"), result.Message);
 //        }
-//        Lodding = false;
+//        Loading = false;
 
 //        return result.Success;
 
@@ -164,11 +164,11 @@
 //    {
 //        if (confirm)
 //        {
-//            Lodding = true;
+//            Loading = true;
 //            var request = new DeleteObjectRequest { ObjectId = CurrentData.Id };
 //            var result = await AuthenticationCaller.DeleteObjectAsync(request);
 //            await CheckApiResult(result, I18n.T("Delete object successfully"), result.Message);
-//            Lodding = false;
+//            Loading = false;
 //        }
 //    }
 
@@ -181,12 +181,12 @@
 //    {
 //        if (confirm)
 //        {
-//            Lodding = true;
+//            Loading = true;
 //            var request = new BatchDeleteObjectRequest(SelectDatas.Select(o => o.Id).ToList());
 //            var result = await AuthenticationCaller.BatchDeleteObjectAsync(request);
 //            await CheckApiResult(result, I18n.T("Delete object successfully"), result.Message);
 //            SelectDatas = new List<ObjectItemResponse>();
-//            Lodding = false;
+//            Loading = false;
 //        }
 //    }
 

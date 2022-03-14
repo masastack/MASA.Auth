@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Sdk.Response;
-
-namespace Masa.Auth.Sdk.Callers;
+﻿namespace Masa.Auth.Sdk.Callers;
 
 public abstract class CallerBase : HttpClientCallerBase
 {
@@ -17,20 +15,26 @@ public abstract class CallerBase : HttpClientCallerBase
         }
         catch (Exception ex)
         {
-            return ApiResultResponse<TResponse>.ResponseLose(ex.Message, default);
+            if (ex is UserFriendlyException) return ApiResultResponse<TResponse>.ResponseLose(ex.Message);
+            return ApiResultResponse<TResponse>.ResponseLose("The service is abnormal, please contact the administrator!");
         }
     }
 
-    protected async Task<ApiResultResponse> ResultAsync(Func<Task> func)
+    protected async Task<ApiResultResponse> ResultAsync(Func<Task<HttpResponseMessage>> func)
     {
         try
         {
-            await func.Invoke();
-            return ApiResultResponse.ResponseSuccess("success");
+            var response = await func.Invoke();
+            return response.StatusCode switch
+            {
+                HttpStatusCode.OK or HttpStatusCode.Accepted or HttpStatusCode.NoContent => ApiResultResponse.ResponseSuccess("success"),
+                (HttpStatusCode)MasaHttpStatusCode.UserFriendlyException => ApiResultResponse.ResponseLose(await response.Content.ReadAsStringAsync()),
+                _ => ApiResultResponse.ResponseLose("The service is abnormal, please contact the administrator!"),
+            };
         }
         catch (Exception ex)
         {
-            return ApiResultResponse.ResponseLose(ex.Message);
+            return ApiResultResponse.ResponseLose("The service is abnormal, please contact the administrator!");
         }
     }
 }

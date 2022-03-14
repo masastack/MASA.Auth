@@ -72,24 +72,24 @@ public partial class User
             new() { Text = T(nameof(UserItemResponse.Email)), Value = nameof(UserItemResponse.Email), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.PhoneNumber)), Value = nameof(UserItemResponse.PhoneNumber), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.CreationTime)), Value = nameof(UserItemResponse.CreationTime), Sortable = false },
-            new() { Text = T("State"), Value = T(nameof(UserItemResponse.Enabled)), Sortable = false },
-            new() { Text = T("Action"), Value = T("Action"), Sortable = false },
+            new() { Text = T("State"), Value = nameof(UserItemResponse.Enabled), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
-       
+
         await GetUserItemsAsync();
     }
 
     public async Task GetUserItemsAsync()
     {
-        Lodding = true;
-        var request = new GetUserItemsRequest(PageIndex,PageSize,Search,Enabled);
-        var reponse = await AuthClient.GetUserItemsAsync(request);
-        if (reponse.Success)
+        Loading = true;
+        var request = new GetUserItemsRequest(PageIndex, PageSize, Search, Enabled);
+        var response = await AuthClient.GetUserItemsAsync(request);
+        if (response.Success)
         {
-            Users = reponse.Data;
+            Users = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query user data !"));
-        Lodding = false;
+        else OpenErrorMessage(T("Failed to query userList data:") + response.Message);
+        Loading = false;
     }
 
     public void OpenAddUserDialog()

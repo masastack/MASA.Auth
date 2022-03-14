@@ -12,11 +12,11 @@ public partial class AddOrEditStaffDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid StaffId { get; set; } 
+    public Guid StaffId { get; set; }
 
     private bool IsAdd => StaffId == Guid.Empty;
 
-    private UserItemResponse User { get; set; } = UserItemResponse.Default;
+    private StaffDetailResponse Staff { get; set; } = StaffDetailResponse.Default;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -32,47 +32,66 @@ public partial class AddOrEditStaffDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Visible is true)
+        if (Visible is true)
         {
-            if (StaffId == Guid.Empty) User = UserItemResponse.Default;
-            else await GetUserDetailAsync();
+            if (IsAdd) Staff = StaffDetailResponse.Default;
+            else await GetStaffDetailAsync();
         }
     }
 
-    public async Task GetUserDetailAsync()
+    public async Task GetStaffDetailAsync()
     {
-        var response = await AuthClient.GetUserDetailAsync(StaffId);
+        var response = await AuthClient.GetStaffDetailAsync(StaffId);
         if (response.Success)
         {
-            User = response.Data;
+            Staff = response.Data;
         }
-        else OpenErrorMessage("Failed to query user data !");
+        else OpenErrorDialog($"Failed to query staff data:{response.Message}");
     }
 
-    public async Task AddOrEditUserAsync()
+    public async Task AddOrEditStaffAsync()
     {
-        Lodding = true;
-        if(IsAdd)
+        Loading = true;
+        if (IsAdd)
         {
-            var reponse = await AuthClient.AddUserAsync(User);
+            var reponse = await AuthClient.AddStaffAsync(Staff);
             if (reponse.Success)
             {
+                OpenSuccessMessage(T("Add staff success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog("Failed to add user !");
+            else OpenErrorDialog($"Failed to add staff:{reponse.Message}");
         }
         else
         {
-            var reponse = await AuthClient.EditUserAsync(User);
+            var reponse = await AuthClient.EditStaffAsync(Staff);
             if (reponse.Success)
             {
+                OpenSuccessMessage("Edit staff success");
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog("Failed to edit user !");
+            else OpenErrorDialog($"Failed to edit staff:{reponse.Message}");
         }
-        Lodding = false;
+        Loading = false;
+    }
+
+    public void OpenDeleteStaffDialog()
+    {
+        OpenConfirmDialog(async confirm =>
+        {
+            if (confirm) await DeleteStaffAsync();
+        }, T("Are you sure delete staff data"));
+    }
+
+    public async Task DeleteStaffAsync()
+    {
+        Loading = true;
+        var response = await AuthClient.DeleteStaffAsync(StaffId);
+        if (response.Success) OpenSuccessMessage(T("Delete staff data success"));
+        else OpenErrorDialog(T("Delete staff data failed:") + response.Message);
+        Loading = false;
     }
 
     protected override bool ShouldRender()

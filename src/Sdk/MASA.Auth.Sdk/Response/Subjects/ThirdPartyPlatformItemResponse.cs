@@ -22,7 +22,7 @@ public class ThirdPartyPlatformItemResponse
 
     public DateTime? ModificationTime { get; set; }
 
-    public static ThirdPartyPlatformItemResponse Default => new ThirdPartyPlatformItemResponse(Guid.Empty,"","","","","","",default,DateTime.Now,null);
+    public static ThirdPartyPlatformItemResponse Default => new ThirdPartyPlatformItemResponse(Guid.Empty, "", "", "", "", "", "", default, DateTime.Now, null);
 
     public ThirdPartyPlatformItemResponse(Guid thirdPartyPlatformId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
     {

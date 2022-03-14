@@ -1,6 +1,6 @@
-﻿namespace Masa.Auth.Admin.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Admin.Pages.Subjects.Teams;
 
-public partial class AddOrEditUserDialog
+public partial class AddOrEditTeamDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -12,11 +12,11 @@ public partial class AddOrEditUserDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid UserId { get; set; }
+    public Guid TeamId { get; set; }
 
-    private bool IsAdd => UserId == Guid.Empty;
+    private bool IsAdd => TeamId == Guid.Empty;
 
-    private UserItemResponse User { get; set; } = UserItemResponse.Default;
+    private TeamDetailResponse Team { get; set; } = TeamDetailResponse.Default;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -34,45 +34,45 @@ public partial class AddOrEditUserDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) User = UserItemResponse.Default;
-            else await GetUserDetailAsync();
+            if (IsAdd) Team = TeamDetailResponse.Default;
+            else await GetTeamDetailAsync();
         }
     }
 
-    public async Task GetUserDetailAsync()
+    public async Task GetTeamDetailAsync()
     {
-        var response = await AuthClient.GetUserDetailAsync(UserId);
+        var response = await AuthClient.GetTeamDetailAsync(TeamId);
         if (response.Success)
         {
-            User = response.Data;
+            Team = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query staffDetail data:") + response.Message);
+        else OpenErrorMessage(T("Failed to query teamDetail data:") + response.Message);
     }
 
-    public async Task AddOrEditUserAsync()
+    public async Task AddOrEditTeamAsync()
     {
         Loading = true;
         if (IsAdd)
         {
-            var response = await AuthClient.AddUserAsync(User);
+            var response = await AuthClient.AddTeamAsync(Team);
             if (response.Success)
             {
-                OpenSuccessMessage(T("Add staff data success"));
+                OpenSuccessMessage(T("Add team data success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog(T("Failed to add staff:") + response.Message);
+            else OpenErrorDialog(T("Failed to add team:") + response.Message);
         }
         else
         {
-            var response = await AuthClient.EditUserAsync(User);
+            var response = await AuthClient.EditTeamAsync(Team);
             if (response.Success)
             {
-                OpenSuccessMessage(T("Edit staff data success"));
+                OpenSuccessMessage(T("Edit team data success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog(T("Failed to edit staff:") + response.Message);
+            else OpenErrorDialog(T("Failed to edit team:") + response.Message);
         }
         Loading = false;
     }

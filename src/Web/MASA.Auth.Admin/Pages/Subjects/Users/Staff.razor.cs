@@ -67,7 +67,7 @@ public partial class Staff
         {
             new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.Name)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Department"), Value = nameof(StaffItemResponse.DepartmentId), Sortable = false },
+            new() { Text = T("Department"), Value = nameof(StaffItemResponse.Department), Sortable = false },
             new() { Text = T(nameof(StaffItemResponse.JobNumber)), Value = nameof(StaffItemResponse.JobNumber), Sortable = false },
             new() { Text = T(nameof(StaffItemResponse.Position)), Value = nameof(StaffItemResponse.Position), Sortable = false },
             new() { Text = T("State"), Value = nameof(StaffItemResponse.Enabled), Sortable = false },
@@ -79,16 +79,16 @@ public partial class Staff
 
     public async Task GetStaffAsync()
     {
-        Lodding = true;
+        Loading = true;
         var request = new GetStaffItemsRequest(PageIndex, PageSize, Search, Enabled);
-        var reponse = await AuthClient.GetStaffItemsAsync(request);
-        if (reponse.Success)
+        var response = await AuthClient.GetStaffItemsAsync(request);
+        if (response.Success)
         {
-            Staffs = reponse.Data;
+            Staffs = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query staff data !"));
-        Lodding = false;
-    }  
+        else OpenErrorMessage(T("Failed to query staff data:") + response.Message);
+        Loading = false;
+    }
 
     public void OpenStaffDialog(StaffItemResponse staff)
     {

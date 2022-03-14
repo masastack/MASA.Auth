@@ -84,27 +84,27 @@ public partial class ThirdPartyUser
 
     public async Task GetThirdPartyUserItemsAsync()
     {
-        Lodding = true;
+        Loading = true;
         var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyPlatformId);
-        var reponse = await AuthClient.GetThirdPartyUserItemsAsync(request);
-        if (reponse.Success)
+        var response = await AuthClient.GetThirdPartyUserItemsAsync(request);
+        if (response.Success)
         {
-            ThirdPartyUsers = reponse.Data;
+            ThirdPartyUsers = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyUser data !"));
-        Lodding = false;
+        else OpenErrorMessage(T("Failed to query thirdPartyUserList data:") + response.Message);
+        Loading = false;
     }
 
     public async Task SelectThirdPartyPlatformAsync()
     {
-        Lodding = true;
+        Loading = true;
         var response = await AuthClient.SelectThirdPartyPlatformAsync();
         if (response.Success is true)
         {
             ThirdPartyPlatforms = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyPlatform data !"));
-        Lodding = false;
+        else OpenErrorMessage(T("Failed to query thirdPartyPlatform data:") + response.Message);
+        Loading = false;
     }
 
     public void OpenEditThirdPartyUserDialog(ThirdPartyUserItemResponse thirdPartyUser)

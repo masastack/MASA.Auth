@@ -37,7 +37,7 @@ public class EditUserRequest
 
     #endregion
 
-    public EditUserRequest(Guid userId, string name, string displayName, string avatar, string companyName, bool enabled,string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public EditUserRequest(Guid userId, string name, string displayName, string avatar, string companyName, bool enabled, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
     {
         UserId = userId;
         Name = name;
@@ -58,6 +58,6 @@ public class EditUserRequest
 
     public static implicit operator EditUserRequest(UserItemResponse user)
     {
-        return new EditUserRequest(user.UserId,user.Name, user.DisplayName, user.Avatar, user.CompanyName,user.Enabled, user.Email, user.HouseholdRegisterAddress, user.HouseholdRegisterProvinceCode, user.HouseholdRegisterCityCode, user.HouseholdRegisterDistrictCode, user.ResidentialAddress, user.ResidentialProvinceCode, user.ResidentialCityCode, user.ResidentialDistrictCode);
+        return new EditUserRequest(user.UserId, user.Name, user.DisplayName, user.Avatar, user.CompanyName, user.Enabled, user.Email, user.HouseholdRegisterAddress, user.HouseholdRegisterProvinceCode, user.HouseholdRegisterCityCode, user.HouseholdRegisterDistrictCode, user.ResidentialAddress, user.ResidentialProvinceCode, user.ResidentialCityCode, user.ResidentialDistrictCode);
     }
 }

@@ -12,7 +12,7 @@ public partial class AddOrEditThirdPartyPlatformDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid ThirdPartyPlatformId { get; set; } 
+    public Guid ThirdPartyPlatformId { get; set; }
 
     private bool IsAdd => ThirdPartyPlatformId == Guid.Empty;
 
@@ -32,7 +32,7 @@ public partial class AddOrEditThirdPartyPlatformDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Visible is true)
+        if (Visible is true)
         {
             if (IsAdd) ThirdPartyPlatform = ThirdPartyPlatformItemResponse.Default;
             else await GetThirdPartyPlatformDetailAsync();
@@ -46,33 +46,35 @@ public partial class AddOrEditThirdPartyPlatformDialog
         {
             ThirdPartyPlatform = response.Data;
         }
-        else OpenErrorMessage("Failed to query thirdPartyPlatform data !");
+        else OpenErrorMessage(T("Failed to add thirdPartyPlatformDetail data:") + response.Message);
     }
 
     public async Task AddOrEditThirdPartyPlatformAsync()
     {
-        Lodding = true;
-        if(IsAdd)
+        Loading = true;
+        if (IsAdd)
         {
-            var reponse = await AuthClient.AddThirdPartyPlatformAsync(ThirdPartyPlatform);
-            if (reponse.Success)
+            var response = await AuthClient.AddThirdPartyPlatformAsync(ThirdPartyPlatform);
+            if (response.Success)
             {
+                OpenSuccessMessage(T("Add thirdPartyPlatform success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog("Failed to add thirdPartyPlatform !");
+            else OpenErrorDialog(T("Failed to add thirdPartyPlatform:") + response.Message);
         }
         else
         {
-            var reponse = await AuthClient.EditThirdPartyPlatformAsync(ThirdPartyPlatform);
-            if (reponse.Success)
+            var response = await AuthClient.EditThirdPartyPlatformAsync(ThirdPartyPlatform);
+            if (response.Success)
             {
+                OpenSuccessMessage(T("Edit thirdPartyPlatform success"));
                 await OnSubmitSuccess.InvokeAsync();
                 await UpdateVisible(false);
             }
-            else OpenErrorDialog("Failed to edit thirdPartyPlatform !");
+            else OpenErrorDialog(T("Failed to edit thirdPartyPlatform:") + response.Message);
         }
-        Lodding = false;
+        Loading = false;
     }
 
     protected override bool ShouldRender()

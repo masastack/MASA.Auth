@@ -45,10 +45,10 @@ public abstract class AdminCompontentBase : ComponentBase
         }
     }
 
-    public bool Lodding
+    public bool Loading
     {
-        get => GlobalConfig.Lodding;
-        set => GlobalConfig.Lodding = value;
+        get => GlobalConfig.Loading;
+        set => GlobalConfig.Loading = value;
     }
 
     public string T(string key) => I18n.T(key);

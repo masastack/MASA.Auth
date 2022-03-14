@@ -7,7 +7,7 @@ public class AuthClient
 
     }
 
-    #region Platform
+    #region ThirdPartyPlatform
 
     List<ThirdPartyPlatformItemResponse> PlatformItems = new List<ThirdPartyPlatformItemResponse>()
     {
@@ -81,6 +81,11 @@ public class AuthClient
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
+    public async Task<ApiResultResponse> DeleteUserAsync(Guid userId)
+    {
+        UserItems.Remove(UserItems.First(u=> u.UserId == userId));
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("删除成功"));
+    }
     #endregion
 
     #region ThirdPartyUser
@@ -109,23 +114,14 @@ public class AuthClient
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
-    public async Task<ApiResultResponse> EditThirdPartyUserAsync(EditThirdPartyUserRequest request)
-    {
-        await EditUserAsync(request.User);
-        var oldData = ThirdPartyUserItems.First(tpu => tpu.ThirdPartyUserId == request.ThirdPartyUserId);
-        ThirdPartyUserItems.Remove(oldData);
-        ThirdPartyUserItems.Add(new ThirdPartyUserItemResponse(request.ThirdPartyUserId, oldData.ThirdPartyPlatformId, request.Enabled, UserItems.First(u => u.UserId==request.User.UserId), DateTime.Now, DateTime.Now, Guid.Empty));
-        return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
-    }
-
     #endregion
 
     #region Staff
 
     List<StaffItemResponse> StaffItems => new List<StaffItemResponse>()
     {
-        new StaffItemResponse(Guid.Parse("A446CD5D-B35F-7029-4A30-8232744A3A8E"),Guid.Empty,Guid.Empty,"开发工程师",new(),"0123",true,StaffTypes.InternalStaff,UserItems[0]),
-        new StaffItemResponse(Guid.Parse("8056549B-7D96-E377-2D03-A27C77837EFB"),Guid.Empty,Guid.Empty,"开发工程师",new(),"9527",false,StaffTypes.ExternalStaff,UserItems[1]),
+        new StaffItemResponse(Guid.Parse("A446CD5D-B35F-7029-4A30-8232744A3A8E"),"","开发工程师","0123",true,StaffTypes.InternalStaff,UserItems[0]),
+        new StaffItemResponse(Guid.Parse("8056549B-7D96-E377-2D03-A27C77837EFB"),"","开发工程师","9527",false,StaffTypes.ExternalStaff,UserItems[1]),
     };
 
     public async Task<ApiResultResponse<List<StaffItemResponse>>> GetStaffItemsAsync(GetStaffItemsRequest request)
@@ -136,32 +132,99 @@ public class AuthClient
 
     public async Task<ApiResultResponse<StaffDetailResponse>> GetStaffDetailAsync(Guid id)
     {
-        return await Task.FromResult(ApiResultResponse<StaffDetailResponse>.ResponseSuccess(new(), "查询成功"));
+        return await Task.FromResult(ApiResultResponse<StaffDetailResponse>.ResponseSuccess(StaffDetailResponse.Default, "查询成功"));
     }
 
     public async Task<ApiResultResponse> AddStaffAsync(AddStaffRequest request)
     {
         await AddUserAsync(request.User);
-        StaffItems.Add(new StaffItemResponse(Guid.NewGuid(), request.DepartmentId,request.PositionId,request.Position,new(),request.JobNumber, request.Enabled, request.StaffType ,UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
+        StaffItems.Add(new StaffItemResponse(Guid.NewGuid(), "",request.Position,request.JobNumber, request.Enabled, request.StaffType ,UserItems.First(u => u.PhoneNumber == request.User.PhoneNumber)));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
-    public async Task<ApiResultResponse> EditThirdPartyUserAsync(EditStaffRequest request)
+    public async Task<ApiResultResponse> EditStaffAsync(EditStaffRequest request)
     {
         await EditUserAsync(request.User);
         var oldData = StaffItems.First(s => s.StaffId == request.StaffId);
         StaffItems.Remove(oldData);
-       // StaffItems.Add(new StaffItemResponse(request.StaffId, request.JobNumber, request.Enabled, request.StaffType,UserItems.First(u => u.UserId == request.User.UserId)));
+        StaffItems.Add(new StaffItemResponse(request.StaffId, "",  request.Position, request.JobNumber, request.Enabled, request.StaffType,UserItems.First(u => u.UserId == request.User.UserId)));
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
+    }
+
+    public async Task<ApiResultResponse> DeleteStaffAsync(Guid staffId)
+    {
+        StaffItems.Remove(StaffItems.First(s => s.StaffId == staffId));
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("删除成功"));
+    }
+    #endregion
+
+    #region Role
+
+    List<RoleItemResponse> Roles = new List<RoleItemResponse>
+    {
+        new RoleItemResponse(Guid.NewGuid(),"admin","00001",1,"admin Number One",true,DateTime.Now,DateTime.Now,"wwl","wwl"),
+        new RoleItemResponse(Guid.NewGuid(),"student","10001",1,"student Number One",true,DateTime.Now,DateTime.Now,"wwl","wwl"),
+    };
+
+    public async Task<ApiResultResponse<List<RoleItemResponse>>> GetRoleItemsAsync(GetRoleItemsRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse<List<RoleItemResponse>>.ResponseSuccess(Roles, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<RoleDetailResponse>> GetRoleDetailAsync(Guid id)
+    {
+        return await Task.FromResult(ApiResultResponse<RoleDetailResponse>.ResponseSuccess(default!, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<List<RoleItemResponse>>> SelectRolesAsync()
+    {
+        return await Task.FromResult(ApiResultResponse<List<RoleItemResponse>>.ResponseSuccess(Roles, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse> AddRoleAsync(AddRoleRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
+    }
+
+    public async Task<ApiResultResponse> EditRoleAsync(EditRoleRequest request)
+    {
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
     }
 
     #endregion
 
-    #region Role
-
-    #endregion
-    
     #region Team
+
+    List<TeamItemResponse> Teams = new List<TeamItemResponse>
+    {
+        new TeamItemResponse(Guid.NewGuid(),"Masa Stack","","Masa Stack Number One","cyy","","cyy",DateTime.Now.AddYears(-1)),
+        new TeamItemResponse(Guid.NewGuid(),"Lonsid","","Lonsid Number One","zjc","","zjc",DateTime.Now.AddYears(-10)),
+    };
+
+    public async Task<ApiResultResponse<List<TeamItemResponse>>> GetTeamItemsAsync()
+    {
+        return await Task.FromResult(ApiResultResponse<List<TeamItemResponse>>.ResponseSuccess(Teams, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<TeamDetailResponse>> GetTeamDetailAsync(Guid id)
+    {
+        return await Task.FromResult(ApiResultResponse<TeamDetailResponse>.ResponseSuccess(default!, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<List<TeamItemResponse>>> SelectTeamAsync()
+    {
+        return await Task.FromResult(ApiResultResponse<List<TeamItemResponse>>.ResponseSuccess(Teams, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse> AddTeamAsync(AddTeamRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
+    }
+
+    public async Task<ApiResultResponse> EditTeamAsync(EditTeamRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
+    }
 
     #endregion
 }
