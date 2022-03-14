@@ -34,7 +34,7 @@
 
         private async Task DeleteUserAsync(
             [FromServices] IEventBus eventBus,
-            [FromBody] DeleteUserCommand command)
+            [FromBody] RemoveUserCommand command)
         {
             await eventBus.PublishAsync(command);
         }

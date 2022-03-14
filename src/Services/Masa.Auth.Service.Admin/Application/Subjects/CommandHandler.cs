@@ -37,7 +37,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task DeleteUserAsync(DeleteUserCommand command)
+    public async Task DeleteUserAsync(RemoveUserCommand command)
     {
         var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
         if (user == null)

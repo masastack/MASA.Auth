@@ -1,6 +1,5 @@
 ﻿@inherits AdminCompontentBase
 @inject NavHelper NavHelper
-@inject GlobalConfig GlobalConfig
 @implements IDisposable
 
 <MPageTabs Value="NavHelper.PageTabItems.FindIndex(tab => tab.Url == GlobalConfig.CurrentNav?.Href)" Class="px-6 pagetabs" Items="NavHelper.PageTabItems">
