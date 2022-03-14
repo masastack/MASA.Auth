@@ -5,7 +5,9 @@
         public UserService(IServiceCollection services) : base(services)
         {
             App.MapGet(Routing.UserList, PaginationAsync);
-            App.MapPost(Routing.Staff, CreateAsync);
+            App.MapPost(Routing.OperateUser, AddUserAsync);
+            App.MapPut(Routing.OperateUser, EditUserAsync);
+            App.MapDelete(Routing.OperateUser, DeleteUserAsync);
         }
 
         private async Task<PaginationList<UserItem>> PaginationAsync([FromServices] IEventBus eventBus,
