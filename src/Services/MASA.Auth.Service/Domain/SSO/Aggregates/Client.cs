@@ -2,7 +2,6 @@
 
 public class Client : AggregateRoot<int>
 {
-    //public int Id { get; set; }
     //public bool Enabled { get; set; } = true;
     //public string ClientId { get; set; } = string.Empty;
     //public string ProtocolType { get; set; } = "oidc";

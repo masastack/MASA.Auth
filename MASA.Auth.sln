@@ -11,15 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{E011B243-0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{FBFB499A-7022-4417-881B-68F63DBDB7F4}"
 	ProjectSection(SolutionItems) = preProject
-		dapr\components\masa-framework-pubsub.yaml = dapr\components\masa-framework-pubsub.yaml
-		dapr\components\masa-framework-statestore.yaml = dapr\components\masa-framework-statestore.yaml
+		dapr\components\masa-stack-pubsub.yaml = dapr\components\masa-stack-pubsub.yaml
+		dapr\components\masa-stack-statestore.yaml = dapr\components\masa-stack-statestore.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F3986DD3-0372-4929-B72A-09D93196541E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{32774681-0D67-48A6-A379-D57015094F85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Caller", "src\ApiGateways\Caller\Masa.Auth.Caller\Masa.Auth.Caller.csproj", "{40685EC0-64DF-4742-B8F6-602AFAEFC0EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.ApiGateways.Caller", "src\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj", "{40685EC0-64DF-4742-B8F6-602AFAEFC0EA}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F17CC0A5-E77B-48A8-907C-90CB0020F869}"
 EndProject

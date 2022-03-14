@@ -67,9 +67,11 @@ var app = builder.Services
     {
         options.UseEventBus()
                .UseUoW<AuthDbContext>(dbOptions =>
-                    //dbOptions.UseSqlServer("server=masa.auth.database;uid=sa;pwd=P@ssw0rd;database=masa_auth")
-                    dbOptions.UseSqlServer("server=.;uid=sa;pwd=P@ssw0rd;database=masa_auth")
-               )
+               {
+                   //dbOptions.UseSqlServer("server=masa.auth.database;uid=sa;pwd=P@ssw0rd;database=masa_auth")
+                   dbOptions.UseSqlServer("Server=10.10.90.37,30110;Database=masa-auth-v2;User Id=sa;Password=p@ssw0rd;");
+                   //dbOptions.UseSoftDelete(builder.Services);
+               })
                .UseDaprEventBus<IntegrationEventLogService>()
                .UseEventLog<AuthDbContext>()
                .UseRepository<AuthDbContext>();

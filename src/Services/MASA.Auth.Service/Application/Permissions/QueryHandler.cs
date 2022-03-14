@@ -58,7 +58,32 @@ public class QueryHandler
         var permission = await _permissionRepository.GetByIdAsync(perimissionDetailQuery.PermissionId);
         perimissionDetailQuery.Result = new PermissionDetail
         {
-
+            Name = permission.Name,
+            Description = permission.Description,
+            Icon = permission.Icon,
+            Code = permission.Code,
+            Url = permission.Url,
+            Type = permission.Type,
+            Id = permission.Id,
+            Enabled = permission.Enabled,
+            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectItem
+            {
+                Id = rp.Role.Id,
+                Name = rp.Role.Name,
+                Code = rp.Role.Code
+            }).ToList(),
+            TeamItems = permission.TeamPermissions.Select(tp => new TeamSelectItem
+            {
+                Id = tp.Team.Id,
+                Name = tp.Team.Name,
+                Avatar = tp.Team.Avatar
+            }).ToList(),
+            UserItems = permission.UserPermissions.Select(up => new UserSelectItem
+            {
+                Id = up.User.Id,
+                Name = up.User.Name,
+                Avatar = up.User.Avatar
+            }).ToList(),
         };
     }
 }

@@ -10,9 +10,10 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
     {
         return await _context.Set<Permission>()
             .Where(p => p.Id == id)
-            .Include(p => p.UserPermissions)
-            .Include(p => p.RolePermissions)
-            .Include(p => p.TeamPermissions)
+            .Include(p => p.UserPermissions).ThenInclude(up => up.User)
+            .Include(p => p.RolePermissions).ThenInclude(rp => rp.Role)
+            .Include(p => p.TeamPermissions).ThenInclude(tp => tp.Team)
+            .AsSplitQuery()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current permission does not exist");
     }

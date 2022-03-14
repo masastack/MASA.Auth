@@ -24,6 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.3.1" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.3.1" />
+		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.3.1" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.3.1" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.3.1" />
 		<PackageReference Include="FluentValidation" Version="10.3.6" />

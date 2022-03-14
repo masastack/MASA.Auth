@@ -14,7 +14,7 @@ public class AddUserRequest
 
     public bool Enabled { get; set; }
 
-    #region Contact Property
+    #region Contact Properties
 
     public string PhoneNumber { get; set; }
 

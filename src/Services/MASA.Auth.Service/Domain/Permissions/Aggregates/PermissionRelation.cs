@@ -2,8 +2,13 @@
 
 public class PermissionRelation : Entity<Guid>
 {
-    public Guid ParentId { get; private set; }
+    public Guid ChildId { get; private set; }
 
     public Permission Permission { get; private set; } = null!;
+
+    public PermissionRelation(Guid childId)
+    {
+        ChildId = childId;
+    }
 }
 

@@ -9,7 +9,8 @@ public class DepartmentService : ServiceBase
         App.MapDelete(Routing.Department, DeleteAsync);
     }
 
-    private async Task CreateAsync([FromServices] IEventBus eventBus, [FromBody] CreateDepartmentCommand createDepartmentCommand)
+    private async Task CreateAsync([FromServices] IEventBus eventBus,
+        [FromHeader(Name = "user-id")] Guid userId, [FromBody] CreateDepartmentCommand createDepartmentCommand)
     {
         await eventBus.PublishAsync(createDepartmentCommand);
     }
@@ -21,7 +22,8 @@ public class DepartmentService : ServiceBase
         return query.Result;
     }
 
-    private async Task DeleteAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+    private async Task DeleteAsync([FromServices] IEventBus eventBus,
+        [FromHeader(Name = "user-id")] Guid userId, [FromQuery] Guid id)
     {
         await eventBus.PublishAsync(new DeleteDepartmentCommand(id));
     }
