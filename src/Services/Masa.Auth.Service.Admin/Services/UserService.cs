@@ -27,14 +27,14 @@
 
         private async Task EditUserAsync(
             [FromServices] IEventBus eventBus,
-            [FromBody] EditUserCommand command)
+            [FromBody] UpdateUserCommand command)
         {
             await eventBus.PublishAsync(command);
         }
 
         private async Task DeleteUserAsync(
             [FromServices] IEventBus eventBus,
-            [FromBody] DeleteUserCommand command)
+            [FromBody] RemoveUserCommand command)
         {
             await eventBus.PublishAsync(command);
         }

@@ -1,5 +1,5 @@
 ﻿namespace Masa.Auth.Service.Application.Subjects.Commands;
 
-public record EditUserCommand(Guid UserId) : Command
+public record UpdateUserCommand(Guid UserId) : Command
 {
 }

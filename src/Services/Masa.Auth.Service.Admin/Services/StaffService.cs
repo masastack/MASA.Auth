@@ -11,7 +11,7 @@ public class StaffService : ServiceBase
     }
 
     private async Task CreateAsync([FromServices] IEventBus eventBus,
-        [FromHeader(Name = "user-id")] Guid userId, [FromBody] CreateStaffCommand createStaffCommand)
+        [FromHeader(Name = "user-id")] Guid userId, [FromBody] AddStaffCommand createStaffCommand)
     {
         await eventBus.PublishAsync(createStaffCommand);
     }
@@ -34,7 +34,7 @@ public class StaffService : ServiceBase
     private async Task DeleteAsync([FromServices] IEventBus eventBus,
         [FromHeader(Name = "user-id")] Guid userId, [FromQuery] Guid id)
     {
-        var deleteCommand = new DeleteStaffCommand(id);
+        var deleteCommand = new RemoveStaffCommand(id);
         await eventBus.PublishAsync(deleteCommand);
     }
 }
