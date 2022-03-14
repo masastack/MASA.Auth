@@ -5,9 +5,10 @@ namespace Masa.Auth.Service.Application.Subjects;
 public class CommandHandler
 {
     readonly IUserRepository _userRepository;
+    readonly IStaffRepository _staffRepository;
     readonly StaffDomainService _staffDomainService;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IEventBus eventBus)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, StaffDomainService staffDomainService)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;
