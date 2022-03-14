@@ -53,11 +53,11 @@ public partial class ThirdPartyPlatform
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<ThirdPartyPlatformItemResponse> ThirdPartyPlatforms { get; set; } = new();
+    public List<ThirdPartyIdpItemResponse> ThirdPartyPlatforms { get; set; } = new();
 
     public Guid CurrentThirdPartyPlatformId { get; set; }
 
-    public List<DataTableHeader<ThirdPartyPlatformItemResponse>> Headers { get; set; } = new();
+    public List<DataTableHeader<ThirdPartyIdpItemResponse>> Headers { get; set; } = new();
 
     public bool ThirdPartyPlatformDialogVisible { get; set; }
 
@@ -65,12 +65,12 @@ public partial class ThirdPartyPlatform
     {
         Headers = new()
         {
-            new() { Text = T("Platform"), Value = nameof(ThirdPartyPlatformItemResponse.Icon), Sortable = false },
-            new() { Text = T("ThirdPartyPlatform.Name"), Value = nameof(ThirdPartyPlatformItemResponse.Name), Sortable = false },
-            new() { Text = T("ThirdPartyPlatform.DisplayName"), Value = nameof(ThirdPartyPlatformItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Type"), Value = nameof(ThirdPartyPlatformItemResponse.VerifyType), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyPlatformItemResponse.CreationTime)), Value = nameof(ThirdPartyPlatformItemResponse.CreationTime), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyPlatformItemResponse.Url)), Value = nameof(ThirdPartyPlatformItemResponse.Url), Sortable = false },
+            new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpItemResponse.Icon), Sortable = false },
+            new() { Text = T("ThirdPartyPlatform.Name"), Value = nameof(ThirdPartyIdpItemResponse.Name), Sortable = false },
+            new() { Text = T("ThirdPartyPlatform.DisplayName"), Value = nameof(ThirdPartyIdpItemResponse.DisplayName), Sortable = false },
+            new() { Text = T("Type"), Value = nameof(ThirdPartyIdpItemResponse.VerifyType), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyIdpItemResponse.CreationTime)), Value = nameof(ThirdPartyIdpItemResponse.CreationTime), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyIdpItemResponse.Url)), Value = nameof(ThirdPartyIdpItemResponse.Url), Sortable = false },
             new() { Text = T("Action"), Value = T("Action"), Sortable = false },
         };
 
@@ -80,7 +80,7 @@ public partial class ThirdPartyPlatform
     public async Task GetThirdPartyPlatformItemsAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyPlatformItemsRequest(PageIndex, PageSize, Search);
+        var request = new GetThirdPartyIdpItemsRequest(PageIndex, PageSize, Search);
         var response = await AuthClient.GetThirdPartyPlatformItemsAsync(request);
         if (response.Success)
         {
@@ -96,13 +96,13 @@ public partial class ThirdPartyPlatform
         ThirdPartyPlatformDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(ThirdPartyPlatformItemResponse thirdPartyPlatform)
+    public void OpenEditUserDialog(ThirdPartyIdpItemResponse thirdPartyPlatform)
     {
         CurrentThirdPartyPlatformId = thirdPartyPlatform.ThirdPartyPlatformId;
         ThirdPartyPlatformDialogVisible = true;
     }
 
-    public void OpenDeteteThirdPartyPlatformDialog(ThirdPartyPlatformItemResponse thirdPartyPlatform)
+    public void OpenDeteteThirdPartyPlatformDialog(ThirdPartyIdpItemResponse thirdPartyPlatform)
     {
         CurrentThirdPartyPlatformId = thirdPartyPlatform.ThirdPartyPlatformId;
         OpenConfirmDialog(async confirm =>

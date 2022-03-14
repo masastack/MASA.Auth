@@ -7,35 +7,35 @@ public class AuthClient
 
     }
 
-    #region ThirdPartyPlatform
+    #region ThirdPartyIdp
 
-    List<ThirdPartyPlatformItemResponse> PlatformItems = new List<ThirdPartyPlatformItemResponse>()
+    List<ThirdPartyIdpItemResponse> PlatformItems = new List<ThirdPartyIdpItemResponse>()
     {
-        new ThirdPartyPlatformItemResponse(Guid.NewGuid(),"微信","weixin",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/weixin","",VerifyType.OAuth,DateTime.Now,null),
-        new ThirdPartyPlatformItemResponse(Guid.NewGuid(),"QQ","qq",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/qq","",VerifyType.OAuth,DateTime.Now,null),
+        new ThirdPartyIdpItemResponse(Guid.NewGuid(),"微信","weixin",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/weixin","",VerifyType.OAuth,DateTime.Now,null),
+        new ThirdPartyIdpItemResponse(Guid.NewGuid(),"QQ","qq",Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),"/qq","",VerifyType.OAuth,DateTime.Now,null),
     };
 
-    public async Task<ApiResultResponse<List<ThirdPartyPlatformItemResponse>>> GetThirdPartyPlatformItemsAsync(GetThirdPartyPlatformItemsRequest request)
+    public async Task<ApiResultResponse<List<ThirdPartyIdpItemResponse>>> GetThirdPartyPlatformItemsAsync(GetThirdPartyIdpItemsRequest request)
     {
-        return await Task.FromResult(ApiResultResponse<List<ThirdPartyPlatformItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
+        return await Task.FromResult(ApiResultResponse<List<ThirdPartyIdpItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
     }
 
-    public async Task<ApiResultResponse<ThirdPartyPlatformItemResponse>> GetThirdPartyPlatformDetailAsync(Guid id)
+    public async Task<ApiResultResponse<ThirdPartyIdpItemResponse>> GetThirdPartyPlatformDetailAsync(Guid id)
     {
-        return await Task.FromResult(ApiResultResponse<ThirdPartyPlatformItemResponse>.ResponseSuccess(PlatformItems.First(p => p.ThirdPartyPlatformId == id), "查询成功"));
+        return await Task.FromResult(ApiResultResponse<ThirdPartyIdpItemResponse>.ResponseSuccess(PlatformItems.First(p => p.ThirdPartyPlatformId == id), "查询成功"));
     }
 
-    public async Task<ApiResultResponse<List<ThirdPartyPlatformItemResponse>>> SelectThirdPartyPlatformAsync()
+    public async Task<ApiResultResponse<List<ThirdPartyIdpItemResponse>>> SelectThirdPartyPlatformAsync()
     {
-        return await Task.FromResult(ApiResultResponse<List<ThirdPartyPlatformItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
+        return await Task.FromResult(ApiResultResponse<List<ThirdPartyIdpItemResponse>>.ResponseSuccess(PlatformItems, "查询成功"));
     }
 
-    public async Task<ApiResultResponse> AddThirdPartyPlatformAsync(AddThirdPartyPlatformRequest request)
+    public async Task<ApiResultResponse> AddThirdPartyPlatformAsync(AddThirdPartyIdpRequest request)
     {
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
     }
 
-    public async Task<ApiResultResponse> EditThirdPartyPlatformAsync(EditThirdPartyPlatformRequest request)
+    public async Task<ApiResultResponse> EditThirdPartyPlatformAsync(EditThirdPartyIdpRequest request)
     {
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
     }

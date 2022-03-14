@@ -2,7 +2,7 @@
 
 public class ThirdPartyUser : Entity<Guid>
 {
-    public Guid ThirdPartyPlatformId { get; private set; }
+    public Guid ThirdPartyIdpId { get; private set; }
 
     public Guid UserId { get; private set; }
 
@@ -16,9 +16,9 @@ public class ThirdPartyUser : Entity<Guid>
         set => _user = value;
     }
 
-    public ThirdPartyUser(Guid thirdPartyPlatformId, Guid userId, bool enabled)
+    public ThirdPartyUser(Guid thirdPartyLdp, Guid userId, bool enabled)
     {
-        ThirdPartyPlatformId = thirdPartyPlatformId;
+        ThirdPartyIdpId = thirdPartyLdp;
         UserId = userId;
         Enabled = enabled;
     }

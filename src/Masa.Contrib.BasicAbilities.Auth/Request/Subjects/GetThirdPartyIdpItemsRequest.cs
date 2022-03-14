@@ -1,6 +1,6 @@
 ﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
 
-public class GetThirdPartyPlatformItemsRequest
+public class GetThirdPartyIdpItemsRequest
 {
     public int PageIndex { get; set; }
 
@@ -8,7 +8,7 @@ public class GetThirdPartyPlatformItemsRequest
 
     public string Search { get; set; }
 
-    public GetThirdPartyPlatformItemsRequest(int pageIndex, int pageSize, string search)
+    public GetThirdPartyIdpItemsRequest(int pageIndex, int pageSize, string search)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;

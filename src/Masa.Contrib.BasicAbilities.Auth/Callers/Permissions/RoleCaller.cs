@@ -11,7 +11,7 @@ public class RoleCaller : CallerBase
 
     public RoleCaller(IServiceProvider serviceProvider, Options options) : base(serviceProvider)
     {
-        Name = nameof(ThirdPartyPlatformCaller);
+        Name = nameof(ThirdPartyIdpCaller);
         BaseAddress = options.AuthServiceBaseAdress;
     }
 }
