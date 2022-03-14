@@ -1,6 +1,6 @@
 ﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
 
-public class AddThirdPartyPlatformRequest
+public class AddThirdPartyIdpRequest
 {
     public string Name { get; set; }
 
@@ -16,7 +16,7 @@ public class AddThirdPartyPlatformRequest
 
     public VerifyType VerifyType { get; set; }
 
-    public AddThirdPartyPlatformRequest(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType)
+    public AddThirdPartyIdpRequest(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType)
     {
         Name = name;
         DisplayName = displayName;
@@ -27,8 +27,8 @@ public class AddThirdPartyPlatformRequest
         VerifyType = verifyType;
     }
 
-    public static implicit operator AddThirdPartyPlatformRequest(ThirdPartyPlatformItemResponse platform)
+    public static implicit operator AddThirdPartyIdpRequest(ThirdPartyIdpItemResponse platform)
     {
-        return new AddThirdPartyPlatformRequest(platform.Name, platform.DisplayName, platform.ClientId, platform.ClientSecret, platform.Url, platform.Icon, platform.VerifyType);
+        return new AddThirdPartyIdpRequest(platform.Name, platform.DisplayName, platform.ClientId, platform.ClientSecret, platform.Url, platform.Icon, platform.VerifyType);
     }
 }

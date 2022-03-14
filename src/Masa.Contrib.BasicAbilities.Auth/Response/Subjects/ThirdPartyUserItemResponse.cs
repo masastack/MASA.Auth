@@ -4,7 +4,7 @@ public class ThirdPartyUserItemResponse
 {
     public Guid ThirdPartyUserId { get; set; }
 
-    public Guid ThirdPartyPlatformId { get; set; }
+    public Guid ThirdPartyIdpId { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -18,10 +18,10 @@ public class ThirdPartyUserItemResponse
 
     public static ThirdPartyUserItemResponse Default = new(default, default, true, UserItemResponse.Default, default, default, default);
 
-    public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyPlatformId, bool enabled, UserItemResponse user, DateTime creationTime, DateTime modificationTime, Guid creator)
+    public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyIdpId, bool enabled, UserItemResponse user, DateTime creationTime, DateTime modificationTime, Guid creator)
     {
         ThirdPartyUserId = thirdPartyUserId;
-        ThirdPartyPlatformId = thirdPartyPlatformId;
+        ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
         User = user;
         CreationTime = creationTime;

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
-public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
+public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
 
@@ -18,17 +18,7 @@ public class ThirdPartyPlatform : AuditAggregateRoot<Guid, Guid>
 
     public IdentificationTypes IdentificationType { get; private set; }
 
-    private ThirdPartyPlatform()
-    {
-        Name = "";
-        DisplayName = "";
-        ClientId = "";
-        ClientSecret = "";
-        Url = "";
-        Icon = "";
-    }
-
-    public ThirdPartyPlatform(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyTypes verifyType, IdentificationTypes identificationType)
+    public ThirdPartyIdp(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyTypes verifyType, IdentificationTypes identificationType)
     {
         Name = name;
         DisplayName = displayName;

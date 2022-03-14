@@ -1,10 +1,10 @@
 ﻿namespace Masa.Auth.Service.Infrastructure.EntityConfigurations.Subjects;
 
-public class ThirdPartyPlatformEntityTypeConfiguration : IEntityTypeConfiguration<ThirdPartyPlatform>
+public class ThirdPartyPlatformEntityTypeConfiguration : IEntityTypeConfiguration<ThirdPartyIdp>
 {
-    public void Configure(EntityTypeBuilder<ThirdPartyPlatform> builder)
+    public void Configure(EntityTypeBuilder<ThirdPartyIdp> builder)
     {
-        builder.ToTable(nameof(ThirdPartyPlatform), AuthDbContext.SUBJECT_SCHEMA);
+        builder.ToTable(nameof(ThirdPartyIdp), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(p => p.Id);
     }
 }

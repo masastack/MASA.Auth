@@ -1,8 +1,8 @@
 ﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
 
-public class ThirdPartyPlatformItemResponse
+public class ThirdPartyIdpItemResponse
 {
-    public Guid ThirdPartyPlatformId { get; set; }
+    public Guid ThirdPartyIdpId { get; set; }
 
     public string Name { get; set; }
 
@@ -22,11 +22,11 @@ public class ThirdPartyPlatformItemResponse
 
     public DateTime? ModificationTime { get; set; }
 
-    public static ThirdPartyPlatformItemResponse Default => new ThirdPartyPlatformItemResponse(Guid.Empty, "", "", "", "", "", "", default, DateTime.Now, null);
+    public static ThirdPartyIdpItemResponse Default => new ThirdPartyIdpItemResponse(Guid.Empty, "", "", "", "", "", "", default, DateTime.Now, null);
 
-    public ThirdPartyPlatformItemResponse(Guid thirdPartyPlatformId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
+    public ThirdPartyIdpItemResponse(Guid thirdPartyIdpId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
     {
-        ThirdPartyPlatformId = thirdPartyPlatformId;
+        ThirdPartyIdpId = ThirdPartyIdpId;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;

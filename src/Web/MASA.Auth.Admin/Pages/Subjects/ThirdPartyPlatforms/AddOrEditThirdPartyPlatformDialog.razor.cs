@@ -16,7 +16,7 @@ public partial class AddOrEditThirdPartyPlatformDialog
 
     private bool IsAdd => ThirdPartyPlatformId == Guid.Empty;
 
-    private ThirdPartyPlatformItemResponse ThirdPartyPlatform { get; set; } = ThirdPartyPlatformItemResponse.Default;
+    private ThirdPartyIdpItemResponse ThirdPartyPlatform { get; set; } = ThirdPartyIdpItemResponse.Default;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -34,7 +34,7 @@ public partial class AddOrEditThirdPartyPlatformDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) ThirdPartyPlatform = ThirdPartyPlatformItemResponse.Default;
+            if (IsAdd) ThirdPartyPlatform = ThirdPartyIdpItemResponse.Default;
             else await GetThirdPartyPlatformDetailAsync();
         }
     }

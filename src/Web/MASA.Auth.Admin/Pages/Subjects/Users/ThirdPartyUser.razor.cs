@@ -57,7 +57,7 @@ public partial class ThirdPartyUser
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyPlatformItemResponse> ThirdPartyPlatforms { get; set; } = new();
+    public List<ThirdPartyIdpItemResponse> ThirdPartyPlatforms { get; set; } = new();
 
     public Guid ThirdPartyPlatformId { get; set; }
 
