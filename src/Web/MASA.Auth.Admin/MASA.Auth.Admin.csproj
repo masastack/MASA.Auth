@@ -34,8 +34,4 @@
 		</Content>
 	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Permissions\Roles\" />
-  </ItemGroup>
-
 </Project>

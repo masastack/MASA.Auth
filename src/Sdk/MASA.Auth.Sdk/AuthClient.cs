@@ -160,6 +160,37 @@ public class AuthClient
 
     #region Role
 
+    List<RoleItemResponse> Roles = new List<RoleItemResponse>
+    {
+        new RoleItemResponse(Guid.NewGuid(),"admin","00001",1,"admin Number One",true,DateTime.Now,DateTime.Now,"wwl","wwl"),
+        new RoleItemResponse(Guid.NewGuid(),"student","10001",1,"student Number One",true,DateTime.Now,DateTime.Now,"wwl","wwl"),
+    };
+
+    public async Task<ApiResultResponse<List<RoleItemResponse>>> GetRoleItemsAsync(GetRoleItemsRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse<List<RoleItemResponse>>.ResponseSuccess(Roles, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<RoleDetailResponse>> GetRoleDetailAsync(Guid id)
+    {
+        return await Task.FromResult(ApiResultResponse<RoleDetailResponse>.ResponseSuccess(default!, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse<List<RoleItemResponse>>> SelectRolesAsync()
+    {
+        return await Task.FromResult(ApiResultResponse<List<RoleItemResponse>>.ResponseSuccess(Roles, "查询成功"));
+    }
+
+    public async Task<ApiResultResponse> AddRoleAsync(AddRoleRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("新增成功"));
+    }
+
+    public async Task<ApiResultResponse> EditRoleAsync(EditRoleRequest request)
+    {
+        return await Task.FromResult(ApiResultResponse.ResponseSuccess("编辑成功"));
+    }
+
     #endregion
 
     #region Team

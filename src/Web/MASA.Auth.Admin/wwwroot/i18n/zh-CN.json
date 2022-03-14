@@ -7,12 +7,15 @@
   "Source": "来源",
   "Type": "类型",
   "CreationTime": "创建时间",
+  "ModificationTime": "最近修改时间",
   "State": "状态",
   "Enable": "启用",
   "Disabled": "禁用",
   "Action": "操作",
   "Add": "新增",
   "Are you sure delete data?": "确定删除数据?",
+  "Creator": "创建人",
+  "Modifier": "修改人",
   //Common End
 
   //Department start
@@ -79,6 +82,15 @@
   "Add team data success": "添加团队数据成功",
   "Failed to add team:": "添加团队数据失败:",
   "Edit team data success": "编辑团队数据成功",
-  "Failed to edit team": "编辑团队数据失败:"
+  "Failed to edit team": "编辑团队数据失败:",
   //Team end
+
+  //Role start
+  "Failed to query roleList data:": "查询角色列表数据失败:",
+  "Failed to query roleDetail data:": "查询角色详情数据失败:",
+  "Add role data success": "添加角色数据成功",
+  "Failed to add role:": "添加角色数据失败:",
+  "Edit role data success": "编辑角色数据成功",
+  "Failed to edit role": "编辑角色数据失败:"
+  //Role end
 }

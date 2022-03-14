@@ -36,3 +36,5 @@ global using System.Text.Json;
 global using Masa.Auth.Sdk;
 global using Masa.Auth.Sdk.Request.Subjects;
 global using Masa.Auth.Sdk.Response.Subjects;
+global using Masa.Auth.Sdk.Response.Permissions;
+global using Masa.Auth.Sdk.Request.Permissions;

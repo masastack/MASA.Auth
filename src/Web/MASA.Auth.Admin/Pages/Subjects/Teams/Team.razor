@@ -1,4 +1,3 @@
 ﻿@inherits AdminCompontentBase
 
-<AddOrEditUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUserItemsAsync />
-<AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />
+<AddOrEditTeamDialog TeamId=CurrentTeamId @bind-Visible="TeamDialogVisible" OnSubmitSuccess=GetTeamItemsAsync />

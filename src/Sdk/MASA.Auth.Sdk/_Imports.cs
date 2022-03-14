@@ -1,5 +1,7 @@
 global using Masa.Auth.Sdk.ApiUri;
 global using Masa.Auth.Sdk.Callers.Subjects;
+global using Masa.Auth.Sdk.Response.Permissions;
+global using Masa.Auth.Sdk.Request.Permissions;
 global using Masa.Utils.Caller.HttpClient;
 global using System.Text.Json.Serialization;
 global using Masa.Auth.Sdk.Enums;
