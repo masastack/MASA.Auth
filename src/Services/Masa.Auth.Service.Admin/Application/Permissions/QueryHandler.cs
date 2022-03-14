@@ -10,7 +10,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task ApiPermissionsQueryAsync(ApiPermissionsQuery apiPermissionsQuery)
+    public async Task ApiPermissionsQueryAsync(ApiPermissionListQuery apiPermissionsQuery)
     {
         var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == apiPermissionsQuery.SystemId
                             && p.Type == PermissionType.Api);
@@ -28,7 +28,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FuncPermissionsQueryAsync(FuncPermissionsQuery funcPerimissionsQuery)
+    public async Task FuncPermissionsQueryAsync(FuncPermissionListQuery funcPerimissionsQuery)
     {
         var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == funcPerimissionsQuery.SystemId
                             && p.Type != PermissionType.Api);

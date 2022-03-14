@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Application.Organizations.Commands;
 
-public record CopyDepartmentCommand : CreateDepartmentCommand
+public record CopyDepartmentCommand : AddDepartmentCommand
 {
     public bool IsMigrate { get; set; }
 

@@ -26,7 +26,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task EditUserAsync(EditUserCommand command)
+    public async Task EditUserAsync(UpdateUserCommand command)
     {
         var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
         if (user is null)
@@ -50,7 +50,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task CreateStaffAsync(CreateStaffCommand createStaffCommand)
+    public async Task CreateStaffAsync(AddStaffCommand createStaffCommand)
     {
         //_staffDomainService.CreateStaff();
         var staff = new Staff(createStaffCommand.JobNumber, createStaffCommand.CreateUserCommand.Name,
@@ -73,7 +73,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task DeleteStaffAsync(DeleteStaffCommand deleteStaffCommand)
+    public async Task DeleteStaffAsync(RemoveStaffCommand deleteStaffCommand)
     {
         var staff = await _staffRepository.FindAsync(deleteStaffCommand.StaffId);
         if (staff == null)

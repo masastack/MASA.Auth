@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Service.Application.Organizations.Commands;
 
-public class CreateDepartmentCommandValidator : AbstractValidator<CreateDepartmentCommand>
+public class AddDepartmentCommandValidator : AbstractValidator<AddDepartmentCommand>
 {
-    public CreateDepartmentCommandValidator()
+    public AddDepartmentCommandValidator()
     {
         RuleFor(command => command).NotNull().WithMessage($"Parameter error");
         RuleFor(command => command.Name).Must(name => !string.IsNullOrEmpty(name) && name.Length <= 20)

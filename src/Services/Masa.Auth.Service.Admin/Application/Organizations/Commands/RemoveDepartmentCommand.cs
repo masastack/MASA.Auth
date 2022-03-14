@@ -1,4 +1,4 @@
 ﻿namespace Masa.Auth.Service.Application.Organizations.Commands;
 
-public record DeleteDepartmentCommand(Guid DepartmentId) : Command;
+public record RemoveDepartmentCommand(Guid DepartmentId) : Command;
 

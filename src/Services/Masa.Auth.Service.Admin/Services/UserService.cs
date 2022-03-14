@@ -27,7 +27,7 @@
 
         private async Task EditUserAsync(
             [FromServices] IEventBus eventBus,
-            [FromBody] EditUserCommand command)
+            [FromBody] UpdateUserCommand command)
         {
             await eventBus.PublishAsync(command);
         }

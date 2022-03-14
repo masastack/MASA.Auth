@@ -10,7 +10,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task CreateDepartmentAsync(CreateDepartmentCommand createDepartmentCommand)
+    public async Task CreateDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
     {
         var department = DepartmentFactory.Create(createDepartmentCommand.Name, createDepartmentCommand.Description,
             createDepartmentCommand.ParentId, createDepartmentCommand.Enabled, createDepartmentCommand.StaffIds.ToArray());
@@ -39,7 +39,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task DeleteDepartmentAsync(DeleteDepartmentCommand deleteDepartmentCommand)
+    public async Task DeleteDepartmentAsync(RemoveDepartmentCommand deleteDepartmentCommand)
     {
         var department = await _departmentRepository.GetByIdAsync(deleteDepartmentCommand.DepartmentId);
         await DeleteCheckAsync(department);

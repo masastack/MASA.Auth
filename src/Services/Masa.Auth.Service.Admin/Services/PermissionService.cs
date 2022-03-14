@@ -11,7 +11,7 @@
         }
 
         private async Task CreateAsync([FromServices] IEventBus eventBus,
-            [FromHeader(Name = "user-id")] Guid userId, [FromBody] CreatePermissionCommand createDepartmentCommand)
+            [FromHeader(Name = "user-id")] Guid userId, [FromBody] AddPermissionCommand createDepartmentCommand)
         {
             await eventBus.PublishAsync(createDepartmentCommand);
         }
@@ -21,11 +21,11 @@
         {
             if (apiPermission)
             {
-                var apiQuery = new ApiPermissionsQuery(systemId);
+                var apiQuery = new ApiPermissionListQuery(systemId);
                 await eventBus.PublishAsync(apiQuery);
                 return apiQuery.Result;
             }
-            var funcQuery = new FuncPermissionsQuery(systemId);
+            var funcQuery = new FuncPermissionListQuery(systemId);
             await eventBus.PublishAsync(funcQuery);
             return funcQuery.Result;
         }
@@ -40,7 +40,7 @@
         private async Task DeleteAsync([FromServices] IEventBus eventBus,
             [FromHeader(Name = "user-id")] Guid userId, [FromQuery] Guid id)
         {
-            await eventBus.PublishAsync(new DeletePermissionCommand(id));
+            await eventBus.PublishAsync(new RemovePermissionCommand(id));
         }
     }
 }

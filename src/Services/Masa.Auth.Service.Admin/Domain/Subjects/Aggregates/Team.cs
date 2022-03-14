@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Domain.Subjects.Aggregates;
 
-public class Team : AggregateRoot<Guid>
+public class Team : AuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
 

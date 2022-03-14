@@ -10,7 +10,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task DeletePermissionAsync(DeletePermissionCommand deletePermissionCommand)
+    public async Task DeletePermissionAsync(RemovePermissionCommand deletePermissionCommand)
     {
         var permission = await _permissionRepository.GetByIdAsync(deletePermissionCommand.PermissionId);
         permission.DeleteCheck();
@@ -18,7 +18,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task CreatePermissionAsync(CreatePermissionCommand createPermissionCommand)
+    public async Task CreatePermissionAsync(AddPermissionCommand createPermissionCommand)
     {
         var permission = new Permission(createPermissionCommand.SystemId, createPermissionCommand.AppId, createPermissionCommand.Name,
             createPermissionCommand.Icon, createPermissionCommand.Url, createPermissionCommand.Icon, createPermissionCommand.Type,
