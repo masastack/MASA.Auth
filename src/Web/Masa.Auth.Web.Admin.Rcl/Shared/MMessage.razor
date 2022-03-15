@@ -1,0 +1,69 @@
+﻿@implements IDisposable
+@inject GlobalConfig GlobalConfig;
+
+<MSnackbar @bind-Value="Show" Color="white" Top > @*TimeOut=@TimeOut*@
+    <ChildContent>
+        @{
+            var (icon, color) = GetMessageIconInfo();
+        }
+        <MIcon Color="@color" Size=18>@icon</MIcon>
+        <span class="text-caption neutral--text ml-1">@Message</span>
+    </ChildContent>
+    <ActionContent>
+        <MIcon Color="neutral-lighten-3" Size=18 OnClick="Close">mdi-close</MIcon>
+    </ActionContent>
+</MSnackbar>
+
+@code{
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ShowChanged { get; set; }
+
+    [Parameter]
+    public string? Message { get; set; }
+
+    [Parameter]
+    public int TimeOut { get; set; } = 2000;
+
+    [Parameter]
+    public MessageType MessageType { get; set; }
+
+    async Task Close()
+    {
+        if (ShowChanged.HasDelegate)
+        {
+            await ShowChanged.InvokeAsync(false);
+        }
+        else Show = false;
+    }
+
+    public void ShowMessage(string message,MessageType messageType,int timeOut)
+    {
+        Show = true;
+        Message = message;
+        MessageType = messageType;
+        TimeOut = timeOut;
+
+        base.StateHasChanged();
+    }
+
+    (string icon,string color) GetMessageIconInfo()
+    {
+        if(MessageType == MessageType.Information) return ("mdi-information","blue");
+        else if(MessageType == MessageType.Success) return ("mdi-check-circle","green");
+        else if(MessageType == MessageType.Error) return ("mdi-close-circle","error");
+        else return ("mdi-alert-circle","warning");
+    } 
+
+    protected override void OnInitialized()
+    {
+        GlobalConfig.OnMessageChanged += ShowMessage;
+    }
+
+    public void Dispose()
+    {
+        GlobalConfig.OnMessageChanged -= ShowMessage;
+    }
+}
