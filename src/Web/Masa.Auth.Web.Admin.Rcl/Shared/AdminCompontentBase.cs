@@ -1,25 +1,9 @@
-using Masa.Auth.ApiGateways.Caller;
-
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
 {
     private I18n? _i18n;
     private GlobalConfig? _globalConfig;
-    private AuthClient? _authClient;
-
-    [Inject]
-    public AuthClient AuthClient
-    {
-        get
-        {
-            return _authClient ?? throw new Exception("please Inject AuthClient!");
-        }
-        set
-        {
-            _authClient = value;
-        }
-    }
 
     [Inject]
     public I18n I18n
