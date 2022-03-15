@@ -27,8 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Masa.BuildingBlocks.BasicAbilities.Auth", "Masa.BuildingBlocks.BasicAbilities.Auth", "{13D6AAB4-CE1B-4423-954D-F7587F6A41AD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Rcl", "src\Web\MASA.Auth.Web.Admin.Rcl\Masa.Auth.Web.Admin.Rcl.csproj", "{FB83A140-7D5E-4230-BF2C-058CFE727223}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Server", "src\Web\MASA.Auth.Web.Admin.Server\Masa.Auth.Web.Admin.Server.csproj", "{151C6705-5B1A-4E8E-ADE0-AE17AE0A9A42}"
