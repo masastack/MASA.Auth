@@ -16,8 +16,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Masa.Contrib.BasicAbilities.Auth\Masa.Auth.ApiGateways.Caller.csproj" />
-  </ItemGroup>
-
 </Project>
