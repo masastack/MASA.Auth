@@ -16,9 +16,9 @@ public class ThirdPartyUser : Entity<Guid>
         set => _user = value;
     }
 
-    public ThirdPartyUser(Guid thirdPartyLdp, Guid userId, bool enabled)
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled)
     {
-        ThirdPartyIdpId = thirdPartyLdp;
+        ThirdPartyIdpId = thirdPartyIdpId;
         UserId = userId;
         Enabled = enabled;
     }
