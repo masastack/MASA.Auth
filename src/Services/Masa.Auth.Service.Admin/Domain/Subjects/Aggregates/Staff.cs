@@ -6,9 +6,15 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     private Position? _position;
 
-    public Guid UserId { get; private set; }
+    public virtual User User => _user ?? LazyLoader.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
-    public virtual User User => _user ?? LazyLoader.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to query user data");
+    public Position Position
+    {
+        get => _position ?? new Position("");
+        private set => _position = value;
+    }
+
+    public Guid UserId { get; private set; }
 
     public string JobNumber { get; private set; } = "";
 
@@ -18,12 +24,6 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
     public string Name { get; private set; } = "";
 
     public Guid PositionId { get; private set; }
-
-    public Position Position
-    {
-        get => _position ?? new Position("");
-        set => _position = value;
-    }
 
     public StaffTypes StaffType { get; private set; }
 

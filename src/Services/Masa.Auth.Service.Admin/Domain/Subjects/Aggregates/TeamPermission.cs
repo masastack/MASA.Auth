@@ -3,17 +3,23 @@
 public class TeamPermission : Entity<Guid>
 {
     private Team? _team;
+    private Permission? _permission;
+
     public Team Team
     {
         get => _team ?? throw new UserFriendlyException("Failed to get team data");
         private set => _team = value;
     }
 
+    public Permission Permission
+    {
+        get => _permission ?? throw new UserFriendlyException("Failed to get permission data");
+        private set => _permission = value;
+    }
+
     public Guid TeamId { get; private set; }
 
     public Guid PermissionId { get; private set; }
-
-    public Permission Permission { get; private set; } = null!;
 
     public bool Effect { get; private set; }
 
