@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class AddOrEditTeamDialog
 {

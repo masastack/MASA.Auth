@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class ThirdPartyUser
 {
@@ -57,9 +59,9 @@ public partial class ThirdPartyUser
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyPlatformItemResponse> ThirdPartyPlatforms { get; set; } = new();
+    public List<ThirdPartyIdpItemResponse> ThirdPartyPlatforms { get; set; } = new();
 
-    public Guid ThirdPartyPlatformId { get; set; }
+    public Guid ThirdPartyIdpId { get; set; }
 
     public List<DataTableHeader<ThirdPartyUserItemResponse>> Headers { get; set; } = new();
 
@@ -71,7 +73,7 @@ public partial class ThirdPartyUser
         {
             new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.DisplayName)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserItemResponse.ThirdPartyPlatformId), Sortable = false },
+            new() { Text = T("Source"), Value = nameof(ThirdPartyUserItemResponse.ThirdPartyIdpId), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserItemResponse.CreationTime)), Value = nameof(ThirdPartyUserItemResponse.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserItemResponse.Creator)), Value = nameof(ThirdPartyUserItemResponse.Creator), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserItemResponse.ModificationTime)), Value = nameof(ThirdPartyUserItemResponse.ModificationTime), Sortable = false },
@@ -85,7 +87,7 @@ public partial class ThirdPartyUser
     public async Task GetThirdPartyUserItemsAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyPlatformId);
+        var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyIdpId);
         var response = await AuthClient.GetThirdPartyUserItemsAsync(request);
         if (response.Success)
         {

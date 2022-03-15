@@ -1,6 +1,6 @@
-﻿using Masa.Contrib.BasicAbilities.Auth.Enums;
+﻿using Masa.Auth.ApiGateways.Caller.Enums;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
+namespace Masa.Auth.ApiGateways.Caller.Response.Subjects;
 
 public class StaffItemResponse
 {

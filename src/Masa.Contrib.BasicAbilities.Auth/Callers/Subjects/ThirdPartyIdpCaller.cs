@@ -1,4 +1,10 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Callers.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller;
+using Masa.Auth.ApiGateways.Caller.Callers;
+using Masa.Auth.ApiGateways.Caller.Request.Subjects;
+using Masa.Auth.ApiGateways.Caller.Response;
+using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.ApiGateways.Caller.Callers.Subjects;
 
 internal class ThirdPartyIdpCaller : CallerBase
 {
@@ -25,7 +31,7 @@ internal class ThirdPartyIdpCaller : CallerBase
 
     public async Task<ApiResultResponse<ThirdPartyIdpItemResponse>> GetThirdPartyPlatformDetailAsync(Guid id)
     {
-        return await Task.FromResult(ApiResultResponse<ThirdPartyIdpItemResponse>.ResponseSuccess(PlatformItems.First(p => p.ThirdPartyPlatformId == id), "查询成功"));
+        return await Task.FromResult(ApiResultResponse<ThirdPartyIdpItemResponse>.ResponseSuccess(PlatformItems.First(p => p.ThirdPartyIdpId == id), "查询成功"));
     }
 
     public async Task<ApiResultResponse<List<ThirdPartyIdpItemResponse>>> SelectThirdPartyPlatformAsync()
@@ -45,7 +51,7 @@ internal class ThirdPartyIdpCaller : CallerBase
 
     public async Task<ApiResultResponse> DeleteThirdPartyPlatformAsync(Guid id)
     {
-        PlatformItems.Remove(PlatformItems.First(p => p.ThirdPartyPlatformId == id));
+        PlatformItems.Remove(PlatformItems.First(p => p.ThirdPartyIdpId == id));
         return await Task.FromResult(ApiResultResponse.ResponseSuccess("删除成功"));
     }
 }

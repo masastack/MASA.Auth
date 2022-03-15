@@ -1,7 +1,7 @@
-﻿using Masa.Contrib.BasicAbilities.Auth.Enums;
-using Masa.Contrib.BasicAbilities.Auth.Response.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller.Enums;
+using Masa.Auth.ApiGateways.Caller.Response.Subjects;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
+namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class EditStaffRequest
 {

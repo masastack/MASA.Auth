@@ -1,4 +1,4 @@
-namespace Masa.Contrib.BasicAbilities.Auth.ApiUri;
+namespace Masa.Auth.ApiGateways.Caller.ApiUri;
 
 internal class Routing
 {

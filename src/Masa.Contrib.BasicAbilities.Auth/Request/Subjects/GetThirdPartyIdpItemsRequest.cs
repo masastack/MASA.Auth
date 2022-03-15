@@ -1,4 +1,4 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class GetThirdPartyIdpItemsRequest
 {

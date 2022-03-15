@@ -1,6 +1,6 @@
-﻿using Masa.Contrib.BasicAbilities.Auth.Response;
+﻿using Masa.Auth.ApiGateways.Caller.Response;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Callers;
+namespace Masa.Auth.ApiGateways.Caller.Callers;
 
 public abstract class CallerBase : HttpClientCallerBase
 {

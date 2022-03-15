@@ -1,6 +1,6 @@
-﻿using Masa.Contrib.BasicAbilities.Auth.Response.Permissions;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Permissions;
 
-namespace Masa.Contrib.BasicAbilities.Auth.Request.Permissions;
+namespace Masa.Auth.ApiGateways.Caller.Request.Permissions;
 
 public class AddRoleRequest
 {

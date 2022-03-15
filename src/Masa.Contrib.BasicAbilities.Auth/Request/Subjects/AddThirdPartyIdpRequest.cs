@@ -1,4 +1,6 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Request.Subjects;
+﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+
+namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class AddThirdPartyIdpRequest
 {

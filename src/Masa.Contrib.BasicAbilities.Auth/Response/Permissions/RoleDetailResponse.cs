@@ -1,4 +1,4 @@
-﻿namespace Masa.Contrib.BasicAbilities.Auth.Response.Permissions;
+﻿namespace Masa.Auth.ApiGateways.Caller.Response.Permissions;
 
 public class RoleDetailResponse
 {
