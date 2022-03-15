@@ -12,7 +12,14 @@ public class QueryHandler
     [EventHandler]
     public async Task GetDepartmentDetailAsync(DepartmentDetailQuery departmentDetailQuery)
     {
-
+        var department = await _departmentRepository.GetByIdAsync(departmentDetailQuery.DepartmentId);
+        departmentDetailQuery.Result = new DepartmentDetail
+        {
+            Id = department.Id,
+            Name = department.Name,
+            Description = department.Description,
+            Enabled = department.Enabled
+        };
     }
 
     [EventHandler]

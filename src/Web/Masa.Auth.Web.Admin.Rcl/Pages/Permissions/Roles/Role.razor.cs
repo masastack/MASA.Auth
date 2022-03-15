@@ -1,7 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Permissions;
-using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
 
 public partial class Role
 {
