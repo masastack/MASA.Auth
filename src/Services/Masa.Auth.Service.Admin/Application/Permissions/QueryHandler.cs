@@ -76,7 +76,7 @@ public class QueryHandler
             {
                 Id = tp.Team.Id,
                 Name = tp.Team.Name,
-                Avatar = tp.Team.Avatar
+                Avatar = tp.Team.Avatar.Url
             }).ToList(),
             UserItems = permission.UserPermissions.Select(up => new UserSelectItem
             {

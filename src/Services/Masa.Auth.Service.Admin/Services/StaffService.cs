@@ -2,12 +2,12 @@
 
 public class StaffService : ServiceBase
 {
-    public StaffService(IServiceCollection services) : base(services)
+    public StaffService(IServiceCollection services) : base(services,Routing.STAFF_BASE_URI)
     {
-        App.MapGet(Routing.StaffList, ListAsync);
-        App.MapGet(Routing.StaffPagination, PaginationAsync);
-        App.MapPost(Routing.Staff, CreateAsync);
-        App.MapDelete(Routing.Staff, DeleteAsync);
+        MapGet(ListAsync);
+        MapGet(PaginationAsync);
+        MapPost(CreateAsync);
+        MapDelete(DeleteAsync);
     }
 
     private async Task CreateAsync([FromServices] IEventBus eventBus,

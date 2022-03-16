@@ -2,12 +2,12 @@
 {
     public class PermissionService : ServiceBase
     {
-        public PermissionService(IServiceCollection services) : base(services)
+        public PermissionService(IServiceCollection services) : base(services,Routing.PERMISSION_BASE_URI)
         {
-            App.MapGet(Routing.PermissionList, ListAsync);
-            App.MapGet(Routing.PermissionDetail, GetAsync);
-            App.MapPost(Routing.Permission, CreateAsync);
-            App.MapDelete(Routing.Permission, DeleteAsync);
+            MapGet(ListAsync);
+            MapGet(GetAsync);
+            MapPost(CreateAsync);
+            MapDelete(DeleteAsync);
         }
 
         private async Task CreateAsync([FromServices] IEventBus eventBus,
