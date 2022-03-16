@@ -12,24 +12,33 @@ public class TeamDetailResponse
 
     public TeamTypes TeamType { get; set; }
 
-    public List<Guid> Staffs { get; set; }
+    public List<Guid> AdminStaffs { get; set; }
 
-    public List<Guid> Permissions { get; set; }
+    public List<Guid> AdminPermissions { get; set; }
 
-    public List<Guid> Roles { get; set; }
+    public List<Guid> AdminRoles { get; set; }
 
-    public static TeamDetailResponse Default => new(Guid.Empty, "", new(), "", default, new(), new(), new());
+    public List<Guid> MemberStaffs { get; set; }
 
-    public TeamDetailResponse(Guid teamId, string name, AvatarValue avatar, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
+    public List<Guid> MemberPermissions { get; set; }
+
+    public List<Guid> MemberRoles { get; set; }
+
+    public static TeamDetailResponse Default => new(Guid.Empty, "", new(), "", default, new(), new(), new(), new(), new(), new());
+
+    public TeamDetailResponse(Guid teamId, string name, AvatarValue avatar, string describe, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
     {
         TeamId = teamId;
         Name = name;
         Avatar = avatar;
         Describe = describe;
         TeamType = teamType;
-        Staffs = staffs;
-        Permissions = permissions;
-        Roles = roles;
+        AdminStaffs = adminStaffs;
+        AdminPermissions = adminPermissions;
+        AdminRoles = adminRoles;
+        MemberStaffs = memberStaffs;
+        MemberPermissions = memberPermissions;
+        MemberRoles = memberRoles;
     }
 }
 

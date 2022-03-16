@@ -12,27 +12,36 @@ public class UpdateTeamRequest
 
     public TeamTypes TeamType { get; set; }
 
-    public List<Guid> Staffs { get; set; }
+    public List<Guid> AdminStaffs { get; set; }
 
-    public List<Guid> Permissions { get; set; }
+    public List<Guid> AdminPermissions { get; set; }
 
-    public List<Guid> Roles { get; set; }
+    public List<Guid> AdminRoles { get; set; }
 
-    public UpdateTeamRequest(Guid teamId, string name, AvatarValue avatar, string description, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
+    public List<Guid> MemberStaffs { get; set; }
+
+    public List<Guid> MemberPermissions { get; set; }
+
+    public List<Guid> MemberRoles { get; set; }
+
+    public UpdateTeamRequest(Guid teamId, string name, AvatarValue avatar, string description, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
     {
         TeamId = teamId;
         Name = name;
         Avatar = avatar;
         Description = description;
         TeamType = teamType;
-        Staffs = staffs;
-        Permissions = permissions;
-        Roles = roles;
+        AdminStaffs = adminStaffs;
+        AdminPermissions = adminPermissions;
+        AdminRoles = adminRoles;
+        MemberStaffs = memberStaffs;
+        MemberPermissions = memberPermissions;
+        MemberRoles = memberRoles;
     }
 
     public static implicit operator UpdateTeamRequest(TeamDetailResponse team)
     {
-        return new UpdateTeamRequest(team.TeamId, team.Name, team.Avatar, team.Describe, team.TeamType, team.Staffs, team.Permissions, team.Roles);
+        return new UpdateTeamRequest(team.TeamId, team.Name, team.Avatar, team.Describe, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
     }
 }
 
