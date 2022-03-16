@@ -1,8 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Application.Organizations.Models;
-using Masa.Auth.Service.Admin.Application.Organizations.Queries;
-using Masa.Auth.Service.Admin.Domain.Organizations.Repositories;
-
-namespace Masa.Auth.Service.Admin.Application.Organizations;
+﻿namespace Masa.Auth.Service.Admin.Application.Organizations;
 
 public class QueryHandler
 {
@@ -48,6 +44,22 @@ public class QueryHandler
             result.Add(item);
         }
         return result;
+    }
+
+    [EventHandler]
+    public async Task DepartmentStaffAsync(DepartmentStaffQuery departmentStaffQuery)
+    {
+        var department = await _departmentRepository.GetByIdAsync(departmentStaffQuery.DepartmentId);
+        departmentStaffQuery.Result = department.DepartmentStaffs
+            .Select(ds => ds.Staff)
+            .Select(s => new StaffItem
+            {
+                Id = s.Id,
+                Name = s.User.Name,
+                JobNumber = s.JobNumber,
+                Email = s.User.Email,
+                PhoneNumber = s.User.PhoneNumber
+            }).ToList();
     }
 }
 

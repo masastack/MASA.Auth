@@ -2,15 +2,11 @@
 
 public class DepartmentStaff : Entity<Guid>
 {
-    private Department? _department;
-
-    public Department Department
-    {
-        get => _department ?? throw new UserFriendlyException("Failed to get department data");
-        private set => _department = value;
-    }
+    public Guid DepartmentId { get; private set; }
 
     public Guid StaffId { get; private set; }
+
+    public Staff Staff { get; private set; } = null!;
 
     public DepartmentStaff(Guid staffId)
     {

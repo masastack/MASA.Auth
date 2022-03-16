@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Organizations;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Organizations;
 
 public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Department>
 {
@@ -13,7 +10,5 @@ public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Depart
 
         builder.Property(d => d.Name).HasMaxLength(20).IsRequired();
         builder.Property(d => d.Description).HasMaxLength(255);
-
-        builder.HasMany(d => d.DepartmentStaffs).WithOne(ds => ds.Department);
     }
 }

@@ -65,15 +65,10 @@ public class QueryHandler
         var key = staffPaginationQuery.SearchKey;
         var pageIndex = staffPaginationQuery.PageIndex;
         var pageSize = staffPaginationQuery.PageSize;
-        var departmentId = staffPaginationQuery.DepartmentId;
         Expression<Func<Staff, bool>> condition = staff => true;
         if (string.IsNullOrEmpty(key))
         {
             condition = condition.And(s => s.JobNumber.Contains(key) || s.Name.Contains(key));
-        }
-        if (departmentId == Guid.Empty)
-        {
-
         }
         var paginationList = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {

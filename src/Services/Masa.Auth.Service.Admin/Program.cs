@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Infrastructure;
-using Masa.Auth.Service.Admin.Infrastructure.Middleware;
-
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -80,6 +77,16 @@ var app = builder.Services
                .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
+
+app.MigrateDbContext<AuthDbContext>((context, services) =>
+{
+    if (context.Set<Department>().Any())
+    {
+        return;
+    }
+    context.Set<Department>().Add(new Department("MasaStack", "MasaStack Root Department"));
+    context.SaveChanges();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

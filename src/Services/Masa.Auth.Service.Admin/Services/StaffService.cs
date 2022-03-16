@@ -24,9 +24,10 @@ public class StaffService : ServiceBase
     }
 
     private async Task<PaginationList<StaffItem>> PaginationAsync([FromServices] IEventBus eventBus,
-        [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] Guid departmentId = default(Guid), [FromQuery] string name = "")
+        [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20,
+        [FromQuery] string name = "")
     {
-        var query = new StaffPaginationQuery(pageIndex, pageSize, departmentId, name);
+        var query = new StaffPaginationQuery(pageIndex, pageSize, name);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

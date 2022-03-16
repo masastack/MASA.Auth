@@ -44,7 +44,7 @@ public class Routing
 
     public static readonly string UserDetail = string.Format(DEFAULT_SERVICE_BASE, USER, "{id}");
 
-    public static readonly string OperateUser = string.Format(DEFAULT_SERVICE_BASE, USER);
+    public static readonly string OperateUser = string.Format(DEFAULT_SERVICE, USER);
 
     #endregion
 
@@ -56,7 +56,7 @@ public class Routing
 
     public static readonly string ThirdPartyUserDetail = string.Format(DEFAULT_SERVICE_BASE, THIRD_PARTY_USER, "{id}");
 
-    public static readonly string OperateThirdPartyUser = string.Format(DEFAULT_SERVICE_BASE, THIRD_PARTY_USER);
+    public static readonly string OperateThirdPartyUser = string.Format(DEFAULT_SERVICE, THIRD_PARTY_USER);
 
     #endregion
 
@@ -70,7 +70,7 @@ public class Routing
 
     public static readonly string RoleSelect = string.Format(DEFAULT_SERVICE_BASE, ROLE, "select");
 
-    public static readonly string OperateRole = string.Format(DEFAULT_SERVICE_BASE, ROLE);
+    public static readonly string OperateRole = string.Format(DEFAULT_SERVICE, ROLE);
 
     #endregion
 
@@ -84,7 +84,7 @@ public class Routing
 
     public static readonly string TeamSelect = string.Format(DEFAULT_SERVICE_BASE, TEAM, "select");
 
-    public static readonly string OperateTeam = string.Format(DEFAULT_SERVICE_BASE, TEAM);
+    public static readonly string OperateTeam = string.Format(DEFAULT_SERVICE, TEAM);
 
     #endregion
 
@@ -96,7 +96,7 @@ public class Routing
 
     public static readonly string StaffPagination = string.Format(DEFAULT_SERVICE_BASE, STAFF, "pagination");
 
-    public static readonly string OperateStaff = string.Format(DEFAULT_SERVICE_BASE, STAFF);
+    public static readonly string OperateStaff = string.Format(DEFAULT_SERVICE, STAFF);
 
     #endregion
 

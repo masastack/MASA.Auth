@@ -1,8 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
-using Masa.Auth.Service.Admin.Domain.Organizations.Repositories;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
 
 public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>, IDepartmentRepository
 {
@@ -15,6 +11,7 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
         return await _context.Set<Department>()
             .Where(d => d.Id == id)
             .Include(d => d.DepartmentStaffs)
+            .ThenInclude(ds => ds.Staff)
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current department does not exist");
     }
