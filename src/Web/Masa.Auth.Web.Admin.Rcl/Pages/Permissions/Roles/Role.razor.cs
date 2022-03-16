@@ -47,9 +47,9 @@ public partial class Role
         }
     }
 
-    public int PageCount { get; set; }
+    public long TotalPages { get; set; }
 
-    public long TotalCount { get; set; }
+    public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
@@ -60,6 +60,8 @@ public partial class Role
     public bool RoleDialogVisible { get; set; }
 
     public List<DataTableHeader<RoleItemResponse>> Headers { get; set; } = new();
+
+    private RoleService RoleService => AuthCaller.RoleService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,12 +83,10 @@ public partial class Role
     {
         Loading = true;
         var reuquest = new GetRoleItemsRequest(PageIndex, PageSize, Search, Enabled);
-        var response = await AuthClient.GetRoleItemsAsync(reuquest);
-        if (response.Success)
-        {
-            Roles = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query roleList data:") + response.Message);
+        var response = await RoleService.GetRoleItemsAsync(reuquest);
+        Roles = response.Items;
+        TotalPages = response.TotalPages;
+        Total = response.Total;
         Loading = false;
     }
 

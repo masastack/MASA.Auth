@@ -2,7 +2,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class AddOrEditUserDialog
+public partial class AddOrUpdateUserDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -18,7 +18,9 @@ public partial class AddOrEditUserDialog
 
     private bool IsAdd => UserId == Guid.Empty;
 
-    private UserItemResponse User { get; set; } = UserItemResponse.Default;
+    private UserDetailResponse User { get; set; } = UserDetailResponse.Default;
+
+    private UserService UserService => AuthCaller.UserService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -36,19 +38,14 @@ public partial class AddOrEditUserDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) User = UserItemResponse.Default;
+            if (IsAdd) User = UserDetailResponse.Default;
             else await GetUserDetailAsync();
         }
     }
 
     public async Task GetUserDetailAsync()
     {
-        var response = await AuthClient.GetUserDetailAsync(UserId);
-        if (response.Success)
-        {
-            User = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query staffDetail data:") + response.Message);
+        User = await UserService.GetUserDetailAsync(UserId);
     }
 
     public async Task AddOrEditUserAsync()
@@ -56,25 +53,17 @@ public partial class AddOrEditUserDialog
         Loading = true;
         if (IsAdd)
         {
-            var response = await AuthClient.AddUserAsync(User);
-            if (response.Success)
-            {
-                OpenSuccessMessage(T("Add staff data success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog(T("Failed to add staff:") + response.Message);
+            await UserService.AddUserAsync(User);
+            OpenSuccessMessage(T("Add staff data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         else
         {
-            var response = await AuthClient.EditUserAsync(User);
-            if (response.Success)
-            {
-                OpenSuccessMessage(T("Edit staff data success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog(T("Failed to edit staff:") + response.Message);
+            await UserService.UpdateUserAsync(User);
+            OpenSuccessMessage(T("Edit staff data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         Loading = false;
     }

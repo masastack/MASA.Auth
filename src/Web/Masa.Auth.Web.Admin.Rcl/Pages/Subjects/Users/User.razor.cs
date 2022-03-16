@@ -1,20 +1,40 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class User
 {
-    private string? _search;
+    private string? _name;
+    private string? _email;
+    private string? _phoneNumber;
     private bool _enabled;
     private int _pageIndex = 1;
     private int _pageSize = 10;
 
-    public string Search
+    public string Name
     {
-        get { return _search ?? ""; }
+        get { return _name ?? ""; }
         set
         {
-            _search = value;
+            _name = value;
+            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public string Email
+    {
+        get { return _email ?? ""; }
+        set
+        {
+            _email = value;
+            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public string PhoneNumber
+    {
+        get { return _phoneNumber ?? ""; }
+        set
+        {
+            _phoneNumber = value;
             GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -49,9 +69,9 @@ public partial class User
         }
     }
 
-    public int PageCount { get; set; }
+    public long TotalPages { get; set; }
 
-    public long TotalCount { get; set; }
+    public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
@@ -64,6 +84,8 @@ public partial class User
     public bool UserDialogVisible { get; set; }
 
     public bool AuthorizeDialogVisible { get; set; }
+
+    private UserService UserService => AuthCaller.UserService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,13 +106,11 @@ public partial class User
     public async Task GetUserItemsAsync()
     {
         Loading = true;
-        var request = new GetUserItemsRequest(PageIndex, PageSize, Search, Enabled);
-        var response = await AuthClient.GetUserItemsAsync(request);
-        if (response.Success)
-        {
-            Users = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query userList data:") + response.Message);
+        var request = new GetUserItemsRequest(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
+        var response = await UserService.GetUserItemsAsync(request);
+        Users = response.Items;
+        TotalPages = response.TotalPages;
+        Total = response.Total;
         Loading = false;
     }
 

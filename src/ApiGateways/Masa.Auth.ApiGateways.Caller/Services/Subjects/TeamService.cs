@@ -15,7 +15,7 @@ public class TeamService : ServiceBase
 
     public async Task<PaginationItemsResponse<TeamItemResponse>> GetTeamItemsAsync(GetTeamItemsRequest request)
     {
-        var teams = Teams.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
+        var teams = Teams.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
         return await Task.FromResult(new PaginationItemsResponse<TeamItemResponse>(Teams.Count, 1, teams));
     }
 

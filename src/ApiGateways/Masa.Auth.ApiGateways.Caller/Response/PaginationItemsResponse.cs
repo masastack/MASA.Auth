@@ -6,9 +6,9 @@ public class PaginationItemsResponse<TEntity> where TEntity : class
 
     public long TotalPages { get; }
 
-    public IEnumerable<TEntity> Items { get; }
+    public List<TEntity> Items { get; }
 
-    public PaginationItemsResponse(long total, long totalPages, IEnumerable<TEntity> items)
+    public PaginationItemsResponse(long total, long totalPages, List<TEntity> items)
     {
         Total = total;
         TotalPages = totalPages;

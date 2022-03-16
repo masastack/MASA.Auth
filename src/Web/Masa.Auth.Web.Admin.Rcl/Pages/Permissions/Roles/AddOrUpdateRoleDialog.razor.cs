@@ -1,8 +1,6 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Permissions;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
 
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
-
-public partial class AddOrEditRoleDialog
+public partial class AddOrUpdateRoleDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -19,6 +17,8 @@ public partial class AddOrEditRoleDialog
     private bool IsAdd => RoleId == Guid.Empty;
 
     private RoleDetailResponse Role { get; set; } = RoleDetailResponse.Default;
+
+    private RoleService RoleService => AuthCaller.RoleService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -43,12 +43,7 @@ public partial class AddOrEditRoleDialog
 
     public async Task GetRoleDetailAsync()
     {
-        var response = await AuthClient.GetRoleDetailAsync(RoleId);
-        if (response.Success)
-        {
-            Role = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query roleDetail data:") + response.Message);
+        Role = await RoleService.GetRoleDetailAsync(RoleId);
     }
 
     public async Task AddOrEditRoleAsync()
@@ -56,25 +51,17 @@ public partial class AddOrEditRoleDialog
         Loading = true;
         if (IsAdd)
         {
-            var response = await AuthClient.AddRoleAsync(Role);
-            if (response.Success)
-            {
-                OpenSuccessMessage(T("Add role data success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog(T("Failed to add role:") + response.Message);
+            await RoleService.AddRoleAsync(Role);
+            OpenSuccessMessage(T("Add role data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         else
         {
-            var response = await AuthClient.EditRoleAsync(Role);
-            if (response.Success)
-            {
-                OpenSuccessMessage(T("Edit role data success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog(T("Failed to edit role:") + response.Message);
+            await RoleService.UpdateRoleAsync(Role);
+            OpenSuccessMessage(T("Edit role data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         Loading = false;
     }

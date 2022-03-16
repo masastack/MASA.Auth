@@ -1,8 +1,6 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
-
-public partial class AddOrEditTeamDialog
+public partial class AddOrUpdateTeamDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -19,6 +17,8 @@ public partial class AddOrEditTeamDialog
     private bool IsAdd => TeamId == Guid.Empty;
 
     private TeamDetailResponse Team { get; set; } = TeamDetailResponse.Default;
+
+    private TeamService TeamService => AuthCaller.TeamService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -43,12 +43,7 @@ public partial class AddOrEditTeamDialog
 
     public async Task GetTeamDetailAsync()
     {
-        var response = await AuthClient.GetTeamDetailAsync(TeamId);
-        if (response.Success)
-        {
-            Team = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query teamDetail data:") + response.Message);
+        Team = await TeamService.GetTeamDetailAsync(TeamId);
     }
 
     public async Task AddOrEditTeamAsync()
@@ -56,25 +51,17 @@ public partial class AddOrEditTeamDialog
         Loading = true;
         if (IsAdd)
         {
-            var response = await AuthClient.AddTeamAsync(Team);
-            if (response.Success)
-            {
-                OpenSuccessMessage(T("Add team data success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog(T("Failed to add team:") + response.Message);
+            await TeamService.AddTeamAsync(Team);
+            OpenSuccessMessage(T("Add team data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         else
         {
-            var response = await AuthClient.EditTeamAsync(Team);
-            if (response.Success)
-            {
-                OpenSuccessMessage(T("Edit team data success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog(T("Failed to edit team:") + response.Message);
+            await TeamService.UpdateTeamAsync(Team);
+            OpenSuccessMessage(T("Edit team data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         Loading = false;
     }

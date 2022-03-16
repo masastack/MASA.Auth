@@ -49,9 +49,9 @@ public partial class Staff
         }
     }
 
-    public int PageCount { get; set; }
+    public long TotalPages { get; set; }
 
-    public long TotalCount { get; set; }
+    public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
@@ -62,6 +62,8 @@ public partial class Staff
     public List<DataTableHeader<StaffItemResponse>> Headers { get; set; } = new();
 
     public bool StaffDialog { get; set; }
+
+    private StaffService StaffService => AuthCaller.StaffService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,12 +85,10 @@ public partial class Staff
     {
         Loading = true;
         var request = new GetStaffItemsRequest(PageIndex, PageSize, Search, Enabled);
-        var response = await AuthClient.GetStaffItemsAsync(request);
-        if (response.Success)
-        {
-            Staffs = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query staff data:") + response.Message);
+        var response = await StaffService.GetStaffItemsAsync(request);
+        Staffs = response.Items;
+        TotalPages = response.TotalPages;
+        Total = response.Total;
         Loading = false;
     }
 

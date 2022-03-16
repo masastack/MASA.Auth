@@ -4,18 +4,18 @@ public abstract class AdminCompontentBase : ComponentBase
 {
     private I18n? _i18n;
     private GlobalConfig? _globalConfig;
-    private AuthCaller? _authClient;
+    private AuthCaller? _authCaller;
 
     [Inject]
-    public AuthCaller AuthClient
+    public AuthCaller AuthCaller
     {
         get
         {
-            return _authClient ?? throw new Exception("please Inject AuthClient!");
+            return _authCaller ?? throw new Exception("please Inject AuthCaller!");
         }
         set
         {
-            _authClient = value;
+            _authCaller = value;
         }
     }
 

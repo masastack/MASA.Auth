@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class Team
 {
@@ -61,6 +59,8 @@ public partial class Team
 
     public bool TeamDialogVisible { get; set; }
 
+    private TeamService TeamService => AuthCaller.TeamService;
+
     protected override async Task OnInitializedAsync()
     {
         await GetTeamItemsAsync();
@@ -69,12 +69,7 @@ public partial class Team
     public async Task GetTeamItemsAsync()
     {
         Loading = true;
-        var response = await AuthClient.GetTeamItemsAsync();
-        if (response.Success)
-        {
-            Teams = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query teamList data:") + response.Message);
+        var response = await TeamService.SelectTeamAsync();
         Loading = false;
     }
 

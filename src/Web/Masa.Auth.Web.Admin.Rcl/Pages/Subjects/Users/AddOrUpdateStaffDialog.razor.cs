@@ -1,8 +1,6 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
-
-public partial class AddOrEditStaffDialog
+public partial class AddOrUpdateStaffDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -19,6 +17,8 @@ public partial class AddOrEditStaffDialog
     private bool IsAdd => StaffId == Guid.Empty;
 
     private StaffDetailResponse Staff { get; set; } = StaffDetailResponse.Default;
+
+    private StaffService StaffService => AuthCaller.StaffService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -43,12 +43,7 @@ public partial class AddOrEditStaffDialog
 
     public async Task GetStaffDetailAsync()
     {
-        var response = await AuthClient.GetStaffDetailAsync(StaffId);
-        if (response.Success)
-        {
-            Staff = response.Data;
-        }
-        else OpenErrorDialog($"Failed to query staff data:{response.Message}");
+        Staff = await StaffService.GetStaffDetailAsync(StaffId);
     }
 
     public async Task AddOrEditStaffAsync()
@@ -56,25 +51,17 @@ public partial class AddOrEditStaffDialog
         Loading = true;
         if (IsAdd)
         {
-            var reponse = await AuthClient.AddStaffAsync(Staff);
-            if (reponse.Success)
-            {
-                OpenSuccessMessage(T("Add staff success"));
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog($"Failed to add staff:{reponse.Message}");
+            await StaffService.AddStaffAsync(Staff);
+            OpenSuccessMessage(T("Add staff success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         else
         {
-            var reponse = await AuthClient.EditStaffAsync(Staff);
-            if (reponse.Success)
-            {
-                OpenSuccessMessage("Edit staff success");
-                await OnSubmitSuccess.InvokeAsync();
-                await UpdateVisible(false);
-            }
-            else OpenErrorDialog($"Failed to edit staff:{reponse.Message}");
+            await StaffService.UpdateStaffAsync(Staff);
+            OpenSuccessMessage("Edit staff success");
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
         }
         Loading = false;
     }
@@ -90,9 +77,8 @@ public partial class AddOrEditStaffDialog
     public async Task DeleteStaffAsync()
     {
         Loading = true;
-        var response = await AuthClient.DeleteStaffAsync(StaffId);
-        if (response.Success) OpenSuccessMessage(T("Delete staff data success"));
-        else OpenErrorDialog(T("Delete staff data failed:") + response.Message);
+        await StaffService.DeleteStaffAsync(StaffId);
+        OpenSuccessMessage(T("Delete staff data success"));
         Loading = false;
     }
 

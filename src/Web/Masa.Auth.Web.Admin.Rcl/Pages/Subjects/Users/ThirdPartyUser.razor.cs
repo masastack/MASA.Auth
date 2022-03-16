@@ -49,9 +49,9 @@ public partial class ThirdPartyUser
         }
     }
 
-    public int PageCount { get; set; }
+    public long TotalPages { get; set; }
 
-    public long TotalCount { get; set; }
+    public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
@@ -66,6 +66,10 @@ public partial class ThirdPartyUser
     public List<DataTableHeader<ThirdPartyUserItemResponse>> Headers { get; set; } = new();
 
     public bool ThirdPartyUserDialog { get; set; }
+
+    private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
+
+    private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -88,24 +92,17 @@ public partial class ThirdPartyUser
     {
         Loading = true;
         var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyIdpId);
-        var response = await AuthClient.GetThirdPartyUserItemsAsync(request);
-        if (response.Success)
-        {
-            ThirdPartyUsers = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query thirdPartyUserList data:") + response.Message);
+        var response = await ThirdPartyUserService.GetThirdPartyUserItemsAsync(request);
+        ThirdPartyUsers = response.Items;
+        TotalPages = response.TotalPages;
+        Total = response.Total;
         Loading = false;
     }
 
     public async Task SelectThirdPartyIdpAsync()
     {
         Loading = true;
-        var response = await AuthClient.SelectThirdPartyIdpAsync();
-        if (response.Success is true)
-        {
-            ThirdPartyIdps = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query thirdPartyIdp data:") + response.Message);
+        ThirdPartyIdps = await ThirdPartyIdpService.SelectThirdPartyIdpAsync();
         Loading = false;
     }
 

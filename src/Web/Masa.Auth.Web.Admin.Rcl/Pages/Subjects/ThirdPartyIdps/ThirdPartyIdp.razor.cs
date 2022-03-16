@@ -47,9 +47,9 @@ public partial class ThirdPartyIdp
         }
     }
 
-    public int PageCount { get; set; }
+    public long TotalPages { get; set; }
 
-    public long TotalCount { get; set; }
+    public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
@@ -61,6 +61,8 @@ public partial class ThirdPartyIdp
 
     public bool ThirdPartyIdpDialogVisible { get; set; }
 
+    private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
+
     protected override async Task OnInitializedAsync()
     {
         Headers = new()
@@ -68,7 +70,7 @@ public partial class ThirdPartyIdp
             new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpItemResponse.Icon), Sortable = false },
             new() { Text = T("ThirdPartyIdp.Name"), Value = nameof(ThirdPartyIdpItemResponse.Name), Sortable = false },
             new() { Text = T("ThirdPartyIdp.DisplayName"), Value = nameof(ThirdPartyIdpItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Type"), Value = nameof(ThirdPartyIdpItemResponse.VerifyType), Sortable = false },
+            new() { Text = T("Type"), Value = nameof(ThirdPartyIdpItemResponse.AuthenticationType), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpItemResponse.CreationTime)), Value = nameof(ThirdPartyIdpItemResponse.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpItemResponse.Url)), Value = nameof(ThirdPartyIdpItemResponse.Url), Sortable = false },
             new() { Text = T("Action"), Value = T("Action"), Sortable = false },
@@ -81,12 +83,10 @@ public partial class ThirdPartyIdp
     {
         Loading = true;
         var request = new GetThirdPartyIdpItemsRequest(PageIndex, PageSize, Search);
-        var response = await AuthClient.GetThirdPartyIdpItemsAsync(request);
-        if (response.Success)
-        {
-            ThirdPartyIdps = response.Data;
-        }
-        else OpenErrorMessage(T("Failed to query thirdPartyIdpList data:") + response.Message);
+        var response = await ThirdPartyIdpService.GetThirdPartyIdpItemsAsync(request);
+        ThirdPartyIdps = response.Items;
+        TotalPages = response.TotalPages;
+        Total = response.Total;
         Loading = false;
     }
 
@@ -115,12 +115,8 @@ public partial class ThirdPartyIdp
     public async Task DeleteThirdPartyIdpAsync()
     {
         Loading = true;
-        var response = await AuthClient.DeleteThirdPartyIdpAsync(CurrentThirdPartyIdpId);
-        if (response.Success)
-        {
-            OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
-        }
-        else OpenErrorMessage(T("Failed to delete thirdPartyIdp:") + response.Message);
+        await ThirdPartyIdpService.DeleteThirdPartyIdpAsync(CurrentThirdPartyIdpId);
+        OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
         Loading = false;
     }
 }

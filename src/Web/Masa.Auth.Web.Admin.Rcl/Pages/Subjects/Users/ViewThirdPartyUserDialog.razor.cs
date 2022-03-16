@@ -13,7 +13,9 @@ public partial class ViewThirdPartyUserDialog
     [Parameter]
     public Guid ThirdPartyUserId { get; set; }
 
-    private ThirdPartyUserItemResponse ThirdPartyUser { get; set; } = ThirdPartyUserItemResponse.Default;
+    private ThirdPartyUserDetailResponse ThirdPartyUser { get; set; } = ThirdPartyUserDetailResponse.Default;
+
+    private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -31,12 +33,7 @@ public partial class ViewThirdPartyUserDialog
     {
         if (Visible is true)
         {
-            var response = await AuthClient.GetThirdPartyUserDetailAsync(ThirdPartyUserId);
-            if (response.Success)
-            {
-                ThirdPartyUser = response.Data;
-            }
-            else OpenErrorDialog(T("Failed to query thirdPartyUserDetail data:") + response.Message);
+            ThirdPartyUser = await ThirdPartyUserService.GetThirdPartyUserDetailAsync(ThirdPartyUserId);
         }
     }
 

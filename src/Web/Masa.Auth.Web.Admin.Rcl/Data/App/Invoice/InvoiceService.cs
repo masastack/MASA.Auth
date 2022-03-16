@@ -1,6 +1,7 @@
 ﻿using Masa.Auth.Web.Admin.Rcl.Data.App.Invoice.Dto;
 using Masa.Auth.Web.Admin.Rcl.Data.App.User;
 using Masa.Auth.Web.Admin.Rcl.Data.Base;
+using UserService = Masa.Auth.Web.Admin.Rcl.Data.App.User.UserService;
 
 namespace Masa.Auth.Web.Admin.Rcl.Data.App.Invoice
 {
