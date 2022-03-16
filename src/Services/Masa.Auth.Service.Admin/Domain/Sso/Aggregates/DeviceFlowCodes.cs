@@ -1,0 +1,76 @@
+﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
+
+public class DeviceFlowCodes : AggregateRoot<int>
+{
+    /// <summary>
+    /// Gets or sets the device code.
+    /// </summary>
+    /// <value>
+    /// The device code.
+    /// </value>
+    public string DeviceCode { get; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the user code.
+    /// </summary>
+    /// <value>
+    /// The user code.
+    /// </value>
+    public string UserCode { get; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the subject identifier.
+    /// </summary>
+    /// <value>
+    /// The subject identifier.
+    /// </value>
+    public string SubjectId { get; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the session identifier.
+    /// </summary>
+    /// <value>
+    /// The session identifier.
+    /// </value>
+    public string SessionId { get; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the client identifier.
+    /// </summary>
+    /// <value>
+    /// The client identifier.
+    /// </value>
+    public string ClientId { get; } = string.Empty;
+
+    /// <summary>
+    /// Gets the description the user assigned to the device being authorized.
+    /// </summary>
+    /// <value>
+    /// The description.
+    /// </value>
+    public string Description { get; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the creation time.
+    /// </summary>
+    /// <value>
+    /// The creation time.
+    /// </value>
+    public DateTime CreationTime { get; }
+
+    /// <summary>
+    /// Gets or sets the expiration.
+    /// </summary>
+    /// <value>
+    /// The expiration.
+    /// </value>
+    public DateTime? Expiration { get; }
+
+    /// <summary>
+    /// Gets or sets the data.
+    /// </summary>
+    /// <value>
+    /// The data.
+    /// </value>
+    public string Data { get; } = string.Empty;
+}

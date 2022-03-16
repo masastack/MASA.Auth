@@ -1,0 +1,16 @@
+﻿using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
+using Masa.Auth.Service.Admin.Infrastructure;
+
+namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Organizations;
+
+public class PositionEntityTypeConfiguration : IEntityTypeConfiguration<Position>
+{
+    public void Configure(EntityTypeBuilder<Position> builder)
+    {
+        builder.ToTable(nameof(Position), AuthDbContext.ORGANIZATION_SCHEMA);
+        builder.HasKey(p => p.Id);
+
+        builder.Property(d => d.Name).HasMaxLength(20);
+    }
+}
+
