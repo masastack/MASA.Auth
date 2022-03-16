@@ -1,5 +1,3 @@
-using Masa.Auth.ApiGateways.Caller;
-
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
