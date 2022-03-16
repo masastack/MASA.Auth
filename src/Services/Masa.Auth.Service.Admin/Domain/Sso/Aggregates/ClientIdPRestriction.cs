@@ -2,9 +2,9 @@
 
 public class ClientIdPRestriction : Entity<int>
 {
-    public string Provider { get; } = string.Empty;
+    public string Provider { get; private set; } = string.Empty;
 
-    public int ClientId { get; }
+    public int ClientId { get; private set; }
 
-    public Client Client { get; } = null!;
+    public Client Client { get; private set; } = null!;
 }

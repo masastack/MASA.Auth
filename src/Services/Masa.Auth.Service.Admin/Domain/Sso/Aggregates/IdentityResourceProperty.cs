@@ -2,8 +2,8 @@
 {
     public class IdentityResourceProperty : Property
     {
-        public int IdentityResourceId { get; }
+        public int IdentityResourceId { get; private set; }
 
-        public IdentityResource IdentityResource { get; } = null!;
+        public IdentityResource IdentityResource { get; private set; } = null!;
     }
 }

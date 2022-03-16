@@ -10,5 +10,6 @@ public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Depart
 
         builder.Property(d => d.Name).HasMaxLength(20).IsRequired();
         builder.Property(d => d.Description).HasMaxLength(255);
+        builder.Property(d => d.Level).HasDefaultValue(1);
     }
 }

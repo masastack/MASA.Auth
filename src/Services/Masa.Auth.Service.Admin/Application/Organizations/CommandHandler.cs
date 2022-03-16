@@ -1,22 +1,22 @@
-﻿using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
-using Masa.Auth.Service.Admin.Domain.Organizations.Factories;
-using Masa.Auth.Service.Admin.Domain.Organizations.Repositories;
+﻿using Masa.Auth.Service.Admin.Domain.Organizations.Factories;
 
 namespace Masa.Auth.Service.Admin.Application.Organizations;
 
 public class CommandHandler
 {
     readonly IDepartmentRepository _departmentRepository;
+    readonly DepartmentFactory _departmentFactory;
 
-    public CommandHandler(IDepartmentRepository departmentRepository)
+    public CommandHandler(IDepartmentRepository departmentRepository, DepartmentFactory departmentFactory)
     {
         _departmentRepository = departmentRepository;
+        _departmentFactory = departmentFactory;
     }
 
     [EventHandler]
     public async Task CreateDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
     {
-        var department = DepartmentFactory.Create(createDepartmentCommand.Name, createDepartmentCommand.Description,
+        var department = await _departmentFactory.CreateAsync(createDepartmentCommand.Name, createDepartmentCommand.Description,
             createDepartmentCommand.ParentId, createDepartmentCommand.Enabled, createDepartmentCommand.StaffIds.ToArray());
 
         await _departmentRepository.AddAsync(department);

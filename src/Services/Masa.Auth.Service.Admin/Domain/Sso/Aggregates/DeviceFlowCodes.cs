@@ -8,7 +8,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The device code.
     /// </value>
-    public string DeviceCode { get; } = string.Empty;
+    public string DeviceCode { get; private set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the user code.
@@ -16,7 +16,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The user code.
     /// </value>
-    public string UserCode { get; } = string.Empty;
+    public string UserCode { get; private set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the subject identifier.
@@ -24,7 +24,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The subject identifier.
     /// </value>
-    public string SubjectId { get; } = string.Empty;
+    public string SubjectId { get; private set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the session identifier.
@@ -32,7 +32,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The session identifier.
     /// </value>
-    public string SessionId { get; } = string.Empty;
+    public string SessionId { get; private set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the client identifier.
@@ -40,7 +40,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The client identifier.
     /// </value>
-    public string ClientId { get; } = string.Empty;
+    public string ClientId { get; private set; } = string.Empty;
 
     /// <summary>
     /// Gets the description the user assigned to the device being authorized.
@@ -48,7 +48,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The description.
     /// </value>
-    public string Description { get; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the creation time.
@@ -56,7 +56,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The creation time.
     /// </value>
-    public DateTime CreationTime { get; }
+    public DateTime CreationTime { get; private set; }
 
     /// <summary>
     /// Gets or sets the expiration.
@@ -64,7 +64,7 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The expiration.
     /// </value>
-    public DateTime? Expiration { get; }
+    public DateTime? Expiration { get; private set; }
 
     /// <summary>
     /// Gets or sets the data.
@@ -72,5 +72,5 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// <value>
     /// The data.
     /// </value>
-    public string Data { get; } = string.Empty;
+    public string Data { get; private set; } = string.Empty;
 }

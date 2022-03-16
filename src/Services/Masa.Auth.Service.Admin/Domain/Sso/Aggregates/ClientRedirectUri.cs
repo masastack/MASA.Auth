@@ -2,10 +2,10 @@
 
 public class ClientRedirectUri : Entity<int>
 {
-    public string RedirectUri { get; } = "";
+    public string RedirectUri { get; private set; } = string.Empty;
 
-    public int ClientId { get; }
+    public int ClientId { get; private set; }
 
-    public Client Client { get; } = null!;
+    public Client Client { get; private set; } = null!;
 }
 

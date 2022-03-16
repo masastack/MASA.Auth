@@ -2,13 +2,13 @@
 
 public abstract class Secret : Entity<int>
 {
-    public string Description { get; } = "";
+    public string Description { get; private set; } = "";
 
-    public string Value { get; } = "";
+    public string Value { get; private set; } = "";
 
-    public DateTime? Expiration { get; }
+    public DateTime? Expiration { get; private set; }
 
-    public string Type { get; } = "SharedSecret";
+    public string Type { get; private set; } = "SharedSecret";
 
-    public DateTime Created { get; } = DateTime.UtcNow;
+    public DateTime Created { get; private set; } = DateTime.UtcNow;
 }

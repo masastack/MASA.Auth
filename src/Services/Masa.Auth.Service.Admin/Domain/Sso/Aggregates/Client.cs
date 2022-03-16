@@ -2,108 +2,108 @@
 
 public class Client : AggregateRoot<int>
 {
-    public bool Enabled { get; } = true;
+    public bool Enabled { get; private set; } = true;
 
-    public string ClientId { get; } = string.Empty;
+    public string ClientId { get; private set; } = string.Empty;
 
-    public string ProtocolType { get; } = "oidc";
+    public string ProtocolType { get; private set; } = "oidc";
 
-    public List<ClientSecret> ClientSecrets { get; } = new();
+    public List<ClientSecret> ClientSecrets { get; private set; } = new();
 
-    public bool RequireClientSecret { get; } = true;
+    public bool RequireClientSecret { get; private set; } = true;
 
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName { get; private set; } = string.Empty;
 
-    public string Description { get; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
 
-    public string ClientUri { get; } = string.Empty;
+    public string ClientUri { get; private set; } = string.Empty;
 
-    public string LogoUri { get; } = string.Empty;
+    public string LogoUri { get; private set; } = string.Empty;
 
-    public bool RequireConsent { get; } = false;
+    public bool RequireConsent { get; private set; } = false;
 
-    public bool AllowRememberConsent { get; } = true;
+    public bool AllowRememberConsent { get; private set; } = true;
 
-    public bool AlwaysIncludeUserClaimsInIdToken { get; }
+    public bool AlwaysIncludeUserClaimsInIdToken { get; private set; }
 
-    public List<ClientGrantType> AllowedGrantTypes { get; } = new();
+    public List<ClientGrantType> AllowedGrantTypes { get; private set; } = new();
 
-    public bool RequirePkce { get; } = true;
+    public bool RequirePkce { get; private set; } = true;
 
-    public bool AllowPlainTextPkce { get; }
+    public bool AllowPlainTextPkce { get; private set; }
 
-    public bool RequireRequestObject { get; }
+    public bool RequireRequestObject { get; private set; }
 
-    public bool AllowAccessTokensViaBrowser { get; }
+    public bool AllowAccessTokensViaBrowser { get; private set; }
 
-    public List<ClientRedirectUri> RedirectUris { get; } = new();
+    public List<ClientRedirectUri> RedirectUris { get; private set; } = new();
 
-    public List<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; } = new();
+    public List<ClientPostLogoutRedirectUri> PostLogoutRedirectUris { get; private set; } = new();
 
-    public string FrontChannelLogoutUri { get; } = string.Empty;
+    public string FrontChannelLogoutUri { get; private set; } = string.Empty;
 
-    public bool FrontChannelLogoutSessionRequired { get; } = true;
+    public bool FrontChannelLogoutSessionRequired { get; private set; } = true;
 
-    public string BackChannelLogoutUri { get; } = string.Empty;
+    public string BackChannelLogoutUri { get; private set; } = string.Empty;
 
-    public bool BackChannelLogoutSessionRequired { get; } = true;
+    public bool BackChannelLogoutSessionRequired { get; private set; } = true;
 
-    public bool AllowOfflineAccess { get; }
+    public bool AllowOfflineAccess { get; private set; }
 
-    public List<ClientScope> AllowedScopes { get; } = new();
+    public List<ClientScope> AllowedScopes { get; private set; } = new();
 
-    public int IdentityTokenLifetime { get; } = 300;
+    public int IdentityTokenLifetime { get; private set; } = 300;
 
-    public string AllowedIdentityTokenSigningAlgorithms { get; } = string.Empty;
+    public string AllowedIdentityTokenSigningAlgorithms { get; private set; } = string.Empty;
 
-    public int AccessTokenLifetime { get; } = 3600;
+    public int AccessTokenLifetime { get; private set; } = 3600;
 
-    public int AuthorizationCodeLifetime { get; } = 300;
+    public int AuthorizationCodeLifetime { get; private set; } = 300;
 
-    public int? ConsentLifetime { get; } = null;
+    public int? ConsentLifetime { get; private set; } = null;
 
-    public int AbsoluteRefreshTokenLifetime { get; } = 2592000;
+    public int AbsoluteRefreshTokenLifetime { get; private set; } = 2592000;
 
-    public int SlidingRefreshTokenLifetime { get; } = 1296000;
+    public int SlidingRefreshTokenLifetime { get; private set; } = 1296000;
 
-    public int RefreshTokenUsage { get; } = (int)TokenUsage.OneTimeOnly;
+    public int RefreshTokenUsage { get; private set; } = (int)TokenUsage.OneTimeOnly;
 
-    public bool UpdateAccessTokenClaimsOnRefresh { get; }
+    public bool UpdateAccessTokenClaimsOnRefresh { get; private set; }
 
-    public int RefreshTokenExpiration { get; } = (int)TokenExpiration.Absolute;
+    public int RefreshTokenExpiration { get; private set; } = (int)TokenExpiration.Absolute;
 
-    public int AccessTokenType { get; } = (int)0; // AccessTokenType.Jwt;
+    public int AccessTokenType { get; private set; } = (int)0; // AccessTokenType.Jwt;
 
-    public bool EnableLocalLogin { get; } = true;
+    public bool EnableLocalLogin { get; private set; } = true;
 
-    public List<ClientIdPRestriction> IdentityProviderRestrictions { get; } = new();
+    public List<ClientIdPRestriction> IdentityProviderRestrictions { get; private set; } = new();
 
-    public bool IncludeJwtId { get; }
+    public bool IncludeJwtId { get; private set; }
 
-    public List<ClientClaim> Claims { get; } = new();
+    public List<ClientClaim> Claims { get; private set; } = new();
 
-    public bool AlwaysSendClientClaims { get; }
+    public bool AlwaysSendClientClaims { get; private set; }
 
-    public string ClientClaimsPrefix { get; } = "client_";
+    public string ClientClaimsPrefix { get; private set; } = "client_";
 
-    public string PairWiseSubjectSalt { get; } = string.Empty;
+    public string PairWiseSubjectSalt { get; private set; } = string.Empty;
 
-    public List<ClientCorsOrigin> AllowedCorsOrigins { get; } = new();
+    public List<ClientCorsOrigin> AllowedCorsOrigins { get; private set; } = new();
 
-    public List<ClientProperty> Properties { get; } = new();
+    public List<ClientProperty> Properties { get; private set; } = new();
 
-    public DateTime Created { get; } = DateTime.UtcNow;
+    public DateTime Created { get; private set; } = DateTime.UtcNow;
 
-    public DateTime? Updated { get; }
+    public DateTime? Updated { get; private set; }
 
-    public DateTime? LastAccessed { get; }
+    public DateTime? LastAccessed { get; private set; }
 
-    public int? UserSsoLifetime { get; }
+    public int? UserSsoLifetime { get; private set; }
 
-    public string UserCodeType { get; } = string.Empty;
+    public string UserCodeType { get; private set; } = string.Empty;
 
-    public int DeviceCodeLifetime { get; } = 300;
+    public int DeviceCodeLifetime { get; private set; } = 300;
 
-    public bool NonEditable { get; }
+    public bool NonEditable { get; private set; }
 }
 

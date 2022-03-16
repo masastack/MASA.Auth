@@ -2,35 +2,33 @@
 
 public class ApiResource : AggregateRoot<int>
 {
-    //https://github.com/IdentityServer/IdentityServer4/blob/3ff3b46698f48f164ab1b54d124125d63439f9d0/src/EntityFramework.Storage/src/Extensions/ModelBuilderExtensions.cs
+    public bool Enabled { get; private set; } = true;
 
-    public bool Enabled { get; } = true;
+    public string Name { get; private set; } = "";
 
-    public string Name { get; } = "";
+    public string DisplayName { get; private set; } = "";
 
-    public string DisplayName { get; } = "";
+    public string Description { get; private set; } = "";
 
-    public string Description { get; } = "";
+    public string AllowedAccessTokenSigningAlgorithms { get; private set; } = "";
 
-    public string AllowedAccessTokenSigningAlgorithms { get; } = "";
+    public bool ShowInDiscoveryDocument { get; private set; } = true;
 
-    public bool ShowInDiscoveryDocument { get; } = true;
+    public DateTime Created { get; private set; } = DateTime.UtcNow;
 
-    public DateTime Created { get; } = DateTime.UtcNow;
+    public DateTime? Updated { get; private set; }
 
-    public DateTime? Updated { get; }
+    public DateTime? LastAccessed { get; private set; }
 
-    public DateTime? LastAccessed { get; }
+    public bool NonEditable { get; private set; }
 
-    public bool NonEditable { get; }
+    public List<ApiResourceSecret> Secrets { get; private set; } = new();
 
-    public List<ApiResourceSecret> Secrets { get; } = new();
+    public List<ApiResourceScope> Scopes { get; private set; } = new();
 
-    public List<ApiResourceScope> Scopes { get; } = new();
+    public List<ApiResourceClaim> UserClaims { get; private set; } = new();
 
-    public List<ApiResourceClaim> UserClaims { get; } = new();
-
-    public List<ApiResourceProperty> Properties { get; } = new();
+    public List<ApiResourceProperty> Properties { get; private set; } = new();
 
 }
 

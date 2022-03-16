@@ -1,10 +1,8 @@
-﻿using Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Abstract;
-
-namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
+﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
 public class ClientSecret : Secret
 {
-    public int ClientId { get; }
+    public int ClientId { get; private set; }
 
-    public Client Client { get; } = null!;
+    public Client Client { get; private set; } = null!;
 }

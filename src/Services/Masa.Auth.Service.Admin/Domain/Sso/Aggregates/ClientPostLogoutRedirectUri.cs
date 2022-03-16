@@ -2,9 +2,9 @@
 
 public class ClientPostLogoutRedirectUri : Entity<int>
 {
-    public string PostLogoutRedirectUri { get; } = "";
+    public string PostLogoutRedirectUri { get; private set; } = string.Empty;
 
-    public int ClientId { get; }
+    public int ClientId { get; private set; }
 
-    public Client Client { get; } = null!;
+    public Client Client { get; private set; } = null!;
 }

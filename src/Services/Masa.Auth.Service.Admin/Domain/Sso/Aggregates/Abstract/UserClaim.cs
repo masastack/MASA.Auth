@@ -2,6 +2,6 @@
 {
     public abstract class UserClaim : Entity<int>
     {
-        public string Type { get; } = "";
+        public string Type { get; private set; } = "";
     }
 }

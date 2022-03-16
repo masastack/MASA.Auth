@@ -61,5 +61,16 @@ public class QueryHandler
                 PhoneNumber = s.User.PhoneNumber
             }).ToList();
     }
+
+    [EventHandler]
+    public async Task DepartmentCountAsync(DepartmentCountQuery departmentCountQuery)
+    {
+        departmentCountQuery.Result = new DepartmentCount
+        {
+            SecondLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 2)),
+            ThreeLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 3)),
+            FourLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 4)),
+        };
+    }
 }
 

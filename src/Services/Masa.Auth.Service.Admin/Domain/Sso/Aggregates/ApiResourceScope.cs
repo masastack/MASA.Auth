@@ -2,10 +2,10 @@
 
 public class ApiResourceScope : Entity<int>
 {
-    public string Scope { get; } = "";
+    public string Scope { get; private set; } = "";
 
-    public int ApiResourceId { get; }
+    public int ApiResourceId { get; private set; }
 
-    public ApiResource ApiResource { get; } = null!;
+    public ApiResource ApiResource { get; private set; } = null!;
 }
 

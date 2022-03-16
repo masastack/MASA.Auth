@@ -2,9 +2,9 @@
 
 public class ClientCorsOrigin : Entity<int>
 {
-    public string Origin { get; } = string.Empty;
+    public string Origin { get; private set; } = string.Empty;
 
-    public int ClientId { get; }
+    public int ClientId { get; private set; }
 
-    public Client Client { get; } = null!;
+    public Client Client { get; private set; } = null!;
 }

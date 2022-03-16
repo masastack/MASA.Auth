@@ -2,15 +2,17 @@
 
 public class Department : AuditAggregateRoot<Guid, Guid>
 {
-    public string Name { get; private set; }
+    public string Name { get; }
 
     public Guid ParentId { get; private set; }
 
     public bool Enabled { get; private set; } = true;
 
+    public int Level { get; private set; } = 1;
+
     public int Sort { get; private set; }
 
-    public string Description { get; private set; } = "";
+    public string Description { get; private set; } = string.Empty;
 
     private List<DepartmentStaff> _departmentStaffs = new();
 
@@ -40,9 +42,10 @@ public class Department : AuditAggregateRoot<Guid, Guid>
         Enabled = enabled;
     }
 
-    public void Move(Guid parentId)
+    public void Move(Department parent)
     {
-        ParentId = parentId;
+        ParentId = parent.Id;
+        Level = parent.Level++;
     }
 
     public void DeleteCheck()
