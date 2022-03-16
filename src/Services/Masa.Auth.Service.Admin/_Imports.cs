@@ -9,6 +9,7 @@ global using Masa.Auth.Service.Admin.Application.Subjects.Commands;
 global using Masa.Auth.Service.Admin.Application.Subjects.Models;
 global using Masa.Auth.Service.Admin.Application.Subjects.Queries;
 global using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
+global using Masa.Auth.Service.Admin.Domain.Organizations.Factories;
 global using Masa.Auth.Service.Admin.Domain.Organizations.Repositories;
 global using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 global using Masa.Auth.Service.Admin.Domain.Permissions.Repositories;

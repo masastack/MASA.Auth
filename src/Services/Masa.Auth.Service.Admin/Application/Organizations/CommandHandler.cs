@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Organizations.Factories;
-
-namespace Masa.Auth.Service.Admin.Application.Organizations;
+﻿namespace Masa.Auth.Service.Admin.Application.Organizations;
 
 public class CommandHandler
 {
