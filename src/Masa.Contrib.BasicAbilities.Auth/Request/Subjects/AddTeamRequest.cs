@@ -1,15 +1,10 @@
-﻿using Masa.Auth.ApiGateways.Caller.Enums;
-using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class AddTeamRequest
 {
     public string Name { get; set; }
 
-    public string Avatar { get; set; }
-
-    public string AvatarName { get; set; }
+    public AvatarValue Avatar { get; set; }
 
     public string Describe { get; set; }
 
@@ -21,11 +16,10 @@ public class AddTeamRequest
 
     public List<Guid> Roles { get; set; }
 
-    public AddTeamRequest(string name, string avatar, string avatarName, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
+    public AddTeamRequest(string name, AvatarValue avatar, string describe, TeamTypes teamType, List<Guid> staffs, List<Guid> permissions, List<Guid> roles)
     {
         Name = name;
         Avatar = avatar;
-        AvatarName = avatarName;
         Describe = describe;
         TeamType = teamType;
         Staffs = staffs;
@@ -35,7 +29,7 @@ public class AddTeamRequest
 
     public static implicit operator AddTeamRequest(TeamDetailResponse team)
     {
-        return new AddTeamRequest(team.Name, team.Avatar, team.AvatarName, team.Describe, team.TeamType, team.Staffs, team.Permissions, team.Roles);
+        return new AddTeamRequest(team.Name, team.Avatar, team.Describe, team.TeamType, team.Staffs, team.Permissions, team.Roles);
     }
 }
 

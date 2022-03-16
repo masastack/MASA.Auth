@@ -16,31 +16,24 @@ public class ThirdPartyIdpItemResponse
 
     public string Icon { get; set; }
 
-    public VerifyType VerifyType { get; set; }
+    public AuthenticationTypes AuthenticationType { get; set; }
 
     public DateTime CreationTime { get; set; }
 
     public DateTime? ModificationTime { get; set; }
 
-    public static ThirdPartyIdpItemResponse Default => new ThirdPartyIdpItemResponse(Guid.Empty, "", "", "", "", "", "", default, DateTime.Now, null);
-
-    public ThirdPartyIdpItemResponse(Guid thirdPartyIdpId, string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyType verifyType, DateTime creationTime, DateTime? modificationTime)
+    public ThirdPartyIdpItemResponse(Guid thirdPartyIdpId, string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType, DateTime creationTime, DateTime? modificationTime)
     {
-        ThirdPartyIdpId = ThirdPartyIdpId;
+        ThirdPartyIdpId = thirdPartyIdpId;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
         Url = url;
         Icon = icon;
-        VerifyType = verifyType;
+        AuthenticationType = authenticationType;
         CreationTime = creationTime;
         ModificationTime = modificationTime;
     }
-}
-
-public enum VerifyType
-{
-    OAuth
 }
 

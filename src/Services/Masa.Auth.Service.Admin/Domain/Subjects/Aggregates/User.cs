@@ -24,15 +24,13 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string Email { get; private set; }
 
-    public AddressValue Household { get; private set; }
-
-    public AddressValue Residential { get; private set; }
+    public AddressValue Address { get; private set; }
 
     #endregion
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password,
         string companyName, bool enabled, string phoneNumber, string email,
-        AddressValue householdAddress, AddressValue residentialAddress)
+        AddressValue address)
     {
         Name = name;
         DisplayName = displayName;
@@ -44,12 +42,11 @@ public class User : AuditAggregateRoot<Guid, Guid>
         Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
-        Household = householdAddress;
-        Residential = residentialAddress;
+        Address = address;
     }
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
-        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, new AddressValue(), new AddressValue())
+        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, new AddressValue())
     {
     }
 

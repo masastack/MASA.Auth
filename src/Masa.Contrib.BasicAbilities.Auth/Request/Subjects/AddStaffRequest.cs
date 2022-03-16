@@ -1,13 +1,10 @@
-﻿using Masa.Auth.ApiGateways.Caller.Enums;
-using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class AddStaffRequest
 {
     public string JobNumber { get; set; }
 
-    public StaffTypes StaffType { get; set; }
+    public MemberTypes StaffType { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -21,7 +18,7 @@ public class AddStaffRequest
 
     public AddUserRequest User { get; set; }
 
-    public AddStaffRequest(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserRequest user)
+    public AddStaffRequest(string jobNumber, MemberTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserRequest user)
     {
         JobNumber = jobNumber;
         StaffType = staffType;

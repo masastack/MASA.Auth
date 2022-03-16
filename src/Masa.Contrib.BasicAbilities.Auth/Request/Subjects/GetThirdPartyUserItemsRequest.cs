@@ -1,24 +1,20 @@
 ﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
-public class GetThirdPartyUserItemsRequest
+public class GetThirdPartyUserItemsRequest : PaginationRequest
 {
-    public int PageIndex { get; set; }
-
-    public int PageSize { get; set; }
-
     public string Search { get; set; }
 
     public bool Enabled { get; set; }
 
-    public Guid ThirdPartyPlatformId { get; set; }
+    public Guid ThirdPartyIdpId { get; set; }
 
-    public GetThirdPartyUserItemsRequest(int pageIndex, int pageSize, string search, bool enabled, Guid thirdPartyPlatformId)
+    public GetThirdPartyUserItemsRequest(int pageIndex, int pageSize, string search, bool enabled, Guid thirdPartyIdpId)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;
         Search = search;
         Enabled = enabled;
-        ThirdPartyPlatformId = thirdPartyPlatformId;
+        ThirdPartyIdpId = thirdPartyIdpId;
     }
 }
 

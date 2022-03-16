@@ -2,6 +2,23 @@
 
 public class Routing
 {
+    public const string BASE_URI = "/api";
+
+    public const string DEPARTMENT_BASE_URI = $"{BASE_URI}/department";
+
+    public const string THIRD_PARTY_IDP_BASE_URI = $"{BASE_URI}/thirdPartyIdp";
+
+    public const string USER_BASE_URI = $"{BASE_URI}/user";
+
+    public const string ROLE_BASE_URI = $"{BASE_URI}/role";
+
+    public const string TEAM_BASE_URI = $"{BASE_URI}/team";
+
+    public const string STAFF_BASE_URI = $"{BASE_URI}/staff";
+
+    public const string PERMISSION_BASE_URI = $"{BASE_URI}/permission";
+
+
     const string DEFAULT_SERVICE_BASE = "/api/{0}/{1}";
 
     const string DEFAULT_SERVICE = "/api/{0}";
@@ -22,17 +39,17 @@ public class Routing
 
     #endregion
 
-    #region ThirdPartyPlatform
+    #region ThirdPartyIdp
 
-    const string THIRD_PARTY_PLATFORM = "thirdPartyPlatform";
+    const string THIRD_PARTY_IDP = "thirdPartyIdp";
 
-    public static readonly string PlatformList = string.Format(DEFAULT_SERVICE_LIST, THIRD_PARTY_PLATFORM);
+    public static readonly string PlatformList = string.Format(DEFAULT_SERVICE_LIST, THIRD_PARTY_IDP);
 
-    public static readonly string PlatformDetail = string.Format(DEFAULT_SERVICE_BASE, THIRD_PARTY_PLATFORM, "{id}");
+    public static readonly string PlatformDetail = string.Format(DEFAULT_SERVICE_BASE, THIRD_PARTY_IDP, "{id}");
 
-    public static readonly string PlatformSelect = string.Format(DEFAULT_SERVICE_BASE, THIRD_PARTY_PLATFORM, "select");
+    public static readonly string PlatformSelect = string.Format(DEFAULT_SERVICE_BASE, THIRD_PARTY_IDP, "select");
 
-    public static readonly string OperatePlatform = string.Format(DEFAULT_SERVICE, THIRD_PARTY_PLATFORM);
+    public static readonly string OperatePlatform = string.Format(DEFAULT_SERVICE, THIRD_PARTY_IDP);
 
     #endregion
 

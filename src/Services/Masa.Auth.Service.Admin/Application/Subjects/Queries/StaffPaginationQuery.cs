@@ -1,7 +1,7 @@
 ﻿namespace Masa.Auth.Service.Application.Subjects.Queries;
 
-public record StaffPaginationQuery(int PageIndex, int PageSize, string SearchKey) : Query<PaginationList<StaffItem>>
+public record StaffPaginationQuery(int PageIndex, int PageSize, string SearchKey) : Query<PaginationItems<StaffItem>>
 {
 
-    public override PaginationList<StaffItem> Result { get; set; } = null!;
+    public override PaginationItems<StaffItem> Result { get; set; } = null!;
 }

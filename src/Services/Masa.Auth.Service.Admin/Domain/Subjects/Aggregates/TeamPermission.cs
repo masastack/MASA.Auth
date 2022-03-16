@@ -23,9 +23,9 @@ public class TeamPermission : Entity<Guid>
 
     public bool Effect { get; private set; }
 
-    public TeamStaffType TeamStaffType { get; private set; }
+    public TeamMemberTypes TeamStaffType { get; private set; }
 
-    public TeamPermission(Guid teamId, Guid permissionId, bool effect, TeamStaffType teamStaffType)
+    public TeamPermission(Guid teamId, Guid permissionId, bool effect, TeamMemberTypes teamStaffType)
     {
         TeamId = teamId;
         PermissionId = permissionId;

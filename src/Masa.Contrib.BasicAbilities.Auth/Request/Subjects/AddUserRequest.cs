@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class AddUserRequest
 {
@@ -16,31 +14,13 @@ public class AddUserRequest
 
     public bool Enabled { get; set; }
 
-    #region Contact Properties
-
     public string PhoneNumber { get; set; }
 
     public string Email { get; set; }
 
-    public string HouseholdRegisterAddress { get; set; }
+    public AddressValue Address { get; set; }
 
-    public string HouseholdRegisterProvinceCode { get; set; }
-
-    public string HouseholdRegisterCityCode { get; set; }
-
-    public string HouseholdRegisterDistrictCode { get; set; }
-
-    public string ResidentialAddress { get; set; }
-
-    public string ResidentialProvinceCode { get; set; }
-
-    public string ResidentialCityCode { get; set; }
-
-    public string ResidentialDistrictCode { get; set; }
-
-    #endregion
-
-    public AddUserRequest(string name, string displayName, string avatar, string iDCard, string companyName, bool enabled, string phoneNumber, string email, string householdRegisterAddress, string householdRegisterProvinceCode, string householdRegisterCityCode, string householdRegisterDistrictCode, string residentialAddress, string residentialProvinceCode, string residentialCityCode, string residentialDistrictCode)
+    public AddUserRequest(string name, string displayName, string avatar, string iDCard, string companyName, bool enabled, string phoneNumber, string email, AddressValue address)
     {
         Name = name;
         DisplayName = displayName;
@@ -50,18 +30,11 @@ public class AddUserRequest
         Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
-        HouseholdRegisterAddress = householdRegisterAddress;
-        HouseholdRegisterProvinceCode = householdRegisterProvinceCode;
-        HouseholdRegisterCityCode = householdRegisterCityCode;
-        HouseholdRegisterDistrictCode = householdRegisterDistrictCode;
-        ResidentialAddress = residentialAddress;
-        ResidentialProvinceCode = residentialProvinceCode;
-        ResidentialCityCode = residentialCityCode;
-        ResidentialDistrictCode = residentialDistrictCode;
+        Address = address;
     }
 
-    public static implicit operator AddUserRequest(UserItemResponse user)
+    public static implicit operator AddUserRequest(UserDetailResponse user)
     {
-        return new AddUserRequest(user.Name, user.DisplayName, user.Avatar, user.IDCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.HouseholdRegisterAddress, user.HouseholdRegisterProvinceCode, user.HouseholdRegisterCityCode, user.HouseholdRegisterDistrictCode, user.ResidentialAddress, user.ResidentialProvinceCode, user.ResidentialCityCode, user.ResidentialDistrictCode);
+        return new AddUserRequest(user.Name, user.DisplayName, user.Avatar, user.IDCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.Address);
     }
 }

@@ -14,11 +14,11 @@ public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; }
 
-    public VerifyTypes VerifyType { get; private set; }
+    public AuthenticationTypes VerifyType { get; private set; }
 
     public IdentificationTypes IdentificationType { get; private set; }
 
-    public ThirdPartyIdp(string name, string displayName, string clientId, string clientSecret, string url, string icon, VerifyTypes verifyType, IdentificationTypes identificationType)
+    public ThirdPartyIdp(string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes verifyType, IdentificationTypes identificationType)
     {
         Name = name;
         DisplayName = displayName;

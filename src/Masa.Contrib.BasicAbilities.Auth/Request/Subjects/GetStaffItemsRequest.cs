@@ -1,11 +1,7 @@
 ﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
-public class GetStaffItemsRequest
+public class GetStaffItemsRequest : PaginationRequest
 {
-    public int PageIndex { get; set; }
-
-    public int PageSize { get; set; }
-
     public string Search { get; set; }
 
     public bool Enabled { get; set; }

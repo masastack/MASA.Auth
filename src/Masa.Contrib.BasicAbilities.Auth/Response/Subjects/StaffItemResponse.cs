@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Enums;
-
-namespace Masa.Auth.ApiGateways.Caller.Response.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Response.Subjects;
 
 public class StaffItemResponse
 {
@@ -14,11 +12,11 @@ public class StaffItemResponse
 
     public bool Enabled { get; private set; }
 
-    public StaffTypes StaffType { get; set; }
+    public MemberTypes StaffType { get; set; }
 
     public UserItemResponse User { get; set; }
 
-    public StaffItemResponse(Guid staffId, string department, string position, string jobNumber, bool enabled, StaffTypes staffType, UserItemResponse user)
+    public StaffItemResponse(Guid staffId, string department, string position, string jobNumber, bool enabled, MemberTypes staffType, UserItemResponse user)
     {
         StaffId = staffId;
         Department = department;

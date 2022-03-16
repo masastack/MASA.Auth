@@ -2,11 +2,11 @@
 {
     public class Options
     {
-        public string AuthServiceBaseAdress { get; set; }
+        public string AuthServiceBaseAddress { get; set; }
 
-        public Options(string authServiceBaseAdress)
+        public Options(string authServiceBaseAddress)
         {
-            AuthServiceBaseAdress = authServiceBaseAdress;
+            AuthServiceBaseAddress = authServiceBaseAddress;
         }
     }
 }

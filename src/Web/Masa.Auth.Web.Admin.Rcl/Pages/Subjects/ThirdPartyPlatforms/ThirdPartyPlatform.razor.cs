@@ -1,6 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.ThirdPartyPlatforms;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.ThirdPartyIdps;
 
-public partial class ThirdPartyPlatform
+public partial class ThirdPartyIdp
 {
     private string? _search;
     private bool _enabled;
@@ -13,7 +13,7 @@ public partial class ThirdPartyPlatform
         set
         {
             _search = value;
-            GetThirdPartyPlatformItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,7 +23,7 @@ public partial class ThirdPartyPlatform
         set
         {
             _enabled = value;
-            GetThirdPartyPlatformItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -33,7 +33,7 @@ public partial class ThirdPartyPlatform
         set
         {
             _pageIndex = value;
-            GetThirdPartyPlatformItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class ThirdPartyPlatform
         set
         {
             _pageSize = value;
-            GetThirdPartyPlatformItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -53,74 +53,74 @@ public partial class ThirdPartyPlatform
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<ThirdPartyIdpItemResponse> ThirdPartyPlatforms { get; set; } = new();
+    public List<ThirdPartyIdpItemResponse> ThirdPartyIdps { get; set; } = new();
 
     public Guid CurrentThirdPartyIdpId { get; set; }
 
     public List<DataTableHeader<ThirdPartyIdpItemResponse>> Headers { get; set; } = new();
 
-    public bool ThirdPartyPlatformDialogVisible { get; set; }
+    public bool ThirdPartyIdpDialogVisible { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Headers = new()
         {
             new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpItemResponse.Icon), Sortable = false },
-            new() { Text = T("ThirdPartyPlatform.Name"), Value = nameof(ThirdPartyIdpItemResponse.Name), Sortable = false },
-            new() { Text = T("ThirdPartyPlatform.DisplayName"), Value = nameof(ThirdPartyIdpItemResponse.DisplayName), Sortable = false },
+            new() { Text = T("ThirdPartyIdp.Name"), Value = nameof(ThirdPartyIdpItemResponse.Name), Sortable = false },
+            new() { Text = T("ThirdPartyIdp.DisplayName"), Value = nameof(ThirdPartyIdpItemResponse.DisplayName), Sortable = false },
             new() { Text = T("Type"), Value = nameof(ThirdPartyIdpItemResponse.VerifyType), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpItemResponse.CreationTime)), Value = nameof(ThirdPartyIdpItemResponse.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpItemResponse.Url)), Value = nameof(ThirdPartyIdpItemResponse.Url), Sortable = false },
             new() { Text = T("Action"), Value = T("Action"), Sortable = false },
         };
 
-        await GetThirdPartyPlatformItemsAsync();
+        await GetThirdPartyIdpItemsAsync();
     }
 
-    public async Task GetThirdPartyPlatformItemsAsync()
+    public async Task GetThirdPartyIdpItemsAsync()
     {
         Loading = true;
         var request = new GetThirdPartyIdpItemsRequest(PageIndex, PageSize, Search);
-        var response = await AuthClient.GetThirdPartyPlatformItemsAsync(request);
+        var response = await AuthClient.GetThirdPartyIdpItemsAsync(request);
         if (response.Success)
         {
-            ThirdPartyPlatforms = response.Data;
+            ThirdPartyIdps = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyPlatformList data:") + response.Message);
+        else OpenErrorMessage(T("Failed to query thirdPartyIdpList data:") + response.Message);
         Loading = false;
     }
 
     public void OpenAddUserDialog()
     {
         CurrentThirdPartyIdpId = Guid.Empty;
-        ThirdPartyPlatformDialogVisible = true;
+        ThirdPartyIdpDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(ThirdPartyIdpItemResponse thirdPartyPlatform)
+    public void OpenEditUserDialog(ThirdPartyIdpItemResponse thirdPartyIdp)
     {
-        CurrentThirdPartyIdpId = thirdPartyPlatform.ThirdPartyIdpId;
-        ThirdPartyPlatformDialogVisible = true;
+        CurrentThirdPartyIdpId = thirdPartyIdp.ThirdPartyIdpId;
+        ThirdPartyIdpDialogVisible = true;
     }
 
-    public void OpenDeteteThirdPartyPlatformDialog(ThirdPartyIdpItemResponse thirdPartyPlatform)
+    public void OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpItemResponse thirdPartyIdp)
     {
-        CurrentThirdPartyIdpId = thirdPartyPlatform.ThirdPartyIdpId;
+        CurrentThirdPartyIdpId = thirdPartyIdp.ThirdPartyIdpId;
         OpenConfirmDialog(async confirm =>
         {
-            if (confirm) await DeleteThirdPartyPlatformAsync();
+            if (confirm) await DeleteThirdPartyIdpAsync();
         },
         T("Are you sure delete data?"));
     }
 
-    public async Task DeleteThirdPartyPlatformAsync()
+    public async Task DeleteThirdPartyIdpAsync()
     {
         Loading = true;
-        var response = await AuthClient.DeleteThirdPartyPlatformAsync(CurrentThirdPartyIdpId);
+        var response = await AuthClient.DeleteThirdPartyIdpAsync(CurrentThirdPartyIdpId);
         if (response.Success)
         {
-            OpenSuccessMessage(T("Success to delete thirdPartyPlatform"));
+            OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
         }
-        else OpenErrorMessage(T("Failed to delete thirdPartyPlatform:") + response.Message);
+        else OpenErrorMessage(T("Failed to delete thirdPartyIdp:") + response.Message);
         Loading = false;
     }
 }

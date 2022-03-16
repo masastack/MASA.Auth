@@ -41,7 +41,7 @@
   //ThirdPartyUser start
   "ThirdPartyUser": "第三方用户",
   "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",
-  "Failed to query thirdPartyPlatform data:": "获取第三方平台数据失败:",
+  "Failed to query thirdPartyIdp data:": "获取第三方平台数据失败:",
   "Failed to query thirdPartyUserDetail data:": "获取第三方用户详情数据失败:",
   //ThirdPartyUser end
 
@@ -58,19 +58,19 @@
   "Delete staff data failed:": "删除员工数据失败:",
   //Staff end
 
-  //ThirdPartyPlatform start
+  //ThirdPartyIdp start
   "Platform": "平台",
-  "ThirdPartyPlatform.Name": "名称",
-  "ThirdPartyPlatform.DisplayName": "显示名称",
-  "Failed to query thirdPartyPlatformList data:": "查询第三方平台详情列表失败:",
-  "Failed to query thirdPartyPlatformDetail data:": "查询第三方平台详情数据失败:",
-  "Add thirdPartyPlatform success": "新增第三方平台详情数据成功",
-  "Failed to add thirdPartyPlatform:": "新增第三方平台详情数据失败:",
-  "Edit thirdPartyPlatform success": "编辑第三方平台详情数据成功",
-  "Failed to edit thirdPartyPlatform:": "编辑第三方平台详情数据失败:",
-  "Delete thirdPartyPlatform success": "删除第三方平台成功",
-  "Failed to delete thirdPartyPlatform:": "删除第三方平台失败:",
-  //ThirdPartyPlatform end
+  "ThirdPartyIdp.Name": "名称",
+  "ThirdPartyIdp.DisplayName": "显示名称",
+  "Failed to query thirdPartyIdpList data:": "查询第三方平台详情列表失败:",
+  "Failed to query thirdPartyIdpDetail data:": "查询第三方平台详情数据失败:",
+  "Add thirdPartyIdp success": "新增第三方平台详情数据成功",
+  "Failed to add thirdPartyIdp:": "新增第三方平台详情数据失败:",
+  "Edit thirdPartyIdp success": "编辑第三方平台详情数据成功",
+  "Failed to edit thirdPartyIdp:": "编辑第三方平台详情数据失败:",
+  "Delete thirdPartyIdp success": "删除第三方平台成功",
+  "Failed to delete thirdPartyIdp:": "删除第三方平台失败:",
+  //ThirdPartyIdp end
 
   //Position start
   "Position": "职位",

@@ -8,21 +8,22 @@ public class ThirdPartyUserItemResponse
 
     public bool Enabled { get; set; }
 
+    public string ThridPartyIdentity { get; set; }
+
     public UserItemResponse User { get; set; }
 
     public DateTime CreationTime { get; set; }
 
     public DateTime ModificationTime { get; set; }
 
-    public Guid Creator { get; set; }
+    public string Creator { get; set; }
 
-    public static ThirdPartyUserItemResponse Default = new(default, default, true, UserItemResponse.Default, default, default, default);
-
-    public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyIdpId, bool enabled, UserItemResponse user, DateTime creationTime, DateTime modificationTime, Guid creator)
+    public ThirdPartyUserItemResponse(Guid thirdPartyUserId, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserItemResponse user, DateTime creationTime, DateTime modificationTime, string creator)
     {
         ThirdPartyUserId = thirdPartyUserId;
         ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
+        ThridPartyIdentity = thridPartyIdentity;
         User = user;
         CreationTime = creationTime;
         ModificationTime = modificationTime;

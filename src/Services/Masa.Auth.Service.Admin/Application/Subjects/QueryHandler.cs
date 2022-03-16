@@ -60,13 +60,13 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task<PaginationList<StaffItem>> StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
+    private async Task<PaginationItems<StaffItem>> StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
     {
         var key = staffPaginationQuery.SearchKey;
         var pageIndex = staffPaginationQuery.PageIndex;
         var pageSize = staffPaginationQuery.PageSize;
         var paginationList = await _staffRepository.GetPaginatedListAsync(s => s.JobNumber.Contains(key) || s.Name.Contains(key), pageIndex, pageSize, null);
-        return new PaginationList<StaffItem>(paginationList.Count(), 0, paginationList.Select(s => new StaffItem
+        return new PaginationItems<StaffItem>(paginationList.Count(), 0, paginationList.Select(s => new StaffItem
         {
             Name = s.Name,
             JobNumber = s.JobNumber,

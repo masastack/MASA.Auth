@@ -10,23 +10,23 @@ public class TeamItemResponse
 
     public string Describe { get; set; }
 
-    public string CreatorUser { get; set; }
+    public string Creator { get; set; }
 
-    public string CreatorUserAvatar { get; set; }
+    public string CreatorAvatar { get; set; }
 
-    public string ModifierUser { get; set; }
+    public string Modifier { get; set; }
 
-    public DateTime ModificationTime { get; set; }
+    public DateTime? ModificationTime { get; set; }
 
-    public TeamItemResponse(Guid teamId, string name, string avatar, string describe, string creatorUser, string creatorUserAvatar, string modifierUser, DateTime modificationTime)
+    public TeamItemResponse(Guid teamId, string name, string avatar, string describe, string creator, string creatorAvatar, string modifier, DateTime? modificationTime)
     {
         TeamId = teamId;
         Name = name;
         Avatar = avatar;
         Describe = describe;
-        CreatorUser = creatorUser;
-        CreatorUserAvatar = creatorUserAvatar;
-        ModifierUser = modifierUser;
+        Creator = creator;
+        CreatorAvatar = creatorAvatar;
+        Modifier = modifier;
         ModificationTime = modificationTime;
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace Masa.Auth.Service.Domain.Subjects.Repositories;
 
-public interface IThirdPartyPlatformRepository : IRepository<ThirdPartyIdp>
+public interface IThirdPartyIdpRepository : IRepository<ThirdPartyIdp>
 {
 }

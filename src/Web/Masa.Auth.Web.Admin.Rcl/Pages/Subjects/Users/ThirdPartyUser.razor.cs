@@ -59,7 +59,7 @@ public partial class ThirdPartyUser
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyIdpItemResponse> ThirdPartyPlatforms { get; set; } = new();
+    public List<ThirdPartyIdpItemResponse> ThirdPartyIdps { get; set; } = new();
 
     public Guid ThirdPartyIdpId { get; set; }
 
@@ -81,7 +81,7 @@ public partial class ThirdPartyUser
         };
 
         await GetThirdPartyUserItemsAsync();
-        await SelectThirdPartyPlatformAsync();
+        await SelectThirdPartyIdpAsync();
     }
 
     public async Task GetThirdPartyUserItemsAsync()
@@ -97,15 +97,15 @@ public partial class ThirdPartyUser
         Loading = false;
     }
 
-    public async Task SelectThirdPartyPlatformAsync()
+    public async Task SelectThirdPartyIdpAsync()
     {
         Loading = true;
-        var response = await AuthClient.SelectThirdPartyPlatformAsync();
+        var response = await AuthClient.SelectThirdPartyIdpAsync();
         if (response.Success is true)
         {
-            ThirdPartyPlatforms = response.Data;
+            ThirdPartyIdps = response.Data;
         }
-        else OpenErrorMessage(T("Failed to query thirdPartyPlatform data:") + response.Message);
+        else OpenErrorMessage(T("Failed to query thirdPartyIdp data:") + response.Message);
         Loading = false;
     }
 

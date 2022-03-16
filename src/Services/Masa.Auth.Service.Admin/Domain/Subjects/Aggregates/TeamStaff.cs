@@ -15,9 +15,9 @@ public class TeamStaff : Entity<Guid>
 
     public Guid UserId { get; private set; }
 
-    public TeamStaffType TeamStaffType { get; private set; }
+    public TeamMemberTypes TeamStaffType { get; private set; }
 
-    public TeamStaff(Guid teamId, Guid staffId, Guid userId, TeamStaffType teamStaffType)
+    public TeamStaff(Guid teamId, Guid staffId, Guid userId, TeamMemberTypes teamStaffType)
     {
         TeamId = teamId;
         StaffId = staffId;

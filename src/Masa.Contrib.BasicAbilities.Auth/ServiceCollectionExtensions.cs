@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
 
         configure?.Invoke(options);
         services.AddSingleton(options);
-        services.AddScoped<AuthClient>();
+        services.AddScoped<AuthCaller>();
 
         return services;
     }

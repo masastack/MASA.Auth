@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Request.Subjects;
 
 public class AddThirdPartyUserRequest
 {
@@ -8,17 +6,20 @@ public class AddThirdPartyUserRequest
 
     public bool Enabled { get; set; }
 
+    public string ThridPartyIdentity { get; set; }
+
     public AddUserRequest User { get; set; }
 
-    public AddThirdPartyUserRequest(Guid thirdPartyIdpId, bool enabled, AddUserRequest user)
+    public AddThirdPartyUserRequest(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, AddUserRequest user)
     {
-        ThirdPartyIdpId = ThirdPartyIdpId;
+        ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
+        ThridPartyIdentity = thridPartyIdentity;
         User = user;
     }
 
-    public static implicit operator AddThirdPartyUserRequest(ThirdPartyUserItemResponse thridPartyUser)
+    public static implicit operator AddThirdPartyUserRequest(ThirdPartyUserDetailResponse thridPartyUser)
     {
-        return new AddThirdPartyUserRequest(thridPartyUser.ThirdPartyIdpId, thridPartyUser.Enabled, thridPartyUser.User);
+        return new AddThirdPartyUserRequest(thridPartyUser.ThirdPartyIdpId, thridPartyUser.Enabled, thridPartyUser.ThridPartyIdentity, thridPartyUser.User);
     }
 }

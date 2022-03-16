@@ -6,10 +6,10 @@ public abstract class AdminCompontentBase : ComponentBase
 {
     private I18n? _i18n;
     private GlobalConfig? _globalConfig;
-    private AuthClient? _authClient;
+    private AuthCaller? _authClient;
 
     [Inject]
-    public AuthClient AuthClient
+    public AuthCaller AuthClient
     {
         get
         {

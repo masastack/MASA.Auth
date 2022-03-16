@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Service.Infrastructure.Repositories;
 
-public class ThirdPartyPlatformRepository : Repository<AuthDbContext, ThirdPartyIdp>, IThirdPartyPlatformRepository
+public class ThirdPartyIdpRepository : Repository<AuthDbContext, ThirdPartyIdp>, IThirdPartyIdpRepository
 {
-    public ThirdPartyPlatformRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
+    public ThirdPartyIdpRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {
     }
 }
