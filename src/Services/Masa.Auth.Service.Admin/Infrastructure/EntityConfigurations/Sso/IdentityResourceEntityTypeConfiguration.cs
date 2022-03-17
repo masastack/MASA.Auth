@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
 
 public class IdentityResourceEntityTypeConfiguration : IEntityTypeConfiguration<IdentityResource>
 {
@@ -12,7 +9,8 @@ public class IdentityResourceEntityTypeConfiguration : IEntityTypeConfiguration<
         builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
         builder.Property(x => x.DisplayName).HasMaxLength(200);
         builder.Property(x => x.Description).HasMaxLength(1000);
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.HasIndex(x => x.Name);
+        builder.HasIndex(x => new { x.Name, x.IsDeleted }).IsUnique();
 
         builder.HasMany(x => x.UserClaims).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(x => x.Properties).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);

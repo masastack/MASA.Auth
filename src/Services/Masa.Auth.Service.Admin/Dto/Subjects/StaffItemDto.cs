@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Subjects.Models;
 
-public class StaffItem
+public class StaffItemDto
 {
     public Guid Id { get; set; }
 

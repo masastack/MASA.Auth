@@ -1,8 +1,6 @@
-﻿using Masa.Auth.Service.Admin.Application.Permissions.Models;
+﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
-namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
-
-public record FuncPermissionListQuery(int SystemId) : Query<List<AppPermissionItem>>
+public record FuncPermissionListQuery(int SystemId) : Query<List<AppPermissionDto>>
 {
-    public override List<AppPermissionItem> Result { get; set; } = new();
+    public override List<AppPermissionDto> Result { get; set; } = new();
 }

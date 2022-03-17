@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
 
 public class RoleRelationEntityTypeConfiguration : IEntityTypeConfiguration<RoleRelation>
 {

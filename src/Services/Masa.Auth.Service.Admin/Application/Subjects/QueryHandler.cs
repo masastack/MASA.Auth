@@ -30,7 +30,7 @@ public class QueryHandler
             //}
         });
 
-        query.Result = new(users.Total, users.TotalPages, users.Result.Select(u => new UserItem
+        query.Result = new(users.Total, users.TotalPages, users.Result.Select(u => new UserDto
         {
 
         }));
@@ -46,11 +46,11 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task<List<StaffItem>> StaffListAsync(StaffListQuery staffListQuery)
+    private async Task<List<StaffItemDto>> StaffListAsync(StaffListQuery staffListQuery)
     {
         var key = staffListQuery.SearchKey;
         return (await _staffRepository.GetListAsync(s => s.JobNumber.Contains(key) || s.Name.Contains(key)))
-            .Take(staffListQuery.MaxCount).Select(s => new StaffItem
+            .Take(staffListQuery.MaxCount).Select(s => new StaffItemDto
             {
                 Name = s.Name,
                 JobNumber = s.JobNumber,
@@ -60,7 +60,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task<PaginationList<StaffItem>> StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
+    private async Task<PaginationList<StaffItemDto>> StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
     {
         var key = staffPaginationQuery.SearchKey;
         var pageIndex = staffPaginationQuery.PageIndex;
@@ -75,8 +75,8 @@ public class QueryHandler
             Page = pageIndex,
             PageSize = pageSize
         });
-        return new PaginationList<StaffItem>(paginationList.Total, paginationList.TotalPages,
-            paginationList.Result.Select(s => new StaffItem
+        return new PaginationList<StaffItemDto>(paginationList.Total, paginationList.TotalPages,
+            paginationList.Result.Select(s => new StaffItemDto
             {
                 Name = s.Name,
                 JobNumber = s.JobNumber,

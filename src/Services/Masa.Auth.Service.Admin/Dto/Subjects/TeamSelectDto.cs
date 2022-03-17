@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Subjects.Models;
 
-public class UserSelectItem
+public class TeamSelectDto
 {
     public Guid Id { get; set; }
 

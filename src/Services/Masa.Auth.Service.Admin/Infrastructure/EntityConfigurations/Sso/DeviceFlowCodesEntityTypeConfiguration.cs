@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
 
 public class DeviceFlowCodesEntityTypeConfiguration : IEntityTypeConfiguration<DeviceFlowCodes>
 {
@@ -22,7 +20,8 @@ public class DeviceFlowCodesEntityTypeConfiguration : IEntityTypeConfiguration<D
 
         builder.HasKey(x => new { x.UserCode });
 
-        builder.HasIndex(x => x.DeviceCode).IsUnique();
+        builder.HasIndex(x => x.DeviceCode);
+        builder.HasIndex(x => new { x.DeviceCode, x.IsDeleted }).IsUnique();
         builder.HasIndex(x => x.Expiration);
     }
 }

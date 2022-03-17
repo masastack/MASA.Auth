@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
 
 public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permission>
 {
@@ -8,7 +6,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
     {
         builder.ToTable(nameof(Permission), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(p => p.Id);
-        builder.HasIndex(p => new { p.AppId, p.Code }).IsUnique();
+        builder.HasIndex(p => new { p.AppId, p.Code, p.IsDeleted }).IsUnique();
 
         builder.Property(p => p.Name).HasMaxLength(20).IsRequired();
         builder.Property(p => p.Code).HasMaxLength(255).IsRequired();

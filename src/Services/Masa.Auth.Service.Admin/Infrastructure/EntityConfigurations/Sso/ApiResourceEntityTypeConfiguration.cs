@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
 
 public class ApiResourceEntityTypeConfiguration : IEntityTypeConfiguration<ApiResource>
 {
@@ -12,7 +10,8 @@ public class ApiResourceEntityTypeConfiguration : IEntityTypeConfiguration<ApiRe
         builder.Property(x => x.DisplayName).HasMaxLength(200);
         builder.Property(x => x.Description).HasMaxLength(1000);
         builder.Property(x => x.AllowedAccessTokenSigningAlgorithms).HasMaxLength(100);
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.HasIndex(x => x.Name);
+        builder.HasIndex(x => new { x.Name, x.IsDeleted }).IsUnique();
 
         builder.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(x => x.Scopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);

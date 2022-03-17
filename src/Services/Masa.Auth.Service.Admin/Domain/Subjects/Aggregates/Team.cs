@@ -1,14 +1,10 @@
-﻿using Masa.Auth.Service.Admin.Infrastructure.Enums;
-
-namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class Team : AuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
 
-    public string Avatar { get; private set; }
-
-    public string AvatarName { get; set; }
+    public AvatarValue Avatar { get; private set; }
 
     public string Describe { get; private set; }
 
@@ -20,13 +16,17 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public List<TeamRole> Roles { get; private set; } = new();
 
-    public Team(string name, string avatar, string avatarName, string describe, TeamTypes teamType)
+    public Team(string name, string describe, TeamTypes teamType, AvatarValue avatar)
     {
         Name = name;
-        Avatar = avatar;
-        AvatarName = avatarName;
         Describe = describe;
         TeamType = teamType;
+        Avatar = avatar;
+    }
+
+    public Team(string name, string describe, TeamTypes teamType)
+        : this(name, describe, teamType, new AvatarValue(name, ""))
+    {
     }
 }
 

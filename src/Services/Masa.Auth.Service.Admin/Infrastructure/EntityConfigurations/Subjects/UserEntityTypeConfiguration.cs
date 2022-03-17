@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
 
 public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
@@ -9,8 +6,12 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable(nameof(User), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(u => u.Id);
-        builder.HasIndex(u => u.IdCard).IsUnique();
-        builder.HasIndex(u => u.PhoneNumber).IsUnique();
+        builder.HasIndex(u => u.IdCard);
+        builder.HasIndex(u => new { u.IdCard, u.IsDeleted }).IsUnique();
+        builder.HasIndex(u => u.PhoneNumber);
+        builder.HasIndex(u => new { u.PhoneNumber, u.IsDeleted }).IsUnique();
+        builder.HasIndex(u => u.Name);
+        builder.HasIndex(u => u.Email);
 
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);

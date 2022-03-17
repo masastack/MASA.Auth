@@ -15,10 +15,10 @@ public class QueryHandler
         var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == apiPermissionsQuery.SystemId
                             && p.Type == PermissionType.Api);
         apiPermissionsQuery.Result = permissions.GroupBy(p => p.AppId)
-            .Select(pg => new AppPermissionItem
+            .Select(pg => new AppPermissionDto
             {
                 AppId = pg.Key,
-                Permissions = pg.Select(p => new PermissionItem
+                Permissions = pg.Select(p => new PermissionDto
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -34,16 +34,16 @@ public class QueryHandler
                             && p.Type != PermissionType.Api);
 
         funcPerimissionsQuery.Result = permissions.GroupBy(p => p.AppId)
-                .Select(pg => new AppPermissionItem
+                .Select(pg => new AppPermissionDto
                 {
                     AppId = pg.Key,
                     Permissions = GetPermissionChild(Guid.Empty, pg.ToList())
                 }).ToList();
     }
 
-    private List<PermissionItem> GetPermissionChild(Guid parentId, List<Permission> source)
+    private List<PermissionDto> GetPermissionChild(Guid parentId, List<Permission> source)
     {
-        return source.Where(p => p.ParentId == parentId).Select(p => new PermissionItem
+        return source.Where(p => p.ParentId == parentId).Select(p => new PermissionDto
         {
             Id = p.Id,
             Name = p.Name,
@@ -56,7 +56,7 @@ public class QueryHandler
     public async Task PerimissionDetailQueryAsync(PermissionDetailQuery perimissionDetailQuery)
     {
         var permission = await _permissionRepository.GetByIdAsync(perimissionDetailQuery.PermissionId);
-        perimissionDetailQuery.Result = new PermissionDetail
+        perimissionDetailQuery.Result = new PermissionDetailDto
         {
             Name = permission.Name,
             Description = permission.Description,
@@ -66,19 +66,19 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
-            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectItem
+            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectDto
             {
                 Id = rp.Role.Id,
                 Name = rp.Role.Name,
                 Code = rp.Role.Code
             }).ToList(),
-            TeamItems = permission.TeamPermissions.Select(tp => new TeamSelectItem
+            TeamItems = permission.TeamPermissions.Select(tp => new TeamSelectDto
             {
                 Id = tp.Team.Id,
                 Name = tp.Team.Name,
-                Avatar = tp.Team.Avatar
+                Avatar = tp.Team.Avatar.Url
             }).ToList(),
-            UserItems = permission.UserPermissions.Select(up => new UserSelectItem
+            UserItems = permission.UserPermissions.Select(up => new UserSelectDto
             {
                 Id = up.User.Id,
                 Name = up.User.Name,

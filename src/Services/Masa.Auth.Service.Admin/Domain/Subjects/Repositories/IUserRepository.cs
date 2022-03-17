@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
+﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {

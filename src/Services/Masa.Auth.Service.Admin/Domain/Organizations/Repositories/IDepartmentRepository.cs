@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
-using System.Linq.Expressions;
-
-namespace Masa.Auth.Service.Admin.Domain.Organizations.Repositories;
+﻿namespace Masa.Auth.Service.Admin.Domain.Organizations.Repositories;
 
 public interface IDepartmentRepository : IRepository<Department, Guid>
 {

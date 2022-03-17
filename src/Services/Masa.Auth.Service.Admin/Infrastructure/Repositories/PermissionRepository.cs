@@ -1,8 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
-using Masa.Auth.Service.Admin.Domain.Permissions.Repositories;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
 
 public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>, IPermissionRepository
 {

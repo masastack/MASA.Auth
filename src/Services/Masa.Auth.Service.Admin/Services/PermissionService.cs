@@ -1,17 +1,13 @@
-﻿using Masa.Auth.Service.Admin.Application.Permissions.Commands;
-using Masa.Auth.Service.Admin.Application.Permissions.Models;
-using Masa.Auth.Service.Admin.Infrastructure.Const;
-
-namespace Masa.Auth.Service.Admin.Services
+﻿namespace Masa.Auth.Service.Admin.Services
 {
     public class PermissionService : ServiceBase
     {
-        public PermissionService(IServiceCollection services) : base(services)
+        public PermissionService(IServiceCollection services) : base(services, Routing.PERMISSION_BASE_URI)
         {
-            App.MapGet(Routing.PermissionList, ListAsync);
-            App.MapGet(Routing.PermissionDetail, GetAsync);
-            App.MapPost(Routing.Permission, CreateAsync);
-            App.MapDelete(Routing.Permission, DeleteAsync);
+            MapGet(ListAsync);
+            MapGet(GetAsync);
+            MapPost(CreateAsync);
+            MapDelete(DeleteAsync);
         }
 
         private async Task CreateAsync([FromServices] IEventBus eventBus,
@@ -20,7 +16,7 @@ namespace Masa.Auth.Service.Admin.Services
             await eventBus.PublishAsync(createDepartmentCommand);
         }
 
-        private async Task<List<AppPermissionItem>> ListAsync([FromServices] IEventBus eventBus,
+        private async Task<List<AppPermissionDto>> ListAsync([FromServices] IEventBus eventBus,
             [FromQuery] int systemId, [FromQuery] bool apiPermission)
         {
             if (apiPermission)
@@ -34,7 +30,7 @@ namespace Masa.Auth.Service.Admin.Services
             return funcQuery.Result;
         }
 
-        private async Task<PermissionDetail> GetAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+        private async Task<PermissionDetailDto> GetAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
         {
             var query = new PermissionDetailQuery(id);
             await eventBus.PublishAsync(query);

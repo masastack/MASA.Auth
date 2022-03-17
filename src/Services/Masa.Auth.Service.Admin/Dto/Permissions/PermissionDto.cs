@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Models;
 
-public class PermissionItem
+public class PermissionDto
 {
     public Guid Id { get; set; }
 
@@ -8,5 +8,5 @@ public class PermissionItem
 
     public string Code { get; set; } = "";
 
-    public List<PermissionItem> Children { get; set; } = new();
+    public List<PermissionDto> Children { get; set; } = new();
 }

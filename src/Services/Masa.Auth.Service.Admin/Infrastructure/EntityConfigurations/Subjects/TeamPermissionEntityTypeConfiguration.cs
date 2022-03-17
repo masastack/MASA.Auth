@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
 
 public class TeamPermissionEntityTypeConfiguration : IEntityTypeConfiguration<TeamPermission>
 {

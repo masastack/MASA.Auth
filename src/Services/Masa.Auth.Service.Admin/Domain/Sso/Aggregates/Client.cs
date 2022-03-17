@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class Client : AggregateRoot<int>
+public class Client : AuditAggregateRoot<int, Guid>
 {
     public bool Enabled { get; private set; } = true;
 
@@ -91,10 +91,6 @@ public class Client : AggregateRoot<int>
     public List<ClientCorsOrigin> AllowedCorsOrigins { get; private set; } = new();
 
     public List<ClientProperty> Properties { get; private set; } = new();
-
-    public DateTime Created { get; private set; } = DateTime.UtcNow;
-
-    public DateTime? Updated { get; private set; }
 
     public DateTime? LastAccessed { get; private set; }
 

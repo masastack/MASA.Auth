@@ -1,9 +1,7 @@
-﻿using Masa.Auth.Service.Admin.Application.Organizations.Models;
+﻿namespace Masa.Auth.Service.Admin.Application.Organizations.Queries;
 
-namespace Masa.Auth.Service.Admin.Application.Organizations.Queries;
-
-public record DepartmentDetailQuery(Guid DepartmentId) : Query<DepartmentDetail>
+public record DepartmentDetailQuery(Guid DepartmentId) : Query<DepartmentDetailDto>
 {
-    public override DepartmentDetail Result { get; set; } = new();
+    public override DepartmentDetailDto Result { get; set; } = new();
 }
 

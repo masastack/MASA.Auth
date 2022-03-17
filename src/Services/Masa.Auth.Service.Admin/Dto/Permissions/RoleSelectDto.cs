@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Models;
 
-public class RoleSelectItem
+public class RoleSelectDto
 {
     public Guid Id { get; set; }
 

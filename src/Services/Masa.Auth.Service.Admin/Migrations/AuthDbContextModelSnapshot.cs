@@ -46,7 +46,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int>("Level")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<DateTime>("ModificationTime")
                         .HasColumnType("datetime2");
@@ -67,7 +69,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Name", "IsDeleted")
                         .IsUnique();
 
                     b.ToTable("Department", "organizations");
@@ -174,7 +178,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppId", "Code")
+                    b.HasIndex("AppId", "Code", "IsDeleted")
                         .IsUnique();
 
                     b.ToTable("Permission", "permissions");
@@ -302,8 +306,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -318,8 +325,17 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastAccessed")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -332,12 +348,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("ShowInDiscoveryDocument")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Name", "IsDeleted")
                         .IsUnique();
 
                     b.ToTable("ApiResource", "sso");
@@ -426,8 +441,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("ApiResourceId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -436,6 +454,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -620,8 +647,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -651,6 +681,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("IncludeJwtId")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastAccessed")
                         .HasColumnType("datetime2");
 
@@ -658,6 +691,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("NonEditable")
                         .HasColumnType("bit");
@@ -696,9 +735,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("UserCodeType")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -709,7 +745,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId")
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ClientId", "IsDeleted")
                         .IsUnique();
 
                     b.ToTable("Client", "sso");
@@ -917,8 +955,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -927,6 +968,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -959,6 +1009,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasMaxLength(50000)
@@ -981,6 +1034,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("SessionId")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -993,10 +1055,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("UserCode");
 
-                    b.HasIndex("DeviceCode")
-                        .IsUnique();
+                    b.HasIndex("DeviceCode");
 
                     b.HasIndex("Expiration");
+
+                    b.HasIndex("DeviceCode", "IsDeleted")
+                        .IsUnique();
 
                     b.ToTable("DeviceFlowCodes", "sso");
                 });
@@ -1009,8 +1073,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1028,6 +1095,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -1042,12 +1118,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("ShowInDiscoveryDocument")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name");
+
+                    b.HasIndex("Name", "IsDeleted")
                         .IsUnique();
 
                     b.ToTable("IdentityResource", "sso");
@@ -1119,6 +1194,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasMaxLength(50000)
@@ -1134,6 +1212,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SessionId")
                         .IsRequired()
@@ -1205,13 +1292,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobNumber")
-                        .IsUnique();
+                    b.HasIndex("JobNumber");
 
                     b.HasIndex("PositionId")
                         .IsUnique();
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("JobNumber", "IsDeleted")
+                        .IsUnique();
 
                     b.ToTable("Staff", "subjects");
                 });
@@ -1221,14 +1310,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AvatarName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1443,7 +1524,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
@@ -1464,7 +1545,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -1477,10 +1558,18 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCard")
+                    b.HasIndex("Email");
+
+                    b.HasIndex("IdCard");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("PhoneNumber");
+
+                    b.HasIndex("IdCard", "IsDeleted")
                         .IsUnique();
 
-                    b.HasIndex("PhoneNumber")
+                    b.HasIndex("PhoneNumber", "IsDeleted")
                         .IsUnique();
 
                     b.ToTable("User", "subjects");
@@ -1836,6 +1925,37 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Position");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
+                {
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
+                        {
+                            b1.Property<Guid>("TeamId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Color")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Url")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("TeamId");
+
+                            b1.ToTable("Team", "subjects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TeamId");
+                        });
+
+                    b.Navigation("Avatar")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamPermission", b =>

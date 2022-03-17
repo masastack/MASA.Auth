@@ -2,11 +2,11 @@
 
 public class DepartmentService : ServiceBase
 {
-    public DepartmentService(IServiceCollection services) : base(services)
+    public DepartmentService(IServiceCollection services) : base(services, Routing.DEPARTMENT_BASE_URI)
     {
-        App.MapGet(Routing.DepartmentList, ListAsync);
-        App.MapPost(Routing.Department, CreateAsync);
-        App.MapDelete(Routing.Department, DeleteAsync);
+        MapGet(ListAsync);
+        MapPost(CreateAsync);
+        MapDelete(DeleteAsync);
     }
 
     private async Task CreateAsync([FromServices] IEventBus eventBus,
@@ -15,7 +15,7 @@ public class DepartmentService : ServiceBase
         await eventBus.PublishAsync(createDepartmentCommand);
     }
 
-    private async Task<List<DepartmentItem>> ListAsync([FromServices] IEventBus eventBus)
+    private async Task<List<DepartmentDto>> ListAsync([FromServices] IEventBus eventBus)
     {
         var query = new DepartmentTreeQuery(Guid.Empty);
         await eventBus.PublishAsync(query);

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class DeviceFlowCodes : AggregateRoot<int>
+public class DeviceFlowCodes : AuditAggregateRoot<int, Guid>
 {
     /// <summary>
     /// Gets or sets the device code.
@@ -49,14 +49,6 @@ public class DeviceFlowCodes : AggregateRoot<int>
     /// The description.
     /// </value>
     public string Description { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the creation time.
-    /// </summary>
-    /// <value>
-    /// The creation time.
-    /// </value>
-    public DateTime CreationTime { get; private set; }
 
     /// <summary>
     /// Gets or sets the expiration.

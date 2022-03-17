@@ -1,8 +1,6 @@
-﻿using Masa.Auth.Service.Admin.Application.Permissions.Models;
+﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
-namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
-
-public record PermissionDetailQuery(Guid PermissionId) : Query<PermissionDetail>
+public record PermissionDetailQuery(Guid PermissionId) : Query<PermissionDetailDto>
 {
-    public override PermissionDetail Result { get; set; } = new();
+    public override PermissionDetailDto Result { get; set; } = new();
 }

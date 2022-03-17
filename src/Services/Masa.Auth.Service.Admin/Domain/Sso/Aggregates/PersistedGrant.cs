@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class PersistedGrant : AggregateRoot<int>
+public class PersistedGrant : AuditAggregateRoot<int, Guid>
 {
     public string Key { get; private set; } = null!;
 
@@ -13,8 +13,6 @@ public class PersistedGrant : AggregateRoot<int>
     public string ClientId { get; private set; } = string.Empty;
 
     public string Description { get; private set; } = string.Empty;
-
-    public DateTime CreationTime { get; private set; }
 
     public DateTime? Expiration { get; private set; }
 

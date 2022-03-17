@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class ApiResource : AggregateRoot<int>
+public class ApiResource : AuditAggregateRoot<int, Guid>
 {
     public bool Enabled { get; private set; } = true;
 
@@ -13,10 +13,6 @@ public class ApiResource : AggregateRoot<int>
     public string AllowedAccessTokenSigningAlgorithms { get; private set; } = "";
 
     public bool ShowInDiscoveryDocument { get; private set; } = true;
-
-    public DateTime Created { get; private set; } = DateTime.UtcNow;
-
-    public DateTime? Updated { get; private set; }
 
     public DateTime? LastAccessed { get; private set; }
 

@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
 
 public class ApiScopeEntityTypeConfiguration : IEntityTypeConfiguration<ApiScope>
 {

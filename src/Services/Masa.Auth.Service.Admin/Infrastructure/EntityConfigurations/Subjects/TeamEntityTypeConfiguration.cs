@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
 
 public class TeamEntityTypeConfiguration : IEntityTypeConfiguration<Team>
 {
@@ -12,6 +10,8 @@ public class TeamEntityTypeConfiguration : IEntityTypeConfiguration<Team>
         builder.HasMany(team => team.Staffs).WithOne(teamStaff => teamStaff.Team).HasForeignKey(teamStaff => teamStaff.TeamId);
         builder.HasMany(team => team.Permissions).WithOne(teamPermission => teamPermission.Team).HasForeignKey(teamStaff => teamStaff.TeamId);
         builder.HasMany(team => team.Roles).WithOne(teamRole => teamRole.Team).HasForeignKey(teamStaff => teamStaff.TeamId);
+
+        builder.OwnsOne(team => team.Avatar);
     }
 }
 

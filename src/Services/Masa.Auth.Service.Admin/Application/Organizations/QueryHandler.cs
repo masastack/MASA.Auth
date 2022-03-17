@@ -13,7 +13,7 @@ public class QueryHandler
     public async Task GetDepartmentDetailAsync(DepartmentDetailQuery departmentDetailQuery)
     {
         var department = await _departmentRepository.GetByIdAsync(departmentDetailQuery.DepartmentId);
-        departmentDetailQuery.Result = new DepartmentDetail
+        departmentDetailQuery.Result = new DepartmentDetailDto
         {
             Id = department.Id,
             Name = department.Name,
@@ -28,14 +28,14 @@ public class QueryHandler
         departmentTreeQuery.Result = await GetDepartmentsAsync(departmentTreeQuery.ParentId);
     }
 
-    private async Task<List<DepartmentItem>> GetDepartmentsAsync(Guid parentId)
+    private async Task<List<DepartmentDto>> GetDepartmentsAsync(Guid parentId)
     {
-        var result = new List<DepartmentItem>();
+        var result = new List<DepartmentDto>();
         //todo change memory
         var departments = await _departmentRepository.GetListAsync(d => d.ParentId == parentId);
         foreach (var department in departments)
         {
-            var item = new DepartmentItem
+            var item = new DepartmentDto
             {
                 Id = department.Id,
                 Name = department.Name,
@@ -52,7 +52,7 @@ public class QueryHandler
         var department = await _departmentRepository.GetByIdAsync(departmentStaffQuery.DepartmentId);
         departmentStaffQuery.Result = department.DepartmentStaffs
             .Select(ds => ds.Staff)
-            .Select(s => new StaffItem
+            .Select(s => new StaffItemDto
             {
                 Id = s.Id,
                 Name = s.User.Name,
@@ -65,11 +65,11 @@ public class QueryHandler
     [EventHandler]
     public async Task DepartmentCountAsync(DepartmentCountQuery departmentCountQuery)
     {
-        departmentCountQuery.Result = new DepartmentCount
+        departmentCountQuery.Result = new DepartmentChildrenCountDto
         {
             SecondLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 2)),
-            ThreeLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 3)),
-            FourLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 4)),
+            ThirdLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 3)),
+            FourthLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 4)),
         };
     }
 }

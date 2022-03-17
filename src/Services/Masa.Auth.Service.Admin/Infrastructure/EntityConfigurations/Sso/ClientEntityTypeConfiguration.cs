@@ -19,7 +19,8 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
         builder.Property(x => x.PairWiseSubjectSalt).HasMaxLength(200);
         builder.Property(x => x.UserCodeType).HasMaxLength(100);
         builder.Property(x => x.AllowedIdentityTokenSigningAlgorithms).HasMaxLength(100);
-        builder.HasIndex(x => x.ClientId).IsUnique();
+        builder.HasIndex(x => x.ClientId);
+        builder.HasIndex(x => new { x.ClientId, x.IsDeleted }).IsUnique();
 
         builder.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(x => x.RedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);

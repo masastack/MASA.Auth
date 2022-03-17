@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Organizations.Models;
 
-public class DepartmentDetail
+public class DepartmentDetailDto
 {
     public Guid Id { get; set; }
 

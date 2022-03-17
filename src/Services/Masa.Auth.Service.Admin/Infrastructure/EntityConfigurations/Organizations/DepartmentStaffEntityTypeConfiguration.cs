@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Organizations;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Organizations;
 
 public class DepartmentStaffEntityTypeConfiguration : IEntityTypeConfiguration<DepartmentStaff>
 {

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class IdentityResource : AggregateRoot<int>
+public class IdentityResource : AuditAggregateRoot<int, Guid>
 {
     public bool Enabled { get; private set; } = true;
 
@@ -19,10 +19,6 @@ public class IdentityResource : AggregateRoot<int>
     public List<IdentityResourceClaim> UserClaims { get; private set; } = new();
 
     public List<IdentityResourceProperty> Properties { get; private set; } = new();
-
-    public DateTime Created { get; private set; } = DateTime.UtcNow;
-
-    public DateTime? Updated { get; private set; }
 
     public bool NonEditable { get; private set; }
 }

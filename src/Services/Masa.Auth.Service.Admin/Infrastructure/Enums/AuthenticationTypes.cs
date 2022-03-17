@@ -1,7 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Infrastructure.Enums;
 
-public enum TeamStaffType
+public enum AuthenticationTypes
 {
-    Member = 1,
-    Admin,
+    OAuth = 1
 }

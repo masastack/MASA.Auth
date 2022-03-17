@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
-using Masa.Auth.Service.Admin.Infrastructure;
-
-namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
+﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
 
 public class IdentityResourceClaimEntityTypeConfiguration : IEntityTypeConfiguration<IdentityResourceClaim>
 {

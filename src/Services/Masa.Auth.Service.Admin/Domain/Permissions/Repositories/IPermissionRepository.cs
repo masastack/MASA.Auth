@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Domain.Permissions.Repositories;
+﻿namespace Masa.Auth.Service.Admin.Domain.Permissions.Repositories;
 
 public interface IPermissionRepository : IRepository<Permission, Guid>
 {

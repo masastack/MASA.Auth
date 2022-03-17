@@ -2,15 +2,15 @@
 {
     public class UserService : ServiceBase
     {
-        public UserService(IServiceCollection services) : base(services)
+        public UserService(IServiceCollection services) : base(services, Routing.USER_BASE_URI)
         {
-            App.MapGet(Routing.UserList, PaginationAsync);
-            App.MapPost(Routing.OperateUser, AddUserAsync);
-            App.MapPut(Routing.OperateUser, EditUserAsync);
-            App.MapDelete(Routing.OperateUser, DeleteUserAsync);
+            MapGet(PaginationAsync);
+            MapPost(AddUserAsync);
+            MapPut(EditUserAsync);
+            MapDelete(DeleteUserAsync);
         }
 
-        private async Task<PaginationList<UserItem>> PaginationAsync([FromServices] IEventBus eventBus,
+        private async Task<PaginationList<UserDto>> PaginationAsync([FromServices] IEventBus eventBus,
             [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
         {
             var query = new UserPaginationQuery(pageIndex, pageSize, search, enabled);

@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Infrastructure.Enums;
-
-namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class TeamRole : Entity<Guid>
 {
@@ -15,9 +13,9 @@ public class TeamRole : Entity<Guid>
 
     public Guid RoleId { get; private set; }
 
-    public TeamStaffType TeamStaffType { get; private set; }
+    public TeamMemberTypes TeamStaffType { get; private set; }
 
-    public TeamRole(Guid teamId, Guid roleId, TeamStaffType teamStaffType)
+    public TeamRole(Guid teamId, Guid roleId, TeamMemberTypes teamStaffType)
     {
         TeamId = teamId;
         RoleId = roleId;

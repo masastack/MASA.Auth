@@ -1,7 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Application.Permissions.Commands;
-using Masa.Auth.Service.Admin.Domain.Permissions.Repositories;
-
-namespace Masa.Auth.Service.Admin.Application.Permissions;
+﻿namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class CommandHandler
 {

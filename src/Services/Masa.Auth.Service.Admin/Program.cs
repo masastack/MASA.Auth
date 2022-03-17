@@ -25,9 +25,7 @@ configurationBuilder =>
     });
 });
 
-var serviceProvider = builder.Services.BuildServiceProvider()!;
-var redisOptions = serviceProvider.GetService<IOptions<RedisConfigurationOptions>>();
-builder.Services.AddMasaRedisCache(redisOptions!.Value);
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("Local:Appsettings:RedisConfig"));
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -58,24 +56,24 @@ var app = builder.Services
             }
         });
     })
-    .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
-    .AddTransient(typeof(IMiddleware<>), typeof(ValidatorMiddleware<>))
     .AddFluentValidation(options =>
     {
         options.RegisterValidatorsFromAssemblyContaining<Program>();
     })
     .AddDomainEventBus(options =>
     {
-        options.UseEventBus()
-               .UseUoW<AuthDbContext>(dbOptions =>
-               {
-                   //dbOptions.UseSqlServer("server=masa.auth.database;uid=sa;pwd=P@ssw0rd;database=masa_auth")
-                   dbOptions.UseSqlServer("Server=10.10.90.37,30110;Database=masa-auth-v2;User Id=sa;Password=p@ssw0rd;");
-                   //dbOptions.UseSoftDelete(builder.Services);
-               })
-               .UseDaprEventBus<IntegrationEventLogService>()
-               .UseEventLog<AuthDbContext>()
-               .UseRepository<AuthDbContext>();
+        options.UseEventBus(eventBusBuilder =>
+        {
+            eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
+            eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
+        }).UseUoW<AuthDbContext>(dbOptions =>
+        {
+            dbOptions.UseSqlServer(builder.Configuration["Local:Appsettings:ConnectionStrings:DefaultConnection"]);
+            //dbOptions.UseSoftDelete();
+        })
+        .UseDaprEventBus<IntegrationEventLogService>()
+        .UseEventLog<AuthDbContext>()
+        .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
 

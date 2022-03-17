@@ -1,6 +1,7 @@
 ﻿namespace Masa.Auth.Service.Admin.Infrastructure.Enums;
 
-public enum VerifyTypes
+public enum TeamMemberTypes
 {
-    Auth = 1
+    Member = 1,
+    Admin,
 }

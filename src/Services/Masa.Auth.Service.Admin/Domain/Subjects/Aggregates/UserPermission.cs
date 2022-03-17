@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
-
-namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class UserPermission : Entity<Guid>
 {
