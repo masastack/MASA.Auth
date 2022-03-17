@@ -3,19 +3,18 @@
 public class CommandHandler
 {
     readonly IDepartmentRepository _departmentRepository;
-    readonly DepartmentFactory _departmentFactory;
 
-    public CommandHandler(IDepartmentRepository departmentRepository, DepartmentFactory departmentFactory)
+    public CommandHandler(IDepartmentRepository departmentRepository)
     {
         _departmentRepository = departmentRepository;
-        _departmentFactory = departmentFactory;
     }
 
     [EventHandler]
     public async Task CreateDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
     {
-        var department = await _departmentFactory.CreateAsync(createDepartmentCommand.Name, createDepartmentCommand.Description,
-            createDepartmentCommand.ParentId, createDepartmentCommand.Enabled, createDepartmentCommand.StaffIds.ToArray());
+        var parent = await _departmentRepository.FindAsync(createDepartmentCommand.ParentId);
+        var department = new Department(createDepartmentCommand.Name, createDepartmentCommand.Description,
+            parent, createDepartmentCommand.Enabled, createDepartmentCommand.StaffIds.ToArray());
 
         await _departmentRepository.AddAsync(department);
     }

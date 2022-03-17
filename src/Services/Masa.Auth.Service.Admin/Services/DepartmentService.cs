@@ -10,7 +10,7 @@ public class DepartmentService : ServiceBase
     }
 
     private async Task CreateAsync([FromServices] IEventBus eventBus,
-        [FromHeader(Name = "user-id")] Guid userId, [FromBody] AddDepartmentCommand createDepartmentCommand)
+        [FromBody] AddDepartmentCommand createDepartmentCommand)
     {
         await eventBus.PublishAsync(createDepartmentCommand);
     }
@@ -23,7 +23,7 @@ public class DepartmentService : ServiceBase
     }
 
     private async Task DeleteAsync([FromServices] IEventBus eventBus,
-        [FromHeader(Name = "user-id")] Guid userId, [FromQuery] Guid id)
+        [FromQuery] Guid id)
     {
         await eventBus.PublishAsync(new RemoveDepartmentCommand(id));
     }

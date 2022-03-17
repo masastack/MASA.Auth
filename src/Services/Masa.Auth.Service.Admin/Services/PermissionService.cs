@@ -11,7 +11,7 @@
         }
 
         private async Task CreateAsync([FromServices] IEventBus eventBus,
-            [FromHeader(Name = "user-id")] Guid userId, [FromBody] AddPermissionCommand createDepartmentCommand)
+            [FromBody] AddPermissionCommand createDepartmentCommand)
         {
             await eventBus.PublishAsync(createDepartmentCommand);
         }
@@ -38,7 +38,7 @@
         }
 
         private async Task DeleteAsync([FromServices] IEventBus eventBus,
-            [FromHeader(Name = "user-id")] Guid userId, [FromQuery] Guid id)
+            [FromQuery] Guid id)
         {
             await eventBus.PublishAsync(new RemovePermissionCommand(id));
         }

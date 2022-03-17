@@ -18,10 +18,20 @@ public class Department : AuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
 
-    public Department(string name, string description)
+    public Department(string name, string description) : this(name, description, null, true, new Guid[] { })
+    {
+    }
+
+    public Department(string name, string description, Department? parent, bool enabled, Guid[] staffIds)
     {
         Name = name;
         Description = description;
+        SetEnabled(enabled);
+        AddStaffs(staffIds);
+        if (parent != null)
+        {
+            Move(parent);
+        }
     }
 
     public void AddStaffs(params Guid[] staffIds)

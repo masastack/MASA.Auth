@@ -13,7 +13,6 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = false;
     options.Audience = "";
 });
-builder.Services.AddAggregateFactory();
 
 builder.AddMasaConfiguration(
 configurationBuilder =>
