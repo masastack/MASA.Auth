@@ -5,6 +5,8 @@ public class RoleService : ServiceBase
     public RoleService(IServiceCollection services) : base(services, Routing.ROLE_BASE_URI)
     {
         MapGet(GetRoleItemsAsync);
+        MapGet(GetRoleSelectAsync);
+        MapGet(GetRoleDetailAsync);
         MapPost(AddRoleAsync);
         MapPut(EditRoleAsync);
         MapDelete(DeleteRoleAsync);
