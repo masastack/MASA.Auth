@@ -4,7 +4,11 @@ public class RoleSelectItem
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
 
-    public string Code { get; set; } = string.Empty;
+    public RoleSelectItem(Guid id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
 }

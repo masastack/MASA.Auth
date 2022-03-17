@@ -1,4 +1,47 @@
 ﻿@inherits AdminCompontentBase
 
+<MDataTable Headers="Headers" Items="Users" TItem="UserItemResponse" ItemsPerPage="PageSize" HideDefaultFooter Class="user ml-2 table-border-none">
+    <HeaderColContent Context="header">
+        <span class="text-subtitle">@header.Text</span>
+    </HeaderColContent>
+    <ItemColContent>
+        @switch (context.Header.Value)
+        {
+            case nameof(UserItemResponse.Avatar):
+                <div class="hover-pointer d-flex my-2" @onclick="()=> OpenUpdateUserDialog(context.Item)">
+                    <MAvatar Size=48 Class="mt-1">
+                        <MImage Contain Src="@context.Item.Avatar"></MImage>
+                    </MAvatar>
+                    <div class="ml-4">
+                        <div class="text-subtitle">@context.Item.Name</div>
+                    </div>
+                </div>
+                break;
+            case (nameof(UserItemResponse.Email)):
+                <span>@context.Item.Email</span>
+                break;
+            case nameof(UserItemResponse.PhoneNumber):
+                <span>@context.Item.PhoneNumber</span>
+                break;
+            case (nameof(UserItemResponse.CreationTime)):
+                <span>@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss");</span>
+                break;
+            case nameof(UserItemResponse.Enabled):
+                string color = context.Item.Enabled ? "sample-green" : "error";
+                <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
+                    <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
+                </MChip>
+                break;
+            case "Action":
+                <MIcon Small OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
+                <MIcon Small Class="ml-7" OnClick="()=> OpenAddUserDialog(context.Item)">mdi-shield-half-full</MIcon>
+                break;
+            default:
+                 <span>@context.Value</span>
+                break;
+        }
+    </ItemColContent>
+</MDataTable>
+
 <AddOrUpdateUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUserItemsAsync />
 <AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />

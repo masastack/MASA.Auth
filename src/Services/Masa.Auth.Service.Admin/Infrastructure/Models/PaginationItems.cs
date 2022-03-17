@@ -8,6 +8,11 @@ public class PaginationItems<T> where T : class
 
     public IEnumerable<T> Items { get; set; }
 
+    public PaginationItems()
+    {
+        Items = new List<T>();
+    }
+
     public PaginationItems(long total, int totalPage, IEnumerable<T> items)
     {
         Total = total;

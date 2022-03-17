@@ -91,8 +91,7 @@ public partial class User
     {
         Headers = new()
         {
-            new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.DisplayName)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
+            new() { Text = T("User"), Value = nameof(UserItemResponse.Avatar), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.Email)), Value = nameof(UserItemResponse.Email), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.PhoneNumber)), Value = nameof(UserItemResponse.PhoneNumber), Sortable = false },
             new() { Text = T(nameof(UserItemResponse.CreationTime)), Value = nameof(UserItemResponse.CreationTime), Sortable = false },
@@ -120,7 +119,7 @@ public partial class User
         UserDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(UserItemResponse user)
+    public void OpenUpdateUserDialog(UserItemResponse user)
     {
         CurrentUserId = user.UserId;
         UserDialogVisible = true;

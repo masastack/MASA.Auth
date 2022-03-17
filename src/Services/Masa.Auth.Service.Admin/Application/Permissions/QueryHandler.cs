@@ -2,11 +2,54 @@
 
 public class QueryHandler
 {
+    readonly IRoleRepository _roleRepository;
     readonly IPermissionRepository _permissionRepository;
+    readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IPermissionRepository permissionRepository)
+    public QueryHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository, AuthDbContext authDbContext)
     {
+        _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
+        _authDbContext = authDbContext;
+    }
+
+    [EventHandler]
+    private async Task GetRolePaginationAsync(RolePaginationQuery query)
+    {
+        Expression<Func<Role, bool>> condition = role => role.Enabled == query.Enabled;
+        if (!string.IsNullOrEmpty(query.Search))
+            condition = condition.And(user => user.Name.Contains(query.Search));
+
+        var roles = await _roleRepository.GetPaginatedListAsync(condition, new PaginatedOptions
+        {
+            Page = query.PageIndex,
+            PageSize = query.PageSize,
+            Sorting = new Dictionary<string, bool>
+            {
+                [nameof(User.ModificationTime)] = true,
+                [nameof(User.CreationTime)] = true,
+            }
+        });
+
+        query.Result = new(roles.Total, roles.TotalPages, roles.Result.Select(u => new RoleItem
+        {
+
+        }));
+    }
+
+    [EventHandler]
+    private async Task GetRoleDetailAsync(RoleDetailQuery query)
+    {
+        var role = await _roleRepository.FindAsync(u => u.Id == query.RoleId);
+        if (role is null) throw new UserFriendlyException("This role data does not exist");
+
+        query.Result = new(role.Name, role.Description, role.Enabled, role.RolePermissions.Select(rp => rp.Id).ToList(), role.RoleItems.Select(ri => ri.Role.Id).ToList());
+    }
+
+    [EventHandler]
+    private async Task GetRoleSelectAsync(RoleSelectQuery query)
+    {
+        query.Result = await _authDbContext.Set<Role>().Select(r => new RoleSelectItem(r.Id, r.Name)).ToListAsync();
     }
 
     [EventHandler]
@@ -66,12 +109,7 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
-            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectItem
-            {
-                Id = rp.Role.Id,
-                Name = rp.Role.Name,
-                Code = rp.Role.Code
-            }).ToList(),
+            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectItem(rp.Role.Id, rp.Role.Name)).ToList(),
             TeamItems = permission.TeamPermissions.Select(tp => new TeamSelectItem
             {
                 Id = tp.Team.Id,
