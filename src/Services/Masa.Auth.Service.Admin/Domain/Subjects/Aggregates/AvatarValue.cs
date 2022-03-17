@@ -4,7 +4,7 @@ public class AvatarValue : ValueObject
 {
     public string Url { get; set; } = string.Empty;
 
-    public string Name { get; set; }
+    public string Name { get; set; } 
 
     public string Color { get; set; }
 

@@ -17,6 +17,13 @@
             return query.Result;
         }
 
+        private async Task<UserDetail> GetUserDetailAsync([FromServices] IEventBus eventBus,[FromQuery] Guid userId)
+        {
+            var query = new UserDetailQuery(userId);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
         private async Task AddUserAsync(
             IEventBus eventBus,
             [FromBody] AddUserCommand command)

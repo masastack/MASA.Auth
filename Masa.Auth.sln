@@ -31,9 +31,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Rcl", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Server", "src\Web\MASA.Auth.Web.Admin.Server\Masa.Auth.Web.Admin.Server.csproj", "{151C6705-5B1A-4E8E-ADE0-AE17AE0A9A42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Wasm", "src\Web\Masa.Auth.Web.Admin.Wasm\Masa.Auth.Web.Admin.Wasm.csproj", "{F288C3B9-B0A4-4A6B-A088-CB7DA7F9B709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Contrib.BasicAbilities.Auth", "src\Masa.Contrib.BasicAbilities.Auth\Masa.Contrib.BasicAbilities.Auth.csproj", "{B5AC57F4-0CB4-47DB-819A-74A582A3123A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Service.Admin", "src\Services\Masa.Auth.Service.Admin\Masa.Auth.Service.Admin.csproj", "{AB0EFC8F-452A-41DD-81D5-C6591604493F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.ApiGateways.Caller", "src\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj", "{9C0E9EE4-46B2-40AD-8D51-5A3701E1655B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

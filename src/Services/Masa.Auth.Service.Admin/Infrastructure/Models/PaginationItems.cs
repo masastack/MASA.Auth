@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Infrastructure.Models;
 
-public class PaginationList<T> where T : class
+public class PaginationItems<T> where T : class
 {
     public long Total { get; set; }
 
@@ -8,7 +8,12 @@ public class PaginationList<T> where T : class
 
     public IEnumerable<T> Items { get; set; }
 
-    public PaginationList(long total, int totalPage, IEnumerable<T> items)
+    public PaginationItems()
+    {
+        Items = new List<T>();
+    }
+
+    public PaginationItems(long total, int totalPage, IEnumerable<T> items)
     {
         Total = total;
         TotalPage = totalPage;

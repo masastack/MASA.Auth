@@ -7,7 +7,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.App.User
     public partial class List
     {
         public bool _visible;
-        public UserPage _userPage = new(UserService.GetList());
+        public UserPage _userPage = new(Data.App.User.UserService.GetList());
         private List<int> _pageSizes = new() { 10, 25, 50, 100 };
         private readonly List<DataTableHeader<UserDto>> _headers = new()
         {
@@ -18,7 +18,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.App.User
             new() { Text = "STATUS", Value = nameof(UserDto.Status) },
             new() { Text = "ACTIONS", Value = "Action", Sortable = false }
         };
-        private readonly Dictionary<string, string> _roleIconMap = UserService.GetRoleIconMap();
+        private readonly Dictionary<string, string> _roleIconMap = Data.App.User.UserService.GetRoleIconMap();
 
         private void NavigateToDetails(string id)
         {

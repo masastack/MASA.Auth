@@ -14,3 +14,5 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
+global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
+global using Masa.Auth.ApiGateways.Caller.Services.Permissions;

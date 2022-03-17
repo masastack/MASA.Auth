@@ -24,7 +24,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task EditUserAsync(UpdateUserCommand command)
+    public async Task UpdateUserAsync(UpdateUserCommand command)
     {
         var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
         if (user is null)
