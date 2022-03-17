@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Masa.Auth.ApiGateways.Caller;
 
@@ -11,8 +12,7 @@ public static class ServiceCollectionExtensions
 
         configure?.Invoke(options);
         services.AddSingleton(options);
-        services.AddScoped<AuthCaller>();
-
+        services.AddCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
         return services;
     }
 }

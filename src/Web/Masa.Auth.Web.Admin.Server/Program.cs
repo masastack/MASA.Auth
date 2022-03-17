@@ -1,6 +1,5 @@
+using Masa.Auth.ApiGateways.Caller;
 using Masa.Auth.Web.Admin.Rcl.Global;
-using Masa.Utils.Caller.Core;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +16,7 @@ builder.Services.AddMasaBlazor(builder =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddCaller(Assembly.Load("Masa.Auth.Caller"));
+builder.Services.AddAuthSdkServer();
 
 var app = builder.Build();
 
