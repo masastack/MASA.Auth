@@ -1,6 +1,8 @@
-﻿namespace Masa.Auth.Service.Application.Permissions.Queries;
+﻿using Masa.Auth.Service.Admin.Dto.Permissions;
 
-public record RoleDetailQuery(Guid RoleId) : Query<RoleDetail>
+namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
+
+public record RoleDetailQuery(Guid RoleId) : Query<RoleDetailDto>
 {
-    public override RoleDetail Result { get; set; } = new();
+    public override RoleDetailDto Result { get; set; } = null!;
 }

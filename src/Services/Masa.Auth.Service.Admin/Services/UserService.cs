@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Admin.Services
+﻿using Masa.Auth.Service.Admin.Dto.Subjects;
+
+namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : ServiceBase
     {
@@ -17,7 +19,7 @@
             return query.Result;
         }
 
-        private async Task<UserDetail> GetUserDetailAsync([FromServices] IEventBus eventBus,[FromQuery] Guid userId)
+        private async Task<UserDetailDto> GetUserDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid userId)
         {
             var query = new UserDetailQuery(userId);
             await eventBus.PublishAsync(query);

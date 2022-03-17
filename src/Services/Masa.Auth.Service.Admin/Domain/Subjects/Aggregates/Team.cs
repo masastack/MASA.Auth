@@ -10,8 +10,6 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public TeamTypes TeamType { get; private set; }
 
-    public AvatarValue Avatar { get; private set; }
-
     public List<TeamStaff> Staffs { get; private set; } = new();
 
     public List<TeamPermission> Permissions { get; private set; } = new();

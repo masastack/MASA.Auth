@@ -25,7 +25,7 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     public Guid PositionId { get; private set; }
 
-    public Infrastructure.Enums.MemberTypes StaffType { get; private set; }
+    public StaffTypes StaffType { get; private set; }
 
     public bool Enabled { get; private set; }
 
@@ -36,7 +36,7 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
         LazyLoader = lazyLoader;
     }
 
-    public Staff(string jobNumber, string name, Infrastructure.Enums.MemberTypes staffType, bool enabled)
+    public Staff(string jobNumber, string name, StaffTypes staffType, bool enabled)
     {
         JobNumber = jobNumber;
         Name = name;

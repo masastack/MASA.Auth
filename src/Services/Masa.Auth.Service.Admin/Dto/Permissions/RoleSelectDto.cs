@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Models;
+﻿namespace Masa.Auth.Service.Admin.Dto.Permissions;
 
 public class RoleSelectDto
 {
@@ -6,7 +6,7 @@ public class RoleSelectDto
 
     public string Name { get; set; }
 
-    public RoleSelectItem(Guid id, string name)
+    public RoleSelectDto(Guid id, string name)
     {
         Id = id;
         Name = name;

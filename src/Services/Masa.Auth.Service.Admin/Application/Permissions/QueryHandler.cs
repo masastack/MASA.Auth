@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Permissions;
+﻿using Masa.Auth.Service.Admin.Dto.Permissions;
+
+namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class QueryHandler
 {
@@ -31,7 +33,7 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(roles.Total, roles.TotalPages, roles.Result.Select(u => new RoleItem
+        query.Result = new(roles.Total, roles.TotalPages, roles.Result.Select(u => new RoleDto
         {
 
         }));
@@ -49,7 +51,7 @@ public class QueryHandler
     [EventHandler]
     private async Task GetRoleSelectAsync(RoleSelectQuery query)
     {
-        query.Result = await _authDbContext.Set<Role>().Select(r => new RoleSelectItem(r.Id, r.Name)).ToListAsync();
+        query.Result = await _authDbContext.Set<Role>().Select(r => new RoleSelectDto(r.Id, r.Name)).ToListAsync();
     }
 
     [EventHandler]
@@ -109,12 +111,7 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
-            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectDto
-            {
-                Id = rp.Role.Id,
-                Name = rp.Role.Name,
-                Code = rp.Role.Code
-            }).ToList(),
+            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
             TeamItems = permission.TeamPermissions.Select(tp => new TeamSelectDto
             {
                 Id = tp.Team.Id,

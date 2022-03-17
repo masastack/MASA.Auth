@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Organizations.Models;
+﻿namespace Masa.Auth.Service.Admin.Dto.Organizations;
 
 public class DepartmentChildrenCountDto
 {

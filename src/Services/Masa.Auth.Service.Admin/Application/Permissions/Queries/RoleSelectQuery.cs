@@ -1,6 +1,8 @@
-﻿namespace Masa.Auth.Service.Application.Permissions.Queries;
+﻿using Masa.Auth.Service.Admin.Dto.Permissions;
 
-public record RoleSelectQuery() : Query<List<RoleSelectItem>>
+namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
+
+public record RoleSelectQuery() : Query<List<RoleSelectDto>>
 {
-    public override List<RoleSelectItem> Result { get; set; } = new();
+    public override List<RoleSelectDto> Result { get; set; } = new();
 }

@@ -1,6 +1,8 @@
-﻿namespace Masa.Auth.Service.Application.Permissions.Queries;
+﻿using Masa.Auth.Service.Admin.Dto.Permissions;
 
-public record RolePaginationQuery(int PageIndex, int PageSize, string Search, bool Enabled) : Query<PaginationItems<RoleItem>>
+namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
+
+public record RolePaginationQuery(int PageIndex, int PageSize, string Search, bool Enabled) : Query<PaginationList<RoleDto>>
 {
-    public override PaginationItems<RoleItem> Result { get; set; } = new();
+    public override PaginationList<RoleDto> Result { get; set; } = new();
 }

@@ -2,6 +2,7 @@
 
 public class DepartmentService : ServiceBase
 {
+
     public DepartmentService(IServiceCollection services) : base(services, "api/department")
     {
         MapGet(ListAsync);

@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Admin.Infrastructure.Enums;
+﻿namespace Masa.Auth.ApiGateways.Caller.Infrastructure.Enums;
 
 public enum IdentificationTypes
 {

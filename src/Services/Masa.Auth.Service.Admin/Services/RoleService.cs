@@ -1,8 +1,10 @@
-﻿namespace Masa.Auth.Service.Admin.Services;
+﻿using Masa.Auth.Service.Admin.Dto.Permissions;
+
+namespace Masa.Auth.Service.Admin.Services;
 
 public class RoleService : ServiceBase
 {
-    public RoleService(IServiceCollection services) : base(services, Routing.ROLE_BASE_URI)
+    public RoleService(IServiceCollection services) : base(services, "api/role")
     {
         MapGet(GetRoleItemsAsync);
         MapGet(GetRoleSelectAsync);
@@ -12,7 +14,7 @@ public class RoleService : ServiceBase
         MapDelete(DeleteRoleAsync);
     }
 
-    private async Task<PaginationItems<RoleItem>> GetRoleItemsAsync([FromServices] IEventBus eventBus,
+    private async Task<PaginationList<RoleDto>> GetRoleItemsAsync([FromServices] IEventBus eventBus,
            [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
     {
         var query = new RolePaginationQuery(pageIndex, pageSize, search, enabled);
@@ -20,14 +22,14 @@ public class RoleService : ServiceBase
         return query.Result;
     }
 
-    private async Task<List<RoleSelectItem>> GetRoleSelectAsync([FromServices] IEventBus eventBus)
+    private async Task<List<RoleSelectDto>> GetRoleSelectAsync([FromServices] IEventBus eventBus)
     {
         var query = new RoleSelectQuery();
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<RoleDetail> GetRoleDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid roleId)
+    private async Task<RoleDetailDto> GetRoleDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid roleId)
     {
         var query = new RoleDetailQuery(roleId);
         await eventBus.PublishAsync(query);
