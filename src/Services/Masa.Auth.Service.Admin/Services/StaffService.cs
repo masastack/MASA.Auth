@@ -2,7 +2,7 @@
 
 public class StaffService : ServiceBase
 {
-    public StaffService(IServiceCollection services) : base(services, Routing.STAFF_BASE_URI)
+    public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
         MapGet(ListAsync);
         MapGet(PaginationAsync);
@@ -23,11 +23,9 @@ public class StaffService : ServiceBase
         return query.Result;
     }
 
-    private async Task<PaginationList<StaffItemDto>> PaginationAsync([FromServices] IEventBus eventBus,
-        [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20,
-        [FromQuery] string name = "")
+    private async Task<PaginationList<StaffItemDto>> PaginationAsync([FromServices] IEventBus eventBus, StaffPaginationOptions options)
     {
-        var query = new StaffPaginationQuery(pageIndex, pageSize, name);
+        var query = new StaffPaginationQuery(options.PageIndex, options.PageSize, options.Name);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

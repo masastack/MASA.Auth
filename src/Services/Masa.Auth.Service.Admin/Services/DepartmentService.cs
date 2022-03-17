@@ -2,7 +2,7 @@
 
 public class DepartmentService : ServiceBase
 {
-    public DepartmentService(IServiceCollection services) : base(services, Routing.DEPARTMENT_BASE_URI)
+    public DepartmentService(IServiceCollection services) : base(services, "api/department")
     {
         MapGet(ListAsync);
         MapPost(CreateAsync);

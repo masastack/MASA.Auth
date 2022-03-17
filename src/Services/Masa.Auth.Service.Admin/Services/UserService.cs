@@ -2,7 +2,7 @@
 {
     public class UserService : ServiceBase
     {
-        public UserService(IServiceCollection services) : base(services, Routing.USER_BASE_URI)
+        public UserService(IServiceCollection services) : base(services, "api/user")
         {
             MapGet(PaginationAsync);
             MapPost(AddUserAsync);
@@ -10,30 +10,29 @@
             MapDelete(DeleteUserAsync);
         }
 
-        private async Task<PaginationList<UserDto>> PaginationAsync([FromServices] IEventBus eventBus,
-            [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
+        private async Task<PaginationList<UserDto>> PaginationAsync(IEventBus eventBus, UserPaginationOptions options)
         {
-            var query = new UserPaginationQuery(pageIndex, pageSize, search, enabled);
+            var query = new UserPaginationQuery(options.PageIndex, options.PageSize, options.Search, options.Enabled);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
 
         private async Task AddUserAsync(
-            [FromServices] IEventBus eventBus,
+            IEventBus eventBus,
             [FromBody] AddUserCommand command)
         {
             await eventBus.PublishAsync(command);
         }
 
         private async Task EditUserAsync(
-            [FromServices] IEventBus eventBus,
+            IEventBus eventBus,
             [FromBody] UpdateUserCommand command)
         {
             await eventBus.PublishAsync(command);
         }
 
         private async Task DeleteUserAsync(
-            [FromServices] IEventBus eventBus,
+            IEventBus eventBus,
             [FromBody] RemoveUserCommand command)
         {
             await eventBus.PublishAsync(command);

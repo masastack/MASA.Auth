@@ -2,7 +2,7 @@
 {
     public class PermissionService : ServiceBase
     {
-        public PermissionService(IServiceCollection services) : base(services, Routing.PERMISSION_BASE_URI)
+        public PermissionService(IServiceCollection services) : base(services, "api/permission")
         {
             MapGet(ListAsync);
             MapGet(GetAsync);

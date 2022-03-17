@@ -2,7 +2,7 @@
 
 public class RoleService : ServiceBase
 {
-    public RoleService(IServiceCollection services) : base(services, Routing.ROLE_BASE_URI)
+    public RoleService(IServiceCollection services) : base(services, "api/role")
     {
 
     }
