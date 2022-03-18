@@ -16,7 +16,7 @@ public class ThirdPartyIdpService : ServiceBase
 
     public async Task<PaginationDto<ThirdPartyIdpIDto>> GetThirdPartyIdpItemsAsync(GetThirdPartyIdpIsDto request)
     {
-        var thirdPartyIdps = ThirdPartyIdpItems.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
+        var thirdPartyIdps = ThirdPartyIdpItems.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
         return await Task.FromResult(new PaginationDto<ThirdPartyIdpIDto>(ThirdPartyIdpItems.Count, 1, thirdPartyIdps));
     }
 

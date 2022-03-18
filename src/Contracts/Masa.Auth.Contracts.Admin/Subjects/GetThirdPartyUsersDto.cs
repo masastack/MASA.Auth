@@ -10,7 +10,7 @@ public class GetThirdPartyUsersDto : Pagination
 
     public GetThirdPartyUsersDto(int pageIndex, int pageSize, string search, bool enabled, Guid thirdPartyIdpId)
     {
-        PageIndex = pageIndex;
+        Page = pageIndex;
         PageSize = pageSize;
         Search = search;
         Enabled = enabled;

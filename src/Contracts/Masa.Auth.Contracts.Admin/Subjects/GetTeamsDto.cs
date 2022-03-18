@@ -4,7 +4,7 @@ public class GetTeamsDto : Pagination
 {
     public GetTeamsDto(int pageIndex, int pageSize)
     {
-        PageIndex = pageIndex;
+        Page = pageIndex;
         PageSize = pageSize;
     }
 }

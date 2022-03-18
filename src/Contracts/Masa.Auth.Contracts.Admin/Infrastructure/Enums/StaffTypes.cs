@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 
-public enum MemberTypes
+public enum StaffTypes
 {
     InternalStaff = 1,
     ExternalStaff

@@ -52,7 +52,7 @@ public class CommandHandler
     {
         //_staffDomainService.CreateStaff();
         var staff = new Staff(createStaffCommand.JobNumber, createStaffCommand.CreateUserCommand.Name,
-            createStaffCommand.MemberType, createStaffCommand.Enabled);
+            createStaffCommand.StaffType, createStaffCommand.Enabled);
         var users = await _userRepository.GetListAsync(u => u.PhoneNumber == createStaffCommand.CreateUserCommand.PhoneNumber);
         var user = users.FirstOrDefault();
         if (user == null)

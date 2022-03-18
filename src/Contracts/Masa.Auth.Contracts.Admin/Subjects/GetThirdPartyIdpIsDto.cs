@@ -6,7 +6,7 @@ public class GetThirdPartyIdpIsDto : Pagination
 
     public GetThirdPartyIdpIsDto(int pageIndex, int pageSize, string search)
     {
-        PageIndex = pageIndex;
+        Page = pageIndex;
         PageSize = pageSize;
         Search = search;
     }

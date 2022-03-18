@@ -14,7 +14,7 @@ public class GetStaffsDto : Pagination
 
     public GetStaffsDto(int pageIndex, int pageSize, string name, string phoneNumber, string email, bool enabled)
     {
-        PageIndex = pageIndex;
+        Page = pageIndex;
         PageSize = pageSize;
         Name = name;
         PhoneNumber = phoneNumber;

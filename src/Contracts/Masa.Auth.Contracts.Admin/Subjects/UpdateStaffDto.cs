@@ -6,7 +6,7 @@ public class UpdateStaffDto
 
     public string JobNumber { get; set; }
 
-    public MemberTypes MemberType { get; set; }
+    public StaffTypes MemberType { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -20,7 +20,7 @@ public class UpdateStaffDto
 
     public UpdateUserDto User { get; set; }
 
-    public UpdateStaffDto(string jobNumber, MemberTypes MemberType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, UpdateUserDto user)
+    public UpdateStaffDto(string jobNumber, StaffTypes MemberType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, UpdateUserDto user)
     {
         JobNumber = jobNumber;
         MemberType = MemberType;

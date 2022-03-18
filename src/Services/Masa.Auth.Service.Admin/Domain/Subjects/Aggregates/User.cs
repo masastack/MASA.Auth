@@ -26,8 +26,6 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public AddressValue Address { get; private set; }
 
-    public AddressValue Residential { get; private set; }
-
     #endregion
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password,

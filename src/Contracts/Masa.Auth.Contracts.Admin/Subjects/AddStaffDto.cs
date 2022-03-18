@@ -4,7 +4,7 @@ public class AddStaffDto
 {
     public string JobNumber { get; set; }
 
-    public MemberTypes MemberType { get; set; }
+    public StaffTypes MemberType { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -18,7 +18,7 @@ public class AddStaffDto
 
     public AddUserDto User { get; set; }
 
-    public AddStaffDto(string jobNumber, MemberTypes MemberType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserDto user)
+    public AddStaffDto(string jobNumber, StaffTypes MemberType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserDto user)
     {
         JobNumber = jobNumber;
         MemberType = MemberType;

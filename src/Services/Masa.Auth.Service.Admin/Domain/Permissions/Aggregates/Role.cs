@@ -6,13 +6,6 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public string Description { get; private set; }
 
-    /// <summary>
-    /// user role limit count
-    /// </summary>
-    public int Limit { get; private set; }
-
-    public string Description { get; private set; } = "";
-
     public bool Enabled { get; private set; }
 
     private List<RolePermission> rolePermissions = new();
@@ -32,7 +25,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
     {
-        roleItems.AddRange(childrenRoles.Select(roleId=> new RoleRelation(roleId)));
+        roleItems.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
     }
 
     public void BindPermissions(List<Guid> permissions)

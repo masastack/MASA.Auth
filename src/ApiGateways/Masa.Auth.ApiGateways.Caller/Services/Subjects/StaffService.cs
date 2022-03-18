@@ -14,7 +14,7 @@ public class StaffService : ServiceBase
 
     public async Task<PaginationDto<StaffDto>> GetStaffItemsAsync(GetStaffsDto request)
     {
-        var staffs = StaffItems.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
+        var staffs = StaffItems.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
         return await Task.FromResult(new PaginationDto<StaffDto>(StaffItems.Count, 1, staffs));
     }
 
