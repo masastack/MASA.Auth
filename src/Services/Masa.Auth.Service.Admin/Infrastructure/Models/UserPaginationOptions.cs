@@ -9,14 +9,14 @@ public class UserPaginationOptions : PaginationOptions
     public static ValueTask<UserPaginationOptions?> BindAsync(HttpContext context, ParameterInfo parameter)
     {
 
-        int.TryParse(context.Request.Query["pageIndex"], out var pageIndex);
-        pageIndex = pageIndex == 0 ? 1 : pageIndex;
+        int.TryParse(context.Request.Query["page"], out var page);
+        page = page == 0 ? 1 : page;
         int.TryParse(context.Request.Query["pageSize"], out var pageSize);
         pageSize = pageSize == 0 ? 20 : pageSize;
         bool.TryParse(context.Request.Query["enabled"], out var enabled);
         var result = new UserPaginationOptions
         {
-            PageIndex = pageIndex,
+            Page = page,
             PageSize = pageSize,
             Search = context.Request.Query["search"],
             Enabled = enabled

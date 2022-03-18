@@ -12,7 +12,7 @@
 
         private async Task<PaginationList<UserDto>> PaginationAsync(IEventBus eventBus, UserPaginationOptions options)
         {
-            var query = new UserPaginationQuery(options.PageIndex, options.PageSize, options.Search, options.Enabled);
+            var query = new UserPaginationQuery(options.Page, options.PageSize, options.Search, options.Enabled);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

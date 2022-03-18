@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class PermissionRelation : Entity<Guid>
+public class PermissionRelation : AuditEntity<Guid, Guid>
 {
     public Guid ChildId { get; private set; }
 

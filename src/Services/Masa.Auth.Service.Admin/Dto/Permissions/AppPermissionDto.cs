@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Models;
+﻿namespace Masa.Auth.Service.Admin.Dto.Permissions;
 
 public class AppPermissionDto
 {

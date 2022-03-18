@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Admin.Services;
+﻿using Masa.Auth.Service.Admin.Dto.Organizations;
+
+namespace Masa.Auth.Service.Admin.Services;
 
 public class DepartmentService : ServiceBase
 {
