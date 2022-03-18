@@ -70,6 +70,7 @@
     color: #323D6F;
 }
 
+/*24B1*/
 .h5, .text-h5, h5 {
     /* Headline 5 */
     font-family: Roboto !important;
@@ -95,6 +96,7 @@
     color: #1B2559;
 }
 
+/*18M2*/
 .h7, .text-h7, h7 {
     /* Headline 6 */
     font-family: Roboto !important;
@@ -120,7 +122,7 @@
     /* default color */
     color: #1B2559;
 }
-
+/*14B2*/
 .text-subtitle2 {
     /* Subtitle 2-2 */
     font-family: Roboto !important;

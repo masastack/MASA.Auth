@@ -10,16 +10,27 @@ public partial class Org
         new() { Text = "手机号", Value = nameof(StaffDto.PhoneNumber) },
         new() { Text = "邮箱", Value = nameof(StaffDto.Email) },
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber) },
-        new() { Text = "操作", Value = "Action", Sortable = false }
+        new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
     };
-    List<Contracts.Admin.Subjects.StaffDto> staffItems = new();
+    List<StaffDto> staffItems = new();
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-
+        _departments = new List<DepartmentDto> {
+            new DepartmentDto
+            {
+                Name ="MasaStack",
+                Id = Guid.NewGuid(),
+                Children = new List<DepartmentDto> {
+                    new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid()},
+                    new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid()},
+                }
+            }
+        };
+        StateHasChanged();
         await base.OnAfterRenderAsync(firstRender);
     }
 

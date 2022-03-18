@@ -8,15 +8,15 @@
                 部门管理
             </MCardTitle>
             <MCardText>
-                <MTreeview Active="_active"
+                <MTreeview @bind-Active="_active"
                            Items="_departments"
                            OnActiveUpdate="(List<DepartmentDto> e)=>ActiveUpdated(e)"
-                           Activatable
+                           Activatable Hoverable
                            ItemText="r=>r.Name"
                            ItemKey="r=>r.Id"
                            ItemChildren="r=>r.Children">
                     <LabelContent>
-                        <MHover Context="_">
+            @*            <MHover Context="_">*@
                             <div class="d-flex justify-space-between align-center">
                                 <span>@context.Item.Name</span>
                                 <MMenu Right Bottom class="mr-2">
@@ -43,7 +43,7 @@
                                     </ChildContent>
                                 </MMenu>
                             </div>
-                        </MHover>
+                        @*</MHover>*@
                     </LabelContent>
                 </MTreeview>
             </MCardText>
@@ -52,70 +52,76 @@
     <MCol>
         <MRow>
             <MCol Md="4">
-                <MCard>
-                    <MListItem>
-                        <MListItemAvatar>
-                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"></MImage>
+                <MCard Height="112">
+                    <MListItem class="fill-height">
+                        <MListItemAvatar Height=80 Width=80>
+                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle>二级部门</MListItemTitle>
-                            <MListItemSubtitle>880个</MListItemSubtitle>
+                            <MListItemTitle class="text-h7 neutral-lighten-3--text">二级部门</MListItemTitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">个</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
             </MCol>
             <MCol Md="4">
-                <MCard>
-                    <MListItem>
-                        <MListItemAvatar>
-                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"></MImage>
+                <MCard Height="112">
+                    <MListItem class="fill-height">
+                        <MListItemAvatar Height=80 Width=80>
+                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle>三级部门</MListItemTitle>
-                            <MListItemSubtitle>880个</MListItemSubtitle>
+                            <MListItemTitle class="text-h7 neutral-lighten-3--text">三级部门</MListItemTitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">个</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
             </MCol>
             <MCol Md="4">
-                <MCard>
-                    <MListItem>
-                        <MListItemAvatar>
-                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"></MImage>
+                <MCard Height="112">
+                    <MListItem class="fill-height">
+                        <MListItemAvatar Height=80 Width=80>
+                            <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle>四级部门</MListItemTitle>
-                            <MListItemSubtitle>880个</MListItemSubtitle>
+                            <MListItemTitle class="text-h7 neutral-lighten-3--text">四级部门</MListItemTitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">个</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
             </MCol>
         </MRow>
         <MRow>
-            <MDataTable Headers="_headers" Items="staffItems" TItem="StaffDto" HideDefaultFooter Class="user mt-2 table-border-none">
-                <HeaderColContent Context="header">
-                    <span class="text-subtitle">@header.Text</span>
-                </HeaderColContent>
-                <ItemColContent>
-                    @switch (context.Header.Value)
-                    {
-                        case nameof(StaffDto.Name):
-                            <div>
-                                <MAvatar>
-                                    <MImage Src="@(context.Item.Avatar)" Alt="Jack"></MImage>
-                                </MAvatar>
-                                <span class="ml-2">@context.Item.Name</span>
-                            </div>
-                            break;
-                        case "Action":
-                            <MIcon Small>mdi-pencil</MIcon>
-                            break;
-                        default:
-                            @context.Value
-                            break;
-                    }
-                </ItemColContent>
-            </MDataTable>
+            <MCol Md="12">
+                <MCard>
+                    <MCardText>
+                        <MDataTable Headers="_headers" Items="staffItems" TItem="StaffDto" HideDefaultFooter Class="user mt-2 table-border-none">
+                            <HeaderColContent Context="header">
+                                <span class="text-subtitle">@header.Text</span>
+                            </HeaderColContent>
+                            <ItemColContent>
+                                @switch (context.Header.Value)
+                                {
+                                    case nameof(StaffDto.Name):
+                                        <div>
+                                            <MAvatar>
+                                                <MImage Src="@(context.Item.Avatar)" Alt="Jack"></MImage>
+                                            </MAvatar>
+                                            <span class="ml-2">@context.Item.Name</span>
+                                        </div>
+                                        break;
+                                    case "Action":
+                                        <MIcon Small>mdi-pencil</MIcon>
+                                        break;
+                                    default:
+                                        @context.Value
+                                        break;
+                                }
+                            </ItemColContent>
+                        </MDataTable>
+                    </MCardText>
+                </MCard>
+            </MCol>
         </MRow>
     </MCol>
 </MRow>
