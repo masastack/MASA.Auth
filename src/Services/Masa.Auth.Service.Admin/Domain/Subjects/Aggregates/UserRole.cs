@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class UserRole : Entity<Guid>
+public class UserRole : AuditEntity<Guid, Guid>
 {
     public Guid UserId { get; set; }
 

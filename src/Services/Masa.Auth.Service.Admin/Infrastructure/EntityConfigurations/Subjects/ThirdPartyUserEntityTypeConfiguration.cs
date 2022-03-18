@@ -6,7 +6,6 @@ public class ThirdPartyUserEntityTypeConfiguration : IEntityTypeConfiguration<Th
     {
         builder.ToTable(nameof(ThirdPartyUser), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(tpu => tpu.Id);
-
         builder.HasOne(tpu => tpu.User).WithMany().HasForeignKey(tpu => tpu.UserId);
     }
 }

@@ -36,11 +36,11 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
         LazyLoader = lazyLoader;
     }
 
-    public Staff(string jobNumber, string name, MemberTypes MemberType, bool enabled)
+    public Staff(string jobNumber, string name, MemberTypes memberType, bool enabled)
     {
         JobNumber = jobNumber;
         Name = name;
-        MemberType = MemberType;
+        MemberType = memberType;
         Enabled = enabled;
     }
 

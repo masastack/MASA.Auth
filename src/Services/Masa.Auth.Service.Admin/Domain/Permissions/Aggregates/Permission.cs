@@ -95,3 +95,11 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
         Enabled = enabled;
     }
 }
+
+public enum PermissionType
+{
+    Menu,
+    Element,
+    Api,
+    Data
+}

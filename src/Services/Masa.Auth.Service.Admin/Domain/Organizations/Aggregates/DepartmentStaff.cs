@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
 
-public class DepartmentStaff : Entity<Guid>
+public class DepartmentStaff : AuditEntity<Guid, Guid>
 {
     public Guid DepartmentId { get; private set; }
 

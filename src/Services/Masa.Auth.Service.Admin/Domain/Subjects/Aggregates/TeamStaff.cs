@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class TeamStaff : Entity<Guid>
+public class TeamStaff : AuditEntity<Guid, Guid>
 {
     private Team? _team;
     public Team Team

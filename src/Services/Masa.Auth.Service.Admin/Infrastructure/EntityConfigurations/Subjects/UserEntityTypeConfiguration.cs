@@ -6,13 +6,10 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable(nameof(User), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(u => u.Id);
-        builder.HasIndex(u => u.IdCard);
-        builder.HasIndex(u => new { u.IdCard, u.IsDeleted }).IsUnique();
-        builder.HasIndex(u => u.PhoneNumber);
-        builder.HasIndex(u => new { u.PhoneNumber, u.IsDeleted }).IsUnique();
+        builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(u => u.Name);
         builder.HasIndex(u => u.Email);
-
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
 
