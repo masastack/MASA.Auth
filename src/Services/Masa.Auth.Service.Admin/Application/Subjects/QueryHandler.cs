@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Subjects;
+﻿using Masa.Auth.Service.Admin.Dto.Subjects;
+
+namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
 {

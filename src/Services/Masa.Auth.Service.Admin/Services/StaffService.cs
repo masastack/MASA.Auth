@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Admin.Services;
+﻿using Masa.Auth.Service.Admin.Dto.Subjects;
+
+namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : ServiceBase
 {
@@ -25,7 +27,7 @@ public class StaffService : ServiceBase
 
     private async Task<PaginationList<StaffItemDto>> PaginationAsync([FromServices] IEventBus eventBus, StaffPaginationOptions options)
     {
-        var query = new StaffPaginationQuery(options.PageIndex, options.PageSize, options.Name);
+        var query = new StaffPaginationQuery(options.Page, options.PageSize, options.Name);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

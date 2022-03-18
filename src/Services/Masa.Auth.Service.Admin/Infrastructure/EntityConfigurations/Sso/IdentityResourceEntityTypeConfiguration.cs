@@ -10,7 +10,7 @@ public class IdentityResourceEntityTypeConfiguration : IEntityTypeConfiguration<
         builder.Property(x => x.DisplayName).HasMaxLength(200);
         builder.Property(x => x.Description).HasMaxLength(1000);
         builder.HasIndex(x => x.Name);
-        builder.HasIndex(x => new { x.Name, x.IsDeleted }).IsUnique();
+        builder.HasIndex(x => new { x.Name, x.IsDeleted }).IsUnique().HasFilter(null);
 
         builder.HasMany(x => x.UserClaims).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(x => x.Properties).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class ThirdPartyUser : Entity<Guid>
+public class ThirdPartyUser : AuditEntity<Guid, Guid>
 {
     private User? _user;
 

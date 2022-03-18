@@ -16,7 +16,7 @@ public class UserPaginationOptions : PaginationOptions
         bool.TryParse(context.Request.Query["enabled"], out var enabled);
         var result = new UserPaginationOptions
         {
-            PageIndex = pageIndex,
+            Page = pageIndex,
             PageSize = pageSize,
             Search = context.Request.Query["search"],
             Enabled = enabled

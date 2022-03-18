@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Subjects.Models;
+﻿namespace Masa.Auth.Service.Admin.Dto.Subjects;
 
 public class StaffItemDto
 {

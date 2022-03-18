@@ -13,7 +13,7 @@ public class StaffPaginationOptions : PaginationOptions
         pageSize = pageSize == 0 ? 20 : pageSize;
         var result = new StaffPaginationOptions
         {
-            PageIndex = pageIndex,
+            Page = pageIndex,
             PageSize = pageSize,
             Name = context.Request.Query["name"],
         };

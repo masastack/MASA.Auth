@@ -6,7 +6,6 @@ public class PermissionRelationEntityTypeConfiguration : IEntityTypeConfiguratio
     {
         builder.ToTable(nameof(PermissionRelation), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(pi => pi.Id);
-
     }
 }
 

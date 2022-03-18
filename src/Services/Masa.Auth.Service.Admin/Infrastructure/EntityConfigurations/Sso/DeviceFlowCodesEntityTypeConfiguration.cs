@@ -21,7 +21,7 @@ public class DeviceFlowCodesEntityTypeConfiguration : IEntityTypeConfiguration<D
         builder.HasKey(x => new { x.UserCode });
 
         builder.HasIndex(x => x.DeviceCode);
-        builder.HasIndex(x => new { x.DeviceCode, x.IsDeleted }).IsUnique();
+        builder.HasIndex(x => new { x.DeviceCode, x.IsDeleted }).IsUnique().HasFilter(null);
         builder.HasIndex(x => x.Expiration);
     }
 }

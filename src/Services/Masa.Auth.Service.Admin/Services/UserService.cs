@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Service.Admin.Services
+﻿using Masa.Auth.Service.Admin.Dto.Subjects;
+
+namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : ServiceBase
     {
@@ -12,7 +14,7 @@
 
         private async Task<PaginationList<UserDto>> PaginationAsync(IEventBus eventBus, UserPaginationOptions options)
         {
-            var query = new UserPaginationQuery(options.PageIndex, options.PageSize, options.Search, options.Enabled);
+            var query = new UserPaginationQuery(options.Page, options.PageSize, options.Search, options.Enabled);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
