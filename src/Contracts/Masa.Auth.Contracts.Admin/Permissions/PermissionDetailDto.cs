@@ -1,6 +1,6 @@
-﻿using Masa.Auth.Service.Admin.Dto.Subjects;
+﻿using Masa.Auth.Contracts.Admin.Subjects;
 
-namespace Masa.Auth.Service.Admin.Dto.Permissions;
+namespace Masa.Auth.Contracts.Admin.Permissions;
 
 public class PermissionDetailDto
 {
