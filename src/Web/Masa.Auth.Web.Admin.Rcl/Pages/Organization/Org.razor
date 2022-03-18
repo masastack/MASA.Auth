@@ -52,7 +52,7 @@
     <MCol>
         <MRow>
             <MCol Md="4">
-                <MCard>
+                <MCard Height="112">
                     <MListItem>
                         <MListItemAvatar>
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"></MImage>
@@ -65,7 +65,7 @@
                 </MCard>
             </MCol>
             <MCol Md="4">
-                <MCard>
+                <MCard Height="112">
                     <MListItem>
                         <MListItemAvatar>
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"></MImage>
@@ -78,7 +78,7 @@
                 </MCard>
             </MCol>
             <MCol Md="4">
-                <MCard>
+                <MCard Height="112">
                     <MListItem>
                         <MListItemAvatar>
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"></MImage>
@@ -92,7 +92,10 @@
             </MCol>
         </MRow>
         <MRow>
-            <MDataTable Headers="_headers" Items="staffItems" TItem="StaffDto" HideDefaultFooter Class="user mt-2 table-border-none">
+            <MCol Md="12">
+                <MCard>
+                    <MCardText>
+                        <MDataTable Headers="_headers" Items="staffItems" TItem="StaffDto" HideDefaultFooter Class="user mt-2 table-border-none">
                 <HeaderColContent Context="header">
                     <span class="text-subtitle">@header.Text</span>
                 </HeaderColContent>
@@ -116,6 +119,9 @@
                     }
                 </ItemColContent>
             </MDataTable>
+                    </MCardText>
+                </MCard>
+            </MCol>
         </MRow>
     </MCol>
 </MRow>
