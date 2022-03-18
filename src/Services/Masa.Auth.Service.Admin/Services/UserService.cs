@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Dto.Subjects;
-
-namespace Masa.Auth.Service.Admin.Services
+﻿namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : ServiceBase
     {

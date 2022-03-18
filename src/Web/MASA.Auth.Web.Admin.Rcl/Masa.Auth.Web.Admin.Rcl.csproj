@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj" />
+    <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
   </ItemGroup>
 
 </Project>

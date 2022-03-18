@@ -1,13 +1,21 @@
 ﻿using Masa.Auth.ApiGateways.Caller.Response.Organizations;
+using Masa.Auth.Contracts.Admin.Subjects;
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class Org
 {
-    bool _addOrgDialog, _addDepartmentUserDialog, _disableDepartmentMemberBtn = true;
     List<Guid> _active = new List<Guid>();
     List<DepartmentItemResponse> _departments = new();
-    DepartmentItemResponse _currentDepartment = new();
+    readonly List<DataTableHeader<StaffDto>> _headers = new()
+    {
+        new() { Text = "员工", Value = nameof(StaffDto.Name) },
+        new() { Text = "手机号", Value = nameof(StaffDto.PhoneNumber) },
+        new() { Text = "邮箱", Value = nameof(StaffDto.Email) },
+        new() { Text = "工号", Value = nameof(StaffDto.JobNumber) },
+        new() { Text = "操作", Value = "Action", Sortable = false }
+    };
+    List<StaffDto> staffItems = new();
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
@@ -21,7 +29,6 @@ public partial class Org
     private void OpenAddDialog(Guid parentId, string parentName)
     {
 
-        _addOrgDialog = true;
     }
 
     private async Task AddDepartment()
@@ -35,8 +42,8 @@ public partial class Org
 
     private async Task ActiveUpdated(List<DepartmentItemResponse> activedItems)
     {
-        _disableDepartmentMemberBtn = false;
-        _currentDepartment = activedItems[0];
+        //_disableDepartmentMemberBtn = false;
+        //_currentDepartment = activedItems[0];
         //var res = await UserCaller.GetUsersWithDepartmentAsync(_currentDepartmentId, true);
         //HandleCaller(res, (data) =>
         //{

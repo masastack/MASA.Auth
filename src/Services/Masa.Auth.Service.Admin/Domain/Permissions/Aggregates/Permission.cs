@@ -16,7 +16,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; } = "";
 
-    public PermissionType Type { get; private set; }
+    public PermissionTypes Type { get; private set; }
 
     public string Description { get; private set; } = "";
 
@@ -39,7 +39,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
     public Permission(int systemId, string appId, string name, string code, string url,
-        string icon, PermissionType type, string description)
+        string icon, PermissionTypes type, string description)
     {
         SystemId = systemId;
         AppId = appId;
@@ -69,7 +69,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public void BindApiPermission(params Guid[] childrenId)
     {
-        if (Type == PermissionType.Api)
+        if (Type == PermissionTypes.Api)
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
@@ -81,7 +81,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public void MoveParent(Guid parentId)
     {
-        if (Type == PermissionType.Api)
+        if (Type == PermissionTypes.Api)
         {
             throw new UserFriendlyException("the permission of api type can`t set parent");
         }
@@ -94,12 +94,4 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     {
         Enabled = enabled;
     }
-}
-
-public enum PermissionType
-{
-    Menu,
-    Element,
-    Api,
-    Data
 }

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class StaffItemDto
+public class StaffDto
 {
     public Guid Id { get; set; }
 

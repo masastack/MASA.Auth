@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Contracts.Admin.Subjects;
-
-namespace Masa.Auth.Contracts.Admin.Permissions;
+﻿namespace Masa.Auth.Contracts.Admin.Permissions;
 
 public class PermissionDetailDto
 {
@@ -10,7 +8,7 @@ public class PermissionDetailDto
 
     public string Name { get; set; } = "";
 
-    public PermissionType Type { get; set; }
+    public PermissionTypes Type { get; set; }
 
     public bool Enabled { get; set; }
 

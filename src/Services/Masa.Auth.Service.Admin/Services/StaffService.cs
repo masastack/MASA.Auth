@@ -16,14 +16,14 @@ public class StaffService : ServiceBase
         await eventBus.PublishAsync(createStaffCommand);
     }
 
-    private async Task<List<StaffItemDto>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<StaffDto>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
     {
         var query = new StaffListQuery(name);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<PaginationList<StaffItemDto>> PaginationAsync([FromServices] IEventBus eventBus, StaffPaginationOptions options)
+    private async Task<PaginationList<StaffDto>> PaginationAsync([FromServices] IEventBus eventBus, StaffPaginationOptions options)
     {
         var query = new StaffPaginationQuery(options.PageIndex, options.PageSize, options.Name);
         await eventBus.PublishAsync(query);

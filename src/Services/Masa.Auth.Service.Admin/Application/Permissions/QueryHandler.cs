@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Dto.Permissions;
-
-namespace Masa.Auth.Service.Admin.Application.Permissions;
+﻿namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class QueryHandler
 {
@@ -58,7 +56,7 @@ public class QueryHandler
     public async Task ApiPermissionsQueryAsync(ApiPermissionListQuery apiPermissionsQuery)
     {
         var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == apiPermissionsQuery.SystemId
-                            && p.Type == PermissionType.Api);
+                            && p.Type == PermissionTypes.Api);
         apiPermissionsQuery.Result = permissions.GroupBy(p => p.AppId)
             .Select(pg => new AppPermissionDto
             {
@@ -76,7 +74,7 @@ public class QueryHandler
     public async Task FuncPermissionsQueryAsync(FuncPermissionListQuery funcPerimissionsQuery)
     {
         var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == funcPerimissionsQuery.SystemId
-                            && p.Type != PermissionType.Api);
+                            && p.Type != PermissionTypes.Api);
 
         funcPerimissionsQuery.Result = permissions.GroupBy(p => p.AppId)
                 .Select(pg => new AppPermissionDto

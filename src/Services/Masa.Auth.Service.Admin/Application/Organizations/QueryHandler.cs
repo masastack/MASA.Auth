@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Dto.Organizations;
-
-namespace Masa.Auth.Service.Admin.Application.Organizations;
+﻿namespace Masa.Auth.Service.Admin.Application.Organizations;
 
 public class QueryHandler
 {
@@ -54,7 +52,7 @@ public class QueryHandler
         var department = await _departmentRepository.GetByIdAsync(departmentStaffQuery.DepartmentId);
         departmentStaffQuery.Result = department.DepartmentStaffs
             .Select(ds => ds.Staff)
-            .Select(s => new StaffItemDto
+            .Select(s => new StaffDto
             {
                 Id = s.Id,
                 Name = s.User.Name,

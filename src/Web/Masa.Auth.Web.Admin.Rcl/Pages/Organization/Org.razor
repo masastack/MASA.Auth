@@ -1,5 +1,4 @@
 ﻿@page "/org/index"
-@using Masa.Auth.ApiGateways.Caller.Response.Organizations
 @inherits AdminCompontentBase
 
 <MRow>
@@ -91,73 +90,40 @@
             </MCol>
         </MRow>
         <MRow>
-            @*          <MDataTable Headers="_headers" Items="_departmentUsers.Where(u=>u.Select)" TItem="UserItemResponse" HideDefaultFooter Class="user mt-2 table-border-none">
+            <MDataTable Headers="_headers" Items="staffItems" TItem="StaffDto" HideDefaultFooter Class="user mt-2 table-border-none">
                 <HeaderColContent Context="header">
-                <span class="text-subtitle">@header.Text</span>
+                    <span class="text-subtitle">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
-                @switch (context.Header.Value)
-                {
-                case nameof(UserItemResponse.Gender):
-                var genderText = "";
-                if (context.Item.Gender.HasValue)
-                {
-                if (context.Item.Gender.Value)
-                {
-                genderText = "男";
-                }
-                else
-                {
-                genderText = "女";
-                }
-                }
-                else
-                {
-                genderText = "未知";
-                }
-                <span>@genderText</span>
-                break;
-                case nameof(UserItemResponse.State):
-                @if (context.Item.State == (int)State.Enable)
-                {
-                <MChip Color="green" TextColor="white" Ripple="false">
-                <span>@State.Enable.ToString()</span>
-                </MChip>
-                }
-                else
-                {
-                <MChip Color="gray" Ripple="false">
-                <span>@State.Disabled.ToString()</span>
-                </MChip>
-                }
-                break;
-                case "Action":
-                <MMenu Right Bottom>
-                <ActivatorContent Context="activatorContext">
-                <MButton Icon @attributes="@activatorContext.Attrs">
-                <MIcon XSmall>fas fa-ellipsis-v</MIcon>
-                </MButton>
-                </ActivatorContent>
-                <ChildContent>
-                <MList>
-                <MListItem>
-                <MIcon Small>fas fa-user-tie</MIcon>
-                <MListItemTitle Class="ml-2"> Details </MListItemTitle>
-                </MListItem>
-                <MListItem>
-                <MIcon Small>far fa-trash-alt</MIcon>
-                <MListItemTitle Class="ml-2"> Delete </MListItemTitle>
-                </MListItem>
-                </MList>
-                </ChildContent>
-                </MMenu>
-                break;
-                default:
-                @context.Value
-                break;
-                }
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(StaffDto.Name):
+                            var genderText = "";
+                            <span>@genderText</span>
+                            break;
+                        case "Action":
+                            <MMenu Right Bottom>
+                                <ActivatorContent Context="activatorContext">
+                                    <MButton Icon @attributes="@activatorContext.Attrs">
+                                        <MIcon XSmall>fas fa-ellipsis-v</MIcon>
+                                    </MButton>
+                                </ActivatorContent>
+                                <ChildContent>
+                                    <MList>
+                                        <MListItem>
+                                            <MIcon Small>far fa-trash-alt</MIcon>
+                                            <MListItemTitle Class="ml-2"> Delete </MListItemTitle>
+                                        </MListItem>
+                                    </MList>
+                                </ChildContent>
+                            </MMenu>
+                            break;
+                        default:
+                            @context.Value
+                            break;
+                    }
                 </ItemColContent>
-                </MDataTable>*@
+            </MDataTable>
         </MRow>
     </MCol>
 </MRow>
