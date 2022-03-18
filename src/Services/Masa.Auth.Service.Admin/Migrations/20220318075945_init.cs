@@ -398,7 +398,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -803,7 +808,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChildId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -826,7 +836,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Effect = table.Column<bool>(type: "bit", nullable: false),
-                    Private = table.Column<bool>(type: "bit", nullable: false)
+                    Private = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -854,7 +869,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -877,7 +897,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Effect = table.Column<bool>(type: "bit", nullable: false),
-                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                    TeamStaffType = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -906,7 +931,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                    TeamStaffType = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -929,7 +959,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                    TeamStaffType = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -988,7 +1023,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ThirdPartyIdpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false)
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1010,7 +1050,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Effect = table.Column<bool>(type: "bit", nullable: false)
+                    Effect = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1038,7 +1083,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1063,14 +1113,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_ApiResource_Name",
                 schema: "sso",
                 table: "ApiResource",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResource_Name_IsDeleted",
-                schema: "sso",
-                table: "ApiResource",
-                columns: new[] { "Name", "IsDeleted" },
-                unique: true);
+                column: "Name",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApiResourceClaim_ApiResourceId",
@@ -1119,14 +1164,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_Client_ClientId",
                 schema: "sso",
                 table: "Client",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Client_ClientId_IsDeleted",
-                schema: "sso",
-                table: "Client",
-                columns: new[] { "ClientId", "IsDeleted" },
-                unique: true);
+                column: "ClientId",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientClaim_ClientId",
@@ -1186,14 +1226,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_Department_Name",
                 schema: "organizations",
                 table: "Department",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Department_Name_IsDeleted",
-                schema: "organizations",
-                table: "Department",
-                columns: new[] { "Name", "IsDeleted" },
-                unique: true);
+                column: "Name",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DepartmentStaff_DepartmentId",
@@ -1211,14 +1246,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_DeviceFlowCodes_DeviceCode",
                 schema: "sso",
                 table: "DeviceFlowCodes",
-                column: "DeviceCode");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceFlowCodes_DeviceCode_IsDeleted",
-                schema: "sso",
-                table: "DeviceFlowCodes",
-                columns: new[] { "DeviceCode", "IsDeleted" },
-                unique: true);
+                column: "DeviceCode",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceFlowCodes_Expiration",
@@ -1230,14 +1260,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_IdentityResource_Name",
                 schema: "sso",
                 table: "IdentityResource",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityResource_Name_IsDeleted",
-                schema: "sso",
-                table: "IdentityResource",
-                columns: new[] { "Name", "IsDeleted" },
-                unique: true);
+                column: "Name",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityResourceClaim_IdentityResourceId",
@@ -1262,11 +1287,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: new[] { "State", "TimesSent", "ModificationTime" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permission_AppId_Code_IsDeleted",
+                name: "IX_Permission_AppId_Code",
                 schema: "permissions",
                 table: "Permission",
-                columns: new[] { "AppId", "Code", "IsDeleted" },
-                unique: true);
+                columns: new[] { "AppId", "Code" },
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PermissionRelation_PermissionId",
@@ -1314,14 +1340,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_Staff_JobNumber",
                 schema: "subjects",
                 table: "Staff",
-                column: "JobNumber");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Staff_JobNumber_IsDeleted",
-                schema: "subjects",
-                table: "Staff",
-                columns: new[] { "JobNumber", "IsDeleted" },
-                unique: true);
+                column: "JobNumber",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Staff_PositionId",
@@ -1376,14 +1397,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_User_IdCard",
                 schema: "subjects",
                 table: "User",
-                column: "IdCard");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_IdCard_IsDeleted",
-                schema: "subjects",
-                table: "User",
-                columns: new[] { "IdCard", "IsDeleted" },
-                unique: true);
+                column: "IdCard",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Name",
@@ -1395,14 +1411,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_User_PhoneNumber",
                 schema: "subjects",
                 table: "User",
-                column: "PhoneNumber");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_PhoneNumber_IsDeleted",
-                schema: "subjects",
-                table: "User",
-                columns: new[] { "PhoneNumber", "IsDeleted" },
-                unique: true);
+                column: "PhoneNumber",
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserPermission_PermissionId",
