@@ -1,9 +1,10 @@
 ﻿global using BlazorComponent;
 global using BlazorComponent.I18n;
-global using Masa.Auth.ApiGateways.Caller.Request.Subjects;
-global using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
+global using Masa.Auth.Contracts.Admin.Subjects;
+global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
+global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
+global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Web.Admin.Rcl.Data.Shared.Favorite;
 global using Masa.Auth.Web.Admin.Rcl.Global.Config;
 global using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;

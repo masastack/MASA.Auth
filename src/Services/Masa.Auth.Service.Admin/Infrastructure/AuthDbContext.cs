@@ -14,7 +14,7 @@ public class AuthDbContext : IntegrationEventLogContext
 
     protected override void OnModelCreatingExecuting(ModelBuilder builder)
     {
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
         base.OnModelCreatingExecuting(builder);
     }
 }

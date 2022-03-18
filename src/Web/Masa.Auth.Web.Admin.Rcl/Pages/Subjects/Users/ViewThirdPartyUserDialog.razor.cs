@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class ViewThirdPartyUserDialog
 {
@@ -13,7 +11,7 @@ public partial class ViewThirdPartyUserDialog
     [Parameter]
     public Guid ThirdPartyUserId { get; set; }
 
-    private ThirdPartyUserDetailResponse ThirdPartyUser { get; set; } = ThirdPartyUserDetailResponse.Default;
+    private ThirdPartyUserDetailDto ThirdPartyUser { get; set; } = ThirdPartyUserDetailDto.Default;
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 

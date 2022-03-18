@@ -52,14 +52,7 @@ public class QueryHandler
         var department = await _departmentRepository.GetByIdAsync(departmentStaffQuery.DepartmentId);
         departmentStaffQuery.Result = department.DepartmentStaffs
             .Select(ds => ds.Staff)
-            .Select(s => new StaffDto
-            {
-                Id = s.Id,
-                Name = s.User.Name,
-                JobNumber = s.JobNumber,
-                Email = s.User.Email,
-                PhoneNumber = s.User.PhoneNumber
-            }).ToList();
+            .Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.MemberType, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
     }
 
     [EventHandler]

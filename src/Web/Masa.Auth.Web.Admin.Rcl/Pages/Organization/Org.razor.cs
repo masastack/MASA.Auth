@@ -1,12 +1,9 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Organizations;
-using Masa.Auth.Contracts.Admin.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class Org
 {
     List<Guid> _active = new List<Guid>();
-    List<DepartmentItemResponse> _departments = new();
+    List<DepartmentDto> _departments = new();
     readonly List<DataTableHeader<StaffDto>> _headers = new()
     {
         new() { Text = "员工", Value = nameof(StaffDto.Name) },
@@ -15,7 +12,7 @@ public partial class Org
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber) },
         new() { Text = "操作", Value = "Action", Sortable = false }
     };
-    List<StaffDto> staffItems = new();
+    List<Contracts.Admin.Subjects.StaffDto> staffItems = new();
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
@@ -40,7 +37,7 @@ public partial class Org
         //});
     }
 
-    private async Task ActiveUpdated(List<DepartmentItemResponse> activedItems)
+    private async Task ActiveUpdated(List<DepartmentDto> activedItems)
     {
         //_disableDepartmentMemberBtn = false;
         //_currentDepartment = activedItems[0];

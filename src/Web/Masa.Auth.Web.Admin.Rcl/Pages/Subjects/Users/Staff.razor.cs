@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class Staff
 {
@@ -55,11 +53,11 @@ public partial class Staff
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<StaffItemResponse> Staffs { get; set; } = new();
+    public List<StaffDto> Staffs { get; set; } = new();
 
     public Guid CurrentStaffId { get; set; }
 
-    public List<DataTableHeader<StaffItemResponse>> Headers { get; set; } = new();
+    public List<DataTableHeader<StaffDto>> Headers { get; set; } = new();
 
     public bool StaffDialog { get; set; }
 
@@ -69,12 +67,12 @@ public partial class Staff
     {
         Headers = new()
         {
-            new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.Name)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Department"), Value = nameof(StaffItemResponse.Department), Sortable = false },
-            new() { Text = T(nameof(StaffItemResponse.JobNumber)), Value = nameof(StaffItemResponse.JobNumber), Sortable = false },
-            new() { Text = T(nameof(StaffItemResponse.Position)), Value = nameof(StaffItemResponse.Position), Sortable = false },
-            new() { Text = T("State"), Value = nameof(StaffItemResponse.Enabled), Sortable = false },
+            new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
+            new() { Text = T(nameof(UserDto.Name)), Value = nameof(UserDto.DisplayName), Sortable = false },
+            new() { Text = T("Department"), Value = nameof(StaffDto.Department), Sortable = false },
+            new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
+            new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
+            new() { Text = T("State"), Value = nameof(StaffDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
@@ -84,7 +82,7 @@ public partial class Staff
     public async Task GetStaffAsync()
     {
         Loading = true;
-        var request = new GetStaffItemsRequest(PageIndex, PageSize, Search, Enabled);
+        var request = new GetStaffsDto(PageIndex, PageSize, Search, "", "", Enabled);
         var response = await StaffService.GetStaffItemsAsync(request);
         Staffs = response.Items;
         TotalPages = response.TotalPages;
@@ -92,7 +90,7 @@ public partial class Staff
         Loading = false;
     }
 
-    public void OpenStaffDialog(StaffItemResponse staff)
+    public void OpenStaffDialog(StaffDto staff)
     {
         CurrentStaffId = staff.StaffId;
         StaffDialog = true;

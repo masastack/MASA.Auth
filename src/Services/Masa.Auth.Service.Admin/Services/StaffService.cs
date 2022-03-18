@@ -23,7 +23,7 @@ public class StaffService : ServiceBase
         return query.Result;
     }
 
-    private async Task<PaginationList<StaffDto>> PaginationAsync([FromServices] IEventBus eventBus, StaffPaginationOptions options)
+    private async Task<PaginationDto<StaffDto>> PaginationAsync([FromServices] IEventBus eventBus, GetStaffsDto options)
     {
         var query = new StaffPaginationQuery(options.PageIndex, options.PageSize, options.Name);
         await eventBus.PublishAsync(query);

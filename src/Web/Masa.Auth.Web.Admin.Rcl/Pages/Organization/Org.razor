@@ -10,7 +10,7 @@
             <MCardText>
                 <MTreeview Active="_active"
                            Items="_departments"
-                           OnActiveUpdate="(List<DepartmentItemResponse> e)=>ActiveUpdated(e)"
+                           OnActiveUpdate="(List<DepartmentDto> e)=>ActiveUpdated(e)"
                            Activatable
                            ItemText="r=>r.Name"
                            ItemKey="r=>r.Id"

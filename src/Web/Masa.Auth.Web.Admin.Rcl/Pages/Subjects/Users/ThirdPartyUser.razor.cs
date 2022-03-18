@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class ThirdPartyUser
 {
@@ -55,15 +53,15 @@ public partial class ThirdPartyUser
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<ThirdPartyUserItemResponse> ThirdPartyUsers { get; set; } = new();
+    public List<ThirdPartyUserDto> ThirdPartyUsers { get; set; } = new();
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyIdpItemResponse> ThirdPartyIdps { get; set; } = new();
+    public List<ThirdPartyIdpIDto> ThirdPartyIdps { get; set; } = new();
 
     public Guid ThirdPartyIdpId { get; set; }
 
-    public List<DataTableHeader<ThirdPartyUserItemResponse>> Headers { get; set; } = new();
+    public List<DataTableHeader<ThirdPartyUserDto>> Headers { get; set; } = new();
 
     public bool ThirdPartyUserDialog { get; set; }
 
@@ -75,13 +73,13 @@ public partial class ThirdPartyUser
     {
         Headers = new()
         {
-            new() { Text = T(nameof(UserItemResponse.Avatar)), Value = nameof(UserItemResponse.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.DisplayName)), Value = nameof(UserItemResponse.DisplayName), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserItemResponse.ThirdPartyIdpId), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserItemResponse.CreationTime)), Value = nameof(ThirdPartyUserItemResponse.CreationTime), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserItemResponse.Creator)), Value = nameof(ThirdPartyUserItemResponse.Creator), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserItemResponse.ModificationTime)), Value = nameof(ThirdPartyUserItemResponse.ModificationTime), Sortable = false },
-            new() { Text = T("State"), Value = T(nameof(UserItemResponse.Enabled)), Sortable = false },
+            new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
+            new() { Text = T(nameof(UserDto.DisplayName)), Value = nameof(UserDto.DisplayName), Sortable = false },
+            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.ThirdPartyIdpId), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
+            new() { Text = T("State"), Value = T(nameof(UserDto.Enabled)), Sortable = false },
         };
 
         await GetThirdPartyUserItemsAsync();
@@ -91,7 +89,7 @@ public partial class ThirdPartyUser
     public async Task GetThirdPartyUserItemsAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyUserItemsRequest(PageIndex, PageSize, Search, Enabled, ThirdPartyIdpId);
+        var request = new GetThirdPartyUsersDto(PageIndex, PageSize, Search, Enabled, ThirdPartyIdpId);
         var response = await ThirdPartyUserService.GetThirdPartyUserItemsAsync(request);
         ThirdPartyUsers = response.Items;
         TotalPages = response.TotalPages;
@@ -106,7 +104,7 @@ public partial class ThirdPartyUser
         Loading = false;
     }
 
-    public void OpenEditThirdPartyUserDialog(ThirdPartyUserItemResponse thirdPartyUser)
+    public void OpenEditThirdPartyUserDialog(ThirdPartyUserDto thirdPartyUser)
     {
         CurrentThirdPartyUserId = thirdPartyUser.ThirdPartyUserId;
         ThirdPartyUserDialog = true;

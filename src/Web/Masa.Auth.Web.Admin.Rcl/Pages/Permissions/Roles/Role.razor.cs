@@ -1,7 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Request.Permissions;
-using Masa.Auth.ApiGateways.Caller.Response.Permissions;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
 
 public partial class Role
 {
@@ -56,13 +53,13 @@ public partial class Role
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<RoleItemResponse> Roles { get; set; } = new();
+    public List<RoleDto> Roles { get; set; } = new();
 
     public Guid CurrentRoleId { get; set; }
 
     public bool RoleDialogVisible { get; set; }
 
-    public List<DataTableHeader<RoleItemResponse>> Headers { get; set; } = new();
+    public List<DataTableHeader<RoleDto>> Headers { get; set; } = new();
 
     private RoleService RoleService => AuthCaller.RoleService;
 
@@ -70,12 +67,12 @@ public partial class Role
     {
         Headers = new()
         {
-            new() { Text = T(nameof(RoleItemResponse.Name)), Value = nameof(RoleItemResponse.Name), Sortable = false },
-            new() { Text = T("State"), Value = nameof(RoleItemResponse.Enabled), Sortable = false },
-            new() { Text = T(nameof(RoleItemResponse.CreationTime)), Value = nameof(RoleItemResponse.CreationTime), Sortable = false },
-            new() { Text = T(nameof(RoleItemResponse.Creator)), Value = nameof(RoleItemResponse.Creator), Sortable = false },
-            new() { Text = T(nameof(RoleItemResponse.ModificationTime)), Value = nameof(RoleItemResponse.ModificationTime), Sortable = false },
-            new() { Text = T(nameof(RoleItemResponse.Modifier)), Value = nameof(RoleItemResponse.Modifier), Sortable = false },
+            new() { Text = T(nameof(RoleDto.Name)), Value = nameof(RoleDto.Name), Sortable = false },
+            new() { Text = T("State"), Value = nameof(RoleDto.Enabled), Sortable = false },
+            new() { Text = T(nameof(RoleDto.CreationTime)), Value = nameof(RoleDto.CreationTime), Sortable = false },
+            new() { Text = T(nameof(RoleDto.Creator)), Value = nameof(RoleDto.Creator), Sortable = false },
+            new() { Text = T(nameof(RoleDto.ModificationTime)), Value = nameof(RoleDto.ModificationTime), Sortable = false },
+            new() { Text = T(nameof(RoleDto.Modifier)), Value = nameof(RoleDto.Modifier), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
@@ -85,7 +82,7 @@ public partial class Role
     public async Task GetRoleItemsAsync()
     {
         Loading = true;
-        var reuquest = new GetRoleItemsRequest(PageIndex, PageSize, Search, Enabled);
+        var reuquest = new GetRoleItemsDto(PageIndex, PageSize, Search, Enabled);
         var response = await RoleService.GetRoleItemsAsync(reuquest);
         Roles = response.Items;
         TotalPages = response.TotalPages;
@@ -99,13 +96,13 @@ public partial class Role
         RoleDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(UserItemResponse user)
+    public void OpenEditUserDialog(UserDto user)
     {
         CurrentRoleId = user.UserId;
         RoleDialogVisible = true;
     }
 
-    public void OpenAuthorizeDialog(UserItemResponse user)
+    public void OpenAuthorizeDialog(UserDto user)
     {
         CurrentRoleId = user.UserId;
         RoleDialogVisible = true;

@@ -16,7 +16,7 @@ public partial class AddOrUpdateTeamDialog
 
     private bool IsAdd => TeamId == Guid.Empty;
 
-    private TeamDetailResponse Team { get; set; } = TeamDetailResponse.Default;
+    private TeamDetailDto Team { get; set; } = TeamDetailDto.Default;
 
     private TeamService TeamService => AuthCaller.TeamService;
 
@@ -36,7 +36,7 @@ public partial class AddOrUpdateTeamDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) Team = TeamDetailResponse.Default;
+            if (IsAdd) Team = TeamDetailDto.Default;
             else await GetTeamDetailAsync();
         }
     }

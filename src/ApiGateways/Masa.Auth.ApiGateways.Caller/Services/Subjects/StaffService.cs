@@ -2,7 +2,7 @@
 
 public class StaffService : ServiceBase
 {
-    List<StaffItemResponse> StaffItems => new List<StaffItemResponse>()
+    List<StaffDto> StaffItems => new List<StaffDto>()
     {
 
     };
@@ -12,23 +12,23 @@ public class StaffService : ServiceBase
 
     }
 
-    public async Task<PaginationItemsResponse<StaffItemResponse>> GetStaffItemsAsync(GetStaffItemsRequest request)
+    public async Task<PaginationDto<StaffDto>> GetStaffItemsAsync(GetStaffsDto request)
     {
         var staffs = StaffItems.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationItemsResponse<StaffItemResponse>(StaffItems.Count, 1, staffs));
+        return await Task.FromResult(new PaginationDto<StaffDto>(StaffItems.Count, 1, staffs));
     }
 
-    public async Task<StaffDetailResponse> GetStaffDetailAsync(Guid id)
+    public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
     {
-        return await Task.FromResult(StaffDetailResponse.Default);
+        return await Task.FromResult(StaffDetailDto.Default);
     }
 
-    public async Task AddStaffAsync(AddStaffRequest request)
+    public async Task AddStaffAsync(AddStaffDto request)
     {
         await Task.CompletedTask;
     }
 
-    public async Task UpdateStaffAsync(UpdateStaffRequest request)
+    public async Task UpdateStaffAsync(UpdateStaffDto request)
     {
         await Task.CompletedTask;
     }

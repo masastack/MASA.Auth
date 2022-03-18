@@ -11,4 +11,8 @@
 		<PackageReference Include="Masa.Utils.Caller.HttpClient" Version="0.3.2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
+	</ItemGroup>
+
 </Project>

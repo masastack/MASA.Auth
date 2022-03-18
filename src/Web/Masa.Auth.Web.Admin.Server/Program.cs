@@ -16,7 +16,7 @@ builder.Services.AddMasaBlazor(builder =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddAuthSdkServer();
+builder.Services.AddAuthApiGateways();
 
 var app = builder.Build();
 
