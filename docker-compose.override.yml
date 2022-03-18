@@ -36,6 +36,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   masa.auth.service.admin.dapr:
     image: "daprio/daprd:1.5.1"
     command: ["./daprd",
