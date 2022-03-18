@@ -16,7 +16,7 @@ public partial class AddOrUpdateStaffDialog
 
     private bool IsAdd => StaffId == Guid.Empty;
 
-    private StaffDetailResponse Staff { get; set; } = StaffDetailResponse.Default;
+    private StaffDetailDto Staff { get; set; } = StaffDetailDto.Default;
 
     private StaffService StaffService => AuthCaller.StaffService;
 
@@ -36,7 +36,7 @@ public partial class AddOrUpdateStaffDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) Staff = StaffDetailResponse.Default;
+            if (IsAdd) Staff = StaffDetailDto.Default;
             else await GetStaffDetailAsync();
         }
     }

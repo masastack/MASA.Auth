@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<MDataTable Headers="Headers" Items="Users" TItem="UserItemResponse" ItemsPerPage="PageSize" HideDefaultFooter Class="user ml-2 table-border-none">
+<MDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user ml-2 table-border-none">
     <HeaderColContent Context="header">
         <span class="text-subtitle">@header.Text</span>
     </HeaderColContent>
     <ItemColContent>
         @switch (context.Header.Value)
         {
-            case nameof(UserItemResponse.Avatar):
+            case nameof(UserDto.Avatar):
                 <div class="hover-pointer d-flex my-2" @onclick="()=> OpenUpdateUserDialog(context.Item)">
                     <MAvatar Size=48 Class="mt-1">
                         <MImage Contain Src="@context.Item.Avatar"></MImage>
@@ -17,16 +17,16 @@
                     </div>
                 </div>
                 break;
-            case (nameof(UserItemResponse.Email)):
+            case (nameof(UserDto.Email)):
                 <span>@context.Item.Email</span>
                 break;
-            case nameof(UserItemResponse.PhoneNumber):
+            case nameof(UserDto.PhoneNumber):
                 <span>@context.Item.PhoneNumber</span>
                 break;
-            case (nameof(UserItemResponse.CreationTime)):
+            case (nameof(UserDto.CreationTime)):
                 <span>@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss");</span>
                 break;
-            case nameof(UserItemResponse.Enabled):
+            case nameof(UserDto.Enabled):
                 string color = context.Item.Enabled ? "sample-green" : "error";
                 <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
                     <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>

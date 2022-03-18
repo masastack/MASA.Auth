@@ -31,10 +31,10 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(roles.Total, roles.TotalPages, roles.Result.Select(u => new RoleDto
-        {
+        //query.Result = new(roles.Total, roles.TotalPages, roles.Result.Select(u => new RoleDto
+        //{
 
-        }));
+        //}));
     }
 
     [EventHandler]
@@ -43,7 +43,7 @@ public class QueryHandler
         var role = await _roleRepository.FindAsync(u => u.Id == query.RoleId);
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
-        query.Result = new(role.Name, role.Description, role.Enabled, role.RolePermissions.Select(rp => rp.Id).ToList(), role.RoleItems.Select(ri => ri.Role.Id).ToList());
+        //query.Result = new(role.Name, role.Description, role.Enabled, role.RolePermissions.Select(rp => rp.Id).ToList(), role.RoleItems.Select(ri => ri.Role.Id).ToList());
     }
 
     [EventHandler]

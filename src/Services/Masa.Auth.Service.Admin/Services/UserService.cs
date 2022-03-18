@@ -10,9 +10,9 @@
             MapDelete(DeleteUserAsync);
         }
 
-        private async Task<PaginationList<UserDto>> PaginationAsync(IEventBus eventBus, UserPaginationOptions options)
+        private async Task<PaginationDto<UserDto>> PaginationAsync(IEventBus eventBus, GetUsersDto options)
         {
-            var query = new UserPaginationQuery(options.PageIndex, options.PageSize, options.Search, options.Enabled);
+            var query = new UserPaginationQuery(options.PageIndex, options.PageSize, options.Name, options.PhoneNumber, options.Email, options.Enabled);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

@@ -14,7 +14,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.Property(p => p.Description).HasMaxLength(255);
         builder.Property(p => p.Type).HasConversion(
             v => v.ToString(),
-            v => (PermissionType)Enum.Parse(typeof(PermissionType), v)
+            v => (PermissionTypes)Enum.Parse(typeof(PermissionTypes), v)
         );
 
         builder.HasMany(p => p.PermissionItems).WithOne(pi => pi.Permission);

@@ -75,11 +75,11 @@ public partial class User
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<UserItemResponse> Users { get; set; } = new();
+    public List<UserDto> Users { get; set; } = new();
 
     public Guid CurrentUserId { get; set; }
 
-    public List<DataTableHeader<UserItemResponse>> Headers { get; set; } = new();
+    public List<DataTableHeader<UserDto>> Headers { get; set; } = new();
 
     public bool UserDialogVisible { get; set; }
 
@@ -91,11 +91,11 @@ public partial class User
     {
         Headers = new()
         {
-            new() { Text = T("User"), Value = nameof(UserItemResponse.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.Email)), Value = nameof(UserItemResponse.Email), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.PhoneNumber)), Value = nameof(UserItemResponse.PhoneNumber), Sortable = false },
-            new() { Text = T(nameof(UserItemResponse.CreationTime)), Value = nameof(UserItemResponse.CreationTime), Sortable = false },
-            new() { Text = T("State"), Value = nameof(UserItemResponse.Enabled), Sortable = false },
+            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
+            new() { Text = T(nameof(UserDto.Email)), Value = nameof(UserDto.Email), Sortable = false },
+            new() { Text = T(nameof(UserDto.PhoneNumber)), Value = nameof(UserDto.PhoneNumber), Sortable = false },
+            new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
+            new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
@@ -105,7 +105,7 @@ public partial class User
     public async Task GetUserItemsAsync()
     {
         Loading = true;
-        var request = new GetUserItemsRequest(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
+        var request = new GetUsersDto(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
         var response = await UserService.GetUserItemsAsync(request);
         Users = response.Items;
         TotalPages = response.TotalPages;
@@ -119,13 +119,13 @@ public partial class User
         UserDialogVisible = true;
     }
 
-    public void OpenUpdateUserDialog(UserItemResponse user)
+    public void OpenUpdateUserDialog(UserDto user)
     {
         CurrentUserId = user.UserId;
         UserDialogVisible = true;
     }
 
-    public void OpenAuthorizeDialog(UserItemResponse user)
+    public void OpenAuthorizeDialog(UserDto user)
     {
         CurrentUserId = user.UserId;
         AuthorizeDialogVisible = true;

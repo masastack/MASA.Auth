@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Subjects;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class AddOrUpdateUserDialog
 {
@@ -18,7 +16,7 @@ public partial class AddOrUpdateUserDialog
 
     private bool IsAdd => UserId == Guid.Empty;
 
-    private UserDetailResponse User { get; set; } = UserDetailResponse.Default;
+    private UserDetailDto User { get; set; } = UserDetailDto.Default;
 
     private UserService UserService => AuthCaller.UserService;
 
@@ -38,7 +36,7 @@ public partial class AddOrUpdateUserDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) User = UserDetailResponse.Default;
+            if (IsAdd) User = UserDetailDto.Default;
             else await GetUserDetailAsync();
         }
     }

@@ -1,6 +1,4 @@
-﻿using Masa.Auth.ApiGateways.Caller.Response.Permissions;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
 
 public partial class AddOrUpdateRoleDialog
 {
@@ -18,7 +16,7 @@ public partial class AddOrUpdateRoleDialog
 
     private bool IsAdd => RoleId == Guid.Empty;
 
-    private RoleDetailResponse Role { get; set; } = RoleDetailResponse.Default;
+    private RoleDetailDto Role { get; set; } = RoleDetailDto.Default;
 
     private RoleService RoleService => AuthCaller.RoleService;
 
@@ -38,7 +36,7 @@ public partial class AddOrUpdateRoleDialog
     {
         if (Visible is true)
         {
-            if (IsAdd) Role = RoleDetailResponse.Default;
+            if (IsAdd) Role = RoleDetailDto.Default;
             else await GetRoleDetailAsync();
         }
     }

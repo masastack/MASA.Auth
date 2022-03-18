@@ -1284,7 +1284,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("PositionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("StaffType")
+                    b.Property<int>("MemberType")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -1357,7 +1357,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TeamStaffType")
+                    b.Property<int>("TeamMemberType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1381,7 +1381,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TeamStaffType")
+                    b.Property<int>("TeamMemberType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1403,7 +1403,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TeamStaffType")
+                    b.Property<int>("TeamMemberType")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")

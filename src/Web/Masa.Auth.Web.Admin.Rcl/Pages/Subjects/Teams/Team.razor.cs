@@ -53,7 +53,7 @@ public partial class Team
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<TeamItemResponse> Teams { get; set; } = new();
+    public List<TeamItemDto> Teams { get; set; } = new();
 
     public Guid CurrentTeamId { get; set; }
 
@@ -79,13 +79,13 @@ public partial class Team
         TeamDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(UserItemResponse user)
+    public void OpenEditUserDialog(UserDto user)
     {
         CurrentTeamId = user.UserId;
         TeamDialogVisible = true;
     }
 
-    public void OpenAuthorizeDialog(UserItemResponse user)
+    public void OpenAuthorizeDialog(UserDto user)
     {
         CurrentTeamId = user.UserId;
         TeamDialogVisible = true;

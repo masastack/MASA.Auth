@@ -12,7 +12,7 @@ public class RoleService : ServiceBase
         MapDelete(DeleteRoleAsync);
     }
 
-    private async Task<PaginationList<RoleDto>> GetRoleItemsAsync([FromServices] IEventBus eventBus,
+    private async Task<PaginationDto<RoleDto>> GetRoleItemsAsync([FromServices] IEventBus eventBus,
            [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
     {
         var query = new RolePaginationQuery(pageIndex, pageSize, search, enabled);

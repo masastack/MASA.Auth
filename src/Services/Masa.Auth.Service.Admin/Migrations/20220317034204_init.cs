@@ -877,7 +877,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Effect = table.Column<bool>(type: "bit", nullable: false),
-                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                    TeamMemberType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -906,7 +906,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                    TeamMemberType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -929,7 +929,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamStaffType = table.Column<int>(type: "int", nullable: false)
+                    TeamMemberType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -953,7 +953,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     JobNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StaffType = table.Column<int>(type: "int", nullable: false),
+                    MemberType = table.Column<int>(type: "int", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),

@@ -2,10 +2,10 @@
 
 public class RoleService : ServiceBase
 {
-    List<RoleItemResponse> Roles = new List<RoleItemResponse>
+    List<RoleDto> Roles = new List<RoleDto>
     {
-        new RoleItemResponse(Guid.NewGuid(), "admin", "00001", 1, "admin Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
-        new RoleItemResponse(Guid.NewGuid(), "student", "10001", 1, "student Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
+        new RoleDto(Guid.NewGuid(), "admin", "00001", 1, "admin Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
+        new RoleDto(Guid.NewGuid(), "student", "10001", 1, "student Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
     };
 
     internal RoleService(ICallerProvider callerProvider) : base(callerProvider)
@@ -13,28 +13,28 @@ public class RoleService : ServiceBase
 
     }
 
-    public async Task<PaginationItemsResponse<RoleItemResponse>> GetRoleItemsAsync(GetRoleItemsRequest request)
+    public async Task<PaginationDto<RoleDto>> GetRoleItemsAsync(GetRoleItemsDto request)
     {
         var roles = Roles.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
-        return await Task.FromResult(new PaginationItemsResponse<RoleItemResponse>(Roles.Count, 1, Roles));
+        return await Task.FromResult(new PaginationDto<RoleDto>(Roles.Count, 1, Roles));
     }
 
-    public async Task<RoleDetailResponse> GetRoleDetailAsync(Guid id)
+    public async Task<RoleDetailDto> GetRoleDetailAsync(Guid id)
     {
-        return await Task.FromResult(RoleDetailResponse.Default);
+        return await Task.FromResult(RoleDetailDto.Default);
     }
 
-    public async Task<List<RoleItemResponse>> SelectRolesAsync()
+    public async Task<List<RoleDto>> SelectRolesAsync()
     {
         return await Task.FromResult(Roles);
     }
 
-    public async Task AddRoleAsync(AddRoleRequest request)
+    public async Task AddRoleAsync(AddRoleDto request)
     {
         await Task.CompletedTask;
     }
 
-    public async Task UpdateRoleAsync(UpdateRoleRequest request)
+    public async Task UpdateRoleAsync(UpdateRoleDto request)
     {
         await Task.CompletedTask;
     }
