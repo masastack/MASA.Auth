@@ -16,32 +16,34 @@
                            ItemKey="r=>r.Id"
                            ItemChildren="r=>r.Children">
                     <LabelContent>
-                        <div class="d-flex justify-space-between align-center">
-                            <span>@context.Item.Name</span>
-                            <MMenu Right Bottom class="mr-2">
-                                <ActivatorContent Context="activatorContext">
-                                    <MButton Icon @attributes="@activatorContext.Attrs">
-                                        <MIcon Small>fas fa-ellipsis-v</MIcon>
-                                    </MButton>
-                                </ActivatorContent>
-                                <ChildContent>
-                                    <MList>
-                                        <MListItem OnClick="()=>OpenAddDialog(context.Item.Id,context.Item.Name)">
-                                            <MIcon Small>mdi-plus-circle-outline</MIcon>
-                                            <MListItemTitle Class="ml-2"> @T("AddSubordinate") </MListItemTitle>
-                                        </MListItem>
-                                        <MListItem>
-                                            <MIcon Small>mdi-pencil-outline</MIcon>
-                                            <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
-                                        </MListItem>
-                                        <MListItem>
-                                            <MIcon Small>mdi-trash-can-outline</MIcon>
-                                            <MListItemTitle Class="ml-2"> @T("Delete") </MListItemTitle>
-                                        </MListItem>
-                                    </MList>
-                                </ChildContent>
-                            </MMenu>
-                        </div>
+                        <MHover Context="_">
+                            <div class="d-flex justify-space-between align-center">
+                                <span>@context.Item.Name</span>
+                                <MMenu Right Bottom class="mr-2">
+                                    <ActivatorContent Context="activatorContext">
+                                        <MButton Icon @attributes="@activatorContext.Attrs">
+                                            <MIcon Small>fas fa-ellipsis-v</MIcon>
+                                        </MButton>
+                                    </ActivatorContent>
+                                    <ChildContent>
+                                        <MList>
+                                            <MListItem>
+                                                <MIcon Small>mdi-copy</MIcon>
+                                                <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
+                                            </MListItem>
+                                            <MListItem>
+                                                <MIcon Small>mdi-pencil</MIcon>
+                                                <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
+                                            </MListItem>
+                                            <MListItem>
+                                                <MIcon Small>mdi-plus</MIcon>
+                                                <MListItemTitle Class="ml-2"> @T("AddChild") </MListItemTitle>
+                                            </MListItem>
+                                        </MList>
+                                    </ChildContent>
+                                </MMenu>
+                            </div>
+                        </MHover>
                     </LabelContent>
                 </MTreeview>
             </MCardText>
@@ -98,25 +100,15 @@
                     @switch (context.Header.Value)
                     {
                         case nameof(StaffDto.Name):
-                            var genderText = "";
-                            <span>@genderText</span>
+                            <div>
+                                <MAvatar>
+                                    <MImage Src="@(context.Item.Avatar)" Alt="Jack"></MImage>
+                                </MAvatar>
+                                <span class="ml-2">@context.Item.Name</span>
+                            </div>
                             break;
                         case "Action":
-                            <MMenu Right Bottom>
-                                <ActivatorContent Context="activatorContext">
-                                    <MButton Icon @attributes="@activatorContext.Attrs">
-                                        <MIcon XSmall>fas fa-ellipsis-v</MIcon>
-                                    </MButton>
-                                </ActivatorContent>
-                                <ChildContent>
-                                    <MList>
-                                        <MListItem>
-                                            <MIcon Small>far fa-trash-alt</MIcon>
-                                            <MListItemTitle Class="ml-2"> Delete </MListItemTitle>
-                                        </MListItem>
-                                    </MList>
-                                </ChildContent>
-                            </MMenu>
+                            <MIcon Small>mdi-pencil</MIcon>
                             break;
                         default:
                             @context.Value
