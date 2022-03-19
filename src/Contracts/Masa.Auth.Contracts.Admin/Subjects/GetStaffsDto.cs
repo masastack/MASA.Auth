@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class GetStaffsDto : Pagination
 {
@@ -24,15 +22,15 @@ public class GetStaffsDto : Pagination
 
     public static ValueTask<GetStaffsDto?> BindAsync(HttpContext context, ParameterInfo parameter)
     {
-        int.TryParse(context.Request.Query["pageIndex"], out var pageIndex);
-        pageIndex = pageIndex == 0 ? 1 : pageIndex;
+        int.TryParse(context.Request.Query["page"], out var page);
+        page = page == 0 ? 1 : page;
         int.TryParse(context.Request.Query["pageSize"], out var pageSize);
         pageSize = pageSize == 0 ? 20 : pageSize;
         bool.TryParse(context.Request.Query["enabled"], out var enabled);
         var name = context.Request.Query["name"];
         var phoneNumber = context.Request.Query["phoneNumber"];
         var email = context.Request.Query["email"];
-        var result = new GetStaffsDto(pageIndex, pageSize, name, phoneNumber, email, enabled);
+        var result = new GetStaffsDto(page, pageSize, name, phoneNumber, email, enabled);
 
         return ValueTask.FromResult<GetStaffsDto?>(result);
     }
