@@ -99,12 +99,12 @@ namespace Masa.Auth.Web.Admin.Rcl.Data.App.Todo
 
         public static string[] GetAvatars() => new string[]
         {
-        "/img/avatar/1.svg",
-        "/img/avatar/8.svg",
-        "/img/avatar/12.svg",
-        "/img/avatar/10.svg",
-        "/img/avatar/11.svg",
-        "/img/avatar/9.svg"
+        "/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/1.svg",
+        "/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/8.svg",
+        "/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/12.svg",
+        "/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/10.svg",
+        "/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/11.svg",
+        "/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/9.svg"
         };
     }
 }

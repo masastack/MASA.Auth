@@ -10,9 +10,9 @@
             case nameof(UserDto.Avatar):
                 <div class="hover-pointer d-flex my-2" @onclick="()=> OpenUpdateUserDialog(context.Item)">
                     <MAvatar Size=48 Class="mt-1">
-                        <MImage Contain Src="@context.Item.Avatar"></MImage>
+                        <img src="@context.Item.Avatar" />
                     </MAvatar>
-                    <div class="ml-4">
+                    <div class="ml-4 block-center">
                         <div class="text-subtitle">@context.Item.Name</div>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                 <span>@context.Item.PhoneNumber</span>
                 break;
             case (nameof(UserDto.CreationTime)):
-                <span>@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss");</span>
+                <span>@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</span>
                 break;
             case nameof(UserDto.Enabled):
                 string color = context.Item.Enabled ? "sample-green" : "error";
