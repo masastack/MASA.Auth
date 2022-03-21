@@ -1,10 +1,10 @@
 ﻿namespace Masa.Auth.ApiGateways.Caller
 {
-    public class Options
+    public class AuthApiOptions
     {
         public string AuthServiceBaseAddress { get; set; }
 
-        public Options(string authServiceBaseAddress)
+        public AuthApiOptions(string authServiceBaseAddress)
         {
             AuthServiceBaseAddress = authServiceBaseAddress;
         }

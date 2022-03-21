@@ -29,7 +29,7 @@ public class AuthCaller : HttpClientCallerBase
 
     public override string Name { get; set; }
 
-    public AuthCaller(IServiceProvider serviceProvider,Options options) : base(serviceProvider)
+    public AuthCaller(IServiceProvider serviceProvider,AuthApiOptions options) : base(serviceProvider)
     {
         Name = nameof(AuthCaller);
         BaseAddress = options.AuthServiceBaseAddress;
