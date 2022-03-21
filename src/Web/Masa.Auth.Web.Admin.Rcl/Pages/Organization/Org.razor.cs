@@ -6,10 +6,10 @@ public partial class Org
     List<DepartmentDto> _departments = new();
     readonly List<DataTableHeader<StaffDto>> _headers = new()
     {
-        new() { Text = "员工", Value = nameof(StaffDto.Name) },
-        new() { Text = "手机号", Value = nameof(StaffDto.PhoneNumber) },
-        new() { Text = "邮箱", Value = nameof(StaffDto.Email) },
-        new() { Text = "工号", Value = nameof(StaffDto.JobNumber) },
+        new() { Text = "员工", Value = nameof(StaffDto.Name), CellClass = "text-body neutral-lighten-1--text" },
+        new() { Text = "手机号", Value = nameof(StaffDto.PhoneNumber), CellClass = "text-body3" },
+        new() { Text = "邮箱", Value = nameof(StaffDto.Email), CellClass = "text-body3" },
+        new() { Text = "工号", Value = nameof(StaffDto.JobNumber), CellClass = "text-body3" },
         new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
     };
     List<StaffDto> staffItems = new();
@@ -19,18 +19,26 @@ public partial class Org
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        _departments = new List<DepartmentDto> {
-            new DepartmentDto
-            {
-                Name ="MasaStack",
-                Id = Guid.NewGuid(),
-                Children = new List<DepartmentDto> {
-                    new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid()},
-                    new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid()},
+        if (firstRender)
+        {
+
+            _departments = new List<DepartmentDto> {
+                new DepartmentDto
+                {
+                    Name ="MasaStack",
+                    Id = Guid.NewGuid(),
+                    Children = new List<DepartmentDto> {
+                        new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid()},
+                        new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid()},
+                    }
                 }
-            }
-        };
-        StateHasChanged();
+            };
+            staffItems = new List<StaffDto> {
+                new StaffDto(Guid.NewGuid(),"新员工","18267367890","13562763@qq.com","12412489","https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png")
+            };
+            StateHasChanged();
+        }
+
         await base.OnAfterRenderAsync(firstRender);
     }
 

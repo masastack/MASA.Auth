@@ -55,7 +55,7 @@ public class QueryHandler
     {
         var key = staffListQuery.SearchKey;
         return (await _staffRepository.GetListAsync(s => s.JobNumber.Contains(key) || s.Name.Contains(key)))
-            .Take(staffListQuery.MaxCount).Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.StaffType, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
+            .Take(staffListQuery.MaxCount).Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar)).ToList();
     }
 
     [EventHandler]
@@ -75,6 +75,6 @@ public class QueryHandler
             PageSize = pageSize
         });
         return new PaginationDto<StaffDto>(PaginationDto.Total, PaginationDto.TotalPages,
-            PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.StaffType, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
+            PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar)).ToList());
     }
 }

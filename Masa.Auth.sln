@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.ApiGateways.Calle
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{99DF0538-B88E-444B-AA99-D92641592F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masa.Auth.Contracts.Admin", "src\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj", "{4E4040FE-959E-4C83-B0FD-262E0C5F3D72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Contracts.Admin", "src\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj", "{4E4040FE-959E-4C83-B0FD-262E0C5F3D72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,8 +4,9 @@
 <MRow>
     <MCol Md="@("auto")">
         <MCard style="width:300px;">
-            <MCardTitle>
+            <MCardTitle class="d-flex justify-space-between">
                 部门管理
+                <MIcon>mdi-magnify</MIcon>
             </MCardTitle>
             <MCardText style="height:500px;">
                 <MTreeview @bind-Active="_active"
@@ -16,19 +17,19 @@
                            ItemKey="r=>r.Id"
                            ItemChildren="r=>r.Children">
                     <LabelContent>
-            @*            <MHover Context="_">*@
-                            <div class="d-flex justify-space-between align-center">
+                        <MHover Context="hoverComtext">
+                            <div @attributes="hoverComtext.Attrs" class="d-flex justify-space-between align-center">
                                 <span>@context.Item.Name</span>
                                 <MMenu Right Bottom class="mr-2">
                                     <ActivatorContent Context="activatorContext">
-                                        <MButton Icon @attributes="@activatorContext.Attrs">
+                                        <MButton style="@(hoverComtext.Hover?"display:flex":"display:none")" Icon @attributes="@activatorContext.Attrs">
                                             <MIcon Small>fas fa-ellipsis-v</MIcon>
                                         </MButton>
                                     </ActivatorContent>
                                     <ChildContent>
                                         <MList>
                                             <MListItem>
-                                                <MIcon Small>mdi-copy</MIcon>
+                                                <MIcon Small>mdi-content-copy</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
                                             </MListItem>
                                             <MListItem>
@@ -43,7 +44,7 @@
                                     </ChildContent>
                                 </MMenu>
                             </div>
-                        @*</MHover>*@
+                        </MHover>
                     </LabelContent>
                 </MTreeview>
             </MCardText>
