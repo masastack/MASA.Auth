@@ -34,7 +34,7 @@ public partial class AddOrUpdateUserDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             if (IsAdd) User = UserDetailDto.Default;
             else await GetUserDetailAsync();

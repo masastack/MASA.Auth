@@ -34,7 +34,7 @@ public partial class AddOrUpdateTeamDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             if (IsAdd) Team = TeamDetailDto.Default;
             else await GetTeamDetailAsync();

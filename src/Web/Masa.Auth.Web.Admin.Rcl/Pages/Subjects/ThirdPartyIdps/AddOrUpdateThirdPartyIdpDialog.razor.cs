@@ -34,7 +34,7 @@ public partial class AddOrUpdateThirdPartyIdpDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             if (IsAdd) ThirdPartyIdp = ThirdPartyIdpDetailDto.Default;
             else await GetThirdPartyIdpDetailAsync();
