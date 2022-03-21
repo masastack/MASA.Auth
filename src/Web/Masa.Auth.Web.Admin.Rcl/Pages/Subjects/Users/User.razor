@@ -24,7 +24,7 @@
                 <span>@context.Item.PhoneNumber</span>
                 break;
             case (nameof(UserDto.CreationTime)):
-                <span>@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss");</span>
+                <span>@context.Item.CreationTime.ToString(T("$DateTimeFormat"));</span>
                 break;
             case nameof(UserDto.Enabled):
                 string color = context.Item.Enabled ? "sample-green" : "error";
