@@ -13,9 +13,9 @@ public class RoleService : ServiceBase
     }
 
     private async Task<PaginationDto<RoleDto>> GetRolesAsync([FromServices] IEventBus eventBus,
-           [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
+           [FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
     {
-        var query = new RolePaginationQuery(pageIndex, pageSize, search, enabled);
+        var query = new RolePaginationQuery(page, pageSize, search, enabled);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

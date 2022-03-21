@@ -4,7 +4,7 @@ public partial class Role
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -27,12 +27,12 @@ public partial class Role
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
+            _page = value;
             GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -82,7 +82,7 @@ public partial class Role
     public async Task GetRolesAsync()
     {
         Loading = true;
-        var reuquest = new GetRolesDto(PageIndex, PageSize, Search, Enabled);
+        var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
         var response = await RoleService.GetRolesAsync(reuquest);
         Roles = response.Items;
         TotalPages = response.TotalPages;

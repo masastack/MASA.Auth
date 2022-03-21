@@ -6,7 +6,7 @@ public partial class User
     private string? _email;
     private string? _phoneNumber;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Name
@@ -49,12 +49,12 @@ public partial class User
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
+            _page = value;
             GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -105,7 +105,7 @@ public partial class User
     public async Task GetUsersAsync()
     {
         Loading = true;
-        var request = new GetUsersDto(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
+        var request = new GetUsersDto(Page, PageSize, Name, PhoneNumber, Email, Enabled);
         var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
         TotalPages = response.TotalPages;

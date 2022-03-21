@@ -4,7 +4,7 @@ public partial class ThirdPartyIdp
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -27,12 +27,12 @@ public partial class ThirdPartyIdp
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
+            _page = value;
             GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -82,7 +82,7 @@ public partial class ThirdPartyIdp
     public async Task GetThirdPartyIdpsAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyIdpIsDto(PageIndex, PageSize, Search);
+        var request = new GetThirdPartyIdpIsDto(Page, PageSize, Search);
         var response = await ThirdPartyIdpService.GetThirdPartyIdpsAsync(request);
         ThirdPartyIdps = response.Items;
         TotalPages = response.TotalPages;

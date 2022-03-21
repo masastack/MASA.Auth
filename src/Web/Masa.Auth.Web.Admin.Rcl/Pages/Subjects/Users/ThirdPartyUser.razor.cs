@@ -4,7 +4,7 @@ public partial class ThirdPartyUser
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -27,12 +27,12 @@ public partial class ThirdPartyUser
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
+            _page = value;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -89,7 +89,7 @@ public partial class ThirdPartyUser
     public async Task GetThirdPartyUsersAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyUsersDto(PageIndex, PageSize, Search, Enabled, ThirdPartyIdpId);
+        var request = new GetThirdPartyUsersDto(Page, PageSize, Search, Enabled, ThirdPartyIdpId);
         var response = await ThirdPartyUserService.GetThirdPartyUsersAsync(request);
         ThirdPartyUsers = response.Items;
         TotalPages = response.TotalPages;

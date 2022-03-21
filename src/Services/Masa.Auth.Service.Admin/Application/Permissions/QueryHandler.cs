@@ -22,7 +22,7 @@ public class QueryHandler
 
         var roles = await _roleRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
-            Page = query.PageIndex,
+            Page = query.Page,
             PageSize = query.PageSize,
             Sorting = new Dictionary<string, bool>
             {

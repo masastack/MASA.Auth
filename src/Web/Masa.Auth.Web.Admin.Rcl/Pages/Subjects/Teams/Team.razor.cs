@@ -4,7 +4,7 @@ public partial class Team
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -27,12 +27,12 @@ public partial class Team
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
+            _page = value;
             GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
