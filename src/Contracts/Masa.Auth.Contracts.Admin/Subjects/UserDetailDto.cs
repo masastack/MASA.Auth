@@ -1,7 +1,7 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UserDetailDto : UserDto
-{ 
+{
     public AddressValueDto Address { get; set; }
 
     public static UserDetailDto Default => new UserDetailDto(Guid.Empty, "", "", "", "", "", "", default, "", "", DateTime.Now, new());
