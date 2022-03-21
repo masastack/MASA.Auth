@@ -57,7 +57,7 @@ public partial class ThirdPartyUser
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyIdpIDto> ThirdPartyIdps { get; set; } = new();
+    public List<ThirdPartyIdpDto> ThirdPartyIdps { get; set; } = new();
 
     public Guid ThirdPartyIdpId { get; set; }
 
@@ -106,7 +106,7 @@ public partial class ThirdPartyUser
 
     public void OpenEditThirdPartyUserDialog(ThirdPartyUserDto thirdPartyUser)
     {
-        CurrentThirdPartyUserId = thirdPartyUser.ThirdPartyUserId;
+        CurrentThirdPartyUserId = thirdPartyUser.Id;
         ThirdPartyUserDialog = true;
     }
 }

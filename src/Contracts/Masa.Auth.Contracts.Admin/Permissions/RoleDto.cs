@@ -2,7 +2,7 @@
 
 public class RoleDto
 {
-    public Guid RoleId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -22,9 +22,9 @@ public class RoleDto
 
     public string Modifier { get; set; }
 
-    public RoleDto(Guid roleId, string name, string code, int limit, string description, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public RoleDto(Guid id, string name, string code, int limit, string description, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {
-        RoleId = roleId;
+        Id = id;
         Name = name;
         Code = code;
         Limit = limit;

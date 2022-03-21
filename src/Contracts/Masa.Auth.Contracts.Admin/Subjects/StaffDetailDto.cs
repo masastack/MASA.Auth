@@ -2,7 +2,7 @@
 
 public class StaffDetailDto
 {
-    public Guid StaffId { get; set; }
+    public Guid Id { get; set; }
 
     public Guid DepartmentId { get; set; }
 
@@ -14,7 +14,7 @@ public class StaffDetailDto
 
     public bool Enabled { get; private set; }
 
-    public StaffTypes MemberType { get; set; }
+    public StaffTypes StaffType { get; set; }
 
     public List<Guid> TeamIds { get; set; }
 
@@ -22,15 +22,15 @@ public class StaffDetailDto
 
     public static StaffDetailDto Default => new StaffDetailDto(Guid.Empty, Guid.Empty, Guid.Empty, "", "", true, default, new(), UserDetailDto.Default);
 
-    public StaffDetailDto(Guid staffId, Guid departmentId, Guid positionId, string position, string jobNumber, bool enabled, StaffTypes MemberType, List<Guid> teamIds, UserDetailDto user)
+    public StaffDetailDto(Guid id, Guid departmentId, Guid positionId, string position, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user)
     {
-        StaffId = staffId;
+        Id = id;
         DepartmentId = departmentId;
         PositionId = positionId;
         Position = position;
         JobNumber = jobNumber;
         Enabled = enabled;
-        MemberType = MemberType;
+        StaffType = staffType;
         TeamIds = teamIds;
         User = user;
     }

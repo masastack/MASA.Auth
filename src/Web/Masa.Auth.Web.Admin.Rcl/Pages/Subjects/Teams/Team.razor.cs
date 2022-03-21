@@ -81,13 +81,13 @@ public partial class Team
 
     public void OpenEditUserDialog(UserDto user)
     {
-        CurrentTeamId = user.UserId;
+        CurrentTeamId = user.Id;
         TeamDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentTeamId = user.UserId;
+        CurrentTeamId = user.Id;
         TeamDialogVisible = true;
     }
 }

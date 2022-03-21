@@ -98,13 +98,13 @@ public partial class Role
 
     public void OpenEditUserDialog(UserDto user)
     {
-        CurrentRoleId = user.UserId;
+        CurrentRoleId = user.Id;
         RoleDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentRoleId = user.UserId;
+        CurrentRoleId = user.Id;
         RoleDialogVisible = true;
     }
 }

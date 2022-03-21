@@ -3,10 +3,10 @@
 public class ThirdPartyIdpService : ServiceBase
 {
 
-    List<ThirdPartyIdpIDto> ThirdPartyIdps = new List<ThirdPartyIdpIDto>()
+    List<ThirdPartyIdpDto> ThirdPartyIdps = new List<ThirdPartyIdpDto>()
     {
-        new ThirdPartyIdpIDto(Guid.NewGuid(), "weixin", "weixin", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/weixin", "", default, DateTime.Now, null),
-        new ThirdPartyIdpIDto(Guid.NewGuid(), "QQ", "qq", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/qq", "", default, DateTime.Now, null),
+        new ThirdPartyIdpDto(Guid.NewGuid(), "weixin", "weixin", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/weixin", "", default, DateTime.Now, null),
+        new ThirdPartyIdpDto(Guid.NewGuid(), "QQ", "qq", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/qq", "", default, DateTime.Now, null),
     };
 
     internal ThirdPartyIdpService(ICallerProvider callerProvider) : base(callerProvider)
@@ -14,10 +14,10 @@ public class ThirdPartyIdpService : ServiceBase
 
     }
 
-    public async Task<PaginationDto<ThirdPartyIdpIDto>> GetThirdPartyIdpsAsync(GetThirdPartyIdpIsDto request)
+    public async Task<PaginationDto<ThirdPartyIdpDto>> GetThirdPartyIdpsAsync(GetThirdPartyIdpIsDto request)
     {
         var thirdPartyIdps = ThirdPartyIdps.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<ThirdPartyIdpIDto>(ThirdPartyIdps.Count, 1, thirdPartyIdps));
+        return await Task.FromResult(new PaginationDto<ThirdPartyIdpDto>(ThirdPartyIdps.Count, 1, thirdPartyIdps));
     }
 
     public async Task<ThirdPartyIdpDetailDto> GetThirdPartyIdpDetailAsync(Guid id)
@@ -25,7 +25,7 @@ public class ThirdPartyIdpService : ServiceBase
         return await Task.FromResult(ThirdPartyIdpDetailDto.Default);
     }
 
-    public async Task<List<ThirdPartyIdpIDto>> SelectThirdPartyIdpAsync()
+    public async Task<List<ThirdPartyIdpDto>> SelectThirdPartyIdpAsync()
     {
         return await Task.FromResult(ThirdPartyIdps);
     }
@@ -43,7 +43,7 @@ public class ThirdPartyIdpService : ServiceBase
 
     public async Task DeleteThirdPartyIdpAsync(Guid id)
     {
-        ThirdPartyIdps.Remove(ThirdPartyIdps.First(p => p.ThirdPartyIdpId == id));
+        ThirdPartyIdps.Remove(ThirdPartyIdps.First(p => p.Id == id));
         await Task.CompletedTask;
     }
 }

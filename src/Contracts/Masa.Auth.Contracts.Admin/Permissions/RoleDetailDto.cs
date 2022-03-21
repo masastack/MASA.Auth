@@ -2,7 +2,7 @@
 
 public class RoleDetailDto
 {
-    public Guid RoleId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -30,9 +30,9 @@ public class RoleDetailDto
 
     public static RoleDetailDto Default = new(default, "", "", 0, "", true, new(), new(), new(), default, default, "", "");
 
-    public RoleDetailDto(Guid roleId, string name, string code, int limit, string description, bool enabled, List<Guid> permissions, List<Guid> childrenRoles, List<Guid> users, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public RoleDetailDto(Guid id, string name, string code, int limit, string description, bool enabled, List<Guid> permissions, List<Guid> childrenRoles, List<Guid> users, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {
-        RoleId = roleId;
+        Id = id;
         Name = name;
         Code = code;
         Limit = limit;

@@ -35,7 +35,7 @@ public class StaffService : ServiceBase
 
     public async Task DeleteStaffAsync(Guid staffId)
     {
-        Staffs.Remove(Staffs.First(s => s.StaffId == staffId));
+        Staffs.Remove(Staffs.First(s => s.Id == staffId));
         await Task.CompletedTask;
     }
 }

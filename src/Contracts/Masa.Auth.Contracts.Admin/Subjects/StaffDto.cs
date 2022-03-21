@@ -2,7 +2,7 @@
 
 public class StaffDto
 {
-    public Guid StaffId { get; set; }
+    public Guid Id { get; set; }
 
     public string Department { get; set; }
 
@@ -12,7 +12,7 @@ public class StaffDto
 
     public bool Enabled { get; private set; }
 
-    public StaffTypes MemberType { get; set; }
+    public StaffTypes StaffType { get; set; }
 
     public string Name { get; set; }
 
@@ -22,14 +22,14 @@ public class StaffDto
 
     public string Email { get; set; }
 
-    public StaffDto(Guid staffId, string department, string position, string jobNumber, bool enabled, StaffTypes memberType, string name, string avatar, string phoneNumber, string email)
+    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, StaffTypes staffType, string name, string avatar, string phoneNumber, string email)
     {
-        StaffId = staffId;
+        Id = id;
         Department = department;
         Position = position;
         JobNumber = jobNumber;
         Enabled = enabled;
-        MemberType = memberType;
+        StaffType = staffType;
         Name = name;
         Avatar = avatar;
         PhoneNumber = phoneNumber;

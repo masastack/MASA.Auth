@@ -92,7 +92,7 @@ public partial class Staff
 
     public void OpenStaffDialog(StaffDto staff)
     {
-        CurrentStaffId = staff.StaffId;
+        CurrentStaffId = staff.Id;
         StaffDialog = true;
     }
 }

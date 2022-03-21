@@ -32,15 +32,15 @@ public class UserService : ServiceBase
 
     public async Task UpdateUserAsync(UpdateUserDto request)
     {
-        var oldData = Users.First(u => request.UserId == request.UserId);
+        var oldData = Users.First(u => request.Id == request.Id);
         Users.Remove(oldData);
-        Users.Add(new UserDto(request.UserId, request.Name, request.DisplayName, request.Avatar, oldData.IDCard, oldData.PhoneNumber, request.CompanyName, request.Enabled, oldData.PhoneNumber, oldData.Email, oldData.CreationTime));
+        Users.Add(new UserDto(request.Id, request.Name, request.DisplayName, request.Avatar, oldData.IDCard, oldData.PhoneNumber, request.CompanyName, request.Enabled, oldData.PhoneNumber, oldData.Email, oldData.CreationTime));
         await Task.CompletedTask;
     }
 
     public async Task DeleteUserAsync(Guid userId)
     {
-        Users.Remove(Users.First(u => u.UserId == userId));
+        Users.Remove(Users.First(u => u.Id == userId));
         await Task.CompletedTask;
     }
 }

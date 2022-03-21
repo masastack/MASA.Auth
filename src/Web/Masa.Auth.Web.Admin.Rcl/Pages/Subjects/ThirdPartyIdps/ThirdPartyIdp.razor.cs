@@ -53,11 +53,11 @@ public partial class ThirdPartyIdp
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<ThirdPartyIdpIDto> ThirdPartyIdps { get; set; } = new();
+    public List<ThirdPartyIdpDto> ThirdPartyIdps { get; set; } = new();
 
     public Guid CurrentThirdPartyIdpId { get; set; }
 
-    public List<DataTableHeader<ThirdPartyIdpIDto>> Headers { get; set; } = new();
+    public List<DataTableHeader<ThirdPartyIdpDto>> Headers { get; set; } = new();
 
     public bool ThirdPartyIdpDialogVisible { get; set; }
 
@@ -67,12 +67,12 @@ public partial class ThirdPartyIdp
     {
         Headers = new()
         {
-            new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpIDto.Icon), Sortable = false },
-            new() { Text = T("ThirdPartyIdp.Name"), Value = nameof(ThirdPartyIdpIDto.Name), Sortable = false },
-            new() { Text = T("ThirdPartyIdp.DisplayName"), Value = nameof(ThirdPartyIdpIDto.DisplayName), Sortable = false },
-            new() { Text = T("Type"), Value = nameof(ThirdPartyIdpIDto.AuthenticationType), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyIdpIDto.CreationTime)), Value = nameof(ThirdPartyIdpIDto.CreationTime), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyIdpIDto.Url)), Value = nameof(ThirdPartyIdpIDto.Url), Sortable = false },
+            new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpDto.Icon), Sortable = false },
+            new() { Text = T("ThirdPartyIdp.Name"), Value = nameof(ThirdPartyIdpDto.Name), Sortable = false },
+            new() { Text = T("ThirdPartyIdp.DisplayName"), Value = nameof(ThirdPartyIdpDto.DisplayName), Sortable = false },
+            new() { Text = T("Type"), Value = nameof(ThirdPartyIdpDto.AuthenticationType), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyIdpDto.Url)), Value = nameof(ThirdPartyIdpDto.Url), Sortable = false },
             new() { Text = T("Action"), Value = T("Action"), Sortable = false },
         };
 
@@ -96,15 +96,15 @@ public partial class ThirdPartyIdp
         ThirdPartyIdpDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(ThirdPartyIdpIDto thirdPartyIdp)
+    public void OpenEditUserDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
-        CurrentThirdPartyIdpId = thirdPartyIdp.ThirdPartyIdpId;
+        CurrentThirdPartyIdpId = thirdPartyIdp.Id;
         ThirdPartyIdpDialogVisible = true;
     }
 
-    public void OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpIDto thirdPartyIdp)
+    public void OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
-        CurrentThirdPartyIdpId = thirdPartyIdp.ThirdPartyIdpId;
+        CurrentThirdPartyIdpId = thirdPartyIdp.Id;
         OpenConfirmDialog(async confirm =>
         {
             if (confirm) await DeleteThirdPartyIdpAsync();

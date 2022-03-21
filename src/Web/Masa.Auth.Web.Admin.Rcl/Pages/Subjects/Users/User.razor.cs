@@ -121,13 +121,13 @@ public partial class User
 
     public void OpenUpdateUserDialog(UserDto user)
     {
-        CurrentUserId = user.UserId;
+        CurrentUserId = user.Id;
         UserDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentUserId = user.UserId;
+        CurrentUserId = user.Id;
         AuthorizeDialogVisible = true;
     }
 }

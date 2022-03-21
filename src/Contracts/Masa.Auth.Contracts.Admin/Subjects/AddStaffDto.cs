@@ -4,7 +4,7 @@ public class AddStaffDto
 {
     public string JobNumber { get; set; }
 
-    public StaffTypes MemberType { get; set; }
+    public StaffTypes StaffType { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -18,10 +18,10 @@ public class AddStaffDto
 
     public AddUserDto User { get; set; }
 
-    public AddStaffDto(string jobNumber, StaffTypes MemberType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserDto user)
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserDto user)
     {
         JobNumber = jobNumber;
-        MemberType = MemberType;
+        StaffType = staffType;
         Enabled = enabled;
         DepartmentId = departmentId;
         PositionId = positionId;
@@ -32,6 +32,6 @@ public class AddStaffDto
 
     public static implicit operator AddStaffDto(StaffDetailDto staff)
     {
-        return new AddStaffDto(staff.JobNumber, staff.MemberType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, staff.TeamIds, staff.User);
+        return new AddStaffDto(staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, staff.TeamIds, staff.User);
     }
 }

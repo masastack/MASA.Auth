@@ -2,7 +2,7 @@
 
 public class UpdateThirdPartyIdpDto
 {
-    public Guid ThirdPartyIdpId { get; set; }
+    public Guid Id { get; set; }
 
     public string DisplayName { get; set; }
 
@@ -16,9 +16,9 @@ public class UpdateThirdPartyIdpDto
 
     public AuthenticationTypes AuthenticationType { get; set; }
 
-    public UpdateThirdPartyIdpDto(Guid thirdPartyIdpId, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType)
+    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType)
     {
-        ThirdPartyIdpId = thirdPartyIdpId;
+        Id = id;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
@@ -29,6 +29,6 @@ public class UpdateThirdPartyIdpDto
 
     public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto request)
     {
-        return new UpdateThirdPartyIdpDto(request.ThirdPartyIdpId, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.AuthenticationType);
+        return new UpdateThirdPartyIdpDto(request.Id, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.AuthenticationType);
     }
 }
