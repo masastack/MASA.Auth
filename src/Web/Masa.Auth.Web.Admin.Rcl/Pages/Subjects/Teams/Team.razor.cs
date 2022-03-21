@@ -13,7 +13,7 @@ public partial class Team
         set
         {
             _search = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,7 +23,7 @@ public partial class Team
         set
         {
             _enabled = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -33,7 +33,7 @@ public partial class Team
         set
         {
             _pageIndex = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class Team
         set
         {
             _pageSize = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -63,10 +63,10 @@ public partial class Team
 
     protected override async Task OnInitializedAsync()
     {
-        await GetTeamItemsAsync();
+        await GetTeamsAsync();
     }
 
-    public async Task GetTeamItemsAsync()
+    public async Task GetTeamsAsync()
     {
         Loading = true;
         var response = await TeamService.SelectTeamAsync();

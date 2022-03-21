@@ -15,7 +15,7 @@ public partial class User
         set
         {
             _name = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -25,7 +25,7 @@ public partial class User
         set
         {
             _email = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -35,7 +35,7 @@ public partial class User
         set
         {
             _phoneNumber = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -45,7 +45,7 @@ public partial class User
         set
         {
             _enabled = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -55,7 +55,7 @@ public partial class User
         set
         {
             _pageIndex = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -65,7 +65,7 @@ public partial class User
         set
         {
             _pageSize = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -99,14 +99,14 @@ public partial class User
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetUserItemsAsync();
+        await GetUsersAsync();
     }
 
-    public async Task GetUserItemsAsync()
+    public async Task GetUsersAsync()
     {
         Loading = true;
         var request = new GetUsersDto(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
-        var response = await UserService.GetUserItemsAsync(request);
+        var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;

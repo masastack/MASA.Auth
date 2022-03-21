@@ -12,7 +12,7 @@ public partial class Org
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber) },
         new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
     };
-    List<StaffDto> staffItems = new();
+    List<StaffDto> staffs = new();
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;

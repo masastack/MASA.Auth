@@ -22,9 +22,9 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    private List<PermissionRelation> permissionItems = new();
+    private List<PermissionRelation> permissions = new();
 
-    public IReadOnlyCollection<PermissionRelation> PermissionItems => permissionItems;
+    public IReadOnlyCollection<PermissionRelation> Permissions => permissions;
 
     private List<RolePermission> rolePermissions = new();
 
@@ -61,7 +61,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
         {
             throw new UserFriendlyException("current permission can`t delete,because UserPermissions not empty!");
         }
-        if (permissionItems.Any())
+        if (permissions.Any())
         {
             throw new UserFriendlyException("current permission can`t delete,because PermissionItems not empty!");
         }
@@ -75,7 +75,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
         }
         foreach (var childId in childrenId)
         {
-            permissionItems.Add(new PermissionRelation(childId));
+            permissions.Add(new PermissionRelation(childId));
         }
     }
 

@@ -13,7 +13,7 @@ public partial class ThirdPartyIdp
         set
         {
             _search = value;
-            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,7 +23,7 @@ public partial class ThirdPartyIdp
         set
         {
             _enabled = value;
-            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -33,7 +33,7 @@ public partial class ThirdPartyIdp
         set
         {
             _pageIndex = value;
-            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class ThirdPartyIdp
         set
         {
             _pageSize = value;
-            GetThirdPartyIdpItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -76,14 +76,14 @@ public partial class ThirdPartyIdp
             new() { Text = T("Action"), Value = T("Action"), Sortable = false },
         };
 
-        await GetThirdPartyIdpItemsAsync();
+        await GetThirdPartyIdpsAsync();
     }
 
-    public async Task GetThirdPartyIdpItemsAsync()
+    public async Task GetThirdPartyIdpsAsync()
     {
         Loading = true;
         var request = new GetThirdPartyIdpIsDto(PageIndex, PageSize, Search);
-        var response = await ThirdPartyIdpService.GetThirdPartyIdpItemsAsync(request);
+        var response = await ThirdPartyIdpService.GetThirdPartyIdpsAsync(request);
         ThirdPartyIdps = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;

@@ -6,7 +6,7 @@ public class ThirdPartyUserService : ServiceBase
     {
     }
 
-    public async Task<PaginationDto<ThirdPartyUserDto>> GetThirdPartyUserItemsAsync(GetThirdPartyUsersDto request)
+    public async Task<PaginationDto<ThirdPartyUserDto>> GetThirdPartyUsersAsync(GetThirdPartyUsersDto request)
     {
         return await Task.FromResult(new PaginationDto<ThirdPartyUserDto>(0, 0, new List<ThirdPartyUserDto>()));
     }

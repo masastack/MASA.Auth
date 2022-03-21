@@ -13,7 +13,7 @@ public partial class Role
         set
         {
             _search = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,7 +23,7 @@ public partial class Role
         set
         {
             _enabled = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -33,7 +33,7 @@ public partial class Role
         set
         {
             _pageIndex = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class Role
         set
         {
             _pageSize = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -76,14 +76,14 @@ public partial class Role
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetRoleItemsAsync();
+        await GetRolesAsync();
     }
 
-    public async Task GetRoleItemsAsync()
+    public async Task GetRolesAsync()
     {
         Loading = true;
         var reuquest = new GetRolesDto(PageIndex, PageSize, Search, Enabled);
-        var response = await RoleService.GetRoleItemsAsync(reuquest);
+        var response = await RoleService.GetRolesAsync(reuquest);
         Roles = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;

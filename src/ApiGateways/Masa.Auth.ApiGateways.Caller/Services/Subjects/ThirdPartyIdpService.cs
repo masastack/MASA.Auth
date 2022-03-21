@@ -3,7 +3,7 @@
 public class ThirdPartyIdpService : ServiceBase
 {
 
-    List<ThirdPartyIdpIDto> ThirdPartyIdpItems = new List<ThirdPartyIdpIDto>()
+    List<ThirdPartyIdpIDto> ThirdPartyIdps = new List<ThirdPartyIdpIDto>()
     {
         new ThirdPartyIdpIDto(Guid.NewGuid(), "weixin", "weixin", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/weixin", "", default, DateTime.Now, null),
         new ThirdPartyIdpIDto(Guid.NewGuid(), "QQ", "qq", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/qq", "", default, DateTime.Now, null),
@@ -14,10 +14,10 @@ public class ThirdPartyIdpService : ServiceBase
 
     }
 
-    public async Task<PaginationDto<ThirdPartyIdpIDto>> GetThirdPartyIdpItemsAsync(GetThirdPartyIdpIsDto request)
+    public async Task<PaginationDto<ThirdPartyIdpIDto>> GetThirdPartyIdpsAsync(GetThirdPartyIdpIsDto request)
     {
-        var thirdPartyIdps = ThirdPartyIdpItems.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<ThirdPartyIdpIDto>(ThirdPartyIdpItems.Count, 1, thirdPartyIdps));
+        var thirdPartyIdps = ThirdPartyIdps.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
+        return await Task.FromResult(new PaginationDto<ThirdPartyIdpIDto>(ThirdPartyIdps.Count, 1, thirdPartyIdps));
     }
 
     public async Task<ThirdPartyIdpDetailDto> GetThirdPartyIdpDetailAsync(Guid id)
@@ -27,12 +27,12 @@ public class ThirdPartyIdpService : ServiceBase
 
     public async Task<List<ThirdPartyIdpIDto>> SelectThirdPartyIdpAsync()
     {
-        return await Task.FromResult(ThirdPartyIdpItems);
+        return await Task.FromResult(ThirdPartyIdps);
     }
 
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpDto request)
     {
-        ThirdPartyIdpItems.Add(new(Guid.NewGuid(), request.Name, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.AuthenticationType, DateTime.Now, null));
+        ThirdPartyIdps.Add(new(Guid.NewGuid(), request.Name, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.AuthenticationType, DateTime.Now, null));
         await Task.CompletedTask;
     }
 
@@ -43,7 +43,7 @@ public class ThirdPartyIdpService : ServiceBase
 
     public async Task DeleteThirdPartyIdpAsync(Guid id)
     {
-        ThirdPartyIdpItems.Remove(ThirdPartyIdpItems.First(p => p.ThirdPartyIdpId == id));
+        ThirdPartyIdps.Remove(ThirdPartyIdps.First(p => p.ThirdPartyIdpId == id));
         await Task.CompletedTask;
     }
 }
