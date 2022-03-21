@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class TeamItemDto
+public class TeamDto
 {
     public Guid TeamId { get; set; }
 
@@ -18,7 +18,7 @@ public class TeamItemDto
 
     public DateTime? ModificationTime { get; set; }
 
-    public TeamItemDto(Guid teamId, string name, string avatar, string describe, string creator, string creatorAvatar, string modifier, DateTime? modificationTime)
+    public TeamDto(Guid teamId, string name, string avatar, string describe, string creator, string creatorAvatar, string modifier, DateTime? modificationTime)
     {
         TeamId = teamId;
         Name = name;

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Permissions;
 
-public class GetRoleItemsDto
+public class GetRolesDto
 {
     public int PageIndex { get; set; }
 
@@ -10,7 +10,7 @@ public class GetRoleItemsDto
 
     public bool Enabled { get; set; }
 
-    public GetRoleItemsDto(int pageIndex, int pageSize, string search, bool enabled)
+    public GetRolesDto(int pageIndex, int pageSize, string search, bool enabled)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;

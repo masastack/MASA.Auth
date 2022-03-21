@@ -53,7 +53,7 @@ public partial class Team
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<TeamItemDto> Teams { get; set; } = new();
+    public List<TeamDto> Teams { get; set; } = new();
 
     public Guid CurrentTeamId { get; set; }
 

@@ -82,7 +82,7 @@ public partial class Role
     public async Task GetRoleItemsAsync()
     {
         Loading = true;
-        var reuquest = new GetRoleItemsDto(PageIndex, PageSize, Search, Enabled);
+        var reuquest = new GetRolesDto(PageIndex, PageSize, Search, Enabled);
         var response = await RoleService.GetRoleItemsAsync(reuquest);
         Roles = response.Items;
         TotalPages = response.TotalPages;
