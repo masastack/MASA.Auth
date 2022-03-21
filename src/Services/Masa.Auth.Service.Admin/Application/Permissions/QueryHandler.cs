@@ -22,7 +22,7 @@ public class QueryHandler
 
         var roles = await _roleRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
-            Page = query.PageIndex,
+            Page = query.Page,
             PageSize = query.PageSize,
             Sorting = new Dictionary<string, bool>
             {
@@ -109,14 +109,14 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
-            RoleItems = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
-            TeamItems = permission.TeamPermissions.Select(tp => new TeamSelectDto
+            RoleIs = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
+            Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto
             {
                 Id = tp.Team.Id,
                 Name = tp.Team.Name,
                 Avatar = tp.Team.Avatar.Url
             }).ToList(),
-            UserItems = permission.UserPermissions.Select(up => new UserSelectDto
+            Users = permission.UserPermissions.Select(up => new UserSelectDto
             {
                 Id = up.User.Id,
                 Name = up.User.Name,

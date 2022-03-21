@@ -2,7 +2,7 @@
 
 public class UpdateTeamDto
 {
-    public Guid TeamId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -24,9 +24,9 @@ public class UpdateTeamDto
 
     public List<Guid> MemberRoles { get; set; }
 
-    public UpdateTeamDto(Guid teamId, string name, AvatarValueDto avatar, string description, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
+    public UpdateTeamDto(Guid id, string name, AvatarValueDto avatar, string description, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
     {
-        TeamId = teamId;
+        Id = id;
         Name = name;
         Avatar = avatar;
         Description = description;
@@ -41,7 +41,7 @@ public class UpdateTeamDto
 
     public static implicit operator UpdateTeamDto(TeamDetailDto team)
     {
-        return new UpdateTeamDto(team.TeamId, team.Name, team.Avatar, team.Describe, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
+        return new UpdateTeamDto(team.Id, team.Name, team.Avatar, team.Describe, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
     }
 }
 

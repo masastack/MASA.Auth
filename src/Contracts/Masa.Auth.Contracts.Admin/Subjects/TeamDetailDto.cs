@@ -2,7 +2,7 @@
 
 public class TeamDetailDto
 {
-    public Guid TeamId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -26,9 +26,9 @@ public class TeamDetailDto
 
     public static TeamDetailDto Default => new(Guid.Empty, "", new(), "", default, new(), new(), new(), new(), new(), new());
 
-    public TeamDetailDto(Guid teamId, string name, AvatarValueDto avatar, string describe, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
+    public TeamDetailDto(Guid id, string name, AvatarValueDto avatar, string describe, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
     {
-        TeamId = teamId;
+        Id = id;
         Name = name;
         Avatar = avatar;
         Describe = describe;

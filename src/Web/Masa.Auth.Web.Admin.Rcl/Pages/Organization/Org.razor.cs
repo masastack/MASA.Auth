@@ -12,7 +12,7 @@ public partial class Org
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber), CellClass = "text-body3" },
         new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
     };
-    List<StaffDto> staffItems = new();
+    List<StaffDto> staffs = new();
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
@@ -33,7 +33,7 @@ public partial class Org
                     }
                 }
             };
-            staffItems = new List<StaffDto> {
+            staffs = new List<StaffDto> {
                 new StaffDto(Guid.NewGuid(),"新员工","18267367890","13562763@qq.com","12412489","https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png")
             };
             StateHasChanged();

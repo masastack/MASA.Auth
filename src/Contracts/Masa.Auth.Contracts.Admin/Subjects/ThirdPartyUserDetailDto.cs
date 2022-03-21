@@ -2,7 +2,7 @@
 
 public class ThirdPartyUserDetailDto
 {
-    public Guid ThirdPartyUserId { get; set; }
+    public Guid Id { get; set; }
 
     public Guid ThirdPartyIdpId { get; set; }
 
@@ -20,11 +20,11 @@ public class ThirdPartyUserDetailDto
 
     public string Modifier { get; set; }
 
-    public static ThirdPartyUserDetailDto Default = new(default, default, true, "", UserDetailDto.Default, DateTime.Now, null, "","");
+    public static ThirdPartyUserDetailDto Default = new(default, default, true, "", UserDetailDto.Default, DateTime.Now, null, "", "");
 
-    public ThirdPartyUserDetailDto(Guid thirdPartyUserId, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public ThirdPartyUserDetailDto(Guid id, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {
-        ThirdPartyUserId = thirdPartyUserId;
+        Id = id;
         ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;

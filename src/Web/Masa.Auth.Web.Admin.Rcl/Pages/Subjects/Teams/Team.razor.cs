@@ -4,7 +4,7 @@ public partial class Team
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -13,7 +13,7 @@ public partial class Team
         set
         {
             _search = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,17 +23,17 @@ public partial class Team
         set
         {
             _enabled = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            _page = value;
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class Team
         set
         {
             _pageSize = value;
-            GetTeamItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -53,7 +53,7 @@ public partial class Team
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<TeamItemDto> Teams { get; set; } = new();
+    public List<TeamDto> Teams { get; set; } = new();
 
     public Guid CurrentTeamId { get; set; }
 
@@ -63,10 +63,10 @@ public partial class Team
 
     protected override async Task OnInitializedAsync()
     {
-        await GetTeamItemsAsync();
+        await GetTeamsAsync();
     }
 
-    public async Task GetTeamItemsAsync()
+    public async Task GetTeamsAsync()
     {
         Loading = true;
         var response = await TeamService.SelectTeamAsync();
@@ -81,13 +81,13 @@ public partial class Team
 
     public void OpenEditUserDialog(UserDto user)
     {
-        CurrentTeamId = user.UserId;
+        CurrentTeamId = user.Id;
         TeamDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentTeamId = user.UserId;
+        CurrentTeamId = user.Id;
         TeamDialogVisible = true;
     }
 }

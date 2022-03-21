@@ -3,20 +3,20 @@
 public class TeamService : ServiceBase
 {
 
-    List<TeamItemDto> Teams = new List<TeamItemDto>
+    List<TeamDto> Teams = new List<TeamDto>
     {
-        new TeamItemDto(Guid.NewGuid(), "Masa Stack", "", "Masa Stack Number One", "cyy", "", "cyy", DateTime.Now.AddYears(-1)),
-        new TeamItemDto(Guid.NewGuid(), "Lonsid", "", "Lonsid Number One", "zjc", "", "zjc", DateTime.Now.AddYears(-10)),
+        new TeamDto(Guid.NewGuid(), "Masa Stack", "", "Masa Stack Number One", "cyy", "", "cyy", DateTime.Now.AddYears(-1)),
+        new TeamDto(Guid.NewGuid(), "Lonsid", "", "Lonsid Number One", "zjc", "", "zjc", DateTime.Now.AddYears(-10)),
     };
 
     internal TeamService(ICallerProvider callerProvider) : base(callerProvider)
     {
     }
 
-    public async Task<PaginationDto<TeamItemDto>> GetTeamItemsAsync(GetTeamsDto request)
+    public async Task<PaginationDto<TeamDto>> GetTeamsAsync(GetTeamsDto request)
     {
         var teams = Teams.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<TeamItemDto>(Teams.Count, 1, teams));
+        return await Task.FromResult(new PaginationDto<TeamDto>(Teams.Count, 1, teams));
     }
 
     public async Task<TeamDetailDto> GetTeamDetailAsync(Guid id)
@@ -24,14 +24,14 @@ public class TeamService : ServiceBase
         return await Task.FromResult(TeamDetailDto.Default);
     }
 
-    public async Task<List<TeamItemDto>> SelectTeamAsync()
+    public async Task<List<TeamDto>> SelectTeamAsync()
     {
         return await Task.FromResult(Teams);
     }
 
     public async Task AddTeamAsync(AddTeamDto request)
     {
-        Teams.Add(new TeamItemDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Describe, "", "", "", null));
+        Teams.Add(new TeamDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Describe, "", "", "", null));
         await Task.CompletedTask;
     }
 

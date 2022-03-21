@@ -2,7 +2,7 @@
 
 public class UserDto
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -24,9 +24,9 @@ public class UserDto
 
     public DateTime CreationTime { get; set; }
 
-    public UserDto(Guid userId, string name, string displayName, string avatar, string iDCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime)
+    public UserDto(Guid id, string name, string displayName, string avatar, string iDCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime)
     {
-        UserId = userId;
+        Id = id;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;

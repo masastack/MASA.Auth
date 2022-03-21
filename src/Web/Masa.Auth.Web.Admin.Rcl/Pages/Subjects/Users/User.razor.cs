@@ -6,7 +6,7 @@ public partial class User
     private string? _email;
     private string? _phoneNumber;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Name
@@ -15,7 +15,7 @@ public partial class User
         set
         {
             _name = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -25,7 +25,7 @@ public partial class User
         set
         {
             _email = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -35,7 +35,7 @@ public partial class User
         set
         {
             _phoneNumber = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -45,17 +45,17 @@ public partial class User
         set
         {
             _enabled = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            _page = value;
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -65,7 +65,7 @@ public partial class User
         set
         {
             _pageSize = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -99,14 +99,14 @@ public partial class User
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetUserItemsAsync();
+        await GetUsersAsync();
     }
 
-    public async Task GetUserItemsAsync()
+    public async Task GetUsersAsync()
     {
         Loading = true;
-        var request = new GetUsersDto(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
-        var response = await UserService.GetUserItemsAsync(request);
+        var request = new GetUsersDto(Page, PageSize, Name, PhoneNumber, Email, Enabled);
+        var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;
@@ -121,13 +121,13 @@ public partial class User
 
     public void OpenUpdateUserDialog(UserDto user)
     {
-        CurrentUserId = user.UserId;
+        CurrentUserId = user.Id;
         UserDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentUserId = user.UserId;
+        CurrentUserId = user.Id;
         AuthorizeDialogVisible = true;
     }
 }

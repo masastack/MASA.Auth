@@ -8,9 +8,9 @@ public class GetThirdPartyUsersDto : Pagination
 
     public Guid ThirdPartyIdpId { get; set; }
 
-    public GetThirdPartyUsersDto(int pageIndex, int pageSize, string search, bool enabled, Guid thirdPartyIdpId)
+    public GetThirdPartyUsersDto(int page, int pageSize, string search, bool enabled, Guid thirdPartyIdpId)
     {
-        Page = pageIndex;
+        Page = page;
         PageSize = pageSize;
         Search = search;
         Enabled = enabled;

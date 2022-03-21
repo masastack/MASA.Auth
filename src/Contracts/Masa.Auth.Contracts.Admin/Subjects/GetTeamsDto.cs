@@ -2,9 +2,9 @@
 
 public class GetTeamsDto : Pagination
 {
-    public GetTeamsDto(int pageIndex, int pageSize)
+    public GetTeamsDto(int page, int pageSize)
     {
-        Page = pageIndex;
+        Page = page;
         PageSize = pageSize;
     }
 }

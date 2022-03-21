@@ -34,7 +34,7 @@ public partial class AddOrUpdateRoleDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             if (IsAdd) Role = RoleDetailDto.Default;
             else await GetRoleDetailAsync();

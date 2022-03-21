@@ -2,7 +2,7 @@
 {
     public class PagingData<TEntity> where TEntity : class
     {
-        public int PageIndex { get; private set; }
+        public int Page { get; private set; }
 
         public int PageSize { get; private set; }
 
@@ -12,9 +12,9 @@
 
         public IEnumerable<TEntity> Items { get; private set; }
 
-        public PagingData(int pageIndex, int pageSize, long count, IEnumerable<TEntity> items)
+        public PagingData(int page, int pageSize, long count, IEnumerable<TEntity> items)
         {
-            PageIndex = pageIndex;
+            Page = page;
             PageSize = pageSize;
             Count = count;
             Items = items;

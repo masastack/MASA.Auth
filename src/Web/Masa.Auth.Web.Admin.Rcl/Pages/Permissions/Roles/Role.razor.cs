@@ -4,7 +4,7 @@ public partial class Role
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -13,7 +13,7 @@ public partial class Role
         set
         {
             _search = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,17 +23,17 @@ public partial class Role
         set
         {
             _enabled = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            _page = value;
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class Role
         set
         {
             _pageSize = value;
-            GetRoleItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -76,14 +76,14 @@ public partial class Role
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetRoleItemsAsync();
+        await GetRolesAsync();
     }
 
-    public async Task GetRoleItemsAsync()
+    public async Task GetRolesAsync()
     {
         Loading = true;
-        var reuquest = new GetRoleItemsDto(PageIndex, PageSize, Search, Enabled);
-        var response = await RoleService.GetRoleItemsAsync(reuquest);
+        var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
+        var response = await RoleService.GetRolesAsync(reuquest);
         Roles = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;
@@ -98,13 +98,13 @@ public partial class Role
 
     public void OpenEditUserDialog(UserDto user)
     {
-        CurrentRoleId = user.UserId;
+        CurrentRoleId = user.Id;
         RoleDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentRoleId = user.UserId;
+        CurrentRoleId = user.Id;
         RoleDialogVisible = true;
     }
 }

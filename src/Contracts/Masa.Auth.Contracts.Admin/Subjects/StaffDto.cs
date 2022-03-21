@@ -2,7 +2,7 @@
 
 public class StaffDto
 {
-    public Guid StaffId { get; set; }
+    public Guid Id { get; set; }
 
     public string Department { get; set; } = string.Empty;
 
@@ -20,9 +20,9 @@ public class StaffDto
 
     public string Email { get; set; } = string.Empty;
 
-    public StaffDto(Guid staffId, string name, string phoneNumber, string email, string jobNumber, string avatar)
+    public StaffDto(Guid id, string name, string phoneNumber, string email, string jobNumber, string avatar)
     {
-        StaffId = staffId;
+        Id = id;
         JobNumber = jobNumber;
         Name = name;
         Avatar = avatar;
@@ -30,9 +30,9 @@ public class StaffDto
         Email = email;
     }
 
-    public StaffDto(Guid staffId, string department, string position, string jobNumber, bool enabled, string name, string avatar)
+    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, string name, string avatar, string phoneNumber, string email)
     {
-        StaffId = staffId;
+        Id = id;
         Department = department;
         Position = position;
         JobNumber = jobNumber;

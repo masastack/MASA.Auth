@@ -28,7 +28,7 @@ public partial class AuthorizeDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             await Task.CompletedTask;
         }

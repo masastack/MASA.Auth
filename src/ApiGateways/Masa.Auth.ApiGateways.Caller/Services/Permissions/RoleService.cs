@@ -13,9 +13,9 @@ public class RoleService : ServiceBase
 
     }
 
-    public async Task<PaginationDto<RoleDto>> GetRoleItemsAsync(GetRoleItemsDto request)
+    public async Task<PaginationDto<RoleDto>> GetRolesAsync(GetRolesDto request)
     {
-        var roles = Roles.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize);
+        var roles = Roles.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize);
         return await Task.FromResult(new PaginationDto<RoleDto>(Roles.Count, 1, Roles));
     }
 

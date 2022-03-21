@@ -24,7 +24,7 @@
                 <span>@context.Item.PhoneNumber</span>
                 break;
             case (nameof(UserDto.CreationTime)):
-                <span>@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss");</span>
+                <span>@context.Item.CreationTime.ToString(T("$DateTimeFormat"));</span>
                 break;
             case nameof(UserDto.Enabled):
                 string color = context.Item.Enabled ? "sample-green" : "error";
@@ -43,5 +43,5 @@
     </ItemColContent>
 </MDataTable>
 
-<AddOrUpdateUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUserItemsAsync />
+<AddOrUpdateUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUsersAsync />
 <AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />

@@ -10,9 +10,9 @@ public class GetUsersDto : Pagination
 
     public bool Enabled { get; set; }
 
-    public GetUsersDto(int pageIndex, int pageSize, string name, string phoneNumber, string email, bool enabled)
+    public GetUsersDto(int page, int pageSize, string name, string phoneNumber, string email, bool enabled)
     {
-        Page = pageIndex;
+        Page = page;
         PageSize = pageSize;
         Name = name;
         PhoneNumber = phoneNumber;

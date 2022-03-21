@@ -46,19 +46,19 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.App.ECommerce.Shop.ViewModel
                 datas = datas.Where(d => d.Name.ToUpper().Contains(Search.ToUpper()));
             }
 
-            if (datas.Count() < (PageIndex - 1) * PageSize) PageIndex = 1;
+            if (datas.Count() < (Page - 1) * PageSize) Page = 1;
 
             return datas;
         }
 
         public List<GoodsDto> GetPageDatas()
         {
-            return GetFilterDatas().Skip((PageIndex - 1) * PageSize).Take(PageSize).ToList();
+            return GetFilterDatas().Skip((Page - 1) * PageSize).Take(PageSize).ToList();
         }
 
         public int CurrentCount => GetFilterDatas().Count();
 
-        public int PageIndex { get; set; } = 1;
+        public int Page { get; set; } = 1;
 
         public int PageSize { get; set; } = 6;
 

@@ -34,7 +34,7 @@ public partial class AddOrUpdateStaffDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             if (IsAdd) Staff = StaffDetailDto.Default;
             else await GetStaffDetailAsync();

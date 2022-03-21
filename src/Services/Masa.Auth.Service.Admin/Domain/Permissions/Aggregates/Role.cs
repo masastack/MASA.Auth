@@ -12,9 +12,9 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<RolePermission> RolePermissions => rolePermissions;
 
-    private List<RoleRelation> roleItems = new();
+    private List<RoleRelation> roles = new();
 
-    public IReadOnlyCollection<RoleRelation> RoleItems => roleItems;
+    public IReadOnlyCollection<RoleRelation> Roles => roles;
 
     public Role(string name, string description, bool enabled)
     {
@@ -25,7 +25,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
     {
-        roleItems.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
+        roles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
     }
 
     public void BindPermissions(List<Guid> permissions)

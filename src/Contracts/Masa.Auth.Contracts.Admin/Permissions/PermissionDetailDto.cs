@@ -20,9 +20,9 @@ public class PermissionDetailDto
 
     public string Icon { get; set; } = "";
 
-    public List<RoleSelectDto> RoleItems { get; set; } = new();
+    public List<RoleSelectDto> RoleIs { get; set; } = new();
 
-    public List<UserSelectDto> UserItems { get; set; } = new();
+    public List<UserSelectDto> Users { get; set; } = new();
 
-    public List<TeamSelectDto> TeamItems { get; set; } = new();
+    public List<TeamSelectDto> Teams { get; set; } = new();
 }

@@ -2,7 +2,7 @@
 
 public class UpdateUserDto
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -16,9 +16,9 @@ public class UpdateUserDto
 
     public AddressValueDto Address { get; set; }
 
-    public UpdateUserDto(Guid userId, string name, string displayName, string avatar, string companyName, bool enabled, AddressValueDto address)
+    public UpdateUserDto(Guid id, string name, string displayName, string avatar, string companyName, bool enabled, AddressValueDto address)
     {
-        UserId = userId;
+        Id = id;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
@@ -29,6 +29,6 @@ public class UpdateUserDto
 
     public static implicit operator UpdateUserDto(UserDetailDto user)
     {
-        return new UpdateUserDto(user.UserId, user.Name, user.DisplayName, user.Avatar, user.CompanyName, user.Enabled, user.Address);
+        return new UpdateUserDto(user.Id, user.Name, user.DisplayName, user.Avatar, user.CompanyName, user.Enabled, user.Address);
     }
 }
