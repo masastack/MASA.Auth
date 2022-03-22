@@ -21,7 +21,7 @@ public class UserService : ServiceBase
 
     public async Task<UserDetailDto> GetUserDetailAsync(Guid id)
     {
-        return await Task.FromResult(UserDetailDto.Default);
+        return await Task.FromResult(new UserDetailDto());
     }
 
     public async Task AddUserAsync(AddUserDto request)

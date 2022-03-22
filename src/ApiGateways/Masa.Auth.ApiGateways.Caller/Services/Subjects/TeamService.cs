@@ -21,7 +21,7 @@ public class TeamService : ServiceBase
 
     public async Task<TeamDetailDto> GetTeamDetailAsync(Guid id)
     {
-        return await Task.FromResult(TeamDetailDto.Default);
+        return await Task.FromResult(new TeamDetailDto());
     }
 
     public async Task<List<TeamDto>> SelectTeamAsync()
@@ -31,7 +31,7 @@ public class TeamService : ServiceBase
 
     public async Task AddTeamAsync(AddTeamDto request)
     {
-        Teams.Add(new TeamDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Describe, "", "", "", null));
+        Teams.Add(new TeamDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Description, "", "", "", null));
         await Task.CompletedTask;
     }
 

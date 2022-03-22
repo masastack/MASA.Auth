@@ -24,6 +24,18 @@ public class UserDto
 
     public DateTime CreationTime { get; set; }
 
+    public UserDto()
+    {
+        Name = "";
+        DisplayName = "";
+        Avatar = "";
+        IDCard = "";
+        Account = "";
+        CompanyName = "";
+        PhoneNumber = "";
+        Email = "";
+    }
+
     public UserDto(Guid id, string name, string displayName, string avatar, string iDCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime)
     {
         Id = id;

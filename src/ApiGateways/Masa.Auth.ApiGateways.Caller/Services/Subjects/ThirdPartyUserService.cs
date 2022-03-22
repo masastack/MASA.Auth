@@ -13,7 +13,7 @@ public class ThirdPartyUserService : ServiceBase
 
     public async Task<ThirdPartyUserDetailDto> GetThirdPartyUserDetailAsync(Guid id)
     {
-        return await Task.FromResult(ThirdPartyUserDetailDto.Default);
+        return await Task.FromResult(new ThirdPartyUserDetailDto());
     }
 
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserDto request)

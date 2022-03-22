@@ -22,7 +22,7 @@ public class ThirdPartyIdpService : ServiceBase
 
     public async Task<ThirdPartyIdpDetailDto> GetThirdPartyIdpDetailAsync(Guid id)
     {
-        return await Task.FromResult(ThirdPartyIdpDetailDto.Default);
+        return await Task.FromResult(new ThirdPartyIdpDetailDto());
     }
 
     public async Task<List<ThirdPartyIdpDto>> SelectThirdPartyIdpAsync()

@@ -41,7 +41,7 @@ public class UpdateTeamDto
 
     public static implicit operator UpdateTeamDto(TeamDetailDto team)
     {
-        return new UpdateTeamDto(team.Id, team.Name, team.Avatar, team.Describe, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
+        return new UpdateTeamDto(team.Id, team.Name, team.Avatar, team.Description, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
     }
 }
 

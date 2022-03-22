@@ -20,7 +20,13 @@ public class StaffDetailDto
 
     public UserDetailDto User { get; set; }
 
-    public static StaffDetailDto Default => new StaffDetailDto(Guid.Empty, Guid.Empty, Guid.Empty, "", "", true, default, new(), UserDetailDto.Default);
+    public StaffDetailDto()
+    {
+        Position = "";
+        JobNumber = "";
+        TeamIds = new();
+        User = new();
+    }
 
     public StaffDetailDto(Guid id, Guid departmentId, Guid positionId, string position, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user)
     {

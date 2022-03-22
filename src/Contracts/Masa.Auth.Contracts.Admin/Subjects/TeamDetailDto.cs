@@ -8,7 +8,7 @@ public class TeamDetailDto
 
     public AvatarValueDto Avatar { get; set; }
 
-    public string Describe { get; set; }
+    public string Description { get; set; }
 
     public TeamTypes TeamType { get; set; }
 
@@ -24,14 +24,25 @@ public class TeamDetailDto
 
     public List<Guid> MemberRoles { get; set; }
 
-    public static TeamDetailDto Default => new(Guid.Empty, "", new(), "", default, new(), new(), new(), new(), new(), new());
+    public TeamDetailDto()
+    {
+        Name = "";
+        Avatar = new();
+        Description = "";
+        AdminStaffs = new();
+        AdminPermissions = new();
+        AdminRoles = new();
+        MemberStaffs = new();
+        MemberPermissions = new();
+        MemberRoles = new();
+    }
 
-    public TeamDetailDto(Guid id, string name, AvatarValueDto avatar, string describe, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
+    public TeamDetailDto(Guid id, string name, AvatarValueDto avatar, string description, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
     {
         Id = id;
         Name = name;
         Avatar = avatar;
-        Describe = describe;
+        Description = description;
         TeamType = teamType;
         AdminStaffs = adminStaffs;
         AdminPermissions = adminPermissions;

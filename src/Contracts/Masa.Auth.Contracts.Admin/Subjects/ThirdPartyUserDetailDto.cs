@@ -20,7 +20,13 @@ public class ThirdPartyUserDetailDto
 
     public string Modifier { get; set; }
 
-    public static ThirdPartyUserDetailDto Default = new(default, default, true, "", UserDetailDto.Default, DateTime.Now, null, "", "");
+    public ThirdPartyUserDetailDto()
+    {
+        ThridPartyIdentity = "";
+        User = new();
+        Creator = "";
+        Modifier = "";
+    }
 
     public ThirdPartyUserDetailDto(Guid id, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {

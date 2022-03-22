@@ -22,6 +22,16 @@ public class ThirdPartyIdpDto
 
     public DateTime? ModificationTime { get; set; }
 
+    public ThirdPartyIdpDto()
+    {
+        Name = "";
+        DisplayName = "";
+        ClientId = "";
+        ClientSecret = "";
+        Url = "";
+        Icon = "";
+    }
+
     public ThirdPartyIdpDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType, DateTime creationTime, DateTime? modificationTime)
     {
         Id = id;

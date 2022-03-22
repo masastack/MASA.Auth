@@ -20,7 +20,7 @@ public class StaffService : ServiceBase
 
     public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
     {
-        return await Task.FromResult(StaffDetailDto.Default);
+        return await Task.FromResult(new StaffDetailDto());
     }
 
     public async Task AddStaffAsync(AddStaffDto request)
