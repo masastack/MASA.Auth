@@ -58,5 +58,6 @@
     </FooterContent>
 </MDataTable>
 
-<AddOrUpdateUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUserAsync />
+<AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
+<UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class AddOrUpdateUserDialog
+public partial class UpdateUserDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -14,12 +14,6 @@ public partial class AddOrUpdateUserDialog
     [Parameter]
     public Guid UserId { get; set; }
 
-    private bool IsAdd => UserId == Guid.Empty;
-
-    private int Step { get; set; } = 1;
-
-    private StringNumber Gender { get; set; } = "Male";
-
     private UserDetailDto User { get; set; } = UserDetailDto.Default;
 
     private UserService UserService => AuthCaller.UserService;
@@ -32,7 +26,7 @@ public partial class AddOrUpdateUserDialog
         }
         else
         {
-            visible = false;
+            Visible = false;
         }
     }
 
@@ -40,9 +34,7 @@ public partial class AddOrUpdateUserDialog
     {
         if (Visible is true)
         {
-            Step = 1;
-            if (IsAdd) User = UserDetailDto.Default;
-            else await GetUserDetailAsync();
+            await GetUserDetailAsync();
         }   
     }
 
@@ -54,20 +46,10 @@ public partial class AddOrUpdateUserDialog
     public async Task AddOrEditUserAsync()
     {
         Loading = true;
-        if (IsAdd)
-        {
-            await UserService.AddUserAsync(User);
-            OpenSuccessMessage(T("Add staff data success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
-        else
-        {
-            await UserService.UpdateUserAsync(User);
-            OpenSuccessMessage(T("Edit staff data success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
+        await UserService.UpdateUserAsync(User);
+        OpenSuccessMessage(T("Edit staff data success"));
+        await OnSubmitSuccess.InvokeAsync();
+        await UpdateVisible(false);
         Loading = false;
     }
 }

@@ -79,7 +79,9 @@ public partial class User
 
     public List<DataTableHeader<UserDto>> Headers { get; set; } = new();
 
-    public bool UserDialogVisible { get; set; }
+    public bool AddUserDialogVisible { get; set; }
+
+    public bool UpdateUserDialogVisible { get; set; }
 
     public bool AuthorizeDialogVisible { get; set; }
 
@@ -113,14 +115,13 @@ public partial class User
 
     public void OpenAddUserDialog()
     {
-        CurrentUserId = Guid.Empty;
-        UserDialogVisible = true;
+        AddUserDialogVisible = true;
     }
 
     public void OpenUpdateUserDialog(UserDto user)
     {
         CurrentUserId = user.UserId;
-        UserDialogVisible = true;
+        UpdateUserDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)

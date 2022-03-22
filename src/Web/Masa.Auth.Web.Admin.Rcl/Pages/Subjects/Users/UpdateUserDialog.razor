@@ -1,0 +1,52 @@
+﻿@inherits AdminCompontentBase
+
+<MDialog Value="Visible" ValueChanged=UpdateVisible Width="800">
+    <MForm Model=User EnableDataAnnotationsValidation>
+        <div class="d-flex">
+            <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
+                <MAvatar Size=80>
+                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                </MAvatar>
+                <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+            </div>
+        </div>
+        <div class="mt-6">@T("Basic Information")</div>
+        <MRow Class="my-4">
+            <MCol>
+                <MTextField @bind-Value="User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+            </MCol>
+            <MCol>
+                <MTextField @bind-Value="User.PhoneNumber" Class="my-4" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+            </MCol>
+        </MRow>
+        <MRow Class="my-4">
+            <MCol>
+                <MTextField @bind-Value="User.Email" Class="my-4" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+            </MCol>
+            <MCol>
+                <MTextField @bind-Value="User.IDCard" Class="my-4" Label="@T("IDCard")" HideDetails="@("auto")" Outlined />
+            </MCol>
+        </MRow>
+        <div class="mt-6">@T("Detail Information")</div>
+        <MRow Class="my-4">
+            <MCol>
+                <MTextField @bind-Value="User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+            </MCol>
+            <MCol>
+                <MTextField @bind-Value="User.PhoneNumber" Class="my-4" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+            </MCol>
+        </MRow>
+        <MRow Class="my-4">
+            <MCol>
+                <MTextField @bind-Value="User.Email" Class="my-4" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+            </MCol>
+            <MCol>
+                <MTextField @bind-Value="User.IDCard" Class="my-4" Label="@T("IDCard")" HideDetails="@("auto")" Outlined />
+            </MCol>
+        </MRow>
+        <div class="mt-6">@T("Authorization certification")</div>
+        <div class="mt-4">
+            <MIcon></MIcon>
+        </div>
+    </MForm>
+</MDialog>
