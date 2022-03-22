@@ -32,7 +32,7 @@ public class UserService : ServiceBase
 
     public async Task UpdateUserAsync(UpdateUserDto request)
     {
-        var oldData = Users.First(u => request.Id == request.Id);
+        var oldData = Users.First(u => u.Id == request.Id);
         Users.Remove(oldData);
         Users.Add(new UserDto(request.Id, request.Name, request.DisplayName, request.Avatar, oldData.IDCard, oldData.PhoneNumber, request.CompanyName, request.Enabled, oldData.PhoneNumber, oldData.Email, oldData.CreationTime));
         await Task.CompletedTask;

@@ -4,7 +4,7 @@ namespace Masa.Auth.ApiGateways.Caller;
 
 public class AuthCaller : HttpClientCallerBase
 {
-    #region Filed
+    #region Field
     ThirdPartyIdpService? _thirdPartyIdpService;
     UserService? _userService;
     ThirdPartyUserService? _thirdPartyUserService;
