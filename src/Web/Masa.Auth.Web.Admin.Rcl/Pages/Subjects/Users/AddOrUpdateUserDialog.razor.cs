@@ -26,13 +26,13 @@ public partial class AddOrUpdateUserDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (VisibleChanged.HasDelegate)
+        if(VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
         }
         else
         {
-            Visible = visible;
+            visible = false;
         }
     }
 
@@ -40,9 +40,10 @@ public partial class AddOrUpdateUserDialog
     {
         if (Visible is true)
         {
+            Step = 1;
             if (IsAdd) User = UserDetailDto.Default;
             else await GetUserDetailAsync();
-        }
+        }   
     }
 
     public async Task GetUserDetailAsync()
