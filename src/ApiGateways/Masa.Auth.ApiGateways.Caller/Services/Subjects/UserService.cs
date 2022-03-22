@@ -15,7 +15,8 @@ public class UserService : ServiceBase
 
     public async Task<PaginationDto<UserDto>> GetUsersAsync(GetUsersDto request)
     {
-        var users = Users.Where(u => u.Enabled == request.Enabled).Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
+        var skip = (request.Page - 1) * request.PageSize;
+        var users = Users.Where(u => u.Enabled == request.Enabled).Skip(skip).Take(request.PageSize).ToList();
         return await Task.FromResult(new PaginationDto<UserDto>(Users.Count, 1, users));
     }
 
