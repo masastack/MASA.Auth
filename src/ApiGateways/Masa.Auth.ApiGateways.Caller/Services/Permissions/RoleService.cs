@@ -27,7 +27,7 @@ public class RoleService : ServiceBase
 
     public async Task<List<RoleSelectDto>> GetRoleSelectAsync()
     {
-        return await Task.FromResult(Roles.Select(r => new RoleSelectDto(r.Id,r.Name)).ToList());
+        return await Task.FromResult(Roles.Select(r => new RoleSelectDto(r.Id, r.Name)).ToList());
     }
 
     public async Task AddRoleAsync(AddRoleDto request)

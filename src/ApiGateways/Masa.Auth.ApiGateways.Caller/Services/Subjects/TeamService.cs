@@ -27,7 +27,7 @@ public class TeamService : ServiceBase
 
     public async Task<List<TeamSelectDto>> TeamSelectAsync()
     {
-        return await Task.FromResult(Teams.Select(t => new TeamSelectDto(t.Id,t.Name,t.Avatar)).ToList());
+        return await Task.FromResult(Teams.Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar)).ToList());
     }
 
     public async Task AddTeamAsync(AddTeamDto request)
