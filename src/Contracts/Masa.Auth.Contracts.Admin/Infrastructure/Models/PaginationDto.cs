@@ -4,7 +4,7 @@ public class PaginationDto<TEntity> where TEntity : class
 {
     public long Total { get; }
 
-    public long TotalPages { get; }
+    public int TotalPages { get; }
 
     public List<TEntity> Items { get; }
 
@@ -13,7 +13,7 @@ public class PaginationDto<TEntity> where TEntity : class
         Items = new List<TEntity>();
     }
 
-    public PaginationDto(long total, long totalPages, List<TEntity> items)
+    public PaginationDto(long total, int totalPages, List<TEntity> items)
     {
         Total = total;
         TotalPages = totalPages;

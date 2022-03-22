@@ -16,6 +16,10 @@ public partial class AddOrUpdateUserDialog
 
     private bool IsAdd => UserId == Guid.Empty;
 
+    private int Step { get; set; } = 1;
+
+    private StringNumber Gender { get; set; } = "Male";
+
     private UserDetailDto User { get; set; } = UserDetailDto.Default;
 
     private UserService UserService => AuthCaller.UserService;
@@ -64,11 +68,6 @@ public partial class AddOrUpdateUserDialog
             await UpdateVisible(false);
         }
         Loading = false;
-    }
-
-    protected override bool ShouldRender()
-    {
-        return Visible;
     }
 }
 

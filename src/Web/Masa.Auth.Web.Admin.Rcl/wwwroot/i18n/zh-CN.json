@@ -18,6 +18,11 @@
   "Are you sure delete data?": "确定删除数据?",
   "Creator": "创建人",
   "Modifier": "修改人",
+  "Search": "搜索",
+  "Rows per page": "每页行数",
+  "Male": "男",
+  "Female": "女",
+  "Next step": "下一步",
 
   "Department": "部门",
 
@@ -34,6 +39,7 @@
   "Failed to edit user:": "编辑用户数据失败:",
   "Authorized user succeeded": "授权用户成功",
   "Failed to authorize user:": "授权用户失败:",
+  "Another": "换一个",
 
   "ThirdPartyUser": "第三方用户",
   "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",

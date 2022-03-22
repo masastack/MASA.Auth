@@ -6,7 +6,7 @@ public partial class User
     private string? _email;
     private string? _phoneNumber;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Name
@@ -15,7 +15,7 @@ public partial class User
         set
         {
             _name = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -25,7 +25,7 @@ public partial class User
         set
         {
             _email = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -35,7 +35,7 @@ public partial class User
         set
         {
             _phoneNumber = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -45,17 +45,17 @@ public partial class User
         set
         {
             _enabled = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            _page = value;
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -65,15 +65,13 @@ public partial class User
         set
         {
             _pageSize = value;
-            GetUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public long TotalPages { get; set; }
+    public int TotalPage { get; set; }
 
     public long Total { get; set; }
-
-    public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
     public List<UserDto> Users { get; set; } = new();
 
@@ -99,16 +97,16 @@ public partial class User
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetUserItemsAsync();
+        await GetUserAsync();
     }
 
-    public async Task GetUserItemsAsync()
+    public async Task GetUserAsync()
     {
         Loading = true;
-        var request = new GetUsersDto(PageIndex, PageSize, Name, PhoneNumber, Email, Enabled);
+        var request = new GetUsersDto(Page, PageSize, Name, PhoneNumber, Email, Enabled);
         var response = await UserService.GetUserItemsAsync(request);
         Users = response.Items;
-        TotalPages = response.TotalPages;
+        TotalPage = response.TotalPages;
         Total = response.Total;
         Loading = false;
     }
