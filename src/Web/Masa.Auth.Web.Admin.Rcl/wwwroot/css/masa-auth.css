@@ -756,6 +756,17 @@
     min-width: 0px !important;
 }
 
+.label .m-label {
+    /* Caption-说明 */
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.125rem !important;
+    /* default color */
+    color: #A3AED0 !important;
+}
+
 /* pagetabs */
 /*组件样式全局修改end*/
 /*shop*/
