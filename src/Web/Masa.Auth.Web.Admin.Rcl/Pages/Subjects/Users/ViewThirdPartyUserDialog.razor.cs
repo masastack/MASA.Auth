@@ -11,7 +11,7 @@ public partial class ViewThirdPartyUserDialog
     [Parameter]
     public Guid ThirdPartyUserId { get; set; }
 
-    private ThirdPartyUserDetailDto ThirdPartyUser { get; set; } = ThirdPartyUserDetailDto.Default;
+    private ThirdPartyUserDetailDto ThirdPartyUser { get; set; } = new();
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 

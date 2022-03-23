@@ -1,5 +1,4 @@
-﻿using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Masa.Auth.Web.Admin.Rcl.Global.Nav
 {

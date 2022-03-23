@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
 
-public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>, IDepartmentRepository
+public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>, IdepartmentRepository
 {
     public DepartmentRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {

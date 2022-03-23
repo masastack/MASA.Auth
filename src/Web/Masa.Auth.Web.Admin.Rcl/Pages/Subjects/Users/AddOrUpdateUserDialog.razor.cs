@@ -16,7 +16,7 @@ public partial class AddOrUpdateUserDialog
 
     private bool IsAdd => UserId == Guid.Empty;
 
-    private UserDetailDto User { get; set; } = UserDetailDto.Default;
+    private UserDetailDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
 
@@ -36,7 +36,7 @@ public partial class AddOrUpdateUserDialog
     {
         if (Visible)
         {
-            if (IsAdd) User = UserDetailDto.Default;
+            if (IsAdd) User = new();
             else await GetUserDetailAsync();
         }
     }

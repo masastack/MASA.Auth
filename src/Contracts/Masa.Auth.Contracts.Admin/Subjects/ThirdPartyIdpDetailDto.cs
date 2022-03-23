@@ -1,7 +1,7 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class ThirdPartyIdpDetailDto : ThirdPartyIdpDto
-{   
+{
     public ThirdPartyIdpDetailDto() : base()
     {
 

@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;
-
-namespace Masa.Auth.Web.Admin.Rcl.Global.Config
+﻿namespace Masa.Auth.Web.Admin.Rcl.Global.Config
 {
     public class GlobalConfig
     {

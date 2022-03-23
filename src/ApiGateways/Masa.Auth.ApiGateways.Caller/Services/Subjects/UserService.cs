@@ -27,7 +27,7 @@ public class UserService : ServiceBase
 
     public async Task AddUserAsync(AddUserDto request)
     {
-        Users.Add(new UserDto(Guid.NewGuid(), request.Name, request.DisplayName, request.Avatar, request.IDCard, request.PhoneNumber, request.CompanyName, request.Enabled, request.PhoneNumber, request.Email, DateTime.Now));
+        Users.Add(new UserDto(Guid.NewGuid(), request.Name, request.DisplayName, request.Avatar, request.IdCard, request.PhoneNumber, request.CompanyName, request.Enabled, request.PhoneNumber, request.Email, DateTime.Now));
         await Task.CompletedTask;
     }
 
@@ -35,7 +35,7 @@ public class UserService : ServiceBase
     {
         var oldData = Users.First(u => u.Id == request.Id);
         Users.Remove(oldData);
-        Users.Add(new UserDto(request.Id, request.Name, request.DisplayName, request.Avatar, oldData.IDCard, oldData.PhoneNumber, request.CompanyName, request.Enabled, oldData.PhoneNumber, oldData.Email, oldData.CreationTime));
+        Users.Add(new UserDto(request.Id, request.Name, request.DisplayName, request.Avatar, oldData.IdCard, oldData.PhoneNumber, request.CompanyName, request.Enabled, oldData.PhoneNumber, oldData.Email, oldData.CreationTime));
         await Task.CompletedTask;
     }
 

@@ -2,9 +2,9 @@
 
 public class CommandHandler
 {
-    readonly IDepartmentRepository _departmentRepository;
+    readonly IdepartmentRepository _departmentRepository;
 
-    public CommandHandler(IDepartmentRepository departmentRepository)
+    public CommandHandler(IdepartmentRepository departmentRepository)
     {
         _departmentRepository = departmentRepository;
     }

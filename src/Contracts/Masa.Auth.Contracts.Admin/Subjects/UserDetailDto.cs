@@ -9,7 +9,7 @@ public class UserDetailDto : UserDto
         Address = new();
     }
 
-    public UserDetailDto(Guid id, string name, string displayName, string avatar, string iDCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address) : base(id, name, displayName, avatar, iDCard, account, companyName, enabled, phoneNumber, email, creationTime)
+    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, creationTime)
     {
         Address = address;
     }

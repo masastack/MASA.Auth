@@ -16,7 +16,7 @@ public partial class AddOrUpdateRoleDialog
 
     private bool IsAdd => RoleId == Guid.Empty;
 
-    private RoleDetailDto Role { get; set; } = RoleDetailDto.Default;
+    private RoleDetailDto Role { get; set; } = new();
 
     private RoleService RoleService => AuthCaller.RoleService;
 
@@ -36,7 +36,7 @@ public partial class AddOrUpdateRoleDialog
     {
         if (Visible)
         {
-            if (IsAdd) Role = RoleDetailDto.Default;
+            if (IsAdd) Role = new();
             else await GetRoleDetailAsync();
         }
     }

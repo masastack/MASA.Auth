@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Models;
 
-public class AddressValueDto 
+public class AddressValueDto
 {
     public string Address { get; set; } = string.Empty;
 

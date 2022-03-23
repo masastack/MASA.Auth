@@ -69,7 +69,7 @@ public partial class Team
     public async Task GetTeamsAsync()
     {
         Loading = true;
-        var response = await TeamService.SelectTeamAsync();
+        var response = await TeamService.TeamSelectAsync();
         Loading = false;
     }
 

@@ -18,7 +18,7 @@ public class ThirdPartyUser : AuditEntity<Guid, Guid>
 
     public string ThridPartyIdentity { get; private set; }
 
-    public ThirdPartyUser( Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity)
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         UserId = userId;

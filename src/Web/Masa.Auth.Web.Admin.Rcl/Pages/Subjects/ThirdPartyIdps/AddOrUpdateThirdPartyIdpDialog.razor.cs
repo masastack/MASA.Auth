@@ -16,7 +16,7 @@ public partial class AddOrUpdateThirdPartyIdpDialog
 
     private bool IsAdd => ThirdPartyIdpId == Guid.Empty;
 
-    private ThirdPartyIdpDetailDto ThirdPartyIdp { get; set; } = ThirdPartyIdpDetailDto.Default;
+    private ThirdPartyIdpDetailDto ThirdPartyIdp { get; set; } = new();
 
     private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
@@ -36,7 +36,7 @@ public partial class AddOrUpdateThirdPartyIdpDialog
     {
         if (Visible)
         {
-            if (IsAdd) ThirdPartyIdp = ThirdPartyIdpDetailDto.Default;
+            if (IsAdd) ThirdPartyIdp = new();
             else await GetThirdPartyIdpDetailAsync();
         }
     }

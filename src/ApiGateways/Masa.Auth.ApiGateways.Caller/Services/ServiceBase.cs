@@ -2,7 +2,7 @@
 
 public abstract class ServiceBase
 {
-    ICallerProvider CallerProvider { get; init;}
+    ICallerProvider CallerProvider { get; init; }
 
     protected ServiceBase(ICallerProvider callerProvider)
     {

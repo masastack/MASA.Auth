@@ -2,9 +2,9 @@
 
 public class QueryHandler
 {
-    readonly IDepartmentRepository _departmentRepository;
+    readonly IdepartmentRepository _departmentRepository;
 
-    public QueryHandler(IDepartmentRepository departmentRepository)
+    public QueryHandler(IdepartmentRepository departmentRepository)
     {
         _departmentRepository = departmentRepository;
     }
@@ -52,7 +52,7 @@ public class QueryHandler
         var department = await _departmentRepository.GetByIdAsync(departmentStaffQuery.DepartmentId);
         departmentStaffQuery.Result = department.DepartmentStaffs
             .Select(ds => ds.Staff)
-            .Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar)).ToList();
+            .Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
     }
 
     [EventHandler]
