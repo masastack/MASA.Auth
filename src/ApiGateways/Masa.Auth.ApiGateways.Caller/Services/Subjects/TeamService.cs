@@ -9,8 +9,11 @@ public class TeamService : ServiceBase
         new TeamDto(Guid.NewGuid(), "Lonsid", "", "Lonsid Number One", "zjc", "", "zjc", DateTime.Now.AddYears(-10)),
     };
 
+    protected override string BaseUrl { get; set; }
+
     internal TeamService(ICallerProvider callerProvider) : base(callerProvider)
     {
+        BaseUrl = "api/team/";
     }
 
     public async Task<PaginationDto<TeamDto>> GetTeamsAsync(GetTeamsDto request)

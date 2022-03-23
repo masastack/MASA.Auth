@@ -8,9 +8,11 @@ public class RoleService : ServiceBase
         new RoleDto(Guid.NewGuid(), "student", "10001", 1, "student Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
     };
 
+    protected override string BaseUrl { get; set; }
+
     internal RoleService(ICallerProvider callerProvider) : base(callerProvider)
     {
-
+        BaseUrl = "api/role/";
     }
 
     public async Task<PaginationDto<RoleDto>> GetRolesAsync(GetRolesDto request)

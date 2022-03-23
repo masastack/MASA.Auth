@@ -7,9 +7,11 @@ public class StaffService : ServiceBase
 
     };
 
+    protected override string BaseUrl { get; set; }
+
     internal StaffService(ICallerProvider callerProvider) : base(callerProvider)
     {
-
+        BaseUrl = "api/staff/";
     }
 
     public async Task<PaginationDto<StaffDto>> GetStaffsAsync(GetStaffsDto request)
