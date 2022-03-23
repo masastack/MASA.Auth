@@ -2,9 +2,9 @@
 
 public class QueryHandler
 {
-    readonly IdepartmentRepository _departmentRepository;
+    readonly IDepartmentRepository _departmentRepository;
 
-    public QueryHandler(IdepartmentRepository departmentRepository)
+    public QueryHandler(IDepartmentRepository departmentRepository)
     {
         _departmentRepository = departmentRepository;
     }
