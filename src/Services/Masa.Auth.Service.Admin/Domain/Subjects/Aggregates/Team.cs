@@ -6,7 +6,7 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public AvatarValue Avatar { get; private set; }
 
-    public string Describe { get; private set; }
+    public string Description { get; private set; }
 
     public TeamTypes TeamType { get; private set; }
 
@@ -16,16 +16,16 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public List<TeamRole> Roles { get; private set; } = new();
 
-    public Team(string name, string describe, TeamTypes teamType, AvatarValue avatar)
+    public Team(string name, string description, TeamTypes teamType, AvatarValue avatar)
     {
         Name = name;
-        Describe = describe;
+        Description = description;
         TeamType = teamType;
         Avatar = avatar;
     }
 
-    public Team(string name, string describe, TeamTypes teamType)
-        : this(name, describe, teamType, new AvatarValue(name, ""))
+    public Team(string name, string description, TeamTypes teamType)
+        : this(name, description, teamType, new AvatarValue(name, ""))
     {
     }
 }

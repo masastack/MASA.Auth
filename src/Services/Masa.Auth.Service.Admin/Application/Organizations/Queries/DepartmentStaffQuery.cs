@@ -1,8 +1,6 @@
-﻿using Masa.Auth.Service.Admin.Dto.Subjects;
+﻿namespace Masa.Auth.Service.Admin.Application.Organizations.Queries;
 
-namespace Masa.Auth.Service.Admin.Application.Organizations.Queries;
-
-public record DepartmentStaffQuery(Guid DepartmentId) : Query<List<StaffItemDto>>
+public record DepartmentStaffQuery(Guid DepartmentId) : Query<List<StaffDto>>
 {
-    public override List<StaffItemDto> Result { get; set; } = new();
+    public override List<StaffDto> Result { get; set; } = new();
 }

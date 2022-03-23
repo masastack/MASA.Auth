@@ -16,15 +16,15 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; } = "";
 
-    public PermissionType Type { get; private set; }
+    public PermissionTypes Type { get; private set; }
 
     public string Description { get; private set; } = "";
 
     public bool Enabled { get; private set; }
 
-    private List<PermissionRelation> permissionItems = new();
+    private List<PermissionRelation> permissions = new();
 
-    public IReadOnlyCollection<PermissionRelation> PermissionItems => permissionItems;
+    public IReadOnlyCollection<PermissionRelation> Permissions => permissions;
 
     private List<RolePermission> rolePermissions = new();
 
@@ -39,7 +39,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
     public Permission(int systemId, string appId, string name, string code, string url,
-        string icon, PermissionType type, string description)
+        string icon, PermissionTypes type, string description)
     {
         SystemId = systemId;
         AppId = appId;
@@ -61,7 +61,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
         {
             throw new UserFriendlyException("current permission can`t delete,because UserPermissions not empty!");
         }
-        if (permissionItems.Any())
+        if (permissions.Any())
         {
             throw new UserFriendlyException("current permission can`t delete,because PermissionItems not empty!");
         }
@@ -69,19 +69,19 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
 
     public void BindApiPermission(params Guid[] childrenId)
     {
-        if (Type == PermissionType.Api)
+        if (Type == PermissionTypes.Api)
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
         foreach (var childId in childrenId)
         {
-            permissionItems.Add(new PermissionRelation(childId));
+            permissions.Add(new PermissionRelation(childId));
         }
     }
 
     public void MoveParent(Guid parentId)
     {
-        if (Type == PermissionType.Api)
+        if (Type == PermissionTypes.Api)
         {
             throw new UserFriendlyException("the permission of api type can`t set parent");
         }

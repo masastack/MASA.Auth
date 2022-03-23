@@ -1,5 +1,4 @@
 ﻿using Masa.Auth.Web.Admin.Rcl.Data.Base;
-using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;
 
 namespace Masa.Auth.Web.Admin.Rcl.Global.Nav
 {

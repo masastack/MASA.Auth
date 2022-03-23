@@ -1,9 +1,26 @@
+using Masa.Auth.ApiGateways.Caller;
+
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
 {
     private I18n? _i18n;
     private GlobalConfig? _globalConfig;
+    private AuthCaller? _authCaller;
+    private NavigationManager? _navigationManager;
+
+    [Inject]
+    public AuthCaller AuthCaller
+    {
+        get
+        {
+            return _authCaller ?? throw new Exception("please Inject AuthCaller!");
+        }
+        set
+        {
+            _authCaller = value;
+        }
+    }
 
     [Inject]
     public I18n I18n
@@ -28,6 +45,19 @@ public abstract class AdminCompontentBase : ComponentBase
         set
         {
             _globalConfig = value;
+        }
+    }
+
+    [Inject]
+    public NavigationManager NavigationManager
+    {
+        get
+        {
+            return _navigationManager ?? throw new Exception("please Inject NavigationManager!");
+        }
+        set
+        {
+            _navigationManager = value;
         }
     }
 

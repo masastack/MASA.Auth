@@ -7,7 +7,7 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
         builder.ToTable(nameof(Role), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(r => r.Id);
         builder.HasMany(r => r.RolePermissions).WithOne(rp => rp.Role);
-        builder.HasMany(r => r.RoleItems).WithOne(ri => ri.Role);
+        builder.HasMany(r => r.Roles).WithOne(ri => ri.Role);
     }
 }
 

@@ -19,12 +19,12 @@ public class CommandHandler
         if (await _userRepository.GetCountAsync(u => u.PhoneNumber == command.PhoneNumber) > 0)
             throw new UserFriendlyException($"User with phone number {command.PhoneNumber} already exists");
 
-        var user = new User(command.Name, command.DisplayName, command.Avatar, command.IdCard, command.PhoneNumber, "", command.CompanyName, command.Enabled, command.PhoneNumber, command.Email, command.householdAddress, command.residentialAddress);
+        var user = new User(command.Name, command.DisplayName, command.Avatar, command.IdCard, command.PhoneNumber, "", command.CompanyName, command.Enabled, command.PhoneNumber, command.Email, command.Address);
         await _userRepository.AddAsync(user);
     }
 
     [EventHandler]
-    public async Task EditUserAsync(UpdateUserCommand command)
+    public async Task UpdateUserAsync(UpdateUserCommand command)
     {
         var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
         if (user is null)

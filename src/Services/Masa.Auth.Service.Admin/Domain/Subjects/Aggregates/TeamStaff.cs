@@ -15,14 +15,14 @@ public class TeamStaff : AuditEntity<Guid, Guid>
 
     public Guid UserId { get; private set; }
 
-    public TeamMemberTypes TeamStaffType { get; private set; }
+    public TeamMemberTypes TeamMemberType { get; private set; }
 
-    public TeamStaff(Guid teamId, Guid staffId, Guid userId, TeamMemberTypes teamStaffType)
+    public TeamStaff(Guid teamId, Guid staffId, Guid userId, TeamMemberTypes teamMemberType)
     {
         TeamId = teamId;
         StaffId = staffId;
         UserId = userId;
-        TeamStaffType = teamStaffType;
+        TeamMemberType = teamMemberType;
     }
 }
 

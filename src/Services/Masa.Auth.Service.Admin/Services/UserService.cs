@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Dto.Subjects;
-
-namespace Masa.Auth.Service.Admin.Services
+﻿namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : ServiceBase
     {
@@ -12,9 +10,16 @@ namespace Masa.Auth.Service.Admin.Services
             MapDelete(DeleteUserAsync);
         }
 
-        private async Task<PaginationList<UserDto>> PaginationAsync(IEventBus eventBus, UserPaginationOptions options)
+        private async Task<PaginationDto<UserDto>> PaginationAsync(IEventBus eventBus, GetUsersDto options)
         {
-            var query = new UserPaginationQuery(options.Page, options.PageSize, options.Search, options.Enabled);
+            var query = new UserPaginationQuery(options.Page, options.PageSize, options.Name, options.PhoneNumber, options.Email, options.Enabled);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        private async Task<UserDetailDto> GetUserDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid userId)
+        {
+            var query = new UserDetailQuery(userId);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

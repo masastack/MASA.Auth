@@ -12,8 +12,8 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(u => u.Email);
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
-        builder.OwnsOne(u => u.Household);
-        builder.OwnsOne(u => u.Residential);
+
+        builder.OwnsOne(u => u.Address);
     }
 }
 

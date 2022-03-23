@@ -13,13 +13,13 @@ public class TeamRole : AuditEntity<Guid, Guid>
 
     public Guid RoleId { get; private set; }
 
-    public TeamMemberTypes TeamStaffType { get; private set; }
+    public TeamMemberTypes TeamMemberType { get; private set; }
 
-    public TeamRole(Guid teamId, Guid roleId, TeamMemberTypes teamStaffType)
+    public TeamRole(Guid teamId, Guid roleId, TeamMemberTypes teamMemberType)
     {
         TeamId = teamId;
         RoleId = roleId;
-        TeamStaffType = teamStaffType;
+        TeamMemberType = teamMemberType;
     }
 }
 

@@ -1,3 +1,4 @@
 {
-  "$Text": "English"
+  "$Text": "English",
+  "$DateTimeFormat": "MM/dd/yyyy HH:mm:ss"
 }

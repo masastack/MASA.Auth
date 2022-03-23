@@ -23,14 +23,14 @@ public class TeamPermission : AuditEntity<Guid, Guid>
 
     public bool Effect { get; private set; }
 
-    public TeamMemberTypes TeamStaffType { get; private set; }
+    public TeamMemberTypes TeamMemberType { get; private set; }
 
-    public TeamPermission(Guid teamId, Guid permissionId, bool effect, TeamMemberTypes teamStaffType)
+    public TeamPermission(Guid teamId, Guid permissionId, bool effect, TeamMemberTypes teamMemberType)
     {
         TeamId = teamId;
         PermissionId = permissionId;
         Effect = effect;
-        TeamStaffType = teamStaffType;
+        TeamMemberType = teamMemberType;
     }
 }
 

@@ -16,11 +16,14 @@ public class ThirdPartyUser : AuditEntity<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled)
+    public string ThridPartyIdentity { get; private set; }
+
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         UserId = userId;
         Enabled = enabled;
+        ThridPartyIdentity = thridPartyIdentity;
     }
 }
 
