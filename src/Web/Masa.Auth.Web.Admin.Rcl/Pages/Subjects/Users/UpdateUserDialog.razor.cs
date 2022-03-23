@@ -14,7 +14,7 @@ public partial class UpdateUserDialog
     [Parameter]
     public Guid UserId { get; set; }
 
-    private UserDetailDto User { get; set; } = UserDetailDto.Default;
+    private UserDetailDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
 

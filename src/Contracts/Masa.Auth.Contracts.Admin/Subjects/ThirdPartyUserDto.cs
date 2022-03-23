@@ -2,7 +2,7 @@
 
 public class ThirdPartyUserDto
 {
-    public Guid ThirdPartyUserId { get; set; }
+    public Guid Id { get; set; }
 
     public Guid ThirdPartyIdpId { get; set; }
 
@@ -18,9 +18,9 @@ public class ThirdPartyUserDto
 
     public string Creator { get; set; }
 
-    public ThirdPartyUserDto(Guid thirdPartyUserId, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserDto user, DateTime creationTime, DateTime modificationTime, string creator)
+    public ThirdPartyUserDto(Guid id, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserDto user, DateTime creationTime, DateTime modificationTime, string creator)
     {
-        ThirdPartyUserId = thirdPartyUserId;
+        Id = id;
         ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;

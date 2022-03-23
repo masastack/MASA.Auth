@@ -1,6 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class AddOrUpdateRoleDialog
+public partial class AddOrUpdateUserDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -12,13 +12,13 @@ public partial class AddOrUpdateRoleDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public Guid RoleId { get; set; }
+    public Guid UserId { get; set; }
 
-    private bool IsAdd => RoleId == Guid.Empty;
+    private bool IsAdd => UserId == Guid.Empty;
 
-    private RoleDetailDto Role { get; set; } = new();
+    private UserDetailDto User { get; set; } = new();
 
-    private RoleService RoleService => AuthCaller.RoleService;
+    private UserService UserService => AuthCaller.UserService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -36,30 +36,30 @@ public partial class AddOrUpdateRoleDialog
     {
         if (Visible)
         {
-            if (IsAdd) Role = new();
-            else await GetRoleDetailAsync();
+            if (IsAdd) User = new();
+            else await GetUserDetailAsync();
         }
     }
 
-    public async Task GetRoleDetailAsync()
+    public async Task GetUserDetailAsync()
     {
-        Role = await RoleService.GetRoleDetailAsync(RoleId);
+        User = await UserService.GetUserDetailAsync(UserId);
     }
 
-    public async Task AddOrEditRoleAsync()
+    public async Task AddOrEditUserAsync()
     {
         Loading = true;
         if (IsAdd)
         {
-            await RoleService.AddRoleAsync(Role);
-            OpenSuccessMessage(T("Add role data success"));
+            await UserService.AddUserAsync(User);
+            OpenSuccessMessage(T("Add staff data success"));
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
         }
         else
         {
-            await RoleService.UpdateRoleAsync(Role);
-            OpenSuccessMessage(T("Edit role data success"));
+            await UserService.UpdateUserAsync(User);
+            OpenSuccessMessage(T("Edit staff data success"));
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
         }

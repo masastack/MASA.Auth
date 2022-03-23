@@ -4,7 +4,7 @@ public partial class ThirdPartyUser
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -13,7 +13,7 @@ public partial class ThirdPartyUser
         set
         {
             _search = value;
-            GetThirdPartyUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -23,17 +23,17 @@ public partial class ThirdPartyUser
         set
         {
             _enabled = value;
-            GetThirdPartyUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
-            GetThirdPartyUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            _page = value;
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -43,7 +43,7 @@ public partial class ThirdPartyUser
         set
         {
             _pageSize = value;
-            GetThirdPartyUserItemsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -57,7 +57,7 @@ public partial class ThirdPartyUser
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyIdpIDto> ThirdPartyIdps { get; set; } = new();
+    public List<ThirdPartyIdpDto> ThirdPartyIdps { get; set; } = new();
 
     public Guid ThirdPartyIdpId { get; set; }
 
@@ -82,15 +82,15 @@ public partial class ThirdPartyUser
             new() { Text = T("State"), Value = T(nameof(UserDto.Enabled)), Sortable = false },
         };
 
-        await GetThirdPartyUserItemsAsync();
+        await GetThirdPartyUsersAsync();
         await SelectThirdPartyIdpAsync();
     }
 
-    public async Task GetThirdPartyUserItemsAsync()
+    public async Task GetThirdPartyUsersAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyUsersDto(PageIndex, PageSize, Search, Enabled, ThirdPartyIdpId);
-        var response = await ThirdPartyUserService.GetThirdPartyUserItemsAsync(request);
+        var request = new GetThirdPartyUsersDto(Page, PageSize, Search, Enabled, ThirdPartyIdpId);
+        var response = await ThirdPartyUserService.GetThirdPartyUsersAsync(request);
         ThirdPartyUsers = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;
@@ -106,7 +106,7 @@ public partial class ThirdPartyUser
 
     public void OpenEditThirdPartyUserDialog(ThirdPartyUserDto thirdPartyUser)
     {
-        CurrentThirdPartyUserId = thirdPartyUser.ThirdPartyUserId;
+        CurrentThirdPartyUserId = thirdPartyUser.Id;
         ThirdPartyUserDialog = true;
     }
 }

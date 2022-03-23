@@ -106,7 +106,7 @@ public partial class User
     {
         Loading = true;
         var request = new GetUsersDto(Page, PageSize, Name, PhoneNumber, Email, Enabled);
-        var response = await UserService.GetUserItemsAsync(request);
+        var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
         TotalPage = response.TotalPages;
         Total = response.Total;
@@ -120,13 +120,13 @@ public partial class User
 
     public void OpenUpdateUserDialog(UserDto user)
     {
-        CurrentUserId = user.UserId;
+        CurrentUserId = user.Id;
         UpdateUserDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)
     {
-        CurrentUserId = user.UserId;
+        CurrentUserId = user.Id;
         AuthorizeDialogVisible = true;
     }
 }

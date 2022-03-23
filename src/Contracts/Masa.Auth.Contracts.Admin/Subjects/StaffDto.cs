@@ -2,38 +2,43 @@
 
 public class StaffDto
 {
-    public Guid StaffId { get; set; }
+    public Guid Id { get; set; }
 
-    public string Department { get; set; }
+    public string Department { get; set; } = string.Empty;
 
-    public string Position { get; set; }
+    public string Position { get; set; } = string.Empty;
 
     public string JobNumber { get; set; }
 
     public bool Enabled { get; private set; }
 
-    public StaffTypes MemberType { get; set; }
-
     public string Name { get; set; }
 
     public string Avatar { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = string.Empty;
 
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
-    public StaffDto(Guid staffId, string department, string position, string jobNumber, bool enabled, StaffTypes memberType, string name, string avatar, string phoneNumber, string email)
+    public StaffDto(Guid id, string name, string phoneNumber, string email, string jobNumber, string avatar)
     {
-        StaffId = staffId;
-        Department = department;
-        Position = position;
+        Id = id;
         JobNumber = jobNumber;
-        Enabled = enabled;
-        MemberType = memberType;
         Name = name;
         Avatar = avatar;
         PhoneNumber = phoneNumber;
         Email = email;
+    }
+
+    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, string name, string avatar, string phoneNumber, string email)
+    {
+        Id = id;
+        Department = department;
+        Position = position;
+        JobNumber = jobNumber;
+        Enabled = enabled;
+        Name = name;
+        Avatar = avatar;
     }
 }
 

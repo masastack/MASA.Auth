@@ -24,7 +24,7 @@
         void OnOpen(bool open)
         {
             _open = open;
-            if (open is true)
+            if (open)
             {
                 _search = null;
             }

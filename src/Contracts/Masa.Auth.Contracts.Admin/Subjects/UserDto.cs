@@ -2,7 +2,7 @@
 
 public class UserDto
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -10,7 +10,7 @@ public class UserDto
 
     public string Avatar { get; set; }
 
-    public string IDCard { get; set; }
+    public string IdCard { get; set; }
 
     public string Account { get; set; }
 
@@ -24,13 +24,25 @@ public class UserDto
 
     public DateTime CreationTime { get; set; }
 
-    public UserDto(Guid userId, string name, string displayName, string avatar, string iDCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime)
+    public UserDto()
     {
-        UserId = userId;
+        Name = "";
+        DisplayName = "";
+        Avatar = "";
+        IdCard = "";
+        Account = "";
+        CompanyName = "";
+        PhoneNumber = "";
+        Email = "";
+    }
+
+    public UserDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime)
+    {
+        Id = id;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = iDCard;
+        IdCard = idCard;
         Account = account;
         CompanyName = companyName;
         Enabled = enabled;

@@ -11,7 +11,7 @@ public partial class ViewThirdPartyUserDialog
     [Parameter]
     public Guid ThirdPartyUserId { get; set; }
 
-    private ThirdPartyUserDetailDto ThirdPartyUser { get; set; } = ThirdPartyUserDetailDto.Default;
+    private ThirdPartyUserDetailDto ThirdPartyUser { get; set; } = new();
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
@@ -29,7 +29,7 @@ public partial class ViewThirdPartyUserDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             ThirdPartyUser = await ThirdPartyUserService.GetThirdPartyUserDetailAsync(ThirdPartyUserId);
         }

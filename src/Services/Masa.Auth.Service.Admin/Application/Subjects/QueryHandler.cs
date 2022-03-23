@@ -26,7 +26,7 @@ public class QueryHandler
 
         var users = await _userRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
-            Page = query.PageIndex,
+            Page = query.Page,
             PageSize = query.PageSize,
             Sorting = new Dictionary<string, bool>
             {
@@ -55,14 +55,14 @@ public class QueryHandler
     {
         var key = staffListQuery.SearchKey;
         return (await _staffRepository.GetListAsync(s => s.JobNumber.Contains(key) || s.Name.Contains(key)))
-            .Take(staffListQuery.MaxCount).Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.StaffType, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
+            .Take(staffListQuery.MaxCount).Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
     }
 
     [EventHandler]
     private async Task<PaginationDto<StaffDto>> StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
     {
         var key = staffPaginationQuery.SearchKey;
-        var pageIndex = staffPaginationQuery.PageIndex;
+        var page = staffPaginationQuery.Page;
         var pageSize = staffPaginationQuery.PageSize;
         Expression<Func<Staff, bool>> condition = staff => true;
         if (string.IsNullOrEmpty(key))
@@ -71,10 +71,10 @@ public class QueryHandler
         }
         var PaginationDto = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
-            Page = pageIndex,
+            Page = page,
             PageSize = pageSize
         });
         return new PaginationDto<StaffDto>(PaginationDto.Total, PaginationDto.TotalPages,
-            PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.StaffType, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
+            PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
     }
 }

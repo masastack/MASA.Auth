@@ -8,7 +8,7 @@ public class AddUserDto
 
     public string Avatar { get; set; }
 
-    public string IDCard { get; set; }
+    public string IdCard { get; set; }
 
     public string CompanyName { get; set; }
 
@@ -20,12 +20,12 @@ public class AddUserDto
 
     public AddressValueDto Address { get; set; }
 
-    public AddUserDto(string name, string displayName, string avatar, string iDCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address)
+    public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address)
     {
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
-        IDCard = iDCard;
+        IdCard = idCard;
         CompanyName = companyName;
         Enabled = enabled;
         PhoneNumber = phoneNumber;
@@ -35,6 +35,6 @@ public class AddUserDto
 
     public static implicit operator AddUserDto(UserDetailDto user)
     {
-        return new AddUserDto(user.Name, user.DisplayName, user.Avatar, user.IDCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.Address);
+        return new AddUserDto(user.Name, user.DisplayName, user.Avatar, user.IdCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.Address);
     }
 }

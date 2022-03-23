@@ -2,7 +2,7 @@
 
 public class StaffService : ServiceBase
 {
-    List<StaffDto> StaffItems => new List<StaffDto>()
+    List<StaffDto> Staffs => new List<StaffDto>()
     {
 
     };
@@ -12,15 +12,16 @@ public class StaffService : ServiceBase
 
     }
 
-    public async Task<PaginationDto<StaffDto>> GetStaffItemsAsync(GetStaffsDto request)
+    public async Task<PaginationDto<StaffDto>> GetStaffsAsync(GetStaffsDto request)
     {
-        var staffs = StaffItems.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<StaffDto>(StaffItems.Count, 1, staffs));
+        var skip = (request.Page - 1) * request.PageSize;
+        var staffs = Staffs.Skip(skip).Take(request.PageSize).ToList();
+        return await Task.FromResult(new PaginationDto<StaffDto>(Staffs.Count, 1, staffs));
     }
 
     public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
     {
-        return await Task.FromResult(StaffDetailDto.Default);
+        return await Task.FromResult(new StaffDetailDto());
     }
 
     public async Task AddStaffAsync(AddStaffDto request)
@@ -35,7 +36,7 @@ public class StaffService : ServiceBase
 
     public async Task DeleteStaffAsync(Guid staffId)
     {
-        StaffItems.Remove(StaffItems.First(s => s.StaffId == staffId));
+        Staffs.Remove(Staffs.First(s => s.Id == staffId));
         await Task.CompletedTask;
     }
 }

@@ -13,25 +13,26 @@ public class TeamService : ServiceBase
     {
     }
 
-    public async Task<PaginationDto<TeamDto>> GetTeamItemsAsync(GetTeamsDto request)
+    public async Task<PaginationDto<TeamDto>> GetTeamsAsync(GetTeamsDto request)
     {
-        var teams = Teams.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
+        var skip = (request.Page - 1) * request.PageSize;
+        var teams = Teams.Skip(skip).Take(request.PageSize).ToList();
         return await Task.FromResult(new PaginationDto<TeamDto>(Teams.Count, 1, teams));
     }
 
     public async Task<TeamDetailDto> GetTeamDetailAsync(Guid id)
     {
-        return await Task.FromResult(TeamDetailDto.Default);
+        return await Task.FromResult(new TeamDetailDto());
     }
 
-    public async Task<List<TeamDto>> SelectTeamAsync()
+    public async Task<List<TeamSelectDto>> TeamSelectAsync()
     {
-        return await Task.FromResult(Teams);
+        return await Task.FromResult(Teams.Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar)).ToList());
     }
 
     public async Task AddTeamAsync(AddTeamDto request)
     {
-        Teams.Add(new TeamDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Describe, "", "", "", null));
+        Teams.Add(new TeamDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Description, "", "", "", null));
         await Task.CompletedTask;
     }
 

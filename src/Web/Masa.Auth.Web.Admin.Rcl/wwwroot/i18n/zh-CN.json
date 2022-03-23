@@ -1,6 +1,7 @@
 {
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
+  "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
 
   "Favorite": "收藏",
   "Source": "来源",

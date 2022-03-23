@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class ThirdPartyIdpIDto
+public class ThirdPartyIdpDto
 {
-    public Guid ThirdPartyIdpId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -22,9 +22,19 @@ public class ThirdPartyIdpIDto
 
     public DateTime? ModificationTime { get; set; }
 
-    public ThirdPartyIdpIDto(Guid thirdPartyIdpId, string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType, DateTime creationTime, DateTime? modificationTime)
+    public ThirdPartyIdpDto()
     {
-        ThirdPartyIdpId = thirdPartyIdpId;
+        Name = "";
+        DisplayName = "";
+        ClientId = "";
+        ClientSecret = "";
+        Url = "";
+        Icon = "";
+    }
+
+    public ThirdPartyIdpDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType, DateTime creationTime, DateTime? modificationTime)
+    {
+        Id = id;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;

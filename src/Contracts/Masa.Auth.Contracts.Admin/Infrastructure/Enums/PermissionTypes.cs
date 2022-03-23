@@ -2,7 +2,7 @@
 
 public enum PermissionTypes
 {
-    Menu,
+    Menu = 1,
     Element,
     Api,
     Data

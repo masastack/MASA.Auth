@@ -1,11 +1,7 @@
 global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
-global using Masa.Auth.Contracts.Admin.Permissions;
-global using Masa.Utils.Caller.HttpClient;
-global using System.Text.Json.Serialization;
-global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
-global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
-global using Masa.Utils.Exceptions;
+global using Masa.Auth.Contracts.Admin.Permissions;
+global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Utils.Caller.Core;
-global using System.Net;
+global using Masa.Utils.Caller.HttpClient;

@@ -15,7 +15,7 @@ public partial class AddUserDialog
 
     private StringNumber Gender { get; set; } = "Male";
 
-    private UserDetailDto User { get; set; } = UserDetailDto.Default;
+    private UserDetailDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
 

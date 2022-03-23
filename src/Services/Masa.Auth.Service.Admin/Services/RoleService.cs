@@ -4,7 +4,7 @@ public class RoleService : ServiceBase
 {
     public RoleService(IServiceCollection services) : base(services, "api/role")
     {
-        MapGet(GetRoleItemsAsync);
+        MapGet(GetRolesAsync);
         MapGet(GetRoleSelectAsync);
         MapGet(GetRoleDetailAsync);
         MapPost(AddRoleAsync);
@@ -12,10 +12,10 @@ public class RoleService : ServiceBase
         MapDelete(DeleteRoleAsync);
     }
 
-    private async Task<PaginationDto<RoleDto>> GetRoleItemsAsync([FromServices] IEventBus eventBus,
-           [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
+    private async Task<PaginationDto<RoleDto>> GetRolesAsync([FromServices] IEventBus eventBus,
+           [FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
     {
-        var query = new RolePaginationQuery(pageIndex, pageSize, search, enabled);
+        var query = new RolePaginationQuery(page, pageSize, search, enabled);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

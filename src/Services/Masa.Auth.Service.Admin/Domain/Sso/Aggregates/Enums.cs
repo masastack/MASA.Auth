@@ -1,7 +1,7 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
 /// <summary>
-/// OpenID Connect subject types.
+/// OpenId Connect subject types.
 /// </summary>
 public enum SubjectTypes
 {

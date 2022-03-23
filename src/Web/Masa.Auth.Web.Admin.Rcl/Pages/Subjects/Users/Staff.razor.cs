@@ -4,7 +4,7 @@ public partial class Staff
 {
     private string? _search;
     private bool _enabled;
-    private int _pageIndex = 1;
+    private int _page = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -27,12 +27,12 @@ public partial class Staff
         }
     }
 
-    public int PageIndex
+    public int Page
     {
-        get { return _pageIndex; }
+        get { return _page; }
         set
         {
-            _pageIndex = value;
+            _page = value;
             GetStaffAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -82,8 +82,8 @@ public partial class Staff
     public async Task GetStaffAsync()
     {
         Loading = true;
-        var request = new GetStaffsDto(PageIndex, PageSize, Search, "", "", Enabled);
-        var response = await StaffService.GetStaffItemsAsync(request);
+        var request = new GetStaffsDto(Page, PageSize, Search, "", "", Enabled);
+        var response = await StaffService.GetStaffsAsync(request);
         Staffs = response.Items;
         TotalPages = response.TotalPages;
         Total = response.Total;
@@ -92,7 +92,7 @@ public partial class Staff
 
     public void OpenStaffDialog(StaffDto staff)
     {
-        CurrentStaffId = staff.StaffId;
+        CurrentStaffId = staff.Id;
         StaffDialog = true;
     }
 }
