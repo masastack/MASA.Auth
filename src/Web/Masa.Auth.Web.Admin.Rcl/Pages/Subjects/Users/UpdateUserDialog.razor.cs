@@ -20,7 +20,7 @@ public partial class UpdateUserDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if(VisibleChanged.HasDelegate)
+        if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
         }
@@ -35,7 +35,7 @@ public partial class UpdateUserDialog
         if (Visible is true)
         {
             await GetUserDetailAsync();
-        }   
+        }
     }
 
     public async Task GetUserDetailAsync()

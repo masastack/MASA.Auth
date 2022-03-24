@@ -16,22 +16,40 @@ public class CommandHandler
     [EventHandler]
     public async Task AddUserAsync(AddUserCommand command)
     {
-        if (await _userRepository.GetCountAsync(u => u.PhoneNumber == command.PhoneNumber) > 0)
-            throw new UserFriendlyException($"User with phone number {command.PhoneNumber} already exists");
-
-        var user = new User(command.Name, command.DisplayName, command.Avatar, command.IdCard, command.PhoneNumber, "", command.CompanyName, command.Enabled, command.PhoneNumber, command.Email, command.Address);
-        await _userRepository.AddAsync(user);
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == userDto.PhoneNumber || u.Account == userDto.Account || u.Email == userDto.Email);
+        if (user is not null)
+        {
+            if (userDto.PhoneNumber == user.PhoneNumber)
+                throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
+            if (userDto.Account == user.Account)
+                throw new UserFriendlyException($"User with account {userDto.Account} already exists");
+            if (userDto.Email == user.Email)
+                throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+        }
+        else
+        {
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Department, userDto.Position, userDto.Address);           
+            await _userRepository.AddAsync(user);
+        }
     }
 
     [EventHandler]
     public async Task UpdateUserAsync(UpdateUserCommand command)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id != userDto.Id);
         if (user is null)
-            throw new UserFriendlyException($"The current user does not exist");
-
-        user.Update();
-        await _userRepository.UpdateAsync(user);
+            throw new UserFriendlyException("The current user does not exist");
+        else
+        {
+            if (userDto.PhoneNumber == user.PhoneNumber)
+                throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
+            if (userDto.Email == user.Email)
+                throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password);
+            await _userRepository.UpdateAsync(user);
+        }
     }
 
     [EventHandler]
@@ -44,6 +62,7 @@ public class CommandHandler
         //todo
         //Delete ThirdPartyUser
         //Delete Staff
+        //Delete ...
         await _userRepository.RemoveAsync(user);
     }
 
@@ -51,15 +70,15 @@ public class CommandHandler
     public async Task CreateStaffAsync(AddStaffCommand createStaffCommand)
     {
         //_staffDomainService.CreateStaff();
-        var staff = new Staff(createStaffCommand.JobNumber, createStaffCommand.CreateUserCommand.Name,
+        var staff = new Staff(createStaffCommand.JobNumber, createStaffCommand.CreateUserCommand.User.Name,
             createStaffCommand.StaffType, createStaffCommand.Enabled);
-        var users = await _userRepository.GetListAsync(u => u.PhoneNumber == createStaffCommand.CreateUserCommand.PhoneNumber);
+        var users = await _userRepository.GetListAsync(u => u.PhoneNumber == createStaffCommand.CreateUserCommand.User.PhoneNumber);
         var user = users.FirstOrDefault();
         if (user == null)
         {
-            var userInfo = createStaffCommand.CreateUserCommand;
-            user = new User(userInfo.Name, userInfo.DisplayName, userInfo.Avatar, userInfo.IdCard,
-                userInfo.Account, userInfo.Password, userInfo.CompanyName, userInfo.Enabled, userInfo.PhoneNumber, userInfo.Email);
+            var userDto = createStaffCommand.CreateUserCommand.User;
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard,
+                userDto.Account, userDto.Password, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, "", userDto.Position);
         }
         else
         {

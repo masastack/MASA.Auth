@@ -4,11 +4,13 @@ public class QueryHandler
 {
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
+    readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IUserRepository userRepository, IStaffRepository staffRepository)
+    public QueryHandler(IUserRepository userRepository, IStaffRepository staffRepository, AuthDbContext authDbContext)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler]
@@ -16,13 +18,7 @@ public class QueryHandler
     {
         Expression<Func<User, bool>> condition = user => true;
         condition.And(user => user.Enabled == query.Enabled);
-        if (!string.IsNullOrEmpty(query.Name))
-            condition = condition.And(user => user.Name.Contains(query.Name));
-        if (!string.IsNullOrEmpty(query.PhoneNumber))
-            condition = condition.And(user => user.PhoneNumber.Contains(query.PhoneNumber));
-        if (!string.IsNullOrEmpty(query.Email))
-            condition = condition.And(user => user.Email.Contains(query.Email));
-
+        //Todo es search
 
         var users = await _userRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
@@ -35,10 +31,9 @@ public class QueryHandler
             }
         });
 
-        //query.Result = new(users.Total, users.TotalPages, users.Result.Select(u => new UserDto
-        //{
-
-        //}));
+        query.Result = new(users.Total, users.TotalPages, users.Result.Select(u =>
+            new UserDto(u.Id, u.Name, u.DisplayName, u.Avatar, u.IdCard, u.Account, u.CompanyName, u.Enabled, u.PhoneNumber, u.Email, u.CreationTime)
+        ).ToList());
     }
 
     [EventHandler]
@@ -47,7 +42,17 @@ public class QueryHandler
         var user = await _userRepository.FindAsync(u => u.Id == query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
 
-        //query.Result = new();
+        var thirdPartyIdpAvatars = await (from tpu in _authDbContext.Set<ThirdPartyUser>()
+                                          where tpu.UserId == user.Id
+                                          join tp in _authDbContext.Set<ThirdPartyIdp>()
+                                          on tpu.ThirdPartyIdpId equals tp.Id
+                                          into temp
+                                          from tp in temp
+                                          select tp.Icon).ToListAsync();
+        var creator = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstAsync(u => u.Id == user.Creator);
+        var modifier = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstAsync(u => u.Id == user.Modifier);
+
+        query.Result = new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, creator.Name, modifier.Name, user.ModificationTime, user.Department, user.Position, user.Password);
     }
 
     [EventHandler]

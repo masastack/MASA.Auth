@@ -55,7 +55,7 @@ public class UserService : ServiceBase
 
     public async Task DeleteUserAsync(Guid id)
     {
-        await DeleteAsync(nameof(DeleteUserAsync), new DeleteUserDto(id));
+        await DeleteAsync(nameof(DeleteUserAsync), new RemoveUserDto(id));
     }
 }
 

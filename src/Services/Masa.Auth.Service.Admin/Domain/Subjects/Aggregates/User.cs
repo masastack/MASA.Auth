@@ -16,6 +16,10 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string CompanyName { get; private set; }
 
+    public string Department { get; set; }
+
+    public string Position { get; set; }
+
     public bool Enabled { get; private set; }
 
     #region Contact Property
@@ -30,7 +34,7 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password,
         string companyName, bool enabled, string phoneNumber, string email,
-        AddressValue address)
+        string department,string position, AddressValue? address = null)
     {
         Name = name;
         DisplayName = displayName;
@@ -42,16 +46,23 @@ public class User : AuditAggregateRoot<Guid, Guid>
         Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
+        Address = address ?? new();
+        Department = department;
+        Position = position;
+    }
+
+    public void Update(string name, string displayName, string avatar, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password)
+    {
+        Name = name;
+        DisplayName = displayName;
+        Avatar = avatar;
+        CompanyName = companyName;
+        Enabled = enabled;
+        PhoneNumber = phoneNumber;
+        Email = email;
         Address = address;
-    }
-
-    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
-        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, new AddressValue())
-    {
-    }
-
-    public void Update()
-    {
-
+        Department = department;
+        Position = position;
+        Password = password;
     }
 }

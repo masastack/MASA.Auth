@@ -2,6 +2,7 @@
 global using FluentValidation.AspNetCore;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Subjects;
@@ -52,3 +53,4 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.OpenApi.Models;
 global using System.Linq.Expressions;
 global using System.Reflection;
+global using Masa.Auth.Contracts.Admin.Subjects.Validator;

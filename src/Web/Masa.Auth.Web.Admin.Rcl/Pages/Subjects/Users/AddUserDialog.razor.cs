@@ -21,7 +21,7 @@ public partial class AddUserDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if(VisibleChanged.HasDelegate)
+        if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
         }
@@ -36,7 +36,7 @@ public partial class AddUserDialog
         if (Visible is true)
         {
             Step = 1;
-        }   
+        }
     }
 
     public async Task AddOrEditUserAsync()

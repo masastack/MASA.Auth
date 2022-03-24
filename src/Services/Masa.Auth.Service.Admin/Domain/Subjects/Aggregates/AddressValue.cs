@@ -30,4 +30,14 @@ public class AddressValue : ValueObject
         yield return CityCode;
         yield return DistrictCode;
     }
+
+    public static implicit operator AddressValueDto(AddressValue adress)
+    {
+        return new AddressValueDto(adress.Address,adress.ProvinceCode,adress.CityCode,adress.DistrictCode);
+    }
+
+    public static implicit operator AddressValue(AddressValueDto adress)
+    {
+        return new AddressValue(adress.Address, adress.ProvinceCode, adress.CityCode, adress.DistrictCode);
+    }
 }
