@@ -2,21 +2,15 @@
 
 public class GetStaffsDto : Pagination
 {
-    public string Name { get; set; }
-
-    public string PhoneNumber { get; set; }
-
-    public string Email { get; set; }
+    public Guid StaffId { get; set; }
 
     public bool Enabled { get; set; }
 
-    public GetStaffsDto(int page, int pageSize, string name, string phoneNumber, string email, bool enabled)
+    public GetStaffsDto(int page, int pageSize, Guid staffId, bool enabled)
     {
         Page = page;
         PageSize = pageSize;
-        Name = name;
-        PhoneNumber = phoneNumber;
-        Email = email;
+        StaffId = staffId;
         Enabled = enabled;
     }
 
@@ -27,10 +21,8 @@ public class GetStaffsDto : Pagination
         int.TryParse(context.Request.Query["pageSize"], out var pageSize);
         pageSize = pageSize == 0 ? 20 : pageSize;
         bool.TryParse(context.Request.Query["enabled"], out var enabled);
-        var name = context.Request.Query["name"];
-        var phoneNumber = context.Request.Query["phoneNumber"];
-        var email = context.Request.Query["email"];
-        var result = new GetStaffsDto(page, pageSize, name, phoneNumber, email, enabled);
+        var staffId = Guid.Parse(context.Request.Query["staffId"]);
+        var result = new GetStaffsDto(page, pageSize, staffId, enabled);
 
         return ValueTask.FromResult<GetStaffsDto?>(result);
     }

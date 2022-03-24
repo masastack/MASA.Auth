@@ -1,10 +1,10 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class RemoveUserDto
+public class RemoveStaffDto
 {
     public Guid Id { get; set; }
 
-    public RemoveUserDto(Guid id)
+    public RemoveStaffDto(Guid id)
     {
         Id = id;
     }

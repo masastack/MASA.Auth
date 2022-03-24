@@ -34,7 +34,7 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password,
         string companyName, bool enabled, string phoneNumber, string email,
-        string department,string position, AddressValue? address = null)
+        string department, string position, AddressValue? address = null)
     {
         Name = name;
         DisplayName = displayName;
@@ -64,5 +64,10 @@ public class User : AuditAggregateRoot<Guid, Guid>
         Department = department;
         Position = position;
         Password = password;
+    }
+
+    public static implicit operator UserDetailDto(User user)
+    {
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, new(), "", "", user.ModificationTime, user.Department, user.Position, user.Password);
     }
 }

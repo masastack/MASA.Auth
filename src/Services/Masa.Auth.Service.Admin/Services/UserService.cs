@@ -4,15 +4,17 @@
     {
         public UserService(IServiceCollection services) : base(services, "api/user")
         {
-            MapGet(PaginationAsync);
-            MapPost(AddUserAsync);
-            MapPut(EditUserAsync);
+            MapGet(GetUsersAsync);
+            MapGet(GetUserDetailAsync);
+            MapGet(GetUserSelectAsync);
+            MapPut(AddUserAsync);
+            MapPost(UpdateUserAsync);
             MapDelete(DeleteUserAsync);
         }
 
-        private async Task<PaginationDto<UserDto>> PaginationAsync(IEventBus eventBus, GetUsersDto options)
+        private async Task<PaginationDto<UserDto>> GetUsersAsync(IEventBus eventBus, GetUsersDto options)
         {
-            var query = new UserPaginationQuery(options.Page, options.PageSize, options.Name, options.PhoneNumber, options.Email, options.Enabled);
+            var query = new UsersQuery(options.Page, options.PageSize, options.UserId, options.Enabled);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
@@ -24,25 +26,30 @@
             return query.Result;
         }
 
-        private async Task AddUserAsync(
-            IEventBus eventBus,
-            [FromBody] AddUserCommand command)
+        private async Task<List<UserSelectDto>> GetUserSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
         {
-            await eventBus.PublishAsync(command);
+            var query = new UserSelectQuery(search);
+            await eventBus.PublishAsync(query);
+            return query.Result;
         }
 
-        private async Task EditUserAsync(
-            IEventBus eventBus,
-            [FromBody] UpdateUserCommand command)
+        private async Task AddUserAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
         {
-            await eventBus.PublishAsync(command);
+            await eventBus.PublishAsync(new AddUserCommand(dto));
+        }
+
+        private async Task UpdateUserAsync(
+            IEventBus eventBus,
+            [FromBody] UpdateUserDto dto)
+        {
+            await eventBus.PublishAsync(new UpdateUserCommand(dto));
         }
 
         private async Task DeleteUserAsync(
             IEventBus eventBus,
-            [FromBody] RemoveUserCommand command)
+            [FromBody] RemoveUserDto dto)
         {
-            await eventBus.PublishAsync(command);
+            await eventBus.PublishAsync(new RemoveUserCommand(dto));
         }
     }
 }

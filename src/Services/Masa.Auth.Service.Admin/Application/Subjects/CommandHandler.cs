@@ -29,7 +29,7 @@ public class CommandHandler
         }
         else
         {
-            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Department, userDto.Position, userDto.Address);           
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Department, userDto.Position, userDto.Address);
             await _userRepository.AddAsync(user);
         }
     }
@@ -53,9 +53,9 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task DeleteUserAsync(RemoveUserCommand command)
+    public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
+        var user = await _userRepository.FindAsync(u => u.Id == command.User.Id);
         if (user == null)
             throw new UserFriendlyException("The current user does not exist");
 
@@ -67,35 +67,27 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task CreateStaffAsync(AddStaffCommand createStaffCommand)
+    public async Task CreateStaffAsync(AddStaffCommand command)
     {
         //_staffDomainService.CreateStaff();
-        var staff = new Staff(createStaffCommand.JobNumber, createStaffCommand.CreateUserCommand.User.Name,
-            createStaffCommand.StaffType, createStaffCommand.Enabled);
-        var users = await _userRepository.GetListAsync(u => u.PhoneNumber == createStaffCommand.CreateUserCommand.User.PhoneNumber);
-        var user = users.FirstOrDefault();
-        if (user == null)
-        {
-            var userDto = createStaffCommand.CreateUserCommand.User;
-            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard,
-                userDto.Account, userDto.Password, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, "", userDto.Position);
-        }
-        else
-        {
-            //todo update user info
+        var staffDto = command.Staff;
+        var staff = await _staffRepository.FindAsync(s => s.JobNumber == staffDto.JobNumber);
+        if (staff is not null)
+            throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
 
-        }
-        staff.BindUser(user);
+        //Todo add or update user
+        //Todo add position
+        staff = new Staff(default, staffDto.JobNumber, staffDto.User.Name, default, staffDto.StaffType, staffDto.Enabled);
         await _staffRepository.AddAsync(staff);
     }
 
     [EventHandler]
-    public async Task DeleteStaffAsync(RemoveStaffCommand deleteStaffCommand)
+    public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staff = await _staffRepository.FindAsync(deleteStaffCommand.StaffId);
+        var staff = await _staffRepository.FindAsync(command.Staff.Id);
         if (staff == null)
         {
-            throw new UserFriendlyException("the id of staff not found");
+            throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
     }

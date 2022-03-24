@@ -105,7 +105,7 @@ public partial class User
     public async Task GetUserAsync()
     {
         Loading = true;
-        var request = new GetUsersDto(Page, PageSize, Name, PhoneNumber, Email, Enabled);
+        var request = new GetUsersDto(Page, PageSize, default, Enabled);
         var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
         TotalPage = response.TotalPages;

@@ -14,7 +14,7 @@ public class AddStaffDto
 
     public string Position { get; set; }
 
-    public List<Guid> TeamIds { get; set; }
+    public List<Guid> Teams { get; set; }
 
     public AddUserDto User { get; set; }
 
@@ -26,12 +26,12 @@ public class AddStaffDto
         DepartmentId = departmentId;
         PositionId = positionId;
         Position = position;
-        TeamIds = teamIds;
+        Teams = teamIds;
         User = user;
     }
 
     public static implicit operator AddStaffDto(StaffDetailDto staff)
     {
-        return new AddStaffDto(staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, staff.TeamIds, staff.User);
+        return new AddStaffDto(staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, "", staff.TeamIds, staff.User);
     }
 }

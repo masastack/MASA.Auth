@@ -4,9 +4,9 @@ public class StaffDto
 {
     public Guid Id { get; set; }
 
-    public string Department { get; set; } = string.Empty;
+    public string Department { get; set; }
 
-    public string Position { get; set; } = string.Empty;
+    public string Position { get; set; }
 
     public string JobNumber { get; set; }
 
@@ -16,19 +16,9 @@ public class StaffDto
 
     public string Avatar { get; set; }
 
-    public string PhoneNumber { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; }
 
-    public string Email { get; set; } = string.Empty;
-
-    public StaffDto(Guid id, string name, string phoneNumber, string email, string jobNumber, string avatar)
-    {
-        Id = id;
-        JobNumber = jobNumber;
-        Name = name;
-        Avatar = avatar;
-        PhoneNumber = phoneNumber;
-        Email = email;
-    }
+    public string Email { get; set; }
 
     public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, string name, string avatar, string phoneNumber, string email)
     {
@@ -39,6 +29,8 @@ public class StaffDto
         Enabled = enabled;
         Name = name;
         Avatar = avatar;
+        PhoneNumber = phoneNumber;
+        Email = email;
     }
 }
 

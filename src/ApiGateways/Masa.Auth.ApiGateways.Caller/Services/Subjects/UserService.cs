@@ -23,7 +23,7 @@ public class UserService : ServiceBase
 
         //var paramters = new Dictionary<string, string>
         //{
-        //    ["search"] = request.Search,
+        //    ["userId"] = request.UserId.ToString(),
         //    ["enabled"] = request.Enabled.ToString(),
         //};
         //return await GetAsync<PaginationDto<UserDto>>(nameof(GetUsersAsync), paramters);
@@ -53,9 +53,9 @@ public class UserService : ServiceBase
         await PostAsync(nameof(UpdateUserAuthorizationAsync), request);
     }
 
-    public async Task DeleteUserAsync(Guid id)
+    public async Task RemoveUserAsync(Guid id)
     {
-        await DeleteAsync(nameof(DeleteUserAsync), new RemoveUserDto(id));
+        await DeleteAsync(nameof(RemoveUserAsync), new RemoveUserDto(id));
     }
 }
 
