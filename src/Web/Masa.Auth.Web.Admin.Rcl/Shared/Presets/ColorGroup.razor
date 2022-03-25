@@ -1,0 +1,13 @@
+﻿
+<MItemGroup Mandatory Class="@($"m-color-group d-flex { (SpaceBetween?"justify-space-between":"") } mx-n1 {@Class}")" style="@Style">
+    @foreach (var color in Colors)
+    {
+        <MItem>
+            <MCard Style="@($"transition: opacity .4s ease-in-out; {(context.Active ? "" : "opacity: 0.5;")}")">
+                <MButton Fab class="mx-1 rounded-circle" OnClick="()=>{ context.Toggle();Value = color; }"
+                     Width=Size Height=Size MinWidth=Size MinHeight=Size Color="@color">
+                </MButton>
+            </MCard>
+        </MItem>
+    }
+</MItemGroup>
