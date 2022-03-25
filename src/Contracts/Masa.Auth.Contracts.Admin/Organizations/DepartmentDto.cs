@@ -7,5 +7,7 @@ public class DepartmentDto
     public string Name { get; set; } = "";
 
     public List<DepartmentDto> Children { get; set; } = new();
+
+    public bool IsRoot { get; set; }
 }
 

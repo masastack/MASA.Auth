@@ -1,38 +1,39 @@
 ﻿@page "/org/sheet"
+@inherits AdminCompontentBase
 
-<PageTitle>新增部门</PageTitle>
+<PageTitle>@T("Add Department")</PageTitle>
 
 <MCard Class="mx-auto" MaxWidth="1200">
     <MWindow @bind-Value="_step">
         <MWindowItem Value="1">
             <MCardText>
-                <MTextField class="mx-auto text-h5" style="width:120px;" HideDetails="@("auto")" Placeholder="输入部门名称" TValue="string"></MTextField>
-                <MRadio Label="迁移原部门人员" class="mt-12 e-flex justify-center" Color="secondary" Value="_migrationStaff">
+                <MTextField class="mx-auto text-h5" style="width:350px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
+                <MRadio class="mt-12 e-flex justify-center" Color="secondary" Value="_migrationStaff">
                     <LabelContent>
                         <span class="secondary--text">
-                            迁移原部门人员
+                            @T("Relocate former department staff")
                         </span>
                     </LabelContent>
                 </MRadio>
-                <div class="text-right mt-12 mb-7">
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_step = 2">下一步</MButton>
-                </div>
             </MCardText>
+            <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
+                <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_step = 2">@T("Next step")</MButton>
+            </MCardActions>
         </MWindowItem>
         <MWindowItem Value="2">
             <MCardText>
-                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:120px;" Placeholder="输入部门名称" TValue="string"></MTextField>
-                <MCascader Items="_departments" Dense class="mt-6"
+                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:150px;" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
+                <MCascader Items="_departments" Dense class="mt-6" Label="@T("Department location")"
                            ItemText="u => u.Name"
                            ItemValue="u => u.Id"
                            ItemChildren="u => u.Children">
                 </MCascader>
                 <div class="d-flex align-center mt-6">
-                    <span class="text-h5 neutral-lighten-1--text">成员</span>
+                    <span class="text-h5 neutral-lighten-1--text">@T("Member")</span>
                     <MSpacer />
                     <MTextField Outlined TValue="string" style="width:340px;"
                                 Clearable PrependInnerIcon="mdi-magnify" HideDetails="true"
-                                Label="搜索成员" Dense Type="text">
+                                Label="@T("Search for members")" Dense Type="text">
                     </MTextField>
                 </div>
                 <MRow class="mt-6" style="height:300px;overflow-y:scroll;">
@@ -41,8 +42,8 @@
                         <MCol Md="3">
                             <MHover Context="hoverComtext">
                                 <MListItem @attributes="hoverComtext.Attrs" class="px-4" Ripple=false>
-                                    <MListItemAvatar  MinHeight=40 MinWidth=40 Height=40 Width=40>
-                                        <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"/>
+                                    <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
+                                        <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" />
                                     </MListItemAvatar>
                                     <MListItemContent class="py-1">
                                         <MListItemTitle class="text-body3 neutral-lighten-1--text">鬼谷子</MListItemTitle>
@@ -56,13 +57,35 @@
                         </MCol>
                     }
                 </MRow>
-                <MTextarea class="mt-6" Label="描述说明" Placeholder="请输入" Outlined Height="120" NoResize>
+                <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
                 </MTextarea>
-                <div class="d-flex justify-space-between align-center">
-                    <MSwitch @bind-Value="_enabled" Inset Label="正常"></MSwitch>
-                    <MButton class="rounded-pill primary mt-4" MinWidth="100">提交</MButton>
-                </div>
             </MCardText>
+            <MCardActions  class="d-flex align-center mb-10 px-6">
+                <MSwitch @bind-Value="_enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+                <MSpacer />
+                <MButton class="rounded-pill" Outlined MinWidth="100" OnClick="()=>_step=1">@T("Previous step")</MButton>
+                <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_step=3">@T("Submit")</MButton>
+            </MCardActions>
+        </MWindowItem>
+        <MWindowItem Value="3">
+            <MCardText>
+                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:120px;" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
+                <MCascader Items="_departments" Dense class="mt-6"
+                           ItemText="u => u.Name"
+                           ItemValue="u => u.Id"
+                           ItemChildren="u => u.Children">
+                </MCascader>
+                <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                </MTextarea>
+            </MCardText>
+            <MCardActions class="d-flex align-center mb-10 px-6">
+                <MSwitch @bind-Value="_enabled" class="mt-0" Inset Label="@T("Enable")"></MSwitch>
+                <MSpacer />
+                <MButton Text Color="error" MinWidth="100">
+                    @T("Delete")
+                </MButton>
+                <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
+            </MCardActions>
         </MWindowItem>
     </MWindow>
 </MCard>

@@ -27,13 +27,15 @@ public partial class Org
                 {
                     Name ="MasaStack",
                     Id = Guid.NewGuid(),
+                    IsRoot = true,
                     Children = new List<DepartmentDto> {
-                        new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid()},
-                        new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid()},
+                        new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid(),IsRoot = false},
+                        new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid(),IsRoot = false},
                     }
                 }
             };
             staffs = new List<StaffDto> {
+                new StaffDto(Guid.NewGuid(),"新员工","18267367890","13562763@qq.com","12412489","https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"),
                 new StaffDto(Guid.NewGuid(),"新员工","18267367890","13562763@qq.com","12412489","https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png")
             };
             StateHasChanged();
