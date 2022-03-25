@@ -1,124 +1,95 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
-public static class CustomizeFluentValidationExtensions
+public static class FluentValidationExtensions
 {
-    public static CustomizeRuleBuilderInitial<T, string> Chinese<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> Chinese<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.CHINESE)
-                        .WithMessage($"Can only input chinese of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.CHINESE)
+                          .WithMessage("Can only input chinese of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> Number<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> Number<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.NUMBER)
-                         .WithMessage($"Can only input number of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.NUMBER)
+                          .WithMessage("Can only input number of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> Letter<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> Letter<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.LETTER)
-                          .WithMessage($"Can only input letter of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.LETTER)
+                          .WithMessage("Can only input letter of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> LowerLetter<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> LowerLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.LOWER_LETTER)
-                          .WithMessage($"Can only input lower letter of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.LOWER_LETTER)
+                          .WithMessage("Can only input lower letter of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> UpperLetter<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> UpperLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.UPPER_LETTER)
-                          .WithMessage($"Can only input upper letter of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.UPPER_LETTER)
+                          .WithMessage("Can only input upper letter of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> LetterNumber<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> LetterNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.LETTER_NUMBER)
-                          .WithMessage($"Can only input upper letter and number of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.LETTER_NUMBER)
+                          .WithMessage("Can only input upper letter and number of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> ChineseLetter<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> ChineseLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.CHINESE_LETTER)
-                          .WithMessage($"Can only input upper chinese and letter of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.CHINESE_LETTER)
+                          .WithMessage("Can only input upper chinese and letter of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> ChineseLetterNumber<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> ChineseLetterNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.CHINESE_LETTER_NUMBER)
-                         .WithMessage($"Can only input upper chinese and letter and number of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.CHINESE_LETTER_NUMBER)
+                          .WithMessage("Can only input upper chinese and letter and number of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> Phone<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> Phone<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.PHONE)
-                         .WithMessage($"{ruleBuilder.PropertyName} format is incorrect");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.PHONE)
+                          .WithMessage("{PropertyName} format is incorrect");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> Email<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> Email<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.EMAIL)
-                         .WithMessage($"{ruleBuilder.PropertyName} format is incorrect");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.EMAIL)
+                          .WithMessage("{PropertyName} format is incorrect");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> IdCard<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> IdCard<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.IDCARD)
-                          .WithMessage($"{ruleBuilder.PropertyName} format is incorrect");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.IDCARD)
+                          .WithMessage("{PropertyName} format is incorrect");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> Url<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder)
+    public static IRuleBuilderOptions<T, string> Url<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        ruleBuilder.Rule.Matches(RegularHelper.URL)
-                         .WithMessage($"{ruleBuilder.PropertyName} format is incorrect");
-
-        return ruleBuilder;
+        return ruleBuilder.Matches(RegularHelper.URL)
+                          .WithMessage("{PropertyName} format is incorrect");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> MinimumLength<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder, int minimumLength)
+    public static IRuleBuilderOptions<T, string> MinLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength)
     {
-        ruleBuilder.Rule.MinimumLength(minimumLength)
-                        .WithMessage($"Please enter a number greater than {minimumLength} of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.MinimumLength(minimumLength)
+                    .WithMessage("Please enter a number greater than {MinLength} of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, string> MaximumLength<T>(this CustomizeRuleBuilderInitial<T, string> ruleBuilder, int maximumLength)
+    public static IRuleBuilderOptions<T, string> MaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength)
     {
-        ruleBuilder.Rule.MaximumLength(maximumLength)
-                        .WithMessage($"Please enter a number less than {maximumLength} of {ruleBuilder.PropertyName}");
-
-        return ruleBuilder;
+        return ruleBuilder.MaximumLength(maximumLength)
+                    .WithMessage("Please enter a number less than {MaxLength} of {PropertyName}");
     }
 
-    public static CustomizeRuleBuilderInitial<T, TProperty> Required<T, TProperty>(this CustomizeRuleBuilderInitial<T, TProperty> ruleBuilder)
+    public static IRuleBuilderOptions<T, TProperty> Required<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder)
     {
-        ruleBuilder.Rule.NotNull().NotEmpty()
-                        .WithMessage($"{ruleBuilder.PropertyName} is required ");
-
-        return ruleBuilder;
+        return ruleBuilder.NotNull()
+                        .NotEmpty()
+                        .WithMessage("{PropertyName} is required ");
     }
 }

@@ -31,7 +31,7 @@ public partial class AddUserDialog
         }
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         if (Visible is true)
         {
@@ -39,7 +39,7 @@ public partial class AddUserDialog
         }
     }
 
-    public async Task AddOrEditUserAsync()
+    public async Task AddUserAsync()
     {
         Loading = true;
         await UserService.AddUserAsync(User);
