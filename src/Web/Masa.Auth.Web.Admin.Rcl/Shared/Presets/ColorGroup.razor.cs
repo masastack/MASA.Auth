@@ -20,6 +20,9 @@ public partial class ColorGroup
     [Parameter]
     public bool SpaceBetween { get; set; } = false;
 
+    [Parameter]
+    public RenderFragment<string>? ItemAppendContent { get; set; }
+
     protected override void OnParametersSet()
     {
         if (Colors.Any())
