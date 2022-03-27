@@ -2,6 +2,6 @@
 
 public enum TeamTypes
 {
-
+    Ordinary = 1
 }
 

@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record StaffListQuery(string SearchKey) : Query<List<StaffDto>>
+public record StaffListQuery(string SearchKey, int Count = 20) : Query<List<StaffSelectDto>>
 {
     public int MaxCount { get; set; }
 
-    public override List<StaffDto> Result { get; set; } = null!;
+    public override List<StaffSelectDto> Result { get; set; } = null!;
 }

@@ -3,11 +3,17 @@
     @foreach (var color in Colors)
     {
         <MItem>
-            <MCard Style="@($"transition: opacity .4s ease-in-out; {(context.Active ? "" : "opacity: 0.5;")}")">
-                <MButton Fab class="mx-1 rounded-circle" OnClick="()=>{ context.Toggle();Value = color; }"
+            <MCard Class="elevation-0" Style="@($"transition: opacity .4s ease-in-out; {(context.Active ? "" : "opacity: 0.5;")}")">
+                <MButton Fab class="mx-1 rounded-circle" OnClick="()=>{ context.Toggle(); ValueChanged.InvokeAsync(color); }"
                      Width=Size Height=Size MinWidth=Size MinHeight=Size Color="@color">
                 </MButton>
             </MCard>
+            @if (ItemAppendContent is not null)
+            {
+                <div class="m-color-item-append d-flex align-center mr-1">
+                    @ItemAppendContent(color)
+                </div>
+            }
         </MItem>
     }
 </MItemGroup>

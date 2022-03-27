@@ -83,6 +83,7 @@
 
   "Team": "项目团队",
   "Team Name": "团队名称",
+  "Team Type": "团队类型",
   "Create Team": "创建团队",
   "Failed to query teamList data:": "查询团队列表数据失败:",
   "Failed to query teamDetail data:": "查询团队详情数据失败:",
@@ -95,6 +96,8 @@
   "Fill the basic team information": "填写团队基础资料",
   "Setup team admins": "设置团队管理员",
   "Setup team members": "设置团队成员",
+  "Team Admin": "团队管理员",
+  "Team Member": "团队成员",
 
   "Failed to query roleList data:": "查询角色列表数据失败:",
   "Failed to query roleDetail data:": "查询角色详情数据失败:",

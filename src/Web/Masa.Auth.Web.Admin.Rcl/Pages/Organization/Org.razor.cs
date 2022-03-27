@@ -17,6 +17,8 @@ public partial class Org
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
 
+    private DepartmentService DepartmentService => AuthCaller.DepartmentService;
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

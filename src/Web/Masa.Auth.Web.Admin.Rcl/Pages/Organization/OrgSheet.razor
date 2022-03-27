@@ -7,7 +7,7 @@
     <MWindow @bind-Value="_step">
         <MWindowItem Value="1">
             <MCardText>
-                <MTextField class="mx-auto text-h5" style="width:350px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
+                <MTextField class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
                 <MRadio class="mt-12 e-flex justify-center" Color="secondary" Value="_migrationStaff">
                     <LabelContent>
                         <span class="secondary--text">
@@ -69,7 +69,7 @@
         </MWindowItem>
         <MWindowItem Value="3">
             <MCardText>
-                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:120px;" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
+                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
                 <MCascader Items="_departments" Dense class="mt-6"
                            ItemText="u => u.Name"
                            ItemValue="u => u.Id"
