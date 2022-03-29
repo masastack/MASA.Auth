@@ -33,15 +33,7 @@ public class Department : AuditAggregateRoot<Guid, Guid>
         }
     }
 
-    public void AddStaffs(params Guid[] staffIds)
-    {
-        foreach (var staffId in staffIds)
-        {
-            _departmentStaffs.Add(new DepartmentStaff(staffId));
-        }
-    }
-
-    public void ResetStaffs(params Guid[] staffIds)
+    public void SetStaffs(params Guid[] staffIds)
     {
         _departmentStaffs.Clear();
         foreach (var staffId in staffIds)

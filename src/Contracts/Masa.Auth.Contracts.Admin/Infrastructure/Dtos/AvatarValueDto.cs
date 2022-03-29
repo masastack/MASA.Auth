@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Models;
+﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 
 public class AvatarValueDto
 {

@@ -12,10 +12,10 @@ public partial class OrgSheet
     public string Title { get; set; } = string.Empty;
 
     [Parameter]
-    public AddOrUpdateDepartmentDto Dto { get; set; } = new();
+    public UpsertDepartmentDto Dto { get; set; } = new();
 
     [Parameter]
-    public EventCallback<AddOrUpdateDepartmentDto> OnSubmit { get; set; }
+    public EventCallback<UpsertDepartmentDto> OnSubmit { get; set; }
 
     [Parameter]
     public EventCallback<Guid> OnDelete { get; set; }

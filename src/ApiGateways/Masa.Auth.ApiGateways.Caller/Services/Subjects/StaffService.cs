@@ -2,7 +2,7 @@
 
 public class StaffService : ServiceBase
 {
-    string baseUrl = "api/staff";
+    string _baseUrl = "api/staff";
 
     List<StaffDto> Staffs => new List<StaffDto>()
     {
@@ -25,7 +25,7 @@ public class StaffService : ServiceBase
             { nameof(GetStaffsDto.DepartmentId),getStaffsDto.DepartmentId.ToString() },
             { nameof(GetStaffsDto.Name),getStaffsDto.Name.ToString() }
         };
-        return await GetAsync<PaginationDto<StaffDto>>($"{baseUrl}/Pagination", paramters);
+        return await GetAsync<PaginationDto<StaffDto>>($"{_baseUrl}/Pagination", paramters);
     }
 
     public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)

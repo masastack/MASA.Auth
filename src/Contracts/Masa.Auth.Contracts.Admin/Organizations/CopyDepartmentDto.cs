@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Organizations;
 
-public class CopyDepartmentDto : AddOrUpdateDepartmentDto
+public class CopyDepartmentDto : UpsertDepartmentDto
 {
     public List<StaffDto> Staffs { get; set; } = new();
 
