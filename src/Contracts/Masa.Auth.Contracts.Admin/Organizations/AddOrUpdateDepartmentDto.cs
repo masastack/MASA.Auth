@@ -11,5 +11,7 @@ public class AddOrUpdateDepartmentDto
     public string Description { get; set; } = "";
 
     public bool Enabled { get; set; } = true;
+
+    public List<Guid> StaffIds { get; set; } = new();
 }
 

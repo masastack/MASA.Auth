@@ -41,6 +41,15 @@ public class Department : AuditAggregateRoot<Guid, Guid>
         }
     }
 
+    public void ResetStaffs(params Guid[] staffIds)
+    {
+        _departmentStaffs.Clear();
+        foreach (var staffId in staffIds)
+        {
+            _departmentStaffs.Add(new DepartmentStaff(staffId));
+        }
+    }
+
     public void RemoveStaffs(params Guid[] staffIds)
     {
         _departmentStaffs.RemoveAll(ds => staffIds.Contains(ds.StaffId));

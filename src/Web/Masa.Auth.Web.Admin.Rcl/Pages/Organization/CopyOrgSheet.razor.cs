@@ -2,24 +2,51 @@
 
 public partial class CopyOrgSheet
 {
+    StringNumber _step = 1;
+    List<StaffDto> _removeStaffs = new();
+
     [Parameter]
     public bool Show { get; set; }
 
     [Parameter]
     public string Title { get; set; } = string.Empty;
 
-    StringNumber _step = 1;
-    bool _enabled = true, _migrationStaff = false;
+    [Parameter]
+    public CopyDepartmentDto Dto { get; set; } = new();
 
-    List<DepartmentDto> _departments = new List<DepartmentDto> {
-        new DepartmentDto
+    [Parameter]
+    public List<DepartmentDto> Departments { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<CopyDepartmentDto> OnSubmit { get; set; }
+
+    private void NextStep()
+    {
+        _step = 2;
+        if (!Dto.MigrateStaff)
         {
-            Name ="MasaStack",
-            Id = Guid.NewGuid(),
-            Children = new List<DepartmentDto> {
-                new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid()},
-                new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid()},
-            }
+            _removeStaffs.AddRange(Dto.Staffs);
+            Dto.Staffs.Clear();
         }
-    };
+    }
+
+    public async Task OnSubmitHandler()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(Dto);
+        }
+    }
+
+    private void RemoveStaff(StaffDto staffDto)
+    {
+        Dto.Staffs.Remove(staffDto);
+        _removeStaffs.Add(staffDto);
+    }
+
+    private void AddStaff(StaffDto staffDto)
+    {
+        _removeStaffs.Remove(staffDto);
+        Dto.Staffs.Add(staffDto);
+    }
 }

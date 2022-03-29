@@ -18,7 +18,8 @@ public partial class Organization
     };
     PaginationDto<StaffDto> _paginationStaffs = new();
     AddOrUpdateDepartmentDto _addOrUpdateDepartmentDto = new();
-    GetStaffsDto _getStaffsDto = new GetStaffsDto(1, 20, "", Guid.Empty);
+    CopyDepartmentDto _copyDepartmentDto = new();
+    GetStaffsDto _getStaffsDto = new GetStaffsDto(1, 10, "", Guid.Empty);
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
     StaffService StaffService => AuthCaller.StaffService;
 
@@ -85,8 +86,29 @@ public partial class Organization
         await LoadDepartmentsAsync();
     }
 
-    private void Copy(Guid sourceId)
+    private async Task SubmitAsync(CopyDepartmentDto dto)
     {
+        await DepartmentService.AddOrUpdateAsync(dto);
+        await LoadDepartmentsAsync();
+    }
+
+    private async Task Copy(Guid sourceId)
+    {
+        var department = await DepartmentService.GetAsync(sourceId);
+        if (department == null)
+        {
+            throw new UserFriendlyException("department id not found");
+        }
+        _copyDepartmentDto = new CopyDepartmentDto();
+        _copyDepartmentDto.Name = department.Name;
+        _copyDepartmentDto.Description = department.Description;
+        _copyDepartmentDto.Enabled = department.Enabled;
+        _copyDepartmentDto.ParentId = department.ParentId;
+        _copyDepartmentDto.Staffs = department.StaffList;
+        _copyDepartmentDto.Staffs = new List<StaffDto> {
+            new StaffDto(Guid.NewGuid(),"谷守到","鬼谷子","1234567858","","12345678888",""),
+            new StaffDto(Guid.NewGuid(),"谷首道","鬼谷子2","1234567858","","12345678888","")
+        };
         _showCopy = true;
     }
 

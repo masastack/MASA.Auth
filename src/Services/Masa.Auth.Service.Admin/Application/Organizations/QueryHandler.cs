@@ -22,7 +22,7 @@ public class QueryHandler
             ParentId = department.ParentId,
             StaffList = department.DepartmentStaffs
                 .Select(ds => ds.Staff)
-                .Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList()
+                .Select(s => new StaffDto(s.Id, s.JobNumber, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList()
         };
     }
 

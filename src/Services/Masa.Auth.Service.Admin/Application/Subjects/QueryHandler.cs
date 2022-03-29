@@ -83,6 +83,6 @@ public class QueryHandler
             PageSize = pageSize
         });
         staffPaginationQuery.Result = new PaginationDto<StaffDto>(PaginationDto.Total, PaginationDto.TotalPages,
-            PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
+            PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
     }
 }

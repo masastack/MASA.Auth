@@ -35,7 +35,7 @@
                                         <MList>
                                             @if (!context.Item.IsRoot)
                                             {
-                                                <MListItem OnClick="()=>Copy(context.Item.Id)">
+                                                <MListItem OnClick="async ()=> await Copy(context.Item.Id)">
                                                     <MIcon Small>mdi-content-copy</MIcon>
                                                     <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
                                                 </MListItem>
@@ -153,4 +153,4 @@
 
 
 <OrgSheet Show=_showAdd Dto="@_addOrUpdateDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
-<CopyOrgSheet Show=_showCopy />
+<CopyOrgSheet Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>

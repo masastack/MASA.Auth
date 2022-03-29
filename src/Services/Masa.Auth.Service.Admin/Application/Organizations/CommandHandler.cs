@@ -18,6 +18,7 @@ public class CommandHandler
         if (dto.Id == Guid.Empty)
         {
             var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
+            addDepartment.AddStaffs(dto.StaffIds.ToArray());
             await _departmentRepository.AddAsync(addDepartment);
             return;
         }
@@ -27,6 +28,7 @@ public class CommandHandler
         {
             throw new UserFriendlyException($"current department id {dto.Id} not found");
         }
+        department.ResetStaffs(dto.StaffIds.ToArray());
         department.Update(dto.Name, dto.Description, dto.Enabled);
         if (parent != null)
         {

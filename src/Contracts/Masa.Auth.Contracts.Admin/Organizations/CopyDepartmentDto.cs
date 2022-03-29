@@ -2,7 +2,9 @@
 
 public class CopyDepartmentDto : AddOrUpdateDepartmentDto
 {
-    public List<Guid> StaffIds { get; set; } = new();
+    public List<StaffDto> Staffs { get; set; } = new();
+
+    public new List<Guid> StaffIds => Staffs.Select(s => s.Id).ToList();
 
     public bool MigrateStaff { get; set; }
 
