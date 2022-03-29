@@ -110,5 +110,13 @@ public class QueryHandler
         var team = await _teamRepository.FindAsync(teamDetailQuery.Id);
     }
 
+    [EventHandler]
+    public async Task TeamSelectListAsync(TeamSelectListQuery teamSelectListQuery)
+    {
+        teamSelectListQuery.Result = (await _teamRepository.GetListAsync())
+                .Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar.Url))
+                .ToList();
+    }
+
     #endregion
 }

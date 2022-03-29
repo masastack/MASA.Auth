@@ -4,7 +4,7 @@ namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
 
 public class DepartmentService : ServiceBase
 {
-    string baseUrl = "api/department";
+    string _baseUrl = "api/department";
 
     internal DepartmentService(ICallerProvider callerProvider) : base(callerProvider)
     {
@@ -12,26 +12,26 @@ public class DepartmentService : ServiceBase
 
     public async Task<DepartmentDetailDto> GetAsync(Guid id)
     {
-        return await GetAsync<DepartmentDetailDto>($"{baseUrl}/Get?id={id}");
+        return await GetAsync<DepartmentDetailDto>($"{_baseUrl}/Get?id={id}");
     }
 
     public async Task<List<DepartmentDto>> GetListAsync()
     {
-        return await GetAsync<List<DepartmentDto>>($"{baseUrl}/List");
+        return await GetAsync<List<DepartmentDto>>($"{_baseUrl}/List");
     }
 
     public async Task AddOrUpdateAsync(AddOrUpdateDepartmentDto addOrUpdateDepartmentDto)
     {
-        await PostAsync($"{baseUrl}/Add", addOrUpdateDepartmentDto);
+        await PostAsync($"{_baseUrl}/Add", addOrUpdateDepartmentDto);
     }
 
     public async Task RemoveAsync(Guid departmentId)
     {
-        await DeleteAsync($"{baseUrl}/Remove?id={departmentId}");
+        await DeleteAsync($"{_baseUrl}/Remove?id={departmentId}");
     }
 
     public async Task<DepartmentChildrenCountDto> GetCountAsync()
     {
-        return await GetAsync<DepartmentChildrenCountDto>($"{baseUrl}/Count");
+        return await GetAsync<DepartmentChildrenCountDto>($"{_baseUrl}/Count");
     }
 }
