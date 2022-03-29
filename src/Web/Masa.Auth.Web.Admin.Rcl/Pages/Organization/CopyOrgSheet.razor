@@ -79,7 +79,7 @@
                     <MSwitch @bind-Value="@Dto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
                     <MSpacer />
                     <MButton class="rounded-pill" Outlined MinWidth="100" OnClick="()=> _step = 1 ">@T("Previous step")</MButton>
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</MButton>
                 </MCardActions>
             </MWindowItem>
         </MWindow>

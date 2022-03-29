@@ -23,7 +23,6 @@ public partial class OrgSheet
     [Parameter]
     public List<DepartmentDto> Departments { get; set; } = new();
 
-
     public async Task OnSubmitHandler()
     {
         if (OnSubmit.HasDelegate)

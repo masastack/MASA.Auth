@@ -16,14 +16,13 @@
                 @T("Setup team members")
             </MStepperStep>
         </MStepperHeader>
-
         <MStepperItems>
             <MStepperContent Style="padding-top:12px !important;" Step="1">
                 <MCardText>
                     <MTextField class="mx-auto text-h5" style="width:404px;" @bind-Value="@_teamDetailDto.Name" HideDetails="@("auto")" Placeholder="@T("Team Name")"></MTextField>
                     <MListItem class="mt-12 px-0">
                         <MListItemAvatar Color="@_teamDetailDto.Avatar.Color" Height=80 Width=80>
-                            <span class="white--text" style="font-size:48px;">V</span>
+                            <span class="white--text" style="font-size:48px;">@_teamDetailDto.Avatar.Name.FirstOrDefault()</span>
                         </MListItemAvatar>
                         <MListItemContent class="py-0">
                             <MListItemTitle>

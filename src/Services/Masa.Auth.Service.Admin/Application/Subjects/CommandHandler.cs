@@ -4,12 +4,15 @@ public class CommandHandler
 {
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
+    readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, StaffDomainService staffDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
+        ITeamRepository teamRepository, StaffDomainService staffDomainService)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;
+        _teamRepository = teamRepository;
         _staffDomainService = staffDomainService;
     }
 
@@ -80,4 +83,19 @@ public class CommandHandler
         }
         await _staffRepository.RemoveAsync(staff);
     }
+
+    #region Team
+
+    [EventHandler]
+    public async Task RemoveTeamAsync(RemoveTeamCommand removeTeamCommand)
+    {
+        var team = await _teamRepository.GetByIdAsync(removeTeamCommand.TeamId);
+        if (team.Staffs.Any())
+        {
+            throw new UserFriendlyException("the team has staffs can`t delete");
+        }
+        await _teamRepository.RemoveAsync(team);
+    }
+
+    #endregion
 }
