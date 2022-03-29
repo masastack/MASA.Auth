@@ -16,7 +16,7 @@ public class StaffService : ServiceBase
         await eventBus.PublishAsync(createStaffCommand);
     }
 
-    private async Task<List<StaffDto>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<StaffSelectDto>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
     {
         var query = new StaffListQuery(name);
         await eventBus.PublishAsync(query);

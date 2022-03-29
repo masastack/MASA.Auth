@@ -1,3 +1,27 @@
 ﻿@inherits AdminCompontentBase
+@page "/team/index"
 
-<AddOrUpdateTeamDialog TeamId=CurrentTeamId @bind-Visible="TeamDialogVisible" OnSubmitSuccess=GetTeamsAsync />
+<PageTitle>@T("Team")</PageTitle>
+
+<MCard>
+    <MCardTitle class="mx-2 py-6">
+        <MTextField TValue="string" Outlined Dense Placeholder="@T("Search")"
+                    HideDetails=true Style="max-width:340px;" PrependInnerIcon="mdi-magnify">
+        </MTextField>
+    </MCardTitle>
+    <MCardText>
+        <MRow>
+            @for (var i = 1; i < 9; i++)
+            {
+                <MCol Md="4">
+                    <TeamCard />
+                </MCol>
+            }
+            <MCol Md="4">
+                <MCard Outlined Style="display:flex; align-items: center; justify-content: center; border-style: dashed;" Height="230">
+                    <MButton Ripple=false Plain><MIcon Left>mdi-plus</MIcon>@T("Create Team")</MButton>
+                </MCard>
+            </MCol>
+        </MRow>
+    </MCardText>
+</MCard>

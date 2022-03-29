@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Masa.Auth.ApiGateways.Caller;
+﻿namespace Masa.Auth.ApiGateways.Caller;
 
 public class AuthCaller : HttpClientCallerBase
 {
@@ -11,6 +9,7 @@ public class AuthCaller : HttpClientCallerBase
     StaffService? _staffService;
     TeamService? _teamService;
     RoleService? _roleService;
+    DepartmentService? _departmentService;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(CallerProvider));
@@ -24,6 +23,8 @@ public class AuthCaller : HttpClientCallerBase
     public TeamService TeamService => _teamService ?? (_teamService = new(CallerProvider));
 
     public RoleService RoleService => _roleService ?? (_roleService = new(CallerProvider));
+
+    public DepartmentService DepartmentService => _departmentService ?? (_departmentService = new(CallerProvider));
 
     protected override string BaseAddress { get; set; }
 

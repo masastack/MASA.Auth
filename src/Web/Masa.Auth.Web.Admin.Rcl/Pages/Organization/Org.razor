@@ -1,12 +1,16 @@
 ﻿@page "/org/index"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("Department Management")
+</PageTitle>
 <MRow>
     <MCol Md="@("auto")">
         <MCard style="width:300px;">
-            <MCardTitle class="d-flex justify-space-between">
-                部门管理
-                <MIcon>mdi-magnify</MIcon>
+            <MCardTitle>
+                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ClickedExtend>
+                    @T("Department Management")
+                </Masa.Auth.Web.Admin.Rcl.Shared.Presets.ClickedExtend>
             </MCardTitle>
             <MCardText style="height:500px;">
                 <MTreeview @bind-Active="_active"
@@ -28,10 +32,13 @@
                                     </ActivatorContent>
                                     <ChildContent>
                                         <MList>
-                                            <MListItem>
-                                                <MIcon Small>mdi-content-copy</MIcon>
-                                                <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
-                                            </MListItem>
+                                            @if (!context.Item.IsRoot)
+                                            {
+                                                <MListItem>
+                                                    <MIcon Small>mdi-content-copy</MIcon>
+                                                    <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
+                                                </MListItem>
+                                            }
                                             <MListItem>
                                                 <MIcon Small>mdi-pencil</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
@@ -59,8 +66,8 @@
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle class="text-h7 neutral-lighten-3--text">二级部门</MListItemTitle>
-                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">个</span></MListItemSubtitle>
+                            <MListItemTitle class="text-h7 neutral-lighten-3--text">@T("Secondary Department")</MListItemTitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -72,8 +79,8 @@
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle class="text-h7 neutral-lighten-3--text">三级部门</MListItemTitle>
-                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">个</span></MListItemSubtitle>
+                            <MListItemTitle class="text-h7 neutral-lighten-3--text">@T("Tertiary Department")</MListItemTitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -85,8 +92,8 @@
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle class="text-h7 neutral-lighten-3--text">四级部门</MListItemTitle>
-                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">个</span></MListItemSubtitle>
+                            <MListItemTitle class="text-h7 neutral-lighten-3--text">@T("Fourth Department")</MListItemTitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -96,7 +103,7 @@
             <MCol Md="12">
                 <MCard>
                     <MCardText>
-                        <MDataTable Headers="_headers" Items="staffs" TItem="StaffDto" HideDefaultFooter Class="user mt-2 table-border-none">
+                        <MDataTable Headers="_headers" Items="staffs" TItem="StaffDto" ItemClass="my-2" HideDefaultFooter="true" Class="mt-2 table-border-none table-space-v-4">
                             <HeaderColContent Context="header">
                                 <span class="text-subtitle">@header.Text</span>
                             </HeaderColContent>
@@ -119,6 +126,9 @@
                                         break;
                                 }
                             </ItemColContent>
+                            <FooterContent>
+                                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.SimpleDataTableFooter Class="mt-4" Total="100" Page=2 PageSize="10" />
+                            </FooterContent>
                         </MDataTable>
                     </MCardText>
                 </MCard>

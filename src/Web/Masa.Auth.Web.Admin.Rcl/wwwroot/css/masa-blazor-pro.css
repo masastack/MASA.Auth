@@ -1093,3 +1093,11 @@ tr:hover {
     line-height: normal !important;
     letter-spacing: 0em !important;
 }
+
+.m-data-table.table-space-v-4 > .m-data-table__wrapper > table {
+    border-spacing: 0px 16px !important;
+}
+
+.m-data-table.table-space-v-2 > .m-data-table__wrapper > table {
+    border-spacing: 0px 8px !important;
+}

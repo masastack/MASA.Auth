@@ -6,6 +6,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Shared\Presets\readme.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Shared\Presets\readme.md" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

@@ -1,5 +1,6 @@
 ﻿global using BlazorComponent;
 global using BlazorComponent.I18n;
+global using Masa.Auth.ApiGateways.Caller.Services.Organizations;
 global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
 global using Masa.Auth.Contracts.Admin.Organizations;
