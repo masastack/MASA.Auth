@@ -6,6 +6,9 @@ public partial class OrgSheet
     public bool Show { get; set; }
 
     [Parameter]
+    public EventCallback<bool> ShowChanged { get; set; }
+
+    [Parameter]
     public string Title { get; set; } = string.Empty;
 
     [Parameter]

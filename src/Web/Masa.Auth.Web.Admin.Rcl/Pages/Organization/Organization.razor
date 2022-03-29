@@ -152,5 +152,5 @@
 </MRow>
 
 
-<OrgSheet Show=_showAdd Dto="@_addOrUpdateDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
-<CopyOrgSheet Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>
+<OrgSheet @bind-Show=_showAdd Dto="@_addOrUpdateDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
+<CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>

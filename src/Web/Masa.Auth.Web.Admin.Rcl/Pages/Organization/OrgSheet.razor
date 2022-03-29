@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show>
+<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
     <MCard Class="mx-auto">
         <MCardText>
             <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
