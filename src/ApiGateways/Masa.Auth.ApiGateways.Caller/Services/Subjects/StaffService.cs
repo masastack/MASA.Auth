@@ -2,6 +2,8 @@
 
 public class StaffService : ServiceBase
 {
+    string baseUrl = "api/staff";
+
     List<StaffDto> Staffs => new List<StaffDto>()
     {
 
@@ -12,11 +14,18 @@ public class StaffService : ServiceBase
 
     }
 
-    public async Task<PaginationDto<StaffDto>> GetStaffsAsync(GetStaffsDto request)
+    public async Task<PaginationDto<StaffDto>> GetStaffPaginationAsync(GetStaffsDto getStaffsDto)
     {
-        var skip = (request.Page - 1) * request.PageSize;
-        var staffs = Staffs.Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<StaffDto>(Staffs.Count, 1, staffs));
+        var paramters = new Dictionary<string, string>()
+        {
+            { nameof(GetStaffsDto.Page),getStaffsDto.Page.ToString() },
+            { nameof(GetStaffsDto.PageSize),getStaffsDto.PageSize.ToString() },
+            { nameof(GetStaffsDto.Email),getStaffsDto.Email.ToString() },
+            { nameof(GetStaffsDto.PhoneNumber),getStaffsDto.PhoneNumber.ToString() },
+            { nameof(GetStaffsDto.DepartmentId),getStaffsDto.DepartmentId.ToString() },
+            { nameof(GetStaffsDto.Name),getStaffsDto.Name.ToString() }
+        };
+        return await GetAsync<PaginationDto<StaffDto>>($"{baseUrl}/Pagination", paramters);
     }
 
     public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)

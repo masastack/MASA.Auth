@@ -2,17 +2,38 @@
 
 public partial class OrgSheet
 {
-    StringNumber _step = 1;
-    bool _enabled = true, _migrationStaff = false;
-    List<DepartmentDto> _departments = new List<DepartmentDto> {
-        new DepartmentDto
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public AddOrUpdateDepartmentDto Dto { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<AddOrUpdateDepartmentDto> OnSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnDelete { get; set; }
+
+    [Parameter]
+    public List<DepartmentDto> Departments { get; set; } = new();
+
+
+    public async Task OnSubmitHandler()
+    {
+        if (OnSubmit.HasDelegate)
         {
-            Name ="MasaStack",
-            Id = Guid.NewGuid(),
-            Children = new List<DepartmentDto> {
-                new DepartmentDto { Name ="Stack业务部",Id = Guid.NewGuid()},
-                new DepartmentDto { Name ="Stack研发部",Id = Guid.NewGuid()},
-            }
+            await OnSubmit.InvokeAsync(Dto);
         }
-    };
+    }
+
+    public async Task OnDeleteHandler()
+    {
+        if (OnDelete.HasDelegate)
+        {
+            await OnDelete.InvokeAsync(Dto.Id);
+        }
+    }
 }

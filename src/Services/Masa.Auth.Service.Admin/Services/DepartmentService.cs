@@ -4,15 +4,24 @@ public class DepartmentService : ServiceBase
 {
     public DepartmentService(IServiceCollection services) : base(services, "api/department")
     {
+        MapGet(GetAsync);
         MapGet(ListAsync);
-        MapPost(CreateAsync);
-        MapDelete(DeleteAsync);
+        MapGet(CountAsync);
+        MapPost(AddAsync);
+        MapDelete(RemoveAsync);
     }
 
-    private async Task CreateAsync([FromServices] IEventBus eventBus,
-        [FromBody] AddDepartmentCommand createDepartmentCommand)
+    private async Task AddAsync([FromServices] IEventBus eventBus,
+        [FromBody] AddOrUpdateDepartmentDto addOrUpdateDepartmentDto)
     {
-        await eventBus.PublishAsync(createDepartmentCommand);
+        await eventBus.PublishAsync(new AddDepartmentCommand(addOrUpdateDepartmentDto));
+    }
+
+    private async Task<DepartmentDetailDto> GetAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new DepartmentDetailQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 
     private async Task<List<DepartmentDto>> ListAsync([FromServices] IEventBus eventBus)
@@ -22,10 +31,17 @@ public class DepartmentService : ServiceBase
         return query.Result;
     }
 
-    private async Task DeleteAsync([FromServices] IEventBus eventBus,
+    private async Task RemoveAsync([FromServices] IEventBus eventBus,
         [FromQuery] Guid id)
     {
         await eventBus.PublishAsync(new RemoveDepartmentCommand(id));
+    }
+
+    private async Task<DepartmentChildrenCountDto> CountAsync([FromServices] IEventBus eventBus)
+    {
+        var query = new DepartmentCountQuery();
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 }
 

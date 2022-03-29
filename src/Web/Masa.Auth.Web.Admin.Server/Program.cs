@@ -16,6 +16,7 @@ builder.Services.AddMasaBlazor(builder =>
     });
 });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddGlobalForServer();
 builder.Services.AddAuthApiGateways();
 

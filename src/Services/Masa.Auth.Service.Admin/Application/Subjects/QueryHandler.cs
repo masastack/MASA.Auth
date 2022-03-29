@@ -4,15 +4,17 @@ public class QueryHandler
 {
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
+    readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IUserRepository userRepository, IStaffRepository staffRepository)
+    public QueryHandler(IUserRepository userRepository, IStaffRepository staffRepository, AuthDbContext authDbContext)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler]
-    private async Task GetUserPaginationAsync(UserPaginationQuery query)
+    public async Task GetUserPaginationAsync(UserPaginationQuery query)
     {
         Expression<Func<User, bool>> condition = user => true;
         condition.And(user => user.Enabled == query.Enabled);
@@ -42,7 +44,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetUserDetailAsync(UserDetailQuery query)
+    public async Task GetUserDetailAsync(UserDetailQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.Id == query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
@@ -51,15 +53,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task<List<StaffDto>> StaffListAsync(StaffListQuery staffListQuery)
+    public async Task StaffListAsync(StaffListQuery staffListQuery)
     {
         var key = staffListQuery.SearchKey;
-        return (await _staffRepository.GetListAsync(s => s.JobNumber.Contains(key) || s.Name.Contains(key)))
-            .Take(staffListQuery.MaxCount).Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
+
     }
 
     [EventHandler]
-    private async Task<PaginationDto<StaffDto>> StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
+    public async Task StaffPaginationAsync(StaffPaginationQuery staffPaginationQuery)
     {
         var key = staffPaginationQuery.SearchKey;
         var page = staffPaginationQuery.Page;
@@ -69,12 +70,19 @@ public class QueryHandler
         {
             condition = condition.And(s => s.JobNumber.Contains(key) || s.Name.Contains(key));
         }
+        if (staffPaginationQuery.DepartmentId != Guid.Empty)
+        {
+            var staffIds = _authDbContext.Set<DepartmentStaff>()
+                .Where(ds => ds.DepartmentId == staffPaginationQuery.DepartmentId)
+                .Select(ds => ds.StaffId);
+            condition = condition.And(s => staffIds.Contains(s.Id));
+        }
         var PaginationDto = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
             Page = page,
             PageSize = pageSize
         });
-        return new PaginationDto<StaffDto>(PaginationDto.Total, PaginationDto.TotalPages,
+        staffPaginationQuery.Result = new PaginationDto<StaffDto>(PaginationDto.Total, PaginationDto.TotalPages,
             PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
     }
 }

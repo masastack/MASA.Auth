@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Masa.Auth.ApiGateways.Caller;
 
@@ -7,7 +6,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAuthApiGateways(this IServiceCollection services, Action<AuthApiOptions>? configure = null)
     {
-        var options = new AuthApiOptions("http://localhost:8080/");
+        var options = new AuthApiOptions("http://localhost:18002/");
         //Todo default option
 
         configure?.Invoke(options);

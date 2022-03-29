@@ -18,7 +18,11 @@ public class QueryHandler
             Id = department.Id,
             Name = department.Name,
             Description = department.Description,
-            Enabled = department.Enabled
+            Enabled = department.Enabled,
+            ParentId = department.ParentId,
+            StaffList = department.DepartmentStaffs
+                .Select(ds => ds.Staff)
+                .Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList()
         };
     }
 
@@ -39,20 +43,12 @@ public class QueryHandler
             {
                 Id = department.Id,
                 Name = department.Name,
-                Children = await GetDepartmentsAsync(department.Id)
+                Children = await GetDepartmentsAsync(department.Id),
+                IsRoot = department.Level == 1
             };
             result.Add(item);
         }
         return result;
-    }
-
-    [EventHandler]
-    public async Task DepartmentStaffAsync(DepartmentStaffQuery departmentStaffQuery)
-    {
-        var department = await _departmentRepository.GetByIdAsync(departmentStaffQuery.DepartmentId);
-        departmentStaffQuery.Result = department.DepartmentStaffs
-            .Select(ds => ds.Staff)
-            .Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList();
     }
 
     [EventHandler]

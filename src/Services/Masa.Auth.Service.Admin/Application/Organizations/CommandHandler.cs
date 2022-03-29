@@ -10,29 +10,45 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task CreateDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
+    public async Task AddDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
     {
-        var parent = await _departmentRepository.FindAsync(createDepartmentCommand.ParentId);
-        var department = new Department(createDepartmentCommand.Name, createDepartmentCommand.Description,
-            parent, createDepartmentCommand.Enabled, createDepartmentCommand.StaffIds.ToArray());
-
-        await _departmentRepository.AddAsync(department);
+        var dto = createDepartmentCommand.AddOrUpdateDepartmentDto;
+        var parent = await _departmentRepository.FindAsync(dto.ParentId);
+        // Add
+        if (dto.Id == Guid.Empty)
+        {
+            var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
+            await _departmentRepository.AddAsync(addDepartment);
+            return;
+        }
+        //update
+        var department = await _departmentRepository.FindAsync(dto.Id);
+        if (department is null)
+        {
+            throw new UserFriendlyException($"current department id {dto.Id} not found");
+        }
+        department.Update(dto.Name, dto.Description, dto.Enabled);
+        if (parent != null)
+        {
+            department.Move(parent);
+        }
+        await _departmentRepository.UpdateAsync(department);
     }
 
     [EventHandler]
-    public async Task DeleteDepartmentAsync(RemoveDepartmentCommand deleteDepartmentCommand)
+    public async Task RemoveDepartmentAsync(RemoveDepartmentCommand deleteDepartmentCommand)
     {
         var department = await _departmentRepository.GetByIdAsync(deleteDepartmentCommand.DepartmentId);
-        await DeleteCheckAsync(department);
+        await RemoveCheckAsync(department);
     }
 
-    private async Task DeleteCheckAsync(Department department)
+    private async Task RemoveCheckAsync(Department department)
     {
         department.DeleteCheck();
         var childDepartments = await _departmentRepository.QueryListAsync(d => d.ParentId == department.Id);
         foreach (var childDepartment in childDepartments)
         {
-            await DeleteCheckAsync(childDepartment);
+            await RemoveCheckAsync(childDepartment);
         }
         await _departmentRepository.RemoveAsync(department);
     }
