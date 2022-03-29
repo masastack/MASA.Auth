@@ -1,9 +1,7 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Organizations;
 
-public class AddOrUpdateDepartmentDto
+public class UpsertDepartmentDto : BaseUpsertDto<Guid>
 {
-    public Guid Id { get; set; }
-
     public string Name { get; set; } = "";
 
     public Guid ParentId { get; set; }

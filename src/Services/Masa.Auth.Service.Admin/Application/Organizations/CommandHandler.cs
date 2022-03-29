@@ -10,12 +10,12 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task AddDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
+    public async Task UpsertDepartmentAsync(AddDepartmentCommand addDepartmentCommand)
     {
-        var dto = createDepartmentCommand.AddOrUpdateDepartmentDto;
+        var dto = addDepartmentCommand.UpsertDepartmentDto;
         var parent = await _departmentRepository.FindAsync(dto.ParentId);
         // Add
-        if (dto.Id == Guid.Empty)
+        if (dto.HasValue)
         {
             var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
             addDepartment.AddStaffs(dto.StaffIds.ToArray());
@@ -38,9 +38,9 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task RemoveDepartmentAsync(RemoveDepartmentCommand deleteDepartmentCommand)
+    public async Task RemoveDepartmentAsync(RemoveDepartmentCommand removeDepartmentCommand)
     {
-        var department = await _departmentRepository.GetByIdAsync(deleteDepartmentCommand.DepartmentId);
+        var department = await _departmentRepository.GetByIdAsync(removeDepartmentCommand.DepartmentId);
         await RemoveCheckAsync(department);
     }
 
