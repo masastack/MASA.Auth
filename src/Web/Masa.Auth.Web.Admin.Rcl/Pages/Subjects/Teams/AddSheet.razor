@@ -18,110 +18,20 @@
         </MStepperHeader>
         <MStepperItems>
             <MStepperContent Style="padding-top:12px !important;" Step="1">
-                <MCardText>
-                    <MTextField class="mx-auto text-h5" style="width:404px;" @bind-Value="@_teamDetailDto.Name" HideDetails="@("auto")" Placeholder="@T("Team Name")"></MTextField>
-                    <MListItem class="mt-12 px-0">
-                        <MListItemAvatar Color="@_teamDetailDto.Avatar.Color" Height=80 Width=80>
-                            <span class="white--text" style="font-size:48px;">@_teamDetailDto.Avatar.Name.FirstOrDefault()</span>
-                        </MListItemAvatar>
-                        <MListItemContent class="py-0">
-                            <MListItemTitle>
-                                <MTextField @bind-Value="@_teamDetailDto.Avatar.Name" HideDetails="@("auto")" Dense Outlined Placeholder="Michael Harmen"></MTextField>
-                            </MListItemTitle>
-                            <MListItemSubtitle class="mt-2">
-                                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ColorGroup @bind-Value="@_teamDetailDto.Avatar.Color" Colors='_colors' />
-                            </MListItemSubtitle>
-                        </MListItemContent>
-                    </MListItem>
-                    <MSelect class="mt-12" @bind-Value="@_teamDetailDto.TeamType" Dense
-                             Label="@T("Team Type")"
-                             Outlined
-                             Items="@_teamTypes"
-                             ItemText="u => u.Name"
-                             ItemValue="u => u.Id">
-                    </MSelect>
-                    <MTextarea class="mt-12" Label="@T("Description")" @bind-Value="@_teamDetailDto.Description" Outlined Height="120" NoResize>
-                    </MTextarea>
-                </MCardText>
+                <TeamBaseinfo @bind-Value="_teamDetailDto.TeamBaseInfo"/>
                 <MCardActions class="d-flex justify-end align-center mb-6">
-                    <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.Name.Trim())" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.TeamBaseInfo.Name.Trim())" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
                 </MCardActions>
             </MStepperContent>
             <MStepperContent Style="padding-top:12px !important;" Step="2">
-                <MCardText>
-                    <MAutocomplete @bind-Value="_teamDetailDto.AdminStaffs"
-                                   Items="_staffs"
-                                   ItemText="r=>r.Name"
-                                   ItemValue="r=>r.Id"
-                                   Outlined
-                                   Dense
-                                   Chips
-                                   SmallChips
-                                   Label="@T("Team Admin")"
-                                   Multiple>
-                        <SelectionContent Context="data">
-                            <MChip Close Small OnCloseClick="()=>RemoveAdmin(data.Item.Id)">
-                                <MAvatar Left>
-                                    <MImage Src="@data.Item.Avatar"></MImage>
-                                </MAvatar>
-                                @data.Item.Name
-                            </MChip>
-                        </SelectionContent>
-                        <ItemContent Context="data">
-                            <MListItemAvatar>
-                                <img src="@data.Item.Avatar">
-                            </MListItemAvatar>
-                            <MListItemContent>
-                                <MListItemTitle>
-                                    @((MarkupString)data.Item.Name)
-                                </MListItemTitle>
-                                <MListItemSubtitle>
-                                    @((MarkupString)data.Item.JobNumber)
-                                </MListItemSubtitle>
-                            </MListItemContent>
-                        </ItemContent>
-                    </MAutocomplete>
-                </MCardText>
+                <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin"/>
                 <MCardActions class="d-flex justify-end align-center  mb-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
                 </MCardActions>
             </MStepperContent>
             <MStepperContent Style="padding-top:12px !important;" Step="3">
-                <MCardText>
-                    <MAutocomplete @bind-Value="_teamDetailDto.MemberStaffs"
-                                   Items="_staffs"
-                                   ItemText="r=>r.Name"
-                                   ItemValue="r=>r.Id"
-                                   Outlined
-                                   Dense
-                                   Chips
-                                   SmallChips
-                                   Label="@T("Team Member")"
-                                   Multiple>
-                        <SelectionContent Context="data">
-                            <MChip Close Small OnCloseClick="()=>RemoveMember(data.Item.Id)">
-                                <MAvatar Left>
-                                    <MImage Src="@data.Item.Avatar"></MImage>
-                                </MAvatar>
-                                @data.Item.Name
-                            </MChip>
-                        </SelectionContent>
-                        <ItemContent Context="data">
-                            <MListItemAvatar>
-                                <img src="@data.Item.Avatar">
-                            </MListItemAvatar>
-                            <MListItemContent>
-                                <MListItemTitle>
-                                    @((MarkupString)data.Item.Name)
-                                </MListItemTitle>
-                                <MListItemSubtitle>
-                                    @((MarkupString)data.Item.JobNumber)
-                                </MListItemSubtitle>
-                            </MListItemContent>
-                        </ItemContent>
-                    </MAutocomplete>
-                </MCardText>
+                <TeamMember @bind-Value="_teamDetailDto.TeamMember"/>
                 <MCardActions class="d-flex justify-end align-center  mb-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
@@ -134,30 +44,5 @@
 
 @code {
     TeamDetailDto _teamDetailDto = new TeamDetailDto();
-    List<string> _colors = new List<string> { "purple", "green", "yellow", "red", "blue" };
     int _step = 1;
-    List<TeamTypeDto> _teamTypes = new()
-    {
-        new TeamTypeDto { Id = (int)TeamTypes.Normal, Name = TeamTypes.Normal.ToString() }
-    };
-
-    List<StaffSelectDto> _staffs = new List<StaffSelectDto>();
-
-    public void RemoveAdmin(Guid staffId)
-    {
-        var index = _teamDetailDto.AdminStaffs.IndexOf(staffId);
-        if (index >= 0)
-        {
-            _teamDetailDto.AdminStaffs.RemoveAt(index);
-        }
-    }
-
-    public void RemoveMember(Guid staffId)
-    {
-        var index = _teamDetailDto.MemberStaffs.IndexOf(staffId);
-        if (index >= 0)
-        {
-            _teamDetailDto.MemberStaffs.RemoveAt(index);
-        }
-    }
 }

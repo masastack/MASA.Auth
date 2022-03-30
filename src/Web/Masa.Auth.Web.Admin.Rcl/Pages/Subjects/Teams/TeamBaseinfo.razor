@@ -1,0 +1,27 @@
+﻿@inherits AdminCompontentBase
+
+<MCardText>
+    <MTextField class="mx-auto text-h5" style="width:404px;" @bind-Value="@Value.Name" HideDetails="@("auto")" Placeholder="@T("Team Name")"></MTextField>
+    <MListItem class="mt-12 px-0">
+        <MListItemAvatar Color="@Value.Avatar.Color" Height=80 Width=80>
+            <span class="white--text" style="font-size:48px;">@Value.Avatar.Name.FirstOrDefault()</span>
+        </MListItemAvatar>
+        <MListItemContent class="py-0">
+            <MListItemTitle>
+                <MTextField @bind-Value="@Value.Avatar.Name" HideDetails="@("auto")" Dense Outlined Placeholder="Michael Harmen"></MTextField>
+            </MListItemTitle>
+            <MListItemSubtitle class="mt-2">
+                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ColorGroup @bind-Value="@Value.Avatar.Color" Colors='_colors' />
+            </MListItemSubtitle>
+        </MListItemContent>
+    </MListItem>
+    <MSelect class="mt-12" @bind-Value="@Value.TeamType" Dense
+             Label="@T("Team Type")"
+             Outlined
+             Items="@_teamTypes"
+             ItemText="u => u.Name"
+             ItemValue="u => u.Id">
+    </MSelect>
+    <MTextarea class="mt-12" Label="@T("Description")" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
+    </MTextarea>
+</MCardText>

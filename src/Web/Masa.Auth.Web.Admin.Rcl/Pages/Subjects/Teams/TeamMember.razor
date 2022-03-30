@@ -1,0 +1,36 @@
+﻿@inherits AdminCompontentBase
+
+<MCardText>
+    <MAutocomplete @bind-Value="Value.Staffs"
+                   Items="_staffs"
+                   ItemText="r=>r.Name"
+                   ItemValue="r=>r.Id"
+                   Outlined
+                   Dense
+                   Chips
+                   SmallChips
+                   Label="@T("Team Member")"
+                   Multiple>
+        <SelectionContent Context="data">
+            <MChip Close Small OnCloseClick="()=>RemoveMember(data.Item.Id)">
+                <MAvatar Left>
+                    <MImage Src="@data.Item.Avatar"></MImage>
+                </MAvatar>
+                @data.Item.Name
+            </MChip>
+        </SelectionContent>
+        <ItemContent Context="data">
+            <MListItemAvatar>
+                <img src="@data.Item.Avatar">
+            </MListItemAvatar>
+            <MListItemContent>
+                <MListItemTitle>
+                    @((MarkupString)data.Item.Name)
+                </MListItemTitle>
+                <MListItemSubtitle>
+                    @((MarkupString)data.Item.JobNumber)
+                </MListItemSubtitle>
+            </MListItemContent>
+        </ItemContent>
+    </MAutocomplete>
+</MCardText>

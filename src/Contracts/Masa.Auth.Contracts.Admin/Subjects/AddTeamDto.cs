@@ -36,10 +36,10 @@ public class AddTeamDto
         MemberRoles = memberRoles;
     }
 
-    public static implicit operator AddTeamDto(TeamDetailDto team)
-    {
-        return new AddTeamDto(team.Name, team.Avatar, team.Description, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
-    }
+    //public static implicit operator AddTeamDto(TeamDetailDto team)
+    //{
+    //    return new AddTeamDto(team.Name, team.Avatar, team.Description, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
+    //}
 }
 
 
