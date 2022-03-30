@@ -12,9 +12,9 @@ public class DepartmentService : ServiceBase
     }
 
     private async Task AddAsync([FromServices] IEventBus eventBus,
-        [FromBody] AddOrUpdateDepartmentDto addOrUpdateDepartmentDto)
+        [FromBody] UpsertDepartmentDto upsertDepartmentDto)
     {
-        await eventBus.PublishAsync(new AddDepartmentCommand(addOrUpdateDepartmentDto));
+        await eventBus.PublishAsync(new AddDepartmentCommand(upsertDepartmentDto));
     }
 
     private async Task<DepartmentDetailDto> GetAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)

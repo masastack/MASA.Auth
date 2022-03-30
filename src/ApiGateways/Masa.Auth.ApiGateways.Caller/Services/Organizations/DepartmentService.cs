@@ -20,9 +20,9 @@ public class DepartmentService : ServiceBase
         return await GetAsync<List<DepartmentDto>>($"{_baseUrl}/List");
     }
 
-    public async Task AddOrUpdateAsync(AddOrUpdateDepartmentDto addOrUpdateDepartmentDto)
+    public async Task UpsertAsync(UpsertDepartmentDto upsertDepartmentDto)
     {
-        await PostAsync($"{_baseUrl}/Add", addOrUpdateDepartmentDto);
+        await PostAsync($"{_baseUrl}/Add", upsertDepartmentDto);
     }
 
     public async Task RemoveAsync(Guid departmentId)

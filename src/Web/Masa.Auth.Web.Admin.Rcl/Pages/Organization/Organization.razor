@@ -35,12 +35,12 @@
                                         <MList>
                                             @if (!context.Item.IsRoot)
                                             {
-                                                <MListItem OnClick="async ()=> await Copy(context.Item.Id)">
+                                                <MListItem OnClick="()=>Copy(context.Item.Id)">
                                                     <MIcon Small>mdi-content-copy</MIcon>
                                                     <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
                                                 </MListItem>
                                             }
-                                            <MListItem OnClick="async ()=> await Update(context.Item.Id)">
+                                            <MListItem OnClick="()=> Update(context.Item.Id)">
                                                 <MIcon Small>mdi-pencil</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
                                             </MListItem>
@@ -152,5 +152,5 @@
 </MRow>
 
 
-<OrgSheet @bind-Show=_showAdd Dto="@_addOrUpdateDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
+<OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
 <CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>

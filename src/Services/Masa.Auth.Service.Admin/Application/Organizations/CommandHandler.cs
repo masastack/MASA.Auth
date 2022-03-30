@@ -10,37 +10,35 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task AddDepartmentAsync(AddDepartmentCommand createDepartmentCommand)
+    public async Task UpsertDepartmentAsync(AddDepartmentCommand addDepartmentCommand)
     {
-        var dto = createDepartmentCommand.AddOrUpdateDepartmentDto;
+        var dto = addDepartmentCommand.UpsertDepartmentDto;
         var parent = await _departmentRepository.FindAsync(dto.ParentId);
-        // Add
-        if (dto.Id == Guid.Empty)
+        if (dto.IsUpdate)
         {
-            var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
-            addDepartment.AddStaffs(dto.StaffIds.ToArray());
-            await _departmentRepository.AddAsync(addDepartment);
+            var department = await _departmentRepository.FindAsync(dto.Id);
+            if (department is null)
+            {
+                throw new UserFriendlyException($"current department id {dto.Id} not found");
+            }
+            department.SetStaffs(dto.StaffIds.ToArray());
+            department.Update(dto.Name, dto.Description, dto.Enabled);
+            if (parent != null)
+            {
+                department.Move(parent);
+            }
+            await _departmentRepository.UpdateAsync(department);
             return;
         }
-        //update
-        var department = await _departmentRepository.FindAsync(dto.Id);
-        if (department is null)
-        {
-            throw new UserFriendlyException($"current department id {dto.Id} not found");
-        }
-        department.ResetStaffs(dto.StaffIds.ToArray());
-        department.Update(dto.Name, dto.Description, dto.Enabled);
-        if (parent != null)
-        {
-            department.Move(parent);
-        }
-        await _departmentRepository.UpdateAsync(department);
+        var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
+        addDepartment.SetStaffs(dto.StaffIds.ToArray());
+        await _departmentRepository.AddAsync(addDepartment);
     }
 
     [EventHandler]
-    public async Task RemoveDepartmentAsync(RemoveDepartmentCommand deleteDepartmentCommand)
+    public async Task RemoveDepartmentAsync(RemoveDepartmentCommand removeDepartmentCommand)
     {
-        var department = await _departmentRepository.GetByIdAsync(deleteDepartmentCommand.DepartmentId);
+        var department = await _departmentRepository.GetByIdAsync(removeDepartmentCommand.DepartmentId);
         await RemoveCheckAsync(department);
     }
 

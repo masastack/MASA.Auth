@@ -1,5 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
+
 <Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
     <MCard Class="mx-auto">
         <MWindow @bind-Value="_step">
@@ -41,10 +42,10 @@
                                 </MListItemAvatar>
                                 <MListItemContent>
                                     <MListItemTitle>
-                                        @((MarkupString)data.Item.Name)
+                                        @data.Item.Name
                                     </MListItemTitle>
                                     <MListItemSubtitle>
-                                        @((MarkupString)data.Item.JobNumber)
+                                        @data.Item.JobNumber
                                     </MListItemSubtitle>
                                 </MListItemContent>
                             </ItemContent>

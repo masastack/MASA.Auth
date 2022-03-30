@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Masa.Auth.ApiGateways.Caller;
+﻿namespace Masa.Auth.ApiGateways.Caller;
 
 public static class ServiceCollectionExtensions
 {
