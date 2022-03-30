@@ -23,7 +23,6 @@ public partial class Organization
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
     StaffService StaffService => AuthCaller.StaffService;
 
-
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
 
@@ -34,7 +33,6 @@ public partial class Organization
             await LoadDepartmentsAsync();
             StateHasChanged();
         }
-
         await base.OnAfterRenderAsync(firstRender);
     }
 

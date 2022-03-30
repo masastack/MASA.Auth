@@ -22,7 +22,7 @@
 
             <MWindowItem Value="2">
                 <MCardText>
-                    <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+                    <MTextField class="mx-auto text-h5 neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
                     <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
                                ItemValue="u => u.Id"
@@ -42,10 +42,10 @@
                                 </MListItemAvatar>
                                 <MListItemContent>
                                     <MListItemTitle>
-                                        @((MarkupString)data.Item.Name)
+                                        @data.Item.Name
                                     </MListItemTitle>
                                     <MListItemSubtitle>
-                                        @((MarkupString)data.Item.JobNumber)
+                                        @data.Item.JobNumber
                                     </MListItemSubtitle>
                                 </MListItemContent>
                             </ItemContent>
