@@ -7,16 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Services/Masa.Auth.RolePermission.Service/Masa.Auth.RolePermission.csproj", "src/Services/Masa.Auth.RolePermission.Service/"]
-RUN dotnet restore "src/Services/Masa.Auth.RolePermission.Service/Masa.Auth.RolePermission.csproj"
+COPY ["src/Services/Masa.Auth.Service.Admin/Masa.Auth.Service.Admin.csproj", "src/Services/Masa.Auth.Service.Admin/"]
+COPY ["src/Contracts/Masa.Auth.Contracts.Admin/Masa.Auth.Contracts.Admin.csproj", "src/Contracts/Masa.Auth.Contracts.Admin/"]
+RUN dotnet restore "src/Services/Masa.Auth.Service.Admin/Masa.Auth.Service.Admin.csproj"
 COPY . .
-WORKDIR "/src/src/Services/Masa.Auth.RolePermission.Service"
-RUN dotnet build "Masa.Auth.RolePermission.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Services/Masa.Auth.Service.Admin"
+RUN dotnet build "Masa.Auth.Service.Admin.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Masa.Auth.RolePermission.csproj" -c Release -o /app/publish
+RUN dotnet publish "Masa.Auth.Service.Admin.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Masa.Auth.RolePermission.dll"]
+ENTRYPOINT ["dotnet", "Masa.Auth.Service.Admin.dll"]

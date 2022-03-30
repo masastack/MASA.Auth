@@ -13,11 +13,11 @@
 
         <MCardActions>
             <MSpacer></MSpacer>
-            <MButton OnClick="async ()=> await Confirm(false)">
+            <MButton OnClick="()=> Confirm(false)">
                 @T("Cancel")
             </MButton>
             <MButton Color="primary"
-                     OnClick="async ()=> await Confirm(true)">
+                     OnClick="()=> Confirm(true)">
                 @T("Confirm")
             </MButton>
         </MCardActions>

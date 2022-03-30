@@ -1,9 +1,10 @@
-﻿@page "/org/index"
+﻿@page "/organization/index"
 @inherits AdminCompontentBase
 
 <PageTitle>
     @T("Department Management")
 </PageTitle>
+
 <MRow>
     <MCol Md="@("auto")">
         <MCard style="width:300px;">
@@ -34,16 +35,16 @@
                                         <MList>
                                             @if (!context.Item.IsRoot)
                                             {
-                                                <MListItem>
+                                                <MListItem OnClick="()=>Copy(context.Item.Id)">
                                                     <MIcon Small>mdi-content-copy</MIcon>
                                                     <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
                                                 </MListItem>
                                             }
-                                            <MListItem>
+                                            <MListItem OnClick="()=> Update(context.Item.Id)">
                                                 <MIcon Small>mdi-pencil</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
                                             </MListItem>
-                                            <MListItem>
+                                            <MListItem OnClick="()=>Add(context.Item.Id)">
                                                 <MIcon Small>mdi-plus</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("AddChild") </MListItemTitle>
                                             </MListItem>
@@ -67,7 +68,7 @@
                         </MListItemAvatar>
                         <MListItemContent>
                             <MListItemTitle class="text-h7 neutral-lighten-3--text">@T("Secondary Department")</MListItemTitle>
-                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">@_departmentChildrenCountDto.SecondLevel<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -80,7 +81,7 @@
                         </MListItemAvatar>
                         <MListItemContent>
                             <MListItemTitle class="text-h7 neutral-lighten-3--text">@T("Tertiary Department")</MListItemTitle>
-                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">@_departmentChildrenCountDto.ThirdLevel<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -93,7 +94,7 @@
                         </MListItemAvatar>
                         <MListItemContent>
                             <MListItemTitle class="text-h7 neutral-lighten-3--text">@T("Fourth Department")</MListItemTitle>
-                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">880<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
+                            <MListItemSubtitle class="text-h5 neutral-lighten-1--text">@_departmentChildrenCountDto.FourthLevel<span class="text-subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -103,10 +104,23 @@
             <MCol Md="12">
                 <MCard>
                     <MCardText>
-                        <MDataTable Headers="_headers" Items="staffs" TItem="StaffDto" ItemClass="my-2" HideDefaultFooter="true" Class="mt-2 table-border-none table-space-v-4">
+                        <MDataTable Headers="_headers" Items="@_paginationStaffs.Items" TItem="StaffDto" ItemClass="my-2" HideDefaultFooter="true" Class="mt-2 table-border-none table-space-v-4">
                             <HeaderColContent Context="header">
                                 <span class="text-subtitle">@header.Text</span>
                             </HeaderColContent>
+                            <TopContent>
+                                <div class="d-flex justify-space-between">
+                                    <MTextField Autofocus @bind-Value="@_getStaffsDto.Name" Style="max-width:341px;" Outlined Dense Placeholder="@T("Search")"
+                                                HideDetails=true PrependInnerIcon="mdi-magnify">
+                                    </MTextField>
+                                    <MButton class="rounded-pill primary" MinWidth="100">
+                                        <MIcon Left Dark>
+                                            mdi-plus
+                                        </MIcon>
+                                        @T("Add")
+                                    </MButton>
+                                </div>
+                            </TopContent>
                             <ItemColContent>
                                 @switch (context.Header.Value)
                                 {
@@ -127,7 +141,7 @@
                                 }
                             </ItemColContent>
                             <FooterContent>
-                                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.SimpleDataTableFooter Class="mt-4" Total="100" Page=2 PageSize="10" />
+                                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.SimpleDataTableFooter Class="mt-4" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
                             </FooterContent>
                         </MDataTable>
                     </MCardText>
@@ -136,3 +150,7 @@
         </MRow>
     </MCol>
 </MRow>
+
+
+<OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
+<CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>

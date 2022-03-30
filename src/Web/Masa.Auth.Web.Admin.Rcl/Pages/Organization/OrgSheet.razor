@@ -1,92 +1,30 @@
-﻿@page "/org/sheet"
-@inherits AdminCompontentBase
+﻿@inherits AdminCompontentBase
 
-<PageTitle>@T("Add Department")</PageTitle>
-
-<MCard Class="mx-auto" MaxWidth="1200">
-    <MWindow @bind-Value="_step">
-        <MWindowItem Value="1">
-            <MCardText>
-                <MTextField class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
-                <MRadio class="mt-12 e-flex justify-center" Color="secondary" Value="_migrationStaff">
-                    <LabelContent>
-                        <span class="secondary--text">
-                            @T("Relocate former department staff")
-                        </span>
-                    </LabelContent>
-                </MRadio>
-            </MCardText>
-            <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
-                <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_step = 2">@T("Next step")</MButton>
-            </MCardActions>
-        </MWindowItem>
-        <MWindowItem Value="2">
-            <MCardText>
-                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:150px;" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
-                <MCascader Items="_departments" Dense class="mt-6" Label="@T("Department location")"
-                           ItemText="u => u.Name"
-                           ItemValue="u => u.Id"
-                           ItemChildren="u => u.Children">
+<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
+    <MCard Class="mx-auto">
+        <MCardText>
+            <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5 neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+            @if (Dto.ParentId != Guid.Empty)
+            {
+                <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@Dto.ParentId"
+                       ItemText="u => u.Name"
+                       ItemValue="u => u.Id"
+                       ItemChildren="u => u.Children">
                 </MCascader>
-                <div class="d-flex align-center mt-6">
-                    <span class="text-h5 neutral-lighten-1--text">@T("Member")</span>
-                    <MSpacer />
-                    <MTextField Outlined TValue="string" style="width:340px;"
-                                Clearable PrependInnerIcon="mdi-magnify" HideDetails="true"
-                                Label="@T("Search for members")" Dense Type="text">
-                    </MTextField>
-                </div>
-                <MRow class="mt-6" style="height:300px;overflow-y:scroll;">
-                    @for (int i = 0; i < 50; i++)
-                    {
-                        <MCol Md="3">
-                            <MHover Context="hoverComtext">
-                                <MListItem @attributes="hoverComtext.Attrs" class="px-4" Ripple=false>
-                                    <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
-                                        <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" />
-                                    </MListItemAvatar>
-                                    <MListItemContent class="py-1">
-                                        <MListItemTitle class="text-body3 neutral-lighten-1--text">鬼谷子</MListItemTitle>
-                                        <MListItemSubtitle class="text-body2 neutral-lighten-3--text">谷首道<MDivider Vertical /> 12412489245364</MListItemSubtitle>
-                                    </MListItemContent>
-                                    <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
-                                        <MIcon Size="24">mdi-close</MIcon>
-                                    </div>
-                                </MListItem>
-                            </MHover>
-                        </MCol>
-                    }
-                </MRow>
-                <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
-                </MTextarea>
-            </MCardText>
-            <MCardActions  class="d-flex align-center mb-10 px-6">
-                <MSwitch @bind-Value="_enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
-                <MSpacer />
-                <MButton class="rounded-pill" Outlined MinWidth="100" OnClick="()=>_step=1">@T("Previous step")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_step=3">@T("Submit")</MButton>
-            </MCardActions>
-        </MWindowItem>
-        <MWindowItem Value="3">
-            <MCardText>
-                <MTextField class="mx-auto text-h5 .neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")" TValue="string"></MTextField>
-                <MCascader Items="_departments" Dense class="mt-6"
-                           ItemText="u => u.Name"
-                           ItemValue="u => u.Id"
-                           ItemChildren="u => u.Children">
-                </MCascader>
-                <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
-                </MTextarea>
-            </MCardText>
-            <MCardActions class="d-flex align-center mb-10 px-6">
-                <MSwitch @bind-Value="_enabled" class="mt-0" Inset Label="@T("Enable")"></MSwitch>
-                <MSpacer />
-                <MButton Text Color="error" MinWidth="100">
+            }
+            <MTextarea @bind-Value="@Dto.Description" class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+            </MTextarea>
+        </MCardText>
+        <MCardActions class="d-flex align-center mb-10 px-6">
+            <MSwitch @bind-Value="Dto.Enabled" class="mt-0" Inset Label="@T("Enable")"></MSwitch>
+            <MSpacer />
+            @if (Dto.Id != Guid.Empty)
+            {
+                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
                     @T("Delete")
                 </MButton>
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
-            </MCardActions>
-        </MWindowItem>
-    </MWindow>
-</MCard>
-
+            }
+            <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+        </MCardActions>
+    </MCard>
+</Masa.Blazor.Presets.PDrawer>
