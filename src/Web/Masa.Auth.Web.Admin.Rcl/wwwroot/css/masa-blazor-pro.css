@@ -1107,6 +1107,11 @@ tr:hover {
     width: auto !important;
 }
 
+.elevation-tab {
+    background-color: #F0F3FA !important;
+    padding:3px;
+}
+
 .m-tabs.elevation-tab .m-tab {
     background-color: #F0F3FA !important;
     font-family: 'Roboto';
@@ -1159,6 +1164,10 @@ tr:hover {
     color: #323D6F;
 }
 
+.elevation-tab .theme--light.m-btn--active:hover::before, .elevation-tab .theme--light.m-btn--active::before {
+    opacity: 0;
+}
+
 .m-item-group.elevation-tab .m-btn.m-btn--has-bg {
     background-color: #F0F3FA !important;
     font-family: 'Roboto';
@@ -1174,4 +1183,8 @@ tr:hover {
     /* text/2-2正文 */
 
     color: #7681AB;
+}
+
+.remover-hover.m-list-item:hover::before {
+    opacity: 0 !important;
 }

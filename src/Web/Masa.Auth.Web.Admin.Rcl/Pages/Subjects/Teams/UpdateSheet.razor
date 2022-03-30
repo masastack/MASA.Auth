@@ -3,14 +3,14 @@
 
 <MCard Class="mx-auto" MaxWidth="1200">
     <MCardTitle Class="d-flex justify-center">
-        <MButtonGroup Dense Mandatory @bind-Value="_tab" Class="rounded-lg elevation-tab">
-            <MButton Value="1">
+        <MButtonGroup Dense Mandatory Borderless @bind-Value="_tab" Class="rounded-lg elevation-tab">
+            <MButton Ripple=false Value="1" Class="rounded-lg">
                 @T("Basic information")
             </MButton>
-            <MButton Value="2">
+            <MButton Ripple=false Value="2" Class="rounded-lg">
                 @T("Setup team admins")
             </MButton>
-            <MButton Value="3">
+            <MButton Ripple=false Value="3" Class="rounded-lg">
                 @T("Setup team members")
             </MButton>
         </MButtonGroup>
@@ -19,39 +19,34 @@
         <MWindowItem Value="1">
             <TeamBaseinfo @bind-Value="_teamDetailDto.TeamBaseInfo" />
             <MCardActions class="d-flex align-center mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="()=>{ _teamDetailDto.TeamBaseInfo.Description = _teamDetailDto.TeamBaseInfo.Name; }">
+                <MButton Text Color="error" MinWidth="100" OnClick="Remove">
                     @T("Delete")
                 </MButton>
                 <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.TeamBaseInfo.Name.Trim())">@T("Next step")</MButton>
+                <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.TeamBaseInfo.Name.Trim())">@T("Save")</MButton>
             </MCardActions>
         </MWindowItem>
         <MWindowItem Value="2">
             <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin" />
             <MCardActions class="d-flex align-center mb-6">
-                <MButton Text Color="error" MinWidth="100">
+                <MButton Text Color="error" MinWidth="100" OnClick="Remove">
                     @T("Delete")
                 </MButton>
                 <MSpacer />
                 <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Next step")</MButton>
+                <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
             </MCardActions>
         </MWindowItem>
         <MWindowItem Value="3">
             <TeamMember @bind-Value="_teamDetailDto.TeamMember" />
             <MCardActions class="d-flex align-center  mb-6">
-                <MButton Text Color="error" MinWidth="100">
+                <MButton Text Color="error" MinWidth="100" OnClick="Remove">
                     @T("Delete")
                 </MButton>
                 <MSpacer />
                 <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
+                <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
             </MCardActions>
         </MWindowItem>
     </MWindow>
 </MCard>
-
-@code {
-    TeamDetailDto _teamDetailDto = new TeamDetailDto();
-    StringNumber _tab = 1;
-}

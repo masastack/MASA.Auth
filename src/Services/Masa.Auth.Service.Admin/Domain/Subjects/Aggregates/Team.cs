@@ -28,5 +28,10 @@ public class Team : AuditAggregateRoot<Guid, Guid>
         : this(name, description, teamType, new AvatarValue(name, ""))
     {
     }
+
+    public void InitRole()
+    {
+
+    }
 }
 

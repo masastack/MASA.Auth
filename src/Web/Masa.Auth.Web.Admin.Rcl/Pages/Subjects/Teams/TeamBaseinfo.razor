@@ -2,7 +2,7 @@
 
 <MCardText>
     <MTextField class="mx-auto text-h5" style="width:404px;" @bind-Value="@Value.Name" HideDetails="@("auto")" Placeholder="@T("Team Name")"></MTextField>
-    <MListItem class="mt-12 px-0">
+    <MListItem class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Height=80 Width=80>
             <span class="white--text" style="font-size:48px;">@Value.Avatar.Name.FirstOrDefault()</span>
         </MListItemAvatar>
@@ -15,7 +15,7 @@
             </MListItemSubtitle>
         </MListItemContent>
     </MListItem>
-    <MSelect class="mt-12" @bind-Value="@Value.TeamType" Dense
+    <MSelect class="mt-12" @bind-Value="@Value.Type" Dense
              Label="@T("Team Type")"
              Outlined
              Items="@_teamTypes"

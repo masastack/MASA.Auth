@@ -17,20 +17,20 @@
             </MStepperStep>
         </MStepperHeader>
         <MStepperItems>
-            <MStepperContent Style="padding-top:12px !important;" Step="1">
+            <MStepperContent class="pt-3" Step="1">
                 <TeamBaseinfo @bind-Value="_teamDetailDto.TeamBaseInfo"/>
                 <MCardActions class="d-flex justify-end align-center mb-6">
                     <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.TeamBaseInfo.Name.Trim())" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
                 </MCardActions>
             </MStepperContent>
-            <MStepperContent Style="padding-top:12px !important;" Step="2">
+            <MStepperContent class="pt-3" Step="2">
                 <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin"/>
                 <MCardActions class="d-flex justify-end align-center  mb-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
                 </MCardActions>
             </MStepperContent>
-            <MStepperContent Style="padding-top:12px !important;" Step="3">
+            <MStepperContent class="pt-3" Step="3">
                 <TeamMember @bind-Value="_teamDetailDto.TeamMember"/>
                 <MCardActions class="d-flex justify-end align-center  mb-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
@@ -41,8 +41,3 @@
     </MStepper>
 
 </MCard>
-
-@code {
-    TeamDetailDto _teamDetailDto = new TeamDetailDto();
-    int _step = 1;
-}
