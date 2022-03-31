@@ -1,52 +1,53 @@
 ﻿@inherits AdminCompontentBase
-@page "/team/sheetv2"
 
-<MCard Class="mx-auto" MaxWidth="1200">
-    <MCardTitle Class="d-flex justify-center">
-        <MButtonGroup Dense Mandatory Borderless @bind-Value="_tab" Class="rounded-lg elevation-tab">
-            <MButton Ripple=false Value="1" Class="rounded-lg">
-                @T("Basic information")
-            </MButton>
-            <MButton Ripple=false Value="2" Class="rounded-lg">
-                @T("Setup team admins")
-            </MButton>
-            <MButton Ripple=false Value="3" Class="rounded-lg">
-                @T("Setup team members")
-            </MButton>
-        </MButtonGroup>
-    </MCardTitle>
-    <MWindow @bind-Value="_tab" Reverse>
-        <MWindowItem Value="1">
-            <TeamBaseinfo @bind-Value="_teamDetailDto.TeamBaseInfo" />
-            <MCardActions class="d-flex align-center mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="Remove">
-                    @T("Delete")
+<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
+    <MCard Class="mx-auto" MaxWidth="1200">
+        <MCardTitle Class="d-flex justify-center">
+            <MButtonGroup Dense Mandatory Borderless @bind-Value="_tab" Class="rounded-lg elevation-tab">
+                <MButton Ripple=false Value="1" Class="rounded-lg">
+                    @T("Basic information")
                 </MButton>
-                <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.TeamBaseInfo.Name.Trim())">@T("Save")</MButton>
-            </MCardActions>
-        </MWindowItem>
-        <MWindowItem Value="2">
-            <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin" />
-            <MCardActions class="d-flex align-center mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="Remove">
-                    @T("Delete")
+                <MButton Ripple=false Value="2" Class="rounded-lg">
+                    @T("Setup team admins")
                 </MButton>
-                <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
-            </MCardActions>
-        </MWindowItem>
-        <MWindowItem Value="3">
-            <TeamMember @bind-Value="_teamDetailDto.TeamMember" />
-            <MCardActions class="d-flex align-center  mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="Remove">
-                    @T("Delete")
+                <MButton Ripple=false Value="3" Class="rounded-lg">
+                    @T("Setup team members")
                 </MButton>
-                <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
-            </MCardActions>
-        </MWindowItem>
-    </MWindow>
-</MCard>
+            </MButtonGroup>
+        </MCardTitle>
+        <MWindow @bind-Value="_tab" Reverse>
+            <MWindowItem Value="1">
+                <TeamBaseinfo @bind-Value="Dto.TeamBaseInfo" />
+                <MCardActions class="d-flex align-center mb-6">
+                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                        @T("Delete")
+                    </MButton>
+                    <MSpacer />
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrEmpty(Dto.TeamBaseInfo.Name.Trim())">@T("Save")</MButton>
+                </MCardActions>
+            </MWindowItem>
+            <MWindowItem Value="2">
+                <TeamAdmin @bind-Value="Dto.TeamAdmin" />
+                <MCardActions class="d-flex align-center mb-6">
+                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                        @T("Delete")
+                    </MButton>
+                    <MSpacer />
+                    <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</MButton>
+                </MCardActions>
+            </MWindowItem>
+            <MWindowItem Value="3">
+                <TeamMember @bind-Value="Dto.TeamMember" />
+                <MCardActions class="d-flex align-center  mb-6">
+                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                        @T("Delete")
+                    </MButton>
+                    <MSpacer />
+                    <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateMemberHandler">@T("Save")</MButton>
+                </MCardActions>
+            </MWindowItem>
+        </MWindow>
+    </MCard>
+</Masa.Blazor.Presets.PDrawer>

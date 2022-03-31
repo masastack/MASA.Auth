@@ -10,8 +10,9 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
     {
         return await _context.Set<Team>()
             .Where(t => t.Id == id)
-            .Include(t => t.Permissions)
-            .Include(t => t.Staffs)
+            .Include(t => t.TeamPermissions)
+            .Include(t => t.TeamStaffs)
+            .Include(t => t.TeamRoles)
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current team does not exist");
     }

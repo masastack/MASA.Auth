@@ -5,6 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class TeamDetailDto
 {
+    public Guid Id { get; set; }
+
     public TeamBaseInfoDto TeamBaseInfo { get; set; } = new();
 
     public TeamPersonnelDto TeamAdmin { get; set; } = new();
@@ -14,8 +16,6 @@ public class TeamDetailDto
 
 public class TeamBaseInfoDto : INotifyPropertyChanged
 {
-    public Guid Id { get; set; }
-
     string _name = string.Empty;
 
     public string Name
@@ -60,7 +60,7 @@ public class TeamPersonnelDto
 {
     public List<Guid> Staffs { get; set; } = new();
 
-    public List<Guid> Permissions { get; set; } = new();
+    public Dictionary<Guid, bool> Permissions { get; set; } = new();
 
     public List<Guid> Roles { get; set; } = new();
 }

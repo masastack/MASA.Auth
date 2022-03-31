@@ -1,4 +1,4 @@
-﻿<MCard Class="d-flex flex-column" OnClick="OnClick" Outlined MinHeight=Height>
+﻿<MCard Class="d-flex flex-column" Outlined MinHeight=Height>
     <MCardTitle class="pb-1 px-0 pt-1">
         <MListItem>
             <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">
@@ -6,36 +6,39 @@
             </MListItemAvatar>
             <MListItemContent class="pb-0">
                 <MListItemTitle class="d-flex justify-space-between align-center">
-                    <span class="text-body2 neutral-lighten-4--text">成员 : 80人</span>
-                    <MIcon Size=20>mdi-pencil</MIcon>
+                    <span class="text-body2 neutral-lighten-4--text">成员 : 80 </span>
+                    <MIcon Size=20 OnClick="HandleEditClick">mdi-pencil</MIcon>
                 </MListItemTitle>
-                <MListItemSubtitle class="text-h7 neutral-lighten-1--text">MASA Stack</MListItemSubtitle>
+                <MListItemSubtitle class="text-h7 neutral-lighten-1--text">@Team.Name</MListItemSubtitle>
             </MListItemContent>
         </MListItem>
     </MCardTitle>
     <MCardText class="flex-grow-1" style="text-align: justified;">
-       <span class="text-body3"> ApplicationA是阿是大坏蛋萨哈啥的阿斯法师法大四是阿是大坏蛋萨哈啥的阿斯法师法大四ApplicationA是阿是大坏蛋萨哈啥的阿斯法师法大四</span>
+       <span class="text-body3"> @Team.Description</span>
     </MCardText>
     <MCardActions class="px-4 pb-4">
         <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" height=24 width=24/>
-         <span class="text-body2 ml-3">无数天</span>
+         <span class="text-body2 ml-3">@Team.Creator</span>
          <MSpacer/>
-         <span class="text-body2 neutral-lighten-4--text">叶子 编辑于 1小时前 </span>
+         <span class="text-body2 neutral-lighten-4--text">@Team.Modifier 编辑于 1小时前 </span>
     </MCardActions>
 </MCard>
 
 @code {
     [Parameter]
-    public EventCallback<MouseEventArgs> OnClick { get; set; }
+    public EventCallback OnEditClick { get; set; }
 
     [Parameter]
     public int Height { get; set; } = 230;
 
-    private async Task HandleOnClick()
+    [Parameter]
+    public TeamDto Team { get; set; } = null!;
+
+    private async Task HandleEditClick()
     {
-        if (OnClick.HasDelegate)
+        if (OnEditClick.HasDelegate)
         {
-            await OnClick.InvokeAsync();
+            await OnEditClick.InvokeAsync();
         }
     }
 }

@@ -10,11 +10,17 @@ public class Team : AuditAggregateRoot<Guid, Guid>
 
     public TeamTypes TeamType { get; private set; }
 
-    public List<TeamStaff> Staffs { get; private set; } = new();
+    private List<TeamStaff> teamStaffs = new();
 
-    public List<TeamPermission> Permissions { get; private set; } = new();
+    public IReadOnlyCollection<TeamStaff> TeamStaffs => teamStaffs;
 
-    public List<TeamRole> Roles { get; private set; } = new();
+    private List<TeamPermission> teamPermissions = new();
+
+    public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
+
+    private List<TeamRole> teamRoles = new();
+
+    public IReadOnlyCollection<TeamRole> TeamRoles => teamRoles;
 
     public Team(string name, string description, TeamTypes teamType, AvatarValue avatar)
     {
@@ -29,9 +35,43 @@ public class Team : AuditAggregateRoot<Guid, Guid>
     {
     }
 
-    public void InitRole()
+    public void UpdateBaseInfo(string name, string description, TeamTypes teamType, AvatarValue avatar)
     {
+        Name = name;
+        Description = description;
+        TeamType = teamType;
+        Avatar = avatar;
+    }
 
+    public void SetStaff(TeamMemberTypes memberType, List<Guid> staffIds)
+    {
+        teamStaffs.RemoveAll(ts => ts.TeamMemberType == memberType);
+        teamStaffs.AddRange(staffIds.Select(s => new TeamStaff(s, memberType)));
+    }
+
+    public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissionsIds)
+    {
+        teamPermissions.RemoveAll(ts => ts.TeamMemberType == memberType);
+        teamPermissions.AddRange(permissionsIds.Select(p => new TeamPermission(p.Key, p.Value, memberType)));
+    }
+
+    public Guid GetAdminRoleId()
+    {
+        return teamRoles.FirstOrDefault(ts => ts.TeamMemberType == TeamMemberTypes.Admin)?.RoleId ?? Guid.Empty;
+    }
+
+    public Guid GetMemberRoleId()
+    {
+        return teamRoles.FirstOrDefault(ts => ts.TeamMemberType == TeamMemberTypes.Member)?.RoleId ?? Guid.Empty;
+    }
+
+    public void SetRole(TeamMemberTypes memberType, Guid roleId)
+    {
+        if (teamRoles.Any(tr => tr.TeamMemberType == memberType && tr.RoleId == roleId))
+        {
+            throw new UserFriendlyException($"this team {memberType} role already exists");
+        }
+        teamRoles.Add(new TeamRole(roleId, memberType));
     }
 }
 

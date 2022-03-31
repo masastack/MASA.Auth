@@ -9,9 +9,6 @@ public partial class OrgSheet
     public EventCallback<bool> ShowChanged { get; set; }
 
     [Parameter]
-    public string Title { get; set; } = string.Empty;
-
-    [Parameter]
     public UpsertDepartmentDto Dto { get; set; } = new();
 
     [Parameter]

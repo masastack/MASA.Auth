@@ -1,9 +1,9 @@
 ﻿@inherits AdminCompontentBase
-@page "/team/sheet"
 
+<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
 <MCard Class="mx-auto" MaxWidth="1200">
     <MStepper Value="_step" Elevation=0>
-        <MStepperHeader Style="box-shadow:none !important">
+        <MStepperHeader Class="mx-6" Style="box-shadow:none !important">
             <MStepperStep Step="1" Complete="_step>1">
                 @T("Fill the basic team information")
             </MStepperStep>
@@ -34,10 +34,10 @@
                 <TeamMember @bind-Value="_teamDetailDto.TeamMember"/>
                 <MCardActions class="d-flex justify-end align-center  mb-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
-                    <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
                 </MCardActions>
             </MStepperContent>
         </MStepperItems>
     </MStepper>
-
 </MCard>
+</Masa.Blazor.Presets.PDrawer>

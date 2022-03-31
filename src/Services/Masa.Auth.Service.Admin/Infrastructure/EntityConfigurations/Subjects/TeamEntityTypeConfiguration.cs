@@ -9,9 +9,9 @@ public class TeamEntityTypeConfiguration : IEntityTypeConfiguration<Team>
         builder.HasIndex(t => t.Name).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(p => p.Name).HasMaxLength(20).IsRequired();
         builder.Property(p => p.Description).HasMaxLength(255);
-        builder.HasMany(team => team.Staffs).WithOne(teamStaff => teamStaff.Team).HasForeignKey(teamStaff => teamStaff.TeamId);
-        builder.HasMany(team => team.Permissions).WithOne(teamPermission => teamPermission.Team).HasForeignKey(teamStaff => teamStaff.TeamId);
-        builder.HasMany(team => team.Roles).WithOne(teamRole => teamRole.Team).HasForeignKey(teamStaff => teamStaff.TeamId);
+        builder.HasMany(team => team.TeamStaffs);
+        builder.HasMany(team => team.TeamPermissions).WithOne(teamPermission => teamPermission.Team);
+        builder.HasMany(team => team.TeamRoles);
         builder.OwnsOne(team => team.Avatar);
     }
 }

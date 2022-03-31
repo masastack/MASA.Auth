@@ -107,13 +107,42 @@ public class QueryHandler
     [EventHandler]
     public async Task TeamDetailAsync(TeamDetailQuery teamDetailQuery)
     {
-        var team = await _teamRepository.FindAsync(teamDetailQuery.Id);
+        var team = await _teamRepository.GetByIdAsync(teamDetailQuery.TeamId);
+        teamDetailQuery.Result = new TeamDetailDto
+        {
+            Id = team.Id,
+            TeamBaseInfo = new TeamBaseInfoDto
+            {
+                Name = team.Name,
+                Description = team.Description,
+                Type = (int)team.TeamType,
+                Avatar = new AvatarValueDto
+                {
+                    Url = team.Avatar.Url,
+                    Name = team.Avatar.Name,
+                    Color = team.Avatar.Color
+                }
+            },
+            TeamAdmin = new TeamPersonnelDto
+            {
+
+            },
+            TeamMember = new TeamPersonnelDto
+            {
+
+            }
+        };
     }
 
     [EventHandler]
     public async Task TeamSelectListAsync(TeamSelectListQuery teamSelectListQuery)
     {
-        teamSelectListQuery.Result = (await _teamRepository.GetListAsync())
+        Expression<Func<Team, bool>> condition = _ => true;
+        if (string.IsNullOrEmpty(teamSelectListQuery.Name))
+        {
+            condition = condition.And(s => s.Name.Contains(teamSelectListQuery.Name));
+        }
+        teamSelectListQuery.Result = (await _teamRepository.GetListAsync(condition))
                 .Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar.Url))
                 .ToList();
     }

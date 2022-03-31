@@ -2,93 +2,69 @@
 
 public partial class Team
 {
-    //private string? _search;
-    //private bool _enabled;
-    //private int _page = 1;
-    //private int _pageSize = 10;
+    string _search = string.Empty;
+    bool _showAdd, _showEdit;
+    TeamDetailDto _editTeamDto = new();
+    List<TeamDto> _teams = new();
+    TeamService TeamService => AuthCaller.TeamService;
 
-    //public string Search
-    //{
-    //    get { return _search ?? ""; }
-    //    set
-    //    {
-    //        _search = value;
-    //        GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-    //    }
-    //}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadTeams();
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
-    //public bool Enabled
-    //{
-    //    get { return _enabled; }
-    //    set
-    //    {
-    //        _enabled = value;
-    //        GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-    //    }
-    //}
+    private async Task LoadTeams()
+    {
+        _teams = await TeamService.ListAsync(_search);
+    }
 
-    //public int Page
-    //{
-    //    get { return _page; }
-    //    set
-    //    {
-    //        _page = value;
-    //        GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-    //    }
-    //}
+    private async Task SearchKeyDown(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+        {
+            await LoadTeams();
+        }
+    }
 
-    //public int PageSize
-    //{
-    //    get { return _pageSize; }
-    //    set
-    //    {
-    //        _pageSize = value;
-    //        GetTeamsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-    //    }
-    //}
+    private async Task EditTeamHandler(Guid id)
+    {
+        _editTeamDto = await TeamService.GetAsync(id);
+        _showEdit = true;
+    }
 
-    //public int PageCount { get; set; }
+    private async Task OnCreate(TeamDetailDto dto)
+    {
+        await TeamService.CreateAsync(dto);
+        await LoadTeams();
+    }
 
-    //public long TotalCount { get; set; }
+    private async Task OnUpdateBaseInfo(UpdateTeamBaseInfoDto dto)
+    {
+        await TeamService.UpdateBaseInfo(dto);
+        await LoadTeams();
+    }
 
-    //public List<int> PageSizes = new() { 10, 25, 50, 100 };
+    private async Task OnUpdateAdminPersonnel(UpdateTeamPersonnelDto dto)
+    {
+        await TeamService.UpdateAdminPersonnel(dto);
+        await LoadTeams();
+    }
 
-    //public List<TeamDto> Teams { get; set; } = new();
+    private async Task OnUpdateMemberPersonnel(UpdateTeamPersonnelDto dto)
+    {
+        await TeamService.UpdateMemberPersonnel(dto);
+        await LoadTeams();
+    }
 
-    //public Guid CurrentTeamId { get; set; }
-
-    //public bool TeamDialogVisible { get; set; }
-
-    //private TeamService TeamService => AuthCaller.TeamService;
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    await GetTeamsAsync();
-    //}
-
-    //public async Task GetTeamsAsync()
-    //{
-    //    Loading = true;
-    //    var response = await TeamService.TeamSelectAsync();
-    //    Loading = false;
-    //}
-
-    //public void OpenAddTeamDialog()
-    //{
-    //    CurrentTeamId = Guid.Empty;
-    //    TeamDialogVisible = true;
-    //}
-
-    //public void OpenEditUserDialog(UserDto user)
-    //{
-    //    CurrentTeamId = user.Id;
-    //    TeamDialogVisible = true;
-    //}
-
-    //public void OpenAuthorizeDialog(UserDto user)
-    //{
-    //    CurrentTeamId = user.Id;
-    //    TeamDialogVisible = true;
-    //}
+    private async Task OnDelete(Guid id)
+    {
+        await TeamService.DeleteAsync(id);
+        await LoadTeams();
+    }
 }
 

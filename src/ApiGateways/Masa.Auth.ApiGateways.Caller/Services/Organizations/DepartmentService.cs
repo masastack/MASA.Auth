@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Contracts.Admin.Organizations;
-
-namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
+﻿namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
 
 public class DepartmentService : ServiceBase
 {
@@ -22,7 +20,7 @@ public class DepartmentService : ServiceBase
 
     public async Task UpsertAsync(UpsertDepartmentDto upsertDepartmentDto)
     {
-        await PostAsync($"{_baseUrl}/Add", upsertDepartmentDto);
+        await PostAsync($"{_baseUrl}/Save", upsertDepartmentDto);
     }
 
     public async Task RemoveAsync(Guid departmentId)

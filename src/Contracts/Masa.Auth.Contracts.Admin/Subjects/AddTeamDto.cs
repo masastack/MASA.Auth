@@ -2,44 +2,40 @@
 
 public class AddTeamDto
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public AvatarValueDto Avatar { get; set; }
+    public AvatarValueDto Avatar { get; set; } = new();
 
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public TeamTypes TeamType { get; set; }
+    public TeamTypes Type { get; set; } = TeamTypes.Normal;
 
-    public List<Guid> AdminStaffs { get; set; }
+    public List<Guid> AdminStaffs { get; set; } = new();
 
-    public List<Guid> AdminPermissions { get; set; }
+    public List<Guid> AdminRoles { get; set; } = new();
 
-    public List<Guid> AdminRoles { get; set; }
+    public Dictionary<Guid, bool> AdminPermissions { get; set; } = new();
 
-    public List<Guid> MemberStaffs { get; set; }
+    public List<Guid> MemberStaffs { get; set; } = new();
 
-    public List<Guid> MemberPermissions { get; set; }
+    public List<Guid> MemberRoles { get; set; } = new();
 
-    public List<Guid> MemberRoles { get; set; }
+    public Dictionary<Guid, bool> MemberPermissions { get; set; } = new();
 
-    public AddTeamDto(string name, AvatarValueDto avatar, string description, TeamTypes teamType, List<Guid> adminStaffs, List<Guid> adminPermissions, List<Guid> adminRoles, List<Guid> memberStaffs, List<Guid> memberPermissions, List<Guid> memberRoles)
+    public static implicit operator AddTeamDto(TeamDetailDto team)
     {
-        Name = name;
-        Avatar = avatar;
-        Description = description;
-        TeamType = teamType;
-        AdminStaffs = adminStaffs;
-        AdminPermissions = adminPermissions;
-        AdminRoles = adminRoles;
-        MemberStaffs = memberStaffs;
-        MemberPermissions = memberPermissions;
-        MemberRoles = memberRoles;
+        return new AddTeamDto()
+        {
+            Name = team.TeamBaseInfo.Name,
+            Description = team.TeamBaseInfo.Description,
+            Type = (TeamTypes)team.TeamBaseInfo.Type,
+            Avatar = team.TeamBaseInfo.Avatar,
+            AdminStaffs = team.TeamAdmin.Staffs,
+            AdminRoles = team.TeamAdmin.Roles,
+            AdminPermissions = team.TeamAdmin.Permissions,
+            MemberRoles = team.TeamMember.Roles,
+            MemberStaffs = team.TeamMember.Staffs,
+            MemberPermissions = team.TeamMember.Permissions
+        };
     }
-
-    //public static implicit operator AddTeamDto(TeamDetailDto team)
-    //{
-    //    return new AddTeamDto(team.Name, team.Avatar, team.Description, team.TeamType, team.AdminStaffs, team.AdminPermissions, team.AdminRoles, team.MemberStaffs, team.MemberPermissions, team.MemberRoles);
-    //}
 }
-
-

@@ -7,11 +7,11 @@ public class DepartmentService : ServiceBase
         MapGet(GetAsync);
         MapGet(ListAsync);
         MapGet(CountAsync);
-        MapPost(AddAsync);
+        MapPost(SaveAsync);
         MapDelete(RemoveAsync);
     }
 
-    private async Task AddAsync([FromServices] IEventBus eventBus,
+    private async Task SaveAsync([FromServices] IEventBus eventBus,
         [FromBody] UpsertDepartmentDto upsertDepartmentDto)
     {
         await eventBus.PublishAsync(new AddDepartmentCommand(upsertDepartmentDto));
