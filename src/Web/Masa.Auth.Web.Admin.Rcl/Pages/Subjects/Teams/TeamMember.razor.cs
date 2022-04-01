@@ -2,7 +2,6 @@
 
 public partial class TeamMember
 {
-    [EditorRequired]
     [Parameter]
     public TeamPersonnelDto Value { get; set; } = null!;
 
