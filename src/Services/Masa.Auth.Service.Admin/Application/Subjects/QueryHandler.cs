@@ -37,7 +37,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetUserDetailAsync(UserDetailQuery query)
+    public async Task GetUserDetailAsync(UserDetailQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.Id == query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");

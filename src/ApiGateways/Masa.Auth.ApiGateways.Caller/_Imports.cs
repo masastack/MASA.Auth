@@ -1,7 +1,12 @@
+global using Masa.Auth.ApiGateways.Caller.Services.Organizations;
 global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
-global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
+global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Utils.Caller.Core;
 global using Masa.Utils.Caller.HttpClient;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.DependencyInjection;
+global using System.Reflection;

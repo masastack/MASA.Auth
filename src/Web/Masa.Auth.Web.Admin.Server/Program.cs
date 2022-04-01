@@ -1,5 +1,6 @@
 using Masa.Auth.ApiGateways.Caller;
 using Masa.Auth.Web.Admin.Rcl.Global;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +16,11 @@ builder.Services.AddMasaBlazor(builder =>
     });
 });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddGlobalForServer();
 builder.Services.AddAuthApiGateways();
+
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 var app = builder.Build();
 

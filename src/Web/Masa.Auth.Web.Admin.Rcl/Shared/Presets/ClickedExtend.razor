@@ -1,0 +1,18 @@
+﻿<div class="m-click-extend full-width">
+    <div Style="@(IsExpanded ? displayNone : displayFlex)" class="d-flex justify-space-between full-width">
+        @ChildContent
+        <MIcon OnClick="()=> { IsExpanded = true; }">mdi-magnify</MIcon>
+    </div>
+    <div Style="@(IsExpanded ? displayFlex : displayNone)" class="m-click-extend-item">
+        @if (ExtendContent is not null)
+        {
+            @ExtendContent
+        }
+        else
+        {
+            <MTextField Autofocus TValue="string" OnBlur="OnBlurHandler" Outlined Dense Placeholder="search"
+                    HideDetails=true PrependInnerIcon="mdi-magnify" OnKeyDown="OnKeyDown">
+            </MTextField>
+        }
+    </div>
+</div>

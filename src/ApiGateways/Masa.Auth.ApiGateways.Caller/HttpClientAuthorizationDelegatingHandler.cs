@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Masa.Auth.ApiGateways.Caller;
+﻿namespace Masa.Auth.ApiGateways.Caller;
 
 public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
 {

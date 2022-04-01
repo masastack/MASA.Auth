@@ -6,12 +6,25 @@ public class GetStaffsDto : Pagination
 
     public bool Enabled { get; set; }
 
-    public GetStaffsDto(int page, int pageSize, Guid staffId, bool enabled)
+    public Guid DepartmentId { get; set; }
+
+    public GetStaffsDto(int page, int pageSize, string name, string phoneNumber, string email, bool enabled, Guid departmentId)
     {
         Page = page;
         PageSize = pageSize;
-        StaffId = staffId;
+        Name = name;
+        PhoneNumber = phoneNumber;
+        Email = email;
         Enabled = enabled;
+        DepartmentId = departmentId;
+    }
+
+    public GetStaffsDto(int page, int pageSize, string name, Guid departmentId) : this(page, pageSize, name, "", "", true, departmentId)
+    {
+    }
+
+    public GetStaffsDto(int page, int pageSize, string name, string phoneNumber, string email, bool enabled) : this(page, pageSize, name, phoneNumber, email, enabled, Guid.Empty)
+    {
     }
 
     public static ValueTask<GetStaffsDto?> BindAsync(HttpContext context, ParameterInfo parameter)
@@ -21,8 +34,11 @@ public class GetStaffsDto : Pagination
         int.TryParse(context.Request.Query["pageSize"], out var pageSize);
         pageSize = pageSize == 0 ? 20 : pageSize;
         bool.TryParse(context.Request.Query["enabled"], out var enabled);
-        var staffId = Guid.Parse(context.Request.Query["staffId"]);
-        var result = new GetStaffsDto(page, pageSize, staffId, enabled);
+        Guid.TryParse(context.Request.Query["departmentId"], out var departmentId);
+        var name = context.Request.Query["name"];
+        var phoneNumber = context.Request.Query["phoneNumber"];
+        var email = context.Request.Query["email"];
+        var result = new GetStaffsDto(page, pageSize, name, phoneNumber, email, enabled, departmentId);
 
         return ValueTask.FromResult<GetStaffsDto?>(result);
     }

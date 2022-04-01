@@ -1,0 +1,88 @@
+﻿@inherits AdminCompontentBase
+
+
+<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
+    <MCard Class="mx-auto">
+        <MWindow @bind-Value="_step">
+            <MWindowItem Value="1">
+                <MCardText>
+                    <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></MTextField>
+                    <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
+                        <LabelContent>
+                            <span class="secondary--text">
+                                @T("Relocate former department staff")
+                            </span>
+                        </LabelContent>
+                    </MCheckbox>
+                </MCardText>
+                <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="NextStep">@T("Next step")</MButton>
+                </MCardActions>
+            </MWindowItem>
+
+            <MWindowItem Value="2">
+                <MCardText>
+                    <MTextField class="mx-auto text-h5 neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+                    <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department location")"
+                               ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
+                               ItemValue="u => u.Id"
+                               ItemChildren="u => u.Children">
+                    </MCascader>
+                    <div class="d-flex align-center mt-6">
+                        <span class="text-h5 neutral-lighten-1--text">@T("Member")</span>
+                        <MSpacer />
+                        <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
+                                       ItemText="r=>r.Name" PrependInnerIcon="mdi-magnify"
+                                       ItemValue="r=>r" HideDetails="true" OnSelectedItemUpdate="AddStaff"
+                                       Outlined Dense Clearable Style="max-width:340px;"
+                                       Label="@T("Search for members")">
+                            <ItemContent Context="data">
+                                <MListItemAvatar>
+                                    <img src="@data.Item.Avatar">
+                                </MListItemAvatar>
+                                <MListItemContent>
+                                    <MListItemTitle>
+                                        @data.Item.Name
+                                    </MListItemTitle>
+                                    <MListItemSubtitle>
+                                        @data.Item.JobNumber
+                                    </MListItemSubtitle>
+                                </MListItemContent>
+                            </ItemContent>
+                        </MAutocomplete>
+                    </div>
+                    <MRow class="mt-6" style="height:300px;overflow-y:scroll;">
+                        @foreach (var staff in Dto.Staffs)
+                        {
+                            <MCol Md="3">
+                                <MHover Context="hoverComtext">
+                                    <MListItem @attributes="hoverComtext.Attrs" class="px-4" Ripple=false>
+                                        <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
+                                            <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" />
+                                        </MListItemAvatar>
+                                        <MListItemContent class="py-1">
+                                            <MListItemTitle class="text-body3 neutral-lighten-1--text">@staff.DisplayName</MListItemTitle>
+                                            <MListItemSubtitle class="text-body2 neutral-lighten-3--text">@staff.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
+                                        </MListItemContent>
+                                        <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
+                                            <MIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</MIcon>
+                                        </div>
+                                    </MListItem>
+                                </MHover>
+                            </MCol>
+                        }
+                    </MRow>
+                    <MTextarea class="mt-6" @bind-Value="Dto.Description" Label="@T("Description")" Outlined Height="120" NoResize>
+                    </MTextarea>
+                </MCardText>
+                <MCardActions class="d-flex align-center mb-10 px-6">
+                    <MSwitch @bind-Value="@Dto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+                    <MSpacer />
+                    <MButton class="rounded-pill" Outlined MinWidth="100" OnClick="()=> _step = 1 ">@T("Previous step")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+                </MCardActions>
+            </MWindowItem>
+        </MWindow>
+    </MCard>
+
+</Masa.Blazor.Presets.PDrawer>
