@@ -29,7 +29,7 @@ public class CommandHandler
         }
         else
         {
-            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Department, userDto.Position, userDto.Address);
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.PhoneNumber, userDto.Email, userDto.Enabled, userDto.Department, userDto.Position, userDto.Address);
             await _userRepository.AddAsync(user);
         }
     }

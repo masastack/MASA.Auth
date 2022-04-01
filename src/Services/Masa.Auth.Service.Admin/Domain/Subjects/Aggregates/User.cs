@@ -30,11 +30,7 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public AddressValue Address { get; private set; }
 
-    #endregion
-
-    public User(string name, string displayName, string avatar, string idCard, string account, string password,
-        string companyName, bool enabled, string phoneNumber, string email,
-        string department, string position, AddressValue? address = null)
+    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email, AddressValue address)
     {
         Name = name;
         DisplayName = displayName;
@@ -43,13 +39,20 @@ public class User : AuditAggregateRoot<Guid, Guid>
         Account = account;
         Password = password;
         CompanyName = companyName;
+        Department = department;
+        Position = position;
         Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
-        Address = address ?? new();
-        Department = department;
-        Position = position;
+        Address = address;
     }
+
+    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email) : this(name, displayName, avatar, idCard, account, password, companyName, department, position, enabled, phoneNumber, email, new())
+    {
+
+    }
+
+    #endregion
 
     public void Update(string name, string displayName, string avatar, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password)
     {

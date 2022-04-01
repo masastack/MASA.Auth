@@ -22,7 +22,7 @@ public class StaffDto
 
     public string Email { get; set; }
 
-    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, string name, string avatar, string phoneNumber, string email)
+    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
     {
         Id = id;
         Department = department;
@@ -30,6 +30,7 @@ public class StaffDto
         JobNumber = jobNumber;
         Enabled = enabled;
         Name = name;
+        DisplayName = displayName;
         Avatar = avatar;
         PhoneNumber = phoneNumber;
         Email = email;

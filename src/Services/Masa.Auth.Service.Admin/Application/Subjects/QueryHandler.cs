@@ -87,7 +87,7 @@ public class QueryHandler
         });
 
         query.Result = new(staffs.Total, staffs.TotalPages, staffs.Result.Select(s =>
-           new StaffDto(s.Id, s.DepartmentStaff.Department.Name, s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
+           new StaffDto(s.Id, s.DepartmentStaff.Department.Name, s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName,s.User.Avatar, s.User.PhoneNumber, s.User.Email)
        ).ToList());
     }
 

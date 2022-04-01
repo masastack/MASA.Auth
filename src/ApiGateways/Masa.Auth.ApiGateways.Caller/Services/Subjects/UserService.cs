@@ -17,16 +17,14 @@ public class UserService : ServiceBase
 
     public async Task<PaginationDto<UserDto>> GetUsersAsync(GetUsersDto request)
     {
-        var skip = (request.Page - 1) * request.PageSize;
-        var users = Users.Where(u => u.Enabled == request.Enabled).Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<UserDto>(Users.Count, 1, users));
-
-        //var paramters = new Dictionary<string, string>
-        //{
-        //    ["userId"] = request.UserId.ToString(),
-        //    ["enabled"] = request.Enabled.ToString(),
-        //};
-        //return await GetAsync<PaginationDto<UserDto>>(nameof(GetUsersAsync), paramters);
+        var paramters = new Dictionary<string, string>
+        {
+            ["pageSize"] = request.PageSize.ToString(),
+            ["page"] = request.Page.ToString(),
+            ["userId"] = request.UserId.ToString(),
+            ["enabled"] = request.Enabled.ToString(),
+        };
+        return await GetAsync<PaginationDto<UserDto>>(nameof(GetUsersAsync), paramters);
     }
 
     public async Task<UserDetailDto> GetUserDetailAsync(Guid id)

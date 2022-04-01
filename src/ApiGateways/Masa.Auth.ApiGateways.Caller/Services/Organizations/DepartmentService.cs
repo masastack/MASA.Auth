@@ -2,34 +2,35 @@
 
 public class DepartmentService : ServiceBase
 {
-    string _baseUrl = "api/department";
+    protected override string BaseUrl { get; set; }
 
     internal DepartmentService(ICallerProvider callerProvider) : base(callerProvider)
     {
+        BaseUrl = "api/department";
     }
 
     public async Task<DepartmentDetailDto> GetAsync(Guid id)
     {
-        return await GetAsync<DepartmentDetailDto>($"{_baseUrl}/Get?id={id}");
+        return await GetAsync<DepartmentDetailDto>($"Get?id={id}");
     }
 
     public async Task<List<DepartmentDto>> GetListAsync()
     {
-        return await GetAsync<List<DepartmentDto>>($"{_baseUrl}/List");
+        return await GetAsync<List<DepartmentDto>>($"List");
     }
 
     public async Task UpsertAsync(UpsertDepartmentDto upsertDepartmentDto)
     {
-        await PostAsync($"{_baseUrl}/Add", upsertDepartmentDto);
+        await PostAsync($"Add", upsertDepartmentDto);
     }
 
     public async Task RemoveAsync(Guid departmentId)
     {
-        await DeleteAsync($"{_baseUrl}/Remove?id={departmentId}");
+        await DeleteAsync($"Remove?id={departmentId}");
     }
 
     public async Task<DepartmentChildrenCountDto> GetCountAsync()
     {
-        return await GetAsync<DepartmentChildrenCountDto>($"{_baseUrl}/Count");
+        return await GetAsync<DepartmentChildrenCountDto>($"Count");
     }
 }

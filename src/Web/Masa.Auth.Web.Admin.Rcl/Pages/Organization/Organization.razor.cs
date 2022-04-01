@@ -45,7 +45,7 @@ public partial class Organization
     private async Task LoadStaffsAsync(Guid departmentId)
     {
         _getStaffsDto.DepartmentId = departmentId;
-        var data = await StaffService.GetStaffPaginationAsync(_getStaffsDto);
+        var data = await StaffService.GetStaffsAsync(_getStaffsDto);
         _paginationStaffs = data;
     }
 
@@ -104,8 +104,8 @@ public partial class Organization
         _copyDepartmentDto.ParentId = department.ParentId;
         _copyDepartmentDto.Staffs = department.StaffList;
         _copyDepartmentDto.Staffs = new List<StaffDto> {
-            new StaffDto(Guid.NewGuid(),"谷守到","鬼谷子","1234567858","","12345678888",""),
-            new StaffDto(Guid.NewGuid(),"谷首道","鬼谷子2","1234567858","","12345678888","")
+            new StaffDto(Guid.NewGuid(),department.Name,"","1234567858",true,"谷守到","鬼谷子","","12345678888",""),
+            new StaffDto(Guid.NewGuid(),department.Name,"","1234567858",true,"谷首道","鬼谷子2","","12345678888","")
         };
         _showCopy = true;
     }

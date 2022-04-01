@@ -14,9 +14,9 @@ public abstract class ServiceBase
         CallerProvider = callerProvider;
     }
 
-    protected async Task<TResponse> GetAsync<TResponse>(string methodName, Dictionary<string, string> paramters)
+    protected async Task<TResponse> GetAsync<TResponse>(string methodName, Dictionary<string, string>? paramters = null)
     {
-        return await CallerProvider.GetAsync<TResponse>(Path.Combine(BaseUrl, methodName), paramters) ?? throw new Exception("The service is abnormal, please contact the administrator!");
+        return await CallerProvider.GetAsync<TResponse>(Path.Combine(BaseUrl, methodName), paramters ?? new()) ?? throw new Exception("The service is abnormal, please contact the administrator!");
     }
 
     protected async Task PutAsync<TRequest>(string methodName, TRequest data)
@@ -35,6 +35,11 @@ public abstract class ServiceBase
     {
         var response = await CallerProvider.DeleteAsync(Path.Combine(BaseUrl, methodName), data);
         await CheckResponse(response);
+    }
+
+    protected async Task DeleteAsync(string methodName)
+    {
+        await CallerProvider.DeleteAsync(methodName, null);
     }
 
     protected async ValueTask CheckResponse(HttpResponseMessage response)
