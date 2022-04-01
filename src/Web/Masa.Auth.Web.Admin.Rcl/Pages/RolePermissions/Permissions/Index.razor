@@ -1,0 +1,114 @@
+﻿@inherits AdminCompontentBase
+@page "/permission/index"
+
+<MRow>
+    <MCol Md="@("auto")">
+        <MCard style="width:300px;">
+
+        </MCard>
+    </MCol>
+    <MCol>
+        <MCard>
+            <MCardTitle>
+                <h6>权限信息</h6>
+            </MCardTitle>
+            <MCardText>
+                <MRow>
+                    <MCol Md=6>
+                        <MSelect @bind-Value="@value3"
+                                 Label="Outlined style"
+                                 Outlined Dense HideDetails="@("auto")"
+                                 Items="@items"
+                                 ItemText="u => u.Label"
+                                 ItemValue="u => u.Value">
+                        </MSelect>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultTextField TValue="string"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultTextField TValue="string"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultTextField TValue="string"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultTextField TValue="string">
+                            <PrependContent>
+                               <div class="d-flex align-center mt-n1">
+                                    <MIcon Size=30>
+                                    mdi-image
+                                </MIcon>
+                               </div>
+                            </PrependContent>
+                        </DefaultTextField>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultTextField TValue="string"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=12>
+                        <DefaultTextField TValue="string"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=12>
+                        <MAutocomplete @bind-Value="_values"
+                                       Items="_items"
+                                       ItemText="r=>r"
+                                       ItemValue="r=>r"
+                                       Outlined
+                                       Dense Chips
+                                       SmallChips
+                                       Label="Outlined"
+                                       Multiple></MAutocomplete>
+                    </MCol>
+                    <MCol Md=12>
+                        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder Title="挂靠角色">
+                            <MChip Small>
+                                UI
+                            </MChip>
+                            <MChip Small>
+                                UX
+                            </MChip>
+                        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder>
+                    </MCol>
+                    <MCol Md=12>
+                        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder Title="权限使用者">
+                            <div>
+                                <MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip>
+                            </div>
+                            <div class="mt-3">
+                                <MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip><MChip Small>
+                                    UX
+                                </MChip>
+                            </div>
+                        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder>
+                    </MCol>
+                    <MCol Md=12>
+                        <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                        </MTextarea>
+                    </MCol>
+                </MRow>
+            </MCardText>
+            <MCardActions>
+
+            </MCardActions>
+        </MCard>
+    </MCol>
+</MRow> 

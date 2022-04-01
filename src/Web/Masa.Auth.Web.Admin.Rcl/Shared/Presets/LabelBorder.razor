@@ -1,0 +1,14 @@
+﻿<div class="m-label--border">
+    <fieldset>
+    <legend>@Title</legend>
+    @ChildContent
+</fieldset>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+}

@@ -1106,3 +1106,7 @@ tr:hover {
     flex-grow: 0 !important;
     width: auto !important;
 }
+
+.m-chip:not(.m-chip--active) {
+    background: #f6f8fd !important;
+}
