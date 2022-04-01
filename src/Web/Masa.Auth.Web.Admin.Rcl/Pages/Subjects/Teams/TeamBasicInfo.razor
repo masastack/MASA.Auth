@@ -8,7 +8,7 @@
         </MListItemAvatar>
         <MListItemContent class="py-0">
             <MListItemTitle>
-                <MTextField @bind-Value="@Value.Avatar.Name" HideDetails="@("auto")" Dense Outlined Placeholder="Michael Harmen"></MTextField>
+                <Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField @bind-Value="@Value.Avatar.Name" Placeholder="Michael Harmen"></Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField>
             </MListItemTitle>
             <MListItemSubtitle class="mt-2">
                 <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ColorGroup @bind-Value="@Value.Avatar.Color" Colors='_colors' />

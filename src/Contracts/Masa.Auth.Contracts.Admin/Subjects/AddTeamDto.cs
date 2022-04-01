@@ -26,10 +26,10 @@ public class AddTeamDto
     {
         return new AddTeamDto()
         {
-            Name = team.TeamBaseInfo.Name,
-            Description = team.TeamBaseInfo.Description,
-            Type = (TeamTypes)team.TeamBaseInfo.Type,
-            Avatar = team.TeamBaseInfo.Avatar,
+            Name = team.TeamBasicInfo.Name,
+            Description = team.TeamBasicInfo.Description,
+            Type = (TeamTypes)team.TeamBasicInfo.Type,
+            Avatar = team.TeamBasicInfo.Avatar,
             AdminStaffs = team.TeamAdmin.Staffs,
             AdminRoles = team.TeamAdmin.Roles,
             AdminPermissions = team.TeamAdmin.Permissions,

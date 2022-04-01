@@ -111,7 +111,7 @@ public class QueryHandler
         teamDetailQuery.Result = new TeamDetailDto
         {
             Id = team.Id,
-            TeamBaseInfo = new TeamBaseInfoDto
+            TeamBasicInfo = new TeamBasicInfoDto
             {
                 Name = team.Name,
                 Description = team.Description,

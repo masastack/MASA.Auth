@@ -1,20 +1,17 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class TeamDetailDto
 {
     public Guid Id { get; set; }
 
-    public TeamBaseInfoDto TeamBaseInfo { get; set; } = new();
+    public TeamBasicInfoDto TeamBasicInfo { get; set; } = new();
 
     public TeamPersonnelDto TeamAdmin { get; set; } = new();
 
     public TeamPersonnelDto TeamMember { get; set; } = new();
 }
 
-public class TeamBaseInfoDto : INotifyPropertyChanged
+public class TeamBasicInfoDto : INotifyPropertyChanged
 {
     string _name = string.Empty;
 

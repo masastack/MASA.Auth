@@ -43,9 +43,9 @@ public partial class Team
         await LoadTeams();
     }
 
-    private async Task OnUpdateBaseInfo(UpdateTeamBaseInfoDto dto)
+    private async Task OnUpdateBasicInfo(UpdateTeamBasicInfoDto dto)
     {
-        await TeamService.UpdateBaseInfo(dto);
+        await TeamService.UpdateBasicInfo(dto);
         await LoadTeams();
     }
 

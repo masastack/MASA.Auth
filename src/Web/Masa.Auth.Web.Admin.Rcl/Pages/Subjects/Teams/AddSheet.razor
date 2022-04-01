@@ -18,22 +18,22 @@
         </MStepperHeader>
         <MStepperItems>
             <MStepperContent class="pt-3" Step="1">
-                <TeamBaseinfo @bind-Value="_teamDetailDto.TeamBaseInfo"/>
+                <TeamBasicInfo @bind-Value="_teamDetailDto.TeamBasicInfo"/>
                 <MCardActions class="d-flex justify-end align-center mb-6">
-                    <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(_teamDetailDto.TeamBaseInfo.Name.Trim())" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrWhiteSpace(_teamDetailDto.TeamBasicInfo.Name)" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
                 </MCardActions>
             </MStepperContent>
             <MStepperContent class="pt-3" Step="2">
                 <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin"/>
-                <MCardActions class="d-flex justify-end align-center  mb-6">
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step++; }">@T("Next step")</MButton>
+                <MCardActions class="d-flex justify-end align-center mb-6">
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=> _step-- ">@T("Previous step")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=> _step++ ">@T("Next step")</MButton>
                 </MCardActions>
             </MStepperContent>
             <MStepperContent class="pt-3" Step="3">
                 <TeamMember @bind-Value="_teamDetailDto.TeamMember"/>
-                <MCardActions class="d-flex justify-end align-center  mb-6">
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>{ _step--; }">@T("Previous step")</MButton>
+                <MCardActions class="d-flex justify-end align-center mb-6">
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=> _step-- ">@T("Previous step")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
                 </MCardActions>
             </MStepperContent>

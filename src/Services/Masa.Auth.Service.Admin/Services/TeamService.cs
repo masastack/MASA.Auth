@@ -8,7 +8,7 @@ public class TeamService : ServiceBase
         MapGet(ListAsync);
         MapGet(SelectAsync);
         MapPost(CreateAsync);
-        MapPost(UpdateBaseInfoAsync);
+        MapPost(UpdateBasicInfoAsync);
         MapPost(UpdateAdminPersonnelAsync);
         MapPost(UpdateMemberPersonnelAsync);
         MapDelete(RemoveAsync);
@@ -19,9 +19,9 @@ public class TeamService : ServiceBase
         await eventBus.PublishAsync(new AddTeamCommand(addTeamDto));
     }
 
-    private async Task UpdateBaseInfoAsync(IEventBus eventBus, [FromBody] UpdateTeamBaseInfoDto updateTeamBaseInfoDto)
+    private async Task UpdateBasicInfoAsync(IEventBus eventBus, [FromBody] UpdateTeamBasicInfoDto updateTeamBasicInfoDto)
     {
-        await eventBus.PublishAsync(new UpdateTeamBaseInfoCommand(updateTeamBaseInfoDto));
+        await eventBus.PublishAsync(new UpdateTeamBasicInfoCommand(updateTeamBasicInfoDto));
     }
 
     private async Task UpdateAdminPersonnelAsync(IEventBus eventBus, [FromBody] UpdateTeamPersonnelDto updateTeamPersonnelDto)

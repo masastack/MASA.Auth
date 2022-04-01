@@ -10,11 +10,12 @@ public partial class UpdateSheet
     [Parameter]
     public EventCallback<bool> ShowChanged { get; set; }
 
+    [EditorRequired]
     [Parameter]
     public TeamDetailDto Dto { get; set; } = new();
 
     [Parameter]
-    public EventCallback<UpdateTeamBaseInfoDto> OnUpdateBase { get; set; }
+    public EventCallback<UpdateTeamBasicInfoDto> OnUpdateBase { get; set; }
 
     [Parameter]
     public EventCallback<UpdateTeamPersonnelDto> OnUpdateAdmin { get; set; }
@@ -29,25 +30,25 @@ public partial class UpdateSheet
 
     protected override void OnInitialized()
     {
-        Dto.TeamBaseInfo.PropertyChanged += (sender, args) => StateHasChanged();
+        Dto.TeamBasicInfo.PropertyChanged += (sender, args) => StateHasChanged();
     }
 
     public void Dispose()
     {
-        Dto.TeamBaseInfo.PropertyChanged -= (sender, args) => StateHasChanged();
+        Dto.TeamBasicInfo.PropertyChanged -= (sender, args) => StateHasChanged();
     }
 
     public async Task OnUpdateBaseHandler()
     {
         if (OnUpdateBase.HasDelegate)
         {
-            await OnUpdateBase.InvokeAsync(new UpdateTeamBaseInfoDto
+            await OnUpdateBase.InvokeAsync(new UpdateTeamBasicInfoDto
             {
                 Id = Dto.Id,
-                Name = Dto.TeamBaseInfo.Name,
-                Description = Dto.TeamBaseInfo.Description,
-                Type = (TeamTypes)Dto.TeamBaseInfo.Type,
-                Avatar = Dto.TeamBaseInfo.Avatar
+                Name = Dto.TeamBasicInfo.Name,
+                Description = Dto.TeamBasicInfo.Description,
+                Type = (TeamTypes)Dto.TeamBasicInfo.Type,
+                Avatar = Dto.TeamBasicInfo.Avatar
             });
         }
         await ShowChanged.InvokeAsync(false);

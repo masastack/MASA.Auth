@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class UpdateTeamBaseInfoDto
+public class UpdateTeamBasicInfoDto
 {
     public Guid Id { get; set; }
 

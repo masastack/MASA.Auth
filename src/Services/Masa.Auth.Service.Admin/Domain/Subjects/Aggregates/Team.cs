@@ -35,7 +35,7 @@ public class Team : AuditAggregateRoot<Guid, Guid>
     {
     }
 
-    public void UpdateBaseInfo(string name, string description, TeamTypes teamType, AvatarValue avatar)
+    public void UpdateBasicInfo(string name, string description, TeamTypes teamType, AvatarValue avatar)
     {
         Name = name;
         Description = description;

@@ -17,13 +17,13 @@
         </MCardTitle>
         <MWindow @bind-Value="_tab" Reverse>
             <MWindowItem Value="1">
-                <TeamBaseinfo @bind-Value="Dto.TeamBaseInfo" />
+                <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
                 <MCardActions class="d-flex align-center mb-6">
                     <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
                         @T("Delete")
                     </MButton>
                     <MSpacer />
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrEmpty(Dto.TeamBaseInfo.Name.Trim())">@T("Save")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</MButton>
                 </MCardActions>
             </MWindowItem>
             <MWindowItem Value="2">

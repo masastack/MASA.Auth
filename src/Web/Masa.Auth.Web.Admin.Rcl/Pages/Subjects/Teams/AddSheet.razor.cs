@@ -25,11 +25,11 @@ public partial class AddSheet
 
     protected override void OnInitialized()
     {
-        _teamDetailDto.TeamBaseInfo.PropertyChanged += (sender, args) => StateHasChanged();
+        _teamDetailDto.TeamBasicInfo.PropertyChanged += (sender, args) => StateHasChanged();
     }
 
     public void Dispose()
     {
-        _teamDetailDto.TeamBaseInfo.PropertyChanged -= (sender, args) => StateHasChanged();
+        _teamDetailDto.TeamBasicInfo.PropertyChanged -= (sender, args) => StateHasChanged();
     }
 }

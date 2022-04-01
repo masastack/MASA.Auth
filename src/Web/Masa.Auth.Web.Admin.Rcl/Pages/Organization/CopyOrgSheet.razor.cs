@@ -14,6 +14,7 @@ public partial class CopyOrgSheet
     [Parameter]
     public string Title { get; set; } = string.Empty;
 
+    [EditorRequired]
     [Parameter]
     public CopyDepartmentDto Dto { get; set; } = new();
 

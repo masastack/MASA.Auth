@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class TeamService : ServiceBase
 {
@@ -30,9 +28,9 @@ public class TeamService : ServiceBase
         await PostAsync($"{_baseUrl}/Create", addTeamDto);
     }
 
-    public async Task UpdateBaseInfo(UpdateTeamBaseInfoDto updateTeamBaseInfoDto)
+    public async Task UpdateBasicInfo(UpdateTeamBasicInfoDto updateTeamBasicInfoDto)
     {
-        await PostAsync($"{_baseUrl}/UpdateBaseInfo", updateTeamBaseInfoDto);
+        await PostAsync($"{_baseUrl}/UpdateBasicInfo", updateTeamBasicInfoDto);
     }
 
     public async Task UpdateAdminPersonnel(UpdateTeamPersonnelDto updateTeamPersonnelDto)
@@ -45,7 +43,7 @@ public class TeamService : ServiceBase
         await PostAsync($"{_baseUrl}/UpdateMemberPersonnel", updateTeamPersonnelDto);
     }
 
-    public async Task DeleteAsync([FromQuery] Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         await DeleteAsync($"{_baseUrl}/Remove?id={id}");
     }

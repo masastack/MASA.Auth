@@ -79,7 +79,7 @@ public class CommandHandler
         var staff = await _staffRepository.FindAsync(deleteStaffCommand.StaffId);
         if (staff == null)
         {
-            throw new UserFriendlyException("the id of staff not found");
+            throw new UserFriendlyException("The id of staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
     }
@@ -99,11 +99,11 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task UpdateTeamBaseInfoAsync(UpdateTeamBaseInfoCommand updateTeamBaseInfoCommand)
+    public async Task UpdateTeamBasicInfoAsync(UpdateTeamBasicInfoCommand updateTeamBasicInfoCommand)
     {
-        var dto = updateTeamBaseInfoCommand.UpdateTeamBaseInfoDto;
+        var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
         var team = await _teamRepository.GetByIdAsync(dto.Id);
-        team.UpdateBaseInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
         await _teamRepository.UpdateAsync(team);
     }
 

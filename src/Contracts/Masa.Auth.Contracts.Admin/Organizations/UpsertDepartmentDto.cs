@@ -2,7 +2,6 @@
 
 public class UpsertDepartmentDto : BaseUpsertDto<Guid>
 {
-
     public string Name { get; set; } = "";
 
     public Guid ParentId { get; set; }

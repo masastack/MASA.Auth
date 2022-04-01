@@ -5,9 +5,9 @@
 
 <MCard>
     <MCardTitle class="mx-2 py-6">
-        <MTextField @bind-Value="_search" Outlined Dense Placeholder="@T("Search")" OnKeyDown="SearchKeyDown"
-                    HideDetails=true Style="max-width:340px;" PrependInnerIcon="mdi-magnify">
-        </MTextField>
+        <Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField @bind-Value="_search" Placeholder="@T("Search")" OnKeyDown="SearchKeyDown"
+                    Style="max-width:340px;" PrependInnerIcon="mdi-magnify">
+        </Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField>
     </MCardTitle>
     <MCardText>
         <MRow>
@@ -27,5 +27,5 @@
 </MCard>
 
 <AddSheet @bind-Show=_showAdd OnSubmit="OnCreate"/>
-<UpdateSheet @bind-Show=_showEdit Dto=_editTeamDto OnUpdateBase="OnUpdateBaseInfo" 
+<UpdateSheet @bind-Show=_showEdit Dto=_editTeamDto OnUpdateBase="OnUpdateBasicInfo" 
     OnUpdateAdmin="OnUpdateAdminPersonnel" OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete"/>

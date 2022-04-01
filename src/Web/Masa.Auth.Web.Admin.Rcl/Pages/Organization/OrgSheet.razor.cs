@@ -8,6 +8,7 @@ public partial class OrgSheet
     [Parameter]
     public EventCallback<bool> ShowChanged { get; set; }
 
+    [EditorRequired]
     [Parameter]
     public UpsertDepartmentDto Dto { get; set; } = new();
 
