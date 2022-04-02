@@ -110,9 +110,9 @@
                             </HeaderColContent>
                             <TopContent>
                                 <div class="d-flex justify-space-between">
-                                    <MTextField Autofocus @bind-Value="@_getStaffsDto.Name" Style="max-width:341px;" Outlined Dense Placeholder="@T("Search")"
-                                                HideDetails=true PrependInnerIcon="mdi-magnify">
-                                    </MTextField>
+                                    <Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField @bind-Value="@_getStaffsDto.Name" Style="max-width:341px;" 
+                                            Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify">
+                                    </Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField>
                                     <MButton class="rounded-pill primary" MinWidth="100">
                                         <MIcon Left Dark>
                                             mdi-plus

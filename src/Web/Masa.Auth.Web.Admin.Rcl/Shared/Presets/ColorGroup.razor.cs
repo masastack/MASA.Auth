@@ -2,6 +2,7 @@
 
 public partial class ColorGroup
 {
+    [EditorRequired]
     [Parameter]
     public List<string> Colors { get; set; } = new();
 

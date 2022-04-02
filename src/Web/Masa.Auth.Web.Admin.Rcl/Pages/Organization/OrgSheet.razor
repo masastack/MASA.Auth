@@ -24,7 +24,7 @@
                     @T("Delete")
                 </MButton>
             }
-            <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+            <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</MButton>
         </MCardActions>
     </MCard>
 </Masa.Blazor.Presets.PDrawer>

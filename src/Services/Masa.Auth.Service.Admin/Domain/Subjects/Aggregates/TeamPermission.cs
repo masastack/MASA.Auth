@@ -17,17 +17,14 @@ public class TeamPermission : AuditEntity<Guid, Guid>
         private set => _permission = value;
     }
 
-    public Guid TeamId { get; private set; }
-
     public Guid PermissionId { get; private set; }
 
     public bool Effect { get; private set; }
 
     public TeamMemberTypes TeamMemberType { get; private set; }
 
-    public TeamPermission(Guid teamId, Guid permissionId, bool effect, TeamMemberTypes teamMemberType)
+    public TeamPermission(Guid permissionId, bool effect, TeamMemberTypes teamMemberType)
     {
-        TeamId = teamId;
         PermissionId = permissionId;
         Effect = effect;
         TeamMemberType = teamMemberType;

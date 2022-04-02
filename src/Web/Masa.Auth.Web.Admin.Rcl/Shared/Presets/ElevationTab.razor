@@ -1,0 +1,53 @@
+﻿<CascadingValue Value="this">
+    @ChildContent
+    <MCard Class="mx-auto" MaxWidth=@MaxWidth>
+        <MCardTitle Class="d-flex justify-center">
+            <MButtonGroup Dense=@Dense Mandatory Borderless @bind-Value="_tab" Class="rounded-lg elevation-tab">
+                @for (var i = 0; i < Headers.Count; i++)
+                {
+                    var header = Headers[i];
+                    <MButton Ripple=false Value="@i" Class="rounded-lg">
+                        @header
+                    </MButton>
+                }
+            </MButtonGroup>
+        </MCardTitle>
+        <MWindow @bind-Value="_tab" Reverse>
+            @for (var i = 0; i < _elevationTabItems.Count; i++)
+            {
+                var item = _elevationTabItems[i];
+                <MWindowItem Value="@i">
+                    @item.ChildContent
+                </MWindowItem>
+            }
+        </MWindow>
+    </MCard>
+</CascadingValue>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public List<string> Headers { get; set; } = new();
+
+    [Parameter]
+    public bool Dense { get; set; } = false;
+
+     [Parameter]
+    public StringNumber MaxWidth { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    StringNumber _tab = 0;
+    List<ElevationTabItem> _elevationTabItems = new();
+
+    public void AddTabItem(ElevationTabItem tabItem)
+    {
+        _elevationTabItems.Add(tabItem);
+    }
+
+    public void RemoveTabItem(ElevationTabItem tabItem)
+    {
+        _elevationTabItems.Remove(tabItem);
+    }
+}
