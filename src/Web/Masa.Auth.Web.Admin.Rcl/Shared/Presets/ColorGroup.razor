@@ -4,7 +4,7 @@
     {
         <MItem>
             <MCard Class="elevation-0" Style="@($"transition: opacity .4s ease-in-out; {(context.Active ? "" : "opacity: 0.5;")}")">
-                <MButton Fab class="mx-1 rounded-circle" OnClick="()=>{ context.Toggle(); ValueChanged.InvokeAsync(color); }"
+                <MButton StopPropagation Fab class="mx-1 rounded-circle" OnClick="()=>{ context.Toggle(); ValueChanged.InvokeAsync(color); }"
                      Width=Size Height=Size MinWidth=Size MinHeight=Size Color="@color">
                 </MButton>
             </MCard>

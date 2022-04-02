@@ -14,15 +14,18 @@ public partial class SimpleDataTableFooter
     [Parameter]
     public List<int> PageSizes { get; set; } = new List<int> { 10, 20, 30 };
 
+    [EditorRequired]
     [Parameter]
     public int Page { get; set; } = 1;
 
+    [EditorRequired]
     [Parameter]
     public int PageSize { get; set; } = 10;
 
     [Parameter]
     public string PageSizeText { get; set; } = "行/页";
 
+    [EditorRequired]
     [Parameter]
     public long Total { get; set; }
 

@@ -2,4 +2,5 @@
 
 public interface IRoleRepository : IRepository<Role, Guid>
 {
+    Task<Role> GetByIdAsync(Guid Id);
 }

@@ -18,6 +18,7 @@ global using Masa.Auth.Service.Admin.Domain.Permissions.Repositories;
 global using Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 global using Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Abstract;
 global using Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+global using Masa.Auth.Service.Admin.Domain.Subjects.Events;
 global using Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
 global using Masa.Auth.Service.Admin.Domain.Subjects.Services;
 global using Masa.Auth.Service.Admin.Infrastructure;

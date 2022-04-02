@@ -26,6 +26,10 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public AddressValue Address { get; private set; }
 
+    private List<UserRole> userRoles = new();
+
+    public IReadOnlyCollection<UserRole> UserRoles => userRoles;
+
     #endregion
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password,
@@ -53,5 +57,15 @@ public class User : AuditAggregateRoot<Guid, Guid>
     public void Update()
     {
 
+    }
+
+    public void AddRole(params Guid[] roleIds)
+    {
+        userRoles.AddRange(roleIds.Select(roleId => new UserRole(roleId)));
+    }
+
+    public void RemoveRole(params Guid[] roleIds)
+    {
+        userRoles.RemoveAll(ur => roleIds.Contains(ur.RoleId));
     }
 }

@@ -3,12 +3,15 @@
 public class QueryHandler
 {
     readonly IUserRepository _userRepository;
+    readonly ITeamRepository _teamRepository;
     readonly IStaffRepository _staffRepository;
     readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IUserRepository userRepository, IStaffRepository staffRepository, AuthDbContext authDbContext)
+    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository,
+        IStaffRepository staffRepository, AuthDbContext authDbContext)
     {
         _userRepository = userRepository;
+        _teamRepository = teamRepository;
         _staffRepository = staffRepository;
         _authDbContext = authDbContext;
     }
@@ -65,7 +68,7 @@ public class QueryHandler
         var key = staffPaginationQuery.SearchKey;
         var page = staffPaginationQuery.Page;
         var pageSize = staffPaginationQuery.PageSize;
-        Expression<Func<Staff, bool>> condition = staff => true;
+        Expression<Func<Staff, bool>> condition = _ => true;
         if (string.IsNullOrEmpty(key))
         {
             condition = condition.And(s => s.JobNumber.Contains(key) || s.Name.Contains(key));
@@ -85,4 +88,64 @@ public class QueryHandler
         staffPaginationQuery.Result = new PaginationDto<StaffDto>(PaginationDto.Total, PaginationDto.TotalPages,
             PaginationDto.Result.Select(s => new StaffDto(s.Id, "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList());
     }
+
+    #region Team
+
+    [EventHandler]
+    public async Task TeamListAsync(TeamListQuery teamListQuery)
+    {
+        Expression<Func<Team, bool>> condition = _ => true;
+        if (string.IsNullOrEmpty(teamListQuery.Name))
+        {
+            condition = condition.And(s => s.Name.Contains(teamListQuery.Name));
+        }
+        teamListQuery.Result = (await _teamRepository.GetListAsync(condition))
+                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, "", "", "", t.ModificationTime))
+                .ToList();
+    }
+
+    [EventHandler]
+    public async Task TeamDetailAsync(TeamDetailQuery teamDetailQuery)
+    {
+        var team = await _teamRepository.GetByIdAsync(teamDetailQuery.TeamId);
+        teamDetailQuery.Result = new TeamDetailDto
+        {
+            Id = team.Id,
+            TeamBasicInfo = new TeamBasicInfoDto
+            {
+                Name = team.Name,
+                Description = team.Description,
+                Type = (int)team.TeamType,
+                Avatar = new AvatarValueDto
+                {
+                    Url = team.Avatar.Url,
+                    Name = team.Avatar.Name,
+                    Color = team.Avatar.Color
+                }
+            },
+            TeamAdmin = new TeamPersonnelDto
+            {
+
+            },
+            TeamMember = new TeamPersonnelDto
+            {
+
+            }
+        };
+    }
+
+    [EventHandler]
+    public async Task TeamSelectListAsync(TeamSelectListQuery teamSelectListQuery)
+    {
+        Expression<Func<Team, bool>> condition = _ => true;
+        if (string.IsNullOrEmpty(teamSelectListQuery.Name))
+        {
+            condition = condition.And(s => s.Name.Contains(teamSelectListQuery.Name));
+        }
+        teamSelectListQuery.Result = (await _teamRepository.GetListAsync(condition))
+                .Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar.Url))
+                .ToList();
+    }
+
+    #endregion
 }
