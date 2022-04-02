@@ -24,7 +24,8 @@
                         </MSelect>
                     </MCol>
                     <MCol Md=6>
-                        <DefaultTextField TValue="string"></DefaultTextField>
+                        <DefaultTextField TValue="string" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                        </DefaultTextField>
                     </MCol>
                     <MCol Md=6>
                         <DefaultTextField TValue="string"></DefaultTextField>
@@ -61,17 +62,17 @@
                                        Multiple></MAutocomplete>
                     </MCol>
                     <MCol Md=12>
-                        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder Title="挂靠角色">
+                        <GroupBox Title="挂靠角色">
                             <MChip Small>
                                 UI
                             </MChip>
                             <MChip Small>
                                 UX
                             </MChip>
-                        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder>
+                        </GroupBox>
                     </MCol>
                     <MCol Md=12>
-                        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder Title="权限使用者">
+                        <GroupBox Title="权限使用者">
                             <div>
                                 <MChip Small>
                                     UX
@@ -98,7 +99,7 @@
                                     UX
                                 </MChip>
                             </div>
-                        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.LabelBorder>
+                        </GroupBox>
                     </MCol>
                     <MCol Md=12>
                         <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>

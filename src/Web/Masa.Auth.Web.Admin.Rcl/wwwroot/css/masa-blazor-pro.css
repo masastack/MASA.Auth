@@ -450,6 +450,7 @@
 
 .m-messages {
     min-height: 0px !important;
+    margin-top:4px;
 }
 
 .m-navigation-drawer__border {
