@@ -15,4 +15,10 @@ public partial class TeamBasicInfo
     {
         new TeamTypeDto { Id = (int)TeamTypes.Normal, Name = TeamTypes.Normal.ToString() }
     };
+
+    private async Task OnNameChanged(string name)
+    {
+        Value.Name = name;
+        await ValueChanged.InvokeAsync(Value);
+    }
 }
