@@ -92,7 +92,7 @@ public partial class ThirdPartyUser
         var request = new GetThirdPartyUsersDto(Page, PageSize, Search, Enabled, ThirdPartyIdpId);
         var response = await ThirdPartyUserService.GetThirdPartyUsersAsync(request);
         ThirdPartyUsers = response.Items;
-        TotalPages = response.TotalPages;
+        TotalPages = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }

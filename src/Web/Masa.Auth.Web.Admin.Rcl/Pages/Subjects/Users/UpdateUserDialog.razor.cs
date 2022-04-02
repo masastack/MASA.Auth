@@ -14,7 +14,9 @@ public partial class UpdateUserDialog
     [Parameter]
     public Guid UserId { get; set; }
 
-    private UserDetailDto User { get; set; } = new();
+    private UserDetailDto UserDetail { get; set; } = new ();
+
+    private UpdateUserDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
 
@@ -32,7 +34,7 @@ public partial class UpdateUserDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible is true)
+        if (Visible)
         {
             await GetUserDetailAsync();
         }
@@ -40,16 +42,33 @@ public partial class UpdateUserDialog
 
     public async Task GetUserDetailAsync()
     {
-        User = await UserService.GetUserDetailAsync(UserId);
+        UserDetail = await UserService.GetUserDetailAsync(UserId);
+        User = UserDetail;
     }
 
-    public async Task AddOrEditUserAsync()
+    public async Task UpdateUserAsync()
     {
         Loading = true;
         await UserService.UpdateUserAsync(User);
-        OpenSuccessMessage(T("Edit staff data success"));
+        OpenSuccessMessage(T("Update user data success"));
         await OnSubmitSuccess.InvokeAsync();
         await UpdateVisible(false);
+        Loading = false;
+    }
+
+    public void OpenRemoveUserDialog()
+    {
+        OpenConfirmDialog(async confirm =>
+        {
+            if (confirm) await RemoveUserAsync();
+        }, T("Are you sure delete user data"));
+    }
+
+    public async Task RemoveUserAsync()
+    {
+        Loading = true;
+        await UserService.RemoveUserAsync(UserId);
+        OpenSuccessMessage(T("Delete user data success"));
         Loading = false;
     }
 }

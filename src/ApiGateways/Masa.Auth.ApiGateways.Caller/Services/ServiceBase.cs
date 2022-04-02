@@ -16,30 +16,36 @@ public abstract class ServiceBase
 
     protected async Task<TResponse> GetAsync<TResponse>(string methodName, Dictionary<string, string>? paramters = null)
     {
-        return await CallerProvider.GetAsync<TResponse>(Path.Combine(BaseUrl, methodName), paramters ?? new()) ?? throw new Exception("The service is abnormal, please contact the administrator!");
+        return await CallerProvider.GetAsync<TResponse>(BuildAdress(methodName), paramters ?? new()) ?? throw new Exception("The service is abnormal, please contact the administrator!");
     }
 
     protected async Task PutAsync<TRequest>(string methodName, TRequest data)
     {
-        var response = await CallerProvider.PutAsync(Path.Combine(BaseUrl, methodName), data);
+        var response = await CallerProvider.PutAsync(BuildAdress(methodName), data);
         await CheckResponse(response);
     }
 
     protected async Task PostAsync<TRequest>(string methodName, TRequest data)
     {
-        var response = await CallerProvider.PostAsync(Path.Combine(BaseUrl, methodName), data);
+        var response = await CallerProvider.PostAsync(BuildAdress(methodName), data);
         await CheckResponse(response);
     }
 
     protected async Task DeleteAsync<TRequest>(string methodName, TRequest data)
     {
-        var response = await CallerProvider.DeleteAsync(Path.Combine(BaseUrl, methodName), data);
+        var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), data);
         await CheckResponse(response);
     }
 
     protected async Task DeleteAsync(string methodName)
     {
-        await CallerProvider.DeleteAsync(methodName, null);
+        var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), null);
+        await CheckResponse(response);
+    }
+
+    string BuildAdress(string methodName)
+    {
+        return Path.Combine(BaseUrl, methodName.Replace("Async", ""));
     }
 
     protected async ValueTask CheckResponse(HttpResponseMessage response)

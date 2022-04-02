@@ -12,16 +12,16 @@
             MapDelete(DeleteUserAsync);
         }
 
-        private async Task<PaginationDto<UserDto>> GetUsersAsync(IEventBus eventBus, GetUsersDto options)
+        private async Task<PaginationDto<UserDto>> GetUsersAsync(IEventBus eventBus, GetUsersDto user)
         {
-            var query = new UsersQuery(options.Page, options.PageSize, options.UserId, options.Enabled);
+            var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
 
-        private async Task<UserDetailDto> GetUserDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid userId)
+        private async Task<UserDetailDto> GetUserDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
         {
-            var query = new UserDetailQuery(userId);
+            var query = new UserDetailQuery(id);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

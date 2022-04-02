@@ -2,60 +2,76 @@
 
 <MDialog Value="Visible" ValueChanged=UpdateVisible Width="800">
     <MCard Class="pa-6">
-        <MForm Model=User EnableDataAnnotationsValidation>
+        <MForm Model="Staff" EnableDataAnnotationsValidation>
             <div class="d-flex">
                 <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
                     <MAvatar Size=80>
-                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/Staff.svg" />
                     </MAvatar>
-                    <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 text-subtitle2">@T("Basic Information")</div>
             <MRow Class="my-4">
                 <MCol>
-                    <MTextField @bind-Value="User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                    <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
                 </MCol>
                 <MCol>
-                    <MTextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+                    <MTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
                 </MCol>
             </MRow>
             <MRow Class="my-4">
                 <MCol>
-                    <MTextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
+                    <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
                 </MCol>
                 <MCol>
-                    <MTextField @bind-Value="User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+                    <MSelect
+                        @bind-Value="Staff.StaffType"
+                        HideDetails="@("auto")"
+                        Outlined
+                        Items="@(GetEnumMap<StaffTypes>())"
+                        ItemText="map => map.Key"
+                        ItemValue="map => map.Value"
+                        Label="@T("StaffType")">
+                    </MSelect>
                 </MCol>
             </MRow>
             <MRow Class="my-4">
                 <MCol>
-                    <MTextField Readonly Value="UserDetail.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
+                    @*<MTextField Readonly @bind-Value="Staff.Teams" Label="@T("Team")" HideDetails="@("auto")" Outlined />*@
                 </MCol>
                 <MCol>
-                    <MTextField @bind-Value="User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
-                </MCol>
-            </MRow>
-            <div class="mt-6 text-subtitle2">@T("Detail Information")</div>
-            <MRow Class="my-4">
-                <MCol>
-                    <MTextField @bind-Value="User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
-                </MCol>
-                <MCol>
-                    <MTextField @bind-Value="User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
+                    <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
                 </MCol>
             </MRow>
             <MRow Class="my-4">
                 <MCol>
-                    <MTextField @bind-Value="User.Department" Label="@T("Department")" HideDetails="@("auto")" Outlined />
+                    <MTextField @bind-Value="Staff.User.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
                 </MCol>
                 <MCol>
-                    <MTextField @bind-Value="User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                    @*<MTextField @bind-Value="Staff.DepartmentId" Label="@T("Department")" HideDetails="@("auto")" Outlined />*@
                 </MCol>
             </MRow>
+            <MRow Class="my-4">
+                <MCol>
+                    <MTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" HideDetails="@("auto")" Outlined />
+                </MCol>
+                <MCol>
+                    <MTextField @bind-Value="Staff.User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                </MCol>
+            </MRow>
+            <MRow Class="my-4">
+                <MCol>
+                    <MTextField Value="StaffDetail.User.Account" Readonly Label="@T("Account")" HideDetails="@("auto")" Outlined />
+                </MCol>
+                <MCol>
+                    <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                </MCol>
+            </MRow>
+
             <div class="mt-6 text-subtitle2">@T("Authorization certification")</div>
             <div class="mt-4">
-                @foreach (var avatar in UserDetail.ThirdPartyIdpAvatars)
+                @foreach (var avatar in StaffDetail.User.ThirdPartyIdpAvatars)
                 {
                     <img src="@avatar" />
                 }
@@ -75,13 +91,13 @@
                     </OppositeContent>
                     <ChildContent>
                         <div class="pb-4 ml-n5">
-                            <span>@UserDetail.Creator</span>
+                            <span>@StaffDetail.Creator</span>
                             <br />
-                            <span>@UserDetail.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <span>@StaffDetail.CreationTime.ToString(T("$DateTimeFormat"))</span>
                         </div>
                     </ChildContent>
                 </MTimelineItem>
-                @if (UserDetail.ModificationTime is not null)
+                @if (StaffDetail.ModificationTime is not null)
                 {
                     <MTimelineItem Color="sample-green" Small>
                         <IconContent>
@@ -91,9 +107,9 @@
                         </IconContent>
                         <OppositeContent>
                             <div class="pb-4 ml-n5">
-                                <span>@UserDetail.Modifier</span>
+                                <span>@StaffDetail.Modifier</span>
                                 <br />
-                                <span>@UserDetail.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                                <span>@StaffDetail.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
                             </div>
                         </OppositeContent>
                         <ChildContent>
@@ -107,11 +123,12 @@
                     </MTimelineItem>
                 }
             </MTimeline>
+           
             <div class="d-flex">
-                <MSwitch @bind-Value="User.Enabled" Inset Class="label" Label="@(User.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
-                <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete User")</MButton>
-                <MButton Color="primary" Class="small-button" OnClick=UpdateUserAsync>@T("Save")</MButton>
+                <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</MButton>
+                <MButton Color="primary" Class="small-button" OnClick=UpdateStaffAsync>@T("Save")</MButton>
             </div>
         </MForm>
     </MCard>

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class AddUserDialog
+public partial class AddStaffDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -11,15 +11,9 @@ public partial class AddUserDialog
     [Parameter]
     public EventCallback OnSubmitSuccess { get; set; }
 
-    private int Step { get; set; } = 1;
+    private AddStaffDto Staff { get; set; } = new();
 
-    private bool Fill { get; set; }
-
-    private StringNumber Gender { get; set; } = "Male";
-
-    private AddUserDto User { get; set; } = new ();
-
-    private UserService UserService => AuthCaller.UserService;
+    private StaffService StaffService => AuthCaller.StaffService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -29,26 +23,23 @@ public partial class AddUserDialog
         }
         else
         {
-            Visible = false;
+            Visible = visible;
         }
     }
 
     protected override void OnParametersSet()
     {
-        if (Visible is true)
+        if (Visible)
         {
-            Step = 1;
-            Fill = false;
-            User = new();
+            Staff = new();
         }
     }
 
-    public async Task AddUserAsync()
+    public async Task AddStaffAsync()
     {
         Loading = true;
-        User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-        await UserService.AddUserAsync(User);
-        OpenSuccessMessage(T("Add staff data success"));
+        await StaffService.AddStaffAsync(Staff);
+        OpenSuccessMessage(T("Add staff success"));
         await OnSubmitSuccess.InvokeAsync();
         await UpdateVisible(false);
         Loading = false;

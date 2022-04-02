@@ -2,11 +2,6 @@
 
 public class StaffService : ServiceBase
 {
-    List<StaffDto> Staffs => new List<StaffDto>()
-    {
-
-    };
-
     protected override string BaseUrl { get; set; }
 
     internal StaffService(ICallerProvider callerProvider) : base(callerProvider)
@@ -14,20 +9,16 @@ public class StaffService : ServiceBase
         BaseUrl = "api/staff/";
     }
 
-
-
     public async Task<PaginationDto<StaffDto>> GetStaffsAsync(GetStaffsDto request)
     {
-        var skip = (request.Page - 1) * request.PageSize;
-        var staffs = Staffs.Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<StaffDto>(Staffs.Count, 1, staffs));
-
-        //var paramters = new Dictionary<string, string>
-        //{
-        //    ["staffId"] = request.StaffId.ToString(),
-        //    ["enabled"] = request.Enabled.ToString(),
-        //};
-        //return await GetAsync<PaginationDto<StaffDto>>(nameof(GetStaffsAsync), paramters);
+        var paramters = new Dictionary<string, string>
+        {
+            ["pageSize"] = request.PageSize.ToString(),
+            ["page"] = request.Page.ToString(),
+            ["search"] = request.Search.ToString(),
+            ["enabled"] = request.Enabled?.ToString() ?? "",
+        };
+        return await GetAsync<PaginationDto<StaffDto>>(nameof(GetStaffsAsync), paramters);
     }
 
     public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
@@ -49,9 +40,9 @@ public class StaffService : ServiceBase
         await PostAsync(nameof(UpdateStaffAsync), request);
     }
 
-    public async Task DeleteStaffAsync(Guid id)
+    public async Task RemoveStaffAsync(Guid id)
     {
-        await DeleteAsync(nameof(DeleteStaffAsync), new RemoveStaffDto(id));
+        await DeleteAsync(nameof(RemoveStaffAsync), new RemoveStaffDto(id));
     }
 }
 

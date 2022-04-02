@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
-
-namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
+﻿namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
 {
@@ -14,6 +12,6 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
         RuleFor(user => user.CompanyName).ChineseLetter().MinLength(1).MaxLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MaxLength(20);
         RuleFor(user => user.Password).Required().LetterNumber();
-    }    
+    }
 }
 

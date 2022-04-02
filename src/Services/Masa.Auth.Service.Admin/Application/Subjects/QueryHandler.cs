@@ -14,9 +14,12 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetUsersAsync(UsersQuery query)
+    public async Task GetUsersAsync(UsersQuery query)
     {
-        Expression<Func<User, bool>> condition = user => user.Enabled == query.Enabled;
+        Expression<Func<User, bool>> condition = user => true;
+        if(query.Enabled is not null)
+            condition = condition.And(user => user.Enabled == query.Enabled);
+
         if (query.userId != Guid.Empty)
             condition = condition.And(user => user.Id == query.userId);
 
@@ -49,17 +52,17 @@ public class QueryHandler
                                           into temp
                                           from tp in temp
                                           select tp.Icon).ToListAsync();
-        var creator = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstAsync(u => u.Id == user.Creator);
-        var modifier = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstAsync(u => u.Id == user.Modifier);
+        var creator = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Creator);
+        var modifier = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Modifier);
 
         query.Result = user;
         query.Result.ThirdPartyIdpAvatars.AddRange(thirdPartyIdpAvatars);
-        query.Result.Creator = creator.Name;
-        query.Result.Modifier = modifier.Name;
+        query.Result.Creator = creator?.Name ?? "";
+        query.Result.Modifier = modifier?.Name ?? "";
     }
 
     [EventHandler]
-    private async Task GetUserSelectAsync(UserSelectQuery query)
+    public async Task GetUserSelectAsync(UserSelectQuery query)
     {
         var user = await _userRepository.GetListAsync(u => u.Name == query.Search);
         //Todo es search
@@ -67,13 +70,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetStaffsAsync(GetStaffsQuery query)
+    public async Task GetStaffsAsync(GetStaffsQuery query)
     {
-        Expression<Func<Staff, bool>> condition = staff => staff.Enabled == query.Enabled;
+        Expression<Func<Staff, bool>> condition = staff => true;
+        if(query.Enabled is not null)
+            condition = condition.And(s => s.Enabled == query.Enabled);
+
         if (query.StaffId != Guid.Empty)
-        {
             condition = condition.And(s => s.Id == query.StaffId);
-        }
 
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
@@ -92,7 +96,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetStaffDetailAsync(StaffDetailQuery query)
+    public async Task GetStaffDetailAsync(StaffDetailQuery query)
     {
         var staff = await _staffRepository.FindAsync(s => s.Id == query.StaffId);
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
@@ -112,7 +116,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetStaffSelectAsync(StaffSelectQuery query)
+    public async Task GetStaffSelectAsync(StaffSelectQuery query)
     {
         var staff = await _staffRepository.GetListAsync(u => u.JobNumber == query.Search);
         //Todo es search

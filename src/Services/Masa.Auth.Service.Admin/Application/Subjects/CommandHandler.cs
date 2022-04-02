@@ -38,15 +38,19 @@ public class CommandHandler
     public async Task UpdateUserAsync(UpdateUserCommand command)
     {
         var userDto = command.User;
-        var user = await _userRepository.FindAsync(u => u.Id != userDto.Id);
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
         else
         {
-            if (userDto.PhoneNumber == user.PhoneNumber)
+            var existPhoneNumber = await _userRepository.GetCountAsync(u => u.Id != userDto.Id && u.PhoneNumber == userDto.PhoneNumber) > 0;
+            if (existPhoneNumber)
                 throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
-            if (userDto.Email == user.Email)
+
+            var existEmail = await _userRepository.GetCountAsync(u => u.Id != userDto.Id && u.Email == userDto.Email) > 0;
+            if (existEmail)
                 throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+
             user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password);
             await _userRepository.UpdateAsync(user);
         }

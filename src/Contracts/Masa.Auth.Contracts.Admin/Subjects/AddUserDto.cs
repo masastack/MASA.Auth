@@ -28,6 +28,22 @@ public class AddUserDto
  
     public string Password { get; set; }
 
+    public AddUserDto()
+    {
+        Name = "";
+        DisplayName = "";
+        Avatar = "";
+        IdCard = "";
+        CompanyName = "";
+        PhoneNumber = "";
+        Email = "";
+        Address = new();
+        Department = "";
+        Position = "";
+        Account = "";
+        Password = "";
+    }
+
     public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password)
     {
         Name = name;
@@ -43,10 +59,5 @@ public class AddUserDto
         Position = position;
         Account = account;
         Password = password;
-    }
-
-    public static implicit operator AddUserDto(UserDetailDto user)
-    {
-        return new AddUserDto(user.Name, user.DisplayName, user.Avatar, user.IdCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.Address, user.Department, user.Position, user.Account, user.Password);
     }
 }

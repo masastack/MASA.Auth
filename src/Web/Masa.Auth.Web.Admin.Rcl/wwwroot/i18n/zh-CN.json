@@ -30,6 +30,9 @@
   "Save": "保存",
   "Previous step": "上一步",
   "PCS": "个",
+  "Preview": "预览",
+  "Fill in more": "填写更多",
+  "Avatar": "头像",
 
   "Department": "部门",
   "Department location": "部门位置",
@@ -42,10 +45,16 @@
   "Relocate former department staff": "迁移原部门人员",
 
   "User": "用户",
+  "Name": "姓名",
   "Avatr": "头像",
   "User.DisplayName": "用户昵称",
   "Email": "邮箱地址",
   "PhoneNumber": "手机号码",
+  "IdCard": "身份证号",
+  "Account": "账号",
+  "Password": "密码",
+  "CompanyName": "公司名称",
+  "Address": "地区",
   "Failed to query userList data:": "查询用户列表数据失败:",
   "Failed to query userDetail data:": "查询用户详情数据失败:",
   "Add user data success": "新增用户数据成功",
@@ -56,6 +65,8 @@
   "Failed to authorize user:": "授权用户失败:",
   "Another": "换一个",
   "Give him a nickname!": "给他换个昵称吧",
+  "Basic Information": "基础信息",
+  "Detail Information": "详细信息",
 
   "ThirdPartyUser": "第三方用户",
   "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",
@@ -64,6 +75,7 @@
 
   "Staff": "员工",
   "JobNumber": "员工工号",
+  "Staff": "员工类型",
   "Failed to query staffList data:": "获取员工列表数据失败:",
   "Failed to query staffDetail data:": "获取员工详情数据失败",
   "Add staff data success": "新增员工数据成功",

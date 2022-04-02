@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class GetTeamsDto : Pagination
+public class GetTeamsDto : Pagination<GetTeamsDto>
 {
     public GetTeamsDto(int page, int pageSize)
     {

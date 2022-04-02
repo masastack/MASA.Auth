@@ -85,7 +85,7 @@ public partial class ThirdPartyIdp
         var request = new GetThirdPartyIdpIsDto(Page, PageSize, Search);
         var response = await ThirdPartyIdpService.GetThirdPartyIdpsAsync(request);
         ThirdPartyIdps = response.Items;
-        TotalPages = response.TotalPages;
+        TotalPages = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }

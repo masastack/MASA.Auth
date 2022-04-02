@@ -1,3 +1,62 @@
 ﻿@inherits AdminCompontentBase
 
-<AddOrUpdateStaffDialog @bind-Visible=StaffDialog StaffId=CurrentStaffId OnSubmitSuccess=GetStaffAsync />
+<div style="position: fixed;right: 48px;top: 140px;" class="block-center">
+   <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+        <PrependInnerContent>
+            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+        </PrependInnerContent>
+    </MTextField>
+    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddStaffDialog>
+        <MIcon Size=18>mdi-plus</MIcon>
+        <span class="ml-2">@T("Add")</span>
+    </MButton>
+</div>
+
+<MDataTable Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user">
+    <HeaderColContent Context="header">
+        <span class="text-btn">@header.Text</span>
+    </HeaderColContent>
+    <ItemColContent>
+        @switch (context.Header.Value)
+        {
+            case nameof(StaffDto.Avatar):
+                <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
+                    <MAvatar Size=48>
+                        <img src="@context.Item.Avatar" />
+                    </MAvatar>
+                    <div class="ml-4 block-center">
+                        <div class="text-body3 neutral-lighten-1--text">@context.Item.Name</div>
+                    </div>
+                </div>
+                break;
+            case (nameof(StaffDto.Department)):
+                <span class="text-body3">@context.Item.Department</span>
+                break;
+            case nameof(StaffDto.JobNumber):
+                <span class="text-body3">@context.Item.JobNumber</span>
+                break;
+            case (nameof(StaffDto.Position)):
+                <span class="text-body3">@context.Item.Position</span>
+                break;
+            case nameof(StaffDto.Enabled):
+                string color = context.Item.Enabled ? "sample-green" : "error";
+                <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
+                    <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
+                </MChip>
+                break;
+            case "Action":
+                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
+                <MIcon Small Color="neutral-lighten-2"  Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                break;
+            default:
+                 <span class="text-body3">@context.Value</span>
+                break;
+        }
+    </ItemColContent>
+    <FooterContent>
+        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize TotalPage=TotalPage Total=Total />
+    </FooterContent>
+</MDataTable>
+
+<AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
+<UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaffId OnSubmitSuccess=GetStaffAsync />

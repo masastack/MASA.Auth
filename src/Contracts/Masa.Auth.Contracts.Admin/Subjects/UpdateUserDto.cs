@@ -4,20 +4,12 @@ public class UpdateUserDto
 {
     public Guid Id { get; set; }
 
-    [RegularExpression("^[\u4e00-\u9fa5a-zA-Z-z]+$")]
-    [MinLength(1)]
-    [MaxLength(20)]
     public string Name { get; set; }
 
-    [Required]
-    [RegularExpression("^[\u4e00-\u9fa5a-zA-Z-z]+$")]
-    [MinLength(1)]
-    [MaxLength(20)]
     public string DisplayName { get; set; }
 
     public string Avatar { get; set; }
 
-    [RegularExpression("(^\\d{18}$)|(^\\d{15}$)", ErrorMessage = "IdCard format is incorrect")]
     public string IdCard { get; set; }
 
     public string CompanyName { get; set; }
@@ -26,7 +18,6 @@ public class UpdateUserDto
 
     public string PhoneNumber { get; set; }
 
-    [EmailAddress]
     public string Email { get; set; }
 
     public AddressValueDto Address { get; set; }
@@ -36,6 +27,21 @@ public class UpdateUserDto
     public string Position { get; set; }
 
     public string Password { get; set; }
+
+    public UpdateUserDto()
+    {
+        Name = "";
+        DisplayName = "";
+        Avatar = "";
+        IdCard = "";
+        CompanyName = "";
+        PhoneNumber = "";
+        Email = "";
+        Address = new();
+        Department = "";
+        Position = "";
+        Password = "";
+    }
 
     public UpdateUserDto(Guid id, string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password)
     {

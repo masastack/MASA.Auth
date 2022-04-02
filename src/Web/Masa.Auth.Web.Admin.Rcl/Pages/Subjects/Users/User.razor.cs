@@ -5,11 +5,11 @@ public partial class User
     private string? _name;
     private string? _email;
     private string? _phoneNumber;
-    private bool _enabled;
+    private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
 
-    public string Name
+    public string Search
     {
         get { return _name ?? ""; }
         set
@@ -39,7 +39,7 @@ public partial class User
         }
     }
 
-    public bool Enabled
+    public bool? Enabled
     {
         get { return _enabled; }
         set
@@ -108,7 +108,7 @@ public partial class User
         var request = new GetUsersDto(Page, PageSize, default, Enabled);
         var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
-        TotalPage = response.TotalPages;
+        TotalPage = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }
