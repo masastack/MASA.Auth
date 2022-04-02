@@ -23,13 +23,13 @@ public partial class AddSheet
         await ShowChanged.InvokeAsync(false);
     }
 
-    protected override void OnInitialized()
-    {
-        _teamDetailDto.TeamBasicInfo.PropertyChanged += (sender, args) => StateHasChanged();
-    }
+    //protected override void OnInitialized()
+    //{
+    //    _teamDetailDto.TeamBasicInfo.PropertyChanged += (sender, args) => StateHasChanged();
+    //}
 
-    public void Dispose()
-    {
-        _teamDetailDto.TeamBasicInfo.PropertyChanged -= (sender, args) => StateHasChanged();
-    }
+    //public void Dispose()
+    //{
+    //    _teamDetailDto.TeamBasicInfo.PropertyChanged -= (sender, args) => StateHasChanged();
+    //}
 }

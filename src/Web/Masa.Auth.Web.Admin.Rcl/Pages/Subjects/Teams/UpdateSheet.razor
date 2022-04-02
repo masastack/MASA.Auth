@@ -1,53 +1,38 @@
 ﻿@inherits AdminCompontentBase
 
 <Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
-    <MCard Class="mx-auto" MaxWidth="1200">
-        <MCardTitle Class="d-flex justify-center">
-            <MButtonGroup Dense Mandatory Borderless @bind-Value="_tab" Class="rounded-lg elevation-tab">
-                <MButton Ripple=false Value="1" Class="rounded-lg">
-                    @T("Basic information")
+    <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTab Dense Headers='new List<string>{T("Basic information"),T("Setup team admins"),T("Setup team members")}'>
+        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTabItem>
+            <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
+            <MCardActions class="d-flex align-center mb-6">
+                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                    @T("Delete")
                 </MButton>
-                <MButton Ripple=false Value="2" Class="rounded-lg">
-                    @T("Setup team admins")
+                <MSpacer />
+                <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</MButton>
+            </MCardActions>
+        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTabItem>
+        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTabItem>
+            <TeamAdmin @bind-Value="Dto.TeamAdmin" />
+            <MCardActions class="d-flex align-center mb-6">
+                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                    @T("Delete")
                 </MButton>
-                <MButton Ripple=false Value="3" Class="rounded-lg">
-                    @T("Setup team members")
+                <MSpacer />
+                <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
+                <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</MButton>
+            </MCardActions>
+        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTabItem>
+        <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTabItem>
+            <TeamMember @bind-Value="Dto.TeamMember" />
+            <MCardActions class="d-flex align-center  mb-6">
+                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                    @T("Delete")
                 </MButton>
-            </MButtonGroup>
-        </MCardTitle>
-        <MWindow @bind-Value="_tab" Reverse>
-            <MWindowItem Value="1">
-                <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
-                <MCardActions class="d-flex align-center mb-6">
-                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                        @T("Delete")
-                    </MButton>
-                    <MSpacer />
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</MButton>
-                </MCardActions>
-            </MWindowItem>
-            <MWindowItem Value="2">
-                <TeamAdmin @bind-Value="Dto.TeamAdmin" />
-                <MCardActions class="d-flex align-center mb-6">
-                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                        @T("Delete")
-                    </MButton>
-                    <MSpacer />
-                    <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</MButton>
-                </MCardActions>
-            </MWindowItem>
-            <MWindowItem Value="3">
-                <TeamMember @bind-Value="Dto.TeamMember" />
-                <MCardActions class="d-flex align-center  mb-6">
-                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                        @T("Delete")
-                    </MButton>
-                    <MSpacer />
-                    <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateMemberHandler">@T("Save")</MButton>
-                </MCardActions>
-            </MWindowItem>
-        </MWindow>
-    </MCard>
+                <MSpacer />
+                <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
+                <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateMemberHandler">@T("Save")</MButton>
+            </MCardActions>
+        </Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTabItem>
+    </Masa.Auth.Web.Admin.Rcl.Shared.Presets.ElevationTab>
 </Masa.Blazor.Presets.PDrawer>

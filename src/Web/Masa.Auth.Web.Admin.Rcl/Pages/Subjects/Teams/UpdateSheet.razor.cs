@@ -26,18 +26,6 @@ public partial class UpdateSheet
     [Parameter]
     public EventCallback<Guid> OnDelete { get; set; }
 
-    StringNumber _tab = 1;
-
-    protected override void OnInitialized()
-    {
-        Dto.TeamBasicInfo.PropertyChanged += (sender, args) => StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        Dto.TeamBasicInfo.PropertyChanged -= (sender, args) => StateHasChanged();
-    }
-
     public async Task OnUpdateBaseHandler()
     {
         if (OnUpdateBase.HasDelegate)
