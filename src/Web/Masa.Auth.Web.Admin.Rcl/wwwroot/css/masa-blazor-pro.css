@@ -1194,3 +1194,7 @@ tr:hover {
 .m-chip:not(.m-chip--active) {
     background: #f6f8fd !important;
 }
+
+.max-full-height{
+    max-height:100% !important;
+}

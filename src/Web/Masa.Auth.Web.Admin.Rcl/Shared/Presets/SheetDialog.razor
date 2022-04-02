@@ -1,0 +1,50 @@
+﻿<MBottomSheet ContentClass="full-height max-full-height elevation-0" @bind-Value=Value Width="@("90%")">
+    @if (HeaderContent is null)
+    {
+        <div @onclick="OnClose" class="d-flex align-center justify-space-between px-3" style="@($"height:{HeaderHeight}px;")">
+            <MIcon Color="@IconColor">
+                @Icon
+            </MIcon>
+            <label>@Title</label>
+            <MIcon OnClick="OnClose">mdi-close</MIcon>
+        </div>
+    }
+    else
+    {
+        @HeaderContent
+    }
+    <MSheet Class="full-height rounded-b-0" Style="max-height:100% !important;">
+        @ChildContent
+    </MSheet>
+</MBottomSheet>
+
+@code {
+    [Parameter]
+    public int HeaderHeight { get; set; } = 64;
+
+    [Parameter]
+    public string IconColor { get; set; } = "success";
+
+    [Parameter]
+    public string Icon { get; set; } = "mdi-circle";
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Value { get; set; } 
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? HeaderContent { get; set; }
+
+    private void OnClose()
+    {
+        ValueChanged.InvokeAsync(false);
+    }
+}

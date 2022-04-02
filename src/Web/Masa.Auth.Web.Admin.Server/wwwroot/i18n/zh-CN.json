@@ -107,5 +107,8 @@
   "Add role data success": "添加角色数据成功",
   "Failed to add role:": "添加角色数据失败:",
   "Edit role data success": "编辑角色数据成功",
-  "Failed to edit role": "编辑角色数据失败:"
+  "Failed to edit role": "编辑角色数据失败:",
+
+  "Api Permission": "API权限",
+  "Menu Permission": "前端权限"
 }

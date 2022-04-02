@@ -1,4 +1,4 @@
-﻿<div class="m-label--border">
+﻿<div class="@($"m-label--border {@Class}")" style="@Style">
     <fieldset>
     <legend>@Title</legend>
     @ChildContent
@@ -10,5 +10,11 @@
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
 }
