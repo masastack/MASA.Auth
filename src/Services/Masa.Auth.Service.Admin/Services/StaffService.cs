@@ -14,7 +14,7 @@ public class StaffService : ServiceBase
 
     private async Task<PaginationDto<StaffDto>> GetStaffsAsync([FromServices] IEventBus eventBus, GetStaffsDto staff)
     {
-        var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.StaffId, staff.Enabled);
+        var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -34,15 +34,15 @@ public class StaffService : ServiceBase
     }
 
     private async Task AddStaffAsync([FromServices] IEventBus eventBus,
-        [FromBody] AddStaffCommand createStaffCommand)
+        [FromBody] AddStaffDto staff)
     {
-        await eventBus.PublishAsync(createStaffCommand);
+        await eventBus.PublishAsync(new AddStaffCommand(staff));
     }
 
     private async Task UpdateStaffAsync([FromServices] IEventBus eventBus,
-        [FromBody] UpdateUserCommand updateUserCommand)
+        [FromBody] UpdateStaffDto staff)
     {
-        await eventBus.PublishAsync(updateUserCommand);
+        await eventBus.PublishAsync(new UpdateStaffCommand(staff));
     }
 
     private async Task RemoveStaffAsync([FromServices] IEventBus eventBus,

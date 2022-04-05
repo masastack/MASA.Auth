@@ -14,4 +14,10 @@ public class DepartmentStaff : AuditEntity<Guid, Guid>
     {
         StaffId = staffId;
     }
+
+    public DepartmentStaff(Guid departmentId, Guid staffId)
+    {
+        DepartmentId = departmentId;
+        StaffId = staffId;
+    }
 }

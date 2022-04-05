@@ -7,3 +7,4 @@ global using System.Reflection;
 global using System.ComponentModel.DataAnnotations;
 global using FluentValidation;
 global using System.Text.Json.Serialization;
+global using Masa.Auth.Contracts.Admin.Organizations;

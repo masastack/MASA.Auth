@@ -2,5 +2,5 @@
 
 public record AddUserCommand(AddUserDto User) : Command
 {
-
+    public Guid UserId { get; set; }
 }

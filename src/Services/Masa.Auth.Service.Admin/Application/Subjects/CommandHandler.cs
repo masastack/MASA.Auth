@@ -13,6 +13,8 @@ public class CommandHandler
         _staffDomainService = staffDomainService;
     }
 
+    #region User
+
     [EventHandler]
     public async Task AddUserAsync(AddUserCommand command)
     {
@@ -31,6 +33,7 @@ public class CommandHandler
         {
             user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.PhoneNumber, userDto.Email, userDto.Enabled, userDto.Department, userDto.Position, userDto.Address);
             await _userRepository.AddAsync(user);
+            command.UserId = user.Id;
         }
     }
 
@@ -70,19 +73,20 @@ public class CommandHandler
         await _userRepository.RemoveAsync(user);
     }
 
-    [EventHandler]
-    public async Task CreateStaffAsync(AddStaffCommand command)
-    {
-        //_staffDomainService.CreateStaff();
-        var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.JobNumber == staffDto.JobNumber);
-        if (staff is not null)
-            throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
+    #endregion
 
-        //Todo add or update user
-        //Todo add position
-        staff = new Staff(default, staffDto.JobNumber, staffDto.User.Name, default, staffDto.StaffType, staffDto.Enabled);
-        await _staffRepository.AddAsync(staff);
+    #region Staff
+
+    [EventHandler]
+    public async Task AddStaffAsync(AddStaffCommand command)
+    {
+        await _staffDomainService.AddStaffAsync(command.Staff);               
+    }
+
+    [EventHandler]
+    public async Task UpdateStaffAsync(UpdateStaffCommand command)
+    {
+        await _staffDomainService.UpdateStaffAsync(command.Staff);
     }
 
     [EventHandler]
@@ -95,4 +99,6 @@ public class CommandHandler
         }
         await _staffRepository.RemoveAsync(staff);
     }
+
+    #endregion
 }

@@ -2,8 +2,6 @@
 
 public class GetStaffsDto : Pagination<GetStaffsDto>
 {
-    public Guid StaffId { get; set; }
-
     public string Search { get; set; }
 
     public bool? Enabled { get; set; }

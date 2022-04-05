@@ -17,7 +17,7 @@ public class QueryHandler
     public async Task GetUsersAsync(UsersQuery query)
     {
         Expression<Func<User, bool>> condition = user => true;
-        if(query.Enabled is not null)
+        if (query.Enabled is not null)
             condition = condition.And(user => user.Enabled == query.Enabled);
 
         if (query.userId != Guid.Empty)
@@ -73,11 +73,11 @@ public class QueryHandler
     public async Task GetStaffsAsync(GetStaffsQuery query)
     {
         Expression<Func<Staff, bool>> condition = staff => true;
-        if(query.Enabled is not null)
+        if (query.Enabled is not null)
             condition = condition.And(s => s.Enabled == query.Enabled);
 
-        if (query.StaffId != Guid.Empty)
-            condition = condition.And(s => s.Id == query.StaffId);
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
 
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
@@ -91,7 +91,7 @@ public class QueryHandler
         });
 
         query.Result = new(staffs.Total, staffs.TotalPages, staffs.Result.Select(s =>
-           new StaffDto(s.Id, s.DepartmentStaff.Department.Name, s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName,s.User.Avatar, s.User.PhoneNumber, s.User.Email)
+           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
        ).ToList());
     }
 
@@ -112,7 +112,7 @@ public class QueryHandler
         var modifier = await _authDbContext.Set<Staff>().Select(s => new { Id = s.Id, Name = s.Name }).FirstAsync(s => s.Id == staff.Modifier);
         var teams = await _authDbContext.Set<TeamStaff>().Where(ts => ts.StaffId == query.StaffId).Select(ts => ts.TeamId).ToListAsync();
 
-        query.Result = new(staff.Id, staff.DepartmentStaff.DepartmentId, staff.PositionId, staff.JobNumber, staff.Enabled, staff.StaffType, teams, staff.User, creator.Name, modifier.Name, staff.CreationTime, staff.ModificationTime);
+        query.Result = new(staff.Id, staff.DepartmentStaffs.FirstOrDefault()?.DepartmentId ?? default, staff.PositionId, staff.JobNumber, staff.Enabled, staff.StaffType, teams, staff.User, creator.Name, modifier.Name, staff.CreationTime, staff.ModificationTime);
     }
 
     [EventHandler]

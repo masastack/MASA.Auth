@@ -16,9 +16,8 @@ public partial class UpdateStaffDialog
 
     private StaffDetailDto StaffDetail { get; set; } = new();
 
-    private UpdateStaffDto? _staff;
 
-    private UpdateStaffDto Staff => _staff ?? (_staff ?? StaffDetail);
+    private UpdateStaffDto Staff { get; set; } = new();
 
     private StaffService StaffService => AuthCaller.StaffService;
 
@@ -45,6 +44,7 @@ public partial class UpdateStaffDialog
     public async Task GetStaffDetailAsync()
     {
         StaffDetail = await StaffService.GetStaffDetailAsync(StaffId);
+        Staff = StaffDetail;
     }
 
     public async Task UpdateStaffAsync()

@@ -30,7 +30,7 @@
                         HideDetails="@("auto")"
                         Outlined
                         Items="@(GetEnumMap<StaffTypes>())"
-                        ItemText="map => map.Key"
+                        ItemText="map => T(map.Key)"
                         ItemValue="map => map.Value"
                         Label="@T("StaffType")">
                     </MSelect>

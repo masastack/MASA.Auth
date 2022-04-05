@@ -75,7 +75,9 @@
 
   "Staff": "员工",
   "JobNumber": "员工工号",
-  "Staff": "员工类型",
+  "StaffType": "员工类型",
+  "InternalStaff": "内部员工",
+  "ExternalStaff": "驻场员工",
   "Failed to query staffList data:": "获取员工列表数据失败:",
   "Failed to query staffDetail data:": "获取员工详情数据失败",
   "Add staff data success": "新增员工数据成功",
