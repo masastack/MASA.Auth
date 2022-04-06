@@ -2,7 +2,7 @@
 
 <MDialog Value="Visible" ValueChanged=UpdateVisible Width="800">
     <MCard Class="pa-6">
-        <MForm Model="Staff" EnableDataAnnotationsValidation>
+        <MForm Model="Staff" EnableValidation>
             <div class="d-flex">
                 <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
                     <MAvatar Size=80>
@@ -72,7 +72,7 @@
             <div class="d-flex">
                 <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
-                <MButton Color="primary" Class="small-button" OnClick=AddStaffAsync>@T("Save")</MButton>
+                <MButton Color="primary" Class="small-button" OnClick="async() => await AddStaffAsync(context)">@T("Save")</MButton>
             </div>
         </MForm>
     </MCard>

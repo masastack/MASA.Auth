@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <MDialog Value="Visible" ValueChanged=UpdateVisible Width="800">
-    <MForm Model=User EnableDataAnnotationsValidation>
+    <MForm Model=User EnableValidation>
         <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
@@ -68,15 +68,16 @@
                     </div>
                     <div class="d-flex">
                         <MSpacer></MSpacer>
-                        <MButton Outlined Color="primary" Class="small-button mr-6" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
-                        <MButton Color="primary" Class="small-button" OnClick="()=>Step=3">@T("Next step")</MButton>
+                        <MButton Outlined Color="primary" Class="small-button" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
+                        <MButton Color="primary" Class="small-button ml-6" OnClick="()=>Step=3">@T("Next step")</MButton>
+                        <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
                     </div>
                 </MStepperContent>
                 <MStepperContent Step="3">
                     <GlobalNavigationDialog />
                     <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
                     <MButton Text>@T("Preview")</MButton>
-                    <MButton OnClick=AddUserAsync Text>@T("Submit")</MButton>
+                    <MButton OnClick="async () => await AddUserAsync(context)" Text>@T("Submit")</MButton>
                 </MStepperContent>
             </MStepperItems>
         </MStepper>

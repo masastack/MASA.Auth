@@ -35,14 +35,18 @@ public partial class AddStaffDialog
         }
     }
 
-    public async Task AddStaffAsync()
+    public async Task AddStaffAsync(EditContext context)
     {
-        Loading = true;
-        await StaffService.AddStaffAsync(Staff);
-        OpenSuccessMessage(T("Add staff success"));
-        await OnSubmitSuccess.InvokeAsync();
-        await UpdateVisible(false);
-        Loading = false;
+        var success = context.Validate();
+        if (success)
+        {
+            Loading = true;
+            await StaffService.AddStaffAsync(Staff);
+            OpenSuccessMessage(T("Add staff success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
+            Loading = false;
+        }
     }
 }
 

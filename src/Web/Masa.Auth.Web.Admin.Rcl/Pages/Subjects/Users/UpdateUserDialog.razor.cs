@@ -46,14 +46,18 @@ public partial class UpdateUserDialog
         User = UserDetail;
     }
 
-    public async Task UpdateUserAsync()
+    public async Task UpdateUserAsync(EditContext context)
     {
-        Loading = true;
-        await UserService.UpdateUserAsync(User);
-        OpenSuccessMessage(T("Update user data success"));
-        await OnSubmitSuccess.InvokeAsync();
-        await UpdateVisible(false);
-        Loading = false;
+        var success = context.Validate();
+        if(success)
+        {
+            Loading = true;
+            await UserService.UpdateUserAsync(User);
+            OpenSuccessMessage(T("Update user data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
+            Loading = false;
+        }
     }
 
     public void OpenRemoveUserDialog()

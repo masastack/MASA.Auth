@@ -43,15 +43,19 @@ public partial class AddUserDialog
         }
     }
 
-    public async Task AddUserAsync()
+    public async Task AddUserAsync(EditContext context)
     {
-        Loading = true;
-        User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-        await UserService.AddUserAsync(User);
-        OpenSuccessMessage(T("Add staff data success"));
-        await OnSubmitSuccess.InvokeAsync();
-        await UpdateVisible(false);
-        Loading = false;
+        var success = context.Validate();
+        if (success)
+        {
+            Loading = true;
+            User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
+            await UserService.AddUserAsync(User);
+            OpenSuccessMessage(T("Add staff data success"));
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
+            Loading = false;
+        }
     }
 }
 

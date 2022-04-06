@@ -10,6 +10,8 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
         builder.Property(s => s.JobNumber).HasMaxLength(20);
         builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);
         builder.HasOne(s => s.Position).WithOne().HasForeignKey<Staff>(s => s.PositionId);
+        builder.HasMany(s => s.DepartmentStaffs).WithOne().HasForeignKey(ds => ds.StaffId);
+        builder.HasMany(s => s.TeamStaffs).WithOne().HasForeignKey(ts => ts.StaffId);
     }
 }
 

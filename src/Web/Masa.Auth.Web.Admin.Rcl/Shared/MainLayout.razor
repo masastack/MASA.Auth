@@ -16,26 +16,27 @@
     <Navigation />
 
     <MMain Class="fill-lighten-1" Style="padding-top:60px">
-        @if (GlobalConfig.PageMode == PageModes.Breadcrumb)
-        {
-            <div class="pa-6 max-width">
-                <Breadcrumb></Breadcrumb>
-                @Body
-            </div>
-        }
-        else if (GlobalConfig.PageMode == PageModes.PageTab)
-        {
-            <PageTabs>
-                @Body
-            </PageTabs>
-        }
-        else
-        {
-            <div class="pa-6 max-width">
-                @Body
-            </div>
-        }
-
+        <MErrorHandler>
+            @if (GlobalConfig.PageMode == PageModes.Breadcrumb)
+            {
+                <div class="pa-6 max-width">
+                    <Breadcrumb></Breadcrumb>
+                    @Body
+                </div>
+            }
+            else if (GlobalConfig.PageMode == PageModes.PageTab)
+            {
+                <PageTabs>
+                    @Body
+                </PageTabs>
+            }
+            else
+            {
+                <div class="pa-6 max-width">
+                    @Body
+                </div>
+            }
+        </MErrorHandler>
         <MLoading />
         <BMessages />
         <MConfirmDialog />
@@ -43,7 +44,6 @@
 </MApp>
 
 @code {
-
     protected override void OnInitialized()
     {
         GlobalConfig.OnPageModeChanged += base.StateHasChanged;

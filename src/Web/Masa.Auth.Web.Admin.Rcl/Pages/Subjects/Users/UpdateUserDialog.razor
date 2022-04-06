@@ -2,7 +2,7 @@
 
 <MDialog Value="Visible" ValueChanged=UpdateVisible Width="800">
     <MCard Class="pa-6">
-        <MForm Model=User EnableDataAnnotationsValidation>
+        <MForm Model=User EnableValidation>
             <div class="d-flex">
                 <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
                     <MAvatar Size=80>
@@ -111,7 +111,7 @@
                 <MSwitch @bind-Value="User.Enabled" Inset Class="label" Label="@(User.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
                 <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete User")</MButton>
-                <MButton Color="primary" Class="small-button" OnClick=UpdateUserAsync>@T("Save")</MButton>
+                <MButton Color="primary" Class="small-button" OnClick="async() => await UpdateUserAsync(context)">@T("Save")</MButton>
             </div>
         </MForm>
     </MCard>

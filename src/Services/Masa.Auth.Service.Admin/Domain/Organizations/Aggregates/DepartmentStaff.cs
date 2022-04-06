@@ -18,6 +18,5 @@ public class DepartmentStaff : AuditEntity<Guid, Guid>
     public DepartmentStaff(Guid departmentId, Guid staffId)
     {
         DepartmentId = departmentId;
-        StaffId = staffId;
     }
 }
