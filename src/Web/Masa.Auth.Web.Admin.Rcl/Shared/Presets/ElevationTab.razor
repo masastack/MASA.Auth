@@ -1,8 +1,8 @@
 ﻿<CascadingValue Value="this">
     @ChildContent
-    <MCard Class="mx-auto">
+    <MCard Class="@($"mx-auto d-flex flex-column {Class}")" Style="@Style">
         <MCardTitle Class="d-flex justify-center">
-            <MButtonGroup Dense=@Dense Mandatory Borderless Value="TabIndex" ValueChanged="(v)=> TabIndexChanged.InvokeAsync(v)" Class="rounded-lg elevation-tab">
+            <MButtonGroup Dense=@Dense Mandatory Borderless Value="TabIndex" ValueChanged="TabChanged" Class="rounded-lg elevation-tab">
                 @for (var i = 0; i < Headers.Count; i++)
                 {
                     var header = Headers[i];
@@ -12,7 +12,7 @@
                 }
             </MButtonGroup>
         </MCardTitle>
-        <MWindow @bind-Value="TabIndex" Reverse>
+        <MWindow @bind-Value="TabIndex" Reverse Class="flex-grow-1">
             @for (var i = 0; i < _elevationTabItems.Count; i++)
             {
                 var item = _elevationTabItems[i];
@@ -25,6 +25,12 @@
 </CascadingValue>
 
 @code {
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
     [EditorRequired]
     [Parameter]
     public List<string> Headers { get; set; } = new();
@@ -54,5 +60,17 @@
     public void RemoveTabItem(ElevationTabItem tabItem)
     {
         _elevationTabItems.Remove(tabItem);
+    }
+
+    private async Task TabChanged(StringNumber v)
+    {
+        if (TabIndexChanged.HasDelegate)
+        {
+            await TabIndexChanged.InvokeAsync(v);
+        }
+        else
+        {
+            TabIndex = v;
+        }
     }
 }

@@ -1,29 +1,43 @@
-﻿<MBottomSheet ContentClass="full-height max-full-height elevation-0" @bind-Value=Value Width="@("90%")">
-    @if (HeaderContent is null)
-    {
-        <div @onclick="OnClose" class="d-flex align-center justify-space-between px-3" style="@($"height:{HeaderHeight}px;")">
-            <MIcon Color="@IconColor">
-                @Icon
-            </MIcon>
-            <label>@Title</label>
-            <MIcon OnClick="OnClose">mdi-close</MIcon>
-        </div>
-    }
-    else
-    {
-        @HeaderContent
-    }
-    <MSheet Class="full-height rounded-b-0" Style="max-height:100% !important;">
-        @ChildContent
-    </MSheet>
+﻿<MBottomSheet ContentClass="m-sheet-dialog full-height max-full-height elevation-0" @bind-Value=Value Width="@Width">
+    <div class="d-flex flex-column full-height">
+        @if (HeaderContent is null)
+        {
+            <MHover>
+                <div @attributes="context.Attrs" @onclick="OnClose" class="m-sheet-dialog-header d-flex align-center justify-space-between px-3" style="@($"height:{HeaderHeight}px;")">
+                    <div class="d-flex align-center">
+                        <MIcon Size=16 Color="@(context.Hover?IconHoverColor:IconColor)">
+                            @Icon
+                        </MIcon>
+                        <label class="white--text ml-2" style="font-style: normal;font-weight: 700;font-size: 20px;line-height: 30px;">@Title</label>
+                    </div>
+                    <MIcon OnClick="OnClose">@(context.Hover?"mdi-close-circle":"mdi-close")</MIcon>
+                </div>
+            </MHover>
+        }
+        else
+        {
+            @HeaderContent
+        }
+        <MSheet Class="@($"m-sheet-dialog-content flex-grow-1 rounded-lg rounded-b-0 {ContentClass}")" Style="@ContentStyle">
+            @ChildContent
+        </MSheet>
+    </div>
 </MBottomSheet>
-
 @code {
+    [Parameter]
+    public string? ContentClass { get; set; }
+
+    [Parameter]
+    public string? ContentStyle { get; set; }
+
     [Parameter]
     public int HeaderHeight { get; set; } = 64;
 
     [Parameter]
     public string IconColor { get; set; } = "success";
+
+    [Parameter]
+    public string IconHoverColor { get; set; } = "#05CD99";
 
     [Parameter]
     public string Icon { get; set; } = "mdi-circle";
@@ -32,7 +46,10 @@
     public string Title { get; set; } = string.Empty;
 
     [Parameter]
-    public bool Value { get; set; } 
+    public bool Value { get; set; }
+
+    [Parameter]
+    public StringNumber Width { get; set; } = "90%";
 
     [Parameter]
     public EventCallback<bool> ValueChanged { get; set; }
@@ -43,8 +60,5 @@
     [Parameter]
     public RenderFragment? HeaderContent { get; set; }
 
-    private void OnClose()
-    {
-        ValueChanged.InvokeAsync(false);
-    }
+    private async Task OnClose() => await ValueChanged.InvokeAsync(false);
 }
