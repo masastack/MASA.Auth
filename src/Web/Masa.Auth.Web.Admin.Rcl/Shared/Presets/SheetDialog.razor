@@ -6,12 +6,12 @@
 
                 <div @onclick="OnClose" class="m-sheet-dialog-header d-flex align-center justify-space-between px-3" style="@($"height:{HeaderHeight}px;")">
                     <div class="d-flex align-center">
-                        <MIcon Size=16 Color="@(context.Hover?IconHoverColor:IconColor)">
+                        <MIcon Size=16 Color="@(IconColor)">
                             @Icon
                         </MIcon>
                         <label class="white--text ml-2" style="font-style: normal;font-weight: 700;font-size: 20px;line-height: 30px;">@Title</label>
                     </div>
-                    <MIcon OnClick="OnClose">@(context.Hover?"mdi-close-circle":"mdi-close")</MIcon>
+                    <MIcon Color="white" OnClick="OnClose">@(context.Hover?"mdi-close-circle":"mdi-close")</MIcon>
                 </div>
 
             }
@@ -37,10 +37,7 @@
     public int HeaderHeight { get; set; } = 64;
 
     [Parameter]
-    public string IconColor { get; set; } = "success";
-
-    [Parameter]
-    public string IconHoverColor { get; set; } = "#05CD99";
+    public string IconColor { get; set; } = "#05CD99";
 
     [Parameter]
     public string Icon { get; set; } = "mdi-circle";
