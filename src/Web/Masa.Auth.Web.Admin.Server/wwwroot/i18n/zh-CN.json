@@ -37,6 +37,7 @@
   "Tertiary Department": "三级部门",
   "Fourth Department": "四级部门",
   "Add Department": "新增部门",
+  "Copy Department": "复制部门",
   "Enter department name": "输入部门名称",
   "Relocate former department staff": "迁移原部门人员",
 
@@ -88,6 +89,7 @@
   "Team Name": "团队名称",
   "Team Type": "团队类型",
   "Create Team": "创建团队",
+  "Update Team": "编辑团队",
   "Failed to query teamList data:": "查询团队列表数据失败:",
   "Failed to query teamDetail data:": "查询团队详情数据失败:",
   "Add team data success": "添加团队数据成功",
