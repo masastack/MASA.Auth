@@ -12,7 +12,7 @@ public class AddUserDto
 
     public string CompanyName { get; set; }
 
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public string PhoneNumber { get; set; }
 

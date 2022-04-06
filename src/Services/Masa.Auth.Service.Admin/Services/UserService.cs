@@ -9,7 +9,7 @@
             MapGet(GetUserSelectAsync);
             MapPut(AddUserAsync);
             MapPost(UpdateUserAsync);
-            MapDelete(DeleteUserAsync);
+            MapDelete(RemoveUserAsync);
         }
 
         private async Task<PaginationDto<UserDto>> GetUsersAsync(IEventBus eventBus, GetUsersDto user)
@@ -45,7 +45,7 @@
             await eventBus.PublishAsync(new UpdateUserCommand(dto));
         }
 
-        private async Task DeleteUserAsync(
+        private async Task RemoveUserAsync(
             IEventBus eventBus,
             [FromBody] RemoveUserDto dto)
         {

@@ -1,12 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<MDialog Value="Visible" ValueChanged=UpdateVisible Width="800">
+<MBottomSheet Value="Visible" ValueChanged=UpdateVisible>
     <MCard Class="pa-6">
         <MForm Model="Staff" EnableValidation>
             <div class="d-flex">
                 <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
                     <MAvatar Size=80>
-                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/Staff.svg" />
+                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                     </MAvatar>
                     <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
@@ -25,20 +25,49 @@
                     <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
                 </MCol>
                 <MCol>
-                    <MSelect
-                        @bind-Value="Staff.StaffType"
-                        HideDetails="@("auto")"
-                        Outlined
-                        Items="@(GetEnumMap<StaffTypes>())"
-                        ItemText="map => T(map.Key)"
-                        ItemValue="map => map.Value"
-                        Label="@T("StaffType")">
+                    <MSelect @bind-Value="Staff.StaffType"
+                             HideDetails="@("auto")"
+                             Outlined
+                             Items="@(GetEnumMap<StaffTypes>())"
+                             ItemText="map => T(map.Key)"
+                             ItemValue="map => map.Value"
+                             Label="@T("StaffType")">
                     </MSelect>
                 </MCol>
             </MRow>
             <MRow Class="my-4">
                 <MCol>
-                    @*<MTextField Readonly @bind-Value="Staff.Teams" Label="@T("Team")" HideDetails="@("auto")" Outlined />*@
+                    <MAutocomplete @bind-Value="Staff.Teams"
+                                   Items="Teams"
+                                   Outlined
+                                   Height=55
+                                   Chips
+                                   Color="primary"
+                                   Label="Team"
+                                   HideDetails="@("auto")"
+                                   ItemText="t=>t.Name"
+                                   ItemValue="t=>t.Id"
+                                   Multiple>
+                        <SelectionContent Context="data">
+                            <MChip Close
+                                   OnCloseClick="()=>Staff.Teams.Remove(data.Item.Id)">
+                                <MAvatar Left>
+                                    <img src="@data.Item.Avatar" />
+                                </MAvatar>
+                                @data.Item.Name
+                            </MChip>
+                        </SelectionContent>
+                        <ItemContent Context="data">
+                            <MListItemAvatar>
+                                <img src="@data.Item.Avatar" />
+                            </MListItemAvatar>
+                            <MListItemContent>
+                                <MListItemTitle>
+                                    @data.Item.Name
+                                </MListItemTitle>
+                            </MListItemContent>
+                        </ItemContent>
+                    </MAutocomplete>
                 </MCol>
                 <MCol>
                     <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
@@ -49,7 +78,7 @@
                     <MTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
                 </MCol>
                 <MCol>
-                    @*<MTextField @bind-Value="Staff.DepartmentId" Label="@T("Department")" HideDetails="@("auto")" Outlined />*@
+                    <DepartmentSelect @bind-Value="Staff.DepartmentId" />
                 </MCol>
             </MRow>
             <MRow Class="my-4">
@@ -68,7 +97,7 @@
                     <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
                 </MCol>
             </MRow>
-           
+
             <div class="d-flex">
                 <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
@@ -77,4 +106,4 @@
         </MForm>
     </MCard>
 
-</MDialog>
+</MBottomSheet>

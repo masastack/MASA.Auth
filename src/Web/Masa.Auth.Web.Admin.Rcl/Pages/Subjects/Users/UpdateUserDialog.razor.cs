@@ -53,9 +53,9 @@ public partial class UpdateUserDialog
         {
             Loading = true;
             await UserService.UpdateUserAsync(User);
-            OpenSuccessMessage(T("Update user data success"));
-            await OnSubmitSuccess.InvokeAsync();
+            OpenSuccessMessage(T("Update user data success"));           
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }
@@ -73,6 +73,8 @@ public partial class UpdateUserDialog
         Loading = true;
         await UserService.RemoveUserAsync(UserId);
         OpenSuccessMessage(T("Delete user data success"));
+        await UpdateVisible(false);
+        await OnSubmitSuccess.InvokeAsync();        
         Loading = false;
     }
 }

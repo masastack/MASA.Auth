@@ -767,6 +767,9 @@
     color: #A3AED0 !important;
 }
 
+.button-group-active {
+    background: #ECE8FF !important;
+}
 /* pagetabs */
 /*组件样式全局修改end*/
 /*shop*/

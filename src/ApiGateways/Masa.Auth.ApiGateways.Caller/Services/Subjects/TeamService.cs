@@ -5,8 +5,8 @@ public class TeamService : ServiceBase
 
     List<TeamDto> Teams = new List<TeamDto>
     {
-        new TeamDto(Guid.NewGuid(), "Masa Stack", "", "Masa Stack Number One", "cyy", "", "cyy", DateTime.Now.AddYears(-1)),
-        new TeamDto(Guid.NewGuid(), "Lonsid", "", "Lonsid Number One", "zjc", "", "zjc", DateTime.Now.AddYears(-10)),
+        new TeamDto(Guid.NewGuid(), "Masa Stack", "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg", "Masa Stack Number One", "cyy", "", "cyy", DateTime.Now.AddYears(-1)),
+        new TeamDto(Guid.NewGuid(), "Lonsid", "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg", "Lonsid Number One", "zjc", "", "zjc", DateTime.Now.AddYears(-10)),
     };
 
     protected override string BaseUrl { get; set; }

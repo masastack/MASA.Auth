@@ -119,7 +119,7 @@ public class QueryHandler
     public async Task GetStaffSelectAsync(StaffSelectQuery query)
     {
         var staff = await _staffRepository.GetListAsync(u => u.JobNumber == query.Search);
-        //Todo es search
+
         query.Result = staff.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
     }
 }

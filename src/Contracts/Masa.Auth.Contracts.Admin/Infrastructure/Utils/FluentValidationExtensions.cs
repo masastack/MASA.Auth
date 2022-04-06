@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
+﻿using System.Text.RegularExpressions;
+
+namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class FluentValidationExtensions
 {
@@ -52,7 +54,7 @@ public static class FluentValidationExtensions
 
     public static IRuleBuilderOptions<T, string> Phone<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-        return ruleBuilder.Matches(RegularHelper.PHONE)
+        return ruleBuilder.Matches<T>(RegularHelper.PHONE)
                           .WithMessage("{PropertyName} format is incorrect");
     }
 
