@@ -9,7 +9,6 @@ public class AuthDbContext : IntegrationEventLogContext
 
     public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)
     {
-
     }
 
     protected override void OnModelCreatingExecuting(ModelBuilder builder)

@@ -9,9 +9,9 @@
     <MCol Md="@("auto")">
         <MCard style="width:300px;">
             <MCardTitle>
-                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.ClickedExtend>
+                <ClickedExtend>
                     @T("Department Management")
-                </Masa.Auth.Web.Admin.Rcl.Shared.Presets.ClickedExtend>
+                </ClickedExtend>
             </MCardTitle>
             <MCardText style="height:500px;">
                 <MTreeview @bind-Active="_active"
@@ -110,9 +110,9 @@
                             </HeaderColContent>
                             <TopContent>
                                 <div class="d-flex justify-space-between">
-                                    <Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField @bind-Value="@_getStaffsDto.Search" Style="max-width:341px;" 
+                                    <DefaultTextField @bind-Value="@_getStaffsDto.Name" Style="max-width:341px;" 
                                             Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify">
-                                    </Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField>
+                                    </DefaultTextField>
                                     <MButton class="rounded-pill primary" MinWidth="100">
                                         <MIcon Left Dark>
                                             mdi-plus
@@ -150,7 +150,6 @@
         </MRow>
     </MCol>
 </MRow>
-
 
 <OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
 <CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>
