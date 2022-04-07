@@ -1503,9 +1503,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("TeamMemberType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StaffId");
@@ -1687,13 +1684,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasIndex("Email");
 
                     b.HasIndex("IdCard")
-                        .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
                     b.HasIndex("Name");
 
                     b.HasIndex("PhoneNumber")
-                        .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("User", "subjects");
@@ -1766,6 +1761,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRole", "subjects");
                 });
@@ -2123,7 +2120,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
-                        .WithMany("Permissions")
+                        .WithMany("TeamPermissions")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2136,7 +2133,7 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamRole", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
-                        .WithMany("Roles")
+                        .WithMany("TeamRoles")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2152,13 +2149,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
-                        .WithMany("Staffs")
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", null)
+                        .WithMany("TeamStaffs")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyUser", b =>
@@ -2222,6 +2217,17 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.Navigation("Permission");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserRole", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -2304,11 +2310,16 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
                 {
-                    b.Navigation("Permissions");
+                    b.Navigation("TeamPermissions");
 
-                    b.Navigation("Roles");
+                    b.Navigation("TeamRoles");
 
-                    b.Navigation("Staffs");
+                    b.Navigation("TeamStaffs");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

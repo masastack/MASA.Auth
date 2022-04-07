@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
+	  <ProjectReference Include="..\..\Services\Masa.Auth.Service.Admin\Masa.Auth.Service.Admin.csproj" />
 	</ItemGroup>
 
 </Project>

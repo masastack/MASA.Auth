@@ -2,13 +2,6 @@
 
 public class TeamService : ServiceBase
 {
-
-    List<TeamDto> Teams = new List<TeamDto>
-    {
-        new TeamDto(Guid.NewGuid(), "Masa Stack", "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg", "Masa Stack Number One", "cyy", "", "cyy", DateTime.Now.AddYears(-1)),
-        new TeamDto(Guid.NewGuid(), "Lonsid", "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg", "Lonsid Number One", "zjc", "", "zjc", DateTime.Now.AddYears(-10)),
-    };
-
     protected override string BaseUrl { get; set; }
 
     internal TeamService(ICallerProvider callerProvider) : base(callerProvider)
@@ -16,32 +9,44 @@ public class TeamService : ServiceBase
         BaseUrl = "api/team/";
     }
 
-    public async Task<PaginationDto<TeamDto>> GetTeamsAsync(GetTeamsDto request)
+    public async Task<List<TeamDto>> ListAsync(string name = "")
     {
-        var skip = (request.Page - 1) * request.PageSize;
-        var teams = Teams.Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<TeamDto>(Teams.Count, 1, teams));
+       
+        return await GetAsync<List<TeamDto>>($"List?name={name}");
     }
 
-    public async Task<TeamDetailDto> GetTeamDetailAsync(Guid id)
+    public async Task<TeamDetailDto> GetAsync(Guid id)
     {
-        return await Task.FromResult(new TeamDetailDto());
+        return await GetAsync<TeamDetailDto>($"Get?id={id}");
     }
 
-    public async Task<List<TeamSelectDto>> TeamSelectAsync()
+    public async Task<List<TeamSelectDto>> SelectAsync(string name = "")
     {
-        return await Task.FromResult(Teams.Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar)).ToList());
+        return await GetAsync<List<TeamSelectDto>>($"Select?name={name}");
     }
 
-    public async Task AddTeamAsync(AddTeamDto request)
+    public async Task CreateAsync(AddTeamDto addTeamDto)
     {
-        Teams.Add(new TeamDto(Guid.NewGuid(), request.Name, request.Avatar.Name, request.Description, "", "", "", null));
-        await Task.CompletedTask;
+        await PostAsync($"Create", addTeamDto);
     }
 
-    public async Task UpdateTeamAsync(UpdateTeamDto request)
+    public async Task UpdateBasicInfo(UpdateTeamBasicInfoDto updateTeamBasicInfoDto)
     {
-        await Task.CompletedTask;
+        await PostAsync($"UpdateBasicInfo", updateTeamBasicInfoDto);
+    }
+
+    public async Task UpdateAdminPersonnel(UpdateTeamPersonnelDto updateTeamPersonnelDto)
+    {
+        await PostAsync($"UpdateAdminPersonnel", updateTeamPersonnelDto);
+    }
+
+    public async Task UpdateMemberPersonnel(UpdateTeamPersonnelDto updateTeamPersonnelDto)
+    {
+        await PostAsync($"UpdateMemberPersonnel", updateTeamPersonnelDto);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await DeleteAsync($"Remove?id={id}");
     }
 }
-

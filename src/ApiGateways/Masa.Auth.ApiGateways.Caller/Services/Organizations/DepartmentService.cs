@@ -21,7 +21,7 @@ public class DepartmentService : ServiceBase
 
     public async Task UpsertAsync(UpsertDepartmentDto upsertDepartmentDto)
     {
-        await PostAsync($"Add", upsertDepartmentDto);
+        await PostAsync($"Save", upsertDepartmentDto);
     }
 
     public async Task RemoveAsync(Guid departmentId)

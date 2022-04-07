@@ -4,12 +4,17 @@ public class CommandHandler
 {
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
+    readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
+    readonly TeamDomainService _teamDomainService;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, StaffDomainService staffDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
+        ITeamRepository teamRepository, TeamDomainService teamDomainService, StaffDomainService staffDomainService)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;
+        _teamRepository = teamRepository;
+        _teamDomainService = teamDomainService;
         _staffDomainService = staffDomainService;
     }
 
@@ -113,6 +118,58 @@ public class CommandHandler
             throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
+    }
+
+    #endregion
+
+    #region Team
+
+    [EventHandler]
+    public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
+    {
+        var dto = addTeamCommand.AddTeamDto;
+        Team team = new Team(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        await _teamRepository.AddAsync(team);
+        await _teamRepository.UnitOfWork.SaveChangesAsync();
+
+        await _teamDomainService.SetTeamAdminAsync(team, dto.AdminStaffs, dto.AdminRoles, dto.AdminPermissions);
+        await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
+    }
+
+    [EventHandler]
+    public async Task UpdateTeamBasicInfoAsync(UpdateTeamBasicInfoCommand updateTeamBasicInfoCommand)
+    {
+        var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
+        var team = await _teamRepository.GetByIdAsync(dto.Id);
+        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        await _teamRepository.UpdateAsync(team);
+    }
+
+    [EventHandler]
+    public async Task UpdateTeamAdminAsync(UpdateTeamPersonnelCommand updateTeamPersonnelCommand)
+    {
+        var dto = updateTeamPersonnelCommand.UpdateTeamPersonnelDto;
+        var team = await _teamRepository.GetByIdAsync(dto.Id);
+        if (updateTeamPersonnelCommand.MemberType == TeamMemberTypes.Admin)
+        {
+            await _teamDomainService.SetTeamAdminAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
+        }
+        else
+        {
+            await _teamDomainService.SetTeamMemberAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
+        }
+    }
+
+
+    [EventHandler]
+    public async Task RemoveTeamAsync(RemoveTeamCommand removeTeamCommand)
+    {
+        var team = await _teamRepository.GetByIdAsync(removeTeamCommand.TeamId);
+        if (team.TeamStaffs.Any())
+        {
+            throw new UserFriendlyException("the team has staffs can`t delete");
+        }
+        await _teamRepository.RemoveAsync(team);
     }
 
     #endregion

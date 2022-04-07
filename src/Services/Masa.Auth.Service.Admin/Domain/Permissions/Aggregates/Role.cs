@@ -16,6 +16,10 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<RoleRelation> Roles => roles;
 
+    public Role(string name, string description) : this(name, description, true)
+    {
+    }
+
     public Role(string name, string description, bool enabled)
     {
         Name = name;
@@ -25,6 +29,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
     {
+        roles.Clear();
         roles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
     }
 

@@ -14,7 +14,7 @@ public partial class TeamSelect
 
     protected override async Task OnInitializedAsync()
     {
-        Teams = await TeamService.TeamSelectAsync();
+        Teams = await TeamService.SelectAsync();
     }
 }
 

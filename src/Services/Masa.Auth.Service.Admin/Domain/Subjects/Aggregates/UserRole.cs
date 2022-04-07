@@ -2,13 +2,12 @@
 
 public class UserRole : AuditEntity<Guid, Guid>
 {
-    public Guid UserId { get; set; }
+    public User User { get; set; } = null!;
 
     public Guid RoleId { get; set; }
 
-    public UserRole(Guid userId, Guid roleId)
+    public UserRole(Guid roleId)
     {
-        UserId = userId;
         RoleId = roleId;
     }
 }

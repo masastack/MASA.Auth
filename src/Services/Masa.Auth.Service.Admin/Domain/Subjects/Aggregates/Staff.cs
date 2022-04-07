@@ -51,14 +51,16 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     public void AddDepartmentStaff(Guid departmentId)
     {
+        _departmentStaffs.Clear();
         _departmentStaffs.Add(new DepartmentStaff(departmentId, Guid.Empty));
     }
 
     public void AddTeamStaff(List<Guid> teams)
     {
-        foreach(var teamId in teams)
+        _teamStaffs.Clear();
+        foreach (var teamId in teams)
         {
-            _teamStaffs.Add(new TeamStaff(teamId,default,UserId,TeamMemberTypes.Member));
+            _teamStaffs.Add(new TeamStaff(teamId, default,TeamMemberTypes.Member));
         }
     }
 }

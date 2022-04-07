@@ -2,5 +2,5 @@
 
 public interface ITeamRepository : IRepository<Team, Guid>
 {
-
+    Task<Team> GetByIdAsync(Guid id);
 }
