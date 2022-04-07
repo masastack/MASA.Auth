@@ -14,7 +14,7 @@ public class StaffService : ServiceBase
 
     private async Task<PaginationDto<StaffDto>> GetStaffsAsync([FromServices] IEventBus eventBus, GetStaffsDto staff)
     {
-        var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled);
+        var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled, staff.DepartmentId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

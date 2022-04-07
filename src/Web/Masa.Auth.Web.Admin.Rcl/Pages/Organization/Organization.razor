@@ -110,10 +110,10 @@
                             </HeaderColContent>
                             <TopContent>
                                 <div class="d-flex justify-space-between">
-                                    <Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField @bind-Value="@_getStaffsDto.Search" Style="max-width:341px;" 
-                                            Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify">
-                                    </Masa.Auth.Web.Admin.Rcl.Shared.Default.DefaultTextField>
-                                    <MButton class="rounded-pill primary" MinWidth="100">
+                                    <DefaultTextField @bind-Value="@_getStaffsDto.Search" Style="max-width:341px;" 
+                                            Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify" OnKeyDown="EnterSearch">
+                                    </DefaultTextField>
+                                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_addStaff=true">
                                         <MIcon Left Dark>
                                             mdi-plus
                                         </MIcon>
@@ -133,7 +133,7 @@
                                         </div>
                                         break;
                                     case "Action":
-                                        <MIcon Small>mdi-pencil</MIcon>
+                                        <MIcon Small OnClick="()=>UpdateStaff(context.Item.Id)">mdi-pencil</MIcon>
                                         break;
                                     default:
                                         @context.Value
@@ -154,3 +154,7 @@
 
 <OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
 <CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>
+
+
+<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync"/>
+<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.UpdateStaffDialog @bind-Visible=_updateStaff StaffId=_currentStaffId OnSubmitSuccess="LoadStaffsAsync"/>

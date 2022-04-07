@@ -15,8 +15,9 @@ public class StaffService : ServiceBase
         {
             ["pageSize"] = request.PageSize.ToString(),
             ["page"] = request.Page.ToString(),
-            ["search"] = request.Search.ToString(),
+            ["search"] = request.Search ?? "",
             ["enabled"] = request.Enabled?.ToString() ?? "",
+            ["departmentId"] = request.DepartmentId.ToString()
         };
         return await GetAsync<PaginationDto<StaffDto>>(nameof(GetStaffsAsync), paramters);
     }

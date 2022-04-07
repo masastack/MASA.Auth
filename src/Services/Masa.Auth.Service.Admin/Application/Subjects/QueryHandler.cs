@@ -90,6 +90,14 @@ public class QueryHandler
         if (string.IsNullOrEmpty(query.Search) is false)
             condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
 
+        if (query.DepartmentId != Guid.Empty)
+        {
+            var staffIds = _authDbContext.Set<DepartmentStaff>()
+                .Where(ds => ds.DepartmentId == query.DepartmentId)
+                .Select(ds => ds.StaffId);
+            condition = condition.And(s => staffIds.Contains(s.Id));
+        }
+
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
             Page = query.Page,
