@@ -1503,6 +1503,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("TeamMemberType")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("StaffId");
@@ -2154,6 +2157,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyUser", b =>

@@ -1,10 +1,10 @@
 ﻿@inherits AdminCompontentBase
 
 
-<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
-    <MCard Class="mx-auto">
-        <MWindow @bind-Value="_step">
-            <MWindowItem Value="1">
+<SheetDialog Value=Show Title="@T("Copy Department")" ValueChanged="ShowChanged" ContentStyle="padding-right:228px;padding-left:228px;">
+    <MWindow @bind-Value="_step" Class="full-height">
+        <MWindowItem Value="1" Class="full-height">
+            <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText>
                     <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></MTextField>
                     <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
@@ -18,9 +18,10 @@
                 <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="NextStep">@T("Next step")</MButton>
                 </MCardActions>
-            </MWindowItem>
-
-            <MWindowItem Value="2">
+            </MCard>
+        </MWindowItem>
+        <MWindowItem Value="2" Class="full-height">
+            <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText>
                     <MTextField class="mx-auto text-h5 neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
                     <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department location")"
@@ -81,8 +82,7 @@
                     <MButton class="rounded-pill" Outlined MinWidth="100" OnClick="()=> _step = 1 ">@T("Previous step")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</MButton>
                 </MCardActions>
-            </MWindowItem>
-        </MWindow>
-    </MCard>
-
-</Masa.Blazor.Presets.PDrawer>
+            </MCard>
+        </MWindowItem>
+    </MWindow>
+</SheetDialog>

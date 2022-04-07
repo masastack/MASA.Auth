@@ -13,8 +13,7 @@
   <ItemGroup>
     <Content Include="Shared\Presets\readme.md" />
   </ItemGroup>
-
-
+	
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
