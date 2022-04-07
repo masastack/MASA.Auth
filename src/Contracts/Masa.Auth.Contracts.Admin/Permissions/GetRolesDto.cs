@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Permissions;
 
-public class GetRolesDto : Pagination
+public class GetRolesDto : Pagination<GetRolesDto>
 {
     public string Search { get; set; }
 

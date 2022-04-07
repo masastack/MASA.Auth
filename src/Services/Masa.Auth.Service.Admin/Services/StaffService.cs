@@ -4,36 +4,51 @@ public class StaffService : ServiceBase
 {
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
-        MapGet(ListAsync);
-        MapGet(PaginationAsync);
-        MapPost(CreateAsync);
-        MapDelete(DeleteAsync);
+        MapGet(GetStaffsAsync);
+        MapGet(GetStaffDetailAsync);
+        MapGet(GetStaffSelectAsync);
+        MapPut(AddStaffAsync);
+        MapPost(UpdateStaffAsync);
+        MapDelete(RemoveStaffAsync);
     }
 
-    private async Task CreateAsync([FromServices] IEventBus eventBus,
-        [FromBody] AddStaffCommand createStaffCommand)
+    private async Task<PaginationDto<StaffDto>> GetStaffsAsync([FromServices] IEventBus eventBus, GetStaffsDto staff)
     {
-        await eventBus.PublishAsync(createStaffCommand);
-    }
-
-    private async Task<List<StaffSelectDto>> ListAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
-    {
-        var query = new StaffListQuery(name);
+        var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<PaginationDto<StaffDto>> PaginationAsync([FromServices] IEventBus eventBus, GetStaffsDto options)
+    private async Task<StaffDetailDto> GetStaffDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
-        var query = new StaffPaginationQuery(options.Page, options.PageSize, options.Name, options.DepartmentId);
+        var query = new StaffDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task DeleteAsync([FromServices] IEventBus eventBus,
-        [FromQuery] Guid id)
+    private async Task<List<StaffSelectDto>> GetStaffSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
     {
-        var deleteCommand = new RemoveStaffCommand(id);
+        var query = new StaffSelectQuery(name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task AddStaffAsync([FromServices] IEventBus eventBus,
+        [FromBody] AddStaffDto staff)
+    {
+        await eventBus.PublishAsync(new AddStaffCommand(staff));
+    }
+
+    private async Task UpdateStaffAsync([FromServices] IEventBus eventBus,
+        [FromBody] UpdateStaffDto staff)
+    {
+        await eventBus.PublishAsync(new UpdateStaffCommand(staff));
+    }
+
+    private async Task RemoveStaffAsync([FromServices] IEventBus eventBus,
+        [FromBody] RemoveStaffDto staff)
+    {
+        var deleteCommand = new RemoveStaffCommand(staff);
         await eventBus.PublishAsync(deleteCommand);
     }
 }

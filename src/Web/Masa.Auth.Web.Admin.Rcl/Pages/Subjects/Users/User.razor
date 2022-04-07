@@ -1,30 +1,42 @@
 ﻿@inherits AdminCompontentBase
 
-<MDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user ml-2 table-border-none">
+<div style="position: fixed;right: 48px;top: 140px;" class="block-center">
+   <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+        <PrependInnerContent>
+            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+        </PrependInnerContent>
+    </MTextField>
+    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddUserDialog>
+        <MIcon Size=18>mdi-plus</MIcon>
+        <span class="ml-2">@T("Add")</span>
+    </MButton>
+</div>
+
+<MDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
     <HeaderColContent Context="header">
-        <span class="text-subtitle">@header.Text</span>
+        <span class="text-btn">@header.Text</span>
     </HeaderColContent>
     <ItemColContent>
         @switch (context.Header.Value)
         {
             case nameof(UserDto.Avatar):
-                <div class="hover-pointer d-flex my-2" @onclick="()=> OpenUpdateUserDialog(context.Item)">
-                    <MAvatar Size=48 Class="mt-1">
-                        <MImage Contain Src="@context.Item.Avatar"></MImage>
+                <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateUserDialog(context.Item)">
+                    <MAvatar Size=48>
+                        <img src="@context.Item.Avatar" />
                     </MAvatar>
-                    <div class="ml-4">
-                        <div class="text-subtitle">@context.Item.Name</div>
+                    <div class="ml-4 block-center">
+                        <div class="text-body3 neutral-lighten-1--text">@context.Item.Name</div>
                     </div>
                 </div>
                 break;
             case (nameof(UserDto.Email)):
-                <span>@context.Item.Email</span>
+                <span class="text-body3">@context.Item.Email</span>
                 break;
             case nameof(UserDto.PhoneNumber):
-                <span>@context.Item.PhoneNumber</span>
+                <span class="text-body3">@context.Item.PhoneNumber</span>
                 break;
             case (nameof(UserDto.CreationTime)):
-                <span>@context.Item.CreationTime.ToString(T("$DateTimeFormat"));</span>
+                <span class="text-body3">@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</span>
                 break;
             case nameof(UserDto.Enabled):
                 string color = context.Item.Enabled ? "sample-green" : "error";
@@ -33,15 +45,19 @@
                 </MChip>
                 break;
             case "Action":
-                <MIcon Small OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
-                <MIcon Small Class="ml-7" OnClick="()=> OpenAddUserDialog()">mdi-shield-half-full</MIcon>
+                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
+                <MIcon Small Color="neutral-lighten-2"  Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
                 break;
             default:
-                 <span>@context.Value</span>
+                 <span class="text-body3">@context.Value</span>
                 break;
         }
     </ItemColContent>
+    <FooterContent>
+        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize TotalPage=TotalPage Total=Total />
+    </FooterContent>
 </MDataTable>
 
-<AddOrUpdateUserDialog UserId=CurrentUserId @bind-Visible="UserDialogVisible" OnSubmitSuccess=GetUsersAsync />
+<AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
+<UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />

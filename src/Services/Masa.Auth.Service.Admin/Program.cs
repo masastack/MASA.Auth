@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Masa.Utils.Exceptions.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -84,6 +86,19 @@ app.MigrateDbContext<AuthDbContext>((context, services) =>
     }
     context.Set<Department>().Add(new Department("MasaStack", "MasaStack Root Department"));
     context.SaveChanges();
+});
+
+app.UseMasaExceptionHandling(opt =>
+{
+    opt.CustomExceptionHandler = exception =>
+    {
+        Exception friendlyException = exception;
+        if (exception is ValidationException validationException)
+        {
+            friendlyException = new UserFriendlyException(validationException.Errors.Select(err => err.ToString()).FirstOrDefault()!);
+        }
+        return (friendlyException, false);
+    };
 });
 
 // Configure the HTTP request pipeline.

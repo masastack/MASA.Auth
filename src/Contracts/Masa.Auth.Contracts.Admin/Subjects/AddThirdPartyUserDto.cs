@@ -10,16 +10,17 @@ public class AddThirdPartyUserDto
 
     public AddUserDto User { get; set; }
 
+    public AddThirdPartyUserDto()
+    {
+        ThridPartyIdentity = "";
+        User = new();
+    }
+
     public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, AddUserDto user)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
         User = user;
-    }
-
-    public static implicit operator AddThirdPartyUserDto(ThirdPartyUserDetailDto thridPartyUser)
-    {
-        return new AddThirdPartyUserDto(thridPartyUser.ThirdPartyIdpId, thridPartyUser.Enabled, thridPartyUser.ThridPartyIdentity, thridPartyUser.User);
     }
 }

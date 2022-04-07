@@ -44,7 +44,7 @@
 
         public string GetPictureUrl()
         {
-            return $"./img/apps-eCommerce/{PictureFileName}";
+            return $"./_content/Masa.Auth.Web.Admin.Rcl/img/apps-eCommerce/{PictureFileName}";
         }
     }
 }

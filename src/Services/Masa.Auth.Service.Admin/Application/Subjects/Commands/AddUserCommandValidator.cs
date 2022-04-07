@@ -2,8 +2,5 @@
 
 public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
 {
-    public AddUserCommandValidator()
-    {
-
-    }
+    public AddUserCommandValidator() => RuleFor(command => command.User).SetValidator(new AddUserValidator());
 }

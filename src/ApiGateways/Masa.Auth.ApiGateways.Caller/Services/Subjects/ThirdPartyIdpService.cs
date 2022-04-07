@@ -9,9 +9,11 @@ public class ThirdPartyIdpService : ServiceBase
         new ThirdPartyIdpDto(Guid.NewGuid(), "QQ", "qq", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/qq", "", default, DateTime.Now, null),
     };
 
+    protected override string BaseUrl { get; set; }
+
     internal ThirdPartyIdpService(ICallerProvider callerProvider) : base(callerProvider)
     {
-
+        BaseUrl = "api/thirdPartyIdp/";
     }
 
     public async Task<PaginationDto<ThirdPartyIdpDto>> GetThirdPartyIdpsAsync(GetThirdPartyIdpIsDto request)

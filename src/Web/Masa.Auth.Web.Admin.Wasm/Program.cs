@@ -1,9 +1,4 @@
-using Masa.Auth.Web.Admin.Rcl;
-using Masa.Auth.Web.Admin.Rcl.Global;
 using Masa.Auth.Web.Admin.WebAssembly;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 

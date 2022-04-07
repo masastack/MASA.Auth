@@ -8,8 +8,6 @@ public class StaffDetailDto
 
     public Guid PositionId { get; set; }
 
-    public string Position { get; set; }
-
     public string JobNumber { get; set; }
 
     public bool Enabled { get; private set; }
@@ -20,25 +18,37 @@ public class StaffDetailDto
 
     public UserDetailDto User { get; set; }
 
+    public string Creator { get; set; }
+
+    public string Modifier { get; set; }
+
+    public DateTime CreationTime { get; set; }
+
+    public DateTime? ModificationTime { get; set; }
+
     public StaffDetailDto()
     {
-        Position = "";
         JobNumber = "";
         TeamIds = new();
         User = new();
+        Creator = "";
+        Modifier = "";
     }
 
-    public StaffDetailDto(Guid id, Guid departmentId, Guid positionId, string position, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user)
+    public StaffDetailDto(Guid id, Guid departmentId, Guid positionId, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user, string creator, string modifier, DateTime creationTime, DateTime? modificationTime)
     {
         Id = id;
         DepartmentId = departmentId;
         PositionId = positionId;
-        Position = position;
         JobNumber = jobNumber;
         Enabled = enabled;
         StaffType = staffType;
         TeamIds = teamIds;
         User = user;
+        Creator = creator;
+        Modifier = modifier;
+        CreationTime = creationTime;
+        ModificationTime = modificationTime;
     }
 }
 
