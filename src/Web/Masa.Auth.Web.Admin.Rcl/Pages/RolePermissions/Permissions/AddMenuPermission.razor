@@ -1,0 +1,52 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value=Show Title="@T("Add Menu Permission")" ValueChanged="ShowChanged">
+    <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
+        <MCardText>
+            <MRow>
+                <MCol Md=12>
+                    <DefaultTextField Label="@T("Permission Name")" TValue="string"></DefaultTextField>
+                </MCol>
+                <MCol Md=6>
+                    <MSelect @bind-Value="@value3"
+                             Label="@T("Pre Code Select")"
+                             Outlined Dense HideDetails="@("auto")"
+                             Items="@items"
+                             ItemText="u => u.Label"
+                             ItemValue="u => u.Value">
+                    </MSelect>
+                </MCol>
+                <MCol Md=6>
+                    <DefaultTextField Label="@T("Code")" TValue="string" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                    </DefaultTextField>
+                </MCol>
+                <MCol Md=12>
+                    <DefaultTextField Label="@T("Permission Type")" TValue="string"></DefaultTextField>
+                </MCol>
+                <MCol Md=12>
+                    <DefaultTextField Label="@T("Permission Url")" TValue="string"></DefaultTextField>
+                </MCol>
+                <MCol Md=12>
+                    <DefaultTextField Label="@T("Icon Code")" TValue="string">
+                        <PrependContent>
+                            <div class="d-flex align-center mt-n1">
+                                <MIcon Size=30>
+                                    mdi-image
+                                </MIcon>
+                            </div>
+                        </PrependContent>
+                    </DefaultTextField>
+                </MCol>
+                <MCol Md=12>
+                    <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                    </MTextarea>
+                </MCol>
+            </MRow>
+        </MCardText>
+        <MCardActions class="d-flex align-center mb-12 px-6">
+            <MSwitch @bind-Value="_enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+            <MSpacer />
+            <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
+        </MCardActions>
+    </MCard>
+</SheetDialog>

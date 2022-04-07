@@ -3,6 +3,7 @@
 public partial class Index
 {
     StringNumber _tab = 0;
+    bool _enabled = false;
     List<PermissionDto> _menuPermissions = new();
     List<PermissionDto> _apiPermissions = new();
     List<Guid> _menuActive = new List<Guid>();
@@ -15,7 +16,7 @@ public partial class Index
     {
         "foo", "bar", "fizz", "buzz"
     };
-    bool _isShow = true;
+    bool _addApiPermission, _addMenuPermission;
 
     private string value3 = "";
 

@@ -3,7 +3,6 @@
         <div @attributes="context.Attrs" style="@($"padding-right:{Padding}px;padding-left:{Padding}px")" class="m-sheet-dialog-overlay d-flex flex-column full-height" @onclick="OnClose">
             @if (HeaderContent is null)
             {
-
                 <div @onclick="OnClose" class="m-sheet-dialog-header d-flex align-center justify-space-between px-3" style="@($"height:{HeaderHeight}px;")">
                     <div class="d-flex align-center">
                         <MIcon Size=16 Color="@(IconColor)">
@@ -13,7 +12,6 @@
                     </div>
                     <MIcon Color="white" OnClick="OnClose">@(context.Hover?"mdi-close-circle":"mdi-close")</MIcon>
                 </div>
-
             }
             else
             {
@@ -21,8 +19,8 @@
             }
         </div>
     </MHover>
-    <MSheet Class="@($"m-sheet-dialog-content flex-grow-1 rounded-lg rounded-b-0 {ContentClass}")" 
-        Style="@($"position: absolute;top: 0;left: {Padding}px;right: {Padding}px;top: {HeaderHeight}px;height: calc(100% - {HeaderHeight}px);width: calc(100% - {2*Padding}px); {ContentStyle}")">
+    <MSheet Class="@($"m-sheet-dialog-content flex-grow-1 rounded-lg rounded-b-0 {ContentClass}")"
+            Style="@($"position: absolute;top: 0;left: {Padding}px;right: {Padding}px;top: {HeaderHeight}px;height: calc(100% - {HeaderHeight}px);width: calc(100% - {2*Padding}px); {ContentStyle}")">
         @ChildContent
     </MSheet>
 </MBottomSheet>
