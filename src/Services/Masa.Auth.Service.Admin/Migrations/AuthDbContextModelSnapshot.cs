@@ -1505,6 +1505,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StaffId");
+
                     b.HasIndex("TeamId");
 
                     b.ToTable("TeamStaff", "subjects");
@@ -1631,6 +1633,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Creator")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1669,18 +1675,20 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email");
 
                     b.HasIndex("IdCard")
-                        .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
                     b.HasIndex("Name");
 
                     b.HasIndex("PhoneNumber")
-                        .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("User", "subjects");
@@ -1808,17 +1816,19 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.DepartmentStaff", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Department", null)
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Department", "Department")
                         .WithMany("DepartmentStaffs")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("DepartmentStaffs")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Department");
 
                     b.Navigation("Staff");
                 });
@@ -2122,15 +2132,23 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamRole", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", null)
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
                         .WithMany("TeamRoles")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamStaff", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", null)
+                        .WithMany("TeamStaffs")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", null)
                         .WithMany("TeamStaffs")
                         .HasForeignKey("TeamId")
@@ -2281,6 +2299,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Properties");
 
                     b.Navigation("UserClaims");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
+                {
+                    b.Navigation("DepartmentStaffs");
+
+                    b.Navigation("TeamStaffs");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>

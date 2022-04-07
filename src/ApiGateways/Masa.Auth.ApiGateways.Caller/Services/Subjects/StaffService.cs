@@ -2,51 +2,47 @@
 
 public class StaffService : ServiceBase
 {
-    string _baseUrl = "api/staff";
-
-    List<StaffDto> Staffs => new List<StaffDto>()
-    {
-
-    };
+    protected override string BaseUrl { get; set; }
 
     internal StaffService(ICallerProvider callerProvider) : base(callerProvider)
     {
-
+        BaseUrl = "api/staff/";
     }
 
-    public async Task<PaginationDto<StaffDto>> GetStaffPaginationAsync(GetStaffsDto getStaffsDto)
+    public async Task<PaginationDto<StaffDto>> GetStaffsAsync(GetStaffsDto request)
     {
-        var paramters = new Dictionary<string, string>()
+        var paramters = new Dictionary<string, string>
         {
-            { nameof(GetStaffsDto.Page),getStaffsDto.Page.ToString() },
-            { nameof(GetStaffsDto.PageSize),getStaffsDto.PageSize.ToString() },
-            { nameof(GetStaffsDto.Email),getStaffsDto.Email.ToString() },
-            { nameof(GetStaffsDto.PhoneNumber),getStaffsDto.PhoneNumber.ToString() },
-            { nameof(GetStaffsDto.DepartmentId),getStaffsDto.DepartmentId.ToString() },
-            { nameof(GetStaffsDto.Name),getStaffsDto.Name.ToString() }
+            ["pageSize"] = request.PageSize.ToString(),
+            ["page"] = request.Page.ToString(),
+            ["search"] = request.Search.ToString(),
+            ["enabled"] = request.Enabled?.ToString() ?? "",
         };
-        return await GetAsync<PaginationDto<StaffDto>>($"{_baseUrl}/Pagination", paramters);
+        return await GetAsync<PaginationDto<StaffDto>>(nameof(GetStaffsAsync), paramters);
     }
 
     public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
     {
-        return await Task.FromResult(new StaffDetailDto());
+        var paramters = new Dictionary<string, string>
+        {
+            ["id"] = id.ToString(),
+        };
+        return await GetAsync<StaffDetailDto>(nameof(GetStaffDetailAsync), paramters);
     }
 
     public async Task AddStaffAsync(AddStaffDto request)
     {
-        await Task.CompletedTask;
+        await PutAsync(nameof(AddStaffAsync), request);
     }
 
     public async Task UpdateStaffAsync(UpdateStaffDto request)
     {
-        await Task.CompletedTask;
+        await PostAsync(nameof(UpdateStaffAsync), request);
     }
 
-    public async Task DeleteStaffAsync(Guid staffId)
+    public async Task RemoveStaffAsync(Guid id)
     {
-        Staffs.Remove(Staffs.First(s => s.Id == staffId));
-        await Task.CompletedTask;
+        await DeleteAsync(nameof(RemoveStaffAsync), new RemoveStaffDto(id));
     }
 }
 

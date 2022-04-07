@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class AddOrUpdateStaffDialog
+public partial class UpdateStaffDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -14,9 +14,10 @@ public partial class AddOrUpdateStaffDialog
     [Parameter]
     public Guid StaffId { get; set; }
 
-    private bool IsAdd => StaffId == Guid.Empty;
+    private StaffDetailDto StaffDetail { get; set; } = new();
 
-    private StaffDetailDto Staff { get; set; } = new();
+
+    private UpdateStaffDto Staff { get; set; } = new();
 
     private StaffService StaffService => AuthCaller.StaffService;
 
@@ -36,55 +37,40 @@ public partial class AddOrUpdateStaffDialog
     {
         if (Visible)
         {
-            if (IsAdd) Staff = new();
-            else await GetStaffDetailAsync();
+            await GetStaffDetailAsync();
         }
     }
 
     public async Task GetStaffDetailAsync()
     {
-        Staff = await StaffService.GetStaffDetailAsync(StaffId);
+        StaffDetail = await StaffService.GetStaffDetailAsync(StaffId);
+        Staff = StaffDetail;
     }
 
-    public async Task AddOrEditStaffAsync()
+    public async Task UpdateStaffAsync()
     {
         Loading = true;
-        if (IsAdd)
-        {
-            await StaffService.AddStaffAsync(Staff);
-            OpenSuccessMessage(T("Add staff success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
-        else
-        {
-            await StaffService.UpdateStaffAsync(Staff);
-            OpenSuccessMessage("Edit staff success");
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
+        await StaffService.UpdateStaffAsync(Staff);
+        OpenSuccessMessage("Update staff success");
+        await OnSubmitSuccess.InvokeAsync();
+        await UpdateVisible(false);
         Loading = false;
     }
 
-    public void OpenDeleteStaffDialog()
+    public void OpenRemoveStaffDialog()
     {
         OpenConfirmDialog(async confirm =>
         {
-            if (confirm) await DeleteStaffAsync();
+            if (confirm) await RemoveStaffAsync();
         }, T("Are you sure delete staff data"));
     }
 
-    public async Task DeleteStaffAsync()
+    public async Task RemoveStaffAsync()
     {
         Loading = true;
-        await StaffService.DeleteStaffAsync(StaffId);
+        await StaffService.RemoveStaffAsync(StaffId);
         OpenSuccessMessage(T("Delete staff data success"));
         Loading = false;
-    }
-
-    protected override bool ShouldRender()
-    {
-        return Visible;
     }
 }
 

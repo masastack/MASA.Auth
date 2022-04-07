@@ -4,9 +4,9 @@ public class TeamSelectDto
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
 
-    public string Avatar { get; set; } = string.Empty;
+    public string Avatar { get; set; }
 
     public TeamSelectDto(Guid id, string name, string avatar)
     {

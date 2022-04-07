@@ -5,84 +5,123 @@ public class CommandHandler
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
     readonly ITeamRepository _teamRepository;
+    readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
-        ITeamRepository teamRepository, TeamDomainService teamDomainService)
+        ITeamRepository teamRepository, TeamDomainService teamDomainService, StaffDomainService staffDomainService)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
+        _staffDomainService = staffDomainService;
     }
+
+    #region User
 
     [EventHandler]
     public async Task AddUserAsync(AddUserCommand command)
     {
-        if (await _userRepository.GetCountAsync(u => u.PhoneNumber == command.PhoneNumber) > 0)
-            throw new UserFriendlyException($"User with phone number {command.PhoneNumber} already exists");
+        var userDto = command.User;
+        Expression<Func<User, bool>> condition = user => true;
+        if (string.IsNullOrEmpty(userDto.PhoneNumber) is false)
+            condition = condition.And(user => user.PhoneNumber == userDto.PhoneNumber);
 
-        var user = new User(command.Name, command.DisplayName, command.Avatar, command.IdCard, command.PhoneNumber, "", command.CompanyName, command.Enabled, command.PhoneNumber, command.Email, command.Address);
-        await _userRepository.AddAsync(user);
+        if (string.IsNullOrEmpty(userDto.Account) is false)
+            condition = condition.And(user => user.Account == userDto.Account);
+
+        if (string.IsNullOrEmpty(userDto.Email) is false)
+            condition = condition.And(user => user.Email == userDto.Email);
+
+        var user = await _userRepository.FindAsync(condition);
+        if (user is not null)
+        {
+            if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == user.PhoneNumber)
+                throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
+            if (string.IsNullOrEmpty(userDto.Account) is false && userDto.Account == user.Account)
+                throw new UserFriendlyException($"User with account {userDto.Account} already exists");
+            if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == user.Email)
+                throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+        }
+        else
+        {
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account ?? "", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Email ?? "", userDto.Address);
+            await _userRepository.AddAsync(user);
+            command.UserId = user.Id;
+        }
     }
 
     [EventHandler]
     public async Task UpdateUserAsync(UpdateUserCommand command)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
         if (user is null)
-            throw new UserFriendlyException($"The current user does not exist");
+            throw new UserFriendlyException("The current user does not exist");
+        else
+        {
+            if (string.IsNullOrEmpty(userDto.PhoneNumber) is false)
+            {
+                var existPhoneNumber = await _userRepository.GetCountAsync(u => u.Id != userDto.Id && u.PhoneNumber == userDto.PhoneNumber) > 0;
+                if (existPhoneNumber)
+                    throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
+            }
 
-        user.Update();
-        await _userRepository.UpdateAsync(user);
+            if (string.IsNullOrEmpty(userDto.Email) is false)
+            {
+                var existEmail = await _userRepository.GetCountAsync(u => u.Id != userDto.Id && u.Email == userDto.Email) > 0;
+                if (existEmail)
+                    throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+            }
+
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password);
+            await _userRepository.UpdateAsync(user);
+        }
     }
 
     [EventHandler]
-    public async Task DeleteUserAsync(RemoveUserCommand command)
+    public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == command.UserId);
+        var user = await _userRepository.FindAsync(u => u.Id == command.User.Id);
         if (user == null)
             throw new UserFriendlyException("The current user does not exist");
 
         //todo
         //Delete ThirdPartyUser
         //Delete Staff
+        //Delete ...
         await _userRepository.RemoveAsync(user);
     }
 
-    [EventHandler]
-    public async Task CreateStaffAsync(AddStaffCommand createStaffCommand)
-    {
-        //_staffDomainService.CreateStaff();
-        var staff = new Staff(createStaffCommand.JobNumber, createStaffCommand.CreateUserCommand.Name,
-            createStaffCommand.StaffType, createStaffCommand.Enabled);
-        var users = await _userRepository.GetListAsync(u => u.PhoneNumber == createStaffCommand.CreateUserCommand.PhoneNumber);
-        var user = users.FirstOrDefault();
-        if (user == null)
-        {
-            var userInfo = createStaffCommand.CreateUserCommand;
-            user = new User(userInfo.Name, userInfo.DisplayName, userInfo.Avatar, userInfo.IdCard,
-                userInfo.Account, userInfo.Password, userInfo.CompanyName, userInfo.Enabled, userInfo.PhoneNumber, userInfo.Email);
-        }
-        else
-        {
-            //todo update user info
+    #endregion
 
-        }
-        staff.BindUser(user);
-        await _staffRepository.AddAsync(staff);
+    #region Staff
+
+    [EventHandler]
+    public async Task AddStaffAsync(AddStaffCommand command)
+    {
+        await _staffDomainService.AddStaffAsync(command.Staff);
     }
 
     [EventHandler]
-    public async Task DeleteStaffAsync(RemoveStaffCommand deleteStaffCommand)
+    public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
-        var staff = await _staffRepository.FindAsync(deleteStaffCommand.StaffId);
+        await _staffDomainService.UpdateStaffAsync(command.Staff);
+    }
+
+    [EventHandler]
+    public async Task RemoveStaffAsync(RemoveStaffCommand command)
+    {
+        var staff = await _staffRepository.FindAsync(command.Staff.Id);
         if (staff == null)
         {
-            throw new UserFriendlyException("The id of staff not found");
+            throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
     }
+
+    #endregion
 
     #region Team
 

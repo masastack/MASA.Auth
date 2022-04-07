@@ -3,10 +3,12 @@
 public class CommandHandler
 {
     readonly IDepartmentRepository _departmentRepository;
+    readonly IPositionRepository _positionRepository;
 
-    public CommandHandler(IDepartmentRepository departmentRepository)
+    public CommandHandler(IDepartmentRepository departmentRepository, IPositionRepository positionRepository)
     {
         _departmentRepository = departmentRepository;
+        _positionRepository = positionRepository;
     }
 
     [EventHandler]
@@ -51,6 +53,25 @@ public class CommandHandler
             await RemoveCheckAsync(childDepartment);
         }
         await _departmentRepository.RemoveAsync(department);
+    }
+
+    [EventHandler]
+    public async Task AddPosition(AddPositionCommand command)
+    {
+        var position = new Position(command.Position.Name);
+        await _positionRepository.AddAsync(position);
+        command.PositionId = position.Id;
+    }
+
+    [EventHandler]
+    public async Task UpdatePosition(UpdatePositionCommand command)
+    {
+        var position = await _positionRepository.FindAsync(p => p.Id == command.Positioon.Id);
+        if (position is null)
+            throw new UserFriendlyException("The current position does not exist");
+
+        position.Update(command.Positioon.Name);
+        await _positionRepository.UpdateAsync(position);
     }
 }
 

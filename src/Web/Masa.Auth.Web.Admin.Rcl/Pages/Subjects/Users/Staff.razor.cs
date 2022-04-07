@@ -3,7 +3,7 @@
 public partial class Staff
 {
     private string? _search;
-    private bool _enabled;
+    private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
 
@@ -17,7 +17,7 @@ public partial class Staff
         }
     }
 
-    public bool Enabled
+    public bool? Enabled
     {
         get { return _enabled; }
         set
@@ -47,7 +47,7 @@ public partial class Staff
         }
     }
 
-    public long TotalPages { get; set; }
+    public int TotalPage { get; set; }
 
     public long Total { get; set; }
 
@@ -59,7 +59,11 @@ public partial class Staff
 
     public List<DataTableHeader<StaffDto>> Headers { get; set; } = new();
 
-    public bool StaffDialog { get; set; }
+    public bool AddStaffDialogVisible { get; set; }
+
+    public bool UpdateStaffDialogVisible { get; set; }
+
+    public bool AuthorizeDialogVisible { get; set; }
 
     private StaffService StaffService => AuthCaller.StaffService;
 
@@ -67,8 +71,7 @@ public partial class Staff
     {
         Headers = new()
         {
-            new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserDto.Name)), Value = nameof(UserDto.DisplayName), Sortable = false },
+            new() { Text = T(nameof(StaffDto.Avatar)), Value = nameof(StaffDto.Avatar), Sortable = false },
             new() { Text = T("Department"), Value = nameof(StaffDto.Department), Sortable = false },
             new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
             new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
@@ -82,18 +85,29 @@ public partial class Staff
     public async Task GetStaffAsync()
     {
         Loading = true;
-        var request = new GetStaffsDto(Page, PageSize, Search, "", "", Enabled);
-        var response = await StaffService.GetStaffPaginationAsync(request);
+        var request = new GetStaffsDto(Page, PageSize, Search, Enabled);
+        var response = await StaffService.GetStaffsAsync(request);
         Staffs = response.Items;
-        TotalPages = response.TotalPages;
+        TotalPage = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }
 
-    public void OpenStaffDialog(StaffDto staff)
+    public void OpenAddStaffDialog()
+    {
+        AddStaffDialogVisible = true;
+    }
+
+    public void OpenUpdateStaffDialog(StaffDto staff)
     {
         CurrentStaffId = staff.Id;
-        StaffDialog = true;
+        UpdateStaffDialogVisible = true;
+    }
+
+    public void OpenAuthorizeDialog(StaffDto staff)
+    {
+        CurrentStaffId = staff.Id;
+        AuthorizeDialogVisible = true;
     }
 }
 

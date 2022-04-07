@@ -6,32 +6,34 @@ public class AddStaffDto
 
     public StaffTypes StaffType { get; set; }
 
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public Guid DepartmentId { get; set; }
 
-    public Guid PositionId { get; set; }
+    public UpdatePositionDto Position { get; set; }
 
-    public string Position { get; set; }
+    public List<Guid> Teams { get; set; }
 
-    public List<Guid> TeamIds { get; set; }
+    public Guid UserId { get; set; }
 
     public AddUserDto User { get; set; }
 
-    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teamIds, AddUserDto user)
+    public AddStaffDto()
+    {
+        JobNumber = "";
+        Position = new();
+        Teams = new();
+        User = new();
+    }
+
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, UpdatePositionDto position, List<Guid> teamIds, AddUserDto user)
     {
         JobNumber = jobNumber;
         StaffType = staffType;
         Enabled = enabled;
         DepartmentId = departmentId;
-        PositionId = positionId;
         Position = position;
-        TeamIds = teamIds;
+        Teams = teamIds;
         User = user;
-    }
-
-    public static implicit operator AddStaffDto(StaffDetailDto staff)
-    {
-        return new AddStaffDto(staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, staff.TeamIds, staff.User);
     }
 }

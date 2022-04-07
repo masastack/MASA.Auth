@@ -61,7 +61,7 @@
     /* Headline 4 */
     font-family: Roboto !important;
     font-style: normal !important;
-    font-weight: bold !important;
+    font-weight: 700 !important;
     font-size: 2.125rem !important;
     line-height: 2.625rem !important;
     /* identical to box height */
@@ -127,7 +127,7 @@
     /* Subtitle 2-2 */
     font-family: Roboto !important;
     font-style: normal !important;
-    font-weight: bold !important;
+    font-weight: 700 !important;
     font-size: 0.875rem !important;
     line-height: 1rem !important;
     /* identical to box height */
@@ -154,7 +154,7 @@
     font-style: normal !important;
     font-weight: normal !important;
     font-size: 0.875rem !important;
-    line-height: 1rem !important;
+    line-height: 1.3125rem !important;
     /* identical to box height */
     letter-spacing: 0.015625rem !important;
     /* default color */
@@ -165,7 +165,7 @@
     /* Body 1-内容 1 */
     font-family: Roboto !important;
     font-style: normal !important;
-    font-weight: normal !important;
+    font-weight: 500 !important;
     font-size: 1rem !important;
     /* identical to box height */
     line-height: 1.75rem !important;
@@ -173,18 +173,41 @@
     color: #485585;
 }
 
+.text-body4 {
+    /* Body 1-内容 1 */
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    /* identical to box height */
+    line-height: 1.75rem !important;
+    /* default color */
+    color: #7681AB;
+}
+
 .text-btn {
     /* BUTTON-按钮 */
     font-family: Roboto !important;
     font-style: normal !important;
-    font-weight: 500 !important;
+    font-weight: 400 !important;
     font-size: 0.875rem !important;
-    line-height: 1rem !important;
+    line-height: 1.25rem !important;
     /* default color */
-    color: #323D6F !important;
+    color: #A3AED0 !important;
 }
 
 .text-caption {
+    /* Caption-说明 */
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.25rem !important;
+    /* default color */
+    color: #485585;
+}
+
+.text-caption2 {
     /* Caption-说明 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -192,7 +215,7 @@
     font-size: 0.75rem !important;
     line-height: 1.125rem !important;
     /* default color */
-    color: #A3AED0;
+    color: #7681AB;
 }
 
 .text-overline {
@@ -206,6 +229,15 @@
     letter-spacing: 0.09375rem !important;
     /* default color */
     color: #A3AED0;
+}
+
+.text-important {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.3125rem !important;
+    color: #323D6F;
 }
 
 .pry-lighten-1 {
@@ -439,7 +471,72 @@
     align-items: center;
 }
 
+.small-button {
+    min-width: 100px !important;
+    height: 40px !important;
+    border-radius: 40px !important;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.3125rem !important;
+}
+
+.medium-button {
+    min-width: 126px;
+    height: 40px;
+    border-radius: 99px;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.3125rem !important;
+}
+
+.large-button {
+    min-width: 340px;
+    height: 48px;
+    border-radius: 90px;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.3125rem !important;
+}
+
 /*组件样式全局修改start*/
+.button-group {
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 1.125rem !important;
+    line-height: 1.6875rem !important;
+    /* identical to box height */
+    letter-spacing: 0.01em !important;
+    color: #A3AED0 !important;
+    background: #F6F8FD !important;
+}
+
+.button-group .m-icon{
+    color: #A3AED0 !important;
+}
+
+.button-group-active {
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 1.125rem !important;
+    line-height: 1.6875rem !important;
+    /* identical to box height */
+    letter-spacing: 0.01em !important;
+    color: #323D6F !important;
+    background: #E9EDF7 !important;
+}
+
+.button-group-active .m-icon {
+     color: #323D6F !important;
+}
+
 .m-radio i {
     font-size: 21px !important;
 }
@@ -645,13 +742,34 @@
     border: none;
 }
 
-/* pagetabs */
+.search {
+    width: 340px;
+}
 
+.search.m-text-field.m-text-field--solo.m-input--dense > .m-input__control {
+    min-height: 40px;
+}
+
+/* pagetabs */
 .m-page-tabs .m-slide-group__prev.m-slide-group__prev--disabled {
     flex: none !important;
     min-width: 0px !important;
 }
 
+.label .m-label {
+    /* Caption-说明 */
+    font-family: Roboto !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 0.75rem !important;
+    line-height: 1.125rem !important;
+    /* default color */
+    color: #A3AED0 !important;
+}
+
+.button-group-active {
+    background: #ECE8FF !important;
+}
 /* pagetabs */
 /*组件样式全局修改end*/
 /*shop*/
@@ -762,6 +880,10 @@
     margin-block-end: 1em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
+}
+
+.m-tabs-bar{
+    height:28px;
 }
 
 .pro-nav > .m-tabs-bar {

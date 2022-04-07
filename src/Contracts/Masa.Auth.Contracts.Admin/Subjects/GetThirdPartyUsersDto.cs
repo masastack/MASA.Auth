@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class GetThirdPartyUsersDto : Pagination
+public class GetThirdPartyUsersDto : Pagination<GetThirdPartyUsersDto>
 {
     public string Search { get; set; }
 

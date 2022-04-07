@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
-
 namespace Masa.Auth.Web.Admin.WebAssembly
 {
     public class TestAuthStateProvider : AuthenticationStateProvider

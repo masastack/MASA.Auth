@@ -2,5 +2,5 @@
 
 public record UserDetailQuery(Guid UserId) : Query<UserDetailDto>
 {
-    public override UserDetailDto Result { get; set; } = null!;
+    public override UserDetailDto Result { get; set; } = new();
 }

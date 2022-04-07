@@ -5,17 +5,17 @@ public partial class User
     private string? _name;
     private string? _email;
     private string? _phoneNumber;
-    private bool _enabled;
+    private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
 
-    public string Name
+    public string Search
     {
         get { return _name ?? ""; }
         set
         {
             _name = value;
-            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -25,7 +25,7 @@ public partial class User
         set
         {
             _email = value;
-            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -35,17 +35,17 @@ public partial class User
         set
         {
             _phoneNumber = value;
-            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public bool Enabled
+    public bool? Enabled
     {
         get { return _enabled; }
         set
         {
             _enabled = value;
-            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -55,7 +55,7 @@ public partial class User
         set
         {
             _page = value;
-            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -65,15 +65,13 @@ public partial class User
         set
         {
             _pageSize = value;
-            GetUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public long TotalPages { get; set; }
+    public int TotalPage { get; set; }
 
     public long Total { get; set; }
-
-    public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
     public List<UserDto> Users { get; set; } = new();
 
@@ -81,7 +79,9 @@ public partial class User
 
     public List<DataTableHeader<UserDto>> Headers { get; set; } = new();
 
-    public bool UserDialogVisible { get; set; }
+    public bool AddUserDialogVisible { get; set; }
+
+    public bool UpdateUserDialogVisible { get; set; }
 
     public bool AuthorizeDialogVisible { get; set; }
 
@@ -99,30 +99,29 @@ public partial class User
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetUsersAsync();
+        await GetUserAsync();
     }
 
-    public async Task GetUsersAsync()
+    public async Task GetUserAsync()
     {
         Loading = true;
-        var request = new GetUsersDto(Page, PageSize, Name, PhoneNumber, Email, Enabled);
+        var request = new GetUsersDto(Page, PageSize, default, Enabled);
         var response = await UserService.GetUsersAsync(request);
         Users = response.Items;
-        TotalPages = response.TotalPages;
+        TotalPage = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }
 
     public void OpenAddUserDialog()
     {
-        CurrentUserId = Guid.Empty;
-        UserDialogVisible = true;
+        AddUserDialogVisible = true;
     }
 
     public void OpenUpdateUserDialog(UserDto user)
     {
         CurrentUserId = user.Id;
-        UserDialogVisible = true;
+        UpdateUserDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(UserDto user)

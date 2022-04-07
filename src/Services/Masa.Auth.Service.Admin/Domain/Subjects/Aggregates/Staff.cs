@@ -3,25 +3,26 @@
 public class Staff : AuditAggregateRoot<Guid, Guid>
 {
     private User? _user;
-
     private Position? _position;
+    private List<DepartmentStaff> _departmentStaffs = new();
+    private List<TeamStaff> _teamStaffs = new();
 
-    public virtual User User => _user ?? LazyLoader.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
+    public virtual User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
-    public Position Position
-    {
-        get => _position ?? new Position("");
-        private set => _position = value;
-    }
+    public virtual Position Position => _position ?? LazyLoader?.Load(this, ref _position) ?? new("");
+
+    public virtual IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
+
+    public virtual IReadOnlyList<TeamStaff> TeamStaffs => _teamStaffs;
 
     public Guid UserId { get; private set; }
 
-    public string JobNumber { get; private set; } = "";
+    public string JobNumber { get; private set; }
 
     /// <summary>
     /// redundance user name
     /// </summary>
-    public string Name { get; private set; } = "";
+    public string Name { get; private set; }
 
     public Guid PositionId { get; private set; }
 
@@ -29,28 +30,45 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    private ILazyLoader LazyLoader { get; set; } = null!;
+    private ILazyLoader? LazyLoader { get; set; }
 
     private Staff(ILazyLoader lazyLoader)
     {
         LazyLoader = lazyLoader;
+        Name = "";
+        JobNumber = "";
     }
 
-    public Staff(string jobNumber, string name, StaffTypes staffType, bool enabled)
+    public Staff(Guid userId, string jobNumber, string name, Guid positionId, StaffTypes staffType, bool enabled)
     {
+        UserId = userId;
         JobNumber = jobNumber;
         Name = name;
+        PositionId = positionId;
         StaffType = staffType;
         Enabled = enabled;
     }
 
-    public void BindUser(User user)
+    public void Update(string name,Guid positionId, StaffTypes staffType,bool enabled)
     {
-        if (_user is null)
+        Name = name;
+        PositionId = positionId;
+        StaffType = staffType;
+        Enabled = enabled;
+    }
+
+    public void AddDepartmentStaff(Guid departmentId)
+    {
+        _departmentStaffs.Clear();
+        _departmentStaffs.Add(new DepartmentStaff(departmentId, Guid.Empty));
+    }
+
+    public void AddTeamStaff(List<Guid> teams)
+    {
+        _teamStaffs.Clear();
+        foreach (var teamId in teams)
         {
-            _user = user;
-            return;
+            _teamStaffs.Add(new TeamStaff(teamId, default, TeamMemberTypes.Member));
         }
-        _user.Update();
     }
 }

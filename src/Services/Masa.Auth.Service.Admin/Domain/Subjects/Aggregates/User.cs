@@ -16,6 +16,10 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     public string CompanyName { get; private set; }
 
+    public string Department { get; set; }
+
+    public string Position { get; set; }
+
     public bool Enabled { get; private set; }
 
     #region Contact Property
@@ -32,9 +36,7 @@ public class User : AuditAggregateRoot<Guid, Guid>
 
     #endregion
 
-    public User(string name, string displayName, string avatar, string idCard, string account, string password,
-        string companyName, bool enabled, string phoneNumber, string email,
-        AddressValue address)
+    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email, AddressValue address)
     {
         Name = name;
         DisplayName = displayName;
@@ -43,20 +45,37 @@ public class User : AuditAggregateRoot<Guid, Guid>
         Account = account;
         Password = password;
         CompanyName = companyName;
+        Department = department;
+        Position = position;
         Enabled = enabled;
         PhoneNumber = phoneNumber;
         Email = email;
         Address = address;
     }
 
-    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, bool enabled, string phoneNumber, string email)
-        : this(name, displayName, avatar, idCard, account, password, companyName, enabled, phoneNumber, email, new AddressValue())
+    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email) : this(name, displayName, avatar, idCard, account, password, companyName, department, position, enabled, phoneNumber, email, new())
     {
+
     }
 
-    public void Update()
+    public void Update(string name, string displayName, string avatar, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password)
     {
+        Name = name;
+        DisplayName = displayName;
+        Avatar = avatar;
+        CompanyName = companyName;
+        Enabled = enabled;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        Address = address;
+        Department = department;
+        Position = position;
+        Password = password;
+    }
 
+    public static implicit operator UserDetailDto(User user)
+    {
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, new(), "", "", user.ModificationTime, user.Department, user.Position, user.Password);
     }
 
     public void AddRole(params Guid[] roleIds)

@@ -13,6 +13,11 @@ public class TeamStaff : AuditEntity<Guid, Guid>
         StaffId = staffId;
         TeamMemberType = teamMemberType;
     }
+    public TeamStaff(Guid teamId, Guid staffId, TeamMemberTypes teamMemberType)
+    {
+        TeamId = teamId;
+        TeamMemberType = teamMemberType;
+    }
 }
 
 
