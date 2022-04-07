@@ -37,37 +37,7 @@
             </MRow>
             <MRow Class="my-4">
                 <MCol>
-                    <MAutocomplete @bind-Value="Staff.Teams"
-                                   Items="Teams"
-                                   Outlined
-                                   Height=55
-                                   Chips
-                                   Color="primary"
-                                   Label="Team"
-                                   HideDetails="@("auto")"
-                                   ItemText="t=>t.Name"
-                                   ItemValue="t=>t.Id"
-                                   Multiple>
-                        <SelectionContent Context="data">
-                            <MChip Close
-                                   OnCloseClick="()=>Staff.Teams.Remove(data.Item.Id)">
-                                <MAvatar Left>
-                                    <img src="@data.Item.Avatar" />
-                                </MAvatar>
-                                @data.Item.Name
-                            </MChip>
-                        </SelectionContent>
-                        <ItemContent Context="data">
-                            <MListItemAvatar>
-                                <img src="@data.Item.Avatar" />
-                            </MListItemAvatar>
-                            <MListItemContent>
-                                <MListItemTitle>
-                                    @data.Item.Name
-                                </MListItemTitle>
-                            </MListItemContent>
-                        </ItemContent>
-                    </MAutocomplete>
+                   <TeamSelect @bind-Value="Staff.Teams" />
                 </MCol>
                 <MCol>
                     <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />

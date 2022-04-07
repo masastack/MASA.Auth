@@ -11,7 +11,8 @@
              <div style="overflow:scroll;max-height:400px;">
                 <MTreeview Items="Departments"
                             Activatable
-                            OpenAll                          
+                            OpenAll   
+                            Search=@Search
                             ItemKey="d => d.Id"
                             ItemChildren="d => d.Children"
                             ItemText="d => d.Name"
@@ -28,11 +29,11 @@
                             <MCheckbox Class="mt-n1" Value="Value == context.Item.Id" ValueChanged="async check =>await Checked(context.Item)" />                           
                         }
                     </PrependContent>
-                    <LabelContent>
+@*                    <LabelContent>
                         <div @onclick="async ()=>await Checked(context.Item)">
                             @context.Item.Name
                         </div>
-                    </LabelContent>
+                    </LabelContent>*@
                 </MTreeview>
             </div>
         </MCardText>

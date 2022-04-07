@@ -19,7 +19,16 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == userDto.PhoneNumber || u.Account == userDto.Account || u.Email == userDto.Email);
+        Expression<Func<User, bool>> condition = user => true;
+        if (userDto.PhoneNumber is not null)
+            condition = condition.And(user => user.PhoneNumber == userDto.PhoneNumber);
+
+        if (userDto.Account is not null)
+            condition = condition.And(user => user.Account == userDto.Account);
+
+        if (userDto.Email is not null)
+            condition = condition.And(user => user.Email == userDto.Email);
+        var user = await _userRepository.FindAsync(condition);
         if (user is not null)
         {
             if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == user.PhoneNumber)
@@ -31,7 +40,7 @@ public class CommandHandler
         }
         else
         {
-            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address);
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account??"", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber??"", userDto.Email??"", userDto.Address);
             await _userRepository.AddAsync(user);
             command.UserId = user.Id;
         }

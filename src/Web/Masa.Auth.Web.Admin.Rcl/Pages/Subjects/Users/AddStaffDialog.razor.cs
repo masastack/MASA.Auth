@@ -15,10 +15,6 @@ public partial class AddStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
-    private List<TeamSelectDto> Teams { get; set; } = new();
-
-    private TeamService TeamService => AuthCaller.TeamService;
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -31,12 +27,11 @@ public partial class AddStaffDialog
         }
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         if (Visible)
         {
-            Staff = new();
-            Teams = await TeamService.TeamSelectAsync();
+            Staff = new();           
         }
     }
 
