@@ -76,6 +76,7 @@ public partial class Organization
     {
         await DepartmentService.RemoveAsync(departmentId);
         await LoadDepartmentsAsync();
+        _showAdd = false;
     }
 
     private async Task Update(Guid departmentId)
@@ -121,10 +122,6 @@ public partial class Organization
         _copyDepartmentDto.Enabled = department.Enabled;
         _copyDepartmentDto.ParentId = department.ParentId;
         _copyDepartmentDto.Staffs = department.StaffList;
-        _copyDepartmentDto.Staffs = new List<StaffDto> {
-            new StaffDto(Guid.NewGuid(),department.Name,"","1234567858",true,"谷守到","鬼谷子","","12345678888",""),
-            new StaffDto(Guid.NewGuid(),department.Name,"","1234567858",true,"谷首道","鬼谷子2","","12345678888","")
-        };
         _showCopy = true;
     }
 

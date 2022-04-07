@@ -10,6 +10,6 @@ public class UpsertDepartmentDto : BaseUpsertDto<Guid>
 
     public bool Enabled { get; set; } = true;
 
-    public List<Guid> StaffIds { get; set; } = new();
+    public virtual List<Guid> StaffIds { get; set; } = new();
 }
 
