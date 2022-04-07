@@ -11,7 +11,7 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
 
     public virtual Position Position => _position ?? LazyLoader?.Load(this, ref _position) ?? new("");
 
-    public virtual IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;//LazyLoader?.Load(this, ref _departmentStaffs) ?? throw new UserFriendlyException("Failed to get department data");
+    public virtual IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
 
     public virtual IReadOnlyList<TeamStaff> TeamStaffs => _teamStaffs;
 

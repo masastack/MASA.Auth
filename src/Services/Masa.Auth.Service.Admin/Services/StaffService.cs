@@ -19,9 +19,9 @@ public class StaffService : ServiceBase
         return query.Result;
     }
 
-    private async Task<StaffDetailDto> GetStaffDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid staffId)
+    private async Task<StaffDetailDto> GetStaffDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
-        var query = new StaffDetailQuery(staffId);
+        var query = new StaffDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

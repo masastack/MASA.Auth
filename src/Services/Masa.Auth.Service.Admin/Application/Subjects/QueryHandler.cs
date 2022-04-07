@@ -6,15 +6,19 @@ public class QueryHandler
     readonly ITeamRepository _teamRepository;
     readonly IStaffRepository _staffRepository;
     readonly AuthDbContext _authDbContext;
+    readonly IEventBus _eventBus;
 
     public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository,
-        IStaffRepository staffRepository, AuthDbContext authDbContext)
+        IStaffRepository staffRepository, AuthDbContext authDbContext, IEventBus eventBus)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _staffRepository = staffRepository;
         _authDbContext = authDbContext;
+        _eventBus = eventBus;
     }
+
+    #region User
 
     [EventHandler]
     public async Task GetUsersAsync(UsersQuery query)
@@ -72,6 +76,10 @@ public class QueryHandler
         query.Result = user.Select(u => new UserSelectDto(u.Id, u.Name, u.Account, u.PhoneNumber, u.Email, u.Avatar)).ToList();
     }
 
+    #endregion
+
+    #region Staff
+
     [EventHandler]
     public async Task GetStaffsAsync(GetStaffsQuery query)
     {
@@ -101,21 +109,19 @@ public class QueryHandler
     [EventHandler]
     public async Task GetStaffDetailAsync(StaffDetailQuery query)
     {
-        var staff = await _staffRepository.FindAsync(s => s.Id == query.StaffId);
+        var staff = await _authDbContext.Set<Staff>()
+                                        .Include(s => s.DepartmentStaffs)
+                                        .Include(s => s.TeamStaffs).FirstAsync(s => s.Id == query.StaffId);
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
-        var thirdPartyIdpAvatars = await (from tpu in _authDbContext.Set<ThirdPartyUser>()
-                                          where tpu.UserId == staff.UserId
-                                          join tp in _authDbContext.Set<ThirdPartyIdp>()
-                                          on tpu.ThirdPartyIdpId equals tp.Id
-                                          into temp
-                                          from tp in temp
-                                          select tp.Icon).ToListAsync();
-        var creator = await _authDbContext.Set<Staff>().Select(s => new { Id = s.Id, Name = s.Name }).FirstAsync(s => s.Id == staff.Creator);
-        var modifier = await _authDbContext.Set<Staff>().Select(s => new { Id = s.Id, Name = s.Name }).FirstAsync(s => s.Id == staff.Modifier);
-        var teams = await _authDbContext.Set<TeamStaff>().Where(ts => ts.StaffId == query.StaffId).Select(ts => ts.TeamId).ToListAsync();
+        var creator = await _authDbContext.Set<User>().Select(s => new { Id = s.Id, Name = s.Name }).FirstOrDefaultAsync(s => s.Id == staff.Creator);
+        var modifier = await _authDbContext.Set<User>().Select(s => new { Id = s.Id, Name = s.Name }).FirstOrDefaultAsync(s => s.Id == staff.Modifier);
+        var teams = staff.TeamStaffs.Select(ts => ts.TeamId).ToList();
+        var department = staff.DepartmentStaffs.FirstOrDefault()?.DepartmentId ?? default;
+        var userDetailQuery = new UserDetailQuery(staff.UserId);
+        await _eventBus.PublishAsync(userDetailQuery);
 
-        query.Result = new(staff.Id, staff.DepartmentStaffs.FirstOrDefault()?.DepartmentId ?? default, staff.PositionId, staff.JobNumber, staff.Enabled, staff.StaffType, teams, staff.User, creator.Name, modifier.Name, staff.CreationTime, staff.ModificationTime);
+        query.Result = new(staff.Id, department, staff.PositionId, staff.JobNumber, staff.Enabled, staff.StaffType, teams, userDetailQuery.Result, creator?.Name ?? "", modifier?.Name ?? "", staff.CreationTime, staff.ModificationTime);
     }
 
     [EventHandler]
@@ -125,6 +131,8 @@ public class QueryHandler
 
         query.Result = staff.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
     }
+
+    #endregion
 
     #region Team
 

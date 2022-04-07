@@ -25,14 +25,15 @@ public class CommandHandler
     {
         var userDto = command.User;
         Expression<Func<User, bool>> condition = user => true;
-        if (userDto.PhoneNumber is not null)
+        if (string.IsNullOrEmpty(userDto.PhoneNumber) is false)
             condition = condition.And(user => user.PhoneNumber == userDto.PhoneNumber);
 
-        if (userDto.Account is not null)
+        if (string.IsNullOrEmpty(userDto.Account) is false)
             condition = condition.And(user => user.Account == userDto.Account);
 
-        if (userDto.Email is not null)
+        if (string.IsNullOrEmpty(userDto.Email) is false)
             condition = condition.And(user => user.Email == userDto.Email);
+
         var user = await _userRepository.FindAsync(condition);
         if (user is not null)
         {
