@@ -34,13 +34,13 @@ public class UpdateStaffDomainEventHandler
     public async Task UpdateStaffAsync(UpdateStaffDomainEvent staffEvent)
     {
         var staffDto = staffEvent.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.JobNumber == staffDto.JobNumber);
-        if (staff is not null)
-            throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
+        var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
+        if(staff is null)
+            throw new UserFriendlyException("This staff data does not exist");
 
-        staff = new Staff(staffDto.User.Id, staffDto.JobNumber, staffDto.User.Name, staffDto.Position.Id, staffDto.StaffType, staffDto.Enabled);
+        staff.Update(staffDto.User.Name, staffDto.Position.Id, staffDto.StaffType, staffDto.Enabled);
         staff.AddDepartmentStaff(staffDto.DepartmentId);
         staff.AddTeamStaff(staffDto.Teams);
-        await _staffRepository.AddAsync(staff);
+        await _staffRepository.UpdateAsync(staff);
     }
 }

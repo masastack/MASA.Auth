@@ -49,6 +49,14 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
         Enabled = enabled;
     }
 
+    public void Update(string name,Guid positionId, StaffTypes staffType,bool enabled)
+    {
+        Name = name;
+        PositionId = positionId;
+        StaffType = staffType;
+        Enabled = enabled;
+    }
+
     public void AddDepartmentStaff(Guid departmentId)
     {
         _departmentStaffs.Clear();
