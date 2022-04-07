@@ -14,7 +14,7 @@ public partial class UpdateUserDialog
     [Parameter]
     public Guid UserId { get; set; }
 
-    private UserDetailDto UserDetail { get; set; } = new ();
+    private UserDetailDto UserDetail { get; set; } = new();
 
     private UpdateUserDto User { get; set; } = new();
 
@@ -49,11 +49,11 @@ public partial class UpdateUserDialog
     public async Task UpdateUserAsync(EditContext context)
     {
         var success = context.Validate();
-        if(success)
+        if (success)
         {
             Loading = true;
             await UserService.UpdateUserAsync(User);
-            OpenSuccessMessage(T("Update user data success"));           
+            OpenSuccessMessage(T("Update user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
@@ -74,7 +74,7 @@ public partial class UpdateUserDialog
         await UserService.RemoveUserAsync(UserId);
         OpenSuccessMessage(T("Delete user data success"));
         await UpdateVisible(false);
-        await OnSubmitSuccess.InvokeAsync();        
+        await OnSubmitSuccess.InvokeAsync();
         Loading = false;
     }
 }

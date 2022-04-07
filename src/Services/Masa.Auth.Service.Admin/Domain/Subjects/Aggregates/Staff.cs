@@ -60,7 +60,7 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
         _teamStaffs.Clear();
         foreach (var teamId in teams)
         {
-            _teamStaffs.Add(new TeamStaff(teamId, default,TeamMemberTypes.Member));
+            _teamStaffs.Add(new TeamStaff(teamId, default, TeamMemberTypes.Member));
         }
     }
 }

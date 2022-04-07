@@ -17,7 +17,7 @@ public partial class AddUserDialog
 
     private StringNumber Gender { get; set; } = "Male";
 
-    private AddUserDto User { get; set; } = new ();
+    private AddUserDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
 
@@ -53,7 +53,7 @@ public partial class AddUserDialog
             await UserService.AddUserAsync(User);
             OpenSuccessMessage(T("Add user data success"));
             await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();           
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

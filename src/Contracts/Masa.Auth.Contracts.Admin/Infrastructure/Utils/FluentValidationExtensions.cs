@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
+﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class FluentValidationExtensions
 {

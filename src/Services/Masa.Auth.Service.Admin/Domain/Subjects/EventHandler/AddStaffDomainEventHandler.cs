@@ -5,7 +5,7 @@ public class AddStaffDomainEventHandler
     readonly IStaffRepository _staffRepository;
     readonly IEventBus _eventBus;
 
-    public AddStaffDomainEventHandler(IStaffRepository staffRepository,IEventBus eventBus)
+    public AddStaffDomainEventHandler(IStaffRepository staffRepository, IEventBus eventBus)
     {
         _staffRepository = staffRepository;
         _eventBus = eventBus;

@@ -31,7 +31,7 @@ public partial class AddStaffDialog
     {
         if (Visible)
         {
-            Staff = new();           
+            Staff = new();
         }
     }
 
@@ -42,7 +42,7 @@ public partial class AddStaffDialog
         {
             Loading = true;
             await StaffService.AddStaffAsync(Staff);
-            OpenSuccessMessage(T("Add staff success"));            
+            OpenSuccessMessage(T("Add staff success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

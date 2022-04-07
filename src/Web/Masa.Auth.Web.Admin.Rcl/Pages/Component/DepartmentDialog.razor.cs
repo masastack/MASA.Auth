@@ -33,7 +33,7 @@ public partial class DepartmentDialog
 
     private async Task Checked(DepartmentDto department)
     {
-        if(Value != department.Id)
+        if (Value != department.Id)
         {
             Value = department.Id;
             await ValueChanged.InvokeAsync(department);

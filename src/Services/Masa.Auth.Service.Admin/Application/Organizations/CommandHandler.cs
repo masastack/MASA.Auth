@@ -5,7 +5,7 @@ public class CommandHandler
     readonly IDepartmentRepository _departmentRepository;
     readonly IPositionRepository _positionRepository;
 
-    public CommandHandler(IDepartmentRepository departmentRepository,IPositionRepository positionRepository)
+    public CommandHandler(IDepartmentRepository departmentRepository, IPositionRepository positionRepository)
     {
         _departmentRepository = departmentRepository;
         _positionRepository = positionRepository;
@@ -67,7 +67,7 @@ public class CommandHandler
     public async Task UpdatePosition(UpdatePositionCommand command)
     {
         var position = await _positionRepository.FindAsync(p => p.Id == command.Positioon.Id);
-        if(position is null)
+        if (position is null)
             throw new UserFriendlyException("The current position does not exist");
 
         position.Update(command.Positioon.Name);

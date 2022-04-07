@@ -36,7 +36,7 @@ public class AddressValue : ValueObject
 
     public static implicit operator AddressValueDto(AddressValue adress)
     {
-        return new AddressValueDto(adress.Address,adress.ProvinceCode,adress.CityCode,adress.DistrictCode);
+        return new AddressValueDto(adress.Address, adress.ProvinceCode, adress.CityCode, adress.DistrictCode);
     }
 
     public static implicit operator AddressValue(AddressValueDto adress)

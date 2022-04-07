@@ -10,7 +10,7 @@ public class AddStaffDto
 
     public Guid DepartmentId { get; set; }
 
-    public UpdatePositionDto Position  { get; set; }
+    public UpdatePositionDto Position { get; set; }
 
     public List<Guid> Teams { get; set; }
 

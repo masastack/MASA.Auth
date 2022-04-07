@@ -1,5 +1,4 @@
-﻿using Masa.Auth.Service.Admin.Domain.Subjects.Events;
-public class StaffDomainService : DomainService
+﻿public class StaffDomainService : DomainService
 {
     public StaffDomainService(IDomainEventBus eventBus) : base(eventBus)
     {
