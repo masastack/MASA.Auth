@@ -45,7 +45,7 @@ public partial class Organization
     private async Task LoadStaffsAsync(Guid departmentId)
     {
         _getStaffsDto.DepartmentId = departmentId;
-        var data = await StaffService.GetStaffsAsync(_getStaffsDto);
+        var data = await StaffService.GetListAsync(_getStaffsDto);
         _paginationStaffs = data;
     }
 

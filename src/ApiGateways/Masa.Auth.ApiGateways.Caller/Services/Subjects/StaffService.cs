@@ -9,7 +9,7 @@ public class StaffService : ServiceBase
         BaseUrl = "api/staff/";
     }
 
-    public async Task<PaginationDto<StaffDto>> GetStaffsAsync(GetStaffsDto request)
+    public async Task<PaginationDto<StaffDto>> GetListAsync(GetStaffsDto request)
     {
         var paramters = new Dictionary<string, string>
         {
@@ -18,31 +18,31 @@ public class StaffService : ServiceBase
             ["search"] = request.Search.ToString(),
             ["enabled"] = request.Enabled?.ToString() ?? "",
         };
-        return await GetAsync<PaginationDto<StaffDto>>(nameof(GetStaffsAsync), paramters);
+        return await SendAsync<PaginationDto<StaffDto>>(nameof(GetListAsync), paramters);
     }
 
-    public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
+    public async Task<StaffDetailDto> GetDetailAsync(Guid id)
     {
         var paramters = new Dictionary<string, string>
         {
             ["id"] = id.ToString(),
         };
-        return await GetAsync<StaffDetailDto>(nameof(GetStaffDetailAsync), paramters);
+        return await SendAsync<StaffDetailDto>(nameof(GetDetailAsync), paramters);
     }
 
-    public async Task AddStaffAsync(AddStaffDto request)
+    public async Task AddAsync(AddStaffDto request)
     {
-        await PutAsync(nameof(AddStaffAsync), request);
+        await SendAsync(nameof(AddAsync), request);
     }
 
-    public async Task UpdateStaffAsync(UpdateStaffDto request)
+    public async Task UpdateAsync(UpdateStaffDto request)
     {
-        await PostAsync(nameof(UpdateStaffAsync), request);
+        await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task RemoveStaffAsync(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
-        await DeleteAsync(nameof(RemoveStaffAsync), new RemoveStaffDto(id));
+        await SendAsync(nameof(RemoveAsync), new RemoveStaffDto(id));
     }
 }
 
