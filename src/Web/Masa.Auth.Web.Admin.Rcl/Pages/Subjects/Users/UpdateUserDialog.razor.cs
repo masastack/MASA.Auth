@@ -42,7 +42,7 @@ public partial class UpdateUserDialog
 
     public async Task GetUserDetailAsync()
     {
-        UserDetail = await UserService.GetUserDetailAsync(UserId);
+        UserDetail = await UserService.GetDetailAsync(UserId);
         User = UserDetail;
     }
 
@@ -52,7 +52,7 @@ public partial class UpdateUserDialog
         if (success)
         {
             Loading = true;
-            await UserService.UpdateUserAsync(User);
+            await UserService.UpdateAsync(User);
             OpenSuccessMessage(T("Update user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
@@ -71,7 +71,7 @@ public partial class UpdateUserDialog
     public async Task RemoveUserAsync()
     {
         Loading = true;
-        await UserService.RemoveUserAsync(UserId);
+        await UserService.RemoveAsync(UserId);
         OpenSuccessMessage(T("Delete user data success"));
         await UpdateVisible(false);
         await OnSubmitSuccess.InvokeAsync();

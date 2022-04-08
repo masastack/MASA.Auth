@@ -31,7 +31,7 @@ public abstract class ServiceBase
         await CheckResponse(response);
     }
 
-    protected async Task DeleteAsync<TRequest>(string methodName, TRequest data)
+    protected async Task DeleteAsync<TRequest>(string methodName, TRequest? data = default)
     {
         var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), data);
         await CheckResponse(response);
@@ -41,6 +41,18 @@ public abstract class ServiceBase
     {
         var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), null);
         await CheckResponse(response);
+    }
+
+    protected async Task SendAsync<TRequest>(string methodName, TRequest? data = default)
+    {
+        if (methodName.StartsWith("Add")) await PutAsync(methodName, data);
+        else if (methodName.StartsWith("Update")) await PostAsync(methodName, data);
+        else if (methodName.StartsWith("Remove")) await DeleteAsync(methodName, data);
+    }
+
+    protected async Task<TResponse> SendAsync<TResponse>(string methodName, Dictionary<string, string>? data = null)
+    {
+        return await GetAsync<TResponse>(methodName, data);
     }
 
     string BuildAdress(string methodName)

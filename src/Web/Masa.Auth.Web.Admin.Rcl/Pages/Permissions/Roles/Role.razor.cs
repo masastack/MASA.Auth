@@ -83,7 +83,7 @@ public partial class Role
     {
         Loading = true;
         var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
-        var response = await RoleService.GetRolesAsync(reuquest);
+        var response = await RoleService.GetListAsync(reuquest);
         Roles = response.Items;
         TotalPages = response.TotalPage;
         Total = response.Total;
