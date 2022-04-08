@@ -28,7 +28,7 @@ public class StaffService : ServiceBase
         {
             ["name"] = name,
         };
-        return await GetAsync<List<StaffSelectDto>>(nameof(GetSelectAsync), paramters);
+        return await SendAsync<List<StaffSelectDto>>(nameof(GetSelectAsync), paramters);
     }
 
     public async Task<StaffDetailDto> GetDetailAsync(Guid id)

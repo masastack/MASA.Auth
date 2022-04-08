@@ -11,6 +11,8 @@ public partial class AddStaffDialog
     [Parameter]
     public EventCallback OnSubmitSuccess { get; set; }
 
+    private MForm? Form { get; set; }
+
     private AddStaffDto Staff { get; set; } = new();
 
     private StaffService StaffService => AuthCaller.StaffService;
@@ -24,6 +26,10 @@ public partial class AddStaffDialog
         else
         {
             Visible = visible;
+        }
+        if (Form is not null)
+        {
+            await Form.ResetAsync();
         }
     }
 

@@ -1,12 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
-    <MForm Model=User EnableValidation>
-        <MStepper Value="Step">
+    <MForm Model=User EnableValidation @ref="Form">
+        <MStepper Value="Step" Style="padding-left:204px;padding-right:204px;padding-bottom:24px;padding-top:24px;height:100%;width: 100%;position: absolute;">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <div style="height: 98vh;" class="full-height">
-                        <div style="height:300px" class="d-flex">
+                    <div style="position: relative;" class="full-height">
+                        <div class="d-flex full-height">
                             <div class="ma-auto text-center">
                                 <MButtonGroup @bind-Value="Gender" Rounded>
                                     <MButton Width=100 Value="@("Male")" Class="@(Gender == "Male"?"button-group-active":"button-group")">
@@ -28,58 +28,61 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex" style="bottom:48px;right:24px;position:absolute">
+                        <div style="bottom:0px;right:0px;position:absolute">
                             <MSpacer></MSpacer>
                             <MButton Color="primary" Class="small-button" OnClick="()=>Step=2">@T("Next step")</MButton>
                         </div>
                     </div>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <div class="d-flex">
-                        <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
-                            <MAvatar Size=80>
-                                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                            </MAvatar>
-                            <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
-                        </div>
-                    </div>
-                    <div class="md-10">
-                        <div class="mt-9">@T("Basic Information")</div>
-                        <MTextField @bind-Value="User.Name" Class="my-4" Label="@T("Name")" HideDetails="@("auto")" Outlined />
-                        <MTextField @bind-Value="User.PhoneNumber" Class="my-10" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
-                        <MTextField @bind-Value="User.Email" Class="my-10" Label="@T("Email")" HideDetails="@("auto")" Outlined />
-                        <MTextField @bind-Value="User.IdCard" Class="my-10" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
-                        <MTextField @bind-Value="User.Account" Class="my-10" Label="@T("Account")" HideDetails="@("auto")" Outlined />
-                        <MTextField @bind-Value="User.Password" Class="my-10" Label="@T("Password")" HideDetails="@("auto")" Outlined />
-                        @if (Fill is false)
-                        {
-                            <div @onclick="() => Fill = true" class="mt-11 hover-pointer" style="text-align:center">
-                                <MIcon>mdi-menu-down</MIcon>
-                                <span>@T("Fill in more")</span>
+                    <div style="position: relative;" class="full-height">                        
+                            <div class="d-flex">
+                                <div class="mx-auto text-center" style="width:212px;">
+                                    <MAvatar Size=80>
+                                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                                    </MAvatar>
+                                    <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                                </div>
                             </div>
-                        }
-                        else
-                        {
-                            <div class="mt-12">@T("Detail Information")</div>
-                            <MTextField @bind-Value="User.CompanyName" Class="my-4" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.Address.Address" Class="my-10" Label="@T("Address")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.Department" Class="my-10" Label="@T("Department")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.Position" Class="my-10" Label="@T("Position")" HideDetails="@("auto")" Outlined />
-                        }
-
-                    </div>
-                    <div class="d-flex">
-                        <MSpacer></MSpacer>
-                        <MButton Outlined Color="primary" Class="small-button" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
-                        <MButton Color="primary" Class="small-button ml-6" OnClick="()=>Step=3">@T("Next step")</MButton>
-                        <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
-                    </div>
+                            <div class="mt-6" style="overflow-y:scroll;overflow-y:scroll;max-height:590px;height:100%;">
+                                <div>@T("Basic Information")</div>
+                                <MTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                                <MTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+                                <MTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+                                <MTextField @bind-Value="User.IdCard" Class="mb-9" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
+                                <MTextField @bind-Value="User.Account" Class="mb-9" Label="@T("Account")" HideDetails="@("auto")" Outlined />
+                                <MTextField @bind-Value="User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                                @if (Fill is false)
+                                {
+                                    <div @onclick="() => Fill = true" class="mt-12 hover-pointer" style="text-align:center">
+                                        <MIcon>mdi-menu-down</MIcon>
+                                        <span>@T("Fill in more")</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="mt-12">@T("Detail Information")</div>
+                                    <MTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
+                                    <MTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" HideDetails="@("auto")" Outlined />
+                                    <MTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" HideDetails="@("auto")" Outlined />
+                                    <MTextField @bind-Value="User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                                }
+                            </div>
+                             <div style="bottom:0px;right:0px;position:absolute">
+                                <MSpacer></MSpacer>
+                                <MButton Outlined Color="primary" Class="small-button" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
+                                <MButton Color="primary" Class="small-button ml-6" OnClick="()=>Step=3">@T("Next step")</MButton>
+                                <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
+                            </div>                                        
+                    </div>                                    
                 </MStepperContent>
                 <MStepperContent Step="3">
                     <GlobalNavigationDialog />
-                    <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
-                    <MButton Text>@T("Preview")</MButton>
-                    <MButton OnClick="async () => await AddUserAsync(context)" Text>@T("Submit")</MButton>
+                    <div style="bottom:0px;right:0px;position:absolute">
+                        <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
+                        <MButton Text>@T("Preview")</MButton>
+                        <MButton OnClick="async () => await AddUserAsync(context)" Text>@T("Submit")</MButton>
+                    </div>
                 </MStepperContent>
             </MStepperItems>
         </MStepper>

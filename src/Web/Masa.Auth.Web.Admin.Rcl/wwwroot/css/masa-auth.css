@@ -771,6 +771,58 @@
 .button-group-active {
     background: #ECE8FF !important;
 }
+
+.m-stepper__items {
+    height: 100%;
+}
+
+.m-stepper__content {
+    height: 100%;
+}
+
+.m-stepper__wrapper.active {
+    height: 100%;
+}
+
+.m-stepper__content {
+    height: 100%;
+}
+
+.m-text-field--outlined {
+    height: 48px !important;
+}
+.m-text-field--outlined fieldset {
+    height: 51px !important;
+}
+
+.m-text-field--outlined .m-label {
+    top: 14px !important;
+}
+
+.m-text-field--outlined .m-label.m-label--active {
+    top: 18px !important;
+}
+
+.m-text-field--outlined .m-text-field__details {
+    margin-top: -5px !important;
+}
+
+.m-text-field--outlined .m-input__slot {
+    height: 48px !important;
+    min-height: 0px !important;
+}
+
+.m-timeline {
+    padding-top: 0 !important;
+}
+
+.m-timeline-item {
+    padding-bottom: 0 !important;
+}
+
+.m-timeline-item .m-timeline-item__divider {
+    height: 23px !important;
+}
 /* pagetabs */
 /*组件样式全局修改end*/
 /*shop*/
