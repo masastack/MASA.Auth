@@ -1,35 +1,37 @@
 ﻿@inherits AdminCompontentBase
 
-<MBottomSheet Value="Visible" ValueChanged=UpdateVisible>
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
     <MForm Model=User EnableValidation>
         <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <div style="height:300px" class="d-flex">
-                        <div class="ma-auto text-center">
-                            <MButtonGroup @bind-Value="Gender" Rounded>
-                                <MButton Width=100 Value="@("Male")" Class="@(Gender == "Male"?"button-group-active":"button-group")">
-                                    <MIcon Size=18>fa fa-regular fa-mars</MIcon>
-                                    <span class="ml-1">@T("Male")</span>
-                                </MButton>
-                                <MButton Width=100 Value="@("Female")" Class="@(Gender == "Female"?"button-group-active":"button-group")">
-                                    <MIcon Size=18>fa fa-regular fa-venus</MIcon>
-                                    <span class="ml-1">@T("Female")</span>
-                                </MButton>
-                            </MButtonGroup>
-                            <br />
-                            <MAvatar Size=120 Class="mt-12">
-                                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                            </MAvatar>
-                            <br />
-                            <div class="mt-3 hover-pointer text-body4">
-                                <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3">@T("Another")</span>
+                    <div style="height: 98vh;" class="full-height">
+                        <div style="height:300px" class="d-flex">
+                            <div class="ma-auto text-center">
+                                <MButtonGroup @bind-Value="Gender" Rounded>
+                                    <MButton Width=100 Value="@("Male")" Class="@(Gender == "Male"?"button-group-active":"button-group")">
+                                        <MIcon Size=18>fa fa-regular fa-mars</MIcon>
+                                        <span class="ml-1">@T("Male")</span>
+                                    </MButton>
+                                    <MButton Width=100 Value="@("Female")" Class="@(Gender == "Female"?"button-group-active":"button-group")">
+                                        <MIcon Size=18>fa fa-regular fa-venus</MIcon>
+                                        <span class="ml-1">@T("Female")</span>
+                                    </MButton>
+                                </MButtonGroup>
+                                <br />
+                                <MAvatar Size=120 Class="mt-12">
+                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                                </MAvatar>
+                                <br />
+                                <div class="mt-3 hover-pointer text-body4">
+                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3">@T("Another")</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="d-flex" style="bottom:48px;right:24px;position:absolute">
-                        <MSpacer></MSpacer>
-                        <MButton Color="primary" Class="small-button" OnClick="()=>Step=2">@T("Next step")</MButton>
+                        <div class="d-flex" style="bottom:48px;right:24px;position:absolute">
+                            <MSpacer></MSpacer>
+                            <MButton Color="primary" Class="small-button" OnClick="()=>Step=2">@T("Next step")</MButton>
+                        </div>
                     </div>
                 </MStepperContent>
                 <MStepperContent Step="2">
@@ -79,8 +81,7 @@
                     <MButton Text>@T("Preview")</MButton>
                     <MButton OnClick="async () => await AddUserAsync(context)" Text>@T("Submit")</MButton>
                 </MStepperContent>
-
             </MStepperItems>
         </MStepper>
     </MForm>
-</MBottomSheet>
+</SheetDialog>

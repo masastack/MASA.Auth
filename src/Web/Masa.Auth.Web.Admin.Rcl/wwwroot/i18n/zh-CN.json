@@ -47,6 +47,8 @@
   "Relocate former department staff": "迁移原部门人员",
 
   "User": "用户",
+  "Add User": "添加用户",
+  "Update User": "编辑用户",
   "Name": "姓名",
   "Avatr": "头像",
   "User.DisplayName": "用户昵称",
@@ -76,6 +78,8 @@
   "Failed to query thirdPartyUserDetail data:": "获取第三方用户详情数据失败:",
 
   "Staff": "员工",
+  "Add Staff": "添加员工",
+  "Update Staff": "编辑员工",
   "JobNumber": "员工工号",
   "StaffType": "员工类型",
   "InternalStaff": "内部员工",
