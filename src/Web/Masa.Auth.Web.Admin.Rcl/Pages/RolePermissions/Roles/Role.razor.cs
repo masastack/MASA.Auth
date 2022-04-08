@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Permissions.Roles;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
 public partial class Role
 {

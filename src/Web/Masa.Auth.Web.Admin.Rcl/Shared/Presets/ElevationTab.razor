@@ -1,18 +1,18 @@
 ﻿<CascadingValue Value="this">
     @ChildContent
-    <MCard Class="mx-auto" MaxWidth=@MaxWidth>
+    <MCard Class="@($"mx-auto d-flex flex-column {Class}")" Style="@Style">
         <MCardTitle Class="d-flex justify-center">
-            <MButtonGroup Dense=@Dense Mandatory Borderless @bind-Value="_tab" Class="rounded-lg elevation-tab">
+            <MButtonGroup Dense=@Dense Mandatory Borderless Value="TabIndex" ValueChanged="TabChanged" Class="rounded-lg elevation-tab">
                 @for (var i = 0; i < Headers.Count; i++)
                 {
                     var header = Headers[i];
-                    <MButton Ripple=false Value="@i" Class="rounded-lg">
+                    <MButton Ripple=false Value="@i" Class="rounded-lg" MinWidth=TabMinWidth>
                         @header
                     </MButton>
                 }
             </MButtonGroup>
         </MCardTitle>
-        <MWindow @bind-Value="_tab" Reverse>
+        <MWindow @bind-Value="TabIndex" Reverse Class="flex-grow-1">
             @for (var i = 0; i < _elevationTabItems.Count; i++)
             {
                 var item = _elevationTabItems[i];
@@ -25,6 +25,12 @@
 </CascadingValue>
 
 @code {
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
     [EditorRequired]
     [Parameter]
     public List<string> Headers { get; set; } = new();
@@ -32,13 +38,18 @@
     [Parameter]
     public bool Dense { get; set; } = false;
 
-     [Parameter]
-    public StringNumber MaxWidth { get; set; } = "";
+    [Parameter]
+    public StringNumber TabMinWidth { get; set; } = "100";
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    StringNumber _tab = 0;
+    [Parameter]
+    public StringNumber TabIndex { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback<StringNumber> TabIndexChanged { get; set; }
+
     List<ElevationTabItem> _elevationTabItems = new();
 
     public void AddTabItem(ElevationTabItem tabItem)
@@ -49,5 +60,17 @@
     public void RemoveTabItem(ElevationTabItem tabItem)
     {
         _elevationTabItems.Remove(tabItem);
+    }
+
+    private async Task TabChanged(StringNumber v)
+    {
+        if (TabIndexChanged.HasDelegate)
+        {
+            await TabIndexChanged.InvokeAsync(v);
+        }
+        else
+        {
+            TabIndex = v;
+        }
     }
 }

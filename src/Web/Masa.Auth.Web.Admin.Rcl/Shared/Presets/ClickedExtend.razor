@@ -1,18 +1,49 @@
-﻿<div class="m-click-extend full-width">
-    <div Style="@(IsExpanded ? displayNone : displayFlex)" class="d-flex justify-space-between full-width">
-        @ChildContent
-        <MIcon OnClick="()=> { IsExpanded = true; }">mdi-magnify</MIcon>
-    </div>
-    <div Style="@(IsExpanded ? displayFlex : displayNone)" class="m-click-extend-item">
-        @if (ExtendContent is not null)
-        {
-            @ExtendContent
-        }
-        else
-        {
-            <MTextField Autofocus TValue="string" OnBlur="OnBlurHandler" Outlined Dense Placeholder="search"
+﻿@if (Split)
+{
+    <div class="@($"m-click-extend full-width {Class}")" Style="@($"max-width:{(MaxWidth.IsT0?$"{MaxWidth}":$"{MaxWidth}px")}; {Style}")">
+        <div Style="@(IsExpanded ? displayNone : displayFlex)" class="d-flex align-center full-width">
+            <MCard Class="m-click-extend-child flex-grow-1" Style="border-radius: 10px !important;">@ChildContent</MCard>
+            <MCard Class="ml-4 m-click-extend-trigger" Style="border-radius: 10px !important;display: flex;flex-direction: row;justify-content: center;align-items: center;padding: 0px;width: 40px;min-width: 40px;height: 40px;">
+                <MIcon Size=24 OnClick="()=> { IsExpanded = true; }">@TriggerIcon</MIcon>
+            </MCard>
+        </div>
+        <MCard Style="@(IsExpanded ? displayFlex : displayNone)" class="m-click-extend-item">
+            @if (ExtendContent is not null)
+            {
+                @ExtendContent
+            }
+            else
+            {
+                <MTextField Autofocus TValue="string" OnBlur="OnBlurHandler" Outlined Dense Placeholder="search"
                     HideDetails=true PrependInnerIcon="mdi-magnify" OnKeyDown="OnKeyDown">
-            </MTextField>
-        }
+                </MTextField>
+            }
+        </MCard>
     </div>
-</div>
+}
+else
+{
+    <MCard class="@($"m-click-extend full-width {Class}")" Style="@($"max-width:{(MaxWidth.IsT0?$"{MaxWidth}":$"{MaxWidth}px")}; {Style}")">
+        <div Style="@(IsExpanded ? displayNone : displayFlex)" class="d-flex align-center full-width">
+            <div Class="m-click-extend-child flex-grow-1">
+                @ChildContent
+            </div>
+            <div class="m-click-extend-trigger">
+                <MIcon Size=24 OnClick="()=> { IsExpanded = true; }">@TriggerIcon</MIcon>
+            </div>
+        </div>
+        <div Style="@(IsExpanded ? displayFlex : displayNone)" class="m-click-extend-item">
+            @if (ExtendContent is not null)
+            {
+                @ExtendContent
+            }
+            else
+            {
+                <MTextField Autofocus TValue="string" OnBlur="OnBlurHandler" Outlined Dense Placeholder="search"
+                    HideDetails=true PrependInnerIcon="mdi-magnify" OnKeyDown="OnKeyDown">
+                </MTextField>
+            }
+        </div>
+    </MCard>
+}
+

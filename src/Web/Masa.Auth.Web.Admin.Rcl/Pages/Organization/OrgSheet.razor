@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
-<Masa.Blazor.Presets.PDrawer Width=1200 Value=Show ValueChanged=ShowChanged>
-    <MCard Class="mx-auto">
+<SheetDialog Value=Show Title="@T("Add Department")" ValueChanged="ShowChanged">
+    <MCard Class="mx-auto d-flex flex-column full-height" Style="padding-right:228px;padding-left:228px;">
         <MCardText>
             <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5 neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
             @if (Dto.ParentId != Guid.Empty)
@@ -27,4 +27,4 @@
             <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</MButton>
         </MCardActions>
     </MCard>
-</Masa.Blazor.Presets.PDrawer>
+</SheetDialog>

@@ -1,0 +1,220 @@
+﻿@inherits AdminCompontentBase
+@page "/permission/index"
+
+<MRow>
+    <MCol Md="@("auto")">
+        <ClickedExtend Split=true MaxWidth=300>
+            <MSelect @bind-Value="@value3"
+                     Class="mr-2" HideDetails=true
+                     Outlined Dense
+                     Items="@items"
+                     ItemText="u => u.Label"
+                     ItemValue="u => u.Value">
+            </MSelect>
+        </ClickedExtend>
+        <MCard style="width:300px;" Class="full-height mt-4">
+            <ElevationTab TabMinWidth="120" Headers='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
+                <ElevationTabItem>
+                    <MTreeview @bind-Active="_menuActive"
+                               Items="_menuPermissions"
+                               Activatable Hoverable
+                               ItemText="r=>r.Name"
+                               ItemKey="r=>r.Id"
+                               ItemChildren="r=>r.Children">
+                        <LabelContent>
+                            <MHover Context="hoverComtext">
+                                <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
+                                    <span>@context.Item.Name</span>
+                                    <MIcon Size=20 OnClick="()=>_addMenuPermission = true" Style="@(hoverComtext.Hover?"display:flex":"display:none")">mdi-plus</MIcon>
+                                </div>
+                            </MHover>
+                        </LabelContent>
+                    </MTreeview>
+                </ElevationTabItem>
+                <ElevationTabItem>
+                    <MTreeview @bind-Active="_apiActive"
+                               Items="_apiPermissions"
+                               Activatable Hoverable
+                               ItemText="r=>r.Name"
+                               ItemKey="r=>r.Id"
+                               ItemChildren="r=>r.Children">
+                        <LabelContent>
+                            <MHover Context="hoverComtext">
+                                <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
+                                    <span>@context.Item.Name</span>
+                                    <MIcon Size=20 OnClick="()=>_addApiPermission = true" Style="@(hoverComtext.Hover?"display:flex":"display:none")">mdi-plus</MIcon>
+                                </div>
+                            </MHover>
+                        </LabelContent>
+                    </MTreeview>
+                </ElevationTabItem>
+            </ElevationTab>
+        </MCard>
+    </MCol>
+    <MCol>
+        <MCard>
+            <MCardTitle>
+                <h6>@T("Permission Info")</h6>
+            </MCardTitle>
+            <MWindow @bind-Value="_tab" Reverse>
+                <MWindowItem Value="0">
+                    <MCardText>
+                        <MRow>
+                            <MCol Md=6>
+                                <MSelect @bind-Value="@value3"
+                                         Label="@T("Pre Code Select")"
+                                         Outlined Dense HideDetails="@("auto")"
+                                         Items="@items"
+                                         ItemText="u => u.Label"
+                                         ItemValue="u => u.Value">
+                                </MSelect>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Code")" TValue="string" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                </DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Permission Name")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Permission Level")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Icon Code")" TValue="string">
+                                    <PrependContent>
+                                        <div class="d-flex align-center mt-n1">
+                                            <MIcon Size=30>
+                                                mdi-image
+                                            </MIcon>
+                                        </div>
+                                    </PrependContent>
+                                </DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Permission Type")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=12>
+                                <DefaultTextField Label="@T("Permission Url")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=12>
+                                <MAutocomplete @bind-Value="_values"
+                                               Items="_items"
+                                               ItemText="r=>r"
+                                               ItemValue="r=>r"
+                                               Outlined
+                                               Dense Chips
+                                               SmallChips
+                                               Label="@T("Mount Api Permission")"
+                                               Multiple></MAutocomplete>
+                            </MCol>
+                            <MCol Md=12>
+                                <GroupBox Title="@T("Permission Role")">
+                                    <MChip Small>
+                                        UI
+                                    </MChip>
+                                    <MChip Small>
+                                        UX
+                                    </MChip>
+                                </GroupBox>
+                            </MCol>
+                            <MCol Md=12>
+                                <GroupBox Title="@T("Permission User")" class="mt-3">
+                                    <div>
+                                        <MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip>
+                                    </div>
+                                    <div class="mt-3">
+                                        <MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip><MChip Small>
+                                            UX
+                                        </MChip>
+                                    </div>
+                                </GroupBox>
+                            </MCol>
+                            <MCol Md=12>
+                                <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                                </MTextarea>
+                            </MCol>
+                        </MRow>
+                    </MCardText>
+                    <MCardActions class="d-flex align-center mb-10 px-6">
+                        <MSwitch @bind-Value="_enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+                        <MSpacer />
+                        <MButton Text Class="error--text" MinWidth="100">@T("Delete Permission")</MButton>
+                        <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
+                    </MCardActions>
+                </MWindowItem>
+                <MWindowItem Value="1">
+                    <MCardText>
+                        <MRow>
+                            <MCol Md=6>
+                                <MSelect @bind-Value="@value3"
+                                         Label="@T("Pre Code Select")"
+                                         Outlined Dense HideDetails="@("auto")"
+                                         Items="@items"
+                                         ItemText="u => u.Label"
+                                         ItemValue="u => u.Value">
+                                </MSelect>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Code")" TValue="string" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                </DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Permission Name")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Permission Level")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Icon Code")" TValue="string">
+                                    <PrependContent>
+                                        <div class="d-flex align-center mt-n1">
+                                            <MIcon Size=30>
+                                                mdi-image
+                                            </MIcon>
+                                        </div>
+                                    </PrependContent>
+                                </DefaultTextField>
+                            </MCol>
+                            <MCol Md=6>
+                                <DefaultTextField Label="@T("Permission Type")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=12>
+                                <DefaultTextField Label="@T("Permission Url")" TValue="string"></DefaultTextField>
+                            </MCol>
+                            <MCol Md=12>
+                                <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                                </MTextarea>
+                            </MCol>
+                        </MRow>
+                    </MCardText>
+                    <MCardActions class="d-flex align-center mb-10 px-6">
+                        <MSpacer />
+                        <MButton Text Class="error--text" MinWidth="100">@T("Delete Permission")</MButton>
+                        <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
+                    </MCardActions>
+                </MWindowItem>
+            </MWindow>
+        </MCard>
+    </MCol>
+</MRow>
+
+<AddMenuPermission @bind-Show=_addMenuPermission />
+<AddApiPermission @bind-Show=_addApiPermission />

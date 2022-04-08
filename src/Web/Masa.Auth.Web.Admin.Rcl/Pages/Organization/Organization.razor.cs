@@ -82,12 +82,14 @@ public partial class Organization
     {
         await DepartmentService.UpsertAsync(dto);
         await LoadDepartmentsAsync();
+        _showAdd = false;
     }
 
     private async Task SubmitAsync(CopyDepartmentDto dto)
     {
         await DepartmentService.UpsertAsync(dto);
         await LoadDepartmentsAsync();
+        _showCopy = false;
     }
 
     private async Task Copy(Guid sourceId)

@@ -6,7 +6,7 @@ public class DefaultTextField<TValue> : MTextField<TValue>
     {
         Clearable = true;
         Dense = true;
-        HideDetails = "auto";
+        HideDetails = false;
         Outlined = true;
 
         await base.SetParametersAsync(parameters);
