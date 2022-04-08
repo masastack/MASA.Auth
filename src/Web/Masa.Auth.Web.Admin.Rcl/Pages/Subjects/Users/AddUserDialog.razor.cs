@@ -15,6 +15,8 @@ public partial class AddUserDialog
 
     private bool Fill { get; set; }
 
+    private MForm? Form { get; set; }
+
     private StringNumber Gender { get; set; } = "Male";
 
     private AddUserDto User { get; set; } = new();
@@ -31,6 +33,10 @@ public partial class AddUserDialog
         {
             Visible = false;
         }
+        if(Form is not null)
+        {
+            await Form.ResetAsync();
+        }   
     }
 
     protected override void OnParametersSet()
