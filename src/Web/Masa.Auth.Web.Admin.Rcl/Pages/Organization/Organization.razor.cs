@@ -53,7 +53,7 @@ public partial class Organization
 
     private async Task LoadStaffsAsync()
     {
-        var data = await StaffService.GetStaffsAsync(_getStaffsDto);
+        var data = await StaffService.GetListAsync(_getStaffsDto);
         _paginationStaffs = data;
     }
 

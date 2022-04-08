@@ -1331,3 +1331,7 @@ tr:hover {
 .m-window.m-item-group.flex-grow-1 .m-window__container {
     height: 100% !important;
 }
+
+.full-height.d-flex.flex-column .m-data-table__wrapper {
+    flex-grow: 1 !important;
+}

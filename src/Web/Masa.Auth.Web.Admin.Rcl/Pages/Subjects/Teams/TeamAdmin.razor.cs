@@ -29,7 +29,7 @@ public partial class TeamAdmin
         }
 
         _staffLoading = true;
-        _staffs = await StaffService.GetStaffSelectAsync(search);
+        _staffs = await StaffService.GetSelectAsync(search);
         _staffLoading = false;
     }
 }
