@@ -87,7 +87,7 @@ public class QueryHandler
         if (query.Enabled is not null)
             condition = condition.And(s => s.Enabled == query.Enabled);
 
-        if (string.IsNullOrEmpty(query.Search) is false)
+        if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
 
         if (query.DepartmentId != Guid.Empty)
@@ -148,7 +148,7 @@ public class QueryHandler
     public async Task TeamListAsync(TeamListQuery teamListQuery)
     {
         Expression<Func<Team, bool>> condition = _ => true;
-        if (string.IsNullOrEmpty(teamListQuery.Name))
+        if (!string.IsNullOrWhiteSpace(teamListQuery.Name))
         {
             condition = condition.And(s => s.Name.Contains(teamListQuery.Name));
         }
@@ -191,7 +191,7 @@ public class QueryHandler
     public async Task TeamSelectListAsync(TeamSelectListQuery teamSelectListQuery)
     {
         Expression<Func<Team, bool>> condition = _ => true;
-        if (string.IsNullOrEmpty(teamSelectListQuery.Name))
+        if (!string.IsNullOrEmpty(teamSelectListQuery.Name))
         {
             condition = condition.And(s => s.Name.Contains(teamSelectListQuery.Name));
         }
