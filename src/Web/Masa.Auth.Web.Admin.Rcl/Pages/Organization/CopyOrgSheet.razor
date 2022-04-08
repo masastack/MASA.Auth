@@ -5,15 +5,17 @@
     <MWindow @bind-Value="_step" Class="full-height">
         <MWindowItem Value="1" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
-                <MCardText>
-                    <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></MTextField>
-                    <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
-                        <LabelContent>
-                            <span class="secondary--text">
-                                @T("Relocate former department staff")
-                            </span>
-                        </LabelContent>
-                    </MCheckbox>
+                <MCardText Class="d-flex align-center">
+                    <div class="full-width">
+                        <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></MTextField>
+                        <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
+                            <LabelContent>
+                                <span class="secondary--text">
+                                    @T("Relocate former department staff")
+                                </span>
+                            </LabelContent>
+                        </MCheckbox>
+                    </div>
                 </MCardText>
                 <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="NextStep">@T("Next step")</MButton>
@@ -22,7 +24,7 @@
         </MWindowItem>
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
-                <MCardText>
+                <MCardText Class="d-flex flex-column">
                     <MTextField class="mx-auto text-h5 neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
                     <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
@@ -52,7 +54,7 @@
                             </ItemContent>
                         </MAutocomplete>
                     </div>
-                    <MRow class="mt-6" style="height:300px;overflow-y:scroll;">
+                    <MRow class="mt-6 flex-grow-1" style="min-height:300px;overflow-y:scroll;">
                         @foreach (var staff in Dto.Staffs)
                         {
                             <MCol Md="3">

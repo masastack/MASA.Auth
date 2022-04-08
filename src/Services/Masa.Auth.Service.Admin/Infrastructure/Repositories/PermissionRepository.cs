@@ -8,7 +8,7 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
 
     public async Task<Permission> GetByIdAsync(Guid id)
     {
-        return await _context.Set<Permission>()
+        return await Context.Set<Permission>()
             .Where(p => p.Id == id)
             .Include(p => p.UserPermissions).ThenInclude(up => up.User)
             .Include(p => p.RolePermissions).ThenInclude(rp => rp.Role)

@@ -135,9 +135,12 @@ public class QueryHandler
     [EventHandler]
     public async Task GetStaffSelectAsync(StaffSelectQuery query)
     {
-        var staff = await _staffRepository.GetListAsync(u => u.JobNumber == query.Search);
+        Expression<Func<Staff, bool>> condition = staff => true;
+        if (!string.IsNullOrEmpty(query.Search))
+            condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
+        var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount, null);
 
-        query.Result = staff.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
     }
 
     #endregion

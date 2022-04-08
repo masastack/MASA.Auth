@@ -1,6 +1,4 @@
-﻿using Masa.Utils.Exceptions.Extensions;
-
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -16,17 +14,18 @@ builder.Services.AddAuthentication(options =>
     options.Audience = "";
 });
 
-builder.AddMasaConfiguration(
-configurationBuilder =>
-{
-    configurationBuilder.UseMasaOptions(options =>
-    {
-        options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
-        //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
-    });
-});
+//builder.AddMasaConfiguration(
+//configurationBuilder =>
+//    {
+//        configurationBuilder.UseMasaOptions(options =>
+//        {
+//            options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
+//            //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
+//        });
+//    }
+//);
 
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("Local:Appsettings:RedisConfig"));
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -61,19 +60,16 @@ var app = builder.Services
     {
         options.RegisterValidatorsFromAssemblyContaining<Program>();
     })
-    .AddDomainEventBus(options =>
+    .AddDomainEventBus(dispatcherOptions =>
     {
-        options.UseEventBus(eventBusBuilder =>
+        dispatcherOptions
+        .UseDaprEventBus<IntegrationEventLogService>(options => options.UseEventLog<AuthDbContext>())
+        .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
             eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
-        }).UseUoW<AuthDbContext>(dbOptions =>
-        {
-            dbOptions.UseSqlServer(builder.Configuration["Local:Appsettings:ConnectionStrings:DefaultConnection"]);
-            //dbOptions.UseSoftDelete();
         })
-        .UseDaprEventBus<IntegrationEventLogService>()
-        .UseEventLog<AuthDbContext>()
+        .UseUoW<AuthDbContext>(dbOptions => dbOptions.UseSqlServer().UseSoftDelete())
         .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
