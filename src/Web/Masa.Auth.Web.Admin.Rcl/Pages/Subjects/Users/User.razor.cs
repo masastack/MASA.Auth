@@ -106,7 +106,7 @@ public partial class User
     {
         Loading = true;
         var request = new GetUsersDto(Page, PageSize, default, Enabled);
-        var response = await UserService.GetUsersAsync(request);
+        var response = await UserService.GetListAsync(request);
         Users = response.Items;
         TotalPage = response.TotalPage;
         Total = response.Total;

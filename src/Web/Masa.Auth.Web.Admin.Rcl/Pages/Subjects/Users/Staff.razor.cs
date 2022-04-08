@@ -86,7 +86,7 @@ public partial class Staff
     {
         Loading = true;
         var request = new GetStaffsDto(Page, PageSize, Search, Enabled);
-        var response = await StaffService.GetStaffsAsync(request);
+        var response = await StaffService.GetListAsync(request);
         Staffs = response.Items;
         TotalPage = response.TotalPage;
         Total = response.Total;

@@ -43,7 +43,7 @@ public partial class AddOrUpdateRoleDialog
 
     public async Task GetRoleDetailAsync()
     {
-        Role = await RoleService.GetRoleDetailAsync(RoleId);
+        Role = await RoleService.GetDetailAsync(RoleId);
     }
 
     public async Task AddOrEditRoleAsync()
@@ -51,14 +51,14 @@ public partial class AddOrUpdateRoleDialog
         Loading = true;
         if (IsAdd)
         {
-            await RoleService.AddRoleAsync(Role);
+            await RoleService.AddAsync(Role);
             OpenSuccessMessage(T("Add role data success"));
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
         }
         else
         {
-            await RoleService.UpdateRoleAsync(Role);
+            await RoleService.UpdateAsync(Role);
             OpenSuccessMessage(T("Edit role data success"));
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
