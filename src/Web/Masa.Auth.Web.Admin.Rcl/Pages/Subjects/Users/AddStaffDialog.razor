@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<MBottomSheet Value="Visible" ValueChanged=UpdateVisible>
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
     <MCard Class="pa-6">
         <MForm Model="Staff" EnableValidation>
             <div class="d-flex">
@@ -76,4 +76,4 @@
         </MForm>
     </MCard>
 
-</MBottomSheet>
+</SheetDialog>

@@ -1,15 +1,9 @@
 ﻿namespace Masa.Auth.Service.Admin.Services;
 
-public class StaffService : ServiceBase
+public class StaffService : RestServiceBase
 {
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
-        MapGet(GetStaffsAsync);
-        MapGet(GetStaffDetailAsync);
-        MapGet(GetStaffSelectAsync);
-        MapPut(AddStaffAsync);
-        MapPost(UpdateStaffAsync);
-        MapDelete(RemoveStaffAsync);
     }
 
     private async Task<PaginationDto<StaffDto>> GetStaffsAsync(IEventBus eventBus, GetStaffsDto staff)

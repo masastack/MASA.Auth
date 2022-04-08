@@ -9,7 +9,7 @@ public class UserService : ServiceBase
         BaseUrl = "api/user/";
     }
 
-    public async Task<PaginationDto<UserDto>> GetUsersAsync(GetUsersDto request)
+    public async Task<PaginationDto<UserDto>> GetListAsync(GetUsersDto request)
     {
         var paramters = new Dictionary<string, string>
         {
@@ -18,36 +18,36 @@ public class UserService : ServiceBase
             ["userId"] = request.UserId.ToString(),
             ["enabled"] = request.Enabled?.ToString() ?? "",
         };
-        return await GetAsync<PaginationDto<UserDto>>(nameof(GetUsersAsync), paramters);
+        return await SendAsync<PaginationDto<UserDto>>(nameof(GetListAsync), paramters);
     }
 
-    public async Task<UserDetailDto> GetUserDetailAsync(Guid id)
+    public async Task<UserDetailDto> GetDetailAsync(Guid id)
     {
         var paramters = new Dictionary<string, string>
         {
             ["id"] = id.ToString(),
         };
-        return await GetAsync<UserDetailDto>(nameof(GetUserDetailAsync), paramters);
+        return await SendAsync<UserDetailDto>(nameof(GetDetailAsync), paramters);
     }
 
-    public async Task AddUserAsync(AddUserDto request)
+    public async Task AddAsync(AddUserDto request)
     {
-        await PutAsync(nameof(AddUserAsync), request);
+        await SendAsync(nameof(AddAsync), request);
     }
 
-    public async Task UpdateUserAsync(UpdateUserDto request)
+    public async Task UpdateAsync(UpdateUserDto request)
     {
-        await PostAsync(nameof(UpdateUserAsync), request);
+        await SendAsync(nameof(UpdateAsync), request);
     }
 
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationDto request)
     {
-        await PostAsync(nameof(UpdateUserAuthorizationAsync), request);
+        await SendAsync(nameof(UpdateUserAuthorizationAsync), request);
     }
 
-    public async Task RemoveUserAsync(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
-        await DeleteAsync(nameof(RemoveUserAsync), new RemoveUserDto(id));
+        await SendAsync(nameof(RemoveAsync), new RemoveUserDto(id));
     }
 }
 

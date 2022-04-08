@@ -50,7 +50,7 @@ public partial class AddUserDialog
         {
             Loading = true;
             User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-            await UserService.AddUserAsync(User);
+            await UserService.AddAsync(User);
             OpenSuccessMessage(T("Add user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();

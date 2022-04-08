@@ -43,14 +43,14 @@ public partial class UpdateStaffDialog
 
     public async Task GetStaffDetailAsync()
     {
-        StaffDetail = await StaffService.GetStaffDetailAsync(StaffId);
+        StaffDetail = await StaffService.GetDetailAsync(StaffId);
         Staff = StaffDetail;
     }
 
     public async Task UpdateStaffAsync()
     {
         Loading = true;
-        await StaffService.UpdateStaffAsync(Staff);
+        await StaffService.UpdateAsync(Staff);
         OpenSuccessMessage("Update staff success");
         await OnSubmitSuccess.InvokeAsync();
         await UpdateVisible(false);
@@ -68,7 +68,7 @@ public partial class UpdateStaffDialog
     public async Task RemoveStaffAsync()
     {
         Loading = true;
-        await StaffService.RemoveStaffAsync(StaffId);
+        await StaffService.RemoveAsync(StaffId);
         OpenSuccessMessage(T("Delete staff data success"));
         Loading = false;
     }

@@ -41,7 +41,7 @@ public partial class AddStaffDialog
         if (success)
         {
             Loading = true;
-            await StaffService.AddStaffAsync(Staff);
+            await StaffService.AddAsync(Staff);
             OpenSuccessMessage(T("Add staff success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
