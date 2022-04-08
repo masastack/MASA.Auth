@@ -4,7 +4,7 @@
     <MTextField class="mx-auto text-h5" style="width:404px;" OnInput="OnNameChanged" TValue="string" Value="@Value.Name" HideDetails="@("auto")" Placeholder="@T("Team Name")"></MTextField>
     <MListItem class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Height=80 Width=80>
-            <span class="white--text" style="font-size:48px;">@Value.Avatar.Name.FirstOrDefault()</span>
+            <span class="white--text" style="font-size:48px;">@Value.Avatar.Name?.FirstOrDefault()</span>
         </MListItemAvatar>
         <MListItemContent class="py-0">
             <MListItemTitle>

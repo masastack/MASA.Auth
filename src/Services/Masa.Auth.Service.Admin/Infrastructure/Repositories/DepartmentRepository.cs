@@ -8,7 +8,7 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
 
     public async Task<Department> GetByIdAsync(Guid id)
     {
-        return await _context.Set<Department>()
+        return await Context.Set<Department>()
             .Where(d => d.Id == id)
             .Include(d => d.DepartmentStaffs)
             .ThenInclude(ds => ds.Staff)
@@ -18,7 +18,7 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
 
     public async Task<List<Department>> QueryListAsync(Expression<Func<Department, bool>> predicate)
     {
-        var query = _context.Set<Department>().Where(predicate).Include(d => d.DepartmentStaffs);
+        var query = Context.Set<Department>().Where(predicate).Include(d => d.DepartmentStaffs);
         return await query.ToListAsync();
     }
 }

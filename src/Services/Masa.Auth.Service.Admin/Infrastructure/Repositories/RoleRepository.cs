@@ -8,7 +8,7 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
 
     public async Task<Role> GetByIdAsync(Guid id)
     {
-        return await _context.Set<Role>()
+        return await Context.Set<Role>()
             .Where(r => r.Id == id)
             .Include(r => r.Roles)
             .Include(r => r.RolePermissions)

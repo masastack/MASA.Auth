@@ -8,7 +8,9 @@ public partial class TeamAdmin
     [Parameter]
     public EventCallback<TeamPersonnelDto> ValueChanged { get; set; }
 
+    bool _staffLoading = false;
     List<StaffSelectDto> _staffs = new List<StaffSelectDto>();
+    StaffService StaffService => AuthCaller.StaffService;
 
     public void RemoveAdmin(Guid staffId)
     {
@@ -17,5 +19,17 @@ public partial class TeamAdmin
         {
             Value.Staffs.RemoveAt(index);
         }
+    }
+
+    private async Task QuerySelectionStaff(string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return;
+        }
+
+        _staffLoading = true;
+        _staffs = await StaffService.GetStaffSelectAsync(search);
+        _staffLoading = false;
     }
 }

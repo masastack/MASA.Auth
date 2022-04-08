@@ -1311,12 +1311,23 @@ tr:hover {
 .remover-hover.m-list-item:hover::before {
     opacity: 0 !important;
 }
-}
 
 .m-chip:not(.m-chip--active) {
     background: #f6f8fd !important;
 }
 
-.max-full-height{
-    max-height:100% !important;
+.m-chip.theme--light.m-chip--select {
+    background: #f6f8fd !important;
+}
+
+.max-full-height {
+    max-height: 100% !important;
+}
+
+.m-stepper__content.full-height .m-stepper__wrapper {
+    height: 100% !important;
+}
+
+.m-window.m-item-group.flex-grow-1 .m-window__container {
+    height: 100% !important;
 }

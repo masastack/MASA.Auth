@@ -8,7 +8,7 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
 
     public async Task<Team> GetByIdAsync(Guid id)
     {
-        return await _context.Set<Team>()
+        return await Context.Set<Team>()
             .Where(t => t.Id == id)
             .Include(t => t.TeamPermissions)
             .Include(t => t.TeamStaffs)

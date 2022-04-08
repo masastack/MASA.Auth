@@ -2,18 +2,20 @@
 
 <SheetDialog Value=Show Title="@T("Add Department")" ValueChanged="ShowChanged">
     <MCard Class="mx-auto d-flex flex-column full-height" Style="padding-right:228px;padding-left:228px;">
-        <MCardText>
-            <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5 neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
-            @if (Dto.ParentId != Guid.Empty)
-            {
-                <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@Dto.ParentId"
-                       ItemText="u => u.Name"
-                       ItemValue="u => u.Id"
-                       ItemChildren="u => u.Children">
-                </MCascader>
-            }
-            <MTextarea @bind-Value="@Dto.Description" class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
-            </MTextarea>
+        <MCardText Class="d-flex align-center">
+            <div class="full-width">
+                <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5 neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+                @if (Dto.ParentId != Guid.Empty)
+                {
+                    <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@Dto.ParentId"
+                           ItemText="u => u.Name"
+                           ItemValue="u => u.Id"
+                           ItemChildren="u => u.Children">
+                    </MCascader>
+                }
+                <MTextarea @bind-Value="@Dto.Description" class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                </MTextarea>
+            </div>
         </MCardText>
         <MCardActions class="d-flex align-center mb-10 px-6">
             <MSwitch @bind-Value="Dto.Enabled" class="mt-0" Inset Label="@T("Enable")"></MSwitch>

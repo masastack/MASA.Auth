@@ -1,7 +1,7 @@
 ﻿<CascadingValue Value="this">
     @ChildContent
-    <MCard Class="@($"mx-auto d-flex flex-column {Class}")" Style="@Style">
-        <MCardTitle Class="d-flex justify-center">
+    <div Class="@($"mx-auto d-flex flex-column {Class}")" Style="@Style">
+        <div Class="d-flex justify-center">
             <MButtonGroup Dense=@Dense Mandatory Borderless Value="TabIndex" ValueChanged="TabChanged" Class="rounded-lg elevation-tab">
                 @for (var i = 0; i < Headers.Count; i++)
                 {
@@ -11,22 +11,25 @@
                     </MButton>
                 }
             </MButtonGroup>
-        </MCardTitle>
-        <MWindow @bind-Value="TabIndex" Reverse Class="flex-grow-1">
+        </div>
+        <MWindow @bind-Value="TabIndex" Reverse Class="@($"flex-grow-1 {TabWindowClass}")">
             @for (var i = 0; i < _elevationTabItems.Count; i++)
             {
                 var item = _elevationTabItems[i];
-                <MWindowItem Value="@i">
+                <MWindowItem Value="@i" Class="full-height">
                     @item.ChildContent
                 </MWindowItem>
             }
         </MWindow>
-    </MCard>
+    </div>
 </CascadingValue>
 
 @code {
     [Parameter]
     public string? Class { get; set; }
+
+    [Parameter]
+    public string? TabWindowClass { get; set; }
 
     [Parameter]
     public string? Style { get; set; }

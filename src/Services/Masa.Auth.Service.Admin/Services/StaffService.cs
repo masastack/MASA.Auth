@@ -12,40 +12,40 @@ public class StaffService : ServiceBase
         MapDelete(RemoveStaffAsync);
     }
 
-    private async Task<PaginationDto<StaffDto>> GetStaffsAsync([FromServices] IEventBus eventBus, GetStaffsDto staff)
+    private async Task<PaginationDto<StaffDto>> GetStaffsAsync(IEventBus eventBus, GetStaffsDto staff)
     {
         var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled, staff.DepartmentId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<StaffDetailDto> GetStaffDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<StaffDetailDto> GetStaffDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new StaffDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<List<StaffSelectDto>> GetStaffSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<StaffSelectDto>> GetStaffSelectAsync(IEventBus eventBus, [FromQuery] string name)
     {
         var query = new StaffSelectQuery(name);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task AddStaffAsync([FromServices] IEventBus eventBus,
+    private async Task AddStaffAsync(IEventBus eventBus,
         [FromBody] AddStaffDto staff)
     {
         await eventBus.PublishAsync(new AddStaffCommand(staff));
     }
 
-    private async Task UpdateStaffAsync([FromServices] IEventBus eventBus,
+    private async Task UpdateStaffAsync(IEventBus eventBus,
         [FromBody] UpdateStaffDto staff)
     {
         await eventBus.PublishAsync(new UpdateStaffCommand(staff));
     }
 
-    private async Task RemoveStaffAsync([FromServices] IEventBus eventBus,
+    private async Task RemoveStaffAsync(IEventBus eventBus,
         [FromBody] RemoveStaffDto staff)
     {
         var deleteCommand = new RemoveStaffCommand(staff);
