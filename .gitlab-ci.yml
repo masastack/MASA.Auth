@@ -7,10 +7,10 @@ stages:
 
 variables:
   ALI_REGISTRY: registry.cn-hangzhou.aliyuncs.com
-  IMAGE_AUTH_SERVER_ADMIN: $NEW_ALI_REGISTRY/masa/masa-auth-service-admin:$CI_COMMIT_TAG
-  IMAGE_AUTH_SERVER_ADMIN_DEV: $NEW_ALI_REGISTRY/masa/masa-auth-service-admin:dev-$CI_PIPELINE_ID
-  IMAGE_AUTH_WEB_ADMIN_SERVER: $NEW_ALI_REGISTRY/masa/masa-auth-web-admin-server:$CI_COMMIT_TAG
-  IMAGE_AUTH_WEB_ADMIN_SERVER_DEV: $NEW_ALI_REGISTRY/masa/masa-auth-web-admin-server:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_SERVER_ADMIN: $ALI_REGISTRY/masa/masa-auth-service-admin:$CI_COMMIT_TAG
+  IMAGE_AUTH_SERVER_ADMIN_DEV: $ALI_REGISTRY/masa/masa-auth-service-admin:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_WEB_ADMIN_SERVER: $ALI_REGISTRY/masa/masa-auth-web-admin-server:$CI_COMMIT_TAG
+  IMAGE_AUTH_WEB_ADMIN_SERVER_DEV: $ALI_REGISTRY/masa/masa-auth-web-admin-server:dev-$CI_PIPELINE_ID
   DOCKER_AUTH_ADMIN_SERVER_PATH: ./src/Services/Masa.Auth.Service.Admin/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_PATH: ./src/Web/Masa.Auth.Web.Admin.Server/Dockerfile
   NAMESPACE_DEV: masa-auth-dev-new
