@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Services;
 
-public class StaffService : CustomizeServiceBase
+public class StaffService : RestServiceBase
 {
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {

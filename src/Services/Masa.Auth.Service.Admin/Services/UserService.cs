@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Services
 {
-    public class UserService : CustomizeServiceBase
+    public class UserService : RestServiceBase
     {
         public UserService(IServiceCollection services) : base(services, "api/user")
         {

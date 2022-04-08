@@ -2,9 +2,9 @@
 
 namespace Masa.Auth.Service.Admin.Services;
 
-public abstract class CustomizeServiceBase : ServiceBase
+public abstract class RestServiceBase : ServiceBase
 {
-    public CustomizeServiceBase(IServiceCollection services, string baseUri) : base(services, baseUri)
+    public RestServiceBase(IServiceCollection services, string baseUri) : base(services, baseUri)
     {
         var type = GetType();
         var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
