@@ -22,16 +22,16 @@ public class StaffService : ServiceBase
         return await SendAsync<PaginationDto<StaffDto>>(nameof(GetListAsync), paramters);
     }
 
-    public async Task<List<StaffSelectDto>> GetStaffSelectAsync(string name)
+    public async Task<List<StaffSelectDto>> GetSelectAsync(string name)
     {
         var paramters = new Dictionary<string, string>
         {
             ["name"] = name,
         };
-        return await GetAsync<List<StaffSelectDto>>(nameof(GetStaffSelectAsync), paramters);
+        return await SendAsync<List<StaffSelectDto>>(nameof(GetSelectAsync), paramters);
     }
 
-    public async Task<StaffDetailDto> GetStaffDetailAsync(Guid id)
+    public async Task<StaffDetailDto> GetDetailAsync(Guid id)
     {
         var paramters = new Dictionary<string, string>
         {

@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update User")">
-    <MForm Model=User EnableValidation>
+    <MForm Model=User EnableValidation @ref="Form">
         <div style="padding-left:204px;padding-right:204px;padding-bottom:24px;padding-top:24px;height:100%;width: 100%;position: absolute;">
              <div style="position: relative;" class="full-height">    
                 <div class="d-flex">
