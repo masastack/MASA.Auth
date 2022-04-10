@@ -5,15 +5,15 @@
     @T("Department Management")
 </PageTitle>
 
-<MRow>
+<MRow Class="full-height">
     <MCol Md="@("auto")">
-        <MCard style="width:300px;">
+        <MCard style="width:300px;" Class="full-height">
             <MCardTitle>
                 <ClickedExtend>
                     @T("Department Management")
                 </ClickedExtend>
             </MCardTitle>
-            <MCardText style="height:500px;">
+            <MCardText>
                 <MTreeview @bind-Active="_active"
                            Items="_departments"
                            OnActiveUpdate="(List<DepartmentDto> e)=>ActiveUpdated(e)"
@@ -58,8 +58,8 @@
             </MCardText>
         </MCard>
     </MCol>
-    <MCol>
-        <MRow>
+    <MCol Class="d-flex flex-column">
+        <MRow Class="flex-grow-0">
             <MCol Md="4">
                 <MCard Height="112">
                     <MListItem class="fill-height">
@@ -100,18 +100,18 @@
                 </MCard>
             </MCol>
         </MRow>
-        <MRow>
+        <MRow Class="flex-grow-1">
             <MCol Md="12">
-                <MCard>
+                <MCard Class="full-height">
                     <MCardText>
-                        <MDataTable Headers="_headers" Items="@_paginationStaffs.Items" TItem="StaffDto" ItemClass="my-2" HideDefaultFooter="true" Class="mt-2 table-border-none table-space-v-4">
+                        <MDataTable Headers="_headers" Items="@_paginationStaffs.Items" TItem="StaffDto" ItemClass="my-2" HideDefaultFooter="true" Class="mt-2 table-border-none table-space-v-4 full-height d-flex flex-column">
                             <HeaderColContent Context="header">
                                 <span class="text-subtitle">@header.Text</span>
                             </HeaderColContent>
                             <TopContent>
                                 <div class="d-flex justify-space-between">
-                                    <DefaultTextField @bind-Value="@_getStaffsDto.Search" Style="max-width:341px;" 
-                                            Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify" OnKeyDown="EnterSearch">
+                                    <DefaultTextField @bind-Value="@_getStaffsDto.Search" Style="max-width:341px;" HideDetails=true
+                                                      Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify" OnKeyDown="EnterSearch">
                                     </DefaultTextField>
                                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_addStaff=true">
                                         <MIcon Left Dark>
@@ -141,7 +141,7 @@
                                 }
                             </ItemColContent>
                             <FooterContent>
-                                <Masa.Auth.Web.Admin.Rcl.Shared.Presets.SimpleDataTableFooter Class="mt-4" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
+                                <SimpleDataTableFooter Class="mb-4 mt-2" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
                             </FooterContent>
                         </MDataTable>
                     </MCardText>
@@ -152,8 +152,8 @@
 </MRow>
 
 <OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
-<CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync"/>
+<CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync" />
 
 
-<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync"/>
-<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.UpdateStaffDialog @bind-Visible=_updateStaff StaffId=_currentStaffId OnSubmitSuccess="LoadStaffsAsync"/>
+<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync" />
+<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.UpdateStaffDialog @bind-Visible=_updateStaff StaffId=_currentStaffId OnSubmitSuccess="LoadStaffsAsync" />

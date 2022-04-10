@@ -1,28 +1,30 @@
-﻿<MCard Class="d-flex flex-column" Outlined MinHeight=Height>
-    <MCardTitle class="pb-1 px-0 pt-1">
-        <MListItem>
-            <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">
-                <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
-            </MListItemAvatar>
-            <MListItemContent class="pb-0">
-                <MListItemTitle class="d-flex justify-space-between align-center">
-                    <span class="text-body2 neutral-lighten-4--text">成员 : 80 </span>
-                    <MIcon Size=20 OnClick="HandleEditClick">mdi-pencil</MIcon>
-                </MListItemTitle>
-                <MListItemSubtitle class="text-h7 neutral-lighten-1--text">@Team.Name</MListItemSubtitle>
-            </MListItemContent>
-        </MListItem>
-    </MCardTitle>
-    <MCardText class="flex-grow-1" style="text-align: justified;">
-       <span class="text-body3"> @Team.Description</span>
-    </MCardText>
-    <MCardActions class="px-4 pb-4">
-        <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" height=24 width=24/>
-         <span class="text-body2 ml-3">@Team.Creator</span>
-         <MSpacer/>
-         <span class="text-body2 neutral-lighten-4--text">@Team.Modifier 编辑于 1小时前 </span>
-    </MCardActions>
-</MCard>
+﻿<MHover Context="hoverContext" Class="d-flex flex-column">
+    <MCard Outlined MinHeight=Height @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)">
+        <MCardTitle class="pb-1 px-0 pt-1">
+            <MListItem>
+                <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">
+                    <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
+                </MListItemAvatar>
+                <MListItemContent class="pb-0">
+                    <MListItemTitle class="d-flex justify-space-between align-center">
+                        <span class="text-body2 neutral-lighten-4--text">成员 : 80 </span>
+                        <MIcon Size=20 OnClick="HandleEditClick">mdi-pencil</MIcon>
+                    </MListItemTitle>
+                    <MListItemSubtitle class="text-h7 neutral-lighten-1--text">@Team.Name</MListItemSubtitle>
+                </MListItemContent>
+            </MListItem>
+        </MCardTitle>
+        <MCardText class="flex-grow-1" style="text-align: justified;">
+            <span class="text-body3"> @Team.Description</span>
+        </MCardText>
+        <MCardActions class="px-4 pb-4">
+            <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" height=24 width=24 />
+            <span class="text-body2 ml-3">@Team.Creator</span>
+            <MSpacer />
+            <span class="text-body2 neutral-lighten-4--text">@Team.Modifier 编辑于 1小时前 </span>
+        </MCardActions>
+    </MCard>
+</MHover>
 
 @code {
     [Parameter]
@@ -34,6 +36,12 @@
     [EditorRequired]
     [Parameter]
     public TeamDto Team { get; set; } = null!;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
 
     private async Task HandleEditClick()
     {

@@ -4,6 +4,7 @@ public class StaffService : RestServiceBase
 {
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
+
     }
 
     private async Task<PaginationDto<StaffDto>> GetListAsync(IEventBus eventBus, GetStaffsDto staff)
