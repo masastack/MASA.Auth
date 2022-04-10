@@ -29,7 +29,7 @@ public partial class AddStaffDialog
         }
         if (Form is not null)
         {
-            await Form.ResetAsync();
+            await Form.ResetValidationAsync();
         }
     }
 
