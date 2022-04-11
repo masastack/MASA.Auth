@@ -55,11 +55,11 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     {
         if (rolePermissions.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,because RolePermissions not empty!");
+            throw new UserFriendlyException("current permission can`t delete,some role used!");
         }
         if (userPermissions.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,because UserPermissions not empty!");
+            throw new UserFriendlyException("current permission can`t delete,some user used!");
         }
         if (permissions.Any())
         {

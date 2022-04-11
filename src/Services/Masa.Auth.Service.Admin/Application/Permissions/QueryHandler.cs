@@ -52,6 +52,19 @@ public class QueryHandler
         query.Result = await _authDbContext.Set<Role>().Select(r => new RoleSelectDto(r.Id, r.Name)).ToListAsync();
     }
 
+    #region
+
+    [EventHandler]
+    public async Task PermissionTypesQueryAsync(PermissionTypesQuery permissionTypesQuery)
+    {
+        permissionTypesQuery.Result = Enum<PermissionTypes>.GetDescriptionList().Select(pt => new SelectItemDto<int>
+        {
+            Text = pt.desc,
+            Value = (int)pt.value
+        }).ToList();
+        await Task.CompletedTask;
+    }
+
     [EventHandler]
     public async Task ApiPermissionsQueryAsync(ApiPermissionListQuery apiPermissionsQuery)
     {
@@ -71,12 +84,12 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FuncPermissionsQueryAsync(FuncPermissionListQuery funcPerimissionsQuery)
+    public async Task MenuPermissionsQueryAsync(MenuPermissionListQuery menuPerimissionsQuery)
     {
-        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == funcPerimissionsQuery.SystemId
+        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == menuPerimissionsQuery.SystemId
                             && p.Type != PermissionTypes.Api);
 
-        funcPerimissionsQuery.Result = permissions.GroupBy(p => p.AppId)
+        menuPerimissionsQuery.Result = permissions.GroupBy(p => p.AppId)
                 .Select(pg => new AppPermissionDto
                 {
                     AppId = pg.Key,
@@ -96,10 +109,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task PerimissionDetailQueryAsync(PermissionDetailQuery perimissionDetailQuery)
+    public async Task PerimissionDetailQueryAsync(MenuPermissionDetailQuery menuPermissionDetailQuery)
     {
-        var permission = await _permissionRepository.GetByIdAsync(perimissionDetailQuery.PermissionId);
-        perimissionDetailQuery.Result = new PermissionDetailDto
+        var permission = await _permissionRepository.GetByIdAsync(menuPermissionDetailQuery.PermissionId);
+        if (permission.Type == PermissionTypes.Api)
+        {
+            throw new UserFriendlyException($"this permission by id={menuPermissionDetailQuery.PermissionId} is api permission");
+        }
+        menuPermissionDetailQuery.Result = new MenuPermissionDetailDto
         {
             Name = permission.Name,
             Description = permission.Description,
@@ -109,6 +126,14 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
+            ParentId = permission.ParentId,
+            AppId = permission.AppId,
+            ApiPermissions = permission.Permissions.Select(pr => new PermissionDto
+            {
+                Id = pr.Id,
+                Name = pr.ChildPermission.Name,
+                Code = pr.ChildPermission.Code
+            }).ToList(),
             Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Select(up => new UserSelectDto
@@ -119,4 +144,27 @@ public class QueryHandler
             }).ToList(),
         };
     }
+
+    [EventHandler]
+    public async Task PerimissionDetailQueryAsync(ApiPermissionDetailQuery apiPermissionDetailQuery)
+    {
+        var permission = await _permissionRepository.FindAsync(apiPermissionDetailQuery.PermissionId)
+                ?? throw new UserFriendlyException($"the permission id={apiPermissionDetailQuery.PermissionId} not found");
+        if (permission.Type != PermissionTypes.Api)
+        {
+            throw new UserFriendlyException($"this permission by id={apiPermissionDetailQuery.PermissionId} is not api permission");
+        }
+        apiPermissionDetailQuery.Result = new ApiPermissionDetailDto
+        {
+            Name = permission.Name,
+            Description = permission.Description,
+            Icon = permission.Icon,
+            Code = permission.Code,
+            Url = permission.Url,
+            Type = permission.Type,
+            Id = permission.Id
+        };
+    }
+
+    #endregion
 }

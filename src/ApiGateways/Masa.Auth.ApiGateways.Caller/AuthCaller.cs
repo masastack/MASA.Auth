@@ -10,6 +10,7 @@ public class AuthCaller : HttpClientCallerBase
     TeamService? _teamService;
     RoleService? _roleService;
     DepartmentService? _departmentService;
+    PermissionService? _permissionService;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(CallerProvider));
@@ -25,6 +26,8 @@ public class AuthCaller : HttpClientCallerBase
     public RoleService RoleService => _roleService ?? (_roleService = new(CallerProvider));
 
     public DepartmentService DepartmentService => _departmentService ?? (_departmentService = new(CallerProvider));
+
+    public PermissionService PermissionService => _permissionService ?? (_permissionService = new(CallerProvider));
 
     protected override string BaseAddress { get; set; }
 
