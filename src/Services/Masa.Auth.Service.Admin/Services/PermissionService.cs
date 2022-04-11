@@ -5,18 +5,26 @@
         public PermissionService(IServiceCollection services) : base(services, "api/permission")
         {
             MapGet(ListAsync);
+            MapGet(GetTypesAsync);
             MapGet(GetAsync);
             MapPost(CreateAsync);
             MapDelete(DeleteAsync);
         }
 
-        private async Task CreateAsync([FromServices] IEventBus eventBus,
+        private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
+        {
+            var query = new PermissionTypesQuery();
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        private async Task CreateAsync(IEventBus eventBus,
             [FromBody] AddPermissionCommand createDepartmentCommand)
         {
             await eventBus.PublishAsync(createDepartmentCommand);
         }
 
-        private async Task<List<AppPermissionDto>> ListAsync([FromServices] IEventBus eventBus,
+        private async Task<List<AppPermissionDto>> ListAsync(IEventBus eventBus,
             [FromQuery] int systemId, [FromQuery] bool apiPermission)
         {
             if (apiPermission)
@@ -25,20 +33,19 @@
                 await eventBus.PublishAsync(apiQuery);
                 return apiQuery.Result;
             }
-            var funcQuery = new FuncPermissionListQuery(systemId);
+            var funcQuery = new MenuPermissionListQuery(systemId);
             await eventBus.PublishAsync(funcQuery);
             return funcQuery.Result;
         }
 
-        private async Task<PermissionDetailDto> GetAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+        private async Task<MenuPermissionDetailDto> GetAsync(IEventBus eventBus, [FromQuery] Guid id)
         {
-            var query = new PermissionDetailQuery(id);
+            var query = new MenuPermissionDetailQuery(id);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
 
-        private async Task DeleteAsync([FromServices] IEventBus eventBus,
-            [FromQuery] Guid id)
+        private async Task DeleteAsync(IEventBus eventBus, [FromQuery] Guid id)
         {
             await eventBus.PublishAsync(new RemovePermissionCommand(id));
         }

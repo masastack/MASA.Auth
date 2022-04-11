@@ -8,6 +8,23 @@ public partial class AddMenuPermission
     [Parameter]
     public EventCallback<bool> ShowChanged { get; set; }
 
+    [Parameter]
+    public EventCallback<MenuPermissionDetailDto> OnSubmit { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public List<SelectItemDto<PermissionTypes>> PermissionTypes { get; set; } = new();
+
+    MenuPermissionDetailDto _menuPermissionDetailDto = new();
+
+    private async Task OnSubmitHandler()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(_menuPermissionDetailDto);
+        }
+    }
+
     private List<string> _values = new List<string>
     {
         "foo", "bar"
@@ -17,7 +34,6 @@ public partial class AddMenuPermission
         "foo", "bar", "fizz", "buzz"
     };
     bool _enabled = true;
-    private string value3 = "";
 
     public class Item
     {

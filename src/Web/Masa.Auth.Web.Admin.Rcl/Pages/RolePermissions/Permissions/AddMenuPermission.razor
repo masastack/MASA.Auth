@@ -5,10 +5,10 @@
         <MCardText>
             <MRow>
                 <MCol Md=12>
-                    <DefaultTextField Label="@T("Permission Name")" TValue="string"></DefaultTextField>
+                    <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
                 </MCol>
                 <MCol Md=6>
-                    <MSelect @bind-Value="@value3"
+                    <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
                              Label="@T("Pre Code Select")"
                              Outlined Dense HideDetails="@("auto")"
                              Items="@items"
@@ -17,17 +17,23 @@
                     </MSelect>
                 </MCol>
                 <MCol Md=6>
-                    <DefaultTextField Label="@T("Code")" TValue="string" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                    <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                     </DefaultTextField>
                 </MCol>
                 <MCol Md=12>
-                    <DefaultTextField Label="@T("Permission Type")" TValue="string"></DefaultTextField>
+                    <MSelect @bind-Value="_menuPermissionDetailDto.Type"
+                             Label="@T("Permission Type")"
+                             Outlined Dense HideDetails="@("auto")"
+                             Items="@PermissionTypes"
+                             ItemText="u => u.Text"
+                             ItemValue="u => u.Value">
+                    </MSelect>
                 </MCol>
                 <MCol Md=12>
-                    <DefaultTextField Label="@T("Permission Url")" TValue="string"></DefaultTextField>
+                    <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
                 </MCol>
                 <MCol Md=12>
-                    <DefaultTextField Label="@T("Icon Code")" TValue="string">
+                    <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
                         <PrependContent>
                             <div class="d-flex align-center mt-n1">
                                 <MIcon Size=30>
@@ -38,7 +44,7 @@
                     </DefaultTextField>
                 </MCol>
                 <MCol Md=12>
-                    <MTextarea class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
+                    <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
                     </MTextarea>
                 </MCol>
             </MRow>
@@ -46,7 +52,7 @@
         <MCardActions class="d-flex align-center mb-12 px-6">
             <MSwitch @bind-Value="_enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
             <MSpacer />
-            <MButton class="rounded-pill primary" MinWidth="100">@T("Submit")</MButton>
+            <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
         </MCardActions>
     </MCard>
 </SheetDialog>
