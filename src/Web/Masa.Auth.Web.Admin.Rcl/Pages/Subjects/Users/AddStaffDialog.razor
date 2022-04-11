@@ -1,79 +1,79 @@
 ﻿@inherits AdminCompontentBase
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
-    <MCard Class="pa-6">
-        <MForm Model="Staff" EnableValidation>
-            <div class="d-flex">
-                <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
-                    <MAvatar Size=80>
-                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                    </MAvatar>
-                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+    <MForm Model="Staff" EnableValidation @ref="Form">
+        <div style="padding-left:204px;padding-right:204px;padding-bottom:24px;padding-top:24px;height:100%;width: 100%;position: absolute;">
+            <div style="position: relative;" class="full-height">
+                <div class="d-flex">
+                    <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
+                        <MAvatar Size=80>
+                            <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                        </MAvatar>
+                        <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    </div>
+                </div>
+                <div class="mt-6 text-subtitle2">@T("Basic Information")</div>
+                <MRow Class="my-4">
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="my-4">
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MSelect @bind-Value="Staff.StaffType"
+                                    HideDetails="@("auto")"
+                                    Outlined
+                                    Items="@(GetEnumMap<StaffTypes>())"
+                                    ItemText="map => T(map.Key)"
+                                    ItemValue="map => map.Value"
+                                    Label="@T("StaffType")">
+                        </MSelect>
+                    </MCol>
+                </MRow>
+                <MRow Class="my-4">
+                    <MCol>
+                        <TeamSelect @bind-Value="Staff.Teams" />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="my-4">
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <DepartmentSelect @bind-Value="Staff.DepartmentId" />
+                    </MCol>
+                </MRow>
+                <MRow Class="my-4">
+                    <MCol>
+                        <MTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="my-4">
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <div class="d-flex" style="bottom:0px;right:0px;width:100%;position:absolute;">
+                    <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
+                    <MSpacer></MSpacer>
+                    <MButton Color="primary" Class="small-button" OnClick="async() => await AddStaffAsync(context)">@T("Save")</MButton>
                 </div>
             </div>
-            <div class="mt-6 text-subtitle2">@T("Basic Information")</div>
-            <MRow Class="my-4">
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
-                </MCol>
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
-                </MCol>
-            </MRow>
-            <MRow Class="my-4">
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
-                </MCol>
-                <MCol>
-                    <MSelect @bind-Value="Staff.StaffType"
-                             HideDetails="@("auto")"
-                             Outlined
-                             Items="@(GetEnumMap<StaffTypes>())"
-                             ItemText="map => T(map.Key)"
-                             ItemValue="map => map.Value"
-                             Label="@T("StaffType")">
-                    </MSelect>
-                </MCol>
-            </MRow>
-            <MRow Class="my-4">
-                <MCol>
-                   <TeamSelect @bind-Value="Staff.Teams" />
-                </MCol>
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
-                </MCol>
-            </MRow>
-            <MRow Class="my-4">
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
-                </MCol>
-                <MCol>
-                    <DepartmentSelect @bind-Value="Staff.DepartmentId" />
-                </MCol>
-            </MRow>
-            <MRow Class="my-4">
-                <MCol>
-                    <MTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" HideDetails="@("auto")" Outlined />
-                </MCol>
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
-                </MCol>
-            </MRow>
-            <MRow Class="my-4">
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
-                </MCol>
-                <MCol>
-                    <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
-                </MCol>
-            </MRow>
-
-            <div class="d-flex">
-                <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                <MButton Color="primary" Class="small-button" OnClick="async() => await AddStaffAsync(context)">@T("Save")</MButton>
-            </div>
-        </MForm>
-    </MCard>
-
+        </div>
+    </MForm>
 </SheetDialog>

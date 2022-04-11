@@ -35,6 +35,7 @@ public class StaffDetailDto
         Modifier = "";
     }
 
+    [JsonConstructor]
     public StaffDetailDto(Guid id, Guid departmentId, Guid positionId, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user, string creator, string modifier, DateTime creationTime, DateTime? modificationTime)
     {
         Id = id;
