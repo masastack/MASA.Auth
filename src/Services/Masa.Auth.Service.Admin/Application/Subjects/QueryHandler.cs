@@ -5,15 +5,17 @@ public class QueryHandler
     readonly IUserRepository _userRepository;
     readonly ITeamRepository _teamRepository;
     readonly IStaffRepository _staffRepository;
+    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
 
     public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository,
-        IStaffRepository staffRepository, AuthDbContext authDbContext, IEventBus eventBus)
+        IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, AuthDbContext authDbContext, IEventBus eventBus)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _staffRepository = staffRepository;
+        _thirdPartyUserRepository = thirdPartyUserRepository;
         _authDbContext = authDbContext;
         _eventBus = eventBus;
     }
@@ -42,7 +44,7 @@ public class QueryHandler
         });
 
         query.Result = new(users.Total, users.TotalPages, users.Result.Select(u =>
-            new UserDto(u.Id, u.Name, u.DisplayName, u.Avatar, u.IdCard, u.Account, u.CompanyName, u.Enabled, u.PhoneNumber, u.Email, u.CreationTime)
+            new UserDto(u.Id, u.Name, u.DisplayName, u.Avatar, u.IdCard, u.Account, u.CompanyName, u.Enabled, u.PhoneNumber, u.Email, u.CreationTime, u.GenderType)
         ).ToList());
     }
 
@@ -52,13 +54,8 @@ public class QueryHandler
         var user = await _userRepository.FindAsync(u => u.Id == query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
 
-        var thirdPartyIdpAvatars = await (from tpu in _authDbContext.Set<ThirdPartyUser>()
-                                          where tpu.UserId == user.Id
-                                          join tp in _authDbContext.Set<ThirdPartyIdp>()
-                                          on tpu.ThirdPartyIdpId equals tp.Id
-                                          into temp
-                                          from tp in temp
-                                          select tp.Icon).ToListAsync();
+        var thirdPartyUsers = await _thirdPartyUserRepository.GetListAsync(tpu => tpu.UserId == query.UserId);
+        var thirdPartyIdpAvatars = thirdPartyUsers.Select(tpu => tpu.ThirdPartyIdp.Icon).ToList();
         var creator = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Creator);
         var modifier = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Modifier);
 
@@ -97,29 +94,27 @@ public class QueryHandler
                 .Select(ds => ds.StaffId);
             condition = condition.And(s => staffIds.Contains(s.Id));
         }
+        var staffQuery = _authDbContext.Set<Staff>().Where(condition);
+        var total = await staffQuery.LongCountAsync();
+        var totalPages = 1;
+        var staffs = await staffQuery.Include(s => s.DepartmentStaffs)
+                               .ThenInclude(ds => ds.Department)
+                               .Include(s => s.Position)
+                               .OrderByDescending(s => s.ModificationTime)
+                               .ThenByDescending(s => s.CreationTime)
+                               .Skip((query.Page - 1) * query.PageSize)
+                               .Take(query.PageSize)
+                               .ToListAsync();
 
-        var staffs = await _staffRepository.GetPaginatedListAsync(condition, new PaginatedOptions
-        {
-            Page = query.Page,
-            PageSize = query.PageSize,
-            Sorting = new Dictionary<string, bool>
-            {
-                [nameof(Staff.ModificationTime)] = true,
-                [nameof(Staff.CreationTime)] = true,
-            }
-        });
-
-        query.Result = new(staffs.Total, staffs.TotalPages, staffs.Result.Select(s =>
-           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.Position.Name, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
+        query.Result = new(total, totalPages, staffs.Select(s =>
+           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
        ).ToList());
     }
 
     [EventHandler]
     public async Task GetStaffDetailAsync(StaffDetailQuery query)
     {
-        var staff = await _authDbContext.Set<Staff>()
-                                        .Include(s => s.DepartmentStaffs)
-                                        .Include(s => s.TeamStaffs).FirstAsync(s => s.Id == query.StaffId);
+        var staff = await _staffRepository.FindAsync(s => s.Id == query.StaffId);
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
         var creator = await _authDbContext.Set<User>().Select(s => new { Id = s.Id, Name = s.Name }).FirstOrDefaultAsync(s => s.Id == staff.Creator);

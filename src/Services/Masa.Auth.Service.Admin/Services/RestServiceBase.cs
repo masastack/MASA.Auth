@@ -14,8 +14,8 @@ public abstract class RestServiceBase : ServiceBase
             {
                 var @delegate = TypeDescriptor.ConvertToDelegateType(method, this);
                 if (method.Name.StartsWith("Get")) MapGet(@delegate);
-                else if (method.Name.StartsWith("Add")) MapPut(@delegate);
-                else if (method.Name.StartsWith("Update")) MapPost(@delegate);
+                else if (method.Name.StartsWith("Add")) MapPost(@delegate);
+                else if (method.Name.StartsWith("Update")) MapPut(@delegate);
                 else if (method.Name.StartsWith("Remove")) MapDelete(@delegate);
             }
         }

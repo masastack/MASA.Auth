@@ -28,6 +28,8 @@ public class AddUserDto
 
     public string Password { get; set; }
 
+    public GenderTypes GenderType { get; set; }
+
     public AddUserDto()
     {
         Name = "";
@@ -42,9 +44,10 @@ public class AddUserDto
         Position = "";
         Account = "";
         Password = "";
+        GenderType = GenderTypes.Male;
     }
 
-    public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password)
+    public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password, GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName;
@@ -59,5 +62,6 @@ public class AddUserDto
         Position = position;
         Account = account;
         Password = password;
+        GenderType = genderType;
     }
 }

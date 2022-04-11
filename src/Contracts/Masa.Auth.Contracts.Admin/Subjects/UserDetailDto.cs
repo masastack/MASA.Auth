@@ -29,7 +29,7 @@ public class UserDetailDto : UserDto
         Password = "";
     }
 
-    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, creationTime)
+    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, creationTime, genderType)
     {
         Address = address;
         Department = department;

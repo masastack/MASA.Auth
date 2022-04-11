@@ -24,6 +24,8 @@ public class UserDto
 
     public DateTime CreationTime { get; set; }
 
+    public GenderTypes GenderType { get; set; }
+
     public UserDto()
     {
         Name = "";
@@ -36,7 +38,7 @@ public class UserDto
         Email = "";
     }
 
-    public UserDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime)
+    public UserDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, GenderTypes genderType)
     {
         Id = id;
         Name = name;
@@ -49,6 +51,7 @@ public class UserDto
         PhoneNumber = phoneNumber;
         Email = email;
         CreationTime = creationTime;
+        GenderType = genderType;
     }
 }
 

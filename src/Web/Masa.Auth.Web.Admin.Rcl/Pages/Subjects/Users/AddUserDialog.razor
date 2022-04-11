@@ -8,14 +8,14 @@
                     <div style="position: relative;" class="full-height">
                         <div class="d-flex full-height">
                             <div class="ma-auto text-center">
-                                <MButtonGroup @bind-Value="Gender" Rounded>
-                                    <MButton Width=100 Value="@("Male")" Class="@(Gender == "Male"?"button-group-active":"button-group")">
+                                <MButtonGroup Value="@User.GenderType.ToString()" Rounded>
+                                    <MButton OnClick="()=> User.GenderType = GenderTypes.Male" Width=100 Value="@GenderTypes.Male.ToString()" Class="@(User.GenderType == GenderTypes.Male ? "button-group-active":"button-group")">
                                         <MIcon Size=18>fa fa-regular fa-mars</MIcon>
-                                        <span class="ml-1">@T("Male")</span>
+                                        <span class="ml-1">@T(GenderTypes.Male.ToString())</span>
                                     </MButton>
-                                    <MButton Width=100 Value="@("Female")" Class="@(Gender == "Female"?"button-group-active":"button-group")">
+                                    <MButton OnClick="()=> User.GenderType = GenderTypes.Female" Width=100 Value="@GenderTypes.Female.ToString()" Class="@(User.GenderType == GenderTypes.Female ? "button-group-active":"button-group")">
                                         <MIcon Size=18>fa fa-regular fa-venus</MIcon>
-                                        <span class="ml-1">@T("Female")</span>
+                                        <span class="ml-1">@T(GenderTypes.Female.ToString())</span>
                                     </MButton>
                                 </MButtonGroup>
                                 <br />
