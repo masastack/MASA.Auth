@@ -52,7 +52,7 @@ public class QueryHandler
         query.Result = await _authDbContext.Set<Role>().Select(r => new RoleSelectDto(r.Id, r.Name)).ToListAsync();
     }
 
-    #region
+    #region Permission
 
     [EventHandler]
     public async Task PermissionTypesQueryAsync(PermissionTypesQuery permissionTypesQuery)
@@ -90,11 +90,26 @@ public class QueryHandler
                             && p.Type != PermissionTypes.Api);
 
         menuPerimissionsQuery.Result = permissions.GroupBy(p => p.AppId)
-                .Select(pg => new AppPermissionDto
-                {
-                    AppId = pg.Key,
-                    Permissions = GetPermissionChild(Guid.Empty, pg.ToList())
-                }).ToList();
+            .Select(pg => new AppPermissionDto
+            {
+                AppId = pg.Key,
+                Permissions = GetPermissionChild(Guid.Empty, pg.ToList())
+            }).ToList();
+    }
+
+    [EventHandler]
+    public async Task ApiPermissionSelectQueryAsync(ApiPermissionSelectQuery apiPermissionSelectQuery)
+    {
+        Expression<Func<Permission, bool>> condition = permission => permission.Type == PermissionTypes.Api;
+        if (!string.IsNullOrEmpty(apiPermissionSelectQuery.Name))
+            condition = condition.And(permission => permission.Name.Contains(apiPermissionSelectQuery.Name));
+
+        var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount, null);
+        apiPermissionSelectQuery.Result = permissions.Select(p => new SelectItemDto<Guid>
+        {
+            Value = p.Id,
+            Text = p.Name
+        }).ToList();
     }
 
     private List<PermissionDto> GetPermissionChild(Guid parentId, List<Permission> source)

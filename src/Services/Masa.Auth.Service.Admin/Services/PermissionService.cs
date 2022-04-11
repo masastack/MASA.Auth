@@ -6,6 +6,7 @@
         {
             MapGet(ListAsync);
             MapGet(GetTypesAsync);
+            MapGet(GetApiPermissionSelectAsync);
             MapGet(GetAsync);
             MapPost(CreateAsync);
             MapDelete(DeleteAsync);
@@ -14,6 +15,13 @@
         private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
         {
             var query = new PermissionTypesQuery();
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        private async Task<List<SelectItemDto<Guid>>> GetApiPermissionSelectAsync(IEventBus eventBus, [FromQuery] string name)
+        {
+            var query = new ApiPermissionSelectQuery(name);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
