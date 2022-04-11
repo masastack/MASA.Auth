@@ -57,7 +57,9 @@ public partial class Role
 
     public Guid CurrentRoleId { get; set; }
 
-    public bool RoleDialogVisible { get; set; }
+    public bool AddRoleDialogVisible { get; set; }
+
+    public bool UpdateRoleDialogVisible { get; set; }
 
     public List<DataTableHeader<RoleDto>> Headers { get; set; } = new();
 
@@ -92,20 +94,13 @@ public partial class Role
 
     public void OpenAddTeamDialog()
     {
-        CurrentRoleId = Guid.Empty;
-        RoleDialogVisible = true;
+        AddRoleDialogVisible = true;
     }
 
     public void OpenEditUserDialog(UserDto user)
     {
         CurrentRoleId = user.Id;
-        RoleDialogVisible = true;
-    }
-
-    public void OpenAuthorizeDialog(UserDto user)
-    {
-        CurrentRoleId = user.Id;
-        RoleDialogVisible = true;
+        UpdateRoleDialogVisible = true;
     }
 }
 

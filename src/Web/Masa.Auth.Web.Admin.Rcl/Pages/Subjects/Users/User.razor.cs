@@ -92,7 +92,7 @@ public partial class User
         Headers = new()
         {
             new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserDto.Email)), Value = nameof(UserDto.Email), Sortable = false },
+            new() { Text = T(nameof(UserDto.Account)), Value = nameof(UserDto.Account), Sortable = false },
             new() { Text = T(nameof(UserDto.PhoneNumber)), Value = nameof(UserDto.PhoneNumber), Sortable = false },
             new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
             new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },

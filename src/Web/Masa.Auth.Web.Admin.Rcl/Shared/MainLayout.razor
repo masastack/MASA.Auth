@@ -16,7 +16,7 @@
     <Navigation />
 
     <MMain Class="fill-lighten-1" Style="padding-top:60px">
-        <MErrorHandler OnErrorHandleAsync=OnErrorHandleAsync>
+        <MErrorHandler>
             <div class="pa-6 max-width full-height">
                 @Body
             </div>
@@ -28,12 +28,6 @@
 </MApp>
 
 @code {
-
-    private async Task OnErrorHandleAsync(Exception e)
-    {
-        
-    }
-    
     protected override void OnInitialized()
     {
         GlobalConfig.OnPageModeChanged += base.StateHasChanged;

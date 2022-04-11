@@ -14,6 +14,16 @@ public class AddRoleDto
 
     public List<Guid> Users { get; set; }
 
+    public AddRoleDto()
+    {
+        Name = "";
+        Description = "";
+        Enabled = true;
+        RolePermissions = new();
+        ChildRoles = new();
+        Users = new();
+    }
+
     public AddRoleDto(string name, string description, bool enabled, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
     {
         Name = name;
@@ -22,11 +32,6 @@ public class AddRoleDto
         RolePermissions = rolePermissions;
         ChildRoles = childRoles;
         Users = users;
-    }
-
-    public static implicit operator AddRoleDto(RoleDetailDto role)
-    {
-        return new AddRoleDto(role.Name, role.Description, role.Enabled, role.Permissions, role.ChildrenRoles, role.Users);
     }
 }
 
