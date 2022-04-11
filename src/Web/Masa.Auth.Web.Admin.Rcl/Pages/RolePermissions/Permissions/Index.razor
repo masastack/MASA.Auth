@@ -1,8 +1,8 @@
 ﻿@inherits AdminCompontentBase
 @page "/permission/index"
 
-<MRow>
-    <MCol Md="@("auto")">
+<MRow Class="full-height">
+    <MCol Md="@("auto")" Class="d-flex flex-column">
         <ClickedExtend Split=true MaxWidth=300>
             <MSelect @bind-Value="@value3"
                      Class="mr-2" HideDetails=true
@@ -12,7 +12,7 @@
                      ItemValue="u => u.Value">
             </MSelect>
         </ClickedExtend>
-        <MCard style="width:300px;" Class="full-height mt-4">
+        <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
             <ElevationTab TabMinWidth="120" Headers='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
                 <ElevationTabItem>
                     <MTreeview @bind-Active="_menuActive"
@@ -51,13 +51,13 @@
             </ElevationTab>
         </MCard>
     </MCol>
-    <MCol>
-        <MCard>
-            <MCardTitle>
-                <h6>@T("Permission Info")</h6>
-            </MCardTitle>
-            <MWindow @bind-Value="_tab" Reverse>
-                <MWindowItem Value="0">
+    <MCol Class="full-height">
+        <MWindow @bind-Value="_tab" Reverse Class="flex-grow-1">
+            <MWindowItem Value="0">
+                <MCard Class="full-height">
+                    <MCardTitle>
+                        <h6>@T("Permission Info")</h6>
+                    </MCardTitle>
                     <MCardText>
                         <MRow>
                             <MCol Md=6>
@@ -159,8 +159,13 @@
                         <MButton Text Class="error--text" MinWidth="100">@T("Delete Permission")</MButton>
                         <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
                     </MCardActions>
-                </MWindowItem>
-                <MWindowItem Value="1">
+                </MCard>
+            </MWindowItem>
+            <MWindowItem Value="1">
+                <MCard Class="full-height">
+                    <MCardTitle>
+                        <h6>@T("Permission Info")</h6>
+                    </MCardTitle>
                     <MCardText>
                         <MRow>
                             <MCol Md=6>
@@ -210,9 +215,9 @@
                         <MButton Text Class="error--text" MinWidth="100">@T("Delete Permission")</MButton>
                         <MButton class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
                     </MCardActions>
-                </MWindowItem>
-            </MWindow>
-        </MCard>
+                </MCard>
+            </MWindowItem>
+        </MWindow>
     </MCol>
 </MRow>
 
