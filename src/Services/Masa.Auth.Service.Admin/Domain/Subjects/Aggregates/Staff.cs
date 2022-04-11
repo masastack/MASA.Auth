@@ -3,13 +3,13 @@
 public class Staff : AuditAggregateRoot<Guid, Guid>
 {
     private User? _user;
-    private Position? _position;
+    private Position _position = new("");
     private List<DepartmentStaff> _departmentStaffs = new();
     private List<TeamStaff> _teamStaffs = new();
 
     public virtual User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
-    public virtual Position Position => _position ?? LazyLoader?.Load(this, ref _position) ?? new("");
+    public virtual Position Position => _position;
 
     public virtual IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
 

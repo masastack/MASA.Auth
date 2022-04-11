@@ -17,8 +17,6 @@ public partial class AddUserDialog
 
     private MForm? Form { get; set; }
 
-    private StringNumber Gender { get; set; } = "Male";
-
     private AddUserDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;

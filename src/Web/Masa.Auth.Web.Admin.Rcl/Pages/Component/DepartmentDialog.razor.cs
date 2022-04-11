@@ -11,6 +11,8 @@ public partial class DepartmentDialog
     [Parameter]
     public Guid Value { get; set; }
 
+    public Guid OldValue { get; set; }
+
     [Parameter]
     public EventCallback<DepartmentDto> ValueChanged { get; set; }
 
@@ -19,30 +21,28 @@ public partial class DepartmentDialog
     [Parameter]
     public List<DepartmentDto> Departments { get; set; } = new();
 
-    private bool IsFirst { get; set; } = true;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnParametersSetAsync()
     {
-        if (IsFirst && Value != default)
+        if(OldValue != Value)
         {
+            OldValue = Value;
             var department = FindDepartment(Departments);
             if (department is not null)
             {
                 await ValueChanged.InvokeAsync(department);
             }
-            IsFirst = false;
         }
 
         DepartmentDto? FindDepartment(List<DepartmentDto> departments)
         {
             var department = departments.FirstOrDefault(d => d.Id == Value);
-            if(department is not null) return department;
+            if (department is not null) return department;
             else
             {
-                foreach(var item in departments)
+                foreach (var item in departments)
                 {
                     var children = FindDepartment(item.Children);
-                    if(children is not null) return children;
+                    if (children is not null) return children;
                 }
             }
             return null;

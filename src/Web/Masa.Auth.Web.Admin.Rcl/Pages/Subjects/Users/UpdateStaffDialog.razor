@@ -13,7 +13,17 @@
                     </div>
                 </div>
                 <div class="mt-6 text-subtitle2">@T("Basic Information")</div>
-                <MRow Class="mt-1">
+                <MRow Class="mt-6">
+                    <MButtonGroup Dense Mandatory Borderless Value="Staff.User.GenderType.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px">
+                         <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Male" Ripple=false Value="@GenderTypes.Male.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
+                               @T(GenderTypes.Male.ToString())
+                           </MButton>    
+                          <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Female" Ripple=false Value="@GenderTypes.Female.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
+                               @T(GenderTypes.Female.ToString())
+                           </MButton> 
+                    </MButtonGroup>
+                </MRow>
+                <MRow Class="mt-6">
                     <MCol>
                         <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
                     </MCol>
