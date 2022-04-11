@@ -1,6 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
-public partial class AddUserDialog
+public partial class AddRoleDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -11,17 +11,11 @@ public partial class AddUserDialog
     [Parameter]
     public EventCallback OnSubmitSuccess { get; set; }
 
-    private int Step { get; set; } = 1;
+    private AddRoleDto Role { get; set; } = new();
 
-    private bool Fill { get; set; }
+    private RoleService RoleService => AuthCaller.RoleService;
 
     private MForm? Form { get; set; }
-
-    private StringNumber Gender { get; set; } = "Male";
-
-    private AddUserDto User { get; set; } = new();
-
-    private UserService UserService => AuthCaller.UserService;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -31,33 +25,30 @@ public partial class AddUserDialog
         }
         else
         {
-            Visible = false;
+            Visible = visible;
         }
-        if(Form is not null)
+        if (Form is not null)
         {
             await Form.ResetValidationAsync();
-        }   
+        }
     }
 
     protected override void OnParametersSet()
     {
-        if (Visible is true)
+        if (Visible)
         {
-            Step = 1;
-            Fill = false;
-            User = new();
+            Role = new();
         }
     }
 
-    public async Task AddUserAsync(EditContext context)
+    public async Task AddOrEditRoleAsync(EditContext context)
     {
         var success = context.Validate();
-        if (success)
+        if(success)
         {
             Loading = true;
-            User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-            await UserService.AddAsync(User);
-            OpenSuccessMessage(T("Add user data success"));
+            await RoleService.AddAsync(Role);
+            OpenSuccessMessage(T("Add role data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

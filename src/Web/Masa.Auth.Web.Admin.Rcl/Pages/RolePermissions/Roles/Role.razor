@@ -1,3 +1,4 @@
 ﻿@inherits AdminCompontentBase
 
-<AddOrUpdateRoleDialog role=CurrentRoleId @bind-Visible="RoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
+<AddRoleDialog @bind-Visible="AddRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
+<AddRoleDialog Role=CurrentRoleId @bind-Visible="UpdateRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />

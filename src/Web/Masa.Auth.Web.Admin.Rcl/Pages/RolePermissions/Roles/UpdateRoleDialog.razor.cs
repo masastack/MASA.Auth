@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
-public partial class AddOrUpdateRoleDialog
+public partial class UpdateRoleDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -49,20 +49,10 @@ public partial class AddOrUpdateRoleDialog
     public async Task AddOrEditRoleAsync()
     {
         Loading = true;
-        if (IsAdd)
-        {
-            await RoleService.AddAsync(Role);
-            OpenSuccessMessage(T("Add role data success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
-        else
-        {
-            await RoleService.UpdateAsync(Role);
-            OpenSuccessMessage(T("Edit role data success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
+        await RoleService.UpdateAsync(Role);
+        OpenSuccessMessage(T("Edit role data success"));
+        await OnSubmitSuccess.InvokeAsync();
+        await UpdateVisible(false);
         Loading = false;
     }
 

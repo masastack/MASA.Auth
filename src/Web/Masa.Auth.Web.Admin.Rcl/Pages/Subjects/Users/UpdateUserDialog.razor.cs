@@ -34,7 +34,7 @@ public partial class UpdateUserDialog
         }
         if (Form is not null)
         {
-            await Form.ResetAsync();
+            await Form.ResetValidationAsync();
         }
     }
 
