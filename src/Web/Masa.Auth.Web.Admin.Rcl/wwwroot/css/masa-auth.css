@@ -788,30 +788,38 @@
     height: 100%;
 }
 
-/*.m-text-field--outlined:not(.m-textarea) {
+.m-text-field--outlined:not(.m-textarea) {
     height: 48px !important;
 }
     .m-text-field--outlined:not(.m-textarea) fieldset {
         height: 51px !important;
-    }*/
+    }
 
-/*.m-text-field--outlined .m-label {
+.m-text-field--outlined .m-label {
     top: 14px !important;
-}*/
+}
 
-/*.m-text-field--outlined .m-label.m-label--active {
+.m-text-field--outlined .m-label.m-label--active {
     top: 18px !important;
 }
 
 .m-text-field--outlined .m-text-field__details {
     margin-top: -5px !important;
-}*/
+}
 
-/*.m-text-field--outlined:not(.m-textarea) .m-input__slot {
+.m-text-field--outlined:not(.m-textarea) .m-input__slot {
     height: 48px !important;
     min-height: 0px !important;
 }
-*/
+
+.m-text-field--outlined input {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+}
+
 .m-timeline {
     padding-top: 0 !important;
 }

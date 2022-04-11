@@ -36,6 +36,7 @@
   "Icon Code": "ICON代码",
   "Total": "共",
   "Item": "条",
+  "All": "全部",
 
   "Department": "部门",
   "Department location": "部门位置",
@@ -61,6 +62,7 @@
   "Password": "密码",
   "CompanyName": "公司名称",
   "Address": "地区",
+  "UserState": "用户状态",
   "Failed to query userList data:": "查询用户列表数据失败:",
   "Failed to query userDetail data:": "查询用户详情数据失败:",
   "Add user data success": "新增用户数据成功",

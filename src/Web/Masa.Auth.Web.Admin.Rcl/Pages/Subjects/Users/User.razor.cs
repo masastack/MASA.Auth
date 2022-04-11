@@ -69,6 +69,8 @@ public partial class User
         }
     }
 
+    public bool Filter { get; set; }
+
     public int TotalPage { get; set; }
 
     public long Total { get; set; }
@@ -78,6 +80,8 @@ public partial class User
     public Guid CurrentUserId { get; set; }
 
     public List<DataTableHeader<UserDto>> Headers { get; set; } = new();
+
+    public List<(string,bool?)> UserStateSelect { get; set; } = new();
 
     public bool AddUserDialogVisible { get; set; }
 
@@ -97,6 +101,12 @@ public partial class User
             new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
             new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
+        };
+
+        UserStateSelect = new()
+        {
+            (@T("Enable"), true),
+            (@T("Disabled"), false),
         };
 
         await GetUserAsync();

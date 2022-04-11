@@ -13,6 +13,8 @@ public partial class AddStaffDialog
 
     private MForm? Form { get; set; }
 
+    private int Step { get; set; } = 1;
+
     private AddStaffDto Staff { get; set; } = new();
 
     private StaffService StaffService => AuthCaller.StaffService;
@@ -38,6 +40,7 @@ public partial class AddStaffDialog
         if (Visible)
         {
             Staff = new();
+            Step = 1;
         }
     }
 
