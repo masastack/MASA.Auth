@@ -1,7 +1,9 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class ApiResource : AuditAggregateRoot<int, Guid>
+public class ApiResource : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
+    public bool IsDeleted { get; private set; }
+
     public bool Enabled { get; private set; } = true;
 
     public string Name { get; private set; } = "";

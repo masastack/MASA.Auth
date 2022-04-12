@@ -1,11 +1,13 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class Staff : AuditAggregateRoot<Guid, Guid>
+public class Staff : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
     private User? _user;
     private Position _position = new("");
     private List<DepartmentStaff> _departmentStaffs = new();
     private List<TeamStaff> _teamStaffs = new();
+
+    public bool IsDeleted { get; private set; }
 
     public virtual User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
@@ -49,7 +51,7 @@ public class Staff : AuditAggregateRoot<Guid, Guid>
         Enabled = enabled;
     }
 
-    public void Update(string name,Guid positionId, StaffTypes staffType,bool enabled)
+    public void Update(string name, Guid positionId, StaffTypes staffType, bool enabled)
     {
         Name = name;
         PositionId = positionId;
