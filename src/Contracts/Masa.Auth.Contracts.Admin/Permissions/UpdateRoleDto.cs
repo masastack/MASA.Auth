@@ -16,6 +16,15 @@ public class UpdateRoleDto
 
     public List<Guid> Users { get; set; }
 
+    public UpdateRoleDto()
+    {
+        Name = "";
+        Description = "";
+        RolePermissions = new();
+        ChildRoles = new();
+        Users = new();
+    }
+
     public UpdateRoleDto(Guid id, string name, string description, bool enabled, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
     {
         Id = id;

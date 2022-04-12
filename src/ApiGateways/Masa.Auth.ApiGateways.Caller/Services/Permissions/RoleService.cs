@@ -41,5 +41,10 @@ public class RoleService : ServiceBase
     {
         await Task.CompletedTask;
     }
+
+    public async Task RemoveAsync(Guid id)
+    {
+        await Task.CompletedTask;
+    }
 }
 
