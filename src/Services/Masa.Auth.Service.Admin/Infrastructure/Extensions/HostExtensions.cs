@@ -8,7 +8,13 @@ public static class HostExtensions
         {
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<TContext>();
-            context.Database.Migrate();
+            try
+            {
+                context.Database.Migrate();
+            }
+            catch
+            {
+            }
             seeder(context, services);
         }
     }

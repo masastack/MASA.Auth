@@ -22,6 +22,8 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public bool Enabled { get; private set; }
 
+    public bool IsDeleted { get; private set; }
+
     private List<PermissionRelation> permissions = new();
 
     public IReadOnlyCollection<PermissionRelation> Permissions => permissions;

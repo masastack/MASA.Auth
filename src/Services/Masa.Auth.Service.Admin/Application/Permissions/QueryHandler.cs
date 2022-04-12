@@ -55,14 +55,13 @@ public class QueryHandler
     #region Permission
 
     [EventHandler]
-    public async Task PermissionTypesQueryAsync(PermissionTypesQuery permissionTypesQuery)
+    public void PermissionTypesQueryAsync(PermissionTypesQuery permissionTypesQuery)
     {
         permissionTypesQuery.Result = Enum<PermissionTypes>.GetDescriptionList().Select(pt => new SelectItemDto<int>
         {
             Text = pt.desc,
             Value = (int)pt.value
         }).ToList();
-        await Task.CompletedTask;
     }
 
     [EventHandler]
