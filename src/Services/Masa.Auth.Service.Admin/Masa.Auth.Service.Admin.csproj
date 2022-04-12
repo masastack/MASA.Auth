@@ -26,6 +26,7 @@
 		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.4.0-prevew.2" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.4.0-preview.2" />
 		<PackageReference Include="Masa.Utils.Data.EntityFrameworkCore.SqlServer" Version="0.4.0-preview.2" />
+		<PackageReference Include="Masa.Utils.Enums" Version="0.4.0-preview.2" />
 		<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0-preview.2" />
 		<PackageReference Include="Masa.Utils.Expressions" Version="0.4.0-preview.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
