@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220412020650_init")]
+    [Migration("20220412024419_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

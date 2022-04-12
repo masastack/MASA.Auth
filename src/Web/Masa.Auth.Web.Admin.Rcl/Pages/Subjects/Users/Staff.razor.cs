@@ -47,8 +47,6 @@ public partial class Staff
         }
     }
 
-    public int TotalPage { get; set; }
-
     public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
@@ -88,7 +86,6 @@ public partial class Staff
         var request = new GetStaffsDto(Page, PageSize, Search, Enabled);
         var response = await StaffService.GetListAsync(request);
         Staffs = response.Items;
-        TotalPage = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }

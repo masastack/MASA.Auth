@@ -4,8 +4,6 @@ public class PaginationDto<TEntity> where TEntity : class
 {
     public long Total { get; }
 
-    public int TotalPage { get; }
-
     public List<TEntity> Items { get; }
 
     public PaginationDto()
@@ -14,10 +12,9 @@ public class PaginationDto<TEntity> where TEntity : class
     }
 
     [JsonConstructor]
-    public PaginationDto(long total, int totalPage, List<TEntity> items)
+    public PaginationDto(long total, List<TEntity> items)
     {
         Total = total;
-        TotalPage = totalPage;
         Items = items;
     }
 }

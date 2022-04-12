@@ -14,11 +14,13 @@ public partial class UpdateRoleDialog
     [Parameter]
     public Guid RoleId { get; set; }
 
-    private bool IsAdd => RoleId == Guid.Empty;
+    private UpdateRoleDto Role { get; set; } = new();
 
-    private RoleDetailDto Role { get; set; } = new();
+    private RoleDetailDto RoleDetail { get; set; } = new();
 
     private RoleService RoleService => AuthCaller.RoleService;
+
+    private MForm? Form { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -30,35 +32,38 @@ public partial class UpdateRoleDialog
         {
             Visible = visible;
         }
+        if (Form is not null)
+        {
+            await Form.ResetValidationAsync();
+        }
     }
 
     protected override async Task OnParametersSetAsync()
     {
         if (Visible)
         {
-            if (IsAdd) Role = new();
-            else await GetRoleDetailAsync();
+            await GetRoleDetailAsync();
         }
     }
 
     public async Task GetRoleDetailAsync()
     {
-        Role = await RoleService.GetDetailAsync(RoleId);
+        RoleDetail = await RoleService.GetDetailAsync(RoleId);
+        Role = RoleDetail;
     }
 
-    public async Task AddOrEditRoleAsync()
+    public async Task UpdateRoleAsync(EditContext context)
     {
-        Loading = true;
-        await RoleService.UpdateAsync(Role);
-        OpenSuccessMessage(T("Edit role data success"));
-        await OnSubmitSuccess.InvokeAsync();
-        await UpdateVisible(false);
-        Loading = false;
-    }
-
-    protected override bool ShouldRender()
-    {
-        return Visible;
+        var success = context.Validate();
+        if(success)
+        {
+            Loading = true;
+            await RoleService.UpdateAsync(Role);
+            OpenSuccessMessage(T("Update role data success"));
+            await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();           
+            Loading = false;
+        }
     }
 }
 

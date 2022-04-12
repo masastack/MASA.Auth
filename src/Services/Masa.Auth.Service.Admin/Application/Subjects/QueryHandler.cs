@@ -43,7 +43,7 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(users.Total, users.TotalPages, users.Result.Select(u =>
+        query.Result = new(users.Total, users.Result.Select(u =>
             new UserDto(u.Id, u.Name, u.DisplayName, u.Avatar, u.IdCard, u.Account, u.CompanyName, u.Enabled, u.PhoneNumber, u.Email, u.CreationTime, u.GenderType)
         ).ToList());
     }
@@ -96,7 +96,6 @@ public class QueryHandler
         }
         var staffQuery = _authDbContext.Set<Staff>().Where(condition);
         var total = await staffQuery.LongCountAsync();
-        var totalPages = 1;
         var staffs = await staffQuery.Include(s => s.DepartmentStaffs)
                                .ThenInclude(ds => ds.Department)
                                .Include(s => s.Position)
@@ -106,7 +105,7 @@ public class QueryHandler
                                .Take(query.PageSize)
                                .ToListAsync();
 
-        query.Result = new(total, totalPages, staffs.Select(s =>
+        query.Result = new(total, staffs.Select(s =>
            new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
        ).ToList());
     }

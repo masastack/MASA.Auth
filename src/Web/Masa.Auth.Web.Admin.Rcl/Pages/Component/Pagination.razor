@@ -23,7 +23,6 @@
     <div class="@Class ml-auto">
         <MIcon Class="hover-pointer" Disabled=PreviousDisabled Size=24>mdi-chevron-left</MIcon>
         <span class="ma-5 text-caption">@Page/@TotalPage</span>
-@*        <span class="ma-5 text-caption">@((Page-1)* PageSize+1) to @(Page*PageSize) of @Total</span>*@
         <MIcon Class="hover-pointer" Disabled=NextDisabled Size=24>mdi-chevron-right</MIcon>
     </div>
 </div>
@@ -39,9 +38,6 @@
     public EventCallback<int> PageChanged { get; set; }
 
     [Parameter]
-    public int TotalPage { get; set; }
-
-    [Parameter]
     public int PageSize { get; set; }
 
     [Parameter]
@@ -49,6 +45,8 @@
 
     [Parameter]
     public long Total { get; set; }
+
+    private int TotalPage => (int)((Total + PageSize -1) / PageSize);
 
     [Parameter]
     public List<int> PageSizeSelect { get; set; } = new() { 10, 20, 50, 100 };

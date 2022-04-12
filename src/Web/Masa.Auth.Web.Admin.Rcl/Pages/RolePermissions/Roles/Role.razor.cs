@@ -47,8 +47,6 @@ public partial class Role
         }
     }
 
-    public long TotalPages { get; set; }
-
     public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
@@ -87,20 +85,36 @@ public partial class Role
         var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
         var response = await RoleService.GetListAsync(reuquest);
         Roles = response.Items;
-        TotalPages = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }
 
-    public void OpenAddTeamDialog()
+    public void OpenAddRoleDialog()
     {
         AddRoleDialogVisible = true;
     }
 
-    public void OpenEditUserDialog(UserDto user)
+    public void OpenUpdateRoleDialog(RoleDto role)
     {
-        CurrentRoleId = user.Id;
+        CurrentRoleId = role.Id;
         UpdateRoleDialogVisible = true;
+    }
+
+    public void OpenRemoveRoleDialog(RoleDto role)
+    {
+        OpenConfirmDialog(async confirm =>
+        {
+            if (confirm) await RemoveRoleAsync(role.Id);
+        }, T("Are you sure delete role data"));
+    }
+
+    public async Task RemoveRoleAsync(Guid roleId)
+    {
+        Loading = true;
+        await RoleService.RemoveAsync(roleId);
+        OpenSuccessMessage(T("Delete user data success"));
+        await GetRolesAsync();
+        Loading = false;
     }
 }
 

@@ -11,7 +11,7 @@ public class ThirdPartyUserService : ServiceBase
 
     public async Task<PaginationDto<ThirdPartyUserDto>> GetThirdPartyUsersAsync(GetThirdPartyUsersDto request)
     {
-        return await Task.FromResult(new PaginationDto<ThirdPartyUserDto>(0, 0, new List<ThirdPartyUserDto>()));
+        return await Task.FromResult(new PaginationDto<ThirdPartyUserDto>(0, new List<ThirdPartyUserDto>()));
     }
 
     public async Task<ThirdPartyUserDetailDto> GetThirdPartyUserDetailAsync(Guid id)
