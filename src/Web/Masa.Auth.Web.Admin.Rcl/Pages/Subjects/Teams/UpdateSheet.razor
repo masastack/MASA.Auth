@@ -1,38 +1,44 @@
 ﻿@inherits AdminCompontentBase
 
 <SheetDialog Value=Show ValueChanged=ShowChanged Title="@T("Update Team")" ContentStyle="padding-right:228px;padding-left:228px;">
-    <ElevationTab Dense Class="mt-6 full-height" Headers='new List<string>{T("Basic information"),T("Setup team admins"),T("Setup team members")}'>
+    <ElevationTab Dense Class="pt-12 full-height" Headers='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' TabWindowClass="mt-8">
         <ElevationTabItem>
-            <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
-            <MCardActions class="d-flex align-center mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                    @T("Delete")
-                </MButton>
-                <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</MButton>
-            </MCardActions>
+            <MCard Class="d-flex flex-column full-height">
+                <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
+                <MCardActions class="d-flex align-center mb-10 px-6">
+                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                        @T("Delete")
+                    </MButton>
+                    <MSpacer />
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</MButton>
+                </MCardActions>
+            </MCard>
         </ElevationTabItem>
         <ElevationTabItem>
-            <TeamAdmin @bind-Value="Dto.TeamAdmin" />
-            <MCardActions class="d-flex align-center mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                    @T("Delete")
-                </MButton>
-                <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</MButton>
-            </MCardActions>
+            <MCard Class="d-flex flex-column full-height">
+                <TeamAdmin @bind-Value="Dto.TeamAdmin" />
+                <MCardActions class="d-flex align-center mb-10 px-6">
+                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                        @T("Delete")
+                    </MButton>
+                    <MSpacer />
+                    <MButton class="rounded-pill primary mr-4" MinWidth="100">@T("Preview")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</MButton>
+                </MCardActions>
+            </MCard>
         </ElevationTabItem>
         <ElevationTabItem>
-            <TeamMember @bind-Value="Dto.TeamMember" />
-            <MCardActions class="d-flex align-center  mb-6">
-                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                    @T("Delete")
-                </MButton>
-                <MSpacer />
-                <MButton class="rounded-pill primary" MinWidth="100">@T("Preview")</MButton>
-                <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateMemberHandler">@T("Save")</MButton>
-            </MCardActions>
+            <MCard Class="d-flex flex-column full-height">
+                <TeamMember @bind-Value="Dto.TeamMember" />
+                <MCardActions class="d-flex align-center mb-10 px-6">
+                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                        @T("Delete")
+                    </MButton>
+                    <MSpacer />
+                    <MButton class="rounded-pill primary mr-4" MinWidth="100">@T("Preview")</MButton>
+                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateMemberHandler">@T("Save")</MButton>
+                </MCardActions>
+            </MCard>
         </ElevationTabItem>
     </ElevationTab>
 </SheetDialog>

@@ -1,3 +1,46 @@
 ﻿@inherits AdminCompontentBase
 
-<AddOrUpdateRoleDialog role=CurrentRoleId @bind-Visible="RoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
+<MDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
+    <HeaderColContent Context="header">
+        <span class="text-btn">@header.Text</span>
+    </HeaderColContent>
+    <ItemColContent>
+        @switch (context.Header.Value)
+        {
+            case nameof(RoleDto.Name):
+                <span class="text-body3 neutral--text">@context.Item.Name</span>
+                break;
+            case (nameof(RoleDto.CreationTime)):
+                <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                break;
+            case nameof(RoleDto.ModificationTime):
+                <span class="text-body4 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                break;
+            case (nameof(RoleDto.Creator)):
+                <span class="text-body4 neutral-lighten-2--text">@context.Item.Creator</span>
+                break;
+            case (nameof(RoleDto.Modifier)):
+                <span class="text-body4 neutral-lighten-2--text">@context.Item.Modifier</span>
+                break;
+            case nameof(RoleDto.Enabled):
+                string color = context.Item.Enabled ? "sample-green" : "error";
+                <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
+                    <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
+                </MChip>
+                break;
+            case "Action":
+                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
+                <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
+                break;
+            default:
+                <span class="text-body3">@context.Value</span>
+                break;
+        }
+    </ItemColContent>
+    <FooterContent>
+        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+    </FooterContent>
+</MDataTable>
+
+<AddRoleDialog @bind-Visible="AddRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
+<AddRoleDialog Role=CurrentRoleId @bind-Visible="UpdateRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />

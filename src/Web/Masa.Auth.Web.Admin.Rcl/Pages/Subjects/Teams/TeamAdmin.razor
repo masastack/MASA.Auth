@@ -3,6 +3,8 @@
 <MCardText>
     <MAutocomplete @bind-Value="Value.Staffs"
                    Items="_staffs"
+                   Loading="_staffLoading"
+                   OnSearchInputUpdate="QuerySelectionStaff"
                    ItemText="r=>r.Name"
                    ItemValue="r=>r.Id"
                    Outlined

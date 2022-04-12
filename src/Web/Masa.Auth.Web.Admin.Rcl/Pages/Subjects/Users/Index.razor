@@ -4,47 +4,30 @@
 
 <MCard>
     <MCardText Class="pa-6">
-        <div class="d-flex mb-6" style="height:80px;">
-            <MAvatar Size=80>
-                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-            </MAvatar>
-            <div class="ml-3 block-center">
-                <div style="height:67px;">
-                    <div class="text-h4 mb-1">214759</div>
-                    <MTabs @bind-Value="_pageTab" HideSlider Color="sample-green">
-                        <MTab Class="ml-n3 px-0" Style="" Value="PageTab.User">
-                            <MIcon Size=16 Color="@(_userActive?"sample-green":"fill")">mdi-circle</MIcon>
-                            <span class="ml-3 @(_userActive?"text-subtitle2":"text-body2")">@T(PageTab.User)</span>
-                        </MTab>
-                        <MTab Class="ml-4 px-0" Value="PageTab.ThirdPartyUser">
-                            <MIcon Size=16 Color="@(_thirdPartyuserActive?"sample-green":"fill")">mdi-circle</MIcon>
-                            <span class="ml-3 @(_thirdPartyuserActive?"text-subtitle2":"text-body2")">@T(PageTab.ThirdPartyUser)</span>
-                        </MTab>
-                        <MTab Class="ml-4 px-0" Value="PageTab.Staff">
-                            <MIcon Size=16 Color="@(_staffActive?"sample-green":"fill")">mdi-circle</MIcon>
-                            <span class="ml-3 @(_staffActive?"text-subtitle2":"text-body2")">@T(PageTab.Staff)</span>
-                        </MTab>
-                    </MTabs>
-                </div>              
-            </div>
+        <div>
+            <MButtonGroup Dense Mandatory Borderless @bind-Value="_pageTab" Class="rounded-lg elevation-tab mb-6">
+                @foreach(var title in new List<string> { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff})
+                {
+                   <MButton Ripple=false Value="title" Class="rounded-lg" MinWidth=100>
+                        @T(title)
+                   </MButton> 
+                }             
+            </MButtonGroup>
+            <MWindow Value="_pageTab" Reverse Class="flex-grow-1">
+                <MWindowItem Value="PageTab.User" Class="full-height">
+                    <User />
+                </MWindowItem>
+                    <MWindowItem Value="PageTab.ThirdPartyUser" Class="full-height">
+                    <ThirdPartyUser />
+                </MWindowItem>
+                    <MWindowItem Value="PageTab.Staff" Class="full-height">
+                    <Staff />   
+                </MWindowItem>
+            </MWindow>
         </div>
-        <MTabsItems Value="_pageTab">
-            <MTabItem Value="PageTab.User">
-                <User />
-            </MTabItem>
-            <MTabItem Value="PageTab.ThirdPartyUser">
-                <ThirdPartyUser />
-            </MTabItem>
-            <MTabItem Value="PageTab.Staff">
-                <Staff />
-            </MTabItem>
-        </MTabsItems>
     </MCardText>
 </MCard>
 
 @code {
     StringNumber _pageTab = PageTab.User;
-    bool _userActive => _pageTab == PageTab.User;
-    bool _thirdPartyuserActive => _pageTab == PageTab.ThirdPartyUser;
-    bool _staffActive => _pageTab == PageTab.Staff;
 }

@@ -1,12 +1,14 @@
-﻿using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
+﻿using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class Organization
 {
     List<Guid> _active = new List<Guid>();
+    Guid _currentStaffId = Guid.Empty;
     List<DepartmentDto> _departments = new();
-    bool _showAdd, _showCopy;
+    bool _showAdd, _showCopy, _addStaff, _updateStaff;
     DepartmentChildrenCountDto _departmentChildrenCountDto = new();
     readonly List<DataTableHeader<StaffDto>> _headers = new()
     {
@@ -49,6 +51,12 @@ public partial class Organization
         _paginationStaffs = data;
     }
 
+    private async Task LoadStaffsAsync()
+    {
+        var data = await StaffService.GetListAsync(_getStaffsDto);
+        _paginationStaffs = data;
+    }
+
     private void Add(Guid parentId)
     {
         _upsertDepartmentDto = new UpsertDepartmentDto();
@@ -56,10 +64,19 @@ public partial class Organization
         _showAdd = true;
     }
 
+    private async Task EnterSearch(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == Keyboards.Enter)
+        {
+            await LoadStaffsAsync();
+        }
+    }
+
     private async Task DeleteAsync(Guid departmentId)
     {
         await DepartmentService.RemoveAsync(departmentId);
         await LoadDepartmentsAsync();
+        _showAdd = false;
     }
 
     private async Task Update(Guid departmentId)
@@ -105,10 +122,6 @@ public partial class Organization
         _copyDepartmentDto.Enabled = department.Enabled;
         _copyDepartmentDto.ParentId = department.ParentId;
         _copyDepartmentDto.Staffs = department.StaffList;
-        _copyDepartmentDto.Staffs = new List<StaffDto> {
-            new StaffDto(Guid.NewGuid(),department.Name,"","1234567858",true,"谷守到","鬼谷子","","12345678888",""),
-            new StaffDto(Guid.NewGuid(),department.Name,"","1234567858",true,"谷首道","鬼谷子2","","12345678888","")
-        };
         _showCopy = true;
     }
 
@@ -119,6 +132,12 @@ public partial class Organization
             return;
         }
         await LoadStaffsAsync(activedItems.First().Id);
+    }
+
+    private async Task UpdateStaff(Guid staffId)
+    {
+        _currentStaffId = staffId;
+        _updateStaff = true;
     }
 }
 

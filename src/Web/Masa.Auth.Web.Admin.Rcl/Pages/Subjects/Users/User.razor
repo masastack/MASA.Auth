@@ -1,16 +1,34 @@
 ﻿@inherits AdminCompontentBase
 
-<div style="position: fixed;right: 48px;top: 140px;" class="block-center">
-   <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+<div style="position: fixed;right: 48px;top: 108px;" class="d-flex">
+    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
         <PrependInnerContent>
             <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
         </PrependInnerContent>
     </MTextField>
+    <MIcon Size=20 class="ml-6" @onclick="() => Filter = !Filter">mdi-filter-off</MIcon>
     <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddUserDialog>
         <MIcon Size=18>mdi-plus</MIcon>
         <span class="ml-2">@T("Add")</span>
     </MButton>
 </div>
+
+@if (Filter)
+{
+    <div class="">
+        <MCol>
+            <MSelect @bind-Value="Enabled"
+                 HideDetails="@("auto")"
+                 Outlined
+                 Clearable
+                 Items="@UserStateSelect"
+                 ItemText="select => select.Item1"
+                 ItemValue="select => select.Item2"
+                 Label="@T("UserState")">
+            </MSelect>
+        </MCol>
+    </div>
+}
 
 <MDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
     <HeaderColContent Context="header">
@@ -29,8 +47,8 @@
                     </div>
                 </div>
                 break;
-            case (nameof(UserDto.Email)):
-                <span class="text-body3">@context.Item.Email</span>
+            case (nameof(UserDto.Account)):
+                <span class="text-body3">@context.Item.Account</span>
                 break;
             case nameof(UserDto.PhoneNumber):
                 <span class="text-body3">@context.Item.PhoneNumber</span>
@@ -46,15 +64,15 @@
                 break;
             case "Action":
                 <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
-                <MIcon Small Color="neutral-lighten-2"  Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
                 break;
             default:
-                 <span class="text-body3">@context.Value</span>
+                <span class="text-body3">@context.Value</span>
                 break;
         }
     </ItemColContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize TotalPage=TotalPage Total=Total />
+        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </MDataTable>
 

@@ -4,7 +4,7 @@
 @implements IDisposable
 
 <MApp>
-    <MAppBar Elevation=0 App MaxHeight=60 Class="@($"{(GlobalConfig.PageMode == PageModes.PageTab ?"mx-6":"mx-6 rounded-b-4")}")">
+    <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
         <Favorite />
         <MSpacer />
         <Search />
@@ -17,25 +17,9 @@
 
     <MMain Class="fill-lighten-1" Style="padding-top:60px">
         <MErrorHandler>
-            @if (GlobalConfig.PageMode == PageModes.Breadcrumb)
-            {
-                <div class="pa-6 max-width">
-                    <Breadcrumb></Breadcrumb>
-                    @Body
-                </div>
-            }
-            else if (GlobalConfig.PageMode == PageModes.PageTab)
-            {
-                <PageTabs>
-                    @Body
-                </PageTabs>
-            }
-            else
-            {
-                <div class="pa-6 max-width">
-                    @Body
-                </div>
-            }
+            <div class="pa-6 max-width full-height">
+                @Body
+            </div>
         </MErrorHandler>
         <MLoading />
         <MMessage />

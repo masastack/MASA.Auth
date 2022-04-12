@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220407021003_staff2")]
-    partial class staff2
+    [Migration("20220412024419_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -214,6 +214,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ChildPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -233,6 +236,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChildPermissionId");
 
                     b.HasIndex("PermissionId");
 
@@ -1606,6 +1611,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ThirdPartyIdpId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("ThirdPartyUser", "subjects");
@@ -1649,6 +1656,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
+
+                    b.Property<int>("GenderType")
+                        .HasColumnType("int");
 
                     b.Property<string>("IdCard")
                         .IsRequired()
@@ -1792,11 +1802,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<DateTime>("ModificationTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
+                    b.Property<string>("RowVersion")
                         .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
@@ -1808,6 +1817,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex(new[] { "EventId", "RowVersion" }, "index_eventid_version");
 
                     b.HasIndex(new[] { "State", "ModificationTime" }, "index_state_modificationtime");
 
@@ -1837,11 +1848,19 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ChildPermission")
+                        .WithMany()
+                        .HasForeignKey("ChildPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "Permission")
                         .WithMany("Permissions")
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ChildPermission");
 
                     b.Navigation("Permission");
                 });
@@ -2160,11 +2179,19 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyUser", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyIdp", "ThirdPartyIdp")
+                        .WithMany()
+                        .HasForeignKey("ThirdPartyIdpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ThirdPartyIdp");
 
                     b.Navigation("User");
                 });

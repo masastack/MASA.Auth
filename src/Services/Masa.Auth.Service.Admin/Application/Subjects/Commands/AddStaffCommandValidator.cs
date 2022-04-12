@@ -4,6 +4,6 @@ public class AddStaffCommandValidator : AbstractValidator<AddStaffCommand>
 {
     public AddStaffCommandValidator()
     {
-
+        RuleFor(command => command.Staff).SetValidator(new AddStaffValidator());
     }
 }

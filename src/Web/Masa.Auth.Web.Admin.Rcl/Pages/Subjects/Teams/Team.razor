@@ -3,13 +3,13 @@
 
 <PageTitle>@T("Team")</PageTitle>
 
-<MCard>
+<MCard Class="full-height">
     <MCardTitle class="mx-2 py-6">
         <DefaultTextField @bind-Value="_search" Placeholder="@T("Search")" OnKeyDown="SearchKeyDown"
-                    Style="max-width:340px;" PrependInnerIcon="mdi-magnify">
+                          Style="max-width:340px;" PrependInnerIcon="mdi-magnify" HideDetails=true>
         </DefaultTextField>
     </MCardTitle>
-    <MCardText>
+    <MCardText Style="overflow-y:auto;">
         <MRow>
             @foreach (var team in _teams)
             {
@@ -26,6 +26,6 @@
     </MCardText>
 </MCard>
 
-<AddSheet @bind-Show=_showAdd OnSubmit="OnCreate"/>
-<UpdateSheet @bind-Show=_showEdit Dto=_editTeamDto OnUpdateBase="OnUpdateBasicInfo" 
-    OnUpdateAdmin="OnUpdateAdminPersonnel" OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete"/>
+<AddSheet @bind-Show=_showAdd OnSubmit="OnCreate" />
+<UpdateSheet @bind-Show=_showEdit Dto=_editTeamDto OnUpdateBase="OnUpdateBasicInfo"
+             OnUpdateAdmin="OnUpdateAdminPersonnel" OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete" />

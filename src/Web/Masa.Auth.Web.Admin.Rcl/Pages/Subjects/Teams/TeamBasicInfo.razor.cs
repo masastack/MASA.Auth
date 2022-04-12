@@ -18,6 +18,10 @@ public partial class TeamBasicInfo
 
     private async Task OnNameChanged(string name)
     {
+        if (!string.IsNullOrWhiteSpace(name) && Value.Name.FirstOrDefault() != Value.Avatar.Name.FirstOrDefault())
+        {
+            Value.Avatar.Name = name.FirstOrDefault().ToString();
+        }
         Value.Name = name;
         await ValueChanged.InvokeAsync(Value);
     }

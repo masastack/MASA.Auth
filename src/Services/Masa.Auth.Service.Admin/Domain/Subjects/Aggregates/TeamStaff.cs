@@ -1,7 +1,9 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class TeamStaff : AuditEntity<Guid, Guid>
+public class TeamStaff : AuditEntity<Guid, Guid>, ISoftDelete
 {
+    public bool IsDeleted { get; private set; }
+
     public Guid TeamId { get; private set; }
 
     public Guid StaffId { get; private set; }

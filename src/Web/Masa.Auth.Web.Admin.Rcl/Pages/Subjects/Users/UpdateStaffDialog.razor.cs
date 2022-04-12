@@ -21,6 +21,8 @@ public partial class UpdateStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
+    private MForm? Form { get; set; }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -30,6 +32,10 @@ public partial class UpdateStaffDialog
         else
         {
             Visible = visible;
+        }
+        if (Form is not null)
+        {
+            await Form.ResetValidationAsync();
         }
     }
 
@@ -47,14 +53,18 @@ public partial class UpdateStaffDialog
         Staff = StaffDetail;
     }
 
-    public async Task UpdateStaffAsync()
+    public async Task UpdateStaffAsync(EditContext context)
     {
-        Loading = true;
-        await StaffService.UpdateAsync(Staff);
-        OpenSuccessMessage("Update staff success");
-        await OnSubmitSuccess.InvokeAsync();
-        await UpdateVisible(false);
-        Loading = false;
+        var success = context.Validate();
+        if (success)
+        {
+            Loading = true;
+            await StaffService.UpdateAsync(Staff);
+            OpenSuccessMessage("Update staff success");
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
+            Loading = false;
+        }
     }
 
     public void OpenRemoveStaffDialog()
@@ -70,6 +80,8 @@ public partial class UpdateStaffDialog
         Loading = true;
         await StaffService.RemoveAsync(StaffId);
         OpenSuccessMessage(T("Delete staff data success"));
+        await UpdateVisible(false);
+        await OnSubmitSuccess.InvokeAsync();
         Loading = false;
     }
 }

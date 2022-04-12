@@ -8,6 +8,23 @@ public partial class AddApiPermission
     [Parameter]
     public EventCallback<bool> ShowChanged { get; set; }
 
+    [Parameter]
+    public EventCallback<ApiPermissionDetailDto> OnSubmit { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public List<SelectItemDto<PermissionTypes>> PermissionTypes { get; set; } = new();
+
+    ApiPermissionDetailDto _apiPermissionDetailDto = new();
+
+    private async Task OnSubmitHandler()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(_apiPermissionDetailDto);
+        }
+    }
+
     private List<string> _values = new List<string>
     {
         "foo", "bar"
@@ -16,8 +33,6 @@ public partial class AddApiPermission
     {
         "foo", "bar", "fizz", "buzz"
     };
-    bool _enabled = true;
-    private string value3 = "";
 
     public class Item
     {

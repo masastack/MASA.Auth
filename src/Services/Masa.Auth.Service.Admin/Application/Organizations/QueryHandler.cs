@@ -3,10 +3,12 @@
 public class QueryHandler
 {
     readonly IDepartmentRepository _departmentRepository;
+    readonly IPositionRepository _positionRepository;
 
-    public QueryHandler(IDepartmentRepository departmentRepository)
+    public QueryHandler(IDepartmentRepository departmentRepository, IPositionRepository positionRepository)
     {
         _departmentRepository = departmentRepository;
+        _positionRepository = positionRepository;
     }
 
     [EventHandler]
@@ -60,6 +62,13 @@ public class QueryHandler
             ThirdLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 3)),
             FourthLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 4)),
         };
+    }
+
+    [EventHandler]
+    public async Task GetPositionSelectAsync(PositionSelectQuery query)
+    {
+        var psoitions = await _positionRepository.GetListAsync(p => p.Name.Contains(query.Name));
+        query.Result = psoitions.Select(p => new PositionSelectDto(p.Id, p.Name)).ToList();
     }
 }
 

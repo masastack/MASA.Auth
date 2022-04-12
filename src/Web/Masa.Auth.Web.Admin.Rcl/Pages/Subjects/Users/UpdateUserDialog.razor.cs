@@ -14,6 +14,8 @@ public partial class UpdateUserDialog
     [Parameter]
     public Guid UserId { get; set; }
 
+    private MForm? Form { get; set; }
+
     private UserDetailDto UserDetail { get; set; } = new();
 
     private UpdateUserDto User { get; set; } = new();
@@ -29,6 +31,10 @@ public partial class UpdateUserDialog
         else
         {
             Visible = false;
+        }
+        if (Form is not null)
+        {
+            await Form.ResetValidationAsync();
         }
     }
 

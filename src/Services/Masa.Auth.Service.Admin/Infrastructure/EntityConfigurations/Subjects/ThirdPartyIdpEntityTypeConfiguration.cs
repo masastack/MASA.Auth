@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
 
-public class ThirdPartyPlatformEntityTypeConfiguration : IEntityTypeConfiguration<ThirdPartyIdp>
+public class ThirdPartyIdpEntityTypeConfiguration : IEntityTypeConfiguration<ThirdPartyIdp>
 {
     public void Configure(EntityTypeBuilder<ThirdPartyIdp> builder)
     {

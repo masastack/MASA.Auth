@@ -15,10 +15,20 @@ public class StaffService : ServiceBase
         {
             ["pageSize"] = request.PageSize.ToString(),
             ["page"] = request.Page.ToString(),
-            ["search"] = request.Search.ToString(),
+            ["search"] = request.Search ?? "",
             ["enabled"] = request.Enabled?.ToString() ?? "",
+            ["departmentId"] = request.DepartmentId.ToString()
         };
         return await SendAsync<PaginationDto<StaffDto>>(nameof(GetListAsync), paramters);
+    }
+
+    public async Task<List<StaffSelectDto>> GetSelectAsync(string name)
+    {
+        var paramters = new Dictionary<string, string>
+        {
+            ["name"] = name,
+        };
+        return await SendAsync<List<StaffSelectDto>>(nameof(GetSelectAsync), paramters);
     }
 
     public async Task<StaffDetailDto> GetDetailAsync(Guid id)

@@ -1,9 +1,11 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class UserPermission : AuditEntity<Guid, Guid>
+public class UserPermission : AuditEntity<Guid, Guid>, ISoftDelete
 {
     private User? _user;
     private Permission? _permission;
+
+    public bool IsDeleted { get; private set; }
 
     public User User
     {

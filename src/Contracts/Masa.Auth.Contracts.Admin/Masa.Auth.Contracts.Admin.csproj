@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EnumDesc" Version="0.2.0" />
     <PackageReference Include="FluentValidation" Version="10.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Util.Reflection" Version="1.0.2" />
+    <PackageReference Include="Util.Reflection" Version="1.0.3" />
   </ItemGroup>
 
 </Project>

@@ -46,7 +46,7 @@ public class CommandHandler
         }
         else
         {
-            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account ?? "", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Email ?? "", userDto.Address);
+            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account ?? "", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Email ?? "", userDto.Address, userDto.Gender);
             await _userRepository.AddAsync(user);
             command.UserId = user.Id;
         }
@@ -75,7 +75,7 @@ public class CommandHandler
                     throw new UserFriendlyException($"User with email {userDto.Email} already exists");
             }
 
-            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password);
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.GenderType);
             await _userRepository.UpdateAsync(user);
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
-public partial class AddOrUpdateRoleDialog
+public partial class UpdateRoleDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -14,11 +14,13 @@ public partial class AddOrUpdateRoleDialog
     [Parameter]
     public Guid RoleId { get; set; }
 
-    private bool IsAdd => RoleId == Guid.Empty;
+    private UpdateRoleDto Role { get; set; } = new();
 
-    private RoleDetailDto Role { get; set; } = new();
+    private RoleDetailDto RoleDetail { get; set; } = new();
 
     private RoleService RoleService => AuthCaller.RoleService;
+
+    private MForm? Form { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -30,45 +32,38 @@ public partial class AddOrUpdateRoleDialog
         {
             Visible = visible;
         }
+        if (Form is not null)
+        {
+            await Form.ResetValidationAsync();
+        }
     }
 
     protected override async Task OnParametersSetAsync()
     {
         if (Visible)
         {
-            if (IsAdd) Role = new();
-            else await GetRoleDetailAsync();
+            await GetRoleDetailAsync();
         }
     }
 
     public async Task GetRoleDetailAsync()
     {
-        Role = await RoleService.GetDetailAsync(RoleId);
+        RoleDetail = await RoleService.GetDetailAsync(RoleId);
+        Role = RoleDetail;
     }
 
-    public async Task AddOrEditRoleAsync()
+    public async Task UpdateRoleAsync(EditContext context)
     {
-        Loading = true;
-        if (IsAdd)
+        var success = context.Validate();
+        if(success)
         {
-            await RoleService.AddAsync(Role);
-            OpenSuccessMessage(T("Add role data success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
-        else
-        {
+            Loading = true;
             await RoleService.UpdateAsync(Role);
-            OpenSuccessMessage(T("Edit role data success"));
-            await OnSubmitSuccess.InvokeAsync();
+            OpenSuccessMessage(T("Update role data success"));
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();           
+            Loading = false;
         }
-        Loading = false;
-    }
-
-    protected override bool ShouldRender()
-    {
-        return Visible;
     }
 }
 

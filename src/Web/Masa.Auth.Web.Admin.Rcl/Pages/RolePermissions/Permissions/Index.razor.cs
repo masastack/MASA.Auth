@@ -40,10 +40,21 @@ public partial class Index
         new Item("Buzz", "4"),
     };
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    MenuPermissionDetailDto _menuPermissionDetailDto = new();
+    ApiPermissionDetailDto _apiPermissionDetailDto = new();
+    List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
+    List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
+
+    PermissionService PermissionService => AuthCaller.PermissionService;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            var permissionTypes = await PermissionService.GetTypesAsync();
+            _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
+            _apiPermissionTypes = permissionTypes.Where(a => a.Value == PermissionTypes.Api).ToList();
+
             _menuPermissions = new List<PermissionDto>()
             {
                 new PermissionDto() { Name = "菜单1", Code = "1",Id=Guid.NewGuid(),Children = new List<PermissionDto>
@@ -76,6 +87,6 @@ public partial class Index
             };
             StateHasChanged();
         }
-        return base.OnAfterRenderAsync(firstRender);
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

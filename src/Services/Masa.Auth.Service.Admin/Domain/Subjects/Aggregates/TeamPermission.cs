@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class TeamPermission : AuditEntity<Guid, Guid>
+public class TeamPermission : AuditEntity<Guid, Guid>, ISoftDelete
 {
     private Team? _team;
     private Permission? _permission;
@@ -16,6 +16,8 @@ public class TeamPermission : AuditEntity<Guid, Guid>
         get => _permission ?? throw new UserFriendlyException("Failed to get permission data");
         private set => _permission = value;
     }
+
+    public bool IsDeleted { get; private set; }
 
     public Guid PermissionId { get; private set; }
 

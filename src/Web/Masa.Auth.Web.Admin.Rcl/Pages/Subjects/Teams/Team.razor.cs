@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
+﻿using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class Team
 {
@@ -25,7 +27,7 @@ public partial class Team
 
     private async Task SearchKeyDown(KeyboardEventArgs eventArgs)
     {
-        if (eventArgs.Key == "Enter")
+        if (eventArgs.Key == Keyboards.Enter)
         {
             await LoadTeams();
         }

@@ -19,7 +19,7 @@ public class RoleService : ServiceBase
     {
         var skip = (request.Page - 1) * request.PageSize;
         var roles = Roles.Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<RoleDto>(Roles.Count, 1, roles));
+        return await Task.FromResult(new PaginationDto<RoleDto>(Roles.Count, roles));
     }
 
     public async Task<RoleDetailDto> GetDetailAsync(Guid id)
@@ -38,6 +38,11 @@ public class RoleService : ServiceBase
     }
 
     public async Task UpdateAsync(UpdateRoleDto request)
+    {
+        await Task.CompletedTask;
+    }
+
+    public async Task RemoveAsync(Guid id)
     {
         await Task.CompletedTask;
     }

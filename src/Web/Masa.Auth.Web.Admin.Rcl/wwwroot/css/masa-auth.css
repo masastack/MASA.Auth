@@ -771,6 +771,66 @@
 .button-group-active {
     background: #ECE8FF !important;
 }
+
+.m-stepper__items {
+    height: 100%;
+}
+
+.m-stepper__content {
+    height: 100%;
+}
+
+.m-stepper__wrapper.active {
+    height: 100%;
+}
+
+.m-stepper__content {
+    height: 100%;
+}
+
+.m-text-field--outlined:not(.m-textarea) {
+    height: 48px !important;
+}
+    .m-text-field--outlined:not(.m-textarea) fieldset {
+        height: 51px !important;
+    }
+
+.m-text-field--outlined .m-label {
+    top: 14px !important;
+}
+
+.m-text-field--outlined .m-label.m-label--active {
+    top: 18px !important;
+}
+
+.m-text-field--outlined .m-text-field__details {
+    margin-top: -5px !important;
+}
+
+.m-text-field--outlined:not(.m-textarea) .m-input__slot {
+    height: 48px !important;
+    min-height: 0px !important;
+}
+
+.m-text-field--outlined input {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.m-timeline {
+    padding-top: 0 !important;
+}
+
+.m-timeline-item {
+    padding-bottom: 0 !important;
+}
+
+.m-timeline-item .m-timeline-item__divider {
+    height: 23px !important;
+}
 /* pagetabs */
 /*组件样式全局修改end*/
 /*shop*/
@@ -1235,42 +1295,6 @@ tr:hover {
     padding:3px;
 }
 
-.m-tabs.elevation-tab .m-tab {
-    background-color: #F0F3FA !important;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height, or 150% */
-
-    display: flex;
-    align-items: center;
-    text-align: center;
-    /* text/2-2正文 */
-
-    color: #7681AB;
-}
-
-.m-tabs.elevation-tab .m-tab--active {
-    background-color: white !important;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    letter-spacing: 0.1px;
-    /* text/1-2强调 */
-
-    color: #323D6F;
-    padding: 4px;
-    background-image: linear-gradient(to bottom, white 0%, white 100%), linear-gradient(to bottom, #F0F3FA 0%, #F0F3FA 100%);
-    background-clip: content-box, padding-box;
-}
-
 .m-item-group.elevation-tab .m-btn.m-btn--has-bg.m-btn--active {
     background-color: white !important;
     font-family: 'Roboto';
@@ -1311,12 +1335,31 @@ tr:hover {
 .remover-hover.m-list-item:hover::before {
     opacity: 0 !important;
 }
-}
 
 .m-chip:not(.m-chip--active) {
     background: #f6f8fd !important;
 }
 
-.max-full-height{
-    max-height:100% !important;
+.m-chip.theme--light.m-chip--select {
+    background: #f6f8fd !important;
+}
+
+.max-full-height {
+    max-height: 100% !important;
+}
+
+.m-stepper__content.full-height .m-stepper__wrapper {
+    height: 100% !important;
+}
+
+.m-window.m-item-group.flex-grow-1 .m-window__container {
+    height: 100% !important;
+}
+
+.full-height.d-flex.flex-column .m-data-table__wrapper {
+    flex-grow: 1 !important;
+}
+
+.m-text-field.m-text-field--solo.elevation-0:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
+    box-shadow: none;
 }

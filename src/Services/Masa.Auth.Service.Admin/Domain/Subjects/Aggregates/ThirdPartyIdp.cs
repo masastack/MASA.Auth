@@ -1,7 +1,9 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>
+public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
+    public bool IsDeleted { get; private set; }
+
     public string Name { get; private set; }
 
     public string DisplayName { get; private set; }

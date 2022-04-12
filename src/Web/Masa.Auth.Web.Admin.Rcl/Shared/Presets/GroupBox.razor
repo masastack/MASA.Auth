@@ -1,6 +1,6 @@
 ﻿<div class="@($"m-label--border {@Class}")" style="@Style">
     <fieldset>
-    <legend>@Title</legend>
+    <legend class="@TitleClass" style="@TitleStyle">@Title</legend>
     @ChildContent
 </fieldset>
 </div>
@@ -11,6 +11,12 @@
 
     [Parameter]
     public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? TitleClass { get; set; }
+
+    [Parameter]
+    public string? TitleStyle { get; set; }
 
     [Parameter]
     public string? Class { get; set; }

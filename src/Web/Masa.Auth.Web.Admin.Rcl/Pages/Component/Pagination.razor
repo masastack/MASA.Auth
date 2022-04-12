@@ -9,18 +9,21 @@
             Style="max-width:120px;"
             Dense   
             Outlined
-            Items="@_pageSizeSelect"
+            Items="@PageSizeSelect"
             ItemText="p => p.ToString()"
             ItemValue="p => p"
             HideDetails="@("auto")"
             Class="rounded-2">
          </MSelect>
         <div class="ml-2 block-center text-caption2">@T("Rows per page")</div>
+        <div class="ml-2 block-center text-caption2">
+            <span>@T("Total")@Total@T("Item")</span>
+        </div>
     </div>
     <div class="@Class ml-auto">
-        <MIcon Class="hover-pointer" Size=24>mdi-chevron-left</MIcon>
-        <span class="ma-5 text-caption">@((Page-1)* PageSize+1) to @(Page*PageSize) of @Total</span>
-        <MIcon Class="hover-pointer" Size=24>mdi-chevron-right</MIcon>
+        <MIcon Class="hover-pointer" Disabled=PreviousDisabled Size=24>mdi-chevron-left</MIcon>
+        <span class="ma-5 text-caption">@Page/@TotalPage</span>
+        <MIcon Class="hover-pointer" Disabled=NextDisabled Size=24>mdi-chevron-right</MIcon>
     </div>
 </div>
 
@@ -35,9 +38,6 @@
     public EventCallback<int> PageChanged { get; set; }
 
     [Parameter]
-    public int TotalPage { get; set; }
-
-    [Parameter]
     public int PageSize { get; set; }
 
     [Parameter]
@@ -46,5 +46,28 @@
     [Parameter]
     public long Total { get; set; }
 
-    List<int> _pageSizeSelect = new() { 10, 25, 50, 100 };
+    private int TotalPage => (int)((Total + PageSize -1) / PageSize);
+
+    [Parameter]
+    public List<int> PageSizeSelect { get; set; } = new() { 10, 20, 50, 100 };
+
+    bool NextDisabled => Page == TotalPage;
+
+    bool PreviousDisabled => Page == 1;
+
+    async Task Next()
+    {
+        if(NextDisabled is false)
+        {
+            await PageChanged.InvokeAsync(++Page);
+        }
+    }
+
+    async Task Previous()
+    {
+        if(PreviousDisabled is false)
+        {
+            await PageChanged.InvokeAsync(--Page);
+        }
+    }
 }

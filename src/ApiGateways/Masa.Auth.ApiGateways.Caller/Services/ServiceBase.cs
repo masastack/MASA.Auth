@@ -45,14 +45,14 @@ public abstract class ServiceBase
 
     protected async Task SendAsync<TRequest>(string methodName, TRequest? data = default)
     {
-        if (methodName.StartsWith("Add")) await PutAsync(methodName, data);
-        else if (methodName.StartsWith("Update")) await PostAsync(methodName, data);
+        if (methodName.StartsWith("Add")) await PostAsync(methodName, data);
+        else if (methodName.StartsWith("Update")) await PutAsync(methodName, data);
         else if (methodName.StartsWith("Remove")) await DeleteAsync(methodName, data);
     }
 
-    protected async Task<TResponse> SendAsync<TResponse>(string methodName, Dictionary<string, string>? data = null)
+    protected async Task<TResponse> SendAsync<TResponse>(string methodName, Dictionary<string, string>? query = null)
     {
-        return await GetAsync<TResponse>(methodName, data);
+        return await GetAsync<TResponse>(methodName, query);
     }
 
     string BuildAdress(string methodName)

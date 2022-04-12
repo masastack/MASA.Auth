@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class Permission : AuditAggregateRoot<Guid, Guid>
+public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
     public int SystemId { get; set; }
 
@@ -21,6 +21,8 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     public string Description { get; private set; } = "";
 
     public bool Enabled { get; private set; }
+
+    public bool IsDeleted { get; private set; }
 
     private List<PermissionRelation> permissions = new();
 
@@ -55,11 +57,11 @@ public class Permission : AuditAggregateRoot<Guid, Guid>
     {
         if (rolePermissions.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,because RolePermissions not empty!");
+            throw new UserFriendlyException("current permission can`t delete,some role used!");
         }
         if (userPermissions.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,because UserPermissions not empty!");
+            throw new UserFriendlyException("current permission can`t delete,some user used!");
         }
         if (permissions.Any())
         {
