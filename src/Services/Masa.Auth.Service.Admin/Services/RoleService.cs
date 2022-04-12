@@ -1,21 +1,14 @@
 ﻿namespace Masa.Auth.Service.Admin.Services;
 
-public class RoleService : ServiceBase
+public class RoleService : RestServiceBase
 {
     public RoleService(IServiceCollection services) : base(services, "api/role")
     {
-        MapGet(GetListAsync);
-        MapGet(GetSelectAsync);
-        MapGet(GetDetailAsync);
-        MapPost(AddAsync);
-        MapPut(UpdateAsync);
-        MapDelete(RemoveAsync);
     }
 
-    private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus,
-           [FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string search = "", [FromQuery] bool enabled = true)
+    private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus,GetRolesDto role)
     {
-        var query = new RolePaginationQuery(page, pageSize, search, enabled);
+        var query = new GetRolesQuery(role.Page, role.PageSize, role.Search, role.Enabled);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -36,23 +29,23 @@ public class RoleService : ServiceBase
 
     private async Task AddAsync(
         [FromServices] IEventBus eventBus,
-        [FromBody] AddRoleCommand command)
+        [FromBody] AddRoleDto role)
     {
-        await eventBus.PublishAsync(command);
+        await eventBus.PublishAsync(new AddRoleCommand(role));
     }
 
     private async Task UpdateAsync(
         [FromServices] IEventBus eventBus,
-        [FromBody] UpdateRoleCommand command)
+        [FromBody] UpdateRoleDto role)
     {
-        await eventBus.PublishAsync(command);
+        await eventBus.PublishAsync(new UpdateRoleCommand(role));
     }
 
     private async Task RemoveAsync(
         [FromServices] IEventBus eventBus,
-        [FromBody] RemoveRoleCommand command)
+        [FromBody] RemoveRoleDto role)
     {
-        await eventBus.PublishAsync(command);
+        await eventBus.PublishAsync(new RemoveRoleCommand(role));
     }
 }
 

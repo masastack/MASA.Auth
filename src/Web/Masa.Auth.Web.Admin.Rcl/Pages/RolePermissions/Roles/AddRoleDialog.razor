@@ -1,24 +1,27 @@
 ﻿@inherits AdminCompontentBase
 
-@*<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
     <MForm Model="Role" EnableValidation @ref="Form">
-        <div style="padding-left:204px;padding-right:204px;padding-bottom:24px;padding-top:24px;height:100%;width: 100%;position: absolute;">
-            <div style="position: relative;" class="full-height">
-                <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
-                <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
-            
-                <div style="overflow-y:scroll;overflow-y:scroll;max-height:650px;height:100%;">
-
-                </div>
-
-                <div class="d-flex" style="bottom:0px;right:0px;width:100%;position:absolute;">
-                    <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
-                    <MSpacer></MSpacer>
-                    <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</MButton>
-                    <MButton Color="primary" Class="small-button" OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</MButton>
+        <div class="sheetDialogPadding full-height flex-column">
+            <div class="d-flex mb-6">
+                <div class="mx-auto">
+                    <MTextField @bind-Value="Role.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
                 </div>
             </div>
-        </div>
+            <div>
+                <RoleSelect Lable="@T("Inherited Role")" />
+                <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+            </div>           
+            
+            <div class="mt-6 flex-height-auto overflow-y">
+                <GlobalNavigationDialog />
+            </div>
 
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="Role.Enabled" Inset Class="label" Label="@(Role.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton Color="primary" Class="small-button" OnClick="async () => await AddRoleAsync(context)">@T("Save")</MButton>
+            </div>
+        </div>
     </MForm>
-</SheetDialog>*@
+</SheetDialog>

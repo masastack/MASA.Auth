@@ -12,11 +12,6 @@ public partial class TeamSelect
 
     private TeamService TeamService => AuthCaller.TeamService;
 
-    protected override Task OnParametersSetAsync()
-    {
-        return base.OnParametersSetAsync();
-    }
-
     protected override async Task OnInitializedAsync()
     {
         Teams = await TeamService.SelectAsync();

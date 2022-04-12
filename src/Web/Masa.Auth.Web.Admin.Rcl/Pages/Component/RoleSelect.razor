@@ -2,12 +2,13 @@
 
 <MAutocomplete Value="Value"
                ValueChanged=ValueChanged
-               Items="Teams"
+               Items="Roles"
                Outlined
                Height=55
                Chips
                Color="primary"
-               Label="@("Team")"
+               Readonly=Readonly
+               Label="@Lable"
                HideDetails="@("auto")"
                ItemText="t=>t.Name"
                ItemValue="t=>t.Id"
@@ -15,16 +16,10 @@
     <SelectionContent Context="data">
         <MChip Close
                OnCloseClick="()=>Value.Remove(data.Item.Id)">
-            <MAvatar Left>
-                <img src="@data.Item.Avatar" />
-            </MAvatar>
             @data.Item.Name
         </MChip>
     </SelectionContent>
     <ItemContent Context="data">
-        <MListItemAvatar>
-            <img src="@data.Item.Avatar" />
-        </MListItemAvatar>
         <MListItemContent>
             <MListItemTitle>
                 @data.Item.Name

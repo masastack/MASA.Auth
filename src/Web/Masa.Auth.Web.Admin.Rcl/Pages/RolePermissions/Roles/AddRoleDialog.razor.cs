@@ -41,7 +41,7 @@ public partial class AddRoleDialog
         }
     }
 
-    public async Task AddOrEditRoleAsync(EditContext context)
+    public async Task AddRoleAsync(EditContext context)
     {
         var success = context.Validate();
         if(success)

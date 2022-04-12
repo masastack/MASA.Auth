@@ -2,12 +2,6 @@
 
 public class RoleService : ServiceBase
 {
-    List<RoleDto> Roles = new List<RoleDto>
-    {
-        new RoleDto(Guid.NewGuid(), "admin", "00001", 1, "admin Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
-        new RoleDto(Guid.NewGuid(), "student", "10001", 1, "student Number One", true, DateTime.Now, DateTime.Now, "wwl", "wwl"),
-    };
-
     protected override string BaseUrl { get; set; }
 
     internal RoleService(ICallerProvider callerProvider) : base(callerProvider)
@@ -17,34 +11,45 @@ public class RoleService : ServiceBase
 
     public async Task<PaginationDto<RoleDto>> GetListAsync(GetRolesDto request)
     {
-        var skip = (request.Page - 1) * request.PageSize;
-        var roles = Roles.Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<RoleDto>(Roles.Count, roles));
-    }
+        var paramters = new Dictionary<string, string>
+        {
+            ["pageSize"] = request.PageSize.ToString(),
+            ["page"] = request.Page.ToString(),
+            ["search"] = request.Search,
+            ["enabled"] = request.Enabled?.ToString() ?? "",
+        };
 
-    public async Task<RoleDetailDto> GetDetailAsync(Guid id)
-    {
-        return await Task.FromResult(new RoleDetailDto());
+        return await SendAsync<PaginationDto<RoleDto>>(nameof(GetListAsync), paramters);
     }
 
     public async Task<List<RoleSelectDto>> GetSelectAsync()
     {
-        return await Task.FromResult(Roles.Select(r => new RoleSelectDto(r.Id, r.Name)).ToList());
+        return await SendAsync<List<RoleSelectDto>>(nameof(GetSelectAsync), query: null);
+    }
+
+    public async Task<RoleDetailDto> GetDetailAsync(Guid id)
+    {
+        var paramters = new Dictionary<string, string>
+        {
+            ["id"] = id.ToString(),
+        };
+
+        return await SendAsync<RoleDetailDto>(nameof(GetDetailAsync), paramters);
     }
 
     public async Task AddAsync(AddRoleDto request)
     {
-        await Task.CompletedTask;
+        await SendAsync(nameof(AddAsync), request);
     }
 
     public async Task UpdateAsync(UpdateRoleDto request)
     {
-        await Task.CompletedTask;
+        await SendAsync(nameof(UpdateAsync), request);
     }
 
     public async Task RemoveAsync(Guid id)
     {
-        await Task.CompletedTask;
+        await SendAsync(nameof(RemoveAsync), new RemoveRoleDto(id));
     }
 }
 

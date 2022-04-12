@@ -37,6 +37,7 @@
   "Total": "共",
   "Item": "条",
   "All": "全部",
+  "History record": "历史记录",
 
   "Department": "部门",
   "Department location": "部门位置",
@@ -133,6 +134,8 @@
   "Role": "角色",
   "Add Role": "新增角色",
   "Update Role": "编辑角色",
+  "Inherited Role": "继承角色",
+  "Superior Role": "上级角色",
   "Failed to query roleList data:": "查询角色列表数据失败:",
   "Failed to query roleDetail data:": "查询角色详情数据失败:",
   "Add role data success": "添加角色数据成功",

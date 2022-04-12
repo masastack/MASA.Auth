@@ -14,7 +14,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetRolePaginationAsync(RolePaginationQuery query)
+    private async Task GetRolePaginationAsync(GetRolesQuery query)
     {
         Expression<Func<Role, bool>> condition = role => role.Enabled == query.Enabled;
         if (!string.IsNullOrEmpty(query.Search))
