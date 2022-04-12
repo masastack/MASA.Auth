@@ -65,35 +65,31 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task ApiPermissionsQueryAsync(ApiPermissionListQuery apiPermissionsQuery)
+    public async Task ChildMenuPermissionsQueryAsync(ChildMenuPermissionsQuery childMenuPermissionsQuery)
     {
-        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == apiPermissionsQuery.SystemId
+        var permissions = await _permissionRepository.GetListAsync(p => p.ParentId == childMenuPermissionsQuery.PermissionId
                             && p.Type == PermissionTypes.Api);
-        apiPermissionsQuery.Result = permissions.GroupBy(p => p.AppId)
-            .Select(pg => new AppPermissionDto
+        childMenuPermissionsQuery.Result = permissions
+            .Select(p => new PermissionDto
             {
-                AppId = pg.Key,
-                Permissions = pg.Select(p => new PermissionDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Code = p.Code,
-                }).ToList()
+                Id = p.Id,
+                Name = p.Name,
+                Type = p.Type
             }).ToList();
     }
 
     [EventHandler]
-    public async Task MenuPermissionsQueryAsync(MenuPermissionListQuery menuPerimissionsQuery)
+    public async Task ApplicationPermissionsQueryAsync(ApplicationPermissionsQuery applicationPermissionsQuery)
     {
-        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == menuPerimissionsQuery.SystemId
-                            && p.Type != PermissionTypes.Api);
+        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == applicationPermissionsQuery.SystemId);
 
-        menuPerimissionsQuery.Result = permissions.GroupBy(p => p.AppId)
-            .Select(pg => new AppPermissionDto
-            {
-                AppId = pg.Key,
-                Permissions = GetPermissionChild(Guid.Empty, pg.ToList())
-            }).ToList();
+        applicationPermissionsQuery.Result = permissions.Select(p => new AppPermissionDto
+        {
+            AppId = p.AppId,
+            PermissonId = p.Id,
+            PermissonName = p.Name,
+            Type = p.Type
+        }).ToList();
     }
 
     [EventHandler]
@@ -108,17 +104,6 @@ public class QueryHandler
         {
             Value = p.Id,
             Text = p.Name
-        }).ToList();
-    }
-
-    private List<PermissionDto> GetPermissionChild(Guid parentId, List<Permission> source)
-    {
-        return source.Where(p => p.ParentId == parentId).Select(p => new PermissionDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Code = p.Code,
-            Children = GetPermissionChild(p.Id, source)
         }).ToList();
     }
 
@@ -145,8 +130,7 @@ public class QueryHandler
             ApiPermissions = permission.Permissions.Select(pr => new PermissionDto
             {
                 Id = pr.Id,
-                Name = pr.ChildPermission.Name,
-                Code = pr.ChildPermission.Code
+                Name = pr.ChildPermission.Name
             }).ToList(),
             Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),

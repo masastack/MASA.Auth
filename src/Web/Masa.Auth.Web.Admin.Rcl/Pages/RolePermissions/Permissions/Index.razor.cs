@@ -1,13 +1,15 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
+﻿using Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions.ViewModels;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class Index
 {
     StringNumber _tab = 0;
     bool _enabled = false;
-    List<PermissionDto> _menuPermissions = new();
-    List<PermissionDto> _apiPermissions = new();
-    List<Guid> _menuActive = new List<Guid>();
-    List<Guid> _apiActive = new List<Guid>();
+    List<AppPermissionsViewModel> _menuPermissions = new();
+    List<AppPermissionsViewModel> _apiPermissions = new();
+    List<Guid> _menuPermissionActive = new List<Guid>();
+    List<Guid> _apiPermissionActive = new List<Guid>();
     private List<string> _values = new List<string>
     {
         "foo", "bar"
@@ -16,35 +18,14 @@ public partial class Index
     {
         "foo", "bar", "fizz", "buzz"
     };
+    int _curProjectId;
     bool _addApiPermission, _addMenuPermission;
-
-    private string value3 = "";
-
-    public class Item
-    {
-        public string Label { get; set; }
-        public string Value { get; set; }
-
-        public Item(string label, string value)
-        {
-            Label = label;
-            Value = value;
-        }
-    }
-
-    List<Item> items = new()
-    {
-        new Item("Foo", "1"),
-        new Item("Bar", "2"),
-        new Item("Fizz", "3"),
-        new Item("Buzz", "4"),
-    };
-
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
     List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
     List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
-    List<ProjectDto> _projectDtos = new();
+    List<ProjectDto> _projectItems = new();
+    List<AppDto> _curAppItems = new();
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
@@ -54,44 +35,47 @@ public partial class Index
     {
         if (firstRender)
         {
-            _projectDtos = await ProjectService.GetListAsync();
-
             var permissionTypes = await PermissionService.GetTypesAsync();
             _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
             _apiPermissionTypes = permissionTypes.Where(a => a.Value == PermissionTypes.Api).ToList();
 
-            _menuPermissions = new List<PermissionDto>()
+            _projectItems = await ProjectService.GetListAsync();
+            if (!_projectItems.Any())
             {
-                new PermissionDto() { Name = "菜单1", Code = "1",Id=Guid.NewGuid(),Children = new List<PermissionDto>
-                    {
-                        new PermissionDto() { Name ="11111",Id=Guid.NewGuid()},
-                        new PermissionDto() { Name ="222233",Id=Guid.NewGuid()}
-                    }
-                },
-                new PermissionDto() { Name = "菜单2", Code = "1",Id=Guid.NewGuid(),Children = new List<PermissionDto>
-                    {
-                        new PermissionDto() { Name ="44444",Id=Guid.NewGuid()},
-                        new PermissionDto() { Name ="555555",Id=Guid.NewGuid()}
-                    }
-                }
-            };
-            _apiPermissions = new List<PermissionDto>()
-            {
-                new PermissionDto() { Name = "Api1", Code = "1",Id=Guid.NewGuid(),Children = new List<PermissionDto>
-                    {
-                        new PermissionDto() { Name ="11111",Id=Guid.NewGuid()},
-                        new PermissionDto() { Name ="222233",Id=Guid.NewGuid()}
-                    }
-                },
-                new PermissionDto() { Name = "Api2", Code = "1",Id=Guid.NewGuid(),Children = new List<PermissionDto>
-                    {
-                        new PermissionDto() { Name ="44444",Id=Guid.NewGuid()},
-                        new PermissionDto() { Name ="555555",Id=Guid.NewGuid()}
-                    }
-                }
-            };
+                return;
+            }
+            _curProjectId = _projectItems.First().Id;
+            _curAppItems = _projectItems.First().Apps;
+
+            InitAppPermissions();
+
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void SelectProjectItem(ProjectDto project)
+    {
+        _curAppItems = project.Apps;
+
+        InitAppPermissions();
+    }
+
+    //await PermissionService.GetApplicationPermissionsAsync(_curProjectId);
+
+    private void InitAppPermissions()
+    {
+        _menuPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
+        {
+            IsPermission = true,
+            Id = Guid.NewGuid(),
+            Name = a.Name
+        }).ToList();
+        _apiPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
+        {
+            IsPermission = true,
+            Id = Guid.NewGuid(),
+            Name = a.Name
+        }).ToList();
     }
 }

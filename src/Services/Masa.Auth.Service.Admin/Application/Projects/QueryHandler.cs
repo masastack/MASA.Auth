@@ -3,7 +3,7 @@
 public class QueryHandler
 {
     [EventHandler]
-    private async Task GetProjectListAsync(ProjectListQuery query)
+    public async Task GetProjectListAsync(ProjectListQuery query)
     {
         query.Result = new List<ProjectDto>
         {

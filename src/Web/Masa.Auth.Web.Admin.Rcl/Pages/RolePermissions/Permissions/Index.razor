@@ -4,10 +4,10 @@
 <MRow Class="full-height">
     <MCol Md="@("auto")" Class="d-flex flex-column">
         <ClickedExtend Split=true MaxWidth=300>
-            <MSelect @bind-Value="@value3"
-                     HideDetails=true
+            <MSelect HideDetails=true TItemValue="int" TItem="ProjectDto" TValue="int"
+                     OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
                      Solo Dense Class="elevation-0"
-                     Items="@_projectDtos"
+                     Items="@_projectItems"
                      ItemText="u => u.Name"
                      ItemValue="u => u.Id">
             </MSelect>
@@ -15,7 +15,7 @@
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
             <ElevationTab TabMinWidth="120" TabWindowClass="mt-4" Headers='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
                 <ElevationTabItem>
-                    <MTreeview @bind-Active="_menuActive"
+                    <MTreeview @bind-Active="_menuPermissionActive"
                                Items="_menuPermissions"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
@@ -32,7 +32,7 @@
                     </MTreeview>
                 </ElevationTabItem>
                 <ElevationTabItem>
-                    <MTreeview @bind-Active="_apiActive"
+                    <MTreeview @bind-Active="_apiPermissionActive"
                                Items="_apiPermissions"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
@@ -64,9 +64,9 @@
                                 <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
                                          Label="@T("Pre Code Select")"
                                          Outlined Dense HideDetails="@("auto")"
-                                         Items="@items"
-                                         ItemText="u => u.Label"
-                                         ItemValue="u => u.Value">
+                                         Items="_curAppItems"
+                                         ItemText="u => u.Name"
+                                         ItemValue="u => u.Identity">
                                 </MSelect>
                             </MCol>
                             <MCol Md=6>
@@ -175,12 +175,12 @@
                     <MCardText>
                         <MRow>
                             <MCol Md=6>
-                                <MSelect @bind-Value="@value3"
+                                <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
                                          Label="@T("Pre Code Select")"
                                          Outlined Dense HideDetails="@("auto")"
-                                         Items="@items"
-                                         ItemText="u => u.Label"
-                                         ItemValue="u => u.Value">
+                                         Items="_curAppItems"
+                                         ItemText="u => u.Name"
+                                         ItemValue="u => u.Identity">
                                 </MSelect>
                             </MCol>
                             <MCol Md=6>

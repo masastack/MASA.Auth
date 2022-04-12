@@ -4,7 +4,8 @@
     {
         public PermissionService(IServiceCollection services) : base(services, "api/permission")
         {
-            MapGet(ListAsync);
+            MapGet(GetApplicationPermissionsAsync);
+            MapGet(GetChildMenuPermissionsAsync);
             MapGet(GetTypesAsync);
             MapGet(GetApiPermissionSelectAsync);
             MapGet(GetAsync);
@@ -32,16 +33,16 @@
             await eventBus.PublishAsync(createDepartmentCommand);
         }
 
-        private async Task<List<AppPermissionDto>> ListAsync(IEventBus eventBus,
-            [FromQuery] int systemId, [FromQuery] bool apiPermission)
+        private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] int systemId)
         {
-            if (apiPermission)
-            {
-                var apiQuery = new ApiPermissionListQuery(systemId);
-                await eventBus.PublishAsync(apiQuery);
-                return apiQuery.Result;
-            }
-            var funcQuery = new MenuPermissionListQuery(systemId);
+            var funcQuery = new ApplicationPermissionsQuery(systemId);
+            await eventBus.PublishAsync(funcQuery);
+            return funcQuery.Result;
+        }
+
+        private async Task<List<PermissionDto>> GetChildMenuPermissionsAsync(IEventBus eventBus, [FromQuery] Guid permissionId)
+        {
+            var funcQuery = new ChildMenuPermissionsQuery(permissionId);
             await eventBus.PublishAsync(funcQuery);
             return funcQuery.Result;
         }
