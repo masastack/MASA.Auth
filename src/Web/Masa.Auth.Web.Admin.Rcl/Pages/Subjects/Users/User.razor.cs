@@ -71,8 +71,6 @@ public partial class User
 
     public bool Filter { get; set; }
 
-    public int TotalPage { get; set; }
-
     public long Total { get; set; }
 
     public List<UserDto> Users { get; set; } = new();
@@ -118,7 +116,6 @@ public partial class User
         var request = new GetUsersDto(Page, PageSize, default, Enabled);
         var response = await UserService.GetListAsync(request);
         Users = response.Items;
-        TotalPage = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }

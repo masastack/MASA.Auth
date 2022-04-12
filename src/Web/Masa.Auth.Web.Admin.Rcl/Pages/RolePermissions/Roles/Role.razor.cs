@@ -49,8 +49,6 @@ public partial class Role
 
     public long Total { get; set; }
 
-    public int TotalPage { get; set; }
-
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
     public List<RoleDto> Roles { get; set; } = new();
@@ -87,7 +85,6 @@ public partial class Role
         var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
         var response = await RoleService.GetListAsync(reuquest);
         Roles = response.Items;
-        TotalPage = response.TotalPage;
         Total = response.Total;
         Loading = false;
     }
