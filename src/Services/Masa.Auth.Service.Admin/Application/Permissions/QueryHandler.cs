@@ -14,9 +14,11 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetRolePaginationAsync(GetRolesQuery query)
+    private async Task GetRoleListAsync(GetRolesQuery query)
     {
-        Expression<Func<Role, bool>> condition = role => role.Enabled == query.Enabled;
+        Expression<Func<Role, bool>> condition = role => true;
+        if (query.Enabled is not null)
+            condition = condition.And(role => role.Enabled == query.Enabled);
         if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(user => user.Name.Contains(query.Search));
 
@@ -26,24 +28,21 @@ public class QueryHandler
             PageSize = query.PageSize,
             Sorting = new Dictionary<string, bool>
             {
-                [nameof(User.ModificationTime)] = true,
-                [nameof(User.CreationTime)] = true,
+                [nameof(Role.ModificationTime)] = true,
+                [nameof(Role.CreationTime)] = true,
             }
         });
 
-        //query.Result = new(roles.Total, roles.TotalPages, roles.Result.Select(u => new RoleDto
-        //{
-
-        //}));
+        query.Result = new(roles.Total, roles.Result.Select(r => new RoleDto(r.Id, r.Name, r.Limit, r.Description, r.Enabled, r.CreationTime, r.ModificationTime, r.CreatorUser?.Name ?? "", r.ModifierUser?.Name ?? "")).ToList());
     }
 
     [EventHandler]
     private async Task GetRoleDetailAsync(RoleDetailQuery query)
     {
-        var role = await _roleRepository.FindAsync(u => u.Id == query.RoleId);
+        var role = await _roleRepository.GetDetailAsync(query.RoleId);
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
-        //query.Result = new(role.Name, role.Description, role.Enabled, role.RolePermissions.Select(rp => rp.Id).ToList(), role.RoleItems.Select(ri => ri.Role.Id).ToList());
+        query.Result = new(role.Id,role.Name, role.Description, role.Enabled, role.Limit,role.Permissions.Select(rp => rp.Id).ToList(), role.ChildrenRoles.Select(ri => ri.Role.Id).ToList(),role,role.CreationTime,);
     }
 
     [EventHandler]

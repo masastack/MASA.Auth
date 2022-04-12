@@ -14,32 +14,34 @@ public class CommandHandler
     [EventHandler]
     public async Task AddRoleAsync(AddRoleCommand command)
     {
-        if (await _roleRepository.GetCountAsync(u => u.Name == command.Name) > 0)
-            throw new UserFriendlyException($"Role with Name {command.Name} already exists");
+        var roleDto = command.Role;
+        if (await _roleRepository.GetCountAsync(u => u.Name == roleDto.Name) > 0)
+            throw new UserFriendlyException($"Role with Name {roleDto.Name} already exists");
 
-        var role = new Role(command.Name, command.Description, command.Enabled);
-        role.BindChildrenRoles(command.ChildrenRoles);
-        role.BindPermissions(command.Permissions);
+        var role = new Role(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role.BindChildrenRoles(roleDto.ChildrenRoles);
+        role.BindPermissions(roleDto.Permissions);
         await _roleRepository.AddAsync(role);
     }
 
     [EventHandler]
     public async Task UpdateUserAsync(UpdateRoleCommand command)
     {
-        var role = await _roleRepository.FindAsync(u => u.Id == command.RoleId);
+        var roleDto = command.Role;
+        var role = await _roleRepository.GetByIdAsync(roleDto.Id);
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 
-        role.Update();
-        role.BindChildrenRoles(command.ChildrenRoles);
-        role.BindPermissions(command.Permissions);
+        role.Update(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role.BindChildrenRoles(roleDto.ChildrenRoles);
+        role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
     }
 
     [EventHandler]
     public async Task DeleteUserAsync(RemoveRoleCommand command)
     {
-        var role = await _roleRepository.FindAsync(u => u.Id == command.RoleId);
+        var role = await _roleRepository.FindAsync(u => u.Id == command.Role.Id);
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 

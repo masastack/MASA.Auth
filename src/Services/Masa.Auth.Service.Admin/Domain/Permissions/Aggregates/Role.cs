@@ -2,6 +2,12 @@
 
 public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
+    private List<RolePermission> _permissions = new();
+    private List<RoleRelation> _childrenRoles = new();
+    private List<UserRole> _users = new();
+    private User? _creator;
+    private User? _modifier;
+
     public string Name { get; private set; }
 
     public string Description { get; private set; }
@@ -10,38 +16,55 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public bool Enabled { get; private set; }
 
-    private List<RolePermission> rolePermissions = new();
+    public int Limit { get; private set; }
 
-    public IReadOnlyCollection<RolePermission> RolePermissions => rolePermissions;
+    public IReadOnlyCollection<RolePermission> Permissions => _permissions;
 
-    private List<RoleRelation> roles = new();
+    public IReadOnlyCollection<RoleRelation> ChildrenRoles => _childrenRoles;
 
-    public IReadOnlyCollection<RoleRelation> Roles => roles;
+    public IReadOnlyCollection<UserRole> Users => _users;
 
-    public Role(string name, string description) : this(name, description, true)
+    public User? CreatorUser => _creator ?? LazyLoader?.Load(this, ref _creator);    
+
+    public User? ModifierUser => _modifier ?? LazyLoader?.Load(this, ref _modifier);
+
+    private ILazyLoader? LazyLoader { get; set; }
+
+    public Role(ILazyLoader lazyLoader)
+    {
+        LazyLoader = lazyLoader;
+        Name = "";
+        Description = "";
+    }
+
+    public Role(string name, string description) : this(name, description, true, 1)
     {
     }
 
-    public Role(string name, string description, bool enabled)
+    public Role(string name, string description, bool enabled, int limit)
     {
         Name = name;
         Description = description;
         Enabled = enabled;
+        Limit = limit;
     }
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
     {
-        roles.Clear();
-        roles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
+        _childrenRoles.Clear();
+        _childrenRoles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
     }
 
     public void BindPermissions(List<Guid> permissions)
     {
-        rolePermissions.AddRange(permissions.Select(roleId => new RolePermission(roleId)));
+        _permissions.AddRange(permissions.Select(roleId => new RolePermission(roleId)));
     }
 
-    public void Update()
+    public void Update(string name, string description, bool enabled, int limit)
     {
-
+        Name = name;
+        Description = description;
+        Enabled = enabled;
+        Limit = limit;
     }
 }
