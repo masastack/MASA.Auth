@@ -57,10 +57,10 @@ public class QueryHandler
     [EventHandler]
     public void PermissionTypesQueryAsync(PermissionTypesQuery permissionTypesQuery)
     {
-        permissionTypesQuery.Result = Enum<PermissionTypes>.GetDescriptionList().Select(pt => new SelectItemDto<int>
+        permissionTypesQuery.Result = Enum<PermissionTypes>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
         {
-            Text = pt.desc,
-            Value = (int)pt.value
+            Text = pt.Value,
+            Value = pt.Key
         }).ToList();
     }
 
