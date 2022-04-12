@@ -831,6 +831,11 @@
 .m-timeline-item .m-timeline-item__divider {
     height: 23px !important;
 }
+
+.m-stepper__wrapper{
+    height:100% !important;
+}
+
 /* pagetabs */
 /*组件样式全局修改end*/
 /*shop*/
@@ -1362,4 +1367,29 @@ tr:hover {
 
 .m-text-field.m-text-field--solo.elevation-0:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
     box-shadow: none;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    word-break: break-all;
+}
+
+.flex-height-auto {
+    flex: auto;
+}
+
+.overflow-y {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.sheetDialogPadding {
+    padding-left: 204px;
+    padding-right: 204px;
+    padding-bottom: 24px;
+    padding-top: 24px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
 }
