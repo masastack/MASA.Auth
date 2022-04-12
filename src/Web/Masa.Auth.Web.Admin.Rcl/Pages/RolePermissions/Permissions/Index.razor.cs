@@ -44,13 +44,18 @@ public partial class Index
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
     List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
     List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
+    List<ProjectDto> _projectDtos = new();
 
     PermissionService PermissionService => AuthCaller.PermissionService;
+
+    ProjectService ProjectService => AuthCaller.ProjectService;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            _projectDtos = await ProjectService.GetListAsync();
+
             var permissionTypes = await PermissionService.GetTypesAsync();
             _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
             _apiPermissionTypes = permissionTypes.Where(a => a.Value == PermissionTypes.Api).ToList();

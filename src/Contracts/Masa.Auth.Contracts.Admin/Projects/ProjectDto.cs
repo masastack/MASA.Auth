@@ -7,4 +7,6 @@ public class ProjectDto
     public string Name { get; set; } = string.Empty;
 
     public string Identity { get; set; } = string.Empty;
+
+    public List<AppDto> Apps { get; set; } = new();
 }

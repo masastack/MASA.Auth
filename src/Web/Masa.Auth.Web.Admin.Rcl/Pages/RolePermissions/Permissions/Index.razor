@@ -7,9 +7,9 @@
             <MSelect @bind-Value="@value3"
                      HideDetails=true
                      Solo Dense Class="elevation-0"
-                     Items="@items"
-                     ItemText="u => u.Label"
-                     ItemValue="u => u.Value">
+                     Items="@_projectDtos"
+                     ItemText="u => u.Name"
+                     ItemValue="u => u.Id">
             </MSelect>
         </ClickedExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
