@@ -45,8 +45,8 @@ deploy-dev:
     - main  
   script:
     - echo $KUBE_CONFIG_DEV | base64 -d > ./config
-    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$NEW_IMAGE_PM_DEV -n $NAMESPACE_DEV
-    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$NEW_IMAGE_AUTH_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$NEW_IMAGE_AUTH_UI_DEV -n $NAMESPACE_DEV
   retry: 2
 
 deploy-test:
@@ -59,8 +59,8 @@ deploy-test:
     - main  
   script:
     - echo $KUBE_CONFIG_DEV | base64 -d > ./config
-    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$NEW_IMAGE_PM_DEV -n $NAMESPACE_TEST
-    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_TEST
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$NEW_IMAGE_AUTH_DEV -n $NAMESPACE_TEST
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$NEW_IMAGE_AUTH_UI_DEV -n $NAMESPACE_TEST
   retry: 2
   when: manual
 
