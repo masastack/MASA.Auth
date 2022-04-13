@@ -11,9 +11,9 @@
                     <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
                              Label="@T("Pre Code Select")"
                              Outlined Dense HideDetails="@("auto")"
-                             Items="@items"
-                             ItemText="u => u.Label"
-                             ItemValue="u => u.Value">
+                             Items="@AppItems"
+                             ItemText="u => u.Name"
+                             ItemValue="u => u.Identity">
                     </MSelect>
                 </MCol>
                 <MCol Md=6>
@@ -50,7 +50,7 @@
             </MRow>
         </MCardText>
         <MCardActions class="d-flex align-center mb-12 px-6">
-            <MSwitch @bind-Value="_enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+            <MSwitch @bind-Value="_menuPermissionDetailDto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
             <MSpacer />
             <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
         </MCardActions>

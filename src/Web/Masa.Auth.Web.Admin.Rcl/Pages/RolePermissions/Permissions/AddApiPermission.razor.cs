@@ -2,6 +2,10 @@
 
 public partial class AddApiPermission
 {
+    [EditorRequired]
+    [Parameter]
+    public List<AppDto> AppItems { get; set; } = new();
+
     [Parameter]
     public bool Show { get; set; }
 
@@ -24,33 +28,4 @@ public partial class AddApiPermission
             await OnSubmit.InvokeAsync(_apiPermissionDetailDto);
         }
     }
-
-    private List<string> _values = new List<string>
-    {
-        "foo", "bar"
-    };
-    private List<string> _items = new List<string>
-    {
-        "foo", "bar", "fizz", "buzz"
-    };
-
-    public class Item
-    {
-        public string Label { get; set; }
-        public string Value { get; set; }
-
-        public Item(string label, string value)
-        {
-            Label = label;
-            Value = value;
-        }
-    }
-
-    List<Item> items = new()
-    {
-        new Item("Foo", "1"),
-        new Item("Bar", "2"),
-        new Item("Fizz", "3"),
-        new Item("Buzz", "4"),
-    };
 }

@@ -28,6 +28,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -36,7 +37,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
                     LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NonEditable = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -74,6 +74,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     ProtocolType = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -115,7 +116,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     UserCodeType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DeviceCodeLifetime = table.Column<int>(type: "int", nullable: false),
                     NonEditable = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -137,8 +137,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     Sort = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -155,6 +155,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     UserCode = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeviceCode = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -163,7 +164,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -181,6 +181,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -189,7 +190,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Emphasize = table.Column<bool>(type: "bit", nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
                     NonEditable = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -226,7 +226,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SystemId = table.Column<int>(type: "int", nullable: false),
+                    SystemId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -253,6 +253,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Key = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -262,7 +263,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -294,8 +294,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -313,12 +313,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Avatar_Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar_Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     TeamType = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -335,6 +335,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -343,7 +344,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VerifyType = table.Column<int>(type: "int", nullable: false),
                     IdentificationType = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -360,6 +360,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -377,7 +378,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Address_ProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address_CityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address_DistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -462,11 +462,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApiResourceId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -713,11 +713,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -785,7 +785,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ChildId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChildPermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -804,13 +803,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         principalTable: "Permission",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PermissionRelation_Permission_PermissionId",
-                        column: x => x.PermissionId,
-                        principalSchema: "permissions",
-                        principalTable: "Permission",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -820,8 +812,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -852,9 +844,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -879,10 +871,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Effect = table.Column<bool>(type: "bit", nullable: false),
                     TeamMemberType = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -914,9 +906,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamMemberType = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -940,13 +932,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     JobNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StaffType = table.Column<int>(type: "int", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -977,11 +969,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     ThirdPartyIdpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     ThridPartyIdentity = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1012,10 +1004,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Effect = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1046,9 +1038,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1105,10 +1097,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamMemberType = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1336,12 +1328,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "permissions",
                 table: "PermissionRelation",
                 column: "ChildPermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PermissionRelation_PermissionId",
-                schema: "permissions",
-                table: "PermissionRelation",
-                column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrant_Expiration",

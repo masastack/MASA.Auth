@@ -13,6 +13,7 @@ global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Web.Admin.Rcl.Data.Shared.Favorite;
 global using Masa.Auth.Web.Admin.Rcl.Global.Config;
 global using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;
+global using Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions.ViewModels;
 global using Masa.Auth.Web.Admin.Rcl.Shared;
 global using Masa.Blazor;
 global using Microsoft.AspNetCore.Components;

@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Permissions;
 
-public class MenuPermissionDetailDto : ApiPermissionDetailDto
+public class MenuPermissionDetailDto : PermissionDetailDto
 {
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public Guid ParentId { get; set; }
 

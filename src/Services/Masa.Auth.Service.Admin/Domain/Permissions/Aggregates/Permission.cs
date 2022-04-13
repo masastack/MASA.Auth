@@ -2,7 +2,7 @@
 
 public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
-    public int SystemId { get; set; }
+    public string SystemId { get; set; }
 
     public string AppId { get; private set; }
 
@@ -40,8 +40,8 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
-    public Permission(int systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description)
+    public Permission(string systemId, string appId, string name, string code, string url,
+        string icon, PermissionTypes type, string description, bool enabled)
     {
         SystemId = systemId;
         AppId = appId;
@@ -51,6 +51,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Icon = icon;
         Type = type;
         Description = description;
+        Enabled = enabled;
     }
 
     public void DeleteCheck()
@@ -90,10 +91,17 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         ParentId = parentId;
     }
 
-    //todo change to property field
-    //eg. public DateTime HireDate { get; set => field = value.Date; }
-    public void SetEnabled(bool enabled)
+    public void Update(string systemId, string appId, string name, string code, string url,
+        string icon, PermissionTypes type, string description, bool enabled)
     {
+        SystemId = systemId;
+        AppId = appId;
+        Name = name;
+        Code = code;
+        Url = url;
+        Icon = icon;
+        Type = type;
+        Description = description;
         Enabled = enabled;
     }
 }

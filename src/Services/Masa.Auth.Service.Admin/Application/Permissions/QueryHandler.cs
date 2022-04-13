@@ -68,7 +68,7 @@ public class QueryHandler
     public async Task ChildMenuPermissionsQueryAsync(ChildMenuPermissionsQuery childMenuPermissionsQuery)
     {
         var permissions = await _permissionRepository.GetListAsync(p => p.ParentId == childMenuPermissionsQuery.PermissionId
-                            && p.Type == PermissionTypes.Api);
+                            && p.Type != PermissionTypes.Api);
         childMenuPermissionsQuery.Result = permissions
             .Select(p => new PermissionDto
             {
@@ -127,7 +127,7 @@ public class QueryHandler
             Enabled = permission.Enabled,
             ParentId = permission.ParentId,
             AppId = permission.AppId,
-            ApiPermissions = permission.Permissions.Select(pr => pr.ChildId).ToList(),
+            ApiPermissions = permission.Permissions.Select(pr => pr.ChildPermissionId).ToList(),
             Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Select(up => new UserSelectDto

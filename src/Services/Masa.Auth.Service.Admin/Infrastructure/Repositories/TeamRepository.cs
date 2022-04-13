@@ -16,4 +16,12 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current team does not exist");
     }
+
+    public override Task<Team> RemoveAsync(Team entity, CancellationToken cancellationToken = default(CancellationToken))
+    {
+#warning temporary
+        Context.Entry(entity).Property<bool>("IsDeleted").CurrentValue = true;
+        Context.SaveChanges();
+        return Task.FromResult(entity);
+    }
 }

@@ -11,9 +11,9 @@
                     <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
                              Label="@T("Pre Code Select")"
                              Outlined Dense HideDetails="@("auto")"
-                             Items="@items"
-                             ItemText="u => u.Label"
-                             ItemValue="u => u.Value">
+                             Items="@AppItems"
+                             ItemText="u => u.Name"
+                             ItemValue="u => u.Identity">
                     </MSelect>
                 </MCol>
                 <MCol Md=6>

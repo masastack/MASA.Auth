@@ -9,7 +9,8 @@
             MapGet(GetTypesAsync);
             MapGet(GetApiPermissionSelectAsync);
             MapGet(GetAsync);
-            MapPost(CreateAsync);
+            MapPost(CreateMenuPermissionAsync);
+            MapPost(CreateApiPermissionAsync);
             MapDelete(DeleteAsync);
         }
 
@@ -27,13 +28,24 @@
             return query.Result;
         }
 
-        private async Task CreateAsync(IEventBus eventBus,
-            [FromBody] AddPermissionCommand createDepartmentCommand)
+        private async Task CreateMenuPermissionAsync(IEventBus eventBus,
+            [FromBody] MenuPermissionDetailDto menuPermissionDetailDto)
         {
-            await eventBus.PublishAsync(createDepartmentCommand);
+            await eventBus.PublishAsync(new AddPermissionCommand(menuPermissionDetailDto)
+            {
+                Enabled = menuPermissionDetailDto.Enabled,
+                ParentId = menuPermissionDetailDto.ParentId,
+                ApiPermissions = menuPermissionDetailDto.ApiPermissions
+            });
         }
 
-        private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] int systemId)
+        private async Task CreateApiPermissionAsync(IEventBus eventBus,
+            [FromBody] ApiPermissionDetailDto apiPermissionDetailDto)
+        {
+            await eventBus.PublishAsync(new AddPermissionCommand(apiPermissionDetailDto));
+        }
+
+        private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] string systemId)
         {
             var funcQuery = new ApplicationPermissionsQuery(systemId);
             await eventBus.PublishAsync(funcQuery);
