@@ -10,14 +10,6 @@ public partial class Index
     List<AppPermissionsViewModel> _apiPermissions = new();
     List<Guid> _menuPermissionActive = new List<Guid>();
     List<Guid> _apiPermissionActive = new List<Guid>();
-    private List<string> _values = new List<string>
-    {
-        "foo", "bar"
-    };
-    private List<string> _items = new List<string>
-    {
-        "foo", "bar", "fizz", "buzz"
-    };
     int _curProjectId;
     bool _addApiPermission, _addMenuPermission;
     MenuPermissionDetailDto _menuPermissionDetailDto = new();

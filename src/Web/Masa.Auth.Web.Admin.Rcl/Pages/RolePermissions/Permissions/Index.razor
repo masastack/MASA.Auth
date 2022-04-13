@@ -103,10 +103,10 @@
                                 <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
                             </MCol>
                             <MCol Md=12>
-                                <MAutocomplete @bind-Value="_values"
-                                               Items="_items"
-                                               ItemText="r=>r"
-                                               ItemValue="r=>r"
+                                <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
+                                               Items="_childApiItems"
+                                               ItemText="r=>r.Text"
+                                               ItemValue="r=>r.Value"
                                                Outlined
                                                Dense Chips
                                                SmallChips

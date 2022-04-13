@@ -12,5 +12,5 @@ public class MenuPermissionDetailDto : ApiPermissionDetailDto
 
     public List<TeamSelectDto> Teams { get; set; } = new();
 
-    public List<PermissionDto> ApiPermissions { get; set; } = new();
+    public List<Guid> ApiPermissions { get; set; } = new();
 }

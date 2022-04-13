@@ -127,11 +127,7 @@ public class QueryHandler
             Enabled = permission.Enabled,
             ParentId = permission.ParentId,
             AppId = permission.AppId,
-            ApiPermissions = permission.Permissions.Select(pr => new PermissionDto
-            {
-                Id = pr.Id,
-                Name = pr.ChildPermission.Name
-            }).ToList(),
+            ApiPermissions = permission.Permissions.Select(pr => pr.ChildId).ToList(),
             Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name)).ToList(),
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Select(up => new UserSelectDto
