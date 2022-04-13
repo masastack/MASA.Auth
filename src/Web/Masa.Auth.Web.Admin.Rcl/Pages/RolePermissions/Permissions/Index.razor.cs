@@ -26,6 +26,7 @@ public partial class Index
     List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
     List<ProjectDto> _projectItems = new();
     List<AppDto> _curAppItems = new();
+    List<SelectItemDto<Guid>> _childApiItems = new();
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
