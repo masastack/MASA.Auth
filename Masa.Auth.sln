@@ -27,9 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Rcl", "src\Web\MASA.Auth.Web.Admin.Rcl\Masa.Auth.Web.Admin.Rcl.csproj", "{FB83A140-7D5E-4230-BF2C-058CFE727223}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Rcl", "src\Web\Masa.Auth.Web.Admin.Rcl\Masa.Auth.Web.Admin.Rcl.csproj", "{FB83A140-7D5E-4230-BF2C-058CFE727223}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Server", "src\Web\MASA.Auth.Web.Admin.Server\Masa.Auth.Web.Admin.Server.csproj", "{151C6705-5B1A-4E8E-ADE0-AE17AE0A9A42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Server", "src\Web\Masa.Auth.Web.Admin.Server\Masa.Auth.Web.Admin.Server.csproj", "{151C6705-5B1A-4E8E-ADE0-AE17AE0A9A42}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Service.Admin", "src\Services\Masa.Auth.Service.Admin\Masa.Auth.Service.Admin.csproj", "{AB0EFC8F-452A-41DD-81D5-C6591604493F}"
 EndProject
