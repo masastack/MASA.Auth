@@ -14,7 +14,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetRoleListAsync(GetRolesQuery query)
+    public async Task GetRoleListAsync(GetRolesQuery query)
     {
         Expression<Func<Role, bool>> condition = role => true;
         if (query.Enabled is not null)
@@ -37,16 +37,16 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetRoleDetailAsync(RoleDetailQuery query)
+    public async Task GetRoleDetailAsync(RoleDetailQuery query)
     {
         var role = await _roleRepository.GetDetailAsync(query.RoleId);
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
-        query.Result = new(role.Id,role.Name, role.Description, role.Enabled, role.Limit,role.Permissions.Select(rp => rp.Id).ToList(), role.ChildrenRoles.Select(ri => ri.Role.Id).ToList(),role,role.CreationTime,);
+        query.Result = new(role.Id, role.Name, role.Description, role.Enabled, role.Limit, role.Permissions.Select(rp => rp.Id).ToList(), role.ChildrenRoles.Select(ri => ri.Role.Id).ToList(), role.Users.Select(u => u.Id).ToList(), role.CreationTime, role.ModificationTime, role.CreatorUser?.Name ?? "", role.ModifierUser?.Name ?? "");
     }
 
     [EventHandler]
-    private async Task GetRoleSelectAsync(RoleSelectQuery query)
+    public async Task GetRoleSelectAsync(RoleSelectQuery query)
     {
         query.Result = await _authDbContext.Set<Role>().Select(r => new RoleSelectDto(r.Id, r.Name)).ToListAsync();
     }

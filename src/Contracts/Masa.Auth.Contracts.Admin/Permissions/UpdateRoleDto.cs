@@ -10,7 +10,7 @@ public class UpdateRoleDto
 
     public bool Enabled { get; set; }
 
-    public int Limit { get; private set; }
+    public int Limit { get; set; }
 
     public List<Guid> Permissions { get; set; }
 

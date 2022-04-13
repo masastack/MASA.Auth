@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220412024419_init")]
+    [Migration("20220413020022_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -232,14 +232,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PermissionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ChildPermissionId");
-
-                    b.HasIndex("PermissionId");
 
                     b.ToTable("PermissionRelation", "permissions");
                 });
@@ -265,6 +260,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Limit")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ModificationTime")
                         .HasColumnType("datetime2");
@@ -1774,6 +1772,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRole", "subjects");
@@ -1849,20 +1849,12 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ChildPermission")
-                        .WithMany()
+                        .WithMany("Permissions")
                         .HasForeignKey("ChildPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "Permission")
-                        .WithMany("Permissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ChildPermission");
-
-                    b.Navigation("Permission");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RolePermission", b =>
@@ -1874,7 +1866,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
-                        .WithMany("RolePermissions")
+                        .WithMany("Permissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1887,7 +1879,7 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RoleRelation", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
-                        .WithMany("Roles")
+                        .WithMany("ChildrenRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2252,11 +2244,19 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserRole", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });
@@ -2279,9 +2279,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
                 {
-                    b.Navigation("RolePermissions");
+                    b.Navigation("ChildrenRoles");
 
-                    b.Navigation("Roles");
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiResource", b =>

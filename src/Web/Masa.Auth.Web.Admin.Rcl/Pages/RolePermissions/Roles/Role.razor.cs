@@ -3,7 +3,7 @@
 public partial class Role
 {
     private string? _search;
-    private bool _enabled;
+    private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
 
@@ -17,7 +17,7 @@ public partial class Role
         }
     }
 
-    public bool Enabled
+    public bool? Enabled
     {
         get { return _enabled; }
         set

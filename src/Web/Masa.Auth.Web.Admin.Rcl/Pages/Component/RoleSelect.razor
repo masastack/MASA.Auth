@@ -12,7 +12,8 @@
                HideDetails="@("auto")"
                ItemText="t=>t.Name"
                ItemValue="t=>t.Id"
-               Multiple>
+               Multiple
+               Class="@Class">
     <SelectionContent Context="data">
         <MChip Close
                OnCloseClick="()=>Value.Remove(data.Item.Id)">

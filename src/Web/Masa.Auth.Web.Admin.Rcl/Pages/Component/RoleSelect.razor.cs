@@ -14,6 +14,9 @@ public partial class RoleSelect
     [Parameter]
     public bool Readonly { get; set; }
 
+    [Parameter]
+    public string Class { get; set; } = "";
+
     private List<RoleSelectDto> Roles { get; set; } = new();
 
     private RoleService RoleService => AuthCaller.RoleService;

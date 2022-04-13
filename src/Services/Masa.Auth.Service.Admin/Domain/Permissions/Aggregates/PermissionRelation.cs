@@ -8,7 +8,7 @@ public class PermissionRelation : AuditEntity<Guid, Guid>, ISoftDelete
 
     public Permission ChildPermission { get; private set; } = null!;
 
-    public Permission Permission { get; private set; } = null!;
+    //public Permission Permission { get; private set; } = null!;
 
     public PermissionRelation(Guid childId)
     {

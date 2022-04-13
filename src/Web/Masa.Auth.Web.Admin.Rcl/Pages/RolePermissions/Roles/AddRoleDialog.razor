@@ -9,7 +9,8 @@
                 </div>
             </div>
             <div>
-                <RoleSelect Lable="@T("Inherited Role")" />
+                <MTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
+                <RoleSelect Class="mt-4" Lable="@T("Inherited Role")" />
                 <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
             </div>           
             

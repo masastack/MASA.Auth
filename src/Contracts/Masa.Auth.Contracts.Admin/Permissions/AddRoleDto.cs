@@ -8,7 +8,7 @@ public class AddRoleDto
 
     public bool Enabled { get; set; }
 
-    public int Limit { get; private set; }
+    public int Limit { get; set; } = 1;
 
     public List<Guid> Permissions { get; set; }
 

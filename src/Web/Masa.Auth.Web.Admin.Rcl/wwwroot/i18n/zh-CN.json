@@ -136,6 +136,7 @@
   "Update Role": "编辑角色",
   "Inherited Role": "继承角色",
   "Superior Role": "上级角色",
+  "Limit the number of bindings": "限制绑定次数",
   "Failed to query roleList data:": "查询角色列表数据失败:",
   "Failed to query roleDetail data:": "查询角色详情数据失败:",
   "Add role data success": "添加角色数据成功",

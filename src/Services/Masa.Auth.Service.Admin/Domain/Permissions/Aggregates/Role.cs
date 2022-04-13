@@ -5,8 +5,8 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     private List<RolePermission> _permissions = new();
     private List<RoleRelation> _childrenRoles = new();
     private List<UserRole> _users = new();
-    private User? _creator;
-    private User? _modifier;
+    private User? _creatorUser;
+    private User? _modifierUser;
 
     public string Name { get; private set; }
 
@@ -24,9 +24,9 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public IReadOnlyCollection<UserRole> Users => _users;
 
-    public User? CreatorUser => _creator ?? LazyLoader?.Load(this, ref _creator);    
+    public User? CreatorUser => _creatorUser ?? LazyLoader?.Load(this, ref _creatorUser);    
 
-    public User? ModifierUser => _modifier ?? LazyLoader?.Load(this, ref _modifier);
+    public User? ModifierUser => _modifierUser ?? LazyLoader?.Load(this, ref _modifierUser);
 
     private ILazyLoader? LazyLoader { get; set; }
 
