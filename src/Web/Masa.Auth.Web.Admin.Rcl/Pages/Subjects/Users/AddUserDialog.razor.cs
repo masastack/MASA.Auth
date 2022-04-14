@@ -31,10 +31,10 @@ public partial class AddUserDialog
         {
             Visible = false;
         }
-        if(Form is not null)
+        if (Form is not null)
         {
             await Form.ResetValidationAsync();
-        }   
+        }
     }
 
     protected override void OnParametersSet()
