@@ -36,12 +36,12 @@ public class PermissionService : ServiceBase
 
     public async Task<MenuPermissionDetailDto> GetMenuPermissionDetailAsync(Guid id)
     {
-        return await GetAsync<MenuPermissionDetailDto>($"Get?id={id}");
+        return await GetAsync<MenuPermissionDetailDto>($"GetMenuPermission?id={id}");
     }
 
     public async Task<ApiPermissionDetailDto> GetApiPermissionDetailAsync(Guid id)
     {
-        return await GetAsync<ApiPermissionDetailDto>($"Get?id={id}");
+        return await GetAsync<ApiPermissionDetailDto>($"GetApiPermission?id={id}");
     }
 
     public async Task<List<SelectItemDto<Guid>>> GetApiPermissionSelectAsync(string name)

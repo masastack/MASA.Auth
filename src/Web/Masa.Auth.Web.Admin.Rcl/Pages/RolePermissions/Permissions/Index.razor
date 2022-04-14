@@ -4,13 +4,12 @@
 <MRow Class="full-height">
     <MCol Md="@("auto")" Class="d-flex flex-column">
         <ClickedExtend Split=true MaxWidth=300>
-            <MSelect HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
-                     OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
-                     Solo Dense Class="elevation-0"
-                     Items="@_projectItems"
-                     ItemText="u => u.Name"
-                     ItemValue="u => u.Identity">
-            </MSelect>
+            <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
+                           OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
+                           Solo Dense Class="elevation-0"
+                           Items="@_projectItems"
+                           ItemText="u => u.Name"
+                           ItemValue="u => u.Identity"></MAutocomplete>
         </ClickedExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
             <ElevationTab TabMinWidth="120" TabWindowClass="mt-4" Headers='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
@@ -77,7 +76,12 @@
                                 <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
                             </MCol>
                             <MCol Md=6>
-                                <DefaultTextField Label="@T("Permission Level")" @bind-Value="_menuPermissionDetailDto.ParentId"></DefaultTextField>
+                                <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
+                                           Items="_menuPermissions" Dense HideDetails="true" Outlined
+                                           ItemText="u => u.Name"
+                                           ItemValue="u => u.Id"
+                                           ItemChildren="u => u.Children">
+                                </MCascader>
                             </MCol>
                             <MCol Md=6>
                                 <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
@@ -116,7 +120,7 @@
                                                Multiple></MAutocomplete>
                             </MCol>
                             <MCol Md=12>
-                                <GroupBox Title="@T("Permission Role")">
+                                <GroupBox Title="@T("Permission Role")" class="mt-2">
                                     @foreach (var role in _menuPermissionDetailDto.Roles)
                                     {
                                         <MChip Small>
@@ -126,7 +130,7 @@
                                 </GroupBox>
                             </MCol>
                             <MCol Md=12>
-                                <GroupBox Title="@T("Permission User")" class="mt-3">
+                                <GroupBox Title="@T("Permission User")" class="mt-2">
                                     <div>
                                         @foreach (var item in _menuPermissionDetailDto.Users)
                                         {
@@ -146,7 +150,7 @@
                                 </GroupBox>
                             </MCol>
                             <MCol Md=12>
-                                <MTextarea class="mt-6" Label="@T("Description")" @bind-bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
                                 </MTextarea>
                             </MCol>
                         </MRow>
@@ -190,7 +194,7 @@
                                     <PrependContent>
                                         <div class="d-flex align-center mt-n1">
                                             <MIcon Size=30>
-                                                @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)                                                
+                                                @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
                                             </MIcon>
                                         </div>
                                     </PrependContent>
@@ -222,6 +226,6 @@
     </MCol>
 </MRow>
 
-<AddMenuPermission @bind-Show=_addMenuPermission PermissionTypes=_menuPermissionTypes OnSubmit="AddMenuPermissionAsync" 
-    ParentId=_parentMenuId AppItems=_curAppItems/>
-<AddApiPermission @bind-Show=_addApiPermission PermissionTypes=_apiPermissionTypes OnSubmit="AddApiPermissionAsync" AppItems=_curAppItems/>
+<AddMenuPermission @bind-Show=_addMenuPermission PermissionTypes=_menuPermissionTypes OnSubmit="AddMenuPermissionAsync"
+                   ParentId=_parentMenuId AppItems=_curAppItems />
+<AddApiPermission @bind-Show=_addApiPermission PermissionTypes=_apiPermissionTypes OnSubmit="AddApiPermissionAsync" AppItems=_curAppItems />

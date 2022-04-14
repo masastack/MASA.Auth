@@ -135,7 +135,7 @@ public class QueryHandler
                 Id = up.User.Id,
                 Name = up.User.Name,
                 Avatar = up.User.Avatar
-            }).ToList(),
+            }).ToList()
         };
     }
 
@@ -156,7 +156,8 @@ public class QueryHandler
             Code = permission.Code,
             Url = permission.Url,
             Type = permission.Type,
-            Id = permission.Id
+            Id = permission.Id,
+            AppId = permission.AppId
         };
     }
 

@@ -72,7 +72,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public void BindApiPermission(params Guid[] childrenId)
     {
-        if (Type == PermissionTypes.Api)
+        if (Type == PermissionTypes.Api && childrenId.Any())
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
@@ -84,7 +84,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public void MoveParent(Guid parentId)
     {
-        if (Type == PermissionTypes.Api)
+        if (Type == PermissionTypes.Api && parentId != Guid.Empty)
         {
             throw new UserFriendlyException("the permission of api type can`t set parent");
         }
@@ -94,22 +94,26 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     public void Update(string systemId, string appId, string name, string code, string url,
         string icon, PermissionTypes type, string description, bool enabled)
     {
-        SystemId = systemId;
-        AppId = appId;
-        Name = name;
-        Code = code;
+        if (!string.IsNullOrWhiteSpace(systemId))
+        {
+            SystemId = systemId;
+        }
+        if (!string.IsNullOrWhiteSpace(appId))
+        {
+            AppId = appId;
+        }
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            Name = name;
+        }
+        if (!string.IsNullOrWhiteSpace(code))
+        {
+            Code = code;
+        }
         Url = url;
         Icon = icon;
         Type = type;
         Description = description;
         Enabled = enabled;
     }
-}
-
-public enum PermissionType
-{
-    Menu,
-    Element,
-    Api,
-    Data
 }

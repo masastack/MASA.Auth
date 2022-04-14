@@ -43,30 +43,38 @@ public partial class Team
     {
         await TeamService.CreateAsync(dto);
         await LoadTeams();
+        OpenSuccessMessage(I18n.T("Add team data success"));
     }
 
     private async Task OnUpdateBasicInfo(UpdateTeamBasicInfoDto dto)
     {
         await TeamService.UpdateBasicInfo(dto);
+        OpenSuccessMessage(I18n.T("Edit team data success"));
         await LoadTeams();
     }
 
     private async Task OnUpdateAdminPersonnel(UpdateTeamPersonnelDto dto)
     {
         await TeamService.UpdateAdminPersonnel(dto);
+        OpenSuccessMessage(I18n.T("Edit team data success"));
         await LoadTeams();
     }
 
     private async Task OnUpdateMemberPersonnel(UpdateTeamPersonnelDto dto)
     {
         await TeamService.UpdateMemberPersonnel(dto);
+        OpenSuccessMessage(I18n.T("Edit team data success"));
         await LoadTeams();
     }
 
     private async Task OnDelete(Guid id)
     {
-        await TeamService.DeleteAsync(id);
-        await LoadTeams();
+        var isConfirmed = await OpenConfirmDialog(I18n.T("Delete Team"), I18n.T("Confirm Delete Team"), AlertTypes.Warning);
+        if (isConfirmed)
+        {
+            await TeamService.DeleteAsync(id);
+            await LoadTeams();
+        }
     }
 }
 

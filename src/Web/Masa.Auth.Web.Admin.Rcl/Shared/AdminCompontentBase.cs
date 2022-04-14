@@ -59,7 +59,10 @@ public abstract class AdminCompontentBase : ComponentBase
         {
             _navigationManager = value;
         }
+
     }
+    [Inject]
+    public IPopupService PopupService { get; set; } = default!;
 
     public bool Loading
     {
@@ -75,34 +78,34 @@ public abstract class AdminCompontentBase : ComponentBase
         GlobalConfig.OpenConfirmDialog(I18n.T("Operation confirmation"), messgae, callback);
     }
 
-    public void OpenErrorDialog(string message)
+    public async Task<bool> OpenConfirmDialog(string title, string content)
     {
-        GlobalConfig.OpenConfirmDialog(I18n.T("Error"), message, default);
+        return await PopupService.ConfirmAsync(title, content);
     }
 
-    public void OpenWarningDialog(string message)
+    public async Task<bool> OpenConfirmDialog(string title, string content, AlertTypes type)
     {
-        GlobalConfig.OpenConfirmDialog(I18n.T("Warning"), message, default);
+        return await PopupService.ConfirmAsync(title, content, type);
     }
 
     public void OpenInformationMessage(string message)
     {
-        GlobalConfig.OpenMessage(message, MessageType.Information);
+        PopupService.AlertAsync(message, AlertTypes.Info);
     }
 
     public void OpenSuccessMessage(string message)
     {
-        GlobalConfig.OpenMessage(message, MessageType.Success);
+        PopupService.AlertAsync(message, AlertTypes.Success);
     }
 
     public void OpenWarningMessage(string message)
     {
-        GlobalConfig.OpenMessage(message, MessageType.Warning);
+        PopupService.AlertAsync(message, AlertTypes.Warning);
     }
 
     public void OpenErrorMessage(string message)
     {
-        GlobalConfig.OpenMessage(message, MessageType.Error);
+        PopupService.AlertAsync(message, AlertTypes.Error);
     }
 
     public static List<KeyValuePair<string, TEnum>> GetEnumMap<TEnum>() where TEnum : struct, Enum

@@ -112,6 +112,10 @@ public partial class Index
                 }));
             }
         }
+        else
+        {
+            _menuPermissionDetailDto = new();
+        }
     }
 
     private async Task OnClickApiPermissionAsync(AppPermissionsViewModel curItem)
@@ -119,6 +123,10 @@ public partial class Index
         if (curItem.IsPermission)
         {
             _apiPermissionDetailDto = await PermissionService.GetApiPermissionDetailAsync(curItem.Id);
+        }
+        else
+        {
+            _apiPermissionDetailDto = new();
         }
     }
 
@@ -137,13 +145,14 @@ public partial class Index
     {
         _searchApiLoading = true;
         _childApiItems = await PermissionService.GetApiPermissionSelectAsync(val);
-        _searchApiLoading = true;
+        _searchApiLoading = false;
     }
 
     private async Task AddMenuPermissionAsync(MenuPermissionDetailDto dto)
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
         {
+            OpenErrorMessage(I18n.T("Project Identifier is empty"));
             return;
         }
         dto.SystemId = _curProjectId;
@@ -153,13 +162,14 @@ public partial class Index
             await InitAppPermissions();
         }
         _addMenuPermission = false;
+        OpenSuccessMessage(I18n.T("Add menuPermission data success"));
     }
 
     private async Task AddApiPermissionAsync(ApiPermissionDetailDto dto)
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
         {
-            //popservice
+            OpenErrorMessage(I18n.T("Project Identifier is empty"));
             return;
         }
         dto.SystemId = _curProjectId;
@@ -169,25 +179,32 @@ public partial class Index
             await InitAppPermissions();
         }
         _addApiPermission = false;
+        OpenSuccessMessage(I18n.T("Add apiPermission data success"));
     }
 
     private async Task UpdateMenuPermissionAsync()
     {
+        _menuPermissionDetailDto.SystemId = _curProjectId;
         await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
         _addMenuPermission = false;
-        //todo popservice
+        OpenSuccessMessage(I18n.T("Edit menuPermission data success"));
     }
 
     private async Task UpdateApiPermissionAsync()
     {
+        _apiPermissionDetailDto.SystemId = _curProjectId;
         await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
         _addMenuPermission = false;
-        //todo popservice
+        OpenSuccessMessage(I18n.T("Edit apiPermission data success"));
     }
 
     private async Task DeletePermissionAsync(Guid id)
     {
-        await PermissionService.RemoveAsync(id);
-        await InitAppPermissions();
+        var isConfirmed = await OpenConfirmDialog(I18n.T("Delete Permission"), I18n.T("Are you sure you want to delete this permission"), AlertTypes.Warning);
+        if (isConfirmed)
+        {
+            await PermissionService.RemoveAsync(id);
+            await InitAppPermissions();
+        }
     }
 }

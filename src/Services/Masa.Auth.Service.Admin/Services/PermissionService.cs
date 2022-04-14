@@ -8,7 +8,8 @@
             MapGet(GetChildMenuPermissionsAsync);
             MapGet(GetTypesAsync);
             MapGet(GetApiPermissionSelectAsync);
-            MapGet(GetAsync);
+            MapGet(GetMenuPermissionAsync);
+            MapGet(GetApiPermissionAsync);
             MapPost(CreateMenuPermissionAsync);
             MapPost(CreateApiPermissionAsync);
             MapDelete(DeleteAsync);
@@ -59,9 +60,16 @@
             return funcQuery.Result;
         }
 
-        private async Task<MenuPermissionDetailDto> GetAsync(IEventBus eventBus, [FromQuery] Guid id)
+        private async Task<MenuPermissionDetailDto> GetMenuPermissionAsync(IEventBus eventBus, [FromQuery] Guid id)
         {
             var query = new MenuPermissionDetailQuery(id);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        private async Task<ApiPermissionDetailDto> GetApiPermissionAsync(IEventBus eventBus, [FromQuery] Guid id)
+        {
+            var query = new ApiPermissionDetailQuery(id);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
