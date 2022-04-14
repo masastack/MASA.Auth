@@ -65,7 +65,7 @@ public class CommandHandler
         if (permissionBaseInfo.IsUpdate)
         {
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
-            _permission.Update(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
+            _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
                 permissionBaseInfo.Description, addPermissionCommand.Enabled);
             _permission.MoveParent(addPermissionCommand.ParentId);

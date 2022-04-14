@@ -3,51 +3,53 @@
 <SheetDialog Value=Show Title="@T("Add Menu Permission")" ValueChanged="ShowChanged">
     <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
         <MCardText>
-            <MRow>
-                <MCol Md=12>
-                    <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
-                </MCol>
-                <MCol Md=6>
-                    <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
-                             Label="@T("Pre Code Select")"
-                             Outlined Dense HideDetails="@("auto")"
-                             Items="@AppItems"
-                             ItemText="u => u.Name"
-                             ItemValue="u => u.Identity">
-                    </MSelect>
-                </MCol>
-                <MCol Md=6>
-                    <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
-                    </DefaultTextField>
-                </MCol>
-                <MCol Md=12>
-                    <MSelect @bind-Value="_menuPermissionDetailDto.Type"
-                             Label="@T("Permission Type")"
-                             Outlined Dense HideDetails="@("auto")"
-                             Items="@PermissionTypes"
-                             ItemText="u => u.Text"
-                             ItemValue="u => u.Value">
-                    </MSelect>
-                </MCol>
-                <MCol Md=12>
-                    <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
-                </MCol>
-                <MCol Md=12>
-                    <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
-                        <PrependContent>
-                            <div class="d-flex align-center mt-n1">
-                                <MIcon Size=30>
-                                    mdi-image
-                                </MIcon>
-                            </div>
-                        </PrependContent>
-                    </DefaultTextField>
-                </MCol>
-                <MCol Md=12>
-                    <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
-                    </MTextarea>
-                </MCol>
-            </MRow>
+            <MForm Model=_menuPermissionDetailDto EnableValidation @ref="_form">
+                <MRow>
+                    <MCol Md=12>
+                        <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=6>
+                        <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
+                                 Label="@T("Pre Code Select")"
+                                 Outlined Dense HideDetails="@("auto")"
+                                 Items="@AppItems"
+                                 ItemText="u => u.Name"
+                                 ItemValue="u => u.Identity">
+                        </MSelect>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                        </DefaultTextField>
+                    </MCol>
+                    <MCol Md=12>
+                        <MSelect @bind-Value="_menuPermissionDetailDto.Type"
+                                 Label="@T("Permission Type")"
+                                 Outlined Dense HideDetails="@("auto")"
+                                 Items="@PermissionTypes"
+                                 ItemText="u => u.Text"
+                                 ItemValue="u => u.Value">
+                        </MSelect>
+                    </MCol>
+                    <MCol Md=12>
+                        <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
+                    </MCol>
+                    <MCol Md=12>
+                        <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
+                            <PrependContent>
+                                <div class="d-flex align-center mt-n1">
+                                    <MIcon Size=30>
+                                        mdi-image
+                                    </MIcon>
+                                </div>
+                            </PrependContent>
+                        </DefaultTextField>
+                    </MCol>
+                    <MCol Md=12>
+                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                        </MTextarea>
+                    </MCol>
+                </MRow>
+            </MForm>
         </MCardText>
         <MCardActions class="d-flex align-center mb-12 px-6">
             <MSwitch @bind-Value="_menuPermissionDetailDto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>

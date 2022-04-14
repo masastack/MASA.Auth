@@ -58,102 +58,104 @@
                         <h6>@T("Permission Info")</h6>
                     </MCardTitle>
                     <MCardText>
-                        <MRow>
-                            <MCol Md=6>
-                                <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
-                                         Label="@T("Pre Code Select")"
-                                         Outlined Dense HideDetails="@("auto")"
-                                         Items="_curAppItems"
-                                         ItemText="u => u.Name"
-                                         ItemValue="u => u.Identity">
-                                </MSelect>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
-                                </DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                           Items="_menuPermissions" Dense HideDetails="true" Outlined
-                                           ItemText="u => u.Name"
-                                           ItemValue="u => u.Id"
-                                           ItemChildren="u => u.Children">
-                                </MCascader>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
-                                    <PrependContent>
-                                        <div class="d-flex align-center mt-n1">
-                                            <MIcon Size=30>
-                                                @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
-                                            </MIcon>
-                                        </div>
-                                    </PrependContent>
-                                </DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <MSelect @bind-Value="_menuPermissionDetailDto.Type"
-                                         Label="@T("Permission Type")"
-                                         Outlined Dense HideDetails="@("auto")"
-                                         Items="@_menuPermissionTypes"
-                                         ItemText="u => u.Text"
-                                         ItemValue="u => u.Value">
-                                </MSelect>
-                            </MCol>
-                            <MCol Md=12>
-                                <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
-                            </MCol>
-                            <MCol Md=12>
-                                <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
-                                               Items="_childApiItems"
-                                               Loading="_searchApiLoading"
-                                               OnSearchInputUpdate="UpdateSearchApiAsync"
-                                               ItemText="r=>r.Text"
-                                               ItemValue="r=>r.Value"
-                                               Outlined HideSelected
-                                               Dense Chips
-                                               SmallChips
-                                               Label="@T("Mount Api Permission")"
-                                               Multiple></MAutocomplete>
-                            </MCol>
-                            <MCol Md=12>
-                                <GroupBox Title="@T("Permission Role")" class="mt-2">
-                                    @foreach (var role in _menuPermissionDetailDto.Roles)
-                                    {
-                                        <MChip Small>
-                                            @role.Name
-                                        </MChip>
-                                    }
-                                </GroupBox>
-                            </MCol>
-                            <MCol Md=12>
-                                <GroupBox Title="@T("Permission User")" class="mt-2">
-                                    <div>
-                                        @foreach (var item in _menuPermissionDetailDto.Users)
+                        <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
+                            <MRow>
+                                <MCol Md=6>
+                                    <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
+                                             Label="@T("Pre Code Select")"
+                                             Outlined Dense HideDetails="@("auto")"
+                                             Items="_curAppItems"
+                                             ItemText="u => u.Name"
+                                             ItemValue="u => u.Identity">
+                                    </MSelect>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                    </DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
+                                               Items="_menuPermissions" Dense HideDetails="true" Outlined
+                                               ItemText="u => u.Name"
+                                               ItemValue="u => u.Id"
+                                               ItemChildren="u => u.Children">
+                                    </MCascader>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
+                                        <PrependContent>
+                                            <div class="d-flex align-center mt-n1">
+                                                <MIcon Size=30>
+                                                    @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
+                                                </MIcon>
+                                            </div>
+                                        </PrependContent>
+                                    </DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <MSelect @bind-Value="_menuPermissionDetailDto.Type"
+                                             Label="@T("Permission Type")"
+                                             Outlined Dense HideDetails="@("auto")"
+                                             Items="@_menuPermissionTypes"
+                                             ItemText="u => u.Text"
+                                             ItemValue="u => u.Value">
+                                    </MSelect>
+                                </MCol>
+                                <MCol Md=12>
+                                    <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
+                                </MCol>
+                                <MCol Md=12>
+                                    <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
+                                                   Items="_childApiItems"
+                                                   Loading="_searchApiLoading"
+                                                   OnSearchInputUpdate="UpdateSearchApiAsync"
+                                                   ItemText="r=>r.Text"
+                                                   ItemValue="r=>r.Value"
+                                                   Outlined HideSelected
+                                                   Dense Chips
+                                                   SmallChips
+                                                   Label="@T("Mount Api Permission")"
+                                                   Multiple></MAutocomplete>
+                                </MCol>
+                                <MCol Md=12>
+                                    <GroupBox Title="@T("Permission Role")" class="mt-2">
+                                        @foreach (var role in _menuPermissionDetailDto.Roles)
                                         {
                                             <MChip Small>
-                                                @item.Name
+                                                @role.Name
                                             </MChip>
                                         }
-                                    </div>
-                                    <div class="mt-3">
-                                        @foreach (var item in _menuPermissionDetailDto.Teams)
-                                        {
-                                            <MChip Small Style="background: #EBF6FF !important;color: #37A7FF;">
-                                                @item.Name
-                                            </MChip>
-                                        }
-                                    </div>
-                                </GroupBox>
-                            </MCol>
-                            <MCol Md=12>
-                                <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
-                                </MTextarea>
-                            </MCol>
-                        </MRow>
+                                    </GroupBox>
+                                </MCol>
+                                <MCol Md=12>
+                                    <GroupBox Title="@T("Permission User")" class="mt-2">
+                                        <div>
+                                            @foreach (var item in _menuPermissionDetailDto.Users)
+                                            {
+                                                <MChip Small>
+                                                    @item.Name
+                                                </MChip>
+                                            }
+                                        </div>
+                                        <div class="mt-3">
+                                            @foreach (var item in _menuPermissionDetailDto.Teams)
+                                            {
+                                                <MChip Small Style="background: #EBF6FF !important;color: #37A7FF;">
+                                                    @item.Name
+                                                </MChip>
+                                            }
+                                        </div>
+                                    </GroupBox>
+                                </MCol>
+                                <MCol Md=12>
+                                    <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                    </MTextarea>
+                                </MCol>
+                            </MRow>
+                        </MForm>
                     </MCardText>
                     <MCardActions class="d-flex align-center mb-10 px-6">
                         <MSwitch @bind-Value="_menuPermissionDetailDto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
@@ -169,51 +171,53 @@
                         <h6>@T("Permission Info")</h6>
                     </MCardTitle>
                     <MCardText>
-                        <MRow>
-                            <MCol Md=6>
-                                <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
-                                         Label="@T("Pre Code Select")"
-                                         Outlined Dense HideDetails="@("auto")"
-                                         Items="_curAppItems"
-                                         ItemText="u => u.Name"
-                                         ItemValue="u => u.Identity">
-                                </MSelect>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
-                                </DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name"></DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <DefaultTextField Label="@T("Icon Code")" @bind-Value="_apiPermissionDetailDto.Icon">
-                                    <PrependContent>
-                                        <div class="d-flex align-center mt-n1">
-                                            <MIcon Size=30>
-                                                @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
-                                            </MIcon>
-                                        </div>
-                                    </PrependContent>
-                                </DefaultTextField>
-                            </MCol>
-                            <MCol Md=6>
-                                <MSelect @bind-Value="@_apiPermissionDetailDto.Type"
-                                         Label="@T("Permission Type")"
-                                         Outlined Dense HideDetails="@("auto")"
-                                         Items="@_apiPermissionTypes"
-                                         ItemText="u => u.Text"
-                                         ItemValue="u => u.Value">
-                                </MSelect>
-                            </MCol>
-                            <MCol Md=12>
-                                <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
-                                </MTextarea>
-                            </MCol>
-                        </MRow>
+                        <MForm EnableValidation Model=_apiPermissionDetailDto  @ref="_formApi">
+                            <MRow>
+                                <MCol Md=6>
+                                    <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
+                                             Label="@T("Pre Code Select")"
+                                             Outlined Dense HideDetails="@("auto")"
+                                             Items="_curAppItems"
+                                             ItemText="u => u.Name"
+                                             ItemValue="u => u.Identity">
+                                    </MSelect>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                    </DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name"></DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <DefaultTextField Label="@T("Icon Code")" @bind-Value="_apiPermissionDetailDto.Icon">
+                                        <PrependContent>
+                                            <div class="d-flex align-center mt-n1">
+                                                <MIcon Size=30>
+                                                    @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
+                                                </MIcon>
+                                            </div>
+                                        </PrependContent>
+                                    </DefaultTextField>
+                                </MCol>
+                                <MCol Md=6>
+                                    <MSelect @bind-Value="@_apiPermissionDetailDto.Type"
+                                             Label="@T("Permission Type")"
+                                             Outlined Dense HideDetails="@("auto")"
+                                             Items="@_apiPermissionTypes"
+                                             ItemText="u => u.Text"
+                                             ItemValue="u => u.Value">
+                                    </MSelect>
+                                </MCol>
+                                <MCol Md=12>
+                                    <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                    </MTextarea>
+                                </MCol>
+                            </MRow>
+                        </MForm>
                     </MCardText>
                     <MCardActions class="d-flex align-center mb-10 px-6">
                         <MSpacer />

@@ -18,6 +18,7 @@ public partial class Index
     List<AppDto> _curAppItems = new();
     List<SelectItemDto<Guid>> _childApiItems = new();
     Guid _parentMenuId;
+    MForm _formMenu = default!, _formApi = default!;
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
@@ -184,18 +185,24 @@ public partial class Index
 
     private async Task UpdateMenuPermissionAsync()
     {
-        _menuPermissionDetailDto.SystemId = _curProjectId;
-        await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
-        _addMenuPermission = false;
-        OpenSuccessMessage(I18n.T("Edit menuPermission data success"));
+        if (await _formMenu.ValidateAsync())
+        {
+            _menuPermissionDetailDto.SystemId = _curProjectId;
+            await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
+            _addMenuPermission = false;
+            OpenSuccessMessage(I18n.T("Edit menuPermission data success"));
+        }
     }
 
     private async Task UpdateApiPermissionAsync()
     {
-        _apiPermissionDetailDto.SystemId = _curProjectId;
-        await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
-        _addMenuPermission = false;
-        OpenSuccessMessage(I18n.T("Edit apiPermission data success"));
+        if (await _formApi.ValidateAsync())
+        {
+            _apiPermissionDetailDto.SystemId = _curProjectId;
+            await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
+            _addMenuPermission = false;
+            OpenSuccessMessage(I18n.T("Edit apiPermission data success"));
+        }
     }
 
     private async Task DeletePermissionAsync(Guid id)

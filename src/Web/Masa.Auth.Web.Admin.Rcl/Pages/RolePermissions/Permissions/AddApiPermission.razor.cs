@@ -19,13 +19,17 @@ public partial class AddApiPermission
     [Parameter]
     public List<SelectItemDto<PermissionTypes>> PermissionTypes { get; set; } = new();
 
+    MForm _form = default!;
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
 
     private async Task OnSubmitHandler()
     {
-        if (OnSubmit.HasDelegate)
+        if (await _form.ValidateAsync())
         {
-            await OnSubmit.InvokeAsync(_apiPermissionDetailDto);
+            if (OnSubmit.HasDelegate)
+            {
+                await OnSubmit.InvokeAsync(_apiPermissionDetailDto);
+            }
         }
     }
 }

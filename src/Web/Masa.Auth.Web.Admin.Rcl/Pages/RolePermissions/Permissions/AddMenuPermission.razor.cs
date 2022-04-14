@@ -24,6 +24,7 @@ public partial class AddMenuPermission
     public List<SelectItemDto<PermissionTypes>> PermissionTypes { get; set; } = new();
 
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
+    MForm _form = default!;
 
     protected override void OnParametersSet()
     {
@@ -33,9 +34,12 @@ public partial class AddMenuPermission
 
     private async Task OnSubmitHandler()
     {
-        if (OnSubmit.HasDelegate)
+        if (await _form.ValidateAsync())
         {
-            await OnSubmit.InvokeAsync(_menuPermissionDetailDto);
+            if (OnSubmit.HasDelegate)
+            {
+                await OnSubmit.InvokeAsync(_menuPermissionDetailDto);
+            }
         }
     }
 }

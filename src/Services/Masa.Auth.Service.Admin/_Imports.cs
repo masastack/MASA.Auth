@@ -5,6 +5,7 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Organizations.Validator;
 global using Masa.Auth.Contracts.Admin.Permissions;
+global using Masa.Auth.Contracts.Admin.Permissions.Validator;
 global using Masa.Auth.Contracts.Admin.Projects;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Contracts.Admin.Subjects.Validator;

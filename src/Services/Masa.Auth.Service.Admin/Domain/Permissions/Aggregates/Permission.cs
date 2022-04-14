@@ -91,25 +91,15 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         ParentId = parentId;
     }
 
-    public void Update(string systemId, string appId, string name, string code, string url,
+    public void Update(string appId, string name, string code, string url,
         string icon, PermissionTypes type, string description, bool enabled)
     {
-        if (!string.IsNullOrWhiteSpace(systemId))
-        {
-            SystemId = systemId;
-        }
-        if (!string.IsNullOrWhiteSpace(appId))
-        {
-            AppId = appId;
-        }
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            Name = name;
-        }
-        if (!string.IsNullOrWhiteSpace(code))
-        {
-            Code = code;
-        }
+        appId.ThrowIfEmpty();
+        name.ThrowIfEmpty();
+        code.ThrowIfEmpty();
+        AppId = appId;
+        Name = name;
+        Code = code;
         Url = url;
         Icon = icon;
         Type = type;
