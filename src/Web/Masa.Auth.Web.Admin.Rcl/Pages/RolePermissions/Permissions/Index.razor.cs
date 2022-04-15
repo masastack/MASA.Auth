@@ -163,7 +163,7 @@ public partial class Index
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
         {
-            OpenErrorMessage(I18n.T("Project Identifier is empty"));
+            OpenErrorMessage(I18n.T("Project identifier is empty"));
             return;
         }
         dto.SystemId = _curProjectId;
@@ -173,14 +173,14 @@ public partial class Index
             await InitAppPermissions();
         }
         _addMenuPermission = false;
-        OpenSuccessMessage(I18n.T("Add menuPermission data success"));
+        OpenSuccessMessage(I18n.T("Add menu permission data success"));
     }
 
     private async Task AddApiPermissionAsync(ApiPermissionDetailDto dto)
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
         {
-            OpenErrorMessage(I18n.T("Project Identifier is empty"));
+            OpenErrorMessage(I18n.T("Project identifier is empty"));
             return;
         }
         dto.SystemId = _curProjectId;
@@ -190,7 +190,7 @@ public partial class Index
             await InitAppPermissions();
         }
         _addApiPermission = false;
-        OpenSuccessMessage(I18n.T("Add apiPermission data success"));
+        OpenSuccessMessage(I18n.T("Add api permission data success"));
     }
 
     private async Task UpdateMenuPermissionAsync()
@@ -200,7 +200,7 @@ public partial class Index
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
             _addMenuPermission = false;
-            OpenSuccessMessage(I18n.T("Edit menuPermission data success"));
+            OpenSuccessMessage(I18n.T("Edit menu permission data success"));
         }
     }
 
@@ -211,7 +211,7 @@ public partial class Index
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
             _addMenuPermission = false;
-            OpenSuccessMessage(I18n.T("Edit apiPermission data success"));
+            OpenSuccessMessage(I18n.T("Edit api permission data success"));
         }
     }
 

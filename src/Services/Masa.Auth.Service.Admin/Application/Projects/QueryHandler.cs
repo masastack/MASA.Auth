@@ -2,9 +2,17 @@
 
 public class QueryHandler
 {
+    readonly IPmClient _pmClient;
+
+    public QueryHandler(IPmClient pmClient)
+    {
+        _pmClient = pmClient;
+    }
+
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
+        //var projects = await _pmClient.ProjectService.GetProjectListAsync("development");
         query.Result = new List<ProjectDto>
         {
             new ProjectDto
