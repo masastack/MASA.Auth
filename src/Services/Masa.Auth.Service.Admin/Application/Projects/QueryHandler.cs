@@ -12,32 +12,20 @@ public class QueryHandler
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        //var projects = await _pmClient.ProjectService.GetProjectListAsync("development");
-        query.Result = new List<ProjectDto>
+        var projects = await _pmClient.ProjectService.GetProjectListAsync("development");
+        query.Result = projects.Select(p => new ProjectDto
         {
-            new ProjectDto
+            Name = p.Name,
+            Id = p.Id,
+            Identity = p.Identity,
+            Apps = p.Apps.Select(a => new AppDto
             {
-                Name = "Project1",
-                Id =1,
-                Identity="11111111",
-                Apps = new List<AppDto>
-                {
-                    new AppDto{ Id=1,Name="App1",Identity="pro-1-app-1",ProjectId=1},
-                    new AppDto{ Id=2,Name="App2",Identity="pro-1-app-2",ProjectId=1},
-                }
-            },
-            new ProjectDto
-            {
-                Name = "Project2",
-                Id =2,
-                Identity="2222222",
-                Apps = new List<AppDto>
-                {
-                    new AppDto{ Id=3,Name="App1",Identity="pro-2-app-3",ProjectId=2},
-                    new AppDto{ Id=4,Name="App2",Identity="pro-2-app-4",ProjectId=2},
-                }
-            }
-        };
+                Name = a.Name,
+                Id = a.Id,
+                Identity = a.Identity,
+                ProjectId = a.ProjectId
+            }).ToList()
+        }).ToList();
         await Task.CompletedTask;
     }
 }
