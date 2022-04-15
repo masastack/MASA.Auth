@@ -1,5 +1,4 @@
 ﻿using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
-using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
@@ -134,7 +133,7 @@ public partial class Organization
         await LoadStaffsAsync(activedItems.First().Id);
     }
 
-    private async Task UpdateStaff(Guid staffId)
+    private void UpdateStaff(Guid staffId)
     {
         _currentStaffId = staffId;
         _updateStaff = true;

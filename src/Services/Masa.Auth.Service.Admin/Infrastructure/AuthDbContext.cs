@@ -13,7 +13,7 @@ public class AuthDbContext : MasaDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
-        .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Name })
+        .LogTo(message => Debug.WriteLine(message), LogLevel.Information)
         .EnableSensitiveDataLogging()
         .EnableDetailedErrors();
 

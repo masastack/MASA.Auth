@@ -16,5 +16,18 @@
     "Title": "Organization",
     "Icon": "mdi-calendar-check-outline",
     "Href": "organization/index"
+  },
+  {
+    "Id": 3,
+    "Title": "RolePermission",
+    "Icon": "mdi-trending-up",
+    "Children": [
+      {
+        "Id": 4,
+        "Title": "Permission",
+        "Icon": "mdi-circle",
+        "Href": "permission/index"
+      }
+    ]
   }
 ]

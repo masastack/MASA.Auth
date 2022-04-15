@@ -21,12 +21,17 @@ public partial class OrgSheet
     [Parameter]
     public List<DepartmentDto> Departments { get; set; } = new();
 
+    MForm _form = default!;
+
 
     public async Task OnSubmitHandler()
     {
-        if (OnSubmit.HasDelegate)
+        if (await _form.ValidateAsync())
         {
-            await OnSubmit.InvokeAsync(Dto);
+            if (OnSubmit.HasDelegate)
+            {
+                await OnSubmit.InvokeAsync(Dto);
+            }
         }
     }
 

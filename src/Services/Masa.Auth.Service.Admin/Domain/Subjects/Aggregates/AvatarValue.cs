@@ -2,11 +2,11 @@
 
 public class AvatarValue : ValueObject
 {
-    public string Url { get; set; } = string.Empty;
+    public string Url { get; private set; } = string.Empty;
 
-    public string Name { get; set; }
+    public string Name { get; private set; } = string.Empty;
 
-    public string Color { get; set; }
+    public string Color { get; private set; } = string.Empty;
 
     public AvatarValue(string name, string color)
     {
@@ -14,11 +14,9 @@ public class AvatarValue : ValueObject
         Color = color;
     }
 
-    public AvatarValue(string url, string name, string color)
+    public AvatarValue(string url)
     {
         Url = url;
-        Name = name;
-        Color = color;
     }
 
     protected override IEnumerable<object> GetEqualityValues()

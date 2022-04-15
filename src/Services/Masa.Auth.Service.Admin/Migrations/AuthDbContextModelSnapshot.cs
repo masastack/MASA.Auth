@@ -182,8 +182,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SystemId")
-                        .HasColumnType("int");
+                    b.Property<string>("SystemId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -207,9 +208,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ChildPermissionId")
@@ -236,8 +234,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChildPermissionId");
-
-                    b.HasIndex("PermissionId");
 
                     b.ToTable("PermissionRelation", "permissions");
                 });
@@ -1847,20 +1843,12 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ChildPermission")
-                        .WithMany()
+                        .WithMany("Permissions")
                         .HasForeignKey("ChildPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "Permission")
-                        .WithMany("Permissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ChildPermission");
-
-                    b.Navigation("Permission");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RolePermission", b =>
@@ -2101,7 +2089,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
                 {
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team.Avatar#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
                         {
                             b1.Property<Guid>("TeamId")
                                 .HasColumnType("uniqueidentifier");
@@ -2196,7 +2184,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
                 {
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User.Address#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");

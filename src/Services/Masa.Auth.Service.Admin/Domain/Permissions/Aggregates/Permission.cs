@@ -2,7 +2,7 @@
 
 public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
-    public int SystemId { get; set; }
+    public string SystemId { get; set; }
 
     public string AppId { get; private set; }
 
@@ -40,8 +40,8 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
-    public Permission(int systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description)
+    public Permission(string systemId, string appId, string name, string code, string url,
+        string icon, PermissionTypes type, string description, bool enabled)
     {
         SystemId = systemId;
         AppId = appId;
@@ -51,6 +51,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Icon = icon;
         Type = type;
         Description = description;
+        Enabled = enabled;
     }
 
     public void DeleteCheck()
@@ -71,7 +72,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public void BindApiPermission(params Guid[] childrenId)
     {
-        if (Type == PermissionTypes.Api)
+        if (Type == PermissionTypes.Api && childrenId.Any())
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
@@ -81,27 +82,28 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         }
     }
 
-    public void MoveParent(Guid parentId)
+    public void SetParent(Guid parentId)
     {
-        if (Type == PermissionTypes.Api)
+        if (Type == PermissionTypes.Api && parentId != Guid.Empty)
         {
             throw new UserFriendlyException("the permission of api type can`t set parent");
         }
         ParentId = parentId;
     }
 
-    //todo change to property field
-    //eg. public DateTime HireDate { get; set => field = value.Date; }
-    public void SetEnabled(bool enabled)
+    public void Update(string appId, string name, string code, string url,
+        string icon, PermissionTypes type, string description, bool enabled)
     {
+        appId.ThrowIfEmpty();
+        name.ThrowIfEmpty();
+        code.ThrowIfEmpty();
+        AppId = appId;
+        Name = name;
+        Code = code;
+        Url = url;
+        Icon = icon;
+        Type = type;
+        Description = description;
         Enabled = enabled;
     }
-}
-
-public enum PermissionType
-{
-    Menu,
-    Element,
-    Api,
-    Data
 }

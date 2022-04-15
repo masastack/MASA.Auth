@@ -2,9 +2,11 @@
 
 public class AppPermissionDto
 {
-    public string AppId { get; set; } = "";
+    public string AppId { get; set; } = string.Empty;
 
-    public string AppName { get; set; } = "";
+    public PermissionTypes Type { get; set; }
 
-    public List<PermissionDto> Permissions { get; set; } = new();
+    public Guid PermissonId { get; set; }
+
+    public string PermissonName { get; set; } = string.Empty;
 }
