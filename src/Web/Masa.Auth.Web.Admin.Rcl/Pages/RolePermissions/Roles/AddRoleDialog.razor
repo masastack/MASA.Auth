@@ -5,12 +5,12 @@
         <div class="sheetDialogPadding full-height flex-column">
             <div class="d-flex mb-6">
                 <div class="mx-auto">
-                    <MTextField @bind-Value="Role.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                    <MTextField @bind-Value="Role.Name" Label="@T("Role.Name")" HideDetails="@("auto")" Outlined />
                 </div>
             </div>
             <div>
                 <MTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
-                <RoleSelect Class="mt-4" Lable="@T("Inherited Role")" />
+                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" Class="mt-4" Lable="@T("Inherited Role")" />
                 <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
             </div>           
             

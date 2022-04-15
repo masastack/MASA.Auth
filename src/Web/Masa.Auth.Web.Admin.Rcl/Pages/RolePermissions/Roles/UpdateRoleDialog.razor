@@ -1,72 +1,90 @@
-﻿@inherits AdminCompontentBase
+﻿@using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model
+@inherits AdminCompontentBase
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Role")">
     <MForm Model="Role" EnableValidation @ref="Form">
         <div class="sheetDialogPadding full-height flex-column">
             <div class="d-flex">
                 <div class="mx-auto">
-                    
+                    <MButtonGroup Dense Mandatory Borderless @bind-Value="Tab" Class="rounded-lg elevation-tab" Style="margin-left:10px">
+                        <MButton Ripple=false Value="@UpdateRoleTab.BasicInformation" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(UpdateRoleTab.BasicInformation)
+                        </MButton>
+                        <MButton Ripple=false Value="@UpdateRoleTab.Permission" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(UpdateRoleTab.Permission)
+                        </MButton>
+                    </MButtonGroup>
                 </div>
             </div>
-            <div class="mt-6 flex-height-auto overflow-y">     
-                <div>@T("Basic Information")</div>
-                <MTextField @bind-Value="Role.Name" Class="my-4" Label="@T("Name")" HideDetails="@("auto")" Outlined />
-                <RoleSelect Readonly Lable="@T("Superior Role")" />
+            <MWindow Value="Tab" Reverse Class="flex-grow-1">
+                <div class="mt-6 flex-height-auto overflow-y">
+                    <MWindowItem Value="UpdateRoleTab.BasicInformation">
+                        <div>@T("Basic Information")</div>
+                       @* Value="Role.Limit" TValue="int" ValueChanged=LimitChanged*@
+                        <MTextField @bind-Value="Role.Name" Class="my-4" Label="@T("Role.Name")" HideDetails="@("auto")" Outlined />
+                        <MTextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
+                        <TopRoleSelect Class="mt-4" RoleId=RoleId Lable="@T("Superior Role")" />
 
-                <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
-                <div class="mt-6">@T("History record")</div>
-                <MTimeline Class="mt-4">
-                    <MTimelineItem Color="sample-green" Small>
-                        <IconContent>
-                            <MAvatar Size=10>
-                                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                            </MAvatar>
-                        </IconContent>
-                        <OppositeContent>
-                            <span class="mr-n5">
-                                @T("Create")
-                            </span>
-                        </OppositeContent>
-                        <ChildContent>
-                            <div class="pb-4 ml-n5">
-                                <span>@RoleDetail.Creator</span>
-                                <br />
-                                <span>@RoleDetail.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                            </div>
-                        </ChildContent>
-                    </MTimelineItem>
-                    @if (RoleDetail.ModificationTime is not null)
-                    {
-                        <MTimelineItem Color="sample-green" Small>
-                            <IconContent>
-                                <MAvatar Size=10>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                                </MAvatar>
-                            </IconContent>
-                            <OppositeContent>
-                                <div class="pb-4 ml-n5">
-                                    <span>@RoleDetail.Modifier</span>
-                                    <br />
-                                    <span>@RoleDetail.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                                </div>
-                            </OppositeContent>
-                            <ChildContent>
-                                <div class="d-flex">
-                                    <MSpacer />
+                        <MTextField @bind-Value="RoleDetail.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                        <div class="mt-6">@T("History record")</div>
+                        <MTimeline Class="mt-4">
+                            <MTimelineItem Color="sample-green" Small>
+                                <IconContent>
+                                    <MAvatar Size=10>
+                                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
+                                    </MAvatar>
+                                </IconContent>
+                                <OppositeContent>
                                     <span class="mr-n5">
-                                        @T("Update")
+                                        @T("Create")
                                     </span>
-                                </div>
-                            </ChildContent>
-                        </MTimelineItem>
-                    }
-                </MTimeline>
-            </div>  
-           <div class="d-flex mt-6">
+                                </OppositeContent>
+                                <ChildContent>
+                                    <div class="pb-4 ml-n5">
+                                        <span>@RoleDetail.Creator</span>
+                                        <br />
+                                        <span>@RoleDetail.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                                    </div>
+                                </ChildContent>
+                            </MTimelineItem>
+                            @if (RoleDetail.ModificationTime is not null)
+                            {
+                                <MTimelineItem Color="sample-green" Small>
+                                    <IconContent>
+                                        <MAvatar Size=10>
+                                            <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
+                                        </MAvatar>
+                                    </IconContent>
+                                    <OppositeContent>
+                                        <div class="pb-4 ml-n5">
+                                            <span>@RoleDetail.Modifier</span>
+                                            <br />
+                                            <span>@RoleDetail.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                                        </div>
+                                    </OppositeContent>
+                                    <ChildContent>
+                                        <div class="d-flex">
+                                            <MSpacer />
+                                            <span class="mr-n5">
+                                                @T("Update")
+                                            </span>
+                                        </div>
+                                    </ChildContent>
+                                </MTimelineItem>
+                            }
+                        </MTimeline>
+                    </MWindowItem>
+                    <MWindowItem Value="UpdateRoleTab.Permission">
+                        <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mt-1 mb-6" Lable="@T("Inherited Role")" />
+                        <GlobalNavigationDialog />
+                    </MWindowItem>
+                </div>
+            </MWindow>
+            <div class="d-flex mt-6">
                 <MSwitch @bind-Value="Role.Enabled" Inset Class="label" Label="@(Role.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
                 <MButton Color="primary" Class="small-button" OnClick="async () => await UpdateRoleAsync(context)">@T("Save")</MButton>
             </div>
-        </div>    
+        </div>
     </MForm>
 </SheetDialog>

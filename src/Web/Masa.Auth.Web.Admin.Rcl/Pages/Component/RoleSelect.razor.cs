@@ -17,13 +17,23 @@ public partial class RoleSelect
     [Parameter]
     public string Class { get; set; } = "";
 
-    private List<RoleSelectDto> Roles { get; set; } = new();
+    protected List<RoleSelectDto> Roles { get; set; } = new();
 
-    private RoleService RoleService => AuthCaller.RoleService;
+    protected RoleService RoleService => AuthCaller.RoleService;
 
     protected override async Task OnInitializedAsync()
     {
-        Roles = await RoleService.GetSelectAsync();
+        Roles = await RoleService.GetSelectForUserAsync();
+    }
+
+    protected virtual List<RoleSelectDto> GetRoleSelect() => Roles;
+
+    protected void RemoveRole(RoleSelectDto role)
+    {
+        if(Readonly is false)
+        {
+            Value.Remove(role.Id);
+        }
     }
 }
 

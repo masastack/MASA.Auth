@@ -44,7 +44,6 @@ public partial class AddRoleDialog
     public async Task AddRoleAsync(EditContext context)
     {
         var success = context.Validate();
-        var a = context.GetValidationMessages();
         if(success)
         {
             Loading = true;

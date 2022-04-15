@@ -2,12 +2,12 @@
 
 <MAutocomplete Value="Value"
                ValueChanged=ValueChanged
-               Items="Roles"
+               Items="GetRoleSelect()"
                Outlined
                Height=55
                Chips
                Color="primary"
-               Readonly=Readonly
+               Disabled=Readonly
                Label="@Lable"
                HideDetails="@("auto")"
                ItemText="t=>t.Name"
@@ -16,7 +16,8 @@
                Class="@Class">
     <SelectionContent Context="data">
         <MChip Close
-               OnCloseClick="()=>Value.Remove(data.Item.Id)">
+               Disabled=Readonly
+               OnCloseClick="()=>RemoveRole(data.Item)">
             @data.Item.Name
         </MChip>
     </SelectionContent>

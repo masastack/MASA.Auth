@@ -2,7 +2,7 @@
 
 public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>, IPermissionRepository
 {
-    public PermissionRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
+    public PermissionRepository(AuthDbContext context, IUnitOfWork intOfWork) : base(context, intOfWork)
     {
     }
 

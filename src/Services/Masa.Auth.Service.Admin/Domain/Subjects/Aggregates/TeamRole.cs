@@ -8,6 +8,8 @@ public class TeamRole : AuditEntity<Guid, Guid>, ISoftDelete
 
     public Guid RoleId { get; private set; }
 
+    public Role Role { get; private set; } = null!;
+
     public TeamMemberTypes TeamMemberType { get; private set; }
 
     public TeamRole(Guid roleId, TeamMemberTypes teamMemberType)

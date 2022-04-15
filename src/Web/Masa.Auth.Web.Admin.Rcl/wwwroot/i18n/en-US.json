@@ -1,4 +1,6 @@
 {
   "$Text": "English",
-  "$DateTimeFormat": "MM/dd/yyyy HH:mm:ss"
+  "$DateTimeFormat": "MM/dd/yyyy HH:mm:ss",
+
+  "Role.Name": "Name"
 }

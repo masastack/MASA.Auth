@@ -4,9 +4,12 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
     private List<RolePermission> _permissions = new();
     private List<RoleRelation> _childrenRoles = new();
+    private List<RoleRelation> _parentRoles = new();
     private List<UserRole> _users = new();
+    private List<TeamRole> _teams = new();
     private User? _creatorUser;
     private User? _modifierUser;
+    private int _limit;
 
     public string Name { get; private set; }
 
@@ -16,13 +19,34 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public bool Enabled { get; private set; }
 
-    public int Limit { get; private set; }
+    public int Limit
+    {
+        get => _limit;
+        set
+        {
+            if (value < 0)
+                throw new UserFriendlyException("This operation cannot be completed due to role Limit restrictions");
+
+            _limit = value;
+        }
+    }
+
+    public int QuantityAvailable { get; private set; }
+
+    /// <summary>
+    /// Admin and member roles added to the team are not displayed
+    /// </summary>
+    public bool Hidden { get; private set; }
 
     public IReadOnlyCollection<RolePermission> Permissions => _permissions;
 
     public IReadOnlyCollection<RoleRelation> ChildrenRoles => _childrenRoles;
 
+    public IReadOnlyCollection<RoleRelation> ParentRoles => _parentRoles;
+
     public IReadOnlyCollection<UserRole> Users => _users;
+
+    public IReadOnlyCollection<TeamRole> Teams => _teams;
 
     public User? CreatorUser => _creatorUser ?? LazyLoader?.Load(this, ref _creatorUser);    
 
@@ -39,6 +63,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public Role(string name, string description) : this(name, description, true, 1)
     {
+        Hidden = true;
     }
 
     public Role(string name, string description, bool enabled, int limit)
@@ -47,6 +72,8 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Description = description;
         Enabled = enabled;
         Limit = limit;
+        QuantityAvailable = Limit;
+        Hidden = false;
     }
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
@@ -66,5 +93,10 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Description = description;
         Enabled = enabled;
         Limit = limit;
+    }
+
+    public void UpdateQuantityAvailable(int quantityAvailable)
+    {        
+        QuantityAvailable = quantityAvailable;
     }
 }

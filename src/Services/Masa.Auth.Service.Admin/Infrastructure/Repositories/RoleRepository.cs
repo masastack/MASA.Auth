@@ -2,7 +2,7 @@
 
 public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleRepository
 {
-    public RoleRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
+    public RoleRepository(AuthDbContext context, IUnitOfWork intOfWork) : base(context, intOfWork)
     {
     }
 
@@ -22,10 +22,18 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
         return await Context.Set<Role>()
             .Where(r => r.Id == id)
             .Include(r => r.ChildrenRoles)
+            .ThenInclude(cr => cr.Role)
             .Include(r => r.Permissions)
             .Include(r => r.Users)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current role does not exist");
+    }
+
+    public async Task<List<Role>> GetListAsync()
+    {
+        return await Context.Set<Role>()
+                            .Where(r => r.Hidden == false)
+                            .ToListAsync();
     }
 }

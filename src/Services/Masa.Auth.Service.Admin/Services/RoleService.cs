@@ -13,16 +13,37 @@ public class RoleService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<RoleSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus)
+    private async Task<List<RoleSelectDto>> GetTopRoleSelectAsync([FromServices] IEventBus eventBus, Guid roleId)
     {
-        var query = new RoleSelectQuery();
+        var query = new TopRoleSelectQuery(roleId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<RoleDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid roleId)
+    private async Task<List<RoleSelectDto>> GetSelectForUserAsync([FromServices] IEventBus eventBus,Guid userId)
     {
-        var query = new RoleDetailQuery(roleId);
+        var query = new RoleSelectForUserQuery(userId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<RoleSelectDto>> GetSelectForRoleAsync([FromServices] IEventBus eventBus, Guid roleId)
+    {
+        var query = new RoleSelectForRoleQuery(roleId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<RoleSelectDto>> GetSelectForTeamAsync([FromServices] IEventBus eventBus, Guid teamId)
+    {
+        var query = new RoleSelectForTeamQuery(teamId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<RoleDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new RoleDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

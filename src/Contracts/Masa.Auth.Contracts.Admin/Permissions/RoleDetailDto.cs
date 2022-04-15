@@ -8,6 +8,8 @@ public class RoleDetailDto : RoleDto
 
     public List<Guid> Users { get; set; }
 
+    public int QuantityAvailable { get; set; }
+
     public RoleDetailDto() : base()
     {
         Permissions = new();
@@ -15,11 +17,12 @@ public class RoleDetailDto : RoleDto
         Users = new();
     }
 
-    public RoleDetailDto(Guid id, string name, string description, bool enabled, int limit, List<Guid> permissions, List<Guid> childrenRoles, List<Guid> users, DateTime creationTime, DateTime? modificationTime, string creator, string modifier) : base(id, name, limit, description, enabled, creationTime, modificationTime, creator, modifier)
+    public RoleDetailDto(Guid id, string name, string description, bool enabled, int limit, List<Guid> permissions, List<Guid> childrenRoles, List<Guid> users, DateTime creationTime, DateTime? modificationTime, string creator, string modifier, int quantityAvailable) : base(id, name, limit, description, enabled, creationTime, modificationTime, creator, modifier)
     {
         Permissions = permissions;
         ChildrenRoles = childrenRoles;
         Users = users;
+        QuantityAvailable = quantityAvailable;
     }
 }
 

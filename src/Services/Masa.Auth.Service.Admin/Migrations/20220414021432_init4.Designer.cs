@@ -4,6 +4,7 @@ using Masa.Auth.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220414021432_init4")]
+    partial class init4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,8 +267,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Limit")
-                        .HasColumnType("int");
+                    b.Property<long>("Limit")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("ModificationTime")
                         .HasColumnType("datetime2");
@@ -281,8 +283,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuantityAvailable")
-                        .HasColumnType("int");
+                    b.Property<long>("QuantityAvailable")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -357,8 +359,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.HasIndex("RoleId");
 
@@ -1489,8 +1489,6 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
                     b.HasIndex("TeamId");
 
                     b.ToTable("TeamRole", "subjects");
@@ -1911,19 +1909,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RoleRelation", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "ParentRole")
-                        .WithMany("ChildrenRoles")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
-                        .WithMany("ParentRoles")
+                        .WithMany("ChildrenRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ParentRole");
 
                     b.Navigation("Role");
                 });
@@ -2186,19 +2176,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamRole", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
-                        .WithMany("Teams")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
                         .WithMany("TeamRoles")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Role");
 
                     b.Navigation("Team");
                 });
@@ -2330,11 +2312,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.Navigation("ChildrenRoles");
 
-                    b.Navigation("ParentRoles");
-
                     b.Navigation("Permissions");
-
-                    b.Navigation("Teams");
 
                     b.Navigation("Users");
                 });
