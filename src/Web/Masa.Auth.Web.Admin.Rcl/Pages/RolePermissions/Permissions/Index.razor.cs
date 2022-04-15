@@ -3,7 +3,7 @@
 public partial class Index
 {
     StringNumber _tab = 0;
-    bool _searchApiLoading = false;
+    bool _searchApiLoading, _showMenuInfo, _showApiInfo;
     List<AppPermissionsViewModel> _menuPermissions = new();
     List<AppPermissionsViewModel> _apiPermissions = new();
     List<Guid> _menuPermissionActive = new List<Guid>();
@@ -97,37 +97,47 @@ public partial class Index
         });
     }
 
-    private async Task OnClickMenuPermissionAsync(AppPermissionsViewModel curItem)
+    private async Task ActiveMenuPermission(List<AppPermissionsViewModel> activeItems)
     {
-        if (curItem.IsPermission)
+        if (activeItems.Any())
         {
-            _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
-            if (!curItem.Children.Any())
+            var curItem = activeItems.First();
+            _showMenuInfo = curItem.IsPermission;
+            if (curItem.IsPermission)
             {
-                var childPermissions = await PermissionService.GetChildMenuPermissionsAsync(curItem.Id);
-                curItem.Children.AddRange(childPermissions.Select(a => new AppPermissionsViewModel
+                _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
+                if (!curItem.Children.Any())
                 {
-                    IsPermission = true,
-                    Name = a.Name,
-                    Id = a.Id
-                }));
+                    var childPermissions = await PermissionService.GetChildMenuPermissionsAsync(curItem.Id);
+                    curItem.Children.AddRange(childPermissions.Select(a => new AppPermissionsViewModel
+                    {
+                        IsPermission = true,
+                        Name = a.Name,
+                        Id = a.Id
+                    }));
+                }
             }
-        }
-        else
-        {
-            _menuPermissionDetailDto = new();
+            else
+            {
+                _menuPermissionDetailDto = new();
+            }
         }
     }
 
-    private async Task OnClickApiPermissionAsync(AppPermissionsViewModel curItem)
+    private async Task ActiveApiPermission(List<AppPermissionsViewModel> activeItems)
     {
-        if (curItem.IsPermission)
+        if (activeItems.Any())
         {
-            _apiPermissionDetailDto = await PermissionService.GetApiPermissionDetailAsync(curItem.Id);
-        }
-        else
-        {
-            _apiPermissionDetailDto = new();
+            var curItem = activeItems.First();
+            _showApiInfo = curItem.IsPermission;
+            if (curItem.IsPermission)
+            {
+                _apiPermissionDetailDto = await PermissionService.GetApiPermissionDetailAsync(curItem.Id);
+            }
+            else
+            {
+                _apiPermissionDetailDto = new();
+            }
         }
     }
 

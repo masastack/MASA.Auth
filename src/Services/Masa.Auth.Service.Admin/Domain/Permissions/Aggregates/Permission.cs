@@ -82,7 +82,7 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         }
     }
 
-    public void MoveParent(Guid parentId)
+    public void SetParent(Guid parentId)
     {
         if (Type == PermissionTypes.Api && parentId != Guid.Empty)
         {

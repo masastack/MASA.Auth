@@ -37,6 +37,7 @@
   "Total": "共",
   "Item": "条",
   "All": "全部",
+  "Select Tag": "选择标签",
 
   "Department": "部门",
   "Department location": "部门位置",
@@ -117,7 +118,7 @@
   "Create Team": "创建团队",
   "Update Team": "编辑团队",
   "Delete Team": "删除团队",
-  "Confirm Delete Team": "确认删除该团队？",
+  "Are you sure you want to delete this team": "确认删除该团队?",
   "Failed to query teamList data:": "查询团队列表数据失败:",
   "Failed to query teamDetail data:": "查询团队详情数据失败:",
   "Add team data success": "添加团队数据成功",

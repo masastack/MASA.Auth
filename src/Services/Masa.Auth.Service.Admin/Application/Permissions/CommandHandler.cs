@@ -51,7 +51,7 @@ public class CommandHandler
     #region Permission
 
     [EventHandler]
-    public async Task DeletePermissionAsync(RemovePermissionCommand removePermissionCommand)
+    public async Task ReomvePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
         var permission = await _permissionRepository.GetByIdAsync(removePermissionCommand.PermissionId);
         permission.DeleteCheck();
@@ -59,7 +59,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task CreatePermissionAsync(AddPermissionCommand addPermissionCommand)
+    public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
     {
         var permissionBaseInfo = addPermissionCommand.PermissionDetail;
         if (permissionBaseInfo.IsUpdate)
@@ -68,7 +68,7 @@ public class CommandHandler
             _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
                 permissionBaseInfo.Description, addPermissionCommand.Enabled);
-            _permission.MoveParent(addPermissionCommand.ParentId);
+            _permission.SetParent(addPermissionCommand.ParentId);
             _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
             await _permissionRepository.UpdateAsync(_permission);
             return;
@@ -76,7 +76,7 @@ public class CommandHandler
         var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
             permissionBaseInfo.Description, addPermissionCommand.Enabled);
-        permission.MoveParent(addPermissionCommand.ParentId);
+        permission.SetParent(addPermissionCommand.ParentId);
         permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
     }
