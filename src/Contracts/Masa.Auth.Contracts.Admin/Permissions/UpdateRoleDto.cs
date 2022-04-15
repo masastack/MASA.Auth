@@ -27,7 +27,7 @@ public class UpdateRoleDto
         Users = new();
     }
 
-    public UpdateRoleDto(Guid id, string name, string description, bool enabled, int limit,List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
+    public UpdateRoleDto(Guid id, string name, string description, bool enabled, int limit, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
     {
         Id = id;
         Name = name;
@@ -41,7 +41,7 @@ public class UpdateRoleDto
 
     public static implicit operator UpdateRoleDto(RoleDetailDto role)
     {
-        return new UpdateRoleDto(role.Id, role.Name, role.Description, role.Enabled, role.Limit,role.Permissions, role.ChildrenRoles, role.Users);
+        return new UpdateRoleDto(role.Id, role.Name, role.Description, role.Enabled, role.Limit, role.Permissions, role.ChildrenRoles, role.Users);
     }
 }
 

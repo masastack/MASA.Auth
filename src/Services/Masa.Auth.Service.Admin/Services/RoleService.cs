@@ -48,6 +48,14 @@ public class RoleService : RestServiceBase
         return query.Result;
     }
 
+    private async Task<List<Guid>> GetPermissionsByRoleAsync([FromServices] IEventBus eventBus, [FromQuery] string ids)
+    {
+        var roles = ids.Split(',').Select(id => Guid.Parse(id)).ToList();
+        var query = new PermissionsByRoleQuery(roles);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task AddAsync(
         [FromServices] IEventBus eventBus,
         [FromBody] AddRoleDto role)

@@ -4,11 +4,13 @@ public class CommandHandler
 {
     readonly IRoleRepository _roleRepository;
     readonly IPermissionRepository _permissionRepository;
+    readonly RoleDomainService _roleDomainService;
 
-    public CommandHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository)
+    public CommandHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository, RoleDomainService roleDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
+        _roleDomainService = roleDomainService;
     }
 
     [EventHandler]
@@ -36,17 +38,18 @@ public class CommandHandler
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
+        // update and check role limit
+        var influenceRoles = new List<Guid>{ role.Id };
+        await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
     }
 
     [EventHandler]
-    public async Task DeleteUserAsync(RemoveRoleCommand command)
+    public async Task RemoveRoleAsync(RemoveRoleCommand command)
     {
         var role = await _roleRepository.FindAsync(u => u.Id == command.Role.Id);
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 
-        //Todo
-        //RemoveCheck
         await _roleRepository.RemoveAsync(role);
     }
 

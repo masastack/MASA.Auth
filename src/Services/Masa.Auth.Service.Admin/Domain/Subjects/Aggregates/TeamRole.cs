@@ -2,6 +2,8 @@
 
 public class TeamRole : AuditEntity<Guid, Guid>, ISoftDelete
 {
+    public Guid TeamId { get; private set; }
+
     public Team Team { get; private set; } = null!;
 
     public bool IsDeleted { get; private set; }

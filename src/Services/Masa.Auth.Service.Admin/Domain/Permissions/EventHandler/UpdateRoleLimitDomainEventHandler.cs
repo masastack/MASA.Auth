@@ -5,13 +5,11 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandler
     public class UpdateRoleLimitDomainEventHandler
     {
         readonly IRoleRepository _roleRepository;
-        readonly ITeamRepository _tamRepository;
         readonly AuthDbContext _authDbContext;
 
-        public UpdateRoleLimitDomainEventHandler(IRoleRepository roleRepository, ITeamRepository tamRepository, AuthDbContext authDbContext)
+        public UpdateRoleLimitDomainEventHandler(IRoleRepository roleRepository, AuthDbContext authDbContext)
         {
             _roleRepository = roleRepository;
-            _tamRepository = tamRepository;
             _authDbContext = authDbContext;
         }
 
@@ -20,21 +18,42 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandler
         {
             var roles = await _authDbContext.Set<Role>()
                                     .Include(r => r.Users)
+                                    .Include(r => r.Teams)
+                                    .ThenInclude(tr => tr.Team)
+                                    .ThenInclude(t => t.TeamStaffs)
                                     .Where(r => roleEvent.Roles.Contains(r.Id))
                                     .ToListAsync();
             foreach (var role in roles)
             {
-                if (role.Limit != 0)
-                {
-                    var quantityAvailable = (int)role.Limit - role.Users.Count - roleEvent.teamUserCount;
-                    if (quantityAvailable >= 0)
-                        role.UpdateQuantityAvailable((int)quantityAvailable);
-                    else
-                        throw new UserFriendlyException($"Role：{role.Name} exceed the limit!");
-                }
+                var quantityAvailable = GetQuantityAvailable(role);
+                if (role.Limit == 0 || quantityAvailable >= 0)
+                    role.UpdateQuantityAvailable(quantityAvailable);
+                else
+                    throw new UserFriendlyException($"Role：{role.Name} exceed the limit!");
             }
 
             await _roleRepository.UpdateRangeAsync(roles);
+
+            int GetQuantityAvailable(Role role)
+            {
+                var quantityAvailable = role.Limit - role.Users.Count;
+                if (role.Teams.Count > 0)
+                {
+                    foreach(var teamRole in role.Teams)
+                    {
+                        if(teamRole.TeamMemberType == TeamMemberTypes.Admin)
+                        {
+                            quantityAvailable -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Count();
+                        }
+                        else if(teamRole.TeamMemberType == TeamMemberTypes.Member)
+                        {
+                            quantityAvailable -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Count();
+                        }
+                    }
+                }
+
+                return quantityAvailable;
+            }
         }
     }
 }

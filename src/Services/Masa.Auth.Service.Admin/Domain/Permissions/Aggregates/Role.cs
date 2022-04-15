@@ -33,11 +33,6 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public int QuantityAvailable { get; private set; }
 
-    /// <summary>
-    /// Admin and member roles added to the team are not displayed
-    /// </summary>
-    public bool Hidden { get; private set; }
-
     public IReadOnlyCollection<RolePermission> Permissions => _permissions;
 
     public IReadOnlyCollection<RoleRelation> ChildrenRoles => _childrenRoles;
@@ -63,7 +58,6 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public Role(string name, string description) : this(name, description, true, 1)
     {
-        Hidden = true;
     }
 
     public Role(string name, string description, bool enabled, int limit)
@@ -73,7 +67,6 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Enabled = enabled;
         Limit = limit;
         QuantityAvailable = Limit;
-        Hidden = false;
     }
 
     public void BindChildrenRoles(List<Guid> childrenRoles)

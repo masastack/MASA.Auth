@@ -20,10 +20,9 @@
                 <div class="mt-6 flex-height-auto overflow-y">
                     <MWindowItem Value="UpdateRoleTab.BasicInformation">
                         <div>@T("Basic Information")</div>
-                       @* Value="Role.Limit" TValue="int" ValueChanged=LimitChanged*@
                         <MTextField @bind-Value="Role.Name" Class="my-4" Label="@T("Role.Name")" HideDetails="@("auto")" Outlined />
                         <MTextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
-                        <TopRoleSelect Class="mt-4" RoleId=RoleId Lable="@T("Superior Role")" />
+                        <RoleSelect @bind-Value="RoleDetail.ParentRoles" Class="mt-4" Readonly Lable="@T("Superior Role")" />
 
                         <MTextField @bind-Value="RoleDetail.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
                         <div class="mt-6">@T("History record")</div>

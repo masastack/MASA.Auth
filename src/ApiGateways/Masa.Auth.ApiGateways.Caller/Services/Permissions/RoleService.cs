@@ -69,6 +69,16 @@ public class RoleService : ServiceBase
         return await SendAsync<RoleDetailDto>(nameof(GetDetailAsync), paramters);
     }
 
+    public async Task<List<Guid>> GetPermissionsByRoleAsync(List<Guid> roles)
+    {
+        var paramters = new Dictionary<string, string>
+        {
+            ["ids"] = string.Join(',', roles),
+        };
+
+        return await SendAsync<List<Guid>>(nameof(GetPermissionsByRoleAsync), paramters);
+    }
+
     public async Task AddAsync(AddRoleDto request)
     {
         await SendAsync(nameof(AddAsync), request);
