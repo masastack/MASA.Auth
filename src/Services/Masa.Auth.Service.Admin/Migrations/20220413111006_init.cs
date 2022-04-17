@@ -226,7 +226,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SystemId = table.Column<int>(type: "int", nullable: false),
+                    SystemId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -296,7 +296,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Limit = table.Column<int>(type: "int", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -786,9 +785,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ChildId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     ChildPermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1050,13 +1049,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserRole", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRole_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "permissions",
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRole_User_UserId",
                         column: x => x.UserId,
@@ -1483,12 +1475,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRole_RoleId",
-                schema: "subjects",
-                table: "UserRole",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_UserId",
                 schema: "subjects",
                 table: "UserRole",
@@ -1637,6 +1623,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "sso");
 
             migrationBuilder.DropTable(
+                name: "Role",
+                schema: "permissions");
+
+            migrationBuilder.DropTable(
                 name: "Staff",
                 schema: "subjects");
 
@@ -1650,10 +1640,6 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "Permission",
-                schema: "permissions");
-
-            migrationBuilder.DropTable(
-                name: "Role",
                 schema: "permissions");
 
             migrationBuilder.DropTable(

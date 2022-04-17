@@ -1,7 +1,10 @@
 ﻿namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
-public record AddPermissionCommand(int SystemId, string AppId, Guid ParentId, string Name,
-    string Code, string Icon, PermissionTypes Type, string Url, string Description, bool Enabled) : Command
+public record AddPermissionCommand(PermissionDetailDto PermissionDetail) : Command
 {
-    public List<Guid> ApiPermissionIds { get; set; } = new();
+    public bool Enabled { get; set; } = true;
+
+    public Guid ParentId { get; set; }
+
+    public List<Guid> ApiPermissions { get; set; } = new();
 }

@@ -2,7 +2,7 @@
 
 public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
 {
-    public async void Configure(EntityTypeBuilder<Staff> builder)
+    public void Configure(EntityTypeBuilder<Staff> builder)
     {
         builder.ToTable(nameof(Staff), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(s => s.Id);

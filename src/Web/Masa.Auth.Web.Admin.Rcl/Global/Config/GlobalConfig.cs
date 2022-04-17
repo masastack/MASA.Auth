@@ -121,11 +121,6 @@
             OnConfirmChanged?.Invoke(title, message, confirmFunc);
         }
 
-        public void OpenMessage(string message, MessageType messageType, int timeOut = 2)
-        {
-            OnMessageChanged?.Invoke(message, messageType, timeOut);
-        }
-
         #endregion
 
         public GlobalConfig(CookieStorage cookieStorage, I18nConfig i18nConfig, IHttpContextAccessor httpContextAccessor)
@@ -139,14 +134,12 @@
 
         public delegate void GlobalConfigChanged();
         public delegate void LoadingChanged(bool Loading);
-        public delegate void MessageChanged(string message, MessageType messageType, int timeOut);
         public delegate void ConfirmChanged(string title, string message, EventCallback<bool> confirmFunc);
 
         public event GlobalConfigChanged? OnPageModeChanged;
         public event GlobalConfigChanged? OnCurrentNavChanged;
         public event LoadingChanged? OnLoadingChanged;
         public event ConfirmChanged? OnConfirmChanged;
-        public event MessageChanged? OnMessageChanged;
 
         #endregion
 

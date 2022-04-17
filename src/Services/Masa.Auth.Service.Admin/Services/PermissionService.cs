@@ -4,11 +4,14 @@
     {
         public PermissionService(IServiceCollection services) : base(services, "api/permission")
         {
-            MapGet(ListAsync);
+            MapGet(GetApplicationPermissionsAsync);
+            MapGet(GetChildMenuPermissionsAsync);
             MapGet(GetTypesAsync);
             MapGet(GetApiPermissionSelectAsync);
-            MapGet(GetAsync);
-            MapPost(CreateAsync);
+            MapGet(GetMenuPermissionAsync);
+            MapGet(GetApiPermissionAsync);
+            MapPost(CreateMenuPermissionAsync);
+            MapPost(CreateApiPermissionAsync);
             MapDelete(DeleteAsync);
         }
 
@@ -26,29 +29,47 @@
             return query.Result;
         }
 
-        private async Task CreateAsync(IEventBus eventBus,
-            [FromBody] AddPermissionCommand createDepartmentCommand)
+        private async Task CreateMenuPermissionAsync(IEventBus eventBus,
+            [FromBody] MenuPermissionDetailDto menuPermissionDetailDto)
         {
-            await eventBus.PublishAsync(createDepartmentCommand);
+            await eventBus.PublishAsync(new AddPermissionCommand(menuPermissionDetailDto)
+            {
+                Enabled = menuPermissionDetailDto.Enabled,
+                ParentId = menuPermissionDetailDto.ParentId,
+                ApiPermissions = menuPermissionDetailDto.ApiPermissions
+            });
         }
 
-        private async Task<List<AppPermissionDto>> ListAsync(IEventBus eventBus,
-            [FromQuery] int systemId, [FromQuery] bool apiPermission)
+        private async Task CreateApiPermissionAsync(IEventBus eventBus,
+            [FromBody] ApiPermissionDetailDto apiPermissionDetailDto)
         {
-            if (apiPermission)
-            {
-                var apiQuery = new ApiPermissionListQuery(systemId);
-                await eventBus.PublishAsync(apiQuery);
-                return apiQuery.Result;
-            }
-            var funcQuery = new MenuPermissionListQuery(systemId);
+            await eventBus.PublishAsync(new AddPermissionCommand(apiPermissionDetailDto));
+        }
+
+        private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] string systemId)
+        {
+            var funcQuery = new ApplicationPermissionsQuery(systemId);
             await eventBus.PublishAsync(funcQuery);
             return funcQuery.Result;
         }
 
-        private async Task<MenuPermissionDetailDto> GetAsync(IEventBus eventBus, [FromQuery] Guid id)
+        private async Task<List<PermissionDto>> GetChildMenuPermissionsAsync(IEventBus eventBus, [FromQuery] Guid permissionId)
+        {
+            var funcQuery = new ChildMenuPermissionsQuery(permissionId);
+            await eventBus.PublishAsync(funcQuery);
+            return funcQuery.Result;
+        }
+
+        private async Task<MenuPermissionDetailDto> GetMenuPermissionAsync(IEventBus eventBus, [FromQuery] Guid id)
         {
             var query = new MenuPermissionDetailQuery(id);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        private async Task<ApiPermissionDetailDto> GetApiPermissionAsync(IEventBus eventBus, [FromQuery] Guid id)
+        {
+            var query = new ApiPermissionDetailQuery(id);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

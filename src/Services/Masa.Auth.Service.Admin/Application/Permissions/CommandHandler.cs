@@ -53,23 +53,39 @@ public class CommandHandler
         await _roleRepository.RemoveAsync(role);
     }
 
+    #region Permission
+
     [EventHandler]
-    public async Task DeletePermissionAsync(RemovePermissionCommand deletePermissionCommand)
+    public async Task ReomvePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
-        var permission = await _permissionRepository.GetByIdAsync(deletePermissionCommand.PermissionId);
+        var permission = await _permissionRepository.GetByIdAsync(removePermissionCommand.PermissionId);
         permission.DeleteCheck();
         await _permissionRepository.RemoveAsync(permission);
     }
 
     [EventHandler]
-    public async Task CreatePermissionAsync(AddPermissionCommand createPermissionCommand)
+    public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
     {
-        var permission = new Permission(createPermissionCommand.SystemId, createPermissionCommand.AppId, createPermissionCommand.Name,
-            createPermissionCommand.Icon, createPermissionCommand.Url, createPermissionCommand.Icon, createPermissionCommand.Type,
-            createPermissionCommand.Description);
-        permission.SetEnabled(createPermissionCommand.Enabled);
-        permission.MoveParent(createPermissionCommand.ParentId);
-        permission.BindApiPermission(createPermissionCommand.ApiPermissionIds.ToArray());
+        var permissionBaseInfo = addPermissionCommand.PermissionDetail;
+        if (permissionBaseInfo.IsUpdate)
+        {
+            var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
+            _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
+                permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
+                permissionBaseInfo.Description, addPermissionCommand.Enabled);
+            _permission.SetParent(addPermissionCommand.ParentId);
+            _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
+            await _permissionRepository.UpdateAsync(_permission);
+            return;
+        }
+        var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
+            permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
+            permissionBaseInfo.Description, addPermissionCommand.Enabled);
+        permission.SetParent(addPermissionCommand.ParentId);
+        permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
     }
+
+    #endregion
+
 }
