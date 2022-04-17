@@ -24,9 +24,6 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
             .Include(r => r.ParentRoles)
             .Include(r => r.ChildrenRoles)
             .Include(r => r.Permissions)
-            .Include(r => r.Users)
-            .ThenInclude(ur => ur.User)
-            .Include(r => r.Teams)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current role does not exist");

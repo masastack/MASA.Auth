@@ -10,6 +10,7 @@ public class RoleSelectForRole : RoleSelect
     protected override async Task OnInitializedAsync()
     {
         OldRoleId = RoleId;
+        Lable = T("Inherited Role");
         Roles = await RoleService.GetSelectForRoleAsync(RoleId);
     }
 

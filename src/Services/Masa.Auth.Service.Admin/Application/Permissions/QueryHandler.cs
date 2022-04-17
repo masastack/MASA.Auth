@@ -46,9 +46,25 @@ public class QueryHandler
             role.Permissions.Select(rp => rp.Id).ToList(),
             role.ParentRoles.Select(r => r.RoleId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
+            new(), new(), role.CreationTime, role.ModificationTime, role.CreatorUser?.Name ?? "", role.ModifierUser?.Name ?? "", role.QuantityAvailable);
+    }
+
+    [EventHandler]
+    public async Task GetRoleOwnerAsync(RoleOwnerQuery query)
+    {
+        var role = await _authDbContext.Set<Role>()
+                            .Include(r => r.Users)
+                            .ThenInclude(ur => ur.User)
+                            .Include(r => r.Teams)
+                            .ThenInclude(tr => tr.Team)
+                            .AsSplitQuery()
+                            .FirstOrDefaultAsync(r => r.Id == query.RoleId);
+        if (role is null) throw new UserFriendlyException("This role data does not exist");
+
+        query.Result = new(
             role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),
-            role.Teams.Select(tr => tr.TeamId).Distinct().ToList(),
-            role.CreationTime, role.ModificationTime, role.CreatorUser?.Name ?? "", role.ModifierUser?.Name ?? "", role.QuantityAvailable);
+            role.Teams.Select(tr => new TeamSelectDto(tr.Team.Id, tr.Team.Name, tr.Team.Avatar.Url)).ToList()
+        );
     }
 
     [EventHandler]
@@ -120,7 +136,24 @@ public class QueryHandler
     [EventHandler]
     public async Task GetRoleSelectForTeamAsync(RoleSelectForTeamQuery query)
     {
-        await Task.CompletedTask;
+        var roleSelect = new List<RoleSelectDto>();
+        if (query.TeamId != Guid.Empty)
+        {
+            var bindRoles = await _authDbContext.Set<TeamRole>()
+                                                .Where(tr => tr.TeamId == query.TeamId && tr.TeamMemberType == query.TeamMemberType)
+                                                .Select(tr => tr.RoleId)
+                                                .ToListAsync();
+            var userCount = await _authDbContext.Set<TeamStaff>()
+                                    .Where(ts => ts.TeamId == query.TeamId && ts.TeamMemberType == query.TeamMemberType)
+                                    .CountAsync();
+            roleSelect = await GetRoleSelectAsync(bindRoles, userCount);
+        }
+        else
+        {
+            roleSelect = await GetRoleSelectAsync(new(), 0);
+        }
+
+        query.Result = roleSelect;
     }
 
     private async Task<List<RoleSelectDto>> GetRoleSelectAsync(List<Guid> bindRoles, int limit)
@@ -149,7 +182,7 @@ public class QueryHandler
                                           .ToListAsync();
             permissions.AddRange(roles.SelectMany(r => r.Permissions.Select(p => p.PermissionId)));
             var childRoles = roles.SelectMany(r => r.ChildrenRoles.Select(cr => cr.RoleId)).ToList();
-            if(childRoles.Count > 0)
+            if (childRoles.Count > 0)
             {
                 permissions.AddRange(await GetPermissions(childRoles));
             }

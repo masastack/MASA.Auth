@@ -137,6 +137,7 @@
   "Update Role": "编辑角色",
   "Inherited Role": "继承角色",
   "Superior Role": "上级角色",
+  "RoleOwner": "角色使用者",
   "Limit the number of bindings": "绑定限制次数",
   "The number of bindings cannot be less than ": "绑定限制次数不能小于",
   "Failed to query roleList data:": "查询角色列表数据失败:",

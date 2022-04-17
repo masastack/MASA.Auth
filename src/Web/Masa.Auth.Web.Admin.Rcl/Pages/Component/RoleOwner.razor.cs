@@ -2,35 +2,38 @@
 
 public partial class RoleOwner
 {
-    //[Parameter]
-    //public Guid Value { get; set; } = new();
+    [Parameter]
+    public Guid RoleId { get; set; }
 
-    //[Parameter]
-    //public string Lable { get; set; } = "";
+    private Guid OldRoleId { get; set; }
+         
+    [Parameter]
+    public string Class { get; set; } = "";
 
-    //[Parameter]
-    //public bool Readonly { get; set; }
+    [Parameter]
+    public string Style { get; set; } = "";
 
-    //[Parameter]
-    //public string Class { get; set; } = "";
+    protected RoleOwnerDto Role { get; set; } = new();
 
-    //protected List<RoleSelectDto> Roles { get; set; } = new();
+    protected RoleService RoleService => AuthCaller.RoleService;
 
-    //protected RoleService RoleService => AuthCaller.RoleService;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRoleOwnerAsync();
+    }
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    Roles = await RoleService.GetSelectForUserAsync();
-    //}
+    protected override async Task OnParametersSetAsync()
+    {
+        if(RoleId != OldRoleId)
+        {
+           await GetRoleOwnerAsync();
+        }
+    }
 
-    //protected virtual List<RoleSelectDto> GetRoleSelect() => Roles;
-
-    //protected void RemoveRole(RoleSelectDto role)
-    //{
-    //    if(Readonly is false)
-    //    {
-    //        Value.Remove(role.Id);
-    //    }
-    //}
+    private async Task GetRoleOwnerAsync()
+    {
+        OldRoleId = RoleId;
+        Role = await RoleService.GetRoleOwnerAsync(RoleId);
+    }
 }
 

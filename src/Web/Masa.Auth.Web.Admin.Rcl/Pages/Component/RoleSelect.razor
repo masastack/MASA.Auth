@@ -16,15 +16,19 @@
                Class="@Class">
     <SelectionContent Context="data">
         <MChip Close
-               Disabled=Readonly
+               Style="height:28px;"
                OnCloseClick="()=>RemoveRole(data.Item)">
-            @data.Item.Name
+            <span class="text-important neutral-lighten-2--text">
+                @data.Item.Name
+            </span>
         </MChip>
     </SelectionContent>
     <ItemContent Context="data">
         <MListItemContent>
             <MListItemTitle>
-                @data.Item.Name
+                <span class="text-important neutral-lighten-2--text">
+                    @data.Item.Name
+                </span>
             </MListItemTitle>
         </MListItemContent>
     </ItemContent>

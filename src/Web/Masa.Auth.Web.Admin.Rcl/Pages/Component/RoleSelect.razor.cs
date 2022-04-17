@@ -23,6 +23,7 @@ public partial class RoleSelect
 
     protected override async Task OnInitializedAsync()
     {
+        Lable = T("Role");
         Roles = await RoleService.GetSelectForUserAsync();
     }
 

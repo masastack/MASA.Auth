@@ -22,9 +22,9 @@
                         <div>@T("Basic Information")</div>
                         <MTextField @bind-Value="Role.Name" Class="my-4" Label="@T("Role.Name")" HideDetails="@("auto")" Outlined />
                         <MTextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
-                        <RoleSelect @bind-Value="RoleDetail.ParentRoles" Class="mt-4" Readonly Lable="@T("Superior Role")" />
-
-                        <MTextField @bind-Value="RoleDetail.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                        <RoleSelect Value="RoleDetail.ParentRoles" Class="mt-4" Readonly Lable="@T("Superior Role")" />
+                        <RoleOwner RoleId=RoleId Class="mt-4" />
+                        <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
                         <div class="mt-6">@T("History record")</div>
                         <MTimeline Class="mt-4">
                             <MTimelineItem Color="sample-green" Small>
@@ -74,7 +74,7 @@
                         </MTimeline>
                     </MWindowItem>
                     <MWindowItem Value="UpdateRoleTab.Permission">
-                        <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mt-1 mb-6" Lable="@T("Inherited Role")" />
+                        <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mt-1 mb-6" />
                         <GlobalNavigationDialog />
                     </MWindowItem>
                 </div>

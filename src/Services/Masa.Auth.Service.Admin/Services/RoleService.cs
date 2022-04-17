@@ -6,7 +6,7 @@ public class RoleService : RestServiceBase
     {
     }
 
-    private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus,GetRolesDto role)
+    private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus, GetRolesDto role)
     {
         var query = new GetRolesQuery(role.Page, role.PageSize, role.Search, role.Enabled);
         await eventBus.PublishAsync(query);
@@ -20,7 +20,7 @@ public class RoleService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<RoleSelectDto>> GetSelectForUserAsync([FromServices] IEventBus eventBus,Guid userId)
+    private async Task<List<RoleSelectDto>> GetSelectForUserAsync([FromServices] IEventBus eventBus, Guid userId)
     {
         var query = new RoleSelectForUserQuery(userId);
         await eventBus.PublishAsync(query);
@@ -34,9 +34,9 @@ public class RoleService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<RoleSelectDto>> GetSelectForTeamAsync([FromServices] IEventBus eventBus, Guid teamId)
+    private async Task<List<RoleSelectDto>> GetSelectForTeamAsync([FromServices] IEventBus eventBus, Guid teamId, TeamMemberTypes teamMemberType)
     {
-        var query = new RoleSelectForTeamQuery(teamId);
+        var query = new RoleSelectForTeamQuery(teamId, teamMemberType);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -44,6 +44,13 @@ public class RoleService : RestServiceBase
     private async Task<RoleDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new RoleDetailQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<RoleOwnerDto> GetRoleOwnerAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new RoleOwnerQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

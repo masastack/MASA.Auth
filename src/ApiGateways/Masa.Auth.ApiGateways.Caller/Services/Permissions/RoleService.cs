@@ -50,11 +50,12 @@ public class RoleService : ServiceBase
         return await SendAsync<List<RoleSelectDto>>(nameof(GetSelectForRoleAsync), paramters);
     }
 
-    public async Task<List<RoleSelectDto>> GetSelectForTeamAsync(Guid teamId = default)
+    public async Task<List<RoleSelectDto>> GetSelectForTeamAsync(Guid teamId = default, TeamMemberTypes teamMemberType = TeamMemberTypes.Member)
     {
         var paramters = new Dictionary<string, string>
         {
             ["teamId"] = teamId.ToString(),
+            ["teamMemberType"] = teamMemberType.ToString(),
         };
         return await SendAsync<List<RoleSelectDto>>(nameof(GetSelectForTeamAsync), paramters);
     }
@@ -67,6 +68,16 @@ public class RoleService : ServiceBase
         };
 
         return await SendAsync<RoleDetailDto>(nameof(GetDetailAsync), paramters);
+    }
+
+    public async Task<RoleOwnerDto> GetRoleOwnerAsync(Guid id)
+    {
+        var paramters = new Dictionary<string, string>
+        {
+            ["id"] = id.ToString(),
+        };
+
+        return await SendAsync<RoleOwnerDto>(nameof(GetRoleOwnerAsync), paramters);
     }
 
     public async Task<List<Guid>> GetPermissionsByRoleAsync(List<Guid> roles)
