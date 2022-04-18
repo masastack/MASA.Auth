@@ -23,7 +23,7 @@ public partial class RoleSelectForTeam : RoleSelect
 
     protected override List<RoleSelectDto> GetRoleSelect()
     {
-        return Roles.Where(r => r.QuantityAvailable >= TeamUserCount).ToList();
+        return Roles.Where(r => r.AvailableQuantity >= TeamUserCount).ToList();
     }
 }
 

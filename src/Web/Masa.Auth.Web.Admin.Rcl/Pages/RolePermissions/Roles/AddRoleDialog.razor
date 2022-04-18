@@ -10,7 +10,7 @@
             </div>
             <div>
                 <MTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
-                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" Class="mt-4" />
+                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mt-4" />
                 <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
             </div>           
             

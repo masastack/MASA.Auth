@@ -31,7 +31,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         }
     }
 
-    public int QuantityAvailable { get; private set; }
+    public int AvailableQuantity { get; private set; }
 
     public IReadOnlyCollection<RolePermission> Permissions => _permissions;
 
@@ -66,7 +66,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Description = description;
         Enabled = enabled;
         Limit = limit;
-        QuantityAvailable = Limit;
+        AvailableQuantity = Limit;
     }
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
@@ -88,8 +88,8 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Limit = limit;
     }
 
-    public void UpdateQuantityAvailable(int quantityAvailable)
+    public void UpdateAvailableQuantity(int availableQuantity)
     {
-        QuantityAvailable = quantityAvailable;
+        AvailableQuantity = availableQuantity;
     }
 }

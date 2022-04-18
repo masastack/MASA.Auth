@@ -19,40 +19,33 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandler
             var roles = await _authDbContext.Set<Role>()
                                     .Include(r => r.Users)
                                     .Include(r => r.Teams)
-                                    .ThenInclude(tr => tr.Team)
+                                    .ThenInclude(teamUser => teamUser.Team)
                                     .ThenInclude(t => t.TeamStaffs)
                                     .Where(r => roleEvent.Roles.Contains(r.Id))
                                     .ToListAsync();
             foreach (var role in roles)
             {
-                var quantityAvailable = GetQuantityAvailable(role);
-                if (role.Limit == 0 || quantityAvailable >= 0)
-                    role.UpdateQuantityAvailable(quantityAvailable);
+                var availableQuantity = GetAvailableQuantity(role);
+                if (role.Limit == 0 || availableQuantity >= 0)
+                    role.UpdateAvailableQuantity(availableQuantity);
                 else
                     throw new UserFriendlyException($"Role：{role.Name} exceed the limit!");
             }
 
             await _roleRepository.UpdateRangeAsync(roles);
 
-            int GetQuantityAvailable(Role role)
+            int GetAvailableQuantity(Role role)
             {
-                var quantityAvailable = role.Limit - role.Users.Count;
+                var availableQuantity = role.Limit - role.Users.Count;
                 if (role.Teams.Count > 0)
                 {
                     foreach (var teamRole in role.Teams)
                     {
-                        if (teamRole.TeamMemberType == TeamMemberTypes.Admin)
-                        {
-                            quantityAvailable -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Count();
-                        }
-                        else if (teamRole.TeamMemberType == TeamMemberTypes.Member)
-                        {
-                            quantityAvailable -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Count();
-                        }
+                        availableQuantity -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == teamRole.TeamMemberType).Count();
                     }
                 }
 
-                return quantityAvailable;
+                return availableQuantity;
             }
         }
     }

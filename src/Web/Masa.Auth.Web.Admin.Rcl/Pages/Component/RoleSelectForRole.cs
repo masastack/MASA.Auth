@@ -9,18 +9,22 @@ public class RoleSelectForRole : RoleSelect
 
     protected override async Task OnInitializedAsync()
     {
-        OldRoleId = RoleId;
         Lable = T("Inherited Role");
-        Roles = await RoleService.GetSelectForRoleAsync(RoleId);
+        await ReloadAsync();
     }
 
     protected override async Task OnParametersSetAsync()
     {
         if (RoleId != OldRoleId)
         {
-            OldRoleId = RoleId;
-            Roles = await RoleService.GetSelectForRoleAsync(RoleId);
+            await ReloadAsync();
         }
+    }
+
+    public async Task ReloadAsync()
+    {
+        OldRoleId = RoleId;
+        Roles = await RoleService.GetSelectForRoleAsync(RoleId);
     }
 }
 

@@ -149,7 +149,7 @@
   "Failed to add role:": "添加角色数据失败:",
   "Edit role data success": "编辑角色数据成功",
   "Failed to edit role": "编辑角色数据失败:",
-  "This operation cannot be completed due to role Limit restrictions": "由于角色Limit限制，无法完成此操作",
+  "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作",
 
   "Permission": "权限",
   "Api Permission": "API",

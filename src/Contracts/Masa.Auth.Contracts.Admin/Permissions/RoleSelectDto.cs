@@ -6,12 +6,12 @@ public class RoleSelectDto
 
     public string Name { get; set; }
 
-    public int QuantityAvailable { get; set; }
+    public int AvailableQuantity { get; set; }
 
-    public RoleSelectDto(Guid id, string name, int quantityAvailable)
+    public RoleSelectDto(Guid id, string name, int availableQuantity)
     {
         Id = id;
         Name = name;
-        QuantityAvailable = quantityAvailable;
+        AvailableQuantity = availableQuantity;
     }
 }

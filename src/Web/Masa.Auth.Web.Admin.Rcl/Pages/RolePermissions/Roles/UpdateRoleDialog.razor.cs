@@ -75,10 +75,10 @@ public partial class UpdateRoleDialog
     {
         if (limit != 0)
         {
-            var quantityAvailable = limit + RoleDetail.QuantityAvailable - RoleDetail.Limit;
-            if (quantityAvailable < 0)
+            var availableQuantity = limit + RoleDetail.AvailableQuantity - RoleDetail.Limit;
+            if (availableQuantity < 0)
             {
-                OpenWarningMessage(T("The number of bindings cannot be less than ") + (RoleDetail.Limit - RoleDetail.QuantityAvailable));
+                OpenWarningMessage(T("The number of bindings cannot be less than ") + (RoleDetail.Limit - RoleDetail.AvailableQuantity));
             }
         }
     }
