@@ -10,8 +10,20 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
     {
         return await Context.Set<Role>()
             .Where(r => r.Id == id)
-            .Include(r => r.Roles)
-            .Include(r => r.RolePermissions)
+            .Include(r => r.ChildrenRoles)
+            .Include(r => r.Permissions)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync()
+            ?? throw new UserFriendlyException("The current role does not exist");
+    }
+
+    public async Task<Role> GetDetailAsync(Guid id)
+    {
+        return await Context.Set<Role>()
+            .Where(r => r.Id == id)
+            .Include(r => r.ParentRoles)
+            .Include(r => r.ChildrenRoles)
+            .Include(r => r.Permissions)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current role does not exist");

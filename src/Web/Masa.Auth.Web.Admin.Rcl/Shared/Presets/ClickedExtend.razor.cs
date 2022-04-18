@@ -20,7 +20,7 @@ public partial class ClickedExtend
 
     [Parameter]
     public bool Split { get; set; }
-    
+
     [Parameter]
     public StringNumber MaxWidth { get; set; } = "100%";
 

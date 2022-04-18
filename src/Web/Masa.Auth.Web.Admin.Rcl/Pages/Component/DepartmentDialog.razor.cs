@@ -23,7 +23,7 @@ public partial class DepartmentDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if(OldValue != Value)
+        if (OldValue != Value)
         {
             OldValue = Value;
             var department = FindDepartment(Departments);

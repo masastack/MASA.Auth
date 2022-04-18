@@ -18,7 +18,7 @@ public partial class DepartmentSelect
 
     protected override async Task OnInitializedAsync()
     {
-        Departments = await DepartmentService.GetListAsync();      
+        Departments = await DepartmentService.GetListAsync();
     }
 
     private async Task OnValueChanged(DepartmentDto department)

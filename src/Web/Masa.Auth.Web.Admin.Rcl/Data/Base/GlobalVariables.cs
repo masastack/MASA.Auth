@@ -2,6 +2,6 @@
 {
     public static class GlobalVariables
     {
-        public const string DefaultRoute = "user";
+        public const string DefaultRoute = "role";
     }
 }

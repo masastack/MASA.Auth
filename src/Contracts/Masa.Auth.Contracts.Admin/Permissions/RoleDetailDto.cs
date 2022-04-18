@@ -1,53 +1,36 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Permissions;
 
-public class RoleDetailDto
+public class RoleDetailDto : RoleDto
 {
-    public Guid Id { get; set; }
-
-    public string Name { get; set; }
-
-    public string Description { get; set; }
-
-    public bool Enabled { get; set; }
-
     public List<Guid> Permissions { get; set; }
+
+    public List<Guid> ParentRoles { get; set; }
 
     public List<Guid> ChildrenRoles { get; set; }
 
-    public List<Guid> Users { get; set; }
+    public List<UserSelectDto> Users { get; set; }
 
-    public DateTime CreationTime { get; set; }
+    public List<Guid> Teams { get; set; }
 
-    public DateTime? ModificationTime { get; set; }
+    public int AvailableQuantity { get; set; }
 
-    public string Creator { get; set; }
-
-    public string Modifier { get; set; }
-
-    public RoleDetailDto()
+    public RoleDetailDto() : base()
     {
-        Name = "";
-        Description = "";
         Permissions = new();
+        ParentRoles = new();
         ChildrenRoles = new();
         Users = new();
-        Creator = "";
-        Modifier = "";
+        Teams = new();
     }
 
-    public RoleDetailDto(Guid id, string name, string description, bool enabled, List<Guid> permissions, List<Guid> childrenRoles, List<Guid> users, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public RoleDetailDto(Guid id, string name, string description, bool enabled, int limit, List<Guid> permissions, List<Guid> parentRoles, List<Guid> childrenRoles, List<UserSelectDto> users, List<Guid> teams, DateTime creationTime, DateTime? modificationTime, string creator, string modifier, int availableQuantity) : base(id, name, limit, description, enabled, creationTime, modificationTime, creator, modifier)
     {
-        Id = id;
-        Name = name;
-        Description = description;
-        Enabled = enabled;
         Permissions = permissions;
+        ParentRoles = parentRoles;
         ChildrenRoles = childrenRoles;
         Users = users;
-        CreationTime = creationTime;
-        ModificationTime = modificationTime;
-        Creator = creator;
-        Modifier = modifier;
+        Teams = teams;
+        AvailableQuantity = availableQuantity;
     }
 }
 

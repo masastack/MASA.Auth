@@ -35,7 +35,7 @@ public class UpdateStaffDomainEventHandler
     {
         var staffDto = staffEvent.Staff;
         var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
-        if(staff is null)
+        if (staff is null)
             throw new UserFriendlyException("This staff data does not exist");
 
         staff.Update(staffDto.User.Name, staffDto.Position.Id, staffDto.StaffType, staffDto.Enabled);

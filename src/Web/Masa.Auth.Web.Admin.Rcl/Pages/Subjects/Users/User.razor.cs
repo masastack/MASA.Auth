@@ -79,7 +79,7 @@ public partial class User
 
     public List<DataTableHeader<UserDto>> Headers { get; set; } = new();
 
-    public List<(string,bool?)> UserStateSelect { get; set; } = new();
+    public List<(string, bool?)> UserStateSelect { get; set; } = new();
 
     public bool AddUserDialogVisible { get; set; }
 

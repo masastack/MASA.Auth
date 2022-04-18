@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
+﻿using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
 public partial class UpdateRoleDialog
 {
@@ -22,6 +24,8 @@ public partial class UpdateRoleDialog
 
     private MForm? Form { get; set; }
 
+    private StringNumber Tab { get; set; } = UpdateRoleTab.BasicInformation;
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -42,6 +46,7 @@ public partial class UpdateRoleDialog
     {
         if (Visible)
         {
+            Tab = UpdateRoleTab.BasicInformation;
             await GetRoleDetailAsync();
         }
     }
@@ -55,14 +60,26 @@ public partial class UpdateRoleDialog
     public async Task UpdateRoleAsync(EditContext context)
     {
         var success = context.Validate();
-        if(success)
+        if (success)
         {
             Loading = true;
             await RoleService.UpdateAsync(Role);
             OpenSuccessMessage(T("Update role data success"));
             await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();           
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
+        }
+    }
+
+    private void LimitChanged(int limit)
+    {
+        if (limit != 0)
+        {
+            var availableQuantity = limit + RoleDetail.AvailableQuantity - RoleDetail.Limit;
+            if (availableQuantity < 0)
+            {
+                OpenWarningMessage(T("The number of bindings cannot be less than ") + (RoleDetail.Limit - RoleDetail.AvailableQuantity));
+            }
         }
     }
 }

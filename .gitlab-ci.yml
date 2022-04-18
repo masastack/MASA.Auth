@@ -14,7 +14,7 @@ variables:
   DOCKER_AUTH_ADMIN_SERVER_PATH: ./src/Services/Masa.Auth.Service.Admin/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_PATH: ./src/Web/Masa.Auth.Web.Admin.Server/Dockerfile
   NAMESPACE_DEV: masa-auth-dev-new
-  NASASPACE_TEST: masa-auth-test-new
+  NAMESPACE_TEST: masa-auth-test-new
   NAMESPACE_PRE: masa-auth-pre-new
   NAMESPACE_PRO: masa-auth-new
 
