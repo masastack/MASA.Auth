@@ -21,12 +21,12 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandler
                                     .Include(r => r.Teams)
                                     .ThenInclude(teamUser => teamUser.Team)
                                     .ThenInclude(t => t.TeamStaffs)
-                                    .Where(r => roleEvent.Roles.Contains(r.Id))
+                                    .Where(r => r.Limit != 0 && roleEvent.Roles.Contains(r.Id))
                                     .ToListAsync();
             foreach (var role in roles)
             {
                 var availableQuantity = GetAvailableQuantity(role);
-                if (role.Limit == 0 || availableQuantity >= 0)
+                if (availableQuantity >= 0)
                     role.UpdateAvailableQuantity(availableQuantity);
                 else
                     throw new UserFriendlyException($"Role：{role.Name} exceed the limit!");
