@@ -250,6 +250,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Creator")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CreatorUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -269,6 +272,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ModifierUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -278,9 +284,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creator");
+                    b.HasIndex("CreatorUserId");
 
-                    b.HasIndex("Modifier");
+                    b.HasIndex("ModifierUserId");
 
                     b.ToTable("Role", "permissions");
                 });
@@ -1871,15 +1877,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreatorUser")
                         .WithMany()
-                        .HasForeignKey("Creator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorUserId");
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifierUser")
                         .WithMany()
-                        .HasForeignKey("Modifier")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModifierUserId");
 
                     b.Navigation("CreatorUser");
 

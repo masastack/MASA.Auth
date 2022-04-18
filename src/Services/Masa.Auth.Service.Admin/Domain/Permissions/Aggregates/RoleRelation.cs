@@ -16,5 +16,10 @@ public class RoleRelation : AuditEntity<Guid, Guid>, ISoftDelete
     {
         ParentId = parentId;
     }
+
+    public RoleRelation(Guid roleId, Guid parentId)
+    {
+        RoleId = roleId;
+    }
 }
 

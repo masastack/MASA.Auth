@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220417112218_init2")]
+    [Migration("20220418013148_init2")]
     partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -252,6 +252,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Creator")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CreatorUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -271,6 +274,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ModifierUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -280,9 +286,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creator");
+                    b.HasIndex("CreatorUserId");
 
-                    b.HasIndex("Modifier");
+                    b.HasIndex("ModifierUserId");
 
                     b.ToTable("Role", "permissions");
                 });
@@ -1873,15 +1879,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreatorUser")
                         .WithMany()
-                        .HasForeignKey("Creator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorUserId");
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifierUser")
                         .WithMany()
-                        .HasForeignKey("Modifier")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModifierUserId");
 
                     b.Navigation("CreatorUser");
 

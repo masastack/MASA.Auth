@@ -43,7 +43,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public IReadOnlyCollection<TeamRole> Teams => _teams;
 
-    public User? CreatorUser => _creatorUser ?? LazyLoader?.Load(this, ref _creatorUser);    
+    public User? CreatorUser => _creatorUser ?? LazyLoader?.Load(this, ref _creatorUser);
 
     public User? ModifierUser => _modifierUser ?? LazyLoader?.Load(this, ref _modifierUser);
 
@@ -72,7 +72,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     public void BindChildrenRoles(List<Guid> childrenRoles)
     {
         _childrenRoles.Clear();
-        _childrenRoles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId)));
+        _childrenRoles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId, default)));
     }
 
     public void BindPermissions(List<Guid> permissions)
@@ -89,7 +89,7 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     }
 
     public void UpdateQuantityAvailable(int quantityAvailable)
-    {        
+    {
         QuantityAvailable = quantityAvailable;
     }
 }

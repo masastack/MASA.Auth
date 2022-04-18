@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -8,6 +9,13 @@ namespace Masa.Auth.Service.Admin.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<Guid>(
+                name: "CreatorUserId",
+                schema: "permissions",
+                table: "Role",
+                type: "uniqueidentifier",
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "Limit",
                 schema: "permissions",
@@ -15,6 +23,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "ModifierUserId",
+                schema: "permissions",
+                table: "Role",
+                type: "uniqueidentifier",
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "QuantityAvailable",
@@ -43,36 +58,34 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Role_Creator",
+                name: "IX_Role_CreatorUserId",
                 schema: "permissions",
                 table: "Role",
-                column: "Creator");
+                column: "CreatorUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Role_Modifier",
+                name: "IX_Role_ModifierUserId",
                 schema: "permissions",
                 table: "Role",
-                column: "Modifier");
+                column: "ModifierUserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Role_User_Creator",
+                name: "FK_Role_User_CreatorUserId",
                 schema: "permissions",
                 table: "Role",
-                column: "Creator",
+                column: "CreatorUserId",
                 principalSchema: "subjects",
                 principalTable: "User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Role_User_Modifier",
+                name: "FK_Role_User_ModifierUserId",
                 schema: "permissions",
                 table: "Role",
-                column: "Modifier",
+                column: "ModifierUserId",
                 principalSchema: "subjects",
                 principalTable: "User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_RoleRelation_Role_ParentId",
@@ -107,12 +120,12 @@ namespace Masa.Auth.Service.Admin.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Role_User_Creator",
+                name: "FK_Role_User_CreatorUserId",
                 schema: "permissions",
                 table: "Role");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Role_User_Modifier",
+                name: "FK_Role_User_ModifierUserId",
                 schema: "permissions",
                 table: "Role");
 
@@ -147,17 +160,27 @@ namespace Masa.Auth.Service.Admin.Migrations
                 table: "RoleRelation");
 
             migrationBuilder.DropIndex(
-                name: "IX_Role_Creator",
+                name: "IX_Role_CreatorUserId",
                 schema: "permissions",
                 table: "Role");
 
             migrationBuilder.DropIndex(
-                name: "IX_Role_Modifier",
+                name: "IX_Role_ModifierUserId",
+                schema: "permissions",
+                table: "Role");
+
+            migrationBuilder.DropColumn(
+                name: "CreatorUserId",
                 schema: "permissions",
                 table: "Role");
 
             migrationBuilder.DropColumn(
                 name: "Limit",
+                schema: "permissions",
+                table: "Role");
+
+            migrationBuilder.DropColumn(
+                name: "ModifierUserId",
                 schema: "permissions",
                 table: "Role");
 

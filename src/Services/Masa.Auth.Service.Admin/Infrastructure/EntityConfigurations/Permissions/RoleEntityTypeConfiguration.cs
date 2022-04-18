@@ -11,8 +11,8 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
         builder.HasMany(r => r.ParentRoles).WithOne(ri => ri.Role).HasForeignKey(ri => ri.RoleId);
         builder.HasMany(r => r.Users).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId);
         builder.HasMany(r => r.Teams).WithOne(tr => tr.Role).HasForeignKey(tr => tr.RoleId);
-        builder.HasOne(r => r.CreatorUser).WithMany().HasForeignKey("Creator");
-        builder.HasOne(r => r.ModifierUser).WithMany().HasForeignKey("Modifier");
+        builder.HasOne(r => r.CreatorUser).WithMany();
+        builder.HasOne(r => r.ModifierUser).WithMany();
     }
 }
 
