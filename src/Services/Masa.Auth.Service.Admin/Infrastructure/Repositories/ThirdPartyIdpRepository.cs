@@ -2,7 +2,7 @@
 
 public class ThirdPartyIdpRepository : Repository<AuthDbContext, ThirdPartyIdp>, IThirdPartyIdpRepository
 {
-    public ThirdPartyIdpRepository(AuthDbContext context, IUnitOfWork intOfWork) : base(context, intOfWork)
+    public ThirdPartyIdpRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {
     }
 }

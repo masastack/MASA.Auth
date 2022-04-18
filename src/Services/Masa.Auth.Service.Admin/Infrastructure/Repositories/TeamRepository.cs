@@ -2,7 +2,7 @@
 
 public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamRepository
 {
-    public TeamRepository(AuthDbContext context, IUnitOfWork intOfWork) : base(context, intOfWork)
+    public TeamRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {
     }
 

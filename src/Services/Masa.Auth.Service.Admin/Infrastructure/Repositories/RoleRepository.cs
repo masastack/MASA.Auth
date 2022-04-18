@@ -2,7 +2,7 @@
 
 public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleRepository
 {
-    public RoleRepository(AuthDbContext context, IUnitOfWork intOfWork) : base(context, intOfWork)
+    public RoleRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {
     }
 
