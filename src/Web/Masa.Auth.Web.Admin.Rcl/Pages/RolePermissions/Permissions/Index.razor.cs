@@ -19,6 +19,8 @@ public partial class Index
     List<SelectItemDto<Guid>> _childApiItems = new();
     Guid _parentMenuId;
     MForm _formMenu = default!, _formApi = default!;
+    List<string> _appTags = new();
+    AppTagDetailDto _appTagDto = new();
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
@@ -41,10 +43,18 @@ public partial class Index
             _curAppItems = _projectItems.First().Apps;
 
             await InitAppPermissions();
-
+            await GetAppTags();
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task GetAppTags()
+    {
+        if (!_appTags.Any())
+        {
+            _appTags = await ProjectService.GetAppTagsAsync();
+        }
     }
 
     private async Task SelectProjectItem(ProjectDto project)
@@ -60,6 +70,7 @@ public partial class Index
         {
             IsPermission = false,
             AppId = a.Identity,
+            AppTag = a.Tag,
             Id = Guid.NewGuid(),
             Name = a.Name
         }).ToList();
@@ -67,6 +78,7 @@ public partial class Index
         {
             IsPermission = false,
             AppId = a.Identity,
+            AppTag = a.Tag,
             Id = Guid.NewGuid(),
             Name = a.Name
         }).ToList();
@@ -101,10 +113,11 @@ public partial class Index
     {
         if (activeItems.Any())
         {
+            _showMenuInfo = true;
             var curItem = activeItems.First();
-            _showMenuInfo = curItem.IsPermission;
             if (curItem.IsPermission)
             {
+                _appTagDto = new AppTagDetailDto();
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
                 if (!curItem.Children.Any())
                 {
@@ -119,8 +132,17 @@ public partial class Index
             }
             else
             {
+                _appTagDto = new AppTagDetailDto
+                {
+                    AppIdentity = curItem.AppId,
+                    Tag = curItem.AppTag
+                };
                 _menuPermissionDetailDto = new();
             }
+        }
+        else
+        {
+            _showMenuInfo = false;
         }
     }
 
@@ -129,15 +151,25 @@ public partial class Index
         if (activeItems.Any())
         {
             var curItem = activeItems.First();
-            _showApiInfo = curItem.IsPermission;
+            _showApiInfo = true;
             if (curItem.IsPermission)
             {
+                _appTagDto = new();
                 _apiPermissionDetailDto = await PermissionService.GetApiPermissionDetailAsync(curItem.Id);
             }
             else
             {
+                _appTagDto = new AppTagDetailDto
+                {
+                    AppIdentity = curItem.AppId,
+                    Tag = curItem.AppTag
+                };
                 _apiPermissionDetailDto = new();
             }
+        }
+        else
+        {
+            _showApiInfo = false;
         }
     }
 
@@ -223,5 +255,15 @@ public partial class Index
             await PermissionService.RemoveAsync(id);
             await InitAppPermissions();
         }
+    }
+
+    private async Task SaveAppTag(AppTagDetailDto appTagDto)
+    {
+        if (string.IsNullOrEmpty(appTagDto.Tag) || string.IsNullOrEmpty(appTagDto.AppIdentity))
+        {
+            OpenWarningMessage(T("Tag or appid is empty"));
+            return;
+        }
+        await ProjectService.SaveAppTagAsync(appTagDto);
     }
 }

@@ -8,5 +8,7 @@ public class AppDto
 
     public string Identity { get; set; } = string.Empty;
 
+    public string Tag { get; set; } = string.Empty;
+
     public int ProjectId { get; set; }
 }
