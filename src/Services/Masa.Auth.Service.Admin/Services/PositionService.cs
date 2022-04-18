@@ -14,7 +14,7 @@ public class PositionService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<PositionSelectDto>> GetSelectAsync(IEventBus eventBus,string name)
+    private async Task<List<PositionSelectDto>> GetSelectAsync(IEventBus eventBus, string name)
     {
         var query = new PositionSelectQuery(name);
         await eventBus.PublishAsync(query);

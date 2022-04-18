@@ -39,13 +39,13 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandler
                 var quantityAvailable = role.Limit - role.Users.Count;
                 if (role.Teams.Count > 0)
                 {
-                    foreach(var teamRole in role.Teams)
+                    foreach (var teamRole in role.Teams)
                     {
-                        if(teamRole.TeamMemberType == TeamMemberTypes.Admin)
+                        if (teamRole.TeamMemberType == TeamMemberTypes.Admin)
                         {
                             quantityAvailable -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Count();
                         }
-                        else if(teamRole.TeamMemberType == TeamMemberTypes.Member)
+                        else if (teamRole.TeamMemberType == TeamMemberTypes.Member)
                         {
                             quantityAvailable -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Count();
                         }

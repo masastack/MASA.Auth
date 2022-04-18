@@ -6,7 +6,7 @@ public partial class RoleOwner
     public Guid RoleId { get; set; }
 
     private Guid OldRoleId { get; set; }
-         
+
     [Parameter]
     public string Class { get; set; } = "";
 
@@ -24,9 +24,9 @@ public partial class RoleOwner
 
     protected override async Task OnParametersSetAsync()
     {
-        if(RoleId != OldRoleId)
+        if (RoleId != OldRoleId)
         {
-           await GetRoleOwnerAsync();
+            await GetRoleOwnerAsync();
         }
     }
 

@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
-
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class TeamBasicInfo
 {

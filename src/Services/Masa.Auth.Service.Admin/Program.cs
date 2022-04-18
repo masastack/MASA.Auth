@@ -1,6 +1,4 @@
-﻿using Masa.Utils.Data.EntityFrameworkCore.Filters;
-
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();

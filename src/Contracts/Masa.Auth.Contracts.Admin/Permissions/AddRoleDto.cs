@@ -26,7 +26,7 @@ public class AddRoleDto
         Users = new();
     }
 
-    public AddRoleDto(string name, string description, bool enabled,int limit, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
+    public AddRoleDto(string name, string description, bool enabled, int limit, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
     {
         Name = name;
         Description = description;

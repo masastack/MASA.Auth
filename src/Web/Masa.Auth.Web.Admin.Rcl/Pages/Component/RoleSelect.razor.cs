@@ -31,7 +31,7 @@ public partial class RoleSelect
 
     protected void RemoveRole(RoleSelectDto role)
     {
-        if(Readonly is false)
+        if (Readonly is false)
         {
             Value.Remove(role.Id);
         }

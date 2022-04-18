@@ -16,7 +16,7 @@ public class RoleSelectForRole : RoleSelect
 
     protected override async Task OnParametersSetAsync()
     {
-        if(RoleId != OldRoleId)
+        if (RoleId != OldRoleId)
         {
             OldRoleId = RoleId;
             Roles = await RoleService.GetSelectForRoleAsync(RoleId);

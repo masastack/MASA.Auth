@@ -39,7 +39,7 @@ public class CommandHandler
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
         // update and check role limit
-        var influenceRoles = new List<Guid>{ role.Id };
+        var influenceRoles = new List<Guid> { role.Id };
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
     }
 
