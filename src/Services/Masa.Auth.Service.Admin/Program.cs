@@ -80,7 +80,7 @@ var app = builder.Services
             eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
         .UseIsolationUoW<AuthDbContext>(
-            isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),// 使用环境隔离
+            isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),
             dbOptions => dbOptions.UseSqlServer().UseSoftDelete())
         .UseRepository<AuthDbContext>();
     })
