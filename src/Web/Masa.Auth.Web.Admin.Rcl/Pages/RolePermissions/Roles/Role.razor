@@ -22,7 +22,9 @@
             @switch (context.Header.Value)
             {
                 case nameof(RoleDto.Name):
-                    <span class="text-body3 neutral--text">@context.Item.Name</span>
+                    <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
+                        <span class="text-body3 neutral--text">@context.Item.Name</span>
+                    </div>                    
                     break;
                 case (nameof(RoleDto.CreationTime)):
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>

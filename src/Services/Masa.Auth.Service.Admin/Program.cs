@@ -29,8 +29,6 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
 
-builder.Services.AddScoped<ISaveChangesFilter, SoftDeleteSaveChangesFilter>();
-
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()
