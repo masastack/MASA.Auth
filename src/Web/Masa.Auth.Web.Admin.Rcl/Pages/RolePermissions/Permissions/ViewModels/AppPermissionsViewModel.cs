@@ -6,6 +6,8 @@ internal class AppPermissionsViewModel
 
     public string AppId { get; set; } = string.Empty;
 
+    public string AppTag { get; set; } = string.Empty;
+
     public string Name { get; set; } = string.Empty;
 
     public bool IsPermission { get; set; }
