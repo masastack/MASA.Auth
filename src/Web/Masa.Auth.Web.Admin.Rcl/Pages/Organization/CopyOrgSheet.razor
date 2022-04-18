@@ -26,7 +26,7 @@
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column">
                     <MTextField class="mx-auto text-h5 neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
-                    <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department location")"
+                    <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
                                ItemValue="u => u.Id"
                                ItemChildren="u => u.Children">
