@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Masa.Contrib.Isolation.MultiEnvironment;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -26,6 +28,14 @@ builder.Services.AddAuthentication(options =>
 //);
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
+builder.Services.AddPmClient(callerOption =>
+{
+    callerOption.UseHttpClient(_builder =>
+    {
+        _builder.Name = builder.Configuration.GetValue<string>("PmClient:Name");
+        _builder.Configure = opt => opt.BaseAddress = new Uri(builder.Configuration.GetValue<string>("PmClient:Url"));
+    });
+});
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -69,10 +79,19 @@ var app = builder.Services
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
             eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
-        .UseUoW<AuthDbContext>(dbOptions => dbOptions.UseSqlServer().UseSoftDelete())
+        .UseIsolationUoW<AuthDbContext>(
+            isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),
+            dbOptions => dbOptions.UseSqlServer().UseSoftDelete())
         .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
+
+//set Isolation
+app.Use(async (context, next) =>
+{
+    context.Items.Add("env", "development");
+    await next.Invoke();
+});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

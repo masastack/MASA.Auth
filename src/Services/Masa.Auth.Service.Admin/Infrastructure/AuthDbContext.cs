@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Infrastructure;
 
-public class AuthDbContext : MasaDbContext
+public class AuthDbContext : IsolationDbContext
 {
     public const string PERMISSION_SCHEMA = "permissions";
     public const string SUBJECT_SCHEMA = "subjects";

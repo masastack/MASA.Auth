@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
 
-public class Department : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class Department : AuditAggregateRoot<Guid, Guid>, ISoftDelete//, IMultiEnvironment
 {
     public string Name { get; private set; }
 
