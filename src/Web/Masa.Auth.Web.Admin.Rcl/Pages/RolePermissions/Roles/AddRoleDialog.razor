@@ -1,1 +1,28 @@
 ﻿@inherits AdminCompontentBase
+
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
+    <MForm Model="Role" EnableValidation @ref="Form">
+        <div class="sheetDialogPadding full-height flex-column">
+            <div class="d-flex mb-6">
+                <div class="mx-auto">
+                    <MTextField @bind-Value="Role.Name" Label="@T("Role.Name")" HideDetails="@("auto")" Outlined />
+                </div>
+            </div>
+            <div>
+                <MTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
+                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mt-4" />
+                <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+            </div>           
+            
+            <div class="mt-6 flex-height-auto overflow-y">
+                <GlobalNavigationDialog />
+            </div>
+
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="Role.Enabled" Inset Class="label" Label="@(Role.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton Color="primary" Class="small-button" OnClick="async () => await AddRoleAsync(context)">@T("Save")</MButton>
+            </div>
+        </div>
+    </MForm>
+</SheetDialog>

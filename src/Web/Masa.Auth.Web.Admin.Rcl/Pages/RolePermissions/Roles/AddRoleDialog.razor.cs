@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
+﻿using Masa.Auth.Web.Admin.Rcl.Pages.Component;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
 public partial class AddRoleDialog
 {
@@ -17,6 +19,8 @@ public partial class AddRoleDialog
 
     private MForm? Form { get; set; }
 
+    private RoleSelectForRole? RoleSelect { get; set; }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -33,18 +37,19 @@ public partial class AddRoleDialog
         }
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         if (Visible)
         {
             Role = new();
+            if(RoleSelect is not null) await RoleSelect.ReloadAsync();
         }
     }
 
-    public async Task AddOrEditRoleAsync(EditContext context)
+    public async Task AddRoleAsync(EditContext context)
     {
         var success = context.Validate();
-        if(success)
+        if (success)
         {
             Loading = true;
             await RoleService.AddAsync(Role);

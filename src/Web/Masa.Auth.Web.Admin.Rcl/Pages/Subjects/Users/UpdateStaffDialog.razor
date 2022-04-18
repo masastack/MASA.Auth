@@ -2,25 +2,25 @@
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Staff")">
     <MForm Model="Staff" EnableValidation @ref="Form">
-        <div style="padding-left:204px;padding-right:204px;padding-bottom:24px;padding-top:24px;height:100%;width: 100%;position: absolute;">
-            <div style="position: relative;" class="full-height">
-                <div class="d-flex">
-                    <div class="ml-auto mr-auto text-center" style="width:212px;">
-                        <MAvatar Size=80>
-                            <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                        </MAvatar>
-                        <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
-                    </div>
+        <div Class="flex-column sheetDialogPadding">
+            <div class="d-flex">
+                <div class="ml-auto mr-auto text-center" style="width:212px;">
+                    <MAvatar Size=80>
+                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                    </MAvatar>
+                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
-                <div class="mt-6 text-subtitle2">@T("Basic Information")</div>
+            </div>
+            <div class="mt-6 flex-height-auto overflow-y">
+                <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MButtonGroup Dense Mandatory Borderless Value="Staff.User.GenderType.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px">
-                         <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Male" Ripple=false Value="@GenderTypes.Male.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                               @T(GenderTypes.Male.ToString())
-                           </MButton>    
-                          <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Female" Ripple=false Value="@GenderTypes.Female.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                               @T(GenderTypes.Female.ToString())
-                           </MButton> 
+                        <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Male" Ripple=false Value="@GenderTypes.Male.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(GenderTypes.Male.ToString())
+                        </MButton>
+                        <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Female" Ripple=false Value="@GenderTypes.Female.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(GenderTypes.Female.ToString())
+                        </MButton>
                     </MButtonGroup>
                 </MRow>
                 <MRow Class="mt-6">
@@ -90,7 +90,7 @@
                 }
 
                 <div class="mt-6 text-subtitle2">@T("History record")</div>
-                <MTimeline Class="mt-4" Style="position: absolute;left: -50px;">
+                <MTimeline Class="mt-4">
                     <MTimelineItem Color="sample-green" Small>
                         <IconContent>
                             <MAvatar Size=10>
@@ -136,15 +136,14 @@
                         </MTimelineItem>
                     }
                 </MTimeline>
+            </div>
 
-                <div class="d-flex" style="bottom:0px;right:0px;width:100%;position:absolute;">
-                    <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
-                    <MSpacer></MSpacer>
-                    <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</MButton>
-                    <MButton Color="primary" Class="small-button" OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</MButton>
-                </div>
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</MButton>
+                <MButton Color="primary" Class="small-button" OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</MButton>
             </div>
         </div>
-
     </MForm>
 </SheetDialog>

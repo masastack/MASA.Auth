@@ -1,0 +1,35 @@
+﻿@inherits AdminCompontentBase
+
+<MAutocomplete Value="Value"
+               ValueChanged=ValueChanged
+               Items="GetRoleSelect()"
+               Outlined
+               Height=55
+               Chips
+               Color="primary"
+               Disabled=Readonly
+               Label="@Lable"
+               HideDetails="@("auto")"
+               ItemText="t=>t.Name"
+               ItemValue="t=>t.Id"
+               Multiple
+               Class="@Class">
+    <SelectionContent Context="data">
+        <MChip Close
+               Style="height:28px;"
+               OnCloseClick="()=>RemoveRole(data.Item)">
+            <span class="text-important neutral-lighten-2--text">
+                @data.Item.Name
+            </span>
+        </MChip>
+    </SelectionContent>
+    <ItemContent Context="data">
+        <MListItemContent>
+            <MListItemTitle>
+                <span class="text-important neutral-lighten-2--text">
+                    @data.Item.Name
+                </span>
+            </MListItemTitle>
+        </MListItemContent>
+    </ItemContent>
+</MAutocomplete>

@@ -6,22 +6,22 @@
     <MCardText Class="pa-6">
         <div>
             <MButtonGroup Dense Mandatory Borderless @bind-Value="_pageTab" Class="rounded-lg elevation-tab mb-6">
-                @foreach(var title in new List<string> { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff})
+                @foreach (var title in new List<string> { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff })
                 {
-                   <MButton Ripple=false Value="title" Class="rounded-lg" MinWidth=100>
+                    <MButton Ripple=false Value="title" Class="rounded-lg" MinWidth=100>
                         @T(title)
-                   </MButton> 
-                }             
+                    </MButton>
+                }
             </MButtonGroup>
             <MWindow Value="_pageTab" Reverse Class="flex-grow-1">
                 <MWindowItem Value="PageTab.User" Class="full-height">
                     <User />
                 </MWindowItem>
-                    <MWindowItem Value="PageTab.ThirdPartyUser" Class="full-height">
+                <MWindowItem Value="PageTab.ThirdPartyUser" Class="full-height">
                     <ThirdPartyUser />
                 </MWindowItem>
-                    <MWindowItem Value="PageTab.Staff" Class="full-height">
-                    <Staff />   
+                <MWindowItem Value="PageTab.Staff" Class="full-height">
+                    <Staff />
                 </MWindowItem>
             </MWindow>
         </div>

@@ -3,7 +3,7 @@
 public partial class Role
 {
     private string? _search;
-    private bool _enabled;
+    private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
 
@@ -17,7 +17,7 @@ public partial class Role
         }
     }
 
-    public bool Enabled
+    public bool? Enabled
     {
         get { return _enabled; }
         set
@@ -67,12 +67,12 @@ public partial class Role
     {
         Headers = new()
         {
-            new() { Text = T(nameof(RoleDto.Name)), Value = nameof(RoleDto.Name), Sortable = false },
-            new() { Text = T("State"), Value = nameof(RoleDto.Enabled), Sortable = false },
+            new() { Text = T("Role.Name"), Value = nameof(RoleDto.Name), Sortable = false },
             new() { Text = T(nameof(RoleDto.CreationTime)), Value = nameof(RoleDto.CreationTime), Sortable = false },
-            new() { Text = T(nameof(RoleDto.Creator)), Value = nameof(RoleDto.Creator), Sortable = false },
             new() { Text = T(nameof(RoleDto.ModificationTime)), Value = nameof(RoleDto.ModificationTime), Sortable = false },
+            new() { Text = T(nameof(RoleDto.Creator)), Value = nameof(RoleDto.Creator), Sortable = false },
             new() { Text = T(nameof(RoleDto.Modifier)), Value = nameof(RoleDto.Modifier), Sortable = false },
+            new() { Text = T("State"), Value = nameof(RoleDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
