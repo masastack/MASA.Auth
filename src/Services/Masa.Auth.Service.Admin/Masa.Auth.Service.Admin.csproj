@@ -11,6 +11,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.4.0-preview.3" />
@@ -56,5 +57,10 @@
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	
-	<ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<ItemGroup>
+	  <Folder Include="Application\Sso\Commands\" />
+	  <Folder Include="Migrations\" />
+	</ItemGroup>
+	
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

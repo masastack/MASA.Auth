@@ -1,0 +1,45 @@
+﻿@inherits AdminCompontentBase
+
+<MCard Class="full-height d-flex flex-column">
+    <MCardText>
+        <MRow>
+            <MCol Md=6>
+                <MAutocomplete HideDetails=true
+                               @bind-Value="AppTagDto.Tag"
+                               Outlined Dense Label="@I18n.T("Select Tag")"
+                               Items="@_appTags"
+                               ItemText="t => t"
+                               ItemValue="t => t"></MAutocomplete>
+            </MCol>
+        </MRow>
+    </MCardText>
+    <MCardActions class="d-flex justify-end mb-10 px-6">
+        <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSaveHandler">@T("Save")</MButton>
+    </MCardActions>
+</MCard>
+
+@code {
+
+    [Parameter]
+    public EventCallback<AppTagDetailDto> OnSave { get; set; }
+
+    [Parameter]
+    public AppTagDetailDto AppTagDto { get; set; } = new();
+
+    List<string> _appTags = new();
+    ProjectService ProjectService => AuthCaller.ProjectService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _appTags = await ProjectService.GetAppTagsAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task OnSaveHandler()
+    {
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync(AppTagDto);
+        }
+    }
+}

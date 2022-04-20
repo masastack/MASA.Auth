@@ -1,6 +1,7 @@
 global using Masa.Auth.ApiGateways.Caller.Services.Organizations;
 global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Projects;
+global using Masa.Auth.ApiGateways.Caller.Services.Sso;
 global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;

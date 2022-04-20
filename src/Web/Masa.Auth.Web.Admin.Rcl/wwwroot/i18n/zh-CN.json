@@ -21,6 +21,7 @@
   "Save": "保存",
   "Delete": "删除",
   "Edit": "编辑",
+  "Edit In": "编辑于",
   "AddChild": "加子级",
   "Are you sure delete data?": "确定删除数据?",
   "Creator": "创建人",
@@ -189,5 +190,6 @@
   "Are you sure you want to delete this permission": "确定删除该权限?",
   "Permission deleted successfully": "删除权限成功",
   "Failed to delete permission": "删除权限失败",
-  "Project identifier is empty": "项目标识为空"
+  "Project identifier is empty": "项目标识为空",
+  "Tag or appid is empty": "tag或appid为空"
 }

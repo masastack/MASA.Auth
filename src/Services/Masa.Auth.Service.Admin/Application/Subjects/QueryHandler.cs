@@ -156,7 +156,7 @@ public class QueryHandler
             condition = condition.And(s => s.Name.Contains(teamListQuery.Name));
         }
         teamListQuery.Result = (await _teamRepository.GetListAsync(condition))
-                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, "", "", "", t.ModificationTime))
+                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.TeamStaffs.Count, "", "", "", t.ModificationTime))
                 .ToList();
     }
 
