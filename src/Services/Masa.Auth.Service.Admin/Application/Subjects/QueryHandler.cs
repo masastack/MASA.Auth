@@ -8,9 +8,9 @@ public class QueryHandler
     readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
+    readonly IAutoCompleteClient _autoCompleteClient;
 
-    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository,
-        IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, AuthDbContext authDbContext, IEventBus eventBus)
+    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -18,6 +18,7 @@ public class QueryHandler
         _thirdPartyUserRepository = thirdPartyUserRepository;
         _authDbContext = authDbContext;
         _eventBus = eventBus;
+        _autoCompleteClient = autoCompleteClient;
     }
 
     #region User
@@ -28,6 +29,12 @@ public class QueryHandler
         Expression<Func<User, bool>> condition = user => true;
         if (query.Enabled is not null)
             condition = condition.And(user => user.Enabled == query.Enabled);
+
+        if(query.StartTime is not null)
+            condition = condition.And(user => user.CreationTime >= query.StartTime);
+
+        if (query.EndTime is not null)
+            condition = condition.And(user => user.CreationTime <= query.EndTime);
 
         if (query.userId != Guid.Empty)
             condition = condition.And(user => user.Id == query.userId);
@@ -68,9 +75,8 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
-        var user = await _userRepository.GetListAsync(u => u.Name == query.Search);
-        //Todo es search
-        query.Result = user.Select(u => new UserSelectDto(u.Id, u.Name, u.Account, u.PhoneNumber, u.Email, u.Avatar)).ToList();
+        var response = await _autoCompleteClient.GetAsync<UserSelectDto,Guid>(query.Search);      
+        query.Result = response.Data;
     }
 
     #endregion

@@ -11,15 +11,7 @@ public class StaffService : ServiceBase
 
     public async Task<PaginationDto<StaffDto>> GetListAsync(GetStaffsDto request)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["pageSize"] = request.PageSize.ToString(),
-            ["page"] = request.Page.ToString(),
-            ["search"] = request.Search ?? "",
-            ["enabled"] = request.Enabled?.ToString() ?? "",
-            ["departmentId"] = request.DepartmentId.ToString()
-        };
-        return await SendAsync<PaginationDto<StaffDto>>(nameof(GetListAsync), paramters);
+        return await SendAsync<GetStaffsDto, PaginationDto<StaffDto>>(nameof(GetListAsync), request);
     }
 
     public async Task<List<StaffSelectDto>> GetSelectAsync(string name)

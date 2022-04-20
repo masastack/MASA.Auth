@@ -22,6 +22,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_aspnet:6.0.0
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY ["src/Web/Masa.Auth.Web.Admin.Rcl/wwwroot/i18n","wwwroot/i18n"]
+ENV ASPNETCORE_URLS=https://0.0.0.0:443
 EXPOSE 80
 EXPOSE 443
 ENTRYPOINT ["dotnet", "Masa.Auth.Web.Admin.Server.dll"]

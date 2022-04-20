@@ -55,6 +55,11 @@ public abstract class ServiceBase
         return await GetAsync<TResponse>(methodName, query);
     }
 
+    protected async Task<TResponse> SendAsync<TRequest, TResponse>(string methodName, TRequest data) where TRequest : class
+    {
+        return await CallerProvider.GetAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new Exception("The service is abnormal, please contact the administrator!");
+    }
+
     string BuildAdress(string methodName)
     {
         return Path.Combine(BaseUrl, methodName.Replace("Async", ""));

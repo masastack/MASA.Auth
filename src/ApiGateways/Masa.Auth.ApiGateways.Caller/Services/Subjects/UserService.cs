@@ -11,14 +11,17 @@ public class UserService : ServiceBase
 
     public async Task<PaginationDto<UserDto>> GetListAsync(GetUsersDto request)
     {
+        return await SendAsync<GetUsersDto, PaginationDto<UserDto>>(nameof(GetListAsync), request);
+    }
+
+    public async Task<List<UserSelectDto>> GetSelectAsync(string search)
+    {
         var paramters = new Dictionary<string, string>
         {
-            ["pageSize"] = request.PageSize.ToString(),
-            ["page"] = request.Page.ToString(),
-            ["userId"] = request.UserId.ToString(),
-            ["enabled"] = request.Enabled?.ToString() ?? "",
+            ["search"] = search
         };
-        return await SendAsync<PaginationDto<UserDto>>(nameof(GetListAsync), paramters);
+
+        return await SendAsync<List<UserSelectDto>>(nameof(GetSelectAsync), paramters);
     }
 
     public async Task<UserDetailDto> GetDetailAsync(Guid id)

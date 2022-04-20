@@ -1,12 +1,40 @@
 ﻿@inherits AdminCompontentBase
 
 <div style="position: fixed;right: 48px;top: 108px;" class="d-flex">
-    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+    <MAutocomplete @bind-Value="UserId"
+                   OnSearchInputUpdate=OnSearchChanged
+                   Items="UserSelect"
+                   Color="primary"
+                   Label="@T("Search")"
+                   ItemText="t=>t.Name"
+                   ItemValue="t=>t.Id"
+                   Flat
+                   Dense
+                   Solo
+                   BackgroundColor="fill-lighten-1"
+                   HideDetails="@("auto")"
+                   Style="width:340px;height:40px;"
+                   Class="rounded-2">
         <PrependInnerContent>
             <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
         </PrependInnerContent>
-    </MTextField>
-    <MIcon Size=20 class="ml-6" @onclick="() => Filter = !Filter">mdi-filter-off</MIcon>
+        <ItemContent Context="data">
+            <div class="d-flex">
+                <MAvatar Size=24>
+                    <img src="@data.Item.Avatar" />
+                </MAvatar>
+                <div>
+                    <div>@data.Item.Account @data.Item.Name</div>
+                    <div>@data.Item.PhoneNumber @data.Item.Email</div>
+                </div>
+            </div>
+        </ItemContent>
+    </MAutocomplete>
+    <div @onclick="() => Filter = !Filter" class="ml-6 d-flex hover-pointer" style="width: 40px;height: 40px;border: 1px solid #F0F3FA;box-sizing: border-box;border-radius: 10px;">
+        <MIcon Class="ma-auto" Color="neutral-lighten-1" Size=20>
+            @(Filter?"mdi-filter":"mdi-filter-off")
+        </MIcon>
+    </div>
     <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddUserDialog>
         <MIcon Size=18>mdi-plus</MIcon>
         <span class="ml-2">@T("Add")</span>
@@ -15,18 +43,21 @@
 
 @if (Filter)
 {
-    <div class="">
-        <MCol>
-            <MSelect @bind-Value="Enabled"
-                 HideDetails="@("auto")"
-                 Outlined
-                 Clearable
-                 Items="@UserStateSelect"
-                 ItemText="select => select.Item1"
-                 ItemValue="select => select.Item2"
-                 Label="@T("UserState")">
-            </MSelect>
-        </MCol>
+    <div class="d-flex mb-2">
+        <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+        <MRow class="ml-6">
+            <MCol Md=4>
+                <MSelect @bind-Value="Enabled"
+                     HideDetails="@("auto")"
+                     Outlined
+                     Clearable
+                     Items="@UserStateSelect"
+                     ItemText="select => select.Item1"
+                     ItemValue="select => select.Item2"
+                     Placeholder="@T("UserState")">
+                </MSelect>
+            </MCol>
+        </MRow>
     </div>
 }
 

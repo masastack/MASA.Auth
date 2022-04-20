@@ -11,15 +11,7 @@ public class RoleService : ServiceBase
 
     public async Task<PaginationDto<RoleDto>> GetListAsync(GetRolesDto request)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["pageSize"] = request.PageSize.ToString(),
-            ["page"] = request.Page.ToString(),
-            ["search"] = request.Search,
-            ["enabled"] = request.Enabled?.ToString() ?? "",
-        };
-
-        return await SendAsync<PaginationDto<RoleDto>>(nameof(GetListAsync), paramters);
+        return await SendAsync<GetRolesDto, PaginationDto<RoleDto>>(nameof(GetListAsync), request);
     }
 
     public async Task<List<RoleSelectDto>> GetTopRoleSelectAsync(Guid roleId)

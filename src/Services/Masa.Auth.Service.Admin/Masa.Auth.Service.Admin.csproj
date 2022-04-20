@@ -27,6 +27,7 @@
 		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Isolation.UoW.EF" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.4.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.4.0-preview.3" />
 		<PackageReference Include="Masa.Utils.Data.EntityFrameworkCore.SqlServer" Version="0.4.0-preview.3" />

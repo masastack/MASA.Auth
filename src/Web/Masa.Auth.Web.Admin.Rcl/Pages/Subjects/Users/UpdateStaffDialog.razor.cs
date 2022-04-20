@@ -67,12 +67,10 @@ public partial class UpdateStaffDialog
         }
     }
 
-    public void OpenRemoveStaffDialog()
+    public async Task OpenRemoveStaffDialog()
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveStaffAsync();
-        }, T("Are you sure delete staff data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete staff data"));
+        if (confirm) await RemoveStaffAsync();
     }
 
     public async Task RemoveStaffAsync()

@@ -1,4 +1,6 @@
 ﻿using Masa.Contrib.Isolation.MultiEnvironment;
+using Masa.Contrib.SearchEngine.AutoComplete;
+using Masa.Utils.Data.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,9 @@ builder.Services.AddPmClient(callerOption =>
         _builder.Configure = opt => opt.BaseAddress = new Uri(builder.Configuration.GetValue<string>("PmClient:Url"));
     });
 });
+
+builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
+                .AddAutoComplete(option => option.UseIndexName("user_index"));
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

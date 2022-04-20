@@ -100,12 +100,10 @@ public partial class Role
         UpdateRoleDialogVisible = true;
     }
 
-    public void OpenRemoveRoleDialog(RoleDto role)
+    public async Task OpenRemoveRoleDialog(RoleDto role)
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveRoleAsync(role.Id);
-        }, T("Are you sure delete role data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete role data"));
+        if (confirm) await RemoveRoleAsync(role.Id);
     }
 
     public async Task RemoveRoleAsync(Guid roleId)

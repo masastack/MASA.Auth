@@ -101,14 +101,10 @@ public partial class ThirdPartyIdp
         ThirdPartyIdpDialogVisible = true;
     }
 
-    public void OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
+    public async Task OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
-        CurrentThirdPartyIdpId = thirdPartyIdp.Id;
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await DeleteThirdPartyIdpAsync();
-        },
-        T("Are you sure delete data?"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete data"));
+        if (confirm) await DeleteThirdPartyIdpAsync();
     }
 
     public async Task DeleteThirdPartyIdpAsync()

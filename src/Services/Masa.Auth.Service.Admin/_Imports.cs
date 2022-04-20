@@ -62,3 +62,4 @@ global using Microsoft.OpenApi.Models;
 global using System.Diagnostics;
 global using System.Linq.Expressions;
 global using System.Reflection;
+global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
