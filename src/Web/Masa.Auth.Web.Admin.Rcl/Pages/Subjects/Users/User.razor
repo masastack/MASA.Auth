@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<div style="position: fixed;right: 48px;top: 108px;" class="d-flex">
+<div style="position: absolute;right: 0;top: 0;" class="d-flex">
     <MAutocomplete @bind-Value="UserId"
                    OnSearchInputUpdate=OnSearchChanged
                    Items="UserSelect"
@@ -30,12 +30,12 @@
             </div>
         </ItemContent>
     </MAutocomplete>
-    <div @onclick="() => Filter = !Filter" class="ml-6 d-flex hover-pointer" style="width: 40px;height: 40px;border: 1px solid #F0F3FA;box-sizing: border-box;border-radius: 10px;">
+    <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
         <MIcon Class="ma-auto" Color="neutral-lighten-1" Size=20>
             @(Filter?"mdi-filter":"mdi-filter-off")
         </MIcon>
     </div>
-    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddUserDialog>
+    <MButton Color="primary" Class="ml-4 medium-button" OnClick=OpenAddUserDialog>
         <MIcon Size=18>mdi-plus</MIcon>
         <span class="ml-2">@T("Add")</span>
     </MButton>
@@ -85,7 +85,7 @@
                 <span class="text-body3">@context.Item.PhoneNumber</span>
                 break;
             case (nameof(UserDto.CreationTime)):
-                <span class="text-body3">@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                 break;
             case nameof(UserDto.Enabled):
                 string color = context.Item.Enabled ? "sample-green" : "error";

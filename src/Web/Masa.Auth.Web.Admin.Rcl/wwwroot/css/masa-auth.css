@@ -504,7 +504,54 @@
     line-height: 1.3125rem !important;
 }
 
+.button {
+    min-width: 40px;
+    min-height: 40px;
+    border: 1px solid #F0F3FA;
+    box-sizing: border-box;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 /*组件样式全局修改start*/
+.m-window {
+    position: initial !important;
+}
+
+.m-window__container {
+    position: initial !important;
+}
+
+.small .m-input__control .m-input__slot fieldset {
+    height: 40px !important;
+}
+
+.small .m-input__slot {
+    height: 30px !important;
+}
+
+.small .m-select__slot {
+    height: 35px !important;
+}
+
+.theme--light.m-timeline .m-timeline-item__dot {
+    background: none !important;
+}
+
+.m-timeline-item__dot {
+    box-shadow: none !important;
+}
+
+.m-timeline-item__inner-dot {
+    background: white !important;
+    margin-top: 0px !important;
+}
+
+.m-input__append-inner {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
 .button-group {
     font-family: Roboto !important;
     font-style: normal !important;
@@ -813,11 +860,11 @@
 }
 
 .m-text-field--outlined input {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
 }
 
 .m-timeline {

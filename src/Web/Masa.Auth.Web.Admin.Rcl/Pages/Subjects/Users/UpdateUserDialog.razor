@@ -64,63 +64,9 @@
                         <MTextField @bind-Value="User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
                     </MCol>
                 </MRow>
-                @if (UserDetail.ThirdPartyIdpAvatars.Count > 0)
-                {
-                    <div class="mt-6 text-subtitle2">@T("Authorization certification")</div>
-                    <div class="mt-4">
-                        @foreach (var avatar in UserDetail.ThirdPartyIdpAvatars)
-                        {
-                            <img src="@avatar" />
-                        }
-                    </div>
-                }
-                <div class="mt-6 text-subtitle2">@T("History record")</div>
-                <MTimeline Class="mt-4">
-                    <MTimelineItem Color="sample-green" Small>
-                        <IconContent>
-                            <MAvatar Size=10>
-                                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                            </MAvatar>
-                        </IconContent>
-                        <OppositeContent>
-                            <span class="mr-n5">
-                                @T("Create")
-                            </span>
-                        </OppositeContent>
-                        <ChildContent>
-                            <div class="pb-4 ml-n5">
-                                <span>@UserDetail.Creator</span>
-                                <br />
-                                <span>@UserDetail.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                            </div>
-                        </ChildContent>
-                    </MTimelineItem>
-                    @if (UserDetail.ModificationTime is not null)
-                    {
-                        <MTimelineItem Color="sample-green" Small>
-                            <IconContent>
-                                <MAvatar Size=10>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                                </MAvatar>
-                            </IconContent>
-                            <OppositeContent>
-                                <div class="pb-4 ml-n5">
-                                    <span>@UserDetail.Modifier</span>
-                                    <br />
-                                    <span>@UserDetail.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                                </div>
-                            </OppositeContent>
-                            <ChildContent>
-                                <div class="d-flex">
-                                    <MSpacer />
-                                    <span class="mr-n5">
-                                        @T("Update")
-                                    </span>
-                                </div>
-                            </ChildContent>
-                        </MTimelineItem>
-                    }
-                </MTimeline>
+
+                <Authorization Avatars=UserDetail.ThirdPartyIdpAvatars />
+                <Record Creator="@UserDetail.Creator" CreationTime="@UserDetail.CreationTime" Modifier="@UserDetail.Modifier" ModificationTime="@UserDetail.ModificationTime" />
             </div>
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="User.Enabled" Inset Class="label" Label="@(User.Enabled ? T("Enable"):T("Disabled"))" />

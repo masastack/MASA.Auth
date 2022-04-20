@@ -63,11 +63,12 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     }
 
-    public void Update(string name, string displayName, string avatar, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
+    public void Update(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
+        IdCard = idCard;
         CompanyName = companyName;
         Enabled = enabled;
         PhoneNumber = phoneNumber;
