@@ -42,8 +42,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Sso\" />
-  </ItemGroup>
-
 </Project>
