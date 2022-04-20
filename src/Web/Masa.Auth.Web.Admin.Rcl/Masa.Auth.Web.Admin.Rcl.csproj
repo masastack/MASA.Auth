@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\App\**" />
+    <Content Remove="Pages\App\**" />
+    <EmbeddedResource Remove="Pages\App\**" />
+    <None Remove="Pages\App\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Shared\Presets\readme.md" />
   </ItemGroup>
 
@@ -20,6 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="Masa.Blazor" Version="0.4.0-preview.1" />
+    <PackageReference Include="Masa.Stack.Components" Version="0.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
   </ItemGroup>
 

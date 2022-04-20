@@ -13,6 +13,8 @@ public class QueryHandler
         _authDbContext = authDbContext;
     }
 
+    #region Role
+
     [EventHandler]
     public async Task GetRoleListAsync(GetRolesQuery query)
     {
@@ -150,6 +152,8 @@ public class QueryHandler
             return permissions;
         }
     }
+
+    #endregion
 
     #region Permission
 
