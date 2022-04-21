@@ -35,4 +35,25 @@
             </MListItemContent>
         </ItemContent>
     </MAutocomplete>
+    <MAutocomplete @bind-Value="Value.Roles"
+                   Items="_roles"
+                   Loading="_roleLoading"
+                   OnSearchInputUpdate="QuerySelectionRole"
+                   ItemText="r=>r.Name"
+                   ItemValue="r=>r.Id"
+                   Outlined
+                   Dense
+                   Chips
+                   SmallChips
+                   Label="@T("Role")"
+                   Multiple>
+        <SelectionContent Context="data">
+            <MChip Close Small OnCloseClick="()=>RemoveAdmin(data.Item.Id)">
+                @data.Item.Name
+            </MChip>
+        </SelectionContent>
+    </MAutocomplete>
+    <div class="global-nav mt-4" style="height: calc(100vh - 380px);overflow-y: scroll;">
+        <Masa.Stack.Components.GlobalNavigation.ExpansionWrapper Categories=Categories FavoriteNavs=FavoriteNavs Checkable />
+    </div>
 </MCardText>

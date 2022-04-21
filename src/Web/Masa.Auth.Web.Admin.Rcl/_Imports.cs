@@ -18,6 +18,7 @@ global using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;
 global using Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions.ViewModels;
 global using Masa.Auth.Web.Admin.Rcl.Shared;
 global using Masa.Blazor;
+global using Masa.Stack.Components.Models;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Forms;
 global using Microsoft.AspNetCore.Components.Web;
