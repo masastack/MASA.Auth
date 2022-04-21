@@ -16,21 +16,12 @@ public class UserService : ServiceBase
 
     public async Task<List<UserSelectDto>> GetSelectAsync(string search)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["search"] = search
-        };
-
-        return await SendAsync<List<UserSelectDto>>(nameof(GetSelectAsync), paramters);
+        return await SendAsync<object, List<UserSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
     public async Task<UserDetailDto> GetDetailAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-        return await SendAsync<UserDetailDto>(nameof(GetDetailAsync), paramters);
+        return await SendAsync<object, UserDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
     public async Task AddAsync(AddUserDto request)

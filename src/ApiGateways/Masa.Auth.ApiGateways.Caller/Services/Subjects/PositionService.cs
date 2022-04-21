@@ -11,20 +11,12 @@ public class PositionService : ServiceBase
 
     public async Task<PositionDetailDto> GetDetailAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-        return await SendAsync<PositionDetailDto>(nameof(GetDetailAsync), paramters);
+        return await SendAsync<object, PositionDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
     public async Task<List<PositionSelectDto>> GetSelectAsync(string name = "")
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["name"] = name,
-        };
-        return await SendAsync<List<PositionSelectDto>>(nameof(GetSelectAsync), paramters);
+        return await SendAsync<object, List<PositionSelectDto>>(nameof(GetSelectAsync), new { name });
     }
 
     public async Task AddAsync(AddPositionDto request)

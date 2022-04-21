@@ -30,7 +30,7 @@ public class QueryHandler
         if (query.Enabled is not null)
             condition = condition.And(user => user.Enabled == query.Enabled);
 
-        if(query.StartTime is not null)
+        if (query.StartTime is not null)
             condition = condition.And(user => user.CreationTime >= query.StartTime);
 
         if (query.EndTime is not null)
@@ -75,7 +75,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
-        var response = await _autoCompleteClient.GetAsync<UserSelectDto,Guid>(query.Search);      
+        var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(query.Search);
         query.Result = response.Data;
     }
 

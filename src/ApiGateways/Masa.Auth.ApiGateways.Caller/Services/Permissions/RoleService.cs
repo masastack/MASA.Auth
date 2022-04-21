@@ -16,50 +16,28 @@ public class RoleService : ServiceBase
 
     public async Task<List<RoleSelectDto>> GetTopRoleSelectAsync(Guid roleId)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["roleId"] = roleId.ToString(),
-        };
-        return await SendAsync<List<RoleSelectDto>>(nameof(GetTopRoleSelectAsync), paramters);
+        return await SendAsync<object, List<RoleSelectDto>>(nameof(GetTopRoleSelectAsync), new { roleId });
     }
 
     public async Task<List<RoleSelectDto>> GetSelectForUserAsync(Guid userId = default)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["userId"] = userId.ToString(),
-        };
-        return await SendAsync<List<RoleSelectDto>>(nameof(GetSelectForUserAsync), paramters);
+        return await SendAsync<object, List<RoleSelectDto>>(nameof(GetSelectForUserAsync), new { userId });
     }
 
 
     public async Task<List<RoleSelectDto>> GetSelectForRoleAsync(Guid roleId = default)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["roleId"] = roleId.ToString(),
-        };
-        return await SendAsync<List<RoleSelectDto>>(nameof(GetSelectForRoleAsync), paramters);
+        return await SendAsync<object, List<RoleSelectDto>>(nameof(GetSelectForRoleAsync), new { roleId });
     }
 
     public async Task<List<RoleSelectDto>> GetSelectForTeamAsync(Guid teamId = default, TeamMemberTypes teamMemberType = TeamMemberTypes.Member)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["teamId"] = teamId.ToString(),
-            ["teamMemberType"] = teamMemberType.ToString(),
-        };
-        return await SendAsync<List<RoleSelectDto>>(nameof(GetSelectForTeamAsync), paramters);
+        return await SendAsync<object, List<RoleSelectDto>>(nameof(GetSelectForTeamAsync), new { teamId, teamMemberType });
     }
 
     public async Task<RoleDetailDto> GetDetailAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-
-        return await SendAsync<RoleDetailDto>(nameof(GetDetailAsync), paramters);
+        return await SendAsync<object, RoleDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
     public async Task<RoleOwnerDto> GetRoleOwnerAsync(Guid id)
@@ -69,17 +47,12 @@ public class RoleService : ServiceBase
             ["id"] = id.ToString(),
         };
 
-        return await SendAsync<RoleOwnerDto>(nameof(GetRoleOwnerAsync), paramters);
+        return await SendAsync<object, RoleOwnerDto>(nameof(GetRoleOwnerAsync), new { id });
     }
 
     public async Task<List<Guid>> GetPermissionsByRoleAsync(List<Guid> roles)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["ids"] = string.Join(',', roles),
-        };
-
-        return await SendAsync<List<Guid>>(nameof(GetPermissionsByRoleAsync), paramters);
+        return await SendAsync<object, List<Guid>>(nameof(GetPermissionsByRoleAsync), new { ids = string.Join(',', roles) });
     }
 
     public async Task AddAsync(AddRoleDto request)

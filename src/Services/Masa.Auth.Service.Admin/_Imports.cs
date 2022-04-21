@@ -68,3 +68,5 @@ global using System.Diagnostics;
 global using System.Linq.Expressions;
 global using System.Reflection;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
+global using Masa.Auth.Contracts.Admin.Sso.Validator;
+global using Masa.Auth.Service.Admin.Application.Sso.Commands;

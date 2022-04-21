@@ -16,20 +16,12 @@ public class StaffService : ServiceBase
 
     public async Task<List<StaffSelectDto>> GetSelectAsync(string name)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["name"] = name,
-        };
-        return await SendAsync<List<StaffSelectDto>>(nameof(GetSelectAsync), paramters);
+        return await SendAsync<object, List<StaffSelectDto>>(nameof(GetSelectAsync), new { name });
     }
 
     public async Task<StaffDetailDto> GetDetailAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-        return await SendAsync<StaffDetailDto>(nameof(GetDetailAsync), paramters);
+        return await SendAsync<object, StaffDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
     public async Task AddAsync(AddStaffDto request)

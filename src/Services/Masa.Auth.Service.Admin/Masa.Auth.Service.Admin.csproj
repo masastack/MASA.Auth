@@ -58,7 +58,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Application\Sso\Commands\" />
 	  <Folder Include="Migrations\" />
 	</ItemGroup>
 	
