@@ -58,11 +58,11 @@
         try
         {
             await ThirdPartyIdpService.LdapConnectTestAsync(lDAPDetailDto);
-            OpenSuccessMessage("123");
+            OpenSuccessMessage(T("Connect Success"));
         }
         catch
         {
-            OpenErrorMessage("456");   
+            OpenErrorMessage(T("Connect Error"));   
         }
     }
 
@@ -73,6 +73,6 @@
             return;
         }
         await ThirdPartyIdpService.LdapUpsertAsync(lDAPDetailDto);
-        OpenSuccessMessage("789");
+        OpenSuccessMessage("");
     }
 }

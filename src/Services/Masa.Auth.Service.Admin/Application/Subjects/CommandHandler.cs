@@ -183,25 +183,14 @@ public class CommandHandler
     [EventHandler]
     public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
     {
-#warning todo maper
-        var dto = ldapConnectTestCommand.LDAPDetailDto;
-        var ldapOptions = new LdapOptions
+        var ldapOptions = ldapConnectTestCommand.LDAPDetailDto.Adapt<LdapOptions>();
+        if (ldapConnectTestCommand.LDAPDetailDto.IsLdaps)
         {
-            ServerAddress = dto.ServerAddress,
-            BaseDn = dto.BaseDn,
-            UserSearchBaseDn = dto.UserSearchBaseDn,
-            GroupSearchBaseDn = dto.GroupSearchBaseDn,
-            RootUserDn = dto.RootUserDn,
-            RootUserPassword = dto.RootUserPassword
-            //UserSearchFilter = dto.UserSearchFilter,
-        };
-        if (dto.IsLdaps)
-        {
-            ldapOptions.ServerPortSsl = dto.ServerPort;
+            ldapOptions.ServerPortSsl = ldapConnectTestCommand.LDAPDetailDto.ServerPort;
         }
         else
         {
-            ldapOptions.ServerPort = dto.ServerPort;
+            ldapOptions.ServerPort = ldapConnectTestCommand.LDAPDetailDto.ServerPort;
         }
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
@@ -213,31 +202,21 @@ public class CommandHandler
     [EventHandler]
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
-#warning todo maper
-        var dto = ldapUpsertCommand.LDAPDetailDto;
-        var ldapOptions = new LdapOptions
+        var ldapOptions = ldapUpsertCommand.LDAPDetailDto.Adapt<LdapOptions>();
+        if (ldapUpsertCommand.LDAPDetailDto.IsLdaps)
         {
-            ServerAddress = dto.ServerAddress,
-            BaseDn = dto.BaseDn,
-            UserSearchBaseDn = dto.UserSearchBaseDn,
-            GroupSearchBaseDn = dto.GroupSearchBaseDn,
-            RootUserDn = dto.RootUserDn,
-            RootUserPassword = dto.RootUserPassword
-            //UserSearchFilter = dto.UserSearchFilter,
-        };
-        if (dto.IsLdaps)
-        {
-            ldapOptions.ServerPortSsl = dto.ServerPort;
+            ldapOptions.ServerPortSsl = ldapUpsertCommand.LDAPDetailDto.ServerPort;
         }
         else
         {
-            ldapOptions.ServerPort = dto.ServerPort;
+            ldapOptions.ServerPort = ldapUpsertCommand.LDAPDetailDto.ServerPort;
         }
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
         {
-
+            //Public domain event
+            //todo wait user memory cache
         }
     }
 

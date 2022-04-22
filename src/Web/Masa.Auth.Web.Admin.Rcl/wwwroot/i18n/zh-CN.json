@@ -121,6 +121,8 @@
   "BaseDn": "根域名",
   "User Search BaseDn": "用户搜索域",
   "Group Search BaseDn": "组搜索域",
+  "Connect Success": "连接成功",
+  "Connect Error": "连接失败",
 
   "Position": "职位",
 
