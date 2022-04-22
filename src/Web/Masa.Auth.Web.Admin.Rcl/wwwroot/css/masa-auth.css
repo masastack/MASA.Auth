@@ -1308,7 +1308,7 @@ tr:hover {
 }
 
 .m-input.mx-auto .m-text-field__slot {
-    padding-bottom: 12px;
+    padding-bottom: 2px;
 }
 .m-input.mx-auto .m-text-field__slot input {
     text-align: center;

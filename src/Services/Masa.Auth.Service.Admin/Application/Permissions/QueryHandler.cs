@@ -202,7 +202,7 @@ public class QueryHandler
         if (!string.IsNullOrEmpty(apiPermissionSelectQuery.Name))
             condition = condition.And(permission => permission.Name.Contains(apiPermissionSelectQuery.Name));
 
-        var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount, null);
+        var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount);
         apiPermissionSelectQuery.Result = permissions.Select(p => new SelectItemDto<Guid>
         {
             Value = p.Id,

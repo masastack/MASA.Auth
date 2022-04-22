@@ -8,20 +8,13 @@
                     <MAvatar Size=80>
                         <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                     </MAvatar>
-                    <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <MTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
-                    <MButtonGroup Dense Mandatory Borderless Value="User.GenderType.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px">
-                        <MButton OnClick="()=> User.GenderType=GenderTypes.Male" Ripple=false Value="@GenderTypes.Male.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(GenderTypes.Male.ToString())
-                        </MButton>
-                        <MButton OnClick="()=> User.GenderType=GenderTypes.Female" Ripple=false Value="@GenderTypes.Female.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(GenderTypes.Female.ToString())
-                        </MButton>
-                    </MButtonGroup>
+                    <ButtonGroup Type=2 @bind-Value="User.Gender" TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
                 </MRow>
                 <MRow Class="mt-6">
                     <MCol>
@@ -44,7 +37,7 @@
                         <MTextField Readonly Value="UserDetail.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                       <Password @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
                 <div class="mt-6 text-subtitle2">@T("Detail Information")</div>

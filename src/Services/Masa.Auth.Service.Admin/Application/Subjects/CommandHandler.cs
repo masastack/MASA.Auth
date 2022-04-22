@@ -77,7 +77,7 @@ public class CommandHandler
                     throw new UserFriendlyException($"User with email {userDto.Email} already exists");
             }
 
-            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.GenderType);
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.Gender);
             await _userRepository.UpdateAsync(user);
             await _userDomainService.SetAsync(user);
         }

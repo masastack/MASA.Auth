@@ -25,17 +25,13 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
 
     public UserSelectDto(Guid id, string name, string account, string phoneNumber, string email, string avatar)
     {
-        Id = id;
-        Value = Id;
+        Id = id;      
         Name = name;
         Account = account;
         PhoneNumber = phoneNumber;
         Email = email;
         Avatar = avatar;
-    }
-
-    protected override string IdGenerator()
-    {
-        return $"{Name}{Account}{PhoneNumber}{Email}";
+        Value = Id;
+        Text = $"{Name}{Account}{PhoneNumber}{Email}";
     }
 }

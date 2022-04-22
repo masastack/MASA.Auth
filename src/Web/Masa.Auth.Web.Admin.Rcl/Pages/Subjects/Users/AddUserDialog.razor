@@ -8,16 +8,7 @@
                     <div class="full-height flex-column">
                         <div class="d-flex flex-height-auto">
                             <div class="ma-auto text-center">
-                                <MButtonGroup Value="@User.Gender.ToString()" Rounded>
-                                    <MButton OnClick="()=> User.Gender = GenderTypes.Male" Width=100 Value="@GenderTypes.Male.ToString()" Class="@(User.Gender == GenderTypes.Male ? "button-group-active":"button-group")">
-                                        <MIcon Size=18>fa fa-regular fa-mars</MIcon>
-                                        <span class="ml-1">@T(GenderTypes.Male.ToString())</span>
-                                    </MButton>
-                                    <MButton OnClick="()=> User.Gender = GenderTypes.Female" Width=100 Value="@GenderTypes.Female.ToString()" Class="@(User.Gender == GenderTypes.Female ? "button-group-active":"button-group")">
-                                        <MIcon Size=18>fa fa-regular fa-venus</MIcon>
-                                        <span class="ml-1">@T(GenderTypes.Female.ToString())</span>
-                                    </MButton>
-                                </MButtonGroup>
+                                <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
                                 <br />
                                 <MAvatar Size=120 Class="mt-12">
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
@@ -41,11 +32,11 @@
                                 <MAvatar Size=80>
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                                 </MAvatar>
-                                <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                                <MTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">
-                            <div>@T("Basic Information")</div>
+                            <div class="text-subtitle2 neutral-lighten-2--text">@T("Basic Information")</div>
                             <MTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" HideDetails="@("auto")" Outlined />
                             <MTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
                             <MTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" HideDetails="@("auto")" Outlined />
@@ -61,7 +52,7 @@
                             }
                             else
                             {
-                                <div class="mt-12">@T("Detail Information")</div>
+                                <div class="mt-12 text-subtitle2 neutral-lighten-2--text">@T("Detail Information")</div>
                                 <MTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
                                 <MTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" HideDetails="@("auto")" Outlined />
                                 <MTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" HideDetails="@("auto")" Outlined />
@@ -79,7 +70,7 @@
                 <MStepperContent Step="3">
                     <div class="full-height flex-column">
                         <div class="flex-height-auto overflow-y">                           
-                            <GlobalNavigationDialog />
+                            @*<GlobalNavigationDialog />*@
                         </div>                       
                         <div class="d-flex mt-6">
                             <MSpacer></MSpacer>

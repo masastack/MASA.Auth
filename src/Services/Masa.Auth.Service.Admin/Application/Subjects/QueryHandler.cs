@@ -138,7 +138,7 @@ public class QueryHandler
         Expression<Func<Staff, bool>> condition = staff => true;
         if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
-        var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount, null);
+        var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount);
 
         query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
     }
