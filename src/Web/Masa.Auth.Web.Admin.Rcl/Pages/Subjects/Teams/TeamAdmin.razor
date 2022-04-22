@@ -54,6 +54,9 @@
         </SelectionContent>
     </MAutocomplete>
     <div class="global-nav mt-4" style="height: calc(100vh - 380px);overflow-y: scroll;">
-        <Masa.Stack.Components.GlobalNavigation.ExpansionWrapper Categories=Categories FavoriteNavs=FavoriteNavs Checkable />
+        <div>
+            <MButton OnClick="Test">TTT</MButton>
+        </div>
+        <Masa.Stack.Components.GlobalNavigation.ExpansionWrapper @bind-Value=categoryAppNavs Categories=Categories FavoriteNavs=FavoriteNavs Checkable />
     </div>
 </MCardText>

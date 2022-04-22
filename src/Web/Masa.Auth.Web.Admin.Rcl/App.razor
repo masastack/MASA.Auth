@@ -1,4 +1,6 @@
-﻿<CascadingAuthenticationState>
+﻿
+@using StackApp = Masa.Stack.Components.Models.App;
+<CascadingAuthenticationState>
     <Microsoft.AspNetCore.Components.Routing.Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -12,3 +14,16 @@
         </NotFound>
     </Microsoft.AspNetCore.Components.Routing.Router>
 </CascadingAuthenticationState>
+
+@code{
+    
+    protected override void OnInitialized()
+    {
+        TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
+        TypeAdapterConfig<AppDto, StackApp>.ForType()
+            .Map(dest => dest.Code, src => src.Identity);
+        TypeAdapterConfig<PermissionNavDto, Nav>.ForType();
+        base.OnInitialized();
+    }
+
+}
