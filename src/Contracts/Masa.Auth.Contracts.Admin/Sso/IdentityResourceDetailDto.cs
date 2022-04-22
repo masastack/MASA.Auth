@@ -17,5 +17,15 @@ public class IdentityResourceDetailDto : IdentityResourceDto
         UserClaims = userClaims;
         Properties = properties;
     }
+
+    public static implicit operator AddIdentityResourceDto(IdentityResourceDetailDto idrs)
+    {
+        return new AddIdentityResourceDto();
+    }
+
+    public static implicit operator UpdateIdentityResourceDto(IdentityResourceDetailDto idrs)
+    {
+        return new UpdateIdentityResourceDto();
+    }
 }
 

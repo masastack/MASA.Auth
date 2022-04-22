@@ -110,7 +110,7 @@ public partial class Role
     {
         Loading = true;
         await RoleService.RemoveAsync(roleId);
-        OpenSuccessMessage(T("Delete user data success"));
+        OpenSuccessMessage(T("Delete role data success"));
         await GetRolesAsync();
         Loading = false;
     }

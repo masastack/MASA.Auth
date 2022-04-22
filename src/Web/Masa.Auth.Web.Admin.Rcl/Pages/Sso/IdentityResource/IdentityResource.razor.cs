@@ -12,17 +12,7 @@ public partial class IdentityResource
         set
         {
             _search = value;
-            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-        }
-    }
-
-    public bool? Enabled
-    {
-        get { return _enabled; }
-        set
-        {
-            _enabled = value;
-            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetIdentityResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -32,7 +22,7 @@ public partial class IdentityResource
         set
         {
             _page = value;
-            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetIdentityResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -42,7 +32,7 @@ public partial class IdentityResource
         set
         {
             _pageSize = value;
-            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetIdentityResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
@@ -50,54 +40,60 @@ public partial class IdentityResource
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<RoleDto> Roles { get; set; } = new();
+    public List<IdentityResourceDto> IdentityResources { get; set; } = new();
 
-    public Guid CurrentRoleId { get; set; }
+    public int CurrentIdentityResourceId { get; set; }
 
-    public bool AddRoleDialogVisible { get; set; }
+    public bool AddOrUpdateIdentityResourceDialogVisible { get; set; }
 
-    public List<DataTableHeader<RoleDto>> Headers { get; set; } = new();
+    public List<DataTableHeader<IdentityResourceDto>> Headers { get; set; } = new();
 
-    private RoleService RoleService => AuthCaller.RoleService;
+    private IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
-    public IdentityResource()
+    protected override async Task OnInitializedAsync()
     {
+        Headers = new()
+        {
+            new() { Text = T("IdentityResource.Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false },
+            new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false },          
+            new() { Text = T("IdentityResource.Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
+            new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
+            new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false },
+        };
 
+        await GetIdentityResourcesAsync();
     }
 
     public async Task GetIdentityResourcesAsync()
     {
         Loading = true;
-        var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
-        var response = await RoleService.GetListAsync(reuquest);
-        Roles = response.Items;
+        var reuquest = new GetIdentityResourcesDto(Page, PageSize, Search);
+        var response = await IdentityResourceService.GetListAsync(reuquest);
+        IdentityResources = response.Items;
         Total = response.Total;
         Loading = false;
     }
 
-    public void OpenAddRoleDialog()
+    public void OpenAddOrUpdateRoleDialog(IdentityResourceDto? identityResource = null)
     {
-        AddRoleDialogVisible = true;
+        identityResource ??= new();
+        CurrentIdentityResourceId = identityResource.Id;
+        AddOrUpdateIdentityResourceDialogVisible = true;
     }
 
-    public void OpenUpdateRoleDialog(RoleDto role)
+    public async Task RemoveIdentityResourceDialog(IdentityResourceDto identityResource)
     {
-        CurrentRoleId = role.Id;
-        UpdateRoleDialogVisible = true;
+        var confirm = await OpenConfirmDialog(T("Are you sure delete identityResource data"));
+        if (confirm) await RemoveIdentityResourceAsync(identityResource.Id);
     }
 
-    public async Task OpenRemoveRoleDialog(RoleDto role)
-    {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete role data"));
-        if (confirm) await RemoveRoleAsync(role.Id);
-    }
-
-    public async Task RemoveRoleAsync(Guid roleId)
+    public async Task RemoveIdentityResourceAsync(int identityResourceId)
     {
         Loading = true;
-        await RoleService.RemoveAsync(roleId);
-        OpenSuccessMessage(T("Delete user data success"));
-        await GetRolesAsync();
+        await IdentityResourceService.RemoveAsync(identityResourceId);
+        OpenSuccessMessage(T("Delete identityResource data success"));
+        await GetIdentityResourcesAsync();
         Loading = false;
     }
 }

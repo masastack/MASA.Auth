@@ -46,6 +46,8 @@
   "Create": "创建",
   "Update": "修改",
   "RolePermission": "角色权限",
+  "Yes": "是",
+  "No": "否"
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -191,5 +193,9 @@
   "Permission deleted successfully": "删除权限成功",
   "Failed to delete permission": "删除权限失败",
   "Project identifier is empty": "项目标识为空",
-  "Tag or appid is empty": "tag或appid为空"
+  "Tag or appid is empty": "tag或appid为空",
+
+  "IdentityResource": "身份",
+  "IdentityResource.Name": "配置名称",
+  "IdentityResource.Required": "是否必须"
 }
