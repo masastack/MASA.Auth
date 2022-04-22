@@ -40,6 +40,7 @@
   "All": "全部",
   "Select Tag": "选择标签",
   "History record": "历史记录",
+  "Test": "测试",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -111,6 +112,15 @@
   "Failed to edit thirdPartyIdp:": "编辑第三方平台详情数据失败:",
   "Delete thirdPartyIdp success": "删除第三方平台成功",
   "Failed to delete thirdPartyIdp:": "删除第三方平台失败:",
+  "Configure Domain Account": "配置域账户",
+  "LDAP Root User": "LDAP管理员",
+  "LDAP Root User Pwd": "LDAP管理员密码",
+  "Server Address": "服务器地址",
+  "Server Port": "服务器端口",
+  "Is Ldaps": "启用ldaps",
+  "BaseDn": "根域名",
+  "User Search BaseDn": "用户搜索域",
+  "Group Search BaseDn": "组搜索域",
 
   "Position": "职位",
 

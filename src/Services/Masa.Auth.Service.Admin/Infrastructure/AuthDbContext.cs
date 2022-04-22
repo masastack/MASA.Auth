@@ -14,12 +14,17 @@ public class AuthDbContext : IsolationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
-        .LogTo(message => Debug.WriteLine(message), LogLevel.Information)
+        .LogTo(Console.WriteLine, LogLevel.Information)
         .EnableSensitiveDataLogging()
         .EnableDetailedErrors();
 
     protected override void OnModelCreatingExecuting(ModelBuilder builder)
     {
+        builder.Entity<IdentityProvider>()
+            .HasDiscriminator<string>("Discriminator")
+            .HasValue<ThirdPartyIdp>("ThirdParty")
+            .HasValue<LDAPIdp>("LDAP");
+
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreatingExecuting(builder);
     }

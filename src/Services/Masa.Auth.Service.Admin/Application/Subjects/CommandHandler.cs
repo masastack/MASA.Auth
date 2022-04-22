@@ -7,15 +7,18 @@ public class CommandHandler
     readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
+    readonly ILdapFactory _ldapFactory;
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
-        ITeamRepository teamRepository, TeamDomainService teamDomainService, StaffDomainService staffDomainService)
+        ITeamRepository teamRepository, TeamDomainService teamDomainService,
+        StaffDomainService staffDomainService, ILdapFactory ldapFactory)
     {
         _staffRepository = staffRepository;
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
         _staffDomainService = staffDomainService;
+        _ldapFactory = ldapFactory;
     }
 
     #region User
@@ -171,6 +174,71 @@ public class CommandHandler
             throw new UserFriendlyException("the team has staffs can`t delete");
         }
         await _teamRepository.RemoveAsync(team);
+    }
+
+    #endregion
+
+    #region Ldap
+
+    [EventHandler]
+    public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
+    {
+#warning todo maper
+        var dto = ldapConnectTestCommand.LDAPDetailDto;
+        var ldapOptions = new LdapOptions
+        {
+            ServerAddress = dto.ServerAddress,
+            BaseDn = dto.BaseDn,
+            UserSearchBaseDn = dto.UserSearchBaseDn,
+            GroupSearchBaseDn = dto.GroupSearchBaseDn,
+            RootUserDn = dto.RootUserDn,
+            RootUserPassword = dto.RootUserPassword
+            //UserSearchFilter = dto.UserSearchFilter,
+        };
+        if (dto.IsLdaps)
+        {
+            ldapOptions.ServerPortSsl = dto.ServerPort;
+        }
+        else
+        {
+            ldapOptions.ServerPort = dto.ServerPort;
+        }
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
+        {
+            throw new UserFriendlyException("connect error");
+        }
+    }
+
+    [EventHandler]
+    public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
+    {
+#warning todo maper
+        var dto = ldapUpsertCommand.LDAPDetailDto;
+        var ldapOptions = new LdapOptions
+        {
+            ServerAddress = dto.ServerAddress,
+            BaseDn = dto.BaseDn,
+            UserSearchBaseDn = dto.UserSearchBaseDn,
+            GroupSearchBaseDn = dto.GroupSearchBaseDn,
+            RootUserDn = dto.RootUserDn,
+            RootUserPassword = dto.RootUserPassword
+            //UserSearchFilter = dto.UserSearchFilter,
+        };
+        if (dto.IsLdaps)
+        {
+            ldapOptions.ServerPortSsl = dto.ServerPort;
+        }
+        else
+        {
+            ldapOptions.ServerPort = dto.ServerPort;
+        }
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        var ldapUsers = ldapProvider.GetAllUserAsync();
+        await foreach (var ldapUser in ldapUsers)
+        {
+
+        }
     }
 
     #endregion

@@ -1,3 +1,18 @@
 ﻿@inherits AdminCompontentBase
 
+<div style="position: fixed;right: 48px;top: 108px;" class="d-flex">
+    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+        <PrependInnerContent>
+            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+        </PrependInnerContent>
+    </MTextField>
+    <MIcon Size=20 class="ml-6" @onclick="() => Filter = !Filter">mdi-filter-off</MIcon>
+    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenLDAPDialog>
+        <MIcon Size=18>mdi-plus</MIcon>
+        <span class="ml-2">@T("LDAP")</span>
+    </MButton>
+</div>
+
+
 <ViewThirdPartyUserDialog @bind-Visible=ThirdPartyUserDialog ThirdPartyUserId=CurrentThirdPartyUserId />
+<LDAPDialog @bind-Show=LDAPDialog/>

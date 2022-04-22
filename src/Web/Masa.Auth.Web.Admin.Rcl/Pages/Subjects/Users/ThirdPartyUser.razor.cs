@@ -49,6 +49,8 @@ public partial class ThirdPartyUser
 
     public long TotalPages { get; set; }
 
+    public bool Filter { get; set; }
+
     public long Total { get; set; }
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
@@ -64,6 +66,8 @@ public partial class ThirdPartyUser
     public List<DataTableHeader<ThirdPartyUserDto>> Headers { get; set; } = new();
 
     public bool ThirdPartyUserDialog { get; set; }
+
+    public bool LDAPDialog { get; set; }
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
@@ -107,6 +111,11 @@ public partial class ThirdPartyUser
     {
         CurrentThirdPartyUserId = thirdPartyUser.Id;
         ThirdPartyUserDialog = true;
+    }
+
+    public void OpenLDAPDialog()
+    {
+        LDAPDialog = true;
     }
 }
 
