@@ -184,14 +184,6 @@ public class CommandHandler
     public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
     {
         var ldapOptions = ldapConnectTestCommand.LDAPDetailDto.Adapt<LdapOptions>();
-        if (ldapConnectTestCommand.LDAPDetailDto.IsLdaps)
-        {
-            ldapOptions.ServerPortSsl = ldapConnectTestCommand.LDAPDetailDto.ServerPort;
-        }
-        else
-        {
-            ldapOptions.ServerPort = ldapConnectTestCommand.LDAPDetailDto.ServerPort;
-        }
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
         {
@@ -203,14 +195,6 @@ public class CommandHandler
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
         var ldapOptions = ldapUpsertCommand.LDAPDetailDto.Adapt<LdapOptions>();
-        if (ldapUpsertCommand.LDAPDetailDto.IsLdaps)
-        {
-            ldapOptions.ServerPortSsl = ldapUpsertCommand.LDAPDetailDto.ServerPort;
-        }
-        else
-        {
-            ldapOptions.ServerPort = ldapUpsertCommand.LDAPDetailDto.ServerPort;
-        }
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
