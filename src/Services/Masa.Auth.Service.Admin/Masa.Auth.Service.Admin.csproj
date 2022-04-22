@@ -17,6 +17,7 @@
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.4.0-preview.4" />
+		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="10.4.0" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
@@ -57,6 +58,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <Folder Include="Application\Sso\Commands\" />
 	  <Folder Include="Migrations\" />
 	</ItemGroup>
 	
