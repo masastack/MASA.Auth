@@ -5,14 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Pages\App\**" />
-    <Content Remove="Pages\App\**" />
-    <EmbeddedResource Remove="Pages\App\**" />
-    <None Remove="Pages\App\**" />
-  </ItemGroup>
-
+	
   <ItemGroup>
     <None Remove="Shared\Presets\readme.md" />
   </ItemGroup>
