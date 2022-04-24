@@ -198,5 +198,6 @@
 
   "IdentityResource": "身份",
   "IdentityResource.Name": "配置名称",
-  "IdentityResource.Required": "是否必须"
+  "IdentityResource.Required": "是否必须",
+  "User Claims": "用过声明"
 }

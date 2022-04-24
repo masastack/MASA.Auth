@@ -35,5 +35,18 @@
     "Title": "Organization",
     "Icon": "mdi-calendar-check-outline",
     "Href": "organization/index"
+  },
+  {
+    "Id": 6,
+    "Title": "SSO",
+    "Icon": "mdi-calendar-check-outline",
+    "Children": [
+      {
+        "Id": 3,
+        "Title": "IdentityResource",
+        "Icon": "mdi-circle",
+        "Href": "/sso/identityResource"
+      }
+    ]
   }
 ]

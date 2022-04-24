@@ -40,7 +40,7 @@ public partial class AddOrUpdateIdentityResourceDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible)
+        if (Visible && IsAdd is false)
         {
             await GetIdentityResourceDetailAsync();
         }
