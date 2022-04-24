@@ -1,6 +1,4 @@
-﻿using Mapster;
-using StackApp = Masa.Stack.Components.Models.App;
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class TeamAdmin
 {
@@ -14,40 +12,8 @@ public partial class TeamAdmin
     List<StaffSelectDto> _staffs = new List<StaffSelectDto>();
     List<StaffSelectDto> _roles = new List<StaffSelectDto>();
     StaffService StaffService => AuthCaller.StaffService;
-    ProjectService ProjectService => AuthCaller.ProjectService;
-    List<Category> Categories = new();
-    List<FavoriteNav> FavoriteNavs = new();
-    List<CategoryAppNav> categoryAppNavs = new();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            Categories = await FetchCategories();
-            StateHasChanged();
-        }
-    }
-
-    private async Task<List<Category>> FetchCategories()
-    {
-        var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
-        var categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
-        {
-            Code = ag.Key,
-            Name = ag.Key,
-            Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
-        }).ToList();
-        return categories;
-    }
-
-    private void Test()
-    {
-        var d = Categories;
-        var dd = FavoriteNavs;
-        var ddd = categoryAppNavs;
-    }
-
-    public void RemoveAdmin(Guid staffId)
+    private void RemoveAdmin(Guid staffId)
     {
         var index = Value.Staffs.IndexOf(staffId);
         if (index >= 0)
@@ -55,6 +21,16 @@ public partial class TeamAdmin
             Value.Staffs.RemoveAt(index);
         }
     }
+
+    private void RemoveAdminRole(Guid roleId)
+    {
+        var index = Value.Roles.IndexOf(roleId);
+        if (index >= 0)
+        {
+            Value.Roles.RemoveAt(index);
+        }
+    }
+
 
     private async Task QuerySelectionStaff(string search)
     {

@@ -45,7 +45,7 @@ public class QueryHandler
                     a.Navs = menuPermissions.Where(p => p.AppId == a.Identity).Where(p => p.ParentId == Guid.Empty).Select(p => new PermissionNavDto
                     {
                         Name = p.Name,
-                        Code = p.Code,
+                        Code = p.Id.ToString(),
                         Children = GetChildren(p.Id, menuPermissions)
                     }).ToList();
                 });

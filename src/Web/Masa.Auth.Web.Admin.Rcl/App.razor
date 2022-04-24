@@ -20,9 +20,9 @@
     protected override void OnInitialized()
     {
         TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
-        TypeAdapterConfig<AppDto, StackApp>.ForType()
+        TypeAdapterConfig<AppDto, StackApp>.NewConfig()
             .Map(dest => dest.Code, src => src.Identity);
-        TypeAdapterConfig<PermissionNavDto, Nav>.ForType();
+        TypeAdapterConfig<PermissionNavDto, Nav>.NewConfig();
         base.OnInitialized();
     }
 
