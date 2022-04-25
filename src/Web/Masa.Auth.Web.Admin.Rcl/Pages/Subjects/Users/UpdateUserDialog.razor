@@ -14,7 +14,7 @@
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
-                    <ButtonGroup Type=2 @bind-Value="User.Gender" TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
+                    <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
                 </MRow>
                 <MRow Class="mt-6">
                     <MCol>

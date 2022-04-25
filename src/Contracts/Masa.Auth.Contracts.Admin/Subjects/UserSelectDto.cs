@@ -32,6 +32,6 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
         Email = email;
         Avatar = avatar;
         Value = Id;
-        Text = $"{Name}{Account}{PhoneNumber}{Email}";
+        Text = $"{Name},{Account},{PhoneNumber},{Email}";
     }
 }

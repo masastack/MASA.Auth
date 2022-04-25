@@ -15,6 +15,6 @@ public partial class ButtonGroup<TValue> where TValue : struct
     public IEnumerable<TValue> Values { get; set; } = new List<TValue>();
 
     [Parameter]
-    public short Type { get; set; } = 1;
+    public StyleTypes StyleType { get; set; }
 }
 

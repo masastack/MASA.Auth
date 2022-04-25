@@ -12,7 +12,7 @@ public partial class RoleSelectForTeam : RoleSelect
         await ReloadAsync();
     }
 
-    protected override bool RoleDisabled(RoleSelectDto role) => role.Limit != 0 && role.AvailableQuantity < TeamUserCount;
+    protected override bool RoleDisabled(RoleSelectDto role) => role.Limit != 0 && role.AvailableQuantity <= TeamUserCount;
 
     public async Task ReloadAsync()
     {

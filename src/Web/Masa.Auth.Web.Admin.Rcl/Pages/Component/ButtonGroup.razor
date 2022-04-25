@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 @typeparam TValue
 
-@if(Type == 1)
+@if(StyleType == StyleTypes.Toggle)
 {
     <MButtonGroup Class="@Class" Value="Value.ToString()" Rounded>
         @foreach (var value in Values)

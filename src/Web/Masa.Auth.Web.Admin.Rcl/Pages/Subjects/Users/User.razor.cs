@@ -145,7 +145,11 @@ public partial class User
     {
         Search = search;
         await Task.Delay(500);
-        if (Search == search && Search != "")
+        if(Search =="")
+        {
+            UserSelect.Clear();
+        }
+        else if (Search == search)
         {
             UserSelect = await UserService.GetSelectAsync(search);
         }
