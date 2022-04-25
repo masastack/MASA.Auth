@@ -21,6 +21,7 @@ builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddGlobalForServer();
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
 builder.Services.AddSingleton<AddStaffValidator>();
+builder.Services.AddTypeAdapter();
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 

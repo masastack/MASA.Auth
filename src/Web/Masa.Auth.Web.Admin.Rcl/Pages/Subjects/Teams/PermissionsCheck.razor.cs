@@ -15,10 +15,12 @@ public partial class PermissionsCheck
 
     List<Guid> _prevRoleIds = new();
     Dictionary<Guid, bool> _prevValue = new();
-    List<Category> Categories = new();
-    ProjectService ProjectService => AuthCaller.ProjectService;
-    RoleService RoleService => AuthCaller.RoleService;
+    List<Category> _categories = new();
     List<CategoryAppNav> _initValue = new();
+
+    ProjectService ProjectService => AuthCaller.ProjectService;
+
+    RoleService RoleService => AuthCaller.RoleService;
 
     private void ValueChangedHandler(List<CategoryAppNav> _checkedItems)
     {
