@@ -11,9 +11,9 @@ public class ProjectService : ServiceBase
         MapPost(SaveAppTagAsync);
     }
 
-    private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus)
+    private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus, [FromQuery] bool hasMenu = false)
     {
-        var query = new ProjectListQuery();
+        var query = new ProjectListQuery(hasMenu);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
