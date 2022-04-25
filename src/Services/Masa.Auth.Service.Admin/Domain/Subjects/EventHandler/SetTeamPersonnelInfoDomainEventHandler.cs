@@ -29,7 +29,7 @@ public class SetTeamPersonnelInfoDomainEventHandler
                         setTeamPersonnelInfoDomainEvent.Team.GetMemberRoleId();
         removeUsers.ForEach(user =>
         {
-            user.RemoveRole(teamRoleId);
+            user.RemoveRoles(teamRoleId);
         });
         addUsers.ForEach(user =>
         {
