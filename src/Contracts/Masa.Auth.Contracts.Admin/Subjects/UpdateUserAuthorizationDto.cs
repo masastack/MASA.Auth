@@ -8,6 +8,12 @@ public class UpdateUserAuthorizationDto
 
     public List<UserPermissionDto> Permissions { get; set; }
 
+    public UpdateUserAuthorizationDto()
+    {
+        Roles = new ();
+        Permissions = new ();
+    }
+
     public UpdateUserAuthorizationDto(Guid id, List<Guid> roles, List<UserPermissionDto> permissions)
     {
         Id = id;

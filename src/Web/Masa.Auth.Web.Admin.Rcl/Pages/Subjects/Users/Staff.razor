@@ -65,6 +65,6 @@
 </MDataTable>
 
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
-<UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaffId OnSubmitSuccess=GetStaffAsync />
-<Authorization />
+<UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
+<UpdateUserAuthorizeDialog UserId=CurrentStaff.UserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
 <StaffSyncDialog @bind-Visible=StaffSyncDialogVisible OnSubmitSuccess=GetStaffAsync />

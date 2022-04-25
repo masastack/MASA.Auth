@@ -58,18 +58,14 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == query.UserId);
+        var user = await _userRepository.GetDetail(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
-
-        var thirdPartyUsers = await _thirdPartyUserRepository.GetListAsync(tpu => tpu.UserId == query.UserId);
-        var thirdPartyIdpAvatars = thirdPartyUsers.Select(tpu => tpu.ThirdPartyIdp.Icon).ToList();
-        var creator = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Creator);
-        var modifier = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Modifier);
+        var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
+        var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
 
         query.Result = user;
-        query.Result.ThirdPartyIdpAvatars.AddRange(thirdPartyIdpAvatars);
-        query.Result.Creator = creator?.Name ?? "";
-        query.Result.Modifier = modifier?.Name ?? "";
+        query.Result.Creator = creator ?? "";
+        query.Result.Modifier = modifier ?? "";
     }
 
     [EventHandler]
@@ -112,7 +108,7 @@ public class QueryHandler
                                .ToListAsync();
 
         query.Result = new(total, staffs.Select(s =>
-           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
+           new StaffDto(s.Id, s.UserId, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
        ).ToList());
     }
 

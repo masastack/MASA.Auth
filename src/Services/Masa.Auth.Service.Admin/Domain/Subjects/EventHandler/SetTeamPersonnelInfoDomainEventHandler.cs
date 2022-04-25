@@ -33,7 +33,7 @@ public class SetTeamPersonnelInfoDomainEventHandler
         });
         addUsers.ForEach(user =>
         {
-            user.AddRole(teamRoleId);
+            user.AddRoles(teamRoleId);
         });
         await _userRepository.UpdateRangeAsync(removeUsers);
         await _userRepository.UpdateRangeAsync(addUsers);

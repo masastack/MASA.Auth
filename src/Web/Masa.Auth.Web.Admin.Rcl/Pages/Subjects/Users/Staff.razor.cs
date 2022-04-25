@@ -53,7 +53,7 @@ public partial class Staff
 
     public List<StaffDto> Staffs { get; set; } = new();
 
-    public Guid CurrentStaffId { get; set; }
+    public StaffDto CurrentStaff { get; set; } = new();
 
     public List<DataTableHeader<StaffDto>> Headers { get; set; } = new();
 
@@ -99,13 +99,13 @@ public partial class Staff
 
     public void OpenUpdateStaffDialog(StaffDto staff)
     {
-        CurrentStaffId = staff.Id;
+        CurrentStaff = staff;
         UpdateStaffDialogVisible = true;
     }
 
     public void OpenAuthorizeDialog(StaffDto staff)
     {
-        CurrentStaffId = staff.Id;
+        CurrentStaff = staff;
         AuthorizeDialogVisible = true;
     }
 }
