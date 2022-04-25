@@ -92,11 +92,11 @@ var app = builder.Services
     .AddServices(builder);
 
 //set Isolation
-app.Use(async (context, next) =>
-{
-    context.Items.Add("env", "development");
-    await next.Invoke();
-});
+//app.Use(async (context, next) =>
+//{
+//    context.Items.Add("env", "development");
+//    await next.Invoke();
+//});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

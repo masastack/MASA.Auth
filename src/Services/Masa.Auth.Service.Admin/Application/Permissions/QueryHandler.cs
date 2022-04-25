@@ -129,7 +129,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    private async Task GetPermissionsByRoleAsync(PermissionsByRoleQuery query)
+    public async Task GetPermissionsByRoleAsync(PermissionsByRoleQuery query)
     {
         query.Result = await GetPermissions(query.Roles);
 

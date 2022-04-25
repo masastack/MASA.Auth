@@ -4,7 +4,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
-
+builder.Services.AddTypeAdapter();
 await builder.Services.AddGlobalForWasmAsync(builder.HostEnvironment.BaseAddress);
 
 builder.RootComponents.Add(typeof(App), "#app");

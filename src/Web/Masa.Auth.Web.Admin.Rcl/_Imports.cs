@@ -1,5 +1,6 @@
 ﻿global using BlazorComponent;
 global using BlazorComponent.I18n;
+global using Mapster;
 global using Masa.Auth.ApiGateways.Caller.Services.Organizations;
 global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Projects;
@@ -23,8 +24,8 @@ global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Forms;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.DependencyInjection;
 global using System.ComponentModel;
-global using System.ComponentModel.DataAnnotations;
 global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
