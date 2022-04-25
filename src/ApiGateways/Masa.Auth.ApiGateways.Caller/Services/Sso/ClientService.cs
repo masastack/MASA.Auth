@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Contracts.Admin.Sso;
-
-namespace Masa.Auth.ApiGateways.Caller.Services.Sso;
+﻿namespace Masa.Auth.ApiGateways.Caller.Services.Sso;
 
 public class ClientService : ServiceBase
 {

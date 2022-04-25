@@ -25,7 +25,7 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
 
     public UserSelectDto(Guid id, string name, string account, string phoneNumber, string email, string avatar)
     {
-        Id = id;      
+        Id = id;
         Name = name;
         Account = account;
         PhoneNumber = phoneNumber;

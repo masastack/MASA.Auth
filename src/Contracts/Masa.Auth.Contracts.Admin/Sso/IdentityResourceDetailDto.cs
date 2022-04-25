@@ -12,7 +12,7 @@ public class IdentityResourceDetailDto : IdentityResourceDto
         Properties = new Dictionary<string, string>();
     }
 
-    public IdentityResourceDetailDto(int id, string name, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable,List<int> userClaims, Dictionary<string, string> properties) : base(id, name, displayName, description, enabled, required, emphasize, showInDiscoveryDocument, nonEditable)
+    public IdentityResourceDetailDto(int id, string name, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<int> userClaims, Dictionary<string, string> properties) : base(id, name, displayName, description, enabled, required, emphasize, showInDiscoveryDocument, nonEditable)
     {
         UserClaims = userClaims;
         Properties = properties;

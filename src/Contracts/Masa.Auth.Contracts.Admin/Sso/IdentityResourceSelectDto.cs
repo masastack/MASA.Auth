@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Sso;
 
-public class IdentityResourceSelectDto 
+public class IdentityResourceSelectDto
 {
     public int Id { get; set; }
 

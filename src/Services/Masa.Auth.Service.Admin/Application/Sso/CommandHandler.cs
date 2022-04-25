@@ -18,7 +18,7 @@ public class CommandHandler
     {
         var idrsDto = command.IdentityResource;
         var exist = await _identityResourceRepository.GetCountAsync(idrs => idrs.Name == idrsDto.Name) > 0;
-        if(exist)
+        if (exist)
             throw new UserFriendlyException($"IdentityResource with name {idrsDto.Name} already exists");
 
         var idrs = new IdentityResource(idrsDto.Name, idrsDto.DisplayName, idrsDto.Description, idrsDto.Enabled, idrsDto.Required, idrsDto.Emphasize, idrsDto.ShowInDiscoveryDocument, idrsDto.NonEditable);
@@ -33,7 +33,7 @@ public class CommandHandler
     {
         var idrsDto = command.IdentityResource;
         var idrs = await _identityResourceRepository.FindAsync(idrs => idrs.Id == idrsDto.Id);
-        if(idrs is null)
+        if (idrs is null)
             throw new UserFriendlyException("The current identityResource does not exist");
 
         idrs.Update(idrsDto.DisplayName, idrsDto.Description, idrsDto.Enabled, idrsDto.Required, idrsDto.Emphasize, idrsDto.ShowInDiscoveryDocument, idrsDto.NonEditable);

@@ -60,7 +60,7 @@ public class QueryHandler
         var idrs = await _identityResourceRepository.GetDetailByIdAsync(query.IdentityResourceId);
         if (idrs is null) throw new UserFriendlyException("This identityResource data does not exist");
 
-        query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.Id).ToList(), idrs.Properties.ToDictionary(p=> p.Key,p => p.Value));
+        query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.Id).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
     }
 
     [EventHandler]

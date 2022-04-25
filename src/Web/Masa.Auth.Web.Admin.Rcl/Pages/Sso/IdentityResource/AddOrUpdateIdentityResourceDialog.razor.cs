@@ -57,7 +57,7 @@ public partial class AddOrUpdateIdentityResourceDialog
         if (success)
         {
             Loading = true;
-            if(IsAdd)
+            if (IsAdd)
             {
                 await IdentityResourceService.AddAsync(IdentityResourceDetail);
                 OpenSuccessMessage("Add identityResource success");

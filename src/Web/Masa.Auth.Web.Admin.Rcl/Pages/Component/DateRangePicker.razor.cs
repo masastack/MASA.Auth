@@ -33,7 +33,7 @@ public partial class DateRangePicker
 
     private async Task UpdateEndTimeAsync(DateOnly? dateTime)
     {
-        if(dateTime < StartTime) OpenWarningMessage(T("End time cannot be less than start time"));
+        if (dateTime < StartTime) OpenWarningMessage(T("End time cannot be less than start time"));
         else
         {
             EndTime = dateTime;

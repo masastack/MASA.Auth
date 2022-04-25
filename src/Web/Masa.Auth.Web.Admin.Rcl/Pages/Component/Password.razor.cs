@@ -14,8 +14,8 @@ public partial class Password
     public async Task ResetPassword()
     {
         Random random = new Random();
-        Value = random.Next(111111,999999).ToString();
-        if(ValueChanged.HasDelegate)
+        Value = random.Next(111111, 999999).ToString();
+        if (ValueChanged.HasDelegate)
             await ValueChanged.InvokeAsync(Value);
     }
 }

@@ -1,7 +1,4 @@
-﻿using Masa.Utils.Exceptions;
-using System.Net;
-
-namespace Masa.Auth.ApiGateways.Caller.Services;
+﻿namespace Masa.Auth.ApiGateways.Caller.Services;
 
 public abstract class ServiceBase
 {
