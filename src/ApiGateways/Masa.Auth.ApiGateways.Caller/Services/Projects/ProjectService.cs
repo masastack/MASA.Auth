@@ -9,9 +9,9 @@ public class ProjectService : ServiceBase
         BaseUrl = "api/project";
     }
 
-    public async Task<List<ProjectDto>> GetListAsync()
+    public async Task<List<ProjectDto>> GetListAsync(bool hasMenu = false)
     {
-        return await GetAsync<List<ProjectDto>>($"GetList");
+        return await GetAsync<List<ProjectDto>>($"GetList?hasMenu={hasMenu}");
     }
 
     public async Task<List<string>> GetAppTagsAsync()
