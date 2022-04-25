@@ -24,7 +24,7 @@ public class UserDto
 
     public DateTime CreationTime { get; set; }
 
-    public GenderTypes GenderType { get; set; }
+    public GenderTypes Gender { get; set; }
 
     public UserDto()
     {
@@ -51,7 +51,7 @@ public class UserDto
         PhoneNumber = phoneNumber;
         Email = email;
         CreationTime = creationTime;
-        GenderType = genderType;
+        Gender = genderType;
     }
 }
 

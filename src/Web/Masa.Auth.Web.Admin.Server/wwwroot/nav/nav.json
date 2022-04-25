@@ -2,31 +2,50 @@
   {
     "Id": 1,
     "Title": "User",
-    "Icon": "mdi-calendar-check-outline",
+    "Icon": "mdi-account-outline",
     "Href": "user"
   },
   {
     "Id": 2,
-    "Title": "Team",
-    "Icon": "mdi-calendar-check-outline",
-    "Href": "team/index"
-  },
-  {
-    "Id": 3,
-    "Title": "Organization",
-    "Icon": "mdi-calendar-check-outline",
-    "Href": "organization/index"
-  },
-  {
-    "Id": 3,
     "Title": "RolePermission",
-    "Icon": "mdi-trending-up",
+    "Icon": "mdi-shield-half-full",
     "Children": [
+      {
+        "Id": 3,
+        "Title": "Role",
+        "Icon": "mdi-circle",
+        "Href": "role"
+      },
       {
         "Id": 4,
         "Title": "Permission",
         "Icon": "mdi-circle",
         "Href": "permission/index"
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "Title": "Team",
+    "Icon": "mdi-calendar-check-outline",
+    "Href": "team/index"
+  },
+  {
+    "Id": 5,
+    "Title": "Organization",
+    "Icon": "mdi-calendar-check-outline",
+    "Href": "organization/index"
+  },
+  {
+    "Id": 6,
+    "Title": "SSO",
+    "Icon": "mdi-calendar-check-outline",
+    "Children": [
+      {
+        "Id": 3,
+        "Title": "IdentityResource",
+        "Icon": "mdi-circle",
+        "Href": "/sso/identityResource"
       }
     ]
   }

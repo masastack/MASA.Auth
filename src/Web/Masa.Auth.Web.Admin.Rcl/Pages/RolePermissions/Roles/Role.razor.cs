@@ -100,19 +100,17 @@ public partial class Role
         UpdateRoleDialogVisible = true;
     }
 
-    public void OpenRemoveRoleDialog(RoleDto role)
+    public async Task OpenRemoveRoleDialog(RoleDto role)
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveRoleAsync(role.Id);
-        }, T("Are you sure delete role data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete role data"));
+        if (confirm) await RemoveRoleAsync(role.Id);
     }
 
     public async Task RemoveRoleAsync(Guid roleId)
     {
         Loading = true;
         await RoleService.RemoveAsync(roleId);
-        OpenSuccessMessage(T("Delete user data success"));
+        OpenSuccessMessage(T("Delete role data success"));
         await GetRolesAsync();
         Loading = false;
     }

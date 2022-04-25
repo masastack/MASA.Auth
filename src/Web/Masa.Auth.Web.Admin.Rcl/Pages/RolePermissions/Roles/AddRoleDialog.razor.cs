@@ -42,7 +42,7 @@ public partial class AddRoleDialog
         if (Visible)
         {
             Role = new();
-            if(RoleSelect is not null) await RoleSelect.ReloadAsync();
+            if (RoleSelect is not null) await RoleSelect.ReloadAsync();
         }
     }
 

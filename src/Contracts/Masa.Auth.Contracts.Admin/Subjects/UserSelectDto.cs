@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class UserSelectDto
+public class UserSelectDto : AutoCompleteDocument<Guid>
 {
-    public Guid Id { get; set; }
+    public new Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -31,5 +31,7 @@ public class UserSelectDto
         PhoneNumber = phoneNumber;
         Email = email;
         Avatar = avatar;
+        Value = Id;
+        Text = $"{Name},{Account},{PhoneNumber},{Email}";
     }
 }

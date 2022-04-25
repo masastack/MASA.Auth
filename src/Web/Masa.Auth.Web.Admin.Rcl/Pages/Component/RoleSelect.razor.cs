@@ -27,7 +27,7 @@ public partial class RoleSelect
         Roles = await RoleService.GetSelectForUserAsync();
     }
 
-    protected virtual List<RoleSelectDto> GetRoleSelect() => Roles;
+    protected virtual bool RoleDisabled(RoleSelectDto role) => false;
 
     protected void RemoveRole(RoleSelectDto role)
     {

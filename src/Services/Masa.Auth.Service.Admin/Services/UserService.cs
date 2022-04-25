@@ -8,7 +8,7 @@
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
         {
-            var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled);
+            var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled, user.StartTime, user.EndTime);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

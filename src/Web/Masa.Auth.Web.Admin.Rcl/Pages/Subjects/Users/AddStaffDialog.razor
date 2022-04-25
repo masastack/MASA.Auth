@@ -8,16 +8,7 @@
                     <div class="full-height flex-column">
                         <div class="d-flex flex-height-auto">
                             <div class="ma-auto text-center">
-                                <MButtonGroup Value="@Staff.User.Gender.ToString()" Rounded>
-                                    <MButton OnClick="()=> Staff.User.Gender = GenderTypes.Male" Width=100 Value="@GenderTypes.Male.ToString()" Class="@(Staff.User.Gender == GenderTypes.Male ? "button-group-active":"button-group")">
-                                        <MIcon Size=18>fa fa-regular fa-mars</MIcon>
-                                        <span class="ml-1">@T(GenderTypes.Male.ToString())</span>
-                                    </MButton>
-                                    <MButton OnClick="()=> Staff.User.Gender = GenderTypes.Female" Width=100 Value="@GenderTypes.Female.ToString()" Class="@(Staff.User.Gender == GenderTypes.Female ? "button-group-active":"button-group")">
-                                        <MIcon Size=18>fa fa-regular fa-venus</MIcon>
-                                        <span class="ml-1">@T(GenderTypes.Female.ToString())</span>
-                                    </MButton>
-                                </MButtonGroup>
+                                <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
                                 <br />
                                 <MAvatar Size=120 Class="mt-12">
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
@@ -41,7 +32,7 @@
                                 <MAvatar Size=80>
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                                 </MAvatar>
-                                <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                                <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">

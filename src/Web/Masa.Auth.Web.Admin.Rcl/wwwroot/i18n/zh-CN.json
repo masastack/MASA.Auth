@@ -2,6 +2,7 @@
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
+  "$DateFormat": "yyyy-MM-dd",
 
   "Favorite": "收藏",
   "Source": "来源",
@@ -40,6 +41,14 @@
   "All": "全部",
   "Select Tag": "选择标签",
   "History record": "历史记录",
+  "Start time cannot be greater than end time": "开始时间不能大于结束时间",
+  "End time cannot be less than start time": "结束时间不能小于开始时间",
+  "Create": "创建",
+  "Update": "修改",
+  "RolePermission": "角色权限",
+  "Yes": "是",
+  "No": "否",
+  "Reset": "重置密码",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -91,6 +100,8 @@
   "StaffType": "员工类型",
   "InternalStaff": "内部员工",
   "ExternalStaff": "驻场员工",
+  "Sync": "同步",
+  "Staff Sync": "员工同步",
   "Failed to query staffList data:": "获取员工列表数据失败:",
   "Failed to query staffDetail data:": "获取员工详情数据失败",
   "Add staff data success": "新增员工数据成功",
@@ -183,5 +194,10 @@
   "Permission deleted successfully": "删除权限成功",
   "Failed to delete permission": "删除权限失败",
   "Project identifier is empty": "项目标识为空",
-  "Tag or appid is empty": "tag或appid为空"
+  "Tag or appid is empty": "tag或appid为空",
+
+  "IdentityResource": "身份",
+  "IdentityResource.Name": "配置名称",
+  "IdentityResource.Required": "是否必须",
+  "User Claims": "用过声明"
 }

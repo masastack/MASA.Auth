@@ -61,6 +61,7 @@ public abstract class AdminCompontentBase : ComponentBase
         }
 
     }
+
     [Inject]
     public IPopupService PopupService { get; set; } = default!;
 
@@ -72,10 +73,9 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public string T(string key) => I18n.T(key);
 
-    public void OpenConfirmDialog(Func<bool, Task> confirmFunc, string messgae)
+    public async Task<bool> OpenConfirmDialog(string content)
     {
-        var callback = EventCallback.Factory.Create(this, confirmFunc);
-        GlobalConfig.OpenConfirmDialog(I18n.T("Operation confirmation"), messgae, callback);
+        return await PopupService.ConfirmAsync(T("Operation confirmation"), content, AlertTypes.Error);
     }
 
     public async Task<bool> OpenConfirmDialog(string title, string content)
