@@ -13,7 +13,7 @@ public class ClientAddDto
 
     public List<string> GrantTypes { get; set; } = new();
 
-    public bool RequirePkce { get; set; }
+    public bool RequirePkce { get; set; } = true;
     #endregion
 
     #region Authentication
@@ -34,19 +34,5 @@ public class ClientAddDto
     public string LogoUri { get; set; } = string.Empty;
 
     public bool RequireConsent { get; set; } = true;
-    #endregion
-
-    #region Token
-
-    #endregion
-
-    #region Device Flow
-    public string UserCodeType { get; set; } = string.Empty;
-
-    public int DeviceCodeLifetime { get; set; } = 300;
-    #endregion
-
-    #region Client Credentials
-
     #endregion
 }

@@ -1,15 +1,15 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Sso;
 
-internal class ClientDetailDto : ClientAddDto
+public class ClientDetailDto : ClientAddDto
 {
     #region Basic
+    public int Id { get; set; }
+
     public bool Enabled { get; set; }
 
     public bool RequireRequestObject { get; set; }
 
-    public bool AllowOfflineAccess { get; set; }
-
-    public bool RequireClientSecret { get; set; }
+    public List<string> AllowedCorsOrigins { get; set; } = new();
     #endregion
 
     #region Authentication
@@ -29,9 +29,13 @@ internal class ClientDetailDto : ClientAddDto
     #endregion
 
     #region Token
+    public bool AllowOfflineAccess { get; set; }
+
     public int IdentityTokenLifetime { get; set; }
 
     public int AccessTokenLifetime { get; set; }
+
+    public int AccessTokenType { get; set; }
 
     public int AuthorizationCodeLifetime { get; set; }
 
@@ -47,11 +51,23 @@ internal class ClientDetailDto : ClientAddDto
 
     public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
 
-    public List<string> AllowedCorsOrigins { get; set; } = new();
-
     public bool AlwaysSendClientClaims { get; set; }
 
     public string PairWiseSubjectSalt { get; set; } = string.Empty;
+
+    public bool AllowAccessTokensViaBrowser { get; set; }
+    #endregion
+
+    #region Device Flow
+    public string UserCodeType { get; set; } = string.Empty;
+
+    public int DeviceCodeLifetime { get; set; } = 300;
+    #endregion
+
+    #region Client Credentials
+    public bool RequireClientSecret { get; set; }
+
+    public List<ClientSecretDto> ClientSecrets { get; set; } = new();
     #endregion
 
     #region Consent Screen
@@ -60,13 +76,7 @@ internal class ClientDetailDto : ClientAddDto
     public int ConsentLifetime { get; set; }
     #endregion
 
-    #region ClientSecret
-    public List<ClientSecretDto> ClientSecrets { get; set; } = new();
-    #endregion
-
-    #region IdentityResource
-    #endregion
-
-    #region ApiResource
+    #region AllowedScopes
+    public List<string> AllowedScopes { get; set; } = new();
     #endregion
 }

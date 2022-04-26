@@ -8,6 +8,7 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Projects;
+global using Masa.Auth.Contracts.Admin.Sso;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Utils.Caller.Core;
 global using Masa.Utils.Caller.HttpClient;

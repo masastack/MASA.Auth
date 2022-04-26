@@ -2,7 +2,7 @@
 @inherits AdminCompontentBase
 
 <PageTitle>
-    @T("Department Management")
+    Clients
 </PageTitle>
 
 <MCard>
@@ -13,13 +13,13 @@
             </PrependInnerContent>
         </MTextField>
         <MSpacer/>
-        <MButton Color="primary" Class="ml-6 medium-button">
+        <MButton Color="primary" Class="ml-6 medium-button" OnClick="()=>{_addDialog=true;}">
             <MIcon Size=18>mdi-plus</MIcon>
             <span class="ml-2">@T("Add")</span>
         </MButton>
     </MCardTitle>
     <MCardText>
-        <MDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize" HideDefaultFooter Class="user table-border-none">
+        <MDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize" HideDefaultFooter Class="table-border-none">
             <HeaderColContent Context="header">
                 <span class="text-btn">@header.Text</span>
             </HeaderColContent>
@@ -52,9 +52,11 @@
                 }
             </ItemColContent>
             <FooterContent>
-                <SimpleDataTableFooter Class="mt-4" Page=_clientPaginationDto.Page PageSize=_clientPaginationDto.PageSize Total=100 />
+                <DataTableFooter Class="mt-4" Page=_clientPaginationDto.Page PageSize=_clientPaginationDto.PageSize Total=100 />
             </FooterContent>
         </MDataTable>
     </MCardText>
 </MCard>
 
+<AddClient @bind-Value="_addDialog"/>
+@*<UpdateClient @bind-Value="_addDialog" />*@

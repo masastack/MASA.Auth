@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
+﻿namespace Masa.Auth.Contracts.Admin.Sso;
 
 /// <summary>
 /// OpenId Connect subject types.

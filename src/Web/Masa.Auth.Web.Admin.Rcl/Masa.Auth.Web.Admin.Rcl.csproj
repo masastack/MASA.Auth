@@ -5,14 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Shared\Presets\readme.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Shared\Presets\readme.md" />
-  </ItemGroup>
 	
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -23,8 +15,8 @@
     <PackageReference Include="Humanizer.Core.zh-CN" Version="2.14.1" />
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="Masa.Blazor" Version="0.4.0-preview.1" />
-    <PackageReference Include="Masa.Stack.Components" Version="0.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
+    <PackageReference Include="Masa.Stack.Components" Version="0.0.5" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
   </ItemGroup>
 
   <ItemGroup>

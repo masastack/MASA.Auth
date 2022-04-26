@@ -1,0 +1,36 @@
+﻿@inherits AdminCompontentBase
+
+<MContainer>
+    <MRow>
+        <MCol Md=12 Class="text-center">
+            <MAvatar Height=80 Width=80>
+                <MImage Height=80 Width=80 Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" Alt="Jack"></MImage>
+            </MAvatar>
+        </MCol>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.ClientUri" Label="ClientUri" />
+        </MCol>
+        <MCol Md=12>
+            <MCheckbox @bind-Value="Dto.RequireConsent" Label="RequireConsent"></MCheckbox>
+        </MCol>
+    </MRow>
+    @if (Dto.Id != Guid.Empty)
+    {
+        <MRow>
+            <MCol Md=12>
+                <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="ConsentLifetime" Clearable=false />
+            </MCol>
+            <MCol Md=12>
+                <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="AllowRememberConsent"></MCheckbox>
+            </MCol>
+        </MRow>
+    }
+</MContainer>
+
+@code {
+    [Parameter]
+    public ClientConsentDto Dto { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<ClientConsentDto> DtoChanged { get; set; }
+}

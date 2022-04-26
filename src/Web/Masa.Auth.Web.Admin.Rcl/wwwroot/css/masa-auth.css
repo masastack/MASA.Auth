@@ -1392,8 +1392,6 @@ tr:hover {
     height: 100%;
     width: 100%;
     position: absolute;
-.max-full-height {
-    max-height: 100% !important;
 }
 
 .m-stepper__content.full-height .m-stepper__wrapper {
@@ -1410,4 +1408,9 @@ tr:hover {
 
 .m-text-field.m-text-field--solo.elevation-0:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
     box-shadow: none;
+}
+
+.px-sheet-dialog {
+    padding-right: 228px;
+    padding-left: 228px;
 }

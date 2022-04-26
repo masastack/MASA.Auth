@@ -1,0 +1,41 @@
+﻿<MContainer>
+    <MRow>
+        <MCol Md=6>
+            <DefaultTextField TValue="string" Label="Type" />
+        </MCol>
+        <MCol Md=6>
+            <DefaultTextField TValue="string" Label="Value"/>
+        </MCol>
+        <MCol Class="d-flex justify-end">
+            <MButton>Add New</MButton>
+        </MCol>
+        <MCol Md=12>
+            <MDataTable Headers="_headers" Items="new List<ClientSecretDto>()" TItem="ClientSecretDto" HideDefaultFooter DisablePagination Class="table-border-none">
+            <HeaderColContent Context="header">
+                <span class="text-btn">@header.Text</span>
+            </HeaderColContent>
+            <ItemColContent>
+                @switch (context.Header.Value)
+                {
+                    case "Action":
+                        <MIcon Small Color="neutral-lighten-2" Class="ml-7">mdi-shield-half-full</MIcon>
+                        break;
+                    default:
+                        <span class="text-body3">@context.Value</span>
+                        break;
+                }
+            </ItemColContent>
+        </MDataTable>
+        </MCol>
+    </MRow>
+</MContainer>
+
+@code {
+    public List<DataTableHeader<ClientSecretDto>> _headers { get; set; } = new()
+    {
+        new() { Text = "Type", Value = nameof(ClientSecretDto.Type), Sortable = false },
+        new() { Text = "Value", Value = nameof(ClientSecretDto.Value), Sortable = false },
+        new() { Text = "", Value = "Action", Sortable = false },
+    };
+
+}

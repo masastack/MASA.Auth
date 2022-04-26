@@ -2,6 +2,7 @@
 
 public partial class Client
 {
+    bool _addDialog, _updateDialog;
     GetClientPaginationDto _clientPaginationDto = new();
 
     public List<ClientDto> _clients { get; set; } = new();
