@@ -45,10 +45,7 @@
                 <span class="text-body3">@context.Item.Position</span>
                 break;
             case nameof(StaffDto.Enabled):
-                string color = context.Item.Enabled ? "sample-green" : "error";
-                <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                    <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                </MChip>
+                <EnableChip Value="context.Item.Enabled" />
                 break;
             case "Action":
                 <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>

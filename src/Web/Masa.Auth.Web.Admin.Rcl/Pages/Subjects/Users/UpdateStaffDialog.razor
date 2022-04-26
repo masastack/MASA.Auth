@@ -14,7 +14,7 @@
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
-                    <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
+                    <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" />
                 </MRow>
                 <MRow Class="mt-6">
                     <MCol>
@@ -29,14 +29,7 @@
                         <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <MSelect @bind-Value="Staff.StaffType"
-                                 HideDetails="@("auto")"
-                                 Outlined
-                                 Items="@(GetEnumMap<StaffTypes>())"
-                                 ItemText="map => T(map.Key)"
-                                 ItemValue="map => map.Value"
-                                 Label="@T("StaffType")">
-                        </MSelect>
+                        <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">

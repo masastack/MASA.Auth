@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
 
 public class PositionService : ServiceBase
 {

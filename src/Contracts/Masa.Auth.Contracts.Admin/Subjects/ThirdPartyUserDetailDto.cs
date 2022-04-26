@@ -1,44 +1,20 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class ThirdPartyUserDetailDto
+public class ThirdPartyUserDetailDto : ThirdPartyUserDto
 {
-    public Guid Id { get; set; }
+    public new ThirdPartyIdpDetailDto ThirdPartyIdp { get; set; } = new();
 
-    public Guid ThirdPartyIdpId { get; set; }
-
-    public bool Enabled { get; set; }
-
-    public string ThridPartyIdentity { get; set; }
-
-    public UserDetailDto User { get; set; }
-
-    public DateTime CreationTime { get; set; }
-
-    public DateTime? ModificationTime { get; set; }
-
-    public string Creator { get; set; }
-
-    public string Modifier { get; set; }
+    public new UserDetailDto User { get; set; } = new();
 
     public ThirdPartyUserDetailDto()
     {
-        ThridPartyIdentity = "";
-        User = new();
-        Creator = "";
-        Modifier = "";
+
     }
 
-    public ThirdPartyUserDetailDto(Guid id, Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public ThirdPartyUserDetailDto(Guid id, bool enabled, ThirdPartyIdpDetailDto thirdPartyIdp, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier) : base(id, enabled, thirdPartyIdp, user, creationTime, modificationTime, creator, modifier)
     {
-        Id = id;
-        ThirdPartyIdpId = thirdPartyIdpId;
-        Enabled = enabled;
-        ThridPartyIdentity = thridPartyIdentity;
+        ThirdPartyIdp = thirdPartyIdp;
         User = user;
-        CreationTime = creationTime;
-        ModificationTime = modificationTime;
-        Creator = creator;
-        Modifier = modifier;
     }
 }
 

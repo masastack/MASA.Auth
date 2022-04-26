@@ -8,7 +8,7 @@
                     <div class="full-height flex-column">
                         <div class="d-flex flex-height-auto">
                             <div class="ma-auto text-center">
-                                <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
+                                <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
                                 <MAvatar Size=120 Class="mt-12">
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
@@ -50,14 +50,7 @@
                                     <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
                                 </MCol>
                                 <MCol>
-                                    <MSelect @bind-Value="Staff.StaffType"
-                                             HideDetails="@("auto")"
-                                             Outlined
-                                             Items="@(GetEnumMap<StaffTypes>())"
-                                             ItemText="map => T(map.Key)"
-                                             ItemValue="map => map.Value"
-                                             Label="@T("StaffType")">
-                                    </MSelect>
+                                    <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="my-4">

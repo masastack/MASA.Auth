@@ -36,8 +36,8 @@ public class QueryHandler
         if (query.EndTime is not null)
             condition = condition.And(user => user.CreationTime <= query.EndTime);
 
-        if (query.userId != Guid.Empty)
-            condition = condition.And(user => user.Id == query.userId);
+        if (query.UserId != Guid.Empty)
+            condition = condition.And(user => user.Id == query.UserId);
 
         var users = await _userRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
@@ -50,9 +50,7 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(users.Total, users.Result.Select(u =>
-            new UserDto(u.Id, u.Name, u.DisplayName, u.Avatar, u.IdCard, u.Account, u.CompanyName, u.Enabled, u.PhoneNumber, u.Email, u.CreationTime, u.GenderType)
-        ).ToList());
+        query.Result = new(users.Total, users.Result.Select(u => (UserDto)u).ToList());
     }
 
     [EventHandler]
@@ -84,7 +82,7 @@ public class QueryHandler
     #region Staff
 
     [EventHandler]
-    public async Task GetStaffsAsync(GetStaffsQuery query)
+    public async Task GetStaffsAsync(StaffsQuery query)
     {
         Expression<Func<Staff, bool>> condition = staff => true;
         if (query.Enabled is not null)
@@ -141,6 +139,48 @@ public class QueryHandler
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount);
 
         query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
+    }
+
+    #endregion
+
+    #region ThirdPartyUser
+
+    [EventHandler]
+    public async Task GetThirdPartyUsersAsync(ThirdPartyUsersQuery query)
+    {
+        Expression<Func<ThirdPartyUser, bool>> condition = tpu => true;
+        if (query.Enabled is not null)
+            condition = condition.And(tpu => tpu.Enabled == query.Enabled);
+
+        if (query.StartTime is not null)
+            condition = condition.And(tpu => tpu.CreationTime >= query.StartTime);
+
+        if (query.EndTime is not null)
+            condition = condition.And(tpu => tpu.CreationTime <= query.EndTime);
+
+        if (query.UserId != Guid.Empty)
+            condition = condition.And(tpu => tpu.Id == query.UserId);
+
+        var tpuQuery = _authDbContext.Set<ThirdPartyUser>().Where(condition);
+        var total = await tpuQuery.LongCountAsync();
+        var tpus = await tpuQuery.Include(tpu => tpu.User)
+                                   .Include(tpu => tpu.ThirdPartyIdp)
+                                   .OrderByDescending(s => s.ModificationTime)
+                                   .ThenByDescending(s => s.CreationTime)
+                                   .Skip((query.Page - 1) * query.PageSize)
+                                   .Take(query.PageSize)
+                                   .ToListAsync();
+
+        query.Result = new(total, tpus.Select(tpu => (ThirdPartyUserDto)tpu).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetThirdPartyUserDetailAsync(ThirdPartyUserDetailQuery query)
+    {
+        var tpu = await _thirdPartyUserRepository.FindAsync(u => u.Id == query.ThirdPartyUserId);
+        if (tpu is null) throw new UserFriendlyException("This thirdPartyUser data does not exist");
+
+        query.Result = tpu;
     }
 
     #endregion

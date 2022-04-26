@@ -2,27 +2,49 @@
 
 public partial class ThirdPartyUser
 {
-    private string? _search;
-    private bool _enabled;
+    private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
+    private Guid _userId;
+    private DateOnly? _startTime;
+    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
 
-    public string Search
+    public Guid UserId
     {
-        get { return _search ?? ""; }
+        get { return _userId; }
         set
         {
-            _search = value;
+            _userId = value;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
 
-    public bool Enabled
+    public bool? Enabled
     {
         get { return _enabled; }
         set
         {
             _enabled = value;
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public DateOnly? StartTime
+    {
+        get => _startTime;
+        set
+        {
+            _startTime = value;
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public DateOnly? EndTime
+    {
+        get => _endTime;
+        set
+        {
+            _endTime = value;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -47,66 +69,52 @@ public partial class ThirdPartyUser
         }
     }
 
-    public long TotalPages { get; set; }
+    public bool Filter { get; set; }
 
     public long Total { get; set; }
-
-    public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
     public List<ThirdPartyUserDto> ThirdPartyUsers { get; set; } = new();
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<ThirdPartyIdpDto> ThirdPartyIdps { get; set; } = new();
-
-    public Guid ThirdPartyIdpId { get; set; }
-
     public List<DataTableHeader<ThirdPartyUserDto>> Headers { get; set; } = new();
 
-    public bool ThirdPartyUserDialog { get; set; }
+    public bool ViewThirdPartyUserDialog { get; set; }
+
+    public bool DomainAccountDialog { get; set; }
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
-
-    private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
     protected override async Task OnInitializedAsync()
     {
         Headers = new()
         {
             new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T(nameof(UserDto.DisplayName)), Value = nameof(UserDto.DisplayName), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.ThirdPartyIdpId), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
+            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.ThirdPartyIdp), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
+            new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
             new() { Text = T("State"), Value = T(nameof(UserDto.Enabled)), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetThirdPartyUsersAsync();
-        await SelectThirdPartyIdpAsync();
+        // await GetThirdPartyUsersAsync();
     }
 
     public async Task GetThirdPartyUsersAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyUsersDto(Page, PageSize, Search, Enabled, ThirdPartyIdpId);
+        var request = new GetThirdPartyUsersDto(Page, PageSize, UserId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
         var response = await ThirdPartyUserService.GetThirdPartyUsersAsync(request);
         ThirdPartyUsers = response.Items;
         Total = response.Total;
         Loading = false;
     }
 
-    public async Task SelectThirdPartyIdpAsync()
-    {
-        Loading = true;
-        ThirdPartyIdps = await ThirdPartyIdpService.SelectThirdPartyIdpAsync();
-        Loading = false;
-    }
-
-    public void OpenEditThirdPartyUserDialog(ThirdPartyUserDto thirdPartyUser)
+    public void OpenViewThirdPartyUserDialog(ThirdPartyUserDto thirdPartyUser)
     {
         CurrentThirdPartyUserId = thirdPartyUser.Id;
-        ThirdPartyUserDialog = true;
+        ViewThirdPartyUserDialog = true;
     }
 }
 
