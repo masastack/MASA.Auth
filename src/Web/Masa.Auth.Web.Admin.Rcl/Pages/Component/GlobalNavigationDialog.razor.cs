@@ -10,6 +10,12 @@ public partial class GlobalNavigationDialog
 
     [Parameter]
     public EventCallback<GlobalNavigation> OnSubmit { get; set; }
+
+    public Stack.Components.Models.App App { get; set; } = new Stack.Components.Models.App("wuweilai", "吴炜来");
+
+    public string CategoryCode { get; set; } = "1234";
+
+    public List<FavoriteNav>? FavoriteNavs { get; set; } = new();
 }
 
 public enum GlobalNavigationModes

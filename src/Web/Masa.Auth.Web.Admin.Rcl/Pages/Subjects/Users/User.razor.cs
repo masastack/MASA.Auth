@@ -2,39 +2,21 @@
 
 public partial class User
 {
-    private string? _name;
-    private string? _email;
-    private string? _phoneNumber;
     private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
+    private Guid _userId;
+    private DateOnly? _startTime;
+    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
 
-    public string Search
+    public string Search { get; set; } = "";
+
+    public Guid UserId
     {
-        get { return _name ?? ""; }
+        get { return _userId; }
         set
         {
-            _name = value;
-            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-        }
-    }
-
-    public string Email
-    {
-        get { return _email ?? ""; }
-        set
-        {
-            _email = value;
-            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-        }
-    }
-
-    public string PhoneNumber
-    {
-        get { return _phoneNumber ?? ""; }
-        set
-        {
-            _phoneNumber = value;
+            _userId = value;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -45,6 +27,26 @@ public partial class User
         set
         {
             _enabled = value;
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public DateOnly? StartTime
+    {
+        get => _startTime;
+        set
+        {
+            _startTime = value;
+            GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public DateOnly? EndTime
+    {
+        get => _endTime;
+        set
+        {
+            _endTime = value;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -81,6 +83,8 @@ public partial class User
 
     public List<(string, bool?)> UserStateSelect { get; set; } = new();
 
+    public List<UserSelectDto> UserSelect { get; set; } = new();
+
     public bool AddUserDialogVisible { get; set; }
 
     public bool UpdateUserDialogVisible { get; set; }
@@ -103,8 +107,8 @@ public partial class User
 
         UserStateSelect = new()
         {
-            (@T("Enable"), true),
-            (@T("Disabled"), false),
+            (T("Enable"), true),
+            (T("Disabled"), false),
         };
 
         await GetUserAsync();
@@ -113,7 +117,7 @@ public partial class User
     public async Task GetUserAsync()
     {
         Loading = true;
-        var request = new GetUsersDto(Page, PageSize, default, Enabled);
+        var request = new GetUsersDto(Page, PageSize, UserId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
         var response = await UserService.GetListAsync(request);
         Users = response.Items;
         Total = response.Total;
@@ -135,6 +139,20 @@ public partial class User
     {
         CurrentUserId = user.Id;
         AuthorizeDialogVisible = true;
+    }
+
+    public async Task OnSearchChanged(string search)
+    {
+        Search = search;
+        await Task.Delay(500);
+        if(Search =="")
+        {
+            UserSelect.Clear();
+        }
+        else if (Search == search)
+        {
+            UserSelect = await UserService.GetSelectAsync(search);
+        }
     }
 }
 

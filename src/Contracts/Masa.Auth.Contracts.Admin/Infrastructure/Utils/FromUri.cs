@@ -58,7 +58,7 @@ public class FromUri<T>
                 else if (propertyType == typeof(bool)) return Expr.Static(typeof(Convert)).Method(nameof(Convert.ToBoolean), value);
                 else if (propertyType == typeof(Guid)) return Expr.Static<FromUri<string>>().Method(nameof(FromUri<string>.ToGuid), value);
                 else if (propertyType.BaseType == typeof(Enum)) return Expr.Static(typeof(Convert)).Method(nameof(Convert.ToInt32), value).Convert(propertyType);
-                else if (propertyType.BaseType == typeof(DateTime)) return Expr.Static(typeof(Convert)).Method(nameof(Convert.ToDateTime), value);
+                else if (propertyType == typeof(DateTime)) return Expr.Static(typeof(Convert)).Method(nameof(Convert.ToDateTime), value);
                 else if (propertyType.GetGenericTypeDefinition() == typeof(Nullable<>)) return ConvertValue(value, propertyType.GetGenericArguments()[0]).Convert(propertyType);
                 else throw new Exception("This type is not recognized, please add this type detection logic");
             }

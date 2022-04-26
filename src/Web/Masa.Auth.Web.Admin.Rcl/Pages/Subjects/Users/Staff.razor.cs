@@ -63,6 +63,8 @@ public partial class Staff
 
     public bool AuthorizeDialogVisible { get; set; }
 
+    public bool StaffSyncDialogVisible { get; set; }
+
     private StaffService StaffService => AuthCaller.StaffService;
 
     protected override async Task OnInitializedAsync()

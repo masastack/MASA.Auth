@@ -7,15 +7,16 @@ public class CommandHandler
     readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
+    readonly UserDomainService _userDomainService;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
-        ITeamRepository teamRepository, TeamDomainService teamDomainService, StaffDomainService staffDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, UserDomainService userDomainService)
     {
-        _staffRepository = staffRepository;
         _userRepository = userRepository;
+        _staffRepository = staffRepository;
         _teamRepository = teamRepository;
-        _teamDomainService = teamDomainService;
         _staffDomainService = staffDomainService;
+        _teamDomainService = teamDomainService;
+        _userDomainService = userDomainService;
     }
 
     #region User
@@ -49,6 +50,7 @@ public class CommandHandler
             user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account ?? "", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Email ?? "", userDto.Address, userDto.Gender);
             await _userRepository.AddAsync(user);
             command.UserId = user.Id;
+            await _userDomainService.SetAsync(user);
         }
     }
 
@@ -75,8 +77,9 @@ public class CommandHandler
                     throw new UserFriendlyException($"User with email {userDto.Email} already exists");
             }
 
-            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.GenderType);
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.Gender);
             await _userRepository.UpdateAsync(user);
+            await _userDomainService.SetAsync(user);
         }
     }
 
@@ -92,8 +95,8 @@ public class CommandHandler
         //Delete Staff
         //Delete ...
         await _userRepository.RemoveAsync(user);
+        await _userDomainService.RemoveAsync(user.Id);
     }
-
     #endregion
 
     #region Staff

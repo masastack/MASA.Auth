@@ -4,7 +4,7 @@
 
 <MCard>
     <MCardText Class="pa-6">
-        <div>
+        <div style="position: relative;">
             <MButtonGroup Dense Mandatory Borderless @bind-Value="_pageTab" Class="rounded-lg elevation-tab mb-6">
                 @foreach (var title in new List<string> { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff })
                 {

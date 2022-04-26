@@ -66,12 +66,10 @@ public partial class UpdateUserDialog
         }
     }
 
-    public void OpenRemoveUserDialog()
+    public async Task OpenRemoveUserDialog()
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveUserAsync();
-        }, T("Are you sure delete user data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete user data"));
+        if (confirm) await RemoveUserAsync();
     }
 
     public async Task RemoveUserAsync()
