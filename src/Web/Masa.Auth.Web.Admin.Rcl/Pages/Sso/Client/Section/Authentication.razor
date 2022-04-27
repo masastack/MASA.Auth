@@ -28,17 +28,17 @@
     @if (Dto.Id != 0)
     {
         <MRow>
-            <MCol Md=12>
-                <DefaultTextField @bind-Value="Dto.FrontChannelLogoutUri" Label="FrontChannelLogoutUri" />
-            </MCol>
-            <MCol Md=12>
+            <MCol Md=4>
                 <MCheckbox @bind-Value="Dto.FrontChannelLogoutSessionRequired" Label="FrontChannelLogoutSessionRequired"></MCheckbox>
             </MCol>
-            <MCol Md=12>
-                <DefaultTextField @bind-Value="Dto.BackChannelLogoutUri" Label="BackChannelLogoutUri" />
+            <MCol Md=8>
+                <DefaultTextField @bind-Value="Dto.FrontChannelLogoutUri" Label="FrontChannelLogoutUri" />
             </MCol>
-            <MCol Md=12>
+            <MCol Md=4>
                 <MCheckbox @bind-Value="Dto.BackChannelLogoutSessionRequired" Label="BackChannelLogoutSessionRequired"></MCheckbox>
+            </MCol>
+            <MCol Md=8>
+                <DefaultTextField @bind-Value="Dto.BackChannelLogoutUri" Label="BackChannelLogoutUri" />
             </MCol>
             <MCol Md=12>
                 <MCheckbox @bind-Value="Dto.EnableLocalLogin" Label="EnableLocalLogin" />

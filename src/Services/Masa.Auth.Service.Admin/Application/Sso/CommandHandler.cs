@@ -57,8 +57,7 @@ public class CommandHandler
     {
         var id = updateClientCommand.ClientDetailDto.Id;
         var client = await _clientRepository.GetByIdAsync(id);
-        client.Properties.Clear();
-        //updateClientCommand.ClientDetailDto.Adapt(client);
+        updateClientCommand.ClientDetailDto.Adapt(client);
         await _clientRepository.UpdateAsync(client);
     }
 
@@ -66,7 +65,7 @@ public class CommandHandler
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
         var client = (await _clientRepository.FindAsync(removeClientCommand.ClientId))
-            ?? throw new UserFriendlyException($"Client id ={removeClientCommand.ClientId} not found");
+            ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
         await _clientRepository.RemoveAsync(client);
     }
     #endregion

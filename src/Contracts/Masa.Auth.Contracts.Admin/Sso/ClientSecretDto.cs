@@ -8,5 +8,5 @@ public class ClientSecretDto
 
     public DateTime? Expiration { get; set; }
 
-    public string Type { get; set; } = string.Empty; //SharedSecret and X509Thumbprint 
+    public string Type { get; set; } = "SharedSecret";
 }

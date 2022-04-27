@@ -4,24 +4,24 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class ClientConsts
 {
-    public static List<string> GetSecretTypes()
+    public static List<SelectItemDto<string>> GetSecretTypes()
     {
-        var secretTypes = new List<string>
+        var secretTypes = (new List<string>
             {
                 "SharedSecret",
                 "X509Thumbprint",
                 "X509Name",
                 "X509CertificateBase64",
                 "JWK"
-            };
+            }).Select(a => new SelectItemDto<string> { Value = a, Text = a }).ToList();
 
         return secretTypes;
     }
 
-    public static List<string> GetStandardClaims()
+    public static List<SelectItemDto<string>> GetStandardClaims()
     {
         //http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
-        var standardClaims = new List<string>
+        var standardClaims = (new List<string>
             {
                 "name",
                 "given_name",
@@ -38,14 +38,14 @@ public class ClientConsts
                 "locale",
                 "address",
                 "updated_at"
-            };
+            }).Select(a => new SelectItemDto<string> { Value = a, Text = a }).ToList();
 
         return standardClaims;
     }
 
-    public static List<string> SigningAlgorithms()
+    public static List<SelectItemDto<string>> SigningAlgorithms()
     {
-        var signingAlgorithms = new List<string>
+        var signingAlgorithms = (new List<string>
             {
                 "RS256",
                 "RS384",
@@ -56,7 +56,7 @@ public class ClientConsts
                 "ES256",
                 "ES384",
                 "ES512"
-            };
+            }).Select(a => new SelectItemDto<string> { Value = a, Text = a }).ToList();
 
         return signingAlgorithms;
     }

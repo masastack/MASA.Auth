@@ -19,7 +19,6 @@ public class ClientRepository : Repository<AuthDbContext, Client, int>, IClientR
             .Include(c => c.AllowedCorsOrigins)
             .Include(c => c.ClientSecrets)
             .Include(c => c.AllowedScopes)
-            .AsNoTracking()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current client does not exist");
     }

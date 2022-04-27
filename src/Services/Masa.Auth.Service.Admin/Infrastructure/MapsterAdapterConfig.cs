@@ -16,5 +16,6 @@ public class MapsterAdapterConfig
         //    dest.RedirectUris.Clear();
         //    dest.PostLogoutRedirectUris.Clear();
         //});
+        TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
     }
 }
