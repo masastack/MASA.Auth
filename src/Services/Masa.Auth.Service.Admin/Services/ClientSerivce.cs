@@ -5,6 +5,7 @@ public class ClientSerivce : ServiceBase
     public ClientSerivce(IServiceCollection services) : base(services, "api/sso/client")
     {
         MapGet(GetListAsync);
+        MapGet(GetDetailAsync);
         MapGet(GetClientTypeListAsync);
         MapPost(AddClientAsync);
         MapPost(UpdateClientAsync);
@@ -14,6 +15,13 @@ public class ClientSerivce : ServiceBase
     private async Task<PaginationDto<ClientDto>> GetListAsync(IEventBus eventBus, GetClientPaginationDto clientPaginationDto)
     {
         var query = new ClientPaginationListQuery(clientPaginationDto.Page, clientPaginationDto.PageSize);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<ClientDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] int id)
+    {
+        var query = new ClientDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

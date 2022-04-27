@@ -4,6 +4,7 @@ using Masa.Auth.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220427021148_ClientType")]
+    partial class ClientType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,16 +230,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ParentPermissionId")
+                    b.Property<Guid>("PermissionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChildPermissionId");
-
-                    b.HasIndex("ParentPermissionId", "ChildPermissionId")
-                        .IsUnique()
-                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("PermissionRelation", "permissions");
                 });
@@ -1896,20 +1894,12 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ChildPermission")
-                        .WithMany("ParentPermissionRelations")
+                        .WithMany("Permissions")
                         .HasForeignKey("ChildPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ParentPermission")
-                        .WithMany("ChildPermissionRelations")
-                        .HasForeignKey("ParentPermissionId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
                     b.Navigation("ChildPermission");
-
-                    b.Navigation("ParentPermission");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
@@ -2353,9 +2343,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", b =>
                 {
-                    b.Navigation("ChildPermissionRelations");
-
-                    b.Navigation("ParentPermissionRelations");
+                    b.Navigation("Permissions");
 
                     b.Navigation("RolePermissions");
 

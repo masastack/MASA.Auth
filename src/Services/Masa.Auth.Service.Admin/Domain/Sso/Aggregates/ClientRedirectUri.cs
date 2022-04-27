@@ -7,5 +7,10 @@ public class ClientRedirectUri : Entity<int>
     public int ClientId { get; private set; }
 
     public Client Client { get; private set; } = null!;
+
+    public ClientRedirectUri(string redirectUri)
+    {
+        RedirectUri = redirectUri;
+    }
 }
 

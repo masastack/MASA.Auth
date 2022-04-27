@@ -2,7 +2,7 @@
 
 public class ClientBasicDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     public string ClientId { get; set; } = string.Empty;
 
@@ -22,13 +22,7 @@ public class ClientBasicDto
 
     public List<string> AllowedCorsOrigins { get; set; } = new();
 
-    public static implicit operator ClientBasicDto(ClientDetailDto cad)
-    {
-        return new ClientBasicDto()
-        {
-            ClientId = cad.ClientId,
-            ClientName = cad.ClientName,
-            Description = cad.Description
-        };
-    }
+    public List<ClientPropertyDto> Properties { get; set; } = new();
+
+    public ClientPropertyDto Property { get; set; } = new();
 }

@@ -2,13 +2,13 @@
 
 public class ClientConsentDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     public string ClientUri { get; set; } = string.Empty;
 
     public string LogoUri { get; set; } = string.Empty;
 
-    public bool RequireConsent { get; set; }
+    public bool RequireConsent { get; set; } = true;
 
     public bool AllowRememberConsent { get; set; }
 

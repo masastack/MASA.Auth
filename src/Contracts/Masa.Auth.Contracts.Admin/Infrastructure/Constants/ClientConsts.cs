@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+﻿using Masa.Auth.Contracts.Admin.Sso;
+
+namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class ClientConsts
 {
@@ -66,21 +68,33 @@ public class ClientConsts
         return protocolTypes;
     }
 
-    //public virtual List<SelectItem> GetAccessTokenTypes()
-    //{
-    //    var accessTokenTypes = EnumHelpers.ToSelectList<AccessTokenType>();
-    //    return accessTokenTypes;
-    //}
+    public static List<SelectItemDto<int>> GetAccessTokenTypes()
+    {
+        var accessTokenTypes = Enum<AccessTokenType>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
+        {
+            Text = pt.Value,
+            Value = pt.Key
+        }).ToList();
+        return accessTokenTypes;
+    }
 
-    //public virtual List<SelectItem> GetTokenExpirations()
-    //{
-    //    var tokenExpirations = EnumHelpers.ToSelectList<TokenExpiration>();
-    //    return tokenExpirations;
-    //}
+    public static List<SelectItemDto<int>> GetTokenExpirations()
+    {
+        var tokenExpirations = Enum<TokenExpiration>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
+        {
+            Text = pt.Value,
+            Value = pt.Key
+        }).ToList();
+        return tokenExpirations;
+    }
 
-    //public virtual List<SelectItem> GetTokenUsage()
-    //{
-    //    var tokenUsage = EnumHelpers.ToSelectList<TokenUsage>();
-    //    return tokenUsage;
-    //}
+    public static List<SelectItemDto<int>> GetTokenUsage()
+    {
+        var tokenUsage = Enum<TokenUsage>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
+        {
+            Text = pt.Value,
+            Value = pt.Key
+        }).ToList();
+        return tokenUsage;
+    }
 }

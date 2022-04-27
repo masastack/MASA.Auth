@@ -13,7 +13,12 @@ public abstract class ServiceBase
 
     protected async Task<TResponse> GetAsync<TResponse>(string methodName, Dictionary<string, string>? paramters = null)
     {
-        return await CallerProvider.GetAsync<TResponse>(BuildAdress(methodName), paramters ?? new()) ?? throw new Exception("The service is abnormal, please contact the administrator!");
+        return await CallerProvider.GetAsync<TResponse>(BuildAdress(methodName), paramters ?? new()) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
+    }
+
+    protected async Task<TResponse> GetAsync<TRequest, TResponse>(string methodName, TRequest data) where TRequest : class
+    {
+        return await CallerProvider.GetAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
     }
 
     protected async Task PutAsync<TRequest>(string methodName, TRequest data)

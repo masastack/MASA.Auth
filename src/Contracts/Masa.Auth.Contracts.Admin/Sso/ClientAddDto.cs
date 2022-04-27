@@ -11,7 +11,7 @@ public class ClientAddDto
 
     public string Description { get; set; } = string.Empty;
 
-    public List<string> GrantTypes { get; set; } = new();
+    public List<string> AllowedGrantTypes { get; set; } = new();
 
     public bool RequirePkce { get; set; } = true;
     #endregion
@@ -34,5 +34,9 @@ public class ClientAddDto
     public string LogoUri { get; set; } = string.Empty;
 
     public bool RequireConsent { get; set; } = true;
+    #endregion
+
+    #region Client Credentials
+    public bool RequireClientSecret { get; set; }
     #endregion
 }

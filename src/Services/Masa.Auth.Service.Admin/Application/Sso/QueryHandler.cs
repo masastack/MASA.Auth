@@ -2,26 +2,31 @@
 
 public class QueryHandler
 {
-    readonly IClientRepository _ssoClientRepository;
-    public QueryHandler(IClientRepository ssoClientRepository)
-    readonly ISsoClientRepository _ssoClientRepository;
+    readonly IClientRepository _clientRepository;
     readonly IIdentityResourceRepository _identityResourceRepository;
 
-    public QueryHandler(ISsoClientRepository ssoClientRepository, IIdentityResourceRepository identityResourceRepository)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository)
     {
-        _ssoClientRepository = ssoClientRepository;
+        _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
     }
 
     [EventHandler]
     public async Task ClientPaginationListAsync(ClientPaginationListQuery clientPaginationListQuery)
     {
-        var result = await _ssoClientRepository.GetPaginatedListAsync(new PaginatedOptions
+        var result = await _clientRepository.GetPaginatedListAsync(new PaginatedOptions
         {
             Page = clientPaginationListQuery.Page,
             PageSize = clientPaginationListQuery.PageSize
         });
         clientPaginationListQuery.Result = new PaginationDto<ClientDto>(result.Total, result.Result.Adapt<List<ClientDto>>());
+    }
+
+    [EventHandler]
+    public async Task ClientDetailQueryAsync(ClientDetailQuery clientDetailQuery)
+    {
+        var client = await _clientRepository.GetByIdAsync(clientDetailQuery.ClientId);
+        client.Adapt(clientDetailQuery.Result);
     }
 
     [EventHandler]
@@ -48,15 +53,6 @@ public class QueryHandler
                     ClientTypes.Device => "mdi-devices",
                     ClientTypes.Machine => "mdi-server",
                     _ => ""
-                },
-                GrantTypes = ct switch
-                {
-                    ClientTypes.Web => GrantTypeConsts.Code,
-                    ClientTypes.Native => GrantTypeConsts.Code,
-                    ClientTypes.Spa => GrantTypeConsts.Code,
-                    ClientTypes.Device => GrantTypeConsts.DeviceFlow,
-                    ClientTypes.Machine => GrantTypeConsts.ClientCredentials,
-                    _ => new List<string>()
                 }
             }).ToList();
     }

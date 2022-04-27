@@ -7,5 +7,10 @@ public class ClientGrantType : Entity<int>
     public int ClientId { get; private set; }
 
     public Client Client { get; private set; } = null!;
+
+    public ClientGrantType(string grantType)
+    {
+        GrantType = grantType;
+    }
 }
 

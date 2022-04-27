@@ -2,7 +2,7 @@
 
 public class ClientAuthenticationDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     public string RedirectUri { get; set; } = string.Empty;
 

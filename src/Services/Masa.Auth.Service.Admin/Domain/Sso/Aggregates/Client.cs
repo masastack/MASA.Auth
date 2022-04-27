@@ -4,6 +4,8 @@ public class Client : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
     public bool IsDeleted { get; private set; }
 
+    public ClientTypes ClientType { get; private set; }
+
     public bool Enabled { get; private set; } = true;
 
     public string ClientId { get; private set; } = string.Empty;
@@ -93,6 +95,9 @@ public class Client : AuditAggregateRoot<int, Guid>, ISoftDelete
     public List<ClientCorsOrigin> AllowedCorsOrigins { get; private set; } = new();
 
     public List<ClientProperty> Properties { get; private set; } = new();
+    //public IReadOnlyCollection<ClientProperty> Properties => properties;
+
+    //private List<ClientProperty> properties = new();
 
     public DateTime? LastAccessed { get; private set; }
 

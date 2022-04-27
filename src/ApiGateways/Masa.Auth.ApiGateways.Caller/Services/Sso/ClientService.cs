@@ -11,7 +11,12 @@ public class ClientService : ServiceBase
 
     public async Task<PaginationDto<ClientDto>> GetListAsync(GetClientPaginationDto clientPaginationDto)
     {
-        return await GetAsync<PaginationDto<ClientDto>>("GetList", clientPaginationDto);
+        return await GetAsync<GetClientPaginationDto, PaginationDto<ClientDto>>("GetList", clientPaginationDto);
+    }
+
+    public async Task<ClientDetailDto> GetDetailAsync(int id)
+    {
+        return await GetAsync<ClientDetailDto>($"{nameof(GetDetailAsync)}?id={id}");
     }
 
     public async Task<List<ClientTypeDetailDto>> GetClientTypeListAsync()
@@ -26,7 +31,7 @@ public class ClientService : ServiceBase
 
     public async Task UpdateClientAsync(ClientDetailDto clientDetailDto)
     {
-        await PostAsync(nameof(AddClientAsync), clientDetailDto);
+        await PostAsync(nameof(UpdateClientAsync), clientDetailDto);
     }
 
     public async Task RemoveClientAsync(int id)

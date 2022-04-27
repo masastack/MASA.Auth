@@ -56,6 +56,8 @@ public class ClientDetailDto : ClientAddDto
     public string PairWiseSubjectSalt { get; set; } = string.Empty;
 
     public bool AllowAccessTokensViaBrowser { get; set; }
+
+    public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
     #endregion
 
     #region Device Flow
@@ -65,8 +67,6 @@ public class ClientDetailDto : ClientAddDto
     #endregion
 
     #region Client Credentials
-    public bool RequireClientSecret { get; set; }
-
     public List<ClientSecretDto> ClientSecrets { get; set; } = new();
     #endregion
 
@@ -78,5 +78,9 @@ public class ClientDetailDto : ClientAddDto
 
     #region AllowedScopes
     public List<string> AllowedScopes { get; set; } = new();
+    #endregion
+
+    #region Properties
+    public List<ClientPropertyDto> Properties { get; set; } = new();
     #endregion
 }

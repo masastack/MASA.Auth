@@ -24,9 +24,21 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public bool IsDeleted { get; private set; }
 
-    private List<PermissionRelation> permissions = new();
+    private List<Permission> childPermissions = new();
 
-    public IReadOnlyCollection<PermissionRelation> Permissions => permissions;
+    public IReadOnlyCollection<Permission> ChildPermissions => childPermissions;
+
+    private List<PermissionRelation> childPermissionRelations = new();
+
+    public IReadOnlyCollection<PermissionRelation> ChildPermissionRelations => childPermissionRelations;
+
+    private List<Permission> parentPermissions = new();
+
+    public IReadOnlyCollection<Permission> ParentPermissions => parentPermissions;
+
+    private List<PermissionRelation> parentPermissionRelations = new();
+
+    public IReadOnlyCollection<PermissionRelation> ParentPermissionRelations => parentPermissionRelations;
 
     private List<RolePermission> rolePermissions = new();
 
@@ -64,9 +76,9 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         {
             throw new UserFriendlyException("current permission can`t delete,some user used!");
         }
-        if (permissions.Any())
+        if (parentPermissionRelations.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,because PermissionItems not empty!");
+            throw new UserFriendlyException("current permission can`t delete,because relation by other permisson!");
         }
     }
 
@@ -76,9 +88,10 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
+        childPermissionRelations.Clear();
         foreach (var childId in childrenId)
         {
-            permissions.Add(new PermissionRelation(childId));
+            childPermissionRelations.Add(new PermissionRelation(Id, childId));
         }
     }
 

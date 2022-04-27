@@ -2,4 +2,5 @@
 
 public interface IClientRepository : IRepository<Client, int>
 {
+    Task<Client> GetByIdAsync(int id);
 }
