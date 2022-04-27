@@ -17,7 +17,7 @@ public partial class EnumSelect<TValue> where TValue : struct, Enum
     [Parameter]
     public EventCallback<TValue> ValueChanged { get; set; }
 
-    public List<KeyValuePair<string, TValue>> KeyValues { get; set; } = new ();
+    public List<KeyValuePair<string, TValue>> KeyValues { get; set; } = new();
 
     protected override void OnInitialized()
     {

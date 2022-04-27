@@ -17,7 +17,7 @@ public partial class BooleanSelect
     [Parameter]
     public EventCallback<bool?> ValueChanged { get; set; }
 
-    public List<KeyValuePair<string, bool>> KeyValues { get; set; } = new ();
+    public List<KeyValuePair<string, bool>> KeyValues { get; set; } = new();
 
     protected override void OnInitialized()
     {

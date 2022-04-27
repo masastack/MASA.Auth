@@ -11,7 +11,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
         builder.HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId);
         builder.HasOne(s => s.Position).WithOne().HasForeignKey<Staff>(s => s.PositionId);
         builder.HasMany(s => s.DepartmentStaffs).WithOne(a => a.Staff).HasForeignKey(ds => ds.StaffId);
-        builder.HasMany(s => s.TeamStaffs).WithOne().HasForeignKey(ts => ts.StaffId);      
+        builder.HasMany(s => s.TeamStaffs).WithOne().HasForeignKey(ts => ts.StaffId);
     }
 }
 
