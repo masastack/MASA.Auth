@@ -35,7 +35,7 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(roles.Total, roles.Result.Select(r => new RoleDto(r.Id, r.Name, r.Limit, r.Description, r.Enabled, r.CreationTime, r.ModificationTime, r.CreatorUser?.Name ?? "", r.ModifierUser?.Name ?? "")).ToList());
+        query.Result = new(roles.Total, roles.Result.Select(r => new RoleDto(r.Id, r.Name, r.Limit, r.Description, r.Enabled, r.CreationTime, r.ModificationTime, r.CreateUser?.Name ?? "", r.ModifyUser?.Name ?? "")).ToList());
     }
 
     [EventHandler]
@@ -48,7 +48,7 @@ public class QueryHandler
             role.Permissions.Select(rp => rp.Id).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
-            new(), new(), role.CreationTime, role.ModificationTime, role.CreatorUser?.Name ?? "", role.ModifierUser?.Name ?? "", role.AvailableQuantity);
+            new(), new(), role.CreationTime, role.ModificationTime, role.CreateUser?.Name ?? "", role.ModifyUser?.Name ?? "", role.AvailableQuantity);
     }
 
     [EventHandler]

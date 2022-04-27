@@ -7,8 +7,8 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     private List<RoleRelation> _parentRoles = new();
     private List<UserRole> _users = new();
     private List<TeamRole> _teams = new();
-    private User? _creatorUser;
-    private User? _modifierUser;
+    private User? _createUser;
+    private User? _modifyUser;
     private int _limit;
 
     public string Name { get; private set; }
@@ -43,9 +43,9 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public IReadOnlyCollection<TeamRole> Teams => _teams;
 
-    public User? CreatorUser => _creatorUser ?? LazyLoader?.Load(this, ref _creatorUser);
+    public User? CreateUser => _createUser ?? LazyLoader?.Load(this, ref _createUser);
 
-    public User? ModifierUser => _modifierUser ?? LazyLoader?.Load(this, ref _modifierUser);
+    public User? ModifyUser => _modifyUser ?? LazyLoader?.Load(this, ref _modifyUser);
 
     private ILazyLoader? LazyLoader { get; set; }
 

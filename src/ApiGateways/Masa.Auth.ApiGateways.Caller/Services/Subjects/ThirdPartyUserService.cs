@@ -9,14 +9,14 @@ public class ThirdPartyUserService : ServiceBase
         BaseUrl = "api/thirdPartyUser/";
     }
 
-    public async Task<PaginationDto<ThirdPartyUserDto>> GetThirdPartyUsersAsync(GetThirdPartyUsersDto request)
+    public async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(GetThirdPartyUsersDto request)
     {
-        return await SendAsync<GetThirdPartyUsersDto, PaginationDto<ThirdPartyUserDto>>(nameof(GetThirdPartyUsersAsync), request);
+        return await SendAsync<GetThirdPartyUsersDto, PaginationDto<ThirdPartyUserDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<ThirdPartyUserDetailDto> GetThirdPartyUserDetailAsync(Guid id)
+    public async Task<ThirdPartyUserDetailDto> GetDetailAsync(Guid id)
     {
-        return await SendAsync<object, ThirdPartyUserDetailDto>(nameof(GetThirdPartyUserDetailAsync), new { id });
+        return await SendAsync<object, ThirdPartyUserDetailDto>(nameof(GetDetailAsync), new { id });
     }
 }
 

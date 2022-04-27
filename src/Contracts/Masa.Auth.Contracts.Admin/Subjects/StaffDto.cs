@@ -12,28 +12,16 @@ public class StaffDto
 
     public bool Enabled { get; private set; }
 
-    public string Name { get; set; }
+    public UserDto User { get; set; }
 
-    public string DisplayName { get; set; }
-
-    public string Avatar { get; set; }
-
-    public string PhoneNumber { get; set; }
-
-    public string Email { get; set; }
-
-    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
+    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, UserDto user)
     {
         Id = id;
         Department = department;
         Position = position;
         JobNumber = jobNumber;
         Enabled = enabled;
-        Name = name;
-        DisplayName = displayName;
-        Avatar = avatar;
-        PhoneNumber = phoneNumber;
-        Email = email;
+        User = user;
     }
 }
 

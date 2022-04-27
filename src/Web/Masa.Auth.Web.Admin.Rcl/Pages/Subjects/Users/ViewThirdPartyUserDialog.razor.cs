@@ -31,7 +31,7 @@ public partial class ViewThirdPartyUserDialog
     {
         if (Visible)
         {
-            ThirdPartyUser = await ThirdPartyUserService.GetThirdPartyUserDetailAsync(ThirdPartyUserId);
+            ThirdPartyUser = await ThirdPartyUserService.GetDetailAsync(ThirdPartyUserId);
         }
     }
 

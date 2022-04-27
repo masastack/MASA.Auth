@@ -105,7 +105,7 @@ public partial class ThirdPartyUser
     {
         Loading = true;
         var request = new GetThirdPartyUsersDto(Page, PageSize, UserId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
-        var response = await ThirdPartyUserService.GetThirdPartyUsersAsync(request);
+        var response = await ThirdPartyUserService.GetListAsync(request);
         ThirdPartyUsers = response.Items;
         Total = response.Total;
         Loading = false;

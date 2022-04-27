@@ -110,7 +110,7 @@ public class QueryHandler
                                .ToListAsync();
 
         query.Result = new(total, staffs.Select(s =>
-           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)
+           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled && s.User.Enabled, s.User)
        ).ToList());
     }
 

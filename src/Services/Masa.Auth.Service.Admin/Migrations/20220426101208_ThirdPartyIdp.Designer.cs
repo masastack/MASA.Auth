@@ -4,6 +4,7 @@ using Masa.Auth.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220426101208_ThirdPartyIdp")]
+    partial class ThirdPartyIdp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,6 +255,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Creator")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CreatorUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -272,15 +277,18 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ModifierUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creator");
+                    b.HasIndex("CreatorUserId");
 
-                    b.HasIndex("Modifier");
+                    b.HasIndex("ModifierUserId");
 
                     b.ToTable("Role", "permissions");
                 });
@@ -1897,19 +1905,17 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreatorUser")
                         .WithMany()
-                        .HasForeignKey("Creator")
-                        .IsRequired();
+                        .HasForeignKey("CreatorUserId");
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifierUser")
                         .WithMany()
-                        .HasForeignKey("Modifier")
-                        .IsRequired();
+                        .HasForeignKey("ModifierUserId");
 
-                    b.Navigation("CreateUser");
+                    b.Navigation("CreatorUser");
 
-                    b.Navigation("ModifyUser");
+                    b.Navigation("ModifierUser");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RolePermission", b =>
