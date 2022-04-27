@@ -4,13 +4,13 @@ public class ApiScopeEntityTypeConfiguration : IEntityTypeConfiguration<ApiScope
 {
     public void Configure(EntityTypeBuilder<ApiScope> builder)
     {
-        builder.ToTable(nameof(ApiScope), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.ToTable(nameof(ApiScope), AuthDbContext.SSO_SCHEMA).HasKey(apiScope => apiScope.Id);
+        builder.HasIndex(apiScope => apiScope.Name).IsUnique();
 
-        builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.DisplayName).HasMaxLength(200);
-        builder.Property(x => x.Description).HasMaxLength(1000);
+        builder.Property(apiScope => apiScope.Name).HasMaxLength(200).IsRequired();
+        builder.Property(apiScope => apiScope.DisplayName).HasMaxLength(200);
+        builder.Property(apiScope => apiScope.Description).HasMaxLength(1000);
 
-        builder.HasMany(x => x.UserClaims).WithOne(x => x.Scope).HasForeignKey(x => x.ScopeId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(apiScope => apiScope.UserClaims).WithOne(apiScope => apiScope.ApiScope).HasForeignKey(apiScope => apiScope.ApiScopeId).IsRequired().OnDelete(DeleteBehavior.Cascade);
     }
 }

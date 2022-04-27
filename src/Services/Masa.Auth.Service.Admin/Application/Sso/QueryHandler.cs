@@ -4,11 +4,13 @@ public class QueryHandler
 {
     readonly ISsoClientRepository _ssoClientRepository;
     readonly IIdentityResourceRepository _identityResourceRepository;
+    readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(ISsoClientRepository ssoClientRepository, IIdentityResourceRepository identityResourceRepository)
+    public QueryHandler(ISsoClientRepository ssoClientRepository, IIdentityResourceRepository identityResourceRepository, AuthDbContext authDbContext)
     {
         _ssoClientRepository = ssoClientRepository;
         _identityResourceRepository = identityResourceRepository;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler]
@@ -57,7 +59,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetIdentityResourceDetailAsync(IdentityResourceDetailQuery query)
     {
-        var idrs = await _identityResourceRepository.GetDetailByIdAsync(query.IdentityResourceId);
+        var idrs = await _identityResourceRepository.GetDetailAsync(query.IdentityResourceId);
         if (idrs is null) throw new UserFriendlyException("This identityResource data does not exist");
 
         query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.Id).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
@@ -66,7 +68,11 @@ public class QueryHandler
     [EventHandler]
     public async Task GetIdentityResourceSelectAsync(IdentityResourceSelectQuery query)
     {
-        query.Result = await _identityResourceRepository.GetIdentityResourceSelect();
+        var idrs = await _authDbContext.Set<IdentityResource>()
+                                .Select(idrs => new IdentityResourceSelectDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description))
+                                .ToListAsync();
+
+        query.Result = idrs;
     }
 
     #endregion

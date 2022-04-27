@@ -4,8 +4,6 @@ public class IdentityResourceClaimEntityTypeConfiguration : IEntityTypeConfigura
 {
     public void Configure(EntityTypeBuilder<IdentityResourceClaim> builder)
     {
-        builder.ToTable(nameof(IdentityResourceClaim), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
-
-        builder.Property(x => x.Type).HasMaxLength(200).IsRequired();
+        builder.ToTable(nameof(IdentityResourceClaim), AuthDbContext.SSO_SCHEMA).HasKey(identityResourceClaim => identityResourceClaim.Id);
     }
 }

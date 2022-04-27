@@ -4,7 +4,7 @@ public class AddIdentityResourceValidator : AbstractValidator<AddIdentityResourc
 {
     public AddIdentityResourceValidator()
     {
-        RuleFor(user => user.Name).Required();
+        RuleFor(identityResource => identityResource.Name).Required();
     }
 }
 

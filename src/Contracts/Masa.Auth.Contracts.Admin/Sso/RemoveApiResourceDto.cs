@@ -1,10 +1,10 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Sso;
 
-public class RemoveIdentityResourceDto
+public class RemoveApiResourceDto
 {
     public int Id { get; set; }
 
-    public RemoveIdentityResourceDto(int id)
+    public RemoveApiResourceDto(int id)
     {
         Id = id;
     }

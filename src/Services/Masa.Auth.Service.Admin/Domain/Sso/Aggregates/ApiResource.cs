@@ -22,7 +22,7 @@ public class ApiResource : AuditAggregateRoot<int, Guid>, ISoftDelete
 
     public List<ApiResourceSecret> Secrets { get; private set; } = new();
 
-    public List<ApiResourceScope> Scopes { get; private set; } = new();
+    public List<ApiResourceScope> ApiScopes { get; private set; } = new();
 
     public List<ApiResourceClaim> UserClaims { get; private set; } = new();
 

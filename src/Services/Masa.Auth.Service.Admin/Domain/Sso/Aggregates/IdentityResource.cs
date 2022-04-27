@@ -39,7 +39,7 @@ public class IdentityResource : AuditAggregateRoot<int, Guid>, ISoftDelete
     public void BindUserClaims(List<int> userClaims)
     {
         UserClaims.Clear();
-        //Todo add UserClaims;
+        UserClaims.AddRange(userClaims.Select(id => new IdentityResourceClaim(id)));
     }
 
     public void BindProperties(Dictionary<string, string> properties)
