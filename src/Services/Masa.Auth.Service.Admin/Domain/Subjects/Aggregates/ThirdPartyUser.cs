@@ -5,18 +5,15 @@ public class ThirdPartyUser : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     private User? _user;
     private User? _createUser;
     private User? _modifyUser;
-
     private ThirdPartyIdp? _thirdPartyIdp;
 
     public bool IsDeleted { get; private set; }
 
     public User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
-    [MaybeNull]
-    public User CreateUser => _createUser ?? LazyLoader?.Load(this, ref _createUser);
+    public User? CreateUser => _createUser;
 
-    [MaybeNull]
-    public User ModifyUser => _modifyUser ?? LazyLoader?.Load(this, ref _modifyUser);
+    public User? ModifyUser => _modifyUser;
 
     public ThirdPartyIdp ThirdPartyIdp => _thirdPartyIdp ?? LazyLoader?.Load(this, ref _thirdPartyIdp) ?? throw new UserFriendlyException("Failed to get thirdPartyIdp data");
 

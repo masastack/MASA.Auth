@@ -4,6 +4,7 @@ using Masa.Auth.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220427035302_StaffPsoitionNullLabel")]
+    partial class StaffPsoitionNullLabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1373,20 +1375,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creator");
-
                     b.HasIndex("JobNumber")
                         .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
-
-                    b.HasIndex("Modifier");
 
                     b.HasIndex("PositionId")
                         .IsUnique()
                         .HasFilter("[PositionId] IS NOT NULL");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Staff", "subjects");
                 });
@@ -1905,11 +1902,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
                         .WithMany()
-                        .HasForeignKey("Creator");
+                        .HasForeignKey("Creator")
+                        .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
                         .WithMany()
-                        .HasForeignKey("Modifier");
+                        .HasForeignKey("Modifier")
+                        .IsRequired();
 
                     b.Navigation("CreateUser");
 
@@ -2142,27 +2141,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
-                        .WithMany()
-                        .HasForeignKey("Creator");
-
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
-                        .WithMany()
-                        .HasForeignKey("Modifier");
-
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Position", "Position")
                         .WithOne()
                         .HasForeignKey("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "PositionId");
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
-                        .WithOne()
-                        .HasForeignKey("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CreateUser");
-
-                    b.Navigation("ModifyUser");
 
                     b.Navigation("Position");
 

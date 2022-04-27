@@ -19,14 +19,12 @@ public class UpdateStaffDomainEventHandler
     }
 
     [EventHandler(2)]
-    public async Task AddPositionAsync(UpdateStaffDomainEvent staffEvent)
+    public async Task AddOrUpdatePositionAsync(UpdateStaffDomainEvent staffEvent)
     {
-        var position = staffEvent.Staff.Position;
-        if (position.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(staffEvent.Staff.Position.Name) is false)
         {
-            var command = new AddPositionCommand(new AddPositionDto(position.Name));
+            var command = new AddOrUpdatePositionCommand(staffEvent.Staff.Position);
             await _eventBus.PublishAsync(command);
-            position.Id = command.PositionId;
         }
     }
 

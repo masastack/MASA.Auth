@@ -21,15 +21,9 @@ public class PositionService : RestServiceBase
         return query.Result;
     }
 
-    private async Task AddAsync(IEventBus eventBus,
-        [FromBody] AddPositionDto position)
+    private async Task AddOrUpdateAsync(IEventBus eventBus,
+        [FromBody] AddOrUpdatePositionDto position)
     {
-        await eventBus.PublishAsync(new AddPositionCommand(position));
-    }
-
-    private async Task UpdateAsync(IEventBus eventBus,
-        [FromBody] UpdatePositionDto position)
-    {
-        await eventBus.PublishAsync(new UpdatePositionCommand(position));
+        await eventBus.PublishAsync(new AddOrUpdatePositionCommand(position));
     }
 }

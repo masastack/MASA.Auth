@@ -9,10 +9,10 @@ public class StaffRepository : Repository<AuthDbContext, Staff, Guid>, IStaffRep
 
     public async Task<Staff?> FindAsync(Expression<Func<Staff, bool>> predicate)
     {
-        var staff = await Context.Set<Staff>().Include(s => s.DepartmentStaffs)
-                                        .Include(s => s.TeamStaffs)
-                                        .Include(s => s.Position)
-                                        .FirstOrDefaultAsync(predicate);
+        var staff = await Context.Set<Staff>()
+                                .Include(s => s.DepartmentStaffs)
+                                .Include(s => s.TeamStaffs)
+                                .FirstOrDefaultAsync(predicate);
 
         return staff;
     }

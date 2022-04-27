@@ -56,22 +56,25 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task AddPosition(AddPositionCommand command)
+    public async Task AddOrUpdatePosition(AddOrUpdatePositionCommand command)
     {
-        var position = new Position(command.Position.Name);
-        await _positionRepository.AddAsync(position);
-        command.PositionId = position.Id;
-    }
-
-    [EventHandler]
-    public async Task UpdatePosition(UpdatePositionCommand command)
-    {
-        var position = await _positionRepository.FindAsync(p => p.Id == command.Positioon.Id);
+        var positionDto = command.Position;
+        var exist = await _positionRepository.GetCountAsync(p => p.Name == positionDto.Name) > 0;
+        if (exist) throw new UserFriendlyException($"Position with name {positionDto.Name} already exists");
+        
+        var position = await _positionRepository.FindAsync(p => p.Id == positionDto.Id);
         if (position is null)
-            throw new UserFriendlyException("The current position does not exist");
+        {                       
+            position = new Position(command.Position.Name);
+            await _positionRepository.AddAsync(position);
+        }
+        else
+        {
+            position.Update(command.Position.Name);
+            await _positionRepository.UpdateAsync(position);
+        }
 
-        position.Update(command.Positioon.Name);
-        await _positionRepository.UpdateAsync(position);
+        command.Position.Id = position.Id;
     }
 }
 

@@ -100,34 +100,36 @@ public class QueryHandler
         }
         var staffQuery = _authDbContext.Set<Staff>().Where(condition);
         var total = await staffQuery.LongCountAsync();
-        var staffs = await staffQuery.Include(s => s.DepartmentStaffs)
-                               .ThenInclude(ds => ds.Department)
-                               .Include(s => s.Position)
-                               .OrderByDescending(s => s.ModificationTime)
-                               .ThenByDescending(s => s.CreationTime)
-                               .Skip((query.Page - 1) * query.PageSize)
-                               .Take(query.PageSize)
-                               .ToListAsync();
+        var staffs = await staffQuery.Include(s => s.User)
+                                   .Include(s => s.DepartmentStaffs)
+                                   .ThenInclude(ds => ds.Department)
+                                   .Include(s => s.Position)
+                                   .OrderByDescending(s => s.ModificationTime)
+                                   .ThenByDescending(s => s.CreationTime)
+                                   .Skip((query.Page - 1) * query.PageSize)
+                                   .Take(query.PageSize)
+                                   .ToListAsync();
 
-        query.Result = new(total, staffs.Select(s =>
-           new StaffDto(s.Id, s.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "", s.User.Position, s.JobNumber, s.Enabled && s.User.Enabled, s.User)
-       ).ToList());
+        query.Result = new(total, staffs.Select(staff => (StaffDto)staff).ToList());
     }
 
     [EventHandler]
     public async Task GetStaffDetailAsync(StaffDetailQuery query)
     {
-        var staff = await _staffRepository.FindAsync(s => s.Id == query.StaffId);
+        var staff = await _authDbContext.Set<Staff>()
+                                        .Include(s => s.DepartmentStaffs)
+                                        .Include(s => s.TeamStaffs)
+                                        .Include(s => s.Position)
+                                        .Include(s => s.CreateUser)
+                                        .Include(s => s.ModifyUser)
+                                        .FirstOrDefaultAsync(s => s.Id == query.StaffId);
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
-        var creator = await _authDbContext.Set<User>().Select(s => new { Id = s.Id, Name = s.Name }).FirstOrDefaultAsync(s => s.Id == staff.Creator);
-        var modifier = await _authDbContext.Set<User>().Select(s => new { Id = s.Id, Name = s.Name }).FirstOrDefaultAsync(s => s.Id == staff.Modifier);
-        var teams = staff.TeamStaffs.Select(ts => ts.TeamId).ToList();
-        var department = staff.DepartmentStaffs.FirstOrDefault()?.DepartmentId ?? default;
         var userDetailQuery = new UserDetailQuery(staff.UserId);
         await _eventBus.PublishAsync(userDetailQuery);
 
-        query.Result = new(staff.Id, department, staff.PositionId, staff.JobNumber, staff.Enabled, staff.StaffType, teams, userDetailQuery.Result, creator?.Name ?? "", modifier?.Name ?? "", staff.CreationTime, staff.ModificationTime);
+        query.Result = staff;
+        query.Result.User = userDetailQuery.Result;
     }
 
     [EventHandler]
@@ -163,13 +165,13 @@ public class QueryHandler
 
         var tpuQuery = _authDbContext.Set<ThirdPartyUser>().Where(condition);
         var total = await tpuQuery.LongCountAsync();
-        var tpus = await tpuQuery.Include(tpu => tpu.User)
-                                   .Include(tpu => tpu.ThirdPartyIdp)
-                                   .OrderByDescending(s => s.ModificationTime)
-                                   .ThenByDescending(s => s.CreationTime)
-                                   .Skip((query.Page - 1) * query.PageSize)
-                                   .Take(query.PageSize)
-                                   .ToListAsync();
+        var tpus = await tpuQuery.Include(tpu => tpu.CreateUser)
+                                 .Include(tpu => tpu.ModifyUser)
+                                 .OrderByDescending(s => s.ModificationTime)
+                                 .ThenByDescending(s => s.CreationTime)
+                                 .Skip((query.Page - 1) * query.PageSize)
+                                 .Take(query.PageSize)
+                                 .ToListAsync();
 
         query.Result = new(total, tpus.Select(tpu => (ThirdPartyUserDto)tpu).ToList());
     }
@@ -177,7 +179,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetThirdPartyUserDetailAsync(ThirdPartyUserDetailQuery query)
     {
-        var tpu = await _thirdPartyUserRepository.FindAsync(u => u.Id == query.ThirdPartyUserId);
+        var tpu = await _thirdPartyUserRepository.GetDetail(query.ThirdPartyUserId);
         if (tpu is null) throw new UserFriendlyException("This thirdPartyUser data does not exist");
 
         query.Result = tpu;
