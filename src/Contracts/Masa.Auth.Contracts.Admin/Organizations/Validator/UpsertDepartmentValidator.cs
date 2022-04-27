@@ -4,6 +4,6 @@ public class UpsertDepartmentValidator : AbstractValidator<UpsertDepartmentDto>
 {
     public UpsertDepartmentValidator()
     {
-        
+
     }
 }

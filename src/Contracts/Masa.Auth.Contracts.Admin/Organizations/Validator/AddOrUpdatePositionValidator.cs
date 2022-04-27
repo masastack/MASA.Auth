@@ -4,6 +4,6 @@ public class AddOrUpdatePositionValidator : AbstractValidator<AddOrUpdatePositio
 {
     public AddOrUpdatePositionValidator()
     {
-        RuleFor(p => p.Name).Required();      
+        RuleFor(p => p.Name).Required();
     }
 }

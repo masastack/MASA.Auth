@@ -61,10 +61,10 @@ public class CommandHandler
         var positionDto = command.Position;
         var exist = await _positionRepository.GetCountAsync(p => p.Name == positionDto.Name) > 0;
         if (exist) throw new UserFriendlyException($"Position with name {positionDto.Name} already exists");
-        
+
         var position = await _positionRepository.FindAsync(p => p.Id == positionDto.Id);
         if (position is null)
-        {                       
+        {
             position = new Position(command.Position.Name);
             await _positionRepository.AddAsync(position);
         }
