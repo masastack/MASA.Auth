@@ -2,6 +2,11 @@
 
 public class ApiResource : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
+    private List<ApiResourceSecret> _secrets = new();
+    private List<ApiResourceScope> _apiScopes = new();
+    private List<ApiResourceClaim> _userClaims = new();
+    private List<ApiResourceProperty> _properties = new();
+
     public bool IsDeleted { get; private set; }
 
     public bool Enabled { get; private set; }
@@ -20,13 +25,13 @@ public class ApiResource : AuditAggregateRoot<int, Guid>, ISoftDelete
 
     public bool NonEditable { get; private set; }
 
-    public List<ApiResourceSecret> Secrets { get; private set; } = new();
+    public IReadOnlyCollection<ApiResourceSecret> Secrets => _secrets;
 
-    public List<ApiResourceScope> ApiScopes { get; private set; } = new();
+    public IReadOnlyCollection<ApiResourceScope> ApiScopes => _apiScopes;
 
-    public List<ApiResourceClaim> UserClaims { get; private set; } = new();
+    public IReadOnlyCollection<ApiResourceClaim> UserClaims => _userClaims;
 
-    public List<ApiResourceProperty> Properties { get; private set; } = new();
+    public IReadOnlyCollection<ApiResourceProperty> Properties => _properties;
 
     public ApiResource(string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable, bool enabled)
     {
@@ -64,20 +69,20 @@ public class ApiResource : AuditAggregateRoot<int, Guid>, ISoftDelete
 
     public void BindUserClaims(List<int> userClaims)
     {
-        UserClaims.Clear();
-        UserClaims.AddRange(userClaims.Select(id => new ApiResourceClaim(id)));
+        _userClaims.Clear();
+        _userClaims.AddRange(userClaims.Select(id => new ApiResourceClaim(id)));
     }
 
     public void BindProperties(Dictionary<string, string> properties)
     {
-        Properties.Clear();
+        _properties.Clear();
         //Todo add Properties;
     }
 
     public void BindApiScopes(List<int> apiScopes)
     {
-        ApiScopes.Clear();
-        ApiScopes.AddRange(apiScopes.Select(id => new ApiResourceScope(id)));
+        _apiScopes.Clear();
+        _apiScopes.AddRange(apiScopes.Select(id => new ApiResourceScope(id)));
     }
 }
 
