@@ -10,8 +10,8 @@ public class UpdateUserAuthorizationDto
 
     public UpdateUserAuthorizationDto()
     {
-        Roles = new ();
-        Permissions = new ();
+        Roles = new();
+        Permissions = new();
     }
 
     public UpdateUserAuthorizationDto(Guid id, List<Guid> roles, List<UserPermissionDto> permissions)

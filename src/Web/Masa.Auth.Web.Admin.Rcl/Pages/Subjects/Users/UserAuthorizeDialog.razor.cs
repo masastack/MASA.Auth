@@ -41,9 +41,9 @@ public partial class UserAuthorizeDialog
         }
     }
 
-    private void PermissionsChanged(Dictionary<Guid,bool> permissiionMap)
+    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
     {
-        Authorization.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key,kv.Value))
+        Authorization.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value))
                                                    .ToList();
     }
 
