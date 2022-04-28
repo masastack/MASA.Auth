@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(options =>
 //        });
 //    }
 //);
+MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
 builder.Services.AddPmClient(callerOption =>

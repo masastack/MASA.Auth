@@ -4,6 +4,8 @@ public class Client : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
     public bool IsDeleted { get; private set; }
 
+    public ClientTypes ClientType { get; private set; }
+
     public bool Enabled { get; private set; } = true;
 
     public string ClientId { get; private set; } = string.Empty;

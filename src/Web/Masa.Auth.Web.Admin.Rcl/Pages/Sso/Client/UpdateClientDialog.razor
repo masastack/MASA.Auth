@@ -1,0 +1,35 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Create Client")" ContentClass="px-sheet-dialog">
+    <ElevationTab Dense Class="pt-12 full-height" Headers='_tabHeader' TabWindowClass="mt-8">
+        <ElevationTabItem>
+            <MCard Class="d-flex flex-column full-height">
+                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Basics @bind-Dto="_basicDto"/>
+            </MCard>
+        </ElevationTabItem>
+        <ElevationTabItem>
+            <MCard Class="d-flex flex-column full-height">
+                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Consent @bind-Dto="_consentDto"/>
+            </MCard>
+        </ElevationTabItem>
+        <ElevationTabItem>
+            <MCard Class="d-flex flex-column full-height">
+                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Authentication @bind-Dto="_authenticationDto"/>
+            </MCard>
+        </ElevationTabItem>
+        <ElevationTabItem>
+            <MCard Class="d-flex flex-column full-height">
+                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScope />
+            </MCard>
+        </ElevationTabItem>
+        <ElevationTabItem>
+            <MCard Class="d-flex flex-column full-height">
+                <DynamicComponent Type="@_otherType" Parameters="_componentMetadata"/>
+            </MCard>
+        </ElevationTabItem>
+    </ElevationTab>
+    <div style="margin-top: -72px;" class="d-flex justify-space-between">
+        <MButton OnClick="DeleteAsync" Text Color="error">Delete</MButton>
+        <MButton OnClick="SaveAsync">Save</MButton>
+    </div>
+</SheetDialog>

@@ -9,9 +9,9 @@
     <MCol Md="@("auto")">
         <MCard style="width:300px;" Class="full-height">
             <MCardTitle>
-                <ClickedExtend>
+                <SearchableExtend>
                     @T("Department Management")
-                </ClickedExtend>
+                </SearchableExtend>
             </MCardTitle>
             <MCardText>
                 <MTreeview @bind-Active="_active"
@@ -141,7 +141,7 @@
                                 }
                             </ItemColContent>
                             <FooterContent>
-                                <SimpleDataTableFooter Class="mb-4 mt-2" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
+                                <DataTableFooter Class="mb-4 mt-2" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
                             </FooterContent>
                         </MDataTable>
                     </MCardText>

@@ -3,14 +3,14 @@
 
 <MRow Class="full-height">
     <MCol Md="@("auto")" Class="d-flex flex-column">
-        <ClickedExtend Split=true MaxWidth=300>
+        <SearchableExtend Split=true MaxWidth=300>
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
                            Solo Dense Class="elevation-0"
                            Items="@_projectItems"
                            ItemText="u => u.Name"
                            ItemValue="u => u.Identity"></MAutocomplete>
-        </ClickedExtend>
+        </SearchableExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
             <ElevationTab TabMinWidth="120" TabWindowClass="mt-4" Headers='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
                 <ElevationTabItem>

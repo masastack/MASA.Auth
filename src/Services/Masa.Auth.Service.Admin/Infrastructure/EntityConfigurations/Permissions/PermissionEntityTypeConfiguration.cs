@@ -15,10 +15,24 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
             v => v.ToString(),
             v => (PermissionTypes)Enum.Parse(typeof(PermissionTypes), v)
         );
-        builder.HasMany(p => p.Permissions).WithOne(pi => pi.ChildPermission).HasForeignKey(pi => pi.ChildPermissionId);
         builder.HasMany(p => p.RolePermissions).WithOne(rp => rp.Permission);
         builder.HasMany(p => p.UserPermissions).WithOne(up => up.Permission);
         builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission);
+        builder.HasMany(p => p.ParentPermissions).WithMany(pi => pi.ChildPermissions)
+            .UsingEntity<PermissionRelation>(
+                    cr => cr
+                    .HasOne(pr => pr.ParentPermission)
+                    .WithMany(p => p.ChildPermissionRelations)
+                    .HasForeignKey(pr => pr.ParentPermissionId),
+                    cl => cl
+                    .HasOne(pr => pr.ChildPermission)
+                    .WithMany(p => p.ParentPermissionRelations)
+                    .HasForeignKey(pr => pr.ChildPermissionId),
+                    cj =>
+                    {
+                        cj.HasKey(pr => pr.Id);
+                        cj.HasIndex(pr => new { pr.ParentPermissionId, pr.ChildPermissionId }).IsUnique().HasFilter("[IsDeleted] = 0");
+                    });
     }
 }
 
