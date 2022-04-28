@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Sso;
 
-public class ClientAddDto
+public class AddClientDto
 {
     #region Basic
     public ClientTypes ClientType { get; set; }

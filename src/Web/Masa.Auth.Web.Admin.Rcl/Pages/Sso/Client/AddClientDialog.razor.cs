@@ -11,7 +11,7 @@ public partial class AddClientDialog
     [Parameter]
     public EventCallback OnSuccessed { get; set; }
 
-    ClientAddDto _clientAddDto = new();
+    AddClientDto _addClientDto = new();
     ClientBasicDto _basicDto = new();
     ClientConsentDto _consentDto = new();
     ClientAuthenticationDto _authenticationDto = new();
@@ -20,11 +20,11 @@ public partial class AddClientDialog
 
     private async Task SaveAsync()
     {
-        _basicDto.Adapt(_clientAddDto);
-        _consentDto.Adapt(_clientAddDto);
-        _authenticationDto.Adapt(_clientAddDto);
+        _basicDto.Adapt(_addClientDto);
+        _consentDto.Adapt(_addClientDto);
+        _authenticationDto.Adapt(_addClientDto);
 
-        await ClientService.AddClientAsync(_clientAddDto);
+        await ClientService.AddClientAsync(_addClientDto);
         if (ValueChanged.HasDelegate)
         {
             await ValueChanged.InvokeAsync(false);

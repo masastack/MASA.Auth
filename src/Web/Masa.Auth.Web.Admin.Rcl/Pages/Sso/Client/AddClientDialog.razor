@@ -4,7 +4,7 @@
     <ElevationTab Dense Class="pt-12 full-height" Headers='new List<string>{"Basic","Consent Screen","Authentication","Resource"}' TabWindowClass="mt-8">
         <ElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_clientAddDto.ClientType"/>
+                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType"/>
                 <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Basics @bind-Dto="_basicDto"/>
             </MCard>
         </ElevationTabItem>

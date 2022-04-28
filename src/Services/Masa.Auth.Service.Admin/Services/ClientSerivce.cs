@@ -33,9 +33,9 @@ public class ClientSerivce : ServiceBase
         return query.Result;
     }
 
-    private async Task AddClientAsync(IEventBus eventBus, [FromBody] ClientAddDto clientAddDto)
+    private async Task AddClientAsync(IEventBus eventBus, [FromBody] AddClientDto addClientDto)
     {
-        var addCommand = new AddClientCommand(clientAddDto);
+        var addCommand = new AddClientCommand(addClientDto);
         await eventBus.PublishAsync(addCommand);
     }
 

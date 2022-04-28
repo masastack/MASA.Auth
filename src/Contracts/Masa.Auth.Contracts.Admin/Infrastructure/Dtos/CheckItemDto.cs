@@ -1,8 +1,8 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 
-public class CheckItemDto<T> : IEquatable<CheckItemDto<T>>
+public class CheckItemDto<TId> : IEquatable<CheckItemDto<TId>>
 {
-    public T Id { get; set; } = default!;
+    public TId Id { get; set; } = default!;
 
     public bool Selected { get; set; }
 
@@ -10,10 +10,10 @@ public class CheckItemDto<T> : IEquatable<CheckItemDto<T>>
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as CheckItemDto<T>);
+        return Equals(obj as CheckItemDto<TId>);
     }
 
-    public bool Equals(CheckItemDto<T>? other)
+    public bool Equals(CheckItemDto<TId>? other)
     {
         if (other is null)
         {
@@ -36,12 +36,12 @@ public class CheckItemDto<T> : IEquatable<CheckItemDto<T>>
         return DisplayValue ?? " - ";
     }
 
-    public static bool operator ==(CheckItemDto<T> left, CheckItemDto<T> right)
+    public static bool operator ==(CheckItemDto<TId> left, CheckItemDto<TId> right)
     {
-        return EqualityComparer<CheckItemDto<T>>.Default.Equals(left, right);
+        return EqualityComparer<CheckItemDto<TId>>.Default.Equals(left, right);
     }
 
-    public static bool operator !=(CheckItemDto<T> left, CheckItemDto<T> right)
+    public static bool operator !=(CheckItemDto<TId> left, CheckItemDto<TId> right)
     {
         return !(left == right);
     }

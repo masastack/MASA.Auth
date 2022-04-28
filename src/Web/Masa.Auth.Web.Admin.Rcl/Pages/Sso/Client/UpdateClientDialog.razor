@@ -22,34 +22,14 @@
                 <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScope />
             </MCard>
         </ElevationTabItem>
-        @if (_clientDetailDto.ClientType == ClientTypes.Device)
-        {
-            <ElevationTabItem>
-                <MCard Class="d-flex flex-column full-height">
-                    <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.DeviceFlow @bind-Dto="_deviceFlowDto"/>
-                </MCard>
-            </ElevationTabItem>
-        }
-        else if (_clientDetailDto.ClientType == ClientTypes.Machine)
-        {
-            <ElevationTabItem>
-                <MCard Class="d-flex flex-column full-height">
-                    <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientSecret />
-                </MCard>
-            </ElevationTabItem>
-        }
-        else
-        {
-            <ElevationTabItem>
-                <MCard Class="d-flex flex-column full-height">
-                    <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Token @bind-Dto="_tokenDto"/>
-                </MCard>
-            </ElevationTabItem>
-        }
+        <ElevationTabItem>
+            <MCard Class="d-flex flex-column full-height">
+                <DynamicComponent Type="@_otherType" Parameters="_componentParameters[_otherType.Name].Parameters"/>
+            </MCard>
+        </ElevationTabItem>
     </ElevationTab>
     <div style="margin-top: -72px;" class="d-flex justify-space-between">
         <MButton OnClick="DeleteAsync" Text Color="error">Delete</MButton>
         <MButton OnClick="SaveAsync">Save</MButton>
     </div>
-    
 </SheetDialog>

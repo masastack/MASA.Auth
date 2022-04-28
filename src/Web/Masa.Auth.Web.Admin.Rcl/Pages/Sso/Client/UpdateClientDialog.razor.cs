@@ -1,4 +1,6 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
+﻿using Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section;
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
 
 public partial class UpdateClientDialog
 {
@@ -22,19 +24,23 @@ public partial class UpdateClientDialog
     ClientAuthenticationDto _authenticationDto = new();
     ClientDeviceFlowDto _deviceFlowDto = new();
     ClientTokenDto _tokenDto = new();
+    ClientCredentialDto _clientCredentialDto = new();
+    Type _otherType = null!;
+
+    Dictionary<string, ComponentMetadata> _componentParameters = new();
 
     ClientService ClientService => AuthCaller.ClientService;
 
     public async Task ShowAsync(int clientId)
     {
         _clientDetailDto = await ClientService.GetDetailAsync(clientId);
-
-        PrepareHeader();
         _clientDetailDto.Adapt(_basicDto);
         _clientDetailDto.Adapt(_consentDto);
         _clientDetailDto.Adapt(_authenticationDto);
         _clientDetailDto.Adapt(_deviceFlowDto);
         _clientDetailDto.Adapt(_tokenDto);
+
+        PrepareHeader();
 
         if (ValueChanged.HasDelegate)
         {
@@ -52,15 +58,45 @@ public partial class UpdateClientDialog
         if (_clientDetailDto.ClientType == ClientTypes.Device)
         {
             _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Device Flow" };
+            _otherType = typeof(DeviceFlow);
         }
         else if (_clientDetailDto.ClientType == ClientTypes.Machine)
         {
             _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Client Secret" };
+            _otherType = typeof(ClientSecret);
         }
         else
         {
             _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Token" };
+            _otherType = typeof(Token);
         }
+        _componentParameters = new()
+        {
+            {
+                typeof(Token).Name,
+                new()
+                {
+                    Name = typeof(Token).Name,
+                    Parameters = new() { { "Dto", _tokenDto } }
+                }
+            },
+            {
+                typeof(ClientSecret).Name,
+                new()
+                {
+                    Name = typeof(ClientSecret).Name,
+                    Parameters = new() { { "Dto", _clientCredentialDto } }
+                }
+            },
+            {
+                typeof(DeviceFlow).Name,
+                new()
+                {
+                    Name = typeof(DeviceFlow).Name,
+                    Parameters = new() { { "Dto", _deviceFlowDto } }
+                }
+            }
+        };
     }
 
     private async Task SaveAsync()

@@ -95,9 +95,6 @@ public class Client : AuditAggregateRoot<int, Guid>, ISoftDelete
     public List<ClientCorsOrigin> AllowedCorsOrigins { get; private set; } = new();
 
     public List<ClientProperty> Properties { get; private set; } = new();
-    //public IReadOnlyCollection<ClientProperty> Properties => properties;
-
-    //private List<ClientProperty> properties = new();
 
     public DateTime? LastAccessed { get; private set; }
 

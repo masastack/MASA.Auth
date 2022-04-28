@@ -20,7 +20,7 @@ public class CommandHandler
 
         await _clientRepository.AddAsync(client);
 
-        void PrepareGrantTypeWithClientType(ClientAddDto client)
+        void PrepareGrantTypeWithClientType(AddClientDto client)
         {
             switch (client.ClientType)
             {
@@ -30,10 +30,6 @@ public class CommandHandler
                     client.RequireClientSecret = true;
                     break;
                 case ClientTypes.Spa:
-                    client.AllowedGrantTypes.AddRange(GrantTypeConsts.Code);
-                    client.RequirePkce = true;
-                    client.RequireClientSecret = false;
-                    break;
                 case ClientTypes.Native:
                     client.AllowedGrantTypes.AddRange(GrantTypeConsts.Code);
                     client.RequirePkce = true;
@@ -57,6 +53,7 @@ public class CommandHandler
     {
         var id = updateClientCommand.ClientDetailDto.Id;
         var client = await _clientRepository.GetByIdAsync(id);
+        //Contrary to DDD
         updateClientCommand.ClientDetailDto.Adapt(client);
         await _clientRepository.UpdateAsync(client);
     }
