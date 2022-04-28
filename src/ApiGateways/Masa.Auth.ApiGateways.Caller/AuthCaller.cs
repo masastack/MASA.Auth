@@ -16,6 +16,7 @@ public class AuthCaller : HttpClientCallerBase
     IdentityResourceService? _identityResourceService;
     ApiScopeService? _apiScopeService;
     ApiResourceService? _apiResourceService;
+    UserClaimService? _userClaimService;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(CallerProvider));
@@ -43,6 +44,8 @@ public class AuthCaller : HttpClientCallerBase
     public ApiScopeService ApiScopeService => _apiScopeService ?? (_apiScopeService = new(CallerProvider));
 
     public ApiResourceService ApiResourceService => _apiResourceService ?? (_apiResourceService = new(CallerProvider));
+
+    public UserClaimService UserClaimService => _userClaimService ?? (_userClaimService = new(CallerProvider));
 
     protected override string BaseAddress { get; set; }
 
