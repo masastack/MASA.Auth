@@ -34,7 +34,7 @@ public class QueryHandler
     #region IdentityResource
 
     [EventHandler]
-    public async Task GetIdentityResourceAsync(IdentityResourcesQuery query)
+    public async Task GetIdentityResourceAsync(IdentityResourceQuery query)
     {
         Expression<Func<IdentityResource, bool>> condition = idrs => true;
         if (string.IsNullOrEmpty(query.Search) is false)

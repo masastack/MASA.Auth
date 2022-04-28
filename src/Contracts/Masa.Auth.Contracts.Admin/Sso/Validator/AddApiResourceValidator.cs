@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Sso.Validator;
 
-public class AddApiResourceValidator : AbstractValidator<ApiResourceDto>
+public class AddApiResourceValidator : AbstractValidator<AddApiResourceDto>
 {
     public AddApiResourceValidator()
     {
