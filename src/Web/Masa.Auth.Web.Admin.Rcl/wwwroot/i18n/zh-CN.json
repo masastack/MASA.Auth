@@ -204,6 +204,9 @@
   "User Claims": "用户声明",
 
   "ApiScope": "Api范围",
+  "Api Scopes": "Api范围",
   "Add ApiScope": "新增Api范围",
-  "Update ApiScope": "编辑Api范围"
+  "Update ApiScope": "编辑Api范围",
+  "ApiScope.Name": "配置名称",
+  "ApiScope.Required": "是否必须"
 }

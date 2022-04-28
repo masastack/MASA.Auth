@@ -16,9 +16,9 @@ public class AddApiScopeDto
 
     public bool ShowInDiscoveryDocument { get; set; } = true;
 
-    public List<int> UserClaims { get; private set; } = new();
+    public List<int> UserClaims { get; set; } = new();
 
-    public Dictionary<string, string> Properties { get; private set; } = new();
+    public Dictionary<string, string> Properties { get; set; } = new();
 
     public AddApiScopeDto() { }
 

@@ -18,7 +18,7 @@ public class ApiScopeDetailDto : ApiScopeDto
 
     public static implicit operator UpdateApiScopeDto(ApiScopeDetailDto apiScope)
     {
-        return new UpdateApiScopeDto();
+        return new UpdateApiScopeDto(apiScope.Id, apiScope.Enabled, apiScope.Name, apiScope.DisplayName, apiScope.Description, apiScope.Required, apiScope.Emphasize, apiScope.ShowInDiscoveryDocument, apiScope.UserClaims, apiScope.Properties);
     }
 }
 

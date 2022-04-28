@@ -2,35 +2,35 @@
 
 public class AddApiResourceDto
 {
-    public bool Enabled { get; private set; } = true;
+    public bool Enabled { get; set; } = true;
 
-    public string Name { get; private set; } = "";
+    public string Name { get; set; } = "";
 
-    public string DisplayName { get; private set; } = "";
+    public string DisplayName { get; set; } = "";
 
-    public string Description { get; private set; } = "";
+    public string Description { get; set; } = "";
 
-    public string AllowedAccessTokenSigningAlgorithms { get; private set; } = "";
+    public string AllowedAccessTokenSigningAlgorithms { get; set; } = "";
 
-    public bool ShowInDiscoveryDocument { get; private set; } = true;
+    public bool ShowInDiscoveryDocument { get; set; } = true;
 
-    public DateTime? LastAccessed { get; private set; }
+    public DateTime? LastAccessed { get; set; }
 
-    public bool NonEditable { get; private set; }
+    public bool NonEditable { get; set; }
 
-    public List<int> ApiScopes { get; private set; } = new();
+    public List<int> ApiScopes { get; set; } = new();
 
-    public List<int> UserClaims { get; private set; } = new();
+    public List<int> UserClaims { get; set; } = new();
 
-    public Dictionary<string, string> Properties { get; private set; } = new();
+    public Dictionary<string, string> Properties { get; set; } = new();
 
-    public List<int> Secrets { get; private set; } = new();
+    public List<string> Secrets { get; set; } = new();
 
     public AddApiResourceDto()
     {
     }
 
-    public AddApiResourceDto(bool enabled, string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable, List<int> apiScopes, List<int> userClaims, Dictionary<string, string> properties, List<int> secrets)
+    public AddApiResourceDto(bool enabled, string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable, List<int> apiScopes, List<int> userClaims, Dictionary<string, string> properties, List<string> secrets)
     {
         Enabled = enabled;
         Name = name;

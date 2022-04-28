@@ -1,4 +1,4 @@
-﻿@page "/sso/apiScope"
+﻿@page "/sso/ApiResource"
 @inherits AdminCompontentBase
 
 <MCard Class="pa-6">
@@ -14,28 +14,25 @@
             <span class="ml-2">@T("Add")</span>
         </MButton>
     </div>
-    <MDataTable Headers="Headers" Items="ApiScopes" TItem="ApiScopeDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
+    <MDataTable Headers="Headers" Items="ApiResources" TItem="ApiResourceDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
         <HeaderColContent Context="header">
             <span class="text-btn">@header.Text</span>
         </HeaderColContent>
         <ItemColContent>
             @switch (context.Header.Value)
             {
-                case nameof(ApiScopeDto.Name):
+                case nameof(ApiResourceDto.Name):
                     <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
                         <span class="text-body3 neutral--text">@context.Item.Name</span>
                     </div>
                     break;
-                case (nameof(ApiScopeDto.DisplayName)):
+                case (nameof(ApiResourceDto.DisplayName)):
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.DisplayName</span>
                     break;
-                case nameof(ApiScopeDto.Required):
-                    <span class="text-body4 neutral-lighten-2--text">@(context.Item.Required?T("Yes"):T("No"))</span>
-                    break;
-                case (nameof(ApiScopeDto.Description)):
+                case (nameof(ApiResourceDto.Description)):
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
                     break;
-                case nameof(ApiScopeDto.Enabled):
+                case nameof(ApiResourceDto.Enabled):
                     string color = context.Item.Enabled ? "sample-green" : "error";
                     <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
                         <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
@@ -43,7 +40,7 @@
                     break;
                 case "Action":
                     <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveApiScopeDialog(context.Item)">mdi-delete</MIcon>
+                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">mdi-delete</MIcon>
                     break;
                 default:
                     <span class="text-body3">@context.Value</span>
@@ -56,5 +53,5 @@
     </MDataTable>
 </MCard>
 
-<AddApiScopeDialog @bind-Visible="AddApiScopeDialogVisible" OnSubmitSuccess=GetApiScopesAsync />
-<UpdateApiScopeDialog @bind-Visible="UpdateApiScopeDialogVisible" OnSubmitSuccess=GetApiScopesAsync />
+<AddApiResourceDialog @bind-Visible="AddApiResourceDialogVisible" OnSubmitSuccess=GetApiResourcesAsync />
+<UpdateApiResourceDialog @bind-Visible="UpdateApiResourceDialogVisible" OnSubmitSuccess=GetApiResourcesAsync />

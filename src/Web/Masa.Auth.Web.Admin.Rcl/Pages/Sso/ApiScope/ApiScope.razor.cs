@@ -75,12 +75,12 @@ public partial class ApiScope
         Loading = false;
     }
 
-    public void OpenAddRoleDialog()
+    public void OpenAddApiResourceDialog()
     {
         AddApiScopeDialogVisible = true;
     }
 
-    public void OpenUpdateRoleDialog(ApiScopeDto ApiScope)
+    public void OpenUpdateApiResourceDialog(ApiScopeDto ApiScope)
     {
         CurrentApiScopeId = ApiScope.Id;
         UpdateApiScopeDialogVisible = true;
