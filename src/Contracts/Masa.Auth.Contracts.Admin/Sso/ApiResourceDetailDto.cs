@@ -2,13 +2,13 @@
 
 public class ApiResourceDetailDto : ApiResourceDto
 {
-    public List<int> ApiScopes { get; private set; } = new();
+    public List<int> ApiScopes { get; set; } = new();
 
-    public List<int> UserClaims { get; private set; } = new();
+    public List<int> UserClaims { get; set; } = new();
 
-    public Dictionary<string, string> Properties { get; private set; } = new();
+    public Dictionary<string, string> Properties { get; set; } = new();
 
-    public List<string> Secrets { get; private set; } = new();
+    public List<string> Secrets { get; set; } = new();
 
     public ApiResourceDetailDto() { }
 
@@ -19,7 +19,6 @@ public class ApiResourceDetailDto : ApiResourceDto
         Properties = properties;
         Secrets = secrets;
     }
-
 
     public static implicit operator UpdateApiResourceDto(ApiResourceDetailDto apiResource)
     {

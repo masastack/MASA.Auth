@@ -4,11 +4,17 @@ public class CommandHandler
 {
     readonly ISsoClientRepository _ssoClientRepository;
     readonly IIdentityResourceRepository _identityResourceRepository;
+    readonly IApiResourceRepository _apiResourceRepository;
+    readonly IApiScopeRepository _apiScopeRepository;
+    readonly IUserClaimRepository _userClaimRepository;
 
-    public CommandHandler(ISsoClientRepository ssoClientRepository, IIdentityResourceRepository identityResourceRepository)
+    public CommandHandler(ISsoClientRepository ssoClientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository)
     {
         _ssoClientRepository = ssoClientRepository;
         _identityResourceRepository = identityResourceRepository;
+        _apiResourceRepository = apiResourceRepository;
+        _apiScopeRepository = apiScopeRepository;
+        _userClaimRepository = userClaimRepository;
     }
 
     #region IdentityResource
@@ -49,6 +55,131 @@ public class CommandHandler
 
         //Todo remove check
         await _identityResourceRepository.RemoveAsync(idrs);
+    }
+
+    #endregion
+
+    #region ApiResource
+
+    [EventHandler]
+    public async Task AddApiResourceAsync(AddApiResourceCommand command)
+    {
+        var apiResourceDto = command.ApiResource;
+        var exist = await _apiResourceRepository.GetCountAsync(apiResource => apiResource.Name == apiResourceDto.Name) > 0;
+        if (exist)
+            throw new UserFriendlyException($"ApiResource with name {apiResourceDto.Name} already exists");
+
+        var apiResource = new ApiResource(apiResourceDto.Name, apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
+        apiResource.BindUserClaims(apiResourceDto.UserClaims);
+        apiResource.BindProperties(apiResourceDto.Properties);
+        apiResource.BindApiScopes(apiResourceDto.ApiScopes);
+
+        await _apiResourceRepository.AddAsync(apiResource);
+    }
+
+    [EventHandler]
+    public async Task UpdateApiResourceAsync(UpdateApiResourceCommand command)
+    {
+        var apiResourceDto = command.ApiResource;
+        var apiResource = await _apiResourceRepository.FindAsync(apiResource => apiResource.Id == apiResourceDto.Id);
+        if (apiResource is null)
+            throw new UserFriendlyException("The current apiResource does not exist");
+
+        apiResource.Update(apiResourceDto.Name,apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
+        await _apiResourceRepository.UpdateAsync(apiResource);
+    }
+
+    [EventHandler]
+    public async Task RemoveApiResourceAsync(RemoveApiResourceCommand command)
+    {
+        var apiResource = await _apiResourceRepository.FindAsync(apiResource => apiResource.Id == command.ApiResource.Id);
+        if (apiResource == null)
+            throw new UserFriendlyException("The current apiResource does not exist");
+
+        //Todo remove check
+        await _apiResourceRepository.RemoveAsync(apiResource);
+    }
+
+    #endregion
+
+    #region ApiScope
+
+    [EventHandler]
+    public async Task AddApiScopeAsync(AddApiScopeCommand command)
+    {
+        var apiScopeDto = command.ApiScope;
+        var exist = await _apiScopeRepository.GetCountAsync(apiScope => apiScope.Name == apiScopeDto.Name) > 0;
+        if (exist)
+            throw new UserFriendlyException($"ApiScope with name {apiScopeDto.Name} already exists");
+
+        var apiScope = new ApiScope(apiScopeDto.Name, apiScopeDto.DisplayName, apiScopeDto.Description, apiScopeDto.Required, apiScopeDto.Emphasize, apiScopeDto.ShowInDiscoveryDocument, apiScopeDto.Enabled);
+        apiScope.BindUserClaims(apiScopeDto.UserClaims);
+        apiScope.BindProperties(apiScopeDto.Properties);
+
+        await _apiScopeRepository.AddAsync(apiScope);
+    }
+
+    [EventHandler]
+    public async Task UpdateApiScopeAsync(UpdateApiScopeCommand command)
+    {
+        var apiScopeDto = command.ApiScope;
+        var apiScope = await _apiScopeRepository.FindAsync(apiScope => apiScope.Id == apiScopeDto.Id);
+        if (apiScope is null)
+            throw new UserFriendlyException("The current apiScope does not exist");
+
+        apiScope.Update(apiScopeDto.Name, apiScopeDto.DisplayName, apiScopeDto.Description, apiScopeDto.Required, apiScopeDto.Emphasize, apiScopeDto.ShowInDiscoveryDocument, apiScopeDto.Enabled);
+        await _apiScopeRepository.UpdateAsync(apiScope);
+    }
+
+    [EventHandler]
+    public async Task RemoveApiScopeAsync(RemoveApiScopeCommand command)
+    {
+        var apiScope = await _apiScopeRepository.FindAsync(apiScope => apiScope.Id == command.ApiScope.Id);
+        if (apiScope == null)
+            throw new UserFriendlyException("The current apiScope does not exist");
+
+        //Todo remove check
+        await _apiScopeRepository.RemoveAsync(apiScope);
+    }
+
+    #endregion
+
+    #region UserClaim
+
+    [EventHandler]
+    public async Task AddUserClaimAsync(AddUserClaimCommand command)
+    {
+        var userClaimDto = command.UserClaim;
+        var exist = await _userClaimRepository.GetCountAsync(userClaim => userClaim.Name == userClaimDto.Name) > 0;
+        if (exist)
+            throw new UserFriendlyException($"UserClaim with name {userClaimDto.Name} already exists");
+
+        var userClaim = new UserClaim(userClaimDto.Name, userClaimDto.Description, userClaimDto.UserClaimType);
+
+        await _userClaimRepository.AddAsync(userClaim);
+    }
+
+    [EventHandler]
+    public async Task UpdateUserClaimAsync(UpdateUserClaimCommand command)
+    {
+        var userClaimDto = command.UserClaim;
+        var userClaim = await _userClaimRepository.FindAsync(userClaim => userClaim.Id == userClaimDto.Id);
+        if (userClaim is null)
+            throw new UserFriendlyException("The current userClaim does not exist");
+
+        userClaim.Update(userClaimDto.Name, userClaimDto.Description, userClaimDto.UserClaimType);
+        await _userClaimRepository.UpdateAsync(userClaim);
+    }
+
+    [EventHandler]
+    public async Task RemoveUserClaimAsync(RemoveUserClaimCommand command)
+    {
+        var userClaim = await _userClaimRepository.FindAsync(userClaim => userClaim.Id == command.UserClaim.Id);
+        if (userClaim == null)
+            throw new UserFriendlyException("The current userClaim does not exist");
+
+        //Todo remove check
+        await _userClaimRepository.RemoveAsync(userClaim);
     }
 
     #endregion

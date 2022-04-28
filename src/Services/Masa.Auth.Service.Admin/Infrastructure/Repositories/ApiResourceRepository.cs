@@ -11,6 +11,7 @@ public class ApiResourceRepository : Repository<AuthDbContext, ApiResource, int>
         var apiResource = await Context.Set<ApiResource>()
                                 .Include(apiResource => apiResource.UserClaims)
                                 .Include(apiResource => apiResource.Properties)
+                                .Include(apiResource => apiResource.ApiScopes)
                                 .FirstOrDefaultAsync(apiResource => apiResource.Id == id);
 
         return apiResource;
