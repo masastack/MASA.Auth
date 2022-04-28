@@ -58,6 +58,8 @@ public class ClientDetailDto : AddClientDto
     public bool AllowAccessTokensViaBrowser { get; set; }
 
     public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
+
+    public List<ClientClaimDto> Claims { get; set; } = new();
     #endregion
 
     #region Device Flow

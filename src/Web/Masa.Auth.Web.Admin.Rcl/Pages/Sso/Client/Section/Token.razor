@@ -1,7 +1,7 @@
 ﻿@using Masa.Auth.Contracts.Admin.Infrastructure.Constants
 @inherits AdminCompontentBase
 
-<MContainer>
+<MContainer Style="overflow-y: auto;">
     <MRow>
         <MCol Md=6>
             <MCheckbox Dense Label="AllowOfflineAccess"></MCheckbox>
@@ -68,7 +68,7 @@
             <MCheckbox Dense @bind-Value="Dto.AlwaysSendClientClaims" Label="AlwaysSendClientClaims"></MCheckbox>
         </MCol>   
         <MCol Md=12>
-            <Claims/>
+            <Claims @bind-Value="Dto.Claims"/>
         </MCol>
     </MRow>
 </MContainer>

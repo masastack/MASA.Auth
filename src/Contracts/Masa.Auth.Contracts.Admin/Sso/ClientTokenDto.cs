@@ -31,4 +31,6 @@ public class ClientTokenDto
     public bool AllowAccessTokensViaBrowser { get; set; }
 
     public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
+
+    public List<ClientClaimDto> Claims { get; set; } = new();
 }
