@@ -43,7 +43,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveIdentityResourceAsync(RemoveIdentityResourceCommand command)
     {
-        var idrs = await _identityResourceRepository.FindAsync(idrs => idrs.Id == command.identityResource.Id);
+        var idrs = await _identityResourceRepository.FindAsync(idrs => idrs.Id == command.IdentityResource.Id);
         if (idrs == null)
             throw new UserFriendlyException("The current identityResource does not exist");
 

@@ -1,0 +1,36 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add ApiScope")">
+    <MForm Model=ApiScope EnableValidation @ref="Form">
+        <div class="full-height flex-column">
+            <div class="mt-6 flex-height-auto overflow-y">
+                <div class="text-subtitle2">@T("Basic Information")</div>
+                <MRow Class="mt-4">
+                    <MCol>
+                        <MTextField @bind-Value="ApiScope.DisplayName" Label="@T("DisplayName")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="ApiScope.Name" Label="@T("ApiScope.Name")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <MTextField @bind-Value="ApiScope.Description" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                         <MSwitch @bind-Value="ApiScope.Required" Flat Label="@("Whether must:"+ (ApiScope.Required ? T("True"):T("false")))"></MSwitch>
+                    </MCol>
+                </MRow>
+                <div class="mt-6 text-subtitle2">@T("User Claims")</div>
+
+            </div>
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="ApiScope.Enabled" Inset Class="label" Label="@(ApiScope.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton OnClick="async () => await AddApiScopeAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
+            </div>
+        </div>
+    </MForm>
+</SheetDialog>

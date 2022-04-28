@@ -196,8 +196,14 @@
   "Project identifier is empty": "项目标识为空",
   "Tag or appid is empty": "tag或appid为空",
 
-  "IdentityResource": "身份",
+  "IdentityResource": "身份资源",
+  "Add IdentityResource": "新增身份资源",
+  "Update IdentityResource": "编辑身份资源",
   "IdentityResource.Name": "配置名称",
   "IdentityResource.Required": "是否必须",
-  "User Claims": "用过声明"
+  "User Claims": "用户声明",
+
+  "ApiScope": "Api范围",
+  "Add ApiScope": "新增Api范围",
+  "Update ApiScope": "编辑Api范围"
 }

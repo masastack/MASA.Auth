@@ -15,5 +15,10 @@ public class ApiScopeDetailDto : ApiScopeDto
         UserClaims = userClaims;
         Properties = properties;
     }
+
+    public static implicit operator UpdateApiScopeDto(ApiScopeDetailDto apiScope)
+    {
+        return new UpdateApiScopeDto();
+    }
 }
 
