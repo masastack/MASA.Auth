@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\Component\ButtonGroup.razor">
+    <Content Update="Pages\Component\EnableChip.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="wwwroot\i18n\en-US.json">

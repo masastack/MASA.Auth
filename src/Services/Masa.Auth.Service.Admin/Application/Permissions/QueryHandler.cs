@@ -24,18 +24,17 @@ public class QueryHandler
         if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(user => user.Name.Contains(query.Search));
 
-        var roles = await _roleRepository.GetPaginatedListAsync(condition, new PaginatedOptions
-        {
-            Page = query.Page,
-            PageSize = query.PageSize,
-            Sorting = new Dictionary<string, bool>
-            {
-                [nameof(Role.ModificationTime)] = true,
-                [nameof(Role.CreationTime)] = true,
-            }
-        });
+        var roleQuery = _authDbContext.Set<Role>().Where(condition);
+        var total = await roleQuery.LongCountAsync();
+        var roles = await roleQuery.Include(s => s.CreateUser)
+                                   .Include(s => s.ModifyUser)
+                                   .OrderByDescending(s => s.ModificationTime)
+                                   .ThenByDescending(s => s.CreationTime)
+                                   .Skip((query.Page - 1) * query.PageSize)
+                                   .Take(query.PageSize)
+                                   .ToListAsync();
 
-        query.Result = new(roles.Total, roles.Result.Select(r => new RoleDto(r.Id, r.Name, r.Limit, r.Description, r.Enabled, r.CreationTime, r.ModificationTime, r.CreatorUser?.Name ?? "", r.ModifierUser?.Name ?? "")).ToList());
+        query.Result = new(total, roles.Select(role => (RoleDto)role).ToList());
     }
 
     [EventHandler]
@@ -44,11 +43,7 @@ public class QueryHandler
         var role = await _roleRepository.GetDetailAsync(query.RoleId);
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
-        query.Result = new(role.Id, role.Name, role.Description, role.Enabled, role.Limit,
-            role.Permissions.Select(rp => rp.Id).ToList(),
-            role.ParentRoles.Select(r => r.ParentId).ToList(),
-            role.ChildrenRoles.Select(r => r.RoleId).ToList(),
-            new(), new(), role.CreationTime, role.ModificationTime, role.CreatorUser?.Name ?? "", role.ModifierUser?.Name ?? "", role.AvailableQuantity);
+        query.Result = role;
     }
 
     [EventHandler]

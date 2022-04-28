@@ -31,5 +31,10 @@ public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         VerifyType = verifyType;
         IdentificationType = identificationType;
     }
+
+    public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
+    {
+        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
+    }
 }
 

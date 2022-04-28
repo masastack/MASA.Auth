@@ -8,7 +8,7 @@
                     <div class="full-height flex-column">
                         <div class="d-flex flex-height-auto">
                             <div class="ma-auto text-center">
-                                <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" Values="GetEnumMap<GenderTypes>().Select(kv => kv.Value)" />
+                                <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
                                 <MAvatar Size=120 Class="mt-12">
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
@@ -62,21 +62,23 @@
                         <div class="d-flex mt-6">
                             <MSpacer></MSpacer>
                             <MButton Outlined Color="primary" Class="small-button" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
-                            <MButton Color="primary" Class="small-button ml-6" OnClick="()=>Step=3">@T("Next step")</MButton>
-                            <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
+                            <MButton Color="primary" Class="small-button ml-6" OnClick="()=>NextStep(context)">@T("Next step")</MButton>
                         </div>
                     </div>
                 </MStepperContent>
                 <MStepperContent Step="3">
                     <div class="full-height flex-column">
-                        <div class="flex-height-auto overflow-y">                           
-                            @*<GlobalNavigationDialog />*@
-                        </div>                       
+                        <div class="flex-height-auto overflow-y">
+                            <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                            <PermissionsCheck RoleIds=User.Roles
+                                              Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
+                                              ValueChanged="PermissionsChanged" />
+                        </div>
                         <div class="d-flex mt-6">
                             <MSpacer></MSpacer>
                             <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
-                            <MButton Text>@T("Preview")</MButton>
-                            <MButton OnClick="async () => await AddUserAsync(context)" Text>@T("Submit")</MButton>
+                            <MButton Outlined Color="primary">@T("Preview")</MButton>
+                            <MButton OnClick="AddUserAsync" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
                         </div>
                     </div>
                 </MStepperContent>

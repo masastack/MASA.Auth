@@ -2,6 +2,10 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
+    private List<UserRole> _roles = new();
+    private List<UserPermission> _permissions = new();
+    private List<ThirdPartyUser> _thirdPartyUsers = new();
+
     public bool IsDeleted { get; private set; }
 
     public string Name { get; private set; }
@@ -34,11 +38,13 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public AddressValue Address { get; private set; }
 
-    private List<UserRole> userRoles = new();
-
-    public IReadOnlyCollection<UserRole> UserRoles => userRoles;
-
     #endregion
+
+    public IReadOnlyCollection<UserRole> Roles => _roles;
+
+    public IReadOnlyCollection<UserPermission> Permissions => _permissions;
+
+    public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
     public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email, AddressValue address, GenderTypes genderType)
     {
@@ -63,6 +69,14 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     }
 
+    public static implicit operator UserDetailDto(User user)
+    {
+        var roles = user.Roles.Select(r => r.RoleId).ToList();
+        var permissions = user.Permissions.Select(p => new UserPermissionDto(p.PermissionId, p.Effect)).ToList();
+        var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.ThirdPartyIdp.Icon).ToList();
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions);
+    }
+
     public void Update(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
     {
         Name = name;
@@ -80,18 +94,20 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         GenderType = genderType;
     }
 
-    public static implicit operator UserDetailDto(User user)
+    public void AddRoles(params Guid[] roleIds)
     {
-        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, new(), "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType);
+        _roles.Clear();
+        _roles.AddRange(roleIds.Select(roleId => new UserRole(roleId)));
     }
 
-    public void AddRole(params Guid[] roleIds)
+    public void RemoveRoles(params Guid[] roleIds)
     {
-        userRoles.AddRange(roleIds.Select(roleId => new UserRole(roleId)));
+        _roles.RemoveAll(ur => roleIds.Contains(ur.RoleId));
     }
 
-    public void RemoveRole(params Guid[] roleIds)
+    public void AddPermissions(List<UserPermission> permissions)
     {
-        userRoles.RemoveAll(ur => roleIds.Contains(ur.RoleId));
+        _permissions.Clear();
+        _permissions.AddRange(permissions);
     }
 }

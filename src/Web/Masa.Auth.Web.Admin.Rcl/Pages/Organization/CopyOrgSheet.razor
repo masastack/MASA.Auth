@@ -35,17 +35,17 @@
                         <span class="text-h5 neutral-lighten-1--text">@T("Member")</span>
                         <MSpacer />
                         <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
-                                       ItemText="r=>r.Name" PrependInnerIcon="mdi-magnify"
+                                       ItemText="r=>r.User.Name" PrependInnerIcon="mdi-magnify"
                                        ItemValue="r=>r" HideDetails="true" OnSelectedItemUpdate="AddStaff"
                                        Outlined Dense Clearable Style="max-width:340px;"
                                        Label="@T("Search for members")">
                             <ItemContent Context="data">
                                 <MListItemAvatar>
-                                    <img src="@data.Item.Avatar">
+                                    <img src="@data.Item.User.Avatar">
                                 </MListItemAvatar>
                                 <MListItemContent>
                                     <MListItemTitle>
-                                        @data.Item.Name
+                                        @data.Item.User.Name
                                     </MListItemTitle>
                                     <MListItemSubtitle>
                                         @data.Item.JobNumber
@@ -64,8 +64,8 @@
                                             <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" />
                                         </MListItemAvatar>
                                         <MListItemContent class="py-1">
-                                            <MListItemTitle class="text-body3 neutral-lighten-1--text">@staff.DisplayName</MListItemTitle>
-                                            <MListItemSubtitle class="text-body2 neutral-lighten-3--text">@staff.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
+                                            <MListItemTitle class="text-body3 neutral-lighten-1--text">@staff.User.DisplayName</MListItemTitle>
+                                            <MListItemSubtitle class="text-body2 neutral-lighten-3--text">@staff.User.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
                                         </MListItemContent>
                                         <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
                                             <MIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</MIcon>

@@ -2,4 +2,5 @@
 
 public interface IThirdPartyUserRepository : IRepository<ThirdPartyUser>
 {
+    Task<ThirdPartyUser?> GetDetail(Guid id);
 }
