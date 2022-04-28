@@ -15,8 +15,8 @@ public class CommandHandler
     [EventHandler]
     public async Task AddClientAsync(AddClientCommand addClientCommand)
     {
-        PrepareGrantTypeWithClientType(addClientCommand.ClientAddDto);
-        var client = addClientCommand.ClientAddDto.Adapt<Client>();
+        PrepareGrantTypeWithClientType(addClientCommand.AddClientDto);
+        var client = addClientCommand.AddClientDto.Adapt<Client>();
 
         await _clientRepository.AddAsync(client);
 

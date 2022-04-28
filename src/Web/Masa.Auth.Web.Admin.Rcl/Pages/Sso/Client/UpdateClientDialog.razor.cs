@@ -18,7 +18,6 @@ public partial class UpdateClientDialog
 
     List<string> _tabHeader = new();
     ClientDetailDto _clientDetailDto = new();
-
     ClientBasicDto _basicDto = new();
     ClientConsentDto _consentDto = new();
     ClientAuthenticationDto _authenticationDto = new();
@@ -26,8 +25,7 @@ public partial class UpdateClientDialog
     ClientTokenDto _tokenDto = new();
     ClientCredentialDto _clientCredentialDto = new();
     Type _otherType = null!;
-
-    Dictionary<string, ComponentMetadata> _componentParameters = new();
+    Dictionary<string, object> _componentMetadata = new();
 
     ClientService ClientService => AuthCaller.ClientService;
 
@@ -59,44 +57,26 @@ public partial class UpdateClientDialog
         {
             _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Device Flow" };
             _otherType = typeof(DeviceFlow);
+            _componentMetadata = new Dictionary<string, object>{
+                { "Dto",_deviceFlowDto }
+            };
         }
         else if (_clientDetailDto.ClientType == ClientTypes.Machine)
         {
             _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Client Secret" };
             _otherType = typeof(ClientSecret);
+            _componentMetadata = new Dictionary<string, object>{
+                { "Dto",_clientCredentialDto }
+            };
         }
         else
         {
             _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Token" };
             _otherType = typeof(Token);
+            _componentMetadata = new Dictionary<string, object>{
+                { "Dto",_tokenDto }
+            };
         }
-        _componentParameters = new()
-        {
-            {
-                typeof(Token).Name,
-                new()
-                {
-                    Name = typeof(Token).Name,
-                    Parameters = new() { { "Dto", _tokenDto } }
-                }
-            },
-            {
-                typeof(ClientSecret).Name,
-                new()
-                {
-                    Name = typeof(ClientSecret).Name,
-                    Parameters = new() { { "Dto", _clientCredentialDto } }
-                }
-            },
-            {
-                typeof(DeviceFlow).Name,
-                new()
-                {
-                    Name = typeof(DeviceFlow).Name,
-                    Parameters = new() { { "Dto", _deviceFlowDto } }
-                }
-            }
-        };
     }
 
     private async Task SaveAsync()
