@@ -16,6 +16,7 @@ public abstract class RestServiceBase : ServiceBase
                 if (method.Name.StartsWith("Get")) MapGet(@delegate);
                 else if (method.Name.StartsWith("Add")) MapPost(@delegate);
                 else if (method.Name.StartsWith("Update")) MapPut(@delegate);
+                else if (method.Name.StartsWith("Upsert")) MapPost(@delegate);
                 else if (method.Name.StartsWith("Remove")) MapDelete(@delegate);
             }
         }

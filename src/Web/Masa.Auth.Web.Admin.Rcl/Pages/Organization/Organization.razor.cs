@@ -11,9 +11,9 @@ public partial class Organization
     DepartmentChildrenCountDto _departmentChildrenCountDto = new();
     readonly List<DataTableHeader<StaffDto>> _headers = new()
     {
-        new() { Text = "员工", Value = nameof(StaffDto.Name), CellClass = "text-body neutral-lighten-1--text" },
-        new() { Text = "手机号", Value = nameof(StaffDto.PhoneNumber), CellClass = "text-body3" },
-        new() { Text = "邮箱", Value = nameof(StaffDto.Email), CellClass = "text-body3" },
+        new() { Text = "员工", Value = nameof(UserDto.Name), CellClass = "text-body neutral-lighten-1--text" },
+        new() { Text = "手机号", Value = nameof(UserDto.PhoneNumber), CellClass = "text-body3" },
+        new() { Text = "邮箱", Value = nameof(UserDto.Email), CellClass = "text-body3" },
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber), CellClass = "text-body3" },
         new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
     };

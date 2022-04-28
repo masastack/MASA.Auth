@@ -89,6 +89,7 @@
   "Detail Information": "详细信息",
 
   "ThirdPartyUser": "第三方用户",
+  "Domain Account": "域账号",
   "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",
   "Failed to query thirdPartyIdp data:": "获取第三方平台数据失败:",
   "Failed to query thirdPartyUserDetail data:": "获取第三方用户详情数据失败:",

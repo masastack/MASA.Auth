@@ -71,7 +71,7 @@ public partial class Staff
     {
         Headers = new()
         {
-            new() { Text = T(nameof(StaffDto.Avatar)), Value = nameof(StaffDto.Avatar), Sortable = false },
+            new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
             new() { Text = T("Department"), Value = nameof(StaffDto.Department), Sortable = false },
             new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
             new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },

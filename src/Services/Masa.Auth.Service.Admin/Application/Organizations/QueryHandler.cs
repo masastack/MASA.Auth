@@ -24,7 +24,7 @@ public class QueryHandler
             ParentId = department.ParentId,
             StaffList = department.DepartmentStaffs
                 .Select(ds => ds.Staff)
-                .Select(s => new StaffDto(s.Id, department.Name, "", s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList()
+                .Select(staff => (StaffDto)staff).ToList()
         };
     }
 

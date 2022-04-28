@@ -5,6 +5,7 @@ public class AddStaffValidator : AbstractValidator<AddStaffDto>
     public AddStaffValidator()
     {
         RuleFor(staff => staff.User).SetValidator(new AddUserValidator());
+        RuleFor(staff => staff.JobNumber).Required();
     }
 }
 
