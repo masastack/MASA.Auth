@@ -56,7 +56,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task AddOrUpdatePosition(AddOrUpdatePositionCommand command)
+    public async Task UpsertPosition(UpsertPositionCommand command)
     {
         var positionDto = command.Position;
         var exist = await _positionRepository.GetCountAsync(p => p.Name == positionDto.Name) > 0;

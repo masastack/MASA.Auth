@@ -1,16 +1,16 @@
 ﻿namespace Masa.Auth.Contracts.Admin.Organizations;
 
-public class AddOrUpdatePositionDto
+public class UpsertPositionDto
 {
     public Guid Id { get; set; }
 
     public string Name { get; set; } = "";
 
-    public AddOrUpdatePositionDto()
+    public UpsertPositionDto()
     {
     }
 
-    public AddOrUpdatePositionDto(Guid id, string name)
+    public UpsertPositionDto(Guid id, string name)
     {
         Name = name;
     }

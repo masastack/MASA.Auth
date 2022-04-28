@@ -10,7 +10,7 @@ public class AddStaffDto
 
     public Guid DepartmentId { get; set; }
 
-    public AddOrUpdatePositionDto Position { get; set; }
+    public UpsertPositionDto Position { get; set; }
 
     public List<Guid> Teams { get; set; }
 
@@ -26,7 +26,7 @@ public class AddStaffDto
         User = new();
     }
 
-    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, AddOrUpdatePositionDto position, List<Guid> teamIds, AddUserDto user)
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, UpsertPositionDto position, List<Guid> teamIds, AddUserDto user)
     {
         JobNumber = jobNumber;
         StaffType = staffType;

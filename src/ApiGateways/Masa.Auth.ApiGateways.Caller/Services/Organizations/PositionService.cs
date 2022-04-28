@@ -19,9 +19,9 @@ public class PositionService : ServiceBase
         return await SendAsync<object, List<PositionSelectDto>>(nameof(GetSelectAsync), new { name });
     }
 
-    public async Task AddOrUpdateAsync(AddOrUpdatePositionDto request)
+    public async Task UpsertAsync(UpsertPositionDto request)
     {
-        await SendAsync(nameof(AddOrUpdateAsync), request);
+        await SendAsync(nameof(UpsertAsync), request);
     }
 }
 

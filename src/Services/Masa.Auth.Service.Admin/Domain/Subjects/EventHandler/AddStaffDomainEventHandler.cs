@@ -20,11 +20,11 @@ public class AddStaffDomainEventHandler
     }
 
     [EventHandler(2)]
-    public async Task AddOrUpdatePositionAsync(AddStaffDomainEvent staffEvent)
+    public async Task UpsertPositionAsync(AddStaffDomainEvent staffEvent)
     {
         if (string.IsNullOrEmpty(staffEvent.Staff.Position.Name) is false)
         {
-            var command = new AddOrUpdatePositionCommand(staffEvent.Staff.Position);
+            var command = new UpsertPositionCommand(staffEvent.Staff.Position);
             await _eventBus.PublishAsync(command);
         }
     }
