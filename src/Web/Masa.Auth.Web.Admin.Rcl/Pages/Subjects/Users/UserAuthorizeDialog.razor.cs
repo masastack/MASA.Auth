@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class UpdateUserAuthorizeDialog
+public partial class UserAuthorizeDialog
 {
     [Parameter]
     public bool Visible { get; set; }

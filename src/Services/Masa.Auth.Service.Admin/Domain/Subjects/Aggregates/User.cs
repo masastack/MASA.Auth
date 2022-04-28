@@ -69,6 +69,14 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     }
 
+    public static implicit operator UserDetailDto(User user)
+    {
+        var roles = user.Roles.Select(r => r.RoleId).ToList();
+        var permissions = user.Permissions.Select(p => new UserPermissionDto(p.PermissionId, p.Effect)).ToList();
+        var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.ThirdPartyIdp.Icon).ToList();
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions);
+    }
+
     public void Update(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
     {
         Name = name;
@@ -84,14 +92,6 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Position = position;
         Password = password;
         GenderType = genderType;
-    }
-
-    public static implicit operator UserDetailDto(User user)
-    {
-        var roles = user.Roles.Select(r => r.RoleId).ToList();
-        var permissions = user.Permissions.Select(p => new UserPermissionDto(p.PermissionId, p.Effect)).ToList();
-        var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.ThirdPartyIdp.Icon).ToList();
-        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions);
     }
 
     public void AddRoles(params Guid[] roleIds)

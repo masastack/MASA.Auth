@@ -5,7 +5,7 @@ public class ThirdPartyIdpEntityTypeConfiguration : IEntityTypeConfiguration<Thi
     public void Configure(EntityTypeBuilder<ThirdPartyIdp> builder)
     {
         builder.ToTable(nameof(ThirdPartyIdp), AuthDbContext.SUBJECT_SCHEMA);
-        builder.HasKey(p => p.Id);
+        builder.HasKey(tpIdp => tpIdp.Id);
     }
 }
 

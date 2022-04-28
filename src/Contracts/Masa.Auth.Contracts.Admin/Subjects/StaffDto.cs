@@ -4,8 +4,6 @@ public class StaffDto
 {
     public Guid Id { get; set; }
 
-    public Guid UserId { get; set; }
-
     public string Department { get; set; } = "";
 
     public string Position { get; set; } = "";
@@ -14,34 +12,23 @@ public class StaffDto
 
     public bool Enabled { get; set; }
 
-    public string Name { get; set; } = "";
+    public StaffTypes StaffType { get; set; }
 
-    public string DisplayName { get; set; } = "";
-
-    public string Avatar { get; set; } = "";
-
-    public string PhoneNumber { get; set; } = "";
-
-    public string Email { get; set; } = "";
+    public UserDto User { get; set; } = new();
 
     public StaffDto()
     {
-
     }
 
-    public StaffDto(Guid id, Guid userId, string department, string position, string jobNumber, bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
+    public StaffDto(Guid id, string department, string position, string jobNumber, bool enabled, StaffTypes staffType, UserDto user)
     {
         Id = id;
-        UserId = userId;
         Department = department;
         Position = position;
         JobNumber = jobNumber;
         Enabled = enabled;
-        Name = name;
-        DisplayName = displayName;
-        Avatar = avatar;
-        PhoneNumber = phoneNumber;
-        Email = email;
+        StaffType = staffType;
+        User = user;
     }
 }
 

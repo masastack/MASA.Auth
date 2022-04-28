@@ -9,8 +9,6 @@ public partial class User
     private DateOnly? _startTime;
     private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
 
-    public string Search { get; set; } = "";
-
     public Guid UserId
     {
         get { return _userId; }
@@ -81,8 +79,6 @@ public partial class User
 
     public List<DataTableHeader<UserDto>> Headers { get; set; } = new();
 
-    public List<(string, bool?)> UserStateSelect { get; set; } = new();
-
     public List<UserSelectDto> UserSelect { get; set; } = new();
 
     public bool AddUserDialogVisible { get; set; }
@@ -103,12 +99,6 @@ public partial class User
             new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
             new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
-        };
-
-        UserStateSelect = new()
-        {
-            (T("Enable"), true),
-            (T("Disabled"), false),
         };
 
         await GetUserAsync();
@@ -139,20 +129,6 @@ public partial class User
     {
         CurrentUserId = user.Id;
         AuthorizeDialogVisible = true;
-    }
-
-    public async Task OnSearchChanged(string search)
-    {
-        Search = search;
-        await Task.Delay(500);
-        if(Search =="")
-        {
-            UserSelect.Clear();
-        }
-        else if (Search == search)
-        {
-            UserSelect = await UserService.GetSelectAsync(search);
-        }
     }
 }
 

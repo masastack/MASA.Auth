@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Masa.Auth.Web.Admin.Rcl.Global.Nav
+﻿namespace Masa.Auth.Web.Admin.Rcl.Global.Nav
 {
     public static class NavServiceCollectionExtensions
     {
