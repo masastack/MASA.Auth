@@ -29,11 +29,11 @@ public class SetTeamPersonnelInfoDomainEventHandler
                         setTeamPersonnelInfoDomainEvent.Team.GetMemberRoleId();
         removeUsers.ForEach(user =>
         {
-            user.RemoveRole(teamRoleId);
+            user.RemoveRoles(teamRoleId);
         });
         addUsers.ForEach(user =>
         {
-            user.AddRole(teamRoleId);
+            user.AddRoles(teamRoleId);
         });
         await _userRepository.UpdateRangeAsync(removeUsers);
         await _userRepository.UpdateRangeAsync(addUsers);

@@ -56,18 +56,14 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == query.UserId);
+        var user = await _userRepository.GetDetail(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
-
-        var thirdPartyUsers = await _thirdPartyUserRepository.GetListAsync(tpu => tpu.UserId == query.UserId);
-        var thirdPartyIdpAvatars = thirdPartyUsers.Select(tpu => tpu.ThirdPartyIdp.Icon).ToList();
-        var creator = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Creator);
-        var modifier = await _authDbContext.Set<User>().Select(u => new { Id = u.Id, Name = u.Name }).FirstOrDefaultAsync(u => u.Id == user.Modifier);
+        var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
+        var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
 
         query.Result = user;
-        query.Result.ThirdPartyIdpAvatars.AddRange(thirdPartyIdpAvatars);
-        query.Result.Creator = creator?.Name ?? "";
-        query.Result.Modifier = modifier?.Name ?? "";
+        query.Result.Creator = creator ?? "";
+        query.Result.Modifier = modifier ?? "";
     }
 
     [EventHandler]

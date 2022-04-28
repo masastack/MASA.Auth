@@ -2,7 +2,6 @@
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
-global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Microsoft.AspNetCore.Http;

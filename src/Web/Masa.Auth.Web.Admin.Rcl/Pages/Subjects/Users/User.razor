@@ -71,4 +71,4 @@
 
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
-<AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />
+<UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />
