@@ -1,0 +1,16 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("User roles and permissions settings")">
+    <div class="full-height flex-column">
+        <div class="d-flex flex-height-auto">
+            <PermissionsCheck RoleIds=Authorization.Roles 
+                    Value="@(Authorization.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))" 
+                    ValueChanged="PermissionsChanged"/>
+        </div>
+        <div class="d-flex mt-6">
+            <MSpacer></MSpacer>
+            <MButton Outlined Color="primary">@T("Preview")</MButton>
+            <MButton OnClick="async () => await UpdateAuthorizationAsync()" Text>@T("Submit")</MButton>
+        </div>
+    </div>
+</SheetDialog>

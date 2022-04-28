@@ -6,14 +6,13 @@ public class AddThirdPartyUserDto
 
     public bool Enabled { get; set; }
 
-    public string ThridPartyIdentity { get; set; }
+    public string ThridPartyIdentity { get; set; } = "";
 
-    public AddUserDto User { get; set; }
+    public AddUserDto User { get; set; } = new();
 
     public AddThirdPartyUserDto()
     {
-        ThridPartyIdentity = "";
-        User = new();
+
     }
 
     public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, AddUserDto user)

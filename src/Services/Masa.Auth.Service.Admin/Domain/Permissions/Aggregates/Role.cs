@@ -7,8 +7,8 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     private List<RoleRelation> _parentRoles = new();
     private List<UserRole> _users = new();
     private List<TeamRole> _teams = new();
-    private User? _creatorUser;
-    private User? _modifierUser;
+    private User? _createUser;
+    private User? _modifyUser;
     private int _limit;
 
     public string Name { get; private set; }
@@ -43,15 +43,12 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 
     public IReadOnlyCollection<TeamRole> Teams => _teams;
 
-    public User? CreatorUser => _creatorUser ?? LazyLoader?.Load(this, ref _creatorUser);
+    public User? CreateUser => _createUser;
 
-    public User? ModifierUser => _modifierUser ?? LazyLoader?.Load(this, ref _modifierUser);
+    public User? ModifyUser => _modifyUser;
 
-    private ILazyLoader? LazyLoader { get; set; }
-
-    public Role(ILazyLoader lazyLoader)
+    public Role()
     {
-        LazyLoader = lazyLoader;
         Name = "";
         Description = "";
     }
@@ -67,6 +64,17 @@ public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         Enabled = enabled;
         Limit = limit;
         AvailableQuantity = Limit;
+    }
+
+    public static implicit operator RoleDetailDto(Role role)
+    {
+        return new(role.Id, role.Name, role.Description, role.Enabled, role.Limit,
+            role.Permissions.Select(rp => rp.Id).ToList(),
+            role.ParentRoles.Select(r => r.ParentId).ToList(),
+            role.ChildrenRoles.Select(r => r.RoleId).ToList(),
+            role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
+            role.Teams.Select(t => t.TeamId).ToList(),
+            role.CreationTime, role.ModificationTime, role.CreateUser?.Name ?? "", role.ModifyUser?.Name ?? "", role.AvailableQuantity);
     }
 
     public void BindChildrenRoles(List<Guid> childrenRoles)

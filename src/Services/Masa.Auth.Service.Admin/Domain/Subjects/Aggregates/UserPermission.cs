@@ -31,4 +31,10 @@ public class UserPermission : AuditEntity<Guid, Guid>, ISoftDelete
         PermissionId = permissionId;
         Effect = effect;
     }
+
+    public UserPermission(Guid permissionId, bool effect)
+    {
+        PermissionId = permissionId;
+        Effect = effect;
+    }
 }

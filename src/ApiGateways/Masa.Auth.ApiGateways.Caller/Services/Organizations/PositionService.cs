@@ -1,4 +1,4 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
 
 public class PositionService : ServiceBase
 {
@@ -19,14 +19,9 @@ public class PositionService : ServiceBase
         return await SendAsync<object, List<PositionSelectDto>>(nameof(GetSelectAsync), new { name });
     }
 
-    public async Task AddAsync(AddPositionDto request)
+    public async Task UpsertAsync(UpsertPositionDto request)
     {
-        await SendAsync(nameof(AddAsync), request);
-    }
-
-    public async Task UpdateAsync(UpdatePositionDto request)
-    {
-        await SendAsync(nameof(UpdateAsync), request);
+        await SendAsync(nameof(UpsertAsync), request);
     }
 }
 

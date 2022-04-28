@@ -47,19 +47,30 @@ public partial class AddUserDialog
         }
     }
 
-    public async Task AddUserAsync(EditContext context)
+    private void NextStep(EditContext context)
     {
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
-            User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-            await UserService.AddAsync(User);
-            OpenSuccessMessage(T("Add user data success"));
-            await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
+            Step = 3;
         }
+    }
+
+    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
+    {
+        User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value))
+                                                   .ToList();
+    }
+
+    public async Task AddUserAsync()
+    {
+        Loading = true;
+        User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
+        await UserService.AddAsync(User);
+        OpenSuccessMessage(T("Add user data success"));
+        await UpdateVisible(false);
+        await OnSubmitSuccess.InvokeAsync();
+        Loading = false;
     }
 }
 

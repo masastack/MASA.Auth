@@ -42,11 +42,6 @@ public class RoleService : ServiceBase
 
     public async Task<RoleOwnerDto> GetRoleOwnerAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-
         return await SendAsync<object, RoleOwnerDto>(nameof(GetRoleOwnerAsync), new { id });
     }
 

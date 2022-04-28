@@ -25,13 +25,13 @@
     <ItemColContent>
         @switch (context.Header.Value)
         {
-            case nameof(StaffDto.Avatar):
+            case nameof(UserDto.Avatar):
                 <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
                     <MAvatar Size=48>
-                        <img src="@context.Item.Avatar" />
+                        <img src="@context.Item.User.Avatar" />
                     </MAvatar>
                     <div class="ml-4 block-center">
-                        <div class="text-body3 neutral-lighten-1--text">@context.Item.Name</div>
+                        <div class="text-body3 neutral-lighten-1--text">@context.Item.User.Name</div>
                     </div>
                 </div>
                 break;
@@ -45,10 +45,7 @@
                 <span class="text-body3">@context.Item.Position</span>
                 break;
             case nameof(StaffDto.Enabled):
-                string color = context.Item.Enabled ? "sample-green" : "error";
-                <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                    <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                </MChip>
+                <EnableChip Value="context.Item.Enabled" />
                 break;
             case "Action":
                 <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
@@ -65,6 +62,6 @@
 </MDataTable>
 
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
-<UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaffId OnSubmitSuccess=GetStaffAsync />
-<Authorization />
+<UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
+<UserAuthorizeDialog UserId=CurrentStaff.User.Id @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
 <StaffSyncDialog @bind-Visible=StaffSyncDialogVisible OnSubmitSuccess=GetStaffAsync />

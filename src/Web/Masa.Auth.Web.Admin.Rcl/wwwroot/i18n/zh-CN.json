@@ -87,8 +87,10 @@
   "Give him a nickname!": "给他换个昵称吧",
   "Basic Information": "基础信息",
   "Detail Information": "详细信息",
+  "Successfully set user permissions": "设置用户权限成功",
 
   "ThirdPartyUser": "第三方用户",
+  "Domain Account": "域账号",
   "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",
   "Failed to query thirdPartyIdp data:": "获取第三方平台数据失败:",
   "Failed to query thirdPartyUserDetail data:": "获取第三方用户详情数据失败:",

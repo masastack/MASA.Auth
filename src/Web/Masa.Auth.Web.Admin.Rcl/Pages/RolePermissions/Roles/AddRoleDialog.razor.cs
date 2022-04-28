@@ -46,6 +46,11 @@ public partial class AddRoleDialog
         }
     }
 
+    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
+    {
+        Role.Permissions = permissiionMap.Select(kv => kv.Key).ToList();
+    }
+
     public async Task AddRoleAsync(EditContext context)
     {
         var success = context.Validate();

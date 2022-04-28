@@ -39,6 +39,12 @@
             await eventBus.PublishAsync(new UpdateUserCommand(dto));
         }
 
+        public async Task UpdateAuthorizationAsync(IEventBus eventBus,
+            [FromBody] UpdateUserAuthorizationDto dto)
+        {
+            await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(dto));
+        }
+
         private async Task RemoveAsync(
             IEventBus eventBus,
             [FromBody] RemoveUserDto dto)
