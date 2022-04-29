@@ -68,7 +68,7 @@ public class CommandHandler
             }
             else
             {
-                clientSecret.Value = clientSecret.Value.Sha512();
+                clientSecret.Value = SHA512Utils.Encrypt(clientSecret.Value);
             }
         }
     }

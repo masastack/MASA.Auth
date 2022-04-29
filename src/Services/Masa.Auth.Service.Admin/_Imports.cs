@@ -62,6 +62,7 @@ global using Masa.Utils.Caller.HttpClient;
 global using Masa.Utils.Data.EntityFrameworkCore;
 global using Masa.Utils.Data.EntityFrameworkCore.SqlServer;
 global using Masa.Utils.Exceptions.Extensions;
+global using Masa.Utils.Security.Cryptography;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
