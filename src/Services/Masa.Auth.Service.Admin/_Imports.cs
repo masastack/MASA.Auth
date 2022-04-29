@@ -1,6 +1,7 @@
 ﻿global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using Mapster;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Organizations;

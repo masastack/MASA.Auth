@@ -2,16 +2,16 @@
 
 public class QueryHandler
 {
-    readonly ISsoClientRepository _ssoClientRepository;
+    readonly IClientRepository _clientRepository;
     readonly IIdentityResourceRepository _identityResourceRepository;
     readonly IApiResourceRepository _apiResourceRepository;
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
     readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(ISsoClientRepository ssoClientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, AuthDbContext authDbContext)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, AuthDbContext authDbContext)
     {
-        _ssoClientRepository = ssoClientRepository;
+        _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
         _apiResourceRepository = apiResourceRepository;
         _apiScopeRepository = apiScopeRepository;
@@ -22,19 +22,48 @@ public class QueryHandler
     [EventHandler]
     public async Task ClientPaginationListAsync(ClientPaginationListQuery clientPaginationListQuery)
     {
-        var result = await _ssoClientRepository.GetPaginatedListAsync(new PaginatedOptions
+        var result = await _clientRepository.GetPaginatedListAsync(new PaginatedOptions
         {
             Page = clientPaginationListQuery.Page,
             PageSize = clientPaginationListQuery.PageSize
         });
         clientPaginationListQuery.Result = new PaginationDto<ClientDto>(result.Total, result.Result.Adapt<List<ClientDto>>());
-        clientPaginationListQuery.Result = new PaginationDto<ClientDto>(5, new List<ClientDto> {
-            new ClientDto(){ Id=1,ClientId="12333",Description="ddddddddddd",Enabled = true,ClientName="client_name",ClientType = ClientTypes.Web  },
-            new ClientDto(){ Id=1,ClientId="12333",Description="ddddddddddd",Enabled = true,ClientName="client_name",ClientType = ClientTypes.Web  },
-            new ClientDto(){ Id=1,ClientId="12333",Description="ddddddddddd",Enabled = true,ClientName="client_name",ClientType = ClientTypes.Web  },
-            new ClientDto(){ Id=1,ClientId="12333",Description="ddddddddddd",Enabled = true,ClientName="client_name",ClientType = ClientTypes.Web  },
-            new ClientDto(){ Id=1,ClientId="12333",Description="ddddddddddd",Enabled = true,ClientName="client_name",ClientType = ClientTypes.Web  }
-        });
+    }
+
+    [EventHandler]
+    public async Task ClientDetailQueryAsync(ClientDetailQuery clientDetailQuery)
+    {
+        var client = await _clientRepository.GetByIdAsync(clientDetailQuery.ClientId);
+        client.Adapt(clientDetailQuery.Result);
+    }
+
+    [EventHandler]
+    public void ClientTypeListAsync(ClientTypeListQuery clientTypeListQuery)
+    {
+        clientTypeListQuery.Result = Enum<ClientTypes>.GetItems()
+            .Select(ct => new ClientTypeDetailDto
+            {
+                ClientType = ct,
+                Description = ct switch
+                {
+                    //todo: i18n
+                    ClientTypes.Web => "Server-side applications where authentication and tokens are handled on the server (for example, Go, Java, ASP.Net, Node.js, PHP)",
+                    ClientTypes.Native => "Desktop or mobile applications that run natively on a device and redirect users to a non-HTTP callback (for example, iOS, Android, React Native)",
+                    ClientTypes.Spa => "Single-page web applications that run in the browser where the client receives tokens (for example, Javascript, Angular, React, Vue)",
+                    ClientTypes.Device => "Input-constrained devices such as a smart TV, IoT device, or printer.",
+                    ClientTypes.Machine => "Interact with APIs using the scoped OAuth 2.0 access tokens for machine-to-machine authentication.",
+                    _ => ""
+                },
+                Icon = ct switch
+                {
+                    ClientTypes.Web => "mdi-file-code-outline",
+                    ClientTypes.Native => "mdi-cellphone",
+                    ClientTypes.Spa => "mdi-laptop",
+                    ClientTypes.Device => "mdi-devices",
+                    ClientTypes.Machine => "mdi-server",
+                    _ => ""
+                }
+            }).ToList();
     }
 
     #region IdentityResource

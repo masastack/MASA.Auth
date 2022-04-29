@@ -10,7 +10,8 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
     {
         return await Context.Set<Permission>()
             .Where(p => p.Id == id)
-            .Include(p => p.Permissions)
+            .Include(p => p.ChildPermissionRelations)
+            .Include(p => p.ParentPermissionRelations)
             .Include(p => p.UserPermissions).ThenInclude(up => up.User)
             .Include(p => p.RolePermissions).ThenInclude(rp => rp.Role)
             .Include(p => p.TeamPermissions).ThenInclude(tp => tp.Team)

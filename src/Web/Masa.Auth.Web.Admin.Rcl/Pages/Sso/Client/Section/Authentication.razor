@@ -1,0 +1,92 @@
+﻿@inherits AdminCompontentBase
+
+<MContainer Style="overflow-y: auto;">
+    <MRow>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.RedirectUri" Label="CallBackRedirectUri" 
+                AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddCallBackRedirectUri"/>
+        </MCol>
+        @foreach (var uri in Dto.RedirectUris)
+        {
+            <MCol Md=12 Class="d-flex">
+                <MTextField Dense HideDetails="true" Value="uri" Disabled Class="flex-grow-1" />
+                <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
+            </MCol>
+        }
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="PostLogoutRedirectUri" 
+                AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddLogoutRedirectUri"/>
+        </MCol>
+        @foreach (var uri in Dto.PostLogoutRedirectUris)
+        {
+            <MCol Md=12 Class="d-flex">
+                <MTextField Dense HideDetails="true" Value="uri" Disabled />
+                <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
+            </MCol>
+        }
+    </MRow>
+    @if (Dto.Id != 0)
+    {
+        <MRow>
+            <MCol Md=4>
+                <MCheckbox @bind-Value="Dto.FrontChannelLogoutSessionRequired" Label="FrontChannelLogoutSessionRequired"></MCheckbox>
+            </MCol>
+            <MCol Md=8>
+                <DefaultTextField @bind-Value="Dto.FrontChannelLogoutUri" Label="FrontChannelLogoutUri" />
+            </MCol>
+            <MCol Md=4>
+                <MCheckbox @bind-Value="Dto.BackChannelLogoutSessionRequired" Label="BackChannelLogoutSessionRequired"></MCheckbox>
+            </MCol>
+            <MCol Md=8>
+                <DefaultTextField @bind-Value="Dto.BackChannelLogoutUri" Label="BackChannelLogoutUri" />
+            </MCol>
+            <MCol Md=12>
+                <MCheckbox @bind-Value="Dto.EnableLocalLogin" Label="EnableLocalLogin" />
+            </MCol>
+            @*        <MCol Md=12>
+                <DefaultTextField TValue="string" Label="IdentityProviderRestriction" />
+                </MCol>*@
+            <MCol Md=12>
+                <DefaultNumberTextField @bind-Value="Dto.UserSsoLifetime" Label="UserSsoLifetime" />
+            </MCol>
+        </MRow>
+    }
+</MContainer>
+
+@code {
+
+    [Parameter]
+    public ClientAuthenticationDto Dto { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<ClientAuthenticationDto> DtoChanged { get; set; }
+
+
+    private void AddCallBackRedirectUri()
+    {
+        if (Dto.RedirectUris.IndexOf(Dto.RedirectUri)<0)
+        {
+            Dto.RedirectUris.Add(Dto.RedirectUri);
+            Dto.RedirectUri = string.Empty;
+        }
+    }
+
+    private void AddLogoutRedirectUri()
+    {
+        if (Dto.PostLogoutRedirectUris.IndexOf(Dto.PostLogoutRedirectUri)<0)
+        {
+            Dto.PostLogoutRedirectUris.Add(Dto.PostLogoutRedirectUri);
+            Dto.PostLogoutRedirectUri = string.Empty;
+        }
+    }
+
+    private void RemoveCallBackRedirectUri(string val)
+    {
+        Dto.RedirectUris.Remove(val);
+    }
+
+    private void RemoveLogoutRedirectUri(string val)
+    {
+        Dto.PostLogoutRedirectUris.Remove(val);
+    }
+}

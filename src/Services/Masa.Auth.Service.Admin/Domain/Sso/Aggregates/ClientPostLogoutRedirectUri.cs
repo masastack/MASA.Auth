@@ -7,4 +7,9 @@ public class ClientPostLogoutRedirectUri : Entity<int>
     public int ClientId { get; private set; }
 
     public Client Client { get; private set; } = null!;
+
+    public ClientPostLogoutRedirectUri(string postLogoutRedirectUri)
+    {
+        PostLogoutRedirectUri = postLogoutRedirectUri;
+    }
 }

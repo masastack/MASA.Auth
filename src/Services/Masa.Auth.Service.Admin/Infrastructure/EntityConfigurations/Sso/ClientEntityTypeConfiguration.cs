@@ -22,14 +22,14 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
         builder.HasIndex(x => x.ClientId);
         builder.HasIndex(x => x.ClientId).IsUnique().HasFilter("[IsDeleted] = 0");
 
-        builder.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.RedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.PostLogoutRedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.AllowedScopes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.ClientSecrets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.Claims).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.IdentityProviderRestrictions).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.AllowedCorsOrigins).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.Properties).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client);
+        builder.HasMany(x => x.RedirectUris).WithOne(x => x.Client);
+        builder.HasMany(x => x.PostLogoutRedirectUris).WithOne(x => x.Client);
+        builder.HasMany(x => x.AllowedScopes).WithOne(x => x.Client);
+        builder.HasMany(x => x.ClientSecrets).WithOne(x => x.Client);
+        builder.HasMany(x => x.Claims).WithOne(x => x.Client);
+        builder.HasMany(x => x.IdentityProviderRestrictions).WithOne(x => x.Client);
+        builder.HasMany(x => x.AllowedCorsOrigins).WithOne(x => x.Client);
+        builder.HasMany(x => x.Properties).WithOne(x => x.Client);
     }
 }

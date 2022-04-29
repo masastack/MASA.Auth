@@ -11,12 +11,31 @@ public class ClientService : ServiceBase
 
     public async Task<PaginationDto<ClientDto>> GetListAsync(GetClientPaginationDto clientPaginationDto)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["pageSize"] = clientPaginationDto.PageSize.ToString(),
-            ["page"] = clientPaginationDto.Page.ToString(),
-            ["search"] = clientPaginationDto.Search ?? "",
-        };
-        return await GetAsync<PaginationDto<ClientDto>>("GetList", paramters);
+        return await GetAsync<GetClientPaginationDto, PaginationDto<ClientDto>>("GetList", clientPaginationDto);
+    }
+
+    public async Task<ClientDetailDto> GetDetailAsync(int id)
+    {
+        return await GetAsync<ClientDetailDto>($"{nameof(GetDetailAsync)}?id={id}");
+    }
+
+    public async Task<List<ClientTypeDetailDto>> GetClientTypeListAsync()
+    {
+        return await GetAsync<List<ClientTypeDetailDto>>("GetClientTypeList");
+    }
+
+    public async Task AddClientAsync(AddClientDto addClientDto)
+    {
+        await PostAsync(nameof(AddClientAsync), addClientDto);
+    }
+
+    public async Task UpdateClientAsync(ClientDetailDto clientDetailDto)
+    {
+        await PostAsync(nameof(UpdateClientAsync), clientDetailDto);
+    }
+
+    public async Task RemoveClientAsync(int id)
+    {
+        await DeleteAsync($"{nameof(RemoveClientAsync)}?id={id}");
     }
 }

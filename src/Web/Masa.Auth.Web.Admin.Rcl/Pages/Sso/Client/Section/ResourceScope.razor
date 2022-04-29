@@ -1,0 +1,36 @@
+﻿<MContainer>
+    <MRow>
+        <MCol Md=6>
+            <MRow>
+                <MCol Md=12 Class="neutral-lighten-4">
+                    Identity
+                </MCol>
+                @foreach (var identityScope in identityScopes)
+                {
+                    <MCol Md=12>
+                        <MCheckbox Label="@identityScope"></MCheckbox>
+                    </MCol>
+                }
+            </MRow>
+        </MCol>
+        <MDivider Vertical></MDivider>
+        <MCol Md=6>
+            <MRow>
+                <MCol Md=12 Class="neutral-lighten-4">
+                    Api
+                </MCol>
+                 @foreach (var apiScope in apiScopes)
+                {
+                    <MCol Md=12>
+                        <MCheckbox Label="@apiScope"></MCheckbox>
+                    </MCol>
+                }
+            </MRow>
+        </MCol>
+    </MRow>
+</MContainer>
+
+@code {
+    List<string> identityScopes = new List<string> { "1111111", "22222", "33333", "44444444", "555555" };
+    List<string> apiScopes = new List<string> { "api", "api.add", "api.update", "adpi.delete", "api.create" };
+}

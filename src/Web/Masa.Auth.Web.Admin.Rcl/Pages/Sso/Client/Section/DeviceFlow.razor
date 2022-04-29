@@ -1,0 +1,20 @@
+﻿@inherits AdminCompontentBase
+
+<MContainer>
+    <MRow>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.UserCodeType" Label="UserCodeType" />
+        </MCol>
+        <MCol Md=12>
+            <DefaultNumberTextField @bind-Value="Dto.DeviceCodeLifetime" Label="DeviceCodeLifetime" />
+        </MCol>
+    </MRow>
+</MContainer>
+
+@code {
+    [Parameter]
+    public ClientDeviceFlowDto Dto { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<ClientDeviceFlowDto> DtoChanged { get; set; }
+}

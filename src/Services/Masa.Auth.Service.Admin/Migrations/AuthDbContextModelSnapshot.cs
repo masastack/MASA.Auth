@@ -228,12 +228,16 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PermissionId")
+                    b.Property<Guid>("ParentPermissionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChildPermissionId");
+
+                    b.HasIndex("ParentPermissionId", "ChildPermissionId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("PermissionRelation", "permissions");
                 });
@@ -737,6 +741,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ClientType")
+                        .HasColumnType("int");
 
                     b.Property<string>("ClientUri")
                         .IsRequired()
@@ -1949,12 +1956,20 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ChildPermission")
-                        .WithMany("Permissions")
+                        .WithMany("ParentPermissionRelations")
                         .HasForeignKey("ChildPermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ParentPermission")
+                        .WithMany("ChildPermissionRelations")
+                        .HasForeignKey("ParentPermissionId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
                     b.Navigation("ChildPermission");
+
+                    b.Navigation("ParentPermission");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
@@ -2452,7 +2467,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", b =>
                 {
-                    b.Navigation("Permissions");
+                    b.Navigation("ChildPermissionRelations");
+
+                    b.Navigation("ParentPermissionRelations");
 
                     b.Navigation("RolePermissions");
 
