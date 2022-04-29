@@ -2,7 +2,7 @@
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiResource")">
     <MForm Model=ApiResource EnableValidation @ref="Form">
-        <div class="full-height flex-column">
+        <div class="sheetDialogPadding full-height flex-column">
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
@@ -26,7 +26,7 @@
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="ApiResource.Enabled" Inset Class="label" Label="@(ApiResource.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
-                <MButton OnClick="async () => await UpdatetApiResourceAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
+                <MButton OnClick="async () => await UpdatetApiResourceAsync(context)" Color="primary" Class="small-butto">@T("Submit")</MButton>
             </div>
         </div>
     </MForm>

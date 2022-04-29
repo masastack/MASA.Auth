@@ -2,6 +2,9 @@
 
 public class ApiScope : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
+    private List<ApiScopeClaim> _userClaims = new();
+    private List<ApiScopeProperty> _properties = new();
+
     public bool IsDeleted { get; private set; }
 
     public bool Enabled { get; private set; }
@@ -18,9 +21,9 @@ public class ApiScope : AuditAggregateRoot<int, Guid>, ISoftDelete
 
     public bool ShowInDiscoveryDocument { get; private set; }
 
-    public List<ApiScopeClaim> UserClaims { get; private set; } = new();
+    public IReadOnlyCollection<ApiScopeClaim> UserClaims => _userClaims;
 
-    public List<ApiScopeProperty> Properties { get; private set; } = new();  
+    public IReadOnlyCollection<ApiScopeProperty> Properties => _properties;
 
     public ApiScope(string name, string displayName, string description, bool required, bool emphasize, bool showInDiscoveryDocument, bool enabled)
     {
@@ -54,13 +57,13 @@ public class ApiScope : AuditAggregateRoot<int, Guid>, ISoftDelete
 
     public void BindUserClaims(List<int> userClaims)
     {
-        UserClaims.Clear();
-        UserClaims.AddRange(userClaims.Select(id => new ApiScopeClaim(id)));
+        _userClaims.Clear();
+        _userClaims.AddRange(userClaims.Select(id => new ApiScopeClaim(id)));
     }
 
     public void BindProperties(Dictionary<string, string> properties)
     {
-        Properties.Clear();
+        _properties.Clear();
         //Todo add Properties;
     }
 }

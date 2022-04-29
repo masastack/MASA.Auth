@@ -2,7 +2,7 @@
 
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiScope")">
     <MForm Model=ApiScope EnableValidation @ref="Form">
-        <div class="full-height flex-column">
+        <div class="sheetDialogPadding full-height flex-column">
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
@@ -29,7 +29,7 @@
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="ApiScope.Enabled" Inset Class="label" Label="@(ApiScope.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
-                <MButton OnClick="async () => await UpdatetApiScopeAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
+                <MButton OnClick="async () => await UpdatetApiScopeAsync(context)" Color="primary" Class="small-button">@T("Submit")</MButton>
             </div>
         </div>
     </MForm>
