@@ -33,6 +33,8 @@ public class ClientDetailDto : AddClientDto
 
     public int IdentityTokenLifetime { get; set; }
 
+    public string AllowedIdentityTokenSigningAlgorithms { get; set; } = string.Empty;
+
     public int AccessTokenLifetime { get; set; }
 
     public int AccessTokenType { get; set; }

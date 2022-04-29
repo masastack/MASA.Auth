@@ -25,7 +25,6 @@ public class CommandHandler
     {
         PrepareGrantTypeWithClientType(addClientCommand.AddClientDto);
         var client = addClientCommand.AddClientDto.Adapt<Client>();
-
         await _clientRepository.AddAsync(client);
 
         void PrepareGrantTypeWithClientType(AddClientDto client)
@@ -45,6 +44,7 @@ public class CommandHandler
                     break;
                 case ClientTypes.Machine:
                     client.AllowedGrantTypes.AddRange(GrantTypeConsts.ClientCredentials);
+                    client.RequireClientSecret = true;
                     break;
                 case ClientTypes.Device:
                     client.AllowedGrantTypes.AddRange(GrantTypeConsts.DeviceFlow);
@@ -60,10 +60,25 @@ public class CommandHandler
     public async Task UpdateClientAsync(UpdateClientCommand updateClientCommand)
     {
         var id = updateClientCommand.ClientDetailDto.Id;
+        updateClientCommand.ClientDetailDto.ClientSecrets.ForEach(secret =>
+        {
+            HashClientSharedSecret(secret);
+        });
         var client = await _clientRepository.GetByIdAsync(id);
         //Contrary to DDD
         updateClientCommand.ClientDetailDto.Adapt(client);
         await _clientRepository.UpdateAsync(client);
+        void HashClientSharedSecret(ClientSecretDto clientSecret)
+        {
+            if (clientSecret.Id != 0)
+            {
+                clientSecret.Id = 0;
+            }
+            else
+            {
+                clientSecret.Value = SHA512Utils.Encrypt(clientSecret.Value);
+            }
+        }
     }
 
     [EventHandler]

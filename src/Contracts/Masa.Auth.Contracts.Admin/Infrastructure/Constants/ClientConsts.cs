@@ -1,6 +1,4 @@
-﻿using Masa.Auth.Contracts.Admin.Sso;
-
-namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class ClientConsts
 {
