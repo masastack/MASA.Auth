@@ -37,6 +37,7 @@ public partial class UpdateClientDialog
         _clientDetailDto.Adapt(_authenticationDto);
         _clientDetailDto.Adapt(_deviceFlowDto);
         _clientDetailDto.Adapt(_tokenDto);
+        _clientDetailDto.Adapt(_clientCredentialDto);
 
         PrepareHeader();
 
@@ -86,6 +87,7 @@ public partial class UpdateClientDialog
         _authenticationDto.Adapt(_clientDetailDto);
         _deviceFlowDto.Adapt(_clientDetailDto);
         _tokenDto.Adapt(_clientDetailDto);
+        _clientCredentialDto.Adapt(_clientDetailDto);
 
         await ClientService.UpdateClientAsync(_clientDetailDto);
         await CloseAsync();

@@ -70,3 +70,5 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.OpenApi.Models;
 global using System.Linq.Expressions;
 global using System.Reflection;
+global using System.Security.Cryptography;
+global using System.Text;

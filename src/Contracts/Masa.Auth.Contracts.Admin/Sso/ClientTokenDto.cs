@@ -6,6 +6,22 @@ public class ClientTokenDto
 
     public int IdentityTokenLifetime { get; set; }
 
+    public string AllowedIdentityTokenSigningAlgorithms
+    {
+        get
+        {
+            return string.Join(",", AllowTokenSigningAlgorithms);
+        }
+        set
+        {
+            AllowTokenSigningAlgorithms = value.Split(",").ToList();
+        }
+    }
+
+    public List<string> AllowTokenSigningAlgorithms { get; set; } = new();
+
+    public List<SelectItemDto<string>> AllowedIdentityTokenSigningAlgorithmsItems { get; set; } = new();
+
     public int AccessTokenLifetime { get; set; }
 
     public int AccessTokenType { get; set; }

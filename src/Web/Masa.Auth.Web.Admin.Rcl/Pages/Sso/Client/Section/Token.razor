@@ -4,10 +4,19 @@
 <MContainer Style="overflow-y: auto;">
     <MRow>
         <MCol Md=6>
-            <MCheckbox Dense Label="AllowOfflineAccess"></MCheckbox>
+            <MCheckbox Dense @bind-Value="Dto.AllowOfflineAccess" Label="AllowOfflineAccess"></MCheckbox>
         </MCol>
         <MCol Md=6>
-            <DefaultNumberTextField TValue="int" Label="IdentityTokenLifetime" />
+            <DefaultNumberTextField @bind-Value="Dto.IdentityTokenLifetime" Label="IdentityTokenLifetime" />
+        </MCol>
+        <MCol Md=12>
+             <MSelect @bind-Value="@Dto.AllowTokenSigningAlgorithms"
+                 Label="AllowedIdentityTokenSigningAlgorithms"
+                 Outlined Multiple
+                 Items="@Dto.AllowedIdentityTokenSigningAlgorithmsItems"
+                 ItemText="u => u.Text"
+                 ItemValue="u => u.Value">
+            </MSelect>
         </MCol>
         <MCol Md=6>
             <DefaultNumberTextField @bind-Value="Dto.AccessTokenLifetime" Label="AccessTokenLifetime" />
@@ -82,6 +91,11 @@
 
     List<SelectItemDto<int>> _refreshTokenUsage = ClientConsts.GetTokenUsage();
     List<SelectItemDto<int>> _accessTokenType = ClientConsts.GetAccessTokenTypes();    
-    List<SelectItemDto<int>> _refreshTokenExpiration = ClientConsts.GetTokenExpirations();     
-    
+    List<SelectItemDto<int>> _refreshTokenExpiration = ClientConsts.GetTokenExpirations();
+
+    protected override void OnInitialized()
+    {
+        Dto.AllowedIdentityTokenSigningAlgorithmsItems = ClientConsts.SigningAlgorithms();
+        base.OnInitialized();
+    }
 }
