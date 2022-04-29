@@ -10,15 +10,12 @@ public class MapsterAdapterConfig
         TypeAdapterConfig<string, ClientGrantType>.NewConfig().MapWith(str => new ClientGrantType(str));
         TypeAdapterConfig<string, ClientRedirectUri>.NewConfig().MapWith(str => new ClientRedirectUri(str));
         TypeAdapterConfig<string, ClientPostLogoutRedirectUri>.NewConfig().MapWith(str => new ClientPostLogoutRedirectUri(str));
+        TypeAdapterConfig<string, ClientScope>.NewConfig().MapWith(str => new ClientScope(str));
         TypeAdapterConfig<ClientGrantType, string>.NewConfig().MapWith(src => src.GrantType);
         TypeAdapterConfig<ClientRedirectUri, string>.NewConfig().MapWith(src => src.RedirectUri);
         TypeAdapterConfig<ClientPostLogoutRedirectUri, string>.NewConfig().MapWith(src => src.PostLogoutRedirectUri);
-        //TypeAdapterConfig<ClientDetailDto, Client>.ForType().BeforeMapping((src, dest) =>
-        //{
-        //    dest.Properties.Clear();
-        //    dest.RedirectUris.Clear();
-        //    dest.PostLogoutRedirectUris.Clear();
-        //});
+        TypeAdapterConfig<ClientScope, string>.NewConfig().MapWith(src => src.Scope);
+
         TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
     }
 }

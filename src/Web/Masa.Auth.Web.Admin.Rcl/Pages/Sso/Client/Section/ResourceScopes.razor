@@ -1,0 +1,45 @@
+﻿<MContainer>
+    <MRow>
+        <MCol Md=6>
+            <MRow>
+                <MCol Md=12 Class="neutral-lighten-4">
+                    Identity
+                </MCol>
+                @foreach (var identityScope in Dto.IdentityScopes)
+                {
+                    <MCol Md=12>
+                        <MCheckbox @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
+                    </MCol>
+                }
+            </MRow>
+        </MCol>
+        <MDivider Vertical></MDivider>
+        <MCol Md=6>
+            <MRow>
+                <MCol Md=12 Class="neutral-lighten-4">
+                    Api
+                </MCol>
+                 @foreach (var apiScope in Dto.ApiScopes)
+                {
+                    <MCol Md=12>
+                        <MCheckbox @bind-Value="@apiScope.Selected" Label="@apiScope.DisplayValue"></MCheckbox>
+                    </MCol>
+                }
+            </MRow>
+        </MCol>
+    </MRow>
+</MContainer>
+
+@code {
+    [Parameter]
+    public ClientScopesDto Dto { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<ClientScopesDto> DtoChanged { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        //todo load IdentityResources and ApiResources
+        return base.OnInitializedAsync();
+    }
+}

@@ -23,18 +23,19 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission);
         builder.HasMany(p => p.ParentPermissions).WithMany(pi => pi.ChildPermissions)
             .UsingEntity<PermissionRelation>(
-                    cr => cr
+                    configureRight => configureRight
                     .HasOne(pr => pr.ParentPermission)
                     .WithMany(p => p.ChildPermissionRelations)
                     .HasForeignKey(pr => pr.ParentPermissionId),
-                    cl => cl
+                    configureLeft => configureLeft
                     .HasOne(pr => pr.ChildPermission)
                     .WithMany(p => p.ParentPermissionRelations)
                     .HasForeignKey(pr => pr.ChildPermissionId),
-                    cj =>
+                    configureJoinEntityType =>
                     {
-                        cj.HasKey(pr => pr.Id);
-                        cj.HasIndex(pr => new { pr.ParentPermissionId, pr.ChildPermissionId }).IsUnique().HasFilter("[IsDeleted] = 0");
+                        configureJoinEntityType.HasKey(pr => pr.Id);
+                        configureJoinEntityType.HasIndex(pr => new { pr.ParentPermissionId, pr.ChildPermissionId })
+                            .IsUnique().HasFilter("[IsDeleted] = 0");
                     });
     }
 }
