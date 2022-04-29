@@ -9,21 +9,12 @@ public class IdentityResourceRepository : Repository<AuthDbContext, IdentityReso
     {
     }
 
-    public async Task<IdentityResource?> GetDetailByIdAsync(int id)
+    public async Task<IdentityResource?> GetDetailAsync(int id)
     {
         var idrs = await Context.Set<IdentityResource>()
                                 .Include(idrs => idrs.UserClaims)
                                 .Include(idrs => idrs.Properties)
                                 .FirstOrDefaultAsync(idrs => idrs.Id == id);
-
-        return idrs;
-    }
-
-    public async Task<List<IdentityResourceSelectDto>> GetIdentityResourceSelect()
-    {
-        var idrs = await Context.Set<IdentityResource>()
-                                .Select(idrs => new IdentityResourceSelectDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description))
-                                .ToListAsync();
 
         return idrs;
     }

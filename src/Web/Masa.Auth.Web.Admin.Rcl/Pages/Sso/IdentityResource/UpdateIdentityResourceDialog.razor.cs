@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.IdentityResource;
 
-public partial class AddOrUpdateIdentityResourceDialog
+public partial class UpdateIdentityResourceDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -17,9 +17,9 @@ public partial class AddOrUpdateIdentityResourceDialog
     [Parameter]
     public int IdentityResourceId { get; set; }
 
-    public bool IsAdd => IdentityResourceId == 0;
-
     private IdentityResourceDetailDto IdentityResourceDetail { get; set; } = new();
+
+    private UpdateIdentityResourceDto IdentityResource { get; set; } = new();
 
     private IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
@@ -43,7 +43,7 @@ public partial class AddOrUpdateIdentityResourceDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Visible && IsAdd is false)
+        if (Visible)
         {
             await GetIdentityResourceDetailAsync();
         }
@@ -52,24 +52,17 @@ public partial class AddOrUpdateIdentityResourceDialog
     public async Task GetIdentityResourceDetailAsync()
     {
         IdentityResourceDetail = await IdentityResourceService.GetDetailAsync(IdentityResourceId);
+        IdentityResource = IdentityResourceDetail;
     }
 
-    public async Task AddOrUpdatetIdentityResourceAsync(EditContext context)
+    public async Task UpdatetIdentityResourceAsync(EditContext context)
     {
         var success = context.Validate();
         if (success)
         {
             Loading = true;
-            if (IsAdd)
-            {
-                await IdentityResourceService.AddAsync(IdentityResourceDetail);
-                OpenSuccessMessage("Add identityResource success");
-            }
-            else
-            {
-                await IdentityResourceService.UpdateAsync(IdentityResourceDetail);
-                OpenSuccessMessage("Update identityResource success");
-            }
+            await IdentityResourceService.UpdateAsync(IdentityResource);
+            OpenSuccessMessage("Update identityResource success");
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
             Loading = false;

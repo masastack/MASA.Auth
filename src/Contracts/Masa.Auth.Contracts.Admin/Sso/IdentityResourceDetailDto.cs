@@ -21,14 +21,9 @@ public class IdentityResourceDetailDto : IdentityResourceDto
         Properties = properties;
     }
 
-    public static implicit operator AddIdentityResourceDto(IdentityResourceDetailDto idrs)
-    {
-        return new AddIdentityResourceDto();
-    }
-
     public static implicit operator UpdateIdentityResourceDto(IdentityResourceDetailDto idrs)
     {
-        return new UpdateIdentityResourceDto();
+        return new UpdateIdentityResourceDto(idrs.Id, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims);
     }
 }
 

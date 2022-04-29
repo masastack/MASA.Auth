@@ -41,13 +41,13 @@ public partial class IdentityResource
 
     public long Total { get; set; }
 
-    public List<int> PageSizes = new() { 10, 25, 50, 100 };
-
     public List<IdentityResourceDto> IdentityResources { get; set; } = new();
 
     public int CurrentIdentityResourceId { get; set; }
 
-    public bool AddOrUpdateIdentityResourceDialogVisible { get; set; }
+    public bool AddIdentityResourceDialogVisible { get; set; }
+
+    public bool UpdateIdentityResourceDialogVisible { get; set; }
 
     public List<DataTableHeader<IdentityResourceDto>> Headers { get; set; } = new();
 
@@ -78,14 +78,18 @@ public partial class IdentityResource
         Loading = false;
     }
 
-    public void OpenAddOrUpdateRoleDialog(IdentityResourceDto? identityResource = null)
+    public void OpenAddRoleDialog()
     {
-        identityResource ??= new();
-        CurrentIdentityResourceId = identityResource.Id;
-        AddOrUpdateIdentityResourceDialogVisible = true;
+        AddIdentityResourceDialogVisible = true;
     }
 
-    public async Task RemoveIdentityResourceDialog(IdentityResourceDto identityResource)
+    public void OpenUpdateRoleDialog(IdentityResourceDto identityResource)
+    {
+        CurrentIdentityResourceId = identityResource.Id;
+        UpdateIdentityResourceDialogVisible = true;
+    }
+
+    public async Task OpenRemoveIdentityResourceDialog(IdentityResourceDto identityResource)
     {
         var confirm = await OpenConfirmDialog(T("Are you sure delete identityResource data"));
         if (confirm) await RemoveIdentityResourceAsync(identityResource.Id);

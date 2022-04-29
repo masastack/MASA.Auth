@@ -198,11 +198,34 @@
   "Project identifier is empty": "项目标识为空",
   "Tag or appid is empty": "tag或appid为空",
 
-  "IdentityResource": "身份",
+  "IdentityResource": "身份资源",
+  "Add IdentityResource": "新增身份资源",
+  "Update IdentityResource": "编辑身份资源",
   "IdentityResource.Name": "配置名称",
   "IdentityResource.Required": "是否必须",
   "User Claims": "用户声明",
+  "Delete IdentityResource": "删除身份资源",
 
-  "Delete Client": "删除客户端",
-  "Are you sure you want to delete this client": "确定删除该客户端?",
+  "ApiResource": "Api资源",
+  "Add ApiResource": "新增Api资源",
+  "Update ApiResource": "编辑Api资源",
+  "ApiResource.Name": "配置名称",
+  "ApiResource.Required": "是否必须",
+  "Delete ApiResource": "删除Api资源",
+
+  "ApiScope": "Api范围",
+  "Api Scopes": "Api范围",
+  "Add ApiScope": "新增Api范围",
+  "Update ApiScope": "编辑Api范围",
+  "ApiScope.Name": "配置名称",
+  "ApiScope.Required": "是否必须",
+  "Delete ApiScope": "删除Api范围",
+
+  "UserClaim": "用户声明",
+  "UserClaim.Name": "名称",
+  "Standard": "标准",
+  "Customize": "自定义",
+  "Add UserClaim": "新增用户声明",
+  "Update UserClaim": "编辑用户声明",
+  "Delete UserClaim": "删除用户声明"
 }

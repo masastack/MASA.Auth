@@ -7,7 +7,6 @@ public class UpdateIdentityResourceValidator : AbstractValidator<UpdateIdentityR
 {
     public UpdateIdentityResourceValidator()
     {
-
     }
 }
 

@@ -42,10 +42,28 @@
     "Icon": "mdi-calendar-check-outline",
     "Children": [
       {
-        "Id": 3,
+        "Id": 7,
+        "Title": "UserClaim",
+        "Icon": "mdi-circle",
+        "Href": "/sso/userClaim"
+      },
+      {
+        "Id": 8,
         "Title": "IdentityResource",
         "Icon": "mdi-circle",
         "Href": "/sso/identityResource"
+      },
+      {
+        "Id": 9,
+        "Title": "ApiScope",
+        "Icon": "mdi-circle",
+        "Href": "/sso/apiScope"
+      },
+      {
+        "Id": 10,
+        "Title": "ApiResource",
+        "Icon": "mdi-circle",
+        "Href": "/sso/apiResource"
       }
     ]
   }
