@@ -1,4 +1,7 @@
-﻿global using BlazorComponent;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+global using BlazorComponent;
 global using BlazorComponent.I18n;
 global using Mapster;
 global using Masa.Auth.ApiGateways.Caller.Services.Organizations;

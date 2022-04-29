@@ -1,4 +1,7 @@
-﻿using Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section;
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
 
