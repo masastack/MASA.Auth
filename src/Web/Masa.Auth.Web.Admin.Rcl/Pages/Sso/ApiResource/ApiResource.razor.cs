@@ -55,7 +55,7 @@ public partial class ApiResource
         Headers = new()
         {
             new() { Text = T("ApiResource.Name"), Value = nameof(ApiResourceDto.Name), Sortable = false },
-            new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false },         
+            new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false },
             new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
             new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },

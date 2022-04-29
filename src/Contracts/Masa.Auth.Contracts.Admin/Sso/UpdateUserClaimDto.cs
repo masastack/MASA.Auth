@@ -8,7 +8,7 @@ public class UpdateUserClaimDto : AddUserClaimDto
     {
     }
 
-    public UpdateUserClaimDto(int id,string name, string description, UserClaimType userClaimType) : base(name, description, userClaimType)
+    public UpdateUserClaimDto(int id, string name, string description, UserClaimType userClaimType) : base(name, description, userClaimType)
     {
         Id = id;
     }

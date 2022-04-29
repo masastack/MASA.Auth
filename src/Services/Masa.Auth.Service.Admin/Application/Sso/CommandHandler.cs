@@ -143,7 +143,7 @@ public class CommandHandler
         if (apiResource is null)
             throw new UserFriendlyException("The current apiResource does not exist");
 
-        apiResource.Update(apiResourceDto.Name,apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
+        apiResource.Update(apiResourceDto.Name, apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
         await _apiResourceRepository.UpdateAsync(apiResource);
     }
 

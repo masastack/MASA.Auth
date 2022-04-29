@@ -39,7 +39,7 @@ public class ApiScope : AuditAggregateRoot<int, Guid>, ISoftDelete
     public static implicit operator ApiScopeDetailDto(ApiScope apiScope)
     {
         var userClaims = apiScope.UserClaims.Select(userClaim => userClaim.UserClaimId).ToList();
-        var properties = apiScope.Properties.ToDictionary(property => property.Key, property => property.Value);        
+        var properties = apiScope.Properties.ToDictionary(property => property.Key, property => property.Value);
 
         return new ApiScopeDetailDto(apiScope.Id, apiScope.Enabled, apiScope.Name, apiScope.DisplayName, apiScope.Description, apiScope.Required, apiScope.Emphasize, apiScope.ShowInDiscoveryDocument, userClaims, properties);
     }
