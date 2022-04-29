@@ -75,7 +75,9 @@
                     </MWindowItem>
                     <MWindowItem Value="UpdateRoleTab.Permission">
                         <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mt-1 mb-6" />
-                        <GlobalNavigationDialog />
+                        <PermissionsCheck RoleIds=Role.ChildrenRoles
+                                          Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
+                                          ValueChanged="PermissionsChanged" />
                     </MWindowItem>
                 </div>
             </MWindow>

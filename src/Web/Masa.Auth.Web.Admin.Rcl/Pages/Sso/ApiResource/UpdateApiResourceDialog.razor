@@ -1,0 +1,33 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiResource")">
+    <MForm Model=ApiResource EnableValidation @ref="Form">
+        <div class="sheetDialogPadding full-height flex-column">
+            <div class="mt-6 flex-height-auto overflow-y">
+                <div class="text-subtitle2">@T("Basic Information")</div>
+                <MRow Class="mt-4">
+                    <MCol>
+                        <MTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <MTextField @bind-Value="ApiResource.Description" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <div class="mt-6 text-subtitle2">@T("User Claims")</div>
+                <UserClaimSelect @bind-Value=ApiResource.UserClaims Class="mt-4" />
+                <div class="mt-6 text-subtitle2">@T("Api Scopes")</div>
+                <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Class="mt-4" />
+            </div>
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="ApiResource.Enabled" Inset Class="label" Label="@(ApiResource.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton OnClick="async () => await UpdatetApiResourceAsync(context)" Color="primary" Class="small-butto">@T("Submit")</MButton>
+            </div>
+        </div>
+    </MForm>
+</SheetDialog>

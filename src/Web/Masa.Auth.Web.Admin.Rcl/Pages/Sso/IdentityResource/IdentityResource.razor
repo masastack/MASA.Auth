@@ -9,7 +9,7 @@
             </PrependInnerContent>
         </MTextField>
         <MSpacer />
-        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() =>  OpenAddOrUpdateRoleDialog()">
+        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() =>  OpenAddRoleDialog()">
             <MIcon Size=18>mdi-plus</MIcon>
             <span class="ml-2">@T("Add")</span>
         </MButton>
@@ -22,7 +22,7 @@
             @switch (context.Header.Value)
             {
                 case nameof(IdentityResourceDto.Name):
-                    <div class="hover-pointer" @onclick="()=> OpenAddOrUpdateRoleDialog(context.Item)">
+                    <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
                         <span class="text-body3 neutral--text">@context.Item.Name</span>
                     </div>
                     break;
@@ -42,8 +42,8 @@
                     </MChip>
                     break;
                 case "Action":
-                    <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenAddOrUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> RemoveIdentityResourceDialog(context.Item)">mdi-delete</MIcon>
+                    <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
+                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">mdi-delete</MIcon>
                     break;
                 default:
                     <span class="text-body3">@context.Value</span>
@@ -56,4 +56,5 @@
     </MDataTable>
 </MCard>
 
-<AddOrUpdateIdentityResourceDialog @bind-Visible="AddOrUpdateIdentityResourceDialogVisible" IdentityResourceId=CurrentIdentityResourceId OnSubmitSuccess=GetIdentityResourcesAsync />
+<AddIdentityResourceDialog @bind-Visible="AddIdentityResourceDialogVisible" OnSubmitSuccess=GetIdentityResourcesAsync />
+<UpdateIdentityResourceDialog @bind-Visible="UpdateIdentityResourceDialogVisible" IdentityResourceId=CurrentIdentityResourceId OnSubmitSuccess=GetIdentityResourcesAsync />

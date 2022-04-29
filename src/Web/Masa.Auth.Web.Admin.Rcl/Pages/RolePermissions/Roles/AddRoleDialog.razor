@@ -15,7 +15,6 @@
             </div>
 
             <div class="mt-6 flex-height-auto overflow-y">
-                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" Class="mb-13" />
                 <PermissionsCheck RoleIds=Role.ChildrenRoles
                                   Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
                                   ValueChanged="PermissionsChanged" />

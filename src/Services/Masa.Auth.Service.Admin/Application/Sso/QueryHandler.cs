@@ -4,11 +4,19 @@ public class QueryHandler
 {
     readonly IClientRepository _clientRepository;
     readonly IIdentityResourceRepository _identityResourceRepository;
+    readonly IApiResourceRepository _apiResourceRepository;
+    readonly IApiScopeRepository _apiScopeRepository;
+    readonly IUserClaimRepository _userClaimRepository;
+    readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, AuthDbContext authDbContext)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
+        _apiResourceRepository = apiResourceRepository;
+        _apiScopeRepository = apiScopeRepository;
+        _userClaimRepository = userClaimRepository;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler]
@@ -61,7 +69,7 @@ public class QueryHandler
     #region IdentityResource
 
     [EventHandler]
-    public async Task GetIdentityResourceAsync(IdentityResourcesQuery query)
+    public async Task GetIdentityResourceAsync(IdentityResourceQuery query)
     {
         Expression<Func<IdentityResource, bool>> condition = idrs => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -86,7 +94,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetIdentityResourceDetailAsync(IdentityResourceDetailQuery query)
     {
-        var idrs = await _identityResourceRepository.GetDetailByIdAsync(query.IdentityResourceId);
+        var idrs = await _identityResourceRepository.GetDetailAsync(query.IdentityResourceId);
         if (idrs is null) throw new UserFriendlyException("This identityResource data does not exist");
 
         query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.Id).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
@@ -95,7 +103,143 @@ public class QueryHandler
     [EventHandler]
     public async Task GetIdentityResourceSelectAsync(IdentityResourceSelectQuery query)
     {
-        query.Result = await _identityResourceRepository.GetIdentityResourceSelect();
+        var idrs = await _authDbContext.Set<IdentityResource>()
+                                .Select(idrs => new IdentityResourceSelectDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description))
+                                .ToListAsync();
+
+        query.Result = idrs;
+    }
+
+    #endregion
+
+    #region ApiResource
+
+    [EventHandler]
+    public async Task GetApiResourceAsync(ApiResourceQuery query)
+    {
+        Expression<Func<ApiResource, bool>> condition = apiResource => true;
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(apiResource => apiResource.DisplayName.Contains(query.Search) || apiResource.Name.Contains(query.Search));
+
+        var apiResources = await _apiResourceRepository.GetPaginatedListAsync(condition, new PaginatedOptions
+        {
+            Page = query.Page,
+            PageSize = query.PageSize,
+            Sorting = new Dictionary<string, bool>
+            {
+                [nameof(ApiResource.ModificationTime)] = true,
+                [nameof(ApiResource.CreationTime)] = true,
+            }
+        });
+
+        query.Result = new(apiResources.Total, apiResources.Result.Select(apiResource => (ApiResourceDto)apiResource).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetApiResourceDetailAsync(ApiResourceDetailQuery query)
+    {
+        var apiResource = await _apiResourceRepository.GetDetailAsync(query.ApiResourceId);
+        if (apiResource is null) throw new UserFriendlyException("This apiResource data does not exist");
+
+        query.Result = apiResource;
+    }
+
+    [EventHandler]
+    public async Task GetApiResourceSelectAsync(ApiResourceSelectQuery query)
+    {
+        var apiResourceSelect = await _authDbContext.Set<ApiResource>()
+                                .Select(apiResource => new ApiResourceSelectDto(apiResource.Id, apiResource.Name, apiResource.DisplayName, apiResource.Description))
+                                .ToListAsync();
+
+        query.Result = apiResourceSelect;
+    }
+
+    #endregion
+
+    #region ApiScope
+
+    [EventHandler]
+    public async Task GetApiScopeAsync(ApiScopeQuery query)
+    {
+        Expression<Func<ApiScope, bool>> condition = apiScopes => true;
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(apiScope => apiScope.DisplayName.Contains(query.Search) || apiScope.Name.Contains(query.Search));
+
+        var apiScopes = await _apiScopeRepository.GetPaginatedListAsync(condition, new PaginatedOptions
+        {
+            Page = query.Page,
+            PageSize = query.PageSize,
+            Sorting = new Dictionary<string, bool>
+            {
+                [nameof(ApiScope.ModificationTime)] = true,
+                [nameof(ApiScope.CreationTime)] = true,
+            }
+        });
+
+        query.Result = new(apiScopes.Total, apiScopes.Result.Select(apiScope => (ApiScopeDto)apiScope).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetApiScopeDetailAsync(ApiScopeDetailQuery query)
+    {
+        var apiScope = await _apiScopeRepository.GetDetailAsync(query.ApiScopeId);
+        if (apiScope is null) throw new UserFriendlyException("This apiScope data does not exist");
+
+        query.Result = apiScope;
+    }
+
+    [EventHandler]
+    public async Task GetApiScopeSelectAsync(ApiScopeSelectQuery query)
+    {
+        var apiScopeSelect = await _authDbContext.Set<ApiScope>()
+                                .Select(apiScope => new ApiScopeSelectDto(apiScope.Id, apiScope.Name, apiScope.DisplayName, apiScope.Description))
+                                .ToListAsync();
+
+        query.Result = apiScopeSelect;
+    }
+
+    #endregion
+
+    #region UserClaim
+
+    [EventHandler]
+    public async Task GetUserClaimAsync(UserClaimQuery query)
+    {
+        Expression<Func<UserClaim, bool>> condition = userClaim => true;
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(userClaim => userClaim.Name.Contains(query.Search));
+
+        var userClaims = await _userClaimRepository.GetPaginatedListAsync(condition, new PaginatedOptions
+        {
+            Page = query.Page,
+            PageSize = query.PageSize,
+            Sorting = new Dictionary<string, bool>
+            {
+                [nameof(UserClaim.ModificationTime)] = true,
+                [nameof(UserClaim.CreationTime)] = true,
+            }
+        });
+
+        query.Result = new(userClaims.Total, userClaims.Result.Select(userClaim => (UserClaimDto)userClaim).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetUserClaimDetailAsync(UserClaimDetailQuery query)
+    {
+        var userClaim = await _userClaimRepository.FindAsync(userClaim => userClaim.Id == query.UserClaimId);
+        if (userClaim is null) throw new UserFriendlyException("This userClaim data does not exist");
+
+        query.Result = userClaim;
+    }
+
+    [EventHandler]
+    public async Task GetUserClaimSelectAsync(UserClaimSelectQuery query)
+    {
+        var userClaimSelect = await _authDbContext.Set<UserClaim>()
+                                .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description, userClaim.UserClaimType))
+                                .ToListAsync();
+
+        query.Result = userClaimSelect;
     }
 
     #endregion

@@ -457,14 +457,14 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("ApiResourceId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int>("UserClaimId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiResourceId");
+
+                    b.HasIndex("UserClaimId");
 
                     b.ToTable("ApiResourceClaim", "sso");
                 });
@@ -506,14 +506,14 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("ApiResourceId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Scope")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int>("ApiScopeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiResourceId");
+
+                    b.HasIndex("ApiScopeId");
 
                     b.ToTable("ApiResourceScope", "sso");
                 });
@@ -577,6 +577,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -592,6 +598,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -620,17 +635,17 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ScopeId")
+                    b.Property<int>("ApiScopeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int>("UserClaimId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ScopeId");
+                    b.HasIndex("ApiScopeId");
+
+                    b.HasIndex("UserClaimId");
 
                     b.ToTable("ApiScopeClaim", "sso");
                 });
@@ -1227,14 +1242,14 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("IdentityResourceId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int>("UserClaimId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityResourceId");
+
+                    b.HasIndex("UserClaimId");
 
                     b.ToTable("IdentityResourceClaim", "sso");
                 });
@@ -1334,6 +1349,47 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasIndex("SubjectId", "SessionId", "Type");
 
                     b.ToTable("PersistedGrant", "sso");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.UserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("UserClaimType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserClaim", "sso");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
@@ -1976,7 +2032,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.UserClaim", "UserClaim")
+                        .WithMany()
+                        .HasForeignKey("UserClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ApiResource");
+
+                    b.Navigation("UserClaim");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiResourceProperty", b =>
@@ -1993,12 +2057,20 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiResourceScope", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiResource", "ApiResource")
-                        .WithMany("Scopes")
+                        .WithMany("ApiScopes")
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiScope", "ApiScope")
+                        .WithMany()
+                        .HasForeignKey("ApiScopeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ApiResource");
+
+                    b.Navigation("ApiScope");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiResourceSecret", b =>
@@ -2014,13 +2086,21 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiScopeClaim", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiScope", "Scope")
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiScope", "ApiScope")
                         .WithMany("UserClaims")
-                        .HasForeignKey("ScopeId")
+                        .HasForeignKey("ApiScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Scope");
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.UserClaim", "UserClaim")
+                        .WithMany()
+                        .HasForeignKey("UserClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApiScope");
+
+                    b.Navigation("UserClaim");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiScopeProperty", b =>
@@ -2141,7 +2221,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.UserClaim", "UserClaim")
+                        .WithMany()
+                        .HasForeignKey("UserClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("IdentityResource");
+
+                    b.Navigation("UserClaim");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.IdentityResourceProperty", b =>
@@ -2272,13 +2360,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
                         .WithMany()
-                        .HasForeignKey("Creator")
-                        .IsRequired();
+                        .HasForeignKey("Creator");
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
                         .WithMany()
-                        .HasForeignKey("Modifier")
-                        .IsRequired();
+                        .HasForeignKey("Modifier");
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyIdp", "ThirdPartyIdp")
                         .WithMany()
@@ -2287,7 +2373,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
-                        .WithMany()
+                        .WithMany("ThirdPartyUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2345,7 +2431,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
-                        .WithMany()
+                        .WithMany("Permissions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2364,7 +2450,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
-                        .WithMany("UserRoles")
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2407,9 +2493,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.ApiResource", b =>
                 {
-                    b.Navigation("Properties");
+                    b.Navigation("ApiScopes");
 
-                    b.Navigation("Scopes");
+                    b.Navigation("Properties");
 
                     b.Navigation("Secrets");
 
@@ -2469,7 +2555,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Roles");
+
+                    b.Navigation("ThirdPartyUsers");
                 });
 #pragma warning restore 612, 618
         }

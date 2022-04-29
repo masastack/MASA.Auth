@@ -8,7 +8,7 @@
 
         private async Task<PaginationDto<IdentityResourceDto>> GetListAsync(IEventBus eventBus, GetIdentityResourcesDto idrs)
         {
-            var query = new IdentityResourcesQuery(idrs.Page, idrs.PageSize, idrs.Search);
+            var query = new IdentityResourceQuery(idrs.Page, idrs.PageSize, idrs.Search);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
