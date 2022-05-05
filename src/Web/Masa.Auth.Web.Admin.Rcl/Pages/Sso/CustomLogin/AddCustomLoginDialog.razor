@@ -1,0 +1,54 @@
+﻿@using Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin.Model
+@inherits AdminCompontentBase
+
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add CustomLogin")">
+    <MForm Model=CustomLogin EnableValidation @ref="Form">
+        <div class="sheetDialogPadding full-height flex-column">
+            <div class="d-flex">
+                <div class="mx-auto">
+                    <MButtonGroup Dense Mandatory Borderless @bind-Value="Tab" Class="rounded-lg elevation-tab" Style="margin-left:10px">
+                        <MButton Ripple=false Value="@UpdateCustomLoginTab.BasicInformation" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(UpdateCustomLoginTab.BasicInformation)
+                        </MButton>
+                        <MButton Ripple=false Value="@UpdateCustomLoginTab.Login" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(UpdateCustomLoginTab.Login)
+                        </MButton>
+                        <MButton Ripple=false Value="@UpdateCustomLoginTab.Register" Class="rounded-lg" MinWidth=70 Height=36>
+                            @T(UpdateCustomLoginTab.Register)
+                        </MButton>
+                    </MButtonGroup>
+                </div>
+            </div>
+            <MWindow Value="Tab" Reverse Class="flex-grow-1">
+                <div class="mt-6 flex-height-auto overflow-y">
+                    <MWindowItem Value="UpdateCustomLoginTab.BasicInformation">
+                        <div class="d-flex">
+                            <MAvatar Class="mx-auto" Size=80>
+                                <img src="" />
+                            </MAvatar>
+                        </div>
+                        <MRow Class="my-4">
+                            <MCol>
+                                <MTextField @bind-Value="CustomLogin.Name" Label="@T("CustomLogin.Name")" HideDetails="@("auto")" Outlined />
+                            </MCol>
+                            <MCol>
+
+                            </MCol>
+                        </MRow>                                               
+                    </MWindowItem>
+                    <MWindowItem Value="UpdateCustomLoginTab.Login">
+                        
+                    </MWindowItem>
+                    <MWindowItem Value="UpdateCustomLoginTab.Register">
+                        
+                    </MWindowItem>
+                </div>
+            </MWindow>
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="CustomLogin.Enabled" Inset Class="label" Label="@(CustomLogin.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton OnClick="async () => await AddCustomLoginAsync(context)" Color="primary" Class="small-button">@T("Submit")</MButton>
+            </div>
+        </div>
+    </MForm>
+</SheetDialog>

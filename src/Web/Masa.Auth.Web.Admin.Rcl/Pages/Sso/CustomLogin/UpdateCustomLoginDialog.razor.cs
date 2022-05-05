@@ -1,0 +1,68 @@
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin;
+
+public partial class UpdateCustomLoginDialog
+{
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> VisibleChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnSubmitSuccess { get; set; }
+
+    [Parameter]
+    public int CustomLoginId { get; set; }
+
+    private CustomLoginDetailDto CustomLoginDetail { get; set; } = new();
+
+    private UpdateCustomLoginDto CustomLogin { get; set; } = new();
+
+    private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
+
+    private MForm? Form { get; set; }
+
+    private async Task UpdateVisible(bool visible)
+    {
+        if (VisibleChanged.HasDelegate)
+        {
+            await VisibleChanged.InvokeAsync(visible);
+        }
+        else
+        {
+            Visible = visible;
+        }
+        if (Form is not null)
+        {
+            await Form.ResetValidationAsync();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Visible)
+        {
+            await GetCustomLoginDetailAsync();
+        }
+    }
+
+    public async Task GetCustomLoginDetailAsync()
+    {
+        CustomLoginDetail = await CustomLoginService.GetDetailAsync(CustomLoginId);
+        CustomLogin = CustomLoginDetail;
+    }
+
+    public async Task UpdatetCustomLoginAsync(EditContext context)
+    {
+        var success = context.Validate();
+        if (success)
+        {
+            Loading = true;
+            await CustomLoginService.UpdateAsync(CustomLogin);
+            OpenSuccessMessage("Update customLogin success");
+            await OnSubmitSuccess.InvokeAsync();
+            await UpdateVisible(false);
+            Loading = false;
+        }
+    }
+}

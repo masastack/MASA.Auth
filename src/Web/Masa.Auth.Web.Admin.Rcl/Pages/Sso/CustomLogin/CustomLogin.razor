@@ -1,0 +1,60 @@
+﻿@page "/sso/customLogin"
+@inherits AdminCompontentBase
+
+<MCard Class="pa-6">
+    <div class="d-flex mb-6">
+        <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+            <PrependInnerContent>
+                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+            </PrependInnerContent>
+        </MTextField>
+        <MSpacer />
+        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => OpenAddCustomLoginDialog()">
+            <MIcon Size=18>mdi-plus</MIcon>
+            <span class="ml-2">@T("Add")</span>
+        </MButton>
+    </div>
+    <MDataTable Headers="Headers" Items="CustomLogins" TItem="CustomLoginDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
+        <HeaderColContent Context="header">
+            <span class="text-btn">@header.Text</span>
+        </HeaderColContent>
+        <ItemColContent>
+            @switch (context.Header.Value)
+            {
+                case nameof(ClientDto.LogoUri):
+                    <MAvatar Size=48>
+                        <img src="@context.Item.Client.LogoUri" />
+                    </MAvatar>
+                    break;
+                case nameof(CustomLoginDto.Name):
+                    <span class="text-body3 neutral--text">@context.Item.Name</span>
+                    break;
+                case (nameof(ClientDto.ClientName)):
+                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Client.ClientName</span>
+                    break;
+                case (nameof(CustomLoginDto.CreationTime)):
+                    <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                    break;
+                case nameof(CustomLoginDto.ModificationTime):
+                    <span class="text-body4 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                    break;
+                case (nameof(CustomLoginDto.Modifier)):
+                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Modifier</span>
+                    break;
+                case "Action":
+                    <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">mdi-pencil</MIcon>
+                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">mdi-delete</MIcon>
+                    break;
+                default:
+                    <span class="text-body3">@context.Value</span>
+                    break;
+            }
+        </ItemColContent>
+        <FooterContent>
+            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        </FooterContent>
+    </MDataTable>
+</MCard>
+
+<AddCustomLoginDialog @bind-Visible="AddCustomLoginDialogVisible" OnSubmitSuccess=GetCustomLoginsAsync />
+<UpdateCustomLoginDialog @bind-Visible="UpdateCustomLoginDialogVisible" OnSubmitSuccess=GetCustomLoginsAsync />
