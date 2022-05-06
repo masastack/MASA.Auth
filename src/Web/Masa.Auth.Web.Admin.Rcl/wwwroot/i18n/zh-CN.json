@@ -235,5 +235,7 @@
   "ClientDto.ClientName": "客户端",
   "Add CustomLogin": "新增自定义登录",
   "Update CustomLogin": "编辑自定义登录",
-  "Delete CustomLogin": "删除自定义登录"
+  "Delete CustomLogin": "删除自定义登录",
+  "Login": "登录",
+  "Register": "注册"
 }

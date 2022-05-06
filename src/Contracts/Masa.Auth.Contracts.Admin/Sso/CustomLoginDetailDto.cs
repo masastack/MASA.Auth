@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Sso;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class CustomLoginDetailDto : CustomLoginDto
 {
@@ -8,7 +11,7 @@ public class CustomLoginDetailDto : CustomLoginDto
 
     public CustomLoginDetailDto() { }
 
-    public CustomLoginDetailDto(int id, string name, ClientDto client, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier, List<CustomLoginThirdPartyIdpDto> thirdPartyIdps, List<RegisterFieldDto> registerFields) : base(id, name, client, enabled, creationTime, modificationTime, creator, modifier)
+    public CustomLoginDetailDto(int id, string name, string title, ClientDto client, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier, List<CustomLoginThirdPartyIdpDto> thirdPartyIdps, List<RegisterFieldDto> registerFields) : base(id, name, title, client, enabled, creationTime, modificationTime, creator, modifier)
     {
         ThirdPartyIdps = thirdPartyIdps;
         RegisterFields = registerFields;
@@ -16,7 +19,7 @@ public class CustomLoginDetailDto : CustomLoginDto
 
     public static implicit operator UpdateCustomLoginDto(CustomLoginDetailDto customLogin)
     {
-        return new UpdateCustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Enabled, customLogin.ThirdPartyIdps, customLogin.RegisterFields);
+        return new UpdateCustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, customLogin.Enabled, customLogin.ThirdPartyIdps, customLogin.RegisterFields);
     }
 }
 

@@ -15,7 +15,7 @@ public partial class AddCustomLoginDialog
 
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
-    private StringNumber? Tab { get; set; }
+    private StringNumber Tab { get; set; } = CustomLoginTab.BasicInformation;
 
     private MForm? Form { get; set; }
 

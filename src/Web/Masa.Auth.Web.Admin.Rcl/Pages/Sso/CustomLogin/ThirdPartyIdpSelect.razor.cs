@@ -11,6 +11,6 @@ public partial class ThirdPartyIdpSelect
     [Parameter]
     public EventCallback<List<CustomLoginThirdPartyIdpDto>> ValueChanged { get; set; }
 
-    StringNumber? LoginTab { get; set; }
+    StringNumber LoginTab { get; set; } = CustomLoginTab.Login;
 }
 

@@ -273,7 +273,7 @@ public class CommandHandler
                 throw new UserFriendlyException($"CustomLogin public bool Enabled");
         }
         
-        var customLogin = new CustomLogin(customLoginDto.Name, customLoginDto.ClientId, customLoginDto.Enabled);
+        var customLogin = new CustomLogin(customLoginDto.Name, customLoginDto.Title, customLoginDto.ClientId, customLoginDto.Enabled);
         customLogin.BindRegisterFields(customLoginDto.RegisterFields);
         customLogin.BindThirdPartyIdps(customLoginDto.ThirdPartyIdps);
         await _customLoginRepository.AddAsync(customLogin);
@@ -293,7 +293,7 @@ public class CommandHandler
             if (exist)
                 throw new UserFriendlyException($"CustomLogin public bool Enabled");
         }
-        customLogin.Update(customLoginDto.Name, customLoginDto.Enabled);
+        customLogin.Update(customLoginDto.Name, customLoginDto.Title, customLoginDto.Enabled);
         customLogin.BindRegisterFields(customLoginDto.RegisterFields);
         customLogin.BindThirdPartyIdps(customLoginDto.ThirdPartyIdps);
         await _customLoginRepository.UpdateAsync(customLogin);

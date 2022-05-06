@@ -7,13 +7,10 @@
                Label="@T("Client")"
                ItemText="client => client.ClientName"
                ItemValue="client => client.Id"
-               Flat
-               Dense
-               Solo
-               BackgroundColor="fill-lighten-1"
+               Outlined
                HideDetails="@("auto")"
-               Style="@($"width:340px;height:40px;{Style}")"
-               Class="@($"{Class} rounded-2")">
+               Style="@($"{Style}")"
+               Class="@($"{Class}")">
     <PrependInnerContent>
         <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
     </PrependInnerContent>

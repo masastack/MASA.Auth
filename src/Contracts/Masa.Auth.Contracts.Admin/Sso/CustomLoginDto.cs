@@ -6,6 +6,8 @@ public class CustomLoginDto
 
     public string Name { get; set; } = "";
 
+    public string Title { get; private set; } = "";
+
     public ClientDto Client { get; set; } = new();
 
     public bool Enabled { get; set; }
@@ -20,10 +22,11 @@ public class CustomLoginDto
 
     public CustomLoginDto() { }
 
-    public CustomLoginDto(int id, string name, ClientDto client, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public CustomLoginDto(int id, string name, string title, ClientDto client, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {
         Id = id;
         Name = name;
+        Title = title;
         Client = client;
         Enabled = enabled;
         CreationTime = creationTime;

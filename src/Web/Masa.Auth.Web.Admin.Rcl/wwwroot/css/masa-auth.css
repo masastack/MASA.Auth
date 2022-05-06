@@ -1467,3 +1467,12 @@ tr:hover {
     box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
     border-radius: 20px;
 }
+
+.login .m-tabs-slider-wrapper{
+    top:0;
+    height:4px !important;
+}
+
+.login .m-slide-group__wrapper{
+    height:70px !important;
+}

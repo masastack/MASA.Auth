@@ -13,6 +13,8 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public string Name { get; private set; }
 
+        public string Title { get; private set; }
+
         public int ClientId { get; private set; }
 
         public bool Enabled { get; private set; }
@@ -29,9 +31,10 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public bool IsDeleted { get; private set; }
 
-        public CustomLogin(string name, int clientId, bool enabled)
+        public CustomLogin(string name, string title, int clientId, bool enabled)
         {
             Name = name;
+            Title = title;
             ClientId = clientId;
             Enabled = enabled;
         }
@@ -50,12 +53,13 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
             };
             var thirdPartyIdps = customLogin.ThirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdpDto(tp.ThirdPartyIdpId, tp.Sort)).ToList();
             var registerFields = customLogin.RegisterFields.Select(rf => new RegisterFieldDto(rf.RegisterFieldType, rf.Sort, rf.Required)).ToList();
-            return new CustomLoginDetailDto(customLogin.Id, customLogin.Name, client, customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "", thirdPartyIdps, registerFields); ;
+            return new CustomLoginDetailDto(customLogin.Id, customLogin.Name, customLogin.Title, client, customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "", thirdPartyIdps, registerFields); ;
         }
 
-        public void Update(string name, bool enabled)
+        public void Update(string name,string title, bool enabled)
         {
             Name = name;
+            Title = title;
             Enabled = enabled;
         }
 

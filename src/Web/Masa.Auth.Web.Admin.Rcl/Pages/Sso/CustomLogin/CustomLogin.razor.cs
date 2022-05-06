@@ -67,7 +67,7 @@ public partial class CustomLogin
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        await GetCustomLoginsAsync();
+        //await GetCustomLoginsAsync();
     }
 
     public async Task GetCustomLoginsAsync()
