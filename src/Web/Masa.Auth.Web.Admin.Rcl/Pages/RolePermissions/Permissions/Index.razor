@@ -17,6 +17,8 @@
                     <MTreeview @bind-Active="_menuPermissionActive"
                                Items="_menuPermissions"
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
+                               TItem="AppPermissionsViewModel"
+                               TKey="Guid"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"
@@ -34,7 +36,9 @@
                 <ElevationTabItem>
                     <MTreeview @bind-Active="_apiPermissionActive"
                                Items="_apiPermissions"
-                               OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveApiPermission(e)"
+                               OnActiveUpdate="ActiveApiPermission"
+                               TItem="AppPermissionsViewModel"
+                               TKey="Guid"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"

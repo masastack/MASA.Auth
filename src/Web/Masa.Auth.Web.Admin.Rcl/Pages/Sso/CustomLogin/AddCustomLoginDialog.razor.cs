@@ -15,7 +15,11 @@ public partial class AddCustomLoginDialog
 
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
+    private StringNumber? Tab { get; set; }
+
     private MForm? Form { get; set; }
+
+    private ClientSelect? Client { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {

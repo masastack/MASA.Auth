@@ -1461,3 +1461,9 @@ tr:hover {
     padding-right: 228px;
     padding-left: 228px;
 }
+
+.login {
+    background: #FFFFFF;
+    box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+    border-radius: 20px;
+}

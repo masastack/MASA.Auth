@@ -10,6 +10,7 @@ public class ClientSerivce : ServiceBase
         MapGet(GetListAsync);
         MapGet(GetDetailAsync);
         MapGet(GetClientTypeListAsync);
+        MapGet(GetClientSelectAsync);
         MapPost(AddClientAsync);
         MapPost(UpdateClientAsync);
         MapDelete(RemoveClientAsync);
@@ -32,6 +33,13 @@ public class ClientSerivce : ServiceBase
     private async Task<List<ClientTypeDetailDto>> GetClientTypeListAsync(IEventBus eventBus)
     {
         var query = new ClientTypeListQuery();
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    public async Task<List<ClientSelectDto>> GetClientSelectAsync(IEventBus eventBus)
+    {
+        var query = new ClientSelectQuery();
         await eventBus.PublishAsync(query);
         return query.Result;
     }

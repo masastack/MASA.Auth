@@ -1,0 +1,28 @@
+﻿@inherits AdminCompontentBase
+
+<MAutocomplete Value="Value"
+               ValueChanged="ValueChanged"
+               Items="Clients"
+               Color="primary"
+               Label="@T("Client")"
+               ItemText="client => client.ClientName"
+               ItemValue="client => client.Id"
+               Flat
+               Dense
+               Solo
+               BackgroundColor="fill-lighten-1"
+               HideDetails="@("auto")"
+               Style="@($"width:340px;height:40px;{Style}")"
+               Class="@($"{Class} rounded-2")">
+    <PrependInnerContent>
+        <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+    </PrependInnerContent>
+    <ItemContent Context="data">
+        <div class="d-flex" style="height:48px;">
+            <MAvatar Size=30 Class="ma-auto">
+                <img src="@data.Item.LogoUri" />
+            </MAvatar>
+            <span class="text-btn neutral-lighten-1--text ml-2">@data.Item.ClientName</span>            
+        </div>
+    </ItemContent>
+</MAutocomplete>

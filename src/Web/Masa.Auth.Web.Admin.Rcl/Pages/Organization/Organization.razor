@@ -16,7 +16,9 @@
             <MCardText>
                 <MTreeview @bind-Active="_active"
                            Items="_departments"
-                           OnActiveUpdate="(List<DepartmentDto> e)=>ActiveUpdated(e)"
+                           OnActiveUpdate="ActiveUpdated"
+                           TItem="DepartmentDto"
+                           TKey="Guid"
                            Activatable Hoverable
                            ItemText="r=>r.Name"
                            ItemKey="r=>r.Id"

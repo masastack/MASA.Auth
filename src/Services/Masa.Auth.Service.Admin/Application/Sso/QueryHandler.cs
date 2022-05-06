@@ -71,6 +71,12 @@ public class QueryHandler
             }).ToList();
     }
 
+    [EventHandler]
+    public async Task GetClientSelectAsync(ClientSelectQuery query)
+    {
+        query.Result = await _authDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
+    }
+
     #region IdentityResource
 
     [EventHandler]

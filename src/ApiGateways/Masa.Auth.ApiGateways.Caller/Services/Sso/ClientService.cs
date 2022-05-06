@@ -27,6 +27,11 @@ public class ClientService : ServiceBase
         return await GetAsync<List<ClientTypeDetailDto>>("GetClientTypeList");
     }
 
+    public async Task<List<ClientSelectDto>> GetClientSelectAsync()
+    {
+        return await GetAsync<List<ClientSelectDto>>(nameof(GetClientSelectAsync));
+    }
+
     public async Task AddClientAsync(AddClientDto addClientDto)
     {
         await PostAsync(nameof(AddClientAsync), addClientDto);

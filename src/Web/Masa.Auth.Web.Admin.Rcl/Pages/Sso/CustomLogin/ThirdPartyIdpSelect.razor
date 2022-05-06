@@ -1,0 +1,24 @@
+﻿@inherits AdminCompontentBase
+
+<div class="d-flex">
+    <div class="d-flex">
+        <div class="login my-auto" style="width:512px;height:684px;">
+            <MTabs @bind-Value="LoginTab">
+                <MTab Value="CustomLoginTab.Login">@T(CustomLoginTab.Login)</MTab>
+                <MTab Value="CustomLoginTab.Register">@T(CustomLoginTab.Register)</MTab>
+            </MTabs>
+            <MTabsItems @bind-Value="LoginTab">
+                <MTabItem Value="CustomLoginTab.Login">
+
+                </MTabItem>
+                <MTabItem Value="CustomLoginTab.Register">
+
+                </MTabItem>
+            </MTabsItems>
+        </div>
+    </div>
+    <div style="border: 1px solid #E2E7F4;height: 744px;" class="mx-12" />
+    <div>
+
+    </div>
+</div>

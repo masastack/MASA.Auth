@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin.Model;
 
-public class UpdateCustomLoginTab
+public class CustomLoginTab
 {
     public static string BasicInformation { get; } = "Basic Information";
 
