@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Masa.Blazor" Version="0.3.0" />
+	<PackageReference Include="Duende.IdentityServer" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,5 +22,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Account\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
 
 </Project>
