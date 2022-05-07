@@ -2,15 +2,7 @@
 @inherits LayoutComponentBase
 
 <MApp>
-    <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
-        <MSpacer />
-        <MIcon Size=20 Class="ml-5" Color="neutral-lighten-3">mdi-message-processing-outline</MIcon>
-        <Login />
-    </MAppBar>
-
-    <MMain Class="fill-lighten-1" Style="padding-top:60px">
-        <div class="pa-6 max-width">
-            @Body
-        </div>
+    <MMain Class="fill-lighten-1">
+        @Body
     </MMain>
 </MApp>
