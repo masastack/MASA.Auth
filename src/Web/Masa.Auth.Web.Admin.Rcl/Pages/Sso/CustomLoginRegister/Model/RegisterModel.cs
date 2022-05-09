@@ -4,9 +4,7 @@
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 
 public class RegisterModel
-{
-    private Dictionary<string, bool> _requiredMap = new Dictionary<string, bool>();
-
+{    
     public string Account { get; set; } = "";
 
     public string Password { get; set; } = "";
@@ -23,21 +21,8 @@ public class RegisterModel
 
     public string Email { get; set; } = "";
 
-    public void Set(string filed, bool required)
-    {
-        _requiredMap[filed] = required;
-    }
+    public List<string> RequiredFileds = new ();
 
-    public bool CheckRequired(string filed)
-    {
-        if (_requiredMap.ContainsKey(filed)) return _requiredMap[filed];
-        else return false;
-    }
-
-    public static Dictionary<RegisterFieldTypes, RegisterFieldValueTypes> FiledMap = new Dictionary<RegisterFieldTypes, RegisterFieldValueTypes>
-    {
-        [RegisterFieldTypes.Account] = RegisterFieldValueTypes.String,
-        [RegisterFieldTypes.Password] = RegisterFieldValueTypes.Password,
-    };
+    public bool CheckRequired(string filed) => RequiredFileds.Contains(filed);
 }
 

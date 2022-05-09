@@ -16,7 +16,7 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
                 return string.IsNullOrEmpty(displayName) is false;
             }
             return true;
-        }).ChineseLetter().MinLength(1).MaxLength(20);
+        }).ChineseLetter().MaxLength(20);
         RuleFor(register => register.Name).Must((register, name) =>
         {
             if (register.CheckRequired(nameof(RegisterModel.Name)))

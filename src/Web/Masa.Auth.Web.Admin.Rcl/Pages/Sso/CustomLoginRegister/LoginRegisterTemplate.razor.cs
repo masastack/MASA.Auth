@@ -26,7 +26,7 @@ public partial class LoginRegisterTemplate
 
     protected override void OnParametersSet()
     {
-        Login = new();
+        Register.RequiredFileds = RegisterFields.Where(r => r.Required).Select(r => r.RegisterFieldType.ToString()).ToList();
     }
 }
 
