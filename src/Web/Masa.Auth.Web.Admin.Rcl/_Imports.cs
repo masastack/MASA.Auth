@@ -32,3 +32,5 @@ global using Microsoft.Extensions.DependencyInjection;
 global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
+global using FluentValidation;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;

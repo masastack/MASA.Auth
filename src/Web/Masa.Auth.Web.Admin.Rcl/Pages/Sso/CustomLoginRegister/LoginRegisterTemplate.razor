@@ -37,7 +37,7 @@
                             <span class="text-caption2 neutral-lighten-4--text">@T("Forgot password?")</span>
                         </div>
                         <div class="d-flex">
-                            <MButton Class="large-button mt-11 mx-auto" Color="primary">
+                            <MButton OnClick="() => context.Validate()" Class="large-button mt-11 mx-auto" Color="primary">
                                 @T("Login")
                             </MButton>
                         </div>
@@ -91,6 +91,11 @@
                                     default: throw new UserFriendlyException(T(""));
                                 }
                             }
+                        </div>
+                        <div class="d-flex">
+                            <MButton OnClick="() => context.Validate()" Class="large-button mt-11 mx-auto" Color="primary">
+                                @T("Register")
+                            </MButton>
                         </div>
                     </MForm>
                 </MTabItem>
