@@ -25,40 +25,37 @@ public partial class ConfigRegister
             Value.Add(new RegisterFieldDto(RegisterFieldTypes.Password, 2, true, true));
         }
     }
-
+   
     public async Task Up(RegisterFieldDto registerField)
     {
         registerField.Sort--;
-        Value.Remove(registerField);
-        Value.Insert(registerField.Sort - 1, registerField);
-        InitSort();
-        await ValueChanged.InvokeAsync(Value);
+        var oldIndex = Value.IndexOf(registerField);
+        Value.Swap(oldIndex, oldIndex - 1);
+        await InitSort();
     }
 
     public async Task Down(RegisterFieldDto registerField)
     {
         registerField.Sort++;
-        Value.Remove(registerField);
-        Value.Insert(registerField.Sort - 1, registerField);
-        InitSort();
-        await ValueChanged.InvokeAsync(Value);
+        var oldIndex = Value.IndexOf(registerField);
+        Value.Swap(oldIndex, oldIndex + 1);
+        await InitSort();
     }
 
     public async Task Remove(RegisterFieldDto registerField)
     {
         Value.Remove(registerField);
-        InitSort();
-        await ValueChanged.InvokeAsync(Value);
+        await InitSort();
     }
 
-    public void InitSort()
+    public async Task InitSort()
     {
         int sort = 0;
         foreach (var registerField in Value)
         {
             registerField.Sort = ++sort;
         }
-        Value = Value.OrderBy(v => v.Sort).ToList();
+        await ValueChanged.InvokeAsync(Value);
     }
 }
 

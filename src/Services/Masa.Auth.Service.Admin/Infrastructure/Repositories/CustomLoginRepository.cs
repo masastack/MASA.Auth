@@ -11,12 +11,12 @@ public class CustomLoginRepository : Repository<AuthDbContext, CustomLogin, int>
 
     public async Task<CustomLogin?> GetDetailAsync(int id)
     {
-        var CustomLogin = await Context.Set<CustomLogin>()
+        var customLogin = await Context.Set<CustomLogin>()
                                 .Include(customLogin => customLogin.Client)
                                 .Include(customLogin => customLogin.ThirdPartyIdps)
                                 .Include(customLogin => customLogin.RegisterFields)
                                 .FirstOrDefaultAsync(customLogin => customLogin.Id == id);
 
-        return CustomLogin;
+        return customLogin;
     }
 }

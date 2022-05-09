@@ -93,7 +93,7 @@ public partial class CustomLoginRegister
 
     public async Task OpenRemoveCustomLoginDialog(CustomLoginDto CustomLogin)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete customLogin data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure Delete Custom Login data"));
         if (confirm) await RemoveCustomLoginAsync(CustomLogin.Id);
     }
 
@@ -101,7 +101,7 @@ public partial class CustomLoginRegister
     {
         Loading = true;
         await CustomLoginService.RemoveAsync(CustomLoginId);
-        OpenSuccessMessage(T("Delete customLogin data success"));
+        OpenSuccessMessage(T("Delete Custom Login data success"));
         await GetCustomLoginsAsync();
         Loading = false;
     }

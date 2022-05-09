@@ -30,36 +30,33 @@ public partial class ConfigLogin
     public async Task Up(CustomLoginThirdPartyIdpDto thirdPartyIdp)
     {
         thirdPartyIdp.Sort--;
-        Value.Remove(thirdPartyIdp);
-        Value.Insert(thirdPartyIdp.Sort - 1, thirdPartyIdp);
-        InitSort();
-        await ValueChanged.InvokeAsync(Value);
+        var oldIndex = Value.IndexOf(thirdPartyIdp);
+        Value.Swap(oldIndex, oldIndex - 1);
+        await InitSort();
     }
 
     public async Task Down(CustomLoginThirdPartyIdpDto thirdPartyIdp)
     {
         thirdPartyIdp.Sort++;
-        Value.Remove(thirdPartyIdp);
-        Value.Insert(thirdPartyIdp.Sort - 1, thirdPartyIdp);
-        InitSort();
-        await ValueChanged.InvokeAsync(Value);
+        var oldIndex = Value.IndexOf(thirdPartyIdp);
+        Value.Swap(oldIndex, oldIndex +1);
+        await InitSort();
     }
 
     public async Task Remove(CustomLoginThirdPartyIdpDto thirdPartyIdp)
     {
         Value.Remove(thirdPartyIdp);
-        InitSort();
-        await ValueChanged.InvokeAsync(Value);
+        await InitSort();
     }
 
-    public void InitSort()
+    public async Task InitSort()
     {
         int sort = 0;
         foreach (var thirdPartyIdp in Value)
         {
             thirdPartyIdp.Sort = ++sort;
         }
-        Value = Value.OrderBy(v => v.Sort).ToList();
+        await ValueChanged.InvokeAsync(Value);
     }
 }
 
