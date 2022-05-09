@@ -266,13 +266,13 @@ public class CommandHandler
     public async Task AddCustomLoginAsync(AddCustomLoginCommand command)
     {
         var customLoginDto = command.CustomLogin;
-        if(customLoginDto.Enabled is true)
+        if (customLoginDto.Enabled is true)
         {
             var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.ClientId == customLoginDto.ClientId && customLogin.Enabled == true) > 0;
             if (exist)
-                throw new UserFriendlyException($"CustomLogin public bool Enabled");
+                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
         }
-        
+
         var customLogin = new CustomLogin(customLoginDto.Name, customLoginDto.Title, customLoginDto.ClientId, customLoginDto.Enabled);
         customLogin.BindRegisterFields(customLoginDto.RegisterFields);
         customLogin.BindThirdPartyIdps(customLoginDto.ThirdPartyIdps);
@@ -287,11 +287,11 @@ public class CommandHandler
         if (customLogin is null)
             throw new UserFriendlyException("The current customLogin does not exist");
 
-        if(customLoginDto.Enabled is true)
+        if (customLoginDto.Enabled is true)
         {
             var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.Id != customLoginDto.Id && customLogin.ClientId == customLogin.ClientId && customLogin.Enabled == true) > 0;
             if (exist)
-                throw new UserFriendlyException($"CustomLogin public bool Enabled");
+                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
         }
         customLogin.Update(customLoginDto.Name, customLoginDto.Title, customLoginDto.Enabled);
         customLogin.BindRegisterFields(customLoginDto.RegisterFields);

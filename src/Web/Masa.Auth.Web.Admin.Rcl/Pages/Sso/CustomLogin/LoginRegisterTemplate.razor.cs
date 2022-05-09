@@ -22,7 +22,7 @@ public partial class LoginRegisterTemplate
 
     LoginModel Login { get; set; } = new();
 
-    RegisterModel Register { get; set; } = new ();
+    RegisterModel Register { get; set; } = new();
 
     protected override void OnParametersSet()
     {

@@ -15,7 +15,7 @@ public partial class ConfigLogin
     public string? Logo { get; set; }
 
     [Parameter]
-    public string? Title { get; set; }  
+    public string? Title { get; set; }
 
     List<ThirdPartyIdpSelectDto> ThirdPartyIdps = new();
 
@@ -32,7 +32,7 @@ public partial class ConfigLogin
         thirdPartyIdp.Sort--;
         Value.Remove(thirdPartyIdp);
         Value.Insert(thirdPartyIdp.Sort - 1, thirdPartyIdp);
-        InitSort(); 
+        InitSort();
         await ValueChanged.InvokeAsync(Value);
     }
 

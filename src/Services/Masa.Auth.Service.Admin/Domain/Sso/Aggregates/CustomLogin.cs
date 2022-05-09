@@ -56,7 +56,7 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
             return new CustomLoginDetailDto(customLogin.Id, customLogin.Name, customLogin.Title, client, customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "", thirdPartyIdps, registerFields); ;
         }
 
-        public void Update(string name,string title, bool enabled)
+        public void Update(string name, string title, bool enabled)
         {
             Name = name;
             Title = title;

@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin;
 
 public partial class AddCustomLoginRegisterDialog
 {
@@ -63,7 +66,7 @@ public partial class AddCustomLoginRegisterDialog
     public async Task AddCustomLoginAsync(EditContext context)
     {
         var success = context.Validate();
-        if(success is false)
+        if (success is false)
         {
             Tab = CustomLoginTab.BasicInformation;
             return;

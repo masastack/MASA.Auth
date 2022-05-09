@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
 public class RegisterField : Entity<int>
 {
-    public RegisterFieldTypes RegisterFieldType { get;private set; }
+    public RegisterFieldTypes RegisterFieldType { get; private set; }
 
     public int CustomLoginId { get; private set; }
 
