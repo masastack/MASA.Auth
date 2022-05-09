@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin;
 
-public partial class CustomLogin
+public partial class CustomLoginRegister
 {
     private string? _search;
     private int _page = 1;
@@ -45,9 +45,9 @@ public partial class CustomLogin
 
     public int CurrentCustomLoginId { get; set; }
 
-    public bool AddCustomLoginDialogVisible { get; set; }
+    public bool AddCustomLoginRegisterDialogVisible { get; set; }
 
-    public bool UpdateCustomLoginDialogVisible { get; set; }
+    public bool UpdateCustomLoginRegisterDialogVisible { get; set; }
 
     public List<DataTableHeader<CustomLoginDto>> Headers { get; set; } = new();
 
@@ -82,13 +82,13 @@ public partial class CustomLogin
 
     public void OpenAddCustomLoginDialog()
     {
-        AddCustomLoginDialogVisible = true;
+        AddCustomLoginRegisterDialogVisible = true;
     }
 
     public void OpenUpdateCustomLoginDialog(CustomLoginDto CustomLogin)
     {
         CurrentCustomLoginId = CustomLogin.Id;
-        UpdateCustomLoginDialogVisible = true;
+        UpdateCustomLoginRegisterDialogVisible = true;
     }
 
     public async Task OpenRemoveCustomLoginDialog(CustomLoginDto CustomLogin)

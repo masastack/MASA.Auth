@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add CustomLogin")">
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update CustomLogin")">
     <MForm Model=CustomLogin EnableValidation @ref="Form">
         <div class="sheetDialogPadding full-height flex-column">
             <div class="d-flex">
@@ -21,36 +21,47 @@
             <MWindow Value="Tab" Reverse Class="flex-grow-1">
                 <div class="mt-6 flex-height-auto overflow-y">
                     <MWindowItem Value="CustomLoginTab.BasicInformation">
-                        <div class="d-flex">
-                            <MAvatar Class="mx-auto" Size=80>
-                                <img src="@Client?.Client?.LogoUri" />
-                            </MAvatar>
-                        </div>
+                        @if (ClientSelectRef?.Client?.LogoUri is not null)
+                        {
+                            <div class="d-flex">
+                                <MAvatar Class="mx-auto" Size=80>
+                                    <img src="@ClientSelectRef?.Client?.LogoUri" />
+                                </MAvatar>
+                            </div>
+                        }
                         <MRow Class="my-4">
                             <MCol>
                                 <MTextField @bind-Value="CustomLogin.Name" Label="@T("CustomLogin.Name")" HideDetails="@("auto")" Outlined />
                             </MCol>
                             <MCol>
-                                <ClientSelect @ref="Client" @bind-Value="CustomLogin.ClientId" />
+                                <MTextField @bind-Value="CustomLogin.Title" Label="@T("Title")" HideDetails="@("auto")" Outlined />                               
                             </MCol>
-                        </MRow>                                               
+                        </MRow>
+                        <MRow>
+                            <MCol>
+                               <ClientSelect @ref="ClientSelectRef" Value="CustomLoginDetail.Client.Id" Disabled /> 
+                            </MCol>
+                        </MRow>
                     </MWindowItem>
                     <MWindowItem Value="CustomLoginTab.Login">
-                        <ThirdPartyIdpSelect @bind-Value="CustomLogin.ThirdPartyIdps" />                       
+                        <ConfigLogin @bind-Value="CustomLogin.ThirdPartyIdps" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
                     <MWindowItem Value="CustomLoginTab.Register">
-                        <RegisterFieldSelect @bind-Value="CustomLogin.RegisterFields" />
+                        <ConfigRegister @bind-Value="CustomLogin.RegisterFields" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
                 </div>
             </MWindow>
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="CustomLogin.Enabled" Inset Class="label" Label="@(CustomLogin.Enabled ? T("Enable"):T("Disabled"))" />
                 <MSpacer></MSpacer>
-                <MButton Color="primary" Class="small-button">
-                    <MIcon Size=18>mdi-plus</MIcon>
-                    <span class="ml-2">@T("Add")</span>
-                </MButton>
-                <MButton OnClick="async () => await AddCustomLoginAsync(context)" Color="primary" Class="small-button ml-6">@T("Submit")</MButton>
+                @if (Tab != CustomLoginTab.BasicInformation)
+                {
+                    <MButton OnClick="AddConfig" Color="primary" Class="small-button">
+                        <MIcon Size=18>mdi-plus</MIcon>
+                        <span class="ml-2">@T("Add")</span>
+                    </MButton>
+                }
+                <MButton OnClick="async () => await UpdateCustomLoginAsync(context)" Color="primary" Class="small-button ml-6">@T("Submit")</MButton>
             </div>
         </div>
     </MForm>

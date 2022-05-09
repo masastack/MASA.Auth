@@ -1,0 +1,42 @@
+﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
+
+public partial class ThirdPartyIdpSelect
+{
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter]
+    public string Style { get; set; } = "";
+
+    [Parameter]
+    public Guid Value { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<Guid> ValueChanged { get; set; }
+
+    [Parameter]
+    public List<ThirdPartyIdpSelectDto>? ThirdPartyIdps { get; set; }
+
+    [Parameter]
+    public List<Guid> Excludes { get; set; } = new();
+
+    string Label { get; set; } = "";
+
+    ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ThirdPartyIdps is null)
+        {
+            await InitThirdPartyIdps();
+        }
+        else Label = "ThirdPartyIdp";
+    }
+
+    public async Task InitThirdPartyIdps()
+    {
+        ThirdPartyIdps = new();
+        await Task.CompletedTask;
+    }
+}
+

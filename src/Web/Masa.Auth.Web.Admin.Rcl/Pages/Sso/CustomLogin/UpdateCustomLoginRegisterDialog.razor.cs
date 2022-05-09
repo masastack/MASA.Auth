@@ -1,6 +1,6 @@
 ﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin;
 
-public partial class UpdateCustomLoginDialog
+public partial class UpdateCustomLoginRegisterDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -20,7 +20,11 @@ public partial class UpdateCustomLoginDialog
 
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
+    private StringNumber Tab { get; set; } = CustomLoginTab.BasicInformation;
+
     private MForm? Form { get; set; }
+
+    private ClientSelect? ClientSelectRef { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -42,6 +46,7 @@ public partial class UpdateCustomLoginDialog
     {
         if (Visible)
         {
+            Tab = CustomLoginTab.BasicInformation;
             await GetCustomLoginDetailAsync();
         }
     }
@@ -52,8 +57,20 @@ public partial class UpdateCustomLoginDialog
         CustomLogin = CustomLoginDetail;
     }
 
-    public async Task UpdatetCustomLoginAsync(EditContext context)
+    public async Task UpdateCustomLoginAsync(EditContext context)
     {
+        if (CustomLogin.ThirdPartyIdps.Any(tp => tp.Id == default))
+        {
+            Tab = CustomLoginTab.Login;
+            OpenErrorMessage(T("Login configuration items are required"));
+            return;
+        }
+        if (CustomLogin.RegisterFields.Any(r => r.RegisterFieldType == default))
+        {
+            Tab = CustomLoginTab.Register;
+            OpenErrorMessage(T("Register configuration items are required"));
+            return;
+        }
         var success = context.Validate();
         if (success)
         {
@@ -63,6 +80,24 @@ public partial class UpdateCustomLoginDialog
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
             Loading = false;
+        }
+        else
+        {
+            Tab = CustomLoginTab.BasicInformation;
+        }
+    }
+
+    public void AddConfig()
+    {
+        if (Tab == CustomLoginTab.Login)
+        {
+            var maxSort = CustomLogin.ThirdPartyIdps.Count == 0 ? 0 : CustomLogin.ThirdPartyIdps.Max(tp => tp.Sort);
+            CustomLogin.ThirdPartyIdps.Add(new(default, maxSort + 1));
+        }
+        else if (Tab == CustomLoginTab.Register)
+        {
+            var maxSort = CustomLogin.RegisterFields.Count == 0 ? 0 : CustomLogin.RegisterFields.Max(r => r.Sort);
+            CustomLogin.RegisterFields.Add(new(default, maxSort + 1, default));
         }
     }
 }

@@ -2,17 +2,17 @@
 
 public class CustomLoginThirdPartyIdpDto
 {
-    public Guid ThirdPartyIdpId { get; private set; }
+    public Guid Id { get; set; }
 
-    public int Sort { get; private set; }
+    public int Sort { get; set; }
 
     public CustomLoginThirdPartyIdpDto()
     {
     }
 
-    public CustomLoginThirdPartyIdpDto(Guid thirdPartyIdpId, int sort)
+    public CustomLoginThirdPartyIdpDto(Guid id, int sort)
     {
-        ThirdPartyIdpId = thirdPartyIdpId;
+        Id = id;
         Sort = sort;
     }
 }

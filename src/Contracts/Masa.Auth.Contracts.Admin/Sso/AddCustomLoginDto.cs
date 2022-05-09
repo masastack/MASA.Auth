@@ -4,7 +4,7 @@ public class AddCustomLoginDto
 {
     public string Name { get; set; } = "";
 
-    public string Title { get; private set; } = "";
+    public string Title { get; set; } = "";
 
     public int ClientId { get; set; }
 

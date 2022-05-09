@@ -1,0 +1,45 @@
+﻿@inherits AdminCompontentBase
+
+<div class="d-flex">
+    <LoginRegisterTemplate Tab=CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="Value.Where(v => v.Id!=default).Select(v => ThirdPartyIdps.First(tp => tp.Id==v.Id)).ToList()" />
+    <div style="border: 1px solid #E2E7F4;height: 720px;" class="mx-12" />
+    <div class="mt-5 full-height flex-column" style="width:100%">
+        <div class="overflow-y" style="max-height:700px">
+            <MRow>
+                <MCol Cols="6">
+                    <span class="text-btn neutral-lighten-4--text">
+                        @T("ThirdPartyIdp.Name")
+                    </span>
+                </MCol>
+                <MCol Cols="2">
+                    <span class="text-btn neutral-lighten-4--text">
+                        @T("Category")
+                    </span>
+                </MCol>
+                <MCol>
+                    <span class="text-btn neutral-lighten-4--text">
+                        @T("Action")
+                    </span>
+                </MCol>
+            </MRow>
+            <div class="mt-5">
+                @foreach (var thirdPartyIdp in Value)
+                {
+                    <MRow class="mb-12 d-flex">
+                        <MCol Cols="6">
+                            <ThirdPartyIdpSelect @bind-Value="thirdPartyIdp.Id" Excludes="Value.Select(v => v.Id).ToList()" />
+                        </MCol>
+                        <MCol Cols="2">
+                           @T(ThirdPartyIdps.FirstOrDefault(tp => tp.Id == thirdPartyIdp.Id)?.AuthenticationType.ToString()??"")
+                        </MCol>
+                        <MCol>
+                            <MIcon OnClick="async () =>await Up(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
+                            <MIcon OnClick="async () =>await Down(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
+                            <MIcon OnClick="async () =>await Remove(thirdPartyIdp)" Class="mr-8">mdi-delete-outline</MIcon>
+                        </MCol>
+                    </MRow>
+                }
+            </div>
+        </div>
+    </div>
+</div>

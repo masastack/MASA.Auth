@@ -49,6 +49,7 @@
   "Yes": "是",
   "No": "否",
   "Reset": "重置密码",
+  "Required": "必填",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -237,5 +238,11 @@
   "Update CustomLogin": "编辑自定义登录",
   "Delete CustomLogin": "删除自定义登录",
   "Login": "登录",
-  "Register": "注册"
+  "Register": "注册",
+  "Forgot password?": "忘记密码?",
+  "or login with": "或使用以下登录",
+  "Category": "分类",
+  "Register.Name": "名称",
+  "Login configuration items are required": "登录配置项必填",
+  "Register configuration items are required": "注册配置项必填"
 }

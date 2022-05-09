@@ -2,23 +2,20 @@
 
 <MAutocomplete Value="Value"
                ValueChanged="ValueChanged"
-               Items="Clients"
+               Items="ThirdPartyIdps!.Where(e => e.Id==Value || Excludes.Contains(e.Id) is false).ToList()"
                Color="primary"
-               Label="@T("Client")"
-               ItemText="client => client.ClientName"
-               ItemValue="client => client.Id"
+               Label="@T(Label)"
+               ItemText="e => e.Name"
+               ItemValue="e => e.Id"
                Outlined
-               Disabled=Disabled
                HideDetails="@("auto")"
                Style="@($"{Style}")"
                Class="@($"{Class}")">
     <ItemContent Context="data">
         <div class="d-flex" style="height:48px;">
-            <MAvatar Size=30 Class="ma-auto">
-                <img src="@data.Item.LogoUri" />
-            </MAvatar>
+            <MIcon Size="30" Class="ma-auto">data.Item.Icon</MIcon>
             <div class="my-auto">
-                <span class="text-btn neutral-lighten-1--text ml-2">@data.Item.ClientName</span> 
+                <span class="text-btn neutral-lighten-1--text ml-2">@data.Item.Name</span> 
             </div>                      
         </div>
     </ItemContent>

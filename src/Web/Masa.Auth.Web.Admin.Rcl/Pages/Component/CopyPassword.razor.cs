@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public partial class Password
+public partial class CopyPassword
 {
     [Parameter]
     public string Class { get; set; } = "";
@@ -14,6 +14,12 @@ public partial class Password
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
 
-    bool ShowPassword { get; set; }
+    public async Task ResetPassword()
+    {
+        Random random = new Random();
+        Value = random.Next(111111, 999999).ToString();
+        if (ValueChanged.HasDelegate)
+            await ValueChanged.InvokeAsync(Value);
+    }
 }
 

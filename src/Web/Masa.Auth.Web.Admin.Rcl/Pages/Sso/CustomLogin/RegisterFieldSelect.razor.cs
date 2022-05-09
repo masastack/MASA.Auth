@@ -6,9 +6,28 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin;
 public partial class RegisterFieldSelect
 {
     [Parameter]
-    public List<RegisterFieldDto> Value { get; set; } = new();
+    public string Class { get; set; } = "";
 
     [Parameter]
-    public EventCallback<List<RegisterFieldDto>> ValueChanged { get; set; }
+    public string Style { get; set; } = "";
+
+    [Parameter]
+    public RegisterFieldTypes Value { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<RegisterFieldTypes> ValueChanged { get; set; }
+
+    [Parameter]
+    public List<RegisterFieldTypes> RegisterFields { get; set; } = new();
+
+    [Parameter]
+    public List<RegisterFieldTypes> Excludes { get; set; } = new();
+
+    ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
+
+    protected override void OnInitialized()
+    {
+        RegisterFields = Enum.GetValues<RegisterFieldTypes>().ToList();
+    }
 }
 

@@ -3,9 +3,10 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 
-public enum RegisterFieldTypes
+public enum RegisterFieldValueTypes
 {
-    Account = 1,
-    Password,
+    String = 1,
+    Number,
+    Password
 }
 

@@ -9,6 +9,9 @@ public partial class ClientSelect
     public string Style { get; set; } = "";
 
     [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
     public int Value { get; set; } = new();
 
     [Parameter]
