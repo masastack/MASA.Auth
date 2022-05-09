@@ -50,6 +50,7 @@
   "No": "否",
   "Reset": "重置密码",
   "Required": "必填",
+  "DisplayName": "显示名称",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -243,6 +244,7 @@
   "or login with": "或使用以下登录",
   "Category": "分类",
   "Register.Name": "名称",
+  "ConfirmPassword": "确认密码",
   "Login configuration items are required": "登录配置项必填",
   "Register configuration items are required": "注册配置项必填"
 }

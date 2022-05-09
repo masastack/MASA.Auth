@@ -11,7 +11,19 @@ public class RegisterModel
 
     public string Password { get; set; } = "";
 
-    public void Set(string filed,bool required)
+    public string ConfirmPassword { get; set; } = "";
+
+    public string Name { get; set; } = "";
+
+    public string DisplayName { get; set; } = "";
+
+    public string IdCard { get; set; } = "";
+
+    public string PhoneNumber { get; set; } = "";
+
+    public string Email { get; set; } = "";
+
+    public void Set(string filed, bool required)
     {
         _requiredMap[filed] = required;
     }

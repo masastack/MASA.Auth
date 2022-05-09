@@ -25,17 +25,21 @@
             <div class="mt-5">
                 @foreach (var thirdPartyIdp in Value)
                 {
-                    <MRow class="mb-12 d-flex">
+                    <MRow Class="mb-6">
                         <MCol Cols="6">
                             <ThirdPartyIdpSelect @bind-Value="thirdPartyIdp.Id" Excludes="Value.Select(v => v.Id).ToList()" />
                         </MCol>
-                        <MCol Cols="2">
-                           @T(ThirdPartyIdps.FirstOrDefault(tp => tp.Id == thirdPartyIdp.Id)?.AuthenticationType.ToString()??"")
+                        <MCol Cols="2" Class="d-flex">
+                            <div class="my-auto">
+                                @T(ThirdPartyIdps.FirstOrDefault(tp => tp.Id == thirdPartyIdp.Id)?.AuthenticationType.ToString()??"")
+                            </div>                           
                         </MCol>
-                        <MCol>
-                            <MIcon OnClick="async () =>await Up(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
-                            <MIcon OnClick="async () =>await Down(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
-                            <MIcon OnClick="async () =>await Remove(thirdPartyIdp)" Class="mr-8">mdi-delete-outline</MIcon>
+                        <MCol Class="d-flex">
+                            <div class="my-auto">
+                                <MIcon OnClick="async () =>await Up(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
+                                <MIcon OnClick="async () =>await Down(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
+                                <MIcon OnClick="async () =>await Remove(thirdPartyIdp)" Class="mr-8">mdi-delete-outline</MIcon>
+                            </div>
                         </MCol>
                     </MRow>
                 }

@@ -59,6 +59,12 @@ public partial class UpdateCustomLoginRegisterDialog
 
     public async Task UpdateCustomLoginAsync(EditContext context)
     {
+        var success = context.Validate();
+        if (success is false)
+        {
+            Tab = CustomLoginTab.BasicInformation;
+            return;
+        }
         if (CustomLogin.ThirdPartyIdps.Any(tp => tp.Id == default))
         {
             Tab = CustomLoginTab.Login;
@@ -71,20 +77,13 @@ public partial class UpdateCustomLoginRegisterDialog
             OpenErrorMessage(T("Register configuration items are required"));
             return;
         }
-        var success = context.Validate();
-        if (success)
-        {
-            Loading = true;
-            await CustomLoginService.UpdateAsync(CustomLogin);
-            OpenSuccessMessage("Update customLogin success");
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-            Loading = false;
-        }
-        else
-        {
-            Tab = CustomLoginTab.BasicInformation;
-        }
+
+        Loading = true;
+        await CustomLoginService.UpdateAsync(CustomLogin);
+        OpenSuccessMessage("Update customLogin success");
+        await OnSubmitSuccess.InvokeAsync();
+        await UpdateVisible(false);
+        Loading = false;
     }
 
     public void AddConfig()

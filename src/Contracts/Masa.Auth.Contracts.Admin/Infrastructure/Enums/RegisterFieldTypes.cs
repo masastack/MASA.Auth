@@ -7,5 +7,11 @@ public enum RegisterFieldTypes
 {
     Account = 1,
     Password,
+    ConfirmPassword,
+    Name,
+    DisplayName,
+    IdCard,
+    PhoneNumber,
+    Email
 }
 

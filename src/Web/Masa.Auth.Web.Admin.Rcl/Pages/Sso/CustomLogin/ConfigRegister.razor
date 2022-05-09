@@ -25,17 +25,19 @@
             <div class="mt-5">
                 @foreach (var registerField in Value)
                 {
-                    <MRow class="mb-12 d-flex">
+                    <MRow Class="mb-6">
                         <MCol Cols="6">
                             <RegisterFieldSelect @bind-Value="registerField.RegisterFieldType" Excludes="Value.Select(v => v.RegisterFieldType).ToList()" />
                         </MCol>
-                        <MCol Cols="2">
-                          <MSwitch @bind-Value="registerField.Required" Disabled="registerField.CannotUpdate" />
+                        <MCol Cols="2" Class="d-flex">
+                            <MSwitch @bind-Value="registerField.Required" Disabled="registerField.CannotUpdate" Class="my-auto my-0 pt-0" />
                         </MCol>
-                        <MCol>
-                            <MIcon OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
-                            <MIcon OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
-                            <MIcon OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate" Class="mr-8">mdi-delete-outline</MIcon>
+                        <MCol Class="d-flex">
+                            <div class="my-auto">
+                                <MIcon OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
+                                <MIcon OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
+                                <MIcon OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate" Class="mr-8">mdi-delete-outline</MIcon>
+                            </div>
                         </MCol>
                     </MRow>
                 }

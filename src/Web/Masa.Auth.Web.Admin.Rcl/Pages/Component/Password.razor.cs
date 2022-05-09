@@ -9,6 +9,9 @@ public partial class Password
     public string Class { get; set; } = "";
 
     [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
     public string Value { get; set; } = "";
 
     [Parameter]
