@@ -21,7 +21,7 @@ global using Masa.Auth.Web.Admin.Rcl.Global.Config;
 global using Masa.Auth.Web.Admin.Rcl.Global.Nav.Model;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Component;
 global using Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions.ViewModels;
-global using Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLogin.Model;
+global using Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 global using Masa.Blazor;
 global using Masa.Stack.Components.Models;
 global using Microsoft.AspNetCore.Components;
