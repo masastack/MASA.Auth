@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public partial class Password
+public partial class CopyPassword
 {
     [Parameter]
     public string Class { get; set; } = "";

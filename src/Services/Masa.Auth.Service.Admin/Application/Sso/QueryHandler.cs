@@ -10,15 +10,17 @@ public class QueryHandler
     readonly IApiResourceRepository _apiResourceRepository;
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
+    readonly ICustomLoginRepository _customLoginRepository;
     readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, AuthDbContext authDbContext)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, AuthDbContext authDbContext)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
         _apiResourceRepository = apiResourceRepository;
         _apiScopeRepository = apiScopeRepository;
         _userClaimRepository = userClaimRepository;
+        _customLoginRepository = customLoginRepository;
         _authDbContext = authDbContext;
     }
 
@@ -67,6 +69,12 @@ public class QueryHandler
                     _ => ""
                 }
             }).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetClientSelectAsync(ClientSelectQuery query)
+    {
+        query.Result = await _authDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
     }
 
     #region IdentityResource
@@ -243,6 +251,38 @@ public class QueryHandler
                                 .ToListAsync();
 
         query.Result = userClaimSelect;
+    }
+
+    #endregion
+
+    #region CustomLogin
+
+    [EventHandler]
+    public async Task GetCustomLoginAsync(CustomLoginQuery query)
+    {
+        Expression<Func<CustomLogin, bool>> condition = customLogin => true;
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(customLogin => customLogin.Name.Contains(query.Search));
+
+        var customLoginQuery = _authDbContext.Set<CustomLogin>().Where(condition);
+        var total = await customLoginQuery.LongCountAsync();
+        var customLogins = await customLoginQuery.Include(customLogin => customLogin.Client)
+                                   .OrderByDescending(s => s.ModificationTime)
+                                   .ThenByDescending(s => s.CreationTime)
+                                   .Skip((query.Page - 1) * query.PageSize)
+                                   .Take(query.PageSize)
+                                   .ToListAsync();
+
+        query.Result = new(total, customLogins.Select(customLogin => (CustomLoginDto)customLogin).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetCustomLoginDetailAsync(CustomLoginDetailQuery query)
+    {
+        var customLogin = await _customLoginRepository.GetDetailAsync(query.CustomLoginId);
+        if (customLogin is null) throw new UserFriendlyException("This customLogin data does not exist");
+
+        query.Result = customLogin;
     }
 
     #endregion

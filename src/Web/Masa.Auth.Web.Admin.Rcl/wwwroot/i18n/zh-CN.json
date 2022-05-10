@@ -49,6 +49,8 @@
   "Yes": "是",
   "No": "否",
   "Reset": "重置密码",
+  "Required": "必填",
+  "DisplayName": "显示名称",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -227,5 +229,22 @@
   "Customize": "自定义",
   "Add UserClaim": "新增用户声明",
   "Update UserClaim": "编辑用户声明",
-  "Delete UserClaim": "删除用户声明"
+  "Delete UserClaim": "删除用户声明",
+
+  "CustomLogin": "自定义登录",
+  "CustomLogin.Name": "名称",
+  "LogoUri": "LOGO",
+  "ClientDto.ClientName": "客户端",
+  "Add Custom Login": "新增自定义登录",
+  "Update Custom Login": "编辑自定义登录",
+  "Delete Custom Login": "删除自定义登录",
+  "Login": "登录",
+  "Register": "注册",
+  "Forgot password?": "忘记密码?",
+  "or login with": "或使用以下登录",
+  "Category": "分类",
+  "Register.Name": "名称",
+  "ConfirmPassword": "确认密码",
+  "Login configuration items are required": "登录配置项必填",
+  "Register configuration items are required": "注册配置项必填"
 }

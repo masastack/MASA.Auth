@@ -1,0 +1,47 @@
+﻿@inherits AdminCompontentBase
+
+<div class="d-flex">
+    <LoginRegisterTemplate Tab=CustomLoginTab.Register Logo="@Logo" Title="@Title" RegisterFields="Value.Where(v => v.RegisterFieldType!=default).ToList()" />
+    <div style="border: 1px solid #E2E7F4;height: 720px;" class="mx-12" />
+    <div class="mt-5 full-height flex-column" style="width:100%">
+        <div class="overflow-y" style="max-height:700px">
+            <MRow>
+                <MCol Cols="6">
+                    <span class="text-btn neutral-lighten-4--text">
+                        @T("Register.Name")
+                    </span>
+                </MCol>
+                <MCol Cols="2">
+                    <span class="text-btn neutral-lighten-4--text">
+                        @T("Required")
+                    </span>
+                </MCol>
+                <MCol>
+                    <span class="text-btn neutral-lighten-4--text">
+                        @T("Action")
+                    </span>
+                </MCol>
+            </MRow>
+            <div class="mt-5">
+                @foreach (var registerField in Value)
+                {
+                    <MRow Class="mb-6">
+                        <MCol Cols="6">
+                            <RegisterFieldSelect @bind-Value="registerField.RegisterFieldType" Excludes="Value.Select(v => v.RegisterFieldType).ToList()" />
+                        </MCol>
+                        <MCol Cols="2" Class="d-flex">
+                            <MSwitch @bind-Value="registerField.Required" Disabled="registerField.CannotUpdate" Class="my-auto my-0 pt-0" />
+                        </MCol>
+                        <MCol Class="d-flex">
+                            <div class="my-auto">
+                                <MIcon OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
+                                <MIcon OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
+                                <MIcon OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate" Class="mr-8">mdi-delete-outline</MIcon>
+                            </div>
+                        </MCol>
+                    </MRow>
+                }
+            </div>
+        </div>
+    </div>
+</div>

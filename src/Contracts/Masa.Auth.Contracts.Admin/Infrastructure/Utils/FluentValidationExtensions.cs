@@ -93,6 +93,6 @@ public static class FluentValidationExtensions
     {
         return ruleBuilder.NotNull()
                         .NotEmpty()
-                        .WithMessage("{PropertyName} is required ");
+                        .WithMessage("{PropertyName} is required");
     }
 }

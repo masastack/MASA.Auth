@@ -10,17 +10,17 @@ public class CommandHandler
     readonly IApiResourceRepository _apiResourceRepository;
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
+    readonly ICustomLoginRepository _customLoginRepository;
 
-    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository)
+    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
         _apiResourceRepository = apiResourceRepository;
         _apiScopeRepository = apiScopeRepository;
         _userClaimRepository = userClaimRepository;
+        _customLoginRepository = customLoginRepository;
     }
-
-
 
     #region Client
     [EventHandler]
@@ -256,6 +256,58 @@ public class CommandHandler
 
         //Todo remove check
         await _userClaimRepository.RemoveAsync(userClaim);
+    }
+
+    #endregion
+
+    #region CustomLogin
+
+    [EventHandler]
+    public async Task AddCustomLoginAsync(AddCustomLoginCommand command)
+    {
+        var customLoginDto = command.CustomLogin;
+        if (customLoginDto.Enabled is true)
+        {
+            var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.ClientId == customLoginDto.ClientId && customLogin.Enabled == true) > 0;
+            if (exist)
+                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
+        }
+
+        var customLogin = new CustomLogin(customLoginDto.Name, customLoginDto.Title, customLoginDto.ClientId, customLoginDto.Enabled);
+        customLogin.BindRegisterFields(customLoginDto.RegisterFields);
+        customLogin.BindThirdPartyIdps(customLoginDto.ThirdPartyIdps);
+        await _customLoginRepository.AddAsync(customLogin);
+    }
+
+    [EventHandler]
+    public async Task UpdateCustomLoginAsync(UpdateCustomLoginCommand command)
+    {
+        var customLoginDto = command.CustomLogin;
+        var customLogin = await _customLoginRepository.FindAsync(customLogin => customLogin.Id == customLoginDto.Id);
+        if (customLogin is null)
+            throw new UserFriendlyException("The current customLogin does not exist");
+
+        if (customLoginDto.Enabled is true)
+        {
+            var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.Id != customLoginDto.Id && customLogin.ClientId == customLogin.ClientId && customLogin.Enabled == true) > 0;
+            if (exist)
+                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
+        }
+        customLogin.Update(customLoginDto.Name, customLoginDto.Title, customLoginDto.Enabled);
+        customLogin.BindRegisterFields(customLoginDto.RegisterFields);
+        customLogin.BindThirdPartyIdps(customLoginDto.ThirdPartyIdps);
+        await _customLoginRepository.UpdateAsync(customLogin);
+    }
+
+    [EventHandler]
+    public async Task RemoveCustomLoginAsync(RemoveCustomLoginCommand command)
+    {
+        var customLogin = await _customLoginRepository.FindAsync(customLogin => customLogin.Id == command.CustomLogin.Id);
+        if (customLogin == null)
+            throw new UserFriendlyException("The current customLogin does not exist");
+
+        //Todo remove check
+        await _customLoginRepository.RemoveAsync(customLogin);
     }
 
     #endregion

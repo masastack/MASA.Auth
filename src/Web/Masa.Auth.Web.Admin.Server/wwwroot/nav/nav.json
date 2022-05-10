@@ -64,6 +64,12 @@
         "Title": "ApiResource",
         "Icon": "mdi-circle",
         "Href": "/sso/apiResource"
+      },
+      {
+        "Id": 11,
+        "Title": "CustomLogin",
+        "Icon": "mdi-circle",
+        "Href": "/sso/customLogin"
       }
     ]
   }

@@ -37,7 +37,7 @@
                         <MTextField Readonly Value="UserDetail.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                       <Password @bind-Value="User.Password" />
+                       <CopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
                 <div class="mt-6 text-subtitle2">@T("Detail Information")</div>

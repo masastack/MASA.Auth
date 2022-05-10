@@ -483,9 +483,9 @@
 }
 
 .medium-button {
-    min-width: 126px;
-    height: 40px;
-    border-radius: 99px;
+    min-width: 126px !important;
+    height: 40px !important;
+    border-radius: 99px !important;
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -494,9 +494,9 @@
 }
 
 .large-button {
-    min-width: 340px;
-    height: 48px;
-    border-radius: 90px;
+    min-width: 340px !important;
+    height: 48px !important;
+    border-radius: 90px !important;
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -1460,4 +1460,19 @@ tr:hover {
 .px-sheet-dialog {
     padding-right: 228px;
     padding-left: 228px;
+}
+
+.login {
+    background: #FFFFFF;
+    box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+    border-radius: 20px;
+}
+
+.login .m-tabs-slider-wrapper{
+    top:0;
+    height:4px !important;
+}
+
+.login .m-slide-group__wrapper{
+    height:70px !important;
 }
