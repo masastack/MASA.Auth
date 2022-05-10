@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Masa.Blazor" Version="0.3.0" />
+	<PackageReference Include="Masa.Blazor" Version="0.4.0-preview.1" />
 	<PackageReference Include="Duende.IdentityServer" Version="6.0.4" />
+	<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0-preview.5" />
+	<PackageReference Include="Masa.Utils.Expressions" Version="0.4.0-preview.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +26,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Account\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 

@@ -4,14 +4,13 @@
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Services;
-using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServerHost.Pages.Grants;
+namespace Masa.Auth.Web.Sso.Pages.Grants;
 
-//[SecurityHeaders]
-//[Authorize]
+[SecurityHeaders]
+[Authorize]
 public class Index : PageModel
 {
     private readonly IIdentityServerInteractionService _interaction;
@@ -69,7 +68,7 @@ public class Index : PageModel
 
     [BindProperty]
     [Required]
-    public string ClientId { get; set; } = String.Empty;
+    public string ClientId { get; set; } = string.Empty;
 
     public async Task<IActionResult> OnPost()
     {

@@ -1,0 +1,23 @@
+﻿@page "/account/logout/loggedout"
+
+@inherits SsoCompontentBase
+
+<div>
+    <h1>
+        Logout
+        <small>You are now logged out</small>
+    </h1>
+
+    @if (_viewModel.PostLogoutRedirectUri != null)
+    {
+        <div>
+            Click <a class="PostLogoutRedirectUri" href="@_viewModel.PostLogoutRedirectUri">here</a> to return to the
+            <span>@_viewModel.ClientName</span> application.
+        </div>
+    }
+
+    @if (_viewModel.SignOutIframeUrl != null)
+    {
+        <iframe width="0" height="0" class="signout" src="@_viewModel.SignOutIframeUrl"></iframe>
+    }
+</div>

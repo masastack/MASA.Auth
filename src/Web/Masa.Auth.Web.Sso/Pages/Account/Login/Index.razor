@@ -1,0 +1,91 @@
+﻿@page "/account/login/index"
+@page "/account/login"
+
+@inherits SsoCompontentBase
+@inject IClientStore _clientStore
+@inject IAuthenticationSchemeProvider _schemeProvider
+@inject IIdentityProviderStore _identityProviderStore
+@inject HttpClient _httpClient
+
+<MRow>
+    <MCol Cols="8" Style="background-color: #f8f8f8; height:100vh;">
+        <MContainer Class="text-h6">
+            <MIcon Large Left Color="purple">fas fa-seedling</MIcon>
+            Masa.Blazor.Pro
+        </MContainer>
+        <MContainer Class="col-lg-7 mt-16">
+            <MImage Class="" Src="/img/auth/register-v2.0a9e487c.svg">
+            </MImage>
+        </MContainer>
+    </MCol>
+
+    <MCol Cols="4" Align="AlignTypes.Center" Style="background-color:white;">
+        @if (_viewModel.EnableLocalLogin)
+        {
+            <MCard Height=680 Class="mx-auto my-auto">
+                <div style="height:60px;"></div>
+                <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width:420px;">
+                    <MAvatar Size=80>
+                        <MImage Src="/img/avatar/1.svg">
+                        </MImage>
+                    </MAvatar>
+                    <h5 class="mt-2 mb-12">Welcome to Masa.Blazor.Pro! 👋</h5>
+
+                    <MTextField @bind-Value="_inputModel.Username"
+                            Label="Username"
+                            Placeholder="john@example.com"
+                            Outlined Dense
+                            HideDetails="@("auto")">
+                    </MTextField>
+                    <MTextField @bind-Value="@_inputModel.Password"
+                            Class="mt-10"
+                            Label="Password"
+                            Type="@(_show ? "text" : "password")"
+                            Placeholder="john@example.com"
+                            AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")"
+                            OnAppendClick="()=>_show = !_show"
+                            Outlined Dense
+                            HideDetails="@("auto")">
+                    </MTextField>
+                    <MCheckbox @bind-Value="_inputModel.RememberLogin" Label="Remember My Login"></MCheckbox>
+                    <MButton Class="mt-11 rounded-4 text-btn white--text" OnClick=Login Height=46 Width=340 Color="primary">Login</MButton>
+                    <MButton Class="mt-11 rounded-4 text-btn white--text" OnClick=Cancel Height=46 Width=340>Cancel</MButton>
+                </MForm>
+            </MCard>
+        }
+        
+        @if (_viewModel.VisibleExternalProviders.Any())
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>External Account</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-inline">
+                            @foreach (var provider in _viewModel.VisibleExternalProviders)
+                            {
+                                <li class="list-inline-item">
+                                    <a class="btn btn-secondary"
+                               asp-page="/ExternalLogin/Challenge"
+                               asp-route-scheme="@provider.AuthenticationScheme"
+                               asp-route-returnUrl="@_inputModel.ReturnUrl">
+                                        @provider.DisplayName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (!_viewModel.EnableLocalLogin && !_viewModel.VisibleExternalProviders.Any())
+        {
+            <div class="alert alert-warning">
+                <strong>Invalid login request</strong>
+                There are no login schemes configured for this request.
+            </div>
+        }
+    </MCol>
+</MRow>
