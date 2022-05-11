@@ -74,8 +74,6 @@ public partial class ThirdPartyUser
 
     public bool Filter { get; set; }
 
-    public bool Filter { get; set; }
-
     public long Total { get; set; }
 
     public List<ThirdPartyUserDto> ThirdPartyUsers { get; set; } = new();

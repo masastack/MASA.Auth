@@ -14,7 +14,7 @@ public class CommandHandler
     readonly UserDomainService _userDomainService;
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
-        ITeamRepository teamRepository, TeamDomainService teamDomainService, UserDomainService userDomainService
+        ITeamRepository teamRepository, TeamDomainService teamDomainService, UserDomainService userDomainService,
         StaffDomainService staffDomainService, ILdapFactory ldapFactory)
     {
         _userRepository = userRepository;
