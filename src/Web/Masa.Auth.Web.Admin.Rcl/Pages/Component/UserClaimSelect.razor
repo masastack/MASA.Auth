@@ -1,1 +1,15 @@
 ﻿@inherits AdminCompontentBase
+
+<div class="overflow-y full-height @Class" style="@Style">
+    @foreach (var userClaimChunk in UserClaimChunks)
+        {
+            <MRow>
+                @foreach (var userClaim in userClaimChunk)
+                {
+                    <MCol Cols="12/Chunk" Class="py-0">
+                        <MCheckbox Value="Value.Contains(userClaim.Id)" ValueChanged="value => OnValueChanged(value,userClaim.Id)" Label="@userClaim.Name"></MCheckbox>
+                    </MCol>
+                }
+            </MRow>
+        }
+</div>

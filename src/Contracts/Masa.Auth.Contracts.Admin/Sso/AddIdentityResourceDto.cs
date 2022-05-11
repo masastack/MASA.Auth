@@ -11,7 +11,7 @@ public class AddIdentityResourceDto
 
     public string Description { get; set; } = "";
 
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public bool Required { get; set; }
 

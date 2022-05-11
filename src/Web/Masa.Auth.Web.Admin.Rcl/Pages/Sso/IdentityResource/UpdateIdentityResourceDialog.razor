@@ -20,11 +20,11 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                         <MSwitch @bind-Value="IdentityResource.Required" Flat Label="@("Whether must:"+ (IdentityResource.Required ? T("True"):T("false")))"></MSwitch>
+                         <RequiredSwitch @bind-Value="IdentityResource.Required" />
                     </MCol>
                 </MRow>
-                <div class="mt-6 text-subtitle2">@T("User Claims")</div>
-                <UserClaimSelect @bind-Value=IdentityResource.UserClaims Class="mt-4" />
+                <div class="mt-6 text-subtitle2">@T("User Claims")</div>    
+                <UserClaimSelect @bind-Value=IdentityResource.UserClaims Class="mt-4" Style="height:67%!important" />
             </div>
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="IdentityResource.Enabled" Inset Class="label" Label="@(IdentityResource.Enabled ? T("Enable"):T("Disabled"))" />

@@ -23,7 +23,7 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        private async Task<List<UserClaimSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
+        private async Task<List<UserClaimSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string? search)
         {
             var query = new UserClaimSelectQuery(search);
             await eventBus.PublishAsync(query);
@@ -33,6 +33,11 @@ namespace Masa.Auth.Service.Admin.Services
         private async Task AddAsync(IEventBus eventBus, [FromBody] AddUserClaimDto dto)
         {
             await eventBus.PublishAsync(new AddUserClaimCommand(dto));
+        }
+
+        private async Task AddStandardUserClaimsAsync(IEventBus eventBus)
+        {
+            await eventBus.PublishAsync(new AddStandardUserClaimsCommand());
         }
 
         private async Task UpdateAsync(

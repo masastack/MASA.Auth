@@ -54,4 +54,4 @@
 </MCard>
 
 <AddApiResourceDialog @bind-Visible="AddApiResourceDialogVisible" OnSubmitSuccess=GetApiResourcesAsync />
-<UpdateApiResourceDialog @bind-Visible="UpdateApiResourceDialogVisible" OnSubmitSuccess=GetApiResourcesAsync />
+<UpdateApiResourceDialog @bind-Visible="UpdateApiResourceDialogVisible" ApiResourceId="CurrentApiResourceId" OnSubmitSuccess=GetApiResourcesAsync />

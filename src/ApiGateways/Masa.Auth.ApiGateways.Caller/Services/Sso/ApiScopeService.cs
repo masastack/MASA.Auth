@@ -17,7 +17,7 @@ public class ApiScopeService : ServiceBase
         return await SendAsync<GetApiScopesDto, PaginationDto<ApiScopeDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<ApiScopeSelectDto>> GetSelectAsync(string search)
+    public async Task<List<ApiScopeSelectDto>> GetSelectAsync(string? search = null)
     {
         return await SendAsync<object, List<ApiScopeSelectDto>>(nameof(GetSelectAsync), new { search });
     }

@@ -18,10 +18,16 @@
                         <MTextField @bind-Value="ApiResource.Description" Label="@T("Description")" HideDetails="@("auto")" Outlined />
                     </MCol>
                 </MRow>
-                <div class="mt-6 text-subtitle2">@T("User Claims")</div>
-                <UserClaimSelect @bind-Value=ApiResource.UserClaims Class="mt-4" />
-                <div class="mt-6 text-subtitle2">@T("Api Scopes")</div>
-                <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Class="mt-4" />
+                <div class="d-flex mt-6" style="position: relative;height: 67%;">
+                    <div class="pr-6" style="width:50%">
+                        <div class="text-subtitle2">@T("User Claims")</div>
+                        <UserClaimSelect @bind-Value=ApiResource.UserClaims Class="mt-4" />
+                    </div>
+                    <div class="pl-6" style="width:50%">
+                        <div class="text-subtitle2">@T("Api Scopes")</div>
+                        <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Class="mt-4" />
+                    </div>
+                </div>
             </div>
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="ApiResource.Enabled" Inset Class="label" Label="@(ApiResource.Enabled ? T("Enable"):T("Disabled"))" />

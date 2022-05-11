@@ -17,7 +17,7 @@ public class UserClaimService : ServiceBase
         return await SendAsync<GetUserClaimsDto, PaginationDto<UserClaimDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<UserClaimSelectDto>> GetSelectAsync(string search)
+    public async Task<List<UserClaimSelectDto>> GetSelectAsync(string? search = null)
     {
         return await SendAsync<object, List<UserClaimSelectDto>>(nameof(GetSelectAsync), new { search });
     }
@@ -30,6 +30,11 @@ public class UserClaimService : ServiceBase
     public async Task AddAsync(AddUserClaimDto request)
     {
         await SendAsync(nameof(AddAsync), request);
+    }
+
+    public async Task AddStandardUserClaimsAsync()
+    {
+        await SendAsync<object?>(nameof(AddStandardUserClaimsAsync), null);
     }
 
     public async Task UpdateAsync(UpdateUserClaimDto request)

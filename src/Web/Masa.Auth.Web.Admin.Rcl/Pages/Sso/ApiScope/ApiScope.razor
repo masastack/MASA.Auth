@@ -57,4 +57,4 @@
 </MCard>
 
 <AddApiScopeDialog @bind-Visible="AddApiScopeDialogVisible" OnSubmitSuccess=GetApiScopesAsync />
-<UpdateApiScopeDialog @bind-Visible="UpdateApiScopeDialogVisible" OnSubmitSuccess=GetApiScopesAsync />
+<UpdateApiScopeDialog @bind-Visible="UpdateApiScopeDialogVisible" ApiScopeId=CurrentApiScopeId OnSubmitSuccess=GetApiScopesAsync />

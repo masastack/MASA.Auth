@@ -7,21 +7,21 @@ public class ApiResourceDto
 {
     public int Id { get; set; }
 
-    public bool Enabled { get; private set; } = true;
+    public bool Enabled { get; set; } = true;
 
-    public string Name { get; private set; } = "";
+    public string Name { get; set; } = "";
 
-    public string DisplayName { get; private set; } = "";
+    public string DisplayName { get; set; } = "";
 
-    public string Description { get; private set; } = "";
+    public string Description { get; set; } = "";
 
-    public string AllowedAccessTokenSigningAlgorithms { get; private set; } = "";
+    public string AllowedAccessTokenSigningAlgorithms { get; set; } = "";
 
-    public bool ShowInDiscoveryDocument { get; private set; } = true;
+    public bool ShowInDiscoveryDocument { get; set; } = true;
 
-    public DateTime? LastAccessed { get; private set; }
+    public DateTime? LastAccessed { get; set; }
 
-    public bool NonEditable { get; private set; }
+    public bool NonEditable { get; set; }
 
     public ApiResourceDto() { }
 

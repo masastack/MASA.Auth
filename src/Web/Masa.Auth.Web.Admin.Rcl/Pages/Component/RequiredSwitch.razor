@@ -1,0 +1,6 @@
+﻿@inherits AdminCompontentBase
+
+<div class="d-flex">
+    <div class="my-auto text-caption2 neutral-lighten-3--text">@T("Required")</div>
+    <MSwitch Value=Value ValueChanged=ValueChanged Class="my-auto ml-4 pt-0" Flat HideDetails="@("auto")" Label="@(Value ? T("True"):T("False"))"></MSwitch>
+</div>
