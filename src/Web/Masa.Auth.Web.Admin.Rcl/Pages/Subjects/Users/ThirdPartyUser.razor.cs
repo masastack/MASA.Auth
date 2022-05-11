@@ -84,9 +84,7 @@ public partial class ThirdPartyUser
 
     public bool ViewThirdPartyUserDialog { get; set; }
 
-    public bool DomainAccountDialog { get; set; }
-
-    public bool LDAPDialog { get; set; }
+    public bool LdapDialog { get; set; }
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
@@ -122,9 +120,9 @@ public partial class ThirdPartyUser
         ViewThirdPartyUserDialog = true;
     }
 
-    public void OpenLDAPDialog()
+    public void OpenLdapDialog()
     {
-        LDAPDialog = true;
+        LdapDialog = true;
     }
 }
 

@@ -1,6 +1,9 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public class LDAPIdp : IdentityProvider
+namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+
+public class LdapIdp : IdentityProvider
 {
     public string ServerAddress { get; private set; } = null!;
 
@@ -18,10 +21,10 @@ public class LDAPIdp : IdentityProvider
 
     public string RootUserPassword { get; set; } = null!;
 
-    private LDAPIdp()
+    private LdapIdp()
     {
-        Name = "LDAP";
-        DisplayName = "LDAP";
+        Name = "Ldap";
+        DisplayName = "Ldap";
         IdentificationType = IdentificationTypes.PhoneNumber;
     }
 }

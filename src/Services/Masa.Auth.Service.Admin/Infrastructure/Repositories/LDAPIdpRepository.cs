@@ -1,8 +1,11 @@
-﻿namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public class LDAPIdpRepository : Repository<AuthDbContext, LDAPIdp, Guid>, ILDAPIdpRepository
+namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
+
+public class LdapIdpRepository : Repository<AuthDbContext, LdapIdp, Guid>, ILdapIdpRepository
 {
-    public LDAPIdpRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
+    public LdapIdpRepository(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {
     }
 }

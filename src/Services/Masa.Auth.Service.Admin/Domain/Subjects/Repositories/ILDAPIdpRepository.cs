@@ -1,5 +1,8 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public interface ILDAPIdpRepository : IRepository<LDAPIdp, Guid>
+namespace Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
+
+public interface ILdapIdpRepository : IRepository<LdapIdp, Guid>
 {
 }

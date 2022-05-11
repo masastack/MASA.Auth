@@ -1,8 +1,11 @@
-﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public class LDAPIdpEntityTypeConfiguration : IEntityTypeConfiguration<LDAPIdp>
+namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
+
+public class LdapIdpEntityTypeConfiguration : IEntityTypeConfiguration<LdapIdp>
 {
-    public void Configure(EntityTypeBuilder<LDAPIdp> builder)
+    public void Configure(EntityTypeBuilder<LdapIdp> builder)
     {
         builder.Property(p => p.BaseDn).HasMaxLength(255);
         builder.Property(p => p.UserSearchBaseDn).HasMaxLength(255);

@@ -26,7 +26,7 @@ public class AuthDbContext : IsolationDbContext
         builder.Entity<IdentityProvider>()
             .HasDiscriminator<string>("Discriminator")
             .HasValue<ThirdPartyIdp>("ThirdParty")
-            .HasValue<LDAPIdp>("LDAP");
+            .HasValue<LdapIdp>("LDAP");
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreatingExecuting(builder);

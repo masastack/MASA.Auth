@@ -193,7 +193,7 @@ public class CommandHandler
     [EventHandler]
     public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
     {
-        var ldapOptions = ldapConnectTestCommand.LDAPDetailDto.Adapt<LdapOptions>();
+        var ldapOptions = ldapConnectTestCommand.LdapDetailDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
         {
@@ -204,7 +204,7 @@ public class CommandHandler
     [EventHandler]
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
-        var ldapOptions = ldapUpsertCommand.LDAPDetailDto.Adapt<LdapOptions>();
+        var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
