@@ -10,9 +10,12 @@ public class CommandHandler
     readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
+    readonly ILdapFactory _ldapFactory;
     readonly UserDomainService _userDomainService;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, UserDomainService userDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
+        ITeamRepository teamRepository, TeamDomainService teamDomainService, UserDomainService userDomainService,
+        StaffDomainService staffDomainService, ILdapFactory ldapFactory)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -20,6 +23,8 @@ public class CommandHandler
         _staffDomainService = staffDomainService;
         _teamDomainService = teamDomainService;
         _userDomainService = userDomainService;
+        _staffDomainService = staffDomainService;
+        _ldapFactory = ldapFactory;
     }
 
     #region User
@@ -179,6 +184,34 @@ public class CommandHandler
             throw new UserFriendlyException("the team has staffs can`t delete");
         }
         await _teamRepository.RemoveAsync(team);
+    }
+
+    #endregion
+
+    #region Ldap
+
+    [EventHandler]
+    public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
+    {
+        var ldapOptions = ldapConnectTestCommand.LdapDetailDto.Adapt<LdapOptions>();
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
+        {
+            throw new UserFriendlyException("connect error");
+        }
+    }
+
+    [EventHandler]
+    public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
+    {
+        var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        var ldapUsers = ldapProvider.GetAllUserAsync();
+        await foreach (var ldapUser in ldapUsers)
+        {
+            //Public domain event
+            //todo wait user memory cache
+        }
     }
 
     #endregion

@@ -52,4 +52,23 @@ public class ThirdPartyIdpService : ServiceBase
         ThirdPartyIdps.Remove(ThirdPartyIdps.First(p => p.Id == id));
         await Task.CompletedTask;
     }
+
+    #region LDAP
+
+    public async Task LdapConnectTestAsync(LdapDetailDto ldapDetailDto)
+    {
+        await PostAsync("ldap/connect-test", ldapDetailDto);
+    }
+
+    public async Task LdapUpsertAsync(LdapDetailDto ldapDetailDto)
+    {
+        await PostAsync("ldap/save", ldapDetailDto);
+    }
+
+    public async Task<LdapDetailDto> GetLdapDetailAsync(Guid id)
+    {
+        return await Task.FromResult(new LdapDetailDto());
+    }
+
+    #endregion
 }

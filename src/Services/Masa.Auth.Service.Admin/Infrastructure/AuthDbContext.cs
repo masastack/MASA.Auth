@@ -23,6 +23,11 @@ public class AuthDbContext : IsolationDbContext
 
     protected override void OnModelCreatingExecuting(ModelBuilder builder)
     {
+        builder.Entity<IdentityProvider>()
+            .HasDiscriminator<string>("Discriminator")
+            .HasValue<ThirdPartyIdp>("ThirdParty")
+            .HasValue<LdapIdp>("LDAP");
+
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreatingExecuting(builder);
     }

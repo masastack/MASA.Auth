@@ -8,8 +8,9 @@
             @(Filter?"mdi-filter":"mdi-filter-off")
         </MIcon>
     </div>
-    <MButton Color="primary" Class="ml-4 medium-button" OnClick="() => DomainAccountDialog = true">
-        <span class="ml-2">@T("Domain Account")</span>
+    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenLdapDialog>
+        <MIcon Size=18>mdi-plus</MIcon>
+        <span class="ml-2">@T("Ldap")</span>
     </MButton>
 </div>
 
@@ -71,3 +72,4 @@
 </MDataTable>
 
 <ViewThirdPartyUserDialog @bind-Visible=ViewThirdPartyUserDialog ThirdPartyUserId=CurrentThirdPartyUserId />
+<LdapDialog @bind-Show=LdapDialog />
