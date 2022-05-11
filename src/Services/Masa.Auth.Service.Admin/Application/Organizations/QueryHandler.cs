@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Organizations;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Application.Organizations;
 
 public class QueryHandler
 {
@@ -24,7 +27,7 @@ public class QueryHandler
             ParentId = department.ParentId,
             StaffList = department.DepartmentStaffs
                 .Select(ds => ds.Staff)
-                .Select(s => new StaffDto(s.Id, department.Name, "", s.JobNumber, s.Enabled, s.User.Name, s.User.DisplayName, s.User.Avatar, s.User.PhoneNumber, s.User.Email)).ToList()
+                .Select(staff => (StaffDto)staff).ToList()
         };
     }
 

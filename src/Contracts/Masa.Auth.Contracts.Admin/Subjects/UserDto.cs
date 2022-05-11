@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UserDto
 {
@@ -24,7 +27,7 @@ public class UserDto
 
     public DateTime CreationTime { get; set; }
 
-    public GenderTypes GenderType { get; set; }
+    public GenderTypes Gender { get; set; }
 
     public UserDto()
     {
@@ -51,7 +54,7 @@ public class UserDto
         PhoneNumber = phoneNumber;
         Email = email;
         CreationTime = creationTime;
-        GenderType = genderType;
+        Gender = genderType;
     }
 }
 

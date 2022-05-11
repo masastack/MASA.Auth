@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class FluentValidationExtensions
 {
@@ -96,6 +99,6 @@ public static class FluentValidationExtensions
     {
         return ruleBuilder.NotNull()
                         .NotEmpty()
-                        .WithMessage("{PropertyName} is required ");
+                        .WithMessage("{PropertyName} is required");
     }
 }

@@ -1,4 +1,7 @@
-﻿using Masa.Auth.Service.Admin.Application.Projects.Commands;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using Masa.Auth.Service.Admin.Application.Projects.Commands;
 
 namespace Masa.Auth.Service.Admin.Services;
 
@@ -11,9 +14,9 @@ public class ProjectService : ServiceBase
         MapPost(SaveAppTagAsync);
     }
 
-    private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus)
+    private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus, [FromQuery] bool hasMenu = false)
     {
-        var query = new ProjectListQuery();
+        var query = new ProjectListQuery(hasMenu);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

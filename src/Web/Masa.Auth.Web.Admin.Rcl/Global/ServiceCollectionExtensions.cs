@@ -1,5 +1,7 @@
-﻿using Masa.Auth.Web.Admin.Rcl.Global.Nav;
-using Microsoft.Extensions.DependencyInjection;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using Masa.Auth.Web.Admin.Rcl.Global.Nav;
 
 namespace Masa.Auth.Web.Admin.Rcl.Global
 {

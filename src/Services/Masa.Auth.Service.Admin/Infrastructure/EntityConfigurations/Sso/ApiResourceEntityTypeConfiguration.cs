@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Sso;
 
 public class ApiResourceEntityTypeConfiguration : IEntityTypeConfiguration<ApiResource>
 {
@@ -10,9 +13,9 @@ public class ApiResourceEntityTypeConfiguration : IEntityTypeConfiguration<ApiRe
         builder.Property(x => x.Description).HasMaxLength(1000);
         builder.Property(x => x.AllowedAccessTokenSigningAlgorithms).HasMaxLength(100);
         builder.HasIndex(x => x.Name).IsUnique().HasFilter("[IsDeleted] = 0");
-        builder.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.Scopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.UserClaims).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(x => x.Properties).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.ApiScopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.UserClaims).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.Properties).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).OnDelete(DeleteBehavior.Cascade);
     }
 }

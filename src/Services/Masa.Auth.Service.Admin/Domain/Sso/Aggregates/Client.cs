@@ -1,8 +1,13 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
 public class Client : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
     public bool IsDeleted { get; private set; }
+
+    public ClientTypes ClientType { get; private set; }
 
     public bool Enabled { get; private set; } = true;
 

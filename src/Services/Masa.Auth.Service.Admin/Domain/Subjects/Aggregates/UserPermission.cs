@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class UserPermission : AuditEntity<Guid, Guid>, ISoftDelete
 {
@@ -28,6 +31,12 @@ public class UserPermission : AuditEntity<Guid, Guid>, ISoftDelete
     public UserPermission(Guid userId, Guid permissionId, bool effect)
     {
         UserId = userId;
+        PermissionId = permissionId;
+        Effect = effect;
+    }
+
+    public UserPermission(Guid permissionId, bool effect)
+    {
         PermissionId = permissionId;
         Effect = effect;
     }

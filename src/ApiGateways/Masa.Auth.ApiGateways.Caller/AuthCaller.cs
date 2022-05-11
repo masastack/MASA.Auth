@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller;
 
 public class AuthCaller : HttpClientCallerBase
 {
@@ -13,6 +16,11 @@ public class AuthCaller : HttpClientCallerBase
     PermissionService? _permissionService;
     ProjectService? _projectService;
     ClientService? _clientService;
+    IdentityResourceService? _identityResourceService;
+    ApiScopeService? _apiScopeService;
+    ApiResourceService? _apiResourceService;
+    UserClaimService? _userClaimService;
+    CustomLoginService? _customLoginService;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(CallerProvider));
@@ -34,6 +42,16 @@ public class AuthCaller : HttpClientCallerBase
     public ProjectService ProjectService => _projectService ?? (_projectService = new(CallerProvider));
 
     public ClientService ClientService => _clientService ?? (_clientService = new(CallerProvider));
+
+    public IdentityResourceService IdentityResourceService => _identityResourceService ?? (_identityResourceService = new(CallerProvider));
+
+    public ApiScopeService ApiScopeService => _apiScopeService ?? (_apiScopeService = new(CallerProvider));
+
+    public ApiResourceService ApiResourceService => _apiResourceService ?? (_apiResourceService = new(CallerProvider));
+
+    public UserClaimService UserClaimService => _userClaimService ?? (_userClaimService = new(CallerProvider));
+
+    public CustomLoginService CustomLoginService => _customLoginService ?? (_customLoginService = new(CallerProvider));
 
     protected override string BaseAddress { get; set; }
 

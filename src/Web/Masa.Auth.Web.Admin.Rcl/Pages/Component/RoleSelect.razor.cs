@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public partial class RoleSelect
 {
@@ -27,7 +30,7 @@ public partial class RoleSelect
         Roles = await RoleService.GetSelectForUserAsync();
     }
 
-    protected virtual List<RoleSelectDto> GetRoleSelect() => Roles;
+    protected virtual bool RoleDisabled(RoleSelectDto role) => false;
 
     protected void RemoveRole(RoleSelectDto role)
     {

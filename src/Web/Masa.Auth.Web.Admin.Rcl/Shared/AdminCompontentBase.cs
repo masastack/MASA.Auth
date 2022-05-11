@@ -1,3 +1,6 @@
+// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
 using Masa.Auth.ApiGateways.Caller;
 
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
@@ -61,6 +64,7 @@ public abstract class AdminCompontentBase : ComponentBase
         }
 
     }
+
     [Inject]
     public IPopupService PopupService { get; set; } = default!;
 
@@ -72,10 +76,9 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public string T(string key) => I18n.T(key);
 
-    public void OpenConfirmDialog(Func<bool, Task> confirmFunc, string messgae)
+    public async Task<bool> OpenConfirmDialog(string content)
     {
-        var callback = EventCallback.Factory.Create(this, confirmFunc);
-        GlobalConfig.OpenConfirmDialog(I18n.T("Operation confirmation"), messgae, callback);
+        return await PopupService.ConfirmAsync(T("Operation confirmation"), content, AlertTypes.Error);
     }
 
     public async Task<bool> OpenConfirmDialog(string title, string content)
@@ -108,9 +111,18 @@ public abstract class AdminCompontentBase : ComponentBase
         PopupService.AlertAsync(message, AlertTypes.Error);
     }
 
-    public static List<KeyValuePair<string, TEnum>> GetEnumMap<TEnum>() where TEnum : struct, Enum
+    public List<KeyValuePair<string, TEnum>> GetEnumMap<TEnum>() where TEnum : struct, Enum
     {
         return Enum.GetValues<TEnum>().Select(e => new KeyValuePair<string, TEnum>(e.ToString(), e)).ToList();
+    }
+
+    public List<KeyValuePair<string, bool>> GetBooleanMap()
+    {
+        return new()
+        {
+            new(T("Enable"), true),
+            new(T("Disabled"), false)
+        };
     }
 }
 

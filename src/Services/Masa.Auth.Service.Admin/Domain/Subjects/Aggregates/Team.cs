@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class Team : AuditAggregateRoot<Guid, Guid>, ISoftDelete
 {
@@ -11,6 +14,8 @@ public class Team : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     public string Description { get; private set; }
 
     public TeamTypes TeamType { get; private set; }
+
+    public int MemberCount { get; private set; }
 
     private List<TeamStaff> teamStaffs = new();
 
@@ -49,6 +54,7 @@ public class Team : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     {
         teamStaffs.RemoveAll(ts => ts.TeamMemberType == memberType);
         teamStaffs.AddRange(staffIds.Select(s => new TeamStaff(s, memberType)));
+        MemberCount = teamStaffs.Count;
     }
 
     public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissionsIds)

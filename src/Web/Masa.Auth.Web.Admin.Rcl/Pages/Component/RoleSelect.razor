@@ -2,7 +2,7 @@
 
 <MAutocomplete Value="Value"
                ValueChanged=ValueChanged
-               Items="GetRoleSelect()"
+               Items="Roles"
                Outlined
                Height=55
                Chips
@@ -13,7 +13,8 @@
                ItemText="t=>t.Name"
                ItemValue="t=>t.Id"
                Multiple
-               Class="@Class">
+               Class="@Class"
+               ItemDisabled="RoleDisabled">
     <SelectionContent Context="data">
         <MChip Close
                Style="height:28px;"

@@ -1,0 +1,30 @@
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
+
+public class PositionService : ServiceBase
+{
+    protected override string BaseUrl { get; set; }
+
+    internal PositionService(ICallerProvider callerProvider) : base(callerProvider)
+    {
+        BaseUrl = "api/position/";
+    }
+
+    public async Task<PositionDetailDto> GetDetailAsync(Guid id)
+    {
+        return await SendAsync<object, PositionDetailDto>(nameof(GetDetailAsync), new { id });
+    }
+
+    public async Task<List<PositionSelectDto>> GetSelectAsync(string name = "")
+    {
+        return await SendAsync<object, List<PositionSelectDto>>(nameof(GetSelectAsync), new { name });
+    }
+
+    public async Task UpsertAsync(UpsertPositionDto request)
+    {
+        await SendAsync(nameof(UpsertAsync), request);
+    }
+}
+

@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Projects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Projects;
 
 public class ProjectService : ServiceBase
 {
@@ -9,9 +12,9 @@ public class ProjectService : ServiceBase
         BaseUrl = "api/project";
     }
 
-    public async Task<List<ProjectDto>> GetListAsync()
+    public async Task<List<ProjectDto>> GetListAsync(bool hasMenu = false)
     {
-        return await GetAsync<List<ProjectDto>>($"GetList");
+        return await GetAsync<List<ProjectDto>>($"GetList?hasMenu={hasMenu}");
     }
 
     public async Task<List<string>> GetAppTagsAsync()

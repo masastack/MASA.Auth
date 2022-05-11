@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
 
 public class AddStaffDomainEventHandler
 {
@@ -20,14 +23,12 @@ public class AddStaffDomainEventHandler
     }
 
     [EventHandler(2)]
-    public async Task AddPositionAsync(AddStaffDomainEvent staffEvent)
+    public async Task UpsertPositionAsync(AddStaffDomainEvent staffEvent)
     {
-        var position = staffEvent.Staff.Position;
-        if (position.Id == Guid.Empty)
+        if (string.IsNullOrEmpty(staffEvent.Staff.Position.Name) is false)
         {
-            var command = new AddPositionCommand(new AddPositionDto(position.Name));
+            var command = new UpsertPositionCommand(staffEvent.Staff.Position);
             await _eventBus.PublishAsync(command);
-            position.Id = command.PositionId;
         }
     }
 

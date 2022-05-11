@@ -1,6 +1,10 @@
-﻿global using FluentValidation;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using Mapster;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Organizations;
@@ -9,6 +13,7 @@ global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Permissions.Validator;
 global using Masa.Auth.Contracts.Admin.Projects;
 global using Masa.Auth.Contracts.Admin.Sso;
+global using Masa.Auth.Contracts.Admin.Sso.Validator;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Contracts.Admin.Subjects.Validator;
 global using Masa.Auth.Service.Admin.Application.Organizations.Commands;
@@ -16,6 +21,7 @@ global using Masa.Auth.Service.Admin.Application.Organizations.Queries;
 global using Masa.Auth.Service.Admin.Application.Permissions.Commands;
 global using Masa.Auth.Service.Admin.Application.Permissions.Queries;
 global using Masa.Auth.Service.Admin.Application.Projects.Queries;
+global using Masa.Auth.Service.Admin.Application.Sso.Commands;
 global using Masa.Auth.Service.Admin.Application.Sso.Queries;
 global using Masa.Auth.Service.Admin.Application.Subjects.Commands;
 global using Masa.Auth.Service.Admin.Application.Subjects.Queries;
@@ -43,6 +49,7 @@ global using Masa.BuildingBlocks.Ddd.Domain.Events;
 global using Masa.BuildingBlocks.Ddd.Domain.Repositories;
 global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
+global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Masa.Contrib.BasicAbility.Pm;
 global using Masa.Contrib.Ddd.Domain;
 global using Masa.Contrib.Ddd.Domain.Repository.EF;
@@ -60,6 +67,7 @@ global using Masa.Utils.Data.EntityFrameworkCore.SqlServer;
 global using Masa.Utils.Exceptions.Extensions;
 global using Masa.Utils.Ldap.Novell;
 global using Masa.Utils.Ldap.Novell.Extensions;
+global using Masa.Utils.Security.Cryptography;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;

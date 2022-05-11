@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
 
 public class SetTeamPersonnelInfoDomainEventHandler
 {
@@ -29,11 +32,11 @@ public class SetTeamPersonnelInfoDomainEventHandler
                         setTeamPersonnelInfoDomainEvent.Team.GetMemberRoleId();
         removeUsers.ForEach(user =>
         {
-            user.RemoveRole(teamRoleId);
+            user.RemoveRoles(teamRoleId);
         });
         addUsers.ForEach(user =>
         {
-            user.AddRole(teamRoleId);
+            user.AddRoles(teamRoleId);
         });
         await _userRepository.UpdateRangeAsync(removeUsers);
         await _userRepository.UpdateRangeAsync(addUsers);

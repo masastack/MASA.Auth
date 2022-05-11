@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class UserService : ServiceBase
 {
@@ -11,23 +14,17 @@ public class UserService : ServiceBase
 
     public async Task<PaginationDto<UserDto>> GetListAsync(GetUsersDto request)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["pageSize"] = request.PageSize.ToString(),
-            ["page"] = request.Page.ToString(),
-            ["userId"] = request.UserId.ToString(),
-            ["enabled"] = request.Enabled?.ToString() ?? "",
-        };
-        return await SendAsync<PaginationDto<UserDto>>(nameof(GetListAsync), paramters);
+        return await SendAsync<GetUsersDto, PaginationDto<UserDto>>(nameof(GetListAsync), request);
+    }
+
+    public async Task<List<UserSelectDto>> GetSelectAsync(string search)
+    {
+        return await SendAsync<object, List<UserSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
     public async Task<UserDetailDto> GetDetailAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-        return await SendAsync<UserDetailDto>(nameof(GetDetailAsync), paramters);
+        return await SendAsync<object, UserDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
     public async Task AddAsync(AddUserDto request)
@@ -40,9 +37,9 @@ public class UserService : ServiceBase
         await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationDto request)
+    public async Task UpdateAuthorizationAsync(UpdateUserAuthorizationDto request)
     {
-        await SendAsync(nameof(UpdateUserAuthorizationAsync), request);
+        await SendAsync(nameof(UpdateAuthorizationAsync), request);
     }
 
     public async Task RemoveAsync(Guid id)

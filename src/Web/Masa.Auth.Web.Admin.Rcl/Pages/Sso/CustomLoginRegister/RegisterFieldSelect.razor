@@ -1,0 +1,16 @@
+﻿@inherits AdminCompontentBase
+
+<MAutocomplete Value="Value"
+               ValueChanged="ValueChanged"
+               Items="RegisterFields.Where(e => e==Value || Excludes.Contains(e) is false).ToList()"
+               Color="primary"
+               ItemText="e => T(e==default?string.Empty:e.ToString())"
+               ItemValue="e => e"
+               Outlined
+               HideDetails="@("auto")"
+               Style="@($"{Style}")"
+               Class="@($"{Class}")">
+    <ItemContent Context="data">
+        <span class="text-btn neutral-lighten-1--text ml-2">@T(data.Item.ToString())</span> 
+    </ItemContent>
+</MAutocomplete>

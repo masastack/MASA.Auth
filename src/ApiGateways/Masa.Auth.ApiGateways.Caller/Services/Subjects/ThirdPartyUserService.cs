@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class ThirdPartyUserService : ServiceBase
 {
@@ -6,22 +9,17 @@ public class ThirdPartyUserService : ServiceBase
 
     internal ThirdPartyUserService(ICallerProvider callerProvider) : base(callerProvider)
     {
-        BaseUrl = "api/thirdParty/";
+        BaseUrl = "api/thirdPartyUser/";
     }
 
-    public async Task<PaginationDto<ThirdPartyUserDto>> GetThirdPartyUsersAsync(GetThirdPartyUsersDto request)
+    public async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(GetThirdPartyUsersDto request)
     {
-        return await Task.FromResult(new PaginationDto<ThirdPartyUserDto>(0, new List<ThirdPartyUserDto>()));
+        return await SendAsync<GetThirdPartyUsersDto, PaginationDto<ThirdPartyUserDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<ThirdPartyUserDetailDto> GetThirdPartyUserDetailAsync(Guid id)
+    public async Task<ThirdPartyUserDetailDto> GetDetailAsync(Guid id)
     {
-        return await Task.FromResult(new ThirdPartyUserDetailDto());
-    }
-
-    public async Task AddThirdPartyUserAsync(AddThirdPartyUserDto request)
-    {
-        await Task.CompletedTask;
+        return await SendAsync<object, ThirdPartyUserDetailDto>(nameof(GetDetailAsync), new { id });
     }
 }
 

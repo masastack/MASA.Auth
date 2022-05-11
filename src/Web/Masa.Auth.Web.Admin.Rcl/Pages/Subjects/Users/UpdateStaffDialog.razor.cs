@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class UpdateStaffDialog
 {
@@ -67,12 +70,10 @@ public partial class UpdateStaffDialog
         }
     }
 
-    public void OpenRemoveStaffDialog()
+    public async Task OpenRemoveStaffDialog()
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveStaffAsync();
-        }, T("Are you sure delete staff data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete staff data"));
+        if (confirm) await RemoveStaffAsync();
     }
 
     public async Task RemoveStaffAsync()

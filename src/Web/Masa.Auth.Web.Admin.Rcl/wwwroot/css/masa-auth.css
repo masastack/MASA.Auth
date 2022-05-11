@@ -483,9 +483,9 @@
 }
 
 .medium-button {
-    min-width: 126px;
-    height: 40px;
-    border-radius: 99px;
+    min-width: 126px !important;
+    height: 40px !important;
+    border-radius: 99px !important;
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -494,9 +494,9 @@
 }
 
 .large-button {
-    min-width: 340px;
-    height: 48px;
-    border-radius: 90px;
+    min-width: 340px !important;
+    height: 48px !important;
+    border-radius: 90px !important;
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -504,7 +504,54 @@
     line-height: 1.3125rem !important;
 }
 
+.button {
+    min-width: 40px;
+    min-height: 40px;
+    border: 1px solid #F0F3FA;
+    box-sizing: border-box;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 /*组件样式全局修改start*/
+.m-window {
+    position: initial !important;
+}
+
+.m-window__container {
+    position: initial !important;
+}
+
+.small .m-input__control .m-input__slot fieldset {
+    height: 40px !important;
+}
+
+.small .m-input__slot {
+    height: 30px !important;
+}
+
+.small .m-select__slot {
+    height: 35px !important;
+}
+
+.theme--light.m-timeline .m-timeline-item__dot {
+    background: none !important;
+}
+
+.m-timeline-item__dot {
+    box-shadow: none !important;
+}
+
+.m-timeline-item__inner-dot {
+    background: white !important;
+    margin-top: 0px !important;
+}
+
+.m-input__append-inner {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
 .button-group {
     font-family: Roboto !important;
     font-style: normal !important;
@@ -813,11 +860,11 @@
 }
 
 .m-text-field--outlined input {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
 }
 
 .m-timeline {
@@ -1261,7 +1308,7 @@ tr:hover {
 }
 
 .m-input.mx-auto .m-text-field__slot {
-    padding-bottom: 12px;
+    padding-bottom: 2px;
 }
 .m-input.mx-auto .m-text-field__slot input {
     text-align: center;
@@ -1392,8 +1439,6 @@ tr:hover {
     height: 100%;
     width: 100%;
     position: absolute;
-.max-full-height {
-    max-height: 100% !important;
 }
 
 .m-stepper__content.full-height .m-stepper__wrapper {
@@ -1410,4 +1455,24 @@ tr:hover {
 
 .m-text-field.m-text-field--solo.elevation-0:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
     box-shadow: none;
+}
+
+.px-sheet-dialog {
+    padding-right: 228px;
+    padding-left: 228px;
+}
+
+.login {
+    background: #FFFFFF;
+    box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+    border-radius: 20px;
+}
+
+.login .m-tabs-slider-wrapper{
+    top:0;
+    height:4px !important;
+}
+
+.login .m-slide-group__wrapper{
+    height:70px !important;
 }

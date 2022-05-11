@@ -1,13 +1,14 @@
-﻿@inherits AdminCompontentBase
+﻿@using Masa.Stack.Components
+@inherits AdminCompontentBase
 
-<div style="position: fixed;right: 48px;top: 108px;" class="d-flex">
-    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-        <PrependInnerContent>
-            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
-        </PrependInnerContent>
-    </MTextField>
-    <MIcon Size=20 class="ml-6" @onclick="() => Filter = !Filter">mdi-filter-off</MIcon>
-    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddUserDialog>
+<div style="position: absolute;right: 0;top: 0;" class="d-flex">
+    <UserAutoComplete @bind-Value="UserId" />
+    <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
+        <MIcon Class="ma-auto" Color="neutral-lighten-1" Size=20>
+            @(Filter?"mdi-filter":"mdi-filter-off")
+        </MIcon>
+    </div>
+    <MButton Color="primary" Class="ml-4 medium-button" OnClick=OpenAddUserDialog>
         <MIcon Size=18>mdi-plus</MIcon>
         <span class="ml-2">@T("Add")</span>
     </MButton>
@@ -15,18 +16,13 @@
 
 @if (Filter)
 {
-    <div class="">
-        <MCol>
-            <MSelect @bind-Value="Enabled"
-                 HideDetails="@("auto")"
-                 Outlined
-                 Clearable
-                 Items="@UserStateSelect"
-                 ItemText="select => select.Item1"
-                 ItemValue="select => select.Item2"
-                 Label="@T("UserState")">
-            </MSelect>
-        </MCol>
+    <div class="d-flex mb-2">
+        <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+        <MRow class="ml-6">
+            <MCol Md=4>
+                <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
+            </MCol>
+        </MRow>
     </div>
 }
 
@@ -54,13 +50,10 @@
                 <span class="text-body3">@context.Item.PhoneNumber</span>
                 break;
             case (nameof(UserDto.CreationTime)):
-                <span class="text-body3">@context.Item.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                 break;
             case nameof(UserDto.Enabled):
-                string color = context.Item.Enabled ? "sample-green" : "error";
-                <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                    <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                </MChip>
+                <EnableChip Value=context.Item.Enabled />
                 break;
             case "Action":
                 <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
@@ -78,4 +71,4 @@
 
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
-<AuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" />
+<UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />

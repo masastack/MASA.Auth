@@ -1,8 +1,11 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public class UserSelectDto
+namespace Masa.Auth.Contracts.Admin.Subjects;
+
+public class UserSelectDto : AutoCompleteDocument<Guid>
 {
-    public Guid Id { get; set; }
+    public new Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -31,5 +34,7 @@ public class UserSelectDto
         PhoneNumber = phoneNumber;
         Email = email;
         Avatar = avatar;
+        Value = Id;
+        Text = $"{Name},{Account},{PhoneNumber},{Email}";
     }
 }

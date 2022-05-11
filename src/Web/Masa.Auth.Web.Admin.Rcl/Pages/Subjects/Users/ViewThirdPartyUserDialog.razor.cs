@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class ViewThirdPartyUserDialog
 {
@@ -31,7 +34,7 @@ public partial class ViewThirdPartyUserDialog
     {
         if (Visible)
         {
-            ThirdPartyUser = await ThirdPartyUserService.GetThirdPartyUserDetailAsync(ThirdPartyUserId);
+            ThirdPartyUser = await ThirdPartyUserService.GetDetailAsync(ThirdPartyUserId);
         }
     }
 

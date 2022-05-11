@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
 {
@@ -8,15 +11,18 @@ public class CommandHandler
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
     readonly ILdapFactory _ldapFactory;
+    readonly UserDomainService _userDomainService;
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
-        ITeamRepository teamRepository, TeamDomainService teamDomainService,
+        ITeamRepository teamRepository, TeamDomainService teamDomainService, UserDomainService userDomainService
         StaffDomainService staffDomainService, ILdapFactory ldapFactory)
     {
-        _staffRepository = staffRepository;
         _userRepository = userRepository;
+        _staffRepository = staffRepository;
         _teamRepository = teamRepository;
+        _staffDomainService = staffDomainService;
         _teamDomainService = teamDomainService;
+        _userDomainService = userDomainService;
         _staffDomainService = staffDomainService;
         _ldapFactory = ldapFactory;
     }
@@ -50,8 +56,11 @@ public class CommandHandler
         else
         {
             user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account ?? "", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Email ?? "", userDto.Address, userDto.Gender);
+            user.AddRoles(userDto.Roles.ToArray());
+            user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
             await _userRepository.AddAsync(user);
             command.UserId = user.Id;
+            await _userDomainService.SetAsync(user);
         }
     }
 
@@ -78,8 +87,9 @@ public class CommandHandler
                     throw new UserFriendlyException($"User with email {userDto.Email} already exists");
             }
 
-            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.GenderType);
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.Gender);
             await _userRepository.UpdateAsync(user);
+            await _userDomainService.SetAsync(user);
         }
     }
 
@@ -95,8 +105,8 @@ public class CommandHandler
         //Delete Staff
         //Delete ...
         await _userRepository.RemoveAsync(user);
+        await _userDomainService.RemoveAsync(user.Id);
     }
-
     #endregion
 
     #region Staff

@@ -1,4 +1,11 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using Masa.Contrib.Isolation.MultiEnvironment;
+using Masa.Contrib.SearchEngine.AutoComplete;
+using Masa.Utils.Data.Elasticsearch;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -24,12 +31,16 @@ builder.Services.AddAuthentication(options =>
 //        });
 //    }
 //);
+MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
 MapsterAdapterConfig.TypeAdapter();
+
+builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
+                .AddAutoComplete(option => option.UseIndexName("user_index"));
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -81,11 +92,11 @@ var app = builder.Services
     .AddServices(builder);
 
 //set Isolation
-app.Use(async (context, next) =>
-{
-    context.Items.Add("env", "development");
-    await next.Invoke();
-});
+//app.Use(async (context, next) =>
+//{
+//    context.Items.Add("env", "development");
+//    await next.Invoke();
+//});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

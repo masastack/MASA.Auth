@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Services
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : RestServiceBase
     {
@@ -8,7 +11,7 @@
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
         {
-            var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled);
+            var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled, user.StartTime, user.EndTime);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
@@ -37,6 +40,12 @@
             [FromBody] UpdateUserDto dto)
         {
             await eventBus.PublishAsync(new UpdateUserCommand(dto));
+        }
+
+        public async Task UpdateAuthorizationAsync(IEventBus eventBus,
+            [FromBody] UpdateUserAuthorizationDto dto)
+        {
+            await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(dto));
         }
 
         private async Task RemoveAsync(

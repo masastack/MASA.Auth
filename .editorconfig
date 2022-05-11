@@ -134,3 +134,6 @@ dotnet_naming_rule.constant_fields_should_be_upper_case.style    = upper_case_st
 dotnet_naming_symbols.constant_fields.applicable_kinds            = field
 dotnet_naming_symbols.constant_fields.applicable_accessibilities  = *
 dotnet_naming_symbols.constant_fields.required_modifiers          = const
+
+# License Header
+file_header_template = Copyright (c) MASA Stack All rights reserved.\nLicensed under the Apache License. See LICENSE.txt in the project root for license information.

@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class StaffService : ServiceBase
 {
@@ -11,33 +14,17 @@ public class StaffService : ServiceBase
 
     public async Task<PaginationDto<StaffDto>> GetListAsync(GetStaffsDto request)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["pageSize"] = request.PageSize.ToString(),
-            ["page"] = request.Page.ToString(),
-            ["search"] = request.Search ?? "",
-            ["enabled"] = request.Enabled?.ToString() ?? "",
-            ["departmentId"] = request.DepartmentId.ToString()
-        };
-        return await SendAsync<PaginationDto<StaffDto>>(nameof(GetListAsync), paramters);
+        return await SendAsync<GetStaffsDto, PaginationDto<StaffDto>>(nameof(GetListAsync), request);
     }
 
     public async Task<List<StaffSelectDto>> GetSelectAsync(string name)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["name"] = name,
-        };
-        return await SendAsync<List<StaffSelectDto>>(nameof(GetSelectAsync), paramters);
+        return await SendAsync<object, List<StaffSelectDto>>(nameof(GetSelectAsync), new { name });
     }
 
     public async Task<StaffDetailDto> GetDetailAsync(Guid id)
     {
-        var paramters = new Dictionary<string, string>
-        {
-            ["id"] = id.ToString(),
-        };
-        return await SendAsync<StaffDetailDto>(nameof(GetDetailAsync), paramters);
+        return await SendAsync<object, StaffDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
     public async Task AddAsync(AddStaffDto request)

@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Services;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
 {
@@ -9,7 +12,7 @@ public class StaffService : RestServiceBase
 
     private async Task<PaginationDto<StaffDto>> GetListAsync(IEventBus eventBus, GetStaffsDto staff)
     {
-        var query = new GetStaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled, staff.DepartmentId);
+        var query = new StaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled, staff.DepartmentId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

@@ -1,6 +1,9 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Projects.Queries;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public record ProjectListQuery : Query<List<ProjectDto>>
+namespace Masa.Auth.Service.Admin.Application.Projects.Queries;
+
+public record ProjectListQuery(bool HasMenu) : Query<List<ProjectDto>>
 {
     public override List<ProjectDto> Result { get; set; } = new();
 }

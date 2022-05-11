@@ -1,26 +1,21 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public class StaffDetailDto
+namespace Masa.Auth.Contracts.Admin.Subjects;
+
+public class StaffDetailDto : StaffDto
 {
-    public Guid Id { get; set; }
-
     public Guid DepartmentId { get; set; }
 
     public Guid PositionId { get; set; }
 
-    public string JobNumber { get; set; }
+    public List<Guid> TeamIds { get; set; } = new();
 
-    public bool Enabled { get; private set; }
+    public new UserDetailDto User { get; set; } = new();
 
-    public StaffTypes StaffType { get; set; }
+    public string Creator { get; set; } = "";
 
-    public List<Guid> TeamIds { get; set; }
-
-    public UserDetailDto User { get; set; }
-
-    public string Creator { get; set; }
-
-    public string Modifier { get; set; }
+    public string Modifier { get; set; } = "";
 
     public DateTime CreationTime { get; set; }
 
@@ -28,22 +23,13 @@ public class StaffDetailDto
 
     public StaffDetailDto()
     {
-        JobNumber = "";
-        TeamIds = new();
-        User = new();
-        Creator = "";
-        Modifier = "";
     }
 
     [JsonConstructor]
-    public StaffDetailDto(Guid id, Guid departmentId, Guid positionId, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user, string creator, string modifier, DateTime creationTime, DateTime? modificationTime)
+    public StaffDetailDto(Guid id, Guid departmentId, string department, Guid positionId, string position, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user, string creator, string modifier, DateTime creationTime, DateTime? modificationTime) : base(id, department, position, jobNumber, enabled, staffType, user)
     {
-        Id = id;
         DepartmentId = departmentId;
         PositionId = positionId;
-        JobNumber = jobNumber;
-        Enabled = enabled;
-        StaffType = staffType;
         TeamIds = teamIds;
         User = user;
         Creator = creator;

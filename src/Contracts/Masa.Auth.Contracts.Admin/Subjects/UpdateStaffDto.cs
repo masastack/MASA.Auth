@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UpdateStaffDto
 {
@@ -12,7 +15,7 @@ public class UpdateStaffDto
 
     public Guid DepartmentId { get; set; }
 
-    public UpdatePositionDto Position { get; set; }
+    public UpsertPositionDto Position { get; set; }
 
     public List<Guid> Teams { get; set; }
 
@@ -26,7 +29,7 @@ public class UpdateStaffDto
         User = new();
     }
 
-    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, UpdatePositionDto position, List<Guid> teamIds, UpdateUserDto user)
+    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, UpsertPositionDto position, List<Guid> teamIds, UpdateUserDto user)
     {
         Id = id;
         JobNumber = jobNumber;

@@ -1,0 +1,26 @@
+﻿@inherits AdminCompontentBase
+@typeparam TValue
+
+@if (StyleType == StyleTypes.Toggle)
+{
+    <MButtonGroup Class="@Class" Value="Value.ToString()" Rounded>
+        @foreach (var (key, value) in KeyValues)
+        {
+            <MButton OnClick="async() => await ValueChanged.InvokeAsync(value)" Width=100 Value="@value.ToString()" Class="@(Value.Equals(value) ? "button-group-active":"button-group")">
+                <MIcon Size=18>fa fa-regular fa-mars</MIcon>
+                <span class="ml-1">@T(key)</span>
+            </MButton>
+        }
+    </MButtonGroup>
+}
+else
+{
+    <MButtonGroup Value="Value.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px" Dense Mandatory Borderless>
+        @foreach (var (key, value) in KeyValues)
+        {
+            <MButton OnClick="async() => await ValueChanged.InvokeAsync(value)" Value="@value.ToString()" Ripple=false Class="rounded-lg" MinWidth=70 Height=36>
+                @T(key)
+            </MButton>
+        }
+    </MButtonGroup>
+}

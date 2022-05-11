@@ -1,20 +1,26 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class GetThirdPartyUsersDto : Pagination<GetThirdPartyUsersDto>
 {
-    public string Search { get; set; }
+    public Guid UserId { get; set; }
 
-    public bool Enabled { get; set; }
+    public bool? Enabled { get; set; }
 
-    public Guid ThirdPartyIdpId { get; set; }
+    public DateTime? StartTime { get; set; }
 
-    public GetThirdPartyUsersDto(int page, int pageSize, string search, bool enabled, Guid thirdPartyIdpId)
+    public DateTime? EndTime { get; set; }
+
+    public GetThirdPartyUsersDto(int page, int pageSize, Guid userId, bool? enabled, DateTime? startTime, DateTime? endTime)
     {
         Page = page;
         PageSize = pageSize;
-        Search = search;
+        UserId = userId;
         Enabled = enabled;
-        ThirdPartyIdpId = thirdPartyIdpId;
+        StartTime = startTime;
+        EndTime = endTime;
     }
 }
 

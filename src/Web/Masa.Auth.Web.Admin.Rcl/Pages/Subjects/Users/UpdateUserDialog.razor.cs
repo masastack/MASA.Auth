@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class UpdateUserDialog
 {
@@ -66,12 +69,10 @@ public partial class UpdateUserDialog
         }
     }
 
-    public void OpenRemoveUserDialog()
+    public async Task OpenRemoveUserDialog()
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveUserAsync();
-        }, T("Are you sure delete user data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete user data"));
+        if (confirm) await RemoveUserAsync();
     }
 
     public async Task RemoveUserAsync()

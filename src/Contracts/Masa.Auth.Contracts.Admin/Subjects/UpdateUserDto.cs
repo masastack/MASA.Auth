@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UpdateUserDto
 {
@@ -28,7 +31,7 @@ public class UpdateUserDto
 
     public string Password { get; set; }
 
-    public GenderTypes GenderType { get; set; }
+    public GenderTypes Gender { get; set; }
 
     public UpdateUserDto()
     {
@@ -60,11 +63,11 @@ public class UpdateUserDto
         Department = department;
         Position = position;
         Password = password;
-        GenderType = genderType;
+        Gender = genderType;
     }
 
     public static implicit operator UpdateUserDto(UserDetailDto user)
     {
-        return new UpdateUserDto(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.Address, user.Department, user.Position, user.Password, user.GenderType);
+        return new UpdateUserDto(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.Address, user.Department, user.Position, user.Password, user.Gender);
     }
 }

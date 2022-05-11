@@ -8,20 +8,13 @@
                     <MAvatar Size=80>
                         <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                     </MAvatar>
-                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
-                    <MButtonGroup Dense Mandatory Borderless Value="Staff.User.GenderType.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px">
-                        <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Male" Ripple=false Value="@GenderTypes.Male.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(GenderTypes.Male.ToString())
-                        </MButton>
-                        <MButton OnClick="()=> Staff.User.GenderType=GenderTypes.Female" Ripple=false Value="@GenderTypes.Female.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(GenderTypes.Female.ToString())
-                        </MButton>
-                    </MButtonGroup>
+                    <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" />
                 </MRow>
                 <MRow Class="mt-6">
                     <MCol>
@@ -36,14 +29,7 @@
                         <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <MSelect @bind-Value="Staff.StaffType"
-                                 HideDetails="@("auto")"
-                                 Outlined
-                                 Items="@(GetEnumMap<StaffTypes>())"
-                                 ItemText="map => T(map.Key)"
-                                 ItemValue="map => map.Value"
-                                 Label="@T("StaffType")">
-                        </MSelect>
+                        <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
@@ -67,7 +53,7 @@
                         <MTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="Staff.User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                        <MTextField @bind-Value="Staff.Position.Name" Label="@T("Position")" HideDetails="@("auto")" Outlined />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
@@ -75,67 +61,12 @@
                         <MTextField Value="StaffDetail.User.Account" Readonly Label="@T("Account")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                        <CopyPassword @bind-Value="Staff.User.Password" />
                     </MCol>
                 </MRow>
-                @if (StaffDetail.User.ThirdPartyIdpAvatars.Count > 0)
-                {
-                    <div class="mt-6 text-subtitle2">@T("Authorization certification")</div>
-                    <div class="mt-4">
-                        @foreach (var avatar in StaffDetail.User.ThirdPartyIdpAvatars)
-                        {
-                            <img src="@avatar" />
-                        }
-                    </div>
-                }
 
-                <div class="mt-6 text-subtitle2">@T("History record")</div>
-                <MTimeline Class="mt-4">
-                    <MTimelineItem Color="sample-green" Small>
-                        <IconContent>
-                            <MAvatar Size=10>
-                                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                            </MAvatar>
-                        </IconContent>
-                        <OppositeContent>
-                            <span class="mr-n5">
-                                @T("Create")
-                            </span>
-                        </OppositeContent>
-                        <ChildContent>
-                            <div class="pb-4 ml-n5">
-                                <span>@StaffDetail.User.Creator</span>
-                                <br />
-                                <span>@StaffDetail.User.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                            </div>
-                        </ChildContent>
-                    </MTimelineItem>
-                    @if (StaffDetail.User.ModificationTime is not null)
-                    {
-                        <MTimelineItem Color="sample-green" Small>
-                            <IconContent>
-                                <MAvatar Size=10>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                                </MAvatar>
-                            </IconContent>
-                            <OppositeContent>
-                                <div class="pb-4 ml-n5">
-                                    <span>@StaffDetail.User.Modifier</span>
-                                    <br />
-                                    <span>@StaffDetail.User.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                                </div>
-                            </OppositeContent>
-                            <ChildContent>
-                                <div class="d-flex">
-                                    <MSpacer />
-                                    <span class="mr-n5">
-                                        @T("Update")
-                                    </span>
-                                </div>
-                            </ChildContent>
-                        </MTimelineItem>
-                    }
-                </MTimeline>
+                <Authorization Avatars=StaffDetail.User.ThirdPartyIdpAvatars />
+                <Record Creator="@StaffDetail.User.Creator" CreationTime="@StaffDetail.User.CreationTime" Modifier="@StaffDetail.User.Modifier" ModificationTime="@StaffDetail.User.ModificationTime" />
             </div>
 
             <div class="d-flex mt-6">

@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UpdateUserAuthorizationDto
 {
@@ -7,6 +10,12 @@ public class UpdateUserAuthorizationDto
     public List<Guid> Roles { get; set; }
 
     public List<UserPermissionDto> Permissions { get; set; }
+
+    public UpdateUserAuthorizationDto()
+    {
+        Roles = new();
+        Permissions = new();
+    }
 
     public UpdateUserAuthorizationDto(Guid id, List<Guid> roles, List<UserPermissionDto> permissions)
     {

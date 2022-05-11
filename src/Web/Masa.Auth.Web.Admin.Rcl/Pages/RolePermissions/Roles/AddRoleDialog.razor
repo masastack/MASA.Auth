@@ -12,10 +12,12 @@
                 <MTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" HideDetails="@("auto")" Outlined />
                 <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mt-4" />
                 <MTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" HideDetails="@("auto")" Outlined />
-            </div>           
-            
+            </div>
+
             <div class="mt-6 flex-height-auto overflow-y">
-                <GlobalNavigationDialog />
+                <PermissionsCheck RoleIds=Role.ChildrenRoles
+                                  Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
+                                  ValueChanged="PermissionsChanged" />
             </div>
 
             <div class="d-flex mt-6">

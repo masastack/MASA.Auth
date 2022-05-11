@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
 
 public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permission>
 {
@@ -15,10 +18,25 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
             v => v.ToString(),
             v => (PermissionTypes)Enum.Parse(typeof(PermissionTypes), v)
         );
-        builder.HasMany(p => p.Permissions).WithOne(pi => pi.ChildPermission).HasForeignKey(pi => pi.ChildPermissionId);
         builder.HasMany(p => p.RolePermissions).WithOne(rp => rp.Permission);
         builder.HasMany(p => p.UserPermissions).WithOne(up => up.Permission);
         builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission);
+        builder.HasMany(p => p.ParentPermissions).WithMany(pi => pi.ChildPermissions)
+            .UsingEntity<PermissionRelation>(
+                    configureRight => configureRight
+                    .HasOne(pr => pr.ParentPermission)
+                    .WithMany(p => p.ChildPermissionRelations)
+                    .HasForeignKey(pr => pr.ParentPermissionId),
+                    configureLeft => configureLeft
+                    .HasOne(pr => pr.ChildPermission)
+                    .WithMany(p => p.ParentPermissionRelations)
+                    .HasForeignKey(pr => pr.ChildPermissionId),
+                    configureJoinEntityType =>
+                    {
+                        configureJoinEntityType.HasKey(pr => pr.Id);
+                        configureJoinEntityType.HasIndex(pr => new { pr.ParentPermissionId, pr.ChildPermissionId })
+                            .IsUnique().HasFilter("[IsDeleted] = 0");
+                    });
     }
 }
 

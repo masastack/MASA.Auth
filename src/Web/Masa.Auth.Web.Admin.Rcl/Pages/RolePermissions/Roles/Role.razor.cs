@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
 public partial class Role
 {
@@ -100,19 +103,17 @@ public partial class Role
         UpdateRoleDialogVisible = true;
     }
 
-    public void OpenRemoveRoleDialog(RoleDto role)
+    public async Task OpenRemoveRoleDialog(RoleDto role)
     {
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await RemoveRoleAsync(role.Id);
-        }, T("Are you sure delete role data"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete role data"));
+        if (confirm) await RemoveRoleAsync(role.Id);
     }
 
     public async Task RemoveRoleAsync(Guid roleId)
     {
         Loading = true;
         await RoleService.RemoveAsync(roleId);
-        OpenSuccessMessage(T("Delete user data success"));
+        OpenSuccessMessage(T("Delete role data success"));
         await GetRolesAsync();
         Loading = false;
     }

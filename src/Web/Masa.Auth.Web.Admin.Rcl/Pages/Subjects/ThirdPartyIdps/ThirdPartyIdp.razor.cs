@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.ThirdPartyIdps;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.ThirdPartyIdps;
 
 public partial class ThirdPartyIdp
 {
@@ -101,14 +104,10 @@ public partial class ThirdPartyIdp
         ThirdPartyIdpDialogVisible = true;
     }
 
-    public void OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
+    public async Task OpenDeteteThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
-        CurrentThirdPartyIdpId = thirdPartyIdp.Id;
-        OpenConfirmDialog(async confirm =>
-        {
-            if (confirm) await DeleteThirdPartyIdpAsync();
-        },
-        T("Are you sure delete data?"));
+        var confirm = await OpenConfirmDialog(T("Are you sure delete data"));
+        if (confirm) await DeleteThirdPartyIdpAsync();
     }
 
     public async Task DeleteThirdPartyIdpAsync()

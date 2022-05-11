@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class AddUserDialog
 {
@@ -47,19 +50,30 @@ public partial class AddUserDialog
         }
     }
 
-    public async Task AddUserAsync(EditContext context)
+    private void NextStep(EditContext context)
     {
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
-            User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-            await UserService.AddAsync(User);
-            OpenSuccessMessage(T("Add user data success"));
-            await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
+            Step = 3;
         }
+    }
+
+    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
+    {
+        User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value))
+                                                   .ToList();
+    }
+
+    public async Task AddUserAsync()
+    {
+        Loading = true;
+        User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
+        await UserService.AddAsync(User);
+        OpenSuccessMessage(T("Add user data success"));
+        await UpdateVisible(false);
+        await OnSubmitSuccess.InvokeAsync();
+        Loading = false;
     }
 }
 

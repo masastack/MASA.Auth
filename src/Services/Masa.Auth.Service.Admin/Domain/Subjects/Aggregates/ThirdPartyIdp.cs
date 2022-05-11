@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class ThirdPartyIdp : IdentityProvider
 {
@@ -20,6 +23,11 @@ public class ThirdPartyIdp : IdentityProvider
         Icon = icon;
         VerifyType = verifyType;
         IdentificationType = identificationType;
+    }
+
+    public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
+    {
+        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
     }
 }
 

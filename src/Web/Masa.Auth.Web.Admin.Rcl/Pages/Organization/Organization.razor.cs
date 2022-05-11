@@ -1,4 +1,7 @@
-﻿using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
@@ -11,9 +14,9 @@ public partial class Organization
     DepartmentChildrenCountDto _departmentChildrenCountDto = new();
     readonly List<DataTableHeader<StaffDto>> _headers = new()
     {
-        new() { Text = "员工", Value = nameof(StaffDto.Name), CellClass = "text-body neutral-lighten-1--text" },
-        new() { Text = "手机号", Value = nameof(StaffDto.PhoneNumber), CellClass = "text-body3" },
-        new() { Text = "邮箱", Value = nameof(StaffDto.Email), CellClass = "text-body3" },
+        new() { Text = "员工", Value = nameof(UserDto.Name), CellClass = "text-body neutral-lighten-1--text" },
+        new() { Text = "手机号", Value = nameof(UserDto.PhoneNumber), CellClass = "text-body3" },
+        new() { Text = "邮箱", Value = nameof(UserDto.Email), CellClass = "text-body3" },
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber), CellClass = "text-body3" },
         new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
     };

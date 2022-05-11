@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Services;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Services;
 
 public class PositionService : RestServiceBase
 {
@@ -21,15 +24,9 @@ public class PositionService : RestServiceBase
         return query.Result;
     }
 
-    private async Task AddAsync(IEventBus eventBus,
-        [FromBody] AddPositionDto position)
+    private async Task UpsertAsync(IEventBus eventBus,
+        [FromBody] UpsertPositionDto position)
     {
-        await eventBus.PublishAsync(new AddPositionCommand(position));
-    }
-
-    private async Task UpdateAsync(IEventBus eventBus,
-        [FromBody] UpdatePositionDto position)
-    {
-        await eventBus.PublishAsync(new UpdatePositionCommand(position));
+        await eventBus.PublishAsync(new UpsertPositionCommand(position));
     }
 }

@@ -9,14 +9,16 @@
     <MCol Md="@("auto")">
         <MCard style="width:300px;" Class="full-height">
             <MCardTitle>
-                <ClickedExtend>
+                <SearchableExtend>
                     @T("Department Management")
-                </ClickedExtend>
+                </SearchableExtend>
             </MCardTitle>
             <MCardText>
                 <MTreeview @bind-Active="_active"
                            Items="_departments"
-                           OnActiveUpdate="(List<DepartmentDto> e)=>ActiveUpdated(e)"
+                           OnActiveUpdate="ActiveUpdated"
+                           TItem="DepartmentDto"
+                           TKey="Guid"
                            Activatable Hoverable
                            ItemText="r=>r.Name"
                            ItemKey="r=>r.Id"
@@ -124,12 +126,12 @@
                             <ItemColContent>
                                 @switch (context.Header.Value)
                                 {
-                                    case nameof(StaffDto.Name):
+                                    case nameof(UserDto.Name):
                                         <div>
                                             <MAvatar>
-                                                <MImage Src="@(context.Item.Avatar)" Alt="Jack"></MImage>
+                                                <MImage Src="@(context.Item.User.Avatar)" Alt="Jack"></MImage>
                                             </MAvatar>
-                                            <span class="ml-2">@context.Item.Name</span>
+                                            <span class="ml-2">@context.Item.User.Name</span>
                                         </div>
                                         break;
                                     case "Action":
@@ -141,7 +143,7 @@
                                 }
                             </ItemColContent>
                             <FooterContent>
-                                <SimpleDataTableFooter Class="mb-4 mt-2" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
+                                <DataTableFooter Class="mb-4 mt-2" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
                             </FooterContent>
                         </MDataTable>
                     </MCardText>

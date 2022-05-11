@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Contracts.Admin.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class AddThirdPartyUserDto
 {
@@ -6,14 +9,13 @@ public class AddThirdPartyUserDto
 
     public bool Enabled { get; set; }
 
-    public string ThridPartyIdentity { get; set; }
+    public string ThridPartyIdentity { get; set; } = "";
 
-    public AddUserDto User { get; set; }
+    public AddUserDto User { get; set; } = new();
 
     public AddThirdPartyUserDto()
     {
-        ThridPartyIdentity = "";
-        User = new();
+
     }
 
     public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, AddUserDto user)

@@ -1,29 +1,25 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public partial class RoleSelectForTeam : RoleSelect
 {
     [Parameter]
-    public Guid TeamId { get; set; }
-
-    [Parameter]
-    public TeamMemberTypes TeamMemberType { get; set; }
-
-    [Parameter]
     public int TeamUserCount { get; set; }
+
+    public int Limit => Roles.Where(r => r.Limit != 0).Min(r => r.AvailableQuantity);
 
     protected override async Task OnInitializedAsync()
     {
-        Roles = await RoleService.GetSelectForTeamAsync(TeamId, TeamMemberType);
+        await ReloadAsync();
     }
 
-    protected override Task OnParametersSetAsync()
-    {
-        return base.OnParametersSetAsync();
-    }
+    protected override bool RoleDisabled(RoleSelectDto role) => role.Limit != 0 && role.AvailableQuantity <= TeamUserCount;
 
-    protected override List<RoleSelectDto> GetRoleSelect()
+    public async Task ReloadAsync()
     {
-        return Roles.Where(r => r.AvailableQuantity >= TeamUserCount).ToList();
+        Roles = await RoleService.GetSelectForTeamAsync();
     }
 }
 

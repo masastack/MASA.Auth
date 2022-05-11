@@ -1,28 +1,32 @@
 ﻿@inherits AdminCompontentBase
 
 <div class="mt-5 d-flex">
-    <div class="d-flex">
+    <div class="d-flex" style="height: 30px !important;">
         <MSelect Value=PageSize
                  ValueChanged=PageSizeChanged
                  Color="primary"
                  Style="max-width:120px;"
-                 Dense
+                 Dense                
                  Outlined
                  Items="@PageSizeSelect"
                  ItemText="p => p.ToString()"
                  ItemValue="p => p"
                  HideDetails="@("auto")"
-                 Class="rounded-2">
+                 Class="rounded-2 small">
         </MSelect>
-        <div class="ml-2 block-center text-caption2">@T("Rows per page")</div>
-        <div class="ml-2 block-center text-caption2">
-            <span>@T("Total")@Total@T("Item")</span>
+        <div class="ml-2 mt-1 block-center text-caption2">@T("Rows per page")</div>
+        <div class="ml-2 mt-1 block-center text-caption2">
+            <span>@T("Total") @Total @T("Item")</span>
         </div>
     </div>
     <div class="@Class ml-auto">
-        <MIcon Class="hover-pointer" OnClick=Previous Disabled=PreviousDisabled Size=24>mdi-chevron-left</MIcon>
+        <span @onclick=Previous>
+            <MIcon Class="hover-pointer" Disabled=PreviousDisabled Size=24>mdi-chevron-left</MIcon>
+        </span>
         <span class="ma-5 text-caption">@Page/@TotalPage</span>
-        <MIcon Class="hover-pointer" OnClick=Next Disabled=NextDisabled Size=24>mdi-chevron-right</MIcon>
+        <span @onclick=Next>
+            <MIcon Class="hover-pointer" Disabled=NextDisabled Size=24>mdi-chevron-right</MIcon>
+        </span>
     </div>
 </div>
 
@@ -45,6 +49,9 @@
     [Parameter]
     public long Total { get; set; }
 
+    [Parameter]
+    public List<int> PageSizeSelect { get; set; } = new() { 10, 20, 50, 100 };
+
     private int TotalPage
     {
         get
@@ -53,9 +60,6 @@
             return totalPage == 0 ? 1 : totalPage;
         }
     }
-
-    [Parameter]
-    public List<int> PageSizeSelect { get; set; } = new() { 10, 20, 50, 100 };
 
     bool NextDisabled => Page == TotalPage;
 

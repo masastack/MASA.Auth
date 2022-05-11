@@ -8,20 +8,13 @@
                     <MAvatar Size=80>
                         <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                     </MAvatar>
-                    <MTextField @bind-Value="User.DisplayName" Class="mt-0" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <MTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
-                    <MButtonGroup Dense Mandatory Borderless Value="User.GenderType.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px">
-                        <MButton OnClick="()=> User.GenderType=GenderTypes.Male" Ripple=false Value="@GenderTypes.Male.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(GenderTypes.Male.ToString())
-                        </MButton>
-                        <MButton OnClick="()=> User.GenderType=GenderTypes.Female" Ripple=false Value="@GenderTypes.Female.ToString()" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(GenderTypes.Female.ToString())
-                        </MButton>
-                    </MButtonGroup>
+                    <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" />
                 </MRow>
                 <MRow Class="mt-6">
                     <MCol>
@@ -44,7 +37,7 @@
                         <MTextField Readonly Value="UserDetail.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                       <CopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
                 <div class="mt-6 text-subtitle2">@T("Detail Information")</div>
@@ -64,63 +57,9 @@
                         <MTextField @bind-Value="User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
                     </MCol>
                 </MRow>
-                @if (UserDetail.ThirdPartyIdpAvatars.Count > 0)
-                {
-                    <div class="mt-6 text-subtitle2">@T("Authorization certification")</div>
-                    <div class="mt-4">
-                        @foreach (var avatar in UserDetail.ThirdPartyIdpAvatars)
-                        {
-                            <img src="@avatar" />
-                        }
-                    </div>
-                }
-                <div class="mt-6 text-subtitle2">@T("History record")</div>
-                <MTimeline Class="mt-4">
-                    <MTimelineItem Color="sample-green" Small>
-                        <IconContent>
-                            <MAvatar Size=10>
-                                <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                            </MAvatar>
-                        </IconContent>
-                        <OppositeContent>
-                            <span class="mr-n5">
-                                @T("Create")
-                            </span>
-                        </OppositeContent>
-                        <ChildContent>
-                            <div class="pb-4 ml-n5">
-                                <span>@UserDetail.Creator</span>
-                                <br />
-                                <span>@UserDetail.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                            </div>
-                        </ChildContent>
-                    </MTimelineItem>
-                    @if (UserDetail.ModificationTime is not null)
-                    {
-                        <MTimelineItem Color="sample-green" Small>
-                            <IconContent>
-                                <MAvatar Size=10>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/timeLineIcon.svg" />
-                                </MAvatar>
-                            </IconContent>
-                            <OppositeContent>
-                                <div class="pb-4 ml-n5">
-                                    <span>@UserDetail.Modifier</span>
-                                    <br />
-                                    <span>@UserDetail.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                                </div>
-                            </OppositeContent>
-                            <ChildContent>
-                                <div class="d-flex">
-                                    <MSpacer />
-                                    <span class="mr-n5">
-                                        @T("Update")
-                                    </span>
-                                </div>
-                            </ChildContent>
-                        </MTimelineItem>
-                    }
-                </MTimeline>
+
+                <Authorization Avatars=UserDetail.ThirdPartyIdpAvatars />
+                <Record Creator="@UserDetail.Creator" CreationTime="@UserDetail.CreationTime" Modifier="@UserDetail.Modifier" ModificationTime="@UserDetail.ModificationTime" />
             </div>
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="User.Enabled" Inset Class="label" Label="@(User.Enabled ? T("Enable"):T("Disabled"))" />
@@ -129,7 +68,5 @@
                 <MButton Color="primary" Class="small-button" OnClick="async() => await UpdateUserAsync(context)">@T("Save")</MButton>
             </div>
         </div>
-
     </MForm>
-
 </SheetDialog>

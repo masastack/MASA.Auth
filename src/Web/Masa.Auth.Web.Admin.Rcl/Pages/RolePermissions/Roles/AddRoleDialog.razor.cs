@@ -1,4 +1,5 @@
-﻿using Masa.Auth.Web.Admin.Rcl.Pages.Component;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
@@ -42,8 +43,13 @@ public partial class AddRoleDialog
         if (Visible)
         {
             Role = new();
-            if(RoleSelect is not null) await RoleSelect.ReloadAsync();
+            if (RoleSelect is not null) await RoleSelect.ReloadAsync();
         }
+    }
+
+    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
+    {
+        Role.Permissions = permissiionMap.Select(kv => kv.Key).ToList();
     }
 
     public async Task AddRoleAsync(EditContext context)
