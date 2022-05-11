@@ -1930,7 +1930,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("IntegrationEventLog", (string)null);
                 });
 
-            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.LDAPIdp", b =>
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.LdapIdp", b =>
                 {
                     b.HasBaseType("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider");
 
