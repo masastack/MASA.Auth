@@ -122,14 +122,23 @@ public class CommandHandler
         await _eventBus.PublishAsync(userClaimQuery);
         var userClaims = userClaimQuery.Result;
 
-        foreach (var claim in StandardUserClaims.Claims)
+        foreach (var identityResource in StandardIdentityResources.IdentityResources)
         {
-            var exist = await _userClaimRepository.GetCountAsync(userClaim => userClaim.Name == claim.Key) > 0;
-            if (exist) continue;
-
-            userClaims.Add(new UserClaim(claim.Key, claim.Value, UserClaimType.Standard));
+            var userClaimIds = userClaims.Where(uc => identityResource.UserClaims.Contains(uc.Name)).Select(uc => uc.Id);
+            var existData = await _identityResourceRepository.FindAsync(idrs => idrs.Name == identityResource.Name);
+            if (existData is not null)
+            {
+                existData.Update(identityResource.DisplayName, identityResource.Description, true, identityResource.Required, identityResource.Emphasize, identityResource.ShowInDiscoveryDocument, true);
+                existData.BindUserClaims(userClaimIds);
+                await _identityResourceRepository.UpdateAsync(existData);
+            }
+            else
+            {
+                var idrs = new IdentityResource(identityResource.Name, identityResource.DisplayName, identityResource.Description, true, identityResource.Required, identityResource.Enabled, identityResource.ShowInDiscoveryDocument, true);
+                idrs.BindUserClaims(userClaimIds);
+                await _identityResourceRepository.AddAsync(idrs);
+            }
         }
-        await _userClaimRepository.AddRangeAsync(userClaims);
     }
 
     [EventHandler]

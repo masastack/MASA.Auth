@@ -203,7 +203,10 @@
   "Tag or appid is empty": "tag或appid为空",
 
   "IdentityResource": "身份资源",
+  "Emphasize": "强调",
+  "ShowInDiscoveryDocument": "在文档中展示",
   "Add IdentityResource": "新增身份资源",
+  "Create standard identityResource": "创建标准的身份资源",
   "Update IdentityResource": "编辑身份资源",
   "IdentityResource.Name": "配置名称",
   "IdentityResource.Required": "是否必须",

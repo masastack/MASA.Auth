@@ -19,12 +19,14 @@
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
-                    <MCol>
-                         <RequiredSwitch @bind-Value="IdentityResource.Required" />
+                    <MCol Class="d-flex">
+                        <MCheckbox @bind-Value="IdentityResource.Required" Class="pt-0 mt-0" Label="@T(nameof(IdentityResource.Required))"></MCheckbox>
+                        <MCheckbox @bind-Value="IdentityResource.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.Emphasize))"></MCheckbox>
+                        <MCheckbox @bind-Value="IdentityResource.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.ShowInDiscoveryDocument))"></MCheckbox>
                     </MCol>
                 </MRow>
-                <div class="mt-6 text-subtitle2">@T("User Claims")</div>    
-                <UserClaimSelect @bind-Value=IdentityResource.UserClaims Class="mt-4" Style="height:67%!important" />
+                <div class="mt-6 text-subtitle2">@T("User Claims")</div>
+                <UserClaimSelect @bind-Value=IdentityResource.UserClaims Class="mt-4" Style="height:65%!important" />
             </div>
             <div class="d-flex mt-6">
                 <MSwitch @bind-Value="IdentityResource.Enabled" Inset Class="label" Label="@(IdentityResource.Enabled ? T("Enable"):T("Disabled"))" />

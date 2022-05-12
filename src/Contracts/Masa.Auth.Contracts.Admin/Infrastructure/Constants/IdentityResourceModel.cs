@@ -5,17 +5,22 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class IdentityResourceModel
 {
-    public string Name { get; set; }
+    public bool Enabled { get; set; } = true;
 
-    public string Description { get; set; }
+    public string Name { get; set; } = "";
 
-    public List<string> UserClaims { get; set; }
+    public string DisplayName { get; set; } = "";
 
-    public IdentityResourceModel(string name, string description, List<string> userClaims)
-    {
-        Name = name;
-        Description = description;
-        UserClaims = userClaims;
-    }
+    public string Description { get; set; } = "";
+
+    public bool ShowInDiscoveryDocument { get; set; } = true;
+
+    public List<string> UserClaims { get; set; } = new();
+
+    public Dictionary<string, string> Properties { get; set; } = new();
+
+    public bool Required { get; set; }
+
+    public bool Emphasize { get; set; }
 }
 

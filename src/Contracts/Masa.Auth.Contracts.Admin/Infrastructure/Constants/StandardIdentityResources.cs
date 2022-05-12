@@ -5,49 +5,84 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class StandardIdentityResources
 {
-    [Description("Your postal address")]
-    public static List<string> Adress = new()
+    [Description("Your user identifier")]
+    public static IdentityResourceModel OpenId = new()
     {
-        StandardUserClaims.Address
+        Name = "openId",
+        DisplayName = "Your user identifier",
+        Description = "Your user identifier",
+        Required = true,
+        UserClaims = new()
+        {
+            StandardUserClaims.Subject
+        }
+    };
+
+    [Description("Your postal address")]
+    public static IdentityResourceModel Adress = new()
+    {
+        Name = "adress",
+        DisplayName = "Your postal address",
+        Description = "Your postal address",
+        Emphasize = true,
+        UserClaims = new()
+        {
+            StandardUserClaims.Address
+        }
     };
 
     [Description("Your email address")]
-    public static List<string> Email = new()
+    public static IdentityResourceModel Email = new()
     {
-        StandardUserClaims.Email,
-        StandardUserClaims.EmailVerified,
+        Name = "email",
+        DisplayName = "Your email address",
+        Description = "Your email address",
+        Emphasize = true,
+        UserClaims = new()
+        {
+            StandardUserClaims.Email,
+            StandardUserClaims.EmailVerified,
+        }
     };
 
     [Description("Your phone number")]
-    public static List<string> Phone = new()
+    public static IdentityResourceModel Phone = new()
     {
-        StandardUserClaims.PhoneNumber,
-        StandardUserClaims.PhoneNumberVerified
-    };
-
-    [Description("Your user identifier")]
-    public static List<string> OpenId = new()
-    {
-        StandardUserClaims.Subject,
+        Name = "phone",
+        DisplayName = "Your phone number",
+        Description = "Your phone number",
+        Emphasize = true,
+        UserClaims = new()
+        {
+            StandardUserClaims.PhoneNumber,
+            StandardUserClaims.PhoneNumberVerified
+        }
     };
 
     [Description("User profile")]
-    public static List<string> Profile = new()
+    public static IdentityResourceModel Profile = new()
     {
-        StandardUserClaims.Name,
-        StandardUserClaims.FamilyName,
-        StandardUserClaims.GivenName,
-        StandardUserClaims.MiddleName,
-        StandardUserClaims.NickName,
-        StandardUserClaims.PreferredUserName,
-        StandardUserClaims.Profile,
-        StandardUserClaims.Picture,
-        StandardUserClaims.WebSite,
-        StandardUserClaims.Gender,
-        StandardUserClaims.BirthDate,
-        StandardUserClaims.ZoneInfo,
-        StandardUserClaims.Locale,
-        StandardUserClaims.UpdatedAt
+        Name = "profile",
+        DisplayName = "User profile",
+        Description = "Your user profile information (first name, last name, etc.)",
+        Emphasize = true,
+        UserClaims = new()
+        {
+            StandardUserClaims.Name,
+            StandardUserClaims.FamilyName,
+            StandardUserClaims.GivenName,
+            StandardUserClaims.MiddleName,
+            StandardUserClaims.NickName,
+            StandardUserClaims.PreferredUserName,
+            StandardUserClaims.Profile,
+            StandardUserClaims.Picture,
+            StandardUserClaims.WebSite,
+            StandardUserClaims.Gender,
+            StandardUserClaims.BirthDate,
+            StandardUserClaims.ZoneInfo,
+            StandardUserClaims.Locale,
+            StandardUserClaims.UpdatedAt
+        }
     };
 
     static List<IdentityResourceModel>? _identityResources;
@@ -57,12 +92,11 @@ public class StandardIdentityResources
     static List<IdentityResourceModel> GetIdentityResources()
     {
         var identityResources = new List<IdentityResourceModel>();
-        var properties = typeof(StandardIdentityResources).GetProperties(BindingFlags.Static | BindingFlags.Public);
-        foreach (var property in properties)
+        var fields = typeof(StandardIdentityResources).GetFields(BindingFlags.Static | BindingFlags.Public);
+        foreach (var field in fields)
         {
-            var userClaims = (List<string>)(property.GetValue(null) ?? throw new Exception("Error standard identity resources data"));
-            var description = property.GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
-            identityResources.Add(new IdentityResourceModel(property.Name.ToLower(),description,userClaims));
+            var idrs = (IdentityResourceModel)(field.GetValue(null) ?? throw new Exception("Error standard identity resources data"));
+            identityResources.Add(idrs);
         }
 
         return identityResources;

@@ -17,7 +17,7 @@ public class AddIdentityResourceDto
 
     public bool Emphasize { get; set; }
 
-    public bool ShowInDiscoveryDocument { get; set; }
+    public bool ShowInDiscoveryDocument { get; set; } = true;
 
     public bool NonEditable { get; set; }
 

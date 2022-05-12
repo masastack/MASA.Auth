@@ -9,6 +9,10 @@
             </PrependInnerContent>
         </MTextField>
         <MSpacer />
+        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => AddStandardIdentityResourcesAsync()">
+            <MIcon Size=18>mdi-cog-outline</MIcon>
+            <span class="ml-2">@T("Create standard identityResource")</span>
+        </MButton>
         <MButton Color="primary" Class="ml-6 medium-button" OnClick="() =>  OpenAddRoleDialog()">
             <MIcon Size=18>mdi-plus</MIcon>
             <span class="ml-2">@T("Add")</span>
