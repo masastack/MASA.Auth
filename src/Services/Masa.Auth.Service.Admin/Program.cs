@@ -34,14 +34,10 @@ builder.Services.AddAuthentication(options =>
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
-builder.Services.AddPmClient(callerOption =>
-{
-    callerOption.UseHttpClient(_builder =>
-    {
-        _builder.Name = builder.Configuration.GetValue<string>("PmClient:Name");
-        _builder.Configure = opt => opt.BaseAddress = new Uri(builder.Configuration.GetValue<string>("PmClient:Url"));
-    });
-});
+builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
+builder.Services.AddLadpContext();
+
+MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
