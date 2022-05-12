@@ -17,7 +17,7 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<ClientScope, string>.NewConfig().MapWith(src => src.Scope);
 
         TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
-    
+
         TypeAdapterConfig<LdapDetailDto, LdapOptions>.ForType()
             .Map(dest => dest.ServerPort, src => src.IsLdaps ? 0 : src.ServerPort)
             .Map(dest => dest.ServerPortSsl, src => src.IsLdaps ? src.ServerPort : 0);

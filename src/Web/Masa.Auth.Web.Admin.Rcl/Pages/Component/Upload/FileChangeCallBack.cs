@@ -1,11 +1,14 @@
-﻿namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class FileChangeCallBack
 {
     public string? JsCallback { get; init; }
 
     public EventCallback<IReadOnlyList<IBrowserFile>> EventCallback { get; init; }
-   
+
     public Func<IReadOnlyList<IBrowserFile>, Task>? DelegateCallback { get; init; }
 
     [MemberNotNullWhen(true, nameof(JsCallback))]

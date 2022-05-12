@@ -39,7 +39,7 @@ public partial class ConfigLogin
     {
         thirdPartyIdp.Sort++;
         var oldIndex = Value.IndexOf(thirdPartyIdp);
-        Value.Swap(oldIndex, oldIndex +1);
+        Value.Swap(oldIndex, oldIndex + 1);
         await InitSort();
     }
 

@@ -162,7 +162,7 @@ public class QueryHandler
                                 .Where(apiResource => apiResource.Enabled == true)
                                 .OrderByDescending(apiResource => apiResource.ModificationTime)
                                 .ThenByDescending(apiResource => apiResource.CreationTime)
-                                .Select(apiResource => new ApiResourceSelectDto(apiResource.Id, apiResource.Name, apiResource.DisplayName, apiResource.Description))                                
+                                .Select(apiResource => new ApiResourceSelectDto(apiResource.Id, apiResource.Name, apiResource.DisplayName, apiResource.Description))
                                 .ToListAsync();
 
         query.Result = apiResourceSelect;

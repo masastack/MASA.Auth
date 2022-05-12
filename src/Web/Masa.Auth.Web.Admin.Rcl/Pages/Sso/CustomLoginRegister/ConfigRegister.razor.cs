@@ -25,7 +25,7 @@ public partial class ConfigRegister
             Value.Add(new RegisterFieldDto(RegisterFieldTypes.Password, 2, true, true));
         }
     }
-   
+
     public async Task Up(RegisterFieldDto registerField)
     {
         registerField.Sort--;

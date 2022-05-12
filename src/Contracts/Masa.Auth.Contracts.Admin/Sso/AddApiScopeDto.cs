@@ -13,7 +13,7 @@ public class AddApiScopeDto
 
     public string Description { get; set; } = "";
 
-    public bool Required { get; set; } 
+    public bool Required { get; set; }
 
     public bool Emphasize { get; set; }
 

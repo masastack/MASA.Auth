@@ -30,9 +30,9 @@ public partial class UserClaimSelect
         UserClaimChunks = userClaims.Chunk(Chunk);
     }
 
-    void OnValueChanged(bool value,int id)
+    void OnValueChanged(bool value, int id)
     {
-        if(value) Value.Add(id);
+        if (value) Value.Add(id);
         else Value.Remove(id);
     }
 }
