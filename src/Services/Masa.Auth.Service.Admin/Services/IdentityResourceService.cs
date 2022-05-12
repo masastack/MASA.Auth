@@ -35,6 +35,11 @@ namespace Masa.Auth.Service.Admin.Services
             await eventBus.PublishAsync(new AddIdentityResourceCommand(dto));
         }
 
+        private async Task AddStandardIdentityResourcesAsync(IEventBus eventBus)
+        {
+            await eventBus.PublishAsync(new AddStandardIdentityResourcesCommand());
+        }
+
         private async Task UpdateAsync(
             IEventBus eventBus,
             [FromBody] UpdateIdentityResourceDto dto)

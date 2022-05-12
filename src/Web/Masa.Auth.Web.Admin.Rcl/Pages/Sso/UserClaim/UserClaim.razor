@@ -9,6 +9,10 @@
             </PrependInnerContent>
         </MTextField>
         <MSpacer />
+        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => AddStandardUserClaimsAsync()">
+            <MIcon Size=18>mdi-cog-outline</MIcon>
+            <span class="ml-2">@T("Create standard userClaims")</span>
+        </MButton>
         <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => OpenAddApiResourceDialog()">
             <MIcon Size=18>mdi-plus</MIcon>
             <span class="ml-2">@T("Add")</span>
@@ -48,4 +52,4 @@
 </MCard>
 
 <AddUserClaimDialog @bind-Visible="AddUserClaimDialogVisible" OnSubmitSuccess=GetUserClaimsAsync />
-<UpdateUserClaimDialog @bind-Visible="UpdateUserClaimDialogVisible" OnSubmitSuccess=GetUserClaimsAsync />
+<UpdateUserClaimDialog @bind-Visible="UpdateUserClaimDialogVisible" UserClaimId=CurrentUserClaimId OnSubmitSuccess=GetUserClaimsAsync />

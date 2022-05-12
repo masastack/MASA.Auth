@@ -9,9 +9,9 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
     {
         RuleFor(register => register.Account).Required().ChineseLetterNumber();
         RuleFor(register => register.Password).Required().LetterNumber();
-        RuleFor(register => register.DisplayName).Must((register, displayName) => 
+        RuleFor(register => register.DisplayName).Must((register, displayName) =>
         {
-            if(register.CheckRequired(nameof(RegisterModel.DisplayName)))
+            if (register.CheckRequired(nameof(RegisterModel.DisplayName)))
             {
                 return string.IsNullOrEmpty(displayName) is false;
             }

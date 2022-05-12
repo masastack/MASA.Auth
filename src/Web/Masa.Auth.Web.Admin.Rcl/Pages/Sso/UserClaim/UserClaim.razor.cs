@@ -76,6 +76,14 @@ public partial class UserClaim
         Loading = false;
     }
 
+    private async Task AddStandardUserClaimsAsync()
+    {
+        Loading = true;
+        await UserClaimService.AddStandardUserClaimsAsync();
+        await GetUserClaimsAsync();
+        Loading = false;
+    }
+
     public void OpenAddApiResourceDialog()
     {
         AddUserClaimDialogVisible = true;

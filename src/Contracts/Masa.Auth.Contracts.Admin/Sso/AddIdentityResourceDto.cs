@@ -11,13 +11,13 @@ public class AddIdentityResourceDto
 
     public string Description { get; set; } = "";
 
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public bool Required { get; set; }
 
     public bool Emphasize { get; set; }
 
-    public bool ShowInDiscoveryDocument { get; set; }
+    public bool ShowInDiscoveryDocument { get; set; } = true;
 
     public bool NonEditable { get; set; }
 

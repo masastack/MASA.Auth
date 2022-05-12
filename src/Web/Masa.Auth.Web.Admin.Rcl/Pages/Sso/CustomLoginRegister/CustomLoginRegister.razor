@@ -41,6 +41,9 @@
                 case (nameof(CustomLoginDto.Modifier)):
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.Modifier</span>
                     break;
+                case nameof(CustomLoginDto.Enabled):
+                    <EnableChip Value="@context.Item.Enabled" />
+                    break;
                 case "Action":
                     <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">mdi-pencil</MIcon>
                     <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">mdi-delete</MIcon>
@@ -57,4 +60,4 @@
 </MCard>
 
 <AddCustomLoginRegisterDialog @key="Guid.NewGuid()" @bind-Visible="AddCustomLoginRegisterDialogVisible" OnSubmitSuccess=GetCustomLoginsAsync />
-<UpdateCustomLoginRegisterDialog @key="Guid.NewGuid()" @bind-Visible="UpdateCustomLoginRegisterDialogVisible" OnSubmitSuccess=GetCustomLoginsAsync />
+<UpdateCustomLoginRegisterDialog @key="Guid.NewGuid()" @bind-Visible="UpdateCustomLoginRegisterDialogVisible" CustomLoginId="CurrentCustomLoginId" OnSubmitSuccess=GetCustomLoginsAsync />

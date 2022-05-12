@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class AddApiScopeDto
 {
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public string Name { get; set; } = "";
 

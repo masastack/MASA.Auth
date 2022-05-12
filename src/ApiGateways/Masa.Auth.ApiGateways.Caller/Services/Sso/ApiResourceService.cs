@@ -17,7 +17,7 @@ public class ApiResourceService : ServiceBase
         return await SendAsync<GetApiResourcesDto, PaginationDto<ApiResourceDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<ApiResourceSelectDto>> GetSelectAsync(string search)
+    public async Task<List<ApiResourceSelectDto>> GetSelectAsync(string? search = null)
     {
         return await SendAsync<object, List<ApiResourceSelectDto>>(nameof(GetSelectAsync), new { search });
     }

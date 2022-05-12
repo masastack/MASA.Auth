@@ -23,7 +23,7 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        private async Task<List<ApiResourceSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
+        private async Task<List<ApiResourceSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string? search)
         {
             var query = new ApiResourceSelectQuery(search);
             await eventBus.PublishAsync(query);

@@ -1100,6 +1100,86 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientSecret", "sso");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
+
+                    b.HasIndex("Creator");
+
+                    b.HasIndex("Modifier");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("CustomLogin", "sso");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLoginThirdPartyIdp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CustomLoginId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ThirdPartyIdpId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomLoginId");
+
+                    b.HasIndex("ThirdPartyIdpId");
+
+                    b.ToTable("CustomLoginThirdPartyIdp", "sso");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
@@ -1351,6 +1431,74 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("PersistedGrant", "sso");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.RegisterField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CustomLoginId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RegisterFieldType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomLoginId");
+
+                    b.ToTable("RegisterField", "sso");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.UserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("UserClaimType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserClaim", "sso");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1401,47 +1549,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("IdentityProvider", "subjects");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityProvider");
-                });
-
-            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.UserClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Modifier")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("UserClaimType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserClaim", "sso");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
@@ -2275,6 +2382,46 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Client", "Client")
+                        .WithOne()
+                        .HasForeignKey("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", "ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
+                        .WithMany()
+                        .HasForeignKey("Creator");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
+                        .WithMany()
+                        .HasForeignKey("Modifier");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CreateUser");
+
+                    b.Navigation("ModifyUser");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLoginThirdPartyIdp", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", null)
+                        .WithMany("ThirdPartyIdps")
+                        .HasForeignKey("CustomLoginId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyIdp", "ThirdPartyIdp")
+                        .WithMany()
+                        .HasForeignKey("ThirdPartyIdpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ThirdPartyIdp");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.IdentityResourceClaim", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.IdentityResource", "IdentityResource")
@@ -2303,6 +2450,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.Navigation("IdentityResource");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.RegisterField", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", null)
+                        .WithMany("RegisterFields")
+                        .HasForeignKey("CustomLoginId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
@@ -2590,6 +2746,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Properties");
 
                     b.Navigation("RedirectUris");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
+                {
+                    b.Navigation("RegisterFields");
+
+                    b.Navigation("ThirdPartyIdps");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.IdentityResource", b =>

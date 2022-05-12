@@ -108,7 +108,7 @@ public class QueryHandler
         var idrs = await _identityResourceRepository.GetDetailAsync(query.IdentityResourceId);
         if (idrs is null) throw new UserFriendlyException("This identityResource data does not exist");
 
-        query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.Id).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
+        query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.UserClaimId).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
     }
 
     [EventHandler]
@@ -159,6 +159,9 @@ public class QueryHandler
     public async Task GetApiResourceSelectAsync(ApiResourceSelectQuery query)
     {
         var apiResourceSelect = await _authDbContext.Set<ApiResource>()
+                                .Where(apiResource => apiResource.Enabled == true)
+                                .OrderByDescending(apiResource => apiResource.ModificationTime)
+                                .ThenByDescending(apiResource => apiResource.CreationTime)
                                 .Select(apiResource => new ApiResourceSelectDto(apiResource.Id, apiResource.Name, apiResource.DisplayName, apiResource.Description))
                                 .ToListAsync();
 
@@ -203,6 +206,9 @@ public class QueryHandler
     public async Task GetApiScopeSelectAsync(ApiScopeSelectQuery query)
     {
         var apiScopeSelect = await _authDbContext.Set<ApiScope>()
+                                .Where(apiScope => apiScope.Enabled == true)
+                                .OrderByDescending(apiScope => apiScope.ModificationTime)
+                                .ThenByDescending(apiScope => apiScope.CreationTime)
                                 .Select(apiScope => new ApiScopeSelectDto(apiScope.Id, apiScope.Name, apiScope.DisplayName, apiScope.Description))
                                 .ToListAsync();
 
@@ -247,6 +253,8 @@ public class QueryHandler
     public async Task GetUserClaimSelectAsync(UserClaimSelectQuery query)
     {
         var userClaimSelect = await _authDbContext.Set<UserClaim>()
+                                .OrderByDescending(userClaim => userClaim.ModificationTime)
+                                .ThenByDescending(userClaim => userClaim.CreationTime)
                                 .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description, userClaim.UserClaimType))
                                 .ToListAsync();
 
@@ -267,6 +275,8 @@ public class QueryHandler
         var customLoginQuery = _authDbContext.Set<CustomLogin>().Where(condition);
         var total = await customLoginQuery.LongCountAsync();
         var customLogins = await customLoginQuery.Include(customLogin => customLogin.Client)
+                                    .Include(customLogin => customLogin.CreateUser)
+                                    .Include(customLogin => customLogin.ModifyUser)
                                    .OrderByDescending(s => s.ModificationTime)
                                    .ThenByDescending(s => s.CreationTime)
                                    .Skip((query.Page - 1) * query.PageSize)

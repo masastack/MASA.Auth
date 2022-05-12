@@ -9,9 +9,31 @@ public partial class UserClaimSelect
     public string Class { get; set; } = "";
 
     [Parameter]
+    public string Style { get; set; } = "";
+
+    [Parameter]
+    public int Chunk { get; set; } = 5;
+
+    [Parameter]
     public List<int> Value { get; set; } = new();
 
     [Parameter]
     public EventCallback<List<int>> ValueChanged { get; set; }
+
+    IEnumerable<UserClaimSelectDto[]> UserClaimChunks { get; set; } = new List<UserClaimSelectDto[]>();
+
+    UserClaimService UserClaimService => AuthCaller.UserClaimService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userClaims = await UserClaimService.GetSelectAsync();
+        UserClaimChunks = userClaims.Chunk(Chunk);
+    }
+
+    void OnValueChanged(bool value, int id)
+    {
+        if (value) Value.Add(id);
+        else Value.Remove(id);
+    }
 }
 

@@ -42,7 +42,7 @@ public class IdentityResource : AuditAggregateRoot<int, Guid>, ISoftDelete
         NonEditable = nonEditable;
     }
 
-    public void BindUserClaims(List<int> userClaims)
+    public void BindUserClaims(IEnumerable<int> userClaims)
     {
         _userClaims.Clear();
         _userClaims.AddRange(userClaims.Select(id => new IdentityResourceClaim(id)));
