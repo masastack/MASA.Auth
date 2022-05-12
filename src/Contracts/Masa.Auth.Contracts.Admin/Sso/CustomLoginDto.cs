@@ -9,7 +9,7 @@ public class CustomLoginDto
 
     public string Name { get; set; } = "";
 
-    public string Title { get; private set; } = "";
+    public string Title { get; set; } = "";
 
     public ClientDto Client { get; set; } = new();
 

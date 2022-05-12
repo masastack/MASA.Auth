@@ -24,8 +24,6 @@ public class CommandHandler
         _eventBus = eventBus;
     }
 
-
-
     #region Client
     [EventHandler]
     public async Task AddClientAsync(AddClientCommand addClientCommand)
@@ -336,13 +334,13 @@ public class CommandHandler
     public async Task UpdateCustomLoginAsync(UpdateCustomLoginCommand command)
     {
         var customLoginDto = command.CustomLogin;
-        var customLogin = await _customLoginRepository.FindAsync(customLogin => customLogin.Id == customLoginDto.Id);
+        var customLogin = await _customLoginRepository.GetDetailAsync(customLoginDto.Id);
         if (customLogin is null)
             throw new UserFriendlyException("The current customLogin does not exist");
 
         if (customLoginDto.Enabled is true)
         {
-            var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.Id != customLoginDto.Id && customLogin.ClientId == customLogin.ClientId && customLogin.Enabled == true) > 0;
+            var exist = await _customLoginRepository.GetCountAsync(cl => cl.Id != customLoginDto.Id && cl.ClientId == customLogin.ClientId && cl.Enabled == true) > 0;
             if (exist)
                 throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
         }

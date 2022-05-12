@@ -72,7 +72,7 @@ public class QueryHandler
     {
         var roleSelect = await _authDbContext.Set<RoleRelation>()
                                     .Include(r => r.ParentRole)
-                                    .Where(r => r.RoleId == query.RoleId)
+                                    .Where(r => r.ParentRole.Enabled == true && r.RoleId == query.RoleId)
                                     .Select(r => new RoleSelectDto(r.ParentRole.Id, r.ParentRole.Name, r.ParentRole.Limit, r.ParentRole.AvailableQuantity))
                                     .ToListAsync();
 
@@ -120,6 +120,7 @@ public class QueryHandler
     private async Task<List<RoleSelectDto>> GetRoleSelectAsync()
     {
         var roleSelect = await _authDbContext.Set<Role>()
+                                        .Where(r => r.Enabled == true)
                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Limit, r.AvailableQuantity))
                                         .ToListAsync();
 
@@ -135,9 +136,9 @@ public class QueryHandler
         {
             var permissions = new List<Guid>();
             var roles = await _authDbContext.Set<Role>()
+                                          .Where(r => r.Enabled == true && roleIds.Contains(r.Id))
                                           .Include(r => r.ChildrenRoles)
                                           .Include(r => r.Permissions)
-                                          .Where(r => roleIds.Contains(r.Id))
                                           .Select(r => new { r.Permissions, r.ChildrenRoles })
                                           .ToListAsync();
             permissions.AddRange(roles.SelectMany(r => r.Permissions.Select(p => p.PermissionId)));

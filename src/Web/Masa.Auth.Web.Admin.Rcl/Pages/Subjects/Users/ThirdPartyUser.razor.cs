@@ -101,7 +101,7 @@ public partial class ThirdPartyUser
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        // await GetThirdPartyUsersAsync();
+        await GetThirdPartyUsersAsync();
     }
 
     public async Task GetThirdPartyUsersAsync()

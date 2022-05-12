@@ -159,6 +159,7 @@ public class QueryHandler
     public async Task GetApiResourceSelectAsync(ApiResourceSelectQuery query)
     {
         var apiResourceSelect = await _authDbContext.Set<ApiResource>()
+                                .Where(apiResource => apiResource.Enabled == true)
                                 .OrderByDescending(apiResource => apiResource.ModificationTime)
                                 .ThenByDescending(apiResource => apiResource.CreationTime)
                                 .Select(apiResource => new ApiResourceSelectDto(apiResource.Id, apiResource.Name, apiResource.DisplayName, apiResource.Description))                                
@@ -205,6 +206,7 @@ public class QueryHandler
     public async Task GetApiScopeSelectAsync(ApiScopeSelectQuery query)
     {
         var apiScopeSelect = await _authDbContext.Set<ApiScope>()
+                                .Where(apiScope => apiScope.Enabled == true)
                                 .OrderByDescending(apiScope => apiScope.ModificationTime)
                                 .ThenByDescending(apiScope => apiScope.CreationTime)
                                 .Select(apiScope => new ApiScopeSelectDto(apiScope.Id, apiScope.Name, apiScope.DisplayName, apiScope.Description))
@@ -273,6 +275,8 @@ public class QueryHandler
         var customLoginQuery = _authDbContext.Set<CustomLogin>().Where(condition);
         var total = await customLoginQuery.LongCountAsync();
         var customLogins = await customLoginQuery.Include(customLogin => customLogin.Client)
+                                    .Include(customLogin => customLogin.CreateUser)
+                                    .Include(customLogin => customLogin.ModifyUser)
                                    .OrderByDescending(s => s.ModificationTime)
                                    .ThenByDescending(s => s.CreationTime)
                                    .Skip((query.Page - 1) * query.PageSize)
