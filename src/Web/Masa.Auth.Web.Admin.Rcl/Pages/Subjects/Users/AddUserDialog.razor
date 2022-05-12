@@ -10,9 +10,7 @@
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <MAvatar Size=120 Class="mt-12">
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                                </MAvatar>
+                                <UploadImage @bind-Value="User.Avatar" Avatar Size="120" WhenFileChangeUpload Class="mt-12" />
                                 <br />
                                 <div class="mt-3 hover-pointer text-body4">
                                     <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3">@T("Another")</span>

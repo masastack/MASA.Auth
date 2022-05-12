@@ -5,9 +5,7 @@
         <div class="flex-column sheetDialogPadding">
             <div class="d-flex">
                 <div class="mx-auto text-center" style="width:212px;">
-                    <MAvatar Size=80>
-                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                    </MAvatar>
+                    <UploadImage @bind-Value="User.Avatar" Avatar Size="120" WhenFileChangeUpload />
                     <MTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>

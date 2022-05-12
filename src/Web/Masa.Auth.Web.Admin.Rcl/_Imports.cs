@@ -34,3 +34,5 @@ global using System.Reflection;
 global using System.Text.Json;
 global using FluentValidation;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
+global using Microsoft.JSInterop;
+global using System.Diagnostics.CodeAnalysis;
