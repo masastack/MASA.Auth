@@ -36,6 +36,7 @@ public class IdentityResourceService : ServiceBase
     {
         await SendAsync<object?>(nameof(AddStandardIdentityResourcesAsync), null);
     }
+
     public async Task UpdateAsync(UpdateIdentityResourceDto request)
     {
         await SendAsync(nameof(UpdateAsync), request);
