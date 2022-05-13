@@ -104,14 +104,14 @@ public partial class ThirdPartyIdp
     public async Task OpenRemoveThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
         var confirm = await OpenConfirmDialog(T("Are you sure delete current data?"));
-        if (confirm) 
+        if (confirm)
         {
             Loading = true;
             await ThirdPartyIdpService.RemoveAsync(thirdPartyIdp.Id);
             OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
             Loading = false;
             await GetThirdPartyIdpsAsync();
-        }       
+        }
     }
 }
 
