@@ -26,11 +26,11 @@
                 <div class="d-flex mt-6" style="position: relative;height: 65%;">
                     <div class="pr-6" style="width:50%">
                         <div class="text-subtitle2">@T("User Claims")</div>
-                        <UserClaimSelect @bind-Value=ApiResource.UserClaims Chunk="4" Class="mt-4" />
+                        <UserClaimSelect @bind-Value=ApiResource.UserClaims Chunk="3" Class="mt-4" />
                     </div>
                     <div class="pl-6" style="width:50%">
                         <div class="text-subtitle2">@T("Api Scopes")</div>
-                        <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Class="mt-4" />
+                        <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Chunk="3" Class="mt-4" />
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ public class UpdateThirdPartyIdpValidator : AbstractValidator<UpdateThirdPartyId
         RuleFor(staff => staff.ClientId).Required();
         RuleFor(staff => staff.ClientSecret).Required();
         RuleFor(staff => staff.Url).Required();
-        RuleFor(staff => staff.Icon).Required();
+        //RuleFor(staff => staff.Icon).Required();
     }
 }
 

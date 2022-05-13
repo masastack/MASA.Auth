@@ -72,5 +72,11 @@
         "Href": "/sso/customLogin"
       }
     ]
+  },
+  {
+    "Id": 7,
+    "Title": "ThirdPartyIdp",
+    "Icon": "mdi-calendar-check-outline",
+    "Href": "thirdPartyIdp"
   }
 ]

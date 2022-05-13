@@ -195,7 +195,7 @@ public class QueryHandler
     {
         Expression<Func<ThirdPartyIdp, bool>> condition = user => true;
 
-        if (string.IsNullOrEmpty(query.Search))
+        if (string.IsNullOrEmpty(query.Search) is false)
             condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
 
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetPaginatedListAsync(condition, new PaginatedOptions

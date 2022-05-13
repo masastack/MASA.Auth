@@ -74,7 +74,7 @@ public partial class ThirdPartyIdp
             new() { Text = T("Type"), Value = nameof(ThirdPartyIdpDto.VerifyType), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpDto.Url)), Value = nameof(ThirdPartyIdpDto.Url), Sortable = false },
-            new() { Text = T("Action"), Value = T("Action"), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
         await GetThirdPartyIdpsAsync();
@@ -103,16 +103,15 @@ public partial class ThirdPartyIdp
 
     public async Task OpenRemoveThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete data"));
-        if (confirm) await RemoveThirdPartyIdpAsync();
-    }
-
-    public async Task RemoveThirdPartyIdpAsync()
-    {
-        Loading = true;
-        await ThirdPartyIdpService.RemoveAsync(CurrentThirdPartyIdpId);
-        OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
-        Loading = false;
+        var confirm = await OpenConfirmDialog(T("Are you sure delete current data?"));
+        if (confirm) 
+        {
+            Loading = true;
+            await ThirdPartyIdpService.RemoveAsync(thirdPartyIdp.Id);
+            OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
+            Loading = false;
+            await GetThirdPartyIdpsAsync();
+        }       
     }
 }
 

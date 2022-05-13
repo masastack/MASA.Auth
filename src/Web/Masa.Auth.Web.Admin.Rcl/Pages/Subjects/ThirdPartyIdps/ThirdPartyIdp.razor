@@ -1,4 +1,5 @@
-﻿@inherits AdminCompontentBase
+﻿@page "/thirdPartyIdp"
+@inherits AdminCompontentBase
 
 <MCard Class="pa-6">
     <div class="d-flex mb-6">
@@ -59,4 +60,4 @@
 
 
 <AddThirdPartyIdpDialog @bind-Visible="AddThirdPartyIdpDialogVisible" OnSubmitSuccess=GetThirdPartyIdpsAsync />
-<AddThirdPartyIdpDialog ThirdPartyIdpId=CurrentThirdPartyIdpId @bind-Visible="UpdateThirdPartyIdpDialogVisible" OnSubmitSuccess=GetThirdPartyIdpsAsync />
+<UpdateThirdPartyIdpDialog ThirdPartyIdpId=CurrentThirdPartyIdpId @bind-Visible="UpdateThirdPartyIdpDialogVisible" OnSubmitSuccess=GetThirdPartyIdpsAsync />
