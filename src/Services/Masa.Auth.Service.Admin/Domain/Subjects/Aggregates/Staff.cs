@@ -13,8 +13,6 @@ public class Staff : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     private User? _createUser;
     private User? _modifyUser;
 
-    public bool IsDeleted { get; private set; }
-
     public virtual User User => _user ?? throw new UserFriendlyException("Failed to get user data");
 
     public virtual Position? Position => _position;

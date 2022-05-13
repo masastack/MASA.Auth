@@ -29,8 +29,6 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public User? ModifyUser => _modifyUser;
 
-        public bool IsDeleted { get; private set; }
-
         public CustomLogin(string name, string title, int clientId, bool enabled)
         {
             Name = name;

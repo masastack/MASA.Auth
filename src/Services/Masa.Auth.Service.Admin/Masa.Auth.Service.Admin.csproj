@@ -15,37 +15,38 @@
 		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.4.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.4.0-preview.5" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.4.0-preview.4" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Configuration" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.4.0-preview.4" />
+		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Configuration" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.4.0-preview.5" />
 		<PackageReference Include="FluentValidation" Version="10.4.0" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Isolation" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Isolation.UoW.EF" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.4.0-preview.4" />
+		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Isolation" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Isolation.UoW.EF" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.4.0-preview.5" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.4.0-preview.5" />
-		<PackageReference Include="Masa.Utils.Data.EntityFrameworkCore.SqlServer" Version="0.4.0-preview.5" />
 		<PackageReference Include="Masa.Utils.Enums" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0-preview.5" />
 		<PackageReference Include="Masa.Utils.Expressions" Version="0.4.0-preview.4" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="0.4.0-preview.5" />
 		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="0.4.0-preview.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
-		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.4.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.4.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.4.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.4.0-preview.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />

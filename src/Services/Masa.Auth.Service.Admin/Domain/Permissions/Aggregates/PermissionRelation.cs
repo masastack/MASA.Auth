@@ -9,8 +9,6 @@ public class PermissionRelation : AuditEntity<Guid, Guid>, ISoftDelete
 
     public Guid ParentPermissionId { get; private set; }
 
-    public bool IsDeleted { get; private set; }
-
     public Permission ChildPermission { get; private set; } = null!;
 
     public Permission ParentPermission { get; private set; } = null!;

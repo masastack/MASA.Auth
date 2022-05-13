@@ -57,9 +57,10 @@ public partial class UpdateClientDialog
 
     private void PrepareHeader()
     {
+        _tabHeader = new List<string> { T("Basic Information"), T("Consent Screen"), T("Authentication"), T("Resource Information") };
         if (_clientDetailDto.ClientType == ClientTypes.Device)
         {
-            _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Device Flow" };
+            _tabHeader.Add(T("Device Flow"));
             _otherType = typeof(DeviceFlow);
             _componentMetadata = new Dictionary<string, object>{
                 { "Dto",_deviceFlowDto }
@@ -67,7 +68,7 @@ public partial class UpdateClientDialog
         }
         else if (_clientDetailDto.ClientType == ClientTypes.Machine)
         {
-            _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Client Secret" };
+            _tabHeader.Add(T("Client Secret"));
             _otherType = typeof(ClientSecret);
             _componentMetadata = new Dictionary<string, object>{
                 { "Dto",_clientCredentialDto }
@@ -75,7 +76,7 @@ public partial class UpdateClientDialog
         }
         else
         {
-            _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Token" };
+            _tabHeader.Add(T("Token"));
             _otherType = typeof(Token);
             _componentMetadata = new Dictionary<string, object>{
                 { "Dto",_tokenDto }

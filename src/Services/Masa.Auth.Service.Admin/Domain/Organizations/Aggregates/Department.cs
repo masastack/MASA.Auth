@@ -15,8 +15,6 @@ public class Department : AuditAggregateRoot<Guid, Guid>, ISoftDelete//, IMultiE
 
     public int Sort { get; private set; }
 
-    public bool IsDeleted { get; private set; }
-
     public string Description { get; private set; } = string.Empty;
 
     private List<DepartmentStaff> _departmentStaffs = new();

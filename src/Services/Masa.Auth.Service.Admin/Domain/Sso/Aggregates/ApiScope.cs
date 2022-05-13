@@ -8,8 +8,6 @@ public class ApiScope : AuditAggregateRoot<int, Guid>, ISoftDelete
     private List<ApiScopeClaim> _userClaims = new();
     private List<ApiScopeProperty> _properties = new();
 
-    public bool IsDeleted { get; private set; }
-
     public bool Enabled { get; private set; }
 
     public string Name { get; private set; } = "";
