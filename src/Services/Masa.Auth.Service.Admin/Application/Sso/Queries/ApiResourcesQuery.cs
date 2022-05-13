@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Sso.Queries;
 
-public record CustomLoginQuery(int Page, int PageSize, string Search) : Query<PaginationDto<CustomLoginDto>>
+public record ApiResourcesQuery(int Page, int PageSize, string Search) : Query<PaginationDto<ApiResourceDto>>
 {
-    public override PaginationDto<CustomLoginDto> Result { get; set; } = new();
+    public override PaginationDto<ApiResourceDto> Result { get; set; } = new();
 }

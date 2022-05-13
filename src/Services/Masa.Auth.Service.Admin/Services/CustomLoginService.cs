@@ -11,7 +11,7 @@ namespace Masa.Auth.Service.Admin.Services
 
         private async Task<PaginationDto<CustomLoginDto>> GetListAsync(IEventBus eventBus, GetCustomLoginsDto customLogin)
         {
-            var query = new CustomLoginQuery(customLogin.Page, customLogin.PageSize, customLogin.Search);
+            var query = new CustomLoginsQuery(customLogin.Page, customLogin.PageSize, customLogin.Search);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
