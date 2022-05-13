@@ -6,6 +6,6 @@ namespace Masa.Auth.Web.Sso.Global
     public static class GlobalVariables
     {
         public const string DefaultRoute = "dashboard/ecommerce";
-        public const string ERROR_ROUTE = "Error/Index";
+        public const string ERROR_ROUTE = "error";
     }
 }

@@ -1,5 +1,5 @@
-// Copyright (c) Duende Software. All rights reserved.
-// See LICENSE in the project root for license information.
+// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Web.Sso.Pages.Consent;
 
@@ -10,5 +10,4 @@ public class ConsentOptions
     public static string OfflineAccessDescription = "Access to your applications and resources, even when you are offline";
 
     public static readonly string MustChooseOneErrorMessage = "You must pick at least one permission";
-    public static readonly string InvalidSelectionErrorMessage = "Invalid selection";
 }

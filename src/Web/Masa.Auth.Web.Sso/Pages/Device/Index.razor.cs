@@ -2,11 +2,10 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using IdentityServer4.Validation;
+using Masa.Auth.Web.Sso.Pages.Consent;
 
-namespace Masa.Auth.Web.Sso.Pages.Consent;
+namespace Masa.Auth.Web.Sso.Pages.Device;
 
-[Authorize]
-[SecurityHeaders]
 public partial class Index
 {
     ViewModel _viewModel = new();
@@ -14,32 +13,27 @@ public partial class Index
 
     [Parameter]
     [SupplyParameterFromQuery]
-    public string ReturnUrl { get; set; } = string.Empty;
+    public string UserCode { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        _viewModel = await BuildViewModelAsync(ReturnUrl);
+        _viewModel = await BuildViewModelAsync(UserCode);
         _inputModel = new InputModel
         {
-            ReturnUrl = ReturnUrl,
+            UserCode = UserCode,
         };
         await base.OnInitializedAsync();
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && string.IsNullOrWhiteSpace(_viewModel.ClientUrl))
-        {
-            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
-            return;
-        }
-        base.OnAfterRender(firstRender);
+        return base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task OnConsent(bool consent)
+    private async Task OnDevice(bool consent)
     {
         // validate return url is still valid
-        var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
+        var request = await _interaction.GetAuthorizationContextAsync(UserCode);
         if (request == null)
         {
             Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
@@ -59,17 +53,9 @@ public partial class Index
         if (grantedConsent != null)
         {
             // communicate outcome of consent back to identityserver
-            await _interaction.GrantConsentAsync(request, grantedConsent);
+            await _interaction.HandleRequestAsync(UserCode, grantedConsent);
 
-            // redirect back to authorization endpoint
-            if (request.IsNativeClient() == true)
-            {
-                // The client is native, so this change in how to
-                // return the response is for better UX for the end user.
-                Navigation.LoadingPage(_inputModel.ReturnUrl);
-                return;
-            }
-            Navigation.NavigateTo(_inputModel.ReturnUrl, true);
+            Navigation.NavigateTo("device/success", true);
             return;
         }
 
@@ -77,7 +63,7 @@ public partial class Index
         _viewModel = await BuildViewModelAsync(_inputModel.ReturnUrl);
     }
 
-    private async Task<ConsentResponse?> AgreeHandler(AuthorizationRequest request)
+    private async Task<ConsentResponse?> AgreeHandler(DeviceFlowAuthorizationRequest request)
     {
         ConsentResponse? grantedConsent = null;
         // if the user consented to some scope, build the response model
@@ -106,7 +92,7 @@ public partial class Index
         return grantedConsent;
     }
 
-    private async Task<ConsentResponse> RejectHandler(AuthorizationRequest request)
+    private async Task<ConsentResponse> RejectHandler(DeviceFlowAuthorizationRequest request)
     {
         var grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
@@ -115,31 +101,28 @@ public partial class Index
         return grantedConsent;
     }
 
-    private async Task<ViewModel> BuildViewModelAsync(string returnUrl)
+    private async Task<ViewModel> BuildViewModelAsync(string userCode)
     {
-        var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
+        var request = await _interaction.GetAuthorizationContextAsync(userCode);
         if (request != null)
         {
-            return CreateConsentViewModel(_inputModel, returnUrl, request);
+            return CreateConsentViewModel(_inputModel, request);
         }
         return await Task.FromResult(new ViewModel());
     }
 
-    private ViewModel CreateConsentViewModel(
-        InputModel model, string returnUrl,
-        AuthorizationRequest request)
+    private ViewModel CreateConsentViewModel(InputModel model, DeviceFlowAuthorizationRequest request)
     {
+        var client = request.Client;
         var vm = new ViewModel
         {
-            ClientName = request.Client.ClientName ?? request.Client.ClientId,
-            ClientUrl = request.Client.ClientUri,
-            ClientLogoUrl = request.Client.LogoUri,
-            AllowRememberConsent = request.Client.AllowRememberConsent
+            ClientName = client.ClientName ?? client.ClientId,
+            ClientUrl = client.ClientUri,
+            ClientLogoUrl = client.LogoUri,
+            AllowRememberConsent = client.AllowRememberConsent
         };
 
-        vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources
-            .Select(x => CreateScopeViewModel(x, model?.ScopesConsented == null || model.ScopesConsented?.Contains(x.Name) == true))
-            .ToArray();
+        vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x => CreateScopeViewModel(x, model == null || model.ScopesConsented?.Contains(x.Name) == true)).ToArray();
 
         var apiScopes = new List<ScopeViewModel>();
         foreach (var parsedScope in request.ValidatedResources.ParsedScopes)
@@ -151,7 +134,7 @@ public partial class Index
                 apiScopes.Add(scopeVm);
             }
         }
-        if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
+        if (DeviceOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
         {
             apiScopes.Add(GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(IdentityServerConstants.StandardScopes.OfflineAccess) == true));
         }
@@ -164,7 +147,6 @@ public partial class Index
     {
         return new ScopeViewModel
         {
-            Name = identity.Name,
             Value = identity.Name,
             DisplayName = identity.DisplayName ?? identity.Name,
             Description = identity.Description,
@@ -174,19 +156,12 @@ public partial class Index
         };
     }
 
-    private ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
+    public ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
     {
-        var displayName = apiScope.DisplayName ?? apiScope.Name;
-        if (!string.IsNullOrWhiteSpace(parsedScopeValue.ParsedParameter))
-        {
-            displayName += ":" + parsedScopeValue.ParsedParameter;
-        }
-
         return new ScopeViewModel
         {
-            Name = parsedScopeValue.ParsedName,
             Value = parsedScopeValue.RawValue,
-            DisplayName = displayName,
+            DisplayName = apiScope.DisplayName ?? apiScope.Name,
             Description = apiScope.Description,
             Emphasize = apiScope.Emphasize,
             Required = apiScope.Required,
@@ -199,8 +174,8 @@ public partial class Index
         return new ScopeViewModel
         {
             Value = IdentityServerConstants.StandardScopes.OfflineAccess,
-            DisplayName = ConsentOptions.OfflineAccessDisplayName,
-            Description = ConsentOptions.OfflineAccessDescription,
+            DisplayName = DeviceOptions.OfflineAccessDisplayName,
+            Description = DeviceOptions.OfflineAccessDescription,
             Emphasize = true,
             Checked = check
         };

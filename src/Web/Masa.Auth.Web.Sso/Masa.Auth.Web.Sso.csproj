@@ -8,7 +8,6 @@
 
   <ItemGroup>
 	<PackageReference Include="Masa.Blazor" Version="0.4.0-preview.1" />
-	<PackageReference Include="Duende.IdentityServer" Version="6.0.4" />
 	<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0-preview.5" />
 	<PackageReference Include="Masa.Utils.Expressions" Version="0.4.0-preview.4" />
   </ItemGroup>
@@ -27,6 +26,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\mayue\Desktop\IdentityServer4-main\src\IdentityServer4\src\IdentityServer4.csproj" />
   </ItemGroup>
 
 </Project>

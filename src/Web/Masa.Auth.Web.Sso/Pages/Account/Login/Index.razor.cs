@@ -74,15 +74,6 @@ public partial class Index
                 AuthenticationScheme = x.Name
             }).ToList();
 
-        var dyanmicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
-            .Where(x => x.Enabled)
-            .Select(x => new ViewModel.ExternalProvider
-            {
-                AuthenticationScheme = x.Scheme,
-                DisplayName = x.DisplayName
-            });
-        providers.AddRange(dyanmicSchemes);
-
         var allowLocal = true;
         if (context?.Client.ClientId != null)
         {

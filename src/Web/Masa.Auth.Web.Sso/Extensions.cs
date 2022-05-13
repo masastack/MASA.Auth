@@ -36,6 +36,14 @@ public static class Extensions
         nav.NavigateTo(url);
     }
 
+    public static IActionResult LoadingPage(this Controller controller, string redirectUri)
+    {
+        controller.HttpContext.Response.StatusCode = 200;
+        controller.HttpContext.Response.Headers["Location"] = "";
+
+        return controller.RedirectToPage("/Redirect/Index", new { RedirectUri = redirectUri });
+    }
+
     public static void NavigateTo(this NavigationManager nav, string uri, Dictionary<string, object?> parameters)
     {
         var url = nav.GetUriWithQueryParameters(uri, parameters);

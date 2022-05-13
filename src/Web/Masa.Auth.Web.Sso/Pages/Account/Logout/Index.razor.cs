@@ -43,6 +43,7 @@ public partial class Index
             // if there's no current logout context, we need to create one
             // this captures necessary info from the current logged in user
             // this can still return null if there is no context needed
+
             LogoutId ??= await Interaction.CreateLogoutContextAsync();
 
             Navigation.NavigateTo($"logout?logoutId={LogoutId}", true);

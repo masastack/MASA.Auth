@@ -4,6 +4,7 @@
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
+[Authorize]
 public class AccountController : Controller
 {
     readonly TestUserStore _users;
@@ -53,8 +54,7 @@ public class AccountController : Controller
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.
 
-#warning
-                    //Navigation.LoadingPage(_inputModel.ReturnUrl);
+                    return this.LoadingPage(returnUrl);
                 }
 
                 // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
@@ -84,7 +84,6 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<IActionResult> Logout(string logoutId = "")
     {
         if (User.Identity != null && User.Identity.IsAuthenticated == true)
@@ -114,6 +113,6 @@ public class AccountController : Controller
                 }
             }
         }
-        return RedirectToPage("/Account/Logout/LoggedOut", new { logoutId = logoutId });
+        return Redirect($"/Account/Logout/Loggedout?logoutId={logoutId}");
     }
 }

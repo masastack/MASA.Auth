@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Duende.IdentityServer.Services;
 using System.Security.Claims;
 
 namespace Masa.Auth.Web.Sso.Shared
@@ -34,6 +33,8 @@ namespace Masa.Auth.Web.Sso.Shared
 
         [Inject]
         public NavigationManager Navigation { get; set; } = null!;
+
+        public IPopupService PopupService { get; set; } = null!;
 
         protected ClaimsPrincipal User
         {
