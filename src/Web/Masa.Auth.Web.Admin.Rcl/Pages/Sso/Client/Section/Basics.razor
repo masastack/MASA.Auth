@@ -2,72 +2,66 @@
 
 <MContainer Style="overflow-y: auto;">
     <MRow>
-        @if (Dto.Id == 0)
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.ClientId" Disabled Label="@T("ClientId")" />
+        </MCol>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+        </MCol>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.Description" Label="@T("Description")" />
+        </MCol>
+    </MRow>
+    <MRow>
+        <MCol Md=12>
+            <MCheckbox @bind-Value="Dto.Enabled" Label="Enabled"></MCheckbox>
+        </MCol>
+        <MCol Md=12>
+            <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="RequireRequestObject"></MCheckbox>
+        </MCol>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="mdi-plus" />
+        </MCol>
+        @foreach (var origin in Dto.AllowedCorsOrigins)
         {
-            <MCol Md=12>
-                <DefaultTextField @bind-Value="Dto.ClientId" Label="ClientId" />
+            <MCol Md=12 Class="d-flex">
+                <MTextField Dense HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
+                <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
             </MCol>
         }
         <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.ClientName" Label="ClientName" />
-        </MCol>
-        <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.Description" Label="Description" />
+            <h5>Properties</h5>
+            <MRow>
+                <MCol Md=5>
+                    <DefaultTextField @bind-Value="@Dto.Property.Key" Label="Key" />
+                </MCol>
+                <MCol Md=5>
+                    <DefaultTextField @bind-Value="@Dto.Property.Value" Label="Value" />
+                </MCol>
+                <MCol Md=2 Class="d-flex justify-center align-center">
+                    <MButton OnClick="AddProperty">Add New</MButton>
+                </MCol>
+                <MCol Md=12>
+                    <MDataTable Headers="_headers" Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="table-border-none">
+                        <HeaderColContent Context="header">
+                            <span class="text-btn">@header.Text</span>
+                        </HeaderColContent>
+                        <ItemColContent>
+                            @switch (context.Header.Value)
+                            {
+                                case "Action":
+                                    <MIcon OnClick="()=>Dto.Properties.Remove(context.Item)" Color="neutral-lighten-2" Class="ml-7">mdi-delete-circle-outline</MIcon>
+                                    break;
+                                default:
+                                    <span class="text-body3">@context.Value</span>
+                                    break;
+                            }
+                        </ItemColContent>
+                    </MDataTable>
+                </MCol>
+            </MRow>
         </MCol>
     </MRow>
-    @if (Dto.Id != 0)
-    {
-        <MRow>
-            <MCol Md=12>
-                <MCheckbox @bind-Value="Dto.Enabled" Label="Enabled"></MCheckbox>
-            </MCol>
-            <MCol Md=12>
-                <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="RequireRequestObject"></MCheckbox>
-            </MCol>
-            <MCol Md=12>
-                <DefaultTextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="mdi-plus" />
-            </MCol>
-            @foreach (var origin in Dto.AllowedCorsOrigins)
-            {
-                <MCol Md=12 Class="d-flex">
-                    <MTextField Dense HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
-                    <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
-                </MCol>
-            }
-            <MCol Md=12>
-                <h5>Properties</h5>
-                <MRow>
-                    <MCol Md=5>
-                        <DefaultTextField @bind-Value="@Dto.Property.Key" Label="Key" />
-                    </MCol>
-                    <MCol Md=5>
-                        <DefaultTextField @bind-Value="@Dto.Property.Value" Label="Value" />
-                    </MCol>
-                    <MCol Md=2 Class="d-flex justify-center align-center">
-                        <MButton OnClick="AddProperty">Add New</MButton>
-                    </MCol>
-                    <MCol Md=12>
-                        <MDataTable Headers="_headers" Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="table-border-none">
-                            <HeaderColContent Context="header">
-                                <span class="text-btn">@header.Text</span>
-                            </HeaderColContent>
-                            <ItemColContent>
-                                @switch (context.Header.Value)
-                                {
-                                    case "Action":
-                                        <MIcon OnClick="()=>Dto.Properties.Remove(context.Item)" Color="neutral-lighten-2" Class="ml-7">mdi-delete-circle-outline</MIcon>
-                                        break;
-                                    default:
-                                        <span class="text-body3">@context.Value</span>
-                                        break;
-                                }
-                            </ItemColContent>
-                        </MDataTable>
-                    </MCol>
-                </MRow>
-            </MCol>
-        </MRow>
-    }
 </MContainer>
 
 

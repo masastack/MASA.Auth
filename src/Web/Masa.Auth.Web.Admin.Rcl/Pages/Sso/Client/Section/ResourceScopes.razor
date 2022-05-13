@@ -5,6 +5,7 @@
                 <MCol Md=12 Class="neutral-lighten-4">
                     Identity
                 </MCol>
+                <IdentityResourceSelect Class="full-width" Chunk=2/>
                 @foreach (var identityScope in Dto.IdentityScopes)
                 {
                     <MCol Md=12>
@@ -19,6 +20,7 @@
                 <MCol Md=12 Class="neutral-lighten-4">
                     Api
                 </MCol>
+                <ApiResourceSelect Class="full-width" Chunk=2/>
                  @foreach (var apiScope in Dto.ApiScopes)
                 {
                     <MCol Md=12>
@@ -36,10 +38,4 @@
 
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
-
-    protected override Task OnInitializedAsync()
-    {
-        //todo load IdentityResources and ApiResources
-        return base.OnInitializedAsync();
-    }
 }

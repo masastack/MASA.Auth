@@ -6,10 +6,10 @@
         {
             <MCol @key="_clientType.ClientType">
                 <MItem>
-                    <MCard Color="@(context.Active ? "pry-lighten-3" : "")" Height="180" 
+                    <MCard Color="@(context.Active ? "hover-background" : "")" Height="244" 
                             OnClick="()=>{ context.Toggle();TypeChanged.InvokeAsync(_clientType.ClientType); }">
-                        <MCardTitle Class="d-flex justify-center">
-                            <MIcon Large Class="mr-2">@_clientType.Icon</MIcon> @_clientType.ClientType.ToString()
+                        <MCardTitle Class="d-flex justify-center text-h6">
+                            <MIcon Size=24 Class="mr-2">@_clientType.Icon</MIcon> @_clientType.ClientType.ToString()
                         </MCardTitle>
                         <MCardText>
                             @_clientType.Description

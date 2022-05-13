@@ -1,0 +1,15 @@
+﻿@inherits AdminCompontentBase
+
+<div class="overflow-y full-height @Class" style="@Style">
+    @foreach (var identityResourceChunk in IdentityResourceChunks)
+    {
+        <MRow>
+            @foreach (var identityResource in identityResourceChunk)
+            {
+                <MCol Cols="12/Chunk" Class="py-0">
+                    <MCheckbox Value="Value.Contains(identityResource.Id)" ValueChanged="value => OnValueChanged(value,identityResource.Id)" Label="@identityResource.Name"></MCheckbox>
+                </MCol>
+            }
+        </MRow>
+    }
+</div>

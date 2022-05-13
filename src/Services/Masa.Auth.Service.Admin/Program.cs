@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.SearchEngine.AutoComplete;
-using Masa.Utils.Data.Elasticsearch;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -85,7 +82,7 @@ var app = builder.Services
         })
         .UseIsolationUoW<AuthDbContext>(
             isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),
-            dbOptions => dbOptions.UseSqlServer().UseSoftDelete())
+            dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);

@@ -54,6 +54,7 @@
   "True": "是",
   "False": "否",
   "Test": "测试",
+  "Resource Information": "资源信息",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -264,5 +265,22 @@
   "Register.Name": "名称",
   "ConfirmPassword": "确认密码",
   "Login configuration items are required": "登录配置项必填",
-  "Register configuration items are required": "注册配置项必填"
+  "Register configuration items are required": "注册配置项必填",
+
+  "Client": "客户端",
+  "ClientId": "客户端ID",
+  "ClientName": "客户端名称",
+  "ClientUri": "客户端Uri",
+  "PostLogoutRedirectUri": "注销跳转地址",
+  "CallBackRedirectUri": "重定向地址",
+  "RequireConsent": "是否需要授权确认",
+  "AllowRememberConsent": "是否允许记住授权",
+  "Consent Screen": "授权确认页",
+  "Authentication": "Authentication",
+  "Device Flow": "设备流",
+  "Client Secret": "客户端密钥",
+  "Token": "令牌",
+  "ConsentLifetime": "授权同意周期",
+  "UserCodeType": "用户代码的类型",
+  "DeviceCodeLifetime": "设备代码的生命周期"
 }

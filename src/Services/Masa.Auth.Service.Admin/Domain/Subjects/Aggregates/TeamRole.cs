@@ -9,8 +9,6 @@ public class TeamRole : AuditEntity<Guid, Guid>, ISoftDelete
 
     public Team Team { get; private set; } = null!;
 
-    public bool IsDeleted { get; private set; }
-
     public Guid RoleId { get; private set; }
 
     public Role Role { get; private set; } = null!;

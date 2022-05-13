@@ -8,20 +8,20 @@
             </MAvatar>
         </MCol>
         <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.ClientUri" Label="ClientUri" />
+            <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
         </MCol>
         <MCol Md=12>
-            <MCheckbox @bind-Value="Dto.RequireConsent" Label="RequireConsent"></MCheckbox>
+            <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
         </MCol>
     </MRow>
     @if (Dto.Id != 0)
     {
         <MRow>
             <MCol Md=12>
-                <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="ConsentLifetime" Clearable=false />
+                <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
             </MCol>
             <MCol Md=12>
-                <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="AllowRememberConsent"></MCheckbox>
+                <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
             </MCol>
         </MRow>
     }
