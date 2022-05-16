@@ -13,6 +13,7 @@
   "ModificationTime": "最近修改时间",
   "State": "状态",
   "Enable": "启用",
+  "Enabled": "启用",
   "Description": "描述说明",
   "Disabled": "禁用",
   "Action": "操作",
@@ -55,6 +56,7 @@
   "False": "否",
   "Test": "测试",
   "Resource Information": "资源信息",
+  "Add New": "新增",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -282,5 +284,10 @@
   "Token": "令牌",
   "ConsentLifetime": "授权同意周期",
   "UserCodeType": "用户代码的类型",
-  "DeviceCodeLifetime": "设备代码的生命周期"
+  "DeviceCodeLifetime": "设备代码的生命周期",
+  "RequireRequestObject": "授权请求对象",
+  "EnableLocalLogin": "允许本地账号登录",
+  "UserSsoLifetime": "用户最大有效时长",
+  "Create Client": "创建客户端",
+  "Update Client": "更新客户端"
 }

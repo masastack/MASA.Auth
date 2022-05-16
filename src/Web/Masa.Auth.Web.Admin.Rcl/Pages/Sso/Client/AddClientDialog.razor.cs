@@ -16,12 +16,14 @@ public partial class AddClientDialog
 
     AddClientDto _addClientDto = new();
     ClientAddBasicDto _addBasicDto = new();
+    ClientScopesDto _clientScopesDto = new();
 
     ClientService ClientService => AuthCaller.ClientService;
 
     private async Task SaveAsync()
     {
         _addBasicDto.Adapt(_addClientDto);
+        _clientScopesDto.Adapt(_addClientDto);
 
         await ClientService.AddClientAsync(_addClientDto);
         if (ValueChanged.HasDelegate)

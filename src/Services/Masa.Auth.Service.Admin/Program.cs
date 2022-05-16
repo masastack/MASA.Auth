@@ -33,8 +33,6 @@ builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
-MapsterAdapterConfig.TypeAdapter();
-
 builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
 

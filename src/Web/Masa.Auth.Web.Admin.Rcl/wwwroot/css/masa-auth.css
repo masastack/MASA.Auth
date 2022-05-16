@@ -872,6 +872,10 @@
     line-height: 20px !important;
 }
 
+.m-text-field--outlined .m-input__prepend-outer, .m-text-field--outlined .m-input__append-outer, .m-text-field--outlined .m-input__prepend-inner, .m-text-field--outlined .m-input__append-inner {
+    margin-top: 12px !important;
+}
+
 .m-timeline {
     padding-top: 0 !important;
 }
@@ -1492,4 +1496,19 @@ tr:hover {
     pointer-events: none;
     width: 0;
     max-width: 0;
+}
+
+.margin-border {
+    border: 1px solid #E2E7F4;
+    border-radius: 8px;    
+}
+
+.m-text-field.m-input--is-disabled .m-input__slot::before {
+    border: none !important;
+}
+
+.border-btn {
+    background-color: white !important;
+    border: 2px dashed #E2E7F4;
+    border-radius: 8px;
 }

@@ -24,6 +24,7 @@ public partial class UpdateClientDialog
     ClientBasicDto _basicDto = new();
     ClientConsentDto _consentDto = new();
     ClientAuthenticationDto _authenticationDto = new();
+    ClientScopesDto _clientScopesDto = new();
     ClientDeviceFlowDto _deviceFlowDto = new();
     ClientTokenDto _tokenDto = new();
     ClientCredentialDto _clientCredentialDto = new();
@@ -41,6 +42,7 @@ public partial class UpdateClientDialog
         _clientDetailDto.Adapt(_deviceFlowDto);
         _clientDetailDto.Adapt(_tokenDto);
         _clientDetailDto.Adapt(_clientCredentialDto);
+        _clientDetailDto.Adapt(_clientScopesDto);
 
         PrepareHeader();
 
@@ -92,6 +94,7 @@ public partial class UpdateClientDialog
         _deviceFlowDto.Adapt(_clientDetailDto);
         _tokenDto.Adapt(_clientDetailDto);
         _clientCredentialDto.Adapt(_clientDetailDto);
+        _clientScopesDto.Adapt(_clientDetailDto);
 
         await ClientService.UpdateClientAsync(_clientDetailDto);
         await CloseAsync();

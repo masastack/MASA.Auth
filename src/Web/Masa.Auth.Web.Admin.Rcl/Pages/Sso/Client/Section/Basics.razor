@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<MContainer Style="overflow-y: auto;">
+<MContainer Style="overflow-y: auto;" Class="full-height">
     <MRow>
         <MCol Md=12>
             <DefaultTextField @bind-Value="Dto.ClientId" Disabled Label="@T("ClientId")" />
@@ -13,11 +13,11 @@
         </MCol>
     </MRow>
     <MRow>
-        <MCol Md=12>
-            <MCheckbox @bind-Value="Dto.Enabled" Label="Enabled"></MCheckbox>
+        <MCol Md=12 Class="py-0">
+            <MCheckbox @bind-Value="Dto.Enabled" Label="@T("Enabled")"></MCheckbox>
         </MCol>
-        <MCol Md=12>
-            <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="RequireRequestObject"></MCheckbox>
+        <MCol Md=12 Class="py-0 pb-2">
+            <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="@T("RequireRequestObject")"></MCheckbox>
         </MCol>
         <MCol Md=12>
             <DefaultTextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="mdi-plus" />
@@ -30,19 +30,19 @@
             </MCol>
         }
         <MCol Md=12>
-            <h5>Properties</h5>
+            <h5 class="text-subtitle2 neutral--text mb-4">Properties</h5>
             <MRow>
-                <MCol Md=5>
+                <MCol>
                     <DefaultTextField @bind-Value="@Dto.Property.Key" Label="Key" />
                 </MCol>
-                <MCol Md=5>
+                <MCol>
                     <DefaultTextField @bind-Value="@Dto.Property.Value" Label="Value" />
                 </MCol>
-                <MCol Md=2 Class="d-flex justify-center align-center">
-                    <MButton OnClick="AddProperty">Add New</MButton>
+                <MCol Md="@("auto")" Class="d-flex align-center">
+                    <MIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">mdi-plus</MIcon>
                 </MCol>
                 <MCol Md=12>
-                    <MDataTable Headers="_headers" Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="table-border-none">
+                    <MDataTable Headers="_headers" Dense Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="margin-border">
                         <HeaderColContent Context="header">
                             <span class="text-btn">@header.Text</span>
                         </HeaderColContent>
@@ -50,7 +50,7 @@
                             @switch (context.Header.Value)
                             {
                                 case "Action":
-                                    <MIcon OnClick="()=>Dto.Properties.Remove(context.Item)" Color="neutral-lighten-2" Class="ml-7">mdi-delete-circle-outline</MIcon>
+                                    <MIcon Size=20 OnClick="()=>Dto.Properties.Remove(context.Item)" Color="neutral-lighten-2">mdi-close</MIcon>
                                     break;
                                 default:
                                     <span class="text-body3">@context.Value</span>
@@ -73,11 +73,11 @@
     public EventCallback<ClientBasicDto> DtoChanged { get; set; }
 
     public List<DataTableHeader<ClientPropertyDto>> _headers { get; set; } = new()
-    {
-        new() { Text = "Key", Value = nameof(ClientPropertyDto.Key), Sortable = false },
-        new() { Text = "Value", Value = nameof(ClientPropertyDto.Value), Sortable = false },
-        new() { Text = "", Value = "Action", Sortable = false },
-    };
+        {
+            new() { Text = "Key", Value = nameof(ClientPropertyDto.Key), Sortable = false },
+            new() { Text = "Value", Value = nameof(ClientPropertyDto.Value), Sortable = false },
+            new() { Text = "Action", Value = "Action", Sortable = false, Align = "center" },
+        };
 
     private void RemoveAllowedCorsOrigin(string val)
     {

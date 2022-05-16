@@ -52,4 +52,6 @@ public class ClientTokenDto
     public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
 
     public List<ClientClaimDto> Claims { get; set; } = new();
+
+    public ClientClaimDto ClientClaimDto { get; set; } = new();
 }

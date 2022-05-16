@@ -1,14 +1,15 @@
-﻿<MContainer>
+﻿@inherits AdminCompontentBase
+
+<MContainer Style="overflow-y: auto;" Class="full-height">
     <MRow>
         <MCol Md=6>
             <MRow>
-                <MCol Md=12 Class="neutral-lighten-4">
+                <MCol Md=12 Class="fill-lighten-1">
                     Identity
                 </MCol>
-                <IdentityResourceSelect Class="full-width" Chunk=2/>
                 @foreach (var identityScope in Dto.IdentityScopes)
                 {
-                    <MCol Md=12>
+                    <MCol Md=6 Class="py-0">
                         <MCheckbox @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
                     </MCol>
                 }
@@ -17,13 +18,12 @@
         <MDivider Vertical></MDivider>
         <MCol Md=6>
             <MRow>
-                <MCol Md=12 Class="neutral-lighten-4">
+                <MCol Md=12 Class="fill-lighten-1">
                     Api
                 </MCol>
-                <ApiResourceSelect Class="full-width" Chunk=2/>
-                 @foreach (var apiScope in Dto.ApiScopes)
+                @foreach (var apiScope in Dto.ApiScopes)
                 {
-                    <MCol Md=12>
+                    <MCol Md=6 Class="py-0">
                         <MCheckbox @bind-Value="@apiScope.Selected" Label="@apiScope.DisplayValue"></MCheckbox>
                     </MCol>
                 }
@@ -38,4 +38,41 @@
 
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
+
+    ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
+
+    IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadIdentityResources();
+            await LoadApiResources();
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadIdentityResources()
+    {
+        var identityResources = await IdentityResourceService.GetSelectAsync();
+        Dto.IdentityScopes = identityResources.Select(ir => new CheckItemDto<string>
+            {
+                DisplayValue = $"{ir.DisplayName} ({ir.Name})",
+                Selected = Dto._AllowedScopes.Contains(ir.Name),
+                Id = ir.Name
+            }).ToList();
+    }
+
+    private async Task LoadApiResources()
+    {
+        var apiResources = await ApiResourceService.GetSelectAsync();
+        Dto.ApiScopes = apiResources.Select(ar => new CheckItemDto<string>
+            {
+                DisplayValue = $"{ar.DisplayName} ({ar.Name})",
+                Selected = Dto._AllowedScopes.Contains(ar.Name),
+                Id = ar.Name
+            }).ToList();
+    }
 }

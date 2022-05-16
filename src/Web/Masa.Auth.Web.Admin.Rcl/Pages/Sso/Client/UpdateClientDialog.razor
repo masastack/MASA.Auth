@@ -1,39 +1,39 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Create Client")" ContentClass="px-sheet-dialog">
-    <MCard>
+<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Update Client")" ContentClass="px-sheet-dialog">
+    <MCard Style="height: calc(100vh - 140px);">
         <MCardText>
-            <ElevationTab Dense Class="pt-12 full-height" Headers='_tabHeader' TabWindowClass="mt-8">
+            <ElevationTab Dense Class="pt-8 full-height" Headers='_tabHeader' TabWindowClass="mt-8">
                 <ElevationTabItem>
                     <MCard Class="d-flex flex-column full-height">
-                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Basics @bind-Dto="_basicDto" />
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Basics @bind-Dto=_basicDto />
                     </MCard>
                 </ElevationTabItem>
                 <ElevationTabItem>
                     <MCard Class="d-flex flex-column full-height">
-                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Consent @bind-Dto="_consentDto" />
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Consent @bind-Dto=_consentDto />
                     </MCard>
                 </ElevationTabItem>
                 <ElevationTabItem>
                     <MCard Class="d-flex flex-column full-height">
-                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Authentication @bind-Dto="_authenticationDto" />
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Authentication @bind-Dto=_authenticationDto />
                     </MCard>
                 </ElevationTabItem>
                 <ElevationTabItem>
                     <MCard Class="d-flex flex-column full-height">
-                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScopes />
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScopes @bind-Dto=_clientScopesDto/>
                     </MCard>
                 </ElevationTabItem>
                 <ElevationTabItem>
                     <MCard Class="d-flex flex-column full-height">
-                        <DynamicComponent Type="@_otherType" Parameters="_componentMetadata" />
+                        <DynamicComponent Type="@_otherType" Parameters=_componentMetadata />
                     </MCard>
                 </ElevationTabItem>
             </ElevationTab>
         </MCardText>
         <MCardActions class="d-flex justify-space-between">
-            <MButton OnClick="DeleteAsync" Text Color="error">Delete</MButton>
-            <MButton OnClick="SaveAsync" class="rounded-pill primary" MinWidth="100">Save</MButton>
+            <MButton OnClick="DeleteAsync" Text Color="error">@T("Delete")</MButton>
+            <MButton OnClick="SaveAsync" class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
         </MCardActions>
     </MCard>
 </SheetDialog>
