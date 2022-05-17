@@ -3,13 +3,11 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class PermissionRelation : AuditEntity<Guid, Guid>, ISoftDelete
+public class PermissionRelation : FullAuditEntity<Guid, Guid>
 {
     public Guid ChildPermissionId { get; private set; }
 
     public Guid ParentPermissionId { get; private set; }
-
-    public bool IsDeleted { get; private set; }
 
     public Permission ChildPermission { get; private set; } = null!;
 

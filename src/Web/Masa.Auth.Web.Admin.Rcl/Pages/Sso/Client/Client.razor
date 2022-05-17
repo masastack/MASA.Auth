@@ -58,4 +58,4 @@
 </MCard>
 
 <AddClientDialog @bind-Value="_addDialog" OnSuccessed="LoadData"/>
-<UpdateClientDialog @ref="_updateClientDialog" OnSuccessed="LoadData" OnDeleted="LoadData"/>
+<UpdateClientDialog @ref="_updateClientDialog" @bind-Value=_updateDialog OnSuccessed="LoadData" OnDeleted="LoadData"/>

@@ -70,6 +70,12 @@
         "Title": "CustomLogin",
         "Icon": "mdi-circle",
         "Href": "/sso/customLogin"
+      },
+      {
+        "Id": 12,
+        "Title": "Client",
+        "Icon": "mdi-circle",
+        "Href": "/sso/client"
       }
     ]
   },

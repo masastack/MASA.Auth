@@ -6,7 +6,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 public class AddClientDto
 {
     #region Basic
-    public ClientTypes ClientType { get; set; }
+    public ClientTypes ClientType { get; set; } = ClientTypes.Web;
 
     public string ClientId { get; set; } = string.Empty;
 
@@ -41,5 +41,9 @@ public class AddClientDto
 
     #region Client Credentials
     public bool RequireClientSecret { get; set; }
+    #endregion
+
+    #region ResourceScopes
+    public List<string> AllowedScopes { get; set; } = new();
     #endregion
 }

@@ -8,29 +8,24 @@
             </MAvatar>
         </MCol>
         <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.ClientUri" Label="ClientUri" />
+            <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+        </MCol>
+        <MCol Md=12 Class="py-0">
+            <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
+        </MCol>
+        <MCol Md=12 Class="pt-0">
+            <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
         </MCol>
         <MCol Md=12>
-            <MCheckbox @bind-Value="Dto.RequireConsent" Label="RequireConsent"></MCheckbox>
+            <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
         </MCol>
     </MRow>
-    @if (Dto.Id != 0)
-    {
-        <MRow>
-            <MCol Md=12>
-                <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="ConsentLifetime" Clearable=false />
-            </MCol>
-            <MCol Md=12>
-                <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="AllowRememberConsent"></MCheckbox>
-            </MCol>
-        </MRow>
-    }
 </MContainer>
 
 @code {
     [Parameter]
     public ClientConsentDto Dto { get; set; } = new();
-
+     
     [Parameter]
     public EventCallback<ClientConsentDto> DtoChanged { get; set; }
 }

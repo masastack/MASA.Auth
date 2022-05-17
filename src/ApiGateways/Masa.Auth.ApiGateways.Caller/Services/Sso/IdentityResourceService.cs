@@ -17,7 +17,7 @@ public class IdentityResourceService : ServiceBase
         return await SendAsync<GetIdentityResourcesDto, PaginationDto<IdentityResourceDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<IdentityResourceSelectDto>> GetSelectAsync(string search)
+    public async Task<List<IdentityResourceSelectDto>> GetSelectAsync(string search = "")
     {
         return await SendAsync<object, List<IdentityResourceSelectDto>>(nameof(GetSelectAsync), new { search });
     }

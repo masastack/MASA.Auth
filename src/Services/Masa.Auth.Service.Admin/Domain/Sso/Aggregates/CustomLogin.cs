@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 {
-    public class CustomLogin : AuditAggregateRoot<int, Guid>, ISoftDelete
+    public class CustomLogin : FullAuditAggregateRoot<int, Guid>
     {
         private Client? _client;
         private List<CustomLoginThirdPartyIdp> _thirdPartyIdps = new();
@@ -28,8 +28,6 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
         public User? CreateUser => _createUser;
 
         public User? ModifyUser => _modifyUser;
-
-        public bool IsDeleted { get; private set; }
 
         public CustomLogin(string name, string title, int clientId, bool enabled)
         {

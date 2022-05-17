@@ -3,11 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class Team : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class Team : FullAuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
-
-    public bool IsDeleted { get; private set; }
 
     public AvatarValue Avatar { get; private set; }
 
