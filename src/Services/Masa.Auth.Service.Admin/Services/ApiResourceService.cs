@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.Service.Admin.Services
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Service.Admin.Services
 {
     public class ApiResourceService : RestServiceBase
     {
@@ -8,7 +11,7 @@
 
         private async Task<PaginationDto<ApiResourceDto>> GetListAsync(IEventBus eventBus, GetApiResourcesDto apiResource)
         {
-            var query = new ApiResourceQuery(apiResource.Page, apiResource.PageSize, apiResource.Search);
+            var query = new ApiResourcesQuery(apiResource.Page, apiResource.PageSize, apiResource.Search);
             await eventBus.PublishAsync(query);
             return query.Result;
         }
@@ -20,7 +23,7 @@
             return query.Result;
         }
 
-        private async Task<List<ApiResourceSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
+        private async Task<List<ApiResourceSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string? search)
         {
             var query = new ApiResourceSelectQuery(search);
             await eventBus.PublishAsync(query);

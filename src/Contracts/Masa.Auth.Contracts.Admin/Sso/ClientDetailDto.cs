@@ -83,10 +83,6 @@ public class ClientDetailDto : AddClientDto
     public int ConsentLifetime { get; set; }
     #endregion
 
-    #region AllowedScopes
-    public List<string> AllowedScopes { get; set; } = new();
-    #endregion
-
     #region Properties
     public List<ClientPropertyDto> Properties { get; set; } = new();
     #endregion

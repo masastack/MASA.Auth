@@ -3,10 +3,8 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class Client : AuditAggregateRoot<int, Guid>, ISoftDelete
+public class Client : FullAuditAggregateRoot<int, Guid>
 {
-    public bool IsDeleted { get; private set; }
-
     public ClientTypes ClientType { get; private set; }
 
     public bool Enabled { get; private set; } = true;

@@ -64,7 +64,25 @@
         "Title": "ApiResource",
         "Icon": "mdi-circle",
         "Href": "/sso/apiResource"
+      },
+      {
+        "Id": 11,
+        "Title": "CustomLogin",
+        "Icon": "mdi-circle",
+        "Href": "/sso/customLogin"
+      },
+      {
+        "Id": 12,
+        "Title": "Client",
+        "Icon": "mdi-circle",
+        "Href": "/sso/client"
       }
     ]
+  },
+  {
+    "Id": 7,
+    "Title": "ThirdPartyIdp",
+    "Icon": "mdi-calendar-check-outline",
+    "Href": "thirdPartyIdp"
   }
 ]

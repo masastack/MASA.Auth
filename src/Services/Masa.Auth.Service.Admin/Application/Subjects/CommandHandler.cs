@@ -7,18 +7,22 @@ public class CommandHandler
 {
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
+    readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
+    readonly ILdapFactory _ldapFactory;
     readonly UserDomainService _userDomainService;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, UserDomainService userDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory, UserDomainService userDomainService)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
+        _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _teamRepository = teamRepository;
         _staffDomainService = staffDomainService;
         _teamDomainService = teamDomainService;
+        _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
     }
 
@@ -131,6 +135,45 @@ public class CommandHandler
 
     #endregion
 
+    #region ThirdPartyIdp
+
+    [EventHandler]
+    public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
+    {
+        var thirdPartyIdpDto = command.ThirdPartyIdp;
+        var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
+        if (exist)
+            throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
+
+        var thirdPartyIdp = new ThirdPartyIdp(thirdPartyIdpDto.Name, thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, default, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+
+        await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
+    }
+
+    [EventHandler]
+    public async Task UpdateThirdPartyIdpAsync(UpdateThirdPartyIdpCommand command)
+    {
+        var thirdPartyIdpDto = command.ThirdPartyIdp;
+        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == thirdPartyIdpDto.Id);
+        if (thirdPartyIdp is null)
+            throw new UserFriendlyException("The current thirdPartyIdp does not exist");
+
+        thirdPartyIdp.Update(thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, default, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+        await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
+    }
+
+    [EventHandler]
+    public async Task RemoveThirdPartyIdpAsync(RemoveThirdPartyIdpCommand command)
+    {
+        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == command.ThirdPartyIdp.Id);
+        if (thirdPartyIdp == null)
+            throw new UserFriendlyException("The current thirdPartyIdp does not exist");
+
+        await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
+    }
+
+    #endregion
+
     #region Team
 
     [EventHandler]
@@ -179,6 +222,34 @@ public class CommandHandler
             throw new UserFriendlyException("the team has staffs can`t delete");
         }
         await _teamRepository.RemoveAsync(team);
+    }
+
+    #endregion
+
+    #region Ldap
+
+    [EventHandler]
+    public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
+    {
+        var ldapOptions = ldapConnectTestCommand.LdapDetailDto.Adapt<LdapOptions>();
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
+        {
+            throw new UserFriendlyException("connect error");
+        }
+    }
+
+    [EventHandler]
+    public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
+    {
+        var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        var ldapUsers = ldapProvider.GetAllUserAsync();
+        await foreach (var ldapUser in ldapUsers)
+        {
+            //Public domain event
+            //todo wait user memory cache
+        }
     }
 
     #endregion

@@ -3,12 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class IdentityResource : AuditAggregateRoot<int, Guid>, ISoftDelete
+public class IdentityResource : FullAuditAggregateRoot<int, Guid>
 {
     private List<IdentityResourceClaim> _userClaims = new();
     private List<IdentityResourceProperty> _properties = new();
-
-    public bool IsDeleted { get; private set; }
 
     public string Name { get; private set; } = string.Empty;
 
@@ -42,7 +40,7 @@ public class IdentityResource : AuditAggregateRoot<int, Guid>, ISoftDelete
         NonEditable = nonEditable;
     }
 
-    public void BindUserClaims(List<int> userClaims)
+    public void BindUserClaims(IEnumerable<int> userClaims)
     {
         _userClaims.Clear();
         _userClaims.AddRange(userClaims.Select(id => new IdentityResourceClaim(id)));

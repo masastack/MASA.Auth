@@ -20,7 +20,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        var projects = await _pmClient.ProjectService.GetProjectListAsync("development");
+        var projects = await _pmClient.ProjectService.GetProjectAppsAsync("development");
         if (projects.Any())
         {
             var appTags = await _appNavigationTagRepository.GetListAsync();

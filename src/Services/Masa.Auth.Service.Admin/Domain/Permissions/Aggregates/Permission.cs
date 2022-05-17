@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class Permission : FullAuditAggregateRoot<Guid, Guid>
 {
     public string SystemId { get; set; }
 
@@ -24,8 +24,6 @@ public class Permission : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     public string Description { get; private set; } = "";
 
     public bool Enabled { get; private set; }
-
-    public bool IsDeleted { get; private set; }
 
     private List<Permission> childPermissions = new();
 

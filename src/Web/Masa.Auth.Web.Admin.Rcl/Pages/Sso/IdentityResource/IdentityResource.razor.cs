@@ -78,6 +78,14 @@ public partial class IdentityResource
         Loading = false;
     }
 
+    private async Task AddStandardIdentityResourcesAsync()
+    {
+        Loading = true;
+        await IdentityResourceService.AddStandardIdentityResourcesAsync();
+        await GetIdentityResourcesAsync();
+        Loading = false;
+    }
+
     public void OpenAddRoleDialog()
     {
         AddIdentityResourceDialogVisible = true;

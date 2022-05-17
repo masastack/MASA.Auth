@@ -3,27 +3,19 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class ThirdPartyIdp : IdentityProvider
 {
-    public bool IsDeleted { get; private set; }
-
-    public string Name { get; private set; }
-
-    public string DisplayName { get; private set; }
-
     public string ClientId { get; private set; }
 
     public string ClientSecret { get; private set; }
 
     public string Url { get; private set; }
 
-    public string Icon { get; private set; }
+    public string VerifyFile { get; private set; }
 
     public AuthenticationTypes VerifyType { get; private set; }
 
-    public IdentificationTypes IdentificationType { get; private set; }
-
-    public ThirdPartyIdp(string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes verifyType, IdentificationTypes identificationType)
+    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, IdentificationTypes identificationType, string clientId, string clientSecret, string url, string verifyFile, AuthenticationTypes verifyType)
     {
         Name = name;
         DisplayName = displayName;
@@ -31,13 +23,28 @@ public class ThirdPartyIdp : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         ClientSecret = clientSecret;
         Url = url;
         Icon = icon;
+        Enabled = enabled;
+        VerifyFile = verifyFile;
         VerifyType = verifyType;
         IdentificationType = identificationType;
     }
 
     public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
     {
-        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
+        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyFile, tpIdp.Enabled, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
+    }
+
+    public void Update(string displayName, string icon, bool enabled, IdentificationTypes identificationType, string clientId, string clientSecret, string url, string verifyFile, AuthenticationTypes verifyType)
+    {
+        DisplayName = displayName;
+        ClientId = clientId;
+        ClientSecret = clientSecret;
+        Url = url;
+        Icon = icon;
+        Enabled = enabled;
+        VerifyFile = verifyFile;
+        VerifyType = verifyType;
+        IdentificationType = identificationType;
     }
 }
 

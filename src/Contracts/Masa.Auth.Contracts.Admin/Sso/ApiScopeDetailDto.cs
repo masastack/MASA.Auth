@@ -1,10 +1,13 @@
-﻿namespace Masa.Auth.Contracts.Admin.Sso;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class ApiScopeDetailDto : ApiScopeDto
 {
-    public List<int> UserClaims { get; private set; } = new();
+    public List<int> UserClaims { get; set; } = new();
 
-    public Dictionary<string, string> Properties { get; private set; } = new();
+    public Dictionary<string, string> Properties { get; set; } = new();
 
     public ApiScopeDetailDto()
     {

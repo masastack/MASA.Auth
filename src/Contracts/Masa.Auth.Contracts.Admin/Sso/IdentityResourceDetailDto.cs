@@ -23,7 +23,7 @@ public class IdentityResourceDetailDto : IdentityResourceDto
 
     public static implicit operator UpdateIdentityResourceDto(IdentityResourceDetailDto idrs)
     {
-        return new UpdateIdentityResourceDto(idrs.Id, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims);
+        return new UpdateIdentityResourceDto(idrs.Id, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims, idrs.Properties);
     }
 }
 

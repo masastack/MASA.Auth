@@ -10,15 +10,17 @@ public class QueryHandler
     readonly IApiResourceRepository _apiResourceRepository;
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
+    readonly ICustomLoginRepository _customLoginRepository;
     readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, AuthDbContext authDbContext)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, AuthDbContext authDbContext)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
         _apiResourceRepository = apiResourceRepository;
         _apiScopeRepository = apiScopeRepository;
         _userClaimRepository = userClaimRepository;
+        _customLoginRepository = customLoginRepository;
         _authDbContext = authDbContext;
     }
 
@@ -69,10 +71,16 @@ public class QueryHandler
             }).ToList();
     }
 
+    [EventHandler]
+    public async Task GetClientSelectAsync(ClientSelectQuery query)
+    {
+        query.Result = await _authDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
+    }
+
     #region IdentityResource
 
     [EventHandler]
-    public async Task GetIdentityResourceAsync(IdentityResourceQuery query)
+    public async Task GetIdentityResourceAsync(IdentityResourcesQuery query)
     {
         Expression<Func<IdentityResource, bool>> condition = idrs => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -100,7 +108,7 @@ public class QueryHandler
         var idrs = await _identityResourceRepository.GetDetailAsync(query.IdentityResourceId);
         if (idrs is null) throw new UserFriendlyException("This identityResource data does not exist");
 
-        query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.Id).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
+        query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.UserClaimId).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
     }
 
     [EventHandler]
@@ -118,7 +126,7 @@ public class QueryHandler
     #region ApiResource
 
     [EventHandler]
-    public async Task GetApiResourceAsync(ApiResourceQuery query)
+    public async Task GetApiResourceAsync(ApiResourcesQuery query)
     {
         Expression<Func<ApiResource, bool>> condition = apiResource => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -151,6 +159,9 @@ public class QueryHandler
     public async Task GetApiResourceSelectAsync(ApiResourceSelectQuery query)
     {
         var apiResourceSelect = await _authDbContext.Set<ApiResource>()
+                                .Where(apiResource => apiResource.Enabled == true)
+                                .OrderByDescending(apiResource => apiResource.ModificationTime)
+                                .ThenByDescending(apiResource => apiResource.CreationTime)
                                 .Select(apiResource => new ApiResourceSelectDto(apiResource.Id, apiResource.Name, apiResource.DisplayName, apiResource.Description))
                                 .ToListAsync();
 
@@ -162,7 +173,7 @@ public class QueryHandler
     #region ApiScope
 
     [EventHandler]
-    public async Task GetApiScopeAsync(ApiScopeQuery query)
+    public async Task GetApiScopeAsync(ApiScopesQuery query)
     {
         Expression<Func<ApiScope, bool>> condition = apiScopes => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -195,6 +206,9 @@ public class QueryHandler
     public async Task GetApiScopeSelectAsync(ApiScopeSelectQuery query)
     {
         var apiScopeSelect = await _authDbContext.Set<ApiScope>()
+                                .Where(apiScope => apiScope.Enabled == true)
+                                .OrderByDescending(apiScope => apiScope.ModificationTime)
+                                .ThenByDescending(apiScope => apiScope.CreationTime)
                                 .Select(apiScope => new ApiScopeSelectDto(apiScope.Id, apiScope.Name, apiScope.DisplayName, apiScope.Description))
                                 .ToListAsync();
 
@@ -206,7 +220,7 @@ public class QueryHandler
     #region UserClaim
 
     [EventHandler]
-    public async Task GetUserClaimAsync(UserClaimQuery query)
+    public async Task GetUserClaimAsync(UserClaimsQuery query)
     {
         Expression<Func<UserClaim, bool>> condition = userClaim => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -239,10 +253,46 @@ public class QueryHandler
     public async Task GetUserClaimSelectAsync(UserClaimSelectQuery query)
     {
         var userClaimSelect = await _authDbContext.Set<UserClaim>()
+                                .OrderByDescending(userClaim => userClaim.ModificationTime)
+                                .ThenByDescending(userClaim => userClaim.CreationTime)
                                 .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description, userClaim.UserClaimType))
                                 .ToListAsync();
 
         query.Result = userClaimSelect;
+    }
+
+    #endregion
+
+    #region CustomLogin
+
+    [EventHandler]
+    public async Task GetCustomLoginAsync(CustomLoginsQuery query)
+    {
+        Expression<Func<CustomLogin, bool>> condition = customLogin => true;
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(customLogin => customLogin.Name.Contains(query.Search));
+
+        var customLoginQuery = _authDbContext.Set<CustomLogin>().Where(condition);
+        var total = await customLoginQuery.LongCountAsync();
+        var customLogins = await customLoginQuery.Include(customLogin => customLogin.Client)
+                                    .Include(customLogin => customLogin.CreateUser)
+                                    .Include(customLogin => customLogin.ModifyUser)
+                                   .OrderByDescending(s => s.ModificationTime)
+                                   .ThenByDescending(s => s.CreationTime)
+                                   .Skip((query.Page - 1) * query.PageSize)
+                                   .Take(query.PageSize)
+                                   .ToListAsync();
+
+        query.Result = new(total, customLogins.Select(customLogin => (CustomLoginDto)customLogin).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetCustomLoginDetailAsync(CustomLoginDetailQuery query)
+    {
+        var customLogin = await _customLoginRepository.GetDetailAsync(query.CustomLoginId);
+        if (customLogin is null) throw new UserFriendlyException("This customLogin data does not exist");
+
+        query.Result = customLogin;
     }
 
     #endregion

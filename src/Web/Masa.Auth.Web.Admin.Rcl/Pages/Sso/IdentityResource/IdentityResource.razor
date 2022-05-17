@@ -9,6 +9,10 @@
             </PrependInnerContent>
         </MTextField>
         <MSpacer />
+        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => AddStandardIdentityResourcesAsync()">
+            <MIcon Size=18>mdi-cog-outline</MIcon>
+            <span class="ml-2">@T("Create standard identityResource")</span>
+        </MButton>
         <MButton Color="primary" Class="ml-6 medium-button" OnClick="() =>  OpenAddRoleDialog()">
             <MIcon Size=18>mdi-plus</MIcon>
             <span class="ml-2">@T("Add")</span>
@@ -36,10 +40,7 @@
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
                     break;
                 case nameof(IdentityResourceDto.Enabled):
-                    string color = context.Item.Enabled ? "sample-green" : "error";
-                    <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                        <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                    </MChip>
+                    <EnableChip Value="@context.Item.Enabled" />
                     break;
                 case "Action":
                     <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>

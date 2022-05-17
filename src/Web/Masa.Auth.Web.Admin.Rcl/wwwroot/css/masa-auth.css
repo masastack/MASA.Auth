@@ -483,9 +483,9 @@
 }
 
 .medium-button {
-    min-width: 126px;
-    height: 40px;
-    border-radius: 99px;
+    min-width: 126px !important;
+    height: 40px !important;
+    border-radius: 99px !important;
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -494,9 +494,9 @@
 }
 
 .large-button {
-    min-width: 340px;
-    height: 48px;
-    border-radius: 90px;
+    min-width: 340px !important;
+    height: 48px !important;
+    border-radius: 90px !important;
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -564,9 +564,13 @@
     background: #F6F8FD !important;
 }
 
-.button-group .m-icon{
-    color: #A3AED0 !important;
+.hover-background {
+    background: #F6F8FD !important;
 }
+
+    .button-group .m-icon {
+        color: #A3AED0 !important;
+    }
 
 .button-group-active {
     font-family: Roboto !important;
@@ -580,9 +584,9 @@
     background: #E9EDF7 !important;
 }
 
-.button-group-active .m-icon {
-     color: #323D6F !important;
-}
+    .button-group-active .m-icon {
+        color: #323D6F !important;
+    }
 
 .m-radio i {
     font-size: 21px !important;
@@ -594,7 +598,7 @@
 
 .m-messages {
     min-height: 0px !important;
-    margin-top:4px;
+    margin-top: 4px;
 }
 
 .m-navigation-drawer__border {
@@ -794,9 +798,9 @@
     width: 340px;
 }
 
-.search.m-text-field.m-text-field--solo.m-input--dense > .m-input__control {
-    min-height: 40px;
-}
+    .search.m-text-field.m-text-field--solo.m-input--dense > .m-input__control {
+        min-height: 40px;
+    }
 
 /* pagetabs */
 .m-page-tabs .m-slide-group__prev.m-slide-group__prev--disabled {
@@ -838,6 +842,7 @@
 .m-text-field--outlined:not(.m-textarea) {
     height: 48px !important;
 }
+
     .m-text-field--outlined:not(.m-textarea) fieldset {
         height: 51px !important;
     }
@@ -846,9 +851,9 @@
     top: 14px !important;
 }
 
-.m-text-field--outlined .m-label.m-label--active {
-    top: 18px !important;
-}
+    .m-text-field--outlined .m-label.m-label--active {
+        top: 18px !important;
+    }
 
 .m-text-field--outlined .m-text-field__details {
     margin-top: -5px !important;
@@ -867,6 +872,10 @@
     line-height: 20px !important;
 }
 
+.m-text-field--outlined .m-input__prepend-outer, .m-text-field--outlined .m-input__append-outer, .m-text-field--outlined .m-input__prepend-inner, .m-text-field--outlined .m-input__append-inner {
+    margin-top: 12px !important;
+}
+
 .m-timeline {
     padding-top: 0 !important;
 }
@@ -875,12 +884,12 @@
     padding-bottom: 0 !important;
 }
 
-.m-timeline-item .m-timeline-item__divider {
-    height: 23px !important;
-}
+    .m-timeline-item .m-timeline-item__divider {
+        height: 23px !important;
+    }
 
-.m-stepper__wrapper{
-    height:100% !important;
+.m-stepper__wrapper {
+    height: 100% !important;
 }
 
 /* pagetabs */
@@ -995,8 +1004,8 @@
     margin-inline-end: 0px;
 }
 
-.m-tabs-bar{
-    height:28px;
+.m-tabs-bar {
+    height: 28px;
 }
 
 .pro-nav > .m-tabs-bar {
@@ -1310,9 +1319,10 @@ tr:hover {
 .m-input.mx-auto .m-text-field__slot {
     padding-bottom: 2px;
 }
-.m-input.mx-auto .m-text-field__slot input {
-    text-align: center;
-}
+
+    .m-input.mx-auto .m-text-field__slot input {
+        text-align: center;
+    }
 
 .m-input.mx-auto .m-input__slot::before {
     border-color: #E2E7F4 !important;
@@ -1344,7 +1354,7 @@ tr:hover {
 
 .elevation-tab {
     background-color: #F0F3FA !important;
-    padding:3px;
+    padding: 3px;
 }
 
 .m-item-group.elevation-tab .m-btn.m-btn--has-bg.m-btn--active {
@@ -1460,4 +1470,45 @@ tr:hover {
 .px-sheet-dialog {
     padding-right: 228px;
     padding-left: 228px;
+}
+
+.login {
+    background: #FFFFFF;
+    box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+    border-radius: 20px;
+}
+
+.login .m-tabs-slider-wrapper {
+    top: 0;
+    height: 4px !important;
+}
+
+.login .m-slide-group__wrapper {
+    height: 70px !important;
+}
+
+.uploadImage {
+    cursor: pointer;
+}
+
+.uploadImage input[type=file] {
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    max-width: 0;
+}
+
+.margin-border {
+    border: 1px solid #E2E7F4;
+    border-radius: 8px;    
+}
+
+.m-text-field.m-input--is-disabled .m-input__slot::before {
+    border: none !important;
+}
+
+.border-btn {
+    background-color: white !important;
+    border: 2px dashed #E2E7F4;
+    border-radius: 8px;
 }

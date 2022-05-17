@@ -1,28 +1,24 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Create Client")" ContentClass="px-sheet-dialog">
-    <ElevationTab Dense Class="pt-12 full-height" Headers='new List<string>{"Basic","Consent Screen","Authentication","Resource"}' TabWindowClass="mt-8">
-        <ElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType"/>
-                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Basics @bind-Dto="_basicDto"/>
-            </MCard>
-        </ElevationTabItem>
-        <ElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Consent @bind-Dto="_consentDto"/>
-            </MCard>
-        </ElevationTabItem>
-        <ElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Authentication @bind-Dto="_authenticationDto"/>
-            </MCard>
-        </ElevationTabItem>
-        <ElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScopes />
-            </MCard>
-        </ElevationTabItem>
-    </ElevationTab>
-    <MButton OnClick="SaveAsync" Style="position:absolute;bottom:48px;">Save</MButton>
+<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Create Client")" ContentClass="px-sheet-dialog full-height">
+    <MCard Style="height: calc(100vh - 140px);">
+        <MCardText>
+            <ElevationTab Dense Class="pt-8 full-height" Headers='new List<string>{ T("Basic Information"),T("Resource Information")}' TabWindowClass="mt-8">
+                <ElevationTabItem>
+                    <MCard Class="d-flex flex-column full-height">
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType" />
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.AddBasics @bind-Dto="_addBasicDto"/>
+                    </MCard>
+                </ElevationTabItem>
+                <ElevationTabItem>
+                    <MCard Class="d-flex flex-column full-height">
+                        <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScopes @bind-Dto="_clientScopesDto"/>
+                    </MCard>
+                </ElevationTabItem>
+            </ElevationTab>
+        </MCardText>
+        <MCardActions Class="d-flex justify-end">
+            <MButton class="rounded-pill primary" MinWidth="100" OnClick="SaveAsync">@T("Submit")</MButton>
+        </MCardActions>
+    </MCard>
 </SheetDialog>

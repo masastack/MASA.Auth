@@ -1,7 +1,7 @@
 ﻿@using Masa.Auth.Contracts.Admin.Infrastructure.Constants
 @inherits AdminCompontentBase
 
-<MContainer Style="overflow-y: auto;">
+<MContainer Style="overflow-y: auto;" Class="full-height"> 
     <MRow>
         <MCol Md=6>
             <MCheckbox Dense @bind-Value="Dto.AllowOfflineAccess" Label="AllowOfflineAccess"></MCheckbox>
@@ -76,8 +76,34 @@
          <MCol Md=6>
             <MCheckbox Dense @bind-Value="Dto.AlwaysSendClientClaims" Label="AlwaysSendClientClaims"></MCheckbox>
         </MCol>   
+    </MRow>
+    <MRow>
+        <MCol>
+            <DefaultTextField @bind-Value="Dto.ClientClaimDto.Type" Label="Type" />
+        </MCol>
+        <MCol>
+            <DefaultTextField @bind-Value="Dto.ClientClaimDto.Value" Label="Value"/>
+        </MCol>
+        <MCol Md="@("auto")" Class="d-flex align-center">
+            <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">mdi-plus</MIcon>
+        </MCol>
         <MCol Md=12>
-            <Claims @bind-Value="Dto.Claims"/>
+            <MDataTable Headers="_headers" Items="Dto.Claims" TItem="ClientClaimDto" HideDefaultFooter DisablePagination Dense Class="margin-border">
+                <HeaderColContent Context="header">
+                    <span class="text-btn">@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case "Action":
+                            <MIcon OnClick="()=>Dto.Claims.Remove(context.Item)">mdi-close</MIcon>
+                            break;
+                        default:
+                            <span class="text-body3">@context.Value</span>
+                            break;
+                    }
+                </ItemColContent>
+            </MDataTable>
         </MCol>
     </MRow>
 </MContainer>
@@ -92,10 +118,30 @@
     List<SelectItemDto<int>> _refreshTokenUsage = ClientConsts.GetTokenUsage();
     List<SelectItemDto<int>> _accessTokenType = ClientConsts.GetAccessTokenTypes();    
     List<SelectItemDto<int>> _refreshTokenExpiration = ClientConsts.GetTokenExpirations();
+    List<DataTableHeader<ClientClaimDto>> _headers { get; set; } = new()
+    {
+        new() { Text = "Type", Value = nameof(ClientClaimDto.Type), Sortable = false },
+        new() { Text = "Value", Value = nameof(ClientClaimDto.Value), Sortable = false },
+        new() { Text = "Action", Value = "Action", Sortable = false,Align="center" },
+    };
 
     protected override void OnInitialized()
     {
         Dto.AllowedIdentityTokenSigningAlgorithmsItems = ClientConsts.SigningAlgorithms();
         base.OnInitialized();
+    }
+    
+    private void AddClaim()
+    {
+        if (string.IsNullOrWhiteSpace(Dto.ClientClaimDto.Type) || string.IsNullOrWhiteSpace(Dto.ClientClaimDto.Value))
+        {
+            return;
+        }
+        if (Dto.Claims.Any(p => p.Type == Dto.ClientClaimDto.Type.Trim()))
+        {
+            return;
+        }
+        Dto.Claims.Add(Dto.ClientClaimDto);
+        Dto.ClientClaimDto = new();
     }
 }

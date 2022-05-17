@@ -5,13 +5,6 @@ namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class ThirdPartyIdpService : ServiceBase
 {
-
-    List<ThirdPartyIdpDto> ThirdPartyIdps = new List<ThirdPartyIdpDto>()
-    {
-        new ThirdPartyIdpDto(Guid.NewGuid(), "weixin", "weixin", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/weixin", "", default, DateTime.Now, null),
-        new ThirdPartyIdpDto(Guid.NewGuid(), "QQ", "qq", Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "/qq", "", default, DateTime.Now, null),
-    };
-
     protected override string BaseUrl { get; set; }
 
     internal ThirdPartyIdpService(ICallerProvider callerProvider) : base(callerProvider)
@@ -19,37 +12,61 @@ public class ThirdPartyIdpService : ServiceBase
         BaseUrl = "api/thirdPartyIdp/";
     }
 
-    public async Task<PaginationDto<ThirdPartyIdpDto>> GetThirdPartyIdpsAsync(GetThirdPartyIdpIsDto request)
+    #region ThirdPartyIdp
+
+    public async Task<PaginationDto<ThirdPartyIdpDto>> GetListAsync(GetThirdPartyIdpsDto request)
     {
-        var skip = (request.Page - 1) * request.PageSize;
-        var thirdPartyIdps = ThirdPartyIdps.Skip(skip).Take(request.PageSize).ToList();
-        return await Task.FromResult(new PaginationDto<ThirdPartyIdpDto>(ThirdPartyIdps.Count, thirdPartyIdps));
+        return await SendAsync<GetThirdPartyIdpsDto, PaginationDto<ThirdPartyIdpDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<ThirdPartyIdpDetailDto> GetThirdPartyIdpDetailAsync(Guid id)
+    public async Task<List<ThirdPartyIdpSelectDto>> GetSelectAsync(string? search = null)
     {
-        return await Task.FromResult(new ThirdPartyIdpDetailDto());
+        return await SendAsync<object, List<ThirdPartyIdpSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
-    public async Task<List<ThirdPartyIdpDto>> SelectThirdPartyIdpAsync()
+    public async Task<ThirdPartyIdpDetailDto> GetDetailAsync(Guid id)
     {
-        return await Task.FromResult(ThirdPartyIdps);
+        return await SendAsync<object, ThirdPartyIdpDetailDto>(nameof(GetDetailAsync), new { id });
     }
 
-    public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpDto request)
+    public async Task AddAsync(AddThirdPartyIdpDto request)
     {
-        ThirdPartyIdps.Add(new(Guid.NewGuid(), request.Name, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.AuthenticationType, DateTime.Now, null));
-        await Task.CompletedTask;
+        await SendAsync(nameof(AddAsync), request);
     }
 
-    public async Task UpdateThirdPartyIdpAsync(UpdateThirdPartyIdpDto request)
+    public async Task AddStandardThirdPartyIdpsAsync()
     {
-        await Task.CompletedTask;
+        await SendAsync<object?>(nameof(AddStandardThirdPartyIdpsAsync), null);
     }
 
-    public async Task DeleteThirdPartyIdpAsync(Guid id)
+    public async Task UpdateAsync(UpdateThirdPartyIdpDto request)
     {
-        ThirdPartyIdps.Remove(ThirdPartyIdps.First(p => p.Id == id));
-        await Task.CompletedTask;
+        await SendAsync(nameof(UpdateAsync), request);
     }
+
+    public async Task RemoveAsync(Guid id)
+    {
+        await SendAsync(nameof(RemoveAsync), new RemoveThirdPartyIdpDto(id));
+    }
+
+    #endregion
+
+    #region LDAP
+
+    public async Task LdapConnectTestAsync(LdapDetailDto ldapDetailDto)
+    {
+        await PostAsync("ldap/connect-test", ldapDetailDto);
+    }
+
+    public async Task LdapUpsertAsync(LdapDetailDto ldapDetailDto)
+    {
+        await PostAsync("ldap/save", ldapDetailDto);
+    }
+
+    public async Task<LdapDetailDto> GetLdapDetailAsync(Guid id)
+    {
+        return await Task.FromResult(new LdapDetailDto());
+    }
+
+    #endregion
 }

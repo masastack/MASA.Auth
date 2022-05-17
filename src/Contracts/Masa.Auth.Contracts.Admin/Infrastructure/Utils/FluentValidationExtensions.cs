@@ -89,10 +89,16 @@ public static class FluentValidationExtensions
                     .WithMessage("Please enter a number less than {MaxLength} of {PropertyName}");
     }
 
+    public static IRuleBuilderOptions<T, string> Port<T>(this IRuleBuilder<T, string> ruleBuilder)
+    {
+        return ruleBuilder.Matches(RegularHelper.PORT)
+                          .WithMessage("Is not a valid port {PropertyName}");
+    }
+
     public static IRuleBuilderOptions<T, TProperty> Required<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder)
     {
         return ruleBuilder.NotNull()
                         .NotEmpty()
-                        .WithMessage("{PropertyName} is required ");
+                        .WithMessage("{PropertyName} is required");
     }
 }

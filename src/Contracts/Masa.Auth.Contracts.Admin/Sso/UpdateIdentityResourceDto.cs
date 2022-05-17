@@ -23,12 +23,15 @@ public class UpdateIdentityResourceDto
 
     public List<int> UserClaims { get; set; }
 
+    public Dictionary<string, string> Properties { get; set; }
+
     public UpdateIdentityResourceDto()
     {
         UserClaims = new();
+        Properties = new();
     }
 
-    public UpdateIdentityResourceDto(int id, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<int> userClaims)
+    public UpdateIdentityResourceDto(int id, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<int> userClaims, Dictionary<string, string> properties)
     {
         Id = id;
         DisplayName = displayName;
@@ -39,6 +42,7 @@ public class UpdateIdentityResourceDto
         ShowInDiscoveryDocument = showInDiscoveryDocument;
         NonEditable = nonEditable;
         UserClaims = userClaims;
+        Properties = properties;
     }
 }
 

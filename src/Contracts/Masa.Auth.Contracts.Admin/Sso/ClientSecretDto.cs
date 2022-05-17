@@ -11,7 +11,8 @@ public class ClientSecretDto
 
     public string Value { get; set; } = string.Empty;
 
-    public DateTime? Expiration { get; set; }
+    [JsonConverter(typeof(DateOnlyNullableJsonConverter))]
+    public DateOnly? Expiration { get; set; }
 
     public string Type { get; set; } = "SharedSecret";
 }

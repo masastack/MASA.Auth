@@ -36,10 +36,7 @@
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
                     break;
                 case nameof(ApiScopeDto.Enabled):
-                    string color = context.Item.Enabled ? "sample-green" : "error";
-                    <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                        <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                    </MChip>
+                    <EnableChip Value="@context.Item.Enabled" />
                     break;
                 case "Action":
                     <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
@@ -57,4 +54,4 @@
 </MCard>
 
 <AddApiScopeDialog @bind-Visible="AddApiScopeDialogVisible" OnSubmitSuccess=GetApiScopesAsync />
-<UpdateApiScopeDialog @bind-Visible="UpdateApiScopeDialogVisible" OnSubmitSuccess=GetApiScopesAsync />
+<UpdateApiScopeDialog @bind-Visible="UpdateApiScopeDialogVisible" ApiScopeId=CurrentApiScopeId OnSubmitSuccess=GetApiScopesAsync />

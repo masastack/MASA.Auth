@@ -17,7 +17,7 @@ public class IdentityResourceService : ServiceBase
         return await SendAsync<GetIdentityResourcesDto, PaginationDto<IdentityResourceDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<IdentityResourceSelectDto>> GetSelectAsync(string search)
+    public async Task<List<IdentityResourceSelectDto>> GetSelectAsync(string search = "")
     {
         return await SendAsync<object, List<IdentityResourceSelectDto>>(nameof(GetSelectAsync), new { search });
     }
@@ -30,6 +30,11 @@ public class IdentityResourceService : ServiceBase
     public async Task AddAsync(AddIdentityResourceDto request)
     {
         await SendAsync(nameof(AddAsync), request);
+    }
+
+    public async Task AddStandardIdentityResourcesAsync()
+    {
+        await SendAsync<object?>(nameof(AddStandardIdentityResourcesAsync), null);
     }
 
     public async Task UpdateAsync(UpdateIdentityResourceDto request)

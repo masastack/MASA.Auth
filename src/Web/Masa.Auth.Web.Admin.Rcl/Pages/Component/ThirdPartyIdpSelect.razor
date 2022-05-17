@@ -1,0 +1,24 @@
+﻿@inherits AdminCompontentBase
+
+<MAutocomplete Value="Value"
+               ValueChanged="ValueChanged"
+               Items="ThirdPartyIdps!.Where(e => e.Id==Value || Excludes.Contains(e.Id) is false).ToList()"
+               Color="primary"
+               Label="@T(Label)"
+               ItemText="e => e.Name"
+               ItemValue="e => e.Id"
+               Outlined
+               HideDetails="@("auto")"
+               Style="@($"{Style}")"
+               Class="@($"{Class}")">
+    <ItemContent Context="data">
+        <div class="d-flex" style="height:48px;">
+            <MAvatar Size="30" >
+                <img src="data.Item.Icon" />
+            </MAvatar>
+            <div class="my-auto">
+                <span class="text-btn neutral-lighten-1--text ml-2">@data.Item.Name</span> 
+            </div>                      
+        </div>
+    </ItemContent>
+</MAutocomplete>

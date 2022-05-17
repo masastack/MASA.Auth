@@ -1,1 +1,15 @@
 ﻿@inherits AdminCompontentBase
+
+<div class="overflow-y full-height @Class" style="@Style">
+    @foreach (var apiScopeChunk in ApiScopeChunks)
+    {
+        <MRow>
+            @foreach (var apiScope in apiScopeChunk)
+            {
+                <MCol Cols="12/Chunk" Class="py-0">
+                    <MCheckbox Value="Value.Contains(apiScope.Id)" ValueChanged="value => OnValueChanged(value,apiScope.Id)" Label="@apiScope.Name"></MCheckbox>
+                </MCol>
+            }
+        </MRow>
+    }
+</div>

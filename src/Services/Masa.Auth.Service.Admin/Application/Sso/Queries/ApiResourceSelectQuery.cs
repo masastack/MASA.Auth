@@ -1,6 +1,9 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Sso.Queries;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public record ApiResourceSelectQuery(string Search) : Query<List<ApiResourceSelectDto>>
+namespace Masa.Auth.Service.Admin.Application.Sso.Queries;
+
+public record ApiResourceSelectQuery(string? Search) : Query<List<ApiResourceSelectDto>>
 {
     public override List<ApiResourceSelectDto> Result { get; set; } = new();
 }

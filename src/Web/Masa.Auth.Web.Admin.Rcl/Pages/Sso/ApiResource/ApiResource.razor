@@ -1,4 +1,4 @@
-﻿@page "/sso/ApiResource"
+﻿@page "/sso/apiResource"
 @inherits AdminCompontentBase
 
 <MCard Class="pa-6">
@@ -33,10 +33,7 @@
                     <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
                     break;
                 case nameof(ApiResourceDto.Enabled):
-                    string color = context.Item.Enabled ? "sample-green" : "error";
-                    <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                        <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                    </MChip>
+                    <EnableChip Value="@context.Item.Enabled" />
                     break;
                 case "Action":
                     <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
@@ -54,4 +51,4 @@
 </MCard>
 
 <AddApiResourceDialog @bind-Visible="AddApiResourceDialogVisible" OnSubmitSuccess=GetApiResourcesAsync />
-<UpdateApiResourceDialog @bind-Visible="UpdateApiResourceDialogVisible" OnSubmitSuccess=GetApiResourcesAsync />
+<UpdateApiResourceDialog @bind-Visible="UpdateApiResourceDialogVisible" ApiResourceId="CurrentApiResourceId" OnSubmitSuccess=GetApiResourcesAsync />

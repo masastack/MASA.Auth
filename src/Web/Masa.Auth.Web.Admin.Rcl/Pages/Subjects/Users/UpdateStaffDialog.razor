@@ -5,9 +5,7 @@
         <div Class="flex-column sheetDialogPadding">
             <div class="d-flex">
                 <div class="ml-auto mr-auto text-center" style="width:212px;">
-                    <MAvatar Size=80>
-                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                    </MAvatar>
+                    <UploadImage @bind-Value="Staff.User.Avatar" Avatar Size="120" WhenFileChangeUpload />
                     <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
@@ -61,7 +59,7 @@
                         <MTextField Value="StaffDetail.User.Account" Readonly Label="@T("Account")" HideDetails="@("auto")" Outlined />
                     </MCol>
                     <MCol>
-                        <Password @bind-Value="Staff.User.Password" />
+                        <CopyPassword @bind-Value="Staff.User.Password" />
                     </MCol>
                 </MRow>
 

@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class ApiResourceService : ServiceBase
 {
@@ -14,7 +17,7 @@ public class ApiResourceService : ServiceBase
         return await SendAsync<GetApiResourcesDto, PaginationDto<ApiResourceDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<ApiResourceSelectDto>> GetSelectAsync(string search)
+    public async Task<List<ApiResourceSelectDto>> GetSelectAsync(string? search = null)
     {
         return await SendAsync<object, List<ApiResourceSelectDto>>(nameof(GetSelectAsync), new { search });
     }

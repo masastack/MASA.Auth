@@ -1,0 +1,83 @@
+﻿@inherits AdminCompontentBase
+
+<MContainer Style="overflow-y: auto;" Class="full-height">
+    <MRow>
+        <MCol Md=12 Class="text-center">
+            <MAvatar Height=80 Width=80>
+                <MImage Height=80 Width=80 Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" Alt="Jack"></MImage>
+            </MAvatar>
+        </MCol>
+        <MCol Md=6>
+            <DefaultTextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
+        </MCol>
+        <MCol Md=6>
+            <DefaultTextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+        </MCol>
+        <MCol Md=6>
+            <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+        </MCol>
+        <MCol Md=6>
+            <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
+        </MCol> 
+    </MRow>
+    <MRow> 
+        <MCol Md=6>
+            <DefaultTextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")"
+                              AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddCallBackRedirectUri" />
+            @foreach (var uri in Dto.RedirectUris)
+            {
+                <MTextField Dense HideDetails="true" Value="uri" Readonly Class="flex-grow-1" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
+            }
+        </MCol>
+        <MCol Md=6>
+            <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")"
+                              AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddLogoutRedirectUri" />
+            @foreach (var uri in Dto.PostLogoutRedirectUris)
+            {
+                <MTextField Dense HideDetails="true" Value="uri" Readonly AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
+            }
+        </MCol>
+    </MRow>
+    <MRow>
+        <MCol Md=12>
+            <DefaultTextField @bind-Value="Dto.Description" Label="@T("Description")" />
+        </MCol>
+    </MRow>
+</MContainer>
+
+@code {
+    [Parameter]
+    public ClientAddBasicDto Dto { get; set; } = new();
+    
+    [Parameter]
+    public EventCallback<ClientAddBasicDto> DtoChanged { get; set; }
+
+    private void AddCallBackRedirectUri()
+    {
+        if (!string.IsNullOrWhiteSpace(Dto.RedirectUri) && Dto.RedirectUris.IndexOf(Dto.RedirectUri) < 0)
+        {
+            Dto.RedirectUris.Add(Dto.RedirectUri);
+            Dto.RedirectUri = string.Empty;
+        }
+    }
+
+    private void AddLogoutRedirectUri()
+    {
+        if (!string.IsNullOrWhiteSpace(Dto.PostLogoutRedirectUri) &&
+            Dto.PostLogoutRedirectUris.IndexOf(Dto.PostLogoutRedirectUri) < 0)
+        {
+            Dto.PostLogoutRedirectUris.Add(Dto.PostLogoutRedirectUri);
+            Dto.PostLogoutRedirectUri = string.Empty;
+        }
+    }
+
+    private void RemoveCallBackRedirectUri(string val)
+    {
+        Dto.RedirectUris.Remove(val);
+    }
+
+    private void RemoveLogoutRedirectUri(string val)
+    {
+        Dto.PostLogoutRedirectUris.Remove(val);
+    }
+}

@@ -84,7 +84,7 @@ public partial class ThirdPartyUser
 
     public bool ViewThirdPartyUserDialog { get; set; }
 
-    public bool DomainAccountDialog { get; set; }
+    public bool LdapDialog { get; set; }
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
@@ -101,7 +101,7 @@ public partial class ThirdPartyUser
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
-        // await GetThirdPartyUsersAsync();
+        await GetThirdPartyUsersAsync();
     }
 
     public async Task GetThirdPartyUsersAsync()
@@ -118,6 +118,11 @@ public partial class ThirdPartyUser
     {
         CurrentThirdPartyUserId = thirdPartyUser.Id;
         ViewThirdPartyUserDialog = true;
+    }
+
+    public void OpenLdapDialog()
+    {
+        LdapDialog = true;
     }
 }
 

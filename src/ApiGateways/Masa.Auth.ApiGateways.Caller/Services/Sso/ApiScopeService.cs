@@ -1,4 +1,7 @@
-﻿namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class ApiScopeService : ServiceBase
 {
@@ -14,7 +17,7 @@ public class ApiScopeService : ServiceBase
         return await SendAsync<GetApiScopesDto, PaginationDto<ApiScopeDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<ApiScopeSelectDto>> GetSelectAsync(string search)
+    public async Task<List<ApiScopeSelectDto>> GetSelectAsync(string? search = null)
     {
         return await SendAsync<object, List<ApiScopeSelectDto>>(nameof(GetSelectAsync), new { search });
     }

@@ -1,6 +1,9 @@
-﻿namespace Masa.Auth.Service.Admin.Application.Sso.Queries;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public record ApiScopeSelectQuery(string Search) : Query<List<ApiScopeSelectDto>>
+namespace Masa.Auth.Service.Admin.Application.Sso.Queries;
+
+public record ApiScopeSelectQuery(string? Search) : Query<List<ApiScopeSelectDto>>
 {
     public override List<ApiScopeSelectDto> Result { get; set; } = new();
 }

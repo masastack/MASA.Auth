@@ -1,0 +1,51 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ThirdPartyIdp")">
+    <MForm Model=ThirdPartyIdp EnableValidation @ref="Form">
+        <div class="sheetDialogPadding full-height flex-column">
+            <div class="d-flex">
+                <div class="mx-auto text-center" style="width:212px;">
+                    <UploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="120" WhenFileChangeUpload />
+                </div>
+            </div>
+            <div class="mt-6 flex-height-auto overflow-y">
+                <div class="text-subtitle2">@T("Basic Information")</div>
+                <MRow Class="mt-4">
+                    <MCol>
+                        <MTextField @bind-Value="ThirdPartyIdpDetail.Name" Readonly Label="@T("ThirdPartyIdp.Name")" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <MTextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <MTextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <MTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" HideDetails="@("auto")" Outlined />
+                    </MCol>
+                    <MCol>
+                        <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <span>@T(nameof(ThirdPartyIdp.VerifyFile))</span>
+                        <Upload @bind-Value="ThirdPartyIdp.VerifyFile" />
+                    </MCol>
+                </MRow>
+            </div>
+            <div class="d-flex mt-6">
+                <MSwitch @bind-Value="ThirdPartyIdp.Enabled" Inset Class="label" Label="@(ThirdPartyIdp.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                <MButton OnClick="async () => await UpdateThirdPartyIdpAsync(context)" Color="primary" Class="small-button">@T("Submit")</MButton>
+            </div>
+        </div>
+    </MForm>
+</SheetDialog>
