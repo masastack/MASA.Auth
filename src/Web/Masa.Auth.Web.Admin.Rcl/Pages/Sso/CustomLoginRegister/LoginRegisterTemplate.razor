@@ -52,7 +52,9 @@
                         <div class="mt-4 text-center">
                             @foreach (var thirdPartyIdp in ThirdPartyIdps)
                             {
-                                <MIcon>@thirdPartyIdp.Icon</MIcon>
+                                <MAvatar Size="30" Class="ml-4">
+                                    <img src="@thirdPartyIdp.Icon" />
+                                </MAvatar>
                             }
                         </div>
                     }
