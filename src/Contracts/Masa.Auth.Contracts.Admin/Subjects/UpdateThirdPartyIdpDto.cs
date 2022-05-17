@@ -41,8 +41,8 @@ public class UpdateThirdPartyIdpDto
         VerifyType = verifyType;
     }
 
-    public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto tpIdp)
+    public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto thirdPartyIdp)
     {
-        return new UpdateThirdPartyIdpDto(tpIdp.Id, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.Enabled, tpIdp.VerifyFile, tpIdp.VerifyType);
+        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.Url, thirdPartyIdp.Icon, thirdPartyIdp.Enabled, thirdPartyIdp.VerifyFile, thirdPartyIdp.VerifyType);
     }
 }
