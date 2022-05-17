@@ -20,8 +20,6 @@ public class TeamPermission : AuditEntity<Guid, Guid>, ISoftDelete
         private set => _permission = value;
     }
 
-    public bool IsDeleted { get; private set; }
-
     public Guid PermissionId { get; private set; }
 
     public bool Effect { get; private set; }

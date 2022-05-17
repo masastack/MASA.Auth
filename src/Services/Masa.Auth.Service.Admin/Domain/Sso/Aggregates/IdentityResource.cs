@@ -8,8 +8,6 @@ public class IdentityResource : AuditAggregateRoot<int, Guid>, ISoftDelete
     private List<IdentityResourceClaim> _userClaims = new();
     private List<IdentityResourceProperty> _properties = new();
 
-    public bool IsDeleted { get; private set; }
-
     public string Name { get; private set; } = string.Empty;
 
     public string DisplayName { get; private set; } = string.Empty;

@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 global using FluentValidation;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Converters;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
@@ -12,4 +13,5 @@ global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Microsoft.AspNetCore.Http;
 global using System.ComponentModel;
 global using System.Reflection;
+global using System.Text.Json;
 global using System.Text.Json.Serialization;

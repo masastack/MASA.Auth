@@ -9,8 +9,6 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
     private List<UserPermission> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
 
-    public bool IsDeleted { get; private set; }
-
     public string Name { get; private set; }
 
     public string DisplayName { get; private set; }

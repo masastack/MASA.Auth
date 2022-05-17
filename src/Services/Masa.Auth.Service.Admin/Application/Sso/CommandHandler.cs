@@ -72,6 +72,7 @@ public class CommandHandler
         var client = await _clientRepository.GetByIdAsync(id);
         //Contrary to DDD
         updateClientCommand.ClientDetailDto.Adapt(client);
+
         await _clientRepository.UpdateAsync(client);
         void HashClientSharedSecret(ClientSecretDto clientSecret)
         {

@@ -5,8 +5,6 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
 public class DeviceFlowCodes : AuditAggregateRoot<int, Guid>, ISoftDelete
 {
-    public bool IsDeleted { get; private set; }
-
     /// <summary>
     /// Gets or sets the device code.
     /// </summary>

@@ -8,8 +8,6 @@ public class UserPermission : AuditEntity<Guid, Guid>, ISoftDelete
     private User? _user;
     private Permission? _permission;
 
-    public bool IsDeleted { get; private set; }
-
     public User User
     {
         get => _user ?? throw new UserFriendlyException("Failed to get user data");
