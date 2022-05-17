@@ -3,10 +3,11 @@
 <SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Staff Sync")">
     <div Class="flex-column sheetDialogPadding">
         <div class="flex-height-auto overflow-y">
+            <MFileInput TValue="IBrowserFile" OnChange="OnFileChange" />
         </div>
         <div class="d-flex mt-6">
             <MSpacer></MSpacer>
-            <MButton Color="primary" Class="small-button" OnClick=StaffSyncAsync>@T("Save")</MButton>
+            <MButton Color="primary" Class="small-button" OnClick=StaffSyncAsync>@T("Upload")</MButton>
         </div>
     </div>
-</SheetDialog>
+</SheetDialog>h

@@ -134,6 +134,12 @@ public class CommandHandler
         await _staffRepository.RemoveAsync(staff);
     }
 
+    [EventHandler]
+    public async Task SyncAsync(SyncStaffCommand command)
+    {
+
+    }
+
     #endregion
 
     #region Team

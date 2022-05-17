@@ -16,16 +16,23 @@ public partial class SyncStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
+    private IBrowserFile? File { get; set; }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
-        {
+        { 
             await VisibleChanged.InvokeAsync(visible);
         }
         else
         {
             Visible = visible;
         }
+    }
+
+    private void OnFileChange(IBrowserFile file)
+    {
+        File = file;
     }
 
     private async Task StaffSyncAsync()

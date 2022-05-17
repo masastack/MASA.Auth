@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.4.0" />
+    <PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
     <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.4.0-preview.4" />
     <PackageReference Include="Masa.Utils.Enums" Version="0.4.0-preview.4" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

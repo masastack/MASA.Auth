@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Magicodes.ExporterAndImporter.Csv;
+
 namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
@@ -48,5 +50,14 @@ public class StaffService : RestServiceBase
     {
         var deleteCommand = new RemoveStaffCommand(staff);
         await eventBus.PublishAsync(deleteCommand);
+    }
+
+    private async Task SyncAsync(IEventBus eventBus, HttpRequest request)
+    {
+        if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
+        var form = await request.ReadFormAsync();
+        if(form.Files.Count <=0) throw new Exception("File not found");
+        var syncCommand = new SyncStaffCommand(form.Files.First());
+        await eventBus.PublishAsync(syncCommand);
     }
 }
