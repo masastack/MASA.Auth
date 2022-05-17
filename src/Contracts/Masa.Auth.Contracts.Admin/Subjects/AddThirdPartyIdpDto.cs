@@ -5,33 +5,38 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class AddThirdPartyIdpDto
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = "";
 
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = "";
 
-    public string ClientSecret { get; set; }
+    public string ClientSecret { get; set; } = "";
 
-    public string Url { get; set; }
+    public string Url { get; set; } = "";
 
-    public string Icon { get; set; }
+    public bool Enabled { get; set; } = true;
 
-    public AuthenticationTypes AuthenticationType { get; set; }
+    public string Icon { get; set; } = "";
 
-    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType)
+    public string VerifyFile { get; set; } = "";
+
+    public AuthenticationTypes VerifyType { get; set; }
+
+    public AddThirdPartyIdpDto()
+    {
+    }
+
+    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string url, bool enabled, string icon, string verifyFile, AuthenticationTypes verifyType)
     {
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
         Url = url;
+        Enabled = enabled;
         Icon = icon;
-        AuthenticationType = authenticationType;
-    }
-
-    public static implicit operator AddThirdPartyIdpDto(ThirdPartyIdpDetailDto platform)
-    {
-        return new AddThirdPartyIdpDto(platform.Name, platform.DisplayName, platform.ClientId, platform.ClientSecret, platform.Url, platform.Icon, platform.AuthenticationType);
+        VerifyFile = verifyFile;
+        VerifyType = verifyType;
     }
 }

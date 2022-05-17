@@ -80,7 +80,7 @@ public class QueryHandler
     #region IdentityResource
 
     [EventHandler]
-    public async Task GetIdentityResourceAsync(IdentityResourceQuery query)
+    public async Task GetIdentityResourceAsync(IdentityResourcesQuery query)
     {
         Expression<Func<IdentityResource, bool>> condition = idrs => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -126,7 +126,7 @@ public class QueryHandler
     #region ApiResource
 
     [EventHandler]
-    public async Task GetApiResourceAsync(ApiResourceQuery query)
+    public async Task GetApiResourceAsync(ApiResourcesQuery query)
     {
         Expression<Func<ApiResource, bool>> condition = apiResource => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -173,7 +173,7 @@ public class QueryHandler
     #region ApiScope
 
     [EventHandler]
-    public async Task GetApiScopeAsync(ApiScopeQuery query)
+    public async Task GetApiScopeAsync(ApiScopesQuery query)
     {
         Expression<Func<ApiScope, bool>> condition = apiScopes => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -220,7 +220,7 @@ public class QueryHandler
     #region UserClaim
 
     [EventHandler]
-    public async Task GetUserClaimAsync(UserClaimQuery query)
+    public async Task GetUserClaimAsync(UserClaimsQuery query)
     {
         Expression<Func<UserClaim, bool>> condition = userClaim => true;
         if (string.IsNullOrEmpty(query.Search) is false)
@@ -266,7 +266,7 @@ public class QueryHandler
     #region CustomLogin
 
     [EventHandler]
-    public async Task GetCustomLoginAsync(CustomLoginQuery query)
+    public async Task GetCustomLoginAsync(CustomLoginsQuery query)
     {
         Expression<Func<CustomLogin, bool>> condition = customLogin => true;
         if (string.IsNullOrEmpty(query.Search) is false)

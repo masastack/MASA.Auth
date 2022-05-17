@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.ThirdPartyIdps;
 
-public partial class AddOrUpdateThirdPartyIdpDialog
+public partial class AddThirdPartyIdpDialog
 {
     [Parameter]
     public bool Visible { get; set; }
@@ -17,11 +17,11 @@ public partial class AddOrUpdateThirdPartyIdpDialog
     [Parameter]
     public Guid ThirdPartyIdpId { get; set; }
 
-    private bool IsAdd => ThirdPartyIdpId == Guid.Empty;
-
-    private ThirdPartyIdpDetailDto ThirdPartyIdp { get; set; } = new();
+    private AddThirdPartyIdpDto ThirdPartyIdp { get; set; } = new();
 
     private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
+
+    private MForm? Form { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -33,45 +33,32 @@ public partial class AddOrUpdateThirdPartyIdpDialog
         {
             Visible = visible;
         }
+        if (Form is not null)
+        {
+            await Form.ResetValidationAsync();
+        }
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         if (Visible)
         {
-            if (IsAdd) ThirdPartyIdp = new();
-            else await GetThirdPartyIdpDetailAsync();
+            ThirdPartyIdp = new();
         }
     }
 
-    public async Task GetThirdPartyIdpDetailAsync()
+    public async Task AddThirdPartyIdpAsync(EditContext context)
     {
-        ThirdPartyIdp = await ThirdPartyIdpService.GetThirdPartyIdpDetailAsync(ThirdPartyIdpId);
-    }
-
-    public async Task AddOrEditThirdPartyIdpAsync()
-    {
-        Loading = true;
-        if (IsAdd)
+        var success = context.Validate();
+        if (success)
         {
-            await ThirdPartyIdpService.AddThirdPartyIdpAsync(ThirdPartyIdp);
+            Loading = true;
+            await ThirdPartyIdpService.AddAsync(ThirdPartyIdp);
             OpenSuccessMessage(T("Add thirdPartyIdp success"));
             await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            Loading = false;
         }
-        else
-        {
-            await ThirdPartyIdpService.UpdateThirdPartyIdpAsync(ThirdPartyIdp);
-            OpenSuccessMessage(T("Edit thirdPartyIdp success"));
-            await OnSubmitSuccess.InvokeAsync();
-            await UpdateVisible(false);
-        }
-        Loading = false;
-    }
-
-    protected override bool ShouldRender()
-    {
-        return Visible;
     }
 }
 

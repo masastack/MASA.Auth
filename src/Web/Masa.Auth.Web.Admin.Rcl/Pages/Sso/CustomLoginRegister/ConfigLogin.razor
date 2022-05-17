@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <div class="d-flex">
-    <LoginRegisterTemplate Tab=CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="Value.Where(v => v.Id!=default).Select(v => ThirdPartyIdps.First(tp => tp.Id==v.Id)).ToList()" />
+    <LoginRegisterTemplate Tab=CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="Value.Where(v => v.Id!=default).Select(v => ThirdPartyIdps.FirstOrDefault(tp => tp.Id==v.Id)).ToList()" />
     <div style="border: 1px solid #E2E7F4;height: 720px;" class="mx-12" />
     <div class="mt-5 full-height flex-column" style="width:100%">
         <div class="overflow-y" style="max-height:700px">
@@ -27,7 +27,7 @@
                 {
                     <MRow Class="mb-6">
                         <MCol Cols="6">
-                            <ThirdPartyIdpSelect @bind-Value="thirdPartyIdp.Id" Excludes="Value.Select(v => v.Id).ToList()" />
+                            <ThirdPartyIdpSelect @bind-Value="thirdPartyIdp.Id" ThirdPartyIdps="ThirdPartyIdps" Excludes="Value.Select(v => v.Id).ToList()" />
                         </MCol>
                         <MCol Cols="2" Class="d-flex">
                             <div class="my-auto">

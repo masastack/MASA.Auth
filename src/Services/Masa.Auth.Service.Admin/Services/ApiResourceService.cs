@@ -11,7 +11,7 @@ namespace Masa.Auth.Service.Admin.Services
 
         private async Task<PaginationDto<ApiResourceDto>> GetListAsync(IEventBus eventBus, GetApiResourcesDto apiResource)
         {
-            var query = new ApiResourceQuery(apiResource.Page, apiResource.PageSize, apiResource.Search);
+            var query = new ApiResourcesQuery(apiResource.Page, apiResource.PageSize, apiResource.Search);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

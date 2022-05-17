@@ -7,19 +7,28 @@ public class UpdateThirdPartyIdpDto
 {
     public Guid Id { get; set; }
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = "";
 
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = "";
 
-    public string ClientSecret { get; set; }
+    public string ClientSecret { get; set; } = "";
 
-    public string Url { get; set; }
+    public string Url { get; set; } = "";
 
-    public string Icon { get; set; }
+    public string Icon { get; set; } = "";
 
-    public AuthenticationTypes AuthenticationType { get; set; }
+    public bool Enabled { get; set; } = true;
 
-    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType)
+    public string VerifyFile { get; set; } = "";
+
+    public AuthenticationTypes VerifyType { get; set; }
+
+    public UpdateThirdPartyIdpDto()
+    {
+
+    }
+
+    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string url, string icon, bool enabled, string verifyFile, AuthenticationTypes verifyType)
     {
         Id = id;
         DisplayName = displayName;
@@ -27,11 +36,13 @@ public class UpdateThirdPartyIdpDto
         ClientSecret = clientSecret;
         Url = url;
         Icon = icon;
-        AuthenticationType = authenticationType;
+        Enabled = enabled;
+        VerifyFile = verifyFile;
+        VerifyType = verifyType;
     }
 
-    public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto request)
+    public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto thirdPartyIdp)
     {
-        return new UpdateThirdPartyIdpDto(request.Id, request.DisplayName, request.ClientId, request.ClientSecret, request.Url, request.Icon, request.AuthenticationType);
+        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.Url, thirdPartyIdp.Icon, thirdPartyIdp.Enabled, thirdPartyIdp.VerifyFile, thirdPartyIdp.VerifyType);
     }
 }

@@ -21,10 +21,9 @@ public partial class ConfigLogin
 
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        //Toto get ThirdPartyIdps
-        return base.OnInitializedAsync();
+        ThirdPartyIdps = await ThirdPartyIdpService.GetSelectAsync();
     }
 
     public async Task Up(CustomLoginThirdPartyIdpDto thirdPartyIdp)

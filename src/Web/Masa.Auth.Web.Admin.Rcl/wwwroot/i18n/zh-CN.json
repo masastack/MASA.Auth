@@ -57,6 +57,7 @@
   "Test": "测试",
   "Resource Information": "资源信息",
   "Add New": "新增",
+  "Are you sure delete current data?": "确定要删除此数据?",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -122,8 +123,13 @@
   "Delete staff data failed:": "删除员工数据失败:",
 
   "Platform": "平台",
+  "ThirdPartyIdp": "第三方平台",
   "ThirdPartyIdp.Name": "名称",
   "ThirdPartyIdp.DisplayName": "显示名称",
+  "ClientId": "客户端ID",
+  "ClientSecret": "客户端密钥",
+  "AuthenticationTypes": "平台类型",
+  "VerifyFile": "校验文件",
   "Failed to query thirdPartyIdpList data:": "查询第三方平台详情列表失败:",
   "Failed to query thirdPartyIdpDetail data:": "查询第三方平台详情数据失败:",
   "Add thirdPartyIdp success": "新增第三方平台详情数据成功",

@@ -11,5 +11,7 @@ public class IdentityProvider : FullAuditAggregateRoot<Guid, Guid>
 
     public string Icon { get; protected set; } = null!;
 
+    public bool Enabled { get; protected set; } = true;
+
     public IdentificationTypes IdentificationType { get; protected set; }
 }
