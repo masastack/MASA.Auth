@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class UserPermission : AuditEntity<Guid, Guid>, ISoftDelete
+public class UserPermission : FullAuditEntity<Guid, Guid>
 {
     private User? _user;
     private Permission? _permission;

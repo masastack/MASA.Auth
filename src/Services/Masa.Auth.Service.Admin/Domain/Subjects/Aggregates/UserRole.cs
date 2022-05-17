@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class UserRole : AuditEntity<Guid, Guid>, ISoftDelete
+public class UserRole : FullAuditEntity<Guid, Guid>
 {
     public User User { get; set; } = null!;
 

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class ThirdPartyUser : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
 {
     private User? _user;
     private User? _createUser;

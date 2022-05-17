@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class TeamRole : AuditEntity<Guid, Guid>, ISoftDelete
+public class TeamRole : FullAuditEntity<Guid, Guid>
 {
     public Guid TeamId { get; private set; }
 
