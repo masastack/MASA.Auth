@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
-public partial class StaffSyncDialog
+public partial class SyncStaffDialog
 {
     [Parameter]
     public bool Visible { get; set; }
