@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class IdentityResource : AuditAggregateRoot<int, Guid>, ISoftDelete
+public class IdentityResource : FullAuditAggregateRoot<int, Guid>
 {
     private List<IdentityResourceClaim> _userClaims = new();
     private List<IdentityResourceProperty> _properties = new();

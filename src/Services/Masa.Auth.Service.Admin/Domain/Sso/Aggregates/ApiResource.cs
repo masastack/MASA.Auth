@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class ApiResource : AuditAggregateRoot<int, Guid>, ISoftDelete
+public class ApiResource : FullAuditAggregateRoot<int, Guid>
 {
     private List<ApiResourceSecret> _secrets = new();
     private List<ApiResourceScope> _apiScopes = new();

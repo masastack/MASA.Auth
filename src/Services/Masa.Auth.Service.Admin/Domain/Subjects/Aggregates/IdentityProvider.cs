@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class IdentityProvider : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class IdentityProvider : FullAuditAggregateRoot<Guid, Guid>
 {
     public string Name { get; protected set; } = null!;
 

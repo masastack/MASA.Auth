@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class Role : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class Role : FullAuditAggregateRoot<Guid, Guid>
 {
     private List<RolePermission> _permissions = new();
     private List<RoleRelation> _childrenRoles = new();

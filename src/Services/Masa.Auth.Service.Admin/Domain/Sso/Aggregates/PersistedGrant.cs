@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class PersistedGrant : AuditAggregateRoot<int, Guid>, ISoftDelete
+public class PersistedGrant : FullAuditAggregateRoot<int, Guid>
 {
     public string Key { get; private set; } = null!;
 

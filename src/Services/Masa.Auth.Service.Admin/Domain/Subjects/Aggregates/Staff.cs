@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class Staff : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class Staff : FullAuditAggregateRoot<Guid, Guid>
 {
     private User? _user;
     private Position? _position;

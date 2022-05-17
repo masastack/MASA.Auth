@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class RolePermission : AuditEntity<Guid, Guid>, ISoftDelete
+public class RolePermission : FullAuditEntity<Guid, Guid>
 {
     public Role Role { get; set; } = null!;
 
