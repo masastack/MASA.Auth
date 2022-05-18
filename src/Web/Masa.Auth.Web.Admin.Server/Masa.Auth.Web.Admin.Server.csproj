@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Masa.Auth.Web.Admin.Rcl\Masa.Auth.Web.Admin.Rcl.csproj" />
   </ItemGroup>
 
