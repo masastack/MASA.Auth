@@ -43,7 +43,7 @@ public partial class Index
             ReturnUrl = returnUrl
         };
 
-        var context = await Interaction.GetAuthorizationContextAsync(returnUrl);
+        var context = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);
         if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
         {
             var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
@@ -99,7 +99,7 @@ public partial class Index
     private async Task Login()
     {
         // check if we are in the context of an authorization request
-        var context = await Interaction.GetAuthorizationContextAsync(_inputModel.ReturnUrl);
+        var context = SsoAuthenticationStateCache.GetAuthorizationContext(_inputModel.ReturnUrl);
 
         //validate
         if (_loginForm != null && await _loginForm.ValidateAsync())
@@ -118,14 +118,15 @@ public partial class Index
     private async Task Cancel()
     {
         // check if we are in the context of an authorization request
-        var context = await Interaction.GetAuthorizationContextAsync(_inputModel.ReturnUrl);
+        var context = SsoAuthenticationStateCache.GetAuthorizationContext(_inputModel.ReturnUrl);
 
         if (context != null)
         {
             // if the user cancels, send a result back into IdentityServer as if they 
             // denied the consent (even if this client does not require consent).
             // this will send back an access denied OIDC error response to the client.
-            await Interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+#warning DenyAuthorizationAsync
+            //await Interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
             // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
             if (context.IsNativeClient())

@@ -39,7 +39,7 @@ public partial class Index
     private async Task OnConsent(bool consent)
     {
         // validate return url is still valid
-        var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
+        var request = SsoAuthenticationStateCache.GetAuthorizationContext(ReturnUrl);
         if (request == null)
         {
             Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
@@ -59,7 +59,7 @@ public partial class Index
         if (grantedConsent != null)
         {
             // communicate outcome of consent back to identityserver
-            await _interaction.GrantConsentAsync(request, grantedConsent);
+            await Interaction.GrantConsentAsync(request, grantedConsent);
 
             // redirect back to authorization endpoint
             if (request.IsNativeClient() == true)
@@ -117,7 +117,7 @@ public partial class Index
 
     private async Task<ViewModel> BuildViewModelAsync(string returnUrl)
     {
-        var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
+        var request = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);
         if (request != null)
         {
             return CreateConsentViewModel(_inputModel, returnUrl, request);

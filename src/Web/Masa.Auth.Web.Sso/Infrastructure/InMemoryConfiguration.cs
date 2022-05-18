@@ -11,6 +11,7 @@ public class InMemoryConfiguration
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
+            new IdentityResources.Email()
         };
     }
 
@@ -30,24 +31,18 @@ public class InMemoryConfiguration
         {
             new Client
             {
-                ClientId = "client.api.service",
-                ClientSecrets = new [] { new Secret("clientsecret".Sha256()) },
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                AllowedScopes = new [] { "clientservice" }
-            },
-            new Client
-            {
-                ClientId = "product.api.service",
-                ClientSecrets = new [] { new Secret("productsecret".Sha256()) },
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                AllowedScopes = new [] { "clientservice", "productservice" }
-            },
-            new Client
-            {
-                ClientId = "agent.api.service",
-                ClientSecrets = new [] { new Secret("agentsecret".Sha256()) },
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                AllowedScopes = new [] { "agentservice", "clientservice", "productservice" }
+                ClientId = "masa.auth.admin.web",
+                ClientName = "Masa Auth Web",
+                AllowedGrantTypes = GrantTypes.Implicit,
+                RedirectUris = { $"https://localhost:18100/signin-oidc" },
+                PostLogoutRedirectUris = { $"https://localhost:18100/signout-callback-oidc" },
+                AllowedScopes = new [] {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email
+                },
+                //AccessTokenLifetime = 3600, // one hour
+                AllowAccessTokensViaBrowser = true // can return access_token to this client
             }
         };
     }

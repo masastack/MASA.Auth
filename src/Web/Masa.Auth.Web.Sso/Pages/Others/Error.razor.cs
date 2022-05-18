@@ -28,6 +28,7 @@ public partial class Error
                     // only show in development
                     message.ErrorDescription = null;
                 }
+                StateHasChanged();
             }
         }
         await base.OnAfterRenderAsync(firstRender);

@@ -8,8 +8,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Masa.Blazor" Version="0.4.0-preview.1" />
-	<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0-preview.5" />
-	<PackageReference Include="Masa.Utils.Expressions" Version="0.4.0-preview.4" />
+	<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0-rc1" />
   </ItemGroup>
 
   <ItemGroup>

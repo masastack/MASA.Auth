@@ -15,9 +15,8 @@ public partial class Index
     {
         if (firstRender)
         {
-            var grants = await Interaction.GetAllUserGrantsAsync();
             var list = new List<GrantViewModel>();
-            foreach (var grant in grants)
+            foreach (var grant in SsoAuthenticationStateCache.Grants)
             {
                 var client = await _clients.FindClientByIdAsync(grant.ClientId);
                 if (client != null)

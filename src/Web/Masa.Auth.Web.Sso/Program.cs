@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Masa.Auth.Web.Sso;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +20,18 @@ builder.Services.AddMasaBlazor(builder =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
-                .AddTestUsers(InMemoryConfiguration.GetUsers().ToList())
-                .AddInMemoryApiResources(InMemoryConfiguration.GetApis())
-                .AddInMemoryClients(InMemoryConfiguration.GetClients());
+builder.Services.AddIdentityServer(options =>
+    {
+        options.UserInteraction.ErrorUrl = "/500";
+    })
+    .AddDeveloperSigningCredential()
+    .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
+    .AddTestUsers(InMemoryConfiguration.GetUsers().ToList())
+    .AddInMemoryApiResources(InMemoryConfiguration.GetApis())
+    .AddInMemoryClients(InMemoryConfiguration.GetClients());
+
+builder.Services.AddSingleton<SsoAuthenticationStateCache>();
+builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 
 var app = builder.Build();
 

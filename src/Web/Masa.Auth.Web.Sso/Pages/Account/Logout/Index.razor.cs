@@ -21,7 +21,7 @@ public partial class Index
             }
             else
             {
-                var context = await Interaction.GetLogoutContextAsync(LogoutId);
+                var context = SsoAuthenticationStateCache.GetLogoutRequest(LogoutId);
                 if (context?.ShowSignoutPrompt == false)
                 {
                     // it's safe to automatically sign-out

@@ -34,7 +34,11 @@ namespace Masa.Auth.Web.Sso.Shared
         [Inject]
         public NavigationManager Navigation { get; set; } = null!;
 
+        [Inject]
         public IPopupService PopupService { get; set; } = null!;
+
+        [Inject]
+        public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
 
         protected ClaimsPrincipal User
         {
