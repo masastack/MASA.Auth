@@ -137,7 +137,7 @@ public class CommandHandler
     [EventHandler]
     public async Task SyncAsync(SyncStaffCommand command)
     {
-
+        command.Result = await _staffDomainService.SyncStaffAsync(command.Staffs);
     }
 
     #endregion

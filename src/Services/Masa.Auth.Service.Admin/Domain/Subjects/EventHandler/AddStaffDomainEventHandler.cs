@@ -23,12 +23,13 @@ public class AddStaffDomainEventHandler
     }
 
     [EventHandler(2)]
-    public async Task UpsertPositionAsync(AddStaffDomainEvent staffEvent)
+    public async Task AddPositionAsync(AddStaffDomainEvent staffEvent)
     {
-        if (string.IsNullOrEmpty(staffEvent.Staff.Position.Name) is false)
+        if (string.IsNullOrEmpty(staffEvent.Staff.Position) is false)
         {
-            var command = new UpsertPositionCommand(staffEvent.Staff.Position);
+            var command = new AddPositionCommand(new (staffEvent.Staff.Position));
             await _eventBus.PublishAsync(command);
+            staffEvent.Staff.PositionId = command.Result;
         }
     }
 
@@ -40,7 +41,7 @@ public class AddStaffDomainEventHandler
         if (staff is not null)
             throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
 
-        staff = new Staff(staffDto.UserId, staffDto.JobNumber, staffDto.User.Name, staffDto.Position.Id, staffDto.StaffType, staffDto.Enabled);
+        staff = new Staff(staffDto.UserId, staffDto.JobNumber, staffDto.User.Name, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
         staff.AddDepartmentStaff(staffDto.DepartmentId);
         staff.AddTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);

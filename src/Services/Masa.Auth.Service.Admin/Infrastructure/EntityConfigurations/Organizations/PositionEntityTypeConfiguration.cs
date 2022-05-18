@@ -9,6 +9,7 @@ public class PositionEntityTypeConfiguration : IEntityTypeConfiguration<Position
     {
         builder.ToTable(nameof(Position), AuthDbContext.ORGANIZATION_SCHEMA);
         builder.HasKey(p => p.Id);
+        builder.HasIndex(p => p.Name).IsUnique();
         builder.Property(d => d.Name).HasMaxLength(20);
     }
 }

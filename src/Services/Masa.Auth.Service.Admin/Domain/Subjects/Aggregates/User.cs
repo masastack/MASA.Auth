@@ -97,6 +97,17 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         GenderType = genderType;
     }
 
+    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string? email, string? position, GenderTypes genderType)
+    {
+        Name = name;
+        DisplayName = displayName ?? "";
+        IdCard = idCard ?? "";
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        Position = position ?? "";
+        GenderType = genderType;
+    }
+
     public void AddRoles(params Guid[] roleIds)
     {
         _roles.Clear();

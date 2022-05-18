@@ -3,10 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Application.Organizations.Commands;
 
-public class UpsertPositionCommandCommandValidator : AbstractValidator<UpsertPositionCommand>
+public class AddPositionCommandValidator : AbstractValidator<AddPositionCommand>
 {
-    public UpsertPositionCommandCommandValidator()
+    public AddPositionCommandValidator()
     {
-        RuleFor(command => command.Position).SetValidator(new UpsertPositionValidator());
+        RuleFor(command => command.Position).SetValidator(new AddPositionValidator());
     }
 }

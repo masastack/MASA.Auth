@@ -52,12 +52,16 @@ public class StaffService : RestServiceBase
         await eventBus.PublishAsync(deleteCommand);
     }
 
-    private async Task SyncAsync(IEventBus eventBus, HttpRequest request)
+    private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, HttpRequest request)
     {
         if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
         var form = await request.ReadFormAsync();
         if(form.Files.Count <=0) throw new Exception("File not found");
-        var syncCommand = new SyncStaffCommand(form.Files.First());
+        var file = form.Files.First();
+        ICsvImporter importer = new CsvImporter();       
+        var import = await importer.Import<SyncStaffDto>(file.OpenReadStream());
+        var syncCommand = new SyncStaffCommand(import.Data.ToList());
         await eventBus.PublishAsync(syncCommand);
+        return syncCommand.Result;
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record SyncStaffCommand(IFormFile file) : Command
+public record SyncStaffCommand(List<SyncStaffDto> Staffs) : Command
 {
-
+    public SyncStaffResultsDto Result { get; set; } = new();
 }

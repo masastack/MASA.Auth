@@ -5,6 +5,9 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class SyncStaffDto
 {
+    [ExporterHeader(DisplayName = "序号")]
+    public int Index { get; set; }
+
     [ExporterHeader(DisplayName = "姓名")]
     public string Name { get; set; } = "";
 
@@ -32,14 +35,20 @@ public class SyncStaffDto
     [ExporterHeader(DisplayName = "岗位")]
     public string? Position { get; set; }
 
+    [ExporterHeader(IsIgnore = true)]
+    public GenderTypes GenderType => Enum.Parse<GenderTypes>(GenderTypeLable);
+
     [ExporterHeader(DisplayName = "性别")]
-    public string? GenderType { get; set; } = "Male";
+    public string GenderTypeLable { get; set; } = GenderTypes.Male.ToString();
+
+    [ExporterHeader(IsIgnore = true)]
+    public StaffTypes StaffType => Enum.Parse<StaffTypes>(StaffTypeLable);
 
     [ExporterHeader(DisplayName = "员工类型")]
-    public string StaffType { get; set; } = "InternalStaff";
+    public string StaffTypeLable { get; set; } = StaffTypes.InternalStaff.ToString();
 
-    [ExporterHeader(DisplayName = "员工类型")]
-    public string? Remark { get; set; }
+    //[ExporterHeader(DisplayName = "备注")]
+    //public string? Remark { get; set; }
 }
 
 

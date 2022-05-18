@@ -59,7 +59,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
-        var user = await _userRepository.GetDetail(query.UserId);
+        var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
         var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
         var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
@@ -74,6 +74,13 @@ public class QueryHandler
     {
         var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(query.Search);
         query.Result = response.Data;
+    }
+
+    [EventHandler]
+    public async Task GetAllUsers(AllUsersQuery query)
+    {
+        var users = await _userRepository.GetAllAsync();
+        query.Result = users;
     }
 
     #endregion
