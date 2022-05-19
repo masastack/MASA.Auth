@@ -9,9 +9,9 @@ public partial class Index
 {
     ViewModel? _viewModel;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_httpContextAccessor.HttpContext != null)
+        if (firstRender && _httpContextAccessor.HttpContext != null)
         {
             var localAddresses = new string[] { "127.0.0.1", "::1", _httpContextAccessor.HttpContext.Connection.LocalIpAddress?.ToString() ?? "" };
             if (!localAddresses.Contains(_httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString()))
@@ -21,7 +21,8 @@ public partial class Index
             }
 
             _viewModel = new ViewModel(await _httpContextAccessor.HttpContext.AuthenticateAsync());
+            StateHasChanged();
         }
-        await base.OnInitializedAsync();
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

@@ -16,24 +16,23 @@ public partial class Index
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _viewModel = await BuildViewModelAsync(ReturnUrl);
-        _inputModel = new InputModel
+        if (firstRender)
         {
-            ReturnUrl = ReturnUrl,
-        };
-        await base.OnInitializedAsync();
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender && string.IsNullOrWhiteSpace(_viewModel.ClientUrl))
-        {
-            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
-            return;
+            _viewModel = await BuildViewModelAsync(ReturnUrl);
+            _inputModel = new InputModel
+            {
+                ReturnUrl = ReturnUrl,
+            };
+            if (string.IsNullOrWhiteSpace(_viewModel.ClientUrl))
+            {
+                Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
+                return;
+            }
+            StateHasChanged();
         }
-        base.OnAfterRender(firstRender);
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task OnConsent(bool consent)

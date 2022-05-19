@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.WebUtilities;
+
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 [SecurityHeaders]
@@ -19,22 +21,22 @@ public partial class Index
     [CascadingParameter(Name = "HttpContext")]
     public HttpContext? HttpContext { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await BuildModelAsync(ReturnUrl);
-        await base.OnInitializedAsync();
-    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_viewModel.IsExternalLoginOnly)
+        if (firstRender)
         {
-            // we only have one option for logging in and it's an external provider
-            Navigation.NavigateTo("ExternalLogin/Challenge", new Dictionary<string, object?> {
-                {"scheme", _viewModel.ExternalLoginScheme},
-                {"returnUrl", ReturnUrl}
-            });
-            return;
+            await BuildModelAsync(ReturnUrl);
+            if (_viewModel.IsExternalLoginOnly)
+            {
+                // we only have one option for logging in and it's an external provider
+                Navigation.NavigateTo("externalLogin/challenge", new Dictionary<string, object?> {
+                    {"scheme", _viewModel.ExternalLoginScheme},
+                    {"returnUrl", ReturnUrl}
+                });
+                return;
+            }
         }
+
         await base.OnAfterRenderAsync(firstRender);
     }
 
@@ -107,8 +109,15 @@ public partial class Index
             {
                 await HttpContext.SignOutAsync();
             }
-            var returnUrl = Uri.EscapeDataString(_inputModel.ReturnUrl);
-            Navigation.NavigateTo($"login?userName={_inputModel.Username}&password={_inputModel.Password}&remember_login={_inputModel.RememberLogin}&returnUrl={returnUrl}", true);
+            var queryArguments = new Dictionary<string, string?>()
+            {
+                { "userName", _inputModel.Username },
+                { "password", _inputModel.Password },
+                { "remember_login", _inputModel.RememberLogin.ToString() },
+                { "returnUrl", _inputModel.ReturnUrl }
+            };
+            var url = QueryHelpers.AddQueryString("login", queryArguments);
+            Navigation.NavigateTo(url, true);
         }
         // something went wrong, show form with error
         await BuildModelAsync(_inputModel.ReturnUrl);

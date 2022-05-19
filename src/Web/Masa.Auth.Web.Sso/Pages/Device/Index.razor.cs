@@ -15,19 +15,18 @@ public partial class Index
     [SupplyParameterFromQuery]
     public string UserCode { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _viewModel = await BuildViewModelAsync(UserCode);
-        _inputModel = new InputModel
+        if (firstRender)
         {
-            UserCode = UserCode,
-        };
-        await base.OnInitializedAsync();
-    }
-
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        return base.OnAfterRenderAsync(firstRender);
+            _viewModel = await BuildViewModelAsync(UserCode);
+            _inputModel = new InputModel
+            {
+                UserCode = UserCode,
+            };
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task OnDevice(bool consent)

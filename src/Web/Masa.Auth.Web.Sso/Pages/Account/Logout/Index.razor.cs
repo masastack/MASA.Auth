@@ -30,13 +30,13 @@ public partial class Index
             }
             if (!showLogoutPrompt)
             {
-                await Logout();
+                Logout();
             }
         }
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task Logout()
+    private Task Logout()
     {
         if (User.Identity?.IsAuthenticated == true)
         {
@@ -47,11 +47,12 @@ public partial class Index
             LogoutId ??= SsoAuthenticationStateCache.LogoutId;
 
             Navigation.NavigateTo($"logout?logoutId={LogoutId}", true);
-            return;
         }
-
-        Navigation.NavigateTo("/account/logout/loggedout", new Dictionary<string, object?> {
-            {"logoutId", LogoutId}
-        });
+        else
+        {
+            Navigation.NavigateTo("/account/logout/loggedout", new Dictionary<string, object?> {
+                {"logoutId", LogoutId}
+            });
+        }
     }
 }

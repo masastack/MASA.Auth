@@ -22,7 +22,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddIdentityServer(options =>
     {
-        options.UserInteraction.ErrorUrl = "/500";
+        options.UserInteraction.ErrorUrl = "/error/500";
     })
     .AddDeveloperSigningCredential()
     .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
