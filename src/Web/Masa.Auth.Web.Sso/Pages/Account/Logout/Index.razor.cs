@@ -44,7 +44,7 @@ public partial class Index
             // this captures necessary info from the current logged in user
             // this can still return null if there is no context needed
 
-            LogoutId ??= await Interaction.CreateLogoutContextAsync();
+            LogoutId ??= SsoAuthenticationStateCache.LogoutId;
 
             Navigation.NavigateTo($"logout?logoutId={LogoutId}", true);
             return;

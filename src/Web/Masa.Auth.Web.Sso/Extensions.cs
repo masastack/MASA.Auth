@@ -27,6 +27,14 @@ public static class Extensions
     /// <summary>
     /// Renders a loading page that is used to redirect back to the redirectUri.
     /// </summary>
+    public static IActionResult LoadingPage(this PageModel page, string redirectUri)
+    {
+        page.HttpContext.Response.StatusCode = 200;
+        page.HttpContext.Response.Headers["Location"] = "";
+
+        return page.RedirectToPage("/Redirect/Index", new { RedirectUri = redirectUri });
+    }
+
     public static void LoadingPage(this NavigationManager nav, string redirectUri)
     {
         var url = nav.GetUriWithQueryParameters("/Redirect/Index", new Dictionary<string, object?>
@@ -36,6 +44,7 @@ public static class Extensions
         nav.NavigateTo(url);
     }
 
+#warning remove controller
     public static IActionResult LoadingPage(this Controller controller, string redirectUri)
     {
         controller.HttpContext.Response.StatusCode = 200;

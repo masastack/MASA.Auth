@@ -44,6 +44,7 @@ public class _HostAuthModel : PageModel
                         _ssoAuthenticationStateCache.AddLogoutRequest(logoutId, await _identityServerInteractionService.GetLogoutContextAsync(logoutId));
                     }
                 }
+                _ssoAuthenticationStateCache.LogoutId = await _identityServerInteractionService.CreateLogoutContextAsync();
                 break;
             case "/grants":
             case "/grants/index":

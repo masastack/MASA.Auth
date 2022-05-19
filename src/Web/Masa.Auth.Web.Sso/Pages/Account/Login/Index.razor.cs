@@ -29,9 +29,11 @@ public partial class Index
         if (_viewModel.IsExternalLoginOnly)
         {
             // we only have one option for logging in and it's an external provider
-            Navigation.NavigateTo("ExternalLogin/Challenge");
+            Navigation.NavigateTo("ExternalLogin/Challenge", new Dictionary<string, object?> {
+                {"scheme", _viewModel.ExternalLoginScheme},
+                {"returnUrl", ReturnUrl}
+            });
             return;
-            //return RedirectToPage("/ExternalLogin/Challenge", new { scheme = View.ExternalLoginScheme, returnUrl });
         }
         await base.OnAfterRenderAsync(firstRender);
     }
@@ -98,9 +100,6 @@ public partial class Index
 
     private async Task Login()
     {
-        // check if we are in the context of an authorization request
-        var context = SsoAuthenticationStateCache.GetAuthorizationContext(_inputModel.ReturnUrl);
-
         //validate
         if (_loginForm != null && await _loginForm.ValidateAsync())
         {
@@ -108,8 +107,8 @@ public partial class Index
             {
                 await HttpContext.SignOutAsync();
             }
-
-            Navigation.NavigateTo($"login?userName={_inputModel.Username}&password={_inputModel.Password}&remember_login={_inputModel.RememberLogin}&returnUrl={_inputModel.ReturnUrl}", true);
+            var returnUrl = Uri.EscapeDataString(_inputModel.ReturnUrl);
+            Navigation.NavigateTo($"login?userName={_inputModel.Username}&password={_inputModel.Password}&remember_login={_inputModel.RememberLogin}&returnUrl={returnUrl}", true);
         }
         // something went wrong, show form with error
         await BuildModelAsync(_inputModel.ReturnUrl);
@@ -125,8 +124,7 @@ public partial class Index
             // if the user cancels, send a result back into IdentityServer as if they 
             // denied the consent (even if this client does not require consent).
             // this will send back an access denied OIDC error response to the client.
-#warning DenyAuthorizationAsync
-            //await Interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+            await Interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
             // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
             if (context.IsNativeClient())
@@ -136,13 +134,13 @@ public partial class Index
                 Navigation.LoadingPage(_inputModel.ReturnUrl);
                 return;
             }
-            Navigation.NavigateTo(_inputModel.ReturnUrl);
+            Navigation.NavigateTo(_inputModel.ReturnUrl, true);
             return;
         }
         else
         {
             // since we don't have a valid context, then we just go back to the home page
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/", true);
             return;
         }
     }

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Collections.Concurrent;
-
 namespace Masa.Auth.Web.Sso;
 
 public class SsoAuthenticationStateCache
@@ -15,12 +13,18 @@ public class SsoAuthenticationStateCache
 
     public IEnumerable<Grant> Grants { get; set; } = new List<Grant>();
 
+    public string LogoutId { get; set; } = string.Empty;
+
     public bool HasAuthorizationRequest(string url) => AuthorizationRequestCache.ContainsKey(url);
 
     public bool HasLogoutRequest(string url) => LogoutRequestCache.ContainsKey(url);
 
     public AuthorizationRequest? GetAuthorizationContext(string url)
     {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            return null;
+        }
         AuthorizationRequestCache.TryGetValue(url, out var data);
         return data;
     }
@@ -39,6 +43,10 @@ public class SsoAuthenticationStateCache
 
     public LogoutRequest? GetLogoutRequest(string logoutId)
     {
+        if (string.IsNullOrWhiteSpace(logoutId))
+        {
+            return null;
+        }
         LogoutRequestCache.TryGetValue(logoutId, out var data);
         return data;
     }

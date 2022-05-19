@@ -19,7 +19,7 @@ public partial class Index
     {
         if (firstRender && !Url.IsLocalUrl(RedirectUri))
         {
-            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE);
+            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE,true);
         }
     }
 }
