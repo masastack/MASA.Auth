@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class SyncStaffResultsDto
 {
-    public List<SyncStaffResult> Results { get; } = new();
+    public List<SyncStaffResult> Results { get; set; } = new();
 
     public bool IsValid => Results.Count > 0;
 

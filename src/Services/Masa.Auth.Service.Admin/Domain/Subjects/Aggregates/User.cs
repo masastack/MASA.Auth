@@ -97,7 +97,7 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         GenderType = genderType;
     }
 
-    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string? email, string? position, GenderTypes genderType)
+    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string? email, string? position, string password, GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName ?? "";
@@ -105,6 +105,7 @@ public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
         PhoneNumber = phoneNumber ?? "";
         Email = email ?? "";
         Position = position ?? "";
+        Password = password;
         GenderType = genderType;
     }
 

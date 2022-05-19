@@ -4,10 +4,38 @@
     <div Class="flex-column sheetDialogPadding">
         <div class="flex-height-auto overflow-y">
             <MFileInput TValue="IBrowserFile" OnChange="OnFileChange" />
+            <div class="mt-6">
+                <div>@T("Explanation")</div>
+                <div>@T("File size limit")：@MaxFileSize Kb</div>
+            </div>
+            <div class="d-flex mt-12">
+                <span>@T("StaffSyncTemplate.csv")</span>
+                <MSpacer />
+                <a target="_blank" href="_content/Masa.Auth.Web.Admin.Rcl/file/StaffSyncTemplate.csv">
+                    @T("Download")
+                </a>
+            </div>
+            @if (SyncStaffResults is not null && SyncStaffResults.IsValid)
+            {
+                foreach (var result in SyncStaffResults.Results)
+                {
+                    <div class="mt-6">
+                        <div>@T("Index")：@result.Index</div>
+                        <div>@T("Account")：@result.Account</div>
+                        <div>@T("Error Info")：</div>
+                        <div>
+                            @foreach(var error in result.Errors)
+                            {
+                                <div class="error--text">@error</div>
+                            }
+                        </div>                       
+                    </div>
+                }
+            }
         </div>
         <div class="d-flex mt-6">
             <MSpacer></MSpacer>
-            <MButton Color="primary" Class="small-button" OnClick=StaffSyncAsync>@T("Upload")</MButton>
+            <MButton Color="primary" Class="small-button" OnClick=SyncAsync>@T("Upload")</MButton>
         </div>
     </div>
 </SheetDialog>h

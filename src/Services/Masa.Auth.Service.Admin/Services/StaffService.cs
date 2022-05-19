@@ -1,15 +1,13 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Magicodes.ExporterAndImporter.Csv;
-
 namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
 {
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
-
+        MapPost(SyncAsync);
     }
 
     private async Task<PaginationDto<StaffDto>> GetListAsync(IEventBus eventBus, GetStaffsDto staff)
@@ -56,10 +54,11 @@ public class StaffService : RestServiceBase
     {
         if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
         var form = await request.ReadFormAsync();
-        if(form.Files.Count <=0) throw new Exception("File not found");
+        if (form.Files.Count <= 0) throw new UserFriendlyException("File not found");
         var file = form.Files.First();
-        ICsvImporter importer = new CsvImporter();       
+        ICsvImporter importer = new CsvImporter();
         var import = await importer.Import<SyncStaffDto>(file.OpenReadStream());
+        if (import.HasError) throw new UserFriendlyException("Read file data failed");
         var syncCommand = new SyncStaffCommand(import.Data.ToList());
         await eventBus.PublishAsync(syncCommand);
         return syncCommand.Result;

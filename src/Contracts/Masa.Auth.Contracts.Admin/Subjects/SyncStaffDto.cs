@@ -5,49 +5,49 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class SyncStaffDto
 {
-    [ExporterHeader(DisplayName = "序号")]
+    [ImporterHeader(Name = "序号")]
     public int Index { get; set; }
 
-    [ExporterHeader(DisplayName = "姓名")]
+    [ImporterHeader(Name = "姓名")]
     public string Name { get; set; } = "";
 
-    [ExporterHeader(DisplayName = "账号")]
+    [ImporterHeader(Name = "账号")]
     public string Account { get; set; } = "";
 
-    [ExporterHeader(DisplayName = "密码")]
+    [ImporterHeader(Name = "密码")]
     public string Password { get; set; } = "";
 
-    [ExporterHeader(DisplayName = "工号")]
+    [ImporterHeader(Name = "工号")]
     public string JobNumber { get; set; } = "";
 
-    [ExporterHeader(DisplayName = "手机号")]
+    [ImporterHeader(Name = "手机号")]
     public string? PhoneNumber { get; set; }
 
-    [ExporterHeader(DisplayName = "邮箱")]
+    [ImporterHeader(Name = "邮箱")]
     public string? Email { get; set; }
 
-    [ExporterHeader(DisplayName = "身份证号")]
+    [ImporterHeader(Name = "身份证号")]
     public string? IdCard { get; set; }
 
-    [ExporterHeader(DisplayName = "昵称")]
+    [ImporterHeader(Name = "昵称")]
     public string? DisplayName { get; set; }
 
-    [ExporterHeader(DisplayName = "岗位")]
+    [ImporterHeader(Name = "岗位")]
     public string? Position { get; set; }
 
-    [ExporterHeader(IsIgnore = true)]
+    [ImporterHeader(IsIgnore = true)]
     public GenderTypes GenderType => Enum.Parse<GenderTypes>(GenderTypeLable);
 
-    [ExporterHeader(DisplayName = "性别")]
+    [ImporterHeader(Name = "性别")]
     public string GenderTypeLable { get; set; } = GenderTypes.Male.ToString();
 
-    [ExporterHeader(IsIgnore = true)]
+    [ImporterHeader(IsIgnore = true)]
     public StaffTypes StaffType => Enum.Parse<StaffTypes>(StaffTypeLable);
 
-    [ExporterHeader(DisplayName = "员工类型")]
+    [ImporterHeader(Name = "员工类型")]
     public string StaffTypeLable { get; set; } = StaffTypes.InternalStaff.ToString();
 
-    //[ExporterHeader(DisplayName = "备注")]
+    //[ImporterHeader(Name = "备注")]
     //public string? Remark { get; set; }
 }
 

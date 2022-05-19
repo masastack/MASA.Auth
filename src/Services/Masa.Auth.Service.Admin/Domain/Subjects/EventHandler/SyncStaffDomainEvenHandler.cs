@@ -46,7 +46,7 @@ public class SyncStaffDomainEvenHandler
         CheckDuplicate(Staff => Staff.JobNumber);
         CheckDuplicate(Staff => Staff.Email);
         CheckDuplicate(Staff => Staff.IdCard);
-        if (syncResults.IsValid is false) return;
+        if (syncResults.IsValid) return;
 
         //sync user
         var query = new AllUsersQuery();
@@ -55,24 +55,29 @@ public class SyncStaffDomainEvenHandler
         var userRange = new List<User>();
         foreach (var staff in syncStaffs)
         {
+            var existUsers = allUsers.Where(u => u.PhoneNumber == staff.PhoneNumber || u.Email == staff.Email || u.IdCard == staff.IdCard);
             var oldUser = allUsers.FirstOrDefault(s => s.Account == staff.Account);
-            if (oldUser is null) userRange.Add(new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, "123", "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", staff.Email ?? "", staff.GenderType));
+            if(existUsers.Count(u => u.Id!= oldUser?.Id) > 0 )
+            {
+                syncResults[staff.Index] = new()
+                {
+                    Account = staff.Account,
+                    Errors = new() { $"Users with the same mobile phone number, ID number, and email address already exist" }
+                };
+            }
             else
             {
-                if (allUsers.Any(u => u.Id != oldUser.Id && (u.PhoneNumber == staff.PhoneNumber || u.Email == staff.Email || u.IdCard == staff.IdCard)))
-                {
-                    syncResults[staff.Index] = new ()
-                    {
-                        Account = staff.Account,
-                        Errors = new() { $"Users with the same mobile phone number, ID number, and email address already exist" }
-                    };
-                }
-                oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, staff.Email, staff.Position, staff.GenderType);
+                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", staff.Email ?? "", staff.GenderType);
+                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, staff.Email, staff.Position, staff.Password, staff.GenderType);
+
+                userRange.Add(oldUser);
             }
         }
-        if (syncResults.IsValid is false) return;
-        await _userRepository.AddRangeAsync(userRange.Where(u => u.Id == default));
-        await _userRepository.UpdateRangeAsync(userRange.Where(u => u.Id != default));
+        if (syncResults.IsValid) return;
+        var updateUserRange = userRange.Where(u => u.Id != default).ToList();
+        if (updateUserRange.Count > 0) await _userRepository.UpdateRangeAsync(updateUserRange);
+        var addUserRange = userRange.Where(u => u.Id == default).ToList();
+        if(addUserRange.Count >0) await _userRepository.AddRangeAsync(addUserRange);
         await _userDomainService.SetAsync(userRange.ToArray());
 
         //sync psoition
@@ -80,9 +85,10 @@ public class SyncStaffDomainEvenHandler
                                       .Distinct()
                                       .Where(position => position is not null)
                                       .Select(position => new Position(position!));
-        var allPositions = await _positionRepository.GetListAsync();
-        await _positionRepository.AddRangeAsync(syncPsoitions.Where(sp => allPositions.Any(p => p.Name == sp.Name) is false));
-        allPositions = await _positionRepository.GetListAsync();
+        var allPositions = (await _positionRepository.GetListAsync()).ToList();
+        var addPositionRange = syncPsoitions.Where(sp => allPositions.Any(p => p.Name == sp.Name) is false).ToList();
+        await _positionRepository.AddRangeAsync(addPositionRange);
+        allPositions.AddRange(addPositionRange);
 
         //sync staff
         var allStaffs = await _staffRepository.GetListAsync();
@@ -90,7 +96,7 @@ public class SyncStaffDomainEvenHandler
         foreach (var staff in syncStaffs)
         {
             var user = userRange.First(u => u.Account == staff.Account);
-            var position = allPositions.FirstOrDefault(p => p.Name == staff.Name);
+            var position = allPositions.FirstOrDefault(p => p.Name == staff.Position);
             var oldStaff = allStaffs.FirstOrDefault(s => s.JobNumber == staff.JobNumber);
             if (oldStaff is null)
             {
@@ -102,8 +108,12 @@ public class SyncStaffDomainEvenHandler
                 staffRange.Add(oldStaff);
             }
         }
-        await _staffRepository.AddRangeAsync(staffRange.Where(s => s.Id == default));
-        await _staffRepository.UpdateRangeAsync(staffRange.Where(s => s.Id != default));
+        if (syncResults.IsValid) return;
+
+        var updateStaffRange = staffRange.Where(s => s.Id != default).ToList();
+        if (updateStaffRange.Count > 0) await _staffRepository.UpdateRangeAsync(updateStaffRange);
+        var addStaffRange = staffRange.Where(s => s.Id == default).ToList();
+        if (addStaffRange.Count > 0) await _staffRepository.AddRangeAsync(addStaffRange);
 
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
