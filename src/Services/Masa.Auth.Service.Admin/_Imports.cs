@@ -3,10 +3,12 @@
 
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
+global using Magicodes.ExporterAndImporter.Csv;
 global using Mapster;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Organizations.Validator;
 global using Masa.Auth.Contracts.Admin.Permissions;
@@ -80,6 +82,3 @@ global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.OpenApi.Models;
 global using System.Linq.Expressions;
 global using System.Reflection;
-global using Magicodes.ExporterAndImporter.Core;
-global using Magicodes.ExporterAndImporter.Csv;
-global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;

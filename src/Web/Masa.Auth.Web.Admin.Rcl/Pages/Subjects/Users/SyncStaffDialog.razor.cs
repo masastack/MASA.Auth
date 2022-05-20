@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Net.Http;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class SyncStaffDialog
@@ -51,7 +49,7 @@ public partial class SyncStaffDialog
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(File.ContentType);
             content.Add(fileContent, "\"files\"", File.Name);
             SyncStaffResults = await StaffService.SyncAsync(content);
-            if(SyncStaffResults?.IsValid is false)
+            if (SyncStaffResults?.IsValid is false)
             {
                 OpenSuccessMessage(T("Sync staff success"));
                 await UpdateVisible(false);
@@ -59,7 +57,7 @@ public partial class SyncStaffDialog
             }
             else
             {
-                OpenErrorMessage(T("Sync staff failed"));                
+                OpenErrorMessage(T("Sync staff failed"));
             }
             Loading = false;
         }

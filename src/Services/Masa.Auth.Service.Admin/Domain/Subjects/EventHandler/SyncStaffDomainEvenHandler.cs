@@ -57,7 +57,7 @@ public class SyncStaffDomainEvenHandler
         {
             var existUsers = allUsers.Where(u => u.PhoneNumber == staff.PhoneNumber || u.Email == staff.Email || u.IdCard == staff.IdCard);
             var oldUser = allUsers.FirstOrDefault(s => s.Account == staff.Account);
-            if(existUsers.Count(u => u.Id!= oldUser?.Id) > 0 )
+            if (existUsers.Count(u => u.Id != oldUser?.Id) > 0)
             {
                 syncResults[staff.Index] = new()
                 {
@@ -77,7 +77,7 @@ public class SyncStaffDomainEvenHandler
         var updateUserRange = userRange.Where(u => u.Id != default).ToList();
         if (updateUserRange.Count > 0) await _userRepository.UpdateRangeAsync(updateUserRange);
         var addUserRange = userRange.Where(u => u.Id == default).ToList();
-        if(addUserRange.Count >0) await _userRepository.AddRangeAsync(addUserRange);
+        if (addUserRange.Count > 0) await _userRepository.AddRangeAsync(addUserRange);
         await _userDomainService.SetAsync(userRange.ToArray());
 
         //sync psoition

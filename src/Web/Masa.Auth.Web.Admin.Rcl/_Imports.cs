@@ -33,7 +33,7 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.JSInterop;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Net.Http.Headers;
 global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
-global using System.Net.Http.Headers;
