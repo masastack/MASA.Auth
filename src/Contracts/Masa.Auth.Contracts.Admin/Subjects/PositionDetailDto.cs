@@ -5,8 +5,18 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class PositionDetailDto : PositionDto
 {
+    public PositionDetailDto()
+    {
+
+    }
+
     public PositionDetailDto(Guid id, string name) : base(id, name)
     {
+    }
+
+    public static implicit operator UpdatePositionDto(PositionDetailDto position)
+    {
+        return new UpdatePositionDto(position.Id, position.Name);
     }
 }
 
