@@ -7,7 +7,7 @@ namespace Masa.Auth.Web.Sso.Pages.Consent;
 [SecurityHeaders]
 public partial class Index
 {
-    ViewModel _viewModel = new();
+    ViewModel? _viewModel = new();
     InputModel _inputModel = new();
 
     [Parameter]
@@ -18,12 +18,12 @@ public partial class Index
     {
         if (firstRender)
         {
-            _viewModel = await BuildViewModelAsync(ReturnUrl);
+            _viewModel = BuildViewModelAsync(ReturnUrl);
             _inputModel = new InputModel
             {
                 ReturnUrl = ReturnUrl,
             };
-            if (string.IsNullOrWhiteSpace(_viewModel.ClientUrl))
+            if (_viewModel is null)
             {
                 Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
                 return;
@@ -35,43 +35,16 @@ public partial class Index
 
     private async Task OnConsent(bool consent)
     {
-        // validate return url is still valid
-        var request = SsoAuthenticationStateCache.GetAuthorizationContext(ReturnUrl);
-        if (request == null)
+        var queryArguments = new Dictionary<string, string?>()
         {
-            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
-            return;
-        }
-
-        ConsentResponse? grantedConsent = null;
-        if (consent)
-        {
-            grantedConsent = await AgreeHandler(request);
-        }
-        else
-        {
-            grantedConsent = await RejectHandler(request);
-        }
-
-        if (grantedConsent != null)
-        {
-            // communicate outcome of consent back to identityserver
-            await Interaction.GrantConsentAsync(request, grantedConsent);
-
-            // redirect back to authorization endpoint
-            if (request.IsNativeClient() == true)
-            {
-                // The client is native, so this change in how to
-                // return the response is for better UX for the end user.
-                Navigation.LoadingPage(_inputModel.ReturnUrl);
-                return;
-            }
-            Navigation.NavigateTo(_inputModel.ReturnUrl, true);
-            return;
-        }
+            { "consent", consent.ToString() },
+            { "returnUrl", ReturnUrl }
+        };
+        var url = QueryHelpers.AddQueryString("consent/consent", queryArguments);
+        Navigation.NavigateTo(url, true);
 
         // we need to redisplay the consent UI
-        _viewModel = await BuildViewModelAsync(_inputModel.ReturnUrl);
+        _viewModel = BuildViewModelAsync(_inputModel.ReturnUrl);
     }
 
     private async Task<ConsentResponse?> AgreeHandler(AuthorizationRequest request)
@@ -112,14 +85,14 @@ public partial class Index
         return grantedConsent;
     }
 
-    private async Task<ViewModel> BuildViewModelAsync(string returnUrl)
+    private ViewModel? BuildViewModelAsync(string returnUrl)
     {
         var request = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);
         if (request != null)
         {
             return CreateConsentViewModel(_inputModel, returnUrl, request);
         }
-        return await Task.FromResult(new ViewModel());
+        return null;
     }
 
     private ViewModel CreateConsentViewModel(

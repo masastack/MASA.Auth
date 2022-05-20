@@ -25,6 +25,8 @@ public class _HostAuthModel : PageModel
         {
             case "/account/login/index":
             case "/account/login":
+            case "/consent":
+            case "/consent/index":
                 if (HttpContext.Request.Query.ContainsKey("ReturnUrl"))
                 {
                     var returnUrl = HttpContext.Request.Query["ReturnUrl"];

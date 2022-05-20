@@ -22,25 +22,25 @@ builder.Services.AddIdentityServer(options =>
         options.UserInteraction.ErrorUrl = "/error/500";
     })
     .AddDeveloperSigningCredential()
-    .AddConfigurationStore(options =>
-    {
-        options.ConfigureDbContext = dbContextBuilder =>
-        {
-            dbContextBuilder.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
-        };
-    })
-    .AddProfileService<UserProfileService>()
-    .AddInMemoryCaching()
-    .AddConfigurationStoreCache()
-    .AddClientStoreCache<ClientStore>()
-    .AddResourceStoreCache<ResourceStore>()
-    .AddCorsPolicyCache<CorsPolicyService>();
+//.AddConfigurationStore(options =>
+//{
+//    options.ConfigureDbContext = dbContextBuilder =>
+//    {
+//        dbContextBuilder.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+//    };
+//})
+//.AddProfileService<UserProfileService>()
+//.AddInMemoryCaching()
+//.AddConfigurationStoreCache()
+//.AddClientStoreCache<ClientStore>()
+//.AddResourceStoreCache<ResourceStore>()
+//.AddCorsPolicyCache<CorsPolicyService>();
 
 
-//.AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
-//.AddTestUsers(InMemoryConfiguration.GetUsers().ToList())
-//.AddInMemoryApiResources(InMemoryConfiguration.GetApis())
-//.AddInMemoryClients(InMemoryConfiguration.GetClients());
+.AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
+.AddTestUsers(InMemoryConfiguration.GetUsers().ToList())
+.AddInMemoryApiResources(InMemoryConfiguration.GetApis())
+.AddInMemoryClients(InMemoryConfiguration.GetClients());
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();

@@ -41,6 +41,7 @@ public class InMemoryConfiguration
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email
                 },
+                RequireConsent = true,
                 //AccessTokenLifetime = 3600, // one hour
                 AllowAccessTokensViaBrowser = true // can return access_token to this client
             }

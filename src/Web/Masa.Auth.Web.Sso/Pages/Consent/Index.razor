@@ -4,56 +4,64 @@
 @inherits SsoCompontentBase
 @layout SideLayout
 
-<MCard Width=510 Height=680 Class="mx-auto my-auto">
-    <div style="height:60px;"></div>    
-    <span class="h5">
-        授权
-    </span>
-    <p>
-        <span>@_viewModel.ClientName</span>将获取以下权限
-    </p>
-    @if (_viewModel.ClientLogoUrl != null)
-    {
-        <div class="text-center mt-4"><img src="@_viewModel.ClientLogoUrl"></div>
-    }
+@if (_viewModel != null)
+{
+    <MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
+        <MCardTitle>
+            <div style="height:40px;"></div>
+            <span class="h5">
+                授权
+            </span>
+            <p>
+                <span>@_viewModel.ClientName</span>将获取以下权限
+            </p>
+        </MCardTitle>
+        <MCardText Style="height: auto;">
 
-    @if (_viewModel.ApiScopes.Any())
-    {
-        <ul class="list-group list-group-flush">
-            @for (var i = 0; i < _viewModel.IdentityScopes.Count(); i++)
+            @if (_viewModel.ClientLogoUrl != null)
             {
-                var scope = _viewModel.IdentityScopes.ElementAt(i);
-                <_ScopeListItem @bind-ScopeViewModel="scope" />
+                <div class="text-center mt-4"><img src="@_viewModel.ClientLogoUrl"></div>
             }
-        </ul>
-    }
 
-    @if (_viewModel.ApiScopes.Any())
-    {
-        <ul class="list-group list-group-flush">
-            @for (var i = 0; i < _viewModel.ApiScopes.Count(); i++)
+            @if (_viewModel.IdentityScopes.Any())
             {
-                var scope = _viewModel.ApiScopes.ElementAt(i);
-                <_ScopeListItem @bind-ScopeViewModel="scope" />
+                <ul class="pl-0">
+                    @for (var i = 0; i < _viewModel.IdentityScopes.Count(); i++)
+                    {
+                        var scope = _viewModel.IdentityScopes.ElementAt(i);
+                        <_ScopeListItem @bind-ScopeViewModel="scope" />
+                    }
+                </ul>
             }
-        </ul>
-    }
 
-    @if (_viewModel.AllowRememberConsent)
-    {
-        <MCheckbox @bind-Value="_inputModel.RememberConsent" Label="Remember My Decision<"></MCheckbox>
-    }
+            @if (_viewModel.ApiScopes.Any())
+            {
+                <ul class="list-group list-group-flush">
+                    @for (var i = 0; i < _viewModel.ApiScopes.Count(); i++)
+                    {
+                        var scope = _viewModel.ApiScopes.ElementAt(i);
+                        <_ScopeListItem @bind-ScopeViewModel="scope" />
+                    }
+                </ul>
+            }
+        </MCardText>
 
-    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">同意</MButton>
-    <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>拒绝</MButton>
-
-    <div class="col-sm-4 col-lg-auto">
-        @if (_viewModel.ClientUrl != null)
+        @if (_viewModel.AllowRememberConsent)
         {
-            <a class="btn btn-outline-info" href="@_viewModel.ClientUrl">
-                <span class="glyphicon glyphicon-info-sign"></span>
-                <strong>@_viewModel.ClientName</strong>
-            </a>
+            <MCheckbox @bind-Value="_inputModel.RememberConsent" Label="Remember My Decision"></MCheckbox>
         }
-    </div>
-</MCard>
+
+        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">同意</MButton>
+        <MButton Class="mt-6 rounded-4 text-btn primary--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>拒绝</MButton>
+
+        <div class="col-sm-4 col-lg-auto">
+            @if (_viewModel.ClientUrl != null)
+            {
+                <a class="btn btn-outline-info" href="@_viewModel.ClientUrl">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <strong>@_viewModel.ClientName</strong>
+                </a>
+            }
+        </div>
+    </MCard>
+}
