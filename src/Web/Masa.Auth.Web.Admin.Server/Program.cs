@@ -8,6 +8,7 @@ using Masa.Auth.Web.Admin.Rcl.Global;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,52 +32,53 @@ builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = bu
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
+IdentityModelEventSource.ShowPII = true;
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-               .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,
-                   options =>
-                   {
-                       options.RequireHttpsMetadata = false;
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,
+    options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        // Set Authority to setting in appsettings.json.  This is the URL of the IdentityServer4
+        options.Authority = builder.Configuration["OIDC:Authority"];
+        // Set ClientId to setting in appsettings.json.    This Client ID is set when registering the Blazor Server app in IdentityServer4
+        options.ClientId = builder.Configuration["OIDC:ClientId"];
+        // Set ClientSecret to setting in appsettings.json.  The secret value is set from the Client >  Basic tab in IdentityServer Admin UI
+        options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
+        // When set to code, the middleware will use PKCE protection
+        options.ResponseType = "id_token token";
+        // Add request scopes.  The scopes are set in the Client >  Basic tab in IdentityServer Admin UI
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+        // Save access and refresh tokens to authentication cookie.  the default is false
+        options.SaveTokens = true;
+        // It's recommended to always get claims from the 
+        // UserInfoEndpoint during the flow. 
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            //map claim to name for display on the upper right corner after login.  Can be name, email, etc.
+            NameClaimType = "name"
+        };
 
-                       options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                       options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                       // Set Authority to setting in appsettings.json.  This is the URL of the IdentityServer4
-                       options.Authority = builder.Configuration["OIDC:Authority"];
-                       // Set ClientId to setting in appsettings.json.    This Client ID is set when registering the Blazor Server app in IdentityServer4
-                       options.ClientId = builder.Configuration["OIDC:ClientId"];
-                       // Set ClientSecret to setting in appsettings.json.  The secret value is set from the Client >  Basic tab in IdentityServer Admin UI
-                       options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
-                       // When set to code, the middleware will use PKCE protection
-                       options.ResponseType = "id_token token";
-                       // Add request scopes.  The scopes are set in the Client >  Basic tab in IdentityServer Admin UI
-                       options.Scope.Add("openid");
-                       options.Scope.Add("profile");
-                       options.Scope.Add("email");
-                       // Save access and refresh tokens to authentication cookie.  the default is false
-                       options.SaveTokens = true;
-                       // It's recommended to always get claims from the 
-                       // UserInfoEndpoint during the flow. 
-                       options.GetClaimsFromUserInfoEndpoint = true;
-                       options.TokenValidationParameters = new TokenValidationParameters
-                       {
-                           //map claim to name for display on the upper right corner after login.  Can be name, email, etc.
-                           NameClaimType = "name"
-                       };
-
-                       options.Events = new OpenIdConnectEvents
-                       {
-                           OnAccessDenied = context =>
-                           {
-                               context.HandleResponse();
-                               context.Response.Redirect("/");
-                               return Task.CompletedTask;
-                           }
-                       };
-                   });
+        options.Events = new OpenIdConnectEvents
+        {
+            OnAccessDenied = context =>
+            {
+                context.HandleResponse();
+                context.Response.Redirect("/");
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 builder.Services.AddAuthorization(options =>
 {

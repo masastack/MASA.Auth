@@ -1,35 +1,31 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server;
+namespace Masa.Auth.Web.Sso;
 
-namespace Masa.Auth.Web.Sso
+public class SsoAuthenticationStateProvider : RevalidatingServerAuthenticationStateProvider
 {
-    public class SsoAuthenticationStateProvider : RevalidatingServerAuthenticationStateProvider
+    public SsoAuthenticationStateProvider(ILoggerFactory loggerFactory) : base(loggerFactory)
     {
-        public SsoAuthenticationStateProvider(ILoggerFactory loggerFactory) : base(loggerFactory)
-        {
-        }
+    }
 
-        protected override TimeSpan RevalidationInterval => TimeSpan.FromSeconds(30);
+    protected override TimeSpan RevalidationInterval => TimeSpan.FromSeconds(30);
 
-        protected override Task<bool> ValidateAuthenticationStateAsync(AuthenticationState authenticationState, CancellationToken cancellationToken)
-        {
-            var sid =
-                authenticationState.User.Claims
-                .Where(c => c.Type.Equals("sid"))
-                .Select(c => c.Value)
-                .FirstOrDefault();
+    protected override Task<bool> ValidateAuthenticationStateAsync(AuthenticationState authenticationState, CancellationToken cancellationToken)
+    {
+        var sid =
+            authenticationState.User.Claims
+            .Where(c => c.Type.Equals("sid"))
+            .Select(c => c.Value)
+            .FirstOrDefault();
 
-            var name =
-                authenticationState.User.Claims
-                .Where(c => c.Type.Equals("name"))
-                .Select(c => c.Value)
-                .FirstOrDefault() ?? string.Empty;
-            Debug.WriteLine($"\nValidate: {name} / {sid}");
+        var name =
+            authenticationState.User.Claims
+            .Where(c => c.Type.Equals("name"))
+            .Select(c => c.Value)
+            .FirstOrDefault() ?? string.Empty;
+        Debug.WriteLine($"\nValidate: {name} / {sid}");
 
-            return Task.FromResult(true);
-        }
+        return Task.FromResult(true);
     }
 }

@@ -28,6 +28,11 @@ public partial class Loggedout
                     SignOutIframeUrl = logout.SignOutIFrameUrl
                 };
             }
+
+            if (_viewModel.AutomaticRedirectAfterSignOut)
+            {
+                await jsRuntime.InvokeAsync<IJSObjectReference>("import", "~/js/signout-redirect.js");
+            }
         }
         await base.OnAfterRenderAsync(firstRender);
     }

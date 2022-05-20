@@ -36,7 +36,7 @@ public partial class Index
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private Task Logout()
+    private void Logout()
     {
         if (User.Identity?.IsAuthenticated == true)
         {

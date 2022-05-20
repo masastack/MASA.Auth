@@ -1,5 +1,8 @@
 ﻿@page "/redirect/index"
 @page "/redirect"
+@using Microsoft.JSInterop
+
+@inject IJSRuntime jsRuntime;
 
 <HeadContent>
     <meta http-equiv="refresh" content="0;url=@RedirectUri" data-url="@RedirectUri">

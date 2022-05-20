@@ -12,14 +12,20 @@ public partial class Index
     [Inject]
     public NavigationManager Navigation { get; set; } = null!;
 
-    [Inject]
-    public IUrlHelper Url { get; set; } = null!;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/signin-redirect.js");
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if (firstRender && !Url.IsLocalUrl(RedirectUri))
+        if (firstRender && !UrlHelper.IsLocalUrl(RedirectUri))
         {
-            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE,true);
+            Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
         }
     }
 }

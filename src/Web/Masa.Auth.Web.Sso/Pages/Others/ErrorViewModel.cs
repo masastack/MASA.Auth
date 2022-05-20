@@ -14,5 +14,5 @@ public class ErrorViewModel
         Error = new ErrorMessage { Error = error };
     }
 
-    public ErrorMessage Error { get; set; }
+    public ErrorMessage Error { get; set; } = new();
 }
