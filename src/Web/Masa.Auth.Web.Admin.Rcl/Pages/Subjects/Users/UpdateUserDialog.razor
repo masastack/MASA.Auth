@@ -6,7 +6,7 @@
             <div class="d-flex">
                 <div class="mx-auto text-center" style="width:212px;">
                     <UploadImage @bind-Value="User.Avatar" Avatar Size="120" WhenFileChangeUpload />
-                    <MTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <DefaultTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
@@ -16,23 +16,23 @@
                 </MRow>
                 <MRow Class="mt-6">
                     <MCol>
-                        <MTextField @bind-Value="User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.Name" Label="@T("Name")" />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
-                    </MCol>
-                </MRow>
-                <MRow Class="mt-1">
-                    <MCol>
-                        <MTextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
-                    </MCol>
-                    <MCol>
-                        <MTextField @bind-Value="User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextField Readonly Value="UserDetail.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" />
+                    </MCol>
+                    <MCol>
+                        <DefaultTextField @bind-Value="User.Email" Label="@T("Email")" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <DefaultTextField Readonly Value="UserDetail.Account" Label="@T("Account")" />
                     </MCol>
                     <MCol>
                        <CopyPassword @bind-Value="User.Password" />
@@ -41,18 +41,18 @@
                 <div class="mt-6 text-subtitle2">@T("Detail Information")</div>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextField @bind-Value="User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.IdCard" Label="@T("IdCard")" />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.Address.Address" Label="@T("Address")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextField @bind-Value="User.Department" Label="@T("Department")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.Department" Label="@T("Department")" />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                     </MCol>
                 </MRow>
 
