@@ -1520,6 +1520,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -2094,6 +2097,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VerifyFile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

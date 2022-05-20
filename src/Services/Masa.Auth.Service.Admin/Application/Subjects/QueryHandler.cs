@@ -9,16 +9,18 @@ public class QueryHandler
     readonly ITeamRepository _teamRepository;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyUserRepository _thirdPartyUserRepository;
+    readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
     readonly IAutoCompleteClient _autoCompleteClient;
 
-    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient)
+    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _staffRepository = staffRepository;
         _thirdPartyUserRepository = thirdPartyUserRepository;
+        _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _authDbContext = authDbContext;
         _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
@@ -189,6 +191,52 @@ public class QueryHandler
         if (tpu is null) throw new UserFriendlyException("This thirdPartyUser data does not exist");
 
         query.Result = tpu;
+    }
+
+    #endregion
+
+    #region ThirdPartyIdp
+
+    [EventHandler]
+    public async Task GetThirdPartyIdpsAsync(ThirdPartyIdpsQuery query)
+    {
+        Expression<Func<ThirdPartyIdp, bool>> condition = user => true;
+
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
+
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetPaginatedListAsync(condition, new PaginatedOptions
+        {
+            Page = query.Page,
+            PageSize = query.PageSize,
+            Sorting = new Dictionary<string, bool>
+            {
+                [nameof(ThirdPartyIdp.ModificationTime)] = true,
+                [nameof(ThirdPartyIdp.CreationTime)] = true,
+            }
+        });
+
+        query.Result = new(thirdPartyIdps.Total, thirdPartyIdps.Result.Select(thirdPartyIdp => (ThirdPartyIdpDto)thirdPartyIdp).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetThirdPartyIdpDetailAsync(ThirdPartyIdpDetailQuery query)
+    {
+        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == query.ThirdPartyIdpId);
+        if (thirdPartyIdp is null) throw new UserFriendlyException("This thirdPartyIdp data does not exist");
+
+        query.Result = thirdPartyIdp;
+    }
+
+    [EventHandler]
+    public async Task GetThirdPartyIdpSelectAsync(ThirdPartyIdpSelectQuery query)
+    {
+        Expression<Func<ThirdPartyIdp, bool>> condition = ThirdPartyIdp => true;
+        if (!string.IsNullOrEmpty(query.Search))
+            condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
+
+        query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyType)).ToList();
     }
 
     #endregion

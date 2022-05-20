@@ -3,12 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class ApiScope : AuditAggregateRoot<int, Guid>, ISoftDelete
+public class ApiScope : FullAuditAggregateRoot<int, Guid>
 {
     private List<ApiScopeClaim> _userClaims = new();
     private List<ApiScopeProperty> _properties = new();
-
-    public bool IsDeleted { get; private set; }
 
     public bool Enabled { get; private set; }
 

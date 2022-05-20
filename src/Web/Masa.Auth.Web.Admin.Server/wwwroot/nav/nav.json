@@ -70,7 +70,19 @@
         "Title": "CustomLogin",
         "Icon": "mdi-circle",
         "Href": "/sso/customLogin"
+      },
+      {
+        "Id": 12,
+        "Title": "Client",
+        "Icon": "mdi-circle",
+        "Href": "/sso/client"
       }
     ]
+  },
+  {
+    "Id": 7,
+    "Title": "ThirdPartyIdp",
+    "Icon": "mdi-calendar-check-outline",
+    "Href": "thirdPartyIdp"
   }
 ]

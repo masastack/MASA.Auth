@@ -24,6 +24,7 @@ public partial class UpdateClientDialog
     ClientBasicDto _basicDto = new();
     ClientConsentDto _consentDto = new();
     ClientAuthenticationDto _authenticationDto = new();
+    ClientScopesDto _clientScopesDto = new();
     ClientDeviceFlowDto _deviceFlowDto = new();
     ClientTokenDto _tokenDto = new();
     ClientCredentialDto _clientCredentialDto = new();
@@ -41,6 +42,7 @@ public partial class UpdateClientDialog
         _clientDetailDto.Adapt(_deviceFlowDto);
         _clientDetailDto.Adapt(_tokenDto);
         _clientDetailDto.Adapt(_clientCredentialDto);
+        _clientDetailDto.Adapt(_clientScopesDto);
 
         PrepareHeader();
 
@@ -57,9 +59,10 @@ public partial class UpdateClientDialog
 
     private void PrepareHeader()
     {
+        _tabHeader = new List<string> { T("Basic Information"), T("Consent Screen"), T("Authentication"), T("Resource Information") };
         if (_clientDetailDto.ClientType == ClientTypes.Device)
         {
-            _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Device Flow" };
+            _tabHeader.Add(T("Device Flow"));
             _otherType = typeof(DeviceFlow);
             _componentMetadata = new Dictionary<string, object>{
                 { "Dto",_deviceFlowDto }
@@ -67,7 +70,7 @@ public partial class UpdateClientDialog
         }
         else if (_clientDetailDto.ClientType == ClientTypes.Machine)
         {
-            _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Client Secret" };
+            _tabHeader.Add(T("Client Secret"));
             _otherType = typeof(ClientSecret);
             _componentMetadata = new Dictionary<string, object>{
                 { "Dto",_clientCredentialDto }
@@ -75,7 +78,7 @@ public partial class UpdateClientDialog
         }
         else
         {
-            _tabHeader = new List<string> { "Basic", "Consent Screen", "Authentication", "Resource", "Token" };
+            _tabHeader.Add(T("Token"));
             _otherType = typeof(Token);
             _componentMetadata = new Dictionary<string, object>{
                 { "Dto",_tokenDto }
@@ -91,6 +94,7 @@ public partial class UpdateClientDialog
         _deviceFlowDto.Adapt(_clientDetailDto);
         _tokenDto.Adapt(_clientDetailDto);
         _clientCredentialDto.Adapt(_clientDetailDto);
+        _clientScopesDto.Adapt(_clientDetailDto);
 
         await ClientService.UpdateClientAsync(_clientDetailDto);
         await CloseAsync();

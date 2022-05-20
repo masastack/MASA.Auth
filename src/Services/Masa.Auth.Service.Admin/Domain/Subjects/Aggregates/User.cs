@@ -3,13 +3,11 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class User : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class User : FullAuditAggregateRoot<Guid, Guid>
 {
     private List<UserRole> _roles = new();
     private List<UserPermission> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
-
-    public bool IsDeleted { get; private set; }
 
     public string Name { get; private set; }
 

@@ -11,7 +11,7 @@ namespace Masa.Auth.Service.Admin.Services
 
         private async Task<PaginationDto<UserClaimDto>> GetListAsync(IEventBus eventBus, GetUserClaimsDto userClaim)
         {
-            var query = new UserClaimQuery(userClaim.Page, userClaim.PageSize, userClaim.Search);
+            var query = new UserClaimsQuery(userClaim.Page, userClaim.PageSize, userClaim.Search);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

@@ -3,13 +3,11 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
 
-public class DepartmentStaff : AuditEntity<Guid, Guid>, ISoftDelete
+public class DepartmentStaff : FullAuditEntity<Guid, Guid>
 {
     public Guid DepartmentId { get; private set; }
 
     public Guid StaffId { get; private set; }
-
-    public bool IsDeleted { get; private set; }
 
     public Department Department { get; private set; } = null!;
 

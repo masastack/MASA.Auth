@@ -3,14 +3,12 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class ThirdPartyUser : AuditAggregateRoot<Guid, Guid>, ISoftDelete
+public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
 {
     private User? _user;
     private User? _createUser;
     private User? _modifyUser;
     private ThirdPartyIdp? _thirdPartyIdp;
-
-    public bool IsDeleted { get; private set; }
 
     public User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 

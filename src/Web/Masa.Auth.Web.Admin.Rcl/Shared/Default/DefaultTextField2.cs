@@ -8,7 +8,6 @@ public class DefaultTextField2<TValue> : MTextField<TValue>
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         Clearable = true;
-        Dense = true;
         HideDetails = false;
         Outlined = true;
 
