@@ -144,6 +144,42 @@ public class QueryHandler
         query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
     }
 
+    [EventHandler]
+    public async Task GetStaffsByDepartmentAsync(StaffsByDepartmentQuery query)
+    {
+        var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(staff => staff.User)
+                                         .Include(staff => staff.DepartmentStaffs)
+                                         .Where(staff => staff.DepartmentStaffs.Any(department => department.Id == query.DepartmentId))
+                                         .ToListAsync();
+
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffsByTeamAsync(StaffsByTeamQuery query)
+    {
+        var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(staff => staff.User)
+                                         .Include(staff => staff.TeamStaffs)
+                                         .Where(staff => staff.TeamStaffs.Any(team => team.Id == query.TeamId))
+                                         .ToListAsync();
+
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffsByRoleAsync(StaffsByRoleQuery query)
+    {
+        var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(staff => staff.User)
+                                         .ThenInclude(user => user.Roles)
+                                         .Where(staff => staff.User.Roles.Any(role => role.Id == query.RoleId))
+                                         .ToListAsync();
+
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+    }
+
     #endregion
 
     #region ThirdPartyUser
@@ -248,7 +284,7 @@ public class QueryHandler
                 .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount, "", "", "", t.ModificationTime))
                 .ToList();
     }
-
+  
     [EventHandler]
     public async Task TeamDetailAsync(TeamDetailQuery teamDetailQuery)
     {
@@ -276,6 +312,28 @@ public class QueryHandler
             {
 
             }
+        };
+    }
+
+    [EventHandler]
+    public async Task TeamDetailForExternalAsync(TeamDetailForExternalQuery query)
+    {
+        var team = await _authDbContext.Set<Team>()
+                                       .Include(t => t.TeamStaffs)
+                                       .ThenInclude(ts => ts.Staff)
+                                       .AsSplitQuery()
+                                       .FirstOrDefaultAsync(t => t.Id == query.TeamId);
+
+        if (team is null) throw new UserFriendlyException("This team data does not exist");
+        query.Result = new TeamDetailForExternalDto
+        {
+            Id = team.Id,
+            Name = team.Name,
+            Description = team.Description,
+            TeamType = team.TeamType,
+            Avatar = team.Avatar.Url,          
+            TeamAdmin = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(ts => (StaffDto)ts.Staff).ToList(),
+            TeamMember = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(ts => (StaffDto)ts.Staff).ToList(),
         };
     }
 

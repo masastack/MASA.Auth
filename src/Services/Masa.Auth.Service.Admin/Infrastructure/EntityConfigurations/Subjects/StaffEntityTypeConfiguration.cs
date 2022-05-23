@@ -14,7 +14,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
         builder.HasOne(s => s.User).WithOne().HasForeignKey<Staff>(s => s.UserId);
         builder.HasOne(s => s.Position).WithOne().HasForeignKey<Staff>(s => s.PositionId).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasMany(s => s.DepartmentStaffs).WithOne(a => a.Staff).HasForeignKey(ds => ds.StaffId);
-        builder.HasMany(s => s.TeamStaffs).WithOne().HasForeignKey(ts => ts.StaffId);
+        builder.HasMany(s => s.TeamStaffs).WithOne(ts => ts.Staff).HasForeignKey(ts => ts.StaffId);
         builder.HasOne(r => r.CreateUser).WithMany().HasForeignKey(r => r.Creator).IsRequired(false).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasOne(r => r.ModifyUser).WithMany().HasForeignKey(r => r.Modifier).IsRequired(false).OnDelete(DeleteBehavior.ClientSetNull);
     }

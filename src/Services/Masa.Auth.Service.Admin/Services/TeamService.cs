@@ -44,6 +44,13 @@ public class TeamService : ServiceBase
         return query.Result;
     }
 
+    private async Task<TeamDetailDto> GetDetailForExternalAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new TeamDetailForExternalQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task<List<TeamDto>> ListAsync(IEventBus eventBus, [FromQuery] string name)
     {
         var query = new TeamListQuery(name);
