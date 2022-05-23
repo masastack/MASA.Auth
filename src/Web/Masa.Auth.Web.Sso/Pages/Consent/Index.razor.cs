@@ -38,51 +38,16 @@ public partial class Index
         var queryArguments = new Dictionary<string, string?>()
         {
             { "consent", consent.ToString() },
-            { "returnUrl", ReturnUrl }
+            { "returnUrl", ReturnUrl },
+            { "rememberConsent", _inputModel.RememberConsent.ToString() },
+            { "description", _inputModel.Description },
+            { "scopes", _inputModel.ScopesConsented.ToString() },
         };
         var url = QueryHelpers.AddQueryString("consent/consent", queryArguments);
         Navigation.NavigateTo(url, true);
 
         // we need to redisplay the consent UI
         _viewModel = BuildViewModelAsync(_inputModel.ReturnUrl);
-    }
-
-    private async Task<ConsentResponse?> AgreeHandler(AuthorizationRequest request)
-    {
-        ConsentResponse? grantedConsent = null;
-        // if the user consented to some scope, build the response model
-        if (_inputModel.ScopesConsented != null && _inputModel.ScopesConsented.Any())
-        {
-            var scopes = _inputModel.ScopesConsented;
-            if (ConsentOptions.EnableOfflineAccess == false)
-            {
-                scopes = scopes.Where(x => x != IdentityServerConstants.StandardScopes.OfflineAccess);
-            }
-
-            grantedConsent = new ConsentResponse
-            {
-                RememberConsent = _inputModel.RememberConsent,
-                ScopesValuesConsented = scopes.ToArray(),
-                Description = _inputModel.Description
-            };
-
-            // emit event
-            await Events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
-        }
-        else
-        {
-            await PopupService.AlertAsync(ConsentOptions.MustChooseOneErrorMessage, BlazorComponent.AlertTypes.Error);
-        }
-        return grantedConsent;
-    }
-
-    private async Task<ConsentResponse> RejectHandler(AuthorizationRequest request)
-    {
-        var grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
-
-        // emit event
-        await Events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
-        return grantedConsent;
     }
 
     private ViewModel? BuildViewModelAsync(string returnUrl)

@@ -6,42 +6,40 @@ namespace Masa.Auth.Web.Sso.Pages.Consent;
 public class ConsentModel : PageModel
 {
     readonly IIdentityServerInteractionService _interaction = null!;
+    readonly IEventService _events = null!;
 
-    public ConsentModel(IIdentityServerInteractionService interaction)
+    public ConsentModel(IIdentityServerInteractionService interaction, IEventService events)
     {
         _interaction = interaction;
+        _events = events;
     }
 
-    [BindProperty]
-    public InputModel Input { get; set; } = new();
-
-    public async Task<IActionResult> OnGet(bool consent, string returnUrl)
+    public async Task<IActionResult> OnGet(bool consent, string returnUrl, bool rememberConsent, string description, List<string> scopes)
     {
         var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
-        Input = new InputModel
-        {
-            ReturnUrl = returnUrl,
-        };
 
         ConsentResponse? grantedConsent = null;
 
         if (consent)
         {
-            var scopes = Input.ScopesConsented;
             if (ConsentOptions.EnableOfflineAccess == false)
             {
-                scopes = scopes.Where(x => x != IdentityServerConstants.StandardScopes.OfflineAccess);
+                scopes = scopes.Where(x => x != IdentityServerConstants.StandardScopes.OfflineAccess).ToList();
             }
             grantedConsent = new ConsentResponse
             {
-                RememberConsent = Input.RememberConsent,
+                RememberConsent = rememberConsent,
                 ScopesValuesConsented = scopes.ToArray(),
-                Description = Input.Description
+                Description = description
             };
+            // emit event
+            await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
         }
         else
         {
             grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
+            // emit event
+            await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
 
         if (grantedConsent != null)
@@ -57,6 +55,6 @@ public class ConsentModel : PageModel
                 return this.LoadingPage(returnUrl);
             }
         }
-        return Redirect(returnUrl);
+        return LocalRedirect(returnUrl);
     }
 }

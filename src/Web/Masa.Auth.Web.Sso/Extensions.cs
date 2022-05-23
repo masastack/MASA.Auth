@@ -32,25 +32,24 @@ public static class Extensions
         page.HttpContext.Response.StatusCode = 200;
         page.HttpContext.Response.Headers["Location"] = "";
 
-        return page.RedirectToPage("/Redirect/Index", new { RedirectUri = redirectUri });
+        return page.RedirectToPage("/redirect/index", new { RedirectUri = redirectUri });
     }
 
     public static void LoadingPage(this NavigationManager nav, string redirectUri)
     {
-        var url = nav.GetUriWithQueryParameters("/Redirect/Index", new Dictionary<string, object?>
+        var url = nav.GetUriWithQueryParameters("/redirect/index", new Dictionary<string, object?>
         {
             { "RedirectUri", redirectUri }
         });
         nav.NavigateTo(url);
     }
 
-#warning remove controller
     public static IActionResult LoadingPage(this Controller controller, string redirectUri)
     {
         controller.HttpContext.Response.StatusCode = 200;
         controller.HttpContext.Response.Headers["Location"] = "";
 
-        return controller.RedirectToPage("/Redirect/Index", new { RedirectUri = redirectUri });
+        return controller.RedirectToPage("/redirect/index", new { RedirectUri = redirectUri });
     }
 
     public static void NavigateTo(this NavigationManager nav, string uri, Dictionary<string, object?> parameters)
