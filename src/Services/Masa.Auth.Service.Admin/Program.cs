@@ -78,19 +78,14 @@ var app = builder.Services
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
             eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
+        //set Isolation.
+        //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
         .UseIsolationUoW<AuthDbContext>(
-            isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),
+            isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT_KEY),
             dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
-
-//set Isolation
-//app.Use(async (context, next) =>
-//{
-//    context.Items.Add("env", "development");
-//    await next.Invoke();
-//});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {
