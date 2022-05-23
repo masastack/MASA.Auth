@@ -3,6 +3,7 @@
 
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
+global using Humanizer;
 global using Mapster;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;

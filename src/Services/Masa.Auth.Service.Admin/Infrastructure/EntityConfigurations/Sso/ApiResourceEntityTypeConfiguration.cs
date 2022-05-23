@@ -7,7 +7,6 @@ public class ApiResourceEntityTypeConfiguration : IEntityTypeConfiguration<ApiRe
 {
     public void Configure(EntityTypeBuilder<ApiResource> builder)
     {
-        builder.ToTable(nameof(ApiResource), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
         builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
         builder.Property(x => x.DisplayName).HasMaxLength(200);
         builder.Property(x => x.Description).HasMaxLength(1000);

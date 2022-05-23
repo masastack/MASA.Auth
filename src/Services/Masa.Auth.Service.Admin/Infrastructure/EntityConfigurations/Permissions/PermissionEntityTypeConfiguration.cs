@@ -7,7 +7,6 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
-        builder.ToTable(nameof(Permission), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(p => p.Id);
         builder.HasIndex(p => new { p.AppId, p.Code }).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(p => p.Name).HasMaxLength(20).IsRequired();
