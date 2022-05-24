@@ -7,7 +7,6 @@ public class ClientClaimEntityTypeConfiguration : IEntityTypeConfiguration<Clien
 {
     public void Configure(EntityTypeBuilder<ClientClaim> builder)
     {
-        builder.ToTable(nameof(ClientClaim), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
         builder.Property(x => x.Type).HasMaxLength(250).IsRequired();
         builder.Property(x => x.Value).HasMaxLength(250).IsRequired();
     }

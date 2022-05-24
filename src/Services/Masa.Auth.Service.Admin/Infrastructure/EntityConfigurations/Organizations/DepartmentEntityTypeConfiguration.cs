@@ -7,7 +7,6 @@ public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Depart
 {
     public void Configure(EntityTypeBuilder<Department> builder)
     {
-        builder.ToTable(nameof(Department), AuthDbContext.ORGANIZATION_SCHEMA);
         builder.HasKey(d => d.Id);
         builder.HasIndex(d => d.Name).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(d => d.Level).IsUnique().HasFilter("Level = 1");
