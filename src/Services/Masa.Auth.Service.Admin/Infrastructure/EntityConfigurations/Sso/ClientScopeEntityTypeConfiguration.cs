@@ -7,7 +7,6 @@ public class ClientScopeEntityTypeConfiguration : IEntityTypeConfiguration<Clien
 {
     public void Configure(EntityTypeBuilder<ClientScope> builder)
     {
-        builder.ToTable(nameof(ClientScope), AuthDbContext.SSO_SCHEMA);
         builder.Property(x => x.Scope).HasMaxLength(200).IsRequired();
     }
 }
