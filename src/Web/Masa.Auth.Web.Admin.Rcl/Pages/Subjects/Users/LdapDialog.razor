@@ -38,7 +38,17 @@
 
 @code {
     MForm _form = null!;
-    LdapDetailDto _ldapDetailDto = new();
+    LdapDetailDto _ldapDetailDto = new()
+    {
+        IsLdaps = false,
+        ServerPort = 389,
+        RootUserDn = "lonsid\\bpm",
+        RootUserPassword = "Abc@321",
+        ServerAddress = "192.168.10.21",
+        BaseDn = "DC=lonsid,DC=cn",
+        UserSearchBaseDn = "",
+        GroupSearchBaseDn = ""
+    };
 
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
@@ -62,7 +72,7 @@
         }
         catch
         {
-            OpenErrorMessage(T("Connect Error"));   
+            OpenErrorMessage(T("Connect Error"));
         }
     }
 
@@ -73,6 +83,6 @@
             return;
         }
         await ThirdPartyIdpService.LdapUpsertAsync(_ldapDetailDto);
-        OpenSuccessMessage("");
+        OpenSuccessMessage(T("Ldap Account Synchroniz Success"));
     }
 }

@@ -8,13 +8,19 @@ public class CommandHandler
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
     readonly ILdapFactory _ldapFactory;
     readonly UserDomainService _userDomainService;
+    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
+    readonly IConfiguration _configuration;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory, UserDomainService userDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
+        ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory,
+        UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
+        IConfiguration configuration)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -24,6 +30,9 @@ public class CommandHandler
         _teamDomainService = teamDomainService;
         _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
+        _thirdPartyUserDomainService = thirdPartyUserDomainService;
+        _ldapIdpRepository = ldapIdpRepository;
+        _configuration = configuration;
     }
 
     #region User
@@ -242,13 +251,38 @@ public class CommandHandler
     [EventHandler]
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
+        var _thirdPartyIdpId = Guid.Empty;
+        var ldapIdp = new LdapIdp(ldapUpsertCommand.LdapDetailDto.ServerAddress, ldapUpsertCommand.LdapDetailDto.ServerPort, ldapUpsertCommand.LdapDetailDto.IsLdaps,
+                ldapUpsertCommand.LdapDetailDto.BaseDn, ldapUpsertCommand.LdapDetailDto.RootUserDn, ldapUpsertCommand.LdapDetailDto.RootUserPassword, ldapUpsertCommand.LdapDetailDto.UserSearchBaseDn, ldapUpsertCommand.LdapDetailDto.GroupSearchBaseDn);
+        var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
+        if (dbItem is null)
+        {
+            await _ldapIdpRepository.AddAsync(ldapIdp);
+            await _ldapIdpRepository.UnitOfWork.SaveChangesAsync();
+            _thirdPartyIdpId = ldapIdp.Id;
+        }
+        else
+        {
+            _thirdPartyIdpId = dbItem.Id;
+            dbItem.Update(ldapIdp);
+            await _ldapIdpRepository.UpdateAsync(dbItem);
+        }
         var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
         {
-            //Public domain event
-            //todo wait user memory cache
+            await _thirdPartyUserDomainService.AddThirdPartyUserAsync(new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
+                new AddUserDto
+                {
+                    Name = ldapUser.Name,
+                    DisplayName = ldapUser.DisplayName,
+                    Enabled = true,
+                    Email = ldapUser.EmailAddress,
+                    PhoneNumber = ldapUser.Phone,
+                    Account = ldapUser.SamAccountName,
+                    Password = _configuration.GetValue<string>("Subjects:InitialPassword")
+                }));
         }
     }
 
