@@ -11,6 +11,8 @@
     <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.4.0-rc1" />
     <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.4.0-rc1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta14" />
     <PackageReference Include="Util.Reflection" Version="1.0.3" />
   </ItemGroup>
 
