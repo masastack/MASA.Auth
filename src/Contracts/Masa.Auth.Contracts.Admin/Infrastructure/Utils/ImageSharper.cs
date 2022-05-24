@@ -9,29 +9,31 @@ public static class ImageSharper
     {
         MemoryStream ms = new MemoryStream();
         using var image = new Image<Rgba32>(size, size);
-        image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Origin = new Vector2(size / 2, size / 2)
-        };
-        image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
-        image.SaveAsPng(ms);
+            image.Mutate(x => x.BackgroundColor(backgroundColor));
+            var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Origin = new Vector2(size / 2, size / 2)
+            };
+            image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
+            image.SaveAsPng(ms);
+        }
         return ms;
     }
 
     public static void GeneratePortrait(char show, Color textColor, Color backgroundColor, int size, string path)
     {
         using var image = new Image<Rgba32>(size, size);
-        image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Origin = new Vector2(size / 2, size / 2)
-        };
-        image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
-        image.SaveAsPng(path);
+            image.Mutate(x => x.BackgroundColor(backgroundColor));
+            var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Origin = new Vector2(size / 2, size / 2)
+            };
+            image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
+            image.SaveAsPng(path);
+        }
     }
 }
