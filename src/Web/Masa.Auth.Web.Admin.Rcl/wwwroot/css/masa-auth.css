@@ -505,8 +505,8 @@
 }
 
 .button {
-    min-width: 40px;
-    min-height: 40px;
+    min-width: 42px;
+    min-height: 42px;
     border: 1px solid #F0F3FA;
     box-sizing: border-box;
     border-radius: 10px;
@@ -1188,7 +1188,7 @@ input::-webkit-input-placeholder {
     position: absolute !important;
 }
 
-.user .m-data-table-header__icon {
+.default .m-data-table-header__icon {
     margin-top: 1px;
 }
 

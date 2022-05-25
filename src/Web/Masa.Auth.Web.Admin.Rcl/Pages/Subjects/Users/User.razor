@@ -8,7 +8,7 @@
             @(Filter?"mdi-filter":"mdi-filter-off")
         </MIcon>
     </div>
-    <MButton Color="primary" Class="ml-4 medium-button" OnClick=OpenAddUserDialog>
+    <MButton Color="primary" Class="ml-4 small-button" OnClick=OpenAddUserDialog>
         <MIcon Size=18>mdi-plus</MIcon>
         <span class="ml-2">@T("Add")</span>
     </MButton>
@@ -26,7 +26,7 @@
     </div>
 }
 
-<MDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
+<DefaultDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
     <HeaderColContent Context="header">
         <span class="text-btn">@header.Text</span>
     </HeaderColContent>
@@ -65,9 +65,9 @@
         }
     </ItemColContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
-</MDataTable>
+</DefaultDataTable>
 
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
