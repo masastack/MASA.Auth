@@ -1,5 +1,4 @@
-﻿@using Masa.Stack.Components
-@inherits AdminCompontentBase
+﻿@inherits AdminCompontentBase
 
 <div style="position: absolute;right: 0;top: 0;" class="d-flex">
     <UserAutoComplete @bind-Value="UserId" />
@@ -43,8 +42,15 @@
                     </div>
                 </div>
                 break;
-            case (nameof(ThirdPartyUserDto.ThirdPartyIdp)):
-                <img src="@context.Item.ThirdPartyIdp.Icon" />
+            case (nameof(ThirdPartyUserDto.IdpDetailDto)):
+                if (context.Item.IdpDetailDto.Name==LdapConsts.LDAP_NAME)
+                {
+                    <MIcon>@context.Item.IdpDetailDto.Icon</MIcon>
+                }
+                else
+                {
+                    <img src="@context.Item.IdpDetailDto.Icon" />
+                }
                 break;
             case nameof(ThirdPartyUserDto.Creator):
                 <span class="text-body3">@context.Item.Creator</span>

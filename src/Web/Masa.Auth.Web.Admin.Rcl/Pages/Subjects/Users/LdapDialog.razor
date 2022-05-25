@@ -38,17 +38,7 @@
 
 @code {
     MForm _form = null!;
-    LdapDetailDto _ldapDetailDto = new()
-    {
-        IsLdaps = false,
-        ServerPort = 389,
-        RootUserDn = "lonsid\\bpm",
-        RootUserPassword = "Abc@321",
-        ServerAddress = "192.168.10.21",
-        BaseDn = "DC=lonsid,DC=cn",
-        UserSearchBaseDn = "OU=朗诗德集团,DC=lonsid,DC=cn",
-        GroupSearchBaseDn = ""
-    };
+    LdapDetailDto _ldapDetailDto = new();
 
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 

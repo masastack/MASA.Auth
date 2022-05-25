@@ -45,7 +45,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
 		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.4.0-rc1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">

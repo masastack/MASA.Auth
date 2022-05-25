@@ -93,11 +93,11 @@ public partial class ThirdPartyUser
         Headers = new()
         {
             new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.ThirdPartyIdp), Sortable = false },
+            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
-            new() { Text = T("State"), Value = T(nameof(UserDto.Enabled)), Sortable = false },
+            new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 

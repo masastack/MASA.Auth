@@ -8,7 +8,7 @@ public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
     private User? _user;
     private User? _createUser;
     private User? _modifyUser;
-    private ThirdPartyIdp? _thirdPartyIdp;
+    private IdentityProvider? _identityProvider;
 
     public User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
@@ -21,7 +21,7 @@ public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
 
     public new Guid? Modifier { get; private set; }
 
-    public ThirdPartyIdp ThirdPartyIdp => _thirdPartyIdp ?? LazyLoader?.Load(this, ref _thirdPartyIdp) ?? throw new UserFriendlyException("Failed to get thirdPartyIdp data");
+    public IdentityProvider IdentityProvider => (_identityProvider ?? LazyLoader?.Load(this, ref _identityProvider)) ?? throw new UserFriendlyException("Failed to get IdentityProvider data");
 
     public Guid ThirdPartyIdpId { get; private set; }
 
@@ -49,7 +49,7 @@ public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
 
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)
     {
-        return new ThirdPartyUserDetailDto(tpu.Id, tpu.Enabled, tpu.ThirdPartyIdp, tpu.User, tpu.CreationTime, tpu.ModificationTime, tpu.CreateUser?.Name ?? "", tpu.ModifyUser?.Name ?? "");
+        return new ThirdPartyUserDetailDto(tpu.Id, tpu.Enabled, tpu.IdentityProvider, tpu.User, tpu.CreationTime, tpu.ModificationTime, tpu.CreateUser?.Name ?? "", tpu.ModifyUser?.Name ?? "");
     }
 }
 

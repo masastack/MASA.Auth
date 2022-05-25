@@ -23,8 +23,8 @@ public class LdapIdp : IdentityProvider
 
     private LdapIdp()
     {
-        Name = "Ldap";
-        DisplayName = "Ldap";
+        Name = LdapConsts.LDAP_NAME;
+        DisplayName = LdapConsts.LDAP_NAME;
         Icon = "mdi-laptop";
         IdentificationType = IdentificationTypes.PhoneNumber;
     }
