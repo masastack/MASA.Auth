@@ -16,11 +16,12 @@ public class CommandHandler
     readonly UserDomainService _userDomainService;
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
+    readonly ILogger<CommandHandler> _logger;
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
         ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory,
         UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IConfiguration configuration)
+        IConfiguration configuration, ILogger<CommandHandler> logger)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -33,6 +34,7 @@ public class CommandHandler
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapIdpRepository = ldapIdpRepository;
         _configuration = configuration;
+        _logger = logger;
     }
 
     #region User
@@ -267,24 +269,31 @@ public class CommandHandler
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
+
         var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
         {
-            await _thirdPartyUserDomainService.AddThirdPartyUserAsync(new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
-                new AddUserDto
-                {
-                    Name = ldapUser.Name,
-                    DisplayName = ldapUser.DisplayName,
-                    Enabled = true,
-                    Email = ldapUser.EmailAddress,
-                    PhoneNumber = ldapUser.Phone,
-                    Account = ldapUser.SamAccountName,
-                    Password = _configuration.GetValue<string>("Subjects:InitialPassword")
-                }));
+            try
+            {
+                await _thirdPartyUserDomainService.AddThirdPartyUserAsync(new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
+                    new AddUserDto
+                    {
+                        Name = ldapUser.Name,
+                        DisplayName = ldapUser.DisplayName,
+                        Enabled = true,
+                        Email = ldapUser.EmailAddress,
+                        PhoneNumber = ldapUser.Phone,
+                        Account = ldapUser.SamAccountName,
+                        Password = _configuration.GetValue<string>("Subjects:InitialPassword")
+                    }));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "LdapUser Name = {0},Email = {1},PhoneNumber={2}", ldapUser.Name, ldapUser.EmailAddress, ldapUser.Phone);
+            }
         }
     }
-
     #endregion
 }

@@ -25,6 +25,7 @@ public class LdapIdp : IdentityProvider
     {
         Name = "Ldap";
         DisplayName = "Ldap";
+        Icon = "mdi-laptop";
         IdentificationType = IdentificationTypes.PhoneNumber;
     }
 

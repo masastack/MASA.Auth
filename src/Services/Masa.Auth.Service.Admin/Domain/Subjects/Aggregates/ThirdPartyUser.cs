@@ -14,7 +14,12 @@ public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
 
     public User? CreateUser => _createUser;
 
+    //todo It will be deleted later
+    public new Guid? Creator { get; private set; }
+
     public User? ModifyUser => _modifyUser;
+
+    public new Guid? Modifier { get; private set; }
 
     public ThirdPartyIdp ThirdPartyIdp => _thirdPartyIdp ?? LazyLoader?.Load(this, ref _thirdPartyIdp) ?? throw new UserFriendlyException("Failed to get thirdPartyIdp data");
 
@@ -28,10 +33,10 @@ public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
 
     private ILazyLoader? LazyLoader { get; set; }
 
-    public ThirdPartyUser(ILazyLoader lazyLoader)
+    private ThirdPartyUser(ILazyLoader lazyLoader)
     {
         LazyLoader = lazyLoader;
-        ThridPartyIdentity = "";
+        ThridPartyIdentity = string.Empty;
     }
 
     public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity)

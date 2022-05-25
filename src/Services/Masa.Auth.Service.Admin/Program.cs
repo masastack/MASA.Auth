@@ -3,6 +3,8 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddObservability();
+
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
