@@ -7,14 +7,14 @@ public class UserDomainService : DomainService
     {
     }
 
-    public async Task SetAsync(User user)
+    public async Task SetAsync(params User[] users)
     {
-        await EventBus.PublishAsync(new SetUserDomainEvent(user));
+        await EventBus.PublishAsync(new SetUserDomainEvent(users.ToList()));
     }
 
-    public async Task RemoveAsync(Guid userId)
+    public async Task RemoveAsync(params Guid[] userIds)
     {
-        await EventBus.PublishAsync(new RemoveUserDomainEvent(userId));
+        await EventBus.PublishAsync(new RemoveUserDomainEvent(userIds.ToList()));
     }
 }
 

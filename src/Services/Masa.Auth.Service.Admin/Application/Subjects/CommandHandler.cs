@@ -144,6 +144,12 @@ public class CommandHandler
         await _staffRepository.RemoveAsync(staff);
     }
 
+    [EventHandler]
+    public async Task SyncAsync(SyncStaffCommand command)
+    {
+        command.Result = await _staffDomainService.SyncStaffAsync(command.Staffs);
+    }
+
     #endregion
 
     #region ThirdPartyIdp

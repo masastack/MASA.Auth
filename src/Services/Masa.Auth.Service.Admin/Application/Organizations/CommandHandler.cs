@@ -58,26 +58,25 @@ public class CommandHandler
         await _departmentRepository.RemoveAsync(department);
     }
 
-    [EventHandler]
-    public async Task UpsertPosition(UpsertPositionCommand command)
+    public async Task AddPositionAsync(AddPositionCommand command)
     {
-        var positionDto = command.Position;
-        var exist = await _positionRepository.GetCountAsync(p => p.Name == positionDto.Name) > 0;
-        if (exist) throw new UserFriendlyException($"Position with name {positionDto.Name} already exists");
-
-        var position = await _positionRepository.FindAsync(p => p.Id == positionDto.Id);
+        var position = await _positionRepository.FindAsync(p => p.Name == command.Position.Name);
         if (position is null)
         {
-            position = new Position(command.Position.Name);
+            position = new(command.Position.Name);
             await _positionRepository.AddAsync(position);
         }
-        else
-        {
-            position.Update(command.Position.Name);
-            await _positionRepository.UpdateAsync(position);
-        }
+        command.Result = position.Id;
+    }
 
-        command.Position.Id = position.Id;
+    public async Task UpdatePositionAsync(UpdatePositionCommand command)
+    {
+        var positionDto = command.Position;
+        var position = await _positionRepository.FindAsync(p => p.Name == positionDto.Name);
+        if (position is null) throw new UserFriendlyException($"Current position not found");
+
+        position.Update(positionDto.Name);
+        await _positionRepository.UpdateAsync(position);
     }
 }
 
