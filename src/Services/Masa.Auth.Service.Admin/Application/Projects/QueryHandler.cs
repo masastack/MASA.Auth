@@ -20,6 +20,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
+#warning development change
         var projects = await _pmClient.ProjectService.GetProjectAppsAsync("development");
         if (projects.Any())
         {
@@ -29,7 +30,7 @@ public class QueryHandler
                 Name = p.Name,
                 Id = p.Id,
                 Identity = p.Identity,
-                Apps = p.Apps.Select(a => new AppDto
+                Apps = p.Apps.DistinctBy(a => a.Identity).Select(a => new AppDto
                 {
                     Name = a.Name,
                     Id = a.Id,
@@ -54,7 +55,6 @@ public class QueryHandler
                 });
             }
         }
-        await Task.CompletedTask;
     }
 
     private List<PermissionNavDto> GetChildren(Guid parentId, IEnumerable<Permission> all)

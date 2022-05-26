@@ -66,14 +66,14 @@ public partial class PermissionsCheck
     private async Task LoadData()
     {
         var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
-        var Categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
+        _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
         {
             Code = ag.Key,
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
 
-        var allKey = Categories.SelectMany(c => c.Apps).SelectMany(a => a.Navs).Select(a => Guid.Parse(a.Code));
+        var allKey = _categories.SelectMany(c => c.Apps).SelectMany(a => a.Navs).Select(a => Guid.Parse(a.Code));
         foreach (var key in allKey)
         {
             if (!Value.ContainsKey(key))

@@ -3,7 +3,7 @@
 <SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Create Client")" ContentClass="px-sheet-dialog full-height">
     <MCard Style="height: calc(100vh - 140px);">
         <MCardText>
-            <ElevationTab Dense Class="pt-8 full-height" Headers='new List<string>{ T("Basic Information"),T("Resource Information")}' TabWindowClass="mt-8">
+            <ElevationTab Dense Class="pt-8 full-height" Tabs='new List<string>{ T("Basic Information"),T("Resource Information")}' ItemsClass="mt-8">
                 <ElevationTabItem>
                     <MCard Class="d-flex flex-column full-height">
                         <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType" />
