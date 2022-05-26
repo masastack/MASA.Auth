@@ -80,7 +80,6 @@ var app = builder.Services
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
-            eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
         .UseIsolationUoW<AuthDbContext>(
             isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),
