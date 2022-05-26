@@ -11,5 +11,6 @@ public class IdentityProviderEntityTypeConfiguration : IEntityTypeConfiguration<
         builder.HasIndex(p => p.Name).HasFilter("[IsDeleted] = 0");
         builder.Property(p => p.Name).HasMaxLength(20);
         builder.Property(p => p.DisplayName).HasMaxLength(20);
+        builder.HasMany(u => u.ThirdPartyUsers).WithOne(tpu => tpu.IdentityProvider).HasForeignKey(tpu => tpu.ThirdPartyIdpId);
     }
 }
