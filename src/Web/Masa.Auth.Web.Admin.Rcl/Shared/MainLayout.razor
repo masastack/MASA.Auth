@@ -16,7 +16,7 @@
     <Navigation />
 
     <MMain Class="fill-lighten-1" Style="padding-top:60px">
-        <MErrorHandler>
+        <MErrorHandler OnErrorHandleAsync="OnError">
             <div class="pa-6 max-width full-height">
                 @Body
             </div>
@@ -27,6 +27,16 @@
 </MApp>
 
 @code {
+    [Inject]
+    public IPopupService PopupService { get; set; } = default!;
+
+    Task OnError(Exception exception)
+    {
+        PopupService.AlertAsync(exception.Message,AlertTypes.Error);
+        GlobalConfig.Loading = false;
+        return Task.CompletedTask;
+    }
+
     protected override void OnInitialized()
     {
         GlobalConfig.OnPageModeChanged += base.StateHasChanged;

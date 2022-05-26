@@ -74,7 +74,7 @@ public class CommandHandler
     public async Task UpdatePositionAsync(UpdatePositionCommand command)
     {
         var positionDto = command.Position;
-        var position = await _positionRepository.FindAsync(p => p.Name == positionDto.Name);
+        var position = await _positionRepository.FindAsync(p => p.Id == positionDto.Id);
         if (position is null) throw new UserFriendlyException($"Current position not found");
 
         position.Update(positionDto.Name);
