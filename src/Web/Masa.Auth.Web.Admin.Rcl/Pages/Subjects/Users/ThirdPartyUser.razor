@@ -4,7 +4,7 @@
 <div style="position: absolute;right: 0;top: 0;" class="d-flex">
     <UserAutoComplete @bind-Value="UserId" />
     <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
-        <MIcon Class="ma-auto" Color="neutral-lighten-1" Size=20>
+        <MIcon Class="ma-auto" Color="default-emphasis-secondary" Size=20>
             @(Filter?"mdi-filter":"mdi-filter-off")
         </MIcon>
     </div>
@@ -39,7 +39,7 @@
                         <img src="@context.Item.User.Avatar" />
                     </MAvatar>
                     <div class="ml-4 block-center">
-                        <div class="text-body3 neutral-lighten-1--text">@context.Item.User.DisplayName</div>
+                        <div class="text-body3 default-emphasis-secondary--text">@context.Item.User.DisplayName</div>
                     </div>
                 </div>
                 break;
@@ -59,7 +59,7 @@
                 <EnableChip Value=context.Item.Enabled />
                 break;
             case "Action":
-                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">mdi-pencil</MIcon>
+                <MIcon Small Color="default-regular" OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">mdi-pencil</MIcon>
                 break;
             default:
                 <span class="text-body3">@context.Value</span>

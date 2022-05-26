@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">
-                            <div class="font-14-bold neutral-lighten-2--text">@T("Basic Information")</div>
+                            <div class="font-14-bold default-regular--text">@T("Basic Information")</div>
                             <MTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" HideDetails="@("auto")" Outlined />
                             <MTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
                             <MTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" HideDetails="@("auto")" Outlined />
@@ -50,7 +50,7 @@
                             }
                             else
                             {
-                                <div class="mt-12 font-14-bold neutral-lighten-2--text">@T("Detail Information")</div>
+                                <div class="mt-12 font-14-bold default-regular--text">@T("Detail Information")</div>
                                 <MTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
                                 <MTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" HideDetails="@("auto")" Outlined />
                                 <MTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" HideDetails="@("auto")" Outlined />

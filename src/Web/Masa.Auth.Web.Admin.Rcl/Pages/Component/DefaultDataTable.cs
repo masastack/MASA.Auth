@@ -9,16 +9,7 @@ public class DefaultDataTable<TItem> : MDataTable<TItem>
     {
         base.OnInitialized();
         HideDefaultFooter = true;
-    }
-
-    protected override void SetComponentClass()
-    {
-        base.SetComponentClass();
-
-        CssProvider.Merge(delegate (CssBuilder cssBuilder) {
-            cssBuilder.Add("default")
-                      .Add("table-border-none");
-        });
+        Class += "default table-border-none";
     }
 }
 

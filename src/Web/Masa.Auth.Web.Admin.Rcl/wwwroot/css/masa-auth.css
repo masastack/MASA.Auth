@@ -270,23 +270,23 @@
     caret-color: #6946FF !important;
 }
 
-.neutral {
+.default-emphasis {
     background-color: #1B2559;
 }
 
-.neutral-lighten-1 {
+.default-emphasis-secondary {
     background-color: #323D6F;
 }
 
-.neutral-lighten-2 {
+.default-regular {
     background-color: #485585;
 }
 
-.neutral-lighten-3 {
+.default-regular-secondary {
     background-color: #7681AB;
 }
 
-.neutral-lighten-4 {
+.default-secondary {
     background-color: #A3AED0;
 }
 
@@ -294,28 +294,28 @@
     background-color: #E9EDF7;
 }
 
-.neutral-text-emphasis {
+.default-text-emphasis {
     color: #1B2559 !important;
     caret-color: #1B2559 !important;
 }
 
 
-.neutral-lighten-1--text {
+.default-emphasis-secondary--text {
     color: #323D6F !important;
     caret-color: #323D6F !important;
 }
 
-.neutral-lighten-2--text {
+.default-regular--text {
     color: #485585 !important;
     caret-color: #485585 !important;
 }
 
-.neutral-lighten-3--text {
+.default-regular-secondary--text {
     color: #7681AB !important;
     caret-color: #7681AB !important;
 }
 
-.neutral-lighten-4--text {
+.default-secondary--text {
     color: #A3AED0 !important;
     caret-color: #A3AED0 !important;
 }
@@ -1073,7 +1073,7 @@
     background: linear-gradient(270deg, #4318FF 5.56%, rgba(67, 24, 255, 0) 100%);
 }
 
-.mtab-tab-linear-neutral {
+.mtab-tab-linear-default-emphasis {
     background: linear-gradient(270deg, #E9EDF7 0%, rgba(233, 237, 247, 0) 100%);
 }
 
@@ -1098,7 +1098,7 @@
     box-sizing: border-box;
 }
 
-.mtab-tab-indicator-neutral {
+.mtab-tab-indicator-default-emphasis {
     background: #F0F3FA;
     border: 4px solid #A3AED0;
     box-sizing: border-box;
@@ -1129,15 +1129,15 @@
     overflow-y: scroll;
 }
 
-.neutral-lighten-1--text .m-label {
+.default-emphasis-secondary--text .m-label {
     color: #323D6F !important;
 }
 
-.neutral-lighten-4--text .m-label {
+.default-secondary--text .m-label {
     color: #A3AED0 !important;
 }
 
-.theme--light.m-text-field--outlined.neutral-lighten-4--text > .m-input__control > .m-input__slot fieldset {
+.theme--light.m-text-field--outlined.default-secondary--text > .m-input__control > .m-input__slot fieldset {
     color: #A3AED0 !important;
 }
 
@@ -1192,7 +1192,7 @@ input::-webkit-input-placeholder {
     margin-top: 1px;
 }
 
-.neutral-lighten-icon .m-icon {
+.default-lighten-icon .m-icon {
     color: #A3AED0 !important;
 }
 

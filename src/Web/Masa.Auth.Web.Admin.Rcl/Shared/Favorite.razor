@@ -9,7 +9,7 @@
         <MTooltip Color="primary" Bottom>
             <ActivatorContent>
                 <span @attributes="@context.Attrs" class="hover-pointer mr-8"  @onclick="()=>NavHelper.NavigateTo(menu)">
-                    <MIcon Size=24 Color="@(menu.Active?"primary":"neutral-lighten-3")">
+                    <MIcon Size=24 Color="@(menu.Active?"primary":"default-regular-secondary")">
                         @menu.ParentIcon
                     </MIcon>
                 </span>
@@ -50,7 +50,7 @@
                     {
                         <MListItem Dense OnClick="()=> NavHelper.NavigateTo(nav)" Class="px-4">
                             <MListItemAction Class="mr-3">
-                                <MIcon Size=20 Color="neutral-lighten-3">@nav.ParentIcon</MIcon>
+                                <MIcon Size=20 Color="default-regular-secondary">@nav.ParentIcon</MIcon>
                             </MListItemAction>
                             <MListItemContent>
                                 <span Class="text-btn">@GetI18nFullTitle(nav.FullTitle)</span>

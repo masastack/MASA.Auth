@@ -3,13 +3,13 @@
 <div style="position: absolute;right: 0;top: 0;" class="d-flex">
     <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
         <PrependInnerContent>
-            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+            <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
         </PrependInnerContent>
     </MTextField>
     <div @onclick="() => StaffSyncDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
         <div class="ma-auto">
-            <MIcon Color="neutral-lighten-1" Size=20>mdi-refresh</MIcon>
-            <span class="font-12-medium neutral-lighten-1--text">@T("Sync")</span>
+            <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
+            <span class="font-12-medium default-emphasis-secondary--text">@T("Sync")</span>
         </div>
     </div>
     <MButton Color="primary" Class="ml-4 medium-button" OnClick=OpenAddStaffDialog>
@@ -31,7 +31,7 @@
                         <img src="@context.Item.User.Avatar" />
                     </MAvatar>
                     <div class="ml-4 block-center">
-                        <div class="text-body3 neutral-lighten-1--text">@context.Item.User.Name</div>
+                        <div class="text-body3 default-emphasis-secondary--text">@context.Item.User.Name</div>
                     </div>
                 </div>
                 break;
@@ -48,8 +48,8 @@
                 <EnableChip Value="context.Item.Enabled" />
                 break;
             case "Action":
-                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
-                <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
+                <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
                 break;
             default:
                 <span class="text-body3">@context.Value</span>

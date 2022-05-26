@@ -9,7 +9,7 @@
     <MCardTitle>
         <MTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
             <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
             </PrependInnerContent>
         </MTextField>
         <MSpacer/>
@@ -32,7 +32,7 @@
                                 <img src="@context.Item.LogoUri" />
                             </MAvatar>
                             <div class="ml-4 block-center">
-                                <div class="text-body3 neutral-lighten-1--text">@context.Item.ClientName</div>
+                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.ClientName</div>
                             </div>
                         </div>
                         break;
@@ -43,7 +43,7 @@
                         </MChip>
                         break;
                     case "Action":
-                        <MIcon Small Color="neutral-lighten-2" OnClick="()=>OpenUpdateDialog(context.Item.Id)">mdi-pencil</MIcon>
+                        <MIcon Small Color="default-regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">mdi-pencil</MIcon>
                         break;
                     default:
                         <span class="text-body3">@context.Value</span>
