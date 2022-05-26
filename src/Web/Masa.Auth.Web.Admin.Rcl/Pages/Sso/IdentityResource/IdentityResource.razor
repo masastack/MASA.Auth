@@ -31,13 +31,13 @@
                     </div>
                     break;
                 case (nameof(IdentityResourceDto.DisplayName)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.DisplayName</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.DisplayName</span>
                     break;
                 case nameof(IdentityResourceDto.Required):
-                    <span class="text-body4 neutral-lighten-2--text">@(context.Item.Required?T("Yes"):T("No"))</span>
+                    <span class="font-16 neutral-lighten-2--text">@(context.Item.Required?T("Yes"):T("No"))</span>
                     break;
                 case (nameof(IdentityResourceDto.Description)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.Description</span>
                     break;
                 case nameof(IdentityResourceDto.Enabled):
                     <EnableChip Value="@context.Item.Enabled" />

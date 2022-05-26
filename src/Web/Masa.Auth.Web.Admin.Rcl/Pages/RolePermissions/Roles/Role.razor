@@ -27,16 +27,16 @@
                     </div>                    
                     break;
                 case (nameof(RoleDto.CreationTime)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                     break;
                 case nameof(RoleDto.ModificationTime):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
                     break;
                 case (nameof(RoleDto.Creator)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Creator</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.Creator</span>
                     break;
                 case (nameof(RoleDto.Modifier)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Modifier</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.Modifier</span>
                     break;
                 case nameof(RoleDto.Enabled):
                    <EnableChip Value="context.Item.Enabled" />

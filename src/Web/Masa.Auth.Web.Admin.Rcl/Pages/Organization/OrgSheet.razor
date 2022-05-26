@@ -4,7 +4,7 @@
     <MCard Class="mx-auto d-flex flex-column full-height" Style="padding-right:228px;padding-left:228px;">
         <MCardText Class="d-flex align-center">
             <MForm Model="Dto" EnableValidation Class="full-width" @ref="_form">
-                <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5 neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+                <MTextField @bind-Value="@Dto.Name" class="mx-auto font-24-bold neutral-lighten-4--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
                 @if (Dto.ParentId != Guid.Empty)
                 {
                     <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@Dto.ParentId"

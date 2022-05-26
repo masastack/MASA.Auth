@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
-                <div class="text-subtitle2">@T("Basic Information")</div>
+                <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" />
                 </MRow>
@@ -38,7 +38,7 @@
                        <CopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
-                <div class="mt-6 text-subtitle2">@T("Detail Information")</div>
+                <div class="mt-6 font-14-bold">@T("Detail Information")</div>
                 <MRow Class="mt-1">
                     <MCol>
                         <MTextField @bind-Value="User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />

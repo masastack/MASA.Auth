@@ -22,7 +22,7 @@
                     var item = items[i];
                     var isLast = i == items.Count - 1;
                     <MBreadcrumbsItem Href="@item.Href">
-                        <span class="@(isLast ? "text-subtitle2 neutral-lighten-2--text" : "text-body2")">@item.Text</span>
+                        <span class="@(isLast ? "font-14-bold neutral-lighten-2--text" : "font-14")">@item.Text</span>
                     </MBreadcrumbsItem>
                 }
             </ChildContent>

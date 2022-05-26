@@ -30,16 +30,16 @@
                     <span class="text-body3 neutral--text">@context.Item.Name</span>
                     break;
                 case (nameof(ClientDto.ClientName)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Client.ClientName</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.Client.ClientName</span>
                     break;
                 case (nameof(CustomLoginDto.CreationTime)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                     break;
                 case nameof(CustomLoginDto.ModificationTime):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
                     break;
                 case (nameof(CustomLoginDto.Modifier)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Modifier</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.Modifier</span>
                     break;
                 case nameof(CustomLoginDto.Enabled):
                     <EnableChip Value="@context.Item.Enabled" />

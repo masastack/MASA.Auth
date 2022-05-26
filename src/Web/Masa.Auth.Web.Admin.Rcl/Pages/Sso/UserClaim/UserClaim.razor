@@ -31,10 +31,10 @@
                     </div>
                     break;
                 case (nameof(UserClaimDto.Description)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
+                    <span class="font-16 neutral-lighten-2--text">@context.Item.Description</span>
                     break;
                 case nameof(UserClaimDto.UserClaimType):
-                    <span class="text-body4 neutral-lighten-2--text">@T(context.Item.UserClaimType.ToString())</span>
+                    <span class="font-16 neutral-lighten-2--text">@T(context.Item.UserClaimType.ToString())</span>
                     break;
                 case "Action":
                     <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
