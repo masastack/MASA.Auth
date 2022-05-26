@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class ThirdPartyUserDetailDto : ThirdPartyUserDto
 {
-    public new ThirdPartyIdpDetailDto ThirdPartyIdp { get; set; } = new();
+    public new IdentityProviderDetailDto IdpDetailDto { get; set; } = new();
 
     public new UserDetailDto User { get; set; } = new();
 
@@ -14,9 +14,9 @@ public class ThirdPartyUserDetailDto : ThirdPartyUserDto
 
     }
 
-    public ThirdPartyUserDetailDto(Guid id, bool enabled, ThirdPartyIdpDetailDto thirdPartyIdp, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier) : base(id, enabled, thirdPartyIdp, user, creationTime, modificationTime, creator, modifier)
+    public ThirdPartyUserDetailDto(Guid id, bool enabled, IdentityProviderDetailDto idpDetailDto, UserDetailDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier) : base(id, enabled, idpDetailDto, user, creationTime, modificationTime, creator, modifier)
     {
-        ThirdPartyIdp = thirdPartyIdp;
+        IdpDetailDto = idpDetailDto;
         User = user;
     }
 }

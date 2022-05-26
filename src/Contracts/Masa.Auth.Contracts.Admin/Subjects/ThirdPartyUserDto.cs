@@ -9,7 +9,7 @@ public class ThirdPartyUserDto
 
     public bool Enabled { get; set; }
 
-    public virtual ThirdPartyIdpDto ThirdPartyIdp { get; set; } = new();
+    public IdentityProviderDetailDto IdpDetailDto { get; set; } = new();
 
     public virtual UserDto User { get; set; } = new();
 
@@ -26,11 +26,11 @@ public class ThirdPartyUserDto
 
     }
 
-    public ThirdPartyUserDto(Guid id, bool enabled, ThirdPartyIdpDto thirdPartyIdp, UserDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public ThirdPartyUserDto(Guid id, bool enabled, IdentityProviderDetailDto idpDetailDto, UserDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {
         Id = id;
         Enabled = enabled;
-        ThirdPartyIdp = thirdPartyIdp;
+        IdpDetailDto = idpDetailDto;
         User = user;
         CreationTime = creationTime;
         ModificationTime = modificationTime;

@@ -4,6 +4,7 @@ using Masa.Auth.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220525022224_UpdateThirdPartyUser")]
+    partial class UpdateThirdPartyUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1798,9 +1800,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("IdentityProviderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1823,8 +1822,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Creator");
-
-                    b.HasIndex("IdentityProviderId");
 
                     b.HasIndex("Modifier");
 
@@ -2593,15 +2590,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .WithMany()
                         .HasForeignKey("Creator");
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", null)
-                        .WithMany("ThirdPartyUsers")
-                        .HasForeignKey("IdentityProviderId");
-
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
                         .WithMany()
                         .HasForeignKey("Modifier");
 
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", "IdentityProvider")
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyIdp", "ThirdPartyIdp")
                         .WithMany()
                         .HasForeignKey("ThirdPartyIdpId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2615,9 +2608,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Navigation("CreateUser");
 
-                    b.Navigation("IdentityProvider");
-
                     b.Navigation("ModifyUser");
+
+                    b.Navigation("ThirdPartyIdp");
 
                     b.Navigation("User");
                 });
@@ -2777,11 +2770,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Properties");
 
                     b.Navigation("UserClaims");
-                });
-
-            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", b =>
-                {
-                    b.Navigation("ThirdPartyUsers");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>

@@ -29,11 +29,6 @@ public class ThirdPartyIdp : IdentityProvider
         IdentificationType = identificationType;
     }
 
-    public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
-    {
-        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyFile, tpIdp.Enabled, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
-    }
-
     public void Update(string displayName, string icon, bool enabled, IdentificationTypes identificationType, string clientId, string clientSecret, string url, string verifyFile, AuthenticationTypes verifyType)
     {
         DisplayName = displayName;
@@ -45,6 +40,11 @@ public class ThirdPartyIdp : IdentityProvider
         VerifyFile = verifyFile;
         VerifyType = verifyType;
         IdentificationType = identificationType;
+    }
+
+    public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
+    {
+        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyFile, tpIdp.Enabled, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
     }
 }
 
