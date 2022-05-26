@@ -11,6 +11,7 @@ public partial class ThirdPartyUser
     private Guid _userId;
     private DateOnly? _startTime;
     private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private LdapDialog ldapDialog = null!;
 
     public Guid UserId
     {
@@ -84,8 +85,6 @@ public partial class ThirdPartyUser
 
     public bool ViewThirdPartyUserDialog { get; set; }
 
-    public bool LdapDialog { get; set; }
-
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
     protected override async Task OnInitializedAsync()
@@ -120,9 +119,9 @@ public partial class ThirdPartyUser
         ViewThirdPartyUserDialog = true;
     }
 
-    public void OpenLdapDialog()
+    public async Task OpenLdapDialog()
     {
-        LdapDialog = true;
+        await ldapDialog.OpenAsync();
     }
 }
 

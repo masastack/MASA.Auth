@@ -9,7 +9,7 @@ public class ThirdPartyIdpService : RestServiceBase
     {
         MapPost(LdapSaveAsync, "ldap/save");
         MapPost(LdapConnectTestAsync, "ldap/connect-test");
-        MapPost(LdapDetailAsync, "ldap/detail");
+        MapGet(LdapDetailAsync, "ldap/detail");
     }
 
     #region ThirdPartyIdp
@@ -66,9 +66,9 @@ public class ThirdPartyIdpService : RestServiceBase
         await eventBus.PublishAsync(new LdapConnectTestCommand(ldapDetailDto));
     }
 
-    private async Task<LdapDetailDto> LdapDetailAsync(IEventBus eventBus, Guid id)
+    private async Task<LdapDetailDto> LdapDetailAsync(IEventBus eventBus)
     {
-        var ldapDetailQuery = new LdapDetailQuery(id);
+        var ldapDetailQuery = new LdapDetailQuery();
         await eventBus.PublishAsync(ldapDetailQuery);
         return ldapDetailQuery.Result;
     }
