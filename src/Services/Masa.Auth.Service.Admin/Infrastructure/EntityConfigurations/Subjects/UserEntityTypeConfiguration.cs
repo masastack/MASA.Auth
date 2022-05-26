@@ -7,7 +7,6 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable(nameof(User), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(u => u.Id);
         builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("[IsDeleted] = 0");

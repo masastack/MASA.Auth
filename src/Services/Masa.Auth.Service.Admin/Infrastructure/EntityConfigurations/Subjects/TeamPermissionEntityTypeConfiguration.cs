@@ -7,7 +7,6 @@ public class TeamPermissionEntityTypeConfiguration : IEntityTypeConfiguration<Te
 {
     public void Configure(EntityTypeBuilder<TeamPermission> builder)
     {
-        builder.ToTable(nameof(TeamPermission), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(u => u.Id);
     }
 }
