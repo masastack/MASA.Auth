@@ -18,7 +18,7 @@ namespace Masa.Auth.Service.Admin.Services
             var bucket = await daprClient.GetSecretAsync("localsecretstore", "bucket");
             client.GetSecurityToken();
 
-            return new();
+            return new("","","","","");
         }      
     }
 }
