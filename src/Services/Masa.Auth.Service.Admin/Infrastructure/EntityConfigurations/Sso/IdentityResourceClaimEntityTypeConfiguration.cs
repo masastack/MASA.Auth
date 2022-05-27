@@ -7,6 +7,6 @@ public class IdentityResourceClaimEntityTypeConfiguration : IEntityTypeConfigura
 {
     public void Configure(EntityTypeBuilder<IdentityResourceClaim> builder)
     {
-        builder.ToTable(nameof(IdentityResourceClaim), AuthDbContext.SSO_SCHEMA).HasKey(identityResourceClaim => identityResourceClaim.Id);
+        builder.HasKey(identityResourceClaim => identityResourceClaim.Id);
     }
 }

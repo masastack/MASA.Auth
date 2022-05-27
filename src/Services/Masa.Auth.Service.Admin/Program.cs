@@ -3,6 +3,8 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddObservability();
+
 builder.Services.AddDaprStarter();
 builder.Services.AddDaprClient();
 builder.Services.AddAliyunStorage();
@@ -43,6 +45,8 @@ var app = builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
     {
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {
             Name = "Authorization",
@@ -78,7 +82,6 @@ var app = builder.Services
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
-            eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
         .UseIsolationUoW<AuthDbContext>(
             isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),

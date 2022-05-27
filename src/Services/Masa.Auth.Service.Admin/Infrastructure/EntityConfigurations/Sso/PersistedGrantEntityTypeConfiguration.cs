@@ -7,8 +7,6 @@ public class PersistedGrantEntityTypeConfiguration : IEntityTypeConfiguration<Pe
 {
     public void Configure(EntityTypeBuilder<PersistedGrant> builder)
     {
-        builder.ToTable(nameof(PersistedGrant), AuthDbContext.SSO_SCHEMA);
-
         builder.Property(x => x.Key).HasMaxLength(200).ValueGeneratedNever();
         builder.Property(x => x.Type).HasMaxLength(50).IsRequired();
         builder.Property(x => x.SubjectId).HasMaxLength(200);

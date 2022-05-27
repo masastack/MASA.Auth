@@ -3,6 +3,7 @@
 
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
+global using Humanizer;
 global using Magicodes.ExporterAndImporter.Csv;
 global using Mapster;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
@@ -53,6 +54,7 @@ global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Masa.Contrib.BasicAbility.Pm;
+global using Masa.Contrib.BasicAbility.Tsc;
 global using Masa.Contrib.Data.Contracts.EF;
 global using Masa.Contrib.Data.EntityFrameworkCore;
 global using Masa.Contrib.Data.EntityFrameworkCore.SqlServer;
@@ -80,6 +82,10 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.OpenApi.Models;
+global using OpenTelemetry.Logs;
+global using OpenTelemetry.Metrics;
+global using OpenTelemetry.Resources;
+global using OpenTelemetry.Trace;
 global using System.Linq.Expressions;
 global using System.Reflection;
 global using Masa.Utils.Development.Dapr.AspNetCore;

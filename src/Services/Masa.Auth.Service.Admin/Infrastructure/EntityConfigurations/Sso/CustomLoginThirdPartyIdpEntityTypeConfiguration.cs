@@ -7,7 +7,6 @@ public class CustomLoginThirdPartyIdpEntityTypeConfiguration : IEntityTypeConfig
 {
     public void Configure(EntityTypeBuilder<CustomLoginThirdPartyIdp> builder)
     {
-        builder.ToTable(nameof(CustomLoginThirdPartyIdp), AuthDbContext.SSO_SCHEMA).HasKey(customLoginThirdPartyIdp => customLoginThirdPartyIdp.Id);
         builder.HasOne(cltp => cltp.ThirdPartyIdp).WithMany().HasForeignKey(cltp => cltp.ThirdPartyIdpId);
     }
 }

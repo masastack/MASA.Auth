@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Text;
+
 namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
@@ -57,7 +59,8 @@ public class StaffService : RestServiceBase
         if (form.Files.Count <= 0) throw new UserFriendlyException("File not found");
         var file = form.Files.First();
         ICsvImporter importer = new CsvImporter();
-        var import = await importer.Import<SyncStaffDto>(file.OpenReadStream());
+        using var stream = file.OpenReadStream();
+        var import = await importer.Import<SyncStaffDto>(stream);
         if (import.HasError) throw new UserFriendlyException("Read file data failed");
         var syncCommand = new SyncStaffCommand(import.Data.ToList());
         await eventBus.PublishAsync(syncCommand);
