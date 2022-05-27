@@ -13,6 +13,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
+		<PackageReference Include="Masa.Contrib.BasicAbility.Dcc" Version="0.4.0-rc1" />
 		<PackageReference Include="Masa.Contrib.BasicAbility.Tsc" Version="0.4.0-rc1" />
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.4.0-rc1" />
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.4.0-rc1" />

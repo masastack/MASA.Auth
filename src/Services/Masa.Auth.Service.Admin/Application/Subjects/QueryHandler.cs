@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using StackExchange.Redis;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -146,7 +148,14 @@ public class QueryHandler
             condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.User.Avatar)).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
+    {
+        var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.User.Avatar)).ToList();
     }
 
     #endregion
@@ -282,11 +291,15 @@ public class QueryHandler
             },
             TeamAdmin = new TeamPersonnelDto
             {
-
+                Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin).Select(s => s.StaffId).ToList(),
+                Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Admin).Select(r => r.RoleId).ToList(),
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).ToDictionary(p => p.PermissionId, p => p.Effect)
             },
             TeamMember = new TeamPersonnelDto
             {
-
+                Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Member).Select(s => s.StaffId).ToList(),
+                Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Member).Select(r => r.RoleId).ToList(),
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).ToDictionary(p => p.PermissionId, p => p.Effect)
             }
         };
     }

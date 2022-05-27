@@ -1,59 +1,9 @@
 ﻿@inherits AdminCompontentBase
 
 <MCardText>
-    <MAutocomplete @bind-Value="Value.Staffs"
-                   Items="_staffs"
-                   Loading="_staffLoading"
-                   OnSearchInputUpdate="QuerySelectionStaff"
-                   ItemText="r=>r.Name"
-                   ItemValue="r=>r.Id"
-                   Outlined
-                   Dense
-                   Chips
-                   SmallChips
-                   Label="@T("Team Admin")"
-                   Multiple>
-        <SelectionContent Context="data">
-            <MChip Close Small OnCloseClick="()=>RemoveAdmin(data.Item.Id)">
-                <MAvatar Left>
-                    <MImage Src="@data.Item.Avatar"></MImage>
-                </MAvatar>
-                @data.Item.Name
-            </MChip>
-        </SelectionContent>
-        <ItemContent Context="data">
-            <MListItemAvatar>
-                <img src="@data.Item.Avatar">
-            </MListItemAvatar>
-            <MListItemContent>
-                <MListItemTitle>
-                    @(data.Item.Name)
-                </MListItemTitle>
-                <MListItemSubtitle>
-                    @(data.Item.JobNumber)
-                </MListItemSubtitle>
-            </MListItemContent>
-        </ItemContent>
-    </MAutocomplete>
-    <MAutocomplete @bind-Value="Value.Roles"
-                   Items="_roles"
-                   Loading="_roleLoading"
-                   OnSearchInputUpdate="QuerySelectionRole"
-                   ItemText="r=>r.Name"
-                   ItemValue="r=>r.Id"
-                   Outlined
-                   Dense
-                   Chips
-                   SmallChips
-                   Label="@T("Role")"
-                   Multiple>
-        <SelectionContent Context="data">
-            <MChip Close Small OnCloseClick="()=>RemoveAdminRole(data.Item.Id)">
-                @data.Item.Name
-            </MChip>
-        </SelectionContent>
-    </MAutocomplete>
-    <div class="global-nav mt-4" style="height: calc(100vh - 480px);">
+    <SearchSelectStaff @bind-Value="Value.Staffs" Label="@T("Team Admin")"/>
+    <RoleSelectForTeam @bind-Value="Value.Roles" Label="@T("Role")"/>
+    <div class="global-nav mt-4" style="height: calc(100vh - 420px);">
         <PermissionsCheck RoleIds="Value.Roles" @bind-Value="Value.Permissions"/>
     </div>
 </MCardText>

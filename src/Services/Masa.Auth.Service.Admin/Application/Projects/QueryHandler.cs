@@ -70,6 +70,7 @@ public class QueryHandler
     [EventHandler]
     public async Task AppTagsAsync(AppTagsQuery query)
     {
+#warning change dcc tag
         var tags = new List<string>() { "Tag1", "Tag2", "Tag3" };
         query.Result = tags;
         await Task.CompletedTask;

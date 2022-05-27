@@ -1,0 +1,15 @@
+﻿@inherits AdminCompontentBase
+
+<SheetDialog Value=Show ValueChanged=ShowChanged Title="@T("Permission Preview")" ContentClass="px-sheet-dialog global-nav">
+    <div class="full-width py-12">
+        <div class="d-flex" style="height: calc(100vh - 192px);">
+            <ExpansionWrapper Value="_initValue"
+                              InPreview TagIdPrefix="@_idPrefix" Categories=_categories />
+        </div>
+        <div class="d-flex justify-end">
+            <MButton Text Color="primary" Class="rounded-pill" Outlined MinWidth="100" OnClick="()=>ShowChanged.InvokeAsync(false)">
+                @T("Back")
+            </MButton>
+        </div>
+    </div>
+</SheetDialog>

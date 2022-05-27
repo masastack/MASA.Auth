@@ -5,8 +5,10 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class RoleService : RestServiceBase
 {
-    public RoleService(IServiceCollection services) : base(services, "api/role")
+    readonly ILogger<RoleService> _logger;
+    public RoleService(IServiceCollection services, ILogger<RoleService> logger) : base(services, "api/role")
     {
+        _logger = logger;
     }
 
     private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus, GetRolesDto role)
@@ -60,7 +62,16 @@ public class RoleService : RestServiceBase
 
     private async Task<List<Guid>> GetPermissionsByRoleAsync([FromServices] IEventBus eventBus, [FromQuery] string ids)
     {
-        var roles = ids.Split(',').Select(id => Guid.Parse(id)).ToList();
+        var roles = new List<Guid>();
+        try
+        {
+            roles = ids.Split(',').Select(id => Guid.Parse(id)).ToList();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "GetPermissionsByRoleAsync");
+            return await Task.FromResult(new List<Guid>());
+        }
         var query = new PermissionsByRoleQuery(roles);
         await eventBus.PublishAsync(query);
         return query.Result;

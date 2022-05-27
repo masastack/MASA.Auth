@@ -22,7 +22,7 @@
                         @T("Delete")
                     </MButton>
                     <MSpacer />
-                    <MButton class="rounded-pill primary mr-4" MinWidth="100">@T("Preview")</MButton>
+                    <MButton class="rounded-pill primary mr-4" MinWidth="100" OnClick="()=>{_adminPreview = true;}">@T("Preview")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</MButton>
                 </MCardActions>
             </MCard>
@@ -35,10 +35,13 @@
                         @T("Delete")
                     </MButton>
                     <MSpacer />
-                    <MButton class="rounded-pill primary mr-4" MinWidth="100">@T("Preview")</MButton>
+                    <MButton class="rounded-pill primary mr-4" MinWidth="100" OnClick="()=>{_memberPreview = true;}">@T("Preview")</MButton>
                     <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnUpdateMemberHandler">@T("Save")</MButton>
                 </MCardActions>
             </MCard>
         </ElevationTabItem>
     </ElevationTab>
 </SheetDialog>
+
+<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()"/>
+<PermissionsPreview @bind-Show="_memberPreview" Value="Dto.TeamMember.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()"/>

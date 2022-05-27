@@ -34,6 +34,11 @@ public abstract class ServiceBase
         var response = await CallerProvider.PostAsync(BuildAdress(methodName), data);
     }
 
+    protected async Task<TResponse?> PostAsync<TRequest, TResponse>(string methodName, TRequest data)
+    {
+        return await CallerProvider.PostAsync<TRequest, TResponse>(BuildAdress(methodName), data);
+    }
+
     protected async Task DeleteAsync<TRequest>(string methodName, TRequest? data = default)
     {
         var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), data);
