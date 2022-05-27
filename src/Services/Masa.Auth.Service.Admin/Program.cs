@@ -3,7 +3,9 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDaprStarter();
 builder.Services.AddDaprClient();
+builder.Services.AddAliyunStorage();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {

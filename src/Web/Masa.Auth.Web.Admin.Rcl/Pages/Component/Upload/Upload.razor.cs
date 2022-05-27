@@ -86,7 +86,7 @@ public partial class Upload
         if (OnInputFileUpload is null) return;
         if (OnInputFileUpload.IsJsCallback)
         {
-            MultipleValue = await UploadJs!.InvokeAsync<List<string>>("InputFileUpload", InputFileRef?.Element, OnInputFileUpload.JsCallback);
+            MultipleValue = await UploadJs!.InvokeAsync<List<string>>("InputFileUpload", InputFileRef?.Element, OnInputFileUpload.JsCallback, OnInputFileUpload.JsCallBackParamter);
         }
         else if (OnInputFileUpload.IsDelegateCallback)
         {

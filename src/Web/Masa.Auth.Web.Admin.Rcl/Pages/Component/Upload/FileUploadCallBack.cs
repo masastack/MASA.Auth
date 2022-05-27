@@ -19,6 +19,8 @@ public class FileUploadCallBack
     [MemberNotNullWhen(true, nameof(DelegateCallback))]
     public bool IsDelegateCallback => DelegateCallback is not null;
 
+    public object? JsCallBackParamter { get; set; } 
+
     public static implicit operator FileUploadCallBack(string callback)
     {
         return new FileUploadCallBack { JsCallback = callback };
@@ -29,9 +31,9 @@ public class FileUploadCallBack
         return new FileUploadCallBack { EventCallback = callback };
     }
 
-    public static FileUploadCallBack CreateCallback(string callback)
+    public static FileUploadCallBack CreateCallback(string callback, object? paramter = null)
     {
-        return new FileUploadCallBack { JsCallback = callback };
+        return new FileUploadCallBack { JsCallback = callback, JsCallBackParamter = paramter };
     }
 
     public static FileUploadCallBack CreateCallback(ComponentBase receiver, Action<(IReadOnlyList<IBrowserFile>, Action<List<string>>)> callback)

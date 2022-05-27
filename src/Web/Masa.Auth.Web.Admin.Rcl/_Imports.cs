@@ -37,3 +37,5 @@ global using System.Net.Http.Headers;
 global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
+global using Masa.Auth.ApiGateways.Caller.Services.Oss;
+global using Masa.Auth.ApiGateways.Caller;

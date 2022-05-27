@@ -22,6 +22,7 @@ public class AuthCaller : HttpClientCallerBase
     UserClaimService? _userClaimService;
     CustomLoginService? _customLoginService;
     PositionService? _positionService;
+    OssService? _ossService;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(CallerProvider));
@@ -55,6 +56,8 @@ public class AuthCaller : HttpClientCallerBase
     public CustomLoginService CustomLoginService => _customLoginService ?? (_customLoginService = new(CallerProvider));
 
     public PositionService PositionService => _positionService ?? (_positionService = new(CallerProvider));
+
+    public OssService OssService => _ossService ?? (_ossService = new OssService(CallerProvider));
 
     protected override string BaseAddress { get; set; }
 
