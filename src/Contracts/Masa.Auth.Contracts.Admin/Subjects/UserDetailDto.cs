@@ -5,8 +5,6 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UserDetailDto : UserDto
 {
-    public AddressValueDto Address { get; set; }
-
     public string Department { get; set; }
 
     public string Position { get; set; }
@@ -27,7 +25,6 @@ public class UserDetailDto : UserDto
 
     public UserDetailDto() : base()
     {
-        Address = new();
         ThirdPartyIdpAvatars = new();
         Creator = "";
         Modifier = "";
@@ -38,9 +35,8 @@ public class UserDetailDto : UserDto
         Permissions = new();
     }
 
-    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType, List<Guid> roleIds, List<UserPermissionDto> permissions) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, creationTime, genderType)
+    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType, List<Guid> roleIds, List<UserPermissionDto> permissions) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, address, creationTime, genderType)
     {
-        Address = address;
         Department = department;
         Position = position;
         Password = password;

@@ -98,6 +98,13 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetDepartmentSelectAsync(DepartmentSelectQuery query)
+    {
+        var departments = await _departmentRepository.GetListAsync(department => department.Name.Contains(query.Name));
+        query.Result = departments.Select(department => new DepartmentSelectDto(department.Id, department.Name)).ToList();
+    }
+
+    [EventHandler]
     public async Task GetPositionSelectAsync(PositionSelectQuery query)
     {
         var psoitions = await _positionRepository.GetListAsync(p => p.Name.Contains(query.Name));

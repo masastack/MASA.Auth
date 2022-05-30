@@ -18,6 +18,27 @@ public class StaffService : RestServiceBase
         return query.Result;
     }
 
+    private async Task<List<StaffDto>> GetListByDepartmentAsync(IEventBus eventBus, [FromQuery] Guid departmentId)
+    {
+        var query = new StaffsByDepartmentQuery(departmentId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByTeamAsync(IEventBus eventBus, [FromQuery] Guid teamId)
+    {
+        var query = new StaffsByTeamQuery(teamId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid roleId)
+    {
+        var query = new StaffsByRoleQuery(roleId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task<StaffDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new StaffDetailQuery(id);

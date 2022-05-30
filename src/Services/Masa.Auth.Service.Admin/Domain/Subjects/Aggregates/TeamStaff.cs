@@ -9,6 +9,8 @@ public class TeamStaff : FullAuditEntity<Guid, Guid>
 
     public Guid StaffId { get; private set; }
 
+    public Staff Staff { get; private set; } = default!;
+
     public TeamMemberTypes TeamMemberType { get; private set; }
 
     public TeamStaff(Guid staffId, TeamMemberTypes teamMemberType)

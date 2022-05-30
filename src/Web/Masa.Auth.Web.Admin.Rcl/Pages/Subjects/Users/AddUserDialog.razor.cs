@@ -32,7 +32,7 @@ public partial class AddUserDialog
 
     protected override async Task OnInitializedAsync()
     {
-        DefaultImages = await OssService.GetDefaultImagesAsync();        
+        DefaultImages = await OssService.GetDefaultImagesAsync();
     }
 
     private async Task UpdateVisible(bool visible)

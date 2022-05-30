@@ -9,6 +9,8 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
 
     public string Name { get; set; }
 
+    public string DisplayName { get; set; }
+
     public string Account { get; set; }
 
     public string PhoneNumber { get; set; }
@@ -20,21 +22,21 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
     public UserSelectDto()
     {
         Name = "";
+        DisplayName = "";
         Account = "";
         PhoneNumber = "";
         Email = "";
         Avatar = "";
     }
 
-    public UserSelectDto(Guid id, string name, string account, string phoneNumber, string email, string avatar)
+    public UserSelectDto(Guid id, string name, string displayName, string account, string phoneNumber, string email, string avatar)
     {
         Id = id;
         Name = name;
+        DisplayName = displayName;
         Account = account;
         PhoneNumber = phoneNumber;
         Email = email;
         Avatar = avatar;
-        Value = Id;
-        Text = $"{Name},{Account},{PhoneNumber},{Email}";
     }
 }
