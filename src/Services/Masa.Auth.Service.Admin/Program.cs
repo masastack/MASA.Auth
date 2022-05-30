@@ -41,16 +41,11 @@ builder.Services.AddAuthentication(options =>
     options.Audience = "";
 });
 
-//builder.AddMasaConfiguration(
-//configurationBuilder =>
-//    {
-//        configurationBuilder.UseMasaOptions(options =>
-//        {
-//            options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
-//            //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
-//        });
-//    }
-//);
+//builder.AddMasaConfiguration(configurationBuilder =>
+//{
+//    configurationBuilder.UseDcc();
+//    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
+//});
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));

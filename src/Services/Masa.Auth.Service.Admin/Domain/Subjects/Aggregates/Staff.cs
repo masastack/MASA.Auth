@@ -13,7 +13,7 @@ public class Staff : FullAuditAggregateRoot<Guid, Guid>
     private User? _createUser;
     private User? _modifyUser;
 
-    public virtual User User => _user ?? throw new UserFriendlyException("Failed to get user data");
+    public virtual User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
     public virtual Position? Position => _position;
 
@@ -47,6 +47,13 @@ public class Staff : FullAuditAggregateRoot<Guid, Guid>
     public StaffTypes StaffType { get; private set; }
 
     public bool Enabled { get; private set; }
+
+    private ILazyLoader? LazyLoader { get; set; }
+
+    private Staff(ILazyLoader lazyLoader)
+    {
+        LazyLoader = lazyLoader;
+    }
 
     public Staff(Guid userId, string jobNumber, string name, Guid? positionId, StaffTypes staffType, bool enabled)
     {
