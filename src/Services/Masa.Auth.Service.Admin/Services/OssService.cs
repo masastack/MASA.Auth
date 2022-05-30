@@ -24,7 +24,19 @@ namespace Masa.Auth.Service.Admin.Services
 
         private async Task<List<GetDefaultImagesDto>> GetDefaultImagesAsync()
         {
-            return new List<GetDefaultImagesDto>();
+            return new List<GetDefaultImagesDto>()
+            {
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.chen.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.ma.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.wu.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.xie.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.yan.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.zhen.svg"),
+                new GetDefaultImagesDto(GenderTypes.Male,"https://cdn.masastack.com/stack/images/avatar/mr.zhu.svg"),
+                new GetDefaultImagesDto(GenderTypes.Female,"https://cdn.masastack.com/stack/images/avatar/ms.qu.svg"),
+                new GetDefaultImagesDto(GenderTypes.Female,"https://cdn.masastack.com/stack/images/avatar/ms.wu.svg"),
+            };
         }
     }
 }

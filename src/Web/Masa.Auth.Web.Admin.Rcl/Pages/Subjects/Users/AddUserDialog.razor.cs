@@ -32,8 +32,7 @@ public partial class AddUserDialog
 
     protected override async Task OnInitializedAsync()
     {
-        DefaultImages = await OssService.GetDefaultImagesAsync();
-        ChangeAvayar();
+        DefaultImages = await OssService.GetDefaultImagesAsync();        
     }
 
     private async Task UpdateVisible(bool visible)
@@ -59,6 +58,7 @@ public partial class AddUserDialog
             Step = 1;
             Fill = false;
             User = new();
+            ChangeAvayar();
         }
     }
 
@@ -94,7 +94,9 @@ public partial class AddUserDialog
         var images = DefaultImages.Where(image => image.Gender == User.Gender).ToList();
         if (images.Count > 0)
         {
-            User.Avatar = images[random.Next(0, images.Count - 1)].Url;
+            var avatar = images[random.Next(0, images.Count)].Url;
+            if (avatar == User.Avatar && images.Count > 1) ChangeAvayar();
+            else User.Avatar = avatar;
         }
     }
 }
