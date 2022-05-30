@@ -7,14 +7,9 @@ public class DefaultUploadImage : UploadImage
 {
     private OssService OssService => AuthCaller.OssService;
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();        
-    }
-
     public override async Task UploadAsync()
     {
-        var paramter = await OssService.GetAccessTokenAsync();
+        var paramter = await OssService.GetSecurityTokenAsync();
         OnInputFileUpload = FileUploadCallBack.CreateCallback("UploadImage", paramter);
         await base.UploadAsync();
     }

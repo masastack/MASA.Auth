@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Client = Masa.Contrib.Storage.ObjectStorage.Aliyun.Client;
+using Masa.BuildingBlocks.Storage.ObjectStorage;
 
 namespace Masa.Auth.Service.Admin.Services
 {
@@ -11,14 +11,17 @@ namespace Masa.Auth.Service.Admin.Services
         {
         }
 
-        private async Task<GetAccessTokenDto> GetAccessTokenAsync([FromServices] DaprClient daprClient, [FromServices] Client client)
+        private async Task<GetSecurityTokenDto> GetSecurityTokenAsync([FromServices] IClient client, [FromServices] DaprClient daprClient)
         {
-            var accessId = await daprClient.GetSecretAsync("localsecretstore", "access_id");
-            var accessSecret = await daprClient.GetSecretAsync("localsecretstore", "access_secret");
-            var bucket = await daprClient.GetSecretAsync("localsecretstore", "bucket");
-            client.GetSecurityToken();
-
-            return new("","","","","");
+            var region = "oss-cn-hangzhou";
+            //var accessId = daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
+            //var accessSecret = daprClient.GetSecretAsync("localsecretstore", "access_secret").Result.First().Value;
+            var response = client.GetSecurityToken();
+            var stsToken = response.SessionToken;
+            var accessId = response.AccessKeyId;
+            var accessSecret = response.AccessKeySecret;
+            var bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.First().Value;
+            return await Task.FromResult(new GetSecurityTokenDto(region, accessId, accessSecret, stsToken, bucket));
         }      
     }
 }

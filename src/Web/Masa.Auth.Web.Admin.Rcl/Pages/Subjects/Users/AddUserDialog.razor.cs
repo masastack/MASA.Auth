@@ -24,6 +24,8 @@ public partial class AddUserDialog
 
     private UserService UserService => AuthCaller.UserService;
 
+    private DefaultUploadImage? DefaultUploadImageRef { get; set; }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -52,6 +54,7 @@ public partial class AddUserDialog
 
     private void NextStep(EditContext context)
     {
+        var aa = context.GetValidationMessages();
         var success = context.Validate();
         if (success)
         {
@@ -68,7 +71,8 @@ public partial class AddUserDialog
     public async Task AddUserAsync()
     {
         Loading = true;
-        User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
+        if(DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
+
         await UserService.AddAsync(User);
         OpenSuccessMessage(T("Add user data success"));
         await UpdateVisible(false);

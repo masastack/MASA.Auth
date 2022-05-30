@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Oss;
 
-public class GetAccessTokenDto
+public class GetSecurityTokenDto
 {
     public string Region { get; set; }
 
@@ -15,7 +15,7 @@ public class GetAccessTokenDto
 
     public string Bucket { get; set; }
 
-    public GetAccessTokenDto(string region, string accessKeyId, string accessKeySecret, string stsToken, string bucket)
+    public GetSecurityTokenDto(string region, string accessKeyId, string accessKeySecret, string stsToken, string bucket)
     {
         Region = region;
         AccessKeyId = accessKeyId;

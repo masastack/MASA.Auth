@@ -90,5 +90,5 @@ global using System.Linq.Expressions;
 global using System.Reflection;
 global using Masa.Utils.Development.Dapr.AspNetCore;
 global using Dapr.Client;
-global using Masa.Contrib.Storage.ObjectStorage.Aliyun;
 global using Masa.Auth.Contracts.Admin.Oss;
+global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;

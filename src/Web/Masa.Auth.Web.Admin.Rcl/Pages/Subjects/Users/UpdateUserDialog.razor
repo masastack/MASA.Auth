@@ -5,7 +5,7 @@
         <div class="flex-column sheetDialogPadding">
             <div class="d-flex">
                 <div class="mx-auto text-center" style="width:212px;">
-                    <UploadImage @bind-Value="User.Avatar" Avatar Size="120" WhenFileChangeUpload />
+                    <DefaultUploadImage @bind-Value="User.Avatar" @ref="DefaultUploadImageRef" Avatar Size="120" />
                     <DefaultTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>

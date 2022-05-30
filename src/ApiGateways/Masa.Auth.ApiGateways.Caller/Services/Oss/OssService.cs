@@ -12,9 +12,9 @@ public class OssService : ServiceBase
         BaseUrl = "api/oss/";
     }
 
-    public async Task<GetAccessTokenDto> GetAccessTokenAsync()
+    public async Task<GetSecurityTokenDto> GetSecurityTokenAsync()
     {
-        return await GetAsync<GetAccessTokenDto>(nameof(GetAccessTokenAsync), null);
+        return await GetAsync<GetSecurityTokenDto>(nameof(GetSecurityTokenAsync), null);
     }
 }
 

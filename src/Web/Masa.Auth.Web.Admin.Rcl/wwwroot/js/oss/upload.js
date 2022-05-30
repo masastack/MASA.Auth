@@ -14,14 +14,14 @@ async function UploadImage(imageFiles, ossParamter) {
         // 指定Object的存储类型。
         // 'x-oss-storage-class': 'Standard',
         // 指定Object的访问权限。
-        // 'x-oss-object-acl': 'private',
+        'x-oss-object-acl': 'public-read-write',
         // 设置Object的标签，可同时设置多个标签。
         // 'x-oss-tagging': 'Tag1=1&Tag2=2',
         // 指定CopyObject操作时是否覆盖同名目标Object。此处设置为true，表示禁止覆盖同名Object。
         // 'x-oss-forbid-overwrite': 'true',
     };
 
-    putObject(client, imageFiles[0], headers);
+    return await putObject(client, imageFiles[0], headers);
 }
 
 async function putObject(client, file, headers) {
@@ -30,11 +30,14 @@ async function putObject(client, file, headers) {
         // 您可以通过自定义文件名（例如exampleobject.txt）或文件完整路径（例如exampledir/exampleobject.txt）的形式实现将数据上传到当前Bucket或Bucket中的指定目录。
         // data对象可以自定义为file对象、Blob数据或者OSS Buffer。
         const result = await client.put(
-            `auth/${file.name}`,
-            data,
-            { headers }
+            `${file.name}`,
+            file,
+            {
+               headers
+            }
         );
         console.log(result);
+        return [result.url];
     } catch (e) {
         console.log(e);
     }

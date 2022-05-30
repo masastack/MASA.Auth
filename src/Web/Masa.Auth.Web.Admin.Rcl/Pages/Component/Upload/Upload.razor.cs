@@ -27,7 +27,18 @@ public partial class Upload
     public int MaximumFileCount { get; set; } = 10;
 
     [Parameter]
-    public string? Value { get; set; }
+    public string? Value
+    {
+        get => MultipleValue.FirstOrDefault();
+        set
+        {
+            if(Multiple is false && string.IsNullOrEmpty(value) is false)
+            {
+                MultipleValue.Clear();
+                MultipleValue.Add(value);
+            }            
+        }
+    }
 
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
@@ -83,24 +94,37 @@ public partial class Upload
 
     public virtual async Task UploadAsync()
     {
+        var values = new List<string>();
         if (OnInputFileUpload is null) return;
         if (OnInputFileUpload.IsJsCallback)
         {
-            MultipleValue = await UploadJs!.InvokeAsync<List<string>>("InputFileUpload", InputFileRef?.Element, OnInputFileUpload.JsCallback, OnInputFileUpload.JsCallBackParamter);
+            var multipleValue = await UploadJs!.InvokeAsync<List<string>>("InputFileUpload", InputFileRef?.Element, OnInputFileUpload.JsCallback, OnInputFileUpload.JsCallBackParamter);
+            values.AddRange(multipleValue);
         }
         else if (OnInputFileUpload.IsDelegateCallback)
         {
-            MultipleValue = await OnInputFileUpload.DelegateCallback(Files);
+            values.AddRange(await OnInputFileUpload.DelegateCallback(Files));
         }
         else if (OnInputFileUpload.IsEventCallback)
         {
-            await OnInputFileUpload.EventCallback.InvokeAsync((Files, value => MultipleValue = value));
+            await OnInputFileUpload.EventCallback.InvokeAsync((Files, value => values = value));
         }
 
-        Value = MultipleValue.FirstOrDefault();
+        await SetValueAsync(values);
+    }
 
-        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(Value);
-        if (MultipleValueChanged.HasDelegate) await MultipleValueChanged.InvokeAsync(MultipleValue);
+    protected async Task SetValueAsync(List<string> values)
+    {
+        if(Multiple)
+        {
+            MultipleValue = values;
+            if (MultipleValueChanged.HasDelegate) await MultipleValueChanged.InvokeAsync(MultipleValue);
+        }
+        else
+        {
+            Value = values.FirstOrDefault();
+            if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(Value);
+        }
     }
 }
 
