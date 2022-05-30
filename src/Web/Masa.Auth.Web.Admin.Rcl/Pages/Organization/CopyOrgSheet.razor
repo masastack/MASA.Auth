@@ -7,7 +7,7 @@
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center">
                     <div class="full-width">
-                        <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></MTextField>
+                        <DefaultTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></DefaultTextField>
                         <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">

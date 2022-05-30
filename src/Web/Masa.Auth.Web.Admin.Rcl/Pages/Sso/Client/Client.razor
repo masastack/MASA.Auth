@@ -7,11 +7,11 @@
 
 <MCard>
     <MCardTitle>
-        <MTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+        <DefaultTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
             <PrependInnerContent>
                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
             </PrependInnerContent>
-        </MTextField>
+        </DefaultTextField>
         <MSpacer/>
         <MButton Color="primary" Class="ml-6 medium-button" OnClick="()=>{_addDialog=true;}">
             <MIcon Size=18>mdi-plus</MIcon>
