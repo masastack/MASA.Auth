@@ -4,8 +4,30 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
-
+if (builder.Environment.IsProduction() is false)
+{
+    builder.Services.AddDaprStarter(opt =>
+    {
+        opt.DaprHttpPort = 3600;
+        opt.DaprGrpcPort = 3601;
+    });
+}
 builder.Services.AddDaprClient();
+builder.Services.AddAliyunStorage(serviceProvider =>
+{
+    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
+    var accessId = daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
+    var accessSecret = daprClient.GetSecretAsync("localsecretstore", "access_secret").Result.First().Value;
+    var endpoint = daprClient.GetSecretAsync("localsecretstore", "endpoint").Result.First().Value;
+    var roleArn = daprClient.GetSecretAsync("localsecretstore", "roleArn").Result.First().Value;
+    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
+    {
+        Sts = new AliyunStsOptions()
+        {
+            RegionId = "cn-hangzhou"
+        }
+    };
+});
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
@@ -19,16 +41,11 @@ builder.Services.AddAuthentication(options =>
     options.Audience = "";
 });
 
-//builder.AddMasaConfiguration(
-//configurationBuilder =>
-//    {
-//        configurationBuilder.UseMasaOptions(options =>
-//        {
-//            options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
-//            //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
-//        });
-//    }
-//);
+//builder.AddMasaConfiguration(configurationBuilder =>
+//{
+//    configurationBuilder.UseDcc();
+//    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
+//});
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));

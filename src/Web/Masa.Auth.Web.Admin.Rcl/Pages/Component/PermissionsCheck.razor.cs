@@ -3,7 +3,7 @@
 
 using StackApp = Masa.Stack.Components.Models.App;
 
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public partial class PermissionsCheck
 {
@@ -16,10 +16,10 @@ public partial class PermissionsCheck
     [Parameter]
     public EventCallback<Dictionary<Guid, bool>> ValueChanged { get; set; }
 
-    List<Guid> _prevRoleIds = new();
-    Dictionary<Guid, bool> _prevValue = new();
     List<Category> _categories = new();
     List<CategoryAppNav> _initValue = new();
+    List<CategoryAppNav> _allData = new();
+    string _idPrefix = RandomUtils.GenerateSpecifiedString(8);
 
     ProjectService ProjectService => AuthCaller.ProjectService;
 
@@ -29,14 +29,12 @@ public partial class PermissionsCheck
     {
         if (_checkedItems != null)
         {
-            var navKeys = _checkedItems.Select(i => i.Nav).ToList();
+            var navKeys = _checkedItems.Select(i => i.Nav).Distinct().ToList();
             foreach (var keyValue in Value)
             {
-                if (!navKeys.Contains(keyValue.Key.ToString()))
-                {
-                    Value[keyValue.Key] = false;
-                }
+                Value[keyValue.Key] = navKeys.Contains(keyValue.Key.ToString());
             }
+            _initValue = _checkedItems;
         }
     }
 
@@ -45,47 +43,39 @@ public partial class PermissionsCheck
         if (firstRender)
         {
             await LoadData();
+            if (RoleIds.Any())
+            {
+                await LoadRolePermissions();
+            }
+            InitChecked(Value.Select(v => v.Key.ToString()).ToList());
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        if (!_prevRoleIds.SequenceEqual(RoleIds))
-        {
-            _prevRoleIds = RoleIds;
-            await LoadRolePermissions();
-        }
-        if (!_prevValue.SequenceEqual(Value))
-        {
-            _prevValue = Value;
-        }
-    }
-
     private async Task LoadData()
     {
         var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
-        var Categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
+        _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
         {
             Code = ag.Key,
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
-
-        var allKey = Categories.SelectMany(c => c.Apps).SelectMany(a => a.Navs).Select(a => Guid.Parse(a.Code));
-        foreach (var key in allKey)
-        {
-            if (!Value.ContainsKey(key))
-            {
-                Value[key] = false;
-            }
-        }
+        _allData.AddRange(_categories.SelectMany(category =>
+            category.Apps.SelectMany(app => app.Navs.Select(nav =>
+                new CategoryAppNav(category.Code, app.Code, nav.Code)))));
     }
 
     private async Task LoadRolePermissions()
     {
         var rolePermissions = await RoleService.GetPermissionsByRoleAsync(RoleIds);
-        _initValue = rolePermissions.Select(p => new CategoryAppNav("", "", p.ToString())).ToList();
+        InitChecked(rolePermissions.Select(rp => rp.ToString()).ToList());
+    }
+
+    private void InitChecked(List<string> checkedItems)
+    {
+        _initValue.AddRange(_allData.Where(i => checkedItems.Contains(i.Nav ?? "")));
+        _initValue = _initValue.Distinct().ToList();
     }
 }

@@ -45,6 +45,11 @@ public abstract class ServiceBase
         return System.Text.Json.JsonSerializer.Deserialize<TResponse>(json, serializeOptions) ?? throw new UserFriendlyException("Internal error, please contact administrator");
     }
 
+    protected async Task<TResponse?> PostAsync<TRequest, TResponse>(string methodName, TRequest data)
+    {
+        return await CallerProvider.PostAsync<TRequest, TResponse>(BuildAdress(methodName), data);
+    }
+
     protected async Task DeleteAsync<TRequest>(string methodName, TRequest? data = default)
     {
         var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), data);

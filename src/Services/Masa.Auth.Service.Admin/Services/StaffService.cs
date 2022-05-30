@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Text;
-
 namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
@@ -10,6 +8,7 @@ public class StaffService : RestServiceBase
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
         MapPost(SyncAsync);
+        MapPost(SelectByIdsAsync, "SelectByIds");
     }
 
     private async Task<PaginationDto<StaffDto>> GetListAsync(IEventBus eventBus, GetStaffsDto staff)
@@ -50,6 +49,13 @@ public class StaffService : RestServiceBase
     private async Task<List<StaffSelectDto>> GetSelectAsync(IEventBus eventBus, [FromQuery] string name)
     {
         var query = new StaffSelectQuery(name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffSelectDto>> SelectByIdsAsync(IEventBus eventBus, [FromBody] List<Guid> Ids)
+    {
+        var query = new StaffSelectByIdQuery(Ids);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

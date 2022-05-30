@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using Dapr.Client;
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using Humanizer;
@@ -12,6 +13,7 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 global using Masa.Auth.Contracts.Admin.Organizations;
 global using Masa.Auth.Contracts.Admin.Organizations.Validator;
+global using Masa.Auth.Contracts.Admin.Oss;
 global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Permissions.Validator;
 global using Masa.Auth.Contracts.Admin.Projects;
@@ -52,9 +54,12 @@ global using Masa.BuildingBlocks.Ddd.Domain.Events;
 global using Masa.BuildingBlocks.Ddd.Domain.Repositories;
 global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
+global using Masa.BuildingBlocks.Isolation.Options;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
+global using Masa.Contrib.BasicAbility.Dcc;
 global using Masa.Contrib.BasicAbility.Pm;
 global using Masa.Contrib.BasicAbility.Tsc;
+global using Masa.Contrib.Configuration;
 global using Masa.Contrib.Data.Contracts.EF;
 global using Masa.Contrib.Data.EntityFrameworkCore;
 global using Masa.Contrib.Data.EntityFrameworkCore.SqlServer;
@@ -69,8 +74,10 @@ global using Masa.Contrib.ReadWriteSpliting.Cqrs.Commands;
 global using Masa.Contrib.ReadWriteSpliting.Cqrs.Queries;
 global using Masa.Contrib.SearchEngine.AutoComplete;
 global using Masa.Contrib.Service.MinimalAPIs;
+global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
 global using Masa.Utils.Caching.Redis.DependencyInjection;
 global using Masa.Utils.Data.Elasticsearch;
+global using Masa.Utils.Development.Dapr.AspNetCore;
 global using Masa.Utils.Exceptions.Extensions;
 global using Masa.Utils.Extensions.Expressions;
 global using Masa.Utils.Ldap.Novell;
@@ -88,3 +95,6 @@ global using OpenTelemetry.Resources;
 global using OpenTelemetry.Trace;
 global using System.Linq.Expressions;
 global using System.Reflection;
+global using Masa.Contrib.Storage.ObjectStorage.Aliyun;
+global using OssClient = Masa.Contrib.Storage.ObjectStorage.Aliyun.Client;
+global using Client = Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Client;
