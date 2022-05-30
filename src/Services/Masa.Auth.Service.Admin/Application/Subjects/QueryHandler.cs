@@ -162,7 +162,7 @@ public class QueryHandler
         var staffs = await _authDbContext.Set<Staff>()
                                          .Include(staff => staff.User)
                                          .Include(staff => staff.DepartmentStaffs)
-                                         .Where(staff => staff.DepartmentStaffs.Any(department => department.Id == query.DepartmentId))
+                                         .Where(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId))
                                          .ToListAsync();
 
         query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
@@ -174,7 +174,7 @@ public class QueryHandler
         var staffs = await _authDbContext.Set<Staff>()
                                          .Include(staff => staff.User)
                                          .Include(staff => staff.TeamStaffs)
-                                         .Where(staff => staff.TeamStaffs.Any(team => team.Id == query.TeamId))
+                                         .Where(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId))
                                          .ToListAsync();
 
         query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
@@ -186,7 +186,7 @@ public class QueryHandler
         var staffs = await _authDbContext.Set<Staff>()
                                          .Include(staff => staff.User)
                                          .ThenInclude(user => user.Roles)
-                                         .Where(staff => staff.User.Roles.Any(role => role.Id == query.RoleId))
+                                         .Where(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId))
                                          .ToListAsync();
 
         query.Result = staffs.Select(staff => (StaffDto)staff).ToList();

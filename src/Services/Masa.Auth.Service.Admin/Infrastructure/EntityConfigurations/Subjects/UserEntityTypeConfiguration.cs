@@ -8,10 +8,10 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(u => u.Id);
-        builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("[IsDeleted] = 0");
-        builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("[IsDeleted] = 0");
-        builder.HasIndex(u => u.Name).IsUnique();
-        builder.HasIndex(u => u.Email).IsUnique();
+        builder.HasIndex(u => u.Name);
+        builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("[IsDeleted] = 0 and IdCard!=''");
+        builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("[IsDeleted] = 0 and PhoneNumber!=''");
+        builder.HasIndex(u => u.Email).IsUnique().HasFilter("[IsDeleted] = 0 and Email!=''");
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
         builder.OwnsOne(u => u.Address);
