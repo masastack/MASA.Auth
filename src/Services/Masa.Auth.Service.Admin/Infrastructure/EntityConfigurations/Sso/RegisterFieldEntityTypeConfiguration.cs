@@ -7,6 +7,6 @@ public class RegisterFieldEntityTypeConfiguration : IEntityTypeConfiguration<Reg
 {
     public void Configure(EntityTypeBuilder<RegisterField> builder)
     {
-        builder.ToTable(nameof(RegisterField), AuthDbContext.SSO_SCHEMA).HasKey(registerField => registerField.Id);
+        builder.HasKey(registerField => registerField.Id);
     }
 }

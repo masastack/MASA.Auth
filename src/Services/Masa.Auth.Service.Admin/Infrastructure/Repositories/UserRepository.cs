@@ -9,7 +9,12 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetDetail(Guid id)
+    public async Task<List<User>> GetAllAsync()
+    {
+        return await Context.Set<User>().ToListAsync();
+    }
+
+    public async Task<User?> GetDetailAsync(Guid id)
     {
         var user = await Context.Set<User>()
                            .Include(u => u.Roles)

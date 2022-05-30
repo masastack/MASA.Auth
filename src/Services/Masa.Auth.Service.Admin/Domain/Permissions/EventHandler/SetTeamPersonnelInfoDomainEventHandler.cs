@@ -15,22 +15,7 @@ public class SetTeamPersonnelInfoDomainEventHandler
     [EventHandler(1)]
     public async Task SetRoleAsync(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
     {
-        var teamRole = setTeamPersonnelInfoDomainEvent.Team.TeamRoles.FirstOrDefault(tr => tr.TeamMemberType == setTeamPersonnelInfoDomainEvent.Type);
-        Role role;
-        if (teamRole is null)
-        {
-            role = new Role(setTeamPersonnelInfoDomainEvent.RoleName, setTeamPersonnelInfoDomainEvent.RoleName);
-            await _roleRepository.AddAsync(role);
-            await _roleRepository.UnitOfWork.SaveChangesAsync();
-            setTeamPersonnelInfoDomainEvent.Team.SetRole(setTeamPersonnelInfoDomainEvent.Type, role.Id);
-        }
-        else
-        {
-            role = await _roleRepository.GetByIdAsync(teamRole.RoleId);
-        }
-        role.BindChildrenRoles(setTeamPersonnelInfoDomainEvent.RoleIds);
-        await _roleRepository.UpdateAsync(role);
-        await _roleRepository.UnitOfWork.SaveChangesAsync();
+        setTeamPersonnelInfoDomainEvent.Team.SetRole(setTeamPersonnelInfoDomainEvent.Type, setTeamPersonnelInfoDomainEvent.RoleIds.ToArray());
     }
 
     [EventHandler(3)]

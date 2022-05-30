@@ -15,7 +15,9 @@ public class UpdateStaffDto
 
     public Guid DepartmentId { get; set; }
 
-    public UpsertPositionDto Position { get; set; }
+    public Guid PositionId { get; set; }
+
+    public string Position { get; set; }
 
     public List<Guid> Teams { get; set; }
 
@@ -24,12 +26,12 @@ public class UpdateStaffDto
     public UpdateStaffDto()
     {
         JobNumber = "";
-        Position = new();
+        Position = "";
         Teams = new();
         User = new();
     }
 
-    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, UpsertPositionDto position, List<Guid> teamIds, UpdateUserDto user)
+    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string position, List<Guid> teamIds, UpdateUserDto user)
     {
         Id = id;
         JobNumber = jobNumber;
@@ -43,6 +45,6 @@ public class UpdateStaffDto
 
     public static implicit operator UpdateStaffDto(StaffDetailDto staff)
     {
-        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, new(staff.PositionId, ""), staff.TeamIds, staff.User);
+        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.Position, staff.TeamIds, staff.User);
     }
 }

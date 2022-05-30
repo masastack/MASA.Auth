@@ -7,7 +7,6 @@ public class UserPermissionEntityTypeConfiguration : IEntityTypeConfiguration<Us
 {
     public void Configure(EntityTypeBuilder<UserPermission> builder)
     {
-        builder.ToTable(nameof(UserPermission), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(s => s.Id);
     }
 }

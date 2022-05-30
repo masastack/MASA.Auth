@@ -27,6 +27,8 @@ public partial class UpdateSheet
     [Parameter]
     public EventCallback<Guid> OnDelete { get; set; }
 
+    bool _adminPreview, _memberPreview;
+
     public async Task OnUpdateBaseHandler()
     {
         if (OnUpdateBase.HasDelegate)

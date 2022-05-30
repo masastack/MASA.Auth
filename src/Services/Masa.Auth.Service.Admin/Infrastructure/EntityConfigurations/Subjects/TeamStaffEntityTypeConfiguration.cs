@@ -7,7 +7,6 @@ public class TeamStaffEntityTypeConfiguration : IEntityTypeConfiguration<TeamSta
 {
     public void Configure(EntityTypeBuilder<TeamStaff> builder)
     {
-        builder.ToTable(nameof(TeamStaff), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(t => t.Id);
     }
 }

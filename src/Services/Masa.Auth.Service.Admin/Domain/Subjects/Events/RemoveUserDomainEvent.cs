@@ -3,4 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record RemoveUserDomainEvent(Guid userId) : Event;
+public record RemoveUserDomainEvent(List<Guid> userIds) : Event;

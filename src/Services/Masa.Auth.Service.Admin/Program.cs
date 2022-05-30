@@ -6,6 +6,8 @@ using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddObservability();
+
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
@@ -20,16 +22,11 @@ builder.Services.AddAuthentication(options =>
     options.Audience = "";
 });
 
-//builder.AddMasaConfiguration(
-//configurationBuilder =>
-//    {
-//        configurationBuilder.UseMasaOptions(options =>
-//        {
-//            options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
-//            //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
-//        });
-//    }
-//);
+//builder.AddMasaConfiguration(configurationBuilder =>
+//{
+//    configurationBuilder.UseDcc();
+//    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
+//});
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
@@ -49,6 +46,8 @@ var app = builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
     {
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {
             Name = "Authorization",
@@ -84,7 +83,6 @@ var app = builder.Services
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
-            eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
         .UseIsolationUoW<AuthDbContext>(
             isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),

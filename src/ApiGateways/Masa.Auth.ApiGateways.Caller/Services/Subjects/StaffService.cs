@@ -22,6 +22,11 @@ public class StaffService : ServiceBase
         return await SendAsync<object, List<StaffSelectDto>>(nameof(GetSelectAsync), new { name });
     }
 
+    public async Task<List<StaffSelectDto>> SelectByIdsAsync(List<Guid> ids)
+    {
+        return await PostAsync<List<Guid>, List<StaffSelectDto>>(nameof(SelectByIdsAsync), ids) ?? new();
+    }
+
     public async Task<StaffDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, StaffDetailDto>(nameof(GetDetailAsync), new { id });
@@ -40,6 +45,11 @@ public class StaffService : ServiceBase
     public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveStaffDto(id));
+    }
+
+    public async Task<SyncStaffResultsDto> SyncAsync(HttpContent content)
+    {
+        return await PostAsync<SyncStaffResultsDto>(nameof(SyncAsync), content: content);
     }
 }
 

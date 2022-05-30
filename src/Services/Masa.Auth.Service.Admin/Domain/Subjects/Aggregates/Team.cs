@@ -71,13 +71,10 @@ public class Team : FullAuditAggregateRoot<Guid, Guid>
         return teamRoles.FirstOrDefault(ts => ts.TeamMemberType == TeamMemberTypes.Member)?.RoleId ?? Guid.Empty;
     }
 
-    public void SetRole(TeamMemberTypes memberType, Guid roleId)
+    public void SetRole(TeamMemberTypes memberType, params Guid[] roleIds)
     {
-        if (teamRoles.Any(tr => tr.TeamMemberType == memberType && tr.RoleId == roleId))
-        {
-            throw new UserFriendlyException($"this team {memberType} role already exists");
-        }
-        teamRoles.Add(new TeamRole(roleId, memberType));
+        teamRoles.RemoveAll(tr => tr.TeamMemberType == memberType);
+        teamRoles.AddRange(roleIds.Select(roleId => new TeamRole(roleId, memberType)));
     }
 }
 

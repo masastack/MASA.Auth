@@ -12,7 +12,7 @@ public partial class RoleSelect
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     [Parameter]
-    public string Lable { get; set; } = "";
+    public string Label { get; set; } = "";
 
     [Parameter]
     public bool Readonly { get; set; }
@@ -26,7 +26,7 @@ public partial class RoleSelect
 
     protected override async Task OnInitializedAsync()
     {
-        Lable = T("Role");
+        Label = T("Role");
         Roles = await RoleService.GetSelectForUserAsync();
     }
 

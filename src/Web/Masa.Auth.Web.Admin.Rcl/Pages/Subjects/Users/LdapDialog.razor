@@ -48,6 +48,13 @@
     [Parameter]
     public EventCallback<bool> ShowChanged { get; set; }
 
+    public async Task OpenAsync()
+    {
+        _ldapDetailDto = await ThirdPartyIdpService.GetLdapDetailAsync();
+        Show = true;
+        StateHasChanged();
+    }
+
     private async Task ConnectTest()
     {
         if (!await _form.ValidateAsync())
@@ -62,7 +69,7 @@
         }
         catch
         {
-            OpenErrorMessage(T("Connect Error"));   
+            OpenErrorMessage(T("Connect Error"));
         }
     }
 
@@ -73,6 +80,6 @@
             return;
         }
         await ThirdPartyIdpService.LdapUpsertAsync(_ldapDetailDto);
-        OpenSuccessMessage("");
+        OpenSuccessMessage(T("Ldap Account Synchroniz Success"));
     }
 }
