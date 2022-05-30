@@ -36,7 +36,7 @@ namespace Masa.Auth.Service.Admin.Services
             dto.Password = "";
             if (string.IsNullOrEmpty(dto.Avatar)) dto.Avatar = "";
             if (dto.Gender == default) dto.Gender = GenderTypes.Male;
-            
+
             await eventBus.PublishAsync(new AddUserCommand(dto));
         }
 

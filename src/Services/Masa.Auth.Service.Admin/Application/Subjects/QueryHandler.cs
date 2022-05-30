@@ -312,7 +312,7 @@ public class QueryHandler
                 .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount, "", "", "", t.ModificationTime))
                 .ToList();
     }
-  
+
     [EventHandler]
     public async Task TeamDetailAsync(TeamDetailQuery teamDetailQuery)
     {
@@ -363,7 +363,7 @@ public class QueryHandler
             Name = team.Name,
             Description = team.Description,
             TeamType = team.TeamType,
-            Avatar = team.Avatar.Url,          
+            Avatar = team.Avatar.Url,
             TeamAdmin = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(ts => (StaffDto)ts.Staff).ToList(),
             TeamMember = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(ts => (StaffDto)ts.Staff).ToList(),
         };
