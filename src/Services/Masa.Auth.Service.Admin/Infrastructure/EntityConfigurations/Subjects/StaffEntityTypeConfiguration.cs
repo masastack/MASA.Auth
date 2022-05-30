@@ -7,7 +7,6 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
 {
     public void Configure(EntityTypeBuilder<Staff> builder)
     {
-        builder.ToTable(nameof(Staff), AuthDbContext.SUBJECT_SCHEMA);
         builder.HasKey(s => s.Id);
         builder.HasIndex(s => s.JobNumber).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(s => s.JobNumber).HasMaxLength(20);

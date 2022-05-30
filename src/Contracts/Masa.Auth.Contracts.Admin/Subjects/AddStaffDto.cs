@@ -13,7 +13,9 @@ public class AddStaffDto
 
     public Guid DepartmentId { get; set; }
 
-    public UpsertPositionDto Position { get; set; }
+    public Guid PositionId { get; set; }
+
+    public string Position { get; set; }
 
     public List<Guid> Teams { get; set; }
 
@@ -24,12 +26,12 @@ public class AddStaffDto
     public AddStaffDto()
     {
         JobNumber = "";
-        Position = new();
+        Position = "";
         Teams = new();
         User = new();
     }
 
-    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, UpsertPositionDto position, List<Guid> teamIds, AddUserDto user)
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string position, List<Guid> teamIds, AddUserDto user)
     {
         JobNumber = jobNumber;
         StaffType = staffType;

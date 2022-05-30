@@ -5,6 +5,8 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class IdentityProvider : FullAuditAggregateRoot<Guid, Guid>
 {
+    List<ThirdPartyUser> _thirdPartyUsers = new();
+
     public string Name { get; protected set; } = null!;
 
     public string DisplayName { get; protected set; } = null!;
@@ -14,4 +16,11 @@ public class IdentityProvider : FullAuditAggregateRoot<Guid, Guid>
     public bool Enabled { get; protected set; } = true;
 
     public IdentificationTypes IdentificationType { get; protected set; }
+
+    public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
+
+    public static implicit operator IdentityProviderDetailDto(IdentityProvider tpIdp)
+    {
+        return new IdentityProviderDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.Icon, tpIdp.Enabled);
+    }
 }

@@ -25,6 +25,6 @@ public class UserDomainEventHandler
     [EventHandler]
     public async Task RemoveUserAsync(RemoveUserDomainEvent userEvent)
     {
-        var response = await _autoCompleteClient.DeleteAsync(userEvent.userId);
+        var response = await _autoCompleteClient.DeleteAsync(userEvent.userIds);
     }
 }

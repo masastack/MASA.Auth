@@ -10,11 +10,15 @@ public class QueryHandler
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly ILdapIdpRepository _ldapIdpRepository;
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
     readonly IAutoCompleteClient _autoCompleteClient;
 
-    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient)
+    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository,
+        IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
+        AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient,
+        ILdapIdpRepository ldapIdpRepository)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -24,6 +28,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
+        _ldapIdpRepository = ldapIdpRepository;
     }
 
     #region User
@@ -61,7 +66,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
-        var user = await _userRepository.GetDetail(query.UserId);
+        var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
         var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
         var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
@@ -76,6 +81,13 @@ public class QueryHandler
     {
         var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(query.Search);
         query.Result = response.Data;
+    }
+
+    [EventHandler]
+    public async Task GetAllUsers(AllUsersQuery query)
+    {
+        var users = await _userRepository.GetAllAsync();
+        query.Result = users;
     }
 
     #endregion
@@ -255,6 +267,13 @@ public class QueryHandler
         if (thirdPartyIdp is null) throw new UserFriendlyException("This thirdPartyIdp data does not exist");
 
         query.Result = thirdPartyIdp;
+    }
+
+    [EventHandler]
+    public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
+    {
+        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);
+        thirdPartyIdp?.Adapt(query.Result);
     }
 
     [EventHandler]

@@ -7,8 +7,6 @@ public class DeviceFlowCodesEntityTypeConfiguration : IEntityTypeConfiguration<D
 {
     public void Configure(EntityTypeBuilder<DeviceFlowCodes> builder)
     {
-        builder.ToTable(nameof(DeviceFlowCodes), AuthDbContext.SSO_SCHEMA);
-
         builder.Property(x => x.DeviceCode).HasMaxLength(200).IsRequired();
         builder.Property(x => x.UserCode).HasMaxLength(200).IsRequired();
         builder.Property(x => x.SubjectId).HasMaxLength(200);

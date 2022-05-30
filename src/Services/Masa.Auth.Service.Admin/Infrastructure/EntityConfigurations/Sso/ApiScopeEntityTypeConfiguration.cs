@@ -7,7 +7,6 @@ public class ApiScopeEntityTypeConfiguration : IEntityTypeConfiguration<ApiScope
 {
     public void Configure(EntityTypeBuilder<ApiScope> builder)
     {
-        builder.ToTable(nameof(ApiScope), AuthDbContext.SSO_SCHEMA).HasKey(apiScope => apiScope.Id);
         builder.HasIndex(apiScope => apiScope.Name).IsUnique();
 
         builder.Property(apiScope => apiScope.Name).HasMaxLength(200).IsRequired();

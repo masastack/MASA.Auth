@@ -7,6 +7,6 @@ public class ClientPostLogoutRedirectUriEntityTypeConfiguration : IEntityTypeCon
 {
     public void Configure(EntityTypeBuilder<ClientPostLogoutRedirectUri> builder)
     {
-        builder.ToTable(nameof(ClientPostLogoutRedirectUri), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
     }
 }

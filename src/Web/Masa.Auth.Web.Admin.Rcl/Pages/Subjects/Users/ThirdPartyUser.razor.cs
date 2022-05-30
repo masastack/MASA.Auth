@@ -11,6 +11,7 @@ public partial class ThirdPartyUser
     private Guid _userId;
     private DateOnly? _startTime;
     private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private LdapDialog ldapDialog = null!;
 
     public Guid UserId
     {
@@ -84,8 +85,6 @@ public partial class ThirdPartyUser
 
     public bool ViewThirdPartyUserDialog { get; set; }
 
-    public bool LdapDialog { get; set; }
-
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
 
     protected override async Task OnInitializedAsync()
@@ -93,11 +92,11 @@ public partial class ThirdPartyUser
         Headers = new()
         {
             new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.ThirdPartyIdp), Sortable = false },
+            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
-            new() { Text = T("State"), Value = T(nameof(UserDto.Enabled)), Sortable = false },
+            new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false },
         };
 
@@ -120,9 +119,9 @@ public partial class ThirdPartyUser
         ViewThirdPartyUserDialog = true;
     }
 
-    public void OpenLdapDialog()
+    public async Task OpenLdapDialog()
     {
-        LdapDialog = true;
+        await ldapDialog.OpenAsync();
     }
 }
 

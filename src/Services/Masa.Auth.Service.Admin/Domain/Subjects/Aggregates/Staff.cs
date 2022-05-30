@@ -65,7 +65,7 @@ public class Staff : FullAuditAggregateRoot<Guid, Guid>
         return new(staff.Id, departmentStaff?.DepartmentId ?? default, departmentStaff?.Department?.Name ?? "", staff.PositionId ?? default, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled && staff.User.Enabled, staff.StaffType, teams, new(), staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.CreationTime, staff.ModificationTime);
     }
 
-    public void Update(string name, Guid positionId, StaffTypes staffType, bool enabled)
+    public void Update(string name, Guid? positionId, StaffTypes staffType, bool enabled)
     {
         Name = name;
         PositionId = positionId;
