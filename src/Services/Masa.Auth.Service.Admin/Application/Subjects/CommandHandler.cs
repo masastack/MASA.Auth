@@ -13,8 +13,12 @@ public class CommandHandler
     readonly TeamDomainService _teamDomainService;
     readonly ILdapFactory _ldapFactory;
     readonly UserDomainService _userDomainService;
+    readonly IClient _client;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory, UserDomainService userDomainService)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository,
+        IThirdPartyIdpRepository thirdPartyIdpRepository, ITeamRepository teamRepository,
+        StaffDomainService staffDomainService, TeamDomainService teamDomainService,
+        ILdapFactory ldapFactory, UserDomainService userDomainService, IClient client)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -24,6 +28,7 @@ public class CommandHandler
         _teamDomainService = teamDomainService;
         _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
+        _client = client;
     }
 
     #region User

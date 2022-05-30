@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Storage.ObjectStorage.Aliyun;
+using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -32,6 +35,11 @@ MapsterAdapterConfig.TypeAdapter();
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
+
+builder.Services.AddAliyunStorage(p => new AliyunStorageOptions("", "", "", "", "")
+{
+    Sts = new AliyunStsOptions("")
+});
 
 builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
