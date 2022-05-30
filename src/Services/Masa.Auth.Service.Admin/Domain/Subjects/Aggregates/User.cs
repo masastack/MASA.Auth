@@ -95,6 +95,18 @@ public class User : FullAuditAggregateRoot<Guid, Guid>
         GenderType = genderType;
     }
 
+    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string? email, string? position, string password, GenderTypes genderType)
+    {
+        Name = name;
+        DisplayName = displayName ?? "";
+        IdCard = idCard ?? "";
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        Position = position ?? "";
+        Password = password;
+        GenderType = genderType;
+    }
+
     public void AddRoles(params Guid[] roleIds)
     {
         _roles.Clear();

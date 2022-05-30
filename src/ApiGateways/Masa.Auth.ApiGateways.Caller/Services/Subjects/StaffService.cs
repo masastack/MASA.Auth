@@ -46,5 +46,10 @@ public class StaffService : ServiceBase
     {
         await SendAsync(nameof(RemoveAsync), new RemoveStaffDto(id));
     }
+
+    public async Task<SyncStaffResultsDto> SyncAsync(HttpContent content)
+    {
+        return await PostAsync<SyncStaffResultsDto>(nameof(SyncAsync), content: content);
+    }
 }
 

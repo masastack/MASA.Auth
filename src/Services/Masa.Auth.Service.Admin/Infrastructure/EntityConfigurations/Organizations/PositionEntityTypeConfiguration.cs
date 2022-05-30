@@ -8,6 +8,7 @@ public class PositionEntityTypeConfiguration : IEntityTypeConfiguration<Position
     public void Configure(EntityTypeBuilder<Position> builder)
     {
         builder.HasKey(p => p.Id);
+        builder.HasIndex(p => p.Name).IsUnique();
         builder.Property(d => d.Name).HasMaxLength(20);
     }
 }

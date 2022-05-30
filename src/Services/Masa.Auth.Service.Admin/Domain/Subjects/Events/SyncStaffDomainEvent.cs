@@ -3,4 +3,8 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record SetUserDomainEvent(List<User> Users) : Event;
+public record SyncStaffDomainEvent(List<SyncStaffDto> Staffs) : Event
+{
+    public SyncStaffResultsDto Result { get; set; } = new();
+}
+
