@@ -12,21 +12,21 @@ if (builder.Environment.IsProduction() is false)
     {
         opt.DaprHttpPort = 3600;
         opt.DaprGrpcPort = 3601;
-    }); 
+    });
 }
 builder.Services.AddDaprClient();
-builder.Services.AddAliyunStorage(serviceProvider => 
+builder.Services.AddAliyunStorage(serviceProvider =>
 {
     var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var accessId =  daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
+    var accessId = daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
     var accessSecret = daprClient.GetSecretAsync("localsecretstore", "access_secret").Result.First().Value;
     var endpoint = daprClient.GetSecretAsync("localsecretstore", "endpoint").Result.First().Value;
     var roleArn = daprClient.GetSecretAsync("localsecretstore", "roleArn").Result.First().Value;
     return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
     {
-        Sts=new AliyunStsOptions()
+        Sts = new AliyunStsOptions()
         {
-            RegionId= "cn-hangzhou"
+            RegionId = "cn-hangzhou"
         }
     };
 });

@@ -33,6 +33,7 @@ public partial class AddUserDialog
     protected override async Task OnInitializedAsync()
     {
         DefaultImages = await OssService.GetDefaultImagesAsync();
+        ChangeAvayar();
     }
 
     private async Task UpdateVisible(bool visible)

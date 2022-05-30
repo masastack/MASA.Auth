@@ -20,8 +20,8 @@ namespace Masa.Auth.Service.Admin.Services
             var accessSecret = response.AccessKeySecret;
             var bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.First().Value;
             return await Task.FromResult(new GetSecurityTokenDto(region, accessId, accessSecret, stsToken, bucket));
-        }    
-        
+        }
+
         private async Task<List<GetDefaultImagesDto>> GetDefaultImagesAsync()
         {
             return new List<GetDefaultImagesDto>();

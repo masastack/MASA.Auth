@@ -32,14 +32,14 @@ public partial class Upload
         get => MultipleValue.FirstOrDefault();
         set
         {
-            if(Multiple is false)
+            if (Multiple is false)
             {
                 MultipleValue.Clear();
-                if(string.IsNullOrEmpty(value) is false)
+                if (string.IsNullOrEmpty(value) is false)
                 {
                     MultipleValue.Add(value);
-                }                
-            }            
+                }
+            }
         }
     }
 
@@ -118,7 +118,7 @@ public partial class Upload
 
     protected async Task SetValueAsync(List<string> values)
     {
-        if(Multiple)
+        if (Multiple)
         {
             MultipleValue = values;
             if (MultipleValueChanged.HasDelegate) await MultipleValueChanged.InvokeAsync(MultipleValue);

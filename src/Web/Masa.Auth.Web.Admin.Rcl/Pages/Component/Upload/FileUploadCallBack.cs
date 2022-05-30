@@ -19,7 +19,7 @@ public class FileUploadCallBack
     [MemberNotNullWhen(true, nameof(DelegateCallback))]
     public bool IsDelegateCallback => DelegateCallback is not null;
 
-    public object? JsCallBackParamter { get; set; } 
+    public object? JsCallBackParamter { get; set; }
 
     public static implicit operator FileUploadCallBack(string callback)
     {
