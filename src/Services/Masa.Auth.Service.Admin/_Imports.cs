@@ -92,3 +92,6 @@ global using OpenTelemetry.Resources;
 global using OpenTelemetry.Trace;
 global using System.Linq.Expressions;
 global using System.Reflection;
+global using Masa.Contrib.Storage.ObjectStorage.Aliyun;
+global using OssClient = Masa.Contrib.Storage.ObjectStorage.Aliyun.Client;
+global using Client = Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Client;

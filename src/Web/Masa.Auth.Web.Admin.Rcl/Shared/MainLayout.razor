@@ -32,7 +32,7 @@
 
     Task OnError(Exception exception)
     {
-        PopupService.AlertAsync(exception.Message,AlertTypes.Error);
+        PopupService.AlertAsync(exception.Message, AlertTypes.Error);
         GlobalConfig.Loading = false;
         return Task.CompletedTask;
     }
