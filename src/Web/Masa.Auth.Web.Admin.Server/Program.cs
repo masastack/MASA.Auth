@@ -5,6 +5,7 @@ using Masa.Auth.ApiGateways.Caller;
 using Masa.Auth.Contracts.Admin.Subjects.Validator;
 using Masa.Auth.Web.Admin.Rcl;
 using Masa.Auth.Web.Admin.Rcl.Global;
+using Masa.Stack.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddMasaBlazor(builder =>
         option.Accent = "#4318FF";
     });
 });
+builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n");
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddGlobalForServer();
