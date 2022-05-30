@@ -69,6 +69,6 @@
     </FooterContent>
 </MDataTable>
 
-<AddUserDialog @key="Guid.NewGuid()" @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
+<AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <UpdateUserDialog @key="Guid.NewGuid()" UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <UserAuthorizeDialog @key="Guid.NewGuid()" UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />

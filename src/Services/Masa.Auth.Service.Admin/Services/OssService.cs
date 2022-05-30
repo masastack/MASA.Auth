@@ -14,14 +14,17 @@ namespace Masa.Auth.Service.Admin.Services
         private async Task<GetSecurityTokenDto> GetSecurityTokenAsync([FromServices] IClient client, [FromServices] DaprClient daprClient)
         {
             var region = "oss-cn-hangzhou";
-            //var accessId = daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
-            //var accessSecret = daprClient.GetSecretAsync("localsecretstore", "access_secret").Result.First().Value;
             var response = client.GetSecurityToken();
             var stsToken = response.SessionToken;
             var accessId = response.AccessKeyId;
             var accessSecret = response.AccessKeySecret;
             var bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.First().Value;
             return await Task.FromResult(new GetSecurityTokenDto(region, accessId, accessSecret, stsToken, bucket));
-        }      
+        }    
+        
+        private async Task<List<GetDefaultImagesDto>> GetDefaultImagesAsync()
+        {
+            return new List<GetDefaultImagesDto>();
+        }
     }
 }

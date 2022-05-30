@@ -26,17 +26,19 @@ public partial class UploadImage : Upload
     [Parameter]
     public uint Size { get; set; }
 
-    public List<string>? PreviewImageUrls { get; set; }
+    protected override void OnInitialized()
+    {
+        Accept = "image/*";
+        OnInputFileChanged = "GetPreviewImageUrls";
+        Class = "mr-4";
+    }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         if (string.IsNullOrEmpty(DefaultImage) is false && string.IsNullOrEmpty(Value) && MultipleValue.Count == 0)
         {
             await SetValueAsync(new() { DefaultImage });
         }
-        Accept = "image/*";
-        OnInputFileChanged = "GetPreviewImageUrls";
-        Class = "mr-4";
     }
 
     protected override async Task OnInputFileChange(InputFileChangeEventArgs e)
@@ -44,7 +46,8 @@ public partial class UploadImage : Upload
         await base.OnInputFileChange(e);
         if (OnInputFileChanged is not null && OnInputFileChanged.JsCallbackValue.Equals(default) is false)
         {
-            PreviewImageUrls = OnInputFileChanged.JsCallbackValue.Deserialize<List<string>>() ?? new();
+            var previewImageUrls = OnInputFileChanged.JsCallbackValue.Deserialize<List<string>>() ?? new();
+            await SetValueAsync(previewImageUrls);
         }
     }
 

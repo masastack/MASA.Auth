@@ -16,5 +16,10 @@ public class OssService : ServiceBase
     {
         return await GetAsync<GetSecurityTokenDto>(nameof(GetSecurityTokenAsync), null);
     }
+
+    public async Task<List<GetDefaultImagesDto>> GetDefaultImagesAsync()
+    {
+        return await GetAsync<List<GetDefaultImagesDto>>(nameof(GetDefaultImagesAsync), null);
+    }
 }
 

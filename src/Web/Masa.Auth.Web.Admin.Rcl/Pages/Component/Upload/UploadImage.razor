@@ -6,7 +6,7 @@
     <div>
         @if (ChildContent is not null)
         {
-            @ChildContent(PreviewImageUrls ?? MultipleValue)
+            @ChildContent(MultipleValue)
         }
         else
         {
@@ -14,7 +14,7 @@
             {
                 <img src="@Icon" class="@GetClass()" style="@GetStyle()" />
             }
-            @foreach (var imageUrl in PreviewImageUrls ?? MultipleValue)
+            @foreach (var imageUrl in MultipleValue)
             {
                 <img src="@imageUrl" class="@GetClass()" style="@GetStyle()" />
             }

@@ -39,3 +39,4 @@ global using System.Reflection;
 global using System.Text.Json;
 global using Masa.Auth.ApiGateways.Caller.Services.Oss;
 global using Masa.Auth.ApiGateways.Caller;
+global using Masa.Auth.Contracts.Admin.Oss;

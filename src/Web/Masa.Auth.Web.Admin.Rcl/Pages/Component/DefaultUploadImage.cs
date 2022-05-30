@@ -7,6 +7,13 @@ public class DefaultUploadImage : UploadImage
 {
     private OssService OssService => AuthCaller.OssService;
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Avatar = true;
+        Size = 120;
+    }
+
     public override async Task UploadAsync()
     {
         var paramter = await OssService.GetSecurityTokenAsync();

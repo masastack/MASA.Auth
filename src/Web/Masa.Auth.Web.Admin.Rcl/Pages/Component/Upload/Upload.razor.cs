@@ -32,10 +32,13 @@ public partial class Upload
         get => MultipleValue.FirstOrDefault();
         set
         {
-            if(Multiple is false && string.IsNullOrEmpty(value) is false)
+            if(Multiple is false)
             {
                 MultipleValue.Clear();
-                MultipleValue.Add(value);
+                if(string.IsNullOrEmpty(value) is false)
+                {
+                    MultipleValue.Add(value);
+                }                
             }            
         }
     }
