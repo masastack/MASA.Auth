@@ -353,12 +353,12 @@
     background: #E6FAF5 !important;
 }
 
-.sample-green--text {
+.green--text {
     color: #05CD99 !important;
     caret-color: #05CD99 !important;
 }
 
-.sample-green-lighten-5--text {
+.green--text-lighten {
     color: #E6FAF5 !important;
     caret-color: #E6FAF5 !important;
 }
