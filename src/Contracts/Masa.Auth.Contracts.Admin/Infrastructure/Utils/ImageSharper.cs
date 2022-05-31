@@ -18,6 +18,7 @@ public static class ImageSharper
         };
         image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
         image.SaveAsPng(ms);
+        ms.Seek(0, SeekOrigin.Begin);
         return ms;
     }
 
