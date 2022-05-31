@@ -16,4 +16,11 @@ public class StaffDomainService : DomainService
     {
         await EventBus.PublishAsync(new UpdateStaffDomainEvent(staff));
     }
+
+    public async Task<SyncStaffResultsDto> SyncStaffAsync(List<SyncStaffDto> staffs)
+    {
+        var staffDomainEvent = new SyncStaffDomainEvent(staffs);
+        await EventBus.PublishAsync(staffDomainEvent);
+        return staffDomainEvent.Result;
+    }
 }

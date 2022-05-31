@@ -62,7 +62,7 @@ public class QueryHandler
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
         query.Result = new(
-            role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),
+            role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.DisplayName, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),
             role.Teams.Select(tr => new TeamSelectDto(tr.Team.Id, tr.Team.Name, tr.Team.Avatar.Url)).ToList()
         );
     }
@@ -115,6 +115,16 @@ public class QueryHandler
     public async Task GetRoleSelectForTeamAsync(RoleSelectForTeamQuery query)
     {
         query.Result = await GetRoleSelectAsync();
+    }
+
+    [EventHandler]
+    public async Task GetRoleSelectAsync(RoleSelectQuery query)
+    {
+        var roleSelect = await _authDbContext.Set<Role>()
+                                         .Where(r => r.Enabled == true && r.Name.Contains(query.Name))
+                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Limit, r.AvailableQuantity))
+                                         .ToListAsync();
+        query.Result = roleSelect;
     }
 
     private async Task<List<RoleSelectDto>> GetRoleSelectAsync()

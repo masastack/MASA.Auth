@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using StackExchange.Redis;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -10,11 +12,15 @@ public class QueryHandler
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly ILdapIdpRepository _ldapIdpRepository;
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
     readonly IAutoCompleteClient _autoCompleteClient;
 
-    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository, IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient)
+    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository,
+        IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
+        AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient,
+        ILdapIdpRepository ldapIdpRepository)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -24,6 +30,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
+        _ldapIdpRepository = ldapIdpRepository;
     }
 
     #region User
@@ -61,7 +68,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
-        var user = await _userRepository.GetDetail(query.UserId);
+        var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
         var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
         var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
@@ -76,6 +83,13 @@ public class QueryHandler
     {
         var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(query.Search);
         query.Result = response.Data;
+    }
+
+    [EventHandler]
+    public async Task GetAllUsers(AllUsersQuery query)
+    {
+        var users = await _userRepository.GetAllAsync();
+        query.Result = users;
     }
 
     #endregion
@@ -141,7 +155,50 @@ public class QueryHandler
             condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, "")).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.User.Avatar)).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
+    {
+        var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.User.Avatar)).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffsByDepartmentAsync(StaffsByDepartmentQuery query)
+    {
+        var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(staff => staff.User)
+                                         .Include(staff => staff.DepartmentStaffs)
+                                         .Where(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId))
+                                         .ToListAsync();
+
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffsByTeamAsync(StaffsByTeamQuery query)
+    {
+        var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(staff => staff.User)
+                                         .Include(staff => staff.TeamStaffs)
+                                         .Where(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId))
+                                         .ToListAsync();
+
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffsByRoleAsync(StaffsByRoleQuery query)
+    {
+        var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(staff => staff.User)
+                                         .ThenInclude(user => user.Roles)
+                                         .Where(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId))
+                                         .ToListAsync();
+
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
     }
 
     #endregion
@@ -222,6 +279,13 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
+    {
+        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);
+        thirdPartyIdp?.Adapt(query.Result);
+    }
+
+    [EventHandler]
     public async Task GetThirdPartyIdpSelectAsync(ThirdPartyIdpSelectQuery query)
     {
         Expression<Func<ThirdPartyIdp, bool>> condition = ThirdPartyIdp => true;
@@ -270,12 +334,38 @@ public class QueryHandler
             },
             TeamAdmin = new TeamPersonnelDto
             {
-
+                Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin).Select(s => s.StaffId).ToList(),
+                Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Admin).Select(r => r.RoleId).ToList(),
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).ToDictionary(p => p.PermissionId, p => p.Effect)
             },
             TeamMember = new TeamPersonnelDto
             {
-
+                Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Member).Select(s => s.StaffId).ToList(),
+                Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Member).Select(r => r.RoleId).ToList(),
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).ToDictionary(p => p.PermissionId, p => p.Effect)
             }
+        };
+    }
+
+    [EventHandler]
+    public async Task TeamDetailForExternalAsync(TeamDetailForExternalQuery query)
+    {
+        var team = await _authDbContext.Set<Team>()
+                                       .Include(t => t.TeamStaffs)
+                                       .ThenInclude(ts => ts.Staff)
+                                       .AsSplitQuery()
+                                       .FirstOrDefaultAsync(t => t.Id == query.TeamId);
+
+        if (team is null) throw new UserFriendlyException("This team data does not exist");
+        query.Result = new TeamDetailForExternalDto
+        {
+            Id = team.Id,
+            Name = team.Name,
+            Description = team.Description,
+            TeamType = team.TeamType,
+            Avatar = team.Avatar.Url,
+            TeamAdmin = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(ts => (StaffDto)ts.Staff).ToList(),
+            TeamMember = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(ts => (StaffDto)ts.Staff).ToList(),
         };
     }
 

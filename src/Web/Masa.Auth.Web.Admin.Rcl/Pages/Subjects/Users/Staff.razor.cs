@@ -66,7 +66,7 @@ public partial class Staff
 
     public bool AuthorizeDialogVisible { get; set; }
 
-    public bool StaffSyncDialogVisible { get; set; }
+    public bool SyncStaffDialogVisible { get; set; }
 
     private StaffService StaffService => AuthCaller.StaffService;
 

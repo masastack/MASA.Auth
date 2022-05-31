@@ -44,7 +44,7 @@
         <ChildContent>           
             <MList Class="pb-1" Style="min-width:320px;">
                     <MListItem Class="mb-1">
-                        <MTextField @bind-Value="_search" Class="rounded-2" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1" Placeholder="Search"></MTextField>     
+                        <DefaultTextField @bind-Value="_search" Class="rounded-2" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1" Placeholder="Search"></DefaultTextField>     
                     </MListItem>
                     @foreach (var nav in GetNavs(_search))
                     {

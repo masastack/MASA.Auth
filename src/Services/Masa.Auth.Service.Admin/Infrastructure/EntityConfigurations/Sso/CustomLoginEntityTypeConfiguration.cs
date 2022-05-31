@@ -7,7 +7,6 @@ public class CustomLoginEntityTypeConfiguration : IEntityTypeConfiguration<Custo
 {
     public void Configure(EntityTypeBuilder<CustomLogin> builder)
     {
-        builder.ToTable(nameof(CustomLogin), AuthDbContext.SSO_SCHEMA).HasKey(x => x.Id);
         builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
         builder.HasIndex(x => x.Name).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasOne(x => x.Client).WithOne().HasForeignKey<CustomLogin>(x => x.ClientId);

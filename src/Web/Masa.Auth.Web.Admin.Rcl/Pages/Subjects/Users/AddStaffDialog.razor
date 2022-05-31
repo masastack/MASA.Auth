@@ -30,22 +30,22 @@
                                 <MAvatar Size=80>
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                                 </MAvatar>
-                                <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                                <DefaultTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" Placeholder="@T("Give him a nickname!")" />
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">
                             <div class="font-14-bold">@T("Basic Information")</div>
                             <MRow Class="my-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="my-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Email" Label="@T("Email")" />
                                 </MCol>
                                 <MCol>
                                     <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
@@ -56,12 +56,12 @@
                                     <TeamSelect @bind-Value="Staff.Teams" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="my-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" />
                                 </MCol>
                                 <MCol>
                                     <DepartmentSelect @bind-Value="Staff.DepartmentId" />
@@ -69,18 +69,18 @@
                             </MRow>
                             <MRow Class="my-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.Position.Name" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.Position" Label="@T("Position")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="my-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Account" Label="@T("Account")" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Password" Label="@T("Password")" />
                                 </MCol>
                             </MRow>
                         </div>

@@ -12,7 +12,7 @@
                            ItemValue="u => u.Identity"></MAutocomplete>
         </SearchableExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
-            <ElevationTab TabMinWidth="120" TabWindowClass="mt-4" Headers='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
+            <ElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
                 <ElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
                                Items="_menuPermissions"

@@ -7,15 +7,15 @@
                 <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
-                        <MTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextField @bind-Value="ApiResource.Description" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ApiResource.Description" Label="@T("Description")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">

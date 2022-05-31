@@ -12,23 +12,23 @@
                 <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
-                        <MTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("ThirdPartyIdp.Name")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("ThirdPartyIdp.Name")" />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" HideDetails="@("auto")" Outlined />
-                    </MCol>
-                </MRow>
-                <MRow Class="mt-1">
-                    <MCol>
-                        <MTextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" HideDetails="@("auto")" Outlined />
-                    </MCol>
-                    <MCol>
-                        <MTextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
+                    </MCol>
+                    <MCol>
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mt-1">
+                    <MCol>
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />

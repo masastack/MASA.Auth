@@ -1,12 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
 <div style="position: absolute;right: 0;top: 0;" class="d-flex">
-    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+    <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
         <PrependInnerContent>
             <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
         </PrependInnerContent>
-    </MTextField>
-    <div @onclick="() => StaffSyncDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
+    </DefaultTextField>
+    <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
         <div class="ma-auto">
             <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
             <span class="font-12-medium default-emphasis-secondary--text">@T("Sync")</span>
@@ -64,4 +64,4 @@
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
 <UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
 <UserAuthorizeDialog UserId=CurrentStaff.User.Id @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
-<StaffSyncDialog @bind-Visible=StaffSyncDialogVisible OnSubmitSuccess=GetStaffAsync />
+<SyncStaffDialog @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=GetStaffAsync />

@@ -12,7 +12,7 @@ public class RoleSelectForRole : RoleSelect
 
     protected override async Task OnInitializedAsync()
     {
-        Lable = T("Inherited Role");
+        Label = T("Inherited Role");
         await ReloadAsync();
     }
 

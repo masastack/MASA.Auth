@@ -63,9 +63,9 @@ public class ThirdPartyIdpService : ServiceBase
         await PostAsync("ldap/save", ldapDetailDto);
     }
 
-    public async Task<LdapDetailDto> GetLdapDetailAsync(Guid id)
+    public async Task<LdapDetailDto> GetLdapDetailAsync()
     {
-        return await Task.FromResult(new LdapDetailDto());
+        return await GetAsync<LdapDetailDto>($"ldap/detail");
     }
 
     #endregion

@@ -518,9 +518,9 @@
     position: initial !important;
 }
 
-.m-window__container {
+/*.m-window__container {
     position: initial !important;
-}
+}*/
 
 .small .m-input__control .m-input__slot fieldset {
     height: 40px !important;

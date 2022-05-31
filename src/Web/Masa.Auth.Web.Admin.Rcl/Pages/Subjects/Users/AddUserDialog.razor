@@ -10,10 +10,10 @@
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <UploadImage @bind-Value="User.Avatar" Avatar Size="120" WhenFileChangeUpload Class="mt-12" />
+                                <DefaultUploadImage @bind-Value="User.Avatar" @ref="DefaultUploadImageRef" Class="mt-12" />
                                 <br />
                                 <div class="mt-3 hover-pointer font-16">
-                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3">@T("Another")</span>
+                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3" @onclick="ChangeAvayar">@T("Another")</span>
                                 </div>
                             </div>
                         </div>
@@ -30,17 +30,17 @@
                                 <MAvatar Size=80>
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                                 </MAvatar>
-                                <MTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
+                                <DefaultTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">
                             <div class="font-14-bold default-regular--text">@T("Basic Information")</div>
-                            <MTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.IdCard" Class="mb-9" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.Account" Class="mb-9" Label="@T("Account")" HideDetails="@("auto")" Outlined />
-                            <MTextField @bind-Value="User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                            <DefaultTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" />
+                            <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" />
+                            <DefaultTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" />
+                            <DefaultTextField @bind-Value="User.IdCard" Class="mb-9" Label="@T("IdCard")" />
+                            <DefaultTextField @bind-Value="User.Account" Class="mb-9" Label="@T("Account")" />
+                            <DefaultTextField @bind-Value="User.Password" Label="@T("Password")" />
                             @if (Fill is false)
                             {
                                 <div @onclick="() => Fill = true" class="mt-12 hover-pointer" style="text-align:center">
@@ -51,10 +51,10 @@
                             else
                             {
                                 <div class="mt-12 font-14-bold default-regular--text">@T("Detail Information")</div>
-                                <MTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" HideDetails="@("auto")" Outlined />
-                                <MTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" HideDetails="@("auto")" Outlined />
-                                <MTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" HideDetails="@("auto")" Outlined />
-                                <MTextField @bind-Value="User.Position" Label="@T("Position")" HideDetails="@("auto")" Outlined />
+                                <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" />
+                                <DefaultTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" />
+                                <DefaultTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" />
+                                <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                             }
                         </div>
                         <div class="d-flex mt-6">

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Text.Json;
-
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Converters;
 
 public sealed class DateOnlyJsonConverter : JsonConverter<DateOnly>

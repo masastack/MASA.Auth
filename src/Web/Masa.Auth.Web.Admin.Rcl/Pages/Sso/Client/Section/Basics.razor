@@ -25,7 +25,7 @@
         @foreach (var origin in Dto.AllowedCorsOrigins)
         {
             <MCol Md=12 Class="d-flex">
-                <MTextField Dense HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
+                <DefaultTextField Dense HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
                 <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
             </MCol>
         }
