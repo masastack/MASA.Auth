@@ -1,11 +1,11 @@
 ﻿@inherits AdminCompontentBase
 
 <div style="position: absolute;right: 0;top: 0;" class="d-flex">
-    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+    <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
         <PrependInnerContent>
             <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
         </PrependInnerContent>
-    </MTextField>
+    </DefaultTextField>
     <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
         <div class="ma-auto">
             <MIcon Color="neutral-lighten-1" Size=20>mdi-refresh</MIcon>

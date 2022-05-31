@@ -12,6 +12,11 @@ public class PositionService : ServiceBase
         BaseUrl = "api/position/";
     }
 
+    public async Task<PaginationDto<PositionDto>> GetListAsync(GetPositionsDto request)
+    {
+        return await SendAsync<GetPositionsDto, PaginationDto<PositionDto>>(nameof(GetListAsync), request);
+    }
+
     public async Task<PositionDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, PositionDetailDto>(nameof(GetDetailAsync), new { id });
@@ -30,6 +35,11 @@ public class PositionService : ServiceBase
     public async Task UpdateAsync(UpdatePositionDto request)
     {
         await SendAsync(nameof(UpdateAsync), request);
+    }
+
+    public async Task RemoveAsync(Guid id)
+    {
+        await SendAsync(nameof(RemoveAsync), new RemovePositionDto(id));
     }
 }
 

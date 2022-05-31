@@ -123,12 +123,30 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Positions", "auth");
                 });
@@ -1910,15 +1928,19 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and Email!=''");
 
                     b.HasIndex("IdCard")
-                        .HasFilter("[IsDeleted] = 0");
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and IdCard!=''");
 
                     b.HasIndex("Name");
 
                     b.HasIndex("PhoneNumber")
-                        .HasFilter("[IsDeleted] = 0");
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and PhoneNumber!=''");
 
                     b.ToTable("Users", "auth");
                 });
@@ -2574,7 +2596,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamStaff", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", null)
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "Staff")
                         .WithMany("TeamStaffs")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2585,6 +2607,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyUser", b =>

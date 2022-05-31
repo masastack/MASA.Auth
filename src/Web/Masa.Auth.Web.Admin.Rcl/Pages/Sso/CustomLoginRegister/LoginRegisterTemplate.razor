@@ -30,7 +30,7 @@
             <MTabsItems @bind-Value="Tab">
                 <MTabItem Value="CustomLoginTab.Login">
                     <MForm Model=Login EnableValidation>
-                        <MTextField @bind-Value="Login.Account" Class="mt-10" Height="58" Label="@T(nameof(Login.Account))" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="Login.Account" Class="mt-10" Height="58" Label="@T(nameof(Login.Account))" />
                         <Password @bind-Value="Login.Password" Class="mt-9" />
                         <div class="d-flex">
                             <MSpacer />
@@ -67,7 +67,7 @@
                                 switch (registerField.RegisterFieldType)
                                 {
                                     case RegisterFieldTypes.Account:
-                                        <MTextField @bind-Value="Register.Account" Label="@T(nameof(Register.Account))" Height="58" Class="mb-6" HideDetails="@("auto")" Outlined />
+                                        <DefaultTextField @bind-Value="Register.Account" Label="@T(nameof(Register.Account))" Height="58" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.Password:
                                         <Password @bind-Value="Register.Password" Class="mb-6" />
@@ -76,19 +76,19 @@
                                         <Password @bind-Value="Register.ConfirmPassword" Label="@T(nameof(Register.ConfirmPassword))" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.Name:
-                                        <MTextField @bind-Value="Register.Name" Label="@T(nameof(Register.Name))" Height="58" Class="mb-6" HideDetails="@("auto")" Outlined />
+                                        <DefaultTextField @bind-Value="Register.Name" Label="@T(nameof(Register.Name))" Height="58" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.DisplayName:
-                                        <MTextField @bind-Value="Register.DisplayName" Label="@T(nameof(Register.DisplayName))" Height="58" Class="mb-6" HideDetails="@("auto")" Outlined />
+                                        <DefaultTextField @bind-Value="Register.DisplayName" Label="@T(nameof(Register.DisplayName))" Height="58" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.IdCard:
-                                        <MTextField @bind-Value="Register.IdCard" Label="@T(nameof(Register.IdCard))" Height="58" Class="mb-6" HideDetails="@("auto")" Outlined />
+                                        <DefaultTextField @bind-Value="Register.IdCard" Label="@T(nameof(Register.IdCard))" Height="58" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.PhoneNumber:
-                                        <MTextField @bind-Value="Register.PhoneNumber" Label="@T(nameof(Register.PhoneNumber))" Height="58" Class="mb-6" HideDetails="@("auto")" Outlined />
+                                        <DefaultTextField @bind-Value="Register.PhoneNumber" Label="@T(nameof(Register.PhoneNumber))" Height="58" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.Email:
-                                        <MTextField @bind-Value="Register.Email" Label="@T(nameof(Register.Email))" Height="58" Class="mb-6" HideDetails="@("auto")" Outlined />
+                                        <DefaultTextField @bind-Value="Register.Email" Label="@T(nameof(Register.Email))" Height="58" Class="mb-6" />
                                         break;
                                     default: throw new UserFriendlyException(T(""));
                                 }

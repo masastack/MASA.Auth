@@ -7,12 +7,12 @@
                 <div class="text-subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
-                        <MTextField @bind-Value="UserClaim.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="UserClaim.Name" Label="@T("Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextarea @bind-Value="UserClaim.Description" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                        <MTextarea @bind-Value="UserClaim.Description" Label="@T("Description")" />
                     </MCol>
                 </MRow>
             </div>

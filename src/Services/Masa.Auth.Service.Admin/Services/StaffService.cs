@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Text;
-
 namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
@@ -16,6 +14,27 @@ public class StaffService : RestServiceBase
     private async Task<PaginationDto<StaffDto>> GetListAsync(IEventBus eventBus, GetStaffsDto staff)
     {
         var query = new StaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled, staff.DepartmentId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByDepartmentAsync(IEventBus eventBus, [FromQuery] Guid departmentId)
+    {
+        var query = new StaffsByDepartmentQuery(departmentId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByTeamAsync(IEventBus eventBus, [FromQuery] Guid teamId)
+    {
+        var query = new StaffsByTeamQuery(teamId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid roleId)
+    {
+        var query = new StaffsByRoleQuery(roleId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
