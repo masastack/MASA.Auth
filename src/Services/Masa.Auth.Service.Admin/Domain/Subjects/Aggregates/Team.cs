@@ -27,8 +27,13 @@ public class Team : FullAuditAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<TeamRole> TeamRoles => teamRoles;
 
-    public Team(string name, string description, TeamTypes teamType, AvatarValue avatar)
+    public Team(string name, string description, TeamTypes teamType, AvatarValue avatar) : this(Guid.Empty, name, description, teamType, avatar)
     {
+    }
+
+    public Team(Guid id, string name, string description, TeamTypes teamType, AvatarValue avatar)
+    {
+        Id = id;
         Name = name;
         Description = description;
         TeamType = teamType;
@@ -61,14 +66,14 @@ public class Team : FullAuditAggregateRoot<Guid, Guid>
         teamPermissions.AddRange(permissionsIds.Select(p => new TeamPermission(p.Key, p.Value, memberType)));
     }
 
-    public Guid GetAdminRoleId()
+    public List<Guid> GetAdminRoleIds()
     {
-        return teamRoles.FirstOrDefault(ts => ts.TeamMemberType == TeamMemberTypes.Admin)?.RoleId ?? Guid.Empty;
+        return teamRoles.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(a => a.RoleId).ToList();
     }
 
-    public Guid GetMemberRoleId()
+    public List<Guid> GetMemberRoleIds()
     {
-        return teamRoles.FirstOrDefault(ts => ts.TeamMemberType == TeamMemberTypes.Member)?.RoleId ?? Guid.Empty;
+        return teamRoles.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(a => a.RoleId).ToList();
     }
 
     public void SetRole(TeamMemberTypes memberType, params Guid[] roleIds)
