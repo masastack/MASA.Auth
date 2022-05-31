@@ -4,6 +4,7 @@
 @inherits SsoCompontentBase
 @inject IClientStore _clientStore
 @inject IAuthenticationSchemeProvider _schemeProvider
+@inject IPmClient _pmClient
 @layout SideLayout
 
 @if (_viewModel.EnableLocalLogin)
@@ -24,7 +25,7 @@
                     HideDetails="@("auto")">
             </MTextField>
             <MTextField @bind-Value="@_inputModel.Password"
-                    Class="mt-10"
+                    Class="mt-9"
                     Label="Password"
                     Type="@(_show ? "text" : "password")"
                     Placeholder="john@example.com"
@@ -33,7 +34,20 @@
                     Outlined Dense
                     HideDetails="@("auto")">
             </MTextField>
-            <MCheckbox @bind-Value="_inputModel.RememberLogin" Label="Remember My Login"></MCheckbox>
+            <MRow Class="mt-6">
+                <MCol Md="6" Class="d-flex justify-space-between">
+                    <MIcon Size="16" Color="primary">mdi-record-circle</MIcon>
+                    <MSelect @bind-Value="_inputModel.Environment"
+                         Solo Dense HideDetails="true" Class="elevation-0"
+                         Items="@_environments"
+                         ItemText="u => u.Name"
+                         ItemValue="u => u.Name">
+                    </MSelect>
+                </MCol>
+                <MCol Md="6" Class="d-flex justify-end">
+                    <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true" Label="Remember My Login"></MCheckbox>
+                </MCol>
+            </MRow>
         </MForm>
         <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=Login Height=46 Width=340 Color="primary">Login</MButton>
         <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">Cancel</MButton>

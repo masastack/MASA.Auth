@@ -19,6 +19,7 @@ global using Masa.Auth.Web.Sso.Infrastructure;
 global using Masa.Auth.Web.Sso.Pages.Account.Login;
 global using Masa.Auth.Web.Sso.Services;
 global using Masa.Blazor;
+global using Masa.BuildingBlocks.BasicAbility.Pm.Model;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;

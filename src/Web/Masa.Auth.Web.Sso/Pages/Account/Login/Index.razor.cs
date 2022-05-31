@@ -19,10 +19,13 @@ public partial class Index
     [CascadingParameter(Name = "HttpContext")]
     public HttpContext? HttpContext { get; set; }
 
+    List<EnvironmentModel> _environments = new();
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            _environments = await _pmClient.EnvironmentService.GetListAsync();
             await BuildModelAsync(ReturnUrl);
             if (_viewModel.IsExternalLoginOnly)
             {
@@ -33,6 +36,7 @@ public partial class Index
                 });
                 return;
             }
+            StateHasChanged();
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -42,7 +46,8 @@ public partial class Index
     {
         _inputModel = new InputModel
         {
-            ReturnUrl = returnUrl
+            ReturnUrl = returnUrl,
+            Environment = _environments.FirstOrDefault()?.Name ?? ""
         };
 
         var context = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);

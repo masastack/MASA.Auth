@@ -1067,3 +1067,11 @@ tr:hover {
     border-bottom-left-radius: 20px !important;
     border-bottom-right-radius: 20px !important;
 }
+
+.elevation-0{
+    box-shadow:none !important;
+}
+
+    .elevation-0.m-text-field.m-text-field--solo:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
+        box-shadow: none !important;
+    }

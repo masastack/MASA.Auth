@@ -14,4 +14,6 @@ public class InputModel
     public bool RememberLogin { get; set; }
 
     public string ReturnUrl { get; set; } = string.Empty;
+
+    public string Environment { get; set; } = "生产环境";
 }
