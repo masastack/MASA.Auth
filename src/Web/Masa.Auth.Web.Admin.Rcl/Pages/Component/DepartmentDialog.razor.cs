@@ -26,7 +26,7 @@ public partial class DepartmentDialog
 
     protected override async Task OnParametersSetAsync()
     {
-        if (OldValue != Value)
+        if (OldValue != Value && Departments.Count > 0)
         {
             OldValue = Value;
             var department = FindDepartment(Departments);
@@ -69,9 +69,16 @@ public partial class DepartmentDialog
         if (Value != department.Id)
         {
             Value = department.Id;
+            OldValue = department.Id;
             await ValueChanged.InvokeAsync(department);
-            await UpdateVisibleAsync(false);
         }
+        else
+        {
+            Value = default;
+            OldValue = default;
+            await ValueChanged.InvokeAsync(new DepartmentDto());
+        }
+        await UpdateVisibleAsync(false);
     }
 }
 

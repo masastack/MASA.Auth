@@ -8,15 +8,15 @@
                     <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
                 </PrependInnerContent>
             </DefaultTextField>
-             <div style="overflow:scroll;max-height:400px;">
+            <div style="overflow:scroll;max-height:400px;">
                 <MTreeview Items="Departments"
-                            Activatable
-                            OpenAll   
-                            Search=@Search
-                            ItemKey="d => d.Id"
-                            ItemChildren="d => d.Children"
-                            ItemText="d => d.Name"
-                            OpenOnClick>
+                           Activatable
+                           OpenAll
+                           Search=@Search
+                           ItemKey="d => d.Id"
+                           ItemChildren="d => d.Children"
+                           ItemText="d => d.Name"
+                           OpenOnClick>
                     <PrependContent>
                         @if (context.Item.Children.Count > 0)
                         {
@@ -25,15 +25,24 @@
                             </MIcon>
                         }
                         else
-                        {       
-                            <MCheckbox Class="mt-n1" Value="Value == context.Item.Id" ValueChanged="async check =>await CheckedAsync(context.Item)" />                           
+                        {
+                            <MCheckbox @key="Guid.NewGuid()" Class="mt-n1" Value="Value == context.Item.Id" ValueChanged="async check =>await CheckedAsync(context.Item)" />
                         }
                     </PrependContent>
-@*                    <LabelContent>
-                        <div @onclick="async ()=>await Checked(context.Item)">
-                            @context.Item.Name
-                        </div>
-                    </LabelContent>*@
+                    <LabelContent>
+                        @if (context.Item.Children.Count > 0)
+                        {
+                            <div>
+                                @context.Item.Name
+                            </div>
+                        }
+                        else
+                        {
+                            <div @onclick:preventDefault @onclick="async ()=>await CheckedAsync(context.Item)">
+                                @context.Item.Name
+                            </div>
+                        }
+                    </LabelContent>
                 </MTreeview>
             </div>
         </MCardText>

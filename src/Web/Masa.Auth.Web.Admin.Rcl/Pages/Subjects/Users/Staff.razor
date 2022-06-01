@@ -3,11 +3,11 @@
 <AutoHeight>
     <HeaderContent>
         <div style="margin-left:40%;" class="d-flex">
-            <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+            <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
                 <PrependInnerContent>
                     <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
                 </PrependInnerContent>
-            </DefaultTextField>
+            </MTextField>
             <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
                 <div class="ma-auto">
                     <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
