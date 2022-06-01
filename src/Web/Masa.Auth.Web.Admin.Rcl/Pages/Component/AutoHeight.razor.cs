@@ -13,4 +13,10 @@ public partial class AutoHeight
 
     [Parameter]
     public RenderFragment? FooterContent { get; set; }
+
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter]
+    public bool Overflow { get; set; }
 }

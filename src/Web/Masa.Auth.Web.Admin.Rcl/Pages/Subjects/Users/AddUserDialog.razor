@@ -5,8 +5,8 @@
         <MStepper Value="Step" Class="sheetDialogPadding">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <div class="full-height flex-column">
-                        <div class="d-flex flex-height-auto">
+                    <AutoHeight Class="d-flex">
+                        <AutoHeightContent>
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
@@ -14,24 +14,28 @@
                                     <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" @ref="DefaultUploadImageRef" Class="mt-12" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="d-flex">
-                            <MSpacer></MSpacer>
-                            <MButton Color="primary" Class="small-button" OnClick="()=>Step=2">@T("Next step")</MButton>
-                        </div>
-                    </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=2">@T("Next step")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <div class="full-height flex-column">
-                        <div class="d-flex">
-                            <div class="mx-auto text-center" style="width:212px;">
-                                <MAvatar Size=80>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                                </MAvatar>
-                                <MTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
+                    <AutoHeight Overflow Class="mt-6">
+                        <HeaderContent>
+                            <div class="d-flex">
+                                <div class="mx-auto text-center">
+                                    <MAvatar Size=80>
+                                        <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
+                                    </MAvatar>
+                                    <PlaceholderTextFiled @bind-Value="@User.DisplayName" Placeholder="@T("Give him a nickname!")" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="mt-6 flex-height-auto overflow-y">
+                        </HeaderContent>
+                        <AutoHeightContent>
                             <div class="font-14-bold default-regular--text">@T("Basic Information")</div>
                             <DefaultTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" />
                             <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" />
@@ -54,29 +58,33 @@
                                 <DefaultTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" />
                                 <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                             }
-                        </div>
-                        <div class="d-flex mt-6">
-                            <MSpacer></MSpacer>
-                            <MButton Outlined Color="primary" Class="small-button" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
-                            <MButton Color="primary" Class="small-button ml-6" OnClick="()=>NextStep(context)">@T("Next step")</MButton>
-                        </div>
-                    </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex mt-6">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</DefaultButton>
+                                <DefaultButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="3">
-                    <div class="full-height flex-column">
-                        <div class="flex-height-auto overflow-y">
+                    <AutoHeight Overflow>
+                        <AutoHeightContent>
                             <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
                             <PermissionsCheck RoleIds=User.Roles
                                               Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
                                               ValueChanged="PermissionsChanged" />
-                        </div>
-                        <div class="d-flex mt-6">
-                            <MSpacer></MSpacer>
-                            <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
-                            <MButton Outlined Color="primary">@T("Preview")</MButton>
-                            <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
-                        </div>
-                    </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex mt-6">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=2" Outlined>@T("Previous step")</DefaultButton>
+                                <DefaultButton Medium Outlined Color="primary" Class="ml-6">@T("Preview")</DefaultButton>
+                                <DefaultButton Medium OnClick="async () => await AddUserAsync(context)" Class="ml-6">@T("Submit")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
             </MStepperItems>
         </MStepper>
