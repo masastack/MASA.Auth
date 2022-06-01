@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;
 
-public class Department : FullAuditAggregateRoot<Guid, Guid>
+public class Department : FullAggregateRoot<Guid, Guid>
 {
     public string Name { get; private set; }
 

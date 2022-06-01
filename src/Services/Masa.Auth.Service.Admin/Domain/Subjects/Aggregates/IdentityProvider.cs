@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class IdentityProvider : FullAuditAggregateRoot<Guid, Guid>
+public class IdentityProvider : FullAggregateRoot<Guid, Guid>
 {
     List<ThirdPartyUser> _thirdPartyUsers = new();
 

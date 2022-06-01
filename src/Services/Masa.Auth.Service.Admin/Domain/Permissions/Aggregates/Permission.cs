@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class Permission : FullAuditAggregateRoot<Guid, Guid>
+public class Permission : FullAggregateRoot<Guid, Guid>
 {
     public string SystemId { get; set; }
 
