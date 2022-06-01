@@ -3,18 +3,12 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class DefaultDataTable<TItem> : MDataTable<TItem>
+public class DefaultCard : MCard
 {
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        HideDefaultFooter = true;      
-    }
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        Class += " table-border-none";
+        Class ??= "";
+        Class += " pa-6 full-height";
     }
 }
-

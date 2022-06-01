@@ -1,73 +1,78 @@
 ﻿@using Masa.Stack.Components
 @inherits AdminCompontentBase
 
-<div style="position: absolute;right: 0;top: 0;" class="d-flex">
-    <UserAutoComplete @bind-Value="UserId" />
-    <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
-        <MIcon Class="ma-auto" Color="default-emphasis-secondary" Size=20>
-            @(Filter?"mdi-filter":"mdi-filter-off")
-        </MIcon>
-    </div>
-    <MButton Color="primary" Class="ml-4 small-button" OnClick=OpenAddUserDialog>
-        <MIcon Size=18>mdi-plus</MIcon>
-        <span class="ml-2">@T("Add")</span>
-    </MButton>
-</div>
+<AutoHeight>
+    <HeaderContent>
+        <div style="margin-left:40%" class="d-flex">
+            <UserAutoComplete @bind-Value="UserId" />
+            <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
+                <MIcon Class="ma-auto" Color="default-emphasis-secondary" Size=20>
+                    @(Filter ? "mdi-filter" : "mdi-filter-off")
+                </MIcon>
+            </div>
+            <MButton Color="primary" Class="ml-4 small-button" OnClick=OpenAddUserDialog>
+                <MIcon Size=18>mdi-plus</MIcon>
+                <span class="ml-2">@T("Add")</span>
+            </MButton>
+        </div>
 
-@if (Filter)
-{
-    <div class="d-flex mb-2">
-        <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-        <MRow class="ml-6">
-            <MCol Md=4>
-                <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
-            </MCol>
-        </MRow>
-    </div>
-}
-
-<DefaultDataTable Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
-    <HeaderColContent Context="header">
-        <span class="text-btn">@header.Text</span>
-    </HeaderColContent>
-    <ItemColContent>
-        @switch (context.Header.Value)
+        @if (Filter)
         {
-            case nameof(UserDto.Avatar):
-                <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateUserDialog(context.Item)">
-                    <MAvatar Size=48>
-                        <img src="@context.Item.Avatar" />
-                    </MAvatar>
-                    <div class="ml-4 block-center">
-                        <div class="text-body3 default-emphasis-secondary--text">@context.Item.Name</div>
-                    </div>
-                </div>
-                break;
-            case (nameof(UserDto.Account)):
-                <span class="text-body3">@context.Item.Account</span>
-                break;
-            case nameof(UserDto.PhoneNumber):
-                <span class="text-body3">@context.Item.PhoneNumber</span>
-                break;
-            case (nameof(UserDto.CreationTime)):
-                <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                break;
-            case nameof(UserDto.Enabled):
-                <EnableChip Value=context.Item.Enabled />
-                break;
-            case "Action":
-                <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
-                <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
-                break;
-            default:
-                <span class="text-body3">@context.Value</span>
-                break;
+            <div class="d-flex mt-6">
+                <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+                <MRow class="ml-6">
+                    <MCol Md=4>
+                        <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
+                    </MCol>
+                </MRow>
+            </div>
         }
-    </ItemColContent>
+    </HeaderContent>
+    <AutoHeightContent>
+        <DefaultDataTable Class="mt-6" Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
+            <HeaderColContent Context="header">
+                <span class="text-btn">@header.Text</span>
+            </HeaderColContent>
+            <ItemColContent>
+                @switch (context.Header.Value)
+                {
+                    case nameof(UserDto.Avatar):
+                        <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateUserDialog(context.Item)">
+                            <MAvatar Size=48>
+                                <img src="@context.Item.Avatar" />
+                            </MAvatar>
+                            <div class="ml-4 block-center">
+                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.Name</div>
+                            </div>
+                        </div>
+                        break;
+                    case (nameof(UserDto.Account)):
+                        <span class="text-body3">@context.Item.Account</span>
+                        break;
+                    case nameof(UserDto.PhoneNumber):
+                        <span class="text-body3">@context.Item.PhoneNumber</span>
+                        break;
+                    case (nameof(UserDto.CreationTime)):
+                        <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                        break;
+                    case nameof(UserDto.Enabled):
+                        <EnableChip Value=context.Item.Enabled />
+                        break;
+                    case "Action":
+                        <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
+                        <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                        break;
+                    default:
+                        <span class="text-body3">@context.Value</span>
+                        break;
+                }
+            </ItemColContent>
+        </DefaultDataTable>
+    </AutoHeightContent>
     <FooterContent>
         <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
-</DefaultDataTable>
+</AutoHeight>
 
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
 <UpdateUserDialog @key="Guid.NewGuid()" UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />

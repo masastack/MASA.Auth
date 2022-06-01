@@ -1512,3 +1512,12 @@ tr:hover {
     border: 2px dashed #E2E7F4;
     border-radius: 8px;
 }
+
+.default .m-item-group.theme--light.m-btn-toggle.m-btn-toggle--borderless.m-btn-toggle--dense.labeled-radio-group {
+    position: absolute;
+    z-index: 22;
+}
+
+.default .m-window.m-item-group.full-width.mx-1{
+    height:100%;
+}

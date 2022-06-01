@@ -30,7 +30,7 @@
                                 <MAvatar Size=80>
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                                 </MAvatar>
-                                <DefaultTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
+                                <MTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">
@@ -76,7 +76,7 @@
                             <MSpacer></MSpacer>
                             <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
                             <MButton Outlined Color="primary">@T("Preview")</MButton>
-                            <MButton OnClick="AddUserAsync" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
+                            <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
                         </div>
                     </div>
                 </MStepperContent>
