@@ -1,81 +1,85 @@
 ﻿@inherits AdminCompontentBase
 
-<div style="position: absolute;right: 0;top: 0;" class="d-flex">
-    <UserAutoComplete @bind-Value="UserId" />
-    <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
-        <MIcon Class="ma-auto" Color="neutral-lighten-1" Size=20>
-            @(Filter?"mdi-filter":"mdi-filter-off")
-        </MIcon>
-    </div>
-    <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenLdapDialog>
-        <MIcon Size=18>mdi-plus</MIcon>
-        <span class="ml-2">@T("Ldap")</span>
-    </MButton>
-</div>
-
-@if (Filter)
-{
-    <div class="d-flex mb-2">
-        <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-        <MRow class="ml-6">
-            <MCol Md=4>
-                <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
-            </MCol>
-        </MRow>
-    </div>
-}
-
-<MDataTable Headers="Headers" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
-    <HeaderColContent Context="header">
-        <span class="text-btn">@header.Text</span>
-    </HeaderColContent>
-    <ItemColContent>
-        @switch (context.Header.Value)
+<AutoHeight>
+    <HeaderContent>
+        <div style="margin-left:40%" class="d-flex">
+            <UserAutoComplete @bind-Value="UserId" />
+            <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
+                <MIcon Class="ma-auto" Color="default-emphasis-secondary" Size=20>
+                    @(Filter ? "mdi-filter" : "mdi-filter-off")
+                </MIcon>
+            </div>
+            <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenLdapDialog>
+                <MIcon Size=18>mdi-plus</MIcon>
+                <span class="ml-2">@T("Ldap")</span>
+            </MButton>
+        </div>
+        @if (Filter)
         {
-            case nameof(UserDto.Avatar):
-                <div class="hover-pointer d-flex my-1" @onclick="()=> OpenViewThirdPartyUserDialog(context.Item)">
-                    <MAvatar Size=48>
-                        <img src="@context.Item.User.Avatar" />
-                    </MAvatar>
-                    <div class="ml-4 block-center">
-                        <div class="text-body3 neutral-lighten-1--text">@context.Item.User.DisplayName</div>
-                    </div>
-                </div>
-                break;
-            case (nameof(ThirdPartyUserDto.IdpDetailDto)):
-                if (context.Item.IdpDetailDto.Name==LdapConsts.LDAP_NAME)
-                {
-                    <MIcon>@context.Item.IdpDetailDto.Icon</MIcon>
-                }
-                else
-                {
-                    <img src="@context.Item.IdpDetailDto.Icon" />
-                }
-                break;
-            case nameof(ThirdPartyUserDto.Creator):
-                <span class="text-body3">@context.Item.Creator</span>
-                break;
-            case (nameof(ThirdPartyUserDto.CreationTime)):
-                <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                break;
-            case (nameof(ThirdPartyUserDto.ModificationTime)):
-                <span class="text-body3">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                break;
-            case nameof(UserDto.Enabled):
-                <EnableChip Value=context.Item.Enabled />
-                break;
-            case "Action":
-                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">mdi-pencil</MIcon>
-                break;
-            default:
-                <span class="text-body3">@context.Value</span>
-                break;
+            <div class="d-flex mt-6">
+                <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+                <MRow class="ml-6">
+                    <MCol Md=4>
+                        <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
+                    </MCol>
+                </MRow>
+            </div>
         }
-    </ItemColContent>
+    </HeaderContent>
+    <AutoHeightContent>
+        <DefaultDataTable Headers="Headers" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" Class="mt-6">
+            <HeaderColContent Context="header">
+                <span class="text-btn">@header.Text</span>
+            </HeaderColContent>
+            <ItemColContent>
+                @switch (context.Header.Value)
+                {
+                    case nameof(UserDto.Avatar):
+                        <div class="hover-pointer d-flex my-1" @onclick="()=> OpenViewThirdPartyUserDialog(context.Item)">
+                            <MAvatar Size=48>
+                                <img src="@context.Item.User.Avatar" />
+                            </MAvatar>
+                            <div class="ml-4 block-center">
+                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.User.DisplayName</div>
+                            </div>
+                        </div>
+                        break;
+                    case (nameof(ThirdPartyUserDto.IdpDetailDto)):
+                        if (context.Item.IdpDetailDto.Name == LdapConsts.LDAP_NAME)
+                        {
+                            <MIcon>@context.Item.IdpDetailDto.Icon</MIcon>
+                        }
+                        else
+                        {
+                            <img src="@context.Item.IdpDetailDto.Icon" />
+                        }
+                        break;
+                    case nameof(ThirdPartyUserDto.Creator):
+                        <span class="text-body3">@context.Item.Creator</span>
+                        break;
+                    case (nameof(ThirdPartyUserDto.CreationTime)):
+                        <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                        break;
+                    case (nameof(ThirdPartyUserDto.ModificationTime)):
+                        <span class="text-body3">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                        break;
+                    case nameof(UserDto.Enabled):
+                        <EnableChip Value=context.Item.Enabled />
+                        break;
+                    case "Action":
+                        <MIcon Small Color="default-regular" OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">mdi-pencil</MIcon>
+                        break;
+                    default:
+                        <span class="text-body3">@context.Value</span>
+                        break;
+                }
+            </ItemColContent>
+        </DefaultDataTable>
+    </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
-</MDataTable>
+</AutoHeight>
 
 <ViewThirdPartyUserDialog @bind-Visible=ViewThirdPartyUserDialog ThirdPartyUserId=CurrentThirdPartyUserId />
-<LdapDialog @ref="ldapDialog"/>
+<LdapDialog @ref="ldapDialog" />

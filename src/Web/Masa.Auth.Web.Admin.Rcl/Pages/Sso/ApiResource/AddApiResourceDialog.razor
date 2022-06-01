@@ -4,7 +4,7 @@
     <MForm Model=ApiResource EnableValidation @ref="Form">
         <div class="sheetDialogPadding full-height flex-column">
             <div class="mt-6 flex-height-auto overflow-y">
-                <div class="text-subtitle2">@T("Basic Information")</div>
+                <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
                         <DefaultTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
@@ -25,11 +25,11 @@
                 </MRow>
                 <div class="d-flex mt-6" style="position: relative;height: 65%;">
                     <div class="pr-6" style="width:50%">
-                        <div class="text-subtitle2">@T("User Claims")</div>
+                        <div class="font-14-bold">@T("User Claims")</div>
                         <UserClaimSelect @bind-Value=ApiResource.UserClaims Chunk="3" Class="mt-4" />
                     </div>
                     <div class="pl-6" style="width:50%">
-                        <div class="text-subtitle2">@T("Api Scopes")</div>
+                        <div class="font-14-bold">@T("Api Scopes")</div>
                         <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Chunk="3" Class="mt-4" />
                     </div>
                 </div>

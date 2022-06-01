@@ -4,7 +4,7 @@
     <MForm Model=IdentityResource EnableValidation @ref="Form">
         <div class="sheetDialogPadding full-height flex-column">
             <div class="mt-6 flex-height-auto overflow-y">
-                <div class="text-subtitle2">@T("Basic Information")</div>
+                <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
                         <DefaultTextField @bind-Value="IdentityResource.DisplayName" Label="@T("DisplayName")" />
@@ -25,7 +25,7 @@
                         <MCheckbox @bind-Value="IdentityResource.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.ShowInDiscoveryDocument))"></MCheckbox>
                     </MCol>
                 </MRow>
-                <div class="mt-6 text-subtitle2">@T("User Claims")</div>
+                <div class="mt-6 font-14-bold">@T("User Claims")</div>
                 <UserClaimSelect @bind-Value=IdentityResource.UserClaims Class="mt-4" Style="height:65%!important" />
             </div>
             <div class="d-flex mt-6">

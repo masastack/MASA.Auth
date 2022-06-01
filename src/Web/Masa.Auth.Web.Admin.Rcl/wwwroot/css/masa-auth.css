@@ -33,7 +33,7 @@
     color: #1B2559;
 }
 
-.h2, .text-h2, h2 {
+.font-60-bold {
     /* Headline 2 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -46,7 +46,7 @@
     color: #323D6F;
 }
 
-.h3, .text-h3, h3 {
+.font-48-bold{
     /* Headline 3 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -57,7 +57,7 @@
     color: #323D6F;
 }
 
-.h4, .text-h4, h4 {
+.font-34-bold {
     /* Headline 4 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -71,7 +71,7 @@
 }
 
 /*24B1*/
-.h5, .text-h5, h5 {
+.font-24-bold{
     /* Headline 5 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -83,7 +83,7 @@
     color: #1B2559;
 }
 
-.h6, .text-h6, h6 {
+.font-20-bold{
     /* Headline 6 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -97,7 +97,7 @@
 }
 
 /*18M2*/
-.h7, .text-h7, h7 {
+.font-18-medium{
     /* Headline 6 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -110,7 +110,7 @@
     color: #323D6F;
 }
 
-.text-subtitle {
+.font-16-bold {
     /* Subtitle 1-副标题 1 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -123,7 +123,7 @@
     color: #1B2559;
 }
 /*14B2*/
-.text-subtitle2 {
+.font-14-bold {
     /* Subtitle 2-2 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -136,7 +136,7 @@
     color: #323D6F;
 }
 
-.text-body {
+.font-16-medium {
     /* Body 1-内容 1 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -148,7 +148,7 @@
     color: #1B2559;
 }
 
-.text-body2 {
+.font-14 {
     /* Body 2 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -173,7 +173,7 @@
     color: #485585;
 }
 
-.text-body4 {
+.font-16 {
     /* Body 1-内容 1 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -196,7 +196,7 @@
     color: #A3AED0 !important;
 }
 
-.text-caption {
+.font-12 {
     /* Caption-说明 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -207,7 +207,7 @@
     color: #485585;
 }
 
-.text-caption2 {
+.font-12-medium {
     /* Caption-说明 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -218,7 +218,7 @@
     color: #7681AB;
 }
 
-.text-overline {
+.font-10 {
     /* OVERLINE-眉题 */
     font-family: Roboto !important;
     font-style: normal !important;
@@ -231,7 +231,7 @@
     color: #A3AED0;
 }
 
-.text-important {
+.font-14-medium {
     font-family: 'Roboto' !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -240,7 +240,7 @@
     color: #323D6F;
 }
 
-.pry-lighten-1 {
+.primary-clicked {
     background-color: #3613CC !important;
 }
 
@@ -248,19 +248,19 @@
     background-color: #6946FF !important;
 }
 
-.pry-lighten-3 {
+.primary-disabled {
     background-color: #A18BFF !important;
 }
 
-.pry-lighten-4 {
+.primary-special {
     background-color: #D9D1FF !important;
 }
 
-.pry-lighten-5 {
+.primary-lighten {
     background-color: #ECE8FF !important;
 }
 
-.pry--text {
+.primary--text {
     color: #4318FF !important;
     caret-color: #4318FF !important;
 }
@@ -270,52 +270,52 @@
     caret-color: #6946FF !important;
 }
 
-.neutral {
+.default-emphasis {
     background-color: #1B2559;
 }
 
-.neutral-lighten-1 {
+.default-emphasis-secondary {
     background-color: #323D6F;
 }
 
-.neutral-lighten-2 {
+.default-regular {
     background-color: #485585;
 }
 
-.neutral-lighten-3 {
+.default-regular-secondary {
     background-color: #7681AB;
 }
 
-.neutral-lighten-4 {
+.default-secondary {
     background-color: #A3AED0;
 }
 
-.neutral-lighten-5 {
+.fill-disabled {
     background-color: #E9EDF7;
 }
 
-.neutral--text {
+.default-text-emphasis {
     color: #1B2559 !important;
     caret-color: #1B2559 !important;
 }
 
 
-.neutral-lighten-1--text {
+.default-emphasis-secondary--text {
     color: #323D6F !important;
     caret-color: #323D6F !important;
 }
 
-.neutral-lighten-2--text {
+.default-regular--text {
     color: #485585 !important;
     caret-color: #485585 !important;
 }
 
-.neutral-lighten-3--text {
+.default-regular-secondary--text {
     color: #7681AB !important;
     caret-color: #7681AB !important;
 }
 
-.neutral-lighten-4--text {
+.default-secondary--text {
     color: #A3AED0 !important;
     caret-color: #A3AED0 !important;
 }
@@ -336,7 +336,7 @@
     background: #FFFFFF;
 }
 
-.fill--text {
+.fill--text-disabled {
     color: #E9EDF7 !important;
     caret-color: #E9EDF7 !important;
 }
@@ -353,12 +353,12 @@
     background: #E6FAF5 !important;
 }
 
-.sample-green--text {
+.green--text {
     color: #05CD99 !important;
     caret-color: #05CD99 !important;
 }
 
-.sample-green-lighten-5--text {
+.green--text-lighten {
     color: #E6FAF5 !important;
     caret-color: #E6FAF5 !important;
 }
@@ -505,8 +505,8 @@
 }
 
 .button {
-    min-width: 40px;
-    min-height: 40px;
+    min-width: 42px;
+    min-height: 42px;
     border: 1px solid #F0F3FA;
     box-sizing: border-box;
     border-radius: 10px;
@@ -1073,7 +1073,7 @@
     background: linear-gradient(270deg, #4318FF 5.56%, rgba(67, 24, 255, 0) 100%);
 }
 
-.mtab-tab-linear-neutral {
+.mtab-tab-linear-default-emphasis {
     background: linear-gradient(270deg, #E9EDF7 0%, rgba(233, 237, 247, 0) 100%);
 }
 
@@ -1098,7 +1098,7 @@
     box-sizing: border-box;
 }
 
-.mtab-tab-indicator-neutral {
+.mtab-tab-indicator-default-emphasis {
     background: #F0F3FA;
     border: 4px solid #A3AED0;
     box-sizing: border-box;
@@ -1129,15 +1129,15 @@
     overflow-y: scroll;
 }
 
-.neutral-lighten-1--text .m-label {
+.default-emphasis-secondary--text .m-label {
     color: #323D6F !important;
 }
 
-.neutral-lighten-4--text .m-label {
+.default-secondary--text .m-label {
     color: #A3AED0 !important;
 }
 
-.theme--light.m-text-field--outlined.neutral-lighten-4--text > .m-input__control > .m-input__slot fieldset {
+.theme--light.m-text-field--outlined.default-secondary--text > .m-input__control > .m-input__slot fieldset {
     color: #A3AED0 !important;
 }
 
@@ -1188,11 +1188,11 @@ input::-webkit-input-placeholder {
     position: absolute !important;
 }
 
-.user .m-data-table-header__icon {
+.default .m-data-table-header__icon {
     margin-top: 1px;
 }
 
-.neutral-lighten-icon .m-icon {
+.default-lighten-icon .m-icon {
     color: #A3AED0 !important;
 }
 
@@ -1511,4 +1511,13 @@ tr:hover {
     background-color: white !important;
     border: 2px dashed #E2E7F4;
     border-radius: 8px;
+}
+
+.default .m-item-group.theme--light.m-btn-toggle.m-btn-toggle--borderless.m-btn-toggle--dense.labeled-radio-group {
+    position: absolute;
+    z-index: 22;
+}
+
+.default .m-window.m-item-group.full-width.mx-1{
+    height:100%;
 }

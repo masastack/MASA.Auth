@@ -14,8 +14,8 @@
                  HideDetails="@("auto")"
                  Class="rounded-2 small">
         </MSelect>
-        <div class="ml-2 mt-1 block-center text-caption2">@T("Rows per page")</div>
-        <div class="ml-2 mt-1 block-center text-caption2">
+        <div class="ml-2 mt-1 block-center font-12-medium">@T("Rows per page")</div>
+        <div class="ml-2 mt-1 block-center font-12-medium">
             <span>@T("Total") @Total @T("Item")</span>
         </div>
     </div>
@@ -23,7 +23,7 @@
         <span @onclick=Previous>
             <MIcon Class="hover-pointer" Disabled=PreviousDisabled Size=24>mdi-chevron-left</MIcon>
         </span>
-        <span class="ma-5 text-caption">@Page/@TotalPage</span>
+        <span class="ma-5 font-12">@Page/@TotalPage</span>
         <span @onclick=Next>
             <MIcon Class="hover-pointer" Disabled=NextDisabled Size=24>mdi-chevron-right</MIcon>
         </span>

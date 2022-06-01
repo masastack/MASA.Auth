@@ -5,7 +5,7 @@
     <div class="d-flex mb-6">
         <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
             <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
             </PrependInnerContent>
         </DefaultTextField>
         <MSpacer />
@@ -27,18 +27,18 @@
             {
                 case nameof(UserClaimDto.Name):
                     <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                        <span class="text-body3 neutral--text">@context.Item.Name</span>
+                        <span class="text-body3 default--text">@context.Item.Name</span>
                     </div>
                     break;
                 case (nameof(UserClaimDto.Description)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Description</span>
+                    <span class="font-16 default-regular--text">@context.Item.Description</span>
                     break;
                 case nameof(UserClaimDto.UserClaimType):
-                    <span class="text-body4 neutral-lighten-2--text">@T(context.Item.UserClaimType.ToString())</span>
+                    <span class="font-16 default-regular--text">@T(context.Item.UserClaimType.ToString())</span>
                     break;
                 case "Action":
-                    <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveUserClaimDialog(context.Item)">mdi-delete</MIcon>
+                    <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
+                    <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveUserClaimDialog(context.Item)">mdi-delete</MIcon>
                     break;
                 default:
                     <span class="text-body3">@context.Value</span>
@@ -46,7 +46,7 @@
             }
         </ItemColContent>
         <FooterContent>
-            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </MDataTable>
 </MCard>

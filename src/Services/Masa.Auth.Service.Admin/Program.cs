@@ -5,14 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
 
-if (!builder.Environment.IsProduction())
-{
-    builder.Services.AddDaprStarter(opt =>
-    {
-        opt.DaprHttpPort = 3600;
-        opt.DaprGrpcPort = 3601;
-    });
-}
+//if (!builder.Environment.IsProduction())
+//{
+//    builder.Services.AddDaprStarter(opt =>
+//    {
+//        opt.DaprHttpPort = 3600;
+//        opt.DaprGrpcPort = 3601;
+//    });
+//}
 builder.Services.AddDaprClient();
 builder.Services.AddAliyunStorage(serviceProvider =>
 {

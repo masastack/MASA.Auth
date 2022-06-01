@@ -76,16 +76,19 @@ public partial class AddUserDialog
         User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value)).ToList();
     }
 
-    public async Task AddUserAsync()
+    public async Task AddUserAsync(EditContext context)
     {
-        Loading = true;
-        if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
-
-        await UserService.AddAsync(User);
-        OpenSuccessMessage(T("Add user data success"));
-        await UpdateVisible(false);
-        await OnSubmitSuccess.InvokeAsync();
-        Loading = false;
+        var success = context.Validate();
+        if (success)
+        {
+            Loading = true;
+            if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
+            await UserService.AddAsync(User);
+            OpenSuccessMessage(T("Add user data success"));
+            await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
+            Loading = false;
+        }
     }
 
     private void ChangeAvayar()

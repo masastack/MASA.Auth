@@ -5,7 +5,7 @@
     <div class="d-flex mb-6">
         <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
             <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
             </PrependInnerContent>
         </DefaultTextField>
         <MSpacer />
@@ -28,24 +28,24 @@
                     break;
                 case nameof(ThirdPartyIdpDto.Name):
                     <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
-                        <span class="text-body3 neutral--text">@context.Item.Name</span>
+                        <span class="text-body3 default--text">@context.Item.Name</span>
                     </div>
                     break;
                 case (nameof(ThirdPartyIdpDto.DisplayName)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.DisplayName</span>
+                    <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
                     break;
                 case nameof(ThirdPartyIdpDto.VerifyType):
-                    <span class="text-body4 neutral-lighten-2--text">@T(context.Item.VerifyType.ToString())</span>
+                    <span class="font-16 default-regular--text">@T(context.Item.VerifyType.ToString())</span>
                     break;
                 case nameof(ThirdPartyIdpDto.CreationTime):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                    <span class="font-16 default-regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                     break;
                 case nameof(ThirdPartyIdpDto.Url):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Url</span>
+                    <span class="font-16 default-regular--text">@context.Item.Url</span>
                     break;
                 case "Action":
-                    <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
+                    <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
+                    <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
                     break;
                 default:
                     <span class="text-body3">@context.Value</span>
@@ -53,7 +53,7 @@
             }
         </ItemColContent>
         <FooterContent>
-            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </MDataTable>
 </MCard>

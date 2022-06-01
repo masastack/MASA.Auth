@@ -5,12 +5,12 @@
         <div Class="flex-column sheetDialogPadding">
             <div class="d-flex">
                 <div class="ml-auto mr-auto text-center" style="width:212px;">
-                    <UploadImage @bind-Value="Staff.User.Avatar" Avatar Size="120" WhenFileChangeUpload />
-                    <DefaultTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <DefaultUploadImage @bind-Value="Staff.User.Avatar" @ref="DefaultUploadImageRef" />                    
+                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
-                <div class="text-subtitle2">@T("Basic Information")</div>
+                <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" />
                 </MRow>

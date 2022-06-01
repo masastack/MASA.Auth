@@ -1,8 +1,8 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="mt-6 text-subtitle2 neutral-lighten-2--text">@T("History record")</div>
+<div class="mt-6 font-14-bold default-regular--text">@T("History record")</div>
 <div class="mt-7 d-flex">
-    <div class="mr-n7 text-btn neutral-lighten-4--text" style="text-align: right;margin-top: -2px;">
+    <div class="mr-n7 text-btn default-secondary--text" style="text-align: right;margin-top: -2px;">
         <div>@T("Create")</div>
         <div style="margin-top: 46px;">@T("Update")</div>
     </div>
@@ -16,8 +16,8 @@
             </IconContent>
             <ChildContent>
                 <div class="mt-n3 ml-n7">
-                    <div class="text-btn neutral-lighten-2--text" style="min-height:11px;">@Creator</div>
-                    <div class="text-btn neutral-lighten-4--text">@CreationTime.ToString(T("$DateTimeFormat"))</div>
+                    <div class="text-btn default-regular--text" style="min-height:11px;">@Creator</div>
+                    <div class="text-btn default-secondary--text">@CreationTime.ToString(T("$DateTimeFormat"))</div>
                 </div>
             </ChildContent>
         </MTimelineItem>
@@ -31,8 +31,8 @@
                 </IconContent>
                 <ChildContent>
                     <div class="mt-n3 ml-n7">
-                        <div class="text-btn neutral-lighten-2--text" style="min-height:11px;">@Modifier</div>
-                        <div class="text-btn neutral-lighten-4--text">@ModificationTime?.ToString(T("$DateTimeFormat"))</div>
+                        <div class="text-btn default-regular--text" style="min-height:11px;">@Modifier</div>
+                        <div class="text-btn default-secondary--text">@ModificationTime?.ToString(T("$DateTimeFormat"))</div>
                     </div>
                 </ChildContent>
             </MTimelineItem>

@@ -10,10 +10,10 @@
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <UploadImage @bind-Value="Staff.User.Avatar" Avatar Size="120" WhenFileChangeUpload Class="mt-12" />
+                                <DefaultUploadImage @bind-Value="Staff.User.Avatar" @ref="DefaultUploadImageRef" Class="mt-12" />
                                 <br />
-                                <div class="mt-3 hover-pointer text-body4">
-                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3">@T("Another")</span>
+                                <div class="mt-3 hover-pointer font-16">
+                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3" @onclick="ChangeAvayar">@T("Another")</span>
                                 </div>
                             </div>
                         </div>
@@ -30,11 +30,11 @@
                                 <MAvatar Size=80>
                                     <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
                                 </MAvatar>
-                                <DefaultTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" Placeholder="@T("Give him a nickname!")" />
+                                <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
                             </div>
                         </div>
                         <div class="mt-6 flex-height-auto overflow-y">
-                            <div class="text-subtitle2">@T("Basic Information")</div>
+                            <div class="font-14-bold">@T("Basic Information")</div>
                             <MRow Class="my-4">
                                 <MCol>
                                     <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
