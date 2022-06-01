@@ -14,12 +14,14 @@ public class HttpClientEnvironmentDelegatingHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var userClaim = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == IsolationConsts.ENVIRONMENT_KEY);
-        if (userClaim != null)
-        {
-            _httpContextAccessor.HttpContext?.Items.Add(IsolationConsts.ENVIRONMENT_KEY, userClaim.Value);
-            request.Headers.Add(IsolationConsts.ENVIRONMENT_KEY, userClaim.Value);
-        }
+        //var userClaim = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == IsolationConsts.ENVIRONMENT_KEY);
+        //if (userClaim != null)
+        //{
+        //    _httpContextAccessor.HttpContext?.Items.TryAdd(IsolationConsts.ENVIRONMENT_KEY, userClaim.Value);
+        //    request.Headers.Add(IsolationConsts.ENVIRONMENT_KEY, userClaim.Value);
+        //}
+        _httpContextAccessor.HttpContext?.Items.TryAdd(IsolationConsts.ENVIRONMENT_KEY, "development");
+        request.Headers.Add(IsolationConsts.ENVIRONMENT_KEY, "development");
         return await base.SendAsync(request, cancellationToken);
     }
 }
