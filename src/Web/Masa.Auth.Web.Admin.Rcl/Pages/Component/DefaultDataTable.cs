@@ -8,7 +8,7 @@ public class DefaultDataTable<TItem> : MDataTable<TItem>
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        HideDefaultFooter = true;      
+        HideDefaultFooter = true;
     }
 
     protected override void OnParametersSet()

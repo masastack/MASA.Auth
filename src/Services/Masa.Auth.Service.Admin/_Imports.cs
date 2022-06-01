@@ -76,7 +76,6 @@ global using Masa.Contrib.Storage.ObjectStorage.Aliyun;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
 global using Masa.Utils.Caching.Redis.DependencyInjection;
 global using Masa.Utils.Data.Elasticsearch;
-global using Masa.Utils.Development.Dapr.AspNetCore;
 global using Masa.Utils.Exceptions.Extensions;
 global using Masa.Utils.Extensions.Expressions;
 global using Masa.Utils.Ldap.Novell;
