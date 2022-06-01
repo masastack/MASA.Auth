@@ -16,7 +16,10 @@
         </ElevationTabItem>
         <ElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                <TeamAdmin @bind-Value="Dto.TeamAdmin" />
+                @if (Show)
+                {
+                    <TeamAdmin @bind-Value="Dto.TeamAdmin" />
+                }
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
                         @T("Delete")
@@ -29,7 +32,10 @@
         </ElevationTabItem>
         <ElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                <TeamMember @bind-Value="Dto.TeamMember" />
+                @if (Show)
+                {
+                    <TeamMember @bind-Value="Dto.TeamMember" />
+                }
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
                         @T("Delete")
@@ -43,5 +49,5 @@
     </ElevationTab>
 </SheetDialog>
 
-<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()"/>
-<PermissionsPreview @bind-Show="_memberPreview" Value="Dto.TeamMember.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()"/>
+<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />
+<PermissionsPreview @bind-Show="_memberPreview" Value="Dto.TeamMember.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />

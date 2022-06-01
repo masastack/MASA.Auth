@@ -17,7 +17,7 @@ public class AvatarValue : ValueObject
         Color = color;
     }
 
-    public AvatarValue(string url)
+    public AvatarValue(string name, string color, string url) : this(name, color)
     {
         Url = url;
     }

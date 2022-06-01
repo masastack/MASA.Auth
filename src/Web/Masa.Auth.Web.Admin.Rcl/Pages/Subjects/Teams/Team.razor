@@ -11,17 +11,17 @@
     </MCardTitle>
     <MCardText Style="overflow-y:auto;">
         <MRow>
+            <MCol Md="4">
+                <MCard Outlined class="d-flex justify-center align-center" Style="border-style: dashed;" Height="230">
+                    <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>mdi-plus</MIcon>@T("Create Team")</MButton>
+                </MCard>
+            </MCol>            
             @foreach (var team in _teams)
             {
                 <MCol Md="4">
                     <TeamCard Team=team OnEditClick="()=>EditTeamHandler(team.Id)" />
                 </MCol>
             }
-            <MCol Md="4">
-                <MCard Outlined class="d-flex justify-center align-center" Style="border-style: dashed;" Height="230">
-                    <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>mdi-plus</MIcon>@T("Create Team")</MButton>
-                </MCard>
-            </MCol>
         </MRow>
     </MCardText>
 </MCard>

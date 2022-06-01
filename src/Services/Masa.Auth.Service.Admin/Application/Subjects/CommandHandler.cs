@@ -17,11 +17,15 @@ public class CommandHandler
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<CommandHandler> _logger;
+    readonly IClient _aliyunClient;
+
+    string _bucket = "";
+    string _cdnEndpoint = "";
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
         ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory,
         UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IConfiguration configuration, ILogger<CommandHandler> logger)
+        IConfiguration configuration, ILogger<CommandHandler> logger, IClient aliyunClient, DaprClient daprClient)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -35,6 +39,10 @@ public class CommandHandler
         _ldapIdpRepository = ldapIdpRepository;
         _configuration = configuration;
         _logger = logger;
+        _aliyunClient = aliyunClient;
+
+        _bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.FirstOrDefault().Value;
+        _cdnEndpoint = _configuration.GetValue<string>("CdnEndpoint");
     }
 
     #region User
@@ -197,7 +205,13 @@ public class CommandHandler
     public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
     {
         var dto = addTeamCommand.AddTeamDto;
-        Team team = new Team(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        var teamId = Guid.NewGuid();
+        var avatarName = $"{teamId}.png";
+
+        var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
+        await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+
+        Team team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.AddAsync(team);
         await _teamRepository.UnitOfWork.SaveChangesAsync();
 
@@ -210,7 +224,14 @@ public class CommandHandler
     {
         var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
         var team = await _teamRepository.GetByIdAsync(dto.Id);
-        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        var avatarName = $"{team.Id}.png";
+        if ((team.Avatar.Name != dto.Avatar.Name && team.Avatar.Color != dto.Avatar.Color) ||
+                string.IsNullOrWhiteSpace(team.Avatar.Url))
+        {
+            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
+            await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+        }
+        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.UpdateAsync(team);
     }
 

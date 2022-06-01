@@ -6,7 +6,7 @@
         <MCardTitle class="pb-1 px-0 pt-1">
             <MListItem>
                 <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">
-                    <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
+                    <MImage Src="@Team.Avatar"></MImage>
                 </MListItemAvatar>
                 <MListItemContent class="pb-0">
                     <MListItemTitle class="d-flex justify-space-between align-center">
@@ -21,7 +21,7 @@
             <span class="text-body3"> @Team.Description</span>
         </MCardText>
         <MCardActions class="px-4 pb-4">
-            <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" height=24 width=24 />
+            <img src="@Team.CreatorAvatar" height=24 width=24 />
             <span class="font-14 ml-3">@Team.Creator</span>
             <MSpacer />
             <span class="font-14 default-secondary--text">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:new CultureInfo(I18n.CurrentLanguage))</span>

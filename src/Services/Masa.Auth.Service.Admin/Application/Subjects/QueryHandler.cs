@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using StackExchange.Redis;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -309,7 +307,8 @@ public class QueryHandler
             condition = condition.And(s => s.Name.Contains(teamListQuery.Name));
         }
         teamListQuery.Result = (await _teamRepository.GetListAsync(condition))
-                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount, "", "", "", t.ModificationTime))
+                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount,
+                "", "", "", t.ModificationTime))
                 .ToList();
     }
 

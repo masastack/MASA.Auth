@@ -4,7 +4,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
-if (builder.Environment.IsProduction() is false)
+
+if (!builder.Environment.IsProduction())
 {
     builder.Services.AddDaprStarter(opt =>
     {
@@ -28,6 +29,7 @@ builder.Services.AddAliyunStorage(serviceProvider =>
         }
     };
 });
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
