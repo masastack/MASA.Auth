@@ -36,7 +36,7 @@
             </MTextField>
             <MRow Class="mt-6">
                 <MCol Md="6" Class="d-flex justify-space-between">
-                    <MIcon Size="16" Color="primary">mdi-record-circle</MIcon>
+                    <MIcon Size="16" Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">mdi-record-circle</MIcon>
                     <MSelect @bind-Value="_inputModel.Environment"
                          Solo Dense HideDetails="true" Class="elevation-0"
                          Items="@_environments"

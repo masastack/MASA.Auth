@@ -1075,3 +1075,12 @@ tr:hover {
     .elevation-0.m-text-field.m-text-field--solo:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
         box-shadow: none !important;
     }
+
+    .elevation-0.m-select.m-input--dense .m-select__selection--comma {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        color: #4318FF;
+    }
