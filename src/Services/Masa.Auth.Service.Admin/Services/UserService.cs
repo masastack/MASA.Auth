@@ -30,6 +30,16 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
+        private async Task AddExternalAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
+        {
+            dto.Enabled = true;
+            dto.Password = "";
+            if (string.IsNullOrEmpty(dto.Avatar)) dto.Avatar = "";
+            if (dto.Gender == default) dto.Gender = GenderTypes.Male;
+
+            await eventBus.PublishAsync(new AddUserCommand(dto));
+        }
+
         private async Task AddAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
         {
             await eventBus.PublishAsync(new AddUserCommand(dto));

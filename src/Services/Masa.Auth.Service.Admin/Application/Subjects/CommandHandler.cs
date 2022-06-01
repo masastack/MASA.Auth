@@ -8,13 +8,24 @@ public class CommandHandler
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
     readonly TeamDomainService _teamDomainService;
     readonly ILdapFactory _ldapFactory;
     readonly UserDomainService _userDomainService;
+    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
+    readonly IConfiguration _configuration;
+    readonly ILogger<CommandHandler> _logger;
+    readonly IClient _aliyunClient;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory, UserDomainService userDomainService)
+    string _bucket = "";
+    string _cdnEndpoint = "";
+
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
+        ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory,
+        UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
+        IConfiguration configuration, ILogger<CommandHandler> logger, IClient aliyunClient, DaprClient daprClient)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -24,6 +35,14 @@ public class CommandHandler
         _teamDomainService = teamDomainService;
         _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
+        _thirdPartyUserDomainService = thirdPartyUserDomainService;
+        _ldapIdpRepository = ldapIdpRepository;
+        _configuration = configuration;
+        _logger = logger;
+        _aliyunClient = aliyunClient;
+
+        _bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.FirstOrDefault().Value;
+        _cdnEndpoint = _configuration.GetValue<string>("CdnEndpoint");
     }
 
     #region User
@@ -133,6 +152,12 @@ public class CommandHandler
         await _staffRepository.RemoveAsync(staff);
     }
 
+    [EventHandler]
+    public async Task SyncAsync(SyncStaffCommand command)
+    {
+        command.Result = await _staffDomainService.SyncStaffAsync(command.Staffs);
+    }
+
     #endregion
 
     #region ThirdPartyIdp
@@ -180,7 +205,13 @@ public class CommandHandler
     public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
     {
         var dto = addTeamCommand.AddTeamDto;
-        Team team = new Team(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        var teamId = Guid.NewGuid();
+        var avatarName = $"{teamId}.png";
+
+        var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
+        await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+
+        Team team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.AddAsync(team);
         await _teamRepository.UnitOfWork.SaveChangesAsync();
 
@@ -193,7 +224,14 @@ public class CommandHandler
     {
         var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
         var team = await _teamRepository.GetByIdAsync(dto.Id);
-        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        var avatarName = $"{team.Id}.png";
+        if ((team.Avatar.Name != dto.Avatar.Name && team.Avatar.Color != dto.Avatar.Color) ||
+                string.IsNullOrWhiteSpace(team.Avatar.Url))
+        {
+            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
+            await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+        }
+        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.UpdateAsync(team);
     }
 
@@ -242,15 +280,47 @@ public class CommandHandler
     [EventHandler]
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
+        var _thirdPartyIdpId = Guid.Empty;
+        var ldapIdp = new LdapIdp(ldapUpsertCommand.LdapDetailDto.ServerAddress, ldapUpsertCommand.LdapDetailDto.ServerPort, ldapUpsertCommand.LdapDetailDto.IsLdaps,
+                ldapUpsertCommand.LdapDetailDto.BaseDn, ldapUpsertCommand.LdapDetailDto.RootUserDn, ldapUpsertCommand.LdapDetailDto.RootUserPassword, ldapUpsertCommand.LdapDetailDto.UserSearchBaseDn, ldapUpsertCommand.LdapDetailDto.GroupSearchBaseDn);
+        var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
+        if (dbItem is null)
+        {
+            await _ldapIdpRepository.AddAsync(ldapIdp);
+            await _ldapIdpRepository.UnitOfWork.SaveChangesAsync();
+            _thirdPartyIdpId = ldapIdp.Id;
+        }
+        else
+        {
+            _thirdPartyIdpId = dbItem.Id;
+            dbItem.Update(ldapIdp);
+            await _ldapIdpRepository.UpdateAsync(dbItem);
+        }
+
         var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
         {
-            //Public domain event
-            //todo wait user memory cache
+            try
+            {
+                await _thirdPartyUserDomainService.AddThirdPartyUserAsync(new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
+                    new AddUserDto
+                    {
+                        Name = ldapUser.Name,
+                        DisplayName = ldapUser.DisplayName,
+                        Enabled = true,
+                        Email = ldapUser.EmailAddress,
+                        PhoneNumber = ldapUser.Phone,
+                        Account = ldapUser.SamAccountName,
+                        Password = _configuration.GetValue<string>("Subjects:InitialPassword")
+                    }));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "LdapUser Name = {0},Email = {1},PhoneNumber={2}", ldapUser.Name, ldapUser.EmailAddress, ldapUser.Phone);
+            }
         }
     }
-
     #endregion
 }

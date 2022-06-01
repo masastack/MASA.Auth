@@ -7,6 +7,6 @@ public class ApiResourceScopeEntityTypeConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<ApiResourceScope> builder)
     {
-        builder.ToTable(nameof(ApiResourceScope), AuthDbContext.SSO_SCHEMA).HasKey(apiResourceScope => apiResourceScope.Id);
+        builder.HasKey(apiResourceScope => apiResourceScope.Id);
     }
 }

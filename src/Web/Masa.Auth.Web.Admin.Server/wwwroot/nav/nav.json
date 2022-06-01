@@ -84,5 +84,11 @@
     "Title": "ThirdPartyIdp",
     "Icon": "mdi-calendar-check-outline",
     "Href": "thirdPartyIdp"
+  },
+  {
+    "Id": 8,
+    "Title": "Position",
+    "Icon": "mdi-calendar-check-outline",
+    "Href": "/organization/position"
   }
 ]

@@ -58,6 +58,11 @@
   "Resource Information": "资源信息",
   "Add New": "新增",
   "Are you sure delete current data?": "确定要删除此数据?",
+  "Preview Permissions": "预览权限",
+  "Back": "返回",
+  "Upload": "上传",
+  "Index": "序号",
+  "Error Info": "错误信息",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -113,6 +118,11 @@
   "ExternalStaff": "驻场员工",
   "Sync": "同步",
   "Staff Sync": "员工同步",
+  "StaffSyncTemplate.csv": "员工同步模板",
+  "Sync staff success": "同步员工成功",
+  "Sync staff failed": "同步员工失败",
+  "Explanation": "说明",
+  "File size limit": "文件限制大小",
   "Failed to query staffList data:": "获取员工列表数据失败:",
   "Failed to query staffDetail data:": "获取员工详情数据失败",
   "Add staff data success": "新增员工数据成功",
@@ -149,6 +159,7 @@
   "Group Search BaseDn": "组搜索域",
   "Connect Success": "连接成功",
   "Connect Error": "连接失败",
+  "Ldap Account Synchroniz Success": "域账户同步成功",
 
   "Position": "职位",
 

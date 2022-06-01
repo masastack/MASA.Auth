@@ -22,12 +22,13 @@ public class UpdateStaffDomainEventHandler
     }
 
     [EventHandler(2)]
-    public async Task UpsertPositionAsync(UpdateStaffDomainEvent staffEvent)
+    public async Task AddPositionAsync(UpdateStaffDomainEvent staffEvent)
     {
-        if (string.IsNullOrEmpty(staffEvent.Staff.Position.Name) is false)
+        if (string.IsNullOrEmpty(staffEvent.Staff.Position) is false)
         {
-            var command = new UpsertPositionCommand(staffEvent.Staff.Position);
+            var command = new AddPositionCommand(new(staffEvent.Staff.Position));
             await _eventBus.PublishAsync(command);
+            staffEvent.Staff.PositionId = command.Result;
         }
     }
 
@@ -39,7 +40,7 @@ public class UpdateStaffDomainEventHandler
         if (staff is null)
             throw new UserFriendlyException("This staff data does not exist");
 
-        staff.Update(staffDto.User.Name, staffDto.Position.Id, staffDto.StaffType, staffDto.Enabled);
+        staff.Update(staffDto.User.Name, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
         staff.AddDepartmentStaff(staffDto.DepartmentId);
         staff.AddTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);

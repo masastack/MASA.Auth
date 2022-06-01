@@ -7,7 +7,6 @@ public class RolePermissionEntityTypeConfiguration : IEntityTypeConfiguration<Ro
 {
     public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
-        builder.ToTable(nameof(RolePermission), AuthDbContext.PERMISSION_SCHEMA);
         builder.HasKey(rp => rp.Id);
     }
 }
