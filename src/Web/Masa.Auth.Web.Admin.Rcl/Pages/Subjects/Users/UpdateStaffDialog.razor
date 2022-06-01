@@ -4,16 +4,16 @@
     <MForm Model="Staff" EnableValidation @ref="Form">
         <div Class="flex-column sheetDialogPadding">
             <div class="d-flex">
-                <div class="ml-auto mr-auto text-center" style="width:212px;">
+                <div class="mx-auto text-center" style="width:212px;">
                     <DefaultUploadImage @bind-Value="Staff.User.Avatar" @ref="DefaultUploadImageRef" />                    
                     <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
                 <div class="font-14-bold">@T("Basic Information")</div>
-                <MRow Class="mt-4">
+                <div Class="mt-4">
                     <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" />
-                </MRow>
+                </div>
                 <MRow Class="mt-6">
                     <MCol>
                         <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />

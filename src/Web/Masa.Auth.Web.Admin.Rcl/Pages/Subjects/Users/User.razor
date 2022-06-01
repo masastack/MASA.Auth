@@ -11,7 +11,7 @@
                 </MIcon>
             </div>
             <MButton Color="primary" Class="ml-4 small-button" OnClick=OpenAddUserDialog>
-                <MIcon Size=18>mdi-plus</MIcon>
+                <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2">@T("Add")</span>
             </MButton>
         </div>
@@ -59,8 +59,8 @@
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">mdi-pencil</MIcon>
-                        <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                        <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
                         <span class="text-body3">@context.Value</span>
@@ -70,7 +70,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

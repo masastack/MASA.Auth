@@ -5,7 +5,10 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultUploadImage : UploadImage
 {
-    private OssService OssService => AuthCaller.OssService;
+    [Inject]
+    public AuthCaller? AuthCaller { get; set; }
+
+    public OssService OssService => AuthCaller!.OssService;
 
     protected override void OnInitialized()
     {

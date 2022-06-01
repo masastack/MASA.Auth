@@ -24,16 +24,7 @@ public partial class AddUserDialog
 
     private UserService UserService => AuthCaller.UserService;
 
-    private OssService OssService => AuthCaller.OssService;
-
-    private List<GetDefaultImagesDto> DefaultImages { get; set; } = new();
-
     private DefaultUploadImage? DefaultUploadImageRef { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        DefaultImages = await OssService.GetDefaultImagesAsync();
-    }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -58,7 +49,6 @@ public partial class AddUserDialog
             Step = 1;
             Fill = false;
             User = new();
-            ChangeAvayar();
         }
     }
 
@@ -88,18 +78,6 @@ public partial class AddUserDialog
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
-        }
-    }
-
-    private void ChangeAvayar()
-    {
-        Random random = new Random();
-        var images = DefaultImages.Where(image => image.Gender == User.Gender).ToList();
-        if (images.Count > 0)
-        {
-            var avatar = images[random.Next(0, images.Count)].Url;
-            if (avatar == User.Avatar && images.Count > 1) ChangeAvayar();
-            else User.Avatar = avatar;
         }
     }
 }
