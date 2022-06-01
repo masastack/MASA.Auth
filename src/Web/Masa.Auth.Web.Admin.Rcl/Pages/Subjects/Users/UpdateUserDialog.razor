@@ -6,7 +6,7 @@
             <div class="d-flex">
                 <div class="mx-auto text-center" style="width:212px;">
                     <DefaultUploadImage @bind-Value="User.Avatar" @ref="DefaultUploadImageRef" />
-                    <DefaultTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <MTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                 </div>
             </div>
             <div class="mt-6 flex-height-auto overflow-y">
