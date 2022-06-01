@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class TeamStaff : FullAuditEntity<Guid, Guid>
+public class TeamStaff : FullEntity<Guid, Guid>
 {
     public Guid TeamId { get; private set; }
 

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class DeviceFlowCodes : FullAuditAggregateRoot<int, Guid>
+public class DeviceFlowCodes : FullAggregateRoot<int, Guid>
 {
     /// <summary>
     /// Gets or sets the device code.

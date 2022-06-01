@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class ApiScope : FullAuditAggregateRoot<int, Guid>
+public class ApiScope : FullAggregateRoot<int, Guid>
 {
     private List<ApiScopeClaim> _userClaims = new();
     private List<ApiScopeProperty> _properties = new();
