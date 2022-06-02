@@ -7,6 +7,7 @@ public class SubjectService : RestServiceBase
 {
     public SubjectService(IServiceCollection services) : base(services, "api/subject")
     {
+        MapGet(GetListAsync, "list");
     }
 
     private async Task<List<SubjectDto>> GetListAsync([FromServices] IEventBus eventBus, [FromQuery] string filter)
