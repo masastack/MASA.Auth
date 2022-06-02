@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class ThirdPartyUser : FullAuditAggregateRoot<Guid, Guid>
+public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 {
     private User? _user;
     private User? _createUser;

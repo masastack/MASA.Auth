@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class User : FullAuditAggregateRoot<Guid, Guid>
+public class User : FullAggregateRoot<Guid, Guid>
 {
     private List<UserRole> _roles = new();
     private List<UserPermission> _permissions = new();

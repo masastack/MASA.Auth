@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class UserClaim : FullAuditAggregateRoot<int, Guid>
+public class UserClaim : FullAggregateRoot<int, Guid>
 {
     public string Name { get; private set; }
 

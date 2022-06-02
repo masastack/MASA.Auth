@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 {
-    public class CustomLogin : FullAuditAggregateRoot<int, Guid>
+    public class CustomLogin : FullAggregateRoot<int, Guid>
     {
         private Client? _client;
         private List<CustomLoginThirdPartyIdp> _thirdPartyIdps = new();

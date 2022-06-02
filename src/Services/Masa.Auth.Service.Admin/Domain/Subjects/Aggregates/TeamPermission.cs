@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class TeamPermission : FullAuditEntity<Guid, Guid>
+public class TeamPermission : FullEntity<Guid, Guid>
 {
     private Team? _team;
     private Permission? _permission;
