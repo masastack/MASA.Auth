@@ -74,6 +74,7 @@ global using Masa.Contrib.SearchEngine.AutoComplete;
 global using Masa.Contrib.Service.MinimalAPIs;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
+global using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
 global using Masa.Utils.Caching.Redis.DependencyInjection;
 global using Masa.Utils.Data.Elasticsearch;
 global using Masa.Utils.Exceptions.Extensions;

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using EFCoreSecondLevelCacheInterceptor;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
@@ -50,12 +52,32 @@ builder.Services.AddAuthentication(options =>
 //});
 MapsterAdapterConfig.TypeAdapter();
 
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
 builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
+
+const string providerName1 = "Redis1";
+builder.Services.AddEFSecondLevelCache(options =>
+                options.UseEasyCachingCoreProvider(providerName1).DisableLogging(false).UseCacheKeyPrefix("EF_")
+                .CacheAllQueries(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(30))
+                .SkipCachingResults(result =>
+                                result.Value == null || (result.Value is EFTableRows rows && rows.RowsCount == 0)));
+
+builder.Services.AddEasyCaching(option =>
+{
+    option.UseRedis(config =>
+    {
+        config.DBConfig.AllowAdmin = true;
+        config.DBConfig.SyncTimeout = 10000;
+        config.DBConfig.AsyncTimeout = 10000;
+        config.DBConfig.Endpoints.Add(new EasyCaching.Core.Configurations.ServerEndPoint("127.0.0.1", 6379));
+        config.SerializerName = "mymsgpack";
+    }, providerName1).WithMessagePack("mymsgpack");
+});
+
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
