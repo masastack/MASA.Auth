@@ -2,12 +2,13 @@
 
 <AutoHeight>
     <HeaderContent>
-        <div style="margin-left:40%;" class="d-flex">
+        <div class="d-flex">
+            <MSpacer />
             <SearchTextField @bind-Value="Search" />
-            <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
+            <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;height:40px;">
                 <div class="ma-auto">
                     <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
-                    <span class="font-12-medium default-emphasis-secondary--text">@T("Sync")</span>
+                    <span class="font-12-medium emphasis2--text">@T("Sync")</span>
                 </div>
             </div>
             <DefaultButton Small Class="ml-4" OnClick=OpenAddStaffDialog>

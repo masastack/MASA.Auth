@@ -1,26 +1,25 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Custom Login")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Custom Login")">
     <MForm Model=CustomLogin EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="d-flex">
-                <div class="mx-auto">
-                    <MButtonGroup Dense Mandatory Borderless @bind-Value="Tab" Class="rounded-lg elevation-tab" Style="margin-left:10px">
-                        <MButton Ripple=false Value="@CustomLoginTab.BasicInformation" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(CustomLoginTab.BasicInformation)
-                        </MButton>
-                        <MButton Ripple=false Value="@CustomLoginTab.Login" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(CustomLoginTab.Login)
-                        </MButton>
-                        <MButton Ripple=false Value="@CustomLoginTab.Register" Class="rounded-lg" MinWidth=70 Height=36>
-                            @T(CustomLoginTab.Register)
-                        </MButton>
-                    </MButtonGroup>
+        <AutoHeight Overflow>
+            <HeaderContent>
+                <div class="d-flex">
+                    <div class="mx-auto">
+                        <LabeledRadioGroup @bind-Value="Tab" Dense>
+                            @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
+                            {
+                                <LabeledRadio Value="tab" MinWidth=70>
+                                    @T(tab)
+                                </LabeledRadio>
+                            }
+                        </LabeledRadioGroup>
+                    </div>
                 </div>
-            </div>
-            <MWindow Value="Tab" Reverse Class="flex-grow-1">
-                <div class="mt-6 flex-height-auto overflow-y">
-                    <MWindowItem Value="CustomLoginTab.BasicInformation">
+            </HeaderContent>
+            <AutoHeightContent>
+                <MWindow Value="Tab" Class="full-height">
+                    <MWindowItem Value="CustomLoginTab.BasicInformation" Class="mt-6">
                         @if (ClientSelectRef?.Client?.LogoUri is not null)
                         {
                             <div class="d-flex">
@@ -34,35 +33,37 @@
                                 <DefaultTextField @bind-Value="CustomLogin.Name" Label="@T("CustomLogin.Name")" />
                             </MCol>
                             <MCol>
-                                <DefaultTextField @bind-Value="CustomLogin.Title" Label="@T("Title")" />                               
+                                <DefaultTextField @bind-Value="CustomLogin.Title" Label="@T("Title")" />
                             </MCol>
                         </MRow>
                         <MRow>
                             <MCol>
-                               <ClientSelect @ref="ClientSelectRef" Value="CustomLoginDetail.Client.Id" Disabled /> 
+                                <ClientSelect @ref="ClientSelectRef" Value="CustomLoginDetail.Client.Id" Disabled />
                             </MCol>
                         </MRow>
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Login">
+                    <MWindowItem Value="CustomLoginTab.Login" Class="mt-6">
                         <ConfigLogin @bind-Value="CustomLogin.ThirdPartyIdps" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Register">
+                    <MWindowItem Value="CustomLoginTab.Register" Class="mt-6">
                         <ConfigRegister @bind-Value="CustomLogin.RegisterFields" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
+                </MWindow>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="CustomLogin.Enabled" />
+                    <MSpacer></MSpacer>
+                    @if (Tab != CustomLoginTab.BasicInformation)
+                    {
+                        <DefaultButton Medium OnClick="AddConfig" Class="mr-6">
+                            <MIcon Size=18>@IconConstants.Add</MIcon>
+                            <span class="ml-2">@T("Add")</span>
+                        </DefaultButton>
+                    }
+                    <DefaultButton Medium OnClick="async () => await UpdateCustomLoginAsync(context)">@T("Submit")</DefaultButton>
                 </div>
-            </MWindow>
-            <div class="d-flex mt-6">
-                <MSwitch @bind-Value="CustomLogin.Enabled" Inset Class="label" Label="@(CustomLogin.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                @if (Tab != CustomLoginTab.BasicInformation)
-                {
-                    <MButton OnClick="AddConfig" Color="primary" Class="small-button">
-                        <MIcon Size=18>mdi-plus</MIcon>
-                        <span class="ml-2">@T("Add")</span>
-                    </MButton>
-                }
-                <MButton OnClick="async () => await UpdateCustomLoginAsync(context)" Color="primary" Class="small-button ml-6">@T("Submit")</MButton>
-            </div>
-        </div>
+            </FooterContent>
+        </AutoHeight>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

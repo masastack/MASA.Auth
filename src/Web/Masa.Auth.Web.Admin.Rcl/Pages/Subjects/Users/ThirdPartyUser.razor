@@ -2,17 +2,18 @@
 
 <AutoHeight>
     <HeaderContent>
-        <div style="margin-left:40%" class="d-flex">
+        <div class="d-flex">
+            <MSpacer />
             <UserAutoComplete @bind-Value="UserId" />
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="default-emphasis-secondary" Size=20>
                     @(Filter ? "mdi-filter" : "mdi-filter-off")
                 </MIcon>
             </div>
-            <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenLdapDialog>
-                <MIcon Size=18>mdi-plus</MIcon>
+            <DefaultButton Small Class="ml-6" OnClick=OpenLdapDialog>
+                <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2">@T("Ldap")</span>
-            </MButton>
+            </DefaultButton>
         </div>
         @if (Filter)
         {

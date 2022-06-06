@@ -392,7 +392,7 @@
     height: 100%;
 }
 
-/*.m-text-field--outlined:not(.m-textarea) {
+.m-text-field--outlined:not(.m-textarea) {
     height: 48px !important;
 }
 
@@ -423,7 +423,7 @@
     font-weight: 400 !important;
     font-size: 14px !important;
     line-height: 20px !important;
-}*/
+}
 
 .m-timeline {
     padding-top: 0 !important;

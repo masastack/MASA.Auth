@@ -5,14 +5,9 @@
     <AutoHeight>
         <HeaderContent>
             <div class="d-flex mb-6">
-                <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="emphasis2--text">
-                    <PrependInnerContent>
-                        <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
-                    </PrependInnerContent>
-                </DefaultTextField>
+                <SearchTextField @bind-Value="Search" />
                 <MSpacer />
                 <DefaultButton Medium Class="ml-6" OnClick=OpenAddRoleDialog>
-                    @*<DefaultIcon />*@
                     <MIcon Size=18>mdi-plus</MIcon>
                     <span class="ml-2">@T("Add")</span>
                 </DefaultButton>
