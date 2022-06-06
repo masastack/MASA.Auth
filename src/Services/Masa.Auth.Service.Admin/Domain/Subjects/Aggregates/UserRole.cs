@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class UserRole : FullAuditEntity<Guid, Guid>
+public class UserRole : FullEntity<Guid, Guid>
 {
     public User User { get; set; } = null!;
 

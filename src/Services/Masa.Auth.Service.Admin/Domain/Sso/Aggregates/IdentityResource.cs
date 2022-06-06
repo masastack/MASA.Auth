@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates;
 
-public class IdentityResource : FullAuditAggregateRoot<int, Guid>
+public class IdentityResource : FullAggregateRoot<int, Guid>
 {
     private List<IdentityResourceClaim> _userClaims = new();
     private List<IdentityResourceProperty> _properties = new();

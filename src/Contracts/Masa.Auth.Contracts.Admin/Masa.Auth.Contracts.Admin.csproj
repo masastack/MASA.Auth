@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.4.0" />
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-    <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.4.0-rc1" />
-    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.4.0-rc1" />
+    <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.4.0" />
+    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta14" />

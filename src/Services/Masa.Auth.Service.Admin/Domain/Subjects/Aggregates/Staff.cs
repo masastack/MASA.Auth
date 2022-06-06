@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class Staff : FullAuditAggregateRoot<Guid, Guid>
+public class Staff : FullAggregateRoot<Guid, Guid>
 {
     private User? _user;
     private Position? _position;
