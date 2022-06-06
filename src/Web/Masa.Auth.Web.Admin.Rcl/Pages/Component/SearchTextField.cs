@@ -16,7 +16,7 @@ public class SearchTextField : MTextField<string>
         BackgroundColor = "fill-background";
         Style = "max-width:340px;";
         Placeholder = I18n!.T("Search");
-        PrependInnerContent = builder => 
+        PrependInnerContent = builder =>
         {
             builder.OpenComponent<MIcon>(0);
             builder.AddAttribute(1, "Size", (StringNumber)16);

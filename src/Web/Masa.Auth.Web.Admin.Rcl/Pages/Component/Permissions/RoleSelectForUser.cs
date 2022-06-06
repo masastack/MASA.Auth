@@ -15,7 +15,7 @@ public partial class RoleSelectForUser : RoleSelect
     }
 
     protected override async Task OnInitializedAsync()
-    {        
+    {
         Roles = await RoleService.GetSelectForUserAsync(UserId);
     }
 

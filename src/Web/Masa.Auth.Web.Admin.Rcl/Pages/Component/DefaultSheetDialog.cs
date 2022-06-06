@@ -9,7 +9,7 @@ public class DefaultSheetDialog : SheetDialog
     {
         base.OnParametersSet();
         ContentClass ??= "";
-        if(ContentClass.Contains("sheetDialogPadding") is false)
+        if (ContentClass.Contains("sheetDialogPadding") is false)
             ContentClass += " sheetDialogPadding";
     }
 }

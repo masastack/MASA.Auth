@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Components.Rendering;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultChangeImage : DefaultUploadImage
@@ -15,7 +13,7 @@ public class DefaultChangeImage : DefaultUploadImage
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        DefaultImages = await OssService.GetDefaultImagesAsync();       
+        DefaultImages = await OssService.GetDefaultImagesAsync();
     }
 
     protected override async Task OnParametersSetAsync()
