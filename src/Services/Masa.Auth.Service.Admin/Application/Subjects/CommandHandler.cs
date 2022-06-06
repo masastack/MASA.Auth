@@ -125,6 +125,19 @@ public class CommandHandler
         await _userRepository.RemoveAsync(user);
         await _userDomainService.RemoveAsync(user.Id);
     }
+
+    [EventHandler]
+    public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.GetDetailAsync(userDto.Id);
+        if (user == null)
+            throw new UserFriendlyException("The current user does not exist");
+
+        user.AddRoles(userDto.Roles.ToArray());
+        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        await _userRepository.UpdateAsync(user);
+    }
     #endregion
 
     #region Staff

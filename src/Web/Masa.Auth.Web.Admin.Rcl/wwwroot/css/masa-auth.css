@@ -994,3 +994,18 @@ tr:hover {
 .default .m-window.m-item-group.full-width.mx-1{
     height:100%;
 }
+
+.auth .m-sheet.m-stepper:not(.m-sheet--outlined) {
+    box-shadow: none !important;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.auth form {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.auth .global-nav .global-nav-content__main{
+    height:auto !important;
+}

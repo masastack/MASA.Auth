@@ -8,8 +8,14 @@ public partial class RoleSelectForUser : RoleSelect
     [Parameter]
     public Guid UserId { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    public override async Task SetParametersAsync(ParameterView parameters)
     {
+        Label = T("Inherited Role");
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {        
         Roles = await RoleService.GetSelectForUserAsync(UserId);
     }
 

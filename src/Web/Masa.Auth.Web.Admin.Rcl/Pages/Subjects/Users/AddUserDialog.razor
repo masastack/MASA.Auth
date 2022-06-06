@@ -1,17 +1,17 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
     <MForm Model=User EnableValidation @ref="Form">
-        <MStepper Value="Step" Class="sheetDialogPadding">
+        <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <AutoHeight Class="d-flex">
+                    <AutoHeight AutoClass="d-flex">
                         <AutoHeightContent>
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
                                 <div>
-                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" @ref="DefaultUploadImageRef" Class="mt-12" />
+                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" WhenFileChangeUpload Class="mt-12" />
                                 </div>
                             </div>
                         </AutoHeightContent>
@@ -24,7 +24,7 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <AutoHeight Overflow Class="mt-6">
+                    <AutoHeight Overflow AutoClass="mt-6">
                         <HeaderContent>
                             <div class="d-flex">
                                 <div class="mx-auto text-center">
@@ -72,15 +72,17 @@
                     <AutoHeight Overflow>
                         <AutoHeightContent>
                             <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
-                            <PermissionsCheck RoleIds=User.Roles
-                                              Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
-                                              ValueChanged="PermissionsChanged" />
+                            <div class="global-nav" style="display: flex;height: auto">                               
+                                <PermissionsCheck RoleIds=User.Roles
+                                                  Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
+                                                  ValueChanged="PermissionsChanged" />
+                            </div>
                         </AutoHeightContent>
                         <FooterContent>
                             <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
                                 <DefaultButton Medium OnClick="()=>Step=2" Outlined>@T("Previous step")</DefaultButton>
-                                <DefaultButton Medium Outlined Color="primary" Class="ml-6">@T("Preview")</DefaultButton>
+                                <DefaultButton Medium Outlined OnClick="()=> Preview=true" Class="ml-6">@T("Preview")</DefaultButton>
                                 <DefaultButton Medium OnClick="async () => await AddUserAsync(context)" Class="ml-6">@T("Submit")</DefaultButton>
                             </div>
                         </FooterContent>
@@ -89,4 +91,6 @@
             </MStepperItems>
         </MStepper>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>
+
+<PermissionsPreview @bind-Show="Preview" Value="User.Permissions.Where(p => p.Effect is true).Select(p => p.PermissionId.ToString()).ToList()" />

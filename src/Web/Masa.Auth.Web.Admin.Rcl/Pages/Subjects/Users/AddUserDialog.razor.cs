@@ -18,13 +18,13 @@ public partial class AddUserDialog
 
     private bool Fill { get; set; }
 
+    public bool Preview { get; set; }
+
     private MForm? Form { get; set; }
 
     private AddUserDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
-
-    private DefaultUploadImage? DefaultUploadImageRef { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -72,7 +72,6 @@ public partial class AddUserDialog
         if (success)
         {
             Loading = true;
-            if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
             await UserService.AddAsync(User);
             OpenSuccessMessage(T("Add user data success"));
             await UpdateVisible(false);

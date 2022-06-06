@@ -3,13 +3,13 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class DefaultCard : MCard
+public class DefaultSheetDialog : SheetDialog
 {
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        Class ??= "";
-        if(Class.Contains("pa-6 full-height") is false)
-            Class += " pa-6 full-height";
+        ContentClass ??= "";
+        if(ContentClass.Contains("sheetDialogPadding") is false)
+            ContentClass += " sheetDialogPadding";
     }
 }

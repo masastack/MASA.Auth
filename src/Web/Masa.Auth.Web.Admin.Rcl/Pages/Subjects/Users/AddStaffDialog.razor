@@ -1,17 +1,17 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
     <MForm Model="Staff" EnableValidation @ref="Form">
-        <MStepper Value="Step" Class="sheetDialogPadding">
+        <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <AutoHeight Class="d-flex">
+                    <AutoHeight AutoClass="d-flex">
                         <AutoHeightContent>
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
                                 <div>
-                                    <DefaultChangeImage @bind-Value="Staff.User.Avatar" Gender="Staff.User.Gender" @ref="DefaultUploadImageRef" Class="mt-12" />
+                                    <DefaultChangeImage @bind-Value="Staff.User.Avatar" Gender="Staff.User.Gender" Class="mt-12" />
                                 </div>
                             </div>
                         </AutoHeightContent>
@@ -24,7 +24,7 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <AutoHeight Overflow Class="mt-6">
+                    <AutoHeight Overflow AutoClass="mt-6">
                         <HeaderContent>
                             <div class="d-flex mt-10">
                                 <div class="mx-auto text-center">
@@ -98,4 +98,4 @@
             </MStepperItems>
         </MStepper>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

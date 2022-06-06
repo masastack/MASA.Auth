@@ -15,6 +15,9 @@ public partial class AutoHeight
     public RenderFragment? FooterContent { get; set; }
 
     [Parameter]
+    public string AutoClass { get; set; } = "";
+
+    [Parameter]
     public string Class { get; set; } = "";
 
     [Parameter]

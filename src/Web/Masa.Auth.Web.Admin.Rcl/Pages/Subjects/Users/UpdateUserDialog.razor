@@ -1,15 +1,17 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update User")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update User")">
     <MForm Model=User EnableValidation @ref="Form">
-        <div class="flex-column sheetDialogPadding">
-            <div class="d-flex">
-                <div class="mx-auto text-center" style="width:212px;">
-                    <DefaultUploadImage @bind-Value="User.Avatar" @ref="DefaultUploadImageRef" />
-                    <MTextField @bind-Value="User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+        <AutoHeight Overflow AutoClass="mt-6">
+            <HeaderContent>
+                <div class="d-flex">
+                    <div class="mx-auto text-center">
+                        <DefaultUploadImage @bind-Value="User.Avatar" WhenFileChangeUpload />
+                        <PlaceholderTextFiled @bind-Value="User.DisplayName" Placeholder="@T("Give him a nickname!")" />
+                    </div>
                 </div>
-            </div>
-            <div class="mt-6 flex-height-auto overflow-y">
+            </HeaderContent>
+            <AutoHeightContent>
                 <div class="font-14-bold">@T("Basic Information")</div>
                 <div Class="mt-4">
                     <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" />
@@ -35,7 +37,7 @@
                         <DefaultTextField Readonly Value="UserDetail.Account" Label="@T("Account")" />
                     </MCol>
                     <MCol>
-                       <CopyPassword @bind-Value="User.Password" />
+                        <CopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
                 <div class="mt-6 font-14-bold">@T("Detail Information")</div>
@@ -55,16 +57,17 @@
                         <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                     </MCol>
                 </MRow>
-
                 <Authorization Avatars=UserDetail.ThirdPartyIdpAvatars />
                 <Record Creator="@UserDetail.Creator" CreationTime="@UserDetail.CreationTime" Modifier="@UserDetail.Modifier" ModificationTime="@UserDetail.ModificationTime" />
-            </div>
-            <div class="d-flex mt-6">
-                <MSwitch @bind-Value="User.Enabled" Inset Class="label" Label="@(User.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete User")</MButton>
-                <MButton Color="primary" Class="small-button" OnClick="async() => await UpdateUserAsync(context)">@T("Save")</MButton>
-            </div>
-        </div>
+            </AutoHeightContent>
+            <FooterContent>
+                 <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="User.Enabled" />
+                    <MSpacer></MSpacer>
+                    <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete User")</MButton>
+                    <MButton Color="primary" Class="small-button" OnClick="async() => await UpdateUserAsync(context)">@T("Save")</MButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

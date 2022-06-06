@@ -19,9 +19,9 @@ public partial class UserAuthorizeDialog
 
     public UpdateUserAuthorizationDto Authorization { get; set; } = new();
 
-    public UserDetailDto User { get; set; } = new();
-
     private UserService UserService => AuthCaller.UserService;
+
+    public bool Preview { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -39,8 +39,8 @@ public partial class UserAuthorizeDialog
     {
         if (Visible)
         {
-            User = await UserService.GetDetailAsync(UserId);
-            Authorization = new(User.Id, User.RoleIds, User.Permissions);
+            var user = await UserService.GetDetailAsync(UserId);
+            Authorization = new(user.Id, user.RoleIds, user.Permissions);
         }
     }
 
@@ -55,6 +55,8 @@ public partial class UserAuthorizeDialog
         Loading = true;
         await UserService.UpdateAuthorizationAsync(Authorization);
         OpenSuccessMessage(T("Successfully set user permissions"));
+        await UpdateVisible(false);
+        await OnSubmitSuccess.InvokeAsync();
         Loading = false;
     }
 }

@@ -22,8 +22,6 @@ public partial class AddStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
-    private DefaultUploadImage? DefaultUploadImageRef { get; set; }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -55,7 +53,6 @@ public partial class AddStaffDialog
         if (success)
         {
             Loading = true;
-            if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
             await StaffService.AddAsync(Staff);
             OpenSuccessMessage(T("Add staff success"));
             await UpdateVisible(false);
