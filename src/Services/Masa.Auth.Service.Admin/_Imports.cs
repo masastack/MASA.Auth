@@ -78,7 +78,6 @@ global using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
 global using Masa.Utils.Caching.Redis.DependencyInjection;
 global using Masa.Utils.Data.Elasticsearch;
 global using Masa.Utils.Exceptions.Extensions;
-global using Masa.Utils.Extensions.Expressions;
 global using Masa.Utils.Ldap.Novell;
 global using Masa.Utils.Ldap.Novell.Extensions;
 global using Masa.Utils.Security.Cryptography;

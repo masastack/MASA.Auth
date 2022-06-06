@@ -18,7 +18,7 @@
 		<PackageReference Include="Masa.Blazor" Version="0.4.0" />
 		<PackageReference Include="Masa.Stack.Components" Version="0.0.15" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.3" />
-		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.4.0-rc1" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
