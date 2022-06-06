@@ -5,7 +5,7 @@
     <AutoHeight>
         <HeaderContent>
             <div class="d-flex mb-6">
-                <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
+                <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="emphasis2--text">
                     <PrependInnerContent>
                         <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
                     </PrependInnerContent>
@@ -21,7 +21,7 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="text-btn">@header.Text</span>
+                    <span class="font-14-medium">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)

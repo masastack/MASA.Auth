@@ -41,3 +41,4 @@ global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
 global using Masa.Stack.Components;
+global using Microsoft.AspNetCore.Components.Rendering;

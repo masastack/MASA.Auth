@@ -1,10 +1,10 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiResource")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiResource")">
     <MForm Model=ApiResource EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="mt-6 flex-height-auto overflow-y">
-                <div class="font-14-bold">@T("Basic Information")</div>
+        <AutoHeight>
+        <AutoHeightContent>
+            <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
                         <DefaultTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
@@ -33,12 +33,14 @@
                         <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Class="mt-4" />
                     </div>
                 </div>
-            </div>
+        </AutoHeightContent>
+        <FooterContent>
             <div class="d-flex mt-6">
-                <MSwitch @bind-Value="ApiResource.Enabled" Inset Class="label" Label="@(ApiResource.Enabled ? T("Enable"):T("Disabled"))" />
+                <EnableSwitch @bind-Value="ApiResource.Enabled" />
                 <MSpacer></MSpacer>
-                <MButton OnClick="async () => await UpdatetApiResourceAsync(context)" Color="primary" Class="small-butto">@T("Submit")</MButton>
+                <DefaultButton Medium OnClick="async () => await UpdatetApiResourceAsync(context)">@T("Submit")</DefaultButton>
             </div>
-        </div>
+        </FooterContent>
+    </AutoHeight>      
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

@@ -1,8 +1,27 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Custom Login")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Custom Login")">
     <MForm Model=CustomLogin EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
+        <AutoHeight Overflow AutoClass="mt-6">
+            <AutoHeightContent>
+                              
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                <EnableSwitch @bind-Value="CustomLogin.Enabled" Inset Class="label" Label="@(CustomLogin.Enabled ? T("Enable"):T("Disabled"))" />
+                <MSpacer></MSpacer>
+                @if (Tab != CustomLoginTab.BasicInformation)
+                {
+                    <DefaultButton Medium OnClick="AddConfig">
+                        <MIcon Size=18>@IconConstants.Add</MIcon>
+                        <span class="ml-2">@T("Add")</span>
+                    </DefaultButton>
+                }
+                <DefaultButton Medium OnClick="async () => await AddCustomLoginAsync(context)">@T("Submit")</DefaultButton>
+            </div>
+            </FooterContent>
+        </AutoHeight>
+       @* <div class="sheetDialogPadding full-height flex-column">
             <div class="d-flex">
                 <div class="mx-auto">
                     <MButtonGroup Dense Mandatory Borderless @bind-Value="Tab" Class="rounded-lg elevation-tab" Style="margin-left:10px">
@@ -63,6 +82,6 @@
                 }
                 <MButton OnClick="async () => await AddCustomLoginAsync(context)" Color="primary" Class="small-button ml-6">@T("Submit")</MButton>
             </div>
-        </div>
+        </div>*@
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

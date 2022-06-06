@@ -33,7 +33,7 @@ namespace Masa.Auth.Service.Admin.Services
         private async Task AddExternalAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
         {
             dto.Enabled = true;
-            dto.Password = "";
+            dto.Password = "123";
             if (string.IsNullOrEmpty(dto.Avatar)) dto.Avatar = "";
             if (dto.Gender == default) dto.Gender = GenderTypes.Male;
 

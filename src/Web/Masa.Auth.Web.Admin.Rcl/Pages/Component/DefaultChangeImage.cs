@@ -35,7 +35,7 @@ public class DefaultChangeImage : DefaultUploadImage
         __builder.AddAttribute(3, "Size", (StringNumber)18);
         __builder.AddAttribute(4, "ChildContent", (RenderFragment)delegate (RenderTreeBuilder __builder2) {
             __builder2.AddContent(5, "mdi-autorenew");
-        });//need change to IconConstants.Refresh
+        });//Todo:need change to IconConstants.Refresh
         __builder.CloseComponent();
 
         __builder.OpenElement(6, "span");

@@ -27,7 +27,7 @@ public class SubjectService : RestServiceBase
         //role
         var roleQuery = new RoleSelectQuery(filter);
         await eventBus.PublishAsync(teamQuery);
-        var roles = teamQuery.Result.Select(team => new SubjectDto(team.Id, team.Name, team.Name, team.Avatar, "", "", BusinessTypes.Team));
+        var roles = roleQuery.Result.Select(role => new SubjectDto(role.Id, role.Name, role.Name, "", "", "", BusinessTypes.Role));
 
         result.AddRange(users);
         result.AddRange(departments);
