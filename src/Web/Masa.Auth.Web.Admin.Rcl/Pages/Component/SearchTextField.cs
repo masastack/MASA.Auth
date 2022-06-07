@@ -22,7 +22,7 @@ public class SearchTextField : MTextField<string>
             builder.AddAttribute(1, "Size", (StringNumber)16);
             builder.AddAttribute(2, "Class", "mr-2 emphasis2--text");
             builder.AddAttribute(3, "ChildContent", (RenderFragment)delegate (RenderTreeBuilder builder2) {
-                builder2.AddContent(4, "mdi-magnify");//Todo: need change to IconConstants.Search
+                builder2.AddContent(4, IconConstants.Search);
             });
             builder.CloseComponent();
         };

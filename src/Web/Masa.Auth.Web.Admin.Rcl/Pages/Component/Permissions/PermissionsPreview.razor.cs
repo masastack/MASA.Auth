@@ -3,7 +3,7 @@
 
 using StackApp = Masa.Stack.Components.Models.App;
 
-namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
+namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
 public partial class PermissionsPreview
 {

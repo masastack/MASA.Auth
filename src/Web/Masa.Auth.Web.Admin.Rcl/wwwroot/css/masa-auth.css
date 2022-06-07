@@ -986,26 +986,26 @@ tr:hover {
     border-radius: 8px;
 }
 
-.default .m-item-group.theme--light.m-btn-toggle.m-btn-toggle--borderless.m-btn-toggle--dense.labeled-radio-group {
+.defaultTab .m-item-group.theme--light.m-btn-toggle.m-btn-toggle--borderless.m-btn-toggle--dense.labeled-radio-group {
     position: absolute;
     z-index: 22;
 }
 
-.default .m-window.m-item-group.full-width.mx-1{
-    height:100%;
+.defaultTab .m-window.m-item-group.full-width.mx-1 {
+    height: 100%;
 }
 
-.auth .m-sheet.m-stepper:not(.m-sheet--outlined) {
+.masa .m-sheet.m-stepper:not(.m-sheet--outlined) {
     box-shadow: none !important;
     height: 100% !important;
     width: 100% !important;
 }
 
-.auth form {
+.masa form {
     height: 100% !important;
     width: 100% !important;
 }
 
-.auth .global-nav .global-nav-content__main{
-    height:auto !important;
+.masa .global-nav .global-nav-content__main {
+    height: auto !important;
 }
