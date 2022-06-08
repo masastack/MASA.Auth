@@ -127,13 +127,6 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UserValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
-    {
-        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
-        validateByAccountCommand.Result = user != null;
-    }
-
-    [EventHandler]
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand command)
     {
         var userDto = command.User;
@@ -144,6 +137,13 @@ public class CommandHandler
         user.AddRoles(userDto.Roles.ToArray());
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task UserValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
+    {
+        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
+        validateByAccountCommand.Result = user != null;
     }
     #endregion
 
