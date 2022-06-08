@@ -41,7 +41,6 @@ namespace Masa.Auth.Service.Admin.Services
                 else dto.Avatar = DefaultUserAttributes.FemaleAvatar;
             }
             
-
             await eventBus.PublishAsync(new AddUserCommand(dto));
         }
 
