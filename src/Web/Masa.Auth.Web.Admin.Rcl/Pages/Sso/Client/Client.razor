@@ -7,11 +7,7 @@
 
 <MCard>
     <MCardTitle>
-        <DefaultTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-            <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
-            </PrependInnerContent>
-        </DefaultTextField>
+        <SearchTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" />
         <MSpacer/>
         <MButton Color="primary" Class="ml-6 medium-button" OnClick="()=>{_addDialog=true;}">
             <MIcon Size=18>mdi-plus</MIcon>
@@ -21,7 +17,7 @@
     <MCardText>
         <MDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize" HideDefaultFooter Class="table-border-none">
             <HeaderColContent Context="header">
-                <span class="text-btn">@header.Text</span>
+                <span class="font-14-medium">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)

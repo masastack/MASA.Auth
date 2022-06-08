@@ -26,8 +26,6 @@ public partial class UpdateStaffDialog
 
     private MForm? Form { get; set; }
 
-    private DefaultUploadImage? DefaultUploadImageRef { get; set; }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -64,7 +62,6 @@ public partial class UpdateStaffDialog
         if (success)
         {
             Loading = true;
-            if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
             await StaffService.UpdateAsync(Staff);
             OpenSuccessMessage("Update staff success");
             await OnSubmitSuccess.InvokeAsync();

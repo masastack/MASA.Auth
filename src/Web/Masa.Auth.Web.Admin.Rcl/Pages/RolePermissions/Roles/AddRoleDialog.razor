@@ -1,30 +1,37 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
     <MForm Model="Role" EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="d-flex mb-6">
-                <div class="mx-auto">
-                    <DefaultTextField @bind-Value="Role.Name" Label="@T("Role.Name")" />
+        <AutoHeight Overflow>
+            <HeaderContent>
+                <div class="d-flex mb-6">
+                    <div class="mx-auto">
+                        <PlaceholderTextFiled @bind-Value="Role.Name" Placeholder="@T("Role.Name")" />
+                    </div>
                 </div>
-            </div>
-            <div>
-                <DefaultTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" />
-                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mt-4" />
-                <DefaultTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" />
-            </div>
-
-            <div class="mt-6 flex-height-auto overflow-y">
-                <PermissionsCheck RoleIds=Role.ChildrenRoles
+                <div>
+                    <DefaultTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" />
+                    <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mt-4" />
+                    <DefaultTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" />
+                </div>
+            </HeaderContent>
+            <AutoHeightContent>
+                <div class="global-nav mt-6" style="display: flex;height: auto">
+                    <PermissionsCheck RoleIds=Role.ChildrenRoles
                                   Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
                                   ValueChanged="PermissionsChanged" />
-            </div>
-
-            <div class="d-flex mt-6">
-                <MSwitch @bind-Value="Role.Enabled" Inset Class="label" Label="@(Role.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                <MButton Color="primary" Class="small-button" OnClick="async () => await AddRoleAsync(context)">@T("Save")</MButton>
-            </div>
-        </div>
+                </div>
+            </AutoHeightContent>
+            <FooterContent>
+                 <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="Role.Enabled" />
+                    <MSpacer></MSpacer>
+                    <DefaultButton Medium Outlined OnClick="() => Preview = true">@T("Preview")</DefaultButton>
+                    <DefaultButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context)">@T("Save")</DefaultButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>
+
+<PermissionsPreview @bind-Show="Preview" Value="Role.Permissions.Select(id => id.ToString()).ToList()" />

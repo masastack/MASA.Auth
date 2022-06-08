@@ -1,9 +1,9 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add UserClaim")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add UserClaim")">
     <MForm Model=UserClaim EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="mt-6 flex-height-auto overflow-y">
+        <AutoHeight Overflow>
+            <AutoHeightContent>
                 <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
@@ -12,14 +12,16 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextarea @bind-Value="UserClaim.Description" Label="@T("Description")" />
+                        <MTextarea @bind-Value="UserClaim.Description" Outlined Label="@T("Description")" />
                     </MCol>
                 </MRow>
-            </div>
-            <div class="d-flex mt-6">
-                <MSpacer></MSpacer>
-                <MButton OnClick="async () => await AddUserClaimAsync(context)" Color="primary" Class="small-button">@T("Submit")</MButton>
-            </div>
-        </div>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <MSpacer></MSpacer>
+                    <DefaultButton Medium OnClick="async () => await AddUserClaimAsync(context)">@T("Submit")</DefaultButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

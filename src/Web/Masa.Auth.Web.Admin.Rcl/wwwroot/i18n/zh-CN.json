@@ -136,7 +136,6 @@
   "ThirdPartyIdp": "第三方平台",
   "ThirdPartyIdp.Name": "名称",
   "ThirdPartyIdp.DisplayName": "显示名称",
-  "ClientId": "客户端ID",
   "ClientSecret": "客户端密钥",
   "AuthenticationTypes": "平台类型",
   "VerifyFile": "校验文件",
@@ -162,6 +161,7 @@
   "Ldap Account Synchroniz Success": "域账户同步成功",
 
   "Position": "职位",
+  "Position.Name": "名称",
 
   "Team": "项目团队",
   "Team Name": "团队名称",
@@ -191,6 +191,7 @@
   "Inherited Role": "继承角色",
   "Superior Role": "上级角色",
   "RoleOwner": "角色使用者",
+  "BasicInformation": "基础信息",
   "Limit the number of bindings": "绑定限制次数",
   "The number of bindings cannot be less than ": "绑定限制次数不能小于",
   "Failed to query roleList data:": "查询角色列表数据失败:",

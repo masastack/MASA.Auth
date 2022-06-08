@@ -1,63 +1,64 @@
 ﻿@page "/thirdPartyIdp"
 @inherits AdminCompontentBase
 
-<MCard Class="pa-6">
-    <div class="d-flex mb-6">
-        <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-            <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
-            </PrependInnerContent>
-        </DefaultTextField>
-        <MSpacer />
-        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => OpenAddThirdPartyIdpDialog()">
-            <MIcon Size=18>mdi-plus</MIcon>
-            <span class="ml-2">@T("Add")</span>
-        </MButton>
-    </div>
-    <MDataTable Headers="Headers" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
-        <HeaderColContent Context="header">
-            <span class="text-btn">@header.Text</span>
-        </HeaderColContent>
-        <ItemColContent>
-            @switch (context.Header.Value)
-            {
-                case nameof(ThirdPartyIdpDto.Icon):
-                    <MAvatar Size="20">
-                        <img src="@context.Item.Icon" />
-                    </MAvatar>
-                    break;
-                case nameof(ThirdPartyIdpDto.Name):
-                    <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
-                        <span class="text-body3 default--text">@context.Item.Name</span>
-                    </div>
-                    break;
-                case (nameof(ThirdPartyIdpDto.DisplayName)):
-                    <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
-                    break;
-                case nameof(ThirdPartyIdpDto.VerifyType):
-                    <span class="font-16 default-regular--text">@T(context.Item.VerifyType.ToString())</span>
-                    break;
-                case nameof(ThirdPartyIdpDto.CreationTime):
-                    <span class="font-16 default-regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                    break;
-                case nameof(ThirdPartyIdpDto.Url):
-                    <span class="font-16 default-regular--text">@context.Item.Url</span>
-                    break;
-                case "Action":
-                    <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
-                    break;
-                default:
-                    <span class="text-body3">@context.Value</span>
-                    break;
-            }
-        </ItemColContent>
+<DefaultCard>
+    <AutoHeight>
+        <HeaderContent>
+            <div class="d-flex mb-6">
+                <SearchTextField @bind-Value="Search" />
+                <MSpacer />
+                <DefaultButton Small OnClick="() => OpenAddThirdPartyIdpDialog()">
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <span class="ml-2">@T("Add")</span>
+                </DefaultButton>
+            </div>
+        </HeaderContent>
+        <AutoHeightContent>
+            <DefaultDataTable Headers="Headers" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize">
+                <HeaderColContent Context="header">
+                    <span class="font-14-medium">@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(ThirdPartyIdpDto.Icon):
+                            <MAvatar Size="20">
+                                <img src="@context.Item.Icon" />
+                            </MAvatar>
+                            break;
+                        case nameof(ThirdPartyIdpDto.Name):
+                            <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
+                                <span class="text-body3 default--text">@context.Item.Name</span>
+                            </div>
+                            break;
+                        case (nameof(ThirdPartyIdpDto.DisplayName)):
+                            <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
+                            break;
+                        case nameof(ThirdPartyIdpDto.VerifyType):
+                            <span class="font-16 default-regular--text">@T(context.Item.VerifyType.ToString())</span>
+                            break;
+                        case nameof(ThirdPartyIdpDto.CreationTime):
+                            <span class="font-16 default-regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            break;
+                        case nameof(ThirdPartyIdpDto.Url):
+                            <span class="font-16 default-regular--text">@context.Item.Url</span>
+                            break;
+                        case "Action":
+                            <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
+                            break;
+                        default:
+                            <span class="text-body3">@context.Value</span>
+                            break;
+                    }
+                </ItemColContent>
+            </DefaultDataTable>
+        </AutoHeightContent>
         <FooterContent>
-            <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
-    </MDataTable>
-</MCard>
-
+    </AutoHeight>
+</DefaultCard>
 
 <AddThirdPartyIdpDialog @bind-Visible="AddThirdPartyIdpDialogVisible" OnSubmitSuccess=GetThirdPartyIdpsAsync />
 <UpdateThirdPartyIdpDialog ThirdPartyIdpId=CurrentThirdPartyIdpId @bind-Visible="UpdateThirdPartyIdpDialogVisible" OnSubmitSuccess=GetThirdPartyIdpsAsync />

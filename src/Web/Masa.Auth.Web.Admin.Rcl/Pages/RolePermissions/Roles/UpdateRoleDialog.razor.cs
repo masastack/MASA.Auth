@@ -27,7 +27,9 @@ public partial class UpdateRoleDialog
 
     private MForm? Form { get; set; }
 
-    private StringNumber Tab { get; set; } = UpdateRoleTab.BasicInformation;
+    public bool Preview { get; set; }
+
+    private UpdateRoleTabs Tab { get; set; } = UpdateRoleTabs.BasicInformation;
 
     private async Task UpdateVisible(bool visible)
     {
@@ -49,7 +51,7 @@ public partial class UpdateRoleDialog
     {
         if (Visible)
         {
-            Tab = UpdateRoleTab.BasicInformation;
+            Tab = UpdateRoleTabs.BasicInformation;
             await GetRoleDetailAsync();
         }
     }

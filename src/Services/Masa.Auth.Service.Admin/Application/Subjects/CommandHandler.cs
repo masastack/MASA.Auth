@@ -132,6 +132,19 @@ public class CommandHandler
         var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
         validateByAccountCommand.Result = user != null;
     }
+
+    [EventHandler]
+    public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.GetDetailAsync(userDto.Id);
+        if (user == null)
+            throw new UserFriendlyException("The current user does not exist");
+
+        user.AddRoles(userDto.Roles.ToArray());
+        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        await _userRepository.UpdateAsync(user);
+    }
     #endregion
 
     #region Staff

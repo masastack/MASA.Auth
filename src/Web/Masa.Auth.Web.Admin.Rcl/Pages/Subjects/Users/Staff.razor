@@ -2,28 +2,25 @@
 
 <AutoHeight>
     <HeaderContent>
-        <div style="margin-left:40%;" class="d-flex">
-            <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-                <PrependInnerContent>
-                    <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
-                </PrependInnerContent>
-            </MTextField>
-            <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
+        <div class="d-flex">
+            <MSpacer />
+            <SearchTextField @bind-Value="Search" />
+            <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;height:40px;">
                 <div class="ma-auto">
                     <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
-                    <span class="font-12-medium default-emphasis-secondary--text">@T("Sync")</span>
+                    <span class="font-12-medium emphasis2--text">@T("Sync")</span>
                 </div>
             </div>
-            <MButton Color="primary" Class="ml-4 medium-button" OnClick=OpenAddStaffDialog>
-                <MIcon Size=18>mdi-plus</MIcon>
+            <DefaultButton Small Class="ml-4" OnClick=OpenAddStaffDialog>
+                <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2">@T("Add")</span>
-            </MButton>
+            </DefaultButton>
         </div>
     </HeaderContent>
     <AutoHeightContent>
-        <DefaultDataTable Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
+        <DefaultDataTable Class="mt-6" Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
-                <span class="text-btn">@header.Text</span>
+                <span class="font-14-medium">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
@@ -62,7 +59,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 
