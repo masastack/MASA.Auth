@@ -8,7 +8,7 @@ public class TeamService : ServiceBase
     public TeamService(IServiceCollection services) : base(services, "api/team")
     {
         MapGet(GetAsync);
-        MapGet(GetDetailForExternalAsync, "detail");
+        MapGet(GetDetailForExternalAsync);
         MapGet(ListAsync);
         MapGet(SelectAsync);
         MapPost(CreateAsync);

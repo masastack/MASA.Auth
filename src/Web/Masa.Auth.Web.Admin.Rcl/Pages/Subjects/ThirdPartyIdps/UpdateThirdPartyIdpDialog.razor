@@ -1,14 +1,16 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ThirdPartyIdp")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ThirdPartyIdp")">
     <MForm Model=ThirdPartyIdp EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="d-flex">
-                <div class="mx-auto text-center" style="width:212px;">
-                    <UploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="120" WhenFileChangeUpload />
+        <AutoHeight Overflow Class="mt-6">
+            <HeaderContent>
+                <div class="d-flex">
+                    <div class="mx-auto text-center" style="width:212px;">
+                        <UploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="120" WhenFileChangeUpload />
+                    </div>
                 </div>
-            </div>
-            <div class="mt-6 flex-height-auto overflow-y">
+            </HeaderContent>
+            <AutoHeightContent>
                 <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
@@ -37,15 +39,17 @@
                 <MRow Class="mt-1">
                     <MCol>
                         <span>@T(nameof(ThirdPartyIdp.VerifyFile))</span>
-                        <Upload @bind-Value="ThirdPartyIdp.VerifyFile" />
+                        <MFileInput TValue="IBrowserFile" />@*@bind-Value="ThirdPartyIdp.VerifyFile" *@
                     </MCol>
                 </MRow>
-            </div>
-            <div class="d-flex mt-6">
-                <MSwitch @bind-Value="ThirdPartyIdp.Enabled" Inset Class="label" Label="@(ThirdPartyIdp.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                <MButton OnClick="async () => await UpdateThirdPartyIdpAsync(context)" Color="primary" Class="small-button">@T("Submit")</MButton>
-            </div>
-        </div>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="ThirdPartyIdp.Enabled" />
+                    <MSpacer></MSpacer>
+                    <DefaultButton Medium OnClick="async () => await UpdateThirdPartyIdpAsync(context)">@T("Submit")</DefaultButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

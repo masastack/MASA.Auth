@@ -3,7 +3,7 @@
 @inject GlobalConfig GlobalConfig
 @implements IDisposable
 
-<MApp Class="masa-stack-components">
+<MApp Class="masa-stack-components masa">
     <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
         <Favorite />
         <MSpacer />
@@ -15,7 +15,7 @@
 
     <Navigation />
 
-    <MMain Class="fill-lighten-1" Style="padding-top:60px">
+    <MMain Class="emphasis2--text" Style="padding-top:60px">
         <MErrorHandler OnErrorHandleAsync="OnError">
             <div class="pa-6 max-width full-height">
                 @Body

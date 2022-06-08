@@ -22,17 +22,6 @@ public partial class AddStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
-    private OssService OssService => AuthCaller.OssService;
-
-    private List<GetDefaultImagesDto> DefaultImages { get; set; } = new();
-
-    private DefaultUploadImage? DefaultUploadImageRef { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        DefaultImages = await OssService.GetDefaultImagesAsync();
-    }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -64,24 +53,11 @@ public partial class AddStaffDialog
         if (success)
         {
             Loading = true;
-            if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
             await StaffService.AddAsync(Staff);
             OpenSuccessMessage(T("Add staff success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
-        }
-    }
-
-    private void ChangeAvayar()
-    {
-        Random random = new Random();
-        var images = DefaultImages.Where(image => image.Gender == Staff.User.Gender).ToList();
-        if (images.Count > 0)
-        {
-            var avatar = images[random.Next(0, images.Count)].Url;
-            if (avatar == Staff.User.Avatar && images.Count > 1) ChangeAvayar();
-            else Staff.User.Avatar = avatar;
         }
     }
 }

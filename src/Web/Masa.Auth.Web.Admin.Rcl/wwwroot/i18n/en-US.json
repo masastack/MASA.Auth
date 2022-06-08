@@ -4,5 +4,7 @@
   "$DateFormat": "MM/dd/yyyy",
 
   "Role.Name": "Name",
-  "ThirdPartyIdp": "ThirdParty identity provider"
+  "ThirdPartyIdp": "ThirdParty identity provider",
+  "BasicInformation": "Basic Information",
+  "Position.Name": "Name",
 }

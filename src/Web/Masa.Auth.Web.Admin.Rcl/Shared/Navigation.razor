@@ -21,7 +21,7 @@
             if (nav.Children is null)
             {
                 <MBorder Value=false Offset Width=4 Class="rounded-r-1" Border="Borders.Right">
-                    <MListItem Ripple=false Class="mb-4" ActiveClass="fill-lighten-1" Href="@nav.Href">
+                    <MListItem Ripple=false Class="mb-4" ActiveClass="emphasis2--text" Href="@nav.Href">
                         <ItemContent>
                             @if (context.Active)
                             {
@@ -49,14 +49,14 @@
                         @foreach (var navChild in nav.Children)
                         {
                             <MBorder Value=false Offset Width=4 Class="rounded-r-1" Border="Borders.Right">
-                                <MListItem Ripple=false ActiveClass="fill-lighten-1" Link Href="@navChild.Href">
+                                <MListItem Ripple=false ActiveClass="emphasis2--text" Link Href="@navChild.Href">
                                     <ItemContent>
                                         @if (context.Active)
                                         {
                                             NavHelper.RefreshRender(navChild);
                                         }
                                         <MListItemContent>
-                                            <div class="text-truncate white-space:nowrap @(context.Active?"font-14-bold":"text-btn default-regular--text")">@T(navChild.Title)</div>
+                                            <div class="text-truncate white-space:nowrap @(context.Active?"font-14-bold":"font-14-medium default-regular--text")">@T(navChild.Title)</div>
                                         </MListItemContent>
                                     </ItemContent>
                                 </MListItem>

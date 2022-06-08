@@ -1,61 +1,63 @@
 ﻿@page "/sso/identityResource"
 @inherits AdminCompontentBase
 
-<MCard Class="pa-6">
-    <div class="d-flex mb-6">
-        <DefaultTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-            <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
-            </PrependInnerContent>
-        </DefaultTextField>
-        <MSpacer />
-        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() => AddStandardIdentityResourcesAsync()">
-            <MIcon Size=18>mdi-cog-outline</MIcon>
-            <span class="ml-2">@T("Create standard identityResource")</span>
-        </MButton>
-        <MButton Color="primary" Class="ml-6 medium-button" OnClick="() =>  OpenAddRoleDialog()">
-            <MIcon Size=18>mdi-plus</MIcon>
-            <span class="ml-2">@T("Add")</span>
-        </MButton>
-    </div>
-    <MDataTable Headers="Headers" Items="IdentityResources" TItem="IdentityResourceDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
-        <HeaderColContent Context="header">
-            <span class="text-btn">@header.Text</span>
-        </HeaderColContent>
-        <ItemColContent>
-            @switch (context.Header.Value)
-            {
-                case nameof(IdentityResourceDto.Name):
-                    <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                        <span class="text-body3 default--text">@context.Item.Name</span>
-                    </div>
-                    break;
-                case (nameof(IdentityResourceDto.DisplayName)):
-                    <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
-                    break;
-                case nameof(IdentityResourceDto.Required):
-                    <span class="font-16 default-regular--text">@(context.Item.Required?T("Yes"):T("No"))</span>
-                    break;
-                case (nameof(IdentityResourceDto.Description)):
-                    <span class="font-16 default-regular--text">@context.Item.Description</span>
-                    break;
-                case nameof(IdentityResourceDto.Enabled):
-                    <EnableChip Value="@context.Item.Enabled" />
-                    break;
-                case "Action":
-                    <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">mdi-delete</MIcon>
-                    break;
-                default:
-                    <span class="text-body3">@context.Value</span>
-                    break;
-            }
-        </ItemColContent>
+<DefaultCard>
+    <AutoHeight>
+        <HeaderContent>
+            <div class="d-flex mb-6">
+                <SearchTextField @bind-Value="Search" />
+                <MSpacer />
+                <DefaultButton Small OnClick="() => AddStandardIdentityResourcesAsync()">
+                    <MIcon Size=18>mdi-cog-outline</MIcon>
+                    <span class="ml-2">@T("Create standard identityResource")</span>
+                </DefaultButton>
+                <DefaultButton Small Class="ml-6" OnClick="() =>  OpenAddRoleDialog()">
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <span class="ml-2">@T("Add")</span>
+                </DefaultButton>
+            </div>
+        </HeaderContent>
+        <AutoHeightContent>
+            <DefaultDataTable Headers="Headers" Items="IdentityResources" TItem="IdentityResourceDto" ItemsPerPage="PageSize">
+                <HeaderColContent Context="header">
+                    <span class="font-14-medium">@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(IdentityResourceDto.Name):
+                            <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
+                                <span class="text-body3 default--text">@context.Item.Name</span>
+                            </div>
+                            break;
+                        case (nameof(IdentityResourceDto.DisplayName)):
+                            <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
+                            break;
+                        case nameof(IdentityResourceDto.Required):
+                            <span class="font-16 default-regular--text">@(context.Item.Required ? T("Yes") : T("No"))</span>
+                            break;
+                        case (nameof(IdentityResourceDto.Description)):
+                            <span class="font-16 default-regular--text">@context.Item.Description</span>
+                            break;
+                        case nameof(IdentityResourceDto.Enabled):
+                            <EnableChip Value="@context.Item.Enabled" />
+                            break;
+                        case "Action":
+                            <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">mdi-delete</MIcon>
+                            break;
+                        default:
+                            <span class="text-body3">@context.Value</span>
+                            break;
+                    }
+                </ItemColContent>
+            </DefaultDataTable>
+        </AutoHeightContent>
         <FooterContent>
-            <DefaultPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
-    </MDataTable>
-</MCard>
+    </AutoHeight>
+</DefaultCard>
 
 <AddIdentityResourceDialog @bind-Visible="AddIdentityResourceDialogVisible" OnSubmitSuccess=GetIdentityResourcesAsync />
 <UpdateIdentityResourceDialog @bind-Visible="UpdateIdentityResourceDialogVisible" IdentityResourceId=CurrentIdentityResourceId OnSubmitSuccess=GetIdentityResourcesAsync />

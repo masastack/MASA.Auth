@@ -1,39 +1,41 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
     <MForm Model=User EnableValidation @ref="Form">
-        <MStepper Value="Step" Class="sheetDialogPadding">
+        <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <div class="full-height flex-column">
-                        <div class="d-flex flex-height-auto">
+                    <AutoHeight AutoClass="d-flex">
+                        <AutoHeightContent>
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <DefaultUploadImage @bind-Value="User.Avatar" @ref="DefaultUploadImageRef" Class="mt-12" />
-                                <br />
-                                <div class="mt-3 hover-pointer font-16">
-                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3" @onclick="ChangeAvayar">@T("Another")</span>
+                                <div>
+                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" WhenFileChangeUpload Class="mt-12" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="d-flex">
-                            <MSpacer></MSpacer>
-                            <MButton Color="primary" Class="small-button" OnClick="()=>Step=2">@T("Next step")</MButton>
-                        </div>
-                    </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=2">@T("Next step")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <div class="full-height flex-column">
-                        <div class="d-flex">
-                            <div class="mx-auto text-center" style="width:212px;">
-                                <MAvatar Size=80>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                                </MAvatar>
-                                <MTextField @bind-Value="@User.DisplayName" Class="mx-auto mt-0" Style="width:220px;" Placeholder="@T("Give him a nickname!")" HideDetails="@("auto")" />
+                    <AutoHeight Overflow AutoClass="mt-6">
+                        <HeaderContent>
+                            <div class="d-flex">
+                                <div class="mx-auto text-center">
+                                    <MAvatar Size=80>
+                                        <img src="@User.Avatar" />
+                                    </MAvatar>
+                                    <PlaceholderTextFiled @bind-Value="@User.DisplayName" Placeholder="@T("Give him a nickname!")" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="mt-6 flex-height-auto overflow-y">
+                        </HeaderContent>
+                        <AutoHeightContent>
                             <div class="font-14-bold default-regular--text">@T("Basic Information")</div>
                             <DefaultTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" />
                             <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" />
@@ -56,31 +58,39 @@
                                 <DefaultTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" />
                                 <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                             }
-                        </div>
-                        <div class="d-flex mt-6">
-                            <MSpacer></MSpacer>
-                            <MButton Outlined Color="primary" Class="small-button" OnClick="()=>Step=1" Text>@T("Previous step")</MButton>
-                            <MButton Color="primary" Class="small-button ml-6" OnClick="()=>NextStep(context)">@T("Next step")</MButton>
-                        </div>
-                    </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex mt-6">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</DefaultButton>
+                                <DefaultButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="3">
-                    <div class="full-height flex-column">
-                        <div class="flex-height-auto overflow-y">
+                    <AutoHeight Overflow>
+                        <AutoHeightContent>
                             <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
-                            <PermissionsCheck RoleIds=User.Roles
-                                              Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
-                                              ValueChanged="PermissionsChanged" />
-                        </div>
-                        <div class="d-flex mt-6">
-                            <MSpacer></MSpacer>
-                            <MButton OnClick="()=>Step=2" Text>@T("Previous step")</MButton>
-                            <MButton Outlined Color="primary">@T("Preview")</MButton>
-                            <MButton OnClick="async () => await AddUserAsync(context)" Color="primary" Class="small-button ml-6" Text>@T("Submit")</MButton>
-                        </div>
-                    </div>
+                            <div class="global-nav" style="display: flex;height: auto">                               
+                                <PermissionsCheck RoleIds=User.Roles
+                                                  Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
+                                                  ValueChanged="PermissionsChanged" />
+                            </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex mt-6">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=2" Outlined>@T("Previous step")</DefaultButton>
+                                <DefaultButton Medium Outlined OnClick="()=> Preview=true" Class="ml-6">@T("Preview")</DefaultButton>
+                                <DefaultButton Medium OnClick="async () => await AddUserAsync(context)" Class="ml-6">@T("Submit")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
             </MStepperItems>
         </MStepper>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>
+
+<PermissionsPreview @bind-Show="Preview" Value="User.Permissions.Where(p => p.Effect is true).Select(p => p.PermissionId.ToString()).ToList()" />

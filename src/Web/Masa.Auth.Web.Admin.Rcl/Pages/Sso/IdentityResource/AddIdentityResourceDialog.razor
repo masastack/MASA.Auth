@@ -1,9 +1,9 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add IdentityResource")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add IdentityResource")">
     <MForm Model=IdentityResource EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="flex-height-auto overflow-y mt-6">
+        <AutoHeight Overflow>
+            <AutoHeightContent>
                 <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
@@ -27,12 +27,14 @@
                 </MRow>
                 <div class="mt-6 font-14-bold">@T("User Claims")</div>
                 <UserClaimSelect @bind-Value=IdentityResource.UserClaims Class="mt-4" Style="height:65%!important" />
-            </div>
-            <div class="d-flex mt-6">
-                <MSwitch @bind-Value="IdentityResource.Enabled" Inset Class="label" Label="@(IdentityResource.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                <MButton OnClick="async () => await AddIdentityResourceAsync(context)" Color="primary" Class="small-button ml-6">@T("Submit")</MButton>
-            </div>
-        </div>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="IdentityResource.Enabled" />
+                    <MSpacer></MSpacer>
+                    <DefaultButton Medium OnClick="async () => await AddIdentityResourceAsync(context)">@T("Submit")</DefaultButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>       
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

@@ -15,12 +15,12 @@
 }
 else
 {
-    <MButtonGroup Value="Value.ToString()" Class="rounded-lg elevation-tab" Style="margin-left:10px" Dense Mandatory Borderless>
+    <LabeledRadioGroup Value="Value.ToString()" Dense>
         @foreach (var (key, value) in KeyValues)
         {
-            <MButton OnClick="async() => await ValueChanged.InvokeAsync(value)" Value="@value.ToString()" Ripple=false Class="rounded-lg" MinWidth=70 Height=36>
+            <LabeledRadio MinWidth=70 Value="@value.ToString()" OnClick="async() => await ValueChanged.InvokeAsync(value)">
                 @T(key)
-            </MButton>
+            </LabeledRadio>
         }
-    </MButtonGroup>
+    </LabeledRadioGroup>
 }

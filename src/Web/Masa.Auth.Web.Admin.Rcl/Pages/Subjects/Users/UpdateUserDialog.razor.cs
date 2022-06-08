@@ -25,8 +25,6 @@ public partial class UpdateUserDialog
 
     private UserService UserService => AuthCaller.UserService;
 
-    private DefaultUploadImage? DefaultUploadImageRef { get; set; }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -63,7 +61,6 @@ public partial class UpdateUserDialog
         if (success)
         {
             Loading = true;
-            if (DefaultUploadImageRef is not null) await DefaultUploadImageRef.UploadAsync();
 
             await UserService.UpdateAsync(User);
             OpenSuccessMessage(T("Update user data success"));

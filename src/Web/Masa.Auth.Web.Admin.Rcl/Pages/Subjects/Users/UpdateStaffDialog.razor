@@ -1,19 +1,21 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Staff")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Staff")">
     <MForm Model="Staff" EnableValidation @ref="Form">
-        <div Class="flex-column sheetDialogPadding">
-            <div class="d-flex">
-                <div class="ml-auto mr-auto text-center" style="width:212px;">
-                    <DefaultUploadImage @bind-Value="Staff.User.Avatar" @ref="DefaultUploadImageRef" />                    
-                    <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+        <AutoHeight Overflow AutoClass="mt-6">
+            <HeaderContent>
+                <div class="d-flex">
+                    <div class="mx-auto text-center">
+                        <DefaultUploadImage @bind-Value="Staff.User.Avatar" WhenFileChangeUpload />
+                        <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    </div>
                 </div>
-            </div>
-            <div class="mt-6 flex-height-auto overflow-y">
+            </HeaderContent>
+            <AutoHeightContent>
                 <div class="font-14-bold">@T("Basic Information")</div>
-                <MRow Class="mt-4">
+                <div Class="mt-4">
                     <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" />
-                </MRow>
+                </div>
                 <MRow Class="mt-6">
                     <MCol>
                         <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
@@ -65,14 +67,15 @@
 
                 <Authorization Avatars=StaffDetail.User.ThirdPartyIdpAvatars />
                 <Record Creator="@StaffDetail.User.Creator" CreationTime="@StaffDetail.User.CreationTime" Modifier="@StaffDetail.User.Modifier" ModificationTime="@StaffDetail.User.ModificationTime" />
-            </div>
-
-            <div class="d-flex mt-6">
-                <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
-                <MSpacer></MSpacer>
-                <MButton Class="mr-6" Text Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</MButton>
-                <MButton Color="primary" Class="small-button" OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</MButton>
-            </div>
-        </div>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="Staff.Enabled" />
+                    <MSpacer></MSpacer>
+                    <DefaultButton Medium Class="mr-6" Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</DefaultButton>
+                    <DefaultButton Medium OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</DefaultButton>
+                </div>
+            </FooterContent>
+            </AutoHeight>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>
