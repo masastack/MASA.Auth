@@ -3,7 +3,8 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record TeamListQuery(string Name, Guid StaffId = default) : Query<List<TeamDto>>
+public record FindUserByAccountQuery(string Account) : Query<UserDetailDto>
 {
-    public override List<TeamDto> Result { get; set; } = new();
+    public override UserDetailDto Result { get; set; } = new();
 }
+

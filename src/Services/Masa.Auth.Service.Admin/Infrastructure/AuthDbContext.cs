@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using EFCoreSecondLevelCacheInterceptor;
-
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthDbContext : IsolationDbContext
@@ -15,8 +13,7 @@ public class AuthDbContext : IsolationDbContext
         => optionsBuilder
         .LogTo(Console.WriteLine, LogLevel.Information)
         .EnableSensitiveDataLogging()
-        .EnableDetailedErrors()
-        .AddInterceptors(Options.ServiceProvider.GetRequiredService<SecondLevelCacheInterceptor>());
+        .EnableDetailedErrors();
 
     protected override void OnModelCreatingExecuting(ModelBuilder builder)
     {

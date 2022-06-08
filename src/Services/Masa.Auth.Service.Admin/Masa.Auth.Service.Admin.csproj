@@ -8,14 +8,10 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="EasyCaching.Redis" Version="1.6.0" />
-		<PackageReference Include="EasyCaching.Serialization.MessagePack" Version="1.6.0" />
-		<PackageReference Include="EasyCaching.Serialization.SystemTextJson" Version="1.6.0" />
-		<PackageReference Include="EFCoreSecondLevelCacheInterceptor" Version="3.5.0" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.4.0" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.4.0" />

@@ -14,7 +14,6 @@ public class TeamService : ServiceBase
 
     public async Task<List<TeamDto>> ListAsync(string name = "")
     {
-
         return await GetAsync<List<TeamDto>>($"List?name={name}");
     }
 

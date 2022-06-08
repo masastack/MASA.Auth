@@ -22,7 +22,7 @@
                         <div>@T("Basic Information")</div>
                         <DefaultTextField @bind-Value="Role.Name" Class="my-4" Label="@T("Role.Name")" />
                         <DefaultTextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Label="@T("Limit the number of bindings")" />
-                        <RoleSelect Value="RoleDetail.ParentRoles" Class="mt-4" Readonly Lable="@T("Superior Role")" />
+                        <RoleSelect Value="RoleDetail.ParentRoles" Class="mt-4" Readonly Label="@T("Superior Role")" />
                         <RoleOwner RoleId=RoleId Class="mt-4" />
                         <DefaultTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" />
                         <div class="mt-6">@T("History record")</div>

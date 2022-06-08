@@ -5,5 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
 public record AddRoleCommand(AddRoleDto Role) : Command
 {
-
+    public Guid RoleId { get; set; }
 }
