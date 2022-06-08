@@ -3,7 +3,7 @@
 <MContainer Style="overflow-y: auto;" Class="full-height">
     <MRow>
         <MCol Md=12 Class="text-center">
-            <UploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload/>
+            <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload/>
         </MCol>
         <MCol Md=6>
             <DefaultTextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
