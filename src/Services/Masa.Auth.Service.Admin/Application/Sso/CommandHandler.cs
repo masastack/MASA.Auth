@@ -12,8 +12,9 @@ public class CommandHandler
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
     readonly IEventBus _eventBus;
+    readonly OidcDbContext _oidcDbContext;
 
-    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, IEventBus eventBus)
+    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, IEventBus eventBus, OidcDbContext oidcDbContext)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -22,7 +23,10 @@ public class CommandHandler
         _userClaimRepository = userClaimRepository;
         _customLoginRepository = customLoginRepository;
         _eventBus = eventBus;
+        _oidcDbContext = oidcDbContext;
     }
+
+
 
     #region Client
     [EventHandler]
@@ -69,7 +73,7 @@ public class CommandHandler
         {
             HashClientSharedSecret(secret);
         });
-        var client = await _clientRepository.GetByIdAsync(id);
+        var client = await _clientRepository.GetDetailAsync(id) ?? throw new UserFriendlyException("Get client data failed!");
         //Contrary to DDD
         updateClientCommand.ClientDetailDto.Adapt(client);
 
@@ -90,7 +94,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
-        var client = (await _clientRepository.FindAsync(removeClientCommand.ClientId))
+        var client = (await _oidcDbContext.Set<Client>().FindAsync(removeClientCommand.ClientId))
             ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
         await _clientRepository.RemoveAsync(client);
     }
@@ -127,13 +131,13 @@ public class CommandHandler
             var existData = await _identityResourceRepository.FindAsync(idrs => idrs.Name == identityResource.Name);
             if (existData is not null)
             {
-                existData.Update(identityResource.DisplayName, identityResource.Description, true, identityResource.Required, identityResource.Emphasize, identityResource.ShowInDiscoveryDocument, true);
+                existData.Update(identityResource.DisplayName, identityResource.Description ?? "", true, identityResource.Required, identityResource.Emphasize, identityResource.ShowInDiscoveryDocument, true);
                 existData.BindUserClaims(userClaimIds);
                 await _identityResourceRepository.UpdateAsync(existData);
             }
             else
             {
-                var idrs = new IdentityResource(identityResource.Name, identityResource.DisplayName, identityResource.Description, true, identityResource.Required, identityResource.Enabled, identityResource.ShowInDiscoveryDocument, true);
+                var idrs = new IdentityResource(identityResource.Name, identityResource.DisplayName, identityResource.Description ?? "", true, identityResource.Required, identityResource.Enabled, identityResource.ShowInDiscoveryDocument, true);
                 idrs.BindUserClaims(userClaimIds);
                 await _identityResourceRepository.AddAsync(idrs);
             }
@@ -267,8 +271,7 @@ public class CommandHandler
         if (exist)
             throw new UserFriendlyException($"UserClaim with name {userClaimDto.Name} already exists");
 
-        var isStandard = StandardUserClaims.Claims.ContainsKey(userClaimDto.Name);
-        var userClaim = new UserClaim(userClaimDto.Name, userClaimDto.Description, isStandard ? UserClaimType.Standard : UserClaimType.Customize);
+        var userClaim = new UserClaim(userClaimDto.Name, userClaimDto.Description);
 
         await _userClaimRepository.AddAsync(userClaim);
     }
@@ -282,9 +285,9 @@ public class CommandHandler
             var exist = await _userClaimRepository.GetCountAsync(userClaim => userClaim.Name == claim.Key) > 0;
             if (exist) continue;
 
-            userClaims.Add(new UserClaim(claim.Key, claim.Value, UserClaimType.Standard));
+            userClaims.Add(new UserClaim(claim.Key, claim.Value));
         }
-        await _userClaimRepository.AddRangeAsync(userClaims);
+        await _oidcDbContext.AddRangeAsync(userClaims);
     }
 
     [EventHandler]
@@ -295,7 +298,7 @@ public class CommandHandler
         if (userClaim is null)
             throw new UserFriendlyException("The current userClaim does not exist");
 
-        userClaim.Update(userClaimDto.Name, userClaimDto.Description, userClaimDto.UserClaimType);
+        userClaim.Update(userClaimDto.Name, userClaimDto.Description);
         await _userClaimRepository.UpdateAsync(userClaim);
     }
 

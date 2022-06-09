@@ -17,4 +17,8 @@
     <PackageReference Include="Util.Reflection" Version="1.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Oidc.EntityFramework\Masa.Oidc.EntityFramework.csproj" />
+  </ItemGroup>
+
 </Project>

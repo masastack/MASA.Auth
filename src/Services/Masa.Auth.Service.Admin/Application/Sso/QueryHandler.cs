@@ -11,9 +11,10 @@ public class QueryHandler
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
+    readonly OidcDbContext _oidcDbContext;
     readonly AuthDbContext _authDbContext;
 
-    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, AuthDbContext authDbContext)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, OidcDbContext oidcDbContext, AuthDbContext authDbContext)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -21,24 +22,21 @@ public class QueryHandler
         _apiScopeRepository = apiScopeRepository;
         _userClaimRepository = userClaimRepository;
         _customLoginRepository = customLoginRepository;
+        _oidcDbContext = oidcDbContext;
         _authDbContext = authDbContext;
     }
 
     [EventHandler]
     public async Task ClientPaginationListAsync(ClientPaginationListQuery clientPaginationListQuery)
     {
-        var result = await _clientRepository.GetPaginatedListAsync(new PaginatedOptions
-        {
-            Page = clientPaginationListQuery.Page,
-            PageSize = clientPaginationListQuery.PageSize
-        });
+        var result = await _clientRepository.GetPaginatedListAsync(clientPaginationListQuery.Page, clientPaginationListQuery.PageSize);
         clientPaginationListQuery.Result = new PaginationDto<ClientDto>(result.Total, result.Result.Adapt<List<ClientDto>>());
     }
 
     [EventHandler]
     public async Task ClientDetailQueryAsync(ClientDetailQuery clientDetailQuery)
     {
-        var client = await _clientRepository.GetByIdAsync(clientDetailQuery.ClientId);
+        var client = await _clientRepository.GetDetailAsync(clientDetailQuery.ClientId);
         client.Adapt(clientDetailQuery.Result);
     }
 
@@ -74,7 +72,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetClientSelectAsync(ClientSelectQuery query)
     {
-        query.Result = await _authDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
+        query.Result = await _oidcDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
     }
 
     #region IdentityResource
@@ -86,16 +84,7 @@ public class QueryHandler
         if (string.IsNullOrEmpty(query.Search) is false)
             condition = condition.And(idrs => idrs.DisplayName.Contains(query.Search) || idrs.Name.Contains(query.Search));
 
-        var identityResources = await _identityResourceRepository.GetPaginatedListAsync(condition, new PaginatedOptions
-        {
-            Page = query.Page,
-            PageSize = query.PageSize,
-            Sorting = new Dictionary<string, bool>
-            {
-                [nameof(IdentityResource.ModificationTime)] = true,
-                [nameof(IdentityResource.CreationTime)] = true,
-            }
-        });
+        var identityResources = await _identityResourceRepository.GetPaginatedListAsync(query.Page, query.PageSize, condition);
 
         query.Result = new(identityResources.Total, identityResources.Result.Select(idrs =>
             new IdentityResourceDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable)
@@ -114,7 +103,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetIdentityResourceSelectAsync(IdentityResourceSelectQuery query)
     {
-        var idrs = await _authDbContext.Set<IdentityResource>()
+        var idrs = await _oidcDbContext.Set<IdentityResource>()
                                 .Select(idrs => new IdentityResourceSelectDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description))
                                 .ToListAsync();
 
@@ -132,18 +121,19 @@ public class QueryHandler
         if (string.IsNullOrEmpty(query.Search) is false)
             condition = condition.And(apiResource => apiResource.DisplayName.Contains(query.Search) || apiResource.Name.Contains(query.Search));
 
-        var apiResources = await _apiResourceRepository.GetPaginatedListAsync(condition, new PaginatedOptions
-        {
-            Page = query.Page,
-            PageSize = query.PageSize,
-            Sorting = new Dictionary<string, bool>
-            {
-                [nameof(ApiResource.ModificationTime)] = true,
-                [nameof(ApiResource.CreationTime)] = true,
-            }
-        });
+        var apiResources = await _apiResourceRepository.GetPaginatedListAsync(query.Page, query.PageSize, condition);
 
-        query.Result = new(apiResources.Total, apiResources.Result.Select(apiResource => (ApiResourceDto)apiResource).ToList());
+        query.Result = new(apiResources.Total, apiResources.Result.Select(apiResource => new ApiResourceDto() 
+        {
+            Id = apiResource.Id,
+            Enabled = apiResource.Enabled,
+            Name = apiResource.Name,
+            Description = apiResource.Description,
+            AllowedAccessTokenSigningAlgorithms = apiResource.AllowedAccessTokenSigningAlgorithms,
+            ShowInDiscoveryDocument = apiResource.ShowInDiscoveryDocument,
+            LastAccessed = apiResource.LastAccessed,
+            NonEditable = apiResource.NonEditable
+        }).ToList());
     }
 
     [EventHandler]
@@ -152,13 +142,27 @@ public class QueryHandler
         var apiResource = await _apiResourceRepository.GetDetailAsync(query.ApiResourceId);
         if (apiResource is null) throw new UserFriendlyException("This apiResource data does not exist");
 
-        query.Result = apiResource;
+        query.Result = new ApiResourceDetailDto()
+        {
+            Id = apiResource.Id,
+            Enabled = apiResource.Enabled,
+            Name = apiResource.Name,
+            Description = apiResource.Description,
+            AllowedAccessTokenSigningAlgorithms = apiResource.AllowedAccessTokenSigningAlgorithms,
+            ShowInDiscoveryDocument = apiResource.ShowInDiscoveryDocument,
+            LastAccessed = apiResource.LastAccessed,
+            NonEditable = apiResource.NonEditable,
+            ApiScopes = apiResource.ApiScopes.Select(a => a.ApiScopeId).ToList(),
+            UserClaims = apiResource.UserClaims.Select(u => u.UserClaimId).ToList(),
+            Properties = apiResource.Properties.ToDictionary(p => p.Key, p => p.Value),
+            Secrets = apiResource.Secrets.Select(s => s.Value).ToList()
+        };
     }
 
     [EventHandler]
     public async Task GetApiResourceSelectAsync(ApiResourceSelectQuery query)
     {
-        var apiResourceSelect = await _authDbContext.Set<ApiResource>()
+        var apiResourceSelect = await _oidcDbContext.Set<ApiResource>()
                                 .Where(apiResource => apiResource.Enabled == true)
                                 .OrderByDescending(apiResource => apiResource.ModificationTime)
                                 .ThenByDescending(apiResource => apiResource.CreationTime)
@@ -179,18 +183,18 @@ public class QueryHandler
         if (string.IsNullOrEmpty(query.Search) is false)
             condition = condition.And(apiScope => apiScope.DisplayName.Contains(query.Search) || apiScope.Name.Contains(query.Search));
 
-        var apiScopes = await _apiScopeRepository.GetPaginatedListAsync(condition, new PaginatedOptions
-        {
-            Page = query.Page,
-            PageSize = query.PageSize,
-            Sorting = new Dictionary<string, bool>
-            {
-                [nameof(ApiScope.ModificationTime)] = true,
-                [nameof(ApiScope.CreationTime)] = true,
-            }
-        });
+        var apiScopes = await _apiScopeRepository.GetPaginatedListAsync(query.Page, query.PageSize, condition);
 
-        query.Result = new(apiScopes.Total, apiScopes.Result.Select(apiScope => (ApiScopeDto)apiScope).ToList());
+        query.Result = new(apiScopes.Total, apiScopes.Result.Select(apiScope => new ApiScopeDto()
+        {
+            Id = apiScope.Id,
+            Name = apiScope.Name,
+            DisplayName = apiScope.DisplayName,
+            Description = apiScope.Description,
+            Required = apiScope.Required,
+            Emphasize = apiScope.Emphasize,
+            ShowInDiscoveryDocument =apiScope.ShowInDiscoveryDocument
+        }).ToList());
     }
 
     [EventHandler]
@@ -199,13 +203,24 @@ public class QueryHandler
         var apiScope = await _apiScopeRepository.GetDetailAsync(query.ApiScopeId);
         if (apiScope is null) throw new UserFriendlyException("This apiScope data does not exist");
 
-        query.Result = apiScope;
+        query.Result = new ApiScopeDetailDto()
+        {
+            Id = apiScope.Id,
+            Name = apiScope.Name,
+            DisplayName = apiScope.DisplayName,
+            Description = apiScope.Description,
+            Required = apiScope.Required,
+            Emphasize = apiScope.Emphasize,
+            ShowInDiscoveryDocument = apiScope.ShowInDiscoveryDocument,
+            UserClaims = apiScope.UserClaims.Select(u => u.Id).ToList(),
+            Properties = apiScope.Properties.ToDictionary(p => p.Key,p => p.Value)
+        };
     }
 
     [EventHandler]
     public async Task GetApiScopeSelectAsync(ApiScopeSelectQuery query)
     {
-        var apiScopeSelect = await _authDbContext.Set<ApiScope>()
+        var apiScopeSelect = await _oidcDbContext.Set<ApiScope>()
                                 .Where(apiScope => apiScope.Enabled == true)
                                 .OrderByDescending(apiScope => apiScope.ModificationTime)
                                 .ThenByDescending(apiScope => apiScope.CreationTime)
@@ -226,38 +241,45 @@ public class QueryHandler
         if (string.IsNullOrEmpty(query.Search) is false)
             condition = condition.And(userClaim => userClaim.Name.Contains(query.Search));
 
-        var userClaims = await _userClaimRepository.GetPaginatedListAsync(condition, new PaginatedOptions
-        {
-            Page = query.Page,
-            PageSize = query.PageSize,
-            Sorting = new Dictionary<string, bool>
-            {
-                [nameof(UserClaim.ModificationTime)] = true,
-                [nameof(UserClaim.CreationTime)] = true,
-            }
-        });
+        var userClaims = await _userClaimRepository.GetPaginatedListAsync(query.Page, query.PageSize, condition);
 
-        query.Result = new(userClaims.Total, userClaims.Result.Select(userClaim => (UserClaimDto)userClaim).ToList());
+        query.Result = new(userClaims.Total, userClaims.Result.Select(userClaim => new UserClaimDto() 
+        {
+            Id = userClaim.Id,
+            Name = userClaim.Name,
+            Description = userClaim.Description,
+            UserClaimType = StandardUserClaims.Claims.ContainsKey(userClaim.Name) ? UserClaimType.Standard : UserClaimType.Customize
+        }).ToList());
     }
 
     [EventHandler]
     public async Task GetUserClaimDetailAsync(UserClaimDetailQuery query)
     {
-        var userClaim = await _userClaimRepository.FindAsync(userClaim => userClaim.Id == query.UserClaimId);
+        var userClaim = await _userClaimRepository.GetDetailAsync(query.UserClaimId);
         if (userClaim is null) throw new UserFriendlyException("This userClaim data does not exist");
 
-        query.Result = userClaim;
+        query.Result = new UserClaimDetailDto()
+        {
+            Id = userClaim.Id,
+            Name = userClaim.Name,
+            Description = userClaim.Description,
+            UserClaimType = StandardUserClaims.Claims.ContainsKey(userClaim.Name) ? UserClaimType.Standard : UserClaimType.Customize
+        };
     }
 
     [EventHandler]
     public async Task GetUserClaimSelectAsync(UserClaimSelectQuery query)
     {
-        var userClaimSelect = await _authDbContext.Set<UserClaim>()
+        var userClaimSelect = await _oidcDbContext.Set<UserClaim>()
                                 .OrderByDescending(userClaim => userClaim.ModificationTime)
                                 .ThenByDescending(userClaim => userClaim.CreationTime)
-                                .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description, userClaim.UserClaimType))
+                                .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description))
                                 .ToListAsync();
-
+        userClaimSelect.ForEach(userClaim => 
+        {
+            if (StandardUserClaims.Claims.ContainsKey(userClaim.Name)) userClaim.UserClaimType = UserClaimType.Standard;
+            else userClaim.UserClaimType = UserClaimType.Customize;
+        });
         query.Result = userClaimSelect;
     }
 

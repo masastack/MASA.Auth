@@ -17,7 +17,7 @@
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.4.0" />
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.4.0" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.4.0" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.4.0" />-->
 		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.4.0" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.4.0" />
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.4.0" />
@@ -28,7 +28,7 @@
 		<PackageReference Include="FluentValidation" Version="10.4.0" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.4.0" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.4.0" />-->
 		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.4.0" />
 		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.4.0" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.4.0" />
@@ -65,6 +65,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Oidc.EntityFramework\Masa.Oidc.EntityFramework.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	
