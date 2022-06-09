@@ -13,14 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMasaBlazor(builder =>
-{
-    builder.UseTheme(option =>
-    {
-        option.Primary = "#4318FF";
-        option.Accent = "#4318FF";
-    });
-});
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n");
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();

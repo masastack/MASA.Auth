@@ -28,10 +28,10 @@
                                 NavHelper.RefreshRender(nav);
                             }
                             <MListItemIcon>
-                                <MIcon Color="@(context.Active?"primary":"default-regular")" Size=20>@nav.Icon</MIcon>
+                                <MIcon Color="@(context.Active?"primary":"regular")" Size=20>@nav.Icon</MIcon>
                             </MListItemIcon>
                             <MListItemContent>
-                                <div style="margin-left:6.5px;" class="text-truncate white-space:nowrap @(context.Active?"font-16-bold":"font-16-medium default-regular--text")">@T(nav.Title)</div>
+                                <div style="margin-left:6.5px;" class="text-truncate white-space:nowrap @(context.Active?"font-16-bold":"font-16-medium regular--text")">@T(nav.Title)</div>
                             </MListItemContent>
                         </ItemContent>
                     </MListItem>
@@ -56,7 +56,7 @@
                                             NavHelper.RefreshRender(navChild);
                                         }
                                         <MListItemContent>
-                                            <div class="text-truncate white-space:nowrap @(context.Active?"font-14-bold":"font-14-medium default-regular--text")">@T(navChild.Title)</div>
+                                            <div class="text-truncate white-space:nowrap @(context.Active?"subtitle2":"body2 regular--text")">@T(navChild.Title)</div>
                                         </MListItemContent>
                                     </ItemContent>
                                 </MListItem>

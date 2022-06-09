@@ -7,52 +7,52 @@
             <SearchTextField @bind-Value="Search" />
             <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;height:40px;">
                 <div class="ma-auto">
-                    <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
-                    <span class="font-12-medium emphasis2--text">@T("Sync")</span>
+                    <MIcon Color="emphasis2" Size=20>mdi-refresh</MIcon>
+                    <span class="caption emphasis2--text">@T("Sync")</span>
                 </div>
             </div>
             <DefaultButton Small Class="ml-4" OnClick=OpenAddStaffDialog>
                 <MIcon Size=18>@IconConstants.Add</MIcon>
-                <span class="ml-2">@T("Add")</span>
+                <span class="ml-2 btn">@T("Add")</span>
             </DefaultButton>
         </div>
     </HeaderContent>
     <AutoHeightContent>
         <DefaultDataTable Class="mt-6" Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
-                <span class="font-14-medium">@header.Text</span>
+                <span class="body2 default2--text">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
                 {
                     case nameof(UserDto.Avatar):
                         <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
-                            <MAvatar Size=48>
+                            <MAvatar Size=40>
                                 <img src="@context.Item.User.Avatar" />
                             </MAvatar>
-                            <div class="ml-4 block-center">
-                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.User.Name</div>
+                            <div class="ml-2 block-center">
+                                <div class="subtitle emphasis2--text">@context.Item.User.Name</div>
                             </div>
                         </div>
                         break;
                     case (nameof(StaffDto.Department)):
-                        <span class="text-body3">@context.Item.Department</span>
+                        <span class="body regular--text">@context.Item.Department</span>
                         break;
                     case nameof(StaffDto.JobNumber):
-                        <span class="text-body3">@context.Item.JobNumber</span>
+                        <span class="body regular--text">@context.Item.JobNumber</span>
                         break;
                     case (nameof(StaffDto.Position)):
-                        <span class="text-body3">@context.Item.Position</span>
+                        <span class="body regular--text">@context.Item.Position</span>
                         break;
                     case nameof(StaffDto.Enabled):
                         <EnableChip Value="context.Item.Enabled" />
                         break;
                     case "Action":
-                        <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
-                        <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                        <MIcon Small Color="regular" OnClick="()=> OpenUpdateStaffDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
-                        <span class="text-body3">@context.Value</span>
+                        <span class="subtitle">@context.Value</span>
                         break;
                 }
             </ItemColContent>

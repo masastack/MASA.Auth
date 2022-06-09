@@ -77,7 +77,7 @@ public class CommandHandler
             user.AddRoles(userDto.Roles.ToArray());
             user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
             await _userRepository.AddAsync(user);
-            command.UserId = user.Id;
+            command.NewUser = user;
             await _userDomainService.SetAsync(user);
         }
     }

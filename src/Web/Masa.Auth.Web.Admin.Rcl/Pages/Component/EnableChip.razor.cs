@@ -14,6 +14,8 @@ public partial class EnableChip
     [Parameter]
     public bool Value { get; set; }
 
+    public string TextColor => Value ? "green" : "error";
+
     public string Color => Value ? "green-lighten" : "warning-lighten";
 }
 

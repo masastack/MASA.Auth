@@ -5,10 +5,10 @@
         <div class="d-flex">
             <MTabs @bind-Value="Tab" Class="mx-auto" Style="max-width: 329px !important;">
                 <MTab Value="CustomLoginTab.Login">
-                    <span class="font-18-medium @(Tab == CustomLoginTab.Login ?"default-emphasis-secondary--text":"default-secondary--text")">@T(CustomLoginTab.Login)</span>
+                    <span class="font-18-medium @(Tab == CustomLoginTab.Login ?"emphasis2--text":"default2--text")">@T(CustomLoginTab.Login)</span>
                 </MTab>
                 <MTab Value="CustomLoginTab.Register" Style="margin-left:130px">
-                    <span class="font-18-medium @(Tab == CustomLoginTab.Register ?"default-emphasis-secondary--text":"default-secondary--text")">@T(CustomLoginTab.Register)</span>
+                    <span class="font-18-medium @(Tab == CustomLoginTab.Register ?"emphasis2--text":"default2--text")">@T(CustomLoginTab.Register)</span>
                 </MTab>
             </MTabs>
         </div>
@@ -24,7 +24,7 @@
             @if (string.IsNullOrEmpty(Title) is false)
             {
                 <div class="d-flex">
-                    <div class="mt-2 mx-auto font-18-medium default-emphasis-secondary--text">@Title</div>
+                    <div class="mt-2 mx-auto font-18-medium emphasis2--text">@Title</div>
                 </div>
             }
             <MTabsItems @bind-Value="Tab">
@@ -34,7 +34,7 @@
                         <Password @bind-Value="Login.Password" Class="mt-9" />
                         <div class="d-flex">
                             <MSpacer />
-                            <span class="font-12-medium default-secondary--text">@T("Forgot password?")</span>
+                            <span class="caption default2--text">@T("Forgot password?")</span>
                         </div>
                         <div class="d-flex">
                             <MButton OnClick="() => context.Validate()" Class="large-button mt-11 mx-auto" Color="primary">
@@ -46,7 +46,7 @@
                     {
                         <div class="d-flex block-center mt-12">
                             <div style="background: #E9EDF7;height: 1px;width: 100%;" />
-                            <div class="mx-4 text-center font-14-medium default-secondary--text" style="@(I18n.CurrentLanguage=="zh-CN"?"min-width:100px":"min-width:80px")">@T("or login with")</div>
+                            <div class="mx-4 text-center body2 default2--text" style="@(I18n.CurrentLanguage=="zh-CN"?"min-width:100px":"min-width:80px")">@T("or login with")</div>
                             <div style="background: #E9EDF7;height: 1px;width: 100%;" />
                         </div>
                         <div class="mt-4 text-center">

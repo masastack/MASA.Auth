@@ -36,7 +36,7 @@
                             </div>
                         </HeaderContent>
                         <AutoHeightContent>
-                            <div class="font-14-bold default-regular--text">@T("Basic Information")</div>
+                            <div class="subtitle2 regular--text">@T("Basic Information")</div>
                             <DefaultTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" />
                             <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" />
                             <DefaultTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" />
@@ -46,13 +46,13 @@
                             @if (Fill is false)
                             {
                                 <div @onclick="() => Fill = true" class="mt-12 hover-pointer" style="text-align:center">
-                                    <MIcon>mdi-menu-down</MIcon>
-                                    <span>@T("Fill in more")</span>
+                                    <MIcon Class="emphasis2--text">mdi-menu-down</MIcon>
+                                    <span class="regular--text body2">@T("Fill in more")</span>
                                 </div>
                             }
                             else
                             {
-                                <div class="mt-12 font-14-bold default-regular--text">@T("Detail Information")</div>
+                                <div class="mt-12 subtitle2 regular--text">@T("Detail Information")</div>
                                 <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" />
                                 <DefaultTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" />
                                 <DefaultTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" />
@@ -70,8 +70,10 @@
                 </MStepperContent>
                 <MStepperContent Step="3">
                     <AutoHeight Overflow>
-                        <AutoHeightContent>
+                        <HeaderContent>
                             <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                        </HeaderContent>
+                        <AutoHeightContent>                          
                             <div class="global-nav" style="display: flex;height: auto">                               
                                 <PermissionsCheck RoleIds=User.Roles
                                                   Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
