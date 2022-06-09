@@ -15,14 +15,14 @@
             </DividerContent>
             <ChildContent>
                 <MBreadcrumbsItem Href="javascript:history.back(-1)">
-                    <MIcon Size=20 Color="default-regular">mdi-arrow-left</MIcon>
+                    <MIcon Size=20 Color="regular">mdi-arrow-left</MIcon>
                 </MBreadcrumbsItem>
                 @for (var i = 0; i < items.Count; i++)
                 {
                     var item = items[i];
                     var isLast = i == items.Count - 1;
                     <MBreadcrumbsItem Href="@item.Href">
-                        <span class="@(isLast ? "font-14-bold default-regular--text" : "font-14")">@item.Text</span>
+                        <span class="@(isLast ? "subtitle2 regular--text" : "font-14")">@item.Text</span>
                     </MBreadcrumbsItem>
                 }
             </ChildContent>

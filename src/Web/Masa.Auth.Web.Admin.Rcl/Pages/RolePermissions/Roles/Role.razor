@@ -16,37 +16,37 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="font-14-medium">@header.Text</span>
+                    <span class="body2">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(RoleDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                                <span class="text-body3 default--text">@context.Item.Name</span>
+                                <span class="subtitle default--text">@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(RoleDto.CreationTime)):
-                            <span class="font-16 default-regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <span class="font-16 regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case nameof(RoleDto.ModificationTime):
-                            <span class="font-16 default-regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                            <span class="font-16 regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case (nameof(RoleDto.Creator)):
-                            <span class="font-16 default-regular--text">@context.Item.Creator</span>
+                            <span class="font-16 regular--text">@context.Item.Creator</span>
                             break;
                         case (nameof(RoleDto.Modifier)):
-                            <span class="font-16 default-regular--text">@context.Item.Modifier</span>
+                            <span class="font-16 regular--text">@context.Item.Modifier</span>
                             break;
                         case nameof(RoleDto.Enabled):
                             <EnableChip Value="context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
                             break;
                         default:
-                            <span class="text-body3">@context.Value</span>
+                            <span class="subtitle">@context.Value</span>
                             break;
                     }
                 </ItemColContent>

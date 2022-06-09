@@ -10,11 +10,11 @@ public class DefaultUploadImage : UploadImage
 
     public OssService OssService => AuthCaller!.OssService;
 
-    protected override void OnInitialized()
+    public override Task SetParametersAsync(ParameterView parameters)
     {
-        base.OnInitialized();
         Avatar = true;
         Size = 120;
+        return base.SetParametersAsync(parameters);
     }
 
     public override async Task UploadAsync()

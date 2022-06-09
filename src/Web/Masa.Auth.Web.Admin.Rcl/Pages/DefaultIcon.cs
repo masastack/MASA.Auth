@@ -20,7 +20,7 @@ public class DefaultIcon : MIcon
     protected override void OnInitialized()
     {
         if ((Small, Large, XLarge, XSmall) == (false, false, false, false)) Small = true;
-        if (Color is null) Color = "default-regular";
+        if (Color is null) Color = "regular";
         string icon = "";
         if (Add) icon = "mdi-plus";
         else if (Update) icon = "mdi-pencil";

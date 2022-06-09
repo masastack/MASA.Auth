@@ -16,31 +16,31 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="ApiResources" TItem="ApiResourceDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="font-14-medium">@header.Text</span>
+                    <span class="body2">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(ApiResourceDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                                <span class="text-body3 default--text">@context.Item.Name</span>
+                                <span class="subtitle default--text">@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(ApiResourceDto.DisplayName)):
-                            <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
+                            <span class="font-16 regular--text">@context.Item.DisplayName</span>
                             break;
                         case (nameof(ApiResourceDto.Description)):
-                            <span class="font-16 default-regular--text">@context.Item.Description</span>
+                            <span class="font-16 regular--text">@context.Item.Description</span>
                             break;
                         case nameof(ApiResourceDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">mdi-delete</MIcon>
                             break;
                         default:
-                            <span class="text-body3">@context.Value</span>
+                            <span class="subtitle">@context.Value</span>
                             break;
                     }
                 </ItemColContent>

@@ -44,7 +44,7 @@ public class ThirdPartyUserDomainService : DomainService
             var addUserCommand = new AddUserCommand(thirdPartyUserDto.User);
             await EventBus.PublishAsync(addUserCommand);
             await _thirdPartyUserRepository.AddAsync(new ThirdPartyUser(thirdPartyUserDto.ThirdPartyIdpId,
-                        addUserCommand.UserId, thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity));
+                        addUserCommand.NewUser.Id, thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity));
         }
     }
 }

@@ -30,7 +30,7 @@
             </MCol>
         }
         <MCol Md=12>
-            <h5 class="font-14-bold default--text mb-4">Properties</h5>
+            <h5 class="subtitle2 default--text mb-4">Properties</h5>
             <MRow>
                 <MCol>
                     <DefaultTextField @bind-Value="@Dto.Property.Key" Label="Key" />
@@ -44,16 +44,16 @@
                 <MCol Md=12>
                     <MDataTable Headers="_headers" Dense Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="margin-border">
                         <HeaderColContent Context="header">
-                            <span class="font-14-medium">@header.Text</span>
+                            <span class="body2">@header.Text</span>
                         </HeaderColContent>
                         <ItemColContent>
                             @switch (context.Header.Value)
                             {
                                 case "Action":
-                                    <MIcon Size=20 OnClick="()=>Dto.Properties.Remove(context.Item)" Color="default-regular">mdi-close</MIcon>
+                                    <MIcon Size=20 OnClick="()=>Dto.Properties.Remove(context.Item)" Color="regular">mdi-close</MIcon>
                                     break;
                                 default:
-                                    <span class="text-body3">@context.Value</span>
+                                    <span class="subtitle">@context.Value</span>
                                     break;
                             }
                         </ItemColContent>

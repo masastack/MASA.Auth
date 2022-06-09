@@ -6,20 +6,27 @@
     <MButtonGroup Class="@Class" Value="Value.ToString()" Rounded>
         @foreach (var (key, value) in KeyValues)
         {
-            <MButton OnClick="async() => await ValueChanged.InvokeAsync(value)" Width=100 Value="@value.ToString()" Class="@(Value.Equals(value) ? "button-group-active":"button-group")">
-                <MIcon Size=18>fa fa-regular fa-mars</MIcon>
-                <span class="ml-1">@T(key)</span>
+            <MButton Style="opacity: 1 !important;" OnClick="async() => await ValueChanged.InvokeAsync(value)" Width=100 Value="@value.ToString()" Class="@(Value.Equals(value) ? "button-group-active emphasis--text":"button-group default2--text")">
+                @if (key == "Male")
+                {
+                    <MIcon Size=20 Class="@(Value.Equals(value) ? "emphasis--text":"default2--text")">fa fa-solid fa-mars</MIcon>
+                }
+                else if(key == "Female")
+                {
+                    <MIcon Size=20 Class="@(Value.Equals(value) ? "emphasis--text":"default2--text")">fa fa-solid fa-venus</MIcon>
+                }
+                <span class="ml-1 subtitle">@T(key)</span>
             </MButton>
         }
     </MButtonGroup>
-}
+} 
 else
 {
     <LabeledRadioGroup Value="Value.ToString()" Dense>
         @foreach (var (key, value) in KeyValues)
         {
             <LabeledRadio MinWidth=70 Value="@value.ToString()" OnClick="async() => await ValueChanged.InvokeAsync(value)">
-                @T(key)
+                <span class="@(Value.Equals(value) ? "subtitle2 emphasis2--text":"btn regular2--text")">@T(key)</span>
             </LabeledRadio>
         }
     </LabeledRadioGroup>
