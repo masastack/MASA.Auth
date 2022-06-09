@@ -17,8 +17,6 @@ public class AddRoleDto
 
     public List<Guid> ChildrenRoles { get; set; }
 
-    public List<Guid> Users { get; set; }
-
     public AddRoleDto()
     {
         Name = "";
@@ -26,7 +24,6 @@ public class AddRoleDto
         Enabled = true;
         Permissions = new();
         ChildrenRoles = new();
-        Users = new();
     }
 
     public AddRoleDto(string name, string description, bool enabled, int limit, List<Guid> rolePermissions, List<Guid> childRoles, List<Guid> users)
@@ -36,7 +33,6 @@ public class AddRoleDto
         Enabled = enabled;
         Permissions = rolePermissions;
         ChildrenRoles = childRoles;
-        Users = users;
         Limit = limit;
     }
 }

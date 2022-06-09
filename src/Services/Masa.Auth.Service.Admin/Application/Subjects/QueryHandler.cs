@@ -77,6 +77,17 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task FindUserByNameQueryAsync(FindUserByAccountQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.Account == query.Account);
+        if (user is null)
+        {
+            throw new UserFriendlyException("This user data does not exist");
+        }
+        query.Result = user;
+    }
+
+    [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
         var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(query.Search);
@@ -304,7 +315,11 @@ public class QueryHandler
         Expression<Func<Team, bool>> condition = _ => true;
         if (!string.IsNullOrWhiteSpace(teamListQuery.Name))
         {
-            condition = condition.And(s => s.Name.Contains(teamListQuery.Name));
+            condition = condition.And(t => t.Name.Contains(teamListQuery.Name));
+        }
+        if (teamListQuery.StaffId != Guid.Empty)
+        {
+            condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == teamListQuery.StaffId));
         }
         teamListQuery.Result = (await _teamRepository.GetListAsync(condition))
                 .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount,
