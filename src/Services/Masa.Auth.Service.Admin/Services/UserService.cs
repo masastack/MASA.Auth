@@ -40,6 +40,7 @@ namespace Masa.Auth.Service.Admin.Services
                 if(dto.Gender == GenderTypes.Male) dto.Avatar = DefaultUserAttributes.MaleAvatar;
                 else dto.Avatar = DefaultUserAttributes.FemaleAvatar;
             }
+            if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
             var command = new AddUserCommand(dto);
             await eventBus.PublishAsync(command);
             return command.NewUser;

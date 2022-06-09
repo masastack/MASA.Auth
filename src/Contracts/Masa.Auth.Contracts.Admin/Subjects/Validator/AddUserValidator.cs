@@ -7,7 +7,7 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
 {
     public AddUserValidator()
     {
-        RuleFor(user => user.DisplayName).ChineseLetter().MinLength(1).MaxLength(20);
+        RuleFor(user => user.DisplayName).ChineseLetter().MaxLength(20);
         RuleFor(user => user.Name).ChineseLetter().MaxLength(20);
         RuleFor(user => user.PhoneNumber).Phone();
         RuleFor(user => user.Email).Email();
