@@ -52,9 +52,9 @@ public class TeamService : ServiceBase
         return query.Result;
     }
 
-    private async Task<List<TeamDto>> ListAsync(IEventBus eventBus, [FromQuery] string name, [FromQuery] Guid? userId)
+    private async Task<List<TeamDto>> ListAsync(IEventBus eventBus, [FromQuery] string? name, [FromQuery] Guid? userId)
     {
-        var query = new TeamListQuery(name, userId ?? Guid.Empty);
+        var query = new TeamListQuery(name ?? "", userId ?? Guid.Empty);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
