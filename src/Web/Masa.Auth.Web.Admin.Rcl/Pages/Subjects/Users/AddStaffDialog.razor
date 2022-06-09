@@ -1,97 +1,101 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
     <MForm Model="Staff" EnableValidation @ref="Form">
-        <MStepper Value="Step" Class="sheetDialogPadding">
+        <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <div class="full-height flex-column">
-                        <div class="d-flex flex-height-auto">
+                    <AutoHeight AutoClass="d-flex">
+                        <AutoHeightContent>
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <UploadImage @bind-Value="Staff.User.Avatar" Avatar Size="120" WhenFileChangeUpload Class="mt-12" />
-                                <br />
-                                <div class="mt-3 hover-pointer text-body4">
-                                    <MIcon Size=18>mdi-autorenew</MIcon><span class="ml-3">@T("Another")</span>
+                                <div>
+                                    <DefaultChangeImage @bind-Value="Staff.User.Avatar" Gender="Staff.User.Gender" Class="mt-12" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="d-flex">
-                            <MSpacer></MSpacer>
-                            <MButton Color="primary" Class="small-button" OnClick="()=>Step=2">@T("Next step")</MButton>
-                        </div>
-                    </div>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex">
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="()=>Step=2">@T("Next step")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <div class="full-height flex-column">
-                        <div class="d-flex">
-                            <div class="mt-10 ml-auto mr-auto text-center" style="width:212px;">
-                                <MAvatar Size=80>
-                                    <img src="/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg" />
-                                </MAvatar>
-                                <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                    <AutoHeight Overflow AutoClass="mt-6">
+                        <HeaderContent>
+                            <div class="d-flex mt-10">
+                                <div class="mx-auto text-center">
+                                    <MAvatar Size=80>
+                                        <img src="@Staff.User.Avatar" />
+                                    </MAvatar>
+                                    <PlaceholderTextFiled @bind-Value="Staff.User.DisplayName" Placeholder="@T("Give him a nickname!")" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="mt-6 flex-height-auto overflow-y">
-                            <div class="text-subtitle2">@T("Basic Information")</div>
-                            <MRow Class="my-4">
+                        </HeaderContent>
+                        <AutoHeightContent>
+                            <div class="font-14-bold">@T("Basic Information")</div>
+                            <MRow Class="mt-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Name" Label="@T("Name")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" />
                                 </MCol>
                             </MRow>
-                            <MRow Class="my-4">
+                            <MRow Class="mt-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Email" Label="@T("Email")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Email" Label="@T("Email")" />
                                 </MCol>
                                 <MCol>
                                     <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
                                 </MCol>
                             </MRow>
-                            <MRow Class="my-4">
+                            <MRow Class="mt-4">
                                 <MCol>
                                     <TeamSelect @bind-Value="Staff.Teams" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" />
                                 </MCol>
                             </MRow>
-                            <MRow Class="my-4">
+                            <MRow Class="mt-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" />
                                 </MCol>
                                 <MCol>
                                     <DepartmentSelect @bind-Value="Staff.DepartmentId" />
                                 </MCol>
                             </MRow>
-                            <MRow Class="my-4">
+                            <MRow Class="mt-4">
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
                                 </MCol>
                                 <MCol>
-                                    <MTextField @bind-Value="Staff.Position.Name" Label="@T("Position")" HideDetails="@("auto")" Outlined />
-                                </MCol>
-                            </MRow>
-                            <MRow Class="my-4">
-                                <MCol>
-                                    <MTextField @bind-Value="Staff.User.Account" Label="@T("Account")" HideDetails="@("auto")" Outlined />
-                                </MCol>
-                                <MCol>
-                                    <MTextField @bind-Value="Staff.User.Password" Label="@T("Password")" HideDetails="@("auto")" Outlined />
+                                    <DefaultTextField @bind-Value="Staff.Position" Label="@T("Position")" />
                                 </MCol>
                             </MRow>
-                        </div>
-                        <div class="d-flex mt-6 pl-2">
-                            <MSwitch @bind-Value="Staff.Enabled" Inset Class="label" Label="@(Staff.Enabled ? T("Enable"):T("Disabled"))" />
-                            <MSpacer></MSpacer>
-                            <MButton Color="primary" Class="small-button" OnClick="async() => await AddStaffAsync(context)">@T("Save")</MButton>
-                        </div>
-                    </div>
+                            <MRow Class="mt-4">
+                                <MCol>
+                                    <DefaultTextField @bind-Value="Staff.User.Account" Label="@T("Account")" />
+                                </MCol>
+                                <MCol>
+                                    <DefaultTextField @bind-Value="Staff.User.Password" Label="@T("Password")" />
+                                </MCol>
+                            </MRow>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <div class="d-flex mt-6">
+                                <EnableSwitch Class="ml-1" @bind-Value="Staff.Enabled" />
+                                <MSpacer></MSpacer>
+                                <DefaultButton Medium OnClick="async() => await AddStaffAsync(context)">@T("Save")</DefaultButton>
+                            </div>
+                        </FooterContent>
+                    </AutoHeight>
                 </MStepperContent>
             </MStepperItems>
         </MStepper>
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

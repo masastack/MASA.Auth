@@ -22,6 +22,8 @@ public partial class AddRoleDialog
 
     private RoleSelectForRole? RoleSelect { get; set; }
 
+    public bool Preview { get; set; }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

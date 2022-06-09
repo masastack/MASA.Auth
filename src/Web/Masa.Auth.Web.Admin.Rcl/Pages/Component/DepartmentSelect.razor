@@ -1,5 +1,0 @@
-﻿@inherits AdminCompontentBase
-
-<MTextField Value=Text Readonly OnFocus="() => Visible = true" Label="@T("Department")" HideDetails="@("auto")" Outlined />
-
-<DepartmentDialog @bind-Visible="Visible" Value=Value ValueChanged=OnValueChanged Departments=Departments />

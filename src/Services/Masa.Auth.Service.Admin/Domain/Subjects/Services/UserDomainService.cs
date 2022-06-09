@@ -7,14 +7,28 @@ public class UserDomainService : DomainService
     {
     }
 
-    public async Task SetAsync(User user)
+    public async Task SetAsync(params User[] users)
     {
-        await EventBus.PublishAsync(new SetUserDomainEvent(user));
+        await EventBus.PublishAsync(new SetUserDomainEvent(users.ToList()));
     }
 
-    public async Task RemoveAsync(Guid userId)
+    public async Task RemoveAsync(params Guid[] userIds)
     {
-        await EventBus.PublishAsync(new RemoveUserDomainEvent(userId));
+        await EventBus.PublishAsync(new RemoveUserDomainEvent(userIds.ToList()));
+    }
+
+    public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId)
+    {
+        var query = new QueryUserPermissionDomainEvent(userId);
+        await EventBus.PublishAsync(query);
+        return query.Permissions;
+    }
+
+    public async Task<bool> AuthorizedAsync(string appId, string code, Guid userId)
+    {
+        var query = new UserAuthorizedDomainEvent(appId, code, userId);
+        await EventBus.PublishAsync(query);
+        return query.Authorized;
     }
 }
 

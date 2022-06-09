@@ -61,6 +61,7 @@ public partial class UpdateUserDialog
         if (success)
         {
             Loading = true;
+
             await UserService.UpdateAsync(User);
             OpenSuccessMessage(T("Update user data success"));
             await UpdateVisible(false);

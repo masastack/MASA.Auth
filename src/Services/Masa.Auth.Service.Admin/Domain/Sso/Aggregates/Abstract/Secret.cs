@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Abstract;
 
-public abstract class Secret : FullAuditEntity<int, Guid>
+public abstract class Secret : FullEntity<int, Guid>
 {
     public string Description { get; protected set; } = string.Empty;
 

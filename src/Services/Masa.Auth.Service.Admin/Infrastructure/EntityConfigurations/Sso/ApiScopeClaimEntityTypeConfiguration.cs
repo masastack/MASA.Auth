@@ -7,6 +7,6 @@ public class ApiScopeClaimEntityTypeConfiguration : IEntityTypeConfiguration<Api
 {
     public void Configure(EntityTypeBuilder<ApiScopeClaim> builder)
     {
-        builder.ToTable(nameof(ApiScopeClaim), AuthDbContext.SSO_SCHEMA).HasKey(apiScopeClaim => apiScopeClaim.Id);
+        builder.HasKey(apiScopeClaim => apiScopeClaim.Id);
     }
 }

@@ -8,12 +8,15 @@ public class QueryHandler
     readonly IRoleRepository _roleRepository;
     readonly IPermissionRepository _permissionRepository;
     readonly AuthDbContext _authDbContext;
+    readonly UserDomainService _userDomainService;
 
-    public QueryHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository, AuthDbContext authDbContext)
+    public QueryHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository,
+        AuthDbContext authDbContext, UserDomainService userDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
+        _userDomainService = userDomainService;
     }
 
     #region Role
@@ -62,7 +65,7 @@ public class QueryHandler
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
         query.Result = new(
-            role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),
+            role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.DisplayName, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),
             role.Teams.Select(tr => new TeamSelectDto(tr.Team.Id, tr.Team.Name, tr.Team.Avatar.Url)).ToList()
         );
     }
@@ -117,13 +120,22 @@ public class QueryHandler
         query.Result = await GetRoleSelectAsync();
     }
 
+    [EventHandler]
+    public async Task GetRoleSelectAsync(RoleSelectQuery query)
+    {
+        var roleSelect = await _authDbContext.Set<Role>()
+                                         .Where(r => r.Enabled == true && r.Name.Contains(query.Name))
+                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Limit, r.AvailableQuantity))
+                                         .ToListAsync();
+        query.Result = roleSelect;
+    }
+
     private async Task<List<RoleSelectDto>> GetRoleSelectAsync()
     {
         var roleSelect = await _authDbContext.Set<Role>()
                                         .Where(r => r.Enabled == true)
                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Limit, r.AvailableQuantity))
                                         .ToListAsync();
-
         return roleSelect;
     }
 
@@ -261,6 +273,44 @@ public class QueryHandler
             Id = permission.Id,
             AppId = permission.AppId
         };
+    }
+
+    [EventHandler]
+    public async Task AppMenuListQueryAsync(AppMenuListQuery appMenuListQuery)
+    {
+        var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appMenuListQuery.UserId);
+        var menus = await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
+                            && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id));
+        appMenuListQuery.Result = GetMenus(menus.ToList(), Guid.Empty);
+
+        List<MenuDto> GetMenus(List<Permission> menus, Guid parentId)
+        {
+            return menus.Where(m => m.ParentId == parentId).Select(m => new MenuDto
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Code = m.Code,
+                Url = m.Url,
+                Icon = m.Icon,
+                Children = GetMenus(menus, m.Id)
+            }).ToList();
+        }
+    }
+
+    [EventHandler]
+    public async Task AppElementPermissionListQueryAsync(AppElementPermissionCodeListQuery appElementPermissionCodeListQuery)
+    {
+        var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appElementPermissionCodeListQuery.UserId);
+        var elements = await _permissionRepository.GetListAsync(p => p.AppId == appElementPermissionCodeListQuery.AppId
+                            && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id));
+        appElementPermissionCodeListQuery.Result = elements.Select(e => e.Code).ToList();
+    }
+
+    [EventHandler]
+    public async Task AppPermissionAuthorizedQueryAsync(AppPermissionAuthorizedQuery appPermissionAuthorizedQuery)
+    {
+        appPermissionAuthorizedQuery.Result = await _userDomainService.AuthorizedAsync(appPermissionAuthorizedQuery.AppId,
+                    appPermissionAuthorizedQuery.Code, appPermissionAuthorizedQuery.UserId);
     }
 
     #endregion

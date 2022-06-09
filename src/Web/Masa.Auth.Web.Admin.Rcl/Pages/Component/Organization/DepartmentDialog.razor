@@ -1,0 +1,50 @@
+﻿@inherits AdminCompontentBase
+
+<MDialog Value="Visible" ValueChanged=UpdateVisibleAsync Width="800">
+    <MCard>
+        <MCardText Class="pt-4">
+            <DefaultTextField @bind-Value="Search" Color="primary" Class="my-2 rounded-2" HideDetails="@("auto")" Flat Dense Solo Outlined Placeholder="@T("Search")">
+                <PrependInnerContent>
+                    <MIcon Size=16 Class="mr-2 default-emphasis-secondary--text">mdi-magnify</MIcon>
+                </PrependInnerContent>
+            </DefaultTextField>
+            <div style="overflow:scroll;max-height:400px;">
+                <MTreeview Items="Departments"
+                           Activatable
+                           OpenAll
+                           Search=@Search
+                           ItemKey="d => d.Id"
+                           ItemChildren="d => d.Children"
+                           ItemText="d => d.Name"
+                           OpenOnClick>
+                    <PrependContent>
+                        @if (context.Item.Children.Count > 0)
+                        {
+                            <MIcon>
+                                @(context.Open ? "mdi-folder-open" : "mdi-folder")
+                            </MIcon>
+                        }
+                        else
+                        {
+                            <MCheckbox @key="Guid.NewGuid()" Class="mt-n1" Value="Value == context.Item.Id" ValueChanged="async check =>await CheckedAsync(context.Item)" />
+                        }
+                    </PrependContent>
+                    <LabelContent>
+                        @if (context.Item.Children.Count > 0)
+                        {
+                            <div>
+                                @context.Item.Name
+                            </div>
+                        }
+                        else
+                        {
+                            <div @onclick:preventDefault @onclick="async ()=>await CheckedAsync(context.Item)">
+                                @context.Item.Name
+                            </div>
+                        }
+                    </LabelContent>
+                </MTreeview>
+            </div>
+        </MCardText>
+    </MCard>
+</MDialog>

@@ -7,12 +7,34 @@ public class StaffService : RestServiceBase
 {
     public StaffService(IServiceCollection services) : base(services, "api/staff")
     {
-
+        MapPost(SyncAsync);
+        MapPost(SelectByIdsAsync, "SelectByIds");
     }
 
     private async Task<PaginationDto<StaffDto>> GetListAsync(IEventBus eventBus, GetStaffsDto staff)
     {
         var query = new StaffsQuery(staff.Page, staff.PageSize, staff.Search, staff.Enabled, staff.DepartmentId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByDepartmentAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new StaffsByDepartmentQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByTeamAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new StaffsByTeamQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffDto>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new StaffsByRoleQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -27,6 +49,13 @@ public class StaffService : RestServiceBase
     private async Task<List<StaffSelectDto>> GetSelectAsync(IEventBus eventBus, [FromQuery] string name)
     {
         var query = new StaffSelectQuery(name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<StaffSelectDto>> SelectByIdsAsync(IEventBus eventBus, [FromBody] List<Guid> Ids)
+    {
+        var query = new StaffSelectByIdQuery(Ids);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -48,5 +77,20 @@ public class StaffService : RestServiceBase
     {
         var deleteCommand = new RemoveStaffCommand(staff);
         await eventBus.PublishAsync(deleteCommand);
+    }
+
+    private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, HttpRequest request)
+    {
+        if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
+        var form = await request.ReadFormAsync();
+        if (form.Files.Count <= 0) throw new UserFriendlyException("File not found");
+        var file = form.Files.First();
+        ICsvImporter importer = new CsvImporter();
+        using var stream = file.OpenReadStream();
+        var import = await importer.Import<SyncStaffDto>(stream);
+        if (import.HasError) throw new UserFriendlyException("Read file data failed");
+        var syncCommand = new SyncStaffCommand(import.Data.ToList());
+        await eventBus.PublishAsync(syncCommand);
+        return syncCommand.Result;
     }
 }

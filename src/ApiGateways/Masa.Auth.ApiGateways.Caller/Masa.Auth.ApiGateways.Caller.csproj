@@ -8,12 +8,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Masa.Utils.Caller.HttpClient" Version="0.4.0-rc1" />
+		<PackageReference Include="Masa.Utils.Caller.HttpClient" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
-	  <ProjectReference Include="..\..\Services\Masa.Auth.Service.Admin\Masa.Auth.Service.Admin.csproj" />
 	</ItemGroup>
 
 </Project>

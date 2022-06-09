@@ -68,6 +68,43 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetPositionsAsync(PositionsQuery query)
+    {
+        Expression<Func<Position, bool>> condition = position => true;
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(position => position.Name.Contains(query.Search));
+
+        var positions = await _positionRepository.GetPaginatedListAsync(condition, new PaginatedOptions
+        {
+            Page = query.Page,
+            PageSize = query.PageSize,
+            Sorting = new Dictionary<string, bool>
+            {
+                [nameof(Position.ModificationTime)] = true,
+                [nameof(Position.CreationTime)] = true,
+            }
+        });
+
+        query.Result = new(positions.Total, positions.Result.Select(position => new PositionDto(position.Id, position.Name)).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetPositionDetailAsync(PositionDetailQuery query)
+    {
+        var position = await _positionRepository.FindAsync(query.PositionId);
+        if (position is null) throw new UserFriendlyException("This position data does not exist");
+
+        query.Result = new PositionDetailDto(position.Id, position.Name);
+    }
+
+    [EventHandler]
+    public async Task GetDepartmentSelectAsync(DepartmentSelectQuery query)
+    {
+        var departments = await _departmentRepository.GetListAsync(department => department.Name.Contains(query.Name));
+        query.Result = departments.Select(department => new DepartmentSelectDto(department.Id, department.Name)).ToList();
+    }
+
+    [EventHandler]
     public async Task GetPositionSelectAsync(PositionSelectQuery query)
     {
         var psoitions = await _positionRepository.GetListAsync(p => p.Name.Contains(query.Name));

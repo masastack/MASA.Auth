@@ -25,12 +25,12 @@
         @foreach (var origin in Dto.AllowedCorsOrigins)
         {
             <MCol Md=12 Class="d-flex">
-                <MTextField Dense HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
+                <DefaultTextField Dense HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
                 <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
             </MCol>
         }
         <MCol Md=12>
-            <h5 class="text-subtitle2 neutral--text mb-4">Properties</h5>
+            <h5 class="font-14-bold default--text mb-4">Properties</h5>
             <MRow>
                 <MCol>
                     <DefaultTextField @bind-Value="@Dto.Property.Key" Label="Key" />
@@ -44,13 +44,13 @@
                 <MCol Md=12>
                     <MDataTable Headers="_headers" Dense Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="margin-border">
                         <HeaderColContent Context="header">
-                            <span class="text-btn">@header.Text</span>
+                            <span class="font-14-medium">@header.Text</span>
                         </HeaderColContent>
                         <ItemColContent>
                             @switch (context.Header.Value)
                             {
                                 case "Action":
-                                    <MIcon Size=20 OnClick="()=>Dto.Properties.Remove(context.Item)" Color="neutral-lighten-2">mdi-close</MIcon>
+                                    <MIcon Size=20 OnClick="()=>Dto.Properties.Remove(context.Item)" Color="default-regular">mdi-close</MIcon>
                                     break;
                                 default:
                                     <span class="text-body3">@context.Value</span>

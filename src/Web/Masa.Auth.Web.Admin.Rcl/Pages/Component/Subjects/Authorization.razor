@@ -1,0 +1,12 @@
+﻿@inherits AdminCompontentBase
+
+@if (Avatars.Count > 0)
+{
+    <div class="mt-6 font-14-bold default-regular--text">@T("Authorization certification")</div>
+    <div class="mt-4">
+        @foreach (var avatar in Avatars)
+        {
+            <img height=24 width=24 src="@avatar" />
+        }
+    </div>
+}

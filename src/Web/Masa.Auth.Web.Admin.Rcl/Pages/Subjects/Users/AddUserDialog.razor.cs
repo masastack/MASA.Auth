@@ -18,6 +18,8 @@ public partial class AddUserDialog
 
     private bool Fill { get; set; }
 
+    public bool Preview { get; set; }
+
     private MForm? Form { get; set; }
 
     private AddUserDto User { get; set; } = new();
@@ -61,19 +63,21 @@ public partial class AddUserDialog
 
     private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
     {
-        User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value))
-                                                   .ToList();
+        User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value)).ToList();
     }
 
-    public async Task AddUserAsync()
+    public async Task AddUserAsync(EditContext context)
     {
-        Loading = true;
-        User.Avatar = "/_content/Masa.Auth.Web.Admin.Rcl/img/subject/user.svg";
-        await UserService.AddAsync(User);
-        OpenSuccessMessage(T("Add user data success"));
-        await UpdateVisible(false);
-        await OnSubmitSuccess.InvokeAsync();
-        Loading = false;
+        var success = context.Validate();
+        if (success)
+        {
+            Loading = true;
+            await UserService.AddAsync(User);
+            OpenSuccessMessage(T("Add user data success"));
+            await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
+            Loading = false;
+        }
     }
 }
 

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class RolePermission : FullAuditEntity<Guid, Guid>
+public class RolePermission : FullEntity<Guid, Guid>
 {
     public Role Role { get; set; } = null!;
 

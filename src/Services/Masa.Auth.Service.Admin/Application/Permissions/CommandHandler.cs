@@ -16,7 +16,7 @@ public class CommandHandler
         _roleDomainService = roleDomainService;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddRoleAsync(AddRoleCommand command)
     {
         var roleDto = command.Role;
@@ -27,9 +27,11 @@ public class CommandHandler
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.AddAsync(role);
+        await _roleRepository.UnitOfWork.SaveChangesAsync();
+        command.RoleId = role.Id;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateUserAsync(UpdateRoleCommand command)
     {
         var roleDto = command.Role;
@@ -46,7 +48,7 @@ public class CommandHandler
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveRoleAsync(RemoveRoleCommand command)
     {
         var role = await _roleRepository.FindAsync(u => u.Id == command.Role.Id);
@@ -58,7 +60,7 @@ public class CommandHandler
 
     #region Permission
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task ReomvePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
         var permission = await _permissionRepository.GetByIdAsync(removePermissionCommand.PermissionId);
@@ -66,7 +68,7 @@ public class CommandHandler
         await _permissionRepository.RemoveAsync(permission);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
     {
         var permissionBaseInfo = addPermissionCommand.PermissionDetail;
@@ -87,6 +89,7 @@ public class CommandHandler
         permission.SetParent(addPermissionCommand.ParentId);
         permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
+        await _permissionRepository.UnitOfWork.SaveChangesAsync();
     }
 
     #endregion

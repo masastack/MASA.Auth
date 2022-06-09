@@ -1,67 +1,69 @@
 ﻿@inherits AdminCompontentBase
 
-<div style="position: absolute;right: 0;top: 0;" class="d-flex">
-    <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-        <PrependInnerContent>
-            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
-        </PrependInnerContent>
-    </MTextField>
-    <div @onclick="() => StaffSyncDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;">
-        <div class="ma-auto">
-            <MIcon Color="neutral-lighten-1" Size=20>mdi-refresh</MIcon>
-            <span class="text-caption2 neutral-lighten-1--text">@T("Sync")</span>
-        </div>
-    </div>
-    <MButton Color="primary" Class="ml-4 medium-button" OnClick=OpenAddStaffDialog>
-        <MIcon Size=18>mdi-plus</MIcon>
-        <span class="ml-2">@T("Add")</span>
-    </MButton>
-</div>
-
-<MDataTable Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
-    <HeaderColContent Context="header">
-        <span class="text-btn">@header.Text</span>
-    </HeaderColContent>
-    <ItemColContent>
-        @switch (context.Header.Value)
-        {
-            case nameof(UserDto.Avatar):
-                <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
-                    <MAvatar Size=48>
-                        <img src="@context.Item.User.Avatar" />
-                    </MAvatar>
-                    <div class="ml-4 block-center">
-                        <div class="text-body3 neutral-lighten-1--text">@context.Item.User.Name</div>
-                    </div>
+<AutoHeight>
+    <HeaderContent>
+        <div class="d-flex">
+            <MSpacer />
+            <SearchTextField @bind-Value="Search" />
+            <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button" style="width: 70px;height:40px;">
+                <div class="ma-auto">
+                    <MIcon Color="default-emphasis-secondary" Size=20>mdi-refresh</MIcon>
+                    <span class="font-12-medium emphasis2--text">@T("Sync")</span>
                 </div>
-                break;
-            case (nameof(StaffDto.Department)):
-                <span class="text-body3">@context.Item.Department</span>
-                break;
-            case nameof(StaffDto.JobNumber):
-                <span class="text-body3">@context.Item.JobNumber</span>
-                break;
-            case (nameof(StaffDto.Position)):
-                <span class="text-body3">@context.Item.Position</span>
-                break;
-            case nameof(StaffDto.Enabled):
-                <EnableChip Value="context.Item.Enabled" />
-                break;
-            case "Action":
-                <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
-                <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
-                break;
-            default:
-                <span class="text-body3">@context.Value</span>
-                break;
-        }
-    </ItemColContent>
+            </div>
+            <DefaultButton Small Class="ml-4" OnClick=OpenAddStaffDialog>
+                <MIcon Size=18>@IconConstants.Add</MIcon>
+                <span class="ml-2">@T("Add")</span>
+            </DefaultButton>
+        </div>
+    </HeaderContent>
+    <AutoHeightContent>
+        <DefaultDataTable Class="mt-6" Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
+            <HeaderColContent Context="header">
+                <span class="font-14-medium">@header.Text</span>
+            </HeaderColContent>
+            <ItemColContent>
+                @switch (context.Header.Value)
+                {
+                    case nameof(UserDto.Avatar):
+                        <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
+                            <MAvatar Size=48>
+                                <img src="@context.Item.User.Avatar" />
+                            </MAvatar>
+                            <div class="ml-4 block-center">
+                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.User.Name</div>
+                            </div>
+                        </div>
+                        break;
+                    case (nameof(StaffDto.Department)):
+                        <span class="text-body3">@context.Item.Department</span>
+                        break;
+                    case nameof(StaffDto.JobNumber):
+                        <span class="text-body3">@context.Item.JobNumber</span>
+                        break;
+                    case (nameof(StaffDto.Position)):
+                        <span class="text-body3">@context.Item.Position</span>
+                        break;
+                    case nameof(StaffDto.Enabled):
+                        <EnableChip Value="context.Item.Enabled" />
+                        break;
+                    case "Action":
+                        <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateStaffDialog(context.Item)">mdi-pencil</MIcon>
+                        <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">mdi-shield-half-full</MIcon>
+                        break;
+                    default:
+                        <span class="text-body3">@context.Value</span>
+                        break;
+                }
+            </ItemColContent>
+        </DefaultDataTable>
+    </AutoHeightContent>
     <FooterContent>
         <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
-</MDataTable>
+</AutoHeight>
 
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
 <UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
 <UserAuthorizeDialog UserId=CurrentStaff.User.Id @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
-<StaffSyncDialog @bind-Visible=StaffSyncDialogVisible OnSubmitSuccess=GetStaffAsync />
+<SyncStaffDialog @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=GetStaffAsync />

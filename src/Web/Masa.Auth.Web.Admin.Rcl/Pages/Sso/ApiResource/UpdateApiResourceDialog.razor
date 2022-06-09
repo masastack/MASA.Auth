@@ -1,21 +1,21 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiResource")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update ApiResource")">
     <MForm Model=ApiResource EnableValidation @ref="Form">
-        <div class="sheetDialogPadding full-height flex-column">
-            <div class="mt-6 flex-height-auto overflow-y">
-                <div class="text-subtitle2">@T("Basic Information")</div>
+        <AutoHeight>
+        <AutoHeightContent>
+            <div class="font-14-bold">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
-                        <MTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <MTextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <MTextField @bind-Value="ApiResource.Description" Label="@T("Description")" HideDetails="@("auto")" Outlined />
+                        <DefaultTextField @bind-Value="ApiResource.Description" Label="@T("Description")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
@@ -25,20 +25,22 @@
                 </MRow>
                 <div class="d-flex mt-6" style="position: relative;height: 67%;">
                     <div class="pr-6" style="width:50%">
-                        <div class="text-subtitle2">@T("User Claims")</div>
+                        <div class="font-14-bold">@T("User Claims")</div>
                         <UserClaimSelect @bind-Value=ApiResource.UserClaims Class="mt-4" />
                     </div>
                     <div class="pl-6" style="width:50%">
-                        <div class="text-subtitle2">@T("Api Scopes")</div>
+                        <div class="font-14-bold">@T("Api Scopes")</div>
                         <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Class="mt-4" />
                     </div>
                 </div>
-            </div>
+        </AutoHeightContent>
+        <FooterContent>
             <div class="d-flex mt-6">
-                <MSwitch @bind-Value="ApiResource.Enabled" Inset Class="label" Label="@(ApiResource.Enabled ? T("Enable"):T("Disabled"))" />
+                <EnableSwitch @bind-Value="ApiResource.Enabled" />
                 <MSpacer></MSpacer>
-                <MButton OnClick="async () => await UpdatetApiResourceAsync(context)" Color="primary" Class="small-butto">@T("Submit")</MButton>
+                <DefaultButton Medium OnClick="async () => await UpdatetApiResourceAsync(context)">@T("Submit")</DefaultButton>
             </div>
-        </div>
+        </FooterContent>
+    </AutoHeight>      
     </MForm>
-</SheetDialog>
+</DefaultSheetDialog>

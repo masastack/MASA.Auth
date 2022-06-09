@@ -2,31 +2,19 @@
 @using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model
 @inherits AdminCompontentBase
 
-<MCard>
-    <MCardText Class="pa-6">
-        <div style="position: relative;">
-            <MButtonGroup Dense Mandatory Borderless @bind-Value="_pageTab" Class="rounded-lg elevation-tab mb-6">
-                @foreach (var title in new List<string> { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff })
-                {
-                    <MButton Ripple=false Value="title" Class="rounded-lg" MinWidth=100>
-                        @T(title)
-                    </MButton>
-                }
-            </MButtonGroup>
-            <MWindow Value="_pageTab" Reverse Class="flex-grow-1">
-                <MWindowItem Value="PageTab.User" Class="full-height">
-                    <User />
-                </MWindowItem>
-                <MWindowItem Value="PageTab.ThirdPartyUser" Class="full-height">
-                    <ThirdPartyUser />
-                </MWindowItem>
-                <MWindowItem Value="PageTab.Staff" Class="full-height">
-                    <Staff />
-                </MWindowItem>
-            </MWindow>
-        </div>
-    </MCardText>
-</MCard>
+<DefaultCard>
+    <ElevationTab Class="defaultTab full-height" TabMinWidth="120" Left Tabs="new List<string> { T(PageTab.User), T(PageTab.ThirdPartyUser), T(PageTab.Staff) }" Dense>
+        <ElevationTabItem>
+            <User />
+        </ElevationTabItem>
+        <ElevationTabItem>
+            <ThirdPartyUser />
+        </ElevationTabItem>
+        <ElevationTabItem>
+            <Staff />
+        </ElevationTabItem>
+    </ElevationTab>
+</DefaultCard>
 
 @code {
     StringNumber _pageTab = PageTab.User;

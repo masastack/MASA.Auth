@@ -3,9 +3,7 @@
 <MContainer Style="overflow-y: auto;" Class="full-height">
     <MRow>
         <MCol Md=12 Class="text-center">
-            <MAvatar Height=80 Width=80>
-                <MImage Height=80 Width=80 Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" Alt="Jack"></MImage>
-            </MAvatar>
+            <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload/>
         </MCol>
         <MCol Md=6>
             <DefaultTextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
@@ -26,7 +24,7 @@
                               AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddCallBackRedirectUri" />
             @foreach (var uri in Dto.RedirectUris)
             {
-                <MTextField Dense HideDetails="true" Value="uri" Readonly Class="flex-grow-1" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
+                <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="flex-grow-1" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
             }
         </MCol>
         <MCol Md=6>
@@ -34,7 +32,7 @@
                               AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddLogoutRedirectUri" />
             @foreach (var uri in Dto.PostLogoutRedirectUris)
             {
-                <MTextField Dense HideDetails="true" Value="uri" Readonly AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
+                <DefaultTextField Dense HideDetails="true" Value="uri" Readonly AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
             }
         </MCol>
     </MRow>

@@ -2,8 +2,8 @@ export function InputFileChanged(inputFile, callback) {
     return eval(`${callback}(inputFile.files)`)
 }
 
-export function InputFileUpload(inputFile, callback) {
-    return eval(`${callback}(inputFile.files)`)
+export function InputFileUpload(inputFile, callback, paramter) {
+    return eval(`${callback}(inputFile.files,paramter,paramter)`)
 }
 
 export async function GetPreviewImageUrls(imageFiles) {

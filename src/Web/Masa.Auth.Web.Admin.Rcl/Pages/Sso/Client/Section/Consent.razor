@@ -3,9 +3,7 @@
 <MContainer>
     <MRow>
         <MCol Md=12 Class="text-center">
-            <MAvatar Height=80 Width=80>
-                <MImage Height=80 Width=80 Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png" Alt="Jack"></MImage>
-            </MAvatar>
+            <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload/>
         </MCol>
         <MCol Md=12>
             <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />

@@ -1,0 +1,22 @@
+﻿@inherits AdminCompontentBase
+
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Position")">
+    <MForm Model=Position EnableValidation @ref="Form">
+        <AutoHeight Overflow AutoClass="mt-6">
+            <AutoHeightContent>
+                <div class="text-subtitle2">@T("Basic Information")</div>
+                <MRow Class="mt-4">
+                    <MCol>
+                        <DefaultTextField @bind-Value="Position.Name" Label="@T("Name")" />
+                    </MCol>
+                </MRow>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <MSpacer></MSpacer>
+                    <DefaultButton Medium OnClick="async () => await UpdatetPositionAsync(context)">@T("Submit")</DefaultButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
+    </MForm>
+</DefaultSheetDialog>

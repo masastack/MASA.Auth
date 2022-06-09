@@ -1,60 +1,62 @@
 ﻿@page "/role"
 @inherits AdminCompontentBase
 
-<MCard Class="pa-6">
-    <div class="d-flex mb-6">
-        <MTextField @bind-Value="Search" Color="primary" Class="rounded-2 search" Style="max-width:340px;" Placeholder="@T("Search")" HideDetails="@("auto")" Flat Dense Solo BackgroundColor="fill-lighten-1">
-            <PrependInnerContent>
-                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
-            </PrependInnerContent>
-        </MTextField>
-        <MSpacer />
-        <MButton Color="primary" Class="ml-6 medium-button" OnClick=OpenAddRoleDialog>
-            <MIcon Size=18>mdi-plus</MIcon>
-            <span class="ml-2">@T("Add")</span>
-        </MButton>
-    </div>
-    <MDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize" HideDefaultFooter Class="user table-border-none">
-        <HeaderColContent Context="header">
-            <span class="text-btn">@header.Text</span>
-        </HeaderColContent>
-        <ItemColContent>
-            @switch (context.Header.Value)
-            {
-                case nameof(RoleDto.Name):
-                    <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                        <span class="text-body3 neutral--text">@context.Item.Name</span>
-                    </div>                    
-                    break;
-                case (nameof(RoleDto.CreationTime)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
-                    break;
-                case nameof(RoleDto.ModificationTime):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                    break;
-                case (nameof(RoleDto.Creator)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Creator</span>
-                    break;
-                case (nameof(RoleDto.Modifier)):
-                    <span class="text-body4 neutral-lighten-2--text">@context.Item.Modifier</span>
-                    break;
-                case nameof(RoleDto.Enabled):
-                   <EnableChip Value="context.Item.Enabled" />
-                    break;
-                case "Action":
-                    <MIcon Small Color="neutral-lighten-2" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                    <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
-                    break;
-                default:
-                    <span class="text-body3">@context.Value</span>
-                    break;
-            }
-        </ItemColContent>
+<DefaultCard>
+    <AutoHeight>
+        <HeaderContent>
+            <div class="d-flex mb-6">
+                <SearchTextField @bind-Value="Search" />
+                <MSpacer />
+                <DefaultButton Medium Class="ml-6" OnClick=OpenAddRoleDialog>
+                    <MIcon Size=18>mdi-plus</MIcon>
+                    <span class="ml-2">@T("Add")</span>
+                </DefaultButton>
+            </div>
+        </HeaderContent>
+        <AutoHeightContent>
+            <DefaultDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize">
+                <HeaderColContent Context="header">
+                    <span class="font-14-medium">@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(RoleDto.Name):
+                            <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
+                                <span class="text-body3 default--text">@context.Item.Name</span>
+                            </div>
+                            break;
+                        case (nameof(RoleDto.CreationTime)):
+                            <span class="font-16 default-regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            break;
+                        case nameof(RoleDto.ModificationTime):
+                            <span class="font-16 default-regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                            break;
+                        case (nameof(RoleDto.Creator)):
+                            <span class="font-16 default-regular--text">@context.Item.Creator</span>
+                            break;
+                        case (nameof(RoleDto.Modifier)):
+                            <span class="font-16 default-regular--text">@context.Item.Modifier</span>
+                            break;
+                        case nameof(RoleDto.Enabled):
+                            <EnableChip Value="context.Item.Enabled" />
+                            break;
+                        case "Action":
+                            <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
+                            break;
+                        default:
+                            <span class="text-body3">@context.Value</span>
+                            break;
+                    }
+                </ItemColContent>
+            </DefaultDataTable>
+        </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <Pagination @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
-    </MDataTable>
-</MCard>
+    </AutoHeight>
+</DefaultCard>
 
 <AddRoleDialog @bind-Visible="AddRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
 <UpdateRoleDialog RoleId=CurrentRoleId @bind-Visible="UpdateRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />

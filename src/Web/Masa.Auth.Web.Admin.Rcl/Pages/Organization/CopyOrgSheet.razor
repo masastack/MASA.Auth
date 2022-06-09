@@ -7,7 +7,7 @@
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center">
                     <div class="full-width">
-                        <MTextField @bind-Value="@Dto.Name" class="mx-auto text-h5" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></MTextField>
+                        <DefaultTextField @bind-Value="@Dto.Name" class="mx-auto font-24-bold" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></DefaultTextField>
                         <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">
@@ -25,14 +25,14 @@
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column">
-                    <MTextField class="mx-auto text-h5 neutral-lighten-4--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+                    <MTextField class="mx-auto font-24-bold default-secondary--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
                     <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
                                ItemValue="u => u.Id"
                                ItemChildren="u => u.Children">
                     </MCascader>
                     <div class="d-flex align-center mt-6">
-                        <span class="text-h5 neutral-lighten-1--text">@T("Member")</span>
+                        <span class="font-24-bold default-emphasis-secondary--text">@T("Member")</span>
                         <MSpacer />
                         <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
                                        ItemText="r=>r.User.Name" PrependInnerIcon="mdi-magnify"
@@ -64,8 +64,8 @@
                                             <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" />
                                         </MListItemAvatar>
                                         <MListItemContent class="py-1">
-                                            <MListItemTitle class="text-body3 neutral-lighten-1--text">@staff.User.DisplayName</MListItemTitle>
-                                            <MListItemSubtitle class="text-body2 neutral-lighten-3--text">@staff.User.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
+                                            <MListItemTitle class="text-body3 default-emphasis-secondary--text">@staff.User.DisplayName</MListItemTitle>
+                                            <MListItemSubtitle class="font-14 default-regular-secondary--text">@staff.User.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
                                         </MListItemContent>
                                         <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
                                             <MIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</MIcon>

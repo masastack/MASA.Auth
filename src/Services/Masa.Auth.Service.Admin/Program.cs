@@ -3,7 +3,33 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddObservability();
+
+#if DEBUG
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
+#endif
+
 builder.Services.AddDaprClient();
+builder.Services.AddAliyunStorage(serviceProvider =>
+{
+    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
+    var accessId = daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
+    var accessSecret = daprClient.GetSecretAsync("localsecretstore", "access_secret").Result.First().Value;
+    var endpoint = daprClient.GetSecretAsync("localsecretstore", "endpoint").Result.First().Value;
+    var roleArn = daprClient.GetSecretAsync("localsecretstore", "roleArn").Result.First().Value;
+    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
+    {
+        Sts = new AliyunStsOptions()
+        {
+            RegionId = "cn-hangzhou"
+        }
+    };
+});
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
@@ -17,19 +43,14 @@ builder.Services.AddAuthentication(options =>
     options.Audience = "";
 });
 
-//builder.AddMasaConfiguration(
-//configurationBuilder =>
-//    {
-//        configurationBuilder.UseMasaOptions(options =>
-//        {
-//            options.Mapping<RedisConfigurationOptions>(SectionTypes.Local, "Appsettings", "RedisConfig");
-//            //Map the RedisConfigurationOptions binding to the Local:Appsettings:RedisConfig node
-//        });
-//    }
-//);
+//builder.AddMasaConfiguration(configurationBuilder =>
+//{
+//    configurationBuilder.UseDcc();
+//    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
+//});
 MapsterAdapterConfig.TypeAdapter();
 
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
@@ -41,6 +62,8 @@ var app = builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
     {
+        //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {
             Name = "Authorization",
@@ -76,21 +99,15 @@ var app = builder.Services
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
-            eventBusBuilder.UseMiddleware(typeof(LogMiddleware<>));
         })
+        //set Isolation.
+        //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
         .UseIsolationUoW<AuthDbContext>(
-            isolationBuilder => isolationBuilder.UseMultiEnvironment("env"),
+            isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT_KEY),
             dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseRepository<AuthDbContext>();
     })
     .AddServices(builder);
-
-//set Isolation
-//app.Use(async (context, next) =>
-//{
-//    context.Items.Add("env", "development");
-//    await next.Invoke();
-//});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

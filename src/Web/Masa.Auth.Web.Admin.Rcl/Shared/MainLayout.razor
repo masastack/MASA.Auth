@@ -3,20 +3,20 @@
 @inject GlobalConfig GlobalConfig
 @implements IDisposable
 
-<MApp Class="masa-stack-components">
+<MApp Class="masa-stack-components masa">
     <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
         <Favorite />
         <MSpacer />
         <Search />
-        <MIcon Size=20 Class="ml-5" Color="neutral-lighten-3">mdi-message-processing-outline</MIcon>
+        <MIcon Size=20 Class="ml-5" Color="default-regular-secondary">mdi-message-processing-outline</MIcon>
         <Language />
         <Login />
     </MAppBar>
 
     <Navigation />
 
-    <MMain Class="fill-lighten-1" Style="padding-top:60px">
-        <MErrorHandler>
+    <MMain Class="emphasis2--text" Style="padding-top:60px">
+        <MErrorHandler OnErrorHandleAsync="OnError">
             <div class="pa-6 max-width full-height">
                 @Body
             </div>
@@ -27,6 +27,16 @@
 </MApp>
 
 @code {
+    [Inject]
+    public IPopupService PopupService { get; set; } = default!;
+
+    Task OnError(Exception exception)
+    {
+        PopupService.AlertAsync(exception.Message, AlertTypes.Error);
+        GlobalConfig.Loading = false;
+        return Task.CompletedTask;
+    }
+
     protected override void OnInitialized()
     {
         GlobalConfig.OnPageModeChanged += base.StateHasChanged;

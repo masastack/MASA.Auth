@@ -5,12 +5,6 @@ namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthDbContext : IsolationDbContext
 {
-    public const string PERMISSION_SCHEMA = "permissions";
-    public const string SUBJECT_SCHEMA = "subjects";
-    public const string ORGANIZATION_SCHEMA = "organizations";
-    public const string SSO_SCHEMA = "sso";
-    public const string PROJECTS_SCHEMA = "projects";
-
     public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)
     {
     }
@@ -23,12 +17,23 @@ public class AuthDbContext : IsolationDbContext
 
     protected override void OnModelCreatingExecuting(ModelBuilder builder)
     {
+        builder.HasDefaultSchema("auth");
+
         builder.Entity<IdentityProvider>()
             .HasDiscriminator<string>("Discriminator")
             .HasValue<ThirdPartyIdp>("ThirdParty")
             .HasValue<LdapIdp>("LDAP");
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))
+            {
+                entityType.SetTableName(entityType.ClrType.Name.Pluralize());
+            }
+        }
+
         base.OnModelCreatingExecuting(builder);
     }
 }

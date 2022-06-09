@@ -10,9 +10,16 @@ public class PositionService : RestServiceBase
 
     }
 
-    private async Task<StaffDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<PaginationDto<PositionDto>> GetListAsync(IEventBus eventBus, GetPositionsDto position)
     {
-        var query = new StaffDetailQuery(id);
+        var query = new PositionsQuery(position.Page, position.PageSize, position.Search);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<PositionDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new PositionDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -24,9 +31,22 @@ public class PositionService : RestServiceBase
         return query.Result;
     }
 
-    private async Task UpsertAsync(IEventBus eventBus,
-        [FromBody] UpsertPositionDto position)
+    private async Task AddAsync(IEventBus eventBus,
+        [FromBody] AddPositionDto position)
     {
-        await eventBus.PublishAsync(new UpsertPositionCommand(position));
+        await eventBus.PublishAsync(new AddPositionCommand(position));
+    }
+
+    private async Task UpdateAsync(IEventBus eventBus,
+        [FromBody] UpdatePositionDto position)
+    {
+        await eventBus.PublishAsync(new UpdatePositionCommand(position));
+    }
+
+    private async Task RemoveAsync(
+            IEventBus eventBus,
+            [FromBody] RemovePositionDto dto)
+    {
+        await eventBus.PublishAsync(new RemovePositionCommand(dto));
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class Role : FullAuditAggregateRoot<Guid, Guid>
+public class Role : FullAggregateRoot<Guid, Guid>
 {
     private List<RolePermission> _permissions = new();
     private List<RoleRelation> _childrenRoles = new();
@@ -73,7 +73,7 @@ public class Role : FullAuditAggregateRoot<Guid, Guid>
             role.Permissions.Select(rp => rp.Id).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
-            role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
+            role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
             role.Teams.Select(t => t.TeamId).ToList(),
             role.CreationTime, role.ModificationTime, role.CreateUser?.Name ?? "", role.ModifyUser?.Name ?? "", role.AvailableQuantity);
     }
