@@ -7,6 +7,8 @@ namespace Masa.Auth.Service.Admin.Services
     {
         public UserService(IServiceCollection services) : base(services, "api/user")
         {
+            MapGet(FindByAccountAsync);
+            MapPost(ValidateByAccountAsync);
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -69,6 +71,20 @@ namespace Masa.Auth.Service.Admin.Services
             [FromBody] RemoveUserDto dto)
         {
             await eventBus.PublishAsync(new RemoveUserCommand(dto));
+        }
+
+        private async Task<bool> ValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
+        {
+            var validateCommand = new ValidateByAccountCommand(accountValidateDto.Account, accountValidateDto.Password);
+            await eventBus.PublishAsync(validateCommand);
+            return validateCommand.Result;
+        }
+
+        private async Task<UserDetailDto> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
+        {
+            var query = new FindUserByAccountQuery(account);
+            await eventBus.PublishAsync(query);
+            return query.Result;
         }
     }
 }

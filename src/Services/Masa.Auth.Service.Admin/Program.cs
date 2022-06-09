@@ -5,14 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
 
-//if (!builder.Environment.IsProduction())
-//{
-//    builder.Services.AddDaprStarter(opt =>
-//    {
-//        opt.DaprHttpPort = 3600;
-//        opt.DaprGrpcPort = 3601;
-//    });
-//}
+#if DEBUG
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
+#endif
+
 builder.Services.AddDaprClient();
 builder.Services.AddAliyunStorage(serviceProvider =>
 {
@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(options =>
 //});
 MapsterAdapterConfig.TypeAdapter();
 
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig"));
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
@@ -62,8 +62,8 @@ var app = builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
     {
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {
             Name = "Authorization",
