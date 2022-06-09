@@ -39,7 +39,7 @@ public class DefaultChangeImage : DefaultUploadImage
         builder.CloseComponent();
 
         builder.OpenElement(8, "span");
-        builder.AddAttribute(9, "class", "ml-3 body");      
+        builder.AddAttribute(9, "class", "ml-3 body");
         builder.AddContent(10, T("Another"));
         builder.CloseElement();
 

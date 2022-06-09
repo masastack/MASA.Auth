@@ -37,7 +37,7 @@ namespace Masa.Auth.Service.Admin.Services
             if (dto.Gender == default) dto.Gender = GenderTypes.Male;
             if (string.IsNullOrEmpty(dto.Avatar))
             {
-                if(dto.Gender == GenderTypes.Male) dto.Avatar = DefaultUserAttributes.MaleAvatar;
+                if (dto.Gender == GenderTypes.Male) dto.Avatar = DefaultUserAttributes.MaleAvatar;
                 else dto.Avatar = DefaultUserAttributes.FemaleAvatar;
             }
             if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
