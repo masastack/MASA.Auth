@@ -15,13 +15,13 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task AddUserAsync(AddUserCommand addUserCommand)
     {
-        await _memoryCacheClient.SetAsync($"{CacheKey.USER_CACHE_KEY_PRE}{addUserCommand.UserId}", addUserCommand.User.Adapt<CacheUser>());
+        await _memoryCacheClient.SetAsync($"{CacheKey.USER_CACHE_KEY_PRE}{addUserCommand.NewUser.Id}", addUserCommand.User.Adapt<CacheUser>());
     }
 
     [EventHandler(99, IsCancel = true)]
     public async Task FailAddUserAsync(AddUserCommand addUserCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{addUserCommand.UserId}");
+        await _memoryCacheClient.RemoveAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{addUserCommand.NewUser.Id}");
     }
 
     [EventHandler(99)]
