@@ -34,8 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Oidc.Cache.Storage\Masa.Oidc.Cache.Storage.csproj" />
-    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Oidc.EntityFramework\Masa.Oidc.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.Cache.Storage\Masa.Contrib.Oidc.Cache.Storage.csproj" />
+    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.EntityFramework\Masa.Contrib.Oidc.EntityFramework.csproj" />
   </ItemGroup>
 
 </Project>

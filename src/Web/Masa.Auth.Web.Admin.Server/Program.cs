@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,23 +52,25 @@ builder.Services.AddAuthentication(options =>
         // Set ClientId to setting in appsettings.json.    This Client ID is set when registering the Blazor Server app in IdentityServer4
         options.ClientId = builder.Configuration["OIDC:ClientId"];
         // Set ClientSecret to setting in appsettings.json.  The secret value is set from the Client >  Basic tab in IdentityServer Admin UI
-        options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
+        //options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
         // When set to code, the middleware will use PKCE protection
-        options.ResponseType = "id_token token";
+        options.ResponseType = "code";
         // Add request scopes.  The scopes are set in the Client >  Basic tab in IdentityServer Admin UI
-        options.Scope.Add("openid");
-        options.Scope.Add("profile");
-        options.Scope.Add("email");
+        //options.Scope.Add("openid");
+        //options.Scope.Add("profile");
         // Save access and refresh tokens to authentication cookie.  the default is false
         options.SaveTokens = true;
         // It's recommended to always get claims from the 
         // UserInfoEndpoint during the flow. 
         options.GetClaimsFromUserInfoEndpoint = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            //map claim to name for display on the upper right corner after login.  Can be name, email, etc.
-            NameClaimType = "name"
-        };
+        options.UseTokenLifetime = true;
+
+        options.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(5.0);
+        options.TokenValidationParameters.RequireExpirationTime = true;
+        options.TokenValidationParameters.ValidateLifetime = true;
+
+        options.NonceCookie.SameSite = SameSiteMode.Unspecified;
+        options.CorrelationCookie.SameSite = SameSiteMode.Unspecified;
 
         options.Events = new OpenIdConnectEvents
         {

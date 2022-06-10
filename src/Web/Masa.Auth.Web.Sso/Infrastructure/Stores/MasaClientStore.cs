@@ -8,10 +8,12 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Stores;
 public class MasaClientStore : IClientStore
 {
     readonly IMasaOidcClientStore _masaOidcClientStore;
+
     public MasaClientStore(IMasaOidcClientStore masaOidcClientStore)
     {
         _masaOidcClientStore = masaOidcClientStore;
     }
+
     public async Task<Client> FindClientByIdAsync(string clientId)
     {
         return (await _masaOidcClientStore.FindClientByIdAsync(clientId))?.Adapt<Client>() ?? new();
