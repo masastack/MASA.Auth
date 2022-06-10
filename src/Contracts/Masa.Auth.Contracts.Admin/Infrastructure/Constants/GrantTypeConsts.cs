@@ -2,7 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
-
+#warning change Masa.BuildingBlocks.Oidc.Domain
 public class GrantTypeConsts
 {
     public static ICollection<string> Implicit =>

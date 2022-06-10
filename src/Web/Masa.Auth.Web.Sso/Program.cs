@@ -1,7 +1,10 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.BasicAbility.Pm;
+using Masa.BuildingBlocks.Oidc.Domain.Repositories;
+using Masa.Oidc.EntityFramework;
+using Masa.Utils.Caching.Redis.Models;
+using Client = Masa.BuildingBlocks.Oidc.Domain.Entities.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,29 +22,22 @@ builder.Services.AddMasaBlazor(builder =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddIdentityServer(options =>
-    {
-        options.UserInteraction.ErrorUrl = "/error/500";
-    })
-    .AddDeveloperSigningCredential()
-.AddConfigurationStore(options =>
-{
-    options.ConfigureDbContext = dbContextBuilder =>
-    {
-        dbContextBuilder.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
-    };
-})
-.AddProfileService<UserProfileService>()
-.AddInMemoryCaching()
-.AddConfigurationStoreCache()
-.AddClientStoreCache<ClientStore>()
-.AddResourceStoreCache<ResourceStore>()
-.AddCorsPolicyCache<CorsPolicyService>();
 
-//.AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
-//.AddTestUsers(InMemoryConfiguration.GetUsers().ToList())
-//.AddInMemoryApiResources(InMemoryConfiguration.GetApis())
-//.AddInMemoryClients(InMemoryConfiguration.GetClients());
+builder.Services.AddOidcDbContext(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+}).AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+.AddIdentityServer(options =>
+{
+    options.UserInteraction.ErrorUrl = "/error/500";
+})
+.AddDeveloperSigningCredential()
+.AddClientStore<MasaClientStore>()
+.AddResourceStore<MasaResourceStore>()
+.AddCorsPolicyService<CorsPolicyService>()
+.AddProfileService<UserProfileService>();
+
+//builder.Services.AddAuthClient("https://localhost:18102");
 
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 
@@ -49,6 +45,16 @@ builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 
 var app = builder.Build();
+
+var clientRespository = builder.Services.BuildServiceProvider().GetRequiredService<IClientRepository>();
+if (clientRespository.FindAsync(c => c.ClientId == "masa.auth.admin.web").Result == null)
+{
+    var client = new Client(Masa.BuildingBlocks.Oidc.Domain.Enums.ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
+    client.SetAllowedScopes(new List<string> { "openid", "profile", "email" });
+    client.SetPostLogoutRedirectUris(new List<string> { "https://localhost:18102/signout-callback-oidc" });
+    client.SetRedirectUris(new List<string> { "https://localhost:18102/signin-oidc" });
+    await clientRespository.AddAsync(client);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -8,7 +8,6 @@ namespace Masa.Auth.Web.Sso.Global.Config
         #region Field
 
         private bool _isDark;
-        private bool _expandOnHover;
         private CookieStorage? _cookieStorage;
 
         #endregion
@@ -16,8 +15,6 @@ namespace Masa.Auth.Web.Sso.Global.Config
         #region Property
 
         public static string IsDarkCookieKey { get; set; } = "GlobalConfig_IsDark";
-
-        public static string ExpandOnHoverCookieKey { get; set; } = "GlobalConfig_ExpandOnHover";
 
         public I18nConfig? I18nConfig { get; set; }
 
@@ -44,16 +41,6 @@ namespace Masa.Auth.Web.Sso.Global.Config
             }
         }
 
-        public bool ExpandOnHover
-        {
-            get => _expandOnHover;
-            set
-            {
-                _expandOnHover = value;
-                _cookieStorage?.SetItemAsync(ExpandOnHoverCookieKey, value);
-            }
-        }
-
         #endregion
 
         public GlobalConfig(CookieStorage cookieStorage, I18nConfig i18nConfig, IHttpContextAccessor httpContextAccessor)
@@ -66,7 +53,6 @@ namespace Masa.Auth.Web.Sso.Global.Config
         #region event
 
         public delegate void GlobalConfigChanged();
-        public event GlobalConfigChanged? OnCurrentNavChanged;
         public event GlobalConfigChanged? OnLanguageChanged;
 
         #endregion
@@ -76,7 +62,6 @@ namespace Masa.Auth.Web.Sso.Global.Config
         public void Initialization(IRequestCookieCollection cookies)
         {
             _isDark = Convert.ToBoolean(cookies[IsDarkCookieKey]);
-            _expandOnHover = Convert.ToBoolean(cookies[ExpandOnHoverCookieKey]);
         }
         #endregion
     }

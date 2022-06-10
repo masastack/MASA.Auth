@@ -41,34 +41,7 @@ public class InMemoryConfiguration
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email
                 },
-                RequireConsent = true,
-                //AccessTokenLifetime = 3600, // one hour
                 AllowAccessTokensViaBrowser = true // can return access_token to this client
-            }
-        };
-    }
-
-    public static IEnumerable<TestUser> GetUsers()
-    {
-        return new[]
-        {
-            new TestUser
-            {
-                SubjectId = "10001",
-                Username = "edison@hotmail.com",
-                Password = "edisonpassword"
-            },
-            new TestUser
-            {
-                SubjectId = "10002",
-                Username = "andy@hotmail.com",
-                Password = "andypassword"
-            },
-            new TestUser
-            {
-                SubjectId = "10003",
-                Username = "leo@hotmail.com",
-                Password = "leopassword"
             }
         };
     }

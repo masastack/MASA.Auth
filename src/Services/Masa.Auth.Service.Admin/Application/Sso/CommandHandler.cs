@@ -32,6 +32,7 @@ public class CommandHandler
         var client = addClientCommand.AddClientDto.Adapt<Client>();
         await _clientRepository.AddAsync(client);
 
+        //todo change domain method
         void PrepareGrantTypeWithClientType(AddClientDto client)
         {
             switch (client.ClientType)

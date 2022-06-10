@@ -5,6 +5,7 @@ using Masa.Auth.ApiGateways.Caller;
 using Masa.Auth.Contracts.Admin.Subjects.Validator;
 using Masa.Auth.Web.Admin.Rcl;
 using Masa.Auth.Web.Admin.Rcl.Global;
+using Masa.Stack.Components;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
