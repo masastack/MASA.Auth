@@ -1,8 +1,7 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Oidc.Domain.Repositories;
-using Masa.Oidc.EntityFramework;
+using Masa.Contrib.Oidc.EntityFramework;
 using Masa.Utils.Caching.Redis.Models;
 using Client = Masa.BuildingBlocks.Oidc.Domain.Entities.Client;
 
@@ -23,10 +22,16 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 
-builder.Services.AddOidcDbContext(options =>
+var client = new Client(Masa.BuildingBlocks.Oidc.Domain.Enums.ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
+client.SetAllowedScopes(new List<string> { "openid", "profile", "email" });
+client.SetPostLogoutRedirectUris(new List<string> { "https://localhost:18100/signout-callback-oidc" });
+client.SetRedirectUris(new List<string> { "https://localhost:18100/signin-oidc" });
+
+builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+.AddOidcDbContext(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
-}).AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+}).SeedClientData(new List<Client> { client })
 .AddIdentityServer(options =>
 {
     options.UserInteraction.ErrorUrl = "/error/500";
@@ -45,16 +50,6 @@ builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 
 var app = builder.Build();
-
-var clientRespository = builder.Services.BuildServiceProvider().GetRequiredService<IClientRepository>();
-if (clientRespository.FindAsync(c => c.ClientId == "masa.auth.admin.web").Result == null)
-{
-    var client = new Client(Masa.BuildingBlocks.Oidc.Domain.Enums.ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
-    client.SetAllowedScopes(new List<string> { "openid", "profile", "email" });
-    client.SetPostLogoutRedirectUris(new List<string> { "https://localhost:18102/signout-callback-oidc" });
-    client.SetRedirectUris(new List<string> { "https://localhost:18102/signin-oidc" });
-    await clientRespository.AddAsync(client);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

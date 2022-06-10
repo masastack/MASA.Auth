@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using BlazorComponent;
+using Masa.Auth.Web.Sso.Controllers.Model;
+
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 [SecurityHeaders]
@@ -112,15 +115,17 @@ public partial class Index
             {
                 await HttpContext.SignOutAsync();
             }
-            var queryArguments = new Dictionary<string, string?>()
+            var msg = await _js.InvokeAsync<string>("login", new LoginModel
             {
-                { "userName", _inputModel.Username },
-                { "password", _inputModel.Password },
-                { "remember_login", _inputModel.RememberLogin.ToString() },
-                { "returnUrl", _inputModel.ReturnUrl }
-            };
-            var url = QueryHelpers.AddQueryString("login", queryArguments);
-            Navigation.NavigateTo(url, true);
+                UserName = _inputModel.Username,
+                Password = _inputModel.Password,
+                RememberLogin = _inputModel.RememberLogin,
+                ReturnUrl = _inputModel.ReturnUrl
+            });
+            if (!string.IsNullOrEmpty(msg))
+            {
+                await PopupService.AlertAsync(msg, AlertTypes.Error);
+            }
         }
         // something went wrong, show form with error
         await BuildModelAsync(_inputModel.ReturnUrl);
