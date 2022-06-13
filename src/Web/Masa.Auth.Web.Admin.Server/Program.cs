@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.IdentityModel.Logging;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +34,14 @@ builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = bu
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
+//builder.WebHost.UseKestrel(option =>
+//{
+//    option.ConfigureHttpsDefaults(options =>
+//    options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
+//});
+
 IdentityModelEventSource.ShowPII = true;
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -49,13 +57,13 @@ builder.Services.AddAuthentication(options =>
         options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
         // Set Authority to setting in appsettings.json.  This is the URL of the IdentityServer4
         options.Authority = builder.Configuration["OIDC:Authority"];
-        // Set ClientId to setting in appsettings.json.    This Client ID is set when registering the Blazor Server app in IdentityServer4
+        // Set ClientId to setting in appsettings.json.    This Client ID is set when registering the Blazor Server app
         options.ClientId = builder.Configuration["OIDC:ClientId"];
-        // Set ClientSecret to setting in appsettings.json.  The secret value is set from the Client >  Basic tab in IdentityServer Admin UI
-        //options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
+        // Set ClientSecret to setting in appsettings.json.  The secret value is set when registering the Blazor Server app
+        options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
         // When set to code, the middleware will use PKCE protection
         options.ResponseType = "code";
-        // Add request scopes.  The scopes are set in the Client >  Basic tab in IdentityServer Admin UI
+        // Add request scopes.  The scopes are set in the Client >  Resources tab in MasaAuth Admin UI
         //options.Scope.Add("openid");
         //options.Scope.Add("profile");
         // Save access and refresh tokens to authentication cookie.  the default is false

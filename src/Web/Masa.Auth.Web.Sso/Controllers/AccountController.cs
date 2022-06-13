@@ -1,86 +1,65 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Sso.Controllers.Model;
-
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
 [Authorize]
 public class AccountController : Controller
 {
-    //readonly IAuthClient _authClient;
+    readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
-        IEventService events)
+        IEventService events, IAuthClient authClient)
     {
         _interaction = interaction;
         _events = events;
-        //_authClient = authClient;
+        _authClient = authClient;
     }
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+    public async Task<IActionResult> Login([FromBody] InputModel inputModel)
     {
-        var returnUrl = loginModel.ReturnUrl;
-        var userName = loginModel.UserName;
+        var returnUrl = inputModel.ReturnUrl;
+        var userName = inputModel.UserName;
         // check if we are in the context of an authorization request
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-        //if (await _authClient.UserService.ValidateCredentialsByAccountAsync(userName, password))
-        if (false)
+        if (await _authClient.UserService.ValidateCredentialsByAccountAsync(userName, inputModel.Password))
         {
-            //var user = await _authClient.UserService.FindByAccountAsync(userName);
-            //// only set explicit expiration here if user chooses "remember me". 
-            //// otherwise we rely upon expiration configured in cookie middleware.
-            //AuthenticationProperties? props = null;
-            //if (LoginOptions.AllowRememberLogin && rememberLogin)
-            //{
-            //    props = new AuthenticationProperties
-            //    {
-            //        IsPersistent = true,
-            //        ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
-            //    };
-            //};
-            //var isuser = new IdentityServerUser(user.Id.ToString())
-            //{
-            //    DisplayName = user.DisplayName
-            //};
-            ////us duende sign in
-            //await HttpContext.SignInAsync(isuser, props);
-
-            //await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
-            if (context != null)
+            var user = await _authClient.UserService.FindByAccountAsync(userName);
+            // only set explicit expiration here if user chooses "remember me". 
+            // otherwise we rely upon expiration configured in cookie middleware.
+            AuthenticationProperties? props = null;
+            if (LoginOptions.AllowRememberLogin && inputModel.RememberLogin)
             {
-                if (context.IsNativeClient())
+                props = new AuthenticationProperties
                 {
-                    // The client is native, so this change in how to
-                    // return the response is for better UX for the end user.
-
-                    return this.LoadingPage(returnUrl);
-                }
-
-                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                return Redirect(returnUrl);
-            }
-
-            // request for a local page
-            if (UrlHelper.IsLocalUrl(returnUrl))
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
+                };
+            };
+            var isuser = new IdentityServerUser(user.Id.ToString())
             {
-                return Redirect(returnUrl);
-            }
-            else if (string.IsNullOrEmpty(returnUrl))
+                DisplayName = user.DisplayName
+            };
+            isuser.AdditionalClaims.Add(new Claim("userName", userName));
+            isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
+            //us duende sign in
+            await HttpContext.SignInAsync(isuser, props);
+
+            await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
+
+            if (context != null && context.IsNativeClient())
             {
-                return Redirect("/");
+                // The client is native, so this change in how to
+                // return the response is for better UX for the end user.
+                return this.LoadingPage(returnUrl);
             }
-            else
-            {
-                // user might have clicked on a malicious link - should be logged
-                return Content("invalid return URL");
-            }
+            return Ok();
         }
         else
         {

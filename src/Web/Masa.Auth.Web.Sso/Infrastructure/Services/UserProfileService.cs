@@ -5,18 +5,24 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Services;
 
 public class UserProfileService : IProfileService
 {
-    public UserProfileService()
-    {
+    readonly IHttpClientFactory _httpClientFactory;
+    readonly IAuthClient _authClient;
 
+    public UserProfileService(IHttpClientFactory httpClientFactory, IAuthClient authClient)
+    {
+        _httpClientFactory = httpClientFactory;
+        _authClient = authClient;
     }
 
     public Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task IsActiveAsync(IsActiveContext context)
     {
-        throw new NotImplementedException();
+        var userId = context.Subject.Claims.FirstOrDefault(x => x.Type == "sub");
+        context.IsActive = true;
+        return Task.CompletedTask;
     }
 }

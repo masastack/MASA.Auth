@@ -2,7 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using BlazorComponent;
-using Masa.Auth.Web.Sso.Controllers.Model;
+using UrlHelper = Masa.Auth.Web.Sso.Infrastructure.UrlHelper;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
@@ -64,7 +64,7 @@ public partial class Index
                 EnableLocalLogin = local,
             };
 
-            _inputModel.Username = context?.LoginHint ?? "";
+            _inputModel.UserName = context?.LoginHint ?? "";
 
             if (!local)
             {
@@ -115,16 +115,25 @@ public partial class Index
             {
                 await HttpContext.SignOutAsync();
             }
-            var msg = await _js.InvokeAsync<string>("login", new LoginModel
-            {
-                UserName = _inputModel.Username,
-                Password = _inputModel.Password,
-                RememberLogin = _inputModel.RememberLogin,
-                ReturnUrl = _inputModel.ReturnUrl
-            });
+            var msg = await _js.InvokeAsync<string>("login", _inputModel);
             if (!string.IsNullOrEmpty(msg))
             {
                 await PopupService.AlertAsync(msg, AlertTypes.Error);
+            }
+            else
+            {
+                if (UrlHelper.IsLocalUrl(_inputModel.ReturnUrl))
+                {
+                    Navigation.NavigateTo(_inputModel.ReturnUrl, true);
+                }
+                else if (string.IsNullOrEmpty(_inputModel.ReturnUrl))
+                {
+                    Navigation.NavigateTo("/", true);
+                }
+                else
+                {
+                    await PopupService.AlertAsync("invalid return URL", AlertTypes.Error);
+                }
             }
         }
         // something went wrong, show form with error

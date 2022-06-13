@@ -6,14 +6,14 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 public class InputModel
 {
     [Required]
-    public string Username { get; set; } = "andy@hotmail.com";
+    public string UserName { get; set; } = string.Empty;
 
     [Required]
-    public string Password { get; set; } = "andypassword";
+    public string Password { get; set; } = string.Empty;
 
     public bool RememberLogin { get; set; }
 
     public string ReturnUrl { get; set; } = string.Empty;
 
-    public string Environment { get; set; } = "生产环境";
+    public string Environment { get; set; } = string.Empty;
 }

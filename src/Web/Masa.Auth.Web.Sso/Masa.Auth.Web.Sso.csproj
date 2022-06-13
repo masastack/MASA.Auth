@@ -34,8 +34,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BasicAbility\Masa.Contrib.BasicAbility.Auth\Masa.Contrib.BasicAbility.Auth.csproj" />
     <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.Cache.Storage\Masa.Contrib.Oidc.Cache.Storage.csproj" />
     <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.EntityFramework\Masa.Contrib.Oidc.EntityFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Certificates\7348307__lonsid.cn.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tempkey.jwk">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

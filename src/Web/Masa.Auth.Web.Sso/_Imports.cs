@@ -4,7 +4,6 @@
 global using BlazorComponent.I18n;
 global using IdentityModel;
 global using IdentityServer4;
-global using IdentityServer4.EntityFramework.Services;
 global using IdentityServer4.Events;
 global using IdentityServer4.Extensions;
 global using IdentityServer4.Models;
@@ -16,7 +15,9 @@ global using Mapster;
 global using Masa.Auth.Web.Sso.Global;
 global using Masa.Auth.Web.Sso.Infrastructure;
 global using Masa.Auth.Web.Sso.Infrastructure.Stores;
+global using Masa.Auth.Web.Sso.Pages.Account.Login;
 global using Masa.Blazor;
+global using Masa.BuildingBlocks.BasicAbility.Auth;
 global using Masa.BuildingBlocks.BasicAbility.Pm.Model;
 global using Masa.Contrib.BasicAbility.Pm;
 global using Masa.Contrib.Oidc.Cache.Storage;

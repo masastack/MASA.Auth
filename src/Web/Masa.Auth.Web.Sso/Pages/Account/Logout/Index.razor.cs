@@ -14,7 +14,7 @@ public partial class Index
         if (firstRender)
         {
             var showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
-            if (User.Identity?.IsAuthenticated == true)
+            if (User.Identity?.IsAuthenticated != true)
             {
                 // if the user is not authenticated, then just show logged out page
                 showLogoutPrompt = false;
@@ -22,11 +22,7 @@ public partial class Index
             else
             {
                 var context = SsoAuthenticationStateCache.GetLogoutRequest(LogoutId);
-                if (context?.ShowSignoutPrompt == false)
-                {
-                    // it's safe to automatically sign-out
-                    showLogoutPrompt = false;
-                }
+                showLogoutPrompt = context?.ShowSignoutPrompt == true;
             }
             if (!showLogoutPrompt)
             {

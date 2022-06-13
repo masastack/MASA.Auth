@@ -12,15 +12,12 @@
 {
     <MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
         <div style="height:60px;"></div>
-        <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center"
-        style="width: 420px;">
-            <MAvatar Size=80>
+        <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
+            <MAvatar Size=80 Class="mb-12">
                 <MImage Src="/img/avatar/1.svg">
                 </MImage>
             </MAvatar>
-            <h5 class="mt-2 mb-12">Welcome to Masa.Blazor.Pro! 👋</h5>
-
-            <MTextField @bind-Value="_inputModel.Username" Label="Username" Placeholder="john@example.com" Outlined Dense
+            <MTextField @bind-Value="_inputModel.UserName" Label="Username" Placeholder="john@example.com" Outlined Dense
             HideDetails="@("auto")">
             </MTextField>
             <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="Password"
