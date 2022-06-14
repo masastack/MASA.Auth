@@ -32,16 +32,16 @@
                             </div>
                             break;
                         case (nameof(ThirdPartyIdpDto.DisplayName)):
-                            <span class="font-16 regular--text">@context.Item.DisplayName</span>
+                            <span class="body regular--text">@context.Item.DisplayName</span>
                             break;
                         case nameof(ThirdPartyIdpDto.VerifyType):
-                            <span class="font-16 regular--text">@T(context.Item.VerifyType.ToString())</span>
+                            <span class="body regular--text">@T(context.Item.VerifyType.ToString())</span>
                             break;
                         case nameof(ThirdPartyIdpDto.CreationTime):
-                            <span class="font-16 regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <span class="body regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case nameof(ThirdPartyIdpDto.Url):
-                            <span class="font-16 regular--text">@context.Item.Url</span>
+                            <span class="body regular--text">@context.Item.Url</span>
                             break;
                         case "Action":
                             <MIcon Small Color="regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>

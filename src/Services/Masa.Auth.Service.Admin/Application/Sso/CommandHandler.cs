@@ -26,8 +26,6 @@ public class CommandHandler
         _oidcDbContext = oidcDbContext;
     }
 
-
-
     #region Client
     [EventHandler]
     public async Task AddClientAsync(AddClientCommand addClientCommand)
@@ -106,10 +104,6 @@ public class CommandHandler
     public async Task AddIdentityResourceAsync(AddIdentityResourceCommand command)
     {
         var idrsDto = command.IdentityResource;
-        var exist = await _identityResourceRepository.GetCountAsync(idrs => idrs.Name == idrsDto.Name) > 0;
-        if (exist)
-            throw new UserFriendlyException($"IdentityResource with name {idrsDto.Name} already exists");
-
         var idrs = new IdentityResource(idrsDto.Name, idrsDto.DisplayName, idrsDto.Description, idrsDto.Enabled, idrsDto.Required, idrsDto.Emphasize, idrsDto.ShowInDiscoveryDocument, idrsDto.NonEditable);
         idrs.BindUserClaims(idrsDto.UserClaims);
         idrs.BindProperties(idrsDto.Properties);
@@ -121,34 +115,14 @@ public class CommandHandler
     public async Task AddStandardIdentityResourcesAsync(AddStandardIdentityResourcesCommand command)
     {
         await _eventBus.PublishAsync(new AddStandardUserClaimsCommand());
-        var userClaimQuery = new UserClaimSelectQuery();
-        await _eventBus.PublishAsync(userClaimQuery);
-        var userClaims = userClaimQuery.Result;
-
-        foreach (var identityResource in StandardIdentityResources.IdentityResources)
-        {
-            var userClaimIds = userClaims.Where(uc => identityResource.UserClaims.Contains(uc.Name)).Select(uc => uc.Id);
-            var existData = await _identityResourceRepository.FindAsync(idrs => idrs.Name == identityResource.Name);
-            if (existData is not null)
-            {
-                existData.Update(identityResource.DisplayName, identityResource.Description ?? "", true, identityResource.Required, identityResource.Emphasize, identityResource.ShowInDiscoveryDocument, true);
-                existData.BindUserClaims(userClaimIds);
-                await _identityResourceRepository.UpdateAsync(existData);
-            }
-            else
-            {
-                var idrs = new IdentityResource(identityResource.Name, identityResource.DisplayName, identityResource.Description ?? "", true, identityResource.Required, identityResource.Enabled, identityResource.ShowInDiscoveryDocument, true);
-                idrs.BindUserClaims(userClaimIds);
-                await _identityResourceRepository.AddAsync(idrs);
-            }
-        }
+        await _identityResourceRepository.AddStandardIdentityResourcesAsync();
     }
 
     [EventHandler]
     public async Task UpdateIdentityResourceAsync(UpdateIdentityResourceCommand command)
     {
         var idrsDto = command.IdentityResource;
-        var idrs = await _identityResourceRepository.FindAsync(idrs => idrs.Id == idrsDto.Id);
+        var idrs = await _identityResourceRepository.GetDetailAsync(idrsDto.Id);
         if (idrs is null)
             throw new UserFriendlyException("The current identityResource does not exist");
 
@@ -177,10 +151,6 @@ public class CommandHandler
     public async Task AddApiResourceAsync(AddApiResourceCommand command)
     {
         var apiResourceDto = command.ApiResource;
-        var exist = await _apiResourceRepository.GetCountAsync(apiResource => apiResource.Name == apiResourceDto.Name) > 0;
-        if (exist)
-            throw new UserFriendlyException($"ApiResource with name {apiResourceDto.Name} already exists");
-
         var apiResource = new ApiResource(apiResourceDto.Name, apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
         apiResource.BindUserClaims(apiResourceDto.UserClaims);
         apiResource.BindProperties(apiResourceDto.Properties);
@@ -193,7 +163,7 @@ public class CommandHandler
     public async Task UpdateApiResourceAsync(UpdateApiResourceCommand command)
     {
         var apiResourceDto = command.ApiResource;
-        var apiResource = await _apiResourceRepository.FindAsync(apiResource => apiResource.Id == apiResourceDto.Id);
+        var apiResource = await _apiResourceRepository.GetDetailAsync(apiResourceDto.Id);
         if (apiResource is null)
             throw new UserFriendlyException("The current apiResource does not exist");
 
@@ -223,10 +193,6 @@ public class CommandHandler
     public async Task AddApiScopeAsync(AddApiScopeCommand command)
     {
         var apiScopeDto = command.ApiScope;
-        var exist = await _apiScopeRepository.GetCountAsync(apiScope => apiScope.Name == apiScopeDto.Name) > 0;
-        if (exist)
-            throw new UserFriendlyException($"ApiScope with name {apiScopeDto.Name} already exists");
-
         var apiScope = new ApiScope(apiScopeDto.Name, apiScopeDto.DisplayName, apiScopeDto.Description, apiScopeDto.Required, apiScopeDto.Emphasize, apiScopeDto.ShowInDiscoveryDocument, apiScopeDto.Enabled);
         apiScope.BindUserClaims(apiScopeDto.UserClaims);
         apiScope.BindProperties(apiScopeDto.Properties);
@@ -238,7 +204,7 @@ public class CommandHandler
     public async Task UpdateApiScopeAsync(UpdateApiScopeCommand command)
     {
         var apiScopeDto = command.ApiScope;
-        var apiScope = await _apiScopeRepository.FindAsync(apiScope => apiScope.Id == apiScopeDto.Id);
+        var apiScope = await _apiScopeRepository.GetDetailAsync(apiScopeDto.Id);
         if (apiScope is null)
             throw new UserFriendlyException("The current apiScope does not exist");
 
@@ -267,10 +233,6 @@ public class CommandHandler
     public async Task AddUserClaimAsync(AddUserClaimCommand command)
     {
         var userClaimDto = command.UserClaim;
-        var exist = await _userClaimRepository.GetCountAsync(userClaim => userClaim.Name == userClaimDto.Name) > 0;
-        if (exist)
-            throw new UserFriendlyException($"UserClaim with name {userClaimDto.Name} already exists");
-
         var userClaim = new UserClaim(userClaimDto.Name, userClaimDto.Description);
 
         await _userClaimRepository.AddAsync(userClaim);
@@ -279,15 +241,7 @@ public class CommandHandler
     [EventHandler]
     public async Task AddStandardUserClaimsAsync(AddStandardUserClaimsCommand command)
     {
-        var userClaims = new List<UserClaim>();
-        foreach (var claim in StandardUserClaims.Claims)
-        {
-            var exist = await _userClaimRepository.GetCountAsync(userClaim => userClaim.Name == claim.Key) > 0;
-            if (exist) continue;
-
-            userClaims.Add(new UserClaim(claim.Key, claim.Value));
-        }
-        await _oidcDbContext.AddRangeAsync(userClaims);
+        await _userClaimRepository.AddStandardUserClaimsAsync();
     }
 
     [EventHandler]

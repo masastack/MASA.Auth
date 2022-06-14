@@ -27,23 +27,23 @@
                             </div>
                             break;
                         case (nameof(RoleDto.CreationTime)):
-                            <span class="font-16 regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <span class="body regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case nameof(RoleDto.ModificationTime):
-                            <span class="font-16 regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                            <span class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case (nameof(RoleDto.Creator)):
-                            <span class="font-16 regular--text">@context.Item.Creator</span>
+                            <span class="body regular--text">@context.Item.Creator</span>
                             break;
                         case (nameof(RoleDto.Modifier)):
-                            <span class="font-16 regular--text">@context.Item.Modifier</span>
+                            <span class="body regular--text">@context.Item.Modifier</span>
                             break;
                         case nameof(RoleDto.Enabled):
                             <EnableChip Value="context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

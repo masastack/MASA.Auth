@@ -27,7 +27,7 @@ public class DefaultChangeImage : DefaultUploadImage
         base.BuildRenderTree(builder);
         builder.OpenRegion(18);
         builder.OpenElement(0, "div");
-        builder.AddAttribute(1, "class", "mt-3 hover-pointer font-16 primary--text");
+        builder.AddAttribute(1, "class", "mt-3 hover-pointer body primary--text");
         builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, ChangeAvayarAsync));
 
         builder.OpenComponent<MIcon>(3);

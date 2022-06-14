@@ -98,10 +98,12 @@ global using SixLabors.ImageSharp;
 global using System.Linq.Expressions;
 global using System.Reflection;
 global using Client = Masa.BuildingBlocks.Oidc.Domain.Entities.Client;
-global using Masa.Auth.Service.Admin.Infrastructure.CacheModel;
 global using Masa.BuildingBlocks.Oidc.Domain.Repositories;
 global using Masa.BuildingBlocks.Oidc.Domain.Entities;
-global using Masa.Oidc.EntityFramework.DbContexts;
+global using Masa.Contrib.Oidc.EntityFramework.DbContexts;
 global using Masa.BuildingBlocks.Oidc.Domain.Enums;
 global using Masa.BuildingBlocks.Oidc.Models.Constans;
+global using Masa.Contrib.Oidc.EntityFramework;
+global using Masa.Contrib.Oidc.Cache;
+global using Masa.Utils.Caching.Redis.Models;
 

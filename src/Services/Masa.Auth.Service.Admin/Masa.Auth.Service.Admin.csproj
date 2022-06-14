@@ -43,7 +43,7 @@
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.4.0" />
 		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.4.0" />
 		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.4.0" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0" />
+		<!--<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0" />-->
 		<PackageReference Include="Masa.Utils.Extensions.Expressions" Version="0.4.0" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="0.4.0" />
 		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="0.4.0" />
@@ -65,7 +65,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Oidc.EntityFramework\Masa.Oidc.EntityFramework.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.Cache\Masa.Contrib.Oidc.Cache.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.EntityFramework\Masa.Contrib.Oidc.EntityFramework.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	
