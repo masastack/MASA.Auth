@@ -33,7 +33,7 @@ public partial class Index
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task OnConsent(bool consent)
+    private void OnConsent(bool consent)
     {
         var queryArguments = new Dictionary<string, string?>()
         {

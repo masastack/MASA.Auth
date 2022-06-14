@@ -21,7 +21,8 @@ public partial class Index
             }
             else
             {
-                var context = SsoAuthenticationStateCache.GetLogoutRequest(LogoutId);
+                var context = await _interaction.GetLogoutContextAsync(LogoutId);
+                //var context = SsoAuthenticationStateCache.GetLogoutRequest(LogoutId);
                 showLogoutPrompt = context?.ShowSignoutPrompt == true;
             }
             if (!showLogoutPrompt)
@@ -36,12 +37,6 @@ public partial class Index
     {
         if (User.Identity?.IsAuthenticated == true)
         {
-            // if there's no current logout context, we need to create one
-            // this captures necessary info from the current logged in user
-            // this can still return null if there is no context needed
-
-            LogoutId ??= SsoAuthenticationStateCache.LogoutId;
-
             Navigation.NavigateTo($"logout?logoutId={LogoutId}", true);
         }
         else

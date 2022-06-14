@@ -73,6 +73,10 @@ public class AccountController : Controller
     {
         if (User.Identity != null && User.Identity.IsAuthenticated == true)
         {
+            if (string.IsNullOrEmpty(logoutId))
+            {
+                logoutId = await _interaction.CreateLogoutContextAsync();
+            }
             // delete local authentication cookie
             await HttpContext.SignOutAsync();
 
