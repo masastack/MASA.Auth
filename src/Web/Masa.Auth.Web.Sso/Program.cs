@@ -28,6 +28,7 @@ builder.Services.AddGlobalForServer();
 
 builder.Services.AddAuthClient("https://localhost:18102");
 
+//todo:move to auth service
 var client = new Client(Masa.BuildingBlocks.Oidc.Domain.Enums.ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
 client.SetAllowedScopes(new List<string> { "openid", "profile", "email" });
 client.SetPostLogoutRedirectUris(new List<string> { "https://localhost:18100/signout-callback-oidc" });
