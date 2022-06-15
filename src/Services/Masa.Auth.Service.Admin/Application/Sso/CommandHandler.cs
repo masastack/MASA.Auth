@@ -139,7 +139,6 @@ public class CommandHandler
         if (idrs == null)
             throw new UserFriendlyException("The current identityResource does not exist");
 
-        //Todo remove check
         await _identityResourceRepository.RemoveAsync(idrs);
     }
 
@@ -181,7 +180,6 @@ public class CommandHandler
         if (apiResource == null)
             throw new UserFriendlyException("The current apiResource does not exist");
 
-        //Todo remove check
         await _apiResourceRepository.RemoveAsync(apiResource);
     }
 
@@ -221,7 +219,6 @@ public class CommandHandler
         if (apiScope == null)
             throw new UserFriendlyException("The current apiScope does not exist");
 
-        //Todo remove check
         await _apiScopeRepository.RemoveAsync(apiScope);
     }
 
@@ -315,7 +312,6 @@ public class CommandHandler
         if (customLogin == null)
             throw new UserFriendlyException("The current customLogin does not exist");
 
-        //Todo remove check
         await _customLoginRepository.RemoveAsync(customLogin);
     }
 

@@ -12,11 +12,11 @@
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <div class="subtitle2 regular--text">@T("Basic Information")</div>
-                <div Class="mt-4">
+                <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
+                <div Class="mb-6">
                     <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" />
                 </div>
-                <MRow Class="mt-6">
+                <MRow>
                     <MCol>
                         <DefaultTextField @bind-Value="User.Name" Label="@T("Name")" />
                     </MCol>
@@ -24,7 +24,7 @@
                         <DefaultTextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
+                <MRow Class="mt-3">
                     <MCol>
                         <DefaultTextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" />
                     </MCol>
@@ -32,7 +32,7 @@
                         <DefaultTextField @bind-Value="User.Email" Label="@T("Email")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
+                <MRow Class="mt-3">
                     <MCol>
                         <DefaultTextField Readonly Value="UserDetail.Account" Label="@T("Account")" />
                     </MCol>
@@ -40,8 +40,8 @@
                         <CopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
-                <div class="mt-6 subtitle2 regular--text">@T("Detail Information")</div>
-                <MRow Class="mt-1">
+                <DefaultTitle>@T("Detail Information")</DefaultTitle>
+                <MRow>
                     <MCol>
                         <DefaultTextField @bind-Value="User.IdCard" Label="@T("IdCard")" />
                     </MCol>
@@ -49,7 +49,7 @@
                         <DefaultTextField @bind-Value="User.Address.Address" Label="@T("Address")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
+                <MRow Class="mt-3">
                     <MCol>
                         <DefaultTextField @bind-Value="User.Department" Label="@T("Department")" />
                     </MCol>

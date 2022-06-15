@@ -5,10 +5,10 @@
         <div class="d-flex">
             <MTabs @bind-Value="Tab" Class="mx-auto" Style="max-width: 329px !important;">
                 <MTab Value="CustomLoginTab.Login">
-                    <span class="font-18-medium @(Tab == CustomLoginTab.Login ?"emphasis2--text":"default2--text")">@T(CustomLoginTab.Login)</span>
+                    <span class="font-18-medium @(Tab == CustomLoginTab.Login ?"emphasis2--text":"regular3--text")">@T(CustomLoginTab.Login)</span>
                 </MTab>
                 <MTab Value="CustomLoginTab.Register" Style="margin-left:130px">
-                    <span class="font-18-medium @(Tab == CustomLoginTab.Register ?"emphasis2--text":"default2--text")">@T(CustomLoginTab.Register)</span>
+                    <span class="font-18-medium @(Tab == CustomLoginTab.Register ?"emphasis2--text":"regular3--text")">@T(CustomLoginTab.Register)</span>
                 </MTab>
             </MTabs>
         </div>
@@ -34,7 +34,7 @@
                         <Password @bind-Value="Login.Password" Class="mt-9" />
                         <div class="d-flex">
                             <MSpacer />
-                            <span class="caption default2--text">@T("Forgot password?")</span>
+                            <span class="caption regular3--text">@T("Forgot password?")</span>
                         </div>
                         <div class="d-flex">
                             <MButton OnClick="() => context.Validate()" Class="large-button mt-11 mx-auto" Color="primary">
@@ -46,7 +46,7 @@
                     {
                         <div class="d-flex block-center mt-12">
                             <div style="background: #E9EDF7;height: 1px;width: 100%;" />
-                            <div class="mx-4 text-center body2 default2--text" style="@(I18n.CurrentLanguage=="zh-CN"?"min-width:100px":"min-width:80px")">@T("or login with")</div>
+                            <div class="mx-4 text-center body2 regular3--text" style="@(I18n.CurrentLanguage=="zh-CN"?"min-width:100px":"min-width:80px")">@T("or login with")</div>
                             <div style="background: #E9EDF7;height: 1px;width: 100%;" />
                         </div>
                         <div class="mt-4 text-center">

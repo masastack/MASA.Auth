@@ -32,7 +32,7 @@
     <AutoHeightContent>
         <DefaultDataTable Headers="Headers" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" Class="mt-6">
             <HeaderColContent Context="header">
-                <span class="body2 default2--text">@header.Text</span>
+                <span class="body2 regular3--text">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
@@ -82,7 +82,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

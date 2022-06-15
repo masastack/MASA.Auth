@@ -34,7 +34,7 @@
     <AutoHeightContent>
         <DefaultDataTable Class="mt-6" Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
-                <span class="body2 default2--text">@header.Text</span>
+                <span class="body2 regular3--text">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
@@ -57,7 +57,7 @@
                         break;
                     case (nameof(UserDto.CreationTime)):
                         <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
-                        <div class="body2 default2--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
+                        <div class="body2 regular3--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
                         break;
                     case nameof(UserDto.Enabled):
                         <EnableChip Value=context.Item.Enabled />
@@ -74,7 +74,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

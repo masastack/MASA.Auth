@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.4.0" />
+    <PackageReference Include="FluentValidation" Version="11.0.3" />
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
     <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.4.0" />
     <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.4.0" />

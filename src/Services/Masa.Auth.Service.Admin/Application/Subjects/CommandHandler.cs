@@ -118,10 +118,6 @@ public class CommandHandler
         if (user == null)
             throw new UserFriendlyException("The current user does not exist");
 
-        //todo
-        //Delete ThirdPartyUser
-        //Delete Staff
-        //Delete ...
         await _userRepository.RemoveAsync(user);
         await _userDomainService.RemoveAsync(user.Id);
     }

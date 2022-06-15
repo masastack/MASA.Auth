@@ -89,6 +89,7 @@
   "CompanyName": "公司名称",
   "Address": "地区",
   "UserState": "用户状态",
+  "Delete User": "删除用户",
   "Failed to query userList data:": "查询用户列表数据失败:",
   "Failed to query userDetail data:": "查询用户详情数据失败:",
   "Add user data success": "新增用户数据成功",

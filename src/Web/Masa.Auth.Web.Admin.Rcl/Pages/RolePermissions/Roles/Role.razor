@@ -8,7 +8,7 @@
                 <SearchTextField @bind-Value="Search" />
                 <MSpacer />
                 <DefaultButton Small OnClick=OpenAddRoleDialog>
-                    <MIcon Size=18>mdi-plus</MIcon>
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
             </div>
@@ -16,7 +16,7 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 default2--text">@header.Text</span>
+                    <span class="body2 regular3--text">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
@@ -28,11 +28,11 @@
                             break;
                         case (nameof(RoleDto.CreationTime)):
                             <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
-                            <div class="body2 default2--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
+                            <div class="body2 regular3--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
                             break;
                         case nameof(RoleDto.ModificationTime):
                             <div class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateFormat"))</div>
-                            <div class="body2 default2--text">@context.Item.ModificationTime?.ToString("HH:mm:ss")</div>
+                            <div class="body2 regular3--text">@context.Item.ModificationTime?.ToString("HH:mm:ss")</div>
                             break;                        
                         case (nameof(RoleDto.Creator)):
                             <span class="body regular--text">@context.Item.Creator</span>
@@ -55,7 +55,7 @@
             </DefaultDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </AutoHeight>
 </DefaultCard>

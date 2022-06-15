@@ -164,14 +164,13 @@
 }
 
 .m-input .m-label {
-    /* BUTTON-按钮 */
-    font-family: Roboto !important;
+    font-family: 'Roboto' !important;
     font-style: normal !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    /*    line-height: 1rem !important;*/
-    /* default color */
-    color: #7681AB;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: #7681AB !important;
+    letter-spacing: 0.25px !important;
 }
 
 .m-input--checkbox .mdi-checkbox-blank-outline {
@@ -360,16 +359,16 @@
     min-width: 0px !important;
 }
 
-.label .m-label {
+/*.label .m-label {*/
     /* Caption-说明 */
-    font-family: Roboto !important;
+    /*font-family: Roboto !important;
     font-style: normal !important;
     font-weight: 500 !important;
     font-size: 0.75rem !important;
-    line-height: 1.125rem !important;
+    line-height: 1.125rem !important;*/
     /* default color */
-    color: #A3AED0 !important;
-}
+    /*color: #A3AED0 !important;
+}*/
 
 .button-group-active {
     background: #ECE8FF !important;
@@ -395,17 +394,17 @@
     height: 48px !important;
 }
 
-    .m-text-field--outlined:not(.m-textarea) fieldset {
-        height: 51px !important;
-    }
+.m-text-field--outlined:not(.m-textarea) fieldset {
+    height: 51px !important;
+}
 
-.m-text-field--outlined .m-label {
+.m-select.m-text-field--outlined .m-label {
     top: 14px !important;
 }
 
-    .m-text-field--outlined .m-label.m-label--active {
-        top: 18px !important;
-    }
+.m-select.m-text-field--outlined .m-label.m-label--active {
+    top: 18px !important;
+}
 
 .m-text-field--outlined .m-text-field__details {
     margin-top: -5px !important;
@@ -532,14 +531,14 @@
     pointer-events: none;
 }
 
-.body2 .m-label {
+/*.body2 .m-label {
     color: #323D6F;
     font-family: Roboto;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
-}
+}*/
 
 .mtab-tab-linear-primary {
     background: linear-gradient(270deg, #4318FF 5.56%, rgba(67, 24, 255, 0) 100%);
@@ -601,15 +600,15 @@
     overflow-y: scroll;
 }
 
-.emphasis2--text .m-label {
+/*.emphasis2--text .m-label {
     color: #323D6F !important;
 }
 
-.default2--text .m-label {
+.regular3--text .m-label {
     color: #A3AED0 !important;
-}
+}*/
 
-.theme--light.m-text-field--outlined.default2--text > .m-input__control > .m-input__slot fieldset {
+.theme--light.m-text-field--outlined.regular3--text > .m-input__control > .m-input__slot fieldset {
     color: #A3AED0 !important;
 }
 
@@ -788,9 +787,9 @@ input::-webkit-input-placeholder {
     padding-bottom: 2px;
 }
 
-    .m-input.mx-auto .m-text-field__slot input {
-        text-align: center;
-    }
+.m-input.mx-auto .m-text-field__slot input {
+    text-align: center;
+}
 
 .m-input.mx-auto .m-input__slot::before {
     border-color: #E2E7F4 !important;
@@ -806,6 +805,15 @@ input::-webkit-input-placeholder {
     line-height: normal !important;
     letter-spacing: 0em !important;
 }
+
+/*.masa-stack-components .m-input .m-text-field__slot input::placeholder {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: red !important;
+}*/
 
 .m-data-table.table-space-v-4 > .m-data-table__wrapper > table {
     border-spacing: 0px 16px !important;
