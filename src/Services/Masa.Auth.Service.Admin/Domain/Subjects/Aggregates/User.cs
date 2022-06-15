@@ -35,6 +35,8 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public string PhoneNumber { get; private set; }
 
+    public string Landline { get; private set; }
+
     public string Email { get; private set; }
 
     public AddressValue Address { get; private set; }
@@ -47,7 +49,21 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
-    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email, AddressValue address, GenderTypes genderType)
+    public User(string name,
+                string displayName,
+                string avatar,
+                string idCard,
+                string account,
+                string password,
+                string companyName,
+                string department,
+                string position,
+                bool enabled,
+                string phoneNumber,
+                string landline,
+                string email,
+                AddressValue address,
+                GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName;
@@ -63,9 +79,38 @@ public class User : FullAggregateRoot<Guid, Guid>
         Email = email;
         Address = address;
         GenderType = genderType;
+        Landline = landline;
     }
 
-    public User(string name, string displayName, string avatar, string idCard, string account, string password, string companyName, string department, string position, bool enabled, string phoneNumber, string email, GenderTypes genderType) : this(name, displayName, avatar, idCard, account, password, companyName, department, position, enabled, phoneNumber, email, new(), genderType)
+    public User(string name,
+                string displayName,
+                string avatar,
+                string idCard,
+                string account,
+                string password,
+                string companyName,
+                string department,
+                string position,
+                bool enabled,
+                string phoneNumber,
+                string landline,
+                string email,
+                GenderTypes genderType)
+        : this(name,
+               displayName,
+               avatar,
+               idCard,
+               account,
+               password,
+               companyName,
+               department,
+               position,
+               enabled,
+               phoneNumber,
+               landline,
+               email,
+               new(),
+               genderType)
     {
 
     }
@@ -78,7 +123,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions);
     }
 
-    public void Update(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
+    public void Update(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string landline, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName;
@@ -93,9 +138,10 @@ public class User : FullAggregateRoot<Guid, Guid>
         Position = position;
         Password = password;
         GenderType = genderType;
+        Landline = landline;
     }
 
-    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string? email, string? position, string password, GenderTypes genderType)
+    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string landline, string? email, string? position, string password, GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName ?? "";
@@ -105,6 +151,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Position = position ?? "";
         Password = password;
         GenderType = genderType;
+        Landline = landline;
     }
 
     public void AddRoles(params Guid[] roleIds)

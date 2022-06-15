@@ -27,7 +27,28 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpdateUserAsync(UpdateUserCommand updateUserCommand)
     {
-        await _memoryCacheClient.SetAsync($"{CacheKey.USER_CACHE_KEY_PRE}{updateUserCommand.User.Id}", updateUserCommand.User.Adapt<CacheUser>());
+        var key = $"{CacheKey.USER_CACHE_KEY_PRE}{updateUserCommand.User.Id}";
+        var cacheUser = updateUserCommand.User.Adapt<CacheUser>();
+        var oldCache = _memoryCacheClient.Get<CacheUser>(key);
+        if (oldCache != null)
+        {
+            cacheUser.Roles = oldCache.Roles;
+            cacheUser.Permissions = oldCache.Permissions;
+        }
+        await _memoryCacheClient.SetAsync(key, cacheUser);
+    }
+
+    [EventHandler(99)]
+    public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand updateUserAuthorizationCommand)
+    {
+        var key = $"{CacheKey.USER_CACHE_KEY_PRE}{updateUserAuthorizationCommand.User.Id}";
+        var oldCache = _memoryCacheClient.Get<CacheUser>(key);
+        if (oldCache != null)
+        {
+            oldCache.Roles = updateUserAuthorizationCommand.User.Roles;
+            oldCache.Permissions = updateUserAuthorizationCommand.User.Permissions.Select(p => p.PermissionId).ToList();
+            await _memoryCacheClient.SetAsync(key, oldCache);
+        }
     }
 
     [EventHandler(99)]
