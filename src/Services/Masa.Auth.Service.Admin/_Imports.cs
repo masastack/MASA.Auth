@@ -98,5 +98,5 @@ global using OpenTelemetry.Trace;
 global using SixLabors.ImageSharp;
 global using System.Linq.Expressions;
 global using System.Reflection;
+global using System.Text.RegularExpressions;
 global using Client = Masa.Auth.Service.Admin.Domain.Sso.Aggregates.Client;
-global using Masa.Auth.Service.Admin.Infrastructure.CacheModel;
