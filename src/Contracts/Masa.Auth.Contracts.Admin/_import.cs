@@ -22,5 +22,6 @@ global using System.Numerics;
 global using System.Reflection;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
-global using Masa.BuildingBlocks.Oidc.Domain.Enums;
-global using Masa.BuildingBlocks.Oidc.Models.Enums;
+global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums;
+global using Masa.BuildingBlocks.Authentication.Oidc.Models.Enums;
+

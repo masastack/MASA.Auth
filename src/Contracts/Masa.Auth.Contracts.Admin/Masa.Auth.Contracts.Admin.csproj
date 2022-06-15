@@ -18,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Oidc.EntityFramework\Masa.Oidc.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\Authentication\Masa.BuildingBlocks.Authentication.Oidc.Domain\Masa.BuildingBlocks.Authentication.Oidc.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\Authentication\Masa.BuildingBlocks.Authentication.Oidc.Models\Masa.BuildingBlocks.Authentication.Oidc.Models.csproj" />
   </ItemGroup>
 
 </Project>

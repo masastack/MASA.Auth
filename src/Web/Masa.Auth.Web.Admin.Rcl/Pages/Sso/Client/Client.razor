@@ -9,15 +9,15 @@
     <MCardTitle>
         <SearchTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" />
         <MSpacer/>
-        <MButton Color="primary" Class="ml-6 medium-button" OnClick="()=>{_addDialog=true;}">
+        <MButton Small OnClick="()=>{_addDialog=true;}">
             <MIcon Size=18>mdi-plus</MIcon>
-            <span class="ml-2">@T("Add")</span>
+            <span class="ml-2 btn">@T("Add")</span>
         </MButton>
     </MCardTitle>
     <MCardText>
         <MDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize" HideDefaultFooter Class="table-border-none">
             <HeaderColContent Context="header">
-                <span class="body2">@header.Text</span>
+                <span class="body2 default2--text">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
@@ -33,13 +33,10 @@
                         </div>
                         break;
                     case nameof(ClientDto.Enabled):
-                        string color = context.Item.Enabled ? "sample-green" : "error";
-                        <MChip Color="@($"{color}-lighten-5")" TextColor="@color" Ripple="false">
-                            <span>@T(context.Item.Enabled?"Enabled":"Disabled")</span>
-                        </MChip>
+                        <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">mdi-pencil</MIcon>
+                        <MIcon Small Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">@IconConstants.Update</MIcon>
                         break;
                     default:
                         <span class="subtitle">@context.Value</span>

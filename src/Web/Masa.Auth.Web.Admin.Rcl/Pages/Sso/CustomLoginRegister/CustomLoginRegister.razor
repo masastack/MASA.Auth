@@ -9,14 +9,14 @@
                 <MSpacer />
                 <DefaultButton Small OnClick="() => OpenAddCustomLoginDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
-                    <span class="ml-2">@T("Add")</span>
+                    <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="CustomLogins" TItem="CustomLoginDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2">@header.Text</span>
+                    <span class="body2 default2--text">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
@@ -33,10 +33,12 @@
                             <span class="body regular--text">@context.Item.Client.ClientName</span>
                             break;
                         case (nameof(CustomLoginDto.CreationTime)):
-                            <span class="body regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
+                            <div class="body2 default2--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
                             break;
                         case nameof(CustomLoginDto.ModificationTime):
-                            <span class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                            <div class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateFormat"))</div>
+                            <div class="body2 default2--text">@context.Item.ModificationTime?.ToString("HH:mm:ss")</div>
                             break;
                         case (nameof(CustomLoginDto.Modifier)):
                             <span class="body regular--text">@context.Item.Modifier</span>
@@ -45,8 +47,8 @@
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

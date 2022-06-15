@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class ClientConsts
@@ -80,7 +81,7 @@ public class ClientConsts
 
     public static List<SelectItemDto<int>> GetTokenExpirations()
     {
-        var tokenExpirations = Enum<BuildingBlocks.Oidc.Domain.Enums.TokenExpiration>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
+        var tokenExpirations = Enum<BuildingBlocks.Authentication.Oidc.Domain.Enums.TokenExpiration>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
         {
             Text = pt.Value,
             Value = pt.Key
@@ -90,7 +91,7 @@ public class ClientConsts
 
     public static List<SelectItemDto<int>> GetTokenUsage()
     {
-        var tokenUsage = Enum<BuildingBlocks.Oidc.Domain.Enums.TokenUsage>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
+        var tokenUsage = Enum<BuildingBlocks.Authentication.Oidc.Domain.Enums.TokenUsage>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
         {
             Text = pt.Value,
             Value = pt.Key

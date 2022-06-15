@@ -11,7 +11,7 @@
                     <MIcon Size=18>mdi-cog-outline</MIcon>
                     <span class="ml-2 btn">@T("Create standard userClaims")</span>
                 </DefaultButton>
-                <DefaultButton Small Class="ml-6" OnClick="() => OpenAddApiResourceDialog()">
+                <DefaultButton Small Class="ml-4" OnClick="() => OpenAddApiResourceDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
@@ -37,8 +37,8 @@
                             <span class="body regular--text">@T(context.Item.UserClaimType.ToString())</span>
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveUserClaimDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveUserClaimDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

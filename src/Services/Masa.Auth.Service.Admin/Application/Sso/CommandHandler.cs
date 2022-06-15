@@ -170,7 +170,7 @@ public class CommandHandler
         apiResource.BindUserClaims(apiResourceDto.UserClaims);
         apiResource.BindProperties(apiResourceDto.Properties);
         apiResource.BindApiScopes(apiResourceDto.ApiScopes);
-        apiResource.Update(apiResourceDto.Name, apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
+        apiResource.Update(apiResourceDto.DisplayName, apiResourceDto.Description, apiResourceDto.AllowedAccessTokenSigningAlgorithms, apiResourceDto.ShowInDiscoveryDocument, apiResourceDto.LastAccessed, apiResourceDto.NonEditable, apiResourceDto.Enabled);
         await _apiResourceRepository.UpdateAsync(apiResource);
     }
 
@@ -210,7 +210,7 @@ public class CommandHandler
 
         apiScope.BindUserClaims(apiScopeDto.UserClaims);
         apiScope.BindProperties(apiScopeDto.Properties);
-        apiScope.Update(apiScopeDto.Name, apiScopeDto.DisplayName, apiScopeDto.Description, apiScopeDto.Required, apiScopeDto.Emphasize, apiScopeDto.ShowInDiscoveryDocument, apiScopeDto.Enabled);
+        apiScope.Update(apiScopeDto.DisplayName, apiScopeDto.Description, apiScopeDto.Required, apiScopeDto.Emphasize, apiScopeDto.ShowInDiscoveryDocument, apiScopeDto.Enabled);
         await _apiScopeRepository.UpdateAsync(apiScope);
     }
 
@@ -252,7 +252,7 @@ public class CommandHandler
         if (userClaim is null)
             throw new UserFriendlyException("The current userClaim does not exist");
 
-        userClaim.Update(userClaimDto.Name, userClaimDto.Description);
+        userClaim.Update(userClaimDto.Description);
         await _userClaimRepository.UpdateAsync(userClaim);
     }
 

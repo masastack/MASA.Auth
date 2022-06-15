@@ -123,7 +123,7 @@ public class QueryHandler
 
         var apiResources = await _apiResourceRepository.GetPaginatedListAsync(query.Page, query.PageSize, condition);
 
-        query.Result = new(apiResources.Total, apiResources.Result.Select(apiResource => new ApiResourceDto() 
+        query.Result = new(apiResources.Total, apiResources.Result.Select(apiResource => new ApiResourceDto()
         {
             Id = apiResource.Id,
             Enabled = apiResource.Enabled,
@@ -189,11 +189,12 @@ public class QueryHandler
         {
             Id = apiScope.Id,
             Name = apiScope.Name,
+            Enabled = apiScope.Enabled,
             DisplayName = apiScope.DisplayName,
             Description = apiScope.Description,
             Required = apiScope.Required,
             Emphasize = apiScope.Emphasize,
-            ShowInDiscoveryDocument =apiScope.ShowInDiscoveryDocument
+            ShowInDiscoveryDocument = apiScope.ShowInDiscoveryDocument
         }).ToList());
     }
 
@@ -211,9 +212,10 @@ public class QueryHandler
             Description = apiScope.Description,
             Required = apiScope.Required,
             Emphasize = apiScope.Emphasize,
+            Enabled = apiScope.Enabled,
             ShowInDiscoveryDocument = apiScope.ShowInDiscoveryDocument,
-            UserClaims = apiScope.UserClaims.Select(u => u.Id).ToList(),
-            Properties = apiScope.Properties.ToDictionary(p => p.Key,p => p.Value)
+            UserClaims = apiScope.UserClaims.Select(u => u.UserClaimId).ToList(),
+            Properties = apiScope.Properties.ToDictionary(p => p.Key, p => p.Value)
         };
     }
 
@@ -243,7 +245,7 @@ public class QueryHandler
 
         var userClaims = await _userClaimRepository.GetPaginatedListAsync(query.Page, query.PageSize, condition);
 
-        query.Result = new(userClaims.Total, userClaims.Result.Select(userClaim => new UserClaimDto() 
+        query.Result = new(userClaims.Total, userClaims.Result.Select(userClaim => new UserClaimDto()
         {
             Id = userClaim.Id,
             Name = userClaim.Name,
@@ -275,7 +277,7 @@ public class QueryHandler
                                 .ThenByDescending(userClaim => userClaim.CreationTime)
                                 .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description))
                                 .ToListAsync();
-        userClaimSelect.ForEach(userClaim => 
+        userClaimSelect.ForEach(userClaim =>
         {
             if (StandardUserClaims.Claims.ContainsKey(userClaim.Name)) userClaim.UserClaimType = UserClaimType.Standard;
             else userClaim.UserClaimType = UserClaimType.Customize;

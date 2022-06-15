@@ -41,4 +41,4 @@ global using System.Net.Http.Headers;
 global using System.Net.Http.Json;
 global using System.Reflection;
 global using System.Text.Json;
-global using Masa.BuildingBlocks.Oidc.Domain.Enums;
+global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums;
