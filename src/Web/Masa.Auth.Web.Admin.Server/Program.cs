@@ -6,11 +6,8 @@ using Masa.Auth.Contracts.Admin.Subjects.Validator;
 using Masa.Auth.Web.Admin.Rcl;
 using Masa.Auth.Web.Admin.Rcl.Global;
 using Masa.Stack.Components;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.IdentityModel.Logging;
-using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,61 +38,8 @@ builder.Services.AddTypeAdapter();
 //});
 
 IdentityModelEventSource.ShowPII = true;
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-})
-.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,
-    options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
-        // Set Authority to setting in appsettings.json.  This is the URL of the IdentityServer4
-        options.Authority = builder.Configuration["OIDC:Authority"];
-        // Set ClientId to setting in appsettings.json.    This Client ID is set when registering the Blazor Server app
-        options.ClientId = builder.Configuration["OIDC:ClientId"];
-        // Set ClientSecret to setting in appsettings.json.  The secret value is set when registering the Blazor Server app
-        options.ClientSecret = builder.Configuration["OIDC:ClientSecret"];
-        // When set to code, the middleware will use PKCE protection
-        options.ResponseType = "code";
-        // Add request scopes.  The scopes are set in the Client >  Resources tab in MasaAuth Admin UI
-        //options.Scope.Add("openid");
-        //options.Scope.Add("profile");
-        // Save access and refresh tokens to authentication cookie.  the default is false
-        options.SaveTokens = true;
-        // It's recommended to always get claims from the 
-        // UserInfoEndpoint during the flow. 
-        options.GetClaimsFromUserInfoEndpoint = true;
-        options.UseTokenLifetime = true;
-
-        options.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(5.0);
-        options.TokenValidationParameters.RequireExpirationTime = true;
-        options.TokenValidationParameters.ValidateLifetime = true;
-
-        options.NonceCookie.SameSite = SameSiteMode.Unspecified;
-        options.CorrelationCookie.SameSite = SameSiteMode.Unspecified;
-
-        options.Events = new OpenIdConnectEvents
-        {
-            OnAccessDenied = context =>
-            {
-                context.HandleResponse();
-                context.Response.Redirect("/");
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to the default policy
-    options.FallbackPolicy = options.DefaultPolicy;
-});
+builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
