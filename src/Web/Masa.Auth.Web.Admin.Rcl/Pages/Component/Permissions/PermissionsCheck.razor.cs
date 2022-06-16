@@ -25,16 +25,29 @@ public partial class PermissionsCheck
 
     RoleService RoleService => AuthCaller.RoleService;
 
-    private void ValueChangedHandler(List<CategoryAppNav> _checkedItems)
+    private async Task ValueChangedHandler(List<CategoryAppNav> _checkedItems)
     {
         if (_checkedItems != null)
         {
-            var navKeys = _checkedItems.Select(i => i.Nav).Distinct().ToList();
-            foreach (var keyValue in Value)
+            var navKeys = _checkedItems.Where(i => !string.IsNullOrEmpty(i.Nav))
+                .Select(i => i.Nav ?? "").Distinct().ToList();
+            var valueKeys = Value.Keys.ToList();
+            foreach (var valueKey in valueKeys)
             {
-                Value[keyValue.Key] = navKeys.Contains(keyValue.Key.ToString());
+                Value[valueKey] = navKeys.Contains(valueKey.ToString());
             }
-            _initValue = _checkedItems;
+            foreach (var key in navKeys.ConvertAll(v => Guid.Parse(v)).Except(valueKeys))
+            {
+                Value[key] = true;
+            }
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(Value);
+            }
+            else
+            {
+                _initValue = _checkedItems;
+            }
         }
     }
 
