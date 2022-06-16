@@ -19,6 +19,9 @@ public class PermissionService : ServiceBase
         MapGet(GetMenusAsync, "menus");
         MapGet(AuthorizedAsync);
         MapGet(GetElementPermissionsAsync, "element-permissions");
+        MapPut(CollectAsync);
+        MapPut(UnCollectAsync);
+        MapGet(CollectListAsync, "collect-list");
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
@@ -102,6 +105,25 @@ public class PermissionService : ServiceBase
     private async Task<bool> AuthorizedAsync(IEventBus eventBus, [FromQuery] string appId, [FromQuery] string code, [FromQuery] Guid userId)
     {
         var query = new AppPermissionAuthorizedQuery(appId, code, userId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task CollectAsync(IEventBus eventBus, [FromQuery] Guid permissionId, [FromQuery] Guid userId)
+    {
+        var command = new CollectMenuCommand(permissionId, userId, true);
+        await eventBus.PublishAsync(command);
+    }
+
+    private async Task UnCollectAsync(IEventBus eventBus, [FromQuery] Guid permissionId, [FromQuery] Guid userId)
+    {
+        var command = new CollectMenuCommand(permissionId, userId, false);
+        await eventBus.PublishAsync(command);
+    }
+
+    private async Task<List<SelectItemDto<Guid>>> CollectListAsync(IEventBus eventBus, [FromQuery] Guid userId)
+    {
+        var query = new CollectMenuListQuery(userId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

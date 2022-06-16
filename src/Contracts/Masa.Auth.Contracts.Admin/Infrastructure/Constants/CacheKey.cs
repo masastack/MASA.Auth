@@ -10,4 +10,6 @@ public class CacheKey
     public const string ROLE_CACHE_KEY_PRE = "role:";
 
     public const string USER_CACHE_KEY_PRE = "user:";
+
+    public const string USER_MENU_COLLECT_PRE = "menu_collect:";
 }

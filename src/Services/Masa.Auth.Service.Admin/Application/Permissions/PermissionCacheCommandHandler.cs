@@ -26,4 +26,20 @@ public class PermissionCacheCommandHandler
     {
         await _memoryCacheClient.RemoveAsync<CachePermission>($"{CacheKey.PERMISSION_CACHE_KEY_PRE}{removePermissionCommand.PermissionId}");
     }
+
+    [EventHandler]
+    public async Task CollectMenuAsync(CollectMenuCommand collectMenuCommand)
+    {
+        var key = $"{CacheKey.USER_MENU_COLLECT_PRE}{collectMenuCommand.UserId}";
+        var menus = (await _memoryCacheClient.GetAsync<HashSet<Guid>>(key)) ?? new HashSet<Guid>();
+        if (collectMenuCommand.IsFavorite)
+        {
+            menus.Add(collectMenuCommand.PermissionId);
+        }
+        else
+        {
+            menus.Remove(collectMenuCommand.PermissionId);
+        }
+        await _memoryCacheClient.SetAsync(key, menus);
+    }
 }
