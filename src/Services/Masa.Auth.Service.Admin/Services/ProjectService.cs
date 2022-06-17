@@ -10,6 +10,7 @@ public class ProjectService : ServiceBase
     public ProjectService(IServiceCollection services) : base(services, "api/project")
     {
         MapGet(GetListAsync);
+        MapGet(GetNavigationListAsync, "navigations");
         MapGet(GetTagsAsync);
         MapPost(SaveAppTagAsync);
     }
@@ -17,6 +18,15 @@ public class ProjectService : ServiceBase
     private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus, [FromQuery] bool hasMenu = false)
     {
         var query = new ProjectListQuery(hasMenu);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<ProjectDto>> GetNavigationListAsync(IEventBus eventBus,
+        [FromQuery] Guid userId,
+        [FromQuery] string environment)
+    {
+        var query = new NavigationListQuery(userId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
