@@ -24,7 +24,7 @@
                         <DefaultTextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-3">
+                <MRow>
                     <MCol>
                         <DefaultTextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" />
                     </MCol>
@@ -32,12 +32,12 @@
                         <DefaultTextField @bind-Value="User.Email" Label="@T("Email")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-3">
+                <MRow>
                     <MCol>
                         <DefaultTextField Readonly Value="UserDetail.Account" Label="@T("Account")" />
                     </MCol>
                     <MCol>
-                        <CopyPassword @bind-Value="User.Password" />
+                        <DefaultCopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
                 <DefaultTitle>@T("Detail Information")</DefaultTitle>
@@ -49,7 +49,7 @@
                         <DefaultTextField @bind-Value="User.Address.Address" Label="@T("Address")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-3">
+                <MRow>
                     <MCol>
                         <DefaultTextField @bind-Value="User.Department" Label="@T("Department")" />
                     </MCol>

@@ -34,40 +34,40 @@
     <AutoHeightContent>
         <DefaultDataTable Class="mt-6" Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
-                <span class="body2 regular3--text">@header.Text</span>
+                <span>@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
                 {
                     case nameof(UserDto.Avatar):
-                        <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateUserDialog(context.Item)">
+                        <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateUserDialog(context.Item)">
                             <MAvatar Size=40>
                                 <img src="@context.Item.Avatar" />
                             </MAvatar>
-                            <div class="ml-2 block-center">
-                                <div class="subtitle emphasis2--text">@context.Item.Name</div>
+                            <div class="ml-2 my-auto">
+                                <div>@context.Item.Name</div>
+                                <div class="regular2--text overline">@context.Item.PhoneNumber</div>
                             </div>
                         </div>
                         break;
                     case (nameof(UserDto.Account)):
-                        <span class="body regular--text">@context.Item.Account</span>
+                        <span>@context.Item.Account</span>
                         break;
                     case nameof(UserDto.PhoneNumber):
-                        <span class="body regular--text">@context.Item.PhoneNumber</span>
+                        <span>@context.Item.PhoneNumber</span>
                         break;
                     case (nameof(UserDto.CreationTime)):
-                        <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
-                        <div class="body2 regular3--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
+                       <DateTimeTitle Value="@context.Item.CreationTime" />
                         break;
                     case nameof(UserDto.Enabled):
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small Color="regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
-                        <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
+                        <MIcon Small OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Small Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
-                        <span class="subtitle">@context.Value</span>
+                        <span>@context.Value</span>
                         break;
                 }
             </ItemColContent>

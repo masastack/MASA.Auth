@@ -63,6 +63,7 @@
   "Upload": "上传",
   "Index": "序号",
   "Error Info": "错误信息",
+  "Authorization certification": "授权认证",
 
   "Department": "部门",
   "Department Location": "部门位置",
@@ -124,6 +125,9 @@
   "Sync staff failed": "同步员工失败",
   "Explanation": "说明",
   "File size limit": "文件限制大小",
+  "Gender": "性别",
+  "Male/Female": "男/女",
+  "InternalStaff/ExternalStaff": "内部员工/驻场员工",
   "Failed to query staffList data:": "获取员工列表数据失败:",
   "Failed to query staffDetail data:": "获取员工详情数据失败",
   "Add staff data success": "新增员工数据成功",

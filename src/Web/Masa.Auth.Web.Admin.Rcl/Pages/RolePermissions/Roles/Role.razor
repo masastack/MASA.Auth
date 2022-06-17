@@ -1,6 +1,10 @@
 ﻿@page "/role"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("Role")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -16,39 +20,37 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 regular3--text">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(RoleDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                                <span class="subtitle emphasis2--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(RoleDto.CreationTime)):
-                            <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
-                            <div class="body2 regular3--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
+                            <DateTimeTitle Value="@context.Item.CreationTime" />
                             break;
                         case nameof(RoleDto.ModificationTime):
-                            <div class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateFormat"))</div>
-                            <div class="body2 regular3--text">@context.Item.ModificationTime?.ToString("HH:mm:ss")</div>
+                            <DateTimeTitle Value="@context.Item.ModificationTime" />
                             break;                        
                         case (nameof(RoleDto.Creator)):
-                            <span class="body regular--text">@context.Item.Creator</span>
+                            <span>@context.Item.Creator</span>
                             break;
                         case (nameof(RoleDto.Modifier)):
-                            <span class="body regular--text">@context.Item.Modifier</span>
+                            <span>@context.Item.Modifier</span>
                             break;
                         case nameof(RoleDto.Enabled):
                             <EnableChip Value="context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>

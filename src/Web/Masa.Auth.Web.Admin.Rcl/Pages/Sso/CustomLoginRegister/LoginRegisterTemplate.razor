@@ -31,7 +31,7 @@
                 <MTabItem Value="CustomLoginTab.Login">
                     <MForm Model=Login EnableValidation>
                         <DefaultTextField @bind-Value="Login.Account" Class="mt-10" Height="58" Label="@T(nameof(Login.Account))" />
-                        <Password @bind-Value="Login.Password" Class="mt-9" />
+                        <DefaultPassword @bind-Value="Login.Password" Class="mt-9" />
                         <div class="d-flex">
                             <MSpacer />
                             <span class="caption regular3--text">@T("Forgot password?")</span>
@@ -70,10 +70,10 @@
                                         <DefaultTextField @bind-Value="Register.Account" Label="@T(nameof(Register.Account))" Height="58" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.Password:
-                                        <Password @bind-Value="Register.Password" Class="mb-6" />
+                                        <DefaultPassword @bind-Value="Register.Password" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.ConfirmPassword:
-                                        <Password @bind-Value="Register.ConfirmPassword" Label="@T(nameof(Register.ConfirmPassword))" Class="mb-6" />
+                                        <DefaultPassword @bind-Value="Register.ConfirmPassword" Label="@T(nameof(Register.ConfirmPassword))" Class="mb-6" />
                                         break;
                                     case RegisterFieldTypes.Name:
                                         <DefaultTextField @bind-Value="Register.Name" Label="@T(nameof(Register.Name))" Height="58" Class="mb-6" />

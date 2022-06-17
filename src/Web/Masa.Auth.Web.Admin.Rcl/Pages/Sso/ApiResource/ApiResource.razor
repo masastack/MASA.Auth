@@ -1,6 +1,10 @@
 ﻿@page "/sso/apiResource"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("ApiResource")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -16,31 +20,31 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="ApiResources" TItem="ApiResourceDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 regular3--text">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(ApiResourceDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                                <span class="subtitle emphasis2--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(ApiResourceDto.DisplayName)):
-                            <span class="body regular--text">@context.Item.DisplayName</span>
+                            <span>@context.Item.DisplayName</span>
                             break;
                         case (nameof(ApiResourceDto.Description)):
-                            <span class="body regular--text">@context.Item.Description</span>
+                            <span>@context.Item.Description</span>
                             break;
                         case nameof(ApiResourceDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>

@@ -1,6 +1,10 @@
 ﻿@page "/sso/customLogin"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("CustomLogin")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -16,7 +20,7 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="CustomLogins" TItem="CustomLoginDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 regular3--text">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
@@ -27,28 +31,26 @@
                             </MAvatar>
                             break;
                         case nameof(CustomLoginDto.Name):
-                            <span class="subtitle default--text">@context.Item.Name</span>
+                            <span>@context.Item.Name</span>
                             break;
                         case (nameof(ClientDto.ClientName)):
-                            <span class="body regular--text">@context.Item.Client.ClientName</span>
+                            <span>@context.Item.Client.ClientName</span>
                             break;
                         case (nameof(CustomLoginDto.CreationTime)):
-                            <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
-                            <div class="body2 regular3--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
+                            <DateTimeTitle Value="@context.Item.CreationTime" />
                             break;
                         case nameof(CustomLoginDto.ModificationTime):
-                            <div class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateFormat"))</div>
-                            <div class="body2 regular3--text">@context.Item.ModificationTime?.ToString("HH:mm:ss")</div>
+                            <DateTimeTitle Value="@context.Item.ModificationTime" />
                             break;
                         case (nameof(CustomLoginDto.Modifier)):
-                            <span class="body regular--text">@context.Item.Modifier</span>
+                            <span>@context.Item.Modifier</span>
                             break;
                         case nameof(CustomLoginDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

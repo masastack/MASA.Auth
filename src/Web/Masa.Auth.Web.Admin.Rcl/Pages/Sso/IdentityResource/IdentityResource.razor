@@ -1,6 +1,10 @@
 ﻿@page "/sso/identityResource"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("IdentityResource")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -20,34 +24,34 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="IdentityResources" TItem="IdentityResourceDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 regular3--text">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(IdentityResourceDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                                <span class="subtitle emphasis2--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(IdentityResourceDto.DisplayName)):
-                            <span class="body regular--text">@context.Item.DisplayName</span>
+                            <span>@context.Item.DisplayName</span>
                             break;
                         case nameof(IdentityResourceDto.Required):
-                            <span class="body regular--text">@(context.Item.Required ? T("Yes") : T("No"))</span>
+                            <span>@(context.Item.Required ? T("Yes") : T("No"))</span>
                             break;
                         case (nameof(IdentityResourceDto.Description)):
-                            <span class="body regular--text">@context.Item.Description</span>
+                            <span>@context.Item.Description</span>
                             break;
                         case nameof(IdentityResourceDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>

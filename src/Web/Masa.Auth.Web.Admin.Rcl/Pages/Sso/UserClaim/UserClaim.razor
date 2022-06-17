@@ -1,6 +1,10 @@
 ﻿@page "/sso/userClaim"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("UserClaim")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -20,28 +24,28 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="UserClaims" TItem="UserClaimDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 regular3--text">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(UserClaimDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                                <span class="subtitle emphasis2--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(UserClaimDto.Description)):
-                            <span class="body regular--text">@context.Item.Description</span>
+                            <span>@context.Item.Description</span>
                             break;
                         case nameof(UserClaimDto.UserClaimType):
-                            <span class="body regular--text">@T(context.Item.UserClaimType.ToString())</span>
+                            <span>@T(context.Item.UserClaimType.ToString())</span>
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveUserClaimDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveUserClaimDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>

@@ -1,6 +1,10 @@
 ﻿@page "/sso/apiScope"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("ApiScope")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -16,34 +20,34 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="ApiScopes" TItem="ApiScopeDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2 regular3--text">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(ApiScopeDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                                <span class="subtitle emphasis2--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(ApiScopeDto.DisplayName)):
-                            <span class="body regular--text">@context.Item.DisplayName</span>
+                            <span>@context.Item.DisplayName</span>
                             break;
                         case nameof(ApiScopeDto.Required):
-                            <span class="body regular--text">@(context.Item.Required ? T("Yes") : T("No"))</span>
+                            <span>@(context.Item.Required ? T("Yes") : T("No"))</span>
                             break;
                         case (nameof(ApiScopeDto.Description)):
-                            <span class="body regular--text">@context.Item.Description</span>
+                            <span>@context.Item.Description</span>
                             break;
                         case nameof(ApiScopeDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveApiScopeDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveApiScopeDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>
