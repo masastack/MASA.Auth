@@ -14,11 +14,12 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
     readonly IAutoCompleteClient _autoCompleteClient;
+    readonly IMemoryCacheClient _memoryCacheClient;
 
     public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository,
         IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
         AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient,
-        ILdapIdpRepository ldapIdpRepository)
+        ILdapIdpRepository ldapIdpRepository, IMemoryCacheClient memoryCacheClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -29,6 +30,7 @@ public class QueryHandler
         _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
         _ldapIdpRepository = ldapIdpRepository;
+        _memoryCacheClient = memoryCacheClient;
     }
 
     #region User
@@ -397,4 +399,25 @@ public class QueryHandler
     }
 
     #endregion
+
+    [EventHandler]
+    public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
+    {
+        var key = $"{CacheKey.USER_VISIT_PRE}{userVisitedListQuery.UserId}";
+        var visited = await _memoryCacheClient.GetAsync<List<string>>(key);
+        if (visited != null)
+        {
+            var menus = _authDbContext.Set<Permission>().Where(p => visited.Contains(p.Url))
+                .Select(p => new
+                {
+                    p.Name,
+                    p.Url
+                }).ToDictionary(p => p.Url, p => p.Name);
+            userVisitedListQuery.Result = visited.Select(v => new UserVisitedDto
+            {
+                Url = v,
+                Name = menus.ContainsKey(v) ? menus[v] : ""
+            }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
+        }
+    }
 }

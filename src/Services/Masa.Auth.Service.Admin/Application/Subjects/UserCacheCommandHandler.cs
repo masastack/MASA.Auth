@@ -56,4 +56,22 @@ public class UserCacheCommandHandler
     {
         await _memoryCacheClient.RemoveAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{removeUserCommand.User.Id}");
     }
+
+    [EventHandler]
+    public async Task UserVisitedAsync(UserVisitedCommand userVisitedCommand)
+    {
+        //todo zset
+        var key = $"{CacheKey.USER_VISIT_PRE}{userVisitedCommand.UserId}";
+        var visited = await _memoryCacheClient.GetOrSetAsync<List<string>>(key, () =>
+        {
+            return new List<string>();
+        });
+        visited?.Remove(userVisitedCommand.Url);
+        visited?.Insert(0, userVisitedCommand.Url);
+        if (visited?.Count > 5)
+        {
+            visited = visited.GetRange(0, 5);
+        }
+        await _memoryCacheClient.SetAsync(key, visited);
+    }
 }

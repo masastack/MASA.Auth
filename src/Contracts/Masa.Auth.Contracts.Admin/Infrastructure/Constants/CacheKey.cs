@@ -12,4 +12,6 @@ public class CacheKey
     public const string USER_CACHE_KEY_PRE = "user:";
 
     public const string USER_MENU_COLLECT_PRE = "menu_collect:";
+
+    public const string USER_VISIT_PRE = "user_visit:";
 }

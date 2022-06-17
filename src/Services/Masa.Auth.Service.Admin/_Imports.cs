@@ -25,6 +25,7 @@ global using Masa.Auth.Service.Admin.Application.Organizations.Commands;
 global using Masa.Auth.Service.Admin.Application.Organizations.Queries;
 global using Masa.Auth.Service.Admin.Application.Permissions.Commands;
 global using Masa.Auth.Service.Admin.Application.Permissions.Queries;
+global using Masa.Auth.Service.Admin.Application.Projects.Commands;
 global using Masa.Auth.Service.Admin.Application.Projects.Queries;
 global using Masa.Auth.Service.Admin.Application.Sso.Commands;
 global using Masa.Auth.Service.Admin.Application.Sso.Queries;
