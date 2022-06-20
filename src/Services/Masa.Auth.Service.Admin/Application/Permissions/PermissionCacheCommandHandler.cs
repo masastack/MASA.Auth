@@ -28,17 +28,17 @@ public class PermissionCacheCommandHandler
     }
 
     [EventHandler]
-    public async Task CollectMenuAsync(CollectMenuCommand collectMenuCommand)
+    public async Task CollectMenuAsync(MenuFavoriteCommand menuFavoriteCommand)
     {
-        var key = $"{CacheKey.USER_MENU_COLLECT_PRE}{collectMenuCommand.UserId}";
+        var key = $"{CacheKey.USER_MENU_COLLECT_PRE}{menuFavoriteCommand.UserId}";
         var menus = (await _memoryCacheClient.GetAsync<HashSet<Guid>>(key)) ?? new HashSet<Guid>();
-        if (collectMenuCommand.IsFavorite)
+        if (menuFavoriteCommand.IsFavorite)
         {
-            menus.Add(collectMenuCommand.PermissionId);
+            menus.Add(menuFavoriteCommand.PermissionId);
         }
         else
         {
-            menus.Remove(collectMenuCommand.PermissionId);
+            menus.Remove(menuFavoriteCommand.PermissionId);
         }
         await _memoryCacheClient.SetAsync(key, menus);
     }

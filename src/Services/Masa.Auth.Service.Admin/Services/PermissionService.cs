@@ -19,9 +19,9 @@ public class PermissionService : ServiceBase
         MapGet(GetMenusAsync, "menus");
         MapGet(AuthorizedAsync);
         MapGet(GetElementPermissionsAsync, "element-permissions");
-        MapPut(CollectAsync);
-        MapPut(UnCollectAsync);
-        MapGet(CollectListAsync, "collect-list");
+        MapPut(AddMenuFavoriteAsync);
+        MapPut(RemoveMenuFavoriteAsync);
+        MapGet(GetMenuFavoriteListAsync, "menu-favorite-list");
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
@@ -109,21 +109,21 @@ public class PermissionService : ServiceBase
         return query.Result;
     }
 
-    private async Task CollectAsync(IEventBus eventBus, [FromQuery] Guid permissionId, [FromQuery] Guid userId)
+    private async Task AddMenuFavoriteAsync(IEventBus eventBus, [FromQuery] Guid permissionId, [FromQuery] Guid userId)
     {
-        var command = new CollectMenuCommand(permissionId, userId, true);
+        var command = new MenuFavoriteCommand(permissionId, userId, true);
         await eventBus.PublishAsync(command);
     }
 
-    private async Task UnCollectAsync(IEventBus eventBus, [FromQuery] Guid permissionId, [FromQuery] Guid userId)
+    private async Task RemoveMenuFavoriteAsync(IEventBus eventBus, [FromQuery] Guid permissionId, [FromQuery] Guid userId)
     {
-        var command = new CollectMenuCommand(permissionId, userId, false);
+        var command = new MenuFavoriteCommand(permissionId, userId, false);
         await eventBus.PublishAsync(command);
     }
 
-    private async Task<List<SelectItemDto<Guid>>> CollectListAsync(IEventBus eventBus, [FromQuery] Guid userId)
+    private async Task<List<SelectItemDto<Guid>>> GetMenuFavoriteListAsync(IEventBus eventBus, [FromQuery] Guid userId)
     {
-        var query = new CollectMenuListQuery(userId);
+        var query = new MenuFavoriteListQuery(userId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

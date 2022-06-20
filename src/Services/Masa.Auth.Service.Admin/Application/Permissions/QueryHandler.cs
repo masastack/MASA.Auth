@@ -319,14 +319,14 @@ public class QueryHandler
     #endregion
 
     [EventHandler]
-    public async Task CollectMenuListQueryAsync(CollectMenuListQuery collectMenuListQuery)
+    public async Task CollectMenuListQueryAsync(MenuFavoriteListQuery menuFavoriteListQuery)
     {
-        var permissionIds = await _memoryCacheClient.GetAsync<List<Guid>>($"{CacheKey.USER_MENU_COLLECT_PRE}{collectMenuListQuery.UserId}");
+        var permissionIds = await _memoryCacheClient.GetAsync<List<Guid>>($"{CacheKey.USER_MENU_COLLECT_PRE}{menuFavoriteListQuery.UserId}");
         if (permissionIds == null)
         {
             return;
         }
-        collectMenuListQuery.Result = (await _permissionRepository.GetListAsync(p => permissionIds.Contains(p.Id)))
+        menuFavoriteListQuery.Result = (await _permissionRepository.GetListAsync(p => permissionIds.Contains(p.Id)))
             .Select(p => new SelectItemDto<Guid>
             {
                 Value = p.Id,
