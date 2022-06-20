@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
-public record CollectMenuCommand(Guid PermissionId, Guid UserId, bool IsFavorite) : Command
+public record FavoriteMenuCommand(Guid PermissionId, Guid UserId, bool IsFavorite) : Command
 {
 }

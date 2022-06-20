@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
-public record CollectMenuListQuery(Guid UserId) : Query<List<SelectItemDto<Guid>>>
+public record FavoriteMenuListQuery(Guid UserId) : Query<List<SelectItemDto<Guid>>>
 {
     public override List<SelectItemDto<Guid>> Result { get; set; } = new();
 }
