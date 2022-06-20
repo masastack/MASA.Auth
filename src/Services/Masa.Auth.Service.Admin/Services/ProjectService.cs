@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Service.Admin.Application.Projects.Commands;
-
 namespace Masa.Auth.Service.Admin.Services;
 
 public class ProjectService : ServiceBase
@@ -10,6 +8,7 @@ public class ProjectService : ServiceBase
     public ProjectService(IServiceCollection services) : base(services, "api/project")
     {
         MapGet(GetListAsync);
+        MapGet(GetNavigationListAsync, "navigations");
         MapGet(GetTagsAsync);
         MapPost(SaveAppTagAsync);
     }
@@ -17,6 +16,15 @@ public class ProjectService : ServiceBase
     private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus, [FromQuery] bool hasMenu = false)
     {
         var query = new ProjectListQuery(hasMenu);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<ProjectDto>> GetNavigationListAsync(IEventBus eventBus,
+        [FromQuery] Guid userId,
+        [FromQuery] string environment)
+    {
+        var query = new NavigationListQuery(userId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
