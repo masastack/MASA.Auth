@@ -51,21 +51,22 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        Expression<Func<User, bool>> condition = user => true;
-        if (string.IsNullOrEmpty(userDto.PhoneNumber) is false)
+        Expression<Func<User, bool>> condition = user => user.Account == userDto.Account;
+        if (!string.IsNullOrEmpty(userDto.PhoneNumber))
             condition = condition.And(user => user.PhoneNumber == userDto.PhoneNumber);
-
-        if (string.IsNullOrEmpty(userDto.Account) is false)
-            condition = condition.And(user => user.Account == userDto.Account);
-
-        if (string.IsNullOrEmpty(userDto.Email) is false)
+        if (!string.IsNullOrEmpty(userDto.Landline))
+            condition = condition.And(user => user.Landline == userDto.Landline);
+        if (!string.IsNullOrEmpty(userDto.Email))
             condition = condition.And(user => user.Email == userDto.Email);
 
         var user = await _userRepository.FindAsync(condition);
         if (user is not null)
         {
+            //email or phone number is duplicate            
             if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == user.PhoneNumber)
                 throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
+            if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == user.Landline)
+                throw new UserFriendlyException($"User with landline {userDto.Landline} already exists");
             if (string.IsNullOrEmpty(userDto.Account) is false && userDto.Account == user.Account)
                 throw new UserFriendlyException($"User with account {userDto.Account} already exists");
             if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == user.Email)
@@ -73,11 +74,11 @@ public class CommandHandler
         }
         else
         {
-            user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account ?? "", userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Email ?? "", userDto.Address, userDto.Gender);
+            user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
             user.AddRoles(userDto.Roles.ToArray());
             user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
             await _userRepository.AddAsync(user);
-            command.UserId = user.Id;
+            command.NewUser = user;
             await _userDomainService.SetAsync(user);
         }
     }
@@ -105,7 +106,7 @@ public class CommandHandler
                     throw new UserFriendlyException($"User with email {userDto.Email} already exists");
             }
 
-            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.Gender);
+            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.Gender);
             await _userRepository.UpdateAsync(user);
             await _userDomainService.SetAsync(user);
         }
@@ -324,17 +325,28 @@ public class CommandHandler
         {
             try
             {
-                await _thirdPartyUserDomainService.AddThirdPartyUserAsync(new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
+                //todo:change bulk
+                var thirdPartyUserDtp = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
                     new AddUserDto
                     {
                         Name = ldapUser.Name,
                         DisplayName = ldapUser.DisplayName,
                         Enabled = true,
                         Email = ldapUser.EmailAddress,
-                        PhoneNumber = ldapUser.Phone,
                         Account = ldapUser.SamAccountName,
-                        Password = _configuration.GetValue<string>("Subjects:InitialPassword")
-                    }));
+                        Password = _configuration.GetValue<string>("Subjects:InitialPassword"),
+                        Avatar = _configuration.GetValue<string>("Subjects:Avatar")
+                    });
+                //phone number regular match
+                if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
+                {
+                    thirdPartyUserDtp.User.PhoneNumber = ldapUser.Phone;
+                }
+                else
+                {
+                    thirdPartyUserDtp.User.Landline = ldapUser.Phone;
+                }
+                await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
             }
             catch (Exception e)
             {

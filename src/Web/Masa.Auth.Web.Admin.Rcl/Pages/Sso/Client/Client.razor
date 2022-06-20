@@ -17,7 +17,7 @@
     <MCardText>
         <MDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize" HideDefaultFooter Class="table-border-none">
             <HeaderColContent Context="header">
-                <span class="font-14-medium">@header.Text</span>
+                <span class="body2">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
@@ -28,7 +28,7 @@
                                 <img src="@context.Item.LogoUri" />
                             </MAvatar>
                             <div class="ml-4 block-center">
-                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.ClientName</div>
+                                <div class="subtitle emphasis2--text">@context.Item.ClientName</div>
                             </div>
                         </div>
                         break;
@@ -39,10 +39,10 @@
                         </MChip>
                         break;
                     case "Action":
-                        <MIcon Small Color="default-regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">mdi-pencil</MIcon>
+                        <MIcon Small Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">mdi-pencil</MIcon>
                         break;
                     default:
-                        <span class="text-body3">@context.Value</span>
+                        <span class="subtitle">@context.Value</span>
                         break;
                 }
             </ItemColContent>

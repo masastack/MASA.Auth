@@ -3,7 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record AddUserCommand(AddUserDto User) : Command
-{
-    public UserDto NewUser { get; set; } = null!;
-}
+public record UserVisitedCommand(Guid UserId, string Url) : Command;

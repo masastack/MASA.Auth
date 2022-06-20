@@ -16,7 +16,7 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="font-14-medium">@header.Text</span>
+                    <span class="body2">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
@@ -28,27 +28,27 @@
                             break;
                         case nameof(ThirdPartyIdpDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
-                                <span class="text-body3 default--text">@context.Item.Name</span>
+                                <span class="subtitle default--text">@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(ThirdPartyIdpDto.DisplayName)):
-                            <span class="font-16 default-regular--text">@context.Item.DisplayName</span>
+                            <span class="font-16 regular--text">@context.Item.DisplayName</span>
                             break;
                         case nameof(ThirdPartyIdpDto.VerifyType):
-                            <span class="font-16 default-regular--text">@T(context.Item.VerifyType.ToString())</span>
+                            <span class="font-16 regular--text">@T(context.Item.VerifyType.ToString())</span>
                             break;
                         case nameof(ThirdPartyIdpDto.CreationTime):
-                            <span class="font-16 default-regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <span class="font-16 regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case nameof(ThirdPartyIdpDto.Url):
-                            <span class="font-16 default-regular--text">@context.Item.Url</span>
+                            <span class="font-16 regular--text">@context.Item.Url</span>
                             break;
                         case "Action":
-                            <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
                             break;
                         default:
-                            <span class="text-body3">@context.Value</span>
+                            <span class="subtitle">@context.Value</span>
                             break;
                     }
                 </ItemColContent>

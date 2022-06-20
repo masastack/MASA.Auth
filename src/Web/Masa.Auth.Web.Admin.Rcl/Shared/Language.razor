@@ -4,7 +4,7 @@
 
 <MMenu OffsetY Bottom>
     <ActivatorContent>
-        <div Color="white" @attributes="@context.Attrs" Class="hover-pointer ml-6 mr-5 default-secondary--text text-center">
+        <div Color="white" @attributes="@context.Attrs" Class="hover-pointer ml-6 mr-5 default2--text text-center">
             <MIcon>mdi-google-translate</MIcon>
         </div>
     </ActivatorContent>
@@ -16,7 +16,7 @@
                     <MListItem OnClick="()=> OnLanguageChange(language)" Value="(StringNumber)language">
                         <ItemContent>
                             <MListItemContent>
-                                <span Class="@(context.Active?"white--text":"default-secondary--text") font-14-medium">
+                                <span Class="@(context.Active?"white--text":"default2--text") body2">
                                     @map.GetValueOrDefault("$Text")
                                 </span>
                             </MListItemContent>

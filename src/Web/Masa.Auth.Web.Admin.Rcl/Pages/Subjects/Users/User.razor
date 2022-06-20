@@ -5,15 +5,17 @@
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
-            <UserAutoComplete @bind-Value="UserId" />
+            <div>
+                <UserAutoComplete @bind-Value="UserId" />
+            </div>          
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
-                <MIcon Class="ma-auto" Color="default-emphasis-secondary" Size=20>
+                <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter ? "mdi-filter" : "mdi-filter-off")
                 </MIcon>
             </div>
-            <DefaultButton Small Color="primary" Class="ml-4" OnClick=OpenAddUserDialog>
+            <DefaultButton Small Class="ml-4" OnClick=OpenAddUserDialog>
                 <MIcon Size=18>@IconConstants.Add</MIcon>
-                <span class="ml-2">@T("Add")</span>
+                <span class="ml-2 btn">@T("Add")</span>
             </DefaultButton>
         </div>
 
@@ -32,39 +34,40 @@
     <AutoHeightContent>
         <DefaultDataTable Class="mt-6" Headers="Headers" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
-                <span class="font-14-medium">@header.Text</span>
+                <span class="body2 default2--text">@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
                 {
                     case nameof(UserDto.Avatar):
                         <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateUserDialog(context.Item)">
-                            <MAvatar Size=48>
+                            <MAvatar Size=40>
                                 <img src="@context.Item.Avatar" />
                             </MAvatar>
-                            <div class="ml-4 block-center">
-                                <div class="text-body3 default-emphasis-secondary--text">@context.Item.Name</div>
+                            <div class="ml-2 block-center">
+                                <div class="subtitle emphasis2--text">@context.Item.Name</div>
                             </div>
                         </div>
                         break;
                     case (nameof(UserDto.Account)):
-                        <span class="text-body3">@context.Item.Account</span>
+                        <span class="body regular--text">@context.Item.Account</span>
                         break;
                     case nameof(UserDto.PhoneNumber):
-                        <span class="text-body3">@context.Item.PhoneNumber</span>
+                        <span class="body regular--text">@context.Item.PhoneNumber</span>
                         break;
                     case (nameof(UserDto.CreationTime)):
-                        <span class="text-body3">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                        <div class="body regular--text">@context.Item.CreationTime.ToString(T("$DateFormat"))</div>
+                        <div class="body2 default2--text">@context.Item.CreationTime.ToString("HH:mm:ss")</div>
                         break;
                     case nameof(UserDto.Enabled):
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small Color="default-regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
-                        <MIcon Small Color="default-regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
+                        <MIcon Small Color="regular" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
-                        <span class="text-body3">@context.Value</span>
+                        <span class="subtitle">@context.Value</span>
                         break;
                 }
             </ItemColContent>

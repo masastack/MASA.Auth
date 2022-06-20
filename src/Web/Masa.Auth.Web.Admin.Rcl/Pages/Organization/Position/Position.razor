@@ -16,14 +16,14 @@
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="Positions" TItem="PositionDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="font-14-medium">@header.Text</span>
+                    <span class="body2">@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(PositionDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                                <span class="text-body3 neutral--text">@context.Item.Name</span>
+                                <span class="subtitle neutral--text">@context.Item.Name</span>
                             </div>
                             break;
                         case "Action":
@@ -31,7 +31,7 @@
                             <MIcon Small Color="neutral-lighten-2" Class="ml-7" OnClick="()=> OpenRemovePositionDialog(context.Item)">mdi-delete</MIcon>
                             break;
                         default:
-                            <span class="text-body3">@context.Value</span>
+                            <span class="subtitle">@context.Value</span>
                             break;
                     }
                 </ItemColContent>

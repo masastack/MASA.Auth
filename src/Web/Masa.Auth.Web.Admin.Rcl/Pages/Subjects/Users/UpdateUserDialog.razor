@@ -6,13 +6,13 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center">
-                        <DefaultUploadImage @bind-Value="User.Avatar" WhenFileChangeUpload />
+                        <DefaultUploadImage Size="80" @bind-Value="User.Avatar" WhenFileChangeUpload />
                         <PlaceholderTextFiled @bind-Value="User.DisplayName" Placeholder="@T("Give him a nickname!")" />
                     </div>
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <div class="font-14-bold">@T("Basic Information")</div>
+                <div class="subtitle2 regular--text">@T("Basic Information")</div>
                 <div Class="mt-4">
                     <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" />
                 </div>
@@ -40,7 +40,7 @@
                         <CopyPassword @bind-Value="User.Password" />
                     </MCol>
                 </MRow>
-                <div class="mt-6 font-14-bold">@T("Detail Information")</div>
+                <div class="mt-6 subtitle2 regular--text">@T("Detail Information")</div>
                 <MRow Class="mt-1">
                     <MCol>
                         <DefaultTextField @bind-Value="User.IdCard" Label="@T("IdCard")" />

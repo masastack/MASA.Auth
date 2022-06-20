@@ -27,19 +27,20 @@ public class DefaultChangeImage : DefaultUploadImage
         base.BuildRenderTree(builder);
         builder.OpenRegion(18);
         builder.OpenElement(0, "div");
-        builder.AddAttribute(1, "class", "mt-3 hover-pointer font-16");
+        builder.AddAttribute(1, "class", "mt-3 hover-pointer font-16 primary--text");
+        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, ChangeAvayarAsync));
 
-        builder.OpenComponent<MIcon>(2);
-        builder.AddAttribute(3, "Size", (StringNumber)18);
-        builder.AddAttribute(4, "ChildContent", (RenderFragment)delegate (RenderTreeBuilder builder2) {
-            builder2.AddContent(5, IconConstants.Refresh);
+        builder.OpenComponent<MIcon>(3);
+        builder.AddAttribute(4, "Size", (StringNumber)18);
+        builder.AddAttribute(5, "Class", "primary--text");
+        builder.AddAttribute(6, "ChildContent", (RenderFragment)delegate (RenderTreeBuilder builder2) {
+            builder2.AddContent(7, IconConstants.Refresh);
         });
         builder.CloseComponent();
 
-        builder.OpenElement(6, "span");
-        builder.AddAttribute(7, "class", "ml-3");
-        builder.AddAttribute(8, "onclick", EventCallback.Factory.Create(this, ChangeAvayarAsync));
-        builder.AddContent(9, T("Another"));
+        builder.OpenElement(8, "span");
+        builder.AddAttribute(9, "class", "ml-3 body");
+        builder.AddContent(10, T("Another"));
         builder.CloseElement();
 
         builder.CloseElement();

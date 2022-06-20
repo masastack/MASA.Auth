@@ -67,8 +67,8 @@ public class SyncStaffDomainEvenHandler
             }
             else
             {
-                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", staff.Email ?? "", staff.GenderType);
-                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, staff.Email, staff.Position, staff.Password, staff.GenderType);
+                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.GenderType);
+                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, "", staff.Email, staff.Position, staff.Password, staff.GenderType);
 
                 userRange.Add(oldUser);
             }

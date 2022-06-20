@@ -21,9 +21,9 @@ public class ThirdPartyUserDomainService : DomainService
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserDto thirdPartyUserDto)
     {
 #warning change _userRepository、_thirdPartyUserRepository to _cacheClient
-        var user = await _userRepository.FindAsync(u => u.Account == thirdPartyUserDto.User.Account ||
-                    u.Email == thirdPartyUserDto.User.Email ||
-                    u.PhoneNumber == thirdPartyUserDto.User.PhoneNumber);
+        var user = await _userRepository.FindAsync(u => u.Account == thirdPartyUserDto.User.Account &&
+                    u.Email == thirdPartyUserDto.User.Email &&
+                    u.PhoneNumber == thirdPartyUserDto.User.PhoneNumber && u.Landline == thirdPartyUserDto.User.Landline);
         if (user != null)
         {
             var updateUserDto = thirdPartyUserDto.User.Adapt<UpdateUserDto>();
@@ -33,18 +33,10 @@ public class ThirdPartyUserDomainService : DomainService
         }
         else
         {
-            var duplicateUser = await _userRepository.FindAsync(u => u.Email == thirdPartyUserDto.User.Email ||
-                    u.PhoneNumber == thirdPartyUserDto.User.PhoneNumber);
-            if (duplicateUser != null)
-            {
-                _logger.LogWarning($"email or phone number is duplicate.value email = {thirdPartyUserDto.User.Email} and phone number = {thirdPartyUserDto.User.PhoneNumber}");
-                //email or phone number is duplicate
-                return;
-            }
             var addUserCommand = new AddUserCommand(thirdPartyUserDto.User);
             await EventBus.PublishAsync(addUserCommand);
             await _thirdPartyUserRepository.AddAsync(new ThirdPartyUser(thirdPartyUserDto.ThirdPartyIdpId,
-                        addUserCommand.UserId, thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity));
+                        addUserCommand.NewUser.Id, thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity));
         }
     }
 }

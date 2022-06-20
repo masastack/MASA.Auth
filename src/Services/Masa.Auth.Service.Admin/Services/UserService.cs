@@ -9,6 +9,8 @@ namespace Masa.Auth.Service.Admin.Services
         {
             MapGet(FindByAccountAsync);
             MapPost(ValidateByAccountAsync);
+            MapPost(Visit);
+            MapGet(VisitedList);
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -32,18 +34,20 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        private async Task AddExternalAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
+        private async Task<UserDto> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
         {
             dto.Enabled = true;
             dto.Password = DefaultUserAttributes.Password;
             if (dto.Gender == default) dto.Gender = GenderTypes.Male;
             if (string.IsNullOrEmpty(dto.Avatar))
             {
-                if(dto.Gender == GenderTypes.Male) dto.Avatar = DefaultUserAttributes.MaleAvatar;
+                if (dto.Gender == GenderTypes.Male) dto.Avatar = DefaultUserAttributes.MaleAvatar;
                 else dto.Avatar = DefaultUserAttributes.FemaleAvatar;
             }
-            
-            await eventBus.PublishAsync(new AddUserCommand(dto));
+            if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
+            var command = new AddUserCommand(dto);
+            await eventBus.PublishAsync(command);
+            return command.NewUser;
         }
 
         private async Task AddAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
@@ -83,6 +87,19 @@ namespace Masa.Auth.Service.Admin.Services
             var query = new FindUserByAccountQuery(account);
             await eventBus.PublishAsync(query);
             return query.Result;
+        }
+
+        private async Task Visit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)
+        {
+            var visitCommand = new UserVisitedCommand(addUserVisitedDto.UserId, addUserVisitedDto.Url);
+            await eventBus.PublishAsync(visitCommand);
+        }
+
+        private async Task<List<UserVisitedDto>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
+        {
+            var visitListQuery = new UserVisitedListQuery(userId);
+            await eventBus.PublishAsync(visitListQuery);
+            return visitListQuery.Result;
         }
     }
 }
