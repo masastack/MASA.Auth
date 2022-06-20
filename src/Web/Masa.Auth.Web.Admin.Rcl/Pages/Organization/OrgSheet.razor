@@ -4,7 +4,7 @@
     <MCard Class="mx-auto d-flex flex-column full-height" Style="padding-right:228px;padding-left:228px;">
         <MCardText Class="d-flex align-center">
             <MForm Model="Dto" EnableValidation Class="full-width" @ref="_form">
-                <MTextField @bind-Value="@Dto.Name" class="mx-auto font-24-bold regular3--text" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
+                <PlaceholderTextFiled @bind-Value="@Dto.Name" style="width:323px;" Placeholder="@T("Enter department name")" />
                 @if (Dto.ParentId != Guid.Empty)
                 {
                     <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@Dto.ParentId"
@@ -13,12 +13,11 @@
                            ItemChildren="u => u.Children">
                     </MCascader>
                 }
-                <MTextarea @bind-Value="@Dto.Description" class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize>
-                </MTextarea>
+                <MTextarea @bind-Value="@Dto.Description" class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize />
             </MForm>
         </MCardText>
         <MCardActions class="d-flex align-center mb-10 px-6">
-            <MSwitch @bind-Value="Dto.Enabled" class="mt-0" Inset Label="@T("Enable")"></MSwitch>
+            <EnableSwitch @bind-Value="Dto.Enabled" />
             <MSpacer />
             @if (Dto.Id != Guid.Empty)
             {
@@ -26,7 +25,7 @@
                     @T("Delete")
                 </MButton>
             }
-            <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+            <DefaultButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
         </MCardActions>
     </MCard>
 </SheetDialog>

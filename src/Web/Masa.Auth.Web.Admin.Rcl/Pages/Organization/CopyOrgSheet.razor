@@ -1,6 +1,5 @@
 ﻿@inherits AdminCompontentBase
 
-
 <SheetDialog Value=Show Title="@T("Copy Department")" ValueChanged="ShowChanged" ContentClass="px-sheet-dialog">
     <MWindow @bind-Value="_step" Class="full-height">
         <MWindowItem Value="1" Class="full-height">
@@ -18,7 +17,7 @@
                     </div>
                 </MCardText>
                 <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
-                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="NextStep">@T("Next step")</MButton>
+                    <DefaultButton Medium OnClick="NextStep">@T("Next step")</DefaultButton>
                 </MCardActions>
             </MCard>
         </MWindowItem>
@@ -75,14 +74,13 @@
                             </MCol>
                         }
                     </MRow>
-                    <MTextarea class="mt-6" @bind-Value="Dto.Description" Label="@T("Description")" Outlined Height="120" NoResize>
-                    </MTextarea>
+                    <MTextarea class="mt-6" @bind-Value="Dto.Description" Label="@T("Description")" Outlined Height="120" NoResize />
                 </MCardText>
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <MSwitch @bind-Value="@Dto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
                     <MSpacer />
-                    <MButton class="rounded-pill" Outlined MinWidth="100" OnClick="()=> _step = 1 ">@T("Previous step")</MButton>
-                    <MButton class="rounded-pill primary" MinWidth="100" Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+                    <DefaultButton Medium Outlined OnClick="()=> _step = 1 ">@T("Previous step")</DefaultButton>
+                    <DefaultButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
                 </MCardActions>
             </MCard>
         </MWindowItem>

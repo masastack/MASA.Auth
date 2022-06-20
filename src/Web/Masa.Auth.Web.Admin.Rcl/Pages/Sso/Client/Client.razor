@@ -2,53 +2,57 @@
 @inherits AdminCompontentBase
 
 <PageTitle>
-    Clients
+    @T("Client")
 </PageTitle>
 
-<MCard>
-    <MCardTitle>
-        <SearchTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" />
-        <MSpacer/>
-        <MButton Small OnClick="()=>{_addDialog=true;}">
-            <MIcon Size=18>mdi-plus</MIcon>
-            <span class="ml-2 btn">@T("Add")</span>
-        </MButton>
-    </MCardTitle>
-    <MCardText>
-        <MDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize" HideDefaultFooter Class="table-border-none">
-            <HeaderColContent Context="header">
-                <span class="body2 regular3--text">@header.Text</span>
-            </HeaderColContent>
-            <ItemColContent>
-                @switch (context.Header.Value)
-                {
-                    case nameof(ClientDto.LogoUri):
-                        <div class="hover-pointer d-flex my-1">
-                            <MAvatar Size=48>
-                                <img src="@context.Item.LogoUri" />
-                            </MAvatar>
-                            <div class="ml-4 block-center">
-                                <div class="subtitle emphasis2--text">@context.Item.ClientName</div>
+<DefaultCard>
+    <AutoHeight>
+        <HeaderContent>
+            <div class="d-flex mb-6">
+                <SearchTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" />
+                <MSpacer />
+                <DefaultButton Small OnClick="()=>{_addDialog=true;}">
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <span class="ml-2 btn">@T("Add")</span>
+                </DefaultButton>
+            </div>           
+        </HeaderContent>
+        <AutoHeightContent>
+            <DefaultDataTable Headers="_headers" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize">
+                <HeaderColContent Context="header">
+                    <span>@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(ClientDto.LogoUri):
+                            <div class="hover-pointer d-flex">
+                                <MAvatar Size=48>
+                                    <img src="@context.Item.LogoUri" />
+                                </MAvatar>
+                                <div class="ml-4 block-center">
+                                    <div>@context.Item.ClientName</div>
+                                </div>
                             </div>
-                        </div>
-                        break;
-                    case nameof(ClientDto.Enabled):
-                        <EnableChip Value=context.Item.Enabled />
-                        break;
-                    case "Action":
-                        <MIcon Small Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">@IconConstants.Update</MIcon>
-                        break;
-                    default:
-                        <span class="subtitle">@context.Value</span>
-                        break;
-                }
-            </ItemColContent>
-            <FooterContent>
-                <DataTableFooter Class="mt-4" Page=_clientPaginationDto.Page PageSize=_clientPaginationDto.PageSize Total=100 />
-            </FooterContent>
-        </MDataTable>
-    </MCardText>
-</MCard>
+                            break;
+                        case nameof(ClientDto.Enabled):
+                            <EnableChip Value=context.Item.Enabled />
+                            break;
+                        case "Action":
+                            <MIcon Small Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">@IconConstants.Update</MIcon>
+                            break;
+                        default:
+                            <span>@context.Value</span>
+                            break;
+                    }
+                </ItemColContent>
+            </DefaultDataTable>
+        </AutoHeightContent>
+        <FooterContent>
+            <Pagination Class="mt-4" @bind-Page="_clientPaginationDto.Page" @bind-PageSize=_clientPaginationDto.PageSize Total=100 />
+        </FooterContent>
+    </AutoHeight>
+</DefaultCard>
 
-<AddClientDialog @bind-Value="_addDialog" OnSuccessed="LoadData"/>
-<UpdateClientDialog @ref="_updateClientDialog" @bind-Value=_updateDialog OnSuccessed="LoadData" OnDeleted="LoadData"/>
+<AddClientDialog @bind-Value="_addDialog" OnSuccessed="LoadData" />
+<UpdateClientDialog @ref="_updateClientDialog" @bind-Value=_updateDialog OnSuccessed="LoadData" OnDeleted="LoadData" />

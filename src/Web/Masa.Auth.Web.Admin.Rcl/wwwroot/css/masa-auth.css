@@ -1,8 +1,4 @@
-﻿html {
-    font-size: 16px;
-}
-
-/*scrollbar*/
+﻿/*scrollbar*/
 ::-webkit-scrollbar-track {
     border-radius: 15px;
     margin: 5px 0;

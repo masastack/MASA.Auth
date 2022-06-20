@@ -104,50 +104,51 @@
         </MRow>
         <MRow Class="flex-grow-1">
             <MCol Md="12">
-                <MCard Class="full-height">
-                    <MCardText>
-                        <MDataTable Headers="_headers" Items="@_paginationStaffs.Items" TItem="StaffDto" ItemClass="my-2" HideDefaultFooter="true" Class="mt-2 table-border-none table-space-v-4 full-height d-flex flex-column">
-                            <HeaderColContent Context="header">
-                                <span class="body-bold">@header.Text</span>
-                            </HeaderColContent>
-                            <TopContent>
-                                <div class="d-flex justify-space-between">
-                                    <DefaultTextField @bind-Value="@_getStaffsDto.Search" Style="max-width:341px;" HideDetails=true
-                                                      Placeholder="@T("Search")" PrependInnerIcon="mdi-magnify" OnKeyDown="EnterSearch">
-                                    </DefaultTextField>
-                                    <MButton class="rounded-pill primary" MinWidth="100" OnClick="()=>_addStaff=true">
-                                        <MIcon Left Dark>
-                                            mdi-plus
-                                        </MIcon>
-                                        @T("Add")
-                                    </MButton>
-                                </div>
-                            </TopContent>
-                            <ItemColContent>
-                                @switch (context.Header.Value)
-                                {
-                                    case nameof(UserDto.Name):
-                                        <div>
-                                            <MAvatar>
-                                                <MImage Src="@(context.Item.User.Avatar)" Alt="Jack"></MImage>
-                                            </MAvatar>
-                                            <span class="ml-2">@context.Item.User.Name</span>
-                                        </div>
-                                        break;
-                                    case "Action":
-                                        <MIcon Small OnClick="()=>UpdateStaff(context.Item.Id)">mdi-pencil</MIcon>
-                                        break;
-                                    default:
-                                        //@context.Value
-                                        break;
-                                }
-                            </ItemColContent>
-                            <FooterContent>
-                                <DataTableFooter Class="mb-4 mt-2" Total="_paginationStaffs.Total" Page=_getStaffsDto.Page PageSize=_getStaffsDto.PageSize />
-                            </FooterContent>
-                        </MDataTable>
-                    </MCardText>
-                </MCard>
+                <DefaultCard>
+                    <AutoHeight>
+                        <HeaderContent>
+                            <div class="d-flex mb-6">
+                                <SearchTextField @bind-Value="@_getStaffsDto.Search" PrependInnerIcon="mdi-magnify" OnKeyDown="EnterSearch" />
+                                <MSpacer />
+                                <DefaultButton Small OnClick="()=>_addStaff=true">
+                                    <MIcon Left Dark>
+                                        @IconConstants.Add
+                                    </MIcon>
+                                    @T("Add")
+                                </DefaultButton>
+                            </div>
+                        </HeaderContent>
+                        <AutoHeightContent>
+                            <DefaultDataTable Headers="_headers" Items="@_paginationStaffs.Items" TItem="StaffDto">
+                                <HeaderColContent Context="header">
+                                    <span class="body-bold">@header.Text</span>
+                                </HeaderColContent>
+                                <ItemColContent>
+                                    @switch (context.Header.Value)
+                                    {
+                                        case nameof(UserDto.Name):
+                                            <div>
+                                                <MAvatar>
+                                                    <MImage Src="@(context.Item.User.Avatar)" Alt="Jack"></MImage>
+                                                </MAvatar>
+                                                <span class="ml-2">@context.Item.User.Name</span>
+                                            </div>
+                                            break;
+                                        case "Action":
+                                            <MIcon Small OnClick="()=>UpdateStaff(context.Item.Id)">mdi-pencil</MIcon>
+                                            break;
+                                        default:
+                                            <span>@context.Value</span>
+                                            break;
+                                    }
+                                </ItemColContent>
+                            </DefaultDataTable>
+                        </AutoHeightContent>
+                        <FooterContent>
+                            <Pagination Class="mt-4" @bind-Page="_getStaffsDto.Page" @bind-PageSize=_getStaffsDto.PageSize Total=_paginationStaffs.Total />
+                        </FooterContent>
+                    </AutoHeight>
+                </DefaultCard>            
             </MCol>
         </MRow>
     </MCol>

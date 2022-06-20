@@ -6,7 +6,7 @@
             <MForm Model=_menuPermissionDetailDto EnableValidation @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
+                        <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=6>
                         <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
@@ -18,8 +18,7 @@
                         </MSelect>
                     </MCol>
                     <MCol Md=6>
-                        <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
-                        </DefaultTextField>
+                        <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
                     </MCol>
                     <MCol Md=12>
                         <MSelect @bind-Value="_menuPermissionDetailDto.Type"
@@ -31,7 +30,7 @@
                         </MSelect>
                     </MCol>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
+                        <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url" />
                     </MCol>
                     <MCol Md=12>
                         <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
@@ -45,16 +44,15 @@
                         </DefaultTextField>
                     </MCol>
                     <MCol Md=12>
-                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
-                        </MTextarea>
+                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize />
                     </MCol>
                 </MRow>
             </MForm>
         </MCardText>
         <MCardActions class="d-flex align-center mb-12 px-6">
-            <MSwitch @bind-Value="_menuPermissionDetailDto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+            <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />           
             <MSpacer />
-            <MButton class="rounded-pill primary" MinWidth="100" OnClick="OnSubmitHandler">@T("Submit")</MButton>
+            <DefaultButton Medium OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
         </MCardActions>
     </MCard>
 </SheetDialog>
