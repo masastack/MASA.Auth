@@ -19,9 +19,9 @@ public class PermissionService : ServiceBase
         MapGet(GetMenusAsync, "menus");
         MapGet(AuthorizedAsync);
         MapGet(GetElementPermissionsAsync, "element-permissions");
-        MapPut(AddMenuFavoriteAsync);
-        MapPut(RemoveMenuFavoriteAsync);
-        MapGet(GetMenuFavoriteListAsync, "menu-favorite-list");
+        MapPut(AddFavoriteMenuAsync);
+        MapPut(RemoveFavoriteMenuAsync);
+        MapGet(GetFavoriteMenuListAsync, "menu-favorite-list");
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
