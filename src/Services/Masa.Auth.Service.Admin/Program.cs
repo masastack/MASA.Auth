@@ -57,7 +57,7 @@ builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http:
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
 
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
-builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"], b => b.MigrationsAssembly(migrationsAssembly)));
+builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:OidcConnection"], b => b.MigrationsAssembly(migrationsAssembly)));
 var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddOidcCache(option);
 

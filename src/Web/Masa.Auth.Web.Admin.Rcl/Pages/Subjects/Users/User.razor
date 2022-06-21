@@ -7,7 +7,7 @@
             <MSpacer />
             <div>
                 <UserAutoComplete @bind-Value="UserId" />
-            </div>          
+            </div>     
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter ? "mdi-filter" : "mdi-filter-off")
@@ -46,7 +46,7 @@
                             </MAvatar>
                             <div class="ml-2 my-auto">
                                 <div>@context.Item.Name</div>
-                                <div class="regular2--text overline">@context.Item.PhoneNumber</div>
+                                <div class="regular2--text caption">@context.Item.PhoneNumber</div>
                             </div>
                         </div>
                         break;
@@ -63,8 +63,8 @@
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
-                        <MIcon Small Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
+                        <MIcon Size="20" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Size="20" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
                         <span>@context.Value</span>

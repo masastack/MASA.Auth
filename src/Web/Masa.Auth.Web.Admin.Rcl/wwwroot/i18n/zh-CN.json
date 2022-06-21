@@ -2,7 +2,7 @@
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
-  "$DateFormat": "yyyy-MM-dd",
+  "$DateFormat": "yyyy年MM月dd日",
 
   "Favorite": "收藏",
   "Source": "来源",

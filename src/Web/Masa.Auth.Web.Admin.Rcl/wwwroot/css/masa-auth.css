@@ -54,8 +54,8 @@
 }
 
 .button {
-    min-width: 42px;
-    min-height: 42px;
+    min-width: 40px;
+    min-height: 40px;
     border: 1px solid #F0F3FA;
     box-sizing: border-box;
     border-radius: 10px;
@@ -312,7 +312,7 @@
     letter-spacing: 0em !important;
 }
 
-.masa .overline {
+.masa .caption {
     font-size: 0.625rem !important;
     font-weight: 400 !important;
     line-height: 0.9375rem !important;
@@ -542,7 +542,7 @@
 }
 
 .m-text-field--outlined:not(.m-textarea) fieldset {
-    height: 51px !important;
+    height: 53px !important;
 }
 
 .m-select.m-text-field--outlined .m-label {
@@ -1163,4 +1163,16 @@ input::-webkit-input-placeholder {
 .theme--light.m-btn--active:hover::before, .theme--light.m-btn--active::before {
     /* opacity: 0.18; */
     opacity: 0.00000000000000001 !important;
+}
+
+.masa .m-input__control {
+    min-height: 40px !important;
+}
+
+.masa .labeled-radio-group {
+    padding: 2px;
+}
+
+.masa .m-chip {
+    padding: 0 14px;
 }

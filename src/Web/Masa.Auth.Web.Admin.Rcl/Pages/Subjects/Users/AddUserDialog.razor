@@ -24,7 +24,7 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <AutoHeight Overflow AutoClass="mt-6">
+                    <AutoHeight Overflow AutoClass="mt-9">
                         <HeaderContent>
                             <div class="d-flex">
                                 <div class="mx-auto text-center">
@@ -37,11 +37,11 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
-                            <DefaultTextField @bind-Value="User.Name" Class="mb-9" Label="@T("请输入用户真实姓名")" />
-                            <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" />
-                            <DefaultTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" />
-                            <DefaultTextField @bind-Value="User.IdCard" Class="mb-9" Label="@T("IdCard")" />
-                            <DefaultTextField @bind-Value="User.Account" Class="mb-9" Label="@T("Account")" />
+                            <DefaultTextField @bind-Value="User.Name" Class="mb-12" Label="@T("请输入用户真实姓名")" />
+                            <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-12" Label="@T("PhoneNumber")" />
+                            <DefaultTextField @bind-Value="User.Email" Class="mb-12" Label="@T("Email")" />
+                            <DefaultTextField @bind-Value="User.IdCard" Class="mb-12" Label="@T("IdCard")" />
+                            <DefaultTextField @bind-Value="User.Account" Class="mb-12" Label="@T("Account")" />
                             <DefaultTextField @bind-Value="User.Password" Label="@T("Password")" />
                             @if (Fill is false)
                             {
@@ -55,9 +55,9 @@
                             else
                             {
                                 <DefaultTitle Class="mt-12 mb-6">@T("Detail Information")</DefaultTitle>
-                                <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" />
-                                <DefaultTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" />
-                                <DefaultTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" />
+                                <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-12" Label="@T("CompanyName")" />
+                                <DefaultTextField @bind-Value="User.Address.Address" Class="mb-12" Label="@T("Address")" />
+                                <DefaultTextField @bind-Value="User.Department" Class="mb-12" Label="@T("Department")" />
                                 <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                             }
                         </AutoHeightContent>
@@ -73,7 +73,9 @@
                 <MStepperContent Step="3">
                     <AutoHeight Overflow>
                         <HeaderContent>
-                            <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                            <div>
+                                <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                            </div>                           
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
