@@ -25,6 +25,7 @@ global using Masa.Auth.Service.Admin.Application.Organizations.Commands;
 global using Masa.Auth.Service.Admin.Application.Organizations.Queries;
 global using Masa.Auth.Service.Admin.Application.Permissions.Commands;
 global using Masa.Auth.Service.Admin.Application.Permissions.Queries;
+global using Masa.Auth.Service.Admin.Application.Projects.Commands;
 global using Masa.Auth.Service.Admin.Application.Projects.Queries;
 global using Masa.Auth.Service.Admin.Application.Sso.Commands;
 global using Masa.Auth.Service.Admin.Application.Sso.Queries;
@@ -104,4 +105,4 @@ global using Masa.BuildingBlocks.Authentication.Oidc.Models.Constans;
 global using Masa.Contrib.Authentication.Oidc.EntityFrameworkCore;
 global using Masa.Contrib.Authentication.Oidc.Cache;
 global using Masa.Utils.Caching.Redis.Models;
-
+global using System.Text.RegularExpressions;

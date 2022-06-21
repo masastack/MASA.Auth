@@ -9,14 +9,17 @@ public class QueryHandler
     readonly IPermissionRepository _permissionRepository;
     readonly AuthDbContext _authDbContext;
     readonly UserDomainService _userDomainService;
+    readonly IMemoryCacheClient _memoryCacheClient;
 
     public QueryHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository,
-        AuthDbContext authDbContext, UserDomainService userDomainService)
+        AuthDbContext authDbContext, UserDomainService userDomainService,
+        IMemoryCacheClient memoryCacheClient)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
+        _memoryCacheClient = memoryCacheClient;
     }
 
     #region Role
@@ -314,4 +317,20 @@ public class QueryHandler
     }
 
     #endregion
+
+    [EventHandler]
+    public async Task CollectMenuListQueryAsync(FavoriteMenuListQuery favoriteMenuListQuery)
+    {
+        var permissionIds = await _memoryCacheClient.GetAsync<List<Guid>>($"{CacheKey.USER_MENU_COLLECT_PRE}{favoriteMenuListQuery.UserId}");
+        if (permissionIds == null)
+        {
+            return;
+        }
+        favoriteMenuListQuery.Result = (await _permissionRepository.GetListAsync(p => permissionIds.Contains(p.Id)))
+            .Select(p => new SelectItemDto<Guid>
+            {
+                Value = p.Id,
+                Text = p.Name
+            }).ToList();
+    }
 }

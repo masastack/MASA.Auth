@@ -21,6 +21,8 @@ public class UpdateUserDto
 
     public string PhoneNumber { get; set; }
 
+    public string Landline { get; set; }
+
     public string Email { get; set; }
 
     public AddressValueDto Address { get; set; }
@@ -46,6 +48,7 @@ public class UpdateUserDto
         Department = "";
         Position = "";
         Password = "";
+        Landline = "";
     }
 
     public UpdateUserDto(Guid id, string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string password, GenderTypes genderType)
@@ -64,6 +67,7 @@ public class UpdateUserDto
         Position = position;
         Password = password;
         Gender = genderType;
+        Landline = "";
     }
 
     public static implicit operator UpdateUserDto(UserDetailDto user)

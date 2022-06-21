@@ -19,6 +19,8 @@ public class AddUserDto
 
     public string PhoneNumber { get; set; }
 
+    public string Landline { get; set; }
+
     public string Email { get; set; }
 
     public AddressValueDto Address { get; set; }
@@ -54,6 +56,7 @@ public class AddUserDto
         Gender = GenderTypes.Male;
         Roles = new List<Guid>();
         Permissions = new List<UserPermissionDto>();
+        Landline = "";
     }
 
     public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password, GenderTypes genderType, List<Guid> roleIds, List<UserPermissionDto> permissions)
@@ -74,5 +77,6 @@ public class AddUserDto
         Gender = genderType;
         Roles = roleIds;
         Permissions = permissions;
+        Landline = "";
     }
 }

@@ -9,6 +9,8 @@ namespace Masa.Auth.Service.Admin.Services
         {
             MapGet(FindByAccountAsync);
             MapPost(ValidateByAccountAsync);
+            MapPost(Visit);
+            MapGet(VisitedList);
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -85,6 +87,19 @@ namespace Masa.Auth.Service.Admin.Services
             var query = new FindUserByAccountQuery(account);
             await eventBus.PublishAsync(query);
             return query.Result;
+        }
+
+        private async Task Visit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)
+        {
+            var visitCommand = new UserVisitedCommand(addUserVisitedDto.UserId, addUserVisitedDto.Url);
+            await eventBus.PublishAsync(visitCommand);
+        }
+
+        private async Task<List<UserVisitedDto>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
+        {
+            var visitListQuery = new UserVisitedListQuery(userId);
+            await eventBus.PublishAsync(visitListQuery);
+            return visitListQuery.Result;
         }
     }
 }

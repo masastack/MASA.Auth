@@ -23,5 +23,7 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<LdapDetailDto, LdapOptions>.ForType()
             .Map(dest => dest.ServerPort, src => src.IsLdaps ? 0 : src.ServerPort)
             .Map(dest => dest.ServerPortSsl, src => src.IsLdaps ? src.ServerPort : 0);
+
+        TypeAdapterConfig<AddUserDto, CacheUser>.NewConfig().Map(dest => dest.Permissions, src => src.Permissions.Select(p => p.PermissionId).ToList());
     }
 }
