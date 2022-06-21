@@ -46,7 +46,7 @@ public class UserCacheCommandHandler
         if (oldCache != null)
         {
             oldCache.Roles = updateUserAuthorizationCommand.User.Roles;
-            oldCache.Permissions = updateUserAuthorizationCommand.User.Permissions.Select(p => p.PermissionId).ToList();
+            oldCache.Permissions = updateUserAuthorizationCommand.User.Permissions;
             await _memoryCacheClient.SetAsync(key, oldCache);
         }
     }
