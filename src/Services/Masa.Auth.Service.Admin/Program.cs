@@ -113,15 +113,15 @@ var app = builder.Services
     })
     .AddServices(builder);
 
-//app.MigrateDbContext<AuthDbContext>((context, services) =>
-//{
-//    if (context.Set<Department>().Any())
-//    {
-//        return;
-//    }
-//    context.Set<Department>().Add(new Department("MasaStack", "MasaStack Root Department"));
-//    context.SaveChanges();
-//});
+app.MigrateDbContext<AuthDbContext>((context, services) =>
+{
+    if (context.Set<Department>().Any())
+    {
+        return;
+    }
+    context.Set<Department>().Add(new Department("MasaStack", "MasaStack Root Department"));
+    context.SaveChanges();
+});
 
 app.UseMasaExceptionHandling(opt =>
 {
