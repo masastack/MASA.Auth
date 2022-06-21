@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class UserClaimSelectDto : UserClaimDto
 {
-    public UserClaimSelectDto(int id, string name, string description) : base(id, name, description,default)
+    public UserClaimSelectDto(int id, string name, string description) : base(id, name, description, default)
     {
     }
 }

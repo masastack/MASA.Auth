@@ -22,7 +22,7 @@ public class DefaultCopyPassword : DefaultTextField<string>
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
-    {        
+    {
         builder.OpenElement(0, "div");
 
         builder.AddAttribute(1, "class", "d-flex");

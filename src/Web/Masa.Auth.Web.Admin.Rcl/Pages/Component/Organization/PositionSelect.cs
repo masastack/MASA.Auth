@@ -23,7 +23,7 @@ public class PositionSelect : Combox<PositionSelectDto>
 
     protected override void OnInitialized()
     {
-        PositionService.GetSelectAsync().ContinueWith(async task => 
+        PositionService.GetSelectAsync().ContinueWith(async task =>
         {
             Items = task.Result;
             await InvokeAsync(StateHasChanged);
