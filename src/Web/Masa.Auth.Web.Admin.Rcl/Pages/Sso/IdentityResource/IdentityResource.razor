@@ -1,6 +1,10 @@
 ﻿@page "/sso/identityResource"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("IdentityResource")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -9,45 +13,45 @@
                 <MSpacer />
                 <DefaultButton Small OnClick="() => AddStandardIdentityResourcesAsync()">
                     <MIcon Size=18>mdi-cog-outline</MIcon>
-                    <span class="ml-2">@T("Create standard identityResource")</span>
+                    <span class="ml-2 btn">@T("Create standard identityResource")</span>
                 </DefaultButton>
-                <DefaultButton Small Class="ml-6" OnClick="() =>  OpenAddRoleDialog()">
+                <DefaultButton Small Class="ml-4" OnClick="() =>  OpenAddRoleDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
-                    <span class="ml-2">@T("Add")</span>
+                    <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="IdentityResources" TItem="IdentityResourceDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(IdentityResourceDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                                <span class="subtitle default--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(IdentityResourceDto.DisplayName)):
-                            <span class="font-16 regular--text">@context.Item.DisplayName</span>
+                            <span>@context.Item.DisplayName</span>
                             break;
                         case nameof(IdentityResourceDto.Required):
-                            <span class="font-16 regular--text">@(context.Item.Required ? T("Yes") : T("No"))</span>
+                            <span>@(context.Item.Required ? T("Yes") : T("No"))</span>
                             break;
                         case (nameof(IdentityResourceDto.Description)):
-                            <span class="font-16 regular--text">@context.Item.Description</span>
+                            <span>@context.Item.Description</span>
                             break;
                         case nameof(IdentityResourceDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>

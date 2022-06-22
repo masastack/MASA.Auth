@@ -20,36 +20,36 @@
     <AutoHeightContent>
         <DefaultDataTable Class="mt-6" Headers="Headers" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
-                <span class="body2 default2--text">@header.Text</span>
+                <span>@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
                 {
                     case nameof(UserDto.Avatar):
-                        <div class="hover-pointer d-flex my-1" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
+                        <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
                             <MAvatar Size=40>
                                 <img src="@context.Item.User.Avatar" />
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div class="subtitle emphasis2--text">@context.Item.User.Name</div>
+                                <div>@context.Item.User.Name</div>
                             </div>
                         </div>
                         break;
                     case (nameof(StaffDto.Department)):
-                        <span class="body regular--text">@context.Item.Department</span>
+                        <span>@context.Item.Department</span>
                         break;
                     case nameof(StaffDto.JobNumber):
-                        <span class="body regular--text">@context.Item.JobNumber</span>
+                        <span>@context.Item.JobNumber</span>
                         break;
                     case (nameof(StaffDto.Position)):
-                        <span class="body regular--text">@context.Item.Position</span>
+                        <span>@context.Item.Position</span>
                         break;
                     case nameof(StaffDto.Enabled):
                         <EnableChip Value="context.Item.Enabled" />
                         break;
                     case "Action":
-                        <MIcon Small Color="regular" OnClick="()=> OpenUpdateStaffDialog(context.Item)">@IconConstants.Update</MIcon>
-                        <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
+                        <MIcon Small OnClick="()=> OpenUpdateStaffDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Small Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
                         <span class="subtitle">@context.Value</span>
@@ -59,7 +59,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

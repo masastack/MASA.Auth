@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <MCardText>
-    <MTextField class="mx-auto font-24-bold" style="width:404px;" OnInput="OnNameChanged" TValue="string" Value="@Value.Name" HideDetails="@("auto")" Placeholder="@T("Team Name")"></MTextField>
+    <PlaceholderTextFiled Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Team Name")" />
     <MListItem class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Height=80 Width=80>
             <span class="white--text" style="font-size:48px;">@Value.Avatar.Name?.FirstOrDefault()</span>

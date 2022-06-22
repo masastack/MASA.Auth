@@ -1,6 +1,10 @@
 ﻿@page "/sso/apiResource"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("ApiResource")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -9,38 +13,38 @@
                 <MSpacer />
                 <DefaultButton Small OnClick="() => OpenAddApiResourceDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
-                    <span class="ml-2">@T("Add")</span>
+                    <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="ApiResources" TItem="ApiResourceDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(ApiResourceDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">
-                                <span class="subtitle default--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(ApiResourceDto.DisplayName)):
-                            <span class="font-16 regular--text">@context.Item.DisplayName</span>
+                            <span>@context.Item.DisplayName</span>
                             break;
                         case (nameof(ApiResourceDto.Description)):
-                            <span class="font-16 regular--text">@context.Item.Description</span>
+                            <span>@context.Item.Description</span>
                             break;
                         case nameof(ApiResourceDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>
