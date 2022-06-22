@@ -30,38 +30,9 @@ public class CommandHandler
     [EventHandler]
     public async Task AddClientAsync(AddClientCommand addClientCommand)
     {
-        PrepareGrantTypeWithClientType(addClientCommand.AddClientDto);
         var client = addClientCommand.AddClientDto.Adapt<Client>();
+        client.SetClientType(addClientCommand.AddClientDto.ClientType);
         await _clientRepository.AddAsync(client);
-
-        //todo change domain method
-        void PrepareGrantTypeWithClientType(AddClientDto client)
-        {
-            switch (client.ClientType)
-            {
-                case ClientTypes.Web:
-                    client.AllowedGrantTypes.AddRange(GrantTypeConsts.Code);
-                    client.RequirePkce = true;
-                    client.RequireClientSecret = true;
-                    break;
-                case ClientTypes.Spa:
-                case ClientTypes.Native:
-                    client.AllowedGrantTypes.AddRange(GrantTypeConsts.Code);
-                    client.RequirePkce = true;
-                    client.RequireClientSecret = false;
-                    break;
-                case ClientTypes.Machine:
-                    client.AllowedGrantTypes.AddRange(GrantTypeConsts.ClientCredentials);
-                    client.RequireClientSecret = true;
-                    break;
-                case ClientTypes.Device:
-                    client.AllowedGrantTypes.AddRange(GrantTypeConsts.DeviceFlow);
-                    client.RequireClientSecret = false;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
     }
 
     [EventHandler]
