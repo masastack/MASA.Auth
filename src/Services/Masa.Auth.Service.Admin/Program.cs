@@ -32,17 +32,26 @@ builder.Services.AddAliyunStorage(serviceProvider =>
     };
 });
 
+builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+{
+    options.Environment = "environment";
+    options.UserName = "name";
+    options.UserId = "sub";
+});
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options =>
+.AddJwtBearer("Bearer", options =>
 {
-    options.Authority = "";
+    options.Authority = builder.Configuration["IdentityServerUrl"];
     options.RequireHttpsMetadata = false;
-    options.Audience = "";
+    //options.Audience = "";
+    options.TokenValidationParameters.ValidateAudience = false;
+    options.MapInboundClaims = false;
 });
 
 //builder.AddMasaConfiguration(configurationBuilder =>

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Authentication;
+
 namespace Masa.Auth.ApiGateways.Caller;
 
 public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
@@ -14,10 +16,10 @@ public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var userClaim = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "UserId");
-        if (userClaim != null)
+        if (_httpContextAccessor.HttpContext != null)
         {
-            request.Headers.Add("user-id", userClaim.Value);
+            var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
         }
         return await base.SendAsync(request, cancellationToken);
     }

@@ -3,10 +3,11 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validation;
 
-public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
+public class CustomTokenRequestValidator : ICustomTokenRequestValidator
 {
-    public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
+    public Task ValidateAsync(CustomTokenRequestValidationContext context)
     {
+        var d = context.Result.ValidatedRequest.ClientClaims;
         return Task.CompletedTask;
     }
 }

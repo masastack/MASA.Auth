@@ -16,6 +16,9 @@ public class UserProfileService : IProfileService
 
     public Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
+        //获取IdentityServer给我们定义的Cliams和我们在SignAsync添加的Claims
+        var claims = context.Subject.Claims.ToList();
+        context.IssuedClaims = claims;
         return Task.CompletedTask;
     }
 

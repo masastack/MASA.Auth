@@ -36,6 +36,7 @@
 		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.5.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.5.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.5.0-preview.1" />
+		<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Isolation" Version="0.5.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.5.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Isolation.UoW.EF" Version="0.5.0-preview.1" />

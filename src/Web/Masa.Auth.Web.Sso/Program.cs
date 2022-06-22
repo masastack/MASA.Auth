@@ -34,7 +34,8 @@ builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConf
 .AddResourceStore<MasaResourceStore>()
 .AddCorsPolicyService<CorsPolicyService>()
 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-.AddProfileService<UserProfileService>();
+.AddProfileService<UserProfileService>()
+.AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();

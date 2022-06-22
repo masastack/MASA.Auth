@@ -58,6 +58,7 @@ global using Masa.BuildingBlocks.Ddd.Domain.Events;
 global using Masa.BuildingBlocks.Ddd.Domain.Repositories;
 global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
+global using Masa.BuildingBlocks.Identity.IdentityModel;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Masa.BuildingBlocks.Storage.ObjectStorage;
 global using Masa.Contrib.Authentication.Oidc.Cache.Storage;
