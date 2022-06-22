@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using BlazorComponent;
 using UrlHelper = Masa.Auth.Web.Sso.Infrastructure.UrlHelper;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
@@ -118,7 +117,7 @@ public partial class Index
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
             if (!string.IsNullOrEmpty(msg))
             {
-                await PopupService.AlertAsync(msg, AlertTypes.Error);
+                await PopupService.AlertAsync(msg, BlazorComponent.AlertTypes.Error);
             }
             else
             {
@@ -132,7 +131,7 @@ public partial class Index
                 }
                 else
                 {
-                    await PopupService.AlertAsync("invalid return URL", AlertTypes.Error);
+                    await PopupService.AlertAsync("invalid return URL", BlazorComponent.AlertTypes.Error);
                 }
             }
         }

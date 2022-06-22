@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
 	<PackageReference Include="IdentityServer4" Version="4.1.2" />
 	<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
 	<PackageReference Include="Mapster" Version="7.3.0" />
-	<PackageReference Include="Masa.Blazor" Version="0.4.0" />
-	<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.4.0" />
-	<PackageReference Include="Masa.Utils.Exceptions" Version="0.4.0" />
+	<PackageReference Include="Masa.Blazor" Version="0.5.0-preview.3" />
+	<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache.Storage" Version="0.5.0-preview.1" />
+	<PackageReference Include="Masa.Contrib.BasicAbility.Auth" Version="0.5.0-preview.1" />
+	<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-preview.1" />
+	<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-preview.1" />
+	<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-preview.2" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
   </ItemGroup>
 
@@ -34,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BasicAbility\Masa.Contrib.BasicAbility.Auth\Masa.Contrib.BasicAbility.Auth.csproj" />
     <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.Cache.Storage\Masa.Contrib.Oidc.Cache.Storage.csproj" />
     <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Oidc\Masa.Contrib.Oidc.EntityFramework\Masa.Contrib.Oidc.EntityFramework.csproj" />
   </ItemGroup>
@@ -47,5 +50,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

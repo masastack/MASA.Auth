@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using IMasaOidcClientStore = Masa.BuildingBlocks.Oidc.Storage.Stores.IClientStore;
+using IMasaOidcClientStore = Masa.BuildingBlocks.Authentication.Oidc.Storage.Stores.IClientStore;
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Stores;
 

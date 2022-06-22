@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Client = Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
@@ -56,6 +58,22 @@ builder.Services.AddLadpContext();
 
 builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
+
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
+    .AddDbContextCheck<AuthDbContext>();
+
+var clientUrl = builder.Configuration.GetValue<string>("WebUrl");
+var client = new Client(Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums.ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
+client.SetAllowedScopes(new List<string> { "openid", "profile" });
+client.SetPostLogoutRedirectUris(new List<string> { $"{clientUrl}/signout-callback-oidc" });
+client.SetRedirectUris(new List<string> { $"{clientUrl}/signin-oidc" });
+
+builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+    .AddOidcDbContext(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+}).SeedClientData(new List<Client> { client });
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -149,5 +167,15 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
+});
 
 app.Run();

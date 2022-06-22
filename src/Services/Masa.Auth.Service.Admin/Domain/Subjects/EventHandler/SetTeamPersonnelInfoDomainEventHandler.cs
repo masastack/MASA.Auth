@@ -17,7 +17,7 @@ public class SetTeamPersonnelInfoDomainEventHandler
     }
 
     [EventHandler(2)]
-    public async Task SetUserAsync(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
+    public void SetUserAsync(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
     {
         setTeamPersonnelInfoDomainEvent.Team.SetStaff(setTeamPersonnelInfoDomainEvent.Type, setTeamPersonnelInfoDomainEvent.StaffIds);
     }
