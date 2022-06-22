@@ -19,7 +19,6 @@ public class UserDomainEventHandler
     [EventHandler]
     public async Task SetUserAsync(SetUserDomainEvent userEvent)
     {
-        var user = userEvent.Users;
         var response = await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(userEvent.Users.Select(user => new UserSelectDto(user.Id, user.Name, user.DisplayName, user.Account, user.PhoneNumber, user.Email, user.Avatar)));
     }
 

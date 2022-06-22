@@ -53,7 +53,7 @@
                         <DefaultTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.Position" Label="@T("Position")" />
+                        <PositionSelect @bind-Value="Staff.Position" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
@@ -61,7 +61,7 @@
                         <DefaultTextField Value="StaffDetail.User.Account" Readonly Label="@T("Account")" />
                     </MCol>
                     <MCol>
-                        <CopyPassword @bind-Value="Staff.User.Password" />
+                        <DefaultCopyPassword @bind-Value="Staff.User.Password" />
                     </MCol>
                 </MRow>
 

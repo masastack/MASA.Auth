@@ -1,8 +1,8 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="mt-6 subtitle2 regular--text">@T("History record")</div>
-<div class="mt-7 d-flex">
-    <div class="mr-n7 body2 default2--text" style="text-align: right;margin-top: -2px;">
+<DefaultTitle>@T("History record")</DefaultTitle>
+<div class="d-flex mt-7">
+    <div class="mr-n7 body2 regular3--text" style="text-align: right;margin-top: -2px;">
         <div>@T("Create")</div>
         <div style="margin-top: 46px;">@T("Update")</div>
     </div>
@@ -17,7 +17,7 @@
             <ChildContent>
                 <div class="mt-n3 ml-n7">
                     <div class="body2 regular--text" style="min-height:11px;">@Creator</div>
-                    <div class="body2 default2--text">@CreationTime.ToString(T("$DateTimeFormat"))</div>
+                    <div class="body2 regular3--text">@CreationTime.ToString(T("$DateTimeFormat"))</div>
                 </div>
             </ChildContent>
         </MTimelineItem>
@@ -32,7 +32,7 @@
                 <ChildContent>
                     <div class="mt-n3 ml-n7">
                         <div class="body2 regular--text" style="min-height:11px;">@Modifier</div>
-                        <div class="body2 default2--text">@ModificationTime?.ToString(T("$DateTimeFormat"))</div>
+                        <div class="body2 regular3--text">@ModificationTime?.ToString(T("$DateTimeFormat"))</div>
                     </div>
                 </ChildContent>
             </MTimelineItem>

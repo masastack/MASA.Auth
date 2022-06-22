@@ -84,7 +84,6 @@ public class CommandHandler
     [EventHandler]
     public async Task RemovePositionAsync(RemovePositionCommand command)
     {
-        //todo remove check
         var position = await _positionRepository.FindAsync(position => position.Id == command.Position.Id);
         if (position == null)
             throw new UserFriendlyException("The current position does not exist");

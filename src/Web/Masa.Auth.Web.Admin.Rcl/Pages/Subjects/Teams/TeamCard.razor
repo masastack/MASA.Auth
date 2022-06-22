@@ -10,7 +10,7 @@
                 </MListItemAvatar>
                 <MListItemContent class="pb-0">
                     <MListItemTitle class="d-flex justify-space-between align-center">
-                        <span class="font-14 default2--text">@T("Member") : @Team.MemberCount </span>
+                        <span class="font-14 regular3--text">@T("Member") : @Team.MemberCount </span>
                         <MIcon Size=20 OnClick="HandleEditClick">mdi-pencil</MIcon>
                     </MListItemTitle>
                     <MListItemSubtitle class="font-18-medium emphasis2--text">@Team.Name</MListItemSubtitle>
@@ -24,7 +24,7 @@
             <img src="@Team.CreatorAvatar" height=24 width=24 />
             <span class="font-14 ml-3">@Team.Creator</span>
             <MSpacer />
-            <span class="font-14 default2--text">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:new CultureInfo(I18n.CurrentLanguage))</span>
+            <span class="font-14 regular3--text">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:new CultureInfo(I18n.CurrentLanguage))</span>
         </MCardActions>
     </MCard>
 </MHover>

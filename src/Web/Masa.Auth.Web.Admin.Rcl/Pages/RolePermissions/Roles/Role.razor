@@ -1,59 +1,63 @@
 ﻿@page "/role"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("Role")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="Search" />
                 <MSpacer />
-                <DefaultButton Medium Class="ml-6" OnClick=OpenAddRoleDialog>
-                    <MIcon Size=18>mdi-plus</MIcon>
-                    <span class="ml-2">@T("Add")</span>
+                <DefaultButton Small OnClick=OpenAddRoleDialog>
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="Roles" TItem="RoleDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
                     {
                         case nameof(RoleDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
-                                <span class="subtitle default--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(RoleDto.CreationTime)):
-                            <span class="font-16 regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <DateTimeTitle Value="@context.Item.CreationTime" />
                             break;
                         case nameof(RoleDto.ModificationTime):
-                            <span class="font-16 regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
-                            break;
+                            <DateTimeTitle Value="@context.Item.ModificationTime" />
+                            break;                        
                         case (nameof(RoleDto.Creator)):
-                            <span class="font-16 regular--text">@context.Item.Creator</span>
+                            <span>@context.Item.Creator</span>
                             break;
                         case (nameof(RoleDto.Modifier)):
-                            <span class="font-16 regular--text">@context.Item.Modifier</span>
+                            <span>@context.Item.Modifier</span>
                             break;
                         case nameof(RoleDto.Enabled):
                             <EnableChip Value="context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateRoleDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <span>@context.Value</span>
                             break;
                     }
                 </ItemColContent>
             </DefaultDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </AutoHeight>
 </DefaultCard>
