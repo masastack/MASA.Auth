@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Client = Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
@@ -72,7 +70,7 @@ builder.Services.AddHealthChecks()
     .AddDbContextCheck<AuthDbContext>();
 
 var clientUrl = builder.Configuration.GetValue<string>("WebUrl");
-var client = new Client(Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums.ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
+var client = new Client(ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
 client.SetAllowedScopes(new List<string> { "openid", "profile" });
 client.SetPostLogoutRedirectUris(new List<string> { $"{clientUrl}/signout-callback-oidc" });
 client.SetRedirectUris(new List<string> { $"{clientUrl}/signin-oidc" });
