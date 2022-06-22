@@ -13,10 +13,8 @@ namespace Masa.Auth.Service.Admin.Services
             MapGet(VisitedList);
         }
 
-        private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, HttpContext context, IUserContext userContext, GetUsersDto user)
+        private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
         {
-            var d = context;
-            var userId = userContext.GetUserId<Guid>();
             var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled, user.StartTime, user.EndTime);
             await eventBus.PublishAsync(query);
             return query.Result;

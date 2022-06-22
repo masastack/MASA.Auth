@@ -15,6 +15,7 @@ global using IdentityServer4.Test;
 global using IdentityServer4.Validation;
 global using Mapster;
 global using Masa.Auth.Web.Sso.Global;
+global using Masa.Auth.Web.Sso.Global.Config;
 global using Masa.Auth.Web.Sso.Infrastructure;
 global using Masa.Auth.Web.Sso.Infrastructure.Services;
 global using Masa.Auth.Web.Sso.Infrastructure.Stores;
