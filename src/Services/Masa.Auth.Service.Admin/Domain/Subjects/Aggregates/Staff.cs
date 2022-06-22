@@ -27,12 +27,25 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public Guid UserId { get; private set; }
 
-    public string JobNumber { get; private set; } = "";
-
-    /// <summary>
-    /// redundance user name
-    /// </summary>
     public string Name { get; private set; } = "";
+
+    public string DisplayName { get; private set; } = "";
+
+    public string Avatar { get; private set; } = "";
+
+    public string IdCard { get; private set; } = "";
+
+    public string Account { get; private set; } = "";
+
+    public string Password { get; private set; } = "";
+
+    public string CompanyName { get; private set; } = "";
+
+    public string Department { get; set; } = "";
+
+    public GenderTypes GenderType { get; private set; }
+
+    public string JobNumber { get; private set; } = "";
 
     public Guid? PositionId
     {
@@ -55,11 +68,33 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         LazyLoader = lazyLoader;
     }
 
-    public Staff(Guid userId, string jobNumber, string name, Guid? positionId, StaffTypes staffType, bool enabled)
+    public Staff(
+        Guid userId, 
+        string name, 
+        string displayName, 
+        string avatar,
+        string idCard, 
+        string account, 
+        string password, 
+        string companyName, 
+        string department, 
+        GenderTypes genderType, 
+        string jobNumber, 
+        Guid? positionId,
+        StaffTypes staffType, 
+        bool enabled)
     {
         UserId = userId;
-        JobNumber = jobNumber;
         Name = name;
+        DisplayName = displayName;
+        Avatar = avatar;
+        IdCard = idCard;
+        Account = account;
+        Password = password;
+        CompanyName = companyName;
+        Department = department;
+        GenderType = genderType;
+        JobNumber = jobNumber;
         PositionId = positionId;
         StaffType = staffType;
         Enabled = enabled;
