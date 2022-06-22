@@ -1,11 +1,12 @@
 ﻿@page "/user"
-@using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model
 @inherits AdminCompontentBase
 
-<PageTitle>@T("User")</PageTitle>
+<PageTitle>
+    @T(Title)
+</PageTitle>
 
-<DefaultCard>
-    <ElevationTab Class="defaultTab full-height" TabMinWidth="120" Left Tabs="new List<string> { T(PageTab.User), T(PageTab.ThirdPartyUser), T(PageTab.Staff) }" Dense>
+<DefaultCard> @*TabIndexChanged="value => Title = Tas[value.ToInt32()]"*@
+    <ElevationTab Class="defaultTab full-height" TabMinWidth="120" Left Tabs="Tas" Dense>
         <ElevationTabItem>
             <User />
         </ElevationTabItem>
@@ -19,5 +20,12 @@
 </DefaultCard>
 
 @code {
-    StringNumber _pageTab = PageTab.User;
+    public string Title { get; set; } = PageTab.User;
+
+    List<string> Tas { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        Tas = new() { T(PageTab.User), T(PageTab.ThirdPartyUser), T(PageTab.Staff) };
+    }
 }

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class Password : MTextField<string>
+public class DefaultPassword : MTextField<string>
 {
     [Inject]
     public I18n? I18n { get; set; }

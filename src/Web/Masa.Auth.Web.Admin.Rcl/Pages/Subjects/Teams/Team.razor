@@ -5,9 +5,7 @@
 
 <MCard Class="full-height">
     <MCardTitle class="mx-2 py-6">
-        <DefaultTextField @bind-Value="_search" Placeholder="@T("Search")" OnKeyDown="SearchKeyDown"
-                          Style="max-width:340px;" PrependInnerIcon="mdi-magnify" HideDetails=true>
-        </DefaultTextField>
+        <SearchTextField @bind-Value="_search" OnKeyDown="SearchKeyDown" PrependInnerIcon="mdi-magnify" />
     </MCardTitle>
     <MCardText Style="overflow-y:auto;">
         <MRow>

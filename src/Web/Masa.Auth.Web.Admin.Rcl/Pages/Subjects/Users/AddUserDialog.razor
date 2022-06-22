@@ -24,7 +24,7 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <AutoHeight Overflow AutoClass="mt-6">
+                    <AutoHeight Overflow AutoClass="mt-9">
                         <HeaderContent>
                             <div class="d-flex">
                                 <div class="mx-auto text-center">
@@ -36,26 +36,28 @@
                             </div>
                         </HeaderContent>
                         <AutoHeightContent>
-                            <div class="subtitle2 regular--text">@T("Basic Information")</div>
-                            <DefaultTextField @bind-Value="User.Name" Class="mt-4 mb-9" Label="@T("Name")" />
-                            <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-9" Label="@T("PhoneNumber")" />
-                            <DefaultTextField @bind-Value="User.Email" Class="mb-9" Label="@T("Email")" />
-                            <DefaultTextField @bind-Value="User.IdCard" Class="mb-9" Label="@T("IdCard")" />
-                            <DefaultTextField @bind-Value="User.Account" Class="mb-9" Label="@T("Account")" />
+                            <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
+                            <DefaultTextField @bind-Value="User.Name" Class="mb-12" Label="@T("Name")" />
+                            <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-12" Label="@T("PhoneNumber")" />
+                            <DefaultTextField @bind-Value="User.Email" Class="mb-12" Label="@T("Email")" />
+                            <DefaultTextField @bind-Value="User.IdCard" Class="mb-12" Label="@T("IdCard")" />
+                            <DefaultTextField @bind-Value="User.Account" Class="mb-12" Label="@T("Account")" />
                             <DefaultTextField @bind-Value="User.Password" Label="@T("Password")" />
                             @if (Fill is false)
                             {
-                                <div @onclick="() => Fill = true" class="mt-12 hover-pointer" style="text-align:center">
-                                    <MIcon Class="emphasis2--text">mdi-menu-down</MIcon>
-                                    <span class="regular--text body2">@T("Fill in more")</span>
+                                <div @onclick="() => Fill = true" class="mt-12 hover-pointer d-flex" style="text-align:center;height:48px;">
+                                    <dvi class="ma-auto">
+                                        <MIcon Class="emphasis2--text">mdi-menu-down</MIcon>
+                                        <span class="regular--text body2">@T("Fill in more")</span>
+                                    </dvi>
                                 </div>
                             }
                             else
                             {
-                                <div class="mt-12 subtitle2 regular--text">@T("Detail Information")</div>
-                                <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-9" Label="@T("CompanyName")" />
-                                <DefaultTextField @bind-Value="User.Address.Address" Class="mb-9" Label="@T("Address")" />
-                                <DefaultTextField @bind-Value="User.Department" Class="mb-9" Label="@T("Department")" />
+                                <DefaultTitle Class="mt-12 mb-6">@T("Detail Information")</DefaultTitle>
+                                <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-12" Label="@T("CompanyName")" />
+                                <DefaultTextField @bind-Value="User.Address.Address" Class="mb-12" Label="@T("Address")" />
+                                <DefaultTextField @bind-Value="User.Department" Class="mb-12" Label="@T("Department")" />
                                 <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
                             }
                         </AutoHeightContent>
@@ -71,10 +73,12 @@
                 <MStepperContent Step="3">
                     <AutoHeight Overflow>
                         <HeaderContent>
-                            <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                            <div>
+                                <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                            </div>                           
                         </HeaderContent>
-                        <AutoHeightContent>                          
-                            <div class="global-nav" style="display: flex;height: auto">                               
+                        <AutoHeightContent>
+                            <div class="global-nav" style="display: flex;height: auto">
                                 <PermissionsCheck RoleIds=User.Roles
                                                   Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
                                                   ValueChanged="PermissionsChanged" />

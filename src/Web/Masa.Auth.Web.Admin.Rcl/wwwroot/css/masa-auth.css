@@ -1,8 +1,4 @@
-﻿html {
-    font-size: 16px;
-}
-
-/*scrollbar*/
+﻿/*scrollbar*/
 ::-webkit-scrollbar-track {
     border-radius: 15px;
     margin: 5px 0;
@@ -58,8 +54,8 @@
 }
 
 .button {
-    min-width: 42px;
-    min-height: 42px;
+    min-width: 40px;
+    min-height: 40px;
     border: 1px solid #F0F3FA;
     box-sizing: border-box;
     border-radius: 10px;
@@ -164,14 +160,13 @@
 }
 
 .m-input .m-label {
-    /* BUTTON-按钮 */
-    font-family: Roboto !important;
+    font-family: 'Roboto' !important;
     font-style: normal !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    /*    line-height: 1rem !important;*/
-    /* default color */
-    color: #7681AB;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: #7681AB !important;
+    letter-spacing: 0.25px !important;
 }
 
 .m-input--checkbox .mdi-checkbox-blank-outline {
@@ -208,30 +203,174 @@
     background: #F6F8FD;
 }
 
-.table-border-none td {
-    border-bottom: 0px !important;
-    box-shadow: none;
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
+/*
+    temp
+*/
+
+.masa .h1 {
+    font-size: 6rem !important;
+    font-weight: 300 !important;
+    line-height: 7rem !important;
+    letter-spacing: -0.0946875em !important;
 }
 
-.table-border-none th {
+.masa .h2 {
+    font-size: 3.75rem !important;
+    font-weight: 300 !important;
+    line-height: 4.75rem !important;
+    letter-spacing: -0.03125em !important;
+}
+
+.masa .h3 {
+    font-size: 3rem !important;
+    font-weight: 900 !important;
+    line-height: 3.5rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .h4 {
+    font-size: 2.125rem !important;
+    font-weight: 700 !important;
+    line-height: 3.1875rem !important;
+    letter-spacing: 0.02em !important;
+}
+
+.masa .h5 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    line-height: 2.25rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .h6 {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    line-height: 1.875rem !important;
+    letter-spacing: 0.01em !important;
+}
+
+.masa .h7 {
+    font-size: 1.125rem !important;
+    font-weight: 500 !important;
+    line-height: 1.6875rem !important;
+    letter-spacing: 0.01em !important;
+}
+
+.masa .h8 {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: 0.03125em !important;
+}
+
+.masa .subtitle {
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .subtitle2 {
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3125rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .subtitle3 {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    line-height: 1.125rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .body {
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .body2 {
+    font-size: 0.875rem !important;
+    font-weight: 400 !important;
+    line-height: 1.3125rem !important;
+    letter-spacing: 0.015625em !important;
+}
+
+.masa .btn {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    line-height: 1.3125rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .caption {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    line-height: 1.125rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa .caption {
+    font-size: 0.625rem !important;
+    font-weight: 400 !important;
+    line-height: 0.9375rem !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+.masa-stack-components .table-border-none thead th {
     border-bottom: 0px !important;
     box-shadow: none;
     padding-top: 24px !important;
     padding-bottom: 24px !important;
+    color: #A3AED0 !important;
+    font-size: 0.875rem !important;
+    font-weight: 400 !important;
+    line-height: 1.3125rem !important;
+    letter-spacing: 0.015625em !important;
 }
 
-.table-border-none tbody tr:hover {
+.masa-stack-components .table-border-none td {
+    border-bottom: 0px !important;
+    box-shadow: none;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+}
+
+.masa-stack-components .table-border-none tbody tr:hover {
     background-color: #F6F8FD !important;
 }
 
-.table-border-none tr td:first-child, th:first-child {
+.masa-stack-components .table-border-none tr td:first-child {
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: #1B2559 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa-stack-components .table-border-none tr td {
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    color: #485585 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa-stack-components .table-border-none tr .m-icon {
+    color: #485585 !important;
+}
+
+.masa-stack-components .table-border-none tr td:first-child, th:first-child {
     border-top-left-radius: 8px !important;
     border-bottom-left-radius: 8px !important;
 }
 
-.table-border-none tr td:last-child, th:last-child {
+.masa-stack-components .table-border-none tr td:last-child, th:last-child {
     border-top-right-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
 }
@@ -239,6 +378,15 @@
 .table-border-solid td, th {
     border-bottom: 0 !important;
     box-shadow: none;
+}
+
+.masa-stack-components .combox:hover {
+    background-color: #F6F8FD !important;
+    cursor: pointer;
+}
+
+.masa-stack-components .border-none {
+    border: none !important;
 }
 
 .navigation {
@@ -361,13 +509,11 @@
 }
 
 .label .m-label {
-    /* Caption-说明 */
     font-family: Roboto !important;
     font-style: normal !important;
     font-weight: 500 !important;
     font-size: 0.75rem !important;
     line-height: 1.125rem !important;
-    /* default color */
     color: #A3AED0 !important;
 }
 
@@ -395,17 +541,17 @@
     height: 48px !important;
 }
 
-    .m-text-field--outlined:not(.m-textarea) fieldset {
-        height: 51px !important;
-    }
+.m-text-field--outlined:not(.m-textarea) fieldset {
+    height: 53px !important;
+}
 
-.m-text-field--outlined .m-label {
+.m-select.m-text-field--outlined .m-label {
     top: 14px !important;
 }
 
-    .m-text-field--outlined .m-label.m-label--active {
-        top: 18px !important;
-    }
+.m-select.m-text-field--outlined .m-label.m-label--active {
+    top: 18px !important;
+}
 
 .m-text-field--outlined .m-text-field__details {
     margin-top: -5px !important;
@@ -532,14 +678,14 @@
     pointer-events: none;
 }
 
-.body2 .m-label {
+/*.body2 .m-label {
     color: #323D6F;
     font-family: Roboto;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
-}
+}*/
 
 .mtab-tab-linear-primary {
     background: linear-gradient(270deg, #4318FF 5.56%, rgba(67, 24, 255, 0) 100%);
@@ -601,15 +747,15 @@
     overflow-y: scroll;
 }
 
-.emphasis2--text .m-label {
+/*.emphasis2--text .m-label {
     color: #323D6F !important;
 }
 
-.default2--text .m-label {
+.regular3--text .m-label {
     color: #A3AED0 !important;
-}
+}*/
 
-.theme--light.m-text-field--outlined.default2--text > .m-input__control > .m-input__slot fieldset {
+.theme--light.m-text-field--outlined.regular3--text > .m-input__control > .m-input__slot fieldset {
     color: #A3AED0 !important;
 }
 
@@ -788,9 +934,9 @@ input::-webkit-input-placeholder {
     padding-bottom: 2px;
 }
 
-    .m-input.mx-auto .m-text-field__slot input {
-        text-align: center;
-    }
+.m-input.mx-auto .m-text-field__slot input {
+    text-align: center;
+}
 
 .m-input.mx-auto .m-input__slot::before {
     border-color: #E2E7F4 !important;
@@ -806,6 +952,15 @@ input::-webkit-input-placeholder {
     line-height: normal !important;
     letter-spacing: 0em !important;
 }
+
+/*.masa-stack-components .m-input .m-text-field__slot input::placeholder {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: red !important;
+}*/
 
 .m-data-table.table-space-v-4 > .m-data-table__wrapper > table {
     border-spacing: 0px 16px !important;
@@ -1008,4 +1163,16 @@ input::-webkit-input-placeholder {
 .theme--light.m-btn--active:hover::before, .theme--light.m-btn--active::before {
     /* opacity: 0.18; */
     opacity: 0.00000000000000001 !important;
+}
+
+.masa .m-input__control {
+    min-height: 40px !important;
+}
+
+.masa .labeled-radio-group {
+    padding: 2px;
+}
+
+.masa .m-chip {
+    padding: 0 14px;
 }

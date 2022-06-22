@@ -7,8 +7,9 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Converters;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
-global using Masa.Auth.Contracts.Admin.Sso;
 global using Masa.Auth.Contracts.Admin.Subjects;
+global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums;
+global using Masa.BuildingBlocks.Authentication.Oidc.Models.Enums;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Microsoft.AspNetCore.Http;
 global using SixLabors.Fonts;
@@ -22,3 +23,4 @@ global using System.Numerics;
 global using System.Reflection;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
+

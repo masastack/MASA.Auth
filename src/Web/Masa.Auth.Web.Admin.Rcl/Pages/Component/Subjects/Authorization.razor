@@ -2,8 +2,8 @@
 
 @if (Avatars.Count > 0)
 {
-    <div class="mt-6 subtitle2 regular--text">@T("Authorization certification")</div>
-    <div class="mt-4">
+    <DefaultTitle>@T("Authorization certification")</DefaultTitle>
+    <div>
         @foreach (var avatar in Avatars)
         {
             <img height=24 width=24 src="@avatar" class="ml-7" />

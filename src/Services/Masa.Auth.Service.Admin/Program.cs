@@ -60,8 +60,7 @@ builder.Services.AddAuthentication(options =>
 //    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
 //});
 MapsterAdapterConfig.TypeAdapter();
-
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
+// builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 

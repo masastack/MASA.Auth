@@ -36,8 +36,8 @@
                             </div>
                         </HeaderContent>
                         <AutoHeightContent>
-                            <div class="subtitle2">@T("Basic Information")</div>
-                            <MRow Class="mt-4">
+                            <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
+                            <MRow>
                                 <MCol>
                                     <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
                                 </MCol>
@@ -74,7 +74,7 @@
                                     <DefaultTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.Position" Label="@T("Position")" />
+                                    <PositionSelect @bind-Value="Staff.Position" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">

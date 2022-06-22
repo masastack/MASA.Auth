@@ -12,7 +12,7 @@
                     @(Filter ? "mdi-filter" : "mdi-filter-off")
                 </MIcon>
             </div>
-            <DefaultButton Small Class="ml-6" OnClick=OpenLdapDialog>
+            <DefaultButton Small Class="ml-4" OnClick=OpenLdapDialog>
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Ldap")</span>
             </DefaultButton>
@@ -32,18 +32,18 @@
     <AutoHeightContent>
         <DefaultDataTable Headers="Headers" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" Class="mt-6">
             <HeaderColContent Context="header">
-                <span class="body2 default2--text">@header.Text</span>
+                <span>@header.Text</span>
             </HeaderColContent>
             <ItemColContent>
                 @switch (context.Header.Value)
                 {
                     case nameof(UserDto.Avatar):
-                        <div class="hover-pointer d-flex my-1" @onclick="()=> OpenViewThirdPartyUserDialog(context.Item)">
+                        <div class="hover-pointer d-flex" @onclick="()=> OpenViewThirdPartyUserDialog(context.Item)">
                             <MAvatar Size=40>
                                 <img src="@context.Item.User.Avatar" />
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div class="subtitle emphasis2--text">@context.Item.User.DisplayName</div>
+                                <div>@context.Item.User.DisplayName</div>
                             </div>
                         </div>
                         break;
@@ -60,29 +60,29 @@
                         }
                         break;
                     case nameof(ThirdPartyUserDto.Creator):
-                        <span class="body regular--text">@context.Item.Creator</span>
+                        <span>@context.Item.Creator</span>
                         break;
                     case (nameof(ThirdPartyUserDto.CreationTime)):
-                        <span class="body regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                        <DateTimeTitle Value="@context.Item.CreationTime" />
                         break;
                     case (nameof(ThirdPartyUserDto.ModificationTime)):
-                        <span class="body regular--text">@context.Item.ModificationTime?.ToString(T("$DateTimeFormat"))</span>
+                        <DateTimeTitle Value="@context.Item.ModificationTime" />
                         break;
                     case nameof(UserDto.Enabled):
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small Color="regular" OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Small OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">@IconConstants.Update</MIcon>
                         break;
                     default:
-                        <span class="subtitle">@context.Value</span>
+                        <span>@context.Value</span>
                         break;
                 }
             </ItemColContent>
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

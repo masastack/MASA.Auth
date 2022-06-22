@@ -1,6 +1,10 @@
 ﻿@page "/thirdPartyIdp"
 @inherits AdminCompontentBase
 
+<PageTitle>
+    @T("ThirdPartyIdp")
+</PageTitle>
+
 <DefaultCard>
     <AutoHeight>
         <HeaderContent>
@@ -9,14 +13,14 @@
                 <MSpacer />
                 <DefaultButton Small OnClick="() => OpenAddThirdPartyIdpDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
-                    <span class="ml-2">@T("Add")</span>
+                    <span class="ml-2 btn">@T("Add")</span>
                 </DefaultButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
             <DefaultDataTable Headers="Headers" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
-                    <span class="body2">@header.Text</span>
+                    <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
                     @switch (context.Header.Value)
@@ -28,24 +32,24 @@
                             break;
                         case nameof(ThirdPartyIdpDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
-                                <span class="subtitle default--text">@context.Item.Name</span>
+                                <span>@context.Item.Name</span>
                             </div>
                             break;
                         case (nameof(ThirdPartyIdpDto.DisplayName)):
-                            <span class="font-16 regular--text">@context.Item.DisplayName</span>
+                            <span>@context.Item.DisplayName</span>
                             break;
                         case nameof(ThirdPartyIdpDto.VerifyType):
-                            <span class="font-16 regular--text">@T(context.Item.VerifyType.ToString())</span>
+                            <span>@T(context.Item.VerifyType.ToString())</span>
                             break;
                         case nameof(ThirdPartyIdpDto.CreationTime):
-                            <span class="font-16 regular--text">@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <span>@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case nameof(ThirdPartyIdpDto.Url):
-                            <span class="font-16 regular--text">@context.Item.Url</span>
+                            <span>@context.Item.Url</span>
                             break;
                         case "Action":
-                            <MIcon Small Color="regular" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Color="regular" Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>
