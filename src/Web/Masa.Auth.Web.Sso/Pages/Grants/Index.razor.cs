@@ -7,7 +7,7 @@ namespace Masa.Auth.Web.Sso.Pages.Grants;
 [Authorize]
 public partial class Index
 {
-    ViewModel _viewModel = new();
+    GrantViewModel _viewModel = new();
 
     public string ClientId { get; set; } = string.Empty;
 
@@ -15,7 +15,7 @@ public partial class Index
     {
         if (firstRender)
         {
-            var list = new List<GrantViewModel>();
+            var list = new List<GrantDetailViewModel>();
             foreach (var grant in SsoAuthenticationStateCache.Grants)
             {
                 var client = await _clients.FindClientByIdAsync(grant.ClientId);
@@ -23,7 +23,7 @@ public partial class Index
                 {
                     var resources = await _resources.FindResourcesByScopeAsync(grant.Scopes);
 
-                    var item = new GrantViewModel()
+                    var item = new GrantDetailViewModel()
                     {
                         ClientId = client.ClientId,
                         ClientName = client.ClientName ?? client.ClientId,
@@ -40,7 +40,7 @@ public partial class Index
                 }
             }
 
-            _viewModel = new ViewModel
+            _viewModel = new GrantViewModel
             {
                 Grants = list
             };

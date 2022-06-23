@@ -25,17 +25,17 @@ builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthClien
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 
 builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
-.AddIdentityServer(options =>
-{
-    options.UserInteraction.ErrorUrl = "/error/500";
-})
-.AddDeveloperSigningCredential()
-.AddClientStore<MasaClientStore>()
-.AddResourceStore<MasaResourceStore>()
-.AddCorsPolicyService<CorsPolicyService>()
-.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-.AddProfileService<UserProfileService>()
-.AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
+    .AddIdentityServer(options =>
+    {
+        options.UserInteraction.ErrorUrl = "/error/500";
+    })
+    .AddDeveloperSigningCredential()
+    .AddClientStore<MasaClientStore>()
+    .AddResourceStore<MasaResourceStore>()
+    .AddCorsPolicyService<CorsPolicyService>()
+    .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+    .AddProfileService<UserProfileService>()
+    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();

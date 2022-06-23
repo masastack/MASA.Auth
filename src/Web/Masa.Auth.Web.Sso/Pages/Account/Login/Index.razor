@@ -18,31 +18,34 @@
                 </MImage>
             </MAvatar>
             <MTextField @bind-Value="_inputModel.UserName" Label="Username" Placeholder="john@example.com" Outlined Dense
-            HideDetails="@("auto")">
+                    HideDetails="@("auto")">
             </MTextField>
             <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="Password"
-            Type="@(_show ? "text" : "password")" Placeholder="john@example.com"
-            AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_show = !_show" Outlined Dense
-            HideDetails="@("auto")">
+                    Type="@(_show ? "text" : "password")" Placeholder="john@example.com"
+                    AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_show = !_show" Outlined Dense
+                    HideDetails="@("auto")">
             </MTextField>
             <MRow Class="mt-6">
                 <MCol Md="6" Class="d-flex justify-space-between">
                     <MIcon Size="16"
-                    Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
-                        mdi-record-circle</MIcon>
+                       Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
+                        mdi-record-circle
+                    </MIcon>
                     <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
-                    Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+                         Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
                     </MSelect>
                 </MCol>
                 <MCol Md="6" Class="d-flex justify-end">
                     <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
-                    Label="Remember My Login"></MCheckbox>
+                           Label="Remember My Login"></MCheckbox>
                 </MCol>
             </MRow>
         </MForm>
-        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=Login Height=46 Width=340 Color="primary">Login
+        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=Login Height=46 Width=340 Color="primary">
+            Login
         </MButton>
-        <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">Cancel
+        <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
+            Cancel
         </MButton>
     </MCard>
 }
@@ -60,7 +63,7 @@
                     {
                         <li class="list-inline-item">
                             <a class="btn btn-secondary" asp-page="/ExternalLogin/Challenge"
-                        asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@_inputModel.ReturnUrl">
+                       asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@_inputModel.ReturnUrl">
                                 @provider.DisplayName
                             </a>
                         </li>

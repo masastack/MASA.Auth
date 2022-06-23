@@ -3,12 +3,12 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Grants;
 
-public class ViewModel
+public class GrantViewModel
 {
-    public IEnumerable<GrantViewModel> Grants { get; set; } = new List<GrantViewModel>();
+    public IEnumerable<GrantDetailViewModel> Grants { get; set; } = new List<GrantDetailViewModel>();
 }
 
-public class GrantViewModel
+public class GrantDetailViewModel
 {
     public string ClientId { get; set; } = string.Empty;
     public string ClientName { get; set; } = string.Empty;

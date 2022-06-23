@@ -30,7 +30,7 @@
       const Http = new XMLHttpRequest();
       const url = 'login';
       Http.open("post", url, false);
-      //发送合适的请求头信息
+      //sent header
       Http.setRequestHeader("Content-type", "application/json");
       Http.send(JSON.stringify(data));
       return Http.responseText;

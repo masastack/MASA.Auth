@@ -40,6 +40,8 @@ public class _HostAuthModel : PageModel
             case "/grants/index":
                 _ssoAuthenticationStateCache.Grants = await _identityServerInteractionService.GetAllUserGrantsAsync();
                 break;
+            default:
+                break;
         }
         Debug.WriteLine($"\n_Host OnGet IsAuth? {User.Identity?.IsAuthenticated}");
 
