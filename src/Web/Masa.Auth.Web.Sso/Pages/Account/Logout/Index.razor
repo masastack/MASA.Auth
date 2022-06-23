@@ -1,0 +1,15 @@
+﻿@page "/account/logout/index"
+@page "/account/logout"
+
+@inherits SsoCompontentBase
+@inject IHttpContextAccessor _httpContextAccessor
+@inject IIdentityServerInteractionService _interaction
+
+<div>
+    <div class="lead">
+        <h5>Logout</h5>
+        <p>Would you like to logout of IdentityServer?</p>
+    </div>
+    <MButton class="primary" OnClick="Logout">Yes</MButton>
+</div>
+

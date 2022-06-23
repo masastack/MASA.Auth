@@ -1,0 +1,42 @@
+﻿@page "/error/500"
+@inherits SsoCompontentBase
+@inject IWebHostEnvironment _environment
+@layout MainLayout
+
+<MRow Class="d-flex flex-column justify-center" Style="height:calc(100vh - 132px);">
+    <MContainer Class="d-flex flex-column justify-space-between align-center">
+        <MRow>
+            <MCol>
+                Sorry, there was an error
+
+                @if (_errorViewModel.Error != null)
+                {
+                    <strong>
+                        <em>
+                            : @_errorViewModel.Error.Error
+                        </em>
+                    </strong>
+
+                    if (_errorViewModel.Error.ErrorDescription != null)
+                    {
+                        <div>@_errorViewModel.Error.ErrorDescription</div>
+                    }
+                }
+                @if (_errorViewModel.Error?.RequestId != null)
+                {
+                    <div class="request-id">Request Id: @_errorViewModel.Error.RequestId</div>
+                }
+            </MCol>
+        </MRow>
+        <MImage Src="/img/status/500.png" Width="350" Height="200">
+        </MImage>
+        <MRow NoGutters Class="mt-12 text-btn neutral-lighten-2--text">Server Error.😖</MRow>
+        <MButton Class="rounded-pill mt-6"
+                 Dark
+                 Tile
+                 Color="primary"
+                 OnClick="()=>Navigation.NavigateTo(Navigation.BaseUri)">
+            Back to home
+        </MButton>
+    </MContainer>
+</MRow>

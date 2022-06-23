@@ -1,0 +1,10 @@
+﻿@page "/"
+@namespace Masa.Auth.Web.Sso.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+@model _HostAuthModel
+
+<component type="typeof(Masa.Auth.Web.Sso.App)" render-mode="ServerPrerendered"/>

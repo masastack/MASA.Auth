@@ -6,18 +6,14 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
 public class SetTeamPersonnelInfoDomainEventHandler
 {
     readonly ITeamRepository _teamRepository;
-    readonly IUserRepository _userRepository;
-    readonly IStaffRepository _staffRepository;
 
-    public SetTeamPersonnelInfoDomainEventHandler(ITeamRepository teamRepository, IUserRepository userRepository, IStaffRepository staffRepository)
+    public SetTeamPersonnelInfoDomainEventHandler(ITeamRepository teamRepository)
     {
         _teamRepository = teamRepository;
-        _userRepository = userRepository;
-        _staffRepository = staffRepository;
     }
 
     [EventHandler(2)]
-    public async Task SetUserAsync(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
+    public void SetUser(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
     {
         setTeamPersonnelInfoDomainEvent.Team.SetStaff(setTeamPersonnelInfoDomainEvent.Type, setTeamPersonnelInfoDomainEvent.StaffIds);
     }

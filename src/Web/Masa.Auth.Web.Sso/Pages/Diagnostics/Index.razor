@@ -1,0 +1,66 @@
+﻿@page "/diagnostics/index"
+@page "/diagnostics"
+
+@inherits SsoCompontentBase
+@inject IHttpContextAccessor _httpContextAccessor
+
+<MContainer>
+    <h1>Authentication Cookie</h1>
+    <MRow>
+        <MCol>
+            <MCard>
+                <MCardTitle>
+                    <h2>Claims</h2>
+                </MCardTitle>
+                <MCardText>
+                    @if (_viewModel?.AuthenticateResult.Principal != null)
+                    {
+                        <dl>
+                            @foreach (var claim in _viewModel.AuthenticateResult.Principal.Claims)
+                            {
+                                <dt>@claim.Type</dt>
+                                <dd>@claim.Value</dd>
+                            }
+                        </dl>
+                    }
+                </MCardText>
+            </MCard>
+        </MCol>
+        <MCol>
+            <MCard>
+                <MCardTitle>
+                    <h2>Properties</h2>
+                </MCardTitle>
+                <MCardText>
+                    @if (_viewModel?.AuthenticateResult.Properties != null)
+                    {
+                        <dl>
+                            @foreach (var prop in _viewModel.AuthenticateResult.Properties.Items)
+                            {
+                                <dt>@prop.Key</dt>
+                                <dd>@prop.Value</dd>
+                            }
+                            @if (_viewModel.Clients.Any())
+                            {
+                                <dt>Clients</dt>
+                                <dd>
+                                    @{
+                                        var clients = _viewModel.Clients.ToArray();
+                                        for (var i = 0; i < clients.Length; i++)
+                                        {
+                                            <text>@clients[i]</text>
+                                            if (i < clients.Length - 1)
+                                            {
+                                                <text>, </text>
+                                            }
+                                        }
+                                    }
+                                </dd>
+                            }
+                        </dl>
+                    }
+                </MCardText>
+            </MCard>
+        </MCol>
+    </MRow>
+</MContainer>

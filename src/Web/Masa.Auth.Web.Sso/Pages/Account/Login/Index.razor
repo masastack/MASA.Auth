@@ -1,0 +1,83 @@
+﻿@page "/account/login/index"
+@page "/account/login"
+
+@inherits SsoCompontentBase
+@inject IClientStore _clientStore
+@inject IAuthenticationSchemeProvider _schemeProvider
+@inject IPmClient _pmClient
+@inject IJSRuntime _js
+@layout SideLayout
+
+@if (_viewModel.EnableLocalLogin)
+{
+    <MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
+        <div style="height:60px;"></div>
+        <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
+            <MAvatar Size=80 Class="mb-12">
+                <MImage Src="/img/avatar/1.svg">
+                </MImage>
+            </MAvatar>
+            <MTextField @bind-Value="_inputModel.UserName" Label="Username" Placeholder="john@example.com" Outlined Dense
+                    HideDetails="@("auto")">
+            </MTextField>
+            <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="Password"
+                    Type="@(_show ? "text" : "password")" Placeholder="john@example.com"
+                    AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_show = !_show" Outlined Dense
+                    HideDetails="@("auto")">
+            </MTextField>
+            <MRow Class="mt-6">
+                <MCol Md="6" Class="d-flex justify-space-between">
+                    <MIcon Size="16"
+                       Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
+                        mdi-record-circle
+                    </MIcon>
+                    <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
+                         Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+                    </MSelect>
+                </MCol>
+                <MCol Md="6" Class="d-flex justify-end">
+                    <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
+                           Label="Remember My Login"></MCheckbox>
+                </MCol>
+            </MRow>
+        </MForm>
+        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=Login Height=46 Width=340 Color="primary">
+            Login
+        </MButton>
+        <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
+            Cancel
+        </MButton>
+    </MCard>
+}
+
+@if (_viewModel.VisibleExternalProviders.Any())
+{
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>External Account</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-inline">
+                    @foreach (var provider in _viewModel.VisibleExternalProviders)
+                    {
+                        <li class="list-inline-item">
+                            <a class="btn btn-secondary" asp-page="/ExternalLogin/Challenge"
+                       asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@_inputModel.ReturnUrl">
+                                @provider.DisplayName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!_viewModel.EnableLocalLogin && !_viewModel.VisibleExternalProviders.Any())
+{
+    <div class="alert alert-warning">
+        <strong>Invalid login request</strong>
+        There are no login schemes configured for this request.
+    </div>
+}
