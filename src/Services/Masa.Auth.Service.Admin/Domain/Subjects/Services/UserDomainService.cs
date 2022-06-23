@@ -3,8 +3,11 @@
 
 public class UserDomainService : DomainService
 {
-    public UserDomainService(IDomainEventBus eventBus) : base(eventBus)
+    readonly AuthDbContext _authDbContext;
+
+    public UserDomainService(IDomainEventBus eventBus, AuthDbContext authDbContext) : base(eventBus)
     {
+        _authDbContext = authDbContext;
     }
 
     public async Task SetAsync(params User[] users)
@@ -19,6 +22,13 @@ public class UserDomainService : DomainService
 
     public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId)
     {
+        //todo add appid filter and query from cache
+        var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Account == "administrator" && u.Id == userId);
+        if (user is not null)
+        {
+            var permissions = _authDbContext.Set<Permission>().Select(a => a.Id).ToList();
+            return await Task.FromResult(permissions);
+        }
         var query = new QueryUserPermissionDomainEvent(userId);
         await EventBus.PublishAsync(query);
         return query.Permissions;
