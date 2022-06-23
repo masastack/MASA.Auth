@@ -12,7 +12,7 @@
                            ItemValue="u => u.Identity"></MAutocomplete>
         </SearchableExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
-            <ElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-TabIndex="_tab">
+            <ElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-Tab="_tab">
                 <ElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
                                Items="_menuPermissions"
@@ -57,8 +57,8 @@
         </MCard>
     </MCol>
     <MCol Class="full-height">
-        <MWindow @bind-Value="_tab" Reverse Class="full-height">
-            <MWindowItem Value="0" Class="full-height">
+        <MWindow Value="_tab" Reverse Class="full-height">
+            <MWindowItem Value='T("Menu Permission")' Class="full-height">
                 @if (_showMenuInfo)
                 {
                     @if (_menuPermissionDetailDto.Id == Guid.Empty)
@@ -181,7 +181,7 @@
                     }
                 }
             </MWindowItem>
-            <MWindowItem Value="1" Class="full-height">
+            <MWindowItem Value='T("Api Permission")' Class="full-height">
                 @if (_showApiInfo)
                 {
                     @if (_apiPermissionDetailDto.Id == Guid.Empty)
