@@ -36,14 +36,14 @@ public class AddStaffDomainEventHandler
     [EventHandler(3)]
     public async Task AddStaffAsync(AddStaffDomainEvent staffEvent)
     {
-        var staffDto = staffEvent.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.JobNumber == staffDto.JobNumber);
-        if (staff is not null)
-            throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
+        //var staffDto = staffEvent.Staff;
+        //var staff = await _staffRepository.FindAsync(s => s.JobNumber == staffDto.JobNumber);
+        //if (staff is not null)
+        //    throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
 
-        staff = new Staff(staffDto.UserId, staffDto.JobNumber, staffDto.User.Name, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
-        staff.AddDepartmentStaff(staffDto.DepartmentId);
-        staff.AddTeamStaff(staffDto.Teams);
-        await _staffRepository.AddAsync(staff);
+        //staff = new Staff(staffDto.UserId, staffDto.,staffDto.JobNumber, staffDto.User.Name, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
+        //staff.AddDepartmentStaff(staffDto.DepartmentId);
+        //staff.AddTeamStaff(staffDto.Teams);
+        //await _staffRepository.AddAsync(staff);
     }
 }

@@ -101,7 +101,7 @@ public partial class User
             //new() { Text = T(nameof(UserDto.PhoneNumber)), Value = nameof(UserDto.PhoneNumber), Sortable = false },
             new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
             new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
         };
 
         await GetUserAsync();

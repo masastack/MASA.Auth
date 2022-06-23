@@ -48,8 +48,8 @@
                             <span>@context.Item.Url</span>
                             break;
                         case "Action":
-                            <MIcon Small OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">mdi-pencil</MIcon>
-                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">mdi-delete</MIcon>
+                            <MIcon Small OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

@@ -15,7 +15,7 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
         RuleFor(user => user.IdCard).IdCard();
         RuleFor(user => user.CompanyName).ChineseLetter().MaxLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MaxLength(20);
-        RuleFor(user => user.Account).Required().ChineseLetterNumber();
+        RuleFor(user => user.Account).NotEmpty().ChineseLetterNumber();
         RuleFor(user => user.Password).Required()
                                       .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
                                       .WithMessage("Password must contain numbers and letter, and not less than 8 digits")

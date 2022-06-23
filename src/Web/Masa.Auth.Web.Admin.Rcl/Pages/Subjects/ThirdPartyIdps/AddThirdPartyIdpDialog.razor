@@ -2,17 +2,16 @@
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add ThirdPartyIdp")">
     <MForm Model=ThirdPartyIdp EnableValidation @ref="Form">
-        <AutoHeight Overflow AutoClass="mt-6">
+        <AutoHeight Overflow>
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center" style="width:212px;">
-                        <UploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="120" WhenFileChangeUpload />
+                        <UploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
                     </div>
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <div class="subtitle2">@T("Basic Information")</div>
-                <MRow Class="mt-4">
+                <MRow Class="mb-6 mt-6">
                     <MCol>
                         <DefaultTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("ThirdPartyIdp.Name")" />
                     </MCol>
@@ -20,7 +19,7 @@
                         <DefaultTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
+                <MRow Class="mb-6">
                     <MCol>
                         <DefaultTextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
                     </MCol>
@@ -28,7 +27,7 @@
                         <DefaultTextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
+                <MRow Class="mb-6">
                     <MCol>
                         <DefaultTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
                     </MCol>
@@ -36,10 +35,26 @@
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
-                    <MCol Cols="6">
-                        <span>@T(nameof(ThirdPartyIdp.VerifyFile))</span>
-                        <MFileInput TValue="IBrowserFile" /> @*@bind-Value="ThirdPartyIdp.VerifyFile"*@ 
+                <MRow>
+                    <MCol>
+                        <MFileInput TValue="IBrowserFile" Outlined Dense Label="@T(nameof(ThirdPartyIdp.VerifyFile))" /> @*@bind-Value="ThirdPartyIdp.VerifyFile"*@
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <div class="d-flex defaultRadio">
+                            <div class="body regular--text my-auto">@T("Unique identification of third-party platforms")</div>
+                            <MRadioGroup @bind-Value="@ThirdPartyIdp.IdentificationType" Class="my-auto ml-6" Row>
+                                <MRadio Label="@T("PhoneNumber")"
+                                        Color="green"
+                                        Value="IdentificationTypes.PhoneNumber">
+                                </MRadio>
+                                <MRadio Label="@T("Email")"
+                                        Color="green"
+                                        Value="IdentificationTypes.Email">
+                                </MRadio>
+                            </MRadioGroup>
+                        </div>
                     </MCol>
                 </MRow>
             </AutoHeightContent>

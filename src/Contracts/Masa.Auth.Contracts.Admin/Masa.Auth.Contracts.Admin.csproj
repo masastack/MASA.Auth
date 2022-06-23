@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorComponent" Version="0.5.0-preview.3" />
     <PackageReference Include="FluentValidation" Version="11.0.3" />
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.Oidc.Domain" Version="0.5.0-preview.1" />

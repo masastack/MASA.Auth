@@ -43,11 +43,11 @@
                                                 </MListItem>
                                             }
                                             <MListItem OnClick="()=> Update(context.Item.Id)">
-                                                <MIcon Small>mdi-pencil</MIcon>
+                                                <MIcon Small>@IconConstants.Update</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
                                             </MListItem>
                                             <MListItem OnClick="()=>Add(context.Item.Id)">
-                                                <MIcon Small>mdi-plus</MIcon>
+                                                <MIcon Small>@IconConstants.Add</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("AddChild") </MListItemTitle>
                                             </MListItem>
                                         </MList>
@@ -69,7 +69,7 @@
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle class="font-18-medium regular-secondary--text">@T("Secondary Department")</MListItemTitle>
+                            <MListItemTitle class="h5 regular-secondary--text">@T("Secondary Department")</MListItemTitle>
                             <MListItemSubtitle class="font-24-bold emphasis2--text">@_departmentChildrenCountDto.SecondLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
@@ -82,7 +82,7 @@
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle class="font-18-medium regular-secondary--text">@T("Tertiary Department")</MListItemTitle>
+                            <MListItemTitle class="h5 regular-secondary--text">@T("Tertiary Department")</MListItemTitle>
                             <MListItemSubtitle class="font-24-bold emphasis2--text">@_departmentChildrenCountDto.ThirdLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
@@ -95,7 +95,7 @@
                             <MImage Src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"></MImage>
                         </MListItemAvatar>
                         <MListItemContent>
-                            <MListItemTitle class="font-18-medium regular-secondary--text">@T("Fourth Department")</MListItemTitle>
+                            <MListItemTitle class="h5 regular-secondary--text">@T("Fourth Department")</MListItemTitle>
                             <MListItemSubtitle class="font-24-bold emphasis2--text">@_departmentChildrenCountDto.FourthLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
@@ -108,7 +108,7 @@
                     <AutoHeight>
                         <HeaderContent>
                             <div class="d-flex mb-6">
-                                <SearchTextField @bind-Value="@_getStaffsDto.Search" PrependInnerIcon="mdi-magnify" OnKeyDown="EnterSearch" />
+                                <SearchTextField @bind-Value="@_getStaffsDto.Search" PrependInnerIcon="@IconConstants.Search" OnKeyDown="EnterSearch" />
                                 <MSpacer />
                                 <DefaultButton Small OnClick="()=>_addStaff=true">
                                     <MIcon Left Dark>
@@ -135,7 +135,7 @@
                                             </div>
                                             break;
                                         case "Action":
-                                            <MIcon Small OnClick="()=>UpdateStaff(context.Item.Id)">mdi-pencil</MIcon>
+                                            <MIcon Small OnClick="()=>UpdateStaff(context.Item.Id)">@IconConstants.Update</MIcon>
                                             break;
                                         default:
                                             <span>@context.Value</span>

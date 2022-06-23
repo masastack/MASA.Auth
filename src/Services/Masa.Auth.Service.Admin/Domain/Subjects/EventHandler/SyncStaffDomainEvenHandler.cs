@@ -100,7 +100,7 @@ public class SyncStaffDomainEvenHandler
             var oldStaff = allStaffs.FirstOrDefault(s => s.JobNumber == staff.JobNumber);
             if (oldStaff is null)
             {
-                staffRange.Add(new Staff(user.Id, staff.JobNumber, staff.Name, position?.Id, staff.StaffType, true));
+                //staffRange.Add(new Staff(user.Id, staff.JobNumber, staff.Name, position?.Id, staff.StaffType, true));
             }
             else
             {

@@ -65,6 +65,7 @@
   "Error Info": "错误信息",
   "Authorization certification": "授权认证",
 
+  "Organization": "组织架构",
   "Department": "部门",
   "Department Location": "部门位置",
   "Department Management": "部门管理",
@@ -145,6 +146,7 @@
   "ClientSecret": "客户端密钥",
   "AuthenticationTypes": "平台类型",
   "VerifyFile": "校验文件",
+  "Unique identification of third-party platforms": "第三方平台唯一识别",
   "Failed to query thirdPartyIdpList data:": "查询第三方平台详情列表失败:",
   "Failed to query thirdPartyIdpDetail data:": "查询第三方平台详情数据失败:",
   "Add thirdPartyIdp success": "新增第三方平台详情数据成功",
@@ -313,5 +315,11 @@
   "EnableLocalLogin": "允许本地账号登录",
   "UserSsoLifetime": "用户最大有效时长",
   "Create Client": "创建客户端",
-  "Update Client": "更新客户端"
+  "Update Client": "更新客户端",
+
+  "SSO": "单点登录",
+
+  "Validation": {
+    "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数"
+  }
 }

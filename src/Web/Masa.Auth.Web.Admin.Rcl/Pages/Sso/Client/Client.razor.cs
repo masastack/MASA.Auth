@@ -18,7 +18,7 @@ public partial class Client
         new() { Text = "类型", Value = nameof(ClientDto.ClientType), Sortable = false },
         new() { Text = "描述", Value = nameof(ClientDto.Description), Sortable = false },
         new() { Text = "状态", Value = nameof(ClientDto.Enabled), Sortable = false },
-        new() { Text = "操作", Value = "Action", Sortable = false },
+        new() { Text = "操作", Value = "Action", Sortable = false, Align="center", Width="105px" },
     };
 
     ClientService _clientService => AuthCaller.ClientService;

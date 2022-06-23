@@ -4,17 +4,9 @@
     <MForm Model=UserClaim EnableValidation @ref="Form">
         <AutoHeight Overflow>
             <AutoHeightContent>
-                <div class="subtitle2">@T("Basic Information")</div>
-                <MRow Class="mt-4">
-                    <MCol>
-                        <DefaultTextField @bind-Value="UserClaim.Name" Label="@T("UserClaim.Name")" />
-                    </MCol>
-                </MRow>
-                <MRow Class="mt-1">
-                    <MCol>
-                        <MTextarea @bind-Value="UserClaim.Description" Outlined Label="@T("Description")" />
-                    </MCol>
-                </MRow>
+                <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
+                <DefaultTextField @bind-Value="UserClaim.Name" Label="@T("UserClaim.Name")" Class="mb-12" />
+                <MTextarea @bind-Value="UserClaim.Description" Outlined Label="@T("Description")" Class="mb-12" />
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

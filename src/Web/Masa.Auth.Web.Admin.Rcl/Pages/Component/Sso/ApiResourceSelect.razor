@@ -1,15 +1,14 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="overflow-y full-height @Class" style="@Style">
-    @foreach (var apiResourceChunk in ApiResourceChunks)
-    {
-        <MRow>
-            @foreach (var apiResource in apiResourceChunk)
-            {
-                <MCol Cols="12/Chunk" Class="py-0">
-                    <MCheckbox Value="Value.Contains(apiResource.Id)" ValueChanged="value => OnValueChanged(value,apiResource.Id)" Label="@apiResource.Name"></MCheckbox>
-                </MCol>
-            }
-        </MRow>
-    }
-</div>
+@foreach (var apiResourceChunk in ApiResourceChunks)
+{
+    <MRow Class="mb-2 mt-0">
+        @foreach (var apiResource in apiResourceChunk)
+        {
+            <MCol Cols="12/Chunk" Class="py-0">
+                <MCheckbox Value="Value.Contains(apiResource.Id)" ValueChanged="value => OnValueChanged(value,apiResource.Id)" Label="@apiResource.Name"></MCheckbox>
+            </MCol>
+        }
+    </MRow>
+}
+

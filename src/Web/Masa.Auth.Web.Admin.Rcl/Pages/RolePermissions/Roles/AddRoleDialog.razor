@@ -10,13 +10,13 @@
                     </div>
                 </div>
                 <div>
-                    <DefaultTextField @bind-Value="Role.Limit" Label="@T("Limit the number of bindings")" />
-                    <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mt-4" />
-                    <DefaultTextField @bind-Value="Role.Description" Class="mt-4" Label="@T("Description")" />
+                    <DefaultTextField @bind-Value="Role.Limit" Class="mb-6" Label="@T("Limit the number of bindings")" />
+                    <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mb-6" />
+                    <DefaultTextField @bind-Value="Role.Description" Class="mb-6" Label="@T("Description")" />
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <div class="global-nav mt-6" style="display: flex;height: auto">
+                <div class="global-nav" style="display: flex;height: auto">
                     <PermissionsCheck RoleIds=Role.ChildrenRoles
                                   Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
                                   ValueChanged="PermissionsChanged" />

@@ -40,7 +40,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
             {
                 if (I18nConfig is not null)
                 {
-                    I18nConfig.Language = value;
+                    I18nConfig.Language = value;                    
                 }
             }
         }

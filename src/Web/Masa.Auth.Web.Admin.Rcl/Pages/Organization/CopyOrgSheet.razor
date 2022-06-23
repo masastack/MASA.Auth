@@ -34,7 +34,7 @@
                         <span class="font-24-bold emphasis2--text">@T("Member")</span>
                         <MSpacer />
                         <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
-                                       ItemText="r=>r.User.Name" PrependInnerIcon="mdi-magnify"
+                                       ItemText="r=>r.User.Name" PrependInnerIcon="@IconConstants.Search"
                                        ItemValue="r=>r" HideDetails="true" OnSelectedItemUpdate="AddStaff"
                                        Outlined Dense Clearable Style="max-width:340px;"
                                        Label="@T("Search for members")">
