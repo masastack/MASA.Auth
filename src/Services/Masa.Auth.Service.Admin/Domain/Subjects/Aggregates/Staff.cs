@@ -97,7 +97,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
         Account = account ?? "";
-        Password = password ?? throw new UserFriendlyException("Password cannot be empty");
+        UpdatePassword(password);      
         CompanyName = companyName ?? "";
         Gender = gender;
         PhoneNumber = phoneNumber ?? "";
@@ -138,6 +138,14 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         CompanyName = companyName ?? "";
         Enabled = enabled;
         Address = address ?? new();
+    }
+
+    [MemberNotNull(nameof(Password))]
+    public void UpdatePassword(string password)
+    {
+        if (password is null) throw new UserFriendlyException("Password cannot be null");
+
+        Password = MD5Utils.EncryptRepeat(password);
     }
 
     public void AddDepartmentStaff(Guid departmentId)

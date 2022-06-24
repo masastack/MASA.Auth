@@ -72,6 +72,12 @@ public class StaffService : RestServiceBase
         await eventBus.PublishAsync(new UpdateStaffCommand(staff));
     }
 
+    public async Task UpdateStaffPasswordAsync(IEventBus eventBus,
+    [FromBody] UpdateStaffPasswordDto staff)
+    {
+        await eventBus.PublishAsync(new UpdateStaffPasswordCommand(staff));
+    }
+
     private async Task RemoveAsync(IEventBus eventBus,
         [FromBody] RemoveStaffDto staff)
     {

@@ -68,6 +68,12 @@ namespace Masa.Auth.Service.Admin.Services
             await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(dto));
         }
 
+        public async Task UpdateUserPasswordAsync(IEventBus eventBus,
+            [FromBody] UpdateUserPasswordDto dto)
+        {
+            await eventBus.PublishAsync(new UpdateUserPasswordCommand(dto));
+        }
+
         private async Task RemoveAsync(
             IEventBus eventBus,
             [FromBody] RemoveUserDto dto)

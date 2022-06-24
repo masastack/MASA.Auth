@@ -110,6 +110,7 @@ public class SyncStaffDomainEvenHandler
                     position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
                     staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
                     staff.PhoneNumber, staff.Email, oldStaff.Address, staff.Gender);
+                oldStaff.UpdatePassword(staff.Password);
                 staffRange.Add(oldStaff);
             }
         }

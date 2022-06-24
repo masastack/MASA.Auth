@@ -39,7 +39,7 @@ builder.Services.AddTypeAdapter();
 
 IdentityModelEventSource.ShowPII = true;
 
-builder.Services.AddMasaOpenIdConnect(builder.Configuration);
+//builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
