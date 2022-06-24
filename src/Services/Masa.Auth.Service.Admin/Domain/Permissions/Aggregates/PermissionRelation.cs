@@ -13,6 +13,10 @@ public class PermissionRelation : FullEntity<Guid, Guid>
 
     public Permission ParentPermission { get; private set; } = null!;
 
+    private PermissionRelation()
+    {
+    }
+
     public PermissionRelation(Guid parentPermissionId, Guid childPermissionId)
     {
         ParentPermissionId = parentPermissionId;
