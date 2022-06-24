@@ -7,7 +7,7 @@ public class UpdateStaffDto
 {
     public Guid Id { get; set; }
 
-    public string JobNumber { get; set; }
+    public string JobNumber { get; set; } = "";
 
     public StaffTypes StaffType { get; set; }
 
@@ -17,34 +17,63 @@ public class UpdateStaffDto
 
     public Guid PositionId { get; set; }
 
-    public string Position { get; set; }
+    public string Position { get; set; } = "";
 
-    public List<Guid> Teams { get; set; }
+    public List<Guid> Teams { get; set; } = new();
 
-    public UpdateUserDto User { get; set; }
+    public string Name { get; set; } = "";
+
+    public string DisplayName { get; set; } = "";
+
+    public string Avatar { get; set; } = "";
+
+    public string IdCard { get; set; } = "";
+
+    public string CompanyName { get; set; } = "";
+
+    public string PhoneNumber { get; set; } = "";
+
+    public string Landline { get; set; } = "";
+
+    public string Email { get; set; } = "";
+
+    public AddressValueDto Address { get; set; } = new();
+
+    public string Password { get; set; } = "";
+
+    public GenderTypes Gender { get; set; }
+
+    public UpdateUserAuthorizationDto User { get; set; } = new();
 
     public UpdateStaffDto()
     {
-        JobNumber = "";
-        Position = "";
-        Teams = new();
-        User = new();
     }
 
-    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string position, List<Guid> teamIds, UpdateUserDto user)
+    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, string password, GenderTypes gender, UpdateUserAuthorizationDto user)
     {
         Id = id;
         JobNumber = jobNumber;
         StaffType = staffType;
         Enabled = enabled;
         DepartmentId = departmentId;
+        PositionId = positionId;
         Position = position;
-        Teams = teamIds;
+        Teams = teams;
+        Name = name;
+        DisplayName = displayName;
+        Avatar = avatar;
+        IdCard = idCard;
+        CompanyName = companyName;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        Address = address;
+        Password = password;
+        Gender = gender;
         User = user;
     }
 
     public static implicit operator UpdateStaffDto(StaffDetailDto staff)
     {
-        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.Position, staff.TeamIds, staff.User);
+        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId,staff.PositionId,staff.Position, staff.TeamIds, staff.Name,staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email,staff.Address, staff.Password, staff.Gender,new(staff.UserId, staff.RoleIds, staff.Permissions));
     }
 }

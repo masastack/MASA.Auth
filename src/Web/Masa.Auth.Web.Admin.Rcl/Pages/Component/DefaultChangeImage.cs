@@ -5,6 +5,9 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultChangeImage : DefaultUploadImage
 {
+    [Inject]
+    public I18n? I18n { get; set; }
+
     [Parameter]
     public GenderTypes Gender { get; set; }
 
@@ -31,7 +34,7 @@ public class DefaultChangeImage : DefaultUploadImage
         builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, ChangeAvayarAsync));
 
         builder.OpenComponent<MIcon>(3);
-        builder.AddAttribute(4, "Size", (StringNumber)18);
+        builder.AddAttribute(4, "Size", (StringNumber)20);
         builder.AddAttribute(5, "Class", "primary--text");
         builder.AddAttribute(6, "ChildContent", (RenderFragment)delegate (RenderTreeBuilder builder2) {
             builder2.AddContent(7, IconConstants.Refresh);
@@ -39,8 +42,8 @@ public class DefaultChangeImage : DefaultUploadImage
         builder.CloseComponent();
 
         builder.OpenElement(8, "span");
-        builder.AddAttribute(9, "class", "ml-3 body");
-        builder.AddContent(10, T("Another"));
+        builder.AddAttribute(9, "class", "body ml-2");
+        builder.AddContent(10, I18n!.T("Another", true));
         builder.CloseElement();
 
         builder.CloseElement();

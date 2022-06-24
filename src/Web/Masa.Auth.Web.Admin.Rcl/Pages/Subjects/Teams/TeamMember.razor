@@ -1,9 +1,9 @@
 ﻿@inherits AdminCompontentBase
 
 <MCardText>
-    <SearchSelectStaff @bind-Value="Value.Staffs" Label="@T("Team Member")"/>    
-    <RoleSelectForTeam @bind-Value="Value.Roles" Label="@T("Role")"/> 
-    <div class="global-nav mt-4" style="height: calc(100vh - 420px);">
+    <SearchSelectStaff @bind-Value="Value.Staffs" Class="mb-6" Label="@T("Team Member")"/>    
+    <RoleSelectForTeam @bind-Value="Value.Roles" Class="mb-6" Label="@T("Role")"/> 
+    <div class="global-nav" style="height: calc(100vh - 420px);">
         <PermissionsCheck RoleIds="Value.Roles" @bind-Value="Value.Permissions"/>
     </div>
 </MCardText>

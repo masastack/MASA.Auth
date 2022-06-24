@@ -18,7 +18,7 @@ public partial class Organization
         new() { Text = "手机号", Value = nameof(UserDto.PhoneNumber), CellClass = "subtitle" },
         new() { Text = "邮箱", Value = nameof(UserDto.Email), CellClass = "subtitle" },
         new() { Text = "工号", Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
-        new() { Text = "操作", Value = "Action", Sortable = false, Width = 80 }
+        new() { Text = "操作", Value = "Action", Sortable = false, Align="center", Width="80px" }
     };
     PaginationDto<StaffDto> _paginationStaffs = new();
     UpsertDepartmentDto _upsertDepartmentDto = new();

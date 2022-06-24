@@ -53,16 +53,17 @@ public class CommandHandler
         var userDto = command.User;
         Expression<Func<User, bool>> condition = user => user.Account == userDto.Account;
         if (!string.IsNullOrEmpty(userDto.PhoneNumber))
-            condition = condition.And(user => user.PhoneNumber == userDto.PhoneNumber);
+            condition = condition.Or(user => user.PhoneNumber == userDto.PhoneNumber);
         if (!string.IsNullOrEmpty(userDto.Landline))
-            condition = condition.And(user => user.Landline == userDto.Landline);
+            condition = condition.Or(user => user.Landline == userDto.Landline);
         if (!string.IsNullOrEmpty(userDto.Email))
-            condition = condition.And(user => user.Email == userDto.Email);
+            condition = condition.Or(user => user.Email == userDto.Email);
+        if (!string.IsNullOrEmpty(userDto.IdCard))
+            condition = condition.Or(user => user.IdCard == userDto.IdCard);
 
         var user = await _userRepository.FindAsync(condition);
         if (user is not null)
-        {
-            //email or phone number is duplicate            
+        {        
             if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == user.PhoneNumber)
                 throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
             if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == user.Landline)
@@ -71,6 +72,8 @@ public class CommandHandler
                 throw new UserFriendlyException($"User with account {userDto.Account} already exists");
             if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == user.Email)
                 throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+            if (string.IsNullOrEmpty(userDto.IdCard) is false && userDto.IdCard == user.IdCard)
+                throw new UserFriendlyException($"User with idCard {userDto.IdCard} already exists");
         }
         else
         {
@@ -90,22 +93,32 @@ public class CommandHandler
         var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
+
+        Expression<Func<User, bool>> condition = user => false;
+        if (!string.IsNullOrEmpty(userDto.PhoneNumber))
+            condition = condition.Or(user => user.PhoneNumber == userDto.PhoneNumber);
+        if (!string.IsNullOrEmpty(userDto.Landline))
+            condition = condition.Or(user => user.Landline == userDto.Landline);
+        if (!string.IsNullOrEmpty(userDto.Email))
+            condition = condition.Or(user => user.Email == userDto.Email);
+        if (!string.IsNullOrEmpty(userDto.IdCard))
+            condition = condition.Or(user => user.IdCard == userDto.IdCard);
+
+        Expression<Func<User, bool>> condition2 = user => user.Id != userDto.Id;
+        var exitUser = await _userRepository.FindAsync(condition2.And(condition));
+        if (exitUser is not null)
+        {
+            if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == exitUser.PhoneNumber)
+                throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
+            if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == exitUser.Landline)
+                throw new UserFriendlyException($"User with landline {userDto.Landline} already exists");           
+            if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == exitUser.Email)
+                throw new UserFriendlyException($"User with email {userDto.Email} already exists");
+            if (string.IsNullOrEmpty(userDto.IdCard) is false && userDto.IdCard == exitUser.IdCard)
+                throw new UserFriendlyException($"User with idCard {userDto.IdCard} already exists");
+        }
         else
         {
-            if (string.IsNullOrEmpty(userDto.PhoneNumber) is false)
-            {
-                var existPhoneNumber = await _userRepository.GetCountAsync(u => u.Id != userDto.Id && u.PhoneNumber == userDto.PhoneNumber) > 0;
-                if (existPhoneNumber)
-                    throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
-            }
-
-            if (string.IsNullOrEmpty(userDto.Email) is false)
-            {
-                var existEmail = await _userRepository.GetCountAsync(u => u.Id != userDto.Id && u.Email == userDto.Email) > 0;
-                if (existEmail)
-                    throw new UserFriendlyException($"User with email {userDto.Email} already exists");
-            }
-
             user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Password, userDto.Gender);
             await _userRepository.UpdateAsync(user);
             await _userDomainService.SetAsync(user);

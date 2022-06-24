@@ -20,7 +20,7 @@
             <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="@T("RequireRequestObject")"></MCheckbox>
         </MCol>
         <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="mdi-plus" />
+            <DefaultTextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="@IconConstants.Add" />
         </MCol>
         @foreach (var origin in Dto.AllowedCorsOrigins)
         {
@@ -39,7 +39,7 @@
                     <DefaultTextField @bind-Value="@Dto.Property.Value" Label="Value" />
                 </MCol>
                 <MCol Md="@("auto")" Class="d-flex align-center">
-                    <MIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">mdi-plus</MIcon>
+                    <MIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
                 </MCol>
                 <MCol Md=12>
                     <MDataTable Headers="_headers" Dense Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="margin-border">

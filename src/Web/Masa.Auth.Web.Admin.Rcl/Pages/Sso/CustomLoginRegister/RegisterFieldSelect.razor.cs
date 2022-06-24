@@ -23,6 +23,9 @@ public partial class RegisterFieldSelect
     [Parameter]
     public List<RegisterFieldTypes> Excludes { get; set; } = new();
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
     protected override void OnInitialized()

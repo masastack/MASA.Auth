@@ -14,12 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n");
+builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
+builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", "https://auth-develop.masastack.com/");
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddGlobalForServer();
 builder.Services.AddAutoComplete();
-builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 

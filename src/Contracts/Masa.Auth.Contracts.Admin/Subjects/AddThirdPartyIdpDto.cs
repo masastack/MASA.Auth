@@ -23,11 +23,13 @@ public class AddThirdPartyIdpDto
 
     public AuthenticationTypes VerifyType { get; set; }
 
+    public IdentificationTypes IdentificationType { get; set; } = IdentificationTypes.PhoneNumber;
+
     public AddThirdPartyIdpDto()
     {
     }
 
-    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string url, bool enabled, string icon, string verifyFile, AuthenticationTypes verifyType)
+    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string url, bool enabled, string icon, string verifyFile, AuthenticationTypes verifyType, IdentificationTypes identificationType)
     {
         Name = name;
         DisplayName = displayName;
@@ -38,5 +40,6 @@ public class AddThirdPartyIdpDto
         Icon = icon;
         VerifyFile = verifyFile;
         VerifyType = verifyType;
+        IdentificationType = identificationType;
     }
 }

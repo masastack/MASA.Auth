@@ -65,14 +65,14 @@ public class AuthCaller : HttpClientCallerBase
 
     public AuthCaller(IServiceProvider serviceProvider, AuthApiOptions options) : base(serviceProvider)
     {
-        Name = nameof(AuthCaller);
+        Name = "AuthCaller";
         BaseAddress = options.AuthServiceBaseAddress;
     }
 
-    protected override IHttpClientBuilder UseHttpClient()
-    {
-        return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            .AddHttpMessageHandler<HttpClientEnvironmentDelegatingHandler>();
-    }
+    //protected override IHttpClientBuilder UseHttpClient()
+    //{
+    //    return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+    //        .AddHttpMessageHandler<HttpClientEnvironmentDelegatingHandler>();
+    //}
 }
 

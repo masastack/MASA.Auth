@@ -11,9 +11,9 @@
                 <MListItemContent class="pb-0">
                     <MListItemTitle class="d-flex justify-space-between align-center">
                         <span class="font-14 regular3--text">@T("Member") : @Team.MemberCount </span>
-                        <MIcon Size=20 OnClick="HandleEditClick">mdi-pencil</MIcon>
+                        <MIcon Size=20 OnClick="HandleEditClick">@IconConstants.Update</MIcon>
                     </MListItemTitle>
-                    <MListItemSubtitle class="font-18-medium emphasis2--text">@Team.Name</MListItemSubtitle>
+                    <MListItemSubtitle class="h5 emphasis2--text">@Team.Name</MListItemSubtitle>
                 </MListItemContent>
             </MListItem>
         </MCardTitle>

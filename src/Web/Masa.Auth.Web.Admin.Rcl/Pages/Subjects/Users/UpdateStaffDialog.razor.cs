@@ -19,7 +19,6 @@ public partial class UpdateStaffDialog
 
     private StaffDetailDto StaffDetail { get; set; } = new();
 
-
     private UpdateStaffDto Staff { get; set; } = new();
 
     private StaffService StaffService => AuthCaller.StaffService;

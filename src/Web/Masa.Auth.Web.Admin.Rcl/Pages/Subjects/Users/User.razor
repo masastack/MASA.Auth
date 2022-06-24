@@ -10,7 +10,7 @@
             </div>     
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
-                    @(Filter ? "mdi-filter" : "mdi-filter-off")
+                    @(Filter ? IconConstants.Filter : IconConstants.FilterOff)
                 </MIcon>
             </div>
             <DefaultButton Small Class="ml-4" OnClick=OpenAddUserDialog>

@@ -27,7 +27,7 @@
                 {
                     <MRow Class="mb-6">
                         <MCol Cols="6">
-                            <RegisterFieldSelect @bind-Value="registerField.RegisterFieldType" Excludes="Value.Select(v => v.RegisterFieldType).ToList()" />
+                            <RegisterFieldSelect @bind-Value="registerField.RegisterFieldType" Disabled="registerField.CannotUpdate" Excludes="Value.Select(v => v.RegisterFieldType).ToList()" />
                         </MCol>
                         <MCol Cols="2" Class="d-flex">
                             <MSwitch @bind-Value="registerField.Required" Disabled="registerField.CannotUpdate" Class="my-auto my-0 pt-0" />

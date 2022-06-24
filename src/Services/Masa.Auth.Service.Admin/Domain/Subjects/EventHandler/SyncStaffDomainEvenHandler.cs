@@ -67,18 +67,16 @@ public class SyncStaffDomainEvenHandler
             }
             else
             {
-                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.GenderType);
-                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, "", staff.Email, staff.Position, staff.Password, staff.GenderType);
-
-                userRange.Add(oldUser);
+                if (oldUser is null)
+                {
+                    oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender);
+                    userRange.Add(oldUser);
+                }            
             }
         }
         if (syncResults.IsValid) return;
-        var updateUserRange = userRange.Where(u => u.Id != default).ToList();
-        if (updateUserRange.Count > 0) await _userRepository.UpdateRangeAsync(updateUserRange);
-        var addUserRange = userRange.Where(u => u.Id == default).ToList();
-        if (addUserRange.Count > 0) await _userRepository.AddRangeAsync(addUserRange);
-        await _userDomainService.SetAsync(userRange.ToArray());
+        if (userRange.Count > 0) await _userRepository.AddRangeAsync(userRange);
+        await _userDomainService.SetAsync(userRange.ToArray()); 
 
         //sync psoition
         var syncPsoitions = syncStaffs.Select(staff => staff.Position)
@@ -100,11 +98,19 @@ public class SyncStaffDomainEvenHandler
             var oldStaff = allStaffs.FirstOrDefault(s => s.JobNumber == staff.JobNumber);
             if (oldStaff is null)
             {
-                staffRange.Add(new Staff(user.Id, staff.JobNumber, staff.Name, position?.Id, staff.StaffType, true));
+                staffRange.Add(new Staff(
+                    user.Id, user.Name, user.DisplayName, user.Avatar,
+                    user.IdCard, staff.Account, staff.Password, user.CompanyName,
+                    staff.Gender, staff.PhoneNumber, staff.Email, user.Address,
+                    staff.JobNumber, position?.Id, staff.StaffType, true));
             }
             else
             {
-                oldStaff.Update(staff.Name, position?.Id, staff.StaffType, oldStaff.Enabled);
+                oldStaff.Update(
+                    position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
+                    staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
+                    staff.PhoneNumber, staff.Email, oldStaff.Address,staff.Password,
+                    staff.Gender);
                 staffRange.Add(oldStaff);
             }
         }

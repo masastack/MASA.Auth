@@ -62,7 +62,7 @@ public partial class IdentityResource
             new() { Text = T("IdentityResource.Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
             new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
             new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
         };
 
         await GetIdentityResourcesAsync();

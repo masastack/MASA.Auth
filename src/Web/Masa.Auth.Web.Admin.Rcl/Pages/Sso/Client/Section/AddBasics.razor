@@ -21,7 +21,7 @@
     <MRow> 
         <MCol Md=6>
             <DefaultTextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")"
-                              AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddCallBackRedirectUri" />
+                              AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
             @foreach (var uri in Dto.RedirectUris)
             {
                 <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="flex-grow-1" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
@@ -29,7 +29,7 @@
         </MCol>
         <MCol Md=6>
             <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")"
-                              AppendOuterIcon="mdi-plus" OnAppendOuterClick="AddLogoutRedirectUri" />
+                              AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
             @foreach (var uri in Dto.PostLogoutRedirectUris)
             {
                 <DefaultTextField Dense HideDetails="true" Value="uri" Readonly AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />

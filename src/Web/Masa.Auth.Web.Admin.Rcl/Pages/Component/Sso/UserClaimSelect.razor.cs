@@ -12,7 +12,7 @@ public partial class UserClaimSelect
     public string Style { get; set; } = "";
 
     [Parameter]
-    public int Chunk { get; set; } = 5;
+    public int Chunk { get; set; } = 4;
 
     [Parameter]
     public List<int> Value { get; set; } = new();
