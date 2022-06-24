@@ -28,10 +28,10 @@
                     case nameof(UserDto.Avatar):
                         <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateStaffDialog(context.Item)">
                             <MAvatar Size=40>
-                                <img src="@context.Item.User.Avatar" />
+                                <img src="@context.Item.Avatar" />
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div>@context.Item.User.Name</div>
+                                <div>@context.Item.Name</div>
                             </div>
                         </div>
                         break;
@@ -65,5 +65,5 @@
 
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
 <UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
-<UserAuthorizeDialog UserId=CurrentStaff.User.Id @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
+<UserAuthorizeDialog UserId=CurrentStaff.UserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
 <SyncStaffDialog @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=GetStaffAsync />

@@ -65,7 +65,7 @@ public class AuthCaller : HttpClientCallerBase
 
     public AuthCaller(IServiceProvider serviceProvider, AuthApiOptions options) : base(serviceProvider)
     {
-        Name = nameof(AuthCaller);
+        Name = "AuthCaller";
         BaseAddress = options.AuthServiceBaseAddress;
     }
 

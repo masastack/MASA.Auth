@@ -5,6 +5,9 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultChangeImage : DefaultUploadImage
 {
+    [Inject]
+    public I18n? I18n { get; set; }
+
     [Parameter]
     public GenderTypes Gender { get; set; }
 
@@ -41,7 +44,7 @@ public class DefaultChangeImage : DefaultUploadImage
         builder.OpenElement(8, "span");
         builder.AddAttribute(9, "class", "body");
         builder.AddAttribute(10, "style", "margin-left:11px;");
-        builder.AddContent(11, T("Another"));
+        builder.AddContent(11, I18n!.T("Another", true));
         builder.CloseElement();
 
         builder.CloseElement();

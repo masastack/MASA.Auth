@@ -13,7 +13,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     private User? _createUser;
     private User? _modifyUser;
 
-    public virtual User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
+    public virtual User User => _user ?? throw new UserFriendlyException("Failed to get user data");
 
     public virtual Position? Position => _position;
 
@@ -41,9 +41,17 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public string CompanyName { get; private set; } = "";
 
-    public string Department { get; set; } = "";
+    public GenderTypes Gender { get; private set; }
 
-    public GenderTypes GenderType { get; private set; }
+    #region Contact Property
+
+    public string PhoneNumber { get; private set; } = "";
+
+    public string Email { get; private set; } = "";
+
+    public AddressValue Address { get; private set; } = new();
+
+    #endregion
 
     public string JobNumber { get; private set; } = "";
 
@@ -61,40 +69,40 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    private ILazyLoader? LazyLoader { get; set; }
-
-    private Staff(ILazyLoader lazyLoader)
-    {
-        LazyLoader = lazyLoader;
-    }
-
-    public Staff(
-        Guid userId, 
-        string name, 
-        string displayName, 
-        string avatar,
-        string idCard, 
-        string account, 
-        string password, 
-        string companyName, 
-        string department, 
-        GenderTypes genderType, 
-        string jobNumber, 
-        Guid? positionId,
-        StaffTypes staffType, 
-        bool enabled)
+    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string account, string password, string companyName, GenderTypes gender, string? phoneNumber, string? email, AddressValue address, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
     {
         UserId = userId;
-        Name = name;
-        DisplayName = displayName;
-        Avatar = avatar;
-        IdCard = idCard;
-        Account = account;
-        Password = password;
-        CompanyName = companyName;
-        Department = department;
-        GenderType = genderType;
-        JobNumber = jobNumber;
+        Name = name ?? "";
+        DisplayName = displayName ?? "";
+        Avatar = avatar ?? "";
+        IdCard = idCard ?? "";
+        Account = account ?? "";
+        Password = password ?? throw new UserFriendlyException("Password cannot be empty");
+        CompanyName = companyName ?? "";
+        Gender = gender;
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        Address = address ?? new();
+        JobNumber = jobNumber ?? "";
+        PositionId = positionId;
+        StaffType = staffType;
+        Enabled = enabled;
+    }
+
+    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string account, string password, string companyName, GenderTypes gender, string? phoneNumber, string? email, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
+    {
+        UserId = userId;
+        Name = name ?? "";
+        DisplayName = displayName ?? "";
+        Avatar = avatar ?? "";
+        IdCard = idCard ?? "";
+        Account = account ?? "";
+        Password = password ?? throw new UserFriendlyException("Password cannot be empty");
+        CompanyName = companyName ?? "";
+        Gender = gender;
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        JobNumber = jobNumber ?? "";
         PositionId = positionId;
         StaffType = staffType;
         Enabled = enabled;
@@ -104,15 +112,27 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     {
         var teams = staff.TeamStaffs.Select(t => t.TeamId).ToList();
         var departmentStaff = staff.DepartmentStaffs.FirstOrDefault();
-        return new(staff.Id, departmentStaff?.DepartmentId ?? default, departmentStaff?.Department?.Name ?? "", staff.PositionId ?? default, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled && staff.User.Enabled, staff.StaffType, teams, staff.User, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.CreationTime, staff.ModificationTime);
+        UserDetailDto user = staff.User;
+        return new StaffDetailDto(departmentStaff?.Id ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, staff.Password, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name??"", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
-    public void Update(string name, Guid? positionId, StaffTypes staffType, bool enabled)
+    public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string? displayName, string? avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValueDto? address, string password, GenderTypes gender)
     {
-        Name = name;
+        Name = name ?? "";
         PositionId = positionId;
         StaffType = staffType;
         Enabled = enabled;
+        Name = name ?? "";
+        DisplayName = displayName ?? "";
+        IdCard = idCard ?? "";
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        Password = password ?? throw new UserFriendlyException("Password cannot be empty");
+        Gender = gender;
+        Avatar = avatar ?? "";
+        CompanyName = companyName ?? "";
+        Enabled = enabled;
+        Address = address ?? new();
     }
 
     public void AddDepartmentStaff(Guid departmentId)

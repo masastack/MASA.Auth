@@ -8,10 +8,10 @@
                     <AutoHeight AutoClass="d-flex">
                         <AutoHeightContent>
                             <div class="ma-auto text-center">
-                                <ButtonGroup @bind-Value="Staff.User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
+                                <ButtonGroup @bind-Value="Staff.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
                                 <div>
-                                    <DefaultChangeImage @bind-Value="Staff.User.Avatar" Gender="Staff.User.Gender" Class="mt-12" />
+                                    <DefaultChangeImage @bind-Value="Staff.Avatar" Gender="Staff.Gender" Class="mt-12" />
                                 </div>
                             </div>
                         </AutoHeightContent>
@@ -29,9 +29,9 @@
                             <div class="d-flex mt-10">
                                 <div class="mx-auto text-center">
                                     <MAvatar Size=80>
-                                        <img src="@Staff.User.Avatar" />
+                                        <img src="@Staff.Avatar" />
                                     </MAvatar>
-                                    <PlaceholderTextFiled @bind-Value="Staff.User.DisplayName" Placeholder="@T("Give him a nickname!")" />
+                                    <PlaceholderTextFiled @bind-Value="Staff.DisplayName" Placeholder="@T("Give him a nickname!")" />
                                 </div>
                             </div>
                         </HeaderContent>
@@ -39,15 +39,15 @@
                             <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
                             <MRow>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
+                                    <DefaultTextField @bind-Value="Staff.Name" Label="@T("Name")" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" />
+                                    <DefaultTextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.Email" Label="@T("Email")" />
+                                    <DefaultTextField @bind-Value="Staff.Email" Label="@T("Email")" />
                                 </MCol>
                                 <MCol>
                                     <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
@@ -58,12 +58,12 @@
                                     <TeamSelect @bind-Value="Staff.Teams" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" />
+                                    <DefaultTextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" />
+                                    <DefaultTextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
                                 </MCol>
                                 <MCol>
                                     <DepartmentSelect @bind-Value="Staff.DepartmentId" />
@@ -79,10 +79,10 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.Account" Label="@T("Account")" />
+                                    <DefaultTextField @bind-Value="Staff.Account" Label="@T("Account")" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.User.Password" Label="@T("Password")" />
+                                    <DefaultTextField @bind-Value="Staff.Password" Label="@T("Password")" />
                                 </MCol>
                             </MRow>
                         </AutoHeightContent>

@@ -36,7 +36,7 @@ public class SyncStaffDto
     public string? Position { get; set; }
 
     [ImporterHeader(IsIgnore = true)]
-    public GenderTypes GenderType
+    public GenderTypes Gender
     {
         get
         {

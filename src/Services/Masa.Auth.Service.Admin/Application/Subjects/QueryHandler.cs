@@ -126,15 +126,14 @@ public class QueryHandler
         }
         var staffQuery = _authDbContext.Set<Staff>().Where(condition);
         var total = await staffQuery.LongCountAsync();
-        var staffs = await staffQuery.Include(s => s.User)
-                                   .Include(s => s.DepartmentStaffs)
-                                   .ThenInclude(ds => ds.Department)
-                                   .Include(s => s.Position)
-                                   .OrderByDescending(s => s.ModificationTime)
-                                   .ThenByDescending(s => s.CreationTime)
-                                   .Skip((query.Page - 1) * query.PageSize)
-                                   .Take(query.PageSize)
-                                   .ToListAsync();
+        var staffs = await staffQuery.Include(s => s.DepartmentStaffs)
+                                       .ThenInclude(ds => ds.Department)
+                                       .Include(s => s.Position)
+                                       .OrderByDescending(s => s.ModificationTime)
+                                       .ThenByDescending(s => s.CreationTime)
+                                       .Skip((query.Page - 1) * query.PageSize)
+                                       .Take(query.PageSize)
+                                       .ToListAsync();
 
         query.Result = new(total, staffs.Select(staff => (StaffDto)staff).ToList());
     }
@@ -143,6 +142,7 @@ public class QueryHandler
     public async Task GetStaffDetailAsync(StaffDetailQuery query)
     {
         var staff = await _authDbContext.Set<Staff>()
+                                        .Include(s => s.User)
                                         .Include(s => s.DepartmentStaffs)
                                         .Include(s => s.TeamStaffs)
                                         .Include(s => s.Position)
@@ -155,7 +155,6 @@ public class QueryHandler
         await _eventBus.PublishAsync(userDetailQuery);
 
         query.Result = staff;
-        query.Result.User = userDetailQuery.Result;
     }
 
     [EventHandler]
@@ -166,14 +165,14 @@ public class QueryHandler
             condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.User.Avatar)).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.Avatar)).ToList();
     }
 
     [EventHandler]
     public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
     {
         var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
-        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.User.Avatar)).ToList();
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.Avatar)).ToList();
     }
 
     [EventHandler]

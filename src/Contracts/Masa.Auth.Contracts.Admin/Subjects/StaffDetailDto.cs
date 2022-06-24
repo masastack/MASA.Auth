@@ -11,31 +11,37 @@ public class StaffDetailDto : StaffDto
 
     public List<Guid> TeamIds { get; set; } = new();
 
-    public new UserDetailDto User { get; set; } = new();
+    public string Password { get; set; } = "";
+
+    public List<string> ThirdPartyIdpAvatars { get; set; } = new();
 
     public string Creator { get; set; } = "";
 
     public string Modifier { get; set; } = "";
 
-    public DateTime CreationTime { get; set; }
-
     public DateTime? ModificationTime { get; set; }
+
+    public List<Guid> RoleIds { get; set; } = new();
+
+    public List<UserPermissionDto> Permissions { get; set; } = new();
 
     public StaffDetailDto()
     {
     }
 
     [JsonConstructor]
-    public StaffDetailDto(Guid id, Guid departmentId, string department, Guid positionId, string position, string jobNumber, bool enabled, StaffTypes staffType, List<Guid> teamIds, UserDetailDto user, string creator, string modifier, DateTime creationTime, DateTime? modificationTime) : base(id, department, position, jobNumber, enabled, staffType, user)
+    public StaffDetailDto(Guid departmentId, Guid positionId, List<Guid> teamIds, string password, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, List<Guid> roleIds, List<UserPermissionDto> permissions,Guid id, Guid userId, string department, string position, string jobNumber, bool enabled, StaffTypes staffType, string name, string displayName, string avatar, string idCard, string account, string companyName, string phoneNumber, string email, AddressValueDto address, DateTime creationTime, GenderTypes gender) : base(id, userId, department, position, jobNumber, enabled, staffType, name, displayName, avatar, idCard, account, companyName, phoneNumber, email, address, creationTime, gender)
     {
         DepartmentId = departmentId;
         PositionId = positionId;
         TeamIds = teamIds;
-        User = user;
+        Password = password;
+        ThirdPartyIdpAvatars = thirdPartyIdpAvatars;
         Creator = creator;
         Modifier = modifier;
-        CreationTime = creationTime;
         ModificationTime = modificationTime;
+        RoleIds = roleIds;
+        Permissions = permissions;
     }
 }
 

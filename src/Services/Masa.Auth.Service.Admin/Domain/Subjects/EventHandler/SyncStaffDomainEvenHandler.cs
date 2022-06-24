@@ -67,8 +67,8 @@ public class SyncStaffDomainEvenHandler
             }
             else
             {
-                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.GenderType);
-                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, "", staff.Email, staff.Position, staff.Password, staff.GenderType);
+                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender);
+                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, "", staff.Email, staff.Position, staff.Password, staff.Gender);
 
                 userRange.Add(oldUser);
             }
@@ -100,11 +100,19 @@ public class SyncStaffDomainEvenHandler
             var oldStaff = allStaffs.FirstOrDefault(s => s.JobNumber == staff.JobNumber);
             if (oldStaff is null)
             {
-                //staffRange.Add(new Staff(user.Id, staff.JobNumber, staff.Name, position?.Id, staff.StaffType, true));
+                staffRange.Add(new Staff(
+                    user.Id, user.Name, user.DisplayName, user.Avatar,
+                    user.IdCard, staff.Account, staff.Password, user.CompanyName,
+                    staff.Gender, staff.PhoneNumber, staff.Email, user.Address,
+                    staff.JobNumber, position?.Id, staff.StaffType, true));
             }
             else
             {
-                oldStaff.Update(staff.Name, position?.Id, staff.StaffType, oldStaff.Enabled);
+                oldStaff.Update(
+                    position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
+                    staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
+                    staff.PhoneNumber, staff.Email, oldStaff.Address,staff.Password,
+                    staff.Gender);
                 staffRange.Add(oldStaff);
             }
         }
