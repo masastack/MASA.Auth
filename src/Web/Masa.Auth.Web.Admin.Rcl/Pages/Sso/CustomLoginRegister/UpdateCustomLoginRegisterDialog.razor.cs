@@ -84,8 +84,8 @@ public partial class UpdateCustomLoginRegisterDialog
         Loading = true;
         await CustomLoginService.UpdateAsync(CustomLogin);
         OpenSuccessMessage("Update Custom Login success");
-        await OnSubmitSuccess.InvokeAsync();
         await UpdateVisible(false);
+        await OnSubmitSuccess.InvokeAsync();
         Loading = false;
     }
 

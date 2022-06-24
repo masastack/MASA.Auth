@@ -39,8 +39,6 @@ public class UpdateStaffDto
 
     public AddressValueDto Address { get; set; } = new();
 
-    public string Password { get; set; } = "";
-
     public GenderTypes Gender { get; set; }
 
     public UpdateUserAuthorizationDto User { get; set; } = new();
@@ -49,7 +47,7 @@ public class UpdateStaffDto
     {
     }
 
-    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, string password, GenderTypes gender, UpdateUserAuthorizationDto user)
+    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, GenderTypes gender, UpdateUserAuthorizationDto user)
     {
         Id = id;
         JobNumber = jobNumber;
@@ -67,13 +65,12 @@ public class UpdateStaffDto
         PhoneNumber = phoneNumber;
         Email = email;
         Address = address;
-        Password = password;
         Gender = gender;
         User = user;
     }
 
     public static implicit operator UpdateStaffDto(StaffDetailDto staff)
     {
-        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId,staff.PositionId,staff.Position, staff.TeamIds, staff.Name,staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email,staff.Address, staff.Password, staff.Gender,new(staff.UserId, staff.RoleIds, staff.Permissions));
+        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId,staff.PositionId,staff.Position, staff.TeamIds, staff.Name,staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email,staff.Address, staff.Gender,new(staff.UserId, staff.RoleIds, staff.Permissions));
     }
 }

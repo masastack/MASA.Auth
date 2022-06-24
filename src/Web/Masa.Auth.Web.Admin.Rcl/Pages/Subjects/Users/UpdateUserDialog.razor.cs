@@ -23,6 +23,8 @@ public partial class UpdateUserDialog
 
     private UpdateUserDto User { get; set; } = new();
 
+    private UpdateUserPasswordDto UserPassword = new();
+
     private UserService UserService => AuthCaller.UserService;
 
     private async Task UpdateVisible(bool visible)
@@ -53,6 +55,7 @@ public partial class UpdateUserDialog
     {
         UserDetail = await UserService.GetDetailAsync(UserId);
         User = UserDetail;
+        UserPassword = new UpdateUserPasswordDto(UserDetail.Id, UserDetail.Password);
     }
 
     public async Task UpdateUserAsync(EditContext context)
