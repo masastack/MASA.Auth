@@ -52,6 +52,16 @@ public class User : FullAggregateRoot<Guid, Guid>
     public User(string name,
                 string displayName,
                 string avatar,
+                string account,
+                string password,
+                string companyName) :
+        this(name, displayName, avatar, "", account, password, companyName, "", "", true, "", "", "", GenderTypes.Male)
+    {
+    }
+
+    public User(string name,
+                string displayName,
+                string avatar,
                 string idCard,
                 string account,
                 string password,

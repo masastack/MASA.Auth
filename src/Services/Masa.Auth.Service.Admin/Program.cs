@@ -58,7 +58,7 @@ builder.Services.AddAuthentication(options =>
 //    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
 //});
 MapsterAdapterConfig.TypeAdapter();
-// builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
@@ -75,11 +75,12 @@ client.SetAllowedScopes(new List<string> { "openid", "profile" });
 client.SetPostLogoutRedirectUris(new List<string> { $"{clientUrl}/signout-callback-oidc" });
 client.SetRedirectUris(new List<string> { $"{clientUrl}/signin-oidc" });
 
-builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
-    .AddOidcDbContext(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-}).SeedClientData(new List<Client> { client });
+var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddOidcCache(option);
+var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:OidcConnection"],
+    b => b.MigrationsAssembly(migrationsAssembly)))
+    .SeedClientData(new List<Client> { client });
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -135,12 +136,8 @@ var app = builder.Services
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {
-    if (context.Set<Department>().Any())
-    {
-        return;
-    }
-    context.Set<Department>().Add(new Department("MasaStack", "MasaStack Root Department"));
-    context.SaveChanges();
+    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
+    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
 });
 
 app.UseMasaExceptionHandling(opt =>
