@@ -113,7 +113,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         var teams = staff.TeamStaffs.Select(t => t.TeamId).ToList();
         var departmentStaff = staff.DepartmentStaffs.FirstOrDefault();
         UserDetailDto user = staff.User;
-        return new StaffDetailDto(departmentStaff?.Id ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, staff.Password, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name??"", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
+        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, staff.Password, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name??"", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
     public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string? displayName, string? avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValueDto? address, string password, GenderTypes gender)

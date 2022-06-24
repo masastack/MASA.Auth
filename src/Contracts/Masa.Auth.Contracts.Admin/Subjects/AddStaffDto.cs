@@ -45,7 +45,7 @@ public class AddStaffDto
 
     public string Password { get; set; } = "";
 
-    public GenderTypes Gender { get; set; }
+    public GenderTypes Gender { get; set; } = GenderTypes.Male;
 
     public AddStaffDto()
     {

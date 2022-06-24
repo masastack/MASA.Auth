@@ -32,7 +32,7 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UpdateUserAsync(UpdateRoleCommand command)
+    public async Task UpdateRoleAsync(UpdateRoleCommand command)
     {
         var roleDto = command.Role;
         var role = await _roleRepository.GetByIdAsync(roleDto.Id);

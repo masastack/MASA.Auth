@@ -94,7 +94,7 @@ public class CommandHandler
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
-        Expression<Func<User, bool>> condition = user => true;
+        Expression<Func<User, bool>> condition = user => false;
         if (!string.IsNullOrEmpty(userDto.PhoneNumber))
             condition = condition.Or(user => user.PhoneNumber == userDto.PhoneNumber);
         if (!string.IsNullOrEmpty(userDto.Landline))

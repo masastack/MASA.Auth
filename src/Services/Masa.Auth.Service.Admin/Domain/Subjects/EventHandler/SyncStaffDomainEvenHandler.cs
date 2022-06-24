@@ -67,18 +67,16 @@ public class SyncStaffDomainEvenHandler
             }
             else
             {
-                if (oldUser is null) oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender);
-                else oldUser.Update(staff.Name, staff.DisplayName, staff.IdCard, staff.PhoneNumber, "", staff.Email, staff.Position, staff.Password, staff.Gender);
-
-                userRange.Add(oldUser);
+                if (oldUser is null)
+                {
+                    oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender);
+                    userRange.Add(oldUser);
+                }            
             }
         }
         if (syncResults.IsValid) return;
-        var updateUserRange = userRange.Where(u => u.Id != default).ToList();
-        if (updateUserRange.Count > 0) await _userRepository.UpdateRangeAsync(updateUserRange);
-        var addUserRange = userRange.Where(u => u.Id == default).ToList();
-        if (addUserRange.Count > 0) await _userRepository.AddRangeAsync(addUserRange);
-        await _userDomainService.SetAsync(userRange.ToArray());
+        if (userRange.Count > 0) await _userRepository.AddRangeAsync(userRange);
+        await _userDomainService.SetAsync(userRange.ToArray()); 
 
         //sync psoition
         var syncPsoitions = syncStaffs.Select(staff => staff.Position)
