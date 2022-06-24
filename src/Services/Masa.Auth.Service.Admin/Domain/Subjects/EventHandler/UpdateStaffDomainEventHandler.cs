@@ -65,8 +65,7 @@ public class UpdateStaffDomainEventHandler
         staff.Update(
             staffDto.PositionId, staffDto.StaffType, staffDto.Enabled, staffDto.Name,
             staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, 
-            staffDto.PhoneNumber, staffDto.Email, staffDto.Address,staffDto.Password, 
-            staffDto.Gender);
+            staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Gender);
         staff.AddDepartmentStaff(staffDto.DepartmentId);
         staff.AddTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);

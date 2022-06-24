@@ -63,8 +63,8 @@ public partial class UpdateApiScopeDialog
             Loading = true;
             await ApiScopeService.UpdateAsync(ApiScope);
             OpenSuccessMessage("Update apiScope success");
-            await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

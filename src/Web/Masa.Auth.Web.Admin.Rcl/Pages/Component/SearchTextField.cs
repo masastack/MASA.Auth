@@ -13,6 +13,7 @@ public class SearchTextField : MTextField<string>
         Flat = true;
         Dense = true;
         Solo = true;
+        HideDetails = "auto";
         BackgroundColor = "fill-background";
         Style = "max-width:340px;";
         Placeholder = I18n!.T("Search");

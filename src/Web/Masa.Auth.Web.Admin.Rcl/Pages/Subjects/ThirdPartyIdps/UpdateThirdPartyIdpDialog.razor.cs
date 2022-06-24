@@ -63,8 +63,8 @@ public partial class UpdateThirdPartyIdpDialog
             Loading = true;
             await ThirdPartyIdpService.UpdateAsync(ThirdPartyIdp);
             OpenSuccessMessage(T("Update thirdPartyIdp success"));
-            await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

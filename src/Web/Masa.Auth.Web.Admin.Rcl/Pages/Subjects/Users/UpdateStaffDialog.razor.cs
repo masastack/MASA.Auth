@@ -21,6 +21,8 @@ public partial class UpdateStaffDialog
 
     private UpdateStaffDto Staff { get; set; } = new();
 
+    private UpdateStaffPasswordDto StaffPassword = new();
+
     private StaffService StaffService => AuthCaller.StaffService;
 
     private MForm? Form { get; set; }
@@ -53,6 +55,7 @@ public partial class UpdateStaffDialog
     {
         StaffDetail = await StaffService.GetDetailAsync(StaffId);
         Staff = StaffDetail;
+        StaffPassword = new UpdateStaffPasswordDto(StaffDetail.Id, StaffDetail.Password);
     }
 
     public async Task UpdateStaffAsync(EditContext context)
@@ -63,8 +66,8 @@ public partial class UpdateStaffDialog
             Loading = true;
             await StaffService.UpdateAsync(Staff);
             OpenSuccessMessage("Update staff success");
-            await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();           
             Loading = false;
         }
     }

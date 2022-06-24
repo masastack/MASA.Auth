@@ -47,8 +47,8 @@
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Size="20" OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Size="20" Class="ml-6" OnClick="()=> OpenRemoveIdentityResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span>@context.Value</span>
