@@ -26,13 +26,13 @@ public class AuthDbContext : IsolationDbContext
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        foreach (var entityType in builder.Model.GetEntityTypes())
-        {
-            if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))
-            {
-                entityType.SetTableName(entityType.ClrType.Name.Pluralize());
-            }
-        }
+        //foreach (var entityType in builder.Model.GetEntityTypes())
+        //{
+        //    if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))
+        //    {
+        //        entityType.SetTableName(entityType.ClrType.Name.Pluralize());
+        //    }
+        //}
 
         base.OnModelCreatingExecuting(builder);
     }
