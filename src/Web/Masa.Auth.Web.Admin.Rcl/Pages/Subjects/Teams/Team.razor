@@ -5,13 +5,13 @@
 
 <MCard Class="full-height">
     <MCardTitle class="mx-2 py-6">
-        <SearchTextField @bind-Value="_search" OnKeyDown="SearchKeyDown" PrependInnerIcon="mdi-magnify" />
+        <SearchTextField @bind-Value="_search" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
     </MCardTitle>
     <MCardText Style="overflow-y:auto;">
         <MRow>
             <MCol Md="4">
                 <MCard Outlined class="d-flex justify-center align-center" Style="border-style: dashed;" Height="230">
-                    <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>mdi-plus</MIcon>@T("Create Team")</MButton>
+                    <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>@IconConstants.Add</MIcon>@T("Create Team")</MButton>
                 </MCard>
             </MCol>            
             @foreach (var team in _teams)

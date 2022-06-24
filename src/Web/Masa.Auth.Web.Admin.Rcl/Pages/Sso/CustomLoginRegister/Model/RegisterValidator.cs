@@ -8,7 +8,10 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
     public RegisterValidator()
     {
         RuleFor(register => register.Account).Required().ChineseLetterNumber();
-        RuleFor(register => register.Password).Required().LetterNumber();
+        RuleFor(register => register.Password).Required()
+                                      .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
+                                      .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
+                                      .MaxLength(30);
         RuleFor(register => register.DisplayName).Must((register, displayName) =>
         {
             if (register.CheckRequired(nameof(RegisterModel.DisplayName)))

@@ -13,58 +13,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "auth");
 
             migrationBuilder.CreateTable(
-                name: "ApiResources",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
-                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NonEditable = table.Column<bool>(type: "bit", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiResources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiScopes",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Required = table.Column<bool>(type: "bit", nullable: false),
-                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiScopes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppNavigationTags",
+                name: "AppNavigationTag",
                 schema: "auth",
                 columns: table => new
                 {
@@ -74,11 +23,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppNavigationTags", x => x.Id);
+                    table.PrimaryKey("PK_AppNavigationTag", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
+                name: "Client",
                 schema: "auth",
                 columns: table => new
                 {
@@ -86,13 +35,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientType = table.Column<int>(type: "int", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ProtocolType = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ClientId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProtocolType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequireClientSecret = table.Column<bool>(type: "bit", nullable: false),
-                    ClientName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    ClientUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    LogoUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    ClientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LogoUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequireConsent = table.Column<bool>(type: "bit", nullable: false),
                     AllowRememberConsent = table.Column<bool>(type: "bit", nullable: false),
                     AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(type: "bit", nullable: false),
@@ -100,13 +49,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                     AllowPlainTextPkce = table.Column<bool>(type: "bit", nullable: false),
                     RequireRequestObject = table.Column<bool>(type: "bit", nullable: false),
                     AllowAccessTokensViaBrowser = table.Column<bool>(type: "bit", nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    FrontChannelLogoutUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FrontChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    BackChannelLogoutUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BackChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
                     AllowOfflineAccess = table.Column<bool>(type: "bit", nullable: false),
                     IdentityTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccessTokenLifetime = table.Column<int>(type: "int", nullable: false),
                     AuthorizationCodeLifetime = table.Column<int>(type: "int", nullable: false),
                     ConsentLifetime = table.Column<int>(type: "int", nullable: true),
@@ -119,11 +68,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     EnableLocalLogin = table.Column<bool>(type: "bit", nullable: false),
                     IncludeJwtId = table.Column<bool>(type: "bit", nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(type: "bit", nullable: false),
-                    ClientClaimsPrefix = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PairWiseSubjectSalt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ClientClaimsPrefix = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PairWiseSubjectSalt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserSsoLifetime = table.Column<int>(type: "int", nullable: true),
-                    UserCodeType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UserCodeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeviceCodeLifetime = table.Column<int>(type: "int", nullable: false),
                     NonEditable = table.Column<bool>(type: "bit", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -134,11 +83,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.PrimaryKey("PK_Client", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
+                name: "Department",
                 schema: "auth",
                 columns: table => new
                 {
@@ -157,32 +106,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeviceFlowCodes",
-                schema: "auth",
-                columns: table => new
-                {
-                    UserCode = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DeviceCode = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceFlowCodes", x => x.UserCode);
+                    table.PrimaryKey("PK_Department", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,32 +146,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityResources",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Required = table.Column<bool>(type: "bit", nullable: false),
-                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
-                    NonEditable = table.Column<bool>(type: "bit", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityResources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "IntegrationEventLog",
                 schema: "auth",
                 columns: table => new
@@ -269,7 +167,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Permissions",
+                name: "Permission",
                 schema: "auth",
                 columns: table => new
                 {
@@ -292,24 +190,16 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Permissions", x => x.Id);
+                    table.PrimaryKey("PK_Permission", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PersistedGrants",
+                name: "Position",
                 schema: "auth",
                 columns: table => new
                 {
-                    Key = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -318,29 +208,19 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PersistedGrants", x => x.Key);
+                    table.PrimaryKey("PK_Position", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Positions",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Positions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teams",
+                name: "Team",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Avatar_Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Avatar_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Avatar_Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     TeamType = table.Column<int>(type: "int", nullable: false),
                     MemberCount = table.Column<int>(type: "int", nullable: false),
@@ -352,32 +232,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Teams", x => x.Id);
+                    table.PrimaryKey("PK_Team", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserClaims",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    UserClaimType = table.Column<int>(type: "int", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserClaims", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 schema: "auth",
                 columns: table => new
                 {
@@ -394,7 +253,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     GenderType = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Landline = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Address_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_ProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_CityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_DistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -403,203 +267,100 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiResourceProperties",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiResourceProperties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiResourceProperties_ApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalSchema: "auth",
-                        principalTable: "ApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiResourceSecrets",
+                name: "ClientClaim",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiResourceSecrets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiResourceSecrets_ApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalSchema: "auth",
-                        principalTable: "ApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiResourceScopes",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApiScopeId = table.Column<int>(type: "int", nullable: false),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiResourceScopes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiResourceScopes_ApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalSchema: "auth",
-                        principalTable: "ApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApiResourceScopes_ApiScopes_ApiScopeId",
-                        column: x => x.ApiScopeId,
-                        principalSchema: "auth",
-                        principalTable: "ApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiScopeProperties",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ScopeId = table.Column<int>(type: "int", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiScopeProperties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeProperties_ApiScopes_ScopeId",
-                        column: x => x.ScopeId,
-                        principalSchema: "auth",
-                        principalTable: "ApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClientClaims",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientClaims", x => x.Id);
+                    table.PrimaryKey("PK_ClientClaim", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientClaims_Clients_ClientId",
+                        name: "FK_ClientClaim_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientCorsOrigins",
+                name: "ClientCorsOrigin",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Origin = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Origin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientCorsOrigins", x => x.Id);
+                    table.PrimaryKey("PK_ClientCorsOrigin", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientCorsOrigins_Clients_ClientId",
+                        name: "FK_ClientCorsOrigin_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientGrantTypes",
+                name: "ClientGrantType",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GrantType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    GrantType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientGrantTypes", x => x.Id);
+                    table.PrimaryKey("PK_ClientGrantType", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientGrantTypes_Clients_ClientId",
+                        name: "FK_ClientGrantType_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientIdPRestrictions",
+                name: "ClientIdPRestriction",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Provider = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Provider = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientIdPRestrictions", x => x.Id);
+                    table.PrimaryKey("PK_ClientIdPRestriction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientIdPRestrictions_Clients_ClientId",
+                        name: "FK_ClientIdPRestriction_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientPostLogoutRedirectUris",
+                name: "ClientPostLogoutRedirectUri",
                 schema: "auth",
                 columns: table => new
                 {
@@ -610,84 +371,84 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientPostLogoutRedirectUris", x => x.Id);
+                    table.PrimaryKey("PK_ClientPostLogoutRedirectUri", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientPostLogoutRedirectUris_Clients_ClientId",
+                        name: "FK_ClientPostLogoutRedirectUri_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientProperties",
+                name: "ClientProperty",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientProperties", x => x.Id);
+                    table.PrimaryKey("PK_ClientProperty", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientProperties_Clients_ClientId",
+                        name: "FK_ClientProperty_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientRedirectUris",
+                name: "ClientRedirectUri",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RedirectUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    RedirectUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientRedirectUris", x => x.Id);
+                    table.PrimaryKey("PK_ClientRedirectUri", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientRedirectUris_Clients_ClientId",
+                        name: "FK_ClientRedirectUri_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientScopes",
+                name: "ClientScope",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Scope = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientScopes", x => x.Id);
+                    table.PrimaryKey("PK_ClientScope", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientScopes_Clients_ClientId",
+                        name: "FK_ClientScope_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientSecrets",
+                name: "ClientSecret",
                 schema: "auth",
                 columns: table => new
                 {
@@ -699,47 +460,25 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientSecrets", x => x.Id);
+                    table.PrimaryKey("PK_ClientSecret", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientSecrets_Clients_ClientId",
+                        name: "FK_ClientSecret_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdentityResourceProperties",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdentityResourceId = table.Column<int>(type: "int", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityResourceProperties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IdentityResourceProperties_IdentityResources_IdentityResourceId",
-                        column: x => x.IdentityResourceId,
-                        principalSchema: "auth",
-                        principalTable: "IdentityResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PermissionRelations",
+                name: "PermissionRelation",
                 schema: "auth",
                 columns: table => new
                 {
@@ -754,46 +493,24 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissionRelations", x => x.Id);
+                    table.PrimaryKey("PK_PermissionRelation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PermissionRelations_Permissions_ChildPermissionId",
+                        name: "FK_PermissionRelation_Permission_ChildPermissionId",
                         column: x => x.ChildPermissionId,
                         principalSchema: "auth",
-                        principalTable: "Permissions",
+                        principalTable: "Permission",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PermissionRelations_Permissions_ParentPermissionId",
+                        name: "FK_PermissionRelation_Permission_ParentPermissionId",
                         column: x => x.ParentPermissionId,
                         principalSchema: "auth",
-                        principalTable: "Permissions",
+                        principalTable: "Permission",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "AvatarValues",
-                schema: "auth",
-                columns: table => new
-                {
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AvatarValues", x => x.TeamId);
-                    table.ForeignKey(
-                        name: "FK_AvatarValues_Teams_TeamId",
-                        column: x => x.TeamId,
-                        principalSchema: "auth",
-                        principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamPermissions",
+                name: "TeamPermission",
                 schema: "auth",
                 columns: table => new
                 {
@@ -810,135 +527,25 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamPermissions", x => x.Id);
+                    table.PrimaryKey("PK_TeamPermission", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamPermissions_Permissions_PermissionId",
+                        name: "FK_TeamPermission_Permission_PermissionId",
                         column: x => x.PermissionId,
                         principalSchema: "auth",
-                        principalTable: "Permissions",
+                        principalTable: "Permission",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeamPermissions_Teams_TeamId",
+                        name: "FK_TeamPermission_Team_TeamId",
                         column: x => x.TeamId,
                         principalSchema: "auth",
-                        principalTable: "Teams",
+                        principalTable: "Team",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiResourceClaims",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserClaimId = table.Column<int>(type: "int", nullable: false),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiResourceClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiResourceClaims_ApiResources_ApiResourceId",
-                        column: x => x.ApiResourceId,
-                        principalSchema: "auth",
-                        principalTable: "ApiResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApiResourceClaims_UserClaims_UserClaimId",
-                        column: x => x.UserClaimId,
-                        principalSchema: "auth",
-                        principalTable: "UserClaims",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApiScopeClaims",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserClaimId = table.Column<int>(type: "int", nullable: false),
-                    ApiScopeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApiScopeClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeClaims_ApiScopes_ApiScopeId",
-                        column: x => x.ApiScopeId,
-                        principalSchema: "auth",
-                        principalTable: "ApiScopes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApiScopeClaims_UserClaims_UserClaimId",
-                        column: x => x.UserClaimId,
-                        principalSchema: "auth",
-                        principalTable: "UserClaims",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IdentityResourceClaims",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserClaimId = table.Column<int>(type: "int", nullable: false),
-                    IdentityResourceId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityResourceClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IdentityResourceClaims_IdentityResources_IdentityResourceId",
-                        column: x => x.IdentityResourceId,
-                        principalSchema: "auth",
-                        principalTable: "IdentityResources",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_IdentityResourceClaims_UserClaims_UserClaimId",
-                        column: x => x.UserClaimId,
-                        principalSchema: "auth",
-                        principalTable: "UserClaims",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AddressValues",
-                schema: "auth",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AddressValues", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_AddressValues_Users_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "auth",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomLogins",
+                name: "CustomLogin",
                 schema: "auth",
                 columns: table => new
                 {
@@ -956,30 +563,30 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomLogins", x => x.Id);
+                    table.PrimaryKey("PK_CustomLogin", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomLogins_Clients_ClientId",
+                        name: "FK_CustomLogin_Client_ClientId",
                         column: x => x.ClientId,
                         principalSchema: "auth",
-                        principalTable: "Clients",
+                        principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CustomLogins_Users_Creator",
+                        name: "FK_CustomLogin_User_Creator",
                         column: x => x.Creator,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_CustomLogins_Users_Modifier",
+                        name: "FK_CustomLogin_User_Modifier",
                         column: x => x.Modifier,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "Role",
                 schema: "auth",
                 columns: table => new
                 {
@@ -997,18 +604,18 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Roles_Users_Creator",
+                        name: "FK_Role_User_Creator",
                         column: x => x.Creator,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Roles_Users_Modifier",
+                        name: "FK_Role_User_Modifier",
                         column: x => x.Modifier,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                 });
 
@@ -1019,8 +626,21 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Account = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_ProvinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_CityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_DistrictCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StaffType = table.Column<int>(type: "int", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
@@ -1034,28 +654,28 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     table.PrimaryKey("PK_Staff", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Staff_Positions_PositionId",
+                        name: "FK_Staff_Position_PositionId",
                         column: x => x.PositionId,
                         principalSchema: "auth",
-                        principalTable: "Positions",
+                        principalTable: "Position",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Staff_Users_Creator",
+                        name: "FK_Staff_User_Creator",
                         column: x => x.Creator,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Staff_Users_Modifier",
+                        name: "FK_Staff_User_Modifier",
                         column: x => x.Modifier,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Staff_Users_UserId",
+                        name: "FK_Staff_User_UserId",
                         column: x => x.UserId,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1066,19 +686,26 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ThirdPartyIdpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     ThridPartyIdentity = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ThirdPartyUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ThirdPartyUsers_IdentityProvider_IdentityProviderId",
+                        column: x => x.IdentityProviderId,
+                        principalSchema: "auth",
+                        principalTable: "IdentityProvider",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ThirdPartyUsers_IdentityProvider_ThirdPartyIdpId",
                         column: x => x.ThirdPartyIdpId,
@@ -1087,28 +714,28 @@ namespace Masa.Auth.Service.Admin.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ThirdPartyUsers_Users_Creator",
+                        name: "FK_ThirdPartyUsers_User_Creator",
                         column: x => x.Creator,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ThirdPartyUsers_Users_Modifier",
+                        name: "FK_ThirdPartyUsers_User_Modifier",
                         column: x => x.Modifier,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ThirdPartyUsers_Users_UserId",
+                        name: "FK_ThirdPartyUsers_User_UserId",
                         column: x => x.UserId,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserPermissions",
+                name: "UserPermission",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1124,25 +751,25 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserPermissions", x => x.Id);
+                    table.PrimaryKey("PK_UserPermission", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserPermissions_Permissions_PermissionId",
+                        name: "FK_UserPermission_Permission_PermissionId",
                         column: x => x.PermissionId,
                         principalSchema: "auth",
-                        principalTable: "Permissions",
+                        principalTable: "Permission",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserPermissions_Users_UserId",
+                        name: "FK_UserPermission_User_UserId",
                         column: x => x.UserId,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomLoginThirdPartyIdps",
+                name: "CustomLoginThirdPartyIdp",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1154,16 +781,16 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomLoginThirdPartyIdps", x => x.Id);
+                    table.PrimaryKey("PK_CustomLoginThirdPartyIdp", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomLoginThirdPartyIdps_CustomLogins_CustomLoginId",
+                        name: "FK_CustomLoginThirdPartyIdp_CustomLogin_CustomLoginId",
                         column: x => x.CustomLoginId,
                         principalSchema: "auth",
-                        principalTable: "CustomLogins",
+                        principalTable: "CustomLogin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CustomLoginThirdPartyIdps_IdentityProvider_ThirdPartyIdpId",
+                        name: "FK_CustomLoginThirdPartyIdp_IdentityProvider_ThirdPartyIdpId",
                         column: x => x.ThirdPartyIdpId,
                         principalSchema: "auth",
                         principalTable: "IdentityProvider",
@@ -1172,7 +799,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RegisterFields",
+                name: "RegisterField",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1185,18 +812,18 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RegisterFields", x => x.Id);
+                    table.PrimaryKey("PK_RegisterField", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RegisterFields_CustomLogins_CustomLoginId",
+                        name: "FK_RegisterField_CustomLogin_CustomLoginId",
                         column: x => x.CustomLoginId,
                         principalSchema: "auth",
-                        principalTable: "CustomLogins",
+                        principalTable: "CustomLogin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePermissions",
+                name: "RolePermission",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1211,25 +838,25 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
+                    table.PrimaryKey("PK_RolePermission", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Permissions_PermissionId",
+                        name: "FK_RolePermission_Permission_PermissionId",
                         column: x => x.PermissionId,
                         principalSchema: "auth",
-                        principalTable: "Permissions",
+                        principalTable: "Permission",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Roles_RoleId",
+                        name: "FK_RolePermission_Role_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "auth",
-                        principalTable: "Roles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleRelations",
+                name: "RoleRelation",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1244,24 +871,24 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleRelations", x => x.Id);
+                    table.PrimaryKey("PK_RoleRelation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoleRelations_Roles_ParentId",
+                        name: "FK_RoleRelation_Role_ParentId",
                         column: x => x.ParentId,
                         principalSchema: "auth",
-                        principalTable: "Roles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoleRelations_Roles_RoleId",
+                        name: "FK_RoleRelation_Role_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "auth",
-                        principalTable: "Roles",
+                        principalTable: "Role",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamRoles",
+                name: "TeamRole",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1277,25 +904,25 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamRoles", x => x.Id);
+                    table.PrimaryKey("PK_TeamRole", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamRoles_Roles_RoleId",
+                        name: "FK_TeamRole_Role_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "auth",
-                        principalTable: "Roles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeamRoles_Teams_TeamId",
+                        name: "FK_TeamRole_Team_TeamId",
                         column: x => x.TeamId,
                         principalSchema: "auth",
-                        principalTable: "Teams",
+                        principalTable: "Team",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
+                name: "UserRole",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1310,25 +937,25 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.PrimaryKey("PK_UserRole", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
+                        name: "FK_UserRole_Role_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "auth",
-                        principalTable: "Roles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRoles_Users_UserId",
+                        name: "FK_UserRole_User_UserId",
                         column: x => x.UserId,
                         principalSchema: "auth",
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DepartmentStaffs",
+                name: "DepartmentStaff",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1343,16 +970,16 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DepartmentStaffs", x => x.Id);
+                    table.PrimaryKey("PK_DepartmentStaff", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DepartmentStaffs_Departments_DepartmentId",
+                        name: "FK_DepartmentStaff_Department_DepartmentId",
                         column: x => x.DepartmentId,
                         principalSchema: "auth",
-                        principalTable: "Departments",
+                        principalTable: "Department",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DepartmentStaffs_Staff_StaffId",
+                        name: "FK_DepartmentStaff_Staff_StaffId",
                         column: x => x.StaffId,
                         principalSchema: "auth",
                         principalTable: "Staff",
@@ -1361,7 +988,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamStaffs",
+                name: "TeamStaff",
                 schema: "auth",
                 columns: table => new
                 {
@@ -1377,266 +1004,149 @@ namespace Masa.Auth.Service.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamStaffs", x => x.Id);
+                    table.PrimaryKey("PK_TeamStaff", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamStaffs_Staff_StaffId",
+                        name: "FK_TeamStaff_Staff_StaffId",
                         column: x => x.StaffId,
                         principalSchema: "auth",
                         principalTable: "Staff",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeamStaffs_Teams_TeamId",
+                        name: "FK_TeamStaff_Team_TeamId",
                         column: x => x.TeamId,
                         principalSchema: "auth",
-                        principalTable: "Teams",
+                        principalTable: "Team",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiResourceClaims_ApiResourceId",
+                name: "IX_ClientClaim_ClientId",
                 schema: "auth",
-                table: "ApiResourceClaims",
-                column: "ApiResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResourceClaims_UserClaimId",
-                schema: "auth",
-                table: "ApiResourceClaims",
-                column: "UserClaimId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResourceProperties_ApiResourceId",
-                schema: "auth",
-                table: "ApiResourceProperties",
-                column: "ApiResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResources_Name",
-                schema: "auth",
-                table: "ApiResources",
-                column: "Name",
-                unique: true,
-                filter: "[IsDeleted] = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResourceScopes_ApiResourceId",
-                schema: "auth",
-                table: "ApiResourceScopes",
-                column: "ApiResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResourceScopes_ApiScopeId",
-                schema: "auth",
-                table: "ApiResourceScopes",
-                column: "ApiScopeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiResourceSecrets_ApiResourceId",
-                schema: "auth",
-                table: "ApiResourceSecrets",
-                column: "ApiResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeClaims_ApiScopeId",
-                schema: "auth",
-                table: "ApiScopeClaims",
-                column: "ApiScopeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeClaims_UserClaimId",
-                schema: "auth",
-                table: "ApiScopeClaims",
-                column: "UserClaimId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiScopeProperties_ScopeId",
-                schema: "auth",
-                table: "ApiScopeProperties",
-                column: "ScopeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApiScopes_Name",
-                schema: "auth",
-                table: "ApiScopes",
-                column: "Name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientClaims_ClientId",
-                schema: "auth",
-                table: "ClientClaims",
+                table: "ClientClaim",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientCorsOrigins_ClientId",
+                name: "IX_ClientCorsOrigin_ClientId",
                 schema: "auth",
-                table: "ClientCorsOrigins",
+                table: "ClientCorsOrigin",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientGrantTypes_ClientId",
+                name: "IX_ClientGrantType_ClientId",
                 schema: "auth",
-                table: "ClientGrantTypes",
+                table: "ClientGrantType",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientIdPRestrictions_ClientId",
+                name: "IX_ClientIdPRestriction_ClientId",
                 schema: "auth",
-                table: "ClientIdPRestrictions",
+                table: "ClientIdPRestriction",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientPostLogoutRedirectUris_ClientId",
+                name: "IX_ClientPostLogoutRedirectUri_ClientId",
                 schema: "auth",
-                table: "ClientPostLogoutRedirectUris",
+                table: "ClientPostLogoutRedirectUri",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientProperties_ClientId",
+                name: "IX_ClientProperty_ClientId",
                 schema: "auth",
-                table: "ClientProperties",
+                table: "ClientProperty",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientRedirectUris_ClientId",
+                name: "IX_ClientRedirectUri_ClientId",
                 schema: "auth",
-                table: "ClientRedirectUris",
+                table: "ClientRedirectUri",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_ClientId",
+                name: "IX_ClientScope_ClientId",
                 schema: "auth",
-                table: "Clients",
-                column: "ClientId",
-                unique: true,
-                filter: "[IsDeleted] = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientScopes_ClientId",
-                schema: "auth",
-                table: "ClientScopes",
+                table: "ClientScope",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientSecrets_ClientId",
+                name: "IX_ClientSecret_ClientId",
                 schema: "auth",
-                table: "ClientSecrets",
+                table: "ClientSecret",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomLogins_ClientId",
+                name: "IX_CustomLogin_ClientId",
                 schema: "auth",
-                table: "CustomLogins",
+                table: "CustomLogin",
                 column: "ClientId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomLogins_Creator",
+                name: "IX_CustomLogin_Creator",
                 schema: "auth",
-                table: "CustomLogins",
+                table: "CustomLogin",
                 column: "Creator");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomLogins_Modifier",
+                name: "IX_CustomLogin_Modifier",
                 schema: "auth",
-                table: "CustomLogins",
+                table: "CustomLogin",
                 column: "Modifier");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomLogins_Name",
+                name: "IX_CustomLogin_Name",
                 schema: "auth",
-                table: "CustomLogins",
+                table: "CustomLogin",
                 column: "Name",
                 unique: true,
                 filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomLoginThirdPartyIdps_CustomLoginId",
+                name: "IX_CustomLoginThirdPartyIdp_CustomLoginId",
                 schema: "auth",
-                table: "CustomLoginThirdPartyIdps",
+                table: "CustomLoginThirdPartyIdp",
                 column: "CustomLoginId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomLoginThirdPartyIdps_ThirdPartyIdpId",
+                name: "IX_CustomLoginThirdPartyIdp_ThirdPartyIdpId",
                 schema: "auth",
-                table: "CustomLoginThirdPartyIdps",
+                table: "CustomLoginThirdPartyIdp",
                 column: "ThirdPartyIdpId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Departments_Level",
+                name: "IX_Department_Level",
                 schema: "auth",
-                table: "Departments",
+                table: "Department",
                 column: "Level",
                 unique: true,
                 filter: "Level = 1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Departments_Name",
+                name: "IX_Department_Name",
                 schema: "auth",
-                table: "Departments",
+                table: "Department",
                 column: "Name",
                 unique: true,
                 filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartmentStaffs_DepartmentId",
+                name: "IX_DepartmentStaff_DepartmentId",
                 schema: "auth",
-                table: "DepartmentStaffs",
+                table: "DepartmentStaff",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DepartmentStaffs_StaffId",
+                name: "IX_DepartmentStaff_StaffId",
                 schema: "auth",
-                table: "DepartmentStaffs",
+                table: "DepartmentStaff",
                 column: "StaffId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceFlowCodes_DeviceCode",
-                schema: "auth",
-                table: "DeviceFlowCodes",
-                column: "DeviceCode",
-                unique: true,
-                filter: "[IsDeleted] = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceFlowCodes_Expiration",
-                schema: "auth",
-                table: "DeviceFlowCodes",
-                column: "Expiration");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityProvider_Name",
                 schema: "auth",
                 table: "IdentityProvider",
                 column: "Name",
-                filter: "[IsDeleted] = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityResourceClaims_IdentityResourceId",
-                schema: "auth",
-                table: "IdentityResourceClaims",
-                column: "IdentityResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityResourceClaims_UserClaimId",
-                schema: "auth",
-                table: "IdentityResourceClaims",
-                column: "UserClaimId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityResourceProperties_IdentityResourceId",
-                schema: "auth",
-                table: "IdentityResourceProperties",
-                column: "IdentityResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentityResources_Name",
-                schema: "auth",
-                table: "IdentityResources",
-                column: "Name",
-                unique: true,
                 filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
@@ -1658,86 +1168,75 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: new[] { "State", "TimesSent", "ModificationTime" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermissionRelations_ChildPermissionId",
+                name: "IX_Permission_AppId_Code",
                 schema: "auth",
-                table: "PermissionRelations",
-                column: "ChildPermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PermissionRelations_ParentPermissionId_ChildPermissionId",
-                schema: "auth",
-                table: "PermissionRelations",
-                columns: new[] { "ParentPermissionId", "ChildPermissionId" },
-                unique: true,
-                filter: "[IsDeleted] = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Permissions_AppId_Code",
-                schema: "auth",
-                table: "Permissions",
+                table: "Permission",
                 columns: new[] { "AppId", "Code" },
                 unique: true,
                 filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersistedGrants_Expiration",
+                name: "IX_PermissionRelation_ChildPermissionId",
                 schema: "auth",
-                table: "PersistedGrants",
-                column: "Expiration");
+                table: "PermissionRelation",
+                column: "ChildPermissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersistedGrants_SubjectId_ClientId_Type",
+                name: "IX_PermissionRelation_ParentPermissionId_ChildPermissionId",
                 schema: "auth",
-                table: "PersistedGrants",
-                columns: new[] { "SubjectId", "ClientId", "Type" });
+                table: "PermissionRelation",
+                columns: new[] { "ParentPermissionId", "ChildPermissionId" },
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersistedGrants_SubjectId_SessionId_Type",
+                name: "IX_Position_Name",
                 schema: "auth",
-                table: "PersistedGrants",
-                columns: new[] { "SubjectId", "SessionId", "Type" });
+                table: "Position",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RegisterFields_CustomLoginId",
+                name: "IX_RegisterField_CustomLoginId",
                 schema: "auth",
-                table: "RegisterFields",
+                table: "RegisterField",
                 column: "CustomLoginId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_PermissionId",
+                name: "IX_Role_Creator",
                 schema: "auth",
-                table: "RolePermissions",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_RoleId",
-                schema: "auth",
-                table: "RolePermissions",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleRelations_ParentId",
-                schema: "auth",
-                table: "RoleRelations",
-                column: "ParentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleRelations_RoleId",
-                schema: "auth",
-                table: "RoleRelations",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Roles_Creator",
-                schema: "auth",
-                table: "Roles",
+                table: "Role",
                 column: "Creator");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_Modifier",
+                name: "IX_Role_Modifier",
                 schema: "auth",
-                table: "Roles",
+                table: "Role",
                 column: "Modifier");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePermission_PermissionId",
+                schema: "auth",
+                table: "RolePermission",
+                column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePermission_RoleId",
+                schema: "auth",
+                table: "RolePermission",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleRelation_ParentId",
+                schema: "auth",
+                table: "RoleRelation",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleRelation_RoleId",
+                schema: "auth",
+                table: "RoleRelation",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Staff_Creator",
@@ -1775,47 +1274,47 @@ namespace Masa.Auth.Service.Admin.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamPermissions_PermissionId",
+                name: "IX_Team_Name",
                 schema: "auth",
-                table: "TeamPermissions",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamPermissions_TeamId",
-                schema: "auth",
-                table: "TeamPermissions",
-                column: "TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamRoles_RoleId",
-                schema: "auth",
-                table: "TeamRoles",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamRoles_TeamId",
-                schema: "auth",
-                table: "TeamRoles",
-                column: "TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Teams_Name",
-                schema: "auth",
-                table: "Teams",
+                table: "Team",
                 column: "Name",
                 unique: true,
                 filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamStaffs_StaffId",
+                name: "IX_TeamPermission_PermissionId",
                 schema: "auth",
-                table: "TeamStaffs",
+                table: "TeamPermission",
+                column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamPermission_TeamId",
+                schema: "auth",
+                table: "TeamPermission",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamRole_RoleId",
+                schema: "auth",
+                table: "TeamRole",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamRole_TeamId",
+                schema: "auth",
+                table: "TeamRole",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamStaff_StaffId",
+                schema: "auth",
+                table: "TeamStaff",
                 column: "StaffId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamStaffs_TeamId",
+                name: "IX_TeamStaff_TeamId",
                 schema: "auth",
-                table: "TeamStaffs",
+                table: "TeamStaff",
                 column: "TeamId");
 
             migrationBuilder.CreateIndex(
@@ -1823,6 +1322,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 table: "ThirdPartyUsers",
                 column: "Creator");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ThirdPartyUsers_IdentityProviderId",
+                schema: "auth",
+                table: "ThirdPartyUsers",
+                column: "IdentityProviderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ThirdPartyUsers_Modifier",
@@ -1843,148 +1348,108 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserPermissions_PermissionId",
+                name: "IX_User_Email",
                 schema: "auth",
-                table: "UserPermissions",
-                column: "PermissionId");
+                table: "User",
+                column: "Email",
+                unique: true,
+                filter: "[IsDeleted] = 0 and Email!=''");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserPermissions_UserId",
+                name: "IX_User_IdCard",
                 schema: "auth",
-                table: "UserPermissions",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_RoleId",
-                schema: "auth",
-                table: "UserRoles",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_UserId",
-                schema: "auth",
-                table: "UserRoles",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
-                schema: "auth",
-                table: "Users",
-                column: "Email");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_IdCard",
-                schema: "auth",
-                table: "Users",
+                table: "User",
                 column: "IdCard",
-                filter: "[IsDeleted] = 0");
+                unique: true,
+                filter: "[IsDeleted] = 0 and IdCard!=''");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Name",
+                name: "IX_User_Name",
                 schema: "auth",
-                table: "Users",
+                table: "User",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_PhoneNumber",
+                name: "IX_User_PhoneNumber",
                 schema: "auth",
-                table: "Users",
+                table: "User",
                 column: "PhoneNumber",
-                filter: "[IsDeleted] = 0");
+                unique: true,
+                filter: "[IsDeleted] = 0 and PhoneNumber!=''");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermission_PermissionId",
+                schema: "auth",
+                table: "UserPermission",
+                column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermission_UserId",
+                schema: "auth",
+                table: "UserPermission",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_RoleId",
+                schema: "auth",
+                table: "UserRole",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_UserId",
+                schema: "auth",
+                table: "UserRole",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AddressValues",
+                name: "AppNavigationTag",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiResourceClaims",
+                name: "ClientClaim",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiResourceProperties",
+                name: "ClientCorsOrigin",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiResourceScopes",
+                name: "ClientGrantType",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiResourceSecrets",
+                name: "ClientIdPRestriction",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiScopeClaims",
+                name: "ClientPostLogoutRedirectUri",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiScopeProperties",
+                name: "ClientProperty",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "AppNavigationTags",
+                name: "ClientRedirectUri",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "AvatarValues",
+                name: "ClientScope",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ClientClaims",
+                name: "ClientSecret",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ClientCorsOrigins",
+                name: "CustomLoginThirdPartyIdp",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ClientGrantTypes",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "ClientIdPRestrictions",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "ClientPostLogoutRedirectUris",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "ClientProperties",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "ClientRedirectUris",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "ClientScopes",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "ClientSecrets",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "CustomLoginThirdPartyIdps",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "DepartmentStaffs",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "DeviceFlowCodes",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "IdentityResourceClaims",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "IdentityResourceProperties",
+                name: "DepartmentStaff",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -1992,35 +1457,31 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "PermissionRelations",
+                name: "PermissionRelation",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "PersistedGrants",
+                name: "RegisterField",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "RegisterFields",
+                name: "RolePermission",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "RolePermissions",
+                name: "RoleRelation",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "RoleRelations",
+                name: "TeamPermission",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "TeamPermissions",
+                name: "TeamRole",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "TeamRoles",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "TeamStaffs",
+                name: "TeamStaff",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -2028,35 +1489,19 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "UserPermissions",
+                name: "UserPermission",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "UserRoles",
+                name: "UserRole",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiResources",
+                name: "Department",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ApiScopes",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "Departments",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "UserClaims",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "IdentityResources",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "CustomLogins",
+                name: "CustomLogin",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -2064,7 +1509,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Teams",
+                name: "Team",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -2072,23 +1517,23 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Permissions",
+                name: "Permission",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Roles",
+                name: "Role",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Clients",
+                name: "Client",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Positions",
+                name: "Position",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Users",
+                name: "User",
                 schema: "auth");
         }
     }

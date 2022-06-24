@@ -6,27 +6,27 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center">
-                        <DefaultUploadImage @bind-Value="Staff.User.Avatar" WhenFileChangeUpload />
-                        <MTextField @bind-Value="Staff.User.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                        <DefaultUploadImage @bind-Value="Staff.Avatar" WhenFileChangeUpload />
+                        <MTextField @bind-Value="Staff.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                     </div>
                 </div>
             </HeaderContent>
             <AutoHeightContent>
                 <div class="subtitle2">@T("Basic Information")</div>
                 <div Class="mt-4">
-                    <ButtonGroup @bind-Value="Staff.User.Gender" TValue="GenderTypes" />
+                    <ButtonGroup @bind-Value="Staff.Gender" TValue="GenderTypes" />
                 </div>
                 <MRow Class="mt-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.User.Name" Label="@T("Name")" />
+                        <DefaultTextField @bind-Value="Staff.Name" Label="@T("Name")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.User.PhoneNumber" Label="@T("PhoneNumber")" />
+                        <DefaultTextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.User.Email" Label="@T("Email")" />
+                        <DefaultTextField @bind-Value="Staff.Email" Label="@T("Email")" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
@@ -37,12 +37,12 @@
                         <TeamSelect @bind-Value="Staff.Teams" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.User.IdCard" Label="@T("IdCard")" />
+                        <DefaultTextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.User.Address.Address" Label="@T("Address")" />
+                        <DefaultTextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
                     </MCol>
                     <MCol>
                         <DepartmentSelect @bind-Value="Staff.DepartmentId" />
@@ -58,15 +58,15 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField Value="StaffDetail.User.Account" Readonly Label="@T("Account")" />
+                        <DefaultTextField Value="StaffDetail.Account" Readonly Label="@T("Account")" />
                     </MCol>
                     <MCol>
-                        <DefaultCopyPassword @bind-Value="Staff.User.Password" />
+                        <DefaultCopyPassword @bind-Value="Staff.Password" />
                     </MCol>
                 </MRow>
 
-                <Authorization Avatars=StaffDetail.User.ThirdPartyIdpAvatars />
-                <Record Creator="@StaffDetail.User.Creator" CreationTime="@StaffDetail.User.CreationTime" Modifier="@StaffDetail.User.Modifier" ModificationTime="@StaffDetail.User.ModificationTime" />
+                <Authorization Avatars=StaffDetail.ThirdPartyIdpAvatars />
+                <Record Creator="@StaffDetail.Creator" CreationTime="@StaffDetail.CreationTime" Modifier="@StaffDetail.Modifier" ModificationTime="@StaffDetail.ModificationTime" />
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

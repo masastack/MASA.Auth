@@ -72,7 +72,13 @@ public abstract class AdminCompontentBase : ComponentBase
         set => GlobalConfig.Loading = value;
     }
 
-    public string T(string key) => I18n.T(key);
+    protected string? PageName { get; set; }
+
+    public string T(string key)
+    {
+        if (PageName is not null) return I18n.T(PageName, key, true);
+        else return I18n.T(key, true);
+    }
 
     public async Task<bool> OpenConfirmDialog(string content)
     {

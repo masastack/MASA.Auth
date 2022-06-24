@@ -74,7 +74,7 @@ public partial class ThirdPartyIdp
             new() { Text = T("Type"), Value = nameof(ThirdPartyIdpDto.VerifyType), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },
             new() { Text = T(nameof(ThirdPartyIdpDto.Url)), Value = nameof(ThirdPartyIdpDto.Url), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
         };
 
         await GetThirdPartyIdpsAsync();

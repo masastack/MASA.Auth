@@ -61,22 +61,22 @@ public class AddUserDto
 
     public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password, GenderTypes genderType, List<Guid> roleIds, List<UserPermissionDto> permissions)
     {
-        Name = name;
-        DisplayName = displayName;
-        Avatar = avatar;
-        IdCard = idCard;
-        CompanyName = companyName;
+        Name = name ?? "";
+        DisplayName = displayName ?? "";
+        Avatar = avatar ?? "";
+        IdCard = idCard ?? "";
+        CompanyName = companyName ?? "";
         Enabled = enabled;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        Address = address;
-        Department = department;
-        Position = position;
-        Account = account;
-        Password = password;
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        Address = address ?? new();
+        Department = department ?? "";
+        Position = position ?? "";
+        Account = account ?? "";
+        Password = password ?? "";
         Gender = genderType;
-        Roles = roleIds;
-        Permissions = permissions;
+        Roles = roleIds ?? new();
+        Permissions = permissions ?? new();
         Landline = "";
     }
 }

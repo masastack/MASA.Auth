@@ -4,12 +4,8 @@
     <MForm Model=Position EnableValidation @ref="Form">
         <AutoHeight Overflow AutoClass="mt-6">
             <AutoHeightContent>
-                <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
-                <MRow>
-                    <MCol>
-                        <DefaultTextField @bind-Value="Position.Name" Label="@T("Position.Name")" />
-                    </MCol>
-                </MRow>
+                <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
+                <DefaultTextField @bind-Value="Position.Name" Label="@T("Position.Name")" />
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

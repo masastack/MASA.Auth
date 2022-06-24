@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class AddStaffDto
 {
-    public string JobNumber { get; set; }
+    public string JobNumber { get; set; } = "";
 
     public StaffTypes StaffType { get; set; }
 
@@ -15,30 +15,64 @@ public class AddStaffDto
 
     public Guid PositionId { get; set; }
 
-    public string Position { get; set; }
+    public string Position { get; set; } = "";
 
-    public List<Guid> Teams { get; set; }
+    public List<Guid> Teams { get; set; } = new();
 
     public Guid UserId { get; set; }
 
-    public AddUserDto User { get; set; }
+    public string Name { get; set; } = "";
+
+    public string DisplayName { get; set; } = "";
+
+    public string Avatar { get; set; } = "";
+
+    public string IdCard { get; set; } = "";
+
+    public string CompanyName { get; set; } = "";
+
+    public string PhoneNumber { get; set; } = "";
+
+    public string Landline { get; set; } = "";
+
+    public string Email { get; set; } = "";
+
+    public AddressValueDto Address { get; set; } = new();
+
+    public string Department { get; set; } = "";
+
+    public string Account { get; set; } = "";
+
+    public string Password { get; set; } = "";
+
+    public GenderTypes Gender { get; set; } = GenderTypes.Male;
 
     public AddStaffDto()
     {
-        JobNumber = "";
-        Position = "";
-        Teams = new();
-        User = new();
     }
 
-    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string position, List<Guid> teamIds, AddUserDto user)
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, Guid userId, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string landline, string email, AddressValueDto address, string department, string account, string password, GenderTypes gender)
     {
         JobNumber = jobNumber;
         StaffType = staffType;
         Enabled = enabled;
         DepartmentId = departmentId;
+        PositionId = positionId;
         Position = position;
-        Teams = teamIds;
-        User = user;
+        Teams = teams;
+        UserId = userId;
+        Name = name;
+        DisplayName = displayName;
+        Avatar = avatar;
+        IdCard = idCard;
+        CompanyName = companyName;
+        PhoneNumber = phoneNumber;
+        Landline = landline;
+        Email = email;
+        Address = address;
+        Department = department;
+        Account = account;
+        Password = password;
+        Gender = gender;
     }
 }

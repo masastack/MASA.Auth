@@ -8,7 +8,10 @@ public class LoginValidator : AbstractValidator<LoginModel>
     public LoginValidator()
     {
         RuleFor(login => login.Account).Required().ChineseLetterNumber();
-        RuleFor(login => login.Password).Required().LetterNumber();
+        RuleFor(user => user.Password).Required()
+                                      .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
+                                      .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
+                                      .MaxLength(30);
     }
 }
 

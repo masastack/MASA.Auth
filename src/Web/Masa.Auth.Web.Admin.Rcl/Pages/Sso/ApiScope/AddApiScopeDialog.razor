@@ -4,8 +4,8 @@
     <MForm Model=ApiScope EnableValidation @ref="Form">
         <AutoHeight Overflow>
             <AutoHeightContent>
-                <div class="subtitle2">@T("Basic Information")</div>
-                <MRow Class="mt-4">
+                <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
+                <MRow Class="mb-6">
                     <MCol>
                         <DefaultTextField @bind-Value="ApiScope.DisplayName" Label="@T("DisplayName")" />
                     </MCol>
@@ -13,20 +13,18 @@
                         <DefaultTextField @bind-Value="ApiScope.Name" Label="@T("ApiScope.Name")" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
+                <MRow Class="mb-6">
                     <MCol>
                         <DefaultTextField @bind-Value="ApiScope.Description" Label="@T("Description")" />
                     </MCol>
-                </MRow>
-                <MRow Class="mt-1">
-                    <MCol Class="d-flex">
-                        <MCheckbox @bind-Value="ApiScope.Required" Class="pt-0 mt-0" Label="@T(nameof(ApiScope.Required))"></MCheckbox>
-                        <MCheckbox @bind-Value="ApiScope.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.Emphasize))"></MCheckbox>
-                        <MCheckbox @bind-Value="ApiScope.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.ShowInDiscoveryDocument))"></MCheckbox>
-                    </MCol>
-                </MRow>
-                <div class="mt-6 subtitle2">@T("User Claims")</div>
-                <UserClaimSelect @bind-Value=ApiScope.UserClaims Class="mt-4" Style="height:65%!important" />
+                </MRow>            
+                <div class="d-flex mb-10">
+                    <MCheckbox @bind-Value="ApiScope.Required" Class="pt-0 mt-0" Label="@T(nameof(ApiScope.Required))" HideDetails="@("auto")" />
+                    <MCheckbox @bind-Value="ApiScope.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.Emphasize))" HideDetails="@("auto")" />
+                    <MCheckbox @bind-Value="ApiScope.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.ShowInDiscoveryDocument))" HideDetails="@("auto")" />
+                </div>
+                <DefaultTitle Class="mb-2">@T("User Claims")</DefaultTitle>
+                <UserClaimSelect @bind-Value=ApiScope.UserClaims />
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

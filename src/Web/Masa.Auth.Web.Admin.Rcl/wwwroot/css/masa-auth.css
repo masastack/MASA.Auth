@@ -1140,13 +1140,13 @@ input::-webkit-input-placeholder {
     height: 100%;
 }
 
-.masa .m-sheet.m-stepper:not(.m-sheet--outlined) {
+.masa-stack-components .m-sheet.m-stepper:not(.m-sheet--outlined) {
     box-shadow: none !important;
     height: 100% !important;
     width: 100% !important;
 }
 
-.masa form {
+.masa-stack-components form {
     height: 100% !important;
     width: 100% !important;
 }
@@ -1156,14 +1156,36 @@ input::-webkit-input-placeholder {
     opacity: 0.00000000000000001 !important;
 }
 
-.masa .m-input__control {
+.masa-stack-components .m-input__control {
     min-height: 40px !important;
 }
 
-.masa .labeled-radio-group {
+.masa-stack-components .labeled-radio-group {
     padding: 2px;
 }
 
-.masa .m-chip {
+.masa-stack-components .m-chip {
     padding: 0 14px;
+}
+
+.masa-stack-components .m-input--selection-controls {
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+}
+
+.masa-stack-components .defaultRadio label {
+    color: #1B2559 !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3125rem !important;
+    letter-spacing: 0em !important;
+}
+
+.masa-stack-components .m-messages.theme--light.error--text {
+    margin-top: 10px !important;
+    font-size: 0.625rem !important;
+    font-weight: 400 !important;
+    line-height: 0.9375rem !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
 }

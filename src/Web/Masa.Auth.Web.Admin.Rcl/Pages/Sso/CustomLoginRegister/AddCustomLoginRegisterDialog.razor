@@ -4,7 +4,7 @@
     <MForm Model=CustomLogin EnableValidation @ref="Form">
         <AutoHeight Overflow>
             <HeaderContent>
-                <div class="d-flex">
+                <div class="d-flex mb-12">
                     <div class="mx-auto">
                         <LabeledRadioGroup @bind-Value="Tab" Dense>
                             @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
@@ -22,22 +22,22 @@
                     <MWindowItem Value="CustomLoginTab.BasicInformation" Class="mt-6">
                         @if (ClientSelectRef?.Client?.LogoUri is not null)
                         {
-                            <div class="d-flex mb-4">
+                            <div class="d-flex mb-13">
                                 <MAvatar Class="mx-auto" Size=80>
                                     <img src="@ClientSelectRef?.Client?.LogoUri" />
                                 </MAvatar>
                             </div>
                         }
-                        <MRow>
-                            <MCol>
+                        <MRow Class="mb-12">
+                            <MCol Class="py-0">
                                 <DefaultTextField @bind-Value="CustomLogin.Name" Label="@T("CustomLogin.Name")" />
                             </MCol>
-                            <MCol>
+                            <MCol Class="py-0">
                                 <DefaultTextField @bind-Value="CustomLogin.Title" Label="@T("Title")" />
                             </MCol>
                         </MRow>
-                        <MRow Class="mt-1">
-                            <MCol>
+                        <MRow>
+                            <MCol Class="py-0">
                                 <ClientSelect @ref="ClientSelectRef" @bind-Value="CustomLogin.ClientId" />
                             </MCol>
                         </MRow>

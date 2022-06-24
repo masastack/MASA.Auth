@@ -79,7 +79,7 @@ public partial class Staff
             new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
             new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
             new() { Text = T("State"), Value = nameof(StaffDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
         };
 
         await GetStaffAsync();

@@ -58,7 +58,7 @@ public partial class Position
         Headers = new()
         {
             new() { Text = T("Position.Name"), Value = nameof(PositionDto.Name), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
         };
 
         await GetPositionsAsync();

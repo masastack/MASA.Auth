@@ -23,9 +23,7 @@ public class AuthDbContext : IsolationDbContext
             .HasDiscriminator<string>("Discriminator")
             .HasValue<ThirdPartyIdp>("ThirdParty")
             .HasValue<LdapIdp>("LDAP");
-
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
+       
         //foreach (var entityType in builder.Model.GetEntityTypes())
         //{
         //    if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))
@@ -33,6 +31,8 @@ public class AuthDbContext : IsolationDbContext
         //        entityType.SetTableName(entityType.ClrType.Name.Pluralize());
         //    }
         //}
+
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreatingExecuting(builder);
     }

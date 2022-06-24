@@ -6,20 +6,31 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
 public class AddStaffDomainEventHandler
 {
     readonly IStaffRepository _staffRepository;
+    readonly IUserRepository _userRepository;
     readonly IEventBus _eventBus;
 
-    public AddStaffDomainEventHandler(IStaffRepository staffRepository, IEventBus eventBus)
+    public AddStaffDomainEventHandler(IStaffRepository staffRepository, IUserRepository userRepository, IEventBus eventBus)
     {
         _staffRepository = staffRepository;
+        _userRepository = userRepository;
         _eventBus = eventBus;
     }
 
     [EventHandler(1)]
     public async Task AddUserAsync(AddStaffDomainEvent staffEvent)
     {
-        var command = new AddUserCommand(staffEvent.Staff.User);
-        await _eventBus.PublishAsync(command);
-        staffEvent.Staff.UserId = command.NewUser.Id;
+        var staffDto = staffEvent.Staff;
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == u.PhoneNumber);
+        if (user is null)
+        {
+            var command = new AddUserCommand(new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Department, staffDto.Position ?? "", staffDto.Account, staffDto.Password, staffDto.Gender, new(), new()));
+            await _eventBus.PublishAsync(command);
+            staffEvent.Staff.UserId = command.NewUser.Id;
+        }
+        else
+        {
+            staffEvent.Staff.UserId = user.Id;
+        }
     }
 
     [EventHandler(2)]
@@ -37,11 +48,34 @@ public class AddStaffDomainEventHandler
     public async Task AddStaffAsync(AddStaffDomainEvent staffEvent)
     {
         var staffDto = staffEvent.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.JobNumber == staffDto.JobNumber);
-        if (staff is not null)
-            throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
+        Expression<Func<Staff, bool>> condition = staff => staff.Account == staffDto.Account || staff.JobNumber == staffDto.JobNumber;
+        if (!string.IsNullOrEmpty(staffDto.PhoneNumber))
+            condition = condition.Or(staff => staff.PhoneNumber == staffDto.PhoneNumber);
+        if (!string.IsNullOrEmpty(staffDto.Email))
+            condition = condition.Or(staff => staff.Email == staffDto.Email);
+        if (!string.IsNullOrEmpty(staffDto.IdCard))
+            condition = condition.Or(staff => staff.IdCard == staffDto.IdCard);
 
-        staff = new Staff(staffDto.UserId, staffDto.JobNumber, staffDto.User.Name, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
+        var staff = await _staffRepository.FindAsync(condition);
+        if (staff is not null)
+        {
+            if (string.IsNullOrEmpty(staffDto.PhoneNumber) is false && staffDto.PhoneNumber == staff.PhoneNumber)
+                throw new UserFriendlyException($"Staff with phone number {staffDto.PhoneNumber} already exists");
+            if (string.IsNullOrEmpty(staffDto.Account) is false && staffDto.Account == staff.Account)
+                throw new UserFriendlyException($"Staff with account {staffDto.Account} already exists");
+            if (string.IsNullOrEmpty(staffDto.Email) is false && staffDto.Email == staff.Email)
+                throw new UserFriendlyException($"Staff with email {staffDto.Email} already exists");
+            if (string.IsNullOrEmpty(staffDto.IdCard) is false && staffDto.IdCard == staff.IdCard)
+                throw new UserFriendlyException($"Staff with email {staffDto.IdCard} already exists");
+            if (string.IsNullOrEmpty(staffDto.JobNumber) is false && staffDto.JobNumber == staff.JobNumber)
+                throw new UserFriendlyException($"Staff with jobNumber number {staffDto.JobNumber} already exists");
+        }
+
+        staff = new Staff(
+            staffDto.UserId, staffDto.Name, staffDto.DisplayName, staffDto.Avatar,
+            staffDto.IdCard, staffDto.Account, staffDto.Password, staffDto.CompanyName,
+            staffDto.Gender, staffDto.PhoneNumber, staffDto.Email, staffDto.Address,
+            staffDto.JobNumber, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
         staff.AddDepartmentStaff(staffDto.DepartmentId);
         staff.AddTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);

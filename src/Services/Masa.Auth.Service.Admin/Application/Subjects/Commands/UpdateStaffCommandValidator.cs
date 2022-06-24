@@ -7,6 +7,17 @@ public class UpdateStaffCommandValidator : AbstractValidator<UpdateStaffCommand>
 {
     public UpdateStaffCommandValidator()
     {
-        RuleFor(command => command.Staff).SetValidator(new UpdateStaffValidator());
+        RuleFor(command => command.Staff.JobNumber).Required();
+        RuleFor(command => command.Staff.DisplayName).ChineseLetter().MaxLength(20);
+        RuleFor(command => command.Staff.Name).ChineseLetter().MaxLength(20);
+        RuleFor(command => command.Staff.PhoneNumber).Phone();
+        RuleFor(command => command.Staff.Email).Email();
+        RuleFor(command => command.Staff.IdCard).IdCard();
+        RuleFor(command => command.Staff.CompanyName).ChineseLetter().MaxLength(50);
+        RuleFor(command => command.Staff.Position).ChineseLetterNumber().MaxLength(20);
+        RuleFor(command => command.Staff.Password).Required()
+                                      .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
+                                      .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
+                                      .MaxLength(30);
     }
 }
