@@ -1,0 +1,26 @@
+﻿@page "/account/logout/loggedout"
+@using Microsoft.JSInterop
+
+@inherits SsoCompontentBase
+@inject IJSRuntime jsRuntime;
+@inject IIdentityServerInteractionService _interaction;
+
+<div>
+    <h5>
+        Logout
+        <small>You are now logged out</small>
+    </h5>
+
+    @if (_viewModel.PostLogoutRedirectUri != null)
+    {
+        <div>
+            Click <a class="PostLogoutRedirectUri" href="@_viewModel.PostLogoutRedirectUri">here</a> to return to the
+            <span>@_viewModel.ClientName</span> application.
+        </div>
+    }
+
+    @if (_viewModel.SignOutIframeUrl != null)
+    {
+        <iframe width="0" height="0" class="signout" src="@_viewModel.SignOutIframeUrl"></iframe>
+    }
+</div>

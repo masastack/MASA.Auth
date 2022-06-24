@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits LayoutComponentBase
+
+<MApp>
+    <MErrorHandler>
+        <MAppBar Elevation=0 App MaxHeight=60>
+            <MAppBarNavIcon Class="ml-1"></MAppBarNavIcon>
+            <MAppBarTitle>Masa Sso</MAppBarTitle>
+            <MSpacer></MSpacer>
+            <AuthorizeView>
+                <Authorized>
+                    <MMenu Left
+                           Bottom>
+                        <ActivatorContent Context="menuContext">
+                            <MButton Icon @attributes="@menuContext.Attrs">
+                                <MIcon>mdi-account-circle-outline</MIcon>
+                            </MButton>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MList>
+                                <MListItem Href="account/logout">
+                                    <MListItemTitle>Log out</MListItemTitle>
+                                </MListItem>
+                            </MList>
+                        </ChildContent>
+                    </MMenu>
+                </Authorized>
+            </AuthorizeView>
+        </MAppBar>
+        <MMain Class="fill-lighten-1">
+            @Body
+        </MMain>
+    </MErrorHandler>
+</MApp>

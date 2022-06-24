@@ -30,17 +30,26 @@ builder.Services.AddAliyunStorage(serviceProvider =>
     };
 });
 
+builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+{
+    options.Environment = "environment";
+    options.UserName = "name";
+    options.UserId = "sub";
+});
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options =>
+.AddJwtBearer("Bearer", options =>
 {
-    options.Authority = "";
+    options.Authority = builder.Configuration["IdentityServerUrl"];
     options.RequireHttpsMetadata = false;
-    options.Audience = "";
+    //options.Audience = "";
+    options.TokenValidationParameters.ValidateAudience = false;
+    options.MapInboundClaims = false;
 });
 
 //builder.AddMasaConfiguration(configurationBuilder =>
@@ -49,17 +58,29 @@ builder.Services.AddAuthentication(options =>
 //    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
 //});
 MapsterAdapterConfig.TypeAdapter();
-// builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 builder.Services.AddLadpContext();
 
 builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
                 .AddAutoComplete(option => option.UseIndexName("user_index"));
 
-var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
-builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:OidcConnection"], b => b.MigrationsAssembly(migrationsAssembly)));
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
+    .AddDbContextCheck<AuthDbContext>();
+
+var clientUrl = builder.Configuration.GetValue<string>("WebUrl");
+var client = new Client(ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
+client.SetAllowedScopes(new List<string> { "openid", "profile" });
+client.SetPostLogoutRedirectUris(new List<string> { $"{clientUrl}/signout-callback-oidc" });
+client.SetRedirectUris(new List<string> { $"{clientUrl}/signin-oidc" });
+
 var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddOidcCache(option);
+var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:OidcConnection"],
+    b => b.MigrationsAssembly(migrationsAssembly)))
+    .SeedClientData(new List<Client> { client });
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -115,12 +136,8 @@ var app = builder.Services
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {
-    if (context.Set<Department>().Any())
-    {
-        return;
-    }
-    context.Set<Department>().Add(new Department("MasaStack", "MasaStack Root Department"));
-    context.SaveChanges();
+    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
+    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
 });
 
 app.UseMasaExceptionHandling(opt =>
@@ -153,5 +170,15 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
+});
 
 app.Run();

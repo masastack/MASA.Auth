@@ -54,6 +54,17 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
     public Permission(string systemId, string appId, string name, string code, string url,
+        string icon, List<Permission> childPermissions) : this(systemId, appId, name, code, url, icon, PermissionTypes.Menu, "", true)
+    {
+        this.childPermissions = childPermissions;
+    }
+
+    public Permission(string systemId, string appId, string name, string code, string url,
+        string icon, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", true)
+    {
+    }
+
+    public Permission(string systemId, string appId, string name, string code, string url,
         string icon, PermissionTypes type, string description, bool enabled)
     {
         SystemId = systemId;

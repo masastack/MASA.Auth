@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class Index
 {
-    StringNumber _tab = 0;
+    string _tab = "";
     bool _searchApiLoading, _showMenuInfo, _showApiInfo;
     List<AppPermissionsViewModel> _menuPermissions = new();
     List<AppPermissionsViewModel> _apiPermissions = new();
@@ -33,6 +33,7 @@ public partial class Index
     {
         if (firstRender)
         {
+            _tab = T("Menu Permission");
             var permissionTypes = await PermissionService.GetTypesAsync();
             _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
             _apiPermissionTypes = permissionTypes.Where(a => a.Value == PermissionTypes.Api).ToList();

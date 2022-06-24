@@ -13,16 +13,15 @@ public class SetTeamPersonnelInfoDomainEventHandler
     }
 
     [EventHandler(1)]
-    public async Task SetRoleAsync(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
+    public void SetRole(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
     {
         setTeamPersonnelInfoDomainEvent.Team.SetRole(setTeamPersonnelInfoDomainEvent.Type, setTeamPersonnelInfoDomainEvent.RoleIds.ToArray());
     }
 
     [EventHandler(3)]
-    public async Task SetPermissionAsync(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
+    public void SetPermission(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
     {
         setTeamPersonnelInfoDomainEvent.Team.SetPermission(setTeamPersonnelInfoDomainEvent.Type
                 , setTeamPersonnelInfoDomainEvent.PermissionsIds);
-        await Task.CompletedTask;
     }
 }

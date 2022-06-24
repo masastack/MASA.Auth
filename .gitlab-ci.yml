@@ -11,8 +11,11 @@ variables:
   IMAGE_AUTH_SERVER_ADMIN_DEV: $ALI_REGISTRY/masa/masa-auth-service-admin:dev-$CI_PIPELINE_ID
   IMAGE_AUTH_WEB_ADMIN_SERVER: $ALI_REGISTRY/masa/masa-auth-web-admin-server:$CI_COMMIT_TAG
   IMAGE_AUTH_WEB_ADMIN_SERVER_DEV: $ALI_REGISTRY/masa/masa-auth-web-admin-server:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_WEB_ADMIN_SSO: $ALI_REGISTRY/masa/masa-auth-web-sso:$CI_COMMIT_TAG
+  IMAGE_AUTH_WEB_ADMIN_SSO_DEV: $ALI_REGISTRY/masa/masa-auth-web-sso:dev-$CI_PIPELINE_ID
   DOCKER_AUTH_ADMIN_SERVER_PATH: ./src/Services/Masa.Auth.Service.Admin/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_PATH: ./src/Web/Masa.Auth.Web.Admin.Server/Dockerfile
+  DOCKER_AUTH_ADMIN_WEB_SSO_PATH: ./src/Web/Masa.Auth.Web.Sso/Dockerfile
   NAMESPACE_DEV: masa-auth-dev-new
   NAMESPACE_TEST: masa-auth-test-new
   NAMESPACE_PRE: masa-auth-pre-new
@@ -31,9 +34,12 @@ docker-build-dev:
     - docker push $IMAGE_AUTH_SERVER_ADMIN_DEV 
     - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV .
     - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV
+    - docker build -f $DOCKER_AUTH_ADMIN_WEB_SSO_PATH -t $IMAGE_AUTH_WEB_ADMIN_SSO_DEV .
+    - docker push $IMAGE_AUTH_WEB_ADMIN_SSO_DEV
   after_script:
     - docker rmi $IMAGE_AUTH_SERVER_ADMIN_DEV   
     - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV
+    - docker rmi $IMAGE_AUTH_WEB_ADMIN_SSO_DEV
 
 deploy-dev:
   stage: deploy-dev
@@ -47,6 +53,7 @@ deploy-dev:
     - echo $KUBE_CONFIG_DEV | base64 -d > ./config
     - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_DEV
   retry: 2
 
 deploy-test:
@@ -61,6 +68,7 @@ deploy-test:
     - echo $KUBE_CONFIG_DEV | base64 -d > ./config
     - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_TEST
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_TEST
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_TEST
   retry: 2
   when: manual
 
@@ -77,9 +85,12 @@ docker-build-prd:
     - docker push $IMAGE_AUTH_SERVER_ADMIN
     - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER .
     - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER
+    - docker build -f $DOCKER_AUTH_ADMIN_WEB_SSO_PATH -t $IMAGE_AUTH_WEB_ADMIN_SSO .
+    - docker push $IMAGE_AUTH_WEB_ADMIN_SSO
   after_script:
     - docker rmi $IMAGE_AUTH_SERVER_ADMIN  
     - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER
+    - docker rmi $IMAGE_AUTH_WEB_ADMIN_SSO
   
 deploy-prd:
   stage: deploy-prd
@@ -93,5 +104,6 @@ deploy-prd:
     - echo $KUBE_CONFIG_BLAZOR_PRD | base64 -d > ./config
     - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN -n NAMESPACE_PRO
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER -n NAMESPACE_PRO
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO -n $NAMESPACE_PRO
   retry: 2
   when: manual

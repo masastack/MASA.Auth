@@ -20,7 +20,7 @@ namespace Masa.Auth.Service.Admin.Services
             return await Task.FromResult(new GetSecurityTokenDto(region, accessId, accessSecret, stsToken, bucket));
         }
 
-        private async Task<List<GetDefaultImagesDto>> GetDefaultImagesAsync()
+        private List<GetDefaultImagesDto> GetDefaultImages()
         {
             return new List<GetDefaultImagesDto>()
             {
