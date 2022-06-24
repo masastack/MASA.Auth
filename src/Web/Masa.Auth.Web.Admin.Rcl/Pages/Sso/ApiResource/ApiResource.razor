@@ -40,8 +40,8 @@
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Small OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Small Class="ml-7" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <MIcon Size="20" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
+                            <MIcon Size="20" Class="ml-6" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">@IconConstants.Remove</MIcon>
                             break;
                         default:
                             <span>@context.Value</span>

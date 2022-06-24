@@ -72,7 +72,7 @@
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Small OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">@IconConstants.Update</MIcon>
+                        <MIcon Size="20" OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">@IconConstants.Update</MIcon>
                         break;
                     default:
                         <span>@context.Value</span>
@@ -82,7 +82,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 
