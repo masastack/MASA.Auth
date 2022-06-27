@@ -37,7 +37,7 @@ builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConf
     {
         options.UserInteraction.ErrorUrl = "/error/500";
     })
-    .AddDeveloperSigningCredential()
+    //.AddDeveloperSigningCredential()
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
     .AddCorsPolicyService<CorsPolicyService>()

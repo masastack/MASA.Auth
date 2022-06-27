@@ -97,7 +97,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
         Account = account ?? "";
-        Password = password ?? throw new UserFriendlyException("Password cannot be empty");
+        UpdatePassword(password);
         CompanyName = companyName ?? "";
         Gender = gender;
         PhoneNumber = phoneNumber ?? "";
@@ -113,7 +113,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         var teams = staff.TeamStaffs.Select(t => t.TeamId).ToList();
         var departmentStaff = staff.DepartmentStaffs.FirstOrDefault();
         UserDetailDto user = staff.User;
-        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, staff.Password, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name??"", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
+        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, staff.Password, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
     public static implicit operator StaffDto(Staff staff)
@@ -138,6 +138,14 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         CompanyName = companyName ?? "";
         Enabled = enabled;
         Address = address ?? new();
+    }
+
+    [MemberNotNull(nameof(Password))]
+    public void UpdatePassword(string password)
+    {
+        if (password is null) throw new UserFriendlyException("Password cannot be null");
+
+        Password = MD5Utils.EncryptRepeat(password);
     }
 
     public void AddDepartmentStaff(Guid departmentId)

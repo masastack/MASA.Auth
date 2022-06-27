@@ -137,12 +137,25 @@ public class CommandHandler
         await _userRepository.UpdateAsync(user);
     }
 
+    [EventHandler(1)]
+    public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
+        if (user is null)
+            throw new UserFriendlyException("The current user does not exist");
+
+        user.UpdatePassword(userDto.Password);
+        await _userRepository.UpdateAsync(user);
+    }
+
     [EventHandler]
     public async Task UserValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
         var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
         validateByAccountCommand.Result = user != null;
     }
+
     #endregion
 
     #region Staff
@@ -157,6 +170,18 @@ public class CommandHandler
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         await _staffDomainService.UpdateStaffAsync(command.Staff);
+    }
+
+    [EventHandler(1)]
+    public async Task UpdateStaffPasswordAsync(UpdateStaffPasswordCommand command)
+    {
+        var staffDto = command.Staff;
+        var staff = await _staffRepository.FindAsync(u => u.Id == staffDto.Id);
+        if (staff is null)
+            throw new UserFriendlyException("The current user does not exist");
+
+        staff.UpdatePassword(staffDto.Password);
+        await _staffRepository.UpdateAsync(staff);
     }
 
     [EventHandler]

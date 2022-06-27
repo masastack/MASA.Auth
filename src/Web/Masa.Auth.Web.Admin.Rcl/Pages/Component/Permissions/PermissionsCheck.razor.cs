@@ -8,6 +8,12 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 public partial class PermissionsCheck
 {
     [Parameter]
+    public string Style { get; set; } = "";
+
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter]
     public List<Guid> RoleIds { get; set; } = new();
 
     [Parameter]

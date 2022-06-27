@@ -71,6 +71,6 @@ public class UpdateStaffDto
 
     public static implicit operator UpdateStaffDto(StaffDetailDto staff)
     {
-        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId,staff.PositionId,staff.Position, staff.TeamIds, staff.Name,staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email,staff.Address, staff.Gender,new(staff.UserId, staff.RoleIds, staff.Permissions));
+        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, staff.TeamIds, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.Gender, new(staff.UserId, staff.RoleIds, staff.Permissions));
     }
 }

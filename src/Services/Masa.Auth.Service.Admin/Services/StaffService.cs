@@ -18,25 +18,56 @@ public class StaffService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<StaffDto>> GetListByDepartmentAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<List<StaffModel>> GetListByDepartmentAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new StaffsByDepartmentQuery(id);
         await eventBus.PublishAsync(query);
-        return query.Result;
+        return query.Result.Select(staff => ConvertToModel(staff)).ToList();
     }
 
-    private async Task<List<StaffDto>> GetListByTeamAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<List<StaffModel>> GetListByTeamAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new StaffsByTeamQuery(id);
         await eventBus.PublishAsync(query);
-        return query.Result;
+        return query.Result.Select(staff => ConvertToModel(staff)).ToList();
     }
 
-    private async Task<List<StaffDto>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<List<StaffModel>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new StaffsByRoleQuery(id);
         await eventBus.PublishAsync(query);
-        return query.Result;
+        return query.Result.Select(staff => ConvertToModel(staff)).ToList();
+    }
+
+    private StaffModel ConvertToModel(StaffDto staff)
+    {
+        return new StaffModel()
+        {
+            Id = staff.Id,
+            Department = staff.Department,
+            JobNumber = staff.JobNumber,
+            Position = staff.Position,
+            StaffType = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.StaffTypes>(staff.StaffType.ToString()),
+            User = new()
+            {
+                Id = staff.UserId,
+                Account = staff.Account,
+                Name = staff.Name,
+                DisplayName = staff.DisplayName,
+                IdCard = staff.IdCard,
+                CompanyName = staff.CompanyName,
+                PhoneNumber = staff.PhoneNumber,
+                Email = staff.Email,
+                Gender = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.GenderTypes>(staff.Gender.ToString()),
+                Avatar = staff.Avatar,
+                Department = staff.Department,
+                Position = staff.Position,
+                Address = new AddressValueModel
+                {
+                    Address = staff.Address.Address
+                }
+            }
+        };
     }
 
     private async Task<StaffDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
@@ -70,6 +101,12 @@ public class StaffService : RestServiceBase
         [FromBody] UpdateStaffDto staff)
     {
         await eventBus.PublishAsync(new UpdateStaffCommand(staff));
+    }
+
+    public async Task UpdateStaffPasswordAsync(IEventBus eventBus,
+    [FromBody] UpdateStaffPasswordDto staff)
+    {
+        await eventBus.PublishAsync(new UpdateStaffPasswordCommand(staff));
     }
 
     private async Task RemoveAsync(IEventBus eventBus,

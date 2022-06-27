@@ -7,27 +7,28 @@ public class SubjectService : RestServiceBase
 {
     public SubjectService(IServiceCollection services) : base(services, "api/subject")
     {
+        MapGet(GetListAsync, "list");
     }
 
-    private async Task<List<SubjectDto>> GetListAsync([FromServices] IEventBus eventBus, [FromQuery] string filter)
+    private async Task<List<SubjectModel>> GetListAsync([FromServices] IEventBus eventBus, [FromQuery] string filter)
     {
-        var result = new List<SubjectDto>();
+        var result = new List<SubjectModel>();
         //user
         var userQuery = new UserSelectQuery(filter);
         await eventBus.PublishAsync(userQuery);
-        var users = userQuery.Result.Select(user => new SubjectDto(user.Id, user.Name, user.DisplayName, user.Avatar, user.PhoneNumber, user.Email, BusinessTypes.User));
+        var users = userQuery.Result.Select(user => new SubjectModel(user.Id, user.Name, user.DisplayName, user.Avatar, user.PhoneNumber, user.Email, Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.SubjectTypes>(BusinessTypes.User.ToString())));
         //department
         var departmentQuery = new DepartmentSelectQuery(filter);
         await eventBus.PublishAsync(departmentQuery);
-        var departments = departmentQuery.Result.Select(department => new SubjectDto(department.Id, department.Name, department.Name, "", "", "", BusinessTypes.Department));
+        var departments = departmentQuery.Result.Select(department => new SubjectModel(department.Id, department.Name, department.Name, "", "", "", Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.SubjectTypes>(BusinessTypes.Department.ToString())));
         //team
         var teamQuery = new TeamSelectListQuery(filter);
         await eventBus.PublishAsync(teamQuery);
-        var teams = teamQuery.Result.Select(team => new SubjectDto(team.Id, team.Name, team.Name, team.Avatar, "", "", BusinessTypes.Team));
+        var teams = teamQuery.Result.Select(team => new SubjectModel(team.Id, team.Name, team.Name, team.Avatar, "", "", Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.SubjectTypes>(BusinessTypes.Team.ToString())));
         //role
         var roleQuery = new RoleSelectQuery(filter);
-        await eventBus.PublishAsync(teamQuery);
-        var roles = roleQuery.Result.Select(role => new SubjectDto(role.Id, role.Name, role.Name, "", "", "", BusinessTypes.Role));
+        await eventBus.PublishAsync(roleQuery);
+        var roles = roleQuery.Result.Select(role => new SubjectModel(role.Id, role.Name, role.Name, "", "", "", Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.SubjectTypes>(BusinessTypes.Role.ToString())));
 
         result.AddRange(users);
         result.AddRange(departments);

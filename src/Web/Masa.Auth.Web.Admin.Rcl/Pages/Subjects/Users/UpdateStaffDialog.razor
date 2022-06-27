@@ -61,7 +61,7 @@
                         <DefaultTextField Value="StaffDetail.Account" Readonly Label="@T("Account")" />
                     </MCol>
                     <MCol>
-                        <DefaultCopyPassword @bind-Value="StaffPassword.Password" />
+                        <DefaultCopyPassword Value="@StaffPassword.Password" ValueChanged="UpdateStaffPasswordAsync" />
                     </MCol>
                 </MRow>
 

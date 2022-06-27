@@ -80,7 +80,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
         IdCard = idCard;
         Account = account;
-        Password = password;
+        UpdatePassword(password);
         CompanyName = companyName;
         Department = department;
         Position = position;
@@ -150,7 +150,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Landline = landline;
     }
 
-    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string landline, string? email, string? position, string password, GenderTypes genderType)
+    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string landline, string? email, string? position, GenderTypes genderType)
     {
         Name = name;
         DisplayName = displayName ?? "";
@@ -158,9 +158,16 @@ public class User : FullAggregateRoot<Guid, Guid>
         PhoneNumber = phoneNumber ?? "";
         Email = email ?? "";
         Position = position ?? "";
-        Password = password;
         GenderType = genderType;
         Landline = landline;
+    }
+
+    [MemberNotNull(nameof(Password))]
+    public void UpdatePassword(string password)
+    {
+        if (password is null) throw new UserFriendlyException("Password cannot be null");
+
+        Password = MD5Utils.EncryptRepeat(password);
     }
 
     public void AddRoles(params Guid[] roleIds)

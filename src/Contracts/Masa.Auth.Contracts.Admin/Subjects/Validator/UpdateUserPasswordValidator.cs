@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-public class UpdateUserPasswordValidator : AbstractValidator<UpdateStaffPasswordDto>
+public class UpdateUserPasswordValidator : AbstractValidator<UpdateUserPasswordDto>
 {
     public UpdateUserPasswordValidator()
     {

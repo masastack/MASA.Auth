@@ -23,7 +23,7 @@ public class AuthDbContext : IsolationDbContext
             .HasDiscriminator<string>("Discriminator")
             .HasValue<ThirdPartyIdp>("ThirdParty")
             .HasValue<LdapIdp>("LDAP");
-       
+
         //foreach (var entityType in builder.Model.GetEntityTypes())
         //{
         //    if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))
