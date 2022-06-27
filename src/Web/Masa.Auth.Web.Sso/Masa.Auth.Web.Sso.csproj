@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Infrastructure\Models\**" />
-    <Content Remove="Infrastructure\Models\**" />
-    <EmbeddedResource Remove="Infrastructure\Models\**" />
-    <None Remove="Infrastructure\Models\**" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
 	<PackageReference Include="IdentityServer4" Version="4.1.2" />
 	<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
