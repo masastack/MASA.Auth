@@ -1,9 +1,13 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Sso;
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseKestrel(option =>
+{
+    option.ConfigureHttpsDefaults(options =>
+    options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -32,7 +36,7 @@ builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConf
     {
         options.UserInteraction.ErrorUrl = "/error/500";
     })
-    .AddDeveloperSigningCredential()
+    //.AddDeveloperSigningCredential()
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
     .AddCorsPolicyService<CorsPolicyService>()
