@@ -64,13 +64,19 @@ public partial class UpdateUserDialog
         if (success)
         {
             Loading = true;
-
             await UserService.UpdateAsync(User);
             OpenSuccessMessage(T("Update user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
+    }
+
+    public async Task UpdateUserPasswordAsync(string password)
+    {
+        UserPassword.Password = password;
+        await UserService.UpdateUserPasswordAsync(UserPassword);
+        OpenSuccessMessage(T("Password changed successfully"));
     }
 
     public async Task OpenRemoveUserDialog()

@@ -72,6 +72,13 @@ public partial class UpdateStaffDialog
         }
     }
 
+    public async Task UpdateStaffPasswordAsync(string password)
+    {
+        StaffPassword.Password = password;
+        await StaffService.UpdateStaffPasswordAsync(StaffPassword);
+        OpenSuccessMessage(T("Password changed successfully"));
+    }
+
     public async Task OpenRemoveStaffDialog()
     {
         var confirm = await OpenConfirmDialog(T("Are you sure delete staff data"));

@@ -5,27 +5,47 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public partial class PasswordConfirmation
 {
+    [Parameter]
     public bool Visible { get; set; }
 
-    public bool Value { get; set; }
+    [Parameter]
+    public EventCallback<bool> VisibleChanged { get; set; }
 
-    public EventCallback<bool> ValueChanged { get; set; }
+    [Parameter]
+    public EventCallback OnOk { get; set; }
 
-    public string? ConfirmText { get; set; }
+    [Parameter]
+    public EventCallback Cancel { get; set; }
+
+    [Parameter]
+    public string ConfirmText { get; set; } = "";
+
+    string WriteText { get; set; } = "";
+
+    List<string> ErrorMessages = new();
 
     public async Task CancelAsync() 
     {
-        Visible = false;
-        if (ValueChanged.HasDelegate)
-            await ValueChanged.InvokeAsync(false);
-        else Value = false;
+        if (Cancel.HasDelegate) await Cancel.InvokeAsync();
+        if (VisibleChanged.HasDelegate) await VisibleChanged.InvokeAsync(false);
+        else Visible = false;
+        ErrorMessages.Clear();
+        WriteText = "";
     }
 
     public async Task OkAsync()
-    {
-        Visible = false;
-        if (ValueChanged.HasDelegate)
-            await ValueChanged.InvokeAsync(true);
-        else Value = true;
+    {     
+        var confirm = ConfirmText == WriteText;
+        if(confirm is false)
+        {
+            ErrorMessages = new() { "Please enter as prompted." };
+        }
+        else if (confirm is true && OnOk.HasDelegate)
+        {
+            await OnOk.InvokeAsync();
+            if (VisibleChanged.HasDelegate) await VisibleChanged.InvokeAsync(false);
+            else Visible = false;
+            WriteText = "";
+        } 
     }
 }
