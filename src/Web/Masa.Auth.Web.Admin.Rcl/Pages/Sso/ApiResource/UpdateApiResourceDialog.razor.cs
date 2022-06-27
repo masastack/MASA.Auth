@@ -63,8 +63,8 @@ public partial class UpdateApiResourceDialog
             Loading = true;
             await ApiResourceService.UpdateAsync(ApiResource);
             OpenSuccessMessage("Update apiResource success");
-            await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

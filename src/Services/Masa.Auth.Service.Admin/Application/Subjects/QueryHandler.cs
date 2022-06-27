@@ -136,12 +136,7 @@ public class QueryHandler
                                     .Take(query.PageSize)
                                     .ToListAsync();
 
-        query.Result = new(total, staffs.Select(staff =>
-            {
-                var department = staff.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? ""; ;
-                return new StaffDto(staff.Id, staff.UserId, department, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
-            }
-        ).ToList());
+        query.Result = new(total, staffs.Select(staff => (StaffDto)staff).ToList());
     }
 
     [EventHandler]
@@ -182,7 +177,6 @@ public class QueryHandler
     public async Task GetStaffsByDepartmentAsync(StaffsByDepartmentQuery query)
     {
         var staffs = await _authDbContext.Set<Staff>()
-                                         .Include(staff => staff.User)
                                          .Include(staff => staff.DepartmentStaffs)
                                          .Where(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId))
                                          .ToListAsync();
@@ -194,7 +188,6 @@ public class QueryHandler
     public async Task GetStaffsByTeamAsync(StaffsByTeamQuery query)
     {
         var staffs = await _authDbContext.Set<Staff>()
-                                         .Include(staff => staff.User)
                                          .Include(staff => staff.TeamStaffs)
                                          .Where(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId))
                                          .ToListAsync();

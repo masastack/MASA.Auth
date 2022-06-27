@@ -109,8 +109,7 @@ public class SyncStaffDomainEvenHandler
                 oldStaff.Update(
                     position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
                     staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
-                    staff.PhoneNumber, staff.Email, oldStaff.Address,staff.Password,
-                    staff.Gender);
+                    staff.PhoneNumber, staff.Email, oldStaff.Address, staff.Gender);
                 staffRange.Add(oldStaff);
             }
         }

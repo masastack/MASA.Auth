@@ -64,7 +64,7 @@
                         break;
                     case "Action":
                         <MIcon Size="20" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
-                        <MIcon Size="20" Class="ml-7" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
+                        <MIcon Size="20" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
                         break;
                     default:
                         <span>@context.Value</span>
@@ -74,7 +74,7 @@
         </DefaultDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mb-2 mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <Pagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

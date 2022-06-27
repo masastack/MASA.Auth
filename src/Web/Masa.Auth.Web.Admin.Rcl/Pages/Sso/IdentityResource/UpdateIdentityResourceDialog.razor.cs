@@ -63,8 +63,8 @@ public partial class UpdateIdentityResourceDialog
             Loading = true;
             await IdentityResourceService.UpdateAsync(IdentityResource);
             OpenSuccessMessage("Update identityResource success");
-            await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

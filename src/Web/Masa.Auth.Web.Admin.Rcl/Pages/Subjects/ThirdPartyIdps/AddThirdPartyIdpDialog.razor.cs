@@ -55,8 +55,8 @@ public partial class AddThirdPartyIdpDialog
             Loading = true;
             await ThirdPartyIdpService.AddAsync(ThirdPartyIdp);
             OpenSuccessMessage(T("Add thirdPartyIdp success"));
-            await OnSubmitSuccess.InvokeAsync();
             await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }
