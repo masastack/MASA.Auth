@@ -53,7 +53,7 @@ public class UpdateStaffDomainEventHandler
         if (existStaff is not null)
         {
             if (string.IsNullOrEmpty(staffDto.PhoneNumber) is false && staffDto.PhoneNumber == existStaff.PhoneNumber)
-                throw new UserFriendlyException($"Staff with phone number {staffDto.PhoneNumber} already exists");                      
+                throw new UserFriendlyException($"Staff with phone number {staffDto.PhoneNumber} already exists");
             if (string.IsNullOrEmpty(staffDto.Email) is false && staffDto.Email == existStaff.Email)
                 throw new UserFriendlyException($"Staff with email {staffDto.Email} already exists");
             if (string.IsNullOrEmpty(staffDto.IdCard) is false && staffDto.IdCard == existStaff.IdCard)
@@ -64,7 +64,7 @@ public class UpdateStaffDomainEventHandler
 
         staff.Update(
             staffDto.PositionId, staffDto.StaffType, staffDto.Enabled, staffDto.Name,
-            staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, 
+            staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName,
             staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Gender);
         staff.AddDepartmentStaff(staffDto.DepartmentId);
         staff.AddTeamStaff(staffDto.Teams);

@@ -63,7 +63,7 @@ public class CommandHandler
 
         var user = await _userRepository.FindAsync(condition);
         if (user is not null)
-        {        
+        {
             if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == user.PhoneNumber)
                 throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
             if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == user.Landline)
@@ -111,7 +111,7 @@ public class CommandHandler
             if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == exitUser.PhoneNumber)
                 throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
             if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == exitUser.Landline)
-                throw new UserFriendlyException($"User with landline {userDto.Landline} already exists");           
+                throw new UserFriendlyException($"User with landline {userDto.Landline} already exists");
             if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == exitUser.Email)
                 throw new UserFriendlyException($"User with email {userDto.Email} already exists");
             if (string.IsNullOrEmpty(userDto.IdCard) is false && userDto.IdCard == exitUser.IdCard)
@@ -167,7 +167,7 @@ public class CommandHandler
         var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
         validateByAccountCommand.Result = user != null;
     }
-    
+
     #endregion
 
     #region Staff

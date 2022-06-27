@@ -39,7 +39,6 @@ global using Microsoft.AspNetCore.Components.Rendering;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
-global using System.Globalization;
 global using System.Net.Http.Headers;
 global using System.Net.Http.Json;
 global using System.Reflection;

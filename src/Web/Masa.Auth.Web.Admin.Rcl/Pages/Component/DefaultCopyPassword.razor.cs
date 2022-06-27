@@ -19,7 +19,7 @@ public partial class DefaultCopyPassword : DefaultTextField<string>
         base.Type = Type;
         AppendContent = builder =>
         {
-            if(Type == "text")
+            if (Type == "text")
             {
                 builder.OpenComponent<PCopyableText>(0);
                 builder.AddAttribute(1, "Class", "ml-n9");
@@ -36,6 +36,6 @@ public partial class DefaultCopyPassword : DefaultTextField<string>
         var value = RandomUtils.GenerateSpecifiedString(8, true);
         if (ValueChanged.HasDelegate)
             await ValueChanged.InvokeAsync(value);
-        else Value = value;       
+        else Value = value;
     }
 }

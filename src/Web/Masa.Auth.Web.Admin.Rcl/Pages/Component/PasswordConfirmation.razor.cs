@@ -24,7 +24,7 @@ public partial class PasswordConfirmation
 
     List<string> ErrorMessages = new();
 
-    public async Task CancelAsync() 
+    public async Task CancelAsync()
     {
         if (Cancel.HasDelegate) await Cancel.InvokeAsync();
         if (VisibleChanged.HasDelegate) await VisibleChanged.InvokeAsync(false);
@@ -34,9 +34,9 @@ public partial class PasswordConfirmation
     }
 
     public async Task OkAsync()
-    {     
+    {
         var confirm = ConfirmText == WriteText;
-        if(confirm is false)
+        if (confirm is false)
         {
             ErrorMessages = new() { "Please enter as prompted." };
         }
@@ -46,6 +46,6 @@ public partial class PasswordConfirmation
             if (VisibleChanged.HasDelegate) await VisibleChanged.InvokeAsync(false);
             else Visible = false;
             WriteText = "";
-        } 
+        }
     }
 }

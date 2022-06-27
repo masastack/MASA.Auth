@@ -53,7 +53,7 @@ public partial class AddPositionDialog
             await PositionService.AddAsync(Position);
             OpenSuccessMessage("Add position success");
             await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();            
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

@@ -67,7 +67,7 @@ public partial class UpdateStaffDialog
             await StaffService.UpdateAsync(Staff);
             OpenSuccessMessage("Update staff success");
             await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();           
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
     }

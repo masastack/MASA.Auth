@@ -41,14 +41,14 @@ public class StaffService : RestServiceBase
 
     private StaffModel ConvertToModel(StaffDto staff)
     {
-        return new StaffModel() 
-        { 
+        return new StaffModel()
+        {
             Id = staff.Id,
             Department = staff.Department,
             JobNumber = staff.JobNumber,
             Position = staff.Position,
             StaffType = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.StaffTypes>(staff.StaffType.ToString()),
-            User =new()
+            User = new()
             {
                 Id = staff.UserId,
                 Account = staff.Account,
