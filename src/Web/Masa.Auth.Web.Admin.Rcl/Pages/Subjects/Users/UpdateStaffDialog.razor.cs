@@ -67,9 +67,16 @@ public partial class UpdateStaffDialog
             await StaffService.UpdateAsync(Staff);
             OpenSuccessMessage("Update staff success");
             await UpdateVisible(false);
-            await OnSubmitSuccess.InvokeAsync();           
+            await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
+    }
+
+    public async Task UpdateStaffPasswordAsync(string password)
+    {
+        StaffPassword.Password = password;
+        await StaffService.UpdateStaffPasswordAsync(StaffPassword);
+        OpenSuccessMessage(T("Password changed successfully"));
     }
 
     public async Task OpenRemoveStaffDialog()

@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UpdateStaffPasswordDto
 {
-    public Guid StaffId { get; set; }
+    public Guid Id { get; set; }
 
     public string Password { get; set; } = "";
 
@@ -13,9 +13,9 @@ public class UpdateStaffPasswordDto
     {
     }
 
-    public UpdateStaffPasswordDto(Guid staffId, string password)
+    public UpdateStaffPasswordDto(Guid id, string password)
     {
-        StaffId = staffId;
+        Id = id;
         Password = password;
     }
 }

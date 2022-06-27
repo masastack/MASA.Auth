@@ -34,8 +34,19 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        private async Task<UserDto> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
+        private async Task<UserDto> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserModel model)
         {
+            var dto = new AddUserDto()
+            {
+                Account = model.Account,
+                Name = model.Name,
+                DisplayName = model.DisplayName ?? "",
+                IdCard = model.IdCard ?? "",
+                CompanyName = model.CompanyName ?? "",
+                PhoneNumber = model.PhoneNumber ?? "",
+                Email = model.Email ?? "",
+                Gender = Enum.Parse<GenderTypes>(model.Gender.ToString())
+            };
             dto.Enabled = true;
             dto.Password = DefaultUserAttributes.Password;
             if (dto.Gender == default) dto.Gender = GenderTypes.Male;
@@ -68,6 +79,12 @@ namespace Masa.Auth.Service.Admin.Services
             await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(dto));
         }
 
+        public async Task UpdateUserPasswordAsync(IEventBus eventBus,
+            [FromBody] UpdateUserPasswordDto dto)
+        {
+            await eventBus.PublishAsync(new UpdateUserPasswordCommand(dto));
+        }
+
         private async Task RemoveAsync(
             IEventBus eventBus,
             [FromBody] RemoveUserDto dto)
@@ -82,11 +99,41 @@ namespace Masa.Auth.Service.Admin.Services
             return validateCommand.Result;
         }
 
-        private async Task<UserDetailDto> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
+        private async Task<UserModel> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
         {
             var query = new FindUserByAccountQuery(account);
             await eventBus.PublishAsync(query);
-            return query.Result;
+            return ConvertToModel(query.Result);
+        }
+
+        private async Task<UserModel> FindByIdAsync(IEventBus eventBus, [FromQuery] Guid id)
+        {
+            var query = new UserDetailQuery(id);
+            await eventBus.PublishAsync(query);
+            return ConvertToModel(query.Result);
+        }
+
+        private UserModel ConvertToModel(UserDetailDto user)
+        {
+            return new UserModel()
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Account = user.Account,
+                DisplayName = user.DisplayName,
+                IdCard = user.IdCard,
+                CompanyName = user.CompanyName,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                Department = user.Department,
+                Gender = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.GenderTypes>(user.Gender.ToString()),
+                Avatar = user.Avatar,
+                Position = user.Position,
+                Address = new AddressValueModel
+                {
+                    Address = user.Address.Address
+                }
+            };
         }
 
         private async Task Visit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)

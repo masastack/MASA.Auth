@@ -71,12 +71,12 @@ public class SyncStaffDomainEvenHandler
                 {
                     oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender);
                     userRange.Add(oldUser);
-                }            
+                }
             }
         }
         if (syncResults.IsValid) return;
         if (userRange.Count > 0) await _userRepository.AddRangeAsync(userRange);
-        await _userDomainService.SetAsync(userRange.ToArray()); 
+        await _userDomainService.SetAsync(userRange.ToArray());
 
         //sync psoition
         var syncPsoitions = syncStaffs.Select(staff => staff.Position)
@@ -110,6 +110,7 @@ public class SyncStaffDomainEvenHandler
                     position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
                     staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
                     staff.PhoneNumber, staff.Email, oldStaff.Address, staff.Gender);
+                oldStaff.UpdatePassword(staff.Password);
                 staffRange.Add(oldStaff);
             }
         }

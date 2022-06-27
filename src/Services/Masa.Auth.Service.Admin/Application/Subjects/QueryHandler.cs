@@ -177,7 +177,9 @@ public class QueryHandler
     public async Task GetStaffsByDepartmentAsync(StaffsByDepartmentQuery query)
     {
         var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(s => s.Position)
                                          .Include(staff => staff.DepartmentStaffs)
+                                         .ThenInclude(departmentStaff => departmentStaff.Department)
                                          .Where(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId))
                                          .ToListAsync();
 
@@ -188,6 +190,9 @@ public class QueryHandler
     public async Task GetStaffsByTeamAsync(StaffsByTeamQuery query)
     {
         var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(s => s.Position)
+                                         .Include(staff => staff.DepartmentStaffs)
+                                         .ThenInclude(departmentStaff => departmentStaff.Department)
                                          .Include(staff => staff.TeamStaffs)
                                          .Where(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId))
                                          .ToListAsync();
@@ -199,6 +204,9 @@ public class QueryHandler
     public async Task GetStaffsByRoleAsync(StaffsByRoleQuery query)
     {
         var staffs = await _authDbContext.Set<Staff>()
+                                         .Include(s => s.Position)
+                                         .Include(staff => staff.DepartmentStaffs)
+                                         .ThenInclude(departmentStaff => departmentStaff.Department)
                                          .Include(staff => staff.User)
                                          .ThenInclude(user => user.Roles)
                                          .Where(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId))

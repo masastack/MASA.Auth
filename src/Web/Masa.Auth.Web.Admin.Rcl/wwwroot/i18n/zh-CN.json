@@ -65,6 +65,11 @@
   "Error Info": "错误信息",
   "Authorization certification": "授权认证",
   "SSO": "单点登录",
+  "Password changed successfully": "密码修改成功",
+  "Operational qualification": "操作确认",
+  "Please enter：": "请输入：",
+  "I confirm to change the password": "我确认修改密码",
+  "Enter \"{0}\" in the input box below to confirm the operation": "在下面的输入框中输入“{0}”以确认操作",
 
   "Organization": {
     "Organization": "组织架构",
