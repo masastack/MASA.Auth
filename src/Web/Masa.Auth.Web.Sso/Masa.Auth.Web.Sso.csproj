@@ -33,7 +33,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Models\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 

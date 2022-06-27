@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Web.Sso;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,6 +26,7 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
 builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthClient:Url"));
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 
+builder.Services.AddSameSiteCookiePolicy();
 builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
     .AddIdentityServer(options =>
     {
@@ -116,6 +119,7 @@ else
     app.UseHsts();
 }
 
+app.UseCookiePolicy();
 app.UseIdentityServer();
 // This cookie policy fixes login issues with Chrome 80+ using HHTP
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
