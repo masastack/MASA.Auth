@@ -9,6 +9,7 @@ using Masa.BuildingBlocks.Identity.IdentityModel;
 using Masa.Stack.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.IdentityModel.Logging;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,11 +32,11 @@ builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configu
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
-//builder.WebHost.UseKestrel(option =>
-//{
-//    option.ConfigureHttpsDefaults(options =>
-//    options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
-//});
+builder.WebHost.UseKestrel(option =>
+{
+    option.ConfigureHttpsDefaults(options =>
+    options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
+});
 
 IdentityModelEventSource.ShowPII = true;
 
