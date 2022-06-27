@@ -9,40 +9,28 @@ public class CommandHandler
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly ILdapIdpRepository _ldapIdpRepository;
-    readonly ITeamRepository _teamRepository;
     readonly StaffDomainService _staffDomainService;
-    readonly TeamDomainService _teamDomainService;
     readonly ILdapFactory _ldapFactory;
     readonly UserDomainService _userDomainService;
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<CommandHandler> _logger;
-    readonly IClient _aliyunClient;
-
-    string _bucket = "";
-    string _cdnEndpoint = "";
 
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
-        ITeamRepository teamRepository, StaffDomainService staffDomainService, TeamDomainService teamDomainService, ILdapFactory ldapFactory,
+        StaffDomainService staffDomainService, ILdapFactory ldapFactory,
         UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IConfiguration configuration, ILogger<CommandHandler> logger, IClient aliyunClient, DaprClient daprClient)
+        IConfiguration configuration, ILogger<CommandHandler> logger)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
-        _teamRepository = teamRepository;
         _staffDomainService = staffDomainService;
-        _teamDomainService = teamDomainService;
         _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapIdpRepository = ldapIdpRepository;
         _configuration = configuration;
         _logger = logger;
-        _aliyunClient = aliyunClient;
-
-        _bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.FirstOrDefault().Value;
-        _cdnEndpoint = _configuration.GetValue<string>("CdnEndpoint");
     }
 
     #region User
@@ -250,71 +238,6 @@ public class CommandHandler
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
         await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
-    }
-
-    #endregion
-
-    #region Team
-
-    [EventHandler]
-    public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
-    {
-        var dto = addTeamCommand.AddTeamDto;
-        var teamId = Guid.NewGuid();
-        var avatarName = $"{teamId}.png";
-
-        var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
-        await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
-
-        Team team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
-        await _teamRepository.AddAsync(team);
-        await _teamRepository.UnitOfWork.SaveChangesAsync();
-
-        await _teamDomainService.SetTeamAdminAsync(team, dto.AdminStaffs, dto.AdminRoles, dto.AdminPermissions);
-        await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
-    }
-
-    [EventHandler]
-    public async Task UpdateTeamBasicInfoAsync(UpdateTeamBasicInfoCommand updateTeamBasicInfoCommand)
-    {
-        var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
-        var team = await _teamRepository.GetByIdAsync(dto.Id);
-        var avatarName = $"{team.Id}.png";
-        if ((team.Avatar.Name != dto.Avatar.Name && team.Avatar.Color != dto.Avatar.Color) ||
-                string.IsNullOrWhiteSpace(team.Avatar.Url))
-        {
-            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
-            await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
-        }
-        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
-        await _teamRepository.UpdateAsync(team);
-    }
-
-    [EventHandler]
-    public async Task UpdateTeamAdminAsync(UpdateTeamPersonnelCommand updateTeamPersonnelCommand)
-    {
-        var dto = updateTeamPersonnelCommand.UpdateTeamPersonnelDto;
-        var team = await _teamRepository.GetByIdAsync(dto.Id);
-        if (updateTeamPersonnelCommand.MemberType == TeamMemberTypes.Admin)
-        {
-            await _teamDomainService.SetTeamAdminAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
-        }
-        else
-        {
-            await _teamDomainService.SetTeamMemberAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
-        }
-    }
-
-
-    [EventHandler]
-    public async Task RemoveTeamAsync(RemoveTeamCommand removeTeamCommand)
-    {
-        var team = await _teamRepository.GetByIdAsync(removeTeamCommand.TeamId);
-        if (team.TeamStaffs.Any())
-        {
-            throw new UserFriendlyException("the team has staffs can`t delete");
-        }
-        await _teamRepository.RemoveAsync(team);
     }
 
     #endregion
