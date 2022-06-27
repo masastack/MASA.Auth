@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Components.Rendering
 @inherits LayoutComponentBase
 @inject GlobalConfig GlobalConfig
-@implements IDisposable
 
 <Layout AppId="Masa_Auth_Web"
         UserCenterRoute="/user"
@@ -21,15 +20,5 @@
         PopupService.AlertAsync(exception.Message, AlertTypes.Error);
         GlobalConfig.Loading = false;
         return Task.CompletedTask;
-    }
-
-    protected override void OnInitialized()
-    {
-        GlobalConfig.OnPageModeChanged += base.StateHasChanged;
-    }
-
-    public void Dispose()
-    {
-        GlobalConfig.OnPageModeChanged -= base.StateHasChanged;
     }
 }

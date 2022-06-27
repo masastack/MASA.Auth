@@ -69,18 +69,12 @@ builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();
 
-var clientUrl = builder.Configuration.GetValue<string>("WebUrl");
-var client = new Client(ClientTypes.Web, "masa.auth.admin.web", "Masa Auth Web");
-client.SetAllowedScopes(new List<string> { "openid", "profile" });
-client.SetPostLogoutRedirectUris(new List<string> { $"{clientUrl}/signout-callback-oidc" });
-client.SetRedirectUris(new List<string> { $"{clientUrl}/signin-oidc" });
-
 var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddOidcCache(option);
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:OidcConnection"],
     b => b.MigrationsAssembly(migrationsAssembly)))
-    .SeedClientData(new List<Client> { client });
+    .SeedClientData(new List<Client> { builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>() });
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
