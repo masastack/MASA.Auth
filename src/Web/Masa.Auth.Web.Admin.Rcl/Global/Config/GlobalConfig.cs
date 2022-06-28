@@ -29,21 +29,21 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
 
         public static string FavoriteCookieKey { get; set; } = "GlobalConfig_Favorite";
 
-        public I18nConfig? I18nConfig { get; set; }
+        //public I18nConfig? I18nConfig { get; set; }
 
         private CookieStorage? CookieStorage { get; set; }
 
-        public string? Language
-        {
-            get => I18nConfig?.Language;
-            set
-            {
-                if (I18nConfig is not null)
-                {
-                    I18nConfig.Language = value;
-                }
-            }
-        }
+        //public string? Language
+        //{
+        //    get => I18nConfig?.Language;
+        //    set
+        //    {
+        //        if (I18nConfig is not null)
+        //        {
+        //            I18nConfig.Language = value;
+        //        }
+        //    }
+        //}
 
         public bool IsDark
         {
@@ -126,10 +126,10 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
 
         #endregion
 
-        public GlobalConfig(CookieStorage cookieStorage, I18nConfig i18nConfig, IHttpContextAccessor httpContextAccessor)
+        public GlobalConfig(CookieStorage cookieStorage, IHttpContextAccessor httpContextAccessor)
         {
             CookieStorage = cookieStorage;
-            I18nConfig = i18nConfig;
+            //I18nConfig = i18nConfig;
             if (httpContextAccessor.HttpContext is not null) Initialization(httpContextAccessor.HttpContext.Request.Cookies);
         }
 
