@@ -4,7 +4,7 @@
     <MForm Model=CustomLogin EnableValidation @ref="Form">
         <AutoHeight Overflow>
             <HeaderContent>
-                <div class="d-flex mb-12">
+                <div class="d-flex">
                     <div class="mx-auto">
                         <LabeledRadioGroup @bind-Value="Tab" Dense>
                             @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
@@ -19,39 +19,39 @@
             </HeaderContent>
             <AutoHeightContent>
                 <MWindow Value="Tab" Class="full-height">
-                    <MWindowItem Value="CustomLoginTab.BasicInformation" Class="mt-6">
+                    <MWindowItem Value="CustomLoginTab.BasicInformation" Class="my-12">
                         @if (ClientSelectRef?.Client?.LogoUri is not null)
                         {
-                            <div class="d-flex mb-13">
+                            <div class="d-flex mb-12">
                                 <MAvatar Class="mx-auto" Size=80>
                                     <img src="@ClientSelectRef?.Client?.LogoUri" />
                                 </MAvatar>
                             </div>
                         }
-                        <MRow Class="mb-12">
-                            <MCol Class="py-0">
+                        <MRow Class="mb-6">
+                            <MCol>
                                 <DefaultTextField @bind-Value="CustomLogin.Name" Label="@T("CustomLogin.Name")" />
                             </MCol>
-                            <MCol Class="py-0">
+                            <MCol>
                                 <DefaultTextField @bind-Value="CustomLogin.Title" Label="@T("Title")" />
                             </MCol>
                         </MRow>
                         <MRow>
-                            <MCol Class="py-0">
+                            <MCol>
                                 <ClientSelect @ref="ClientSelectRef" @bind-Value="CustomLogin.ClientId" />
                             </MCol>
                         </MRow>
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Login" Class="mt-6">
+                    <MWindowItem Value="CustomLoginTab.Login" Class="my-12">
                         <ConfigLogin @bind-Value="CustomLogin.ThirdPartyIdps" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Register" Class="mt-6">
+                    <MWindowItem Value="CustomLoginTab.Register" Class="my-12">
                         <ConfigRegister @bind-Value="CustomLogin.RegisterFields" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
                 </MWindow>
             </AutoHeightContent>
             <FooterContent>
-                <div class="d-flex mt-6">
+                <div class="d-flex">
                     <EnableSwitch @bind-Value="CustomLogin.Enabled" />
                     <MSpacer></MSpacer>
                     @if (Tab != CustomLoginTab.BasicInformation)
