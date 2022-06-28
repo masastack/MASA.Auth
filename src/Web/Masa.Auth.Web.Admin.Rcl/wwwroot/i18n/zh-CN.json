@@ -352,6 +352,7 @@
     "Account is required": "账号必须填写",
     "Password is required": "密码必须填写",
     "Name is required": null,
-    "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数"
+    "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数",
+    "The password is inconsistent with the confirm password": "密码和确认密码不一致"
   }
 }

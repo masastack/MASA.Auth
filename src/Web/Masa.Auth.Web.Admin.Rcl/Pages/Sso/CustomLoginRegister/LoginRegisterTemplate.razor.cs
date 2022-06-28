@@ -26,7 +26,7 @@ public partial class LoginRegisterTemplate
 
     protected override void OnInitialized()
     {
-        Tab = T(CustomLoginTab.Login);
+        Tab ??= CustomLoginTab.Login;
     }
 
     protected override void OnParametersSet()

@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <div class="d-flex" style="height:685px;">
-    <LoginRegisterTemplate Tab=CustomLoginTab.Register Logo="@Logo" Title="@Title" RegisterFields="Value.Where(v => v.RegisterFieldType!=default).ToList()" />
+    <LoginRegisterTemplate Tab=@CustomLoginTab.Register Logo="@Logo" Title="@Title" RegisterFields="Value.Where(v => v.RegisterFieldType!=default).ToList()" />
     <div style="border: 1px solid #E2E7F4;" class="mx-12 full-height" />
     <div class="my-5 overflow-y" style="width:100%">
         <MRow>
