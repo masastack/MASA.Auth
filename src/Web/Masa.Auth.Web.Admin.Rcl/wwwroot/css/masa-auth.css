@@ -135,10 +135,10 @@
         border-radius: 10px !important;
     }
 
-.m-card__text {
+/*.m-card__text {
     padding: 16px 24px;
     height: 100%;
-}
+}*/
 
 .m-input fieldset {
     border-radius: 10px !important;
@@ -456,17 +456,17 @@
     height: 48px !important;
 }
 
-.m-text-field--outlined:not(.m-textarea) fieldset {
-    height: 53px !important;
-}
+    .m-text-field--outlined:not(.m-textarea) fieldset {
+        height: 53px !important;
+    }
 
 .m-select.m-text-field--outlined .m-label {
     top: 14px !important;
 }
 
-.m-select.m-text-field--outlined .m-label.m-label--active {
-    top: 18px !important;
-}
+    .m-select.m-text-field--outlined .m-label.m-label--active {
+        top: 18px !important;
+    }
 
 .m-text-field--outlined .m-text-field__details {
     margin-top: -5px !important;
@@ -849,9 +849,18 @@ input::-webkit-input-placeholder {
     padding-bottom: 2px;
 }
 
-.m-input.mx-auto .m-text-field__slot input {
-    text-align: center;
-}
+    .m-input.mx-auto .m-text-field__slot input {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        /* identical to box height, or 150% */
+        text-align: center;
+        letter-spacing: 0.01em;
+        /* text/1-2强调 */
+        color: #323D6F;
+    }
 
 .m-input.mx-auto .m-input__slot::before {
     border-color: #E2E7F4 !important;
@@ -888,48 +897,6 @@ input::-webkit-input-placeholder {
 .justify-center.m-input--checkbox > .m-input__control {
     flex-grow: 0 !important;
     width: auto !important;
-}
-
-.elevation-tab {
-    background-color: #F0F3FA !important;
-    padding: 3px;
-}
-
-.m-item-group.elevation-tab .m-btn.m-btn--has-bg.m-btn--active {
-    background-color: white !important;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 16px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    letter-spacing: 0.1px;
-    /* text/1-2强调 */
-
-    color: #323D6F;
-}
-
-.elevation-tab .theme--light.m-btn--active:hover::before, .elevation-tab .theme--light.m-btn--active::before {
-    opacity: 0;
-}
-
-.m-item-group.elevation-tab .m-btn.m-btn--has-bg {
-    background-color: #F0F3FA !important;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height, or 150% */
-
-    display: flex;
-    align-items: center;
-    text-align: center;
-    /* text/2-2正文 */
-
-    color: #7681AB;
 }
 
 .remover-hover.m-list-item:hover::before {
@@ -1016,29 +983,29 @@ input::-webkit-input-placeholder {
     border-radius: 20px;
 }
 
-.login .m-tabs-slider-wrapper {
-    top: 0;
-    height: 4px !important;
-}
+    .login .m-tabs-slider-wrapper {
+        top: 0;
+        height: 4px !important;
+    }
 
-.login .m-slide-group__wrapper {
-    height: 70px !important;
-}
+    .login .m-slide-group__wrapper {
+        height: 70px !important;
+    }
 
 .uploadImage {
     cursor: pointer;
 }
 
-.uploadImage input[type=file] {
-    opacity: 0;
-    pointer-events: none;
-    width: 0;
-    max-width: 0;
-}
+    .uploadImage input[type=file] {
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
+        max-width: 0;
+    }
 
 .margin-border {
     border: 1px solid #E2E7F4;
-    border-radius: 8px;    
+    border-radius: 8px;
 }
 
 .m-text-field.m-input--is-disabled .m-input__slot::before {

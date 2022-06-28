@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<MCardText>
+<MCardText Class="py-0">
     <PlaceholderTextFiled Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Team Name")" />
     <MListItem class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Height=80 Width=80>
@@ -17,11 +17,11 @@
     </MListItem>
     <MSelect class="mt-12" @bind-Value="@Value.Type" Dense
              Label="@T("Team Type")"
-             Outlined
+             Outlined HideDetails="true"
              Items="@_teamTypes"
              ItemText="u => u.Name"
              ItemValue="u => u.Id">
     </MSelect>
-    <MTextarea class="mt-12" Label="@T("Description")" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
+    <MTextarea class="mt-12" Label="@T("Description")" HideDetails="true" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
     </MTextarea>
 </MCardText>

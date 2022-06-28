@@ -89,6 +89,8 @@ public class QueryHandler
                     .Select(p => new PermissionNavDto
                     {
                         Name = p.Name,
+                        Icon = p.Icon,
+                        Url = p.Url,
                         Code = p.Id.ToString(),
                         Children = GetChildren(p.Id, menuPermissions)
                     }).ToList();
@@ -101,6 +103,8 @@ public class QueryHandler
         return all.Where(p => p.ParentId == parentId).Select(p => new PermissionNavDto
         {
             Name = p.Name,
+            Icon = p.Icon,
+            Url = p.Url,
             Code = p.Id.ToString(),
             Children = GetChildren(p.Id, all)
         }).ToList();
