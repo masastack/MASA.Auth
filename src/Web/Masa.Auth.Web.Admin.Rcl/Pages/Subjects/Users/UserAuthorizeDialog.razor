@@ -11,7 +11,8 @@
             <div class="global-nav" style="display: flex;height: auto">
                 <PermissionsCheck RoleIds=Authorization.Roles
                                   Value="@(Authorization.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
-                                  ValueChanged="PermissionsChanged" />
+                                  ValueChanged="PermissionsChanged" 
+                                  Style="max-height:calc(100vh - 300px);" />
             </div>
         </AutoHeightContent>
         <FooterContent>

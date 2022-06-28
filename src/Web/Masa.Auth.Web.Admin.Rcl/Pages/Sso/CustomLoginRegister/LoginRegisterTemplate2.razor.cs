@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister;
 
-public partial class LoginRegisterTemplate
+public partial class LoginRegisterTemplate2
 {
     [Parameter]
     public string? Logo { get; set; }
@@ -18,16 +18,11 @@ public partial class LoginRegisterTemplate
     public List<RegisterFieldDto> RegisterFields { get; set; } = new();
 
     [Parameter]
-    public string Tab { get; set; } = "";
+    public StringNumber Tab { get; set; } = CustomLoginTab.Login;
 
     LoginModel Login { get; set; } = new();
 
     RegisterModel Register { get; set; } = new();
-
-    protected override void OnInitialized()
-    {
-        Tab = T(CustomLoginTab.Login);
-    }
 
     protected override void OnParametersSet()
     {

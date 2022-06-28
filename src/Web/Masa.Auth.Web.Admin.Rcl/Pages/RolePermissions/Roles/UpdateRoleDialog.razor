@@ -27,7 +27,8 @@
                         <div class="global-nav" style="display: flex;height: auto">
                             <PermissionsCheck RoleIds=Role.ChildrenRoles
                                           Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
-                                          ValueChanged="PermissionsChanged" />
+                                          ValueChanged="PermissionsChanged"
+                                          Style="max-height:calc(100vh - 300px);" />
                         </div>
                     </MWindowItem>
                 </MWindow>

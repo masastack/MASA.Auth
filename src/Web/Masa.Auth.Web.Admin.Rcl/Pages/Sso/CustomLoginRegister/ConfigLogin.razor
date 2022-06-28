@@ -1,10 +1,10 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex">
+<div class="d-flex" style="height:685px;">
     <LoginRegisterTemplate Tab=CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="Value.Where(v => v.Id!=default).Select(v => ThirdPartyIdps.FirstOrDefault(tp => tp.Id==v.Id)).ToList()" />
-    <div style="border: 1px solid #E2E7F4;height: 720px;" class="mx-12" />
+    <div style="border: 1px solid #E2E7F4;" class="mx-12 full-height" />
     <div class="mt-5 full-height flex-column" style="width:100%">
-        <div class="overflow-y" style="max-height:700px">
+        <div class="overflow-y">
             <MRow>
                 <MCol Cols="6">
                     <span class="body2 regular3--text">
