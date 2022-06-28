@@ -19,6 +19,7 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<DateTime?, DateOnly?>.NewConfig().MapWith(src => src.HasValue ? DateOnly.FromDateTime(src.Value) : null);
 
         TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
+        TypeAdapterConfig<ClientModel, Client>.NewConfig().MapToConstructor(true);
 
         TypeAdapterConfig<LdapDetailDto, LdapOptions>.ForType()
             .Map(dest => dest.ServerPort, src => src.IsLdaps ? 0 : src.ServerPort)
