@@ -102,13 +102,13 @@ public static class FluentValidationExtensions
                         .WithMessage("{PropertyName} is required");
     }
 
-    public static IRuleBuilderOptions<T, TProperty> RequiredIf<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, Func<T,bool> condition)
+    public static IRuleBuilderOptions<T, TProperty> RequiredIf<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, Func<T, bool> condition)
     {
         return ruleBuilder.Must((register, value) =>
                         {
                             if (condition(register))
                             {
-                                if(value is string stringValue) return string.IsNullOrEmpty(stringValue) is false;
+                                if (value is string stringValue) return string.IsNullOrEmpty(stringValue) is false;
                                 else return value is not null;
                             }
                             return true;
