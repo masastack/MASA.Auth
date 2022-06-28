@@ -8,50 +8,39 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
     public RegisterValidator()
     {
         RuleFor(register => register.Account).Required().ChineseLetterNumber();
+
         RuleFor(register => register.Password).Required()
                                       .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
                                       .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
                                       .MaxLength(30);
-        RuleFor(register => register.DisplayName).Must((register, displayName) =>
-        {
-            if (register.CheckRequired(nameof(RegisterModel.DisplayName)))
-            {
-                return string.IsNullOrEmpty(displayName) is false;
-            }
-            return true;
-        }).ChineseLetter().MaxLength(20);
-        RuleFor(register => register.Name).Must((register, name) =>
-        {
-            if (register.CheckRequired(nameof(RegisterModel.Name)))
-            {
-                return string.IsNullOrEmpty(name) is false;
-            }
-            return true;
-        }).ChineseLetter().MaxLength(20);
-        RuleFor(register => register.PhoneNumber).Must((register, phoneNumber) =>
-        {
-            if (register.CheckRequired(nameof(RegisterModel.PhoneNumber)))
-            {
-                return string.IsNullOrEmpty(phoneNumber) is false;
-            }
-            return true;
-        }).Phone();
-        RuleFor(register => register.Email).Must((register, email) =>
-        {
-            if (register.CheckRequired(nameof(RegisterModel.Email)))
-            {
-                return string.IsNullOrEmpty(email) is false;
-            }
-            return true;
-        }).Email();
-        RuleFor(register => register.IdCard).Must((register, idCard) =>
-        {
-            if (register.CheckRequired(nameof(RegisterModel.IdCard)))
-            {
-                return string.IsNullOrEmpty(idCard) is false;
-            }
-            return true;
-        }).IdCard();
+
+        RuleFor(register => register.ConfirmPassword)
+          .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.ConfirmPassword)))
+          .Must((register, value) => register.ConfirmPassword == register.Password)
+          .WithMessage("The password is inconsistent with the confirm password")
+          .Matches(@"^\s{0}$|^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
+          .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
+          .MaxLength(30);
+
+        RuleFor(register => register.DisplayName)
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.DisplayName)))
+            .ChineseLetter().MaxLength(20);
+
+        RuleFor(register => register.Name)
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Name)))
+            .ChineseLetter().MaxLength(20);
+
+        RuleFor(register => register.PhoneNumber)
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.PhoneNumber)))
+            .Phone();
+
+        RuleFor(register => register.Email)
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Email)))
+            .Email();
+
+        RuleFor(register => register.IdCard)
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.IdCard)))
+            .IdCard();
     }
 }
 

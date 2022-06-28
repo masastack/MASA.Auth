@@ -18,11 +18,16 @@ public partial class LoginRegisterTemplate
     public List<RegisterFieldDto> RegisterFields { get; set; } = new();
 
     [Parameter]
-    public StringNumber Tab { get; set; } = CustomLoginTab.Login;
+    public string Tab { get; set; } = "";
 
     LoginModel Login { get; set; } = new();
 
     RegisterModel Register { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        Tab ??= CustomLoginTab.Login;
+    }
 
     protected override void OnParametersSet()
     {
