@@ -101,7 +101,7 @@ public class QueryHandler
         return all.Where(p => p.ParentId == parentId).Select(p => new PermissionNavDto
         {
             Name = p.Name,
-            Code = p.Code,
+            Code = p.Id.ToString(),
             Children = GetChildren(p.Id, all)
         }).ToList();
     }

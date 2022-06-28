@@ -76,7 +76,7 @@ builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configur
     b => b.MigrationsAssembly(migrationsAssembly)))
     .SeedClientData(new List<Client> { builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>() });
 
-var app = builder.Services
+builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
@@ -125,8 +125,9 @@ var app = builder.Services
             isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT_KEY),
             dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseRepository<AuthDbContext>();
-    })
-    .AddServices(builder);
+    });
+builder.Services.RemoveAll(typeof(IProcessor));
+var app = builder.Services.AddServices(builder);
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {
