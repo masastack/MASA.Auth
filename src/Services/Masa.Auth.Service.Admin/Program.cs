@@ -37,20 +37,20 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
     options.UserId = "sub";
 });
 
-//builder.Services.AddAuthorization();
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer("Bearer", options =>
-//{
-//    options.Authority = builder.Configuration["IdentityServerUrl"];
-//    options.RequireHttpsMetadata = false;
-//    //options.Audience = "";
-//    options.TokenValidationParameters.ValidateAudience = false;
-//    options.MapInboundClaims = false;
-//});
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer("Bearer", options =>
+{
+    options.Authority = builder.Configuration["IdentityServerUrl"];
+    options.RequireHttpsMetadata = false;
+    //options.Audience = "";
+    options.TokenValidationParameters.ValidateAudience = false;
+    options.MapInboundClaims = false;
+});
 
 //builder.AddMasaConfiguration(configurationBuilder =>
 //{
@@ -155,8 +155,8 @@ if (!app.Environment.IsProduction())
 }
 app.UseRouting();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
