@@ -82,6 +82,7 @@ public partial class IdentityResource
     {
         Loading = true;
         await IdentityResourceService.AddStandardIdentityResourcesAsync();
+        OpenSuccessMessage(T("Add standard identityResource data success"));
         await GetIdentityResourcesAsync();
         Loading = false;
     }

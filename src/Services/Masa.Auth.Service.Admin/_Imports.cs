@@ -106,3 +106,6 @@ global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using Client = Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using Masa.BuildingBlocks.Authentication.Oidc.Cache.Caches;
+//global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum;

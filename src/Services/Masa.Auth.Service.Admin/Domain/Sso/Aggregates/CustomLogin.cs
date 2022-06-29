@@ -5,7 +5,6 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 {
     public class CustomLogin : FullAggregateRoot<int, Guid>
     {
-        private Client? _client;
         private List<CustomLoginThirdPartyIdp> _thirdPartyIdps = new();
         private List<RegisterField> _registerFields = new();
         private User? _createUser;
@@ -15,11 +14,11 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public string Title { get; private set; }
 
-        public int ClientId { get; private set; }
+        public string ClientId { get; private set; }
 
         public bool Enabled { get; private set; }
 
-        public Client Client => _client ?? throw new UserFriendlyException("Failed to get client data");
+        public Client? Client { get; set; }
 
         public IReadOnlyCollection<CustomLoginThirdPartyIdp> ThirdPartyIdps => _thirdPartyIdps;
 
@@ -29,30 +28,13 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public User? ModifyUser => _modifyUser;
 
-        public CustomLogin(string name, string title, int clientId, bool enabled)
+        public CustomLogin(string name, string title, string clientId, bool enabled)
         {
             Name = name;
             Title = title;
             ClientId = clientId;
             Enabled = enabled;
-        }
-
-        public static implicit operator CustomLoginDetailDto(CustomLogin customLogin)
-        {
-            var client = new ClientDto
-            {
-                Id = customLogin.Client.Id,
-                ClientId = customLogin.Client.ClientId,
-                Enabled = customLogin.Enabled,
-                ClientName = customLogin.Client.ClientName,
-                ClientType = customLogin.Client.ClientType,
-                Description = customLogin.Client.Description,
-                LogoUri = customLogin.Client.LogoUri,
-            };
-            var thirdPartyIdps = customLogin.ThirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdpDto(tp.ThirdPartyIdpId, tp.Sort)).ToList();
-            var registerFields = customLogin.RegisterFields.Select(rf => new RegisterFieldDto(rf.RegisterFieldType, rf.Sort, rf.Required)).ToList();
-            return new CustomLoginDetailDto(customLogin.Id, customLogin.Name, customLogin.Title, client, customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "", thirdPartyIdps, registerFields); ;
-        }
+        }       
 
         public void Update(string name, string title, bool enabled)
         {

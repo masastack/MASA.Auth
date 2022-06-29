@@ -980,13 +980,20 @@ input::-webkit-input-placeholder {
 }
 
 .sheetDialogPadding {
-    padding-left: 204px;
-    padding-right: 204px;
-    padding-bottom: 24px;
-    padding-top: 24px;
+    padding-left: 228px;
+    padding-right: 228px;
+    padding-bottom: 48px;
+    padding-top: 48px;
     height: 100%;
     width: 100%;
     position: absolute;
+}
+
+.sheetDialogPadding .m-stepper__content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
 }
 
 .m-stepper__content.full-height .m-stepper__wrapper {

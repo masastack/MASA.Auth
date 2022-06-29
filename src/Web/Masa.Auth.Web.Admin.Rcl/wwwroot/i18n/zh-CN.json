@@ -273,9 +273,11 @@
     "Standard": "标准",
     "Customize": "自定义",
     "Create standard userClaims": "创建标准的用户申明",
+    "Add standard userClaim data success": "创建标准的用户申明成功",
     "Add UserClaim": "新增用户声明",
     "Update UserClaim": "编辑用户声明",
-    "Delete UserClaim": "删除用户声明"
+    "Delete UserClaim": "删除用户声明",
+    "Are you sure delete userClaim data": "确定删除用户声明吗"
   },
   "IdentityResource": {
     "IdentityResource": "身份资源",
@@ -283,11 +285,13 @@
     "ShowInDiscoveryDocument": "在文档中展示",
     "Add IdentityResource": "新增身份资源",
     "Create standard identityResource": "创建标准的身份资源",
+    "Add standard identityResource data success": "创建标准的身份资源成功",
     "Update IdentityResource": "编辑身份资源",
     "IdentityResource.Name": "配置名称",
     "IdentityResource.Required": "是否必须",
     "User Claims": "用户声明",
-    "Delete IdentityResource": "删除身份资源"
+    "Delete IdentityResource": "删除身份资源",
+    "Are you sure delete identityResource data": "确定删除身份资源吗"
   },
   "ApiScope": {
     "ApiScope": "Api范围",
@@ -296,7 +300,8 @@
     "Update ApiScope": "编辑Api范围",
     "ApiScope.Name": "配置名称",
     "ApiScope.Required": "是否必须",
-    "Delete ApiScope": "删除Api范围"
+    "Delete ApiScope": "删除Api范围",
+    "Are you sure delete apiScope data": "确定删除Api范围吗"
   },
   "ApiResource": {
     "ApiResource": "Api资源",
@@ -304,7 +309,8 @@
     "Update ApiResource": "编辑Api资源",
     "ApiResource.Name": "配置名称",
     "ApiResource.Required": "是否必须",
-    "Delete ApiResource": "删除Api资源"
+    "Delete ApiResource": "删除Api资源",
+    "Are you sure delete apiResource data": "确定删除Api资源吗"
   },
   "Client": {
     "Client": "客户端",
@@ -351,7 +357,7 @@
   "Validation": {
     "Account is required": "账号必须填写",
     "Password is required": "密码必须填写",
-    "Name is required": null,
+    "Name is required": "名称必须填写",
     "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数",
     "The password is inconsistent with the confirm password": "密码和确认密码不一致"
   }

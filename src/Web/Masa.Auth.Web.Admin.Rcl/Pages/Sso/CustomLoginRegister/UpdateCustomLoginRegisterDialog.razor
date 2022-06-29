@@ -19,16 +19,13 @@
             </HeaderContent>
             <AutoHeightContent>
                 <MWindow Value="Tab" Class="full-height">
-                    <MWindowItem Value="CustomLoginTab.BasicInformation" Class="mt-6">
-                        @if (ClientSelectRef?.Client?.LogoUri is not null)
-                        {
-                            <div class="d-flex">
-                                <MAvatar Class="mx-auto" Size=80>
-                                    <img src="@ClientSelectRef?.Client?.LogoUri" />
-                                </MAvatar>
-                            </div>
-                        }
-                        <MRow Class="my-4">
+                    <MWindowItem Value="CustomLoginTab.BasicInformation" Class="my-12">
+                        <div class="d-flex mb-12">
+                            <MAvatar Class="mx-auto" Size=80>
+                                <img src="@CustomLoginDetail.Client.LogoUri" />
+                            </MAvatar>
+                        </div>
+                        <MRow Class="mb-6">
                             <MCol>
                                 <DefaultTextField @bind-Value="CustomLogin.Name" Label="@T("CustomLogin.Name")" />
                             </MCol>
@@ -38,20 +35,20 @@
                         </MRow>
                         <MRow>
                             <MCol>
-                                <ClientSelect @ref="ClientSelectRef" Value="CustomLoginDetail.Client.Id" Disabled />
+                                <ClientSelect Value="@CustomLoginDetail.Client.ClientId" Disabled />
                             </MCol>
                         </MRow>
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Login" Class="mt-6">
-                        <ConfigLogin @bind-Value="CustomLogin.ThirdPartyIdps" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
+                    <MWindowItem Value="CustomLoginTab.Login" Class="my-12">
+                        <ConfigLogin @bind-Value="CustomLogin.ThirdPartyIdps" Logo="@CustomLoginDetail.Client.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Register" Class="mt-6">
-                        <ConfigRegister @bind-Value="CustomLogin.RegisterFields" Logo="@ClientSelectRef?.Client?.LogoUri" Title="@CustomLogin.Title" />
+                    <MWindowItem Value="CustomLoginTab.Register" Class="my-12">
+                        <ConfigRegister @bind-Value="CustomLogin.RegisterFields" Logo="@CustomLoginDetail.Client.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
                 </MWindow>
             </AutoHeightContent>
             <FooterContent>
-                <div class="d-flex mt-6">
+                <div class="d-flex">
                     <EnableSwitch @bind-Value="CustomLogin.Enabled" />
                     <MSpacer></MSpacer>
                     @if (Tab != CustomLoginTab.BasicInformation)
