@@ -1,36 +1,34 @@
 ﻿@inherits AdminCompontentBase
 
-<MContainer Style="overflow-y: auto;" Class="full-height">
-    <MRow>
-        <MCol Md=6>
-            <MRow>
-                <MCol Md=12 Class="emphasis2--text">
-                    Identity
+<MRow Class="pt-4">
+    <MCol Md=6>
+        <MRow>
+            <MCol Md=12 Class="emphasis2--text">
+                Identity
+            </MCol>
+            @foreach (var identityScope in Dto.IdentityScopes)
+            {
+                <MCol Md=6 Class="py-0">
+                    <MCheckbox @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
                 </MCol>
-                @foreach (var identityScope in Dto.IdentityScopes)
-                {
-                    <MCol Md=6 Class="py-0">
-                        <MCheckbox @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
-                    </MCol>
-                }
-            </MRow>
-        </MCol>
-        <MDivider Vertical></MDivider>
-        <MCol Md=6>
-            <MRow>
-                <MCol Md=12 Class="emphasis2--text">
-                    Api
+            }
+        </MRow>
+    </MCol>
+    <MDivider Vertical></MDivider>
+    <MCol Md=6>
+        <MRow>
+            <MCol Md=12 Class="emphasis2--text">
+                Api
+            </MCol>
+            @foreach (var apiScope in Dto.ApiScopes)
+            {
+                <MCol Md=6 Class="py-0">
+                    <MCheckbox @bind-Value="@apiScope.Selected" Label="@apiScope.DisplayValue"></MCheckbox>
                 </MCol>
-                @foreach (var apiScope in Dto.ApiScopes)
-                {
-                    <MCol Md=6 Class="py-0">
-                        <MCheckbox @bind-Value="@apiScope.Selected" Label="@apiScope.DisplayValue"></MCheckbox>
-                    </MCol>
-                }
-            </MRow>
-        </MCol>
-    </MRow>
-</MContainer>
+            }
+        </MRow>
+    </MCol>
+</MRow>
 
 @code {
     [Parameter]
