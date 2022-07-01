@@ -69,10 +69,10 @@ public class AuthCaller : HttpClientCallerBase
         BaseAddress = options.AuthServiceBaseAddress;
     }
 
-    //protected override IHttpClientBuilder UseHttpClient()
-    //{
-    //    return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-    //        .AddHttpMessageHandler<HttpClientEnvironmentDelegatingHandler>();
-    //}
+    protected override IHttpClientBuilder UseHttpClient()
+    {
+        return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+            .AddHttpMessageHandler<HttpClientEnvironmentDelegatingHandler>();
+    }
 }
 

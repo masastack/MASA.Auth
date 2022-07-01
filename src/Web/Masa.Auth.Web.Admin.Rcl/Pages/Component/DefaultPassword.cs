@@ -18,12 +18,12 @@ public class DefaultPassword : MTextField<string>
         base.OnInitialized();
     }
 
-    protected override bool ShouldRender()
+    public override Task SetParametersAsync(ParameterView parameters)
     {
-        Label ??= I18n?.T("Password");
+        Label ??= I18n?.T("Password", true);
         Type = ShowPassword ? "text" : "password";
         AppendIcon = ShowPassword ? "mdi-eye" : "mdi-eye-off";
-        return base.ShouldRender();
+        return base.SetParametersAsync(parameters);
     }
 
     private void SwitchPassword() => ShowPassword = !ShowPassword;

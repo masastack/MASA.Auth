@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <SheetDialog Value=Show ValueChanged=ShowChanged Title="@T("Create Team")" ContentClass="px-sheet-dialog">
-    <MStepper Value="_step" Elevation=0 Class="d-flex flex-column full-height pt-12">
+    <MStepper Value="_step" Elevation=0 Class="d-flex flex-column full-height pt-6">
         <MStepperHeader Class="mx-6" Style="box-shadow:none !important">
             <MStepperStep Step="1" Complete="_step>1">
                 @T("Fill the basic team information")
@@ -15,11 +15,11 @@
                 @T("Setup team members")
             </MStepperStep>
         </MStepperHeader>
-        <MStepperItems Class="flex-grow-1 mt-2">
+        <MStepperItems Class="flex-grow-1">
             <MStepperContent class="full-height" Step="1">
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamBasicInfo @bind-Value="_teamDetailDto.TeamBasicInfo" />
-                    <MCardActions class="d-flex justify-end align-center mb-10">
+                    <MCardActions class="d-flex justify-end align-center mb-6">
                         <DefaultButton Medium Disabled="@string.IsNullOrWhiteSpace(_teamDetailDto.TeamBasicInfo.Name)" OnClick="()=>{ _step++; }">@T("Next step")</DefaultButton>
                     </MCardActions>
                 </MCard>
@@ -27,7 +27,7 @@
             <MStepperContent class="full-height" Step="2">
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin" />
-                    <MCardActions class="d-flex justify-end align-center mb-10">
+                    <MCardActions class="d-flex justify-end align-center mb-6">
                         <DefaultButton Medium Class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</DefaultButton>
                         <DefaultButton Medium OnClick="()=> _step++ ">@T("Next step")</DefaultButton>
                     </MCardActions>
@@ -36,7 +36,7 @@
             <MStepperContent class="full-height" Step="3">
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamMember @bind-Value="_teamDetailDto.TeamMember" />
-                    <MCardActions class="d-flex justify-end align-center mb-10">
+                    <MCardActions class="d-flex justify-end align-center mb-6">
                         <DefaultButton Medium class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</DefaultButton>
                         <DefaultButton Medium OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
                     </MCardActions>

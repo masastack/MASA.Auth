@@ -20,6 +20,7 @@ public static class MapsterAdapterConfig
 
         TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
         TypeAdapterConfig<ClientModel, Client>.NewConfig().MapToConstructor(true);
+        TypeAdapterConfig<AddClientDto, Client>.NewConfig().MapToConstructor(true);
 
         TypeAdapterConfig<LdapDetailDto, LdapOptions>.ForType()
             .Map(dest => dest.ServerPort, src => src.IsLdaps ? 0 : src.ServerPort)

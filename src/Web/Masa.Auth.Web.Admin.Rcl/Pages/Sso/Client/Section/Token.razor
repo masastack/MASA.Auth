@@ -1,112 +1,110 @@
 ﻿@using Masa.Auth.Contracts.Admin.Infrastructure.Constants
 @inherits AdminCompontentBase
 
-<MContainer Style="overflow-y: auto;" Class="full-height"> 
-    <MRow>
-        <MCol Md=6>
-            <MCheckbox Dense @bind-Value="Dto.AllowOfflineAccess" Label="AllowOfflineAccess"></MCheckbox>
-        </MCol>
-        <MCol Md=6>
-            <DefaultNumberTextField @bind-Value="Dto.IdentityTokenLifetime" Label="IdentityTokenLifetime" />
-        </MCol>
-        <MCol Md=12>
-             <MSelect @bind-Value="@Dto.AllowTokenSigningAlgorithms"
+<MRow Class="pt-4">
+    <MCol Md=6>
+        <MCheckbox Dense @bind-Value="Dto.AllowOfflineAccess" Label="AllowOfflineAccess"></MCheckbox>
+    </MCol>
+    <MCol Md=6>
+        <DefaultNumberTextField @bind-Value="Dto.IdentityTokenLifetime" Label="IdentityTokenLifetime" />
+    </MCol>
+    <MCol Md=12>
+        <MSelect @bind-Value="@Dto.AllowTokenSigningAlgorithms"
                  Label="AllowedIdentityTokenSigningAlgorithms"
                  Outlined Multiple
                  Items="@Dto.AllowedIdentityTokenSigningAlgorithmsItems"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
-            </MSelect>
-        </MCol>
-        <MCol Md=6>
-            <DefaultNumberTextField @bind-Value="Dto.AccessTokenLifetime" Label="AccessTokenLifetime" />
-        </MCol>
-         <MCol Md=6>
-            <MSelect @bind-Value="@Dto.AccessTokenType"
-                     Label="AccessTokenType"
-                     Outlined Dense
-                     Items="@_accessTokenType"
-                     ItemText="u => u.Text"
-                     ItemValue="u => u.Value">
-            </MSelect>  
-        </MCol>        
-        <MCol Md=6>
-            <DefaultNumberTextField @bind-Value="Dto.AuthorizationCodeLifetime" Label="AuthorizationCodeLifetime" />
-        </MCol>
-        <MCol Md=6>
-            <DefaultNumberTextField @bind-Value="Dto.AbsoluteRefreshTokenLifetime" Label="AbsoluteRefreshTokenLifetime" />
-        </MCol>
-        <MCol Md=6>
-            <DefaultNumberTextField @bind-Value="Dto.SlidingRefreshTokenLifetime" Label="SlidingRefreshTokenLifetime" />
-        </MCol>
-        <MCol Md=6>
-            <MSelect @bind-Value="@Dto.RefreshTokenUsage"
-                     Label="RefreshTokenUsage"
-                     Outlined Dense
-                     Items="@_refreshTokenUsage"
-                     ItemText="u => u.Text"
-                     ItemValue="u => u.Value">
-            </MSelect>  
-        </MCol> 
-        <MCol Md=6>
-            <MSelect @bind-Value="@Dto.RefreshTokenExpiration"
-                     Label="RefreshTokenExpiration"
-                     Outlined Dense
-                     Items="@_refreshTokenExpiration"
-                     ItemText="u => u.Text"
-                     ItemValue="u => u.Value">
-            </MSelect>  
-        </MCol> 
-        <MCol Md=6>
-            <DefaultTextField @bind-Value="Dto.PairWiseSubjectSalt" Label="PairWiseSubjectSalt" />
-        </MCol>
-        <MCol Md=6>
-            <MCheckbox Dense @bind-Value="Dto.IncludeJwtId" Label="IncludeJwtId"></MCheckbox>
-        </MCol>
+        </MSelect>
+    </MCol>
+    <MCol Md=6>
+        <DefaultNumberTextField @bind-Value="Dto.AccessTokenLifetime" Label="AccessTokenLifetime" />
+    </MCol>
+    <MCol Md=6>
+        <MSelect @bind-Value="@Dto.AccessTokenType"
+                 Label="AccessTokenType"
+                 Outlined Dense
+                 Items="@_accessTokenType"
+                 ItemText="u => u.Text"
+                 ItemValue="u => u.Value">
+        </MSelect>
+    </MCol>
+    <MCol Md=6>
+        <DefaultNumberTextField @bind-Value="Dto.AuthorizationCodeLifetime" Label="AuthorizationCodeLifetime" />
+    </MCol>
+    <MCol Md=6>
+        <DefaultNumberTextField @bind-Value="Dto.AbsoluteRefreshTokenLifetime" Label="AbsoluteRefreshTokenLifetime" />
+    </MCol>
+    <MCol Md=6>
+        <DefaultNumberTextField @bind-Value="Dto.SlidingRefreshTokenLifetime" Label="SlidingRefreshTokenLifetime" />
+    </MCol>
+    <MCol Md=6>
+        <MSelect @bind-Value="@Dto.RefreshTokenUsage"
+                 Label="RefreshTokenUsage"
+                 Outlined Dense
+                 Items="@_refreshTokenUsage"
+                 ItemText="u => u.Text"
+                 ItemValue="u => u.Value">
+        </MSelect>
+    </MCol>
+    <MCol Md=6>
+        <MSelect @bind-Value="@Dto.RefreshTokenExpiration"
+                 Label="RefreshTokenExpiration"
+                 Outlined Dense
+                 Items="@_refreshTokenExpiration"
+                 ItemText="u => u.Text"
+                 ItemValue="u => u.Value">
+        </MSelect>
+    </MCol>
+    <MCol Md=6>
+        <DefaultTextField @bind-Value="Dto.PairWiseSubjectSalt" Label="PairWiseSubjectSalt" />
+    </MCol>
+    <MCol Md=6>
+        <MCheckbox Dense @bind-Value="Dto.IncludeJwtId" Label="IncludeJwtId"></MCheckbox>
+    </MCol>
 
-        <MCol Md=6>
-            <MCheckbox Dense @bind-Value="Dto.UpdateAccessTokenClaimsOnRefresh" Label="UpdateAccessTokenClaimsOnRefresh"></MCheckbox>
-        </MCol>
-        <MCol Md=6>
-            <MCheckbox Dense @bind-Value="Dto.AlwaysIncludeUserClaimsInIdToken" Label="AlwaysIncludeUserClaimsInIdToken"></MCheckbox>
-        </MCol>
-        <MCol Md=6>
-            <MCheckbox Dense @bind-Value="Dto.AllowAccessTokensViaBrowser" Label="AllowAccessTokensViaBrowser"></MCheckbox>
-        </MCol>
-         <MCol Md=6>
-            <MCheckbox Dense @bind-Value="Dto.AlwaysSendClientClaims" Label="AlwaysSendClientClaims"></MCheckbox>
-        </MCol>   
-    </MRow>
-    <MRow>
-        <MCol>
-            <DefaultTextField @bind-Value="Dto.ClientClaimDto.Type" Label="Type" />
-        </MCol>
-        <MCol>
-            <DefaultTextField @bind-Value="Dto.ClientClaimDto.Value" Label="Value"/>
-        </MCol>
-        <MCol Md="@("auto")" Class="d-flex align-center">
-            <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
-        </MCol>
-        <MCol Md=12>
-            <MDataTable Headers="_headers" Items="Dto.Claims" TItem="ClientClaimDto" HideDefaultFooter DisablePagination Dense Class="margin-border">
-                <HeaderColContent Context="header">
-                    <span class="body2">@header.Text</span>
-                </HeaderColContent>
-                <ItemColContent>
-                    @switch (context.Header.Value)
-                    {
-                        case "Action":
-                            <MIcon OnClick="()=>Dto.Claims.Remove(context.Item)">mdi-close</MIcon>
-                            break;
-                        default:
-                            <span class="subtitle">@context.Value</span>
-                            break;
-                    }
-                </ItemColContent>
-            </MDataTable>
-        </MCol>
-    </MRow>
-</MContainer>
+    <MCol Md=6>
+        <MCheckbox Dense @bind-Value="Dto.UpdateAccessTokenClaimsOnRefresh" Label="UpdateAccessTokenClaimsOnRefresh"></MCheckbox>
+    </MCol>
+    <MCol Md=6>
+        <MCheckbox Dense @bind-Value="Dto.AlwaysIncludeUserClaimsInIdToken" Label="AlwaysIncludeUserClaimsInIdToken"></MCheckbox>
+    </MCol>
+    <MCol Md=6>
+        <MCheckbox Dense @bind-Value="Dto.AllowAccessTokensViaBrowser" Label="AllowAccessTokensViaBrowser"></MCheckbox>
+    </MCol>
+    <MCol Md=6>
+        <MCheckbox Dense @bind-Value="Dto.AlwaysSendClientClaims" Label="AlwaysSendClientClaims"></MCheckbox>
+    </MCol>
+</MRow>
+<MRow>
+    <MCol>
+        <DefaultTextField @bind-Value="Dto.ClientClaimDto.Type" Label="Type" />
+    </MCol>
+    <MCol>
+        <DefaultTextField @bind-Value="Dto.ClientClaimDto.Value" Label="Value" />
+    </MCol>
+    <MCol Md="@("auto")" Class="d-flex align-center">
+        <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
+    </MCol>
+    <MCol Md=12>
+        <MDataTable Headers="_headers" Items="Dto.Claims" TItem="ClientClaimDto" HideDefaultFooter DisablePagination Dense Class="margin-border">
+            <HeaderColContent Context="header">
+                <span class="body2">@header.Text</span>
+            </HeaderColContent>
+            <ItemColContent>
+                @switch (context.Header.Value)
+                {
+                    case "Action":
+                        <MIcon OnClick="()=>Dto.Claims.Remove(context.Item)">mdi-close</MIcon>
+                        break;
+                    default:
+                        <span class="subtitle">@context.Value</span>
+                        break;
+                }
+            </ItemColContent>
+        </MDataTable>
+    </MCol>
+</MRow>
 
 @code {
     [Parameter]
@@ -116,7 +114,7 @@
     public EventCallback<ClientTokenDto> DtoChanged { get; set; }
 
     List<SelectItemDto<int>> _refreshTokenUsage = ClientConsts.GetTokenUsage();
-    List<SelectItemDto<int>> _accessTokenType = ClientConsts.GetAccessTokenTypes();    
+    List<SelectItemDto<int>> _accessTokenType = ClientConsts.GetAccessTokenTypes();
     List<SelectItemDto<int>> _refreshTokenExpiration = ClientConsts.GetTokenExpirations();
     List<DataTableHeader<ClientClaimDto>> _headers { get; set; } = new()
     {
@@ -130,7 +128,7 @@
         Dto.AllowedIdentityTokenSigningAlgorithmsItems = ClientConsts.SigningAlgorithms();
         base.OnInitialized();
     }
-    
+
     private void AddClaim()
     {
         if (string.IsNullOrWhiteSpace(Dto.ClientClaimDto.Type) || string.IsNullOrWhiteSpace(Dto.ClientClaimDto.Value))

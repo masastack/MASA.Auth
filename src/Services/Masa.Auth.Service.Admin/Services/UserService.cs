@@ -8,6 +8,7 @@ namespace Masa.Auth.Service.Admin.Services
         public UserService(IServiceCollection services) : base(services, "api/user")
         {
             MapGet(FindByAccountAsync);
+            MapGet(FindByIdAsync);
             MapPost(ValidateByAccountAsync);
             MapPost(Visit);
             MapGet(VisitedList);

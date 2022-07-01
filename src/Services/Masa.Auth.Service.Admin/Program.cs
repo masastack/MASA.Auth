@@ -131,6 +131,8 @@ builder.Services.AddOidcDbContext<AuthDbContext>()
 var sync = builder.Services.BuildServiceProvider().GetRequiredService<SyncCache>();
 await sync.ResetAsync();
 
+builder.Services.RemoveAll(typeof(IProcessor));
+
 var app = builder.Services.AddServices(builder);
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>

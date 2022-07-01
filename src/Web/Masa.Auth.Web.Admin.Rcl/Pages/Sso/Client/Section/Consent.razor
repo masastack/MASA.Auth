@@ -1,29 +1,27 @@
 ﻿@inherits AdminCompontentBase
 
-<MContainer>
-    <MRow>
-        <MCol Md=12 Class="text-center">
-            <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload/>
-        </MCol>
-        <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
-        </MCol>
-        <MCol Md=12 Class="py-0">
-            <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
-        </MCol>
-        <MCol Md=12 Class="pt-0">
-            <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
-        </MCol>
-        <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
-        </MCol>
-    </MRow>
-</MContainer>
+<MRow>
+    <MCol Md=12 Class="text-center mt-n6">
+        <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
+    </MCol>
+    <MCol Md=12>
+        <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+    </MCol>
+    <MCol Md=12 Class="py-0">
+        <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
+    </MCol>
+    <MCol Md=12 Class="pt-0">
+        <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
+    </MCol>
+    <MCol Md=12>
+        <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
+    </MCol>
+</MRow>
 
 @code {
     [Parameter]
     public ClientConsentDto Dto { get; set; } = new();
-     
+
     [Parameter]
     public EventCallback<ClientConsentDto> DtoChanged { get; set; }
 }

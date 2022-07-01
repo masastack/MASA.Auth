@@ -3,26 +3,22 @@
 
 <PageTitle>@T("Team")</PageTitle>
 
-<MCard Class="full-height">
-    <MCardTitle class="mx-2 py-6">
-        <SearchTextField @bind-Value="_search" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
-    </MCardTitle>
-    <MCardText Style="overflow-y:auto;">
-        <MRow>
-            <MCol Md="4">
-                <MCard Outlined class="d-flex justify-center align-center" Style="border-style: dashed;" Height="230">
-                    <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>@IconConstants.Add</MIcon>@T("Create Team")</MButton>
-                </MCard>
-            </MCol>            
-            @foreach (var team in _teams)
-            {
-                <MCol Md="4">
-                    <TeamCard Team=team OnEditClick="()=>EditTeamHandler(team.Id)" />
-                </MCol>
-            }
-        </MRow>
-    </MCardText>
-</MCard>
+<MRow>
+    <MCol Md="12">
+        <OutlinedSearchTextField @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
+    </MCol>
+    <MCol Md="4">
+        <MCard Outlined class="d-flex justify-center align-center" Style="border-style: dashed;background-color:#F6F8FD;" Height="230">
+            <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>@IconConstants.Add</MIcon>@T("Create Team")</MButton>
+        </MCard>
+    </MCol>
+    @foreach (var team in _teams)
+    {
+        <MCol Md="4">
+            <TeamCard Team=team OnEditClick="()=>EditTeamHandler(team.Id)" />
+        </MCol>
+    }
+</MRow>
 
 <AddSheet @bind-Show=_showAdd OnSubmit="OnCreate" />
 <UpdateSheet @bind-Show=_showEdit Dto=_editTeamDto OnUpdateBase="OnUpdateBasicInfo"
