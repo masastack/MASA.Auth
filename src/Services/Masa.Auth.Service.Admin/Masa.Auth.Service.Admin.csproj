@@ -16,12 +16,12 @@
 		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth" Version="0.5.0-preview.3" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-preview.3" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache.Storage" Version="0.5.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-preview.3" />
+		<!--<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache.Storage" Version="0.5.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-preview.3" />-->
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.5.0-preview.3" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.5.0-preview.3" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.5.0-preview.3" />-->
 		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.5.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.5.0-preview.3" />
@@ -32,7 +32,7 @@
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.5.0-preview.3" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.5.0-preview.3" />-->
 		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.5.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.5.0-preview.3" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.5.0-preview.3" />
@@ -70,6 +70,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Authentication\Masa.Contrib.Authentication.Oidc.Cache\Masa.Contrib.Authentication.Oidc.Cache.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Authentication\Masa.Contrib.Authentication.Oidc.EntityFrameworkCore\Masa.Contrib.Authentication.Oidc.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

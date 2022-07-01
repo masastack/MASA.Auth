@@ -12,6 +12,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapPost(ValidateByAccountAsync);
             MapPost(Visit);
             MapGet(VisitedList);
+            MapPut(ResetUserPasswordAsync);
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -80,10 +81,10 @@ namespace Masa.Auth.Service.Admin.Services
             await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(dto));
         }
 
-        public async Task UpdateUserPasswordAsync(IEventBus eventBus,
-            [FromBody] UpdateUserPasswordDto dto)
+        public async Task ResetUserPasswordAsync(IEventBus eventBus,
+            [FromBody] ResetUserPasswordDto dto)
         {
-            await eventBus.PublishAsync(new UpdateUserPasswordCommand(dto));
+            await eventBus.PublishAsync(new ResetUserPasswordCommand(dto));
         }
 
         private async Task RemoveAsync(
@@ -148,6 +149,18 @@ namespace Masa.Auth.Service.Admin.Services
             var visitListQuery = new UserVisitedListQuery(userId);
             await eventBus.PublishAsync(visitListQuery);
             return visitListQuery.Result;
+        }
+
+        public async Task UpdateUserPasswordAsync(IEventBus eventBus,
+            [FromBody] UpdateUserPasswordModel user)
+        {
+            await eventBus.PublishAsync(new UpdateUserPasswordCommand(user));
+        }
+
+        public async Task UpdateUserBaseInfoAsync(IEventBus eventBus,
+            [FromBody] UpdateUserBaseInfoModel user)
+        {
+            await eventBus.PublishAsync(new UpdateUserBaseInfoCommand(user));
         }
     }
 }

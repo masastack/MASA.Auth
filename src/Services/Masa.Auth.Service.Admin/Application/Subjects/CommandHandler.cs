@@ -138,7 +138,7 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
+    public async Task UpdateUserPasswordAsync(ResetUserPasswordCommand command)
     {
         var userDto = command.User;
         var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);

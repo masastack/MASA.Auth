@@ -23,7 +23,7 @@ public partial class UpdateUserDialog
 
     private UpdateUserDto User { get; set; } = new();
 
-    private UpdateUserPasswordDto UserPassword = new();
+    private ResetUserPasswordDto UserPassword = new();
 
     private UserService UserService => AuthCaller.UserService;
 
@@ -55,7 +55,7 @@ public partial class UpdateUserDialog
     {
         UserDetail = await UserService.GetDetailAsync(UserId);
         User = UserDetail;
-        UserPassword = new UpdateUserPasswordDto(UserDetail.Id, UserDetail.Password);
+        UserPassword = new ResetUserPasswordDto(UserDetail.Id, UserDetail.Password);
     }
 
     public async Task UpdateUserAsync(EditContext context)
@@ -72,10 +72,10 @@ public partial class UpdateUserDialog
         }
     }
 
-    public async Task UpdateUserPasswordAsync(string password)
+    public async Task ResetUserPasswordAsync(string password)
     {
         UserPassword.Password = password;
-        await UserService.UpdateUserPasswordAsync(UserPassword);
+        await UserService.ResetUserPasswordAsync(UserPassword);
         OpenSuccessMessage(T("Password changed successfully"));
     }
 

@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpdateUserPasswordCommand(UpdateUserPasswordModel User) : Command
+public record UpdateUserBaseInfoCommand(UpdateUserBaseInfoModel User) : Command
 {
 }
