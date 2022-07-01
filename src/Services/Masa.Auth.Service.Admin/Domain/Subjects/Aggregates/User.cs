@@ -49,6 +49,13 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
+#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
+    private User()
+#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
+    {
+
+    }
+
     public User(string name,
                 string displayName,
                 string avatar,
@@ -168,6 +175,11 @@ public class User : FullAggregateRoot<Guid, Guid>
         if (password is null) throw new UserFriendlyException("Password cannot be null");
 
         Password = MD5Utils.EncryptRepeat(password);
+    }
+
+    public bool VerifyPassword(string password)
+    {
+        return !string.IsNullOrWhiteSpace(password) && Password == MD5Utils.EncryptRepeat(password);
     }
 
     public void AddRoles(params Guid[] roleIds)

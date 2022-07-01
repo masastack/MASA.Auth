@@ -152,8 +152,11 @@ public class CommandHandler
     [EventHandler]
     public async Task UserValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
-        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
-        validateByAccountCommand.Result = user != null;
+        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account);
+        if (user != null)
+        {
+            validateByAccountCommand.Result = user.VerifyPassword(validateByAccountCommand.Password);
+        }
     }
 
     #endregion

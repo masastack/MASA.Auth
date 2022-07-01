@@ -1,15 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<MContainer>
-    <MRow>
-        <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.UserCodeType" Label="@T("UserCodeType")" />
-        </MCol>
-        <MCol Md=12>
-            <DefaultNumberTextField @bind-Value="Dto.DeviceCodeLifetime" Label="@T("DeviceCodeLifetime")" />
-        </MCol>
-    </MRow>
-</MContainer>
+<MRow Class="pt-4">
+    <MCol Md=12>
+        <DefaultTextField @bind-Value="Dto.UserCodeType" Label="@T("UserCodeType")" />
+    </MCol>
+    <MCol Md=12>
+        <DefaultNumberTextField @bind-Value="Dto.DeviceCodeLifetime" Label="@T("DeviceCodeLifetime")" />
+    </MCol>
+</MRow>
 
 @code {
     [Parameter]
