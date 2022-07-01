@@ -11,10 +11,11 @@ public class QueryHandler
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
-    readonly OidcDbContext _oidcDbContext;
+    readonly DbContext _oidcDbContext;
     readonly AuthDbContext _authDbContext;
+    readonly IClientCache _clientCache;
 
-    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, OidcDbContext oidcDbContext, AuthDbContext authDbContext)
+    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, OidcDbContext oidcDbContext, AuthDbContext authDbContext, IClientCache clientCache)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -24,6 +25,7 @@ public class QueryHandler
         _customLoginRepository = customLoginRepository;
         _oidcDbContext = oidcDbContext;
         _authDbContext = authDbContext;
+        _clientCache = clientCache;
     }
 
     [EventHandler]
@@ -298,16 +300,34 @@ public class QueryHandler
 
         var customLoginQuery = _authDbContext.Set<CustomLogin>().Where(condition);
         var total = await customLoginQuery.LongCountAsync();
-        var customLogins = await customLoginQuery.Include(customLogin => customLogin.Client)
-                                    .Include(customLogin => customLogin.CreateUser)
-                                    .Include(customLogin => customLogin.ModifyUser)
-                                   .OrderByDescending(s => s.ModificationTime)
-                                   .ThenByDescending(s => s.CreationTime)
-                                   .Skip((query.Page - 1) * query.PageSize)
-                                   .Take(query.PageSize)
-                                   .ToListAsync();
+        var customLogins = await customLoginQuery.Include(customLogin => customLogin.CreateUser)
+                                           .Include(customLogin => customLogin.ModifyUser)
+                                           .OrderByDescending(s => s.ModificationTime)
+                                           .ThenByDescending(s => s.CreationTime)
+                                           .Skip((query.Page - 1) * query.PageSize)
+                                           .Take(query.PageSize)
+                                           .ToListAsync();
 
-        query.Result = new(total, customLogins.Select(customLogin => (CustomLoginDto)customLogin).ToList());
+        var clients = await _clientCache.GetListAsync(customLogins.Select(customLogin => customLogin.ClientId));
+        var customLoginDtos = customLogins.Select(customLogin =>
+        {
+            var customLoginDto = new CustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "");
+            var client = clients.FirstOrDefault(client => client.ClientId == customLogin.ClientId);
+            if (client is not null)
+            {
+                customLoginDto.Client = new ClientDto
+                {
+                    ClientId = client.ClientId,
+                    ClientName = client.ClientName,
+                    LogoUri = client.LogoUri,
+                    Enabled = client.Enabled,
+                    Description = client.Description,
+                };
+            }
+            return customLoginDto;
+        }).ToList();
+
+        query.Result = new(total, customLoginDtos);
     }
 
     [EventHandler]
@@ -316,7 +336,23 @@ public class QueryHandler
         var customLogin = await _customLoginRepository.GetDetailAsync(query.CustomLoginId);
         if (customLogin is null) throw new UserFriendlyException("This customLogin data does not exist");
 
-        query.Result = customLogin;
+        var thirdPartyIdps = customLogin.ThirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdpDto(tp.ThirdPartyIdpId, tp.Sort)).ToList();
+        var registerFields = customLogin.RegisterFields.Select(rf => new RegisterFieldDto(rf.RegisterFieldType, rf.Sort, rf.Required)).ToList();
+        var customLoginDetail = new CustomLoginDetailDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "", thirdPartyIdps, registerFields);
+        var client = await _clientCache.GetAsync(customLogin.ClientId);
+        if (client is not null)
+        {
+            customLoginDetail.Client = new ClientDto
+            {
+                ClientId = client.ClientId,
+                ClientName = client.ClientName,
+                LogoUri = client.LogoUri,
+                Enabled = client.Enabled,
+                Description = client.Description,
+            };
+        }
+
+        query.Result = customLoginDetail;
     }
 
     #endregion

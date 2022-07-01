@@ -15,10 +15,10 @@ public partial class ClientSelect
     public bool Disabled { get; set; }
 
     [Parameter]
-    public int Value { get; set; } = new();
+    public string Value { get; set; } = "";
 
     [Parameter]
-    public EventCallback<int> ValueChanged { get; set; }
+    public EventCallback<string> ValueChanged { get; set; }
 
     public ClientSelectDto? Client { get; set; }
 
@@ -29,6 +29,14 @@ public partial class ClientSelect
     protected override async Task OnInitializedAsync()
     {
         Clients = await ClientService.GetClientSelectAsync();
+        Client = Clients.FirstOrDefault(client => client.ClientId == Value);
+    }
+
+    public async Task UpdateValueAsync(string value)
+    {
+        Client = Clients.FirstOrDefault(client => client.ClientId == value);
+        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value);
+        else Value = value;
     }
 }
 

@@ -6,12 +6,12 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center" style="width:212px;">
-                        <UploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
+                        <DefaultUploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
                     </div>
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <MRow Class="mb-6 mt-6">
+                <MRow Class="mb-6 mt-12">
                     <MCol>
                         <DefaultTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("ThirdPartyIdp.Name")" />
                     </MCol>
@@ -35,7 +35,7 @@
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
                     </MCol>
                 </MRow>
-                <MRow>
+                <MRow Class="mb-6">
                     <MCol>
                         <MFileInput TValue="IBrowserFile" Outlined Dense Label="@T(nameof(ThirdPartyIdp.VerifyFile))" /> @*@bind-Value="ThirdPartyIdp.VerifyFile"*@
                     </MCol>

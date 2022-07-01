@@ -80,6 +80,7 @@ public partial class UserClaim
     {
         Loading = true;
         await UserClaimService.AddStandardUserClaimsAsync();
+        OpenSuccessMessage(T("Add standard userClaim data success"));
         await GetUserClaimsAsync();
         Loading = false;
     }

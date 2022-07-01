@@ -55,7 +55,10 @@ public class SyncStaffDomainEvenHandler
         var userRange = new List<User>();
         foreach (var staff in syncStaffs)
         {
-            var existUsers = allUsers.Where(u => u.PhoneNumber == staff.PhoneNumber || u.Email == staff.Email || u.IdCard == staff.IdCard);
+            var existUsers = allUsers.Where(u =>
+                (string.IsNullOrEmpty(u.PhoneNumber) is false && u.PhoneNumber == staff.PhoneNumber) ||
+                (string.IsNullOrEmpty(u.Email) is false && u.Email == staff.Email) ||
+                (string.IsNullOrEmpty(u.IdCard) is false && u.IdCard == staff.IdCard));
             var oldUser = allUsers.FirstOrDefault(s => s.Account == staff.Account);
             if (existUsers.Count(u => u.Id != oldUser?.Id) > 0)
             {
@@ -69,14 +72,21 @@ public class SyncStaffDomainEvenHandler
             {
                 if (oldUser is null)
                 {
-                    oldUser = new User(staff.Name, staff.DisplayName ?? "", "", staff.IdCard ?? "", staff.Account, staff.Password, "", "", staff.Position ?? "", true, staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender);
-                    userRange.Add(oldUser);
+                    userRange.Add(new User(
+                        staff.Name, staff.DisplayName ?? "", DefaultUserAttributes.MaleAvatar, staff.IdCard ?? "",
+                        staff.Account, staff.Password, "", "", staff.Position ?? "", true,
+                        staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender)
+                   );
                 }
             }
         }
         if (syncResults.IsValid) return;
-        if (userRange.Count > 0) await _userRepository.AddRangeAsync(userRange);
-        await _userDomainService.SetAsync(userRange.ToArray());
+        if (userRange.Count > 0)
+        {
+            await _userRepository.AddRangeAsync(userRange);
+            await _userDomainService.SetAsync(userRange.ToArray());
+            allUsers.AddRange(userRange);
+        }
 
         //sync psoition
         var syncPsoitions = syncStaffs.Select(staff => staff.Position)
@@ -85,33 +95,52 @@ public class SyncStaffDomainEvenHandler
                                       .Select(position => new Position(position!));
         var allPositions = (await _positionRepository.GetListAsync()).ToList();
         var addPositionRange = syncPsoitions.Where(sp => allPositions.Any(p => p.Name == sp.Name) is false).ToList();
-        await _positionRepository.AddRangeAsync(addPositionRange);
-        allPositions.AddRange(addPositionRange);
+        if (addPositionRange.Count > 0)
+        {
+            await _positionRepository.AddRangeAsync(addPositionRange);
+            allPositions.AddRange(addPositionRange);
+        }
 
         //sync staff
         var allStaffs = await _staffRepository.GetListAsync();
         var staffRange = new List<Staff>();
         foreach (var staff in syncStaffs)
         {
-            var user = userRange.First(u => u.Account == staff.Account);
+            var user = allUsers.First(u => u.Account == staff.Account);
             var position = allPositions.FirstOrDefault(p => p.Name == staff.Position);
-            var oldStaff = allStaffs.FirstOrDefault(s => s.JobNumber == staff.JobNumber);
-            if (oldStaff is null)
+            var oldStaff = allStaffs.FirstOrDefault(s => s.Account == staff.Account);
+            var existStaffs = allStaffs.Where(s =>
+                (string.IsNullOrEmpty(s.JobNumber) is false && s.JobNumber == staff.JobNumber) ||
+                (string.IsNullOrEmpty(s.PhoneNumber) is false && s.PhoneNumber == staff.PhoneNumber) ||
+                (string.IsNullOrEmpty(s.Email) is false && s.Email == staff.Email) ||
+                (string.IsNullOrEmpty(s.IdCard) is false && s.IdCard == staff.IdCard));
+            if (existStaffs.Count(s => s.Id != oldStaff?.Id) > 0)
             {
-                staffRange.Add(new Staff(
-                    user.Id, user.Name, user.DisplayName, user.Avatar,
-                    user.IdCard, staff.Account, staff.Password, user.CompanyName,
-                    staff.Gender, staff.PhoneNumber, staff.Email, user.Address,
-                    staff.JobNumber, position?.Id, staff.StaffType, true));
+                syncResults[staff.Index] = new()
+                {
+                    Account = staff.Account,
+                    Errors = new() { $"Staffs with the same mobile phone number, ID number, JobNumber, and email address already exist" }
+                };
             }
             else
             {
-                oldStaff.Update(
-                    position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
-                    staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
-                    staff.PhoneNumber, staff.Email, oldStaff.Address, staff.Gender);
-                oldStaff.UpdatePassword(staff.Password);
-                staffRange.Add(oldStaff);
+                if (oldStaff is null)
+                {
+                    staffRange.Add(new Staff(
+                        user.Id, staff.Name, staff.DisplayName ?? "", user.Avatar,
+                        staff.IdCard ?? "", staff.Account, staff.Password, user.CompanyName,
+                        staff.Gender, staff.PhoneNumber, staff.Email, user.Address,
+                        staff.JobNumber, position?.Id, staff.StaffType, true));
+                }
+                else
+                {
+                    oldStaff.Update(
+                        position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
+                        staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
+                        staff.PhoneNumber, staff.Email, oldStaff.Address, staff.Gender);
+                    oldStaff.UpdatePassword(staff.Password);
+                    staffRange.Add(oldStaff);
+                }
             }
         }
         if (syncResults.IsValid) return;

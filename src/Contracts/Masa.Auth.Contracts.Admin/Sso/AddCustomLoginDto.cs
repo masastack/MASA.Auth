@@ -9,7 +9,7 @@ public class AddCustomLoginDto
 
     public string Title { get; set; } = "";
 
-    public int ClientId { get; set; }
+    public string ClientId { get; set; } = "";
 
     public bool Enabled { get; set; } = true;
 
@@ -22,7 +22,7 @@ public class AddCustomLoginDto
 
     }
 
-    public AddCustomLoginDto(string name, string title, int clientId, bool enabled, List<CustomLoginThirdPartyIdpDto> thirdPartyIdps, List<RegisterFieldDto> registerFields)
+    public AddCustomLoginDto(string name, string title, string clientId, bool enabled, List<CustomLoginThirdPartyIdpDto> thirdPartyIdps, List<RegisterFieldDto> registerFields)
     {
         Name = name;
         Title = title;

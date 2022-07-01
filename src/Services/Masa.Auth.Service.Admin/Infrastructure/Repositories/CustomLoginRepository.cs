@@ -12,7 +12,6 @@ public class CustomLoginRepository : Repository<AuthDbContext, CustomLogin, int>
     public async Task<CustomLogin?> GetDetailAsync(int id)
     {
         var customLogin = await Context.Set<CustomLogin>()
-                                .Include(customLogin => customLogin.Client)
                                 .Include(customLogin => customLogin.ThirdPartyIdps)
                                 .Include(customLogin => customLogin.RegisterFields)
                                 .FirstOrDefaultAsync(customLogin => customLogin.Id == id);

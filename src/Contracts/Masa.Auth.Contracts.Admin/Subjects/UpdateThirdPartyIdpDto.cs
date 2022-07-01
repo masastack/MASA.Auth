@@ -23,12 +23,14 @@ public class UpdateThirdPartyIdpDto
 
     public AuthenticationTypes VerifyType { get; set; }
 
+    public IdentificationTypes IdentificationType { get; set; } = IdentificationTypes.PhoneNumber;
+
     public UpdateThirdPartyIdpDto()
     {
 
     }
 
-    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string url, string icon, bool enabled, string verifyFile, AuthenticationTypes verifyType)
+    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string url, string icon, bool enabled, string verifyFile, AuthenticationTypes verifyType, IdentificationTypes identificationType)
     {
         Id = id;
         DisplayName = displayName;
@@ -39,10 +41,11 @@ public class UpdateThirdPartyIdpDto
         Enabled = enabled;
         VerifyFile = verifyFile;
         VerifyType = verifyType;
+        IdentificationType = identificationType;
     }
 
     public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto thirdPartyIdp)
     {
-        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.Url, thirdPartyIdp.Icon, thirdPartyIdp.Enabled, thirdPartyIdp.VerifyFile, thirdPartyIdp.VerifyType);
+        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.Url, thirdPartyIdp.Icon, thirdPartyIdp.Enabled, thirdPartyIdp.VerifyFile, thirdPartyIdp.VerifyType, thirdPartyIdp.IdentificationType);
     }
 }

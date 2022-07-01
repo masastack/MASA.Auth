@@ -9,7 +9,7 @@
                         <LabeledRadioGroup @bind-Value="Tab" Dense>
                             @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
                             {
-                                <LabeledRadio Value="tab" MinWidth=70>
+                                <LabeledRadio Value="tab" TValue="string" MinWidth=70>
                                     @T(tab)
                                 </LabeledRadio>
                             }

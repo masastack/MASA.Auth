@@ -21,8 +21,8 @@ public partial class ConfigRegister
     {
         if (Value.Count == 0)
         {
-            Value.Add(new RegisterFieldDto(RegisterFieldTypes.Account, 1, true, true));
-            Value.Add(new RegisterFieldDto(RegisterFieldTypes.Password, 2, true, true));
+            Value.Add(new RegisterFieldDto(RegisterFieldTypes.Account, 1, true));
+            Value.Add(new RegisterFieldDto(RegisterFieldTypes.Password, 2, true));
         }
     }
 

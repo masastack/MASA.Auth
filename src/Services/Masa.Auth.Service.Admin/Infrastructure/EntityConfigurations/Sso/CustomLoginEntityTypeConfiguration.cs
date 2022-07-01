@@ -9,7 +9,7 @@ public class CustomLoginEntityTypeConfiguration : IEntityTypeConfiguration<Custo
     {
         builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
         builder.HasIndex(x => x.Name).IsUnique().HasFilter("[IsDeleted] = 0");
-        builder.HasOne(x => x.Client).WithOne().HasForeignKey<CustomLogin>(x => x.ClientId);
+        builder.Ignore(x => x.Client);
         builder.HasMany(x => x.ThirdPartyIdps).WithOne().HasForeignKey(x => x.CustomLoginId);
         builder.HasMany(x => x.RegisterFields).WithOne().HasForeignKey(x => x.CustomLoginId);
         builder.HasOne(x => x.CreateUser).WithMany().HasForeignKey(x => x.Creator).IsRequired(false).OnDelete(DeleteBehavior.ClientSetNull);
