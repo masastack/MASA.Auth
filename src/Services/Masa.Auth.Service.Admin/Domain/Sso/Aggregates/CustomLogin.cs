@@ -34,7 +34,7 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
             Title = title;
             ClientId = clientId;
             Enabled = enabled;
-        }       
+        }
 
         public void Update(string name, string title, bool enabled)
         {

@@ -55,8 +55,8 @@ public class SyncStaffDomainEvenHandler
         var userRange = new List<User>();
         foreach (var staff in syncStaffs)
         {
-            var existUsers = allUsers.Where(u => 
-                (string.IsNullOrEmpty(u.PhoneNumber) is false && u.PhoneNumber == staff.PhoneNumber) || 
+            var existUsers = allUsers.Where(u =>
+                (string.IsNullOrEmpty(u.PhoneNumber) is false && u.PhoneNumber == staff.PhoneNumber) ||
                 (string.IsNullOrEmpty(u.Email) is false && u.Email == staff.Email) ||
                 (string.IsNullOrEmpty(u.IdCard) is false && u.IdCard == staff.IdCard));
             var oldUser = allUsers.FirstOrDefault(s => s.Account == staff.Account);
@@ -73,15 +73,15 @@ public class SyncStaffDomainEvenHandler
                 if (oldUser is null)
                 {
                     userRange.Add(new User(
-                        staff.Name, staff.DisplayName ?? "", DefaultUserAttributes.MaleAvatar, staff.IdCard ?? "", 
-                        staff.Account, staff.Password, "", "", staff.Position ?? "", true, 
+                        staff.Name, staff.DisplayName ?? "", DefaultUserAttributes.MaleAvatar, staff.IdCard ?? "",
+                        staff.Account, staff.Password, "", "", staff.Position ?? "", true,
                         staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender)
                    );
                 }
             }
         }
         if (syncResults.IsValid) return;
-        if (userRange.Count > 0) 
+        if (userRange.Count > 0)
         {
             await _userRepository.AddRangeAsync(userRange);
             await _userDomainService.SetAsync(userRange.ToArray());
@@ -95,7 +95,7 @@ public class SyncStaffDomainEvenHandler
                                       .Select(position => new Position(position!));
         var allPositions = (await _positionRepository.GetListAsync()).ToList();
         var addPositionRange = syncPsoitions.Where(sp => allPositions.Any(p => p.Name == sp.Name) is false).ToList();
-        if(addPositionRange.Count >0)
+        if (addPositionRange.Count > 0)
         {
             await _positionRepository.AddRangeAsync(addPositionRange);
             allPositions.AddRange(addPositionRange);
