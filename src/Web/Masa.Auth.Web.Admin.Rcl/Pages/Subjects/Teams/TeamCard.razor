@@ -24,7 +24,7 @@
             <img src="@Team.CreatorAvatar" height=24 width=24 />
             <span class="font-14 ml-3">@Team.Creator</span>
             <MSpacer />
-            <span class="font-14 regular3--text">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:new CultureInfo(I18n.Culture))</span>
+            <span class="font-14 regular3--text">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:I18n.Culture)</span>
         </MCardActions>
     </MCard>
 </MHover>

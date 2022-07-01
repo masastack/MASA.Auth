@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Authentication.Oidc.EntityFrameworkCore.Caches;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
@@ -69,64 +71,67 @@ builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();
 
+builder.Services
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+.AddEndpointsApiExplorer()
+.AddSwaggerGen(options =>
+{
+    //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer xxxxxxxxxxxxxxx\"",
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+})
+.AddFluentValidation(options =>
+{
+    options.RegisterValidatorsFromAssemblyContaining<Program>();
+})
+.AddDomainEventBus(dispatcherOptions =>
+{
+    dispatcherOptions
+    .UseDaprEventBus<IntegrationEventLogService>(options => options.UseEventLog<AuthDbContext>())
+    .UseEventBus(eventBusBuilder =>
+    {
+        eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
+    })
+    //set Isolation.
+    //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
+    .UseIsolationUoW<AuthDbContext>(
+        isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT_KEY),
+        dbOptions => dbOptions.UseSqlServer().UseFilter())
+    .UseRepository<AuthDbContext>();
+});
+
 var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddOidcCache(option);
-var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
-builder.Services.AddOidcDbContext(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:OidcConnection"],
-    b => b.MigrationsAssembly(migrationsAssembly)))
-    .SeedClientData(new List<Client> { builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>() });
+builder.Services.AddOidcDbContext<AuthDbContext>()
+                .SeedClientData(new List<Client> { builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>() });
 
-var app = builder.Services
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    .AddEndpointsApiExplorer()
-    .AddSwaggerGen(options =>
-    {
-        //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-        {
-            Name = "Authorization",
-            Type = SecuritySchemeType.ApiKey,
-            Scheme = "Bearer",
-            BearerFormat = "JWT",
-            In = ParameterLocation.Header,
-            Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer xxxxxxxxxxxxxxx\"",
-        });
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
-    })
-    .AddFluentValidation(options =>
-    {
-        options.RegisterValidatorsFromAssemblyContaining<Program>();
-    })
-    .AddDomainEventBus(dispatcherOptions =>
-    {
-        dispatcherOptions
-        .UseDaprEventBus<IntegrationEventLogService>(options => options.UseEventLog<AuthDbContext>())
-        .UseEventBus(eventBusBuilder =>
-        {
-            eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
-        })
-        //set Isolation.
-        //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
-        .UseIsolationUoW<AuthDbContext>(
-            isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT_KEY),
-            dbOptions => dbOptions.UseSqlServer().UseFilter())
-        .UseRepository<AuthDbContext>();
-    })
-    .AddServices(builder);
+// sync client resource cache
+var sync = builder.Services.BuildServiceProvider().GetRequiredService<SyncCache>();
+await sync.ResetAsync();
+
+var app = builder.Services.AddServices(builder);
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

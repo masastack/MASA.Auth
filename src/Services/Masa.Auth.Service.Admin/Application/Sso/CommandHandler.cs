@@ -12,7 +12,7 @@ public class CommandHandler
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
     readonly IEventBus _eventBus;
-    readonly OidcDbContext _oidcDbContext;
+    readonly DbContext _oidcDbContext;
 
     public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, IEventBus eventBus, OidcDbContext oidcDbContext)
     {

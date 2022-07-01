@@ -11,7 +11,7 @@ public class QueryHandler
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
-    readonly OidcDbContext _oidcDbContext;
+    readonly DbContext _oidcDbContext;
     readonly AuthDbContext _authDbContext;
     readonly IClientCache _clientCache;
 

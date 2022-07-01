@@ -37,7 +37,7 @@ builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configu
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
-//builder.Services.AddMasaOpenIdConnect(builder.Configuration);
+builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
@@ -61,8 +61,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Authentication.Oidc.EntityFrameworkCore.Repositories;
+
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthDbContext : IsolationDbContext
@@ -33,6 +35,7 @@ public class AuthDbContext : IsolationDbContext
         //}
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ApplyConfigurationsFromAssembly(typeof(UserClaimRepository).Assembly);
 
         base.OnModelCreatingExecuting(builder);
     }
