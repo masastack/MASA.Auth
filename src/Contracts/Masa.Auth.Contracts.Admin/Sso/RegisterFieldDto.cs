@@ -13,16 +13,16 @@ public class RegisterFieldDto
 
     public bool CannotUpdate { get; private set; }
 
-    public RegisterFieldDto()
-    {
-    }
-
-    public RegisterFieldDto(RegisterFieldTypes registerFieldType, int sort, bool required, bool cannotUpdate = false)
+    [JsonConstructor]
+    public RegisterFieldDto(RegisterFieldTypes registerFieldType, int sort, bool required)
     {
         RegisterFieldType = registerFieldType;
         Sort = sort;
         Required = required;
-        CannotUpdate = cannotUpdate;
+        if(RegisterFieldType is RegisterFieldTypes.Account or RegisterFieldTypes.Password)
+        {
+            CannotUpdate = true;
+        }     
     }
 }
 

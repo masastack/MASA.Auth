@@ -53,7 +53,6 @@ global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities;
 global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums;
 global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Repositories;
 global using Masa.BuildingBlocks.Authentication.Oidc.Models.Constans;
-global using Masa.BuildingBlocks.BasicAbility.Auth.Model;
 global using Masa.BuildingBlocks.BasicAbility.Pm;
 global using Masa.BuildingBlocks.Data.UoW;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
@@ -108,4 +107,5 @@ global using Client = Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Cl
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using Masa.BuildingBlocks.Authentication.Oidc.Cache.Caches;
-//global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum;
+global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum;
+global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Model;

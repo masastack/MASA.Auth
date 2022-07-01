@@ -47,25 +47,20 @@ public class StaffService : RestServiceBase
             Department = staff.Department,
             JobNumber = staff.JobNumber,
             Position = staff.Position,
-            StaffType = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.StaffTypes>(staff.StaffType.ToString()),
-            User = new()
+            StaffType = Enum.Parse<StaffTypes>(staff.StaffType.ToString()),
+            UserId = staff.UserId,
+            Account = staff.Account,
+            Name = staff.Name,
+            DisplayName = staff.DisplayName,
+            IdCard = staff.IdCard,
+            CompanyName = staff.CompanyName,
+            PhoneNumber = staff.PhoneNumber,
+            Email = staff.Email,
+            Gender = staff.Gender,
+            Avatar = staff.Avatar,
+            Address = new AddressValueModel
             {
-                Id = staff.UserId,
-                Account = staff.Account,
-                Name = staff.Name,
-                DisplayName = staff.DisplayName,
-                IdCard = staff.IdCard,
-                CompanyName = staff.CompanyName,
-                PhoneNumber = staff.PhoneNumber,
-                Email = staff.Email,
-                Gender = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.GenderTypes>(staff.Gender.ToString()),
-                Avatar = staff.Avatar,
-                Department = staff.Department,
-                Position = staff.Position,
-                Address = new AddressValueModel
-                {
-                    Address = staff.Address.Address
-                }
+                Address = staff.Address.Address
             }
         };
     }

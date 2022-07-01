@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Masa.Auth.Contracts.Admin.Sso;
+using SubjectTypes = Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum.SubjectTypes;
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 

@@ -126,7 +126,7 @@ namespace Masa.Auth.Service.Admin.Services
                 PhoneNumber = user.PhoneNumber,
                 Email = user.Email,
                 Department = user.Department,
-                Gender = Enum.Parse<BuildingBlocks.BasicAbility.Auth.Enum.GenderTypes>(user.Gender.ToString()),
+                Gender = user.Gender,
                 Avatar = user.Avatar,
                 Position = user.Position,
                 Address = new AddressValueModel
