@@ -124,16 +124,13 @@ var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurat
 builder.Services.AddOidcCache(option);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option => 
 {
-    option.SeedStandardResourcesAsync().Wait();
-    option.SeedClientDataAsync(new List<Client>
+    await option.SeedStandardResourcesAsync();
+    await option.SeedClientDataAsync(new List<Client>
     {
         builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>()
-    }).Wait();
+    });
+    await option.SyncCacheAsync();
 });
-
-// sync client resource cache
-var sync = builder.Services.BuildServiceProvider().GetRequiredService<SyncCache>();
-await sync.ResetAsync();
 
 builder.Services.RemoveAll(typeof(IProcessor));
 

@@ -169,6 +169,15 @@ public class User : FullAggregateRoot<Guid, Guid>
         Landline = landline;
     }
 
+    public void UpdateBaseInfo(string? displayName, string? phoneNumber, string? email,string avatar, GenderTypes genderType)
+    {
+        DisplayName = displayName ?? "";
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        GenderType = genderType;
+        Avatar = avatar;
+    }
+
     [MemberNotNull(nameof(Password))]
     public void UpdatePassword(string password)
     {
