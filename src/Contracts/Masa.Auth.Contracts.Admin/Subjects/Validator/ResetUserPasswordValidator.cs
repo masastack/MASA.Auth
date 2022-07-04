@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-public class UpdateUserPasswordValidator : AbstractValidator<UpdateUserPasswordDto>
+public class ResetUserPasswordValidator : AbstractValidator<ResetUserPasswordDto>
 {
-    public UpdateUserPasswordValidator()
+    public ResetUserPasswordValidator()
     {
         RuleFor(staff => staff.Password).Required()
                                       .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")

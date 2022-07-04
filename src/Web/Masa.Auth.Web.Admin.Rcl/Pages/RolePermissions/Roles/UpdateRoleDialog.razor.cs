@@ -31,6 +31,8 @@ public partial class UpdateRoleDialog
 
     private UpdateRoleTabs Tab { get; set; } = UpdateRoleTabs.BasicInformation;
 
+    protected override string? PageName { get; set; } = "RoleBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

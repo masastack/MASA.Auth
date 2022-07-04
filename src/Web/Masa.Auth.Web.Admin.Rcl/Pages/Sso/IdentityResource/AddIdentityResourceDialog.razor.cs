@@ -20,6 +20,8 @@ public partial class AddIdentityResourceDialog
 
     private MForm? Form { get; set; }
 
+    protected override string? PageName { get; set; } = "IdentityResourceBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

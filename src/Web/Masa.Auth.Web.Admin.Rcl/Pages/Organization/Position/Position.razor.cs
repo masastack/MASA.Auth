@@ -55,6 +55,7 @@ public partial class Position
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "PositionBlock";
         Headers = new()
         {
             new() { Text = T("Position.Name"), Value = nameof(PositionDto.Name), Sortable = false },
