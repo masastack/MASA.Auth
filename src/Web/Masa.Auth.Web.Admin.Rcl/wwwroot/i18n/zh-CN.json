@@ -4,6 +4,7 @@
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
   "$DateFormat": "yyyy年MM月dd日",
 
+  "Ldap": "域账号",
   "Favorite": "收藏",
   "Source": "来源",
   "Search": "搜索",
@@ -30,6 +31,9 @@
   "Rows per page": "每页行数",
   "Male": "男",
   "Female": "女",
+  "Email": "邮箱地址",
+  "PhoneNumber": "手机号码",
+  "UserState": "用户状态",
   "Next step": "下一步",
   "Previous step": "上一步",
   "PCS": "个",
@@ -70,9 +74,18 @@
   "Please enter：": "请输入：",
   "I confirm to change the password": "我确认修改密码",
   "Enter \"{0}\" in the input box below to confirm the operation": "在下面的输入框中输入“{0}”以确认操作",
+  "Organization": "组织架构",
+  "ThirdPartyIdp": "第三方平台",
+  "Position": "职位",
+  "Team": "项目团队",
+  "Permission": "权限",
+  "User": "用户",
+  "Staff": "员工",
+  "ThirdPartyUser": "第三方用户",
+  "Role": "角色",
+  "UserClaim": "用户声明",
 
-  "Organization": {
-    "Organization": "组织架构",
+  "OrganizationBlock": {
     "Department": "部门",
     "Department Location": "部门位置",
     "Department Management": "部门管理",
@@ -85,14 +98,18 @@
     "Relocate former department staff": "迁移原部门人员"
   },
 
-  "Platform": {
+  "ThirdPartyIdpBlock": {
     "Platform": "平台",
-    "ThirdPartyIdp": "第三方平台",
-    "ThirdPartyIdp.Name": "名称",
-    "ThirdPartyIdp.DisplayName": "显示名称",
+    "Name": "名称",
+    "DisplayName": "显示名称",
+    "URL": "地址",
+    "ClientId": "客户端ID",
     "ClientSecret": "客户端密钥",
     "AuthenticationTypes": "平台类型",
     "VerifyFile": "校验文件",
+    "Add ThirdPartyIdp": "新增第三方平台",
+    "Update ThirdPartyIdp": "编辑第三方平台",
+    "Please upload ThirdPartyIdp icon": "请上传第三方平台图标",
     "Unique identification of third-party platforms": "第三方平台唯一识别",
     "Failed to query thirdPartyIdpList data:": "查询第三方平台详情列表失败:",
     "Failed to query thirdPartyIdpDetail data:": "查询第三方平台详情数据失败:",
@@ -116,13 +133,11 @@
     "Ldap Account Synchroniz Success": "域账户同步成功"
   },
 
-  "Position": {
-    "Position": "职位",
-    "Position.Name": "名称"
+  "PositionBlock": {
+    "Name": "名称"
   },
 
-  "Team": {
-    "Team": "项目团队",
+  "TeamBlock": {
     "Team Name": "团队名称",
     "Team Type": "团队类型",
     "Create Team": "创建团队",
@@ -144,8 +159,7 @@
     "Team Member": "团队成员"
   },
 
-  "Permission": {
-    "Permission": "权限",
+  "PermissionBlock": {
     "Api Permission": "API",
     "Menu Permission": "前端权限",
     "Permission Info": "权限信息",
@@ -179,21 +193,19 @@
     "Tag or appid is empty": "tag或appid为空"
   },
 
-  "User": {
-    "User": "用户",
+  "UserBlock": {
     "Add User": "添加用户",
     "Update User": "编辑用户",
     "Name": "姓名",
     "Avatr": "头像",
     "User.DisplayName": "用户昵称",
-    "Email": "邮箱地址",
-    "PhoneNumber": "手机号码",
     "IdCard": "身份证号",
-    "Account": "账号",
-    "Password": "密码",
+    "Account": "用户账号",
+    "Password": "用户密码",
+    "Position": "职位",
+    "Department": "部门",
     "CompanyName": "公司名称",
     "Address": "地区",
-    "UserState": "用户状态",
     "Delete User": "删除用户",
     "Failed to query userList data:": "查询用户列表数据失败:",
     "Failed to query userDetail data:": "查询用户详情数据失败:",
@@ -210,8 +222,7 @@
     "Successfully set user permissions": "设置用户权限成功"
   },
 
-  "Staff": {
-    "Staff": "员工",
+  "StaffBlcok": {
     "Add Staff": "添加员工",
     "Update Staff": "编辑员工",
     "JobNumber": "员工工号",
@@ -225,6 +236,8 @@
     "Sync staff failed": "同步员工失败",
     "Explanation": "说明",
     "File size limit": "文件限制大小",
+    "Department": "组织架构",
+    "User": "用户",
     "Gender": "性别",
     "Male/Female": "男/女",
     "Delete Staff": "删除员工",
@@ -239,17 +252,17 @@
     "Delete staff data failed:": "删除员工数据失败:"
   },
 
-  "ThirdPartyUser": {
-    "ThirdPartyUser": "第三方用户",
+  "ThirdPartyUserBlock": {
+    "ModificationTime": "更新时间",
+    "User": "用户",
     "Domain Account": "域账号",
     "Failed to query thirdPartyUserList data:": "获取第三方用户列表失败:",
     "Failed to query thirdPartyIdp data:": "获取第三方平台数据失败:",
     "Failed to query thirdPartyUserDetail data:": "获取第三方用户详情数据失败:"
   },
 
-  "Role": {
-    "Role": "角色",
-    "Role.Name": "角色名称",
+  "RoleBlock": {
+    "Name": "角色名称",
     "Add Role": "新增角色",
     "Update Role": "编辑角色",
     "Inherited Role": "继承角色",
@@ -267,8 +280,7 @@
     "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作"
   },
 
-  "UserClaim": {
-    "UserClaim": "用户声明",
+  "UserClaimBlock": {
     "Name": "名称",
     "Standard": "标准",
     "Customize": "自定义",
@@ -279,22 +291,24 @@
     "Delete UserClaim": "删除用户声明",
     "Are you sure delete userClaim data": "确定删除用户声明吗"
   },
-  "IdentityResource": {
-    "IdentityResource": "身份资源",
+
+  "IdentityResource": "身份资源",
+  "IdentityResourceBlock": {
     "Emphasize": "强调",
     "ShowInDiscoveryDocument": "在文档中展示",
     "Add IdentityResource": "新增身份资源",
     "Create standard identityResource": "创建标准的身份资源",
     "Add standard identityResource data success": "创建标准的身份资源成功",
     "Update IdentityResource": "编辑身份资源",
-    "IdentityResource.Name": "配置名称",
-    "IdentityResource.Required": "是否必须",
+    "Name": "配置名称",
+    "Required": "是否必须",
     "User Claims": "用户声明",
     "Delete IdentityResource": "删除身份资源",
     "Are you sure delete identityResource data": "确定删除身份资源吗"
   },
-  "ApiScope": {
-    "ApiScope": "Api范围",
+
+  "ApiScope": "Api范围",
+  "ApiScopeBlock": {
     "Api Scopes": "Api范围",
     "Add ApiScope": "新增Api范围",
     "Update ApiScope": "编辑Api范围",
@@ -303,8 +317,9 @@
     "Delete ApiScope": "删除Api范围",
     "Are you sure delete apiScope data": "确定删除Api范围吗"
   },
-  "ApiResource": {
-    "ApiResource": "Api资源",
+
+  "ApiResource": "Api资源",
+  "ApiResourceBlock": {
     "Add ApiResource": "新增Api资源",
     "Update ApiResource": "编辑Api资源",
     "ApiResource.Name": "配置名称",
@@ -312,8 +327,9 @@
     "Delete ApiResource": "删除Api资源",
     "Are you sure delete apiResource data": "确定删除Api资源吗"
   },
-  "Client": {
-    "Client": "客户端",
+
+  "Client": "客户端",
+  "ClientBlock": {
     "ClientId": "客户端ID",
     "ClientName": "客户端名称",
     "ClientUri": "客户端Uri",
@@ -335,8 +351,9 @@
     "Create Client": "创建客户端",
     "Update Client": "更新客户端"
   },
-  "CustomLogin": {
-    "CustomLogin": "自定义登录",
+
+  "CustomLogin": "自定义登录",
+  "CustomLoginBlock": {
     "CustomLogin.Name": "名称",
     "LogoUri": "LOGO",
     "ClientDto.ClientName": "客户端",
@@ -354,7 +371,7 @@
     "Register configuration items are required": "注册配置项必填"
   },
 
-  "Validation": {
+  "ValidationBlock": {
     "Account is required": "账号必须填写",
     "Password is required": "密码必须填写",
     "Name is required": "名称必须填写",

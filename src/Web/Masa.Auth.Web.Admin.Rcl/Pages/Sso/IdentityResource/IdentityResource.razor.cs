@@ -55,11 +55,12 @@ public partial class IdentityResource
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "IdentityResourceBlock";
         Headers = new()
         {
-            new() { Text = T("IdentityResource.Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false },
+            new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false },
             new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false },
-            new() { Text = T("IdentityResource.Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
+            new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
             new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
             new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false },
             new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },

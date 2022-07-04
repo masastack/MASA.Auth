@@ -68,9 +68,10 @@ public partial class Role
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "RoleBlock";
         Headers = new()
         {
-            new() { Text = T("Role.Name"), Value = nameof(RoleDto.Name), Sortable = false },
+            new() { Text = T("Name"), Value = nameof(RoleDto.Name), Sortable = false },
             new() { Text = T(nameof(RoleDto.CreationTime)), Value = nameof(RoleDto.CreationTime), Sortable = false },
             new() { Text = T(nameof(RoleDto.ModificationTime)), Value = nameof(RoleDto.ModificationTime), Sortable = false },
             new() { Text = T(nameof(RoleDto.Creator)), Value = nameof(RoleDto.Creator), Sortable = false },

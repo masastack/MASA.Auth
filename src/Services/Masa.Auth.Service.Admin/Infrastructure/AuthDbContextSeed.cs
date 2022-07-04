@@ -15,10 +15,10 @@ public class AuthDbContextSeed
                 new Permission("MASA_Auth","Masa_Auth_Web","Permission","permission","permission/index","mdi-circle",PermissionTypes.Menu)
             }),
 
-            new Permission("MASA_Auth","Masa_Auth_Web","Team","team","team/index","mdi-calendar-check-outline",PermissionTypes.Menu),
-            new Permission("MASA_Auth","Masa_Auth_Web","Organization","org","organization/index","mdi-calendar-check-outline",PermissionTypes.Menu),
+            new Permission("MASA_Auth","Masa_Auth_Web","Team","team","team/index","mdi-account-multiple",PermissionTypes.Menu),
+            new Permission("MASA_Auth","Masa_Auth_Web","Organization","org","organization/index","fa-solid fa-sitemap",PermissionTypes.Menu),
 
-            new Permission("MASA_Auth","Masa_Auth_Web","SSO","sso","","mdi-calendar-check-outline",new List<Permission>{
+            new Permission("MASA_Auth","Masa_Auth_Web","SSO","sso","","fa-solid fa-id-card",new List<Permission>{
                 new Permission("MASA_Auth","Masa_Auth_Web","UserClaim","userClaim","sso/userClaim","mdi-circle",PermissionTypes.Menu),
                 new Permission("MASA_Auth","Masa_Auth_Web","IdentityResource","IdentityResource","sso/identityResource","mdi-circle",PermissionTypes.Menu),
                 new Permission("MASA_Auth","Masa_Auth_Web","ApiScope","ApiScope","sso/apiScope","mdi-circle",PermissionTypes.Menu),
@@ -28,7 +28,7 @@ public class AuthDbContextSeed
             }),
 
             new Permission("MASA_Auth","Masa_Auth_Web","ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-calendar-check-outline",PermissionTypes.Menu),
-            new Permission("MASA_Auth","Masa_Auth_Web","Position","position","organization/position","mdi-calendar-check-outline",PermissionTypes.Menu),
+            new Permission("MASA_Auth","Masa_Auth_Web","Position","position","organization/position","fa-solid fa-user-plus",PermissionTypes.Menu),
         };
 
         if (!context.Set<Permission>().Any())

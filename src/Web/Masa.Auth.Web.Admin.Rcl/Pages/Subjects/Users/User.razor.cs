@@ -94,6 +94,7 @@ public partial class User
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "UserBlock";
         Headers = new()
         {
             new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },

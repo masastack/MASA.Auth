@@ -72,11 +72,11 @@ public abstract class AdminCompontentBase : ComponentBase
         set => GlobalConfig.Loading = value;
     }
 
-    protected string? PageName { get; set; }
+    protected virtual string? PageName { get; set; }
 
     public string T(string key)
     {
-        if (PageName is not null) return I18n.T(PageName, key, true);
+        if (PageName is not null) return I18n.T(PageName, key, false) ?? I18n.T(key,false);
         else return I18n.T(key, true);
     }
 

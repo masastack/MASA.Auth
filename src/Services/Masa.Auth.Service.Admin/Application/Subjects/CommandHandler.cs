@@ -124,7 +124,9 @@ public class CommandHandler
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand command)
     {
         var userDto = command.User;
-        var user = await CheckUserAsync(userDto.Id);
+        var user = await _userRepository.GetDetailAsync(userDto.Id);
+        if (user is null)
+            throw new UserFriendlyException("The current user does not exist");
 
         user.AddRoles(userDto.Roles.ToArray());
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());

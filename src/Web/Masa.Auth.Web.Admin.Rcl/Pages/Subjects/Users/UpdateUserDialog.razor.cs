@@ -27,6 +27,8 @@ public partial class UpdateUserDialog
 
     private UserService UserService => AuthCaller.UserService;
 
+    protected override string? PageName { get; set; } = "UserBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

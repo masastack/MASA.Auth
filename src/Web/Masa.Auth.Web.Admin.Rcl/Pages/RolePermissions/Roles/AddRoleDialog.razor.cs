@@ -24,6 +24,8 @@ public partial class AddRoleDialog
 
     public bool Preview { get; set; }
 
+    protected override string? PageName { get; set; } = "RoleBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
