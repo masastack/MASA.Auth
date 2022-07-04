@@ -122,7 +122,7 @@ builder.Services
 
 var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddOidcCache(option);
-await builder.Services.AddOidcDbContext<AuthDbContext>(async option => 
+await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
