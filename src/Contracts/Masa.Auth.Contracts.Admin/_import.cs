@@ -10,6 +10,7 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums;
 global using Masa.BuildingBlocks.Authentication.Oidc.Models.Enums;
+global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Microsoft.AspNetCore.Http;
 global using SixLabors.Fonts;

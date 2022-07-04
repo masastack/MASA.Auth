@@ -198,7 +198,8 @@ public class QueryHandler
     [EventHandler]
     public async Task ApplicationPermissionsQueryAsync(ApplicationPermissionsQuery applicationPermissionsQuery)
     {
-        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == applicationPermissionsQuery.SystemId);
+        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == applicationPermissionsQuery.SystemId
+                && p.ParentId == Guid.Empty);
 
         applicationPermissionsQuery.Result = permissions.Select(p => new AppPermissionDto
         {

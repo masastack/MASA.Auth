@@ -44,7 +44,7 @@ public class ThirdPartyIdp : IdentityProvider
 
     public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
     {
-        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyFile, tpIdp.Enabled, tpIdp.VerifyType, tpIdp.CreationTime, tpIdp.ModificationTime);
+        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyFile, tpIdp.Enabled, tpIdp.VerifyType, tpIdp.IdentificationType, tpIdp.CreationTime, tpIdp.ModificationTime);
     }
 }
 

@@ -23,11 +23,9 @@ public partial class UpdateCustomLoginRegisterDialog
 
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
-    private StringNumber Tab { get; set; } = CustomLoginTab.BasicInformation;
+    private string Tab { get; set; } = CustomLoginTab.BasicInformation;
 
     private MForm? Form { get; set; }
-
-    private ClientSelect? ClientSelectRef { get; set; }
 
     private async Task UpdateVisible(bool visible)
     {

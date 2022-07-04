@@ -1,52 +1,50 @@
 ﻿@inherits AdminCompontentBase
 
-<MContainer Style="overflow-y: auto;" Class="full-height">
-    <MRow>
-        <MCol Md=12 Class="text-center">
-            <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload/>
-        </MCol>
-        <MCol Md=6>
-            <DefaultTextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
-        </MCol>
-        <MCol Md=6>
-            <DefaultTextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
-        </MCol>
-        <MCol Md=6>
-            <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
-        </MCol>
-        <MCol Md=6>
-            <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
-        </MCol> 
-    </MRow>
-    <MRow> 
-        <MCol Md=6>
-            <DefaultTextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")"
-                              AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
-            @foreach (var uri in Dto.RedirectUris)
-            {
-                <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="flex-grow-1" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
-            }
-        </MCol>
-        <MCol Md=6>
-            <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")"
-                              AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
-            @foreach (var uri in Dto.PostLogoutRedirectUris)
-            {
-                <DefaultTextField Dense HideDetails="true" Value="uri" Readonly AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
-            }
-        </MCol>
-    </MRow>
-    <MRow>
-        <MCol Md=12>
-            <DefaultTextField @bind-Value="Dto.Description" Label="@T("Description")" />
-        </MCol>
-    </MRow>
-</MContainer>
+<MRow>
+    <MCol Md=12 Class="text-center">
+        <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
+    </MCol>
+    <MCol Md=6>
+        <DefaultTextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
+    </MCol>
+    <MCol Md=6>
+        <DefaultTextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+    </MCol>
+    <MCol Md=6>
+        <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+    </MCol>
+    <MCol Md=6>
+        <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
+    </MCol>
+</MRow>
+<MRow>
+    <MCol Md=6>
+        <DefaultTextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")"
+                          AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
+        @foreach (var uri in Dto.RedirectUris)
+        {
+            <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
+        }
+    </MCol>
+    <MCol Md=6>
+        <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")"
+                          AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
+        @foreach (var uri in Dto.PostLogoutRedirectUris)
+        {
+            <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
+        }
+    </MCol>
+</MRow>
+<MRow>
+    <MCol Md=12>
+        <DefaultTextField @bind-Value="Dto.Description" Label="@T("Description")" />
+    </MCol>
+</MRow>
 
 @code {
     [Parameter]
     public ClientAddBasicDto Dto { get; set; } = new();
-    
+
     [Parameter]
     public EventCallback<ClientAddBasicDto> DtoChanged { get; set; }
 

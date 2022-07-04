@@ -1,15 +1,18 @@
 ﻿@inherits AdminCompontentBase
 
 <MAutocomplete Value="Value"
-               ValueChanged="ValueChanged"
+               ValueChanged="UpdateValueAsync"
                Items="Clients"
                Color="primary"
                Label="@T("Client")"
                ItemText="client => client.ClientName"
-               ItemValue="client => client.Id"
+               ItemValue="client => client.ClientId"
                Outlined
                Disabled=Disabled
                HideDetails="@("auto")"
+               TItem="ClientSelectDto"
+               TItemValue="string"
+               TValue="string"
                Style="@($"{Style}")"
                Class="@($"{Class}")">
     <ItemContent Context="data">

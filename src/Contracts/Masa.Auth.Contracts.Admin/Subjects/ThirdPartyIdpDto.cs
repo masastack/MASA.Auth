@@ -25,6 +25,8 @@ public class ThirdPartyIdpDto
 
     public AuthenticationTypes VerifyType { get; set; }
 
+    public IdentificationTypes IdentificationType { get; set; }
+
     public DateTime CreationTime { get; set; }
 
     public DateTime? ModificationTime { get; set; }
@@ -34,7 +36,7 @@ public class ThirdPartyIdpDto
 
     }
 
-    public ThirdPartyIdpDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, string verifyFile, bool enabled, AuthenticationTypes authenticationType, DateTime creationTime, DateTime? modificationTime)
+    public ThirdPartyIdpDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, string verifyFile, bool enabled, AuthenticationTypes verifyType, IdentificationTypes identificationType, DateTime creationTime, DateTime? modificationTime)
     {
         Id = id;
         Name = name;
@@ -45,7 +47,8 @@ public class ThirdPartyIdpDto
         Icon = icon;
         VerifyFile = verifyFile;
         Enabled = enabled;
-        VerifyType = authenticationType;
+        VerifyType = verifyType;
+        IdentificationType = identificationType;
         CreationTime = creationTime;
         ModificationTime = modificationTime;
     }

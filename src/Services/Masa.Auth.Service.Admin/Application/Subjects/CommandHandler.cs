@@ -152,8 +152,11 @@ public class CommandHandler
     [EventHandler]
     public async Task UserValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
-        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account && u.Password == validateByAccountCommand.Password);
-        validateByAccountCommand.Result = user != null;
+        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account);
+        if (user != null)
+        {
+            validateByAccountCommand.Result = user.VerifyPassword(validateByAccountCommand.Password);
+        }
     }
 
     #endregion
@@ -213,7 +216,7 @@ public class CommandHandler
         if (exist)
             throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
 
-        var thirdPartyIdp = new ThirdPartyIdp(thirdPartyIdpDto.Name, thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, default, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+        var thirdPartyIdp = new ThirdPartyIdp(thirdPartyIdpDto.Name, thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, thirdPartyIdpDto.IdentificationType, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
 
         await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
     }
@@ -226,7 +229,7 @@ public class CommandHandler
         if (thirdPartyIdp is null)
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
-        thirdPartyIdp.Update(thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, default, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+        thirdPartyIdp.Update(thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, thirdPartyIdpDto.IdentificationType, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
         await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
     }
 

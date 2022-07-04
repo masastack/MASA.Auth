@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using SubjectTypes = Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum.SubjectTypes;
+
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class SubjectDto
@@ -17,14 +19,14 @@ public class SubjectDto
 
     public string Email { get; set; } = "";
 
-    public BusinessTypes SubjectType { get; set; }
+    public SubjectTypes SubjectType { get; set; }
 
     public SubjectDto()
     {
 
     }
 
-    public SubjectDto(Guid subjectId, string name, string displayName, string avatar, string phoneNumber, string email, BusinessTypes subjectType)
+    public SubjectDto(Guid subjectId, string name, string displayName, string avatar, string phoneNumber, string email, SubjectTypes subjectType)
     {
         SubjectId = subjectId;
         Name = name;
