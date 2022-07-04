@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class UpdateUserBaseInfoCommandValidator : AbstractValidator<UpdateUserBaseInfoCommand>
+public class UpdateUserBasicInfoCommandValidator : AbstractValidator<UpdateUserBasicInfoCommand>
 {
-    public UpdateUserBaseInfoCommandValidator()
+    public UpdateUserBasicInfoCommandValidator()
     {
         RuleFor(command => command.User.DisplayName).ChineseLetter().MaxLength(20);
         RuleFor(command => command.User.PhoneNumber).Phone();      

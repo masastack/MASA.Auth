@@ -164,11 +164,11 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task UpdateUserPasswordAsync(UpdateUserBaseInfoCommand command)
+    public async Task UpdateUserPasswordAsync(UpdateUserBasicInfoCommand command)
     {
         var userModel = command.User;
         var user = await CheckUserAsync(userModel.Id);
-        user.UpdateBaseInfo(user.DisplayName, user.PhoneNumber, user.Email, user.Avatar, user.GenderType);
+        user.UpdateBasicInfo(user.DisplayName, user.PhoneNumber, user.Email, user.Avatar, user.GenderType);
         await _userRepository.UpdateAsync(user);
     }
 

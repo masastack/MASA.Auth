@@ -151,16 +151,16 @@ namespace Masa.Auth.Service.Admin.Services
             return visitListQuery.Result;
         }
 
-        public async Task UpdateUserPasswordAsync(IEventBus eventBus,
+        public async Task UpdatePasswordAsync(IEventBus eventBus,
             [FromBody] UpdateUserPasswordModel user)
         {
             await eventBus.PublishAsync(new UpdateUserPasswordCommand(user));
         }
 
-        public async Task UpdateUserBaseInfoAsync(IEventBus eventBus,
-            [FromBody] UpdateUserBaseInfoModel user)
+        public async Task UpdateBasicInfoAsync(IEventBus eventBus,
+            [FromBody] UpdateUserBasicInfoModel user)
         {
-            await eventBus.PublishAsync(new UpdateUserBaseInfoCommand(user));
+            await eventBus.PublishAsync(new UpdateUserBasicInfoCommand(user));
         }
     }
 }

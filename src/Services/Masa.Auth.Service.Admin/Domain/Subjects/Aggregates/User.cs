@@ -169,7 +169,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Landline = landline;
     }
 
-    public void UpdateBaseInfo(string? displayName, string? phoneNumber, string? email,string avatar, GenderTypes genderType)
+    public void UpdateBasicInfo(string? displayName, string? phoneNumber, string? email,string avatar, GenderTypes genderType)
     {
         DisplayName = displayName ?? "";
         PhoneNumber = phoneNumber ?? "";

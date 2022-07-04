@@ -110,3 +110,4 @@ global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using Client = Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client;
 global using Masa.Contrib.Authentication.Oidc.EntityFrameworkCore.Caches;
+global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
