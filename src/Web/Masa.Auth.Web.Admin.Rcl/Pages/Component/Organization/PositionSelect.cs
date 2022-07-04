@@ -16,7 +16,7 @@ public class PositionSelect : Combox<PositionSelectDto>
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         ValueSelector = item => item.Name;
-        Label = I18n!.T("Position");
+        Label = I18n!.T("Position", true);
         MaxHeight = 250;
         await base.SetParametersAsync(parameters);
     }

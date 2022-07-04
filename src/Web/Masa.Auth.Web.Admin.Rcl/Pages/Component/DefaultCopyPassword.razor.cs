@@ -14,7 +14,7 @@ public partial class DefaultCopyPassword : DefaultTextField<string>
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        Label = I18n!.T("Password");
+        Label = I18n!.T("User", "Password");
         Readonly = true;
         base.Type = Type;
         AppendContent = builder =>

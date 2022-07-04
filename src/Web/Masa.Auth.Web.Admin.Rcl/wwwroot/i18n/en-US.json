@@ -3,8 +3,6 @@
   "$DateTimeFormat": "MM/dd/yyyy HH:mm:ss",
   "$DateFormat": "MM/dd/yyyy",
 
-  "Role.Name": "Name",
   "ThirdPartyIdp": "ThirdParty identity provider",
-  "BasicInformation": "Basic Information",
-  "Position.Name": "Name",
+  "BasicInformation": "Basic Information"
 }

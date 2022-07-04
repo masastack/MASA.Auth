@@ -78,9 +78,7 @@ public class CommandHandler
     public async Task UpdateUserAsync(UpdateUserCommand command)
     {
         var userDto = command.User;
-        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
-        if (user is null)
-            throw new UserFriendlyException("The current user does not exist");
+        var user = await CheckUserAsync(userDto.Id);
 
         Expression<Func<User, bool>> condition = user => false;
         if (!string.IsNullOrEmpty(userDto.PhoneNumber))
@@ -116,9 +114,7 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == command.User.Id);
-        if (user == null)
-            throw new UserFriendlyException("The current user does not exist");
+        var user = await CheckUserAsync(command.User.Id);
 
         await _userRepository.RemoveAsync(user);
         await _userDomainService.RemoveAsync(user.Id);
@@ -129,7 +125,7 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await _userRepository.GetDetailAsync(userDto.Id);
-        if (user == null)
+        if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
         user.AddRoles(userDto.Roles.ToArray());
@@ -138,12 +134,10 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
+    public async Task UpdateUserPasswordAsync(ResetUserPasswordCommand command)
     {
         var userDto = command.User;
-        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
-        if (user is null)
-            throw new UserFriendlyException("The current user does not exist");
+        var user = await CheckUserAsync(userDto.Id);
 
         user.UpdatePassword(userDto.Password);
         await _userRepository.UpdateAsync(user);
@@ -157,6 +151,37 @@ public class CommandHandler
         {
             validateByAccountCommand.Result = user.VerifyPassword(validateByAccountCommand.Password);
         }
+    }
+
+    [EventHandler]
+    public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
+    {
+        var userModel = command.User;
+        var user = await CheckUserAsync(userModel.Id);
+        if (user.VerifyPassword(userModel.OldPassword))
+        {
+            user.UpdatePassword(userModel.NewPassword);
+            await _userRepository.UpdateAsync(user);
+        }
+    }
+
+    [EventHandler]
+    public async Task UpdateUserPasswordAsync(UpdateUserBasicInfoCommand command)
+    {
+        var userModel = command.User;
+        var user = await CheckUserAsync(userModel.Id);
+        user.UpdateBasicInfo(user.DisplayName, user.PhoneNumber, user.Email, user.Avatar, user.GenderType);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    private async Task<User> CheckUserAsync(Guid userId)
+    {
+        var user = await _userRepository.FindAsync(u => u.Id == userId);
+        if (user is null)
+            throw new UserFriendlyException("The current user does not exist");
+
+
+        return user;
     }
 
     #endregion

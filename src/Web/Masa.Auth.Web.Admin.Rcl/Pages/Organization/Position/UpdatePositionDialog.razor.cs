@@ -25,6 +25,8 @@ public partial class UpdatePositionDialog
 
     private MForm? Form { get; set; }
 
+    protected override string? PageName { get; set; } = "PositionBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

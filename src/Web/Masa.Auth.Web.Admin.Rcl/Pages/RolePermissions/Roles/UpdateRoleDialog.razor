@@ -15,7 +15,7 @@
                 <MWindow Value="Tab.ToString()" Class="full-height">
                     <MWindowItem Value="UpdateRoleTabs.BasicInformation.ToString()">
                         <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
-                        <DefaultTextField @bind-Value="Role.Name" Class="mb-6" Label="@T("Role.Name")" />
+                        <DefaultTextField @bind-Value="Role.Name" Class="mb-6" Label="@T("Name")" />
                         <DefaultTextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Class="mb-6" Label="@T("Limit the number of bindings")" />
                         <RoleSelect Value="RoleDetail.ParentRoles" Class="mb-12" Readonly Label="@T("Superior Role")" />
                         <RoleOwner RoleId=RoleId Class="mb-12" />

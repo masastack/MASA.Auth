@@ -13,7 +13,7 @@
             <AutoHeightContent>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("ThirdPartyIdp.Name")" />
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("Name")" />
                     </MCol>
                     <MCol>
                         <DefaultTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
@@ -29,17 +29,17 @@
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
+                        <DefaultTextField @bind-Value="ThirdPartyIdp.Url" Label="@T("URL")" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
                     </MCol>
                 </MRow>
-                <MRow Class="mb-6">
+@*                <MRow Class="mb-6">
                     <MCol>
-                        <MFileInput TValue="IBrowserFile" Outlined Dense Label="@T(nameof(ThirdPartyIdp.VerifyFile))" /> @*@bind-Value="ThirdPartyIdp.VerifyFile"*@
+                        <MFileInput TValue="IBrowserFile" Outlined Dense Label="@T(nameof(ThirdPartyIdp.VerifyFile))" />
                     </MCol>
-                </MRow>
+                </MRow>*@
                 <MRow Class="mb-6">
                     <MCol>
                         <div class="d-flex defaultRadio">

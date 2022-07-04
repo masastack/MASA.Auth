@@ -7,10 +7,11 @@ public class UpdateThirdPartyIdpValidator : AbstractValidator<UpdateThirdPartyId
 {
     public UpdateThirdPartyIdpValidator()
     {
-        RuleFor(staff => staff.ClientId).Required();
-        RuleFor(staff => staff.ClientSecret).Required();
-        RuleFor(staff => staff.Url).Required();
-        //RuleFor(staff => staff.Icon).Required();
+        RuleFor(thirdPartyIdp => thirdPartyIdp.DisplayName).ChineseLetterNumber().MinLength(4).MaxLength(50);
+        RuleFor(staff => staff.ClientId).Required().LetterNumber().MinLength(4).MaxLength(50);
+        RuleFor(staff => staff.ClientSecret).Required().MaxLength(255);
+        RuleFor(staff => staff.Url).Required().Url().MaxLength(255);
+        RuleFor(staff => staff.Icon).Required();
     }
 }
 

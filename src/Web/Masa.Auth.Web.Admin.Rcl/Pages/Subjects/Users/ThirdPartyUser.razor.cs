@@ -89,9 +89,10 @@ public partial class ThirdPartyUser
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "ThirdPartyUser";
         Headers = new()
         {
-            new() { Text = T(nameof(UserDto.Avatar)), Value = nameof(UserDto.Avatar), Sortable = false },
+            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
             new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
             new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },

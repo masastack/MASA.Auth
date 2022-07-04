@@ -23,6 +23,8 @@ public partial class AddThirdPartyIdpDialog
 
     private MForm? Form { get; set; }
 
+    protected override string? PageName { get; set; } = "ThirdPartyIdpBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -49,6 +51,11 @@ public partial class AddThirdPartyIdpDialog
 
     public async Task AddThirdPartyIdpAsync(EditContext context)
     {
+        if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
+        {
+            OpenErrorMessage(T("Please upload ThirdPartyIdp icon"));
+            return;
+        }
         var success = context.Validate();
         if (success)
         {

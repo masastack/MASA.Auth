@@ -42,9 +42,9 @@ public class UserService : ServiceBase
         await SendAsync(nameof(UpdateAuthorizationAsync), request);
     }
 
-    public async Task UpdateUserPasswordAsync(UpdateUserPasswordDto request)
+    public async Task ResetUserPasswordAsync(ResetUserPasswordDto request)
     {
-        await SendAsync(nameof(UpdateUserPasswordAsync), request);
+        await PutAsync(nameof(ResetUserPasswordAsync), request);
     }
 
     public async Task RemoveAsync(Guid id)
