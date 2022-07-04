@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.BasicAbility.Dcc;
 using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,6 +62,7 @@ builder.AddMasaConfiguration(configurationBuilder =>
     configurationBuilder.UseDcc();
 });
 
+builder.Services.AddDccClient();
 var redisConfigOption = builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationAPI:Masa_Auth_Web:AppSettings:PmClient:Url"));
