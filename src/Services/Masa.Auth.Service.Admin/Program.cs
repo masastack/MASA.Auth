@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
@@ -45,25 +47,26 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Bearer", options =>
 {
-    options.Authority = builder.Configuration["IdentityServerUrl"];
+    options.Authority = builder.Configuration["ConfigurationAPI:Masa_Auth_Web:AppSettings:IdentityServerUrl"];
     options.RequireHttpsMetadata = false;
     //options.Audience = "";
     options.TokenValidationParameters.ValidateAudience = false;
     options.MapInboundClaims = false;
 });
 
-//builder.AddMasaConfiguration(configurationBuilder =>
-//{
-//    configurationBuilder.UseDcc();
-//    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
-//});
 MapsterAdapterConfig.TypeAdapter();
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
+
+builder.AddMasaConfiguration(configurationBuilder =>
+{
+    configurationBuilder.UseDcc();
+});
+
+var redisConfigOption = builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
+builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationAPI:Masa_Auth_Web:AppSettings:PmClient:Url"));
 builder.Services.AddLadpContext();
 
-builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
-                .AddAutoComplete(option => option.UseIndexName("user_index"));
+builder.Services.AddElasticsearchAutoComplete(builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:AutoComplete"));
 
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
@@ -120,10 +123,9 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddOidcCache(option);
+builder.Services.AddOidcCache(redisConfigOption);
 builder.Services.AddOidcDbContext<AuthDbContext>()
-                .SeedClientData(new List<Client> { builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>() });
+                .SeedClientData(new List<Client> { builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:Client").Get<ClientModel>().Adapt<Client>() });
 
 // sync client resource cache
 var sync = builder.Services.BuildServiceProvider().GetRequiredService<SyncCache>();
