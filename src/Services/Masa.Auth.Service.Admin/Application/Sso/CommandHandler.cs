@@ -12,9 +12,14 @@ public class CommandHandler
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
     readonly IEventBus _eventBus;
-    readonly DbContext _oidcDbContext;
 
-    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, IEventBus eventBus, OidcDbContext oidcDbContext)
+    public CommandHandler(IClientRepository clientRepository,
+                          IIdentityResourceRepository identityResourceRepository,
+                          IApiResourceRepository apiResourceRepository,
+                          IApiScopeRepository apiScopeRepository,
+                          IUserClaimRepository userClaimRepository,
+                          ICustomLoginRepository customLoginRepository,
+                          IEventBus eventBus)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -23,7 +28,6 @@ public class CommandHandler
         _userClaimRepository = userClaimRepository;
         _customLoginRepository = customLoginRepository;
         _eventBus = eventBus;
-        _oidcDbContext = oidcDbContext;
     }
 
     #region Client
@@ -64,7 +68,9 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
-        var client = (await _oidcDbContext.Set<Client>().FindAsync(removeClientCommand.ClientId))
+        //var client = (await _oidcDbContext.Set<Client>().FindAsync(removeClientCommand.ClientId))
+        //    ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
+        var client = await _clientRepository.GetDetailAsync(removeClientCommand.ClientId)
             ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
         await _clientRepository.RemoveAsync(client);
     }

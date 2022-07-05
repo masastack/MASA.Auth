@@ -5,9 +5,11 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Extensions;
 
 public static class ElasticsearchAutoCompleteExtensions
 {
-    public static void AddElasticsearchAutoComplete(this IServiceCollection services, IConfiguration configuration)
+    public static void AddElasticsearchAutoComplete(this IServiceCollection services)
     {
-        var autoCompleteModel = configuration.Get<AutoCompleteModel>();
+        var options = services.BuildServiceProvider().GetService<IOptions<AutoCompleteModel>>();
+        var autoCompleteModel = options!.Value;
+
         var esBuilder = services.AddElasticsearchClient(autoCompleteModel.Name, option => option.UseNodes(autoCompleteModel.Nodes.ToArray())
                 .UseDefault());
         foreach (var doc in autoCompleteModel.Documents)

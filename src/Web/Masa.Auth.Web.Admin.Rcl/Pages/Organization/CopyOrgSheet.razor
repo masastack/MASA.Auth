@@ -4,7 +4,7 @@
     <MWindow @bind-Value="_step" Class="full-height">
         <MWindowItem Value="1" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
-                <MCardText Class="d-flex align-center">
+                <MCardText Class="d-flex align-center full-height">
                     <div class="full-width">
                         <DefaultTextField @bind-Value="@Dto.Name" class="mx-auto font-24-bold" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></DefaultTextField>
                         <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
@@ -23,7 +23,7 @@
         </MWindowItem>
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
-                <MCardText Class="d-flex flex-column">
+                <MCardText Class="d-flex flex-column full-height">
                     <MTextField class="mx-auto font-24-bold regular3--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
                     <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"

@@ -36,9 +36,9 @@ public class AuthDbContextSeed
             context.Set<Permission>().AddRange(menus);
         }
 
-        if (!context.Set<User>().Any(u => u.Account == "administrator"))
+        if (!context.Set<User>().Any(u => u.Account == "admin"))
         {
-            var adminUser = new User("admin", "超级管理员", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "administrator", "masa1234", "Masa");
+            var adminUser = new User("admin", "超级管理员", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "admin", "masa1234", "Masa");
             context.Set<User>().Add(adminUser);
         }
 

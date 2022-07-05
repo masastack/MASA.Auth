@@ -78,6 +78,7 @@ public partial class Index
             Id = Guid.NewGuid(),
             Name = a.Name
         }).ToList();
+        //_menuPermissionActive = _menuPermissions.Select(m => m.Id).Take(1).ToList();
         _apiPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
@@ -86,7 +87,7 @@ public partial class Index
             Id = Guid.NewGuid(),
             Name = a.Name
         }).ToList();
-
+        //_apiPermissionActive = _apiPermissions.Select(m => m.Id).Take(1).ToList();
         var applicationPermissions = await PermissionService.GetApplicationPermissionsAsync(_curProjectId);
 
         _menuPermissions.ForEach(mp =>

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Configuration;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class TeamCommandHandler
@@ -9,23 +11,23 @@ public class TeamCommandHandler
     readonly ITeamRepository _teamRepository;
 
     readonly TeamDomainService _teamDomainService;
-    readonly IConfiguration _configuration;
     readonly IClient _aliyunClient;
 
     string _bucket = "";
     string _cdnEndpoint = "";
 
-    public TeamCommandHandler(
-        ITeamRepository teamRepository, TeamDomainService teamDomainService,
-        IConfiguration configuration, IClient aliyunClient, DaprClient daprClient)
+    public TeamCommandHandler(ITeamRepository teamRepository,
+                              TeamDomainService teamDomainService,
+                              IMasaConfiguration masaConfiguration,
+                              IClient aliyunClient,
+                              DaprClient daprClient)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
-        _configuration = configuration;
         _aliyunClient = aliyunClient;
 
         _bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.FirstOrDefault().Value;
-        _cdnEndpoint = _configuration.GetValue<string>("CdnEndpoint");
+        _cdnEndpoint = masaConfiguration.GetConfiguration(SectionTypes.Local).GetValue<string>("CdnEndpoint");
     }
 
 

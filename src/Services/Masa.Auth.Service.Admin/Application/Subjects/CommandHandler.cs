@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Configuration;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -19,7 +21,7 @@ public class CommandHandler
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
         StaffDomainService staffDomainService, ILdapFactory ldapFactory,
         UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IConfiguration configuration, ILogger<CommandHandler> logger)
+        IMasaConfiguration masaConfiguration, ILogger<CommandHandler> logger)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -29,7 +31,7 @@ public class CommandHandler
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapIdpRepository = ldapIdpRepository;
-        _configuration = configuration;
+        _configuration = masaConfiguration.GetConfiguration(SectionTypes.Local);
         _logger = logger;
     }
 

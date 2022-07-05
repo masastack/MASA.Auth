@@ -65,7 +65,7 @@ builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationAPI:Masa_Auth_Web:AppSettings:PmClient:Url"));
 builder.Services.AddLadpContext();
 
-builder.Services.AddElasticsearchAutoComplete(builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:AutoComplete"));
+builder.Services.AddElasticsearchAutoComplete();
 
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
