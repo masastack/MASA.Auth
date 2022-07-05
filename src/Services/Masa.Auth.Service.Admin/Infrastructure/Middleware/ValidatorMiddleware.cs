@@ -39,18 +39,4 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
 
         }
     }
-
-    public class TemplateMiddleware<TEvent> : IMiddleware<TEvent> 
-        where TEvent : notnull, IEvent
-    {
-        public async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
-        {
-            if(@event is ICommand)
-            {
-                throw new UserFriendlyException("禁止操作");
-            }
-
-            await next();
-        }
-    }
 }

@@ -9,7 +9,7 @@ public partial class RoleSelectForUser : RoleSelect
     public Guid UserId { get; set; }
 
     public override async Task SetParametersAsync(ParameterView parameters)
-    {        
+    {
         await base.SetParametersAsync(parameters);
         Label = T("Inherited Role");
     }
