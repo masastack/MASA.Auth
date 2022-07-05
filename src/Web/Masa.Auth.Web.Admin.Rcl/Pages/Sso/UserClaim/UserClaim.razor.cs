@@ -49,22 +49,21 @@ public partial class UserClaim
 
     public bool UpdateUserClaimDialogVisible { get; set; }
 
-    public List<DataTableHeader<UserClaimDto>> Headers { get; set; } = new();
-
     private UserClaimService UserClaimService => AuthCaller.UserClaimService;
 
     protected override async Task OnInitializedAsync()
     {
-        Headers = new()
-        {
-            new() { Text = T("UserClaim.Name"), Value = nameof(UserClaimDto.Name), Sortable = false },
-            new() { Text = T(nameof(UserClaimDto.Description)), Value = nameof(UserClaimDto.Description), Sortable = false },
-            new() { Text = T("Type"), Value = nameof(UserClaimDto.UserClaimType), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
-        };
-
+        PageName = "UserClaimBlock";
         await GetUserClaimsAsync();
     }
+
+    public List<DataTableHeader<UserClaimDto>> GetHeaders() => new()
+    {
+        new() { Text = T("Name"), Value = nameof(UserClaimDto.Name), Sortable = false },
+        new() { Text = T(nameof(UserClaimDto.Description)), Value = nameof(UserClaimDto.Description), Sortable = false },
+        new() { Text = T("Type"), Value = nameof(UserClaimDto.UserClaimType), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     public async Task GetUserClaimsAsync()
     {

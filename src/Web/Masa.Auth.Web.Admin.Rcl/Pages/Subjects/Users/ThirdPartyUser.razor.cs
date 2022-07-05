@@ -81,8 +81,6 @@ public partial class ThirdPartyUser
 
     public Guid CurrentThirdPartyUserId { get; set; }
 
-    public List<DataTableHeader<ThirdPartyUserDto>> Headers { get; set; } = new();
-
     public bool ViewThirdPartyUserDialog { get; set; }
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
@@ -90,19 +88,19 @@ public partial class ThirdPartyUser
     protected override async Task OnInitializedAsync()
     {
         PageName = "ThirdPartyUser";
-        Headers = new()
-        {
-            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
-            new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
-            new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align="center", Width="105px" },
-            //new() { Text = T("Action"), Value = "Action", Sortable = false },
-        };
-
         await GetThirdPartyUsersAsync();
     }
+
+    public List<DataTableHeader<ThirdPartyUserDto>> GetHeaders() => new()
+    {
+        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
+        new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
+        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align="center", Width="105px" },
+        //new() { Text = T("Action"), Value = "Action", Sortable = false },
+    };
 
     public async Task GetThirdPartyUsersAsync()
     {

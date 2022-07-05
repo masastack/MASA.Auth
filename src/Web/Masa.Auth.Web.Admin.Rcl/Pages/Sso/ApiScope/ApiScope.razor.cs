@@ -49,24 +49,22 @@ public partial class ApiScope
 
     public bool UpdateApiScopeDialogVisible { get; set; }
 
-    public List<DataTableHeader<ApiScopeDto>> Headers { get; set; } = new();
-
     private ApiScopeService ApiScopeService => AuthCaller.ApiScopeService;
 
     protected override async Task OnInitializedAsync()
     {
-        Headers = new()
-        {
-            new() { Text = T("ApiScope.Name"), Value = nameof(ApiScopeDto.Name), Sortable = false },
-            new() { Text = T(nameof(ApiScopeDto.DisplayName)), Value = nameof(ApiScopeDto.DisplayName), Sortable = false },
-            new() { Text = T("ApiScope.Required"), Value = nameof(ApiScopeDto.Required), Sortable = false },
-            new() { Text = T(nameof(ApiScopeDto.Description)), Value = nameof(ApiScopeDto.Description), Sortable = false },
-            new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
-        };
-
         await GetApiScopesAsync();
     }
+
+    public List<DataTableHeader<ApiScopeDto>> GetHeaders() => new()
+    {
+        new() { Text = T("ApiScope.Name"), Value = nameof(ApiScopeDto.Name), Sortable = false },
+        new() { Text = T(nameof(ApiScopeDto.DisplayName)), Value = nameof(ApiScopeDto.DisplayName), Sortable = false },
+        new() { Text = T("ApiScope.Required"), Value = nameof(ApiScopeDto.Required), Sortable = false },
+        new() { Text = T(nameof(ApiScopeDto.Description)), Value = nameof(ApiScopeDto.Description), Sortable = false },
+        new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     public async Task GetApiScopesAsync()
     {

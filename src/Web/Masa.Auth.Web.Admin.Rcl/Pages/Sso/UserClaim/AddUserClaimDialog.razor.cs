@@ -20,6 +20,8 @@ public partial class AddUserClaimDialog
 
     private MForm? Form { get; set; }
 
+    protected override string? PageName { get; set; } = "UserClaimBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
