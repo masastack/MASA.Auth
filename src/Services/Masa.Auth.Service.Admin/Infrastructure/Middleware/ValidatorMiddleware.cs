@@ -35,8 +35,6 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
             }
 
             await next();
-
-
         }
     }
 }
