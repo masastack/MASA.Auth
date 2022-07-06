@@ -44,7 +44,7 @@
   "Total": "共",
   "Item": "条",
   "All": "全部",
-  "Select Tag": "选择标签",
+  "Application Group": "应用程序分组",
   "History record": "历史记录",
   "Start time cannot be greater than end time": "开始时间不能大于结束时间",
   "End time cannot be less than start time": "结束时间不能小于开始时间",
@@ -192,7 +192,9 @@
     "Permission deleted successfully": "删除权限成功",
     "Failed to delete permission": "删除权限失败",
     "Project identifier is empty": "项目标识为空",
-    "Tag or appid is empty": "tag或appid为空"
+    "Tag or appid is empty": "tag或appid为空",
+    "Application Group save successed": "应用分组保存成功",
+    "Support mdi and fas icon": "支持mdi-* 和 fas-* 图标"
   },
 
   "UserBlock": {

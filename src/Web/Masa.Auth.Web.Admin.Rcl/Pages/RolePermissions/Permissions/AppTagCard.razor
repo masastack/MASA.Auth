@@ -1,15 +1,23 @@
 ﻿@inherits AdminCompontentBase
 
 <MCard Class="full-height d-flex flex-column">
-    <MCardText>
+    <MCardText Class="full-height">
         <MRow>
             <MCol Md=6>
-                <MAutocomplete HideDetails=true
-                               @bind-Value="AppTagDto.Tag"
-                               Outlined Dense Label="@I18n.T("Select Tag")"
-                               Items="@_appTags"
-                               ItemText="t => t"
-                               ItemValue="t => t"></MAutocomplete>
+                <MRadioGroup @bind-Value="AppTagDto.Tag" Label="@I18n.T("Application Group")">
+                    @foreach (var _appTag in _appTags)
+                    {
+                        <MRadio Label="@_appTag" Value="@_appTag"></MRadio>
+                    }
+
+                </MRadioGroup>
+            </MCol>
+            <MCol Md="12">
+                <span>
+                    说明：请选择应用归属分组（只能存在于一个分组中）
+                    <br/>
+                    添加分组标签请去DCC中添加
+                </span>
             </MCol>
         </MRow>
     </MCardText>
@@ -40,6 +48,7 @@
         if (OnSave.HasDelegate)
         {
             await OnSave.InvokeAsync(AppTagDto);
+            await PopupService.AlertAsync(T("Application Group save successed"), AlertTypes.Success);
         }
     }
 }

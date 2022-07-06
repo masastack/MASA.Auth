@@ -19,7 +19,7 @@ public class CommandHandler
     public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
         StaffDomainService staffDomainService, ILdapFactory ldapFactory,
         UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IConfiguration configuration, ILogger<CommandHandler> logger)
+        IMasaConfiguration masaConfiguration, ILogger<CommandHandler> logger)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -29,7 +29,7 @@ public class CommandHandler
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapIdpRepository = ldapIdpRepository;
-        _configuration = configuration;
+        _configuration = masaConfiguration.GetConfiguration(SectionTypes.Local);
         _logger = logger;
     }
 
@@ -160,17 +160,18 @@ public class CommandHandler
         var user = await CheckUserAsync(userModel.Id);
         if (user.VerifyPassword(userModel.OldPassword))
         {
-            user.UpdatePassword(userModel.NewPassword);
-            await _userRepository.UpdateAsync(user);
+            throw new UserFriendlyException("password verification failed");
         }
+        user.UpdatePassword(userModel.NewPassword);
+        await _userRepository.UpdateAsync(user);
     }
 
     [EventHandler]
-    public async Task UpdateUserPasswordAsync(UpdateUserBasicInfoCommand command)
+    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         var userModel = command.User;
         var user = await CheckUserAsync(userModel.Id);
-        user.UpdateBasicInfo(user.DisplayName, user.PhoneNumber, user.Email, user.Avatar, user.GenderType);
+        user.UpdateBasicInfo(userModel.DisplayName, userModel.PhoneNumber, userModel.Email, userModel.Avatar, userModel.Gender);
         await _userRepository.UpdateAsync(user);
     }
 

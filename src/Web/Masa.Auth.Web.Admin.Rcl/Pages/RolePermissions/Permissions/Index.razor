@@ -1,7 +1,11 @@
 ﻿@inherits AdminCompontentBase
 @page "/permission/index"
 
-<MRow Class="full-height">
+<PageTitle>
+    @T("Permission")
+</PageTitle>
+
+<MRow Class="full-height" NoGutters>
     <MCol Md="@("auto")" Class="d-flex flex-column">
         <SearchableExtend Split=true MaxWidth=300>
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
@@ -56,7 +60,7 @@
             </ElevationTab>
         </MCard>
     </MCol>
-    <MCol Class="full-height">
+    <MCol Class="full-height ml-6">
         <MWindow Value="_tab" Reverse Class="full-height">
             <MWindowItem Value='T("Menu Permission")' Class="full-height">
                 @if (_showMenuInfo)
@@ -99,7 +103,7 @@
                                             </MCascader>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Icon Code")" @bind-Value="_menuPermissionDetailDto.Icon">
+                                            <DefaultTextField Label="@T("Icon Code")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
                                                 <PrependContent>
                                                     <div class="d-flex align-center mt-n1">
                                                         <MIcon Size=30>
@@ -215,17 +219,6 @@
                                         </MCol>
                                         <MCol Md=6>
                                             <DefaultTextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></DefaultTextField>
-                                        </MCol>
-                                        <MCol Md=6>
-                                            <DefaultTextField Label="@T("Icon Code")" @bind-Value="_apiPermissionDetailDto.Icon">
-                                                <PrependContent>
-                                                    <div class="d-flex align-center mt-n1">
-                                                        <MIcon Size=30>
-                                                            @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
-                                                        </MIcon>
-                                                    </div>
-                                                </PrependContent>
-                                            </DefaultTextField>
                                         </MCol>
                                         <MCol Md=6>
                                             <MSelect @bind-Value="@_apiPermissionDetailDto.Type"
