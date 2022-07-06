@@ -191,8 +191,8 @@
     "Failed to delete permission": "删除权限失败",
     "Project identifier is empty": "项目标识为空",
     "Tag or appid is empty": "tag或appid为空",
-    "Group save successed": "应用分组保存成功",
-    "Support mdi-circle and other icons": "支持mdi-circle等图标"
+    "Application Group save successed": "应用分组保存成功",
+    "Support mdi and fas icon": "支持mdi-* 和 fas-* 图标"
   },
 
   "UserBlock": {

@@ -48,7 +48,7 @@
         if (OnSave.HasDelegate)
         {
             await OnSave.InvokeAsync(AppTagDto);
-            await PopupService.AlertAsync(T("Group save successed"), AlertTypes.Success);
+            await PopupService.AlertAsync(T("Application Group save successed"), AlertTypes.Success);
         }
     }
 }

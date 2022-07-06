@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Configuration;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -162,9 +160,10 @@ public class CommandHandler
         var user = await CheckUserAsync(userModel.Id);
         if (user.VerifyPassword(userModel.OldPassword))
         {
-            user.UpdatePassword(userModel.NewPassword);
-            await _userRepository.UpdateAsync(user);
+            throw new UserFriendlyException("password verification failed");
         }
+        user.UpdatePassword(userModel.NewPassword);
+        await _userRepository.UpdateAsync(user);
     }
 
     [EventHandler]
