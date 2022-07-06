@@ -17,10 +17,11 @@ builder.Services.AddDaprClient();
 builder.Services.AddAliyunStorage(serviceProvider =>
 {
     var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var accessId = daprClient.GetSecretAsync("localsecretstore", "access_id").Result.First().Value;
-    var accessSecret = daprClient.GetSecretAsync("localsecretstore", "access_secret").Result.First().Value;
-    var endpoint = daprClient.GetSecretAsync("localsecretstore", "endpoint").Result.First().Value;
-    var roleArn = daprClient.GetSecretAsync("localsecretstore", "roleArn").Result.First().Value;
+    var aliyunOssConfig = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result;
+    var accessId = aliyunOssConfig["access_id"];
+    var accessSecret = aliyunOssConfig["access_secret"];
+    var endpoint = aliyunOssConfig["endpoint"];
+    var roleArn = aliyunOssConfig["role_arn"];
     return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
     {
         Sts = new AliyunStsOptions()
