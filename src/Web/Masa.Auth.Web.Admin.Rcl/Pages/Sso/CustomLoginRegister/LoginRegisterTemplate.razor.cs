@@ -26,6 +26,7 @@ public partial class LoginRegisterTemplate
 
     protected override void OnInitialized()
     {
+        PageName = "CustomLoginBlock";
         Tab ??= CustomLoginTab.Login;
     }
 

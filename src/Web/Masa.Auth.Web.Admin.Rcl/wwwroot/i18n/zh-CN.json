@@ -86,6 +86,10 @@
   "UserClaim": "用户声明",
   "Basic Information": "基础信息",
   "Detail Information": "详细信息",
+  "Account": "用户账号",
+  "Password": "用户密码",
+  "IdCard": "身份证号",
+  "Operation confirmation": "操作确认",
 
   "OrganizationBlock": {
     "Department": "部门",
@@ -203,9 +207,6 @@
     "Name": "姓名",
     "Avatr": "头像",
     "User.DisplayName": "用户昵称",
-    "IdCard": "身份证号",
-    "Account": "用户账号",
-    "Password": "用户密码",
     "Position": "职位",
     "Department": "部门",
     "CompanyName": "公司名称",
@@ -221,7 +222,9 @@
     "Failed to authorize user:": "授权用户失败:",
     "Another": "换一个",
     "Give him a nickname!": "给Ta取个昵称吧!",
-    "Successfully set user permissions": "设置用户权限成功"
+    "Successfully set user permissions": "设置用户权限成功",
+    "User roles and permissions settings": "用户角色和权限设置",
+    "Are you sure delete user data": "确认删除用户数据"
   },
 
   "StaffBlock": {
@@ -251,7 +254,8 @@
     "Edit staff data success": "编辑员工数据成功",
     "Failed to edit staff:": "编辑员工数据失败:",
     "Delete staff data success": "删除员工数据成功",
-    "Delete staff data failed:": "删除员工数据失败:"
+    "Delete staff data failed:": "删除员工数据失败:",
+    "Are you sure delete user data": "确定删除员工数据"
   },
 
   "ThirdPartyUserBlock": {
@@ -279,7 +283,8 @@
     "Failed to add role:": "添加角色数据失败:",
     "Edit role data success": "编辑角色数据成功",
     "Failed to edit role": "编辑角色数据失败:",
-    "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作"
+    "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作",
+    "Are you sure delete role data": "确定删除角色数据"
   },
 
   "UserClaimBlock": {
@@ -335,12 +340,13 @@
     "ClientId": "客户端ID",
     "ClientName": "客户端名称",
     "ClientUri": "客户端Uri",
+    "ClientType": "类型",
     "PostLogoutRedirectUri": "注销跳转地址",
     "CallBackRedirectUri": "重定向地址",
     "RequireConsent": "是否需要授权确认",
     "AllowRememberConsent": "是否允许记住授权",
     "Consent Screen": "授权确认页",
-    "Authentication": "Authentication",
+    "Authentication": "认证",
     "Device Flow": "设备流",
     "Client Secret": "客户端密钥",
     "Token": "令牌",
@@ -351,23 +357,25 @@
     "EnableLocalLogin": "允许本地账号登录",
     "UserSsoLifetime": "用户最大有效时长",
     "Create Client": "创建客户端",
-    "Update Client": "更新客户端"
+    "Update Client": "更新客户端",
+    "Delete Client": "删除客户端",
+    "Are you sure you want to delete this client": "确定想要删除客户端"
   },
 
   "CustomLogin": "自定义登录",
   "CustomLoginBlock": {
-    "CustomLogin.Name": "名称",
+    "Name": "名称",
     "LogoUri": "LOGO",
-    "ClientDto.ClientName": "客户端",
+    "ClientName": "客户端",
     "Add Custom Login": "新增自定义登录",
     "Update Custom Login": "编辑自定义登录",
     "Delete Custom Login": "删除自定义登录",
     "Login": "登录",
     "Register": "注册",
+    "Title": "标题",
     "Forgot password?": "忘记密码?",
     "or login with": "或使用以下登录",
     "Category": "分类",
-    "Register.Name": "名称",
     "ConfirmPassword": "确认密码",
     "Login configuration items are required": "登录配置项必填",
     "Register configuration items are required": "注册配置项必填"

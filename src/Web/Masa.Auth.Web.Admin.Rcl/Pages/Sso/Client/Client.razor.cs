@@ -11,17 +11,19 @@ public partial class Client
 
     public List<ClientDto> _clients { get; set; } = new();
 
-    public List<DataTableHeader<ClientDto>> _headers { get; set; } = new()
-    {
-        new() { Text = "名称", Value = nameof(ClientDto.ClientName), Sortable = false },
-        new() { Text = "客户端ID", Value = nameof(ClientDto.ClientId), Sortable = false },
-        new() { Text = "类型", Value = nameof(ClientDto.ClientType), Sortable = false },
-        new() { Text = "描述", Value = nameof(ClientDto.Description), Sortable = false },
-        new() { Text = "状态", Value = nameof(ClientDto.Enabled), Sortable = false },
-        new() { Text = "操作", Value = "Action", Sortable = false, Align="center", Width="105px" },
-    };
-
     ClientService _clientService => AuthCaller.ClientService;
+
+    protected override string? PageName { get; set; } = "ClientBlock";
+
+    public List<DataTableHeader<ClientDto>> GetHeaders() => new()
+    {
+        new() { Text = T(nameof(ClientDto.ClientName)), Value = nameof(ClientDto.ClientName), Sortable = false },
+        new() { Text = T(nameof(ClientDto.ClientId)), Value = nameof(ClientDto.ClientId), Sortable = false },
+        new() { Text = T(nameof(ClientDto.ClientType)), Value = nameof(ClientDto.ClientType), Sortable = false },
+        new() { Text = T(nameof(ClientDto.Description)), Value = nameof(ClientDto.Description), Sortable = false },
+        new() { Text = T(nameof(ClientDto.Enabled)), Value = nameof(ClientDto.Enabled), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

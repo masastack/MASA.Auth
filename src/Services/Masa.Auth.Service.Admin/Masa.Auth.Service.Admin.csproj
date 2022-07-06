@@ -16,7 +16,7 @@
 		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-preview.4" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache.Storage" Version="0.5.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-preview.4" />

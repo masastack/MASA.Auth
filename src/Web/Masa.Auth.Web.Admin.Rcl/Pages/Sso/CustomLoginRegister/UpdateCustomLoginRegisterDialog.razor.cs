@@ -27,6 +27,8 @@ public partial class UpdateCustomLoginRegisterDialog
 
     private MForm? Form { get; set; }
 
+    protected override string? PageName { get; set; } = "CustomLoginBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
