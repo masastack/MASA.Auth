@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class Organization
@@ -12,14 +10,6 @@ public partial class Organization
     List<DepartmentDto> _departments = new();
     bool _showAdd, _showCopy, _addStaff, _updateStaff;
     DepartmentChildrenCountDto _departmentChildrenCountDto = new();
-    readonly List<DataTableHeader<StaffDto>> _headers = new()
-    {
-        new() { Text = "员工", Value = nameof(UserDto.Name), CellClass = "body-medium emphasis2--text" },
-        new() { Text = "手机号", Value = nameof(UserDto.PhoneNumber), CellClass = "subtitle" },
-        new() { Text = "邮箱", Value = nameof(UserDto.Email), CellClass = "subtitle" },
-        new() { Text = "工号", Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
-        new() { Text = "操作", Value = "Action", Sortable = false, Align="center", Width="80px" }
-    };
     PaginationDto<StaffDto> _paginationStaffs = new();
     UpsertDepartmentDto _upsertDepartmentDto = new();
     CopyDepartmentDto _copyDepartmentDto = new();
@@ -29,6 +19,15 @@ public partial class Organization
 
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
+
+    public List<DataTableHeader<StaffDto>> GetHeaders() => new()
+    {
+        new() { Text = T(nameof(Staff)), Value = nameof(StaffDto.Name), CellClass = "body-medium emphasis2--text" },
+        new() { Text = T(nameof(StaffDto.PhoneNumber)), Value = nameof(StaffDto.PhoneNumber), CellClass = "subtitle" },
+        new() { Text = T(nameof(StaffDto.Email)), Value = nameof(StaffDto.Email), CellClass = "subtitle" },
+        new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="80px" }
+    };
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {

@@ -7,13 +7,16 @@ public class UserDomainEventHandler
 {
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly AuthDbContext _authDbContext;
+    IStaffRepository _staffRepository;
 
     public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient,
-        AuthDbContext authDbContext)
+        IAutoCompleteClient autoCompleteClient, 
+        AuthDbContext authDbContext, 
+        IStaffRepository staffRepository)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
+        _staffRepository = staffRepository;
     }
 
     [EventHandler]
@@ -22,10 +25,17 @@ public class UserDomainEventHandler
         var response = await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(userEvent.Users.Select(user => new UserSelectDto(user.Id, user.Name, user.DisplayName, user.Account, user.PhoneNumber, user.Email, user.Avatar)));
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserDomainEvent userEvent)
     {
         var response = await _autoCompleteClient.DeleteAsync(userEvent.userIds);
+    }
+
+    [EventHandler(2)]
+    public async Task RemoveStaffAsync(RemoveUserDomainEvent userEvent)
+    {
+        var staffs = await _authDbContext.Set<Staff>().Where(staff => userEvent.userIds.Contains(staff.UserId)).ToListAsync();
+        await _staffRepository.RemoveRangeAsync(staffs);
     }
 
     [EventHandler(1)]
