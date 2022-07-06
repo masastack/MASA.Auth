@@ -4,5 +4,6 @@
   "$DateFormat": "MM/dd/yyyy",
 
   "ThirdPartyIdp": "ThirdParty identity provider",
-  "BasicInformation": "Basic Information"
+  "BasicInformation": "Basic Information",
+  "Support mdi and fas icon": "Support like mdi-* and fa-* icons"
 }

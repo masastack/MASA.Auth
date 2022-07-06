@@ -18,6 +18,7 @@
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.5.0-preview.4" />
 		<PackageReference Include="Mapster" Version="7.3.0" />

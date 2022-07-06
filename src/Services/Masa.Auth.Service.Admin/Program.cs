@@ -45,25 +45,27 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Bearer", options =>
 {
-    options.Authority = builder.Configuration["IdentityServerUrl"];
+    options.Authority = builder.Configuration["ConfigurationAPI:Masa_Auth_Web:AppSettings:IdentityServerUrl"];
     options.RequireHttpsMetadata = false;
     //options.Audience = "";
     options.TokenValidationParameters.ValidateAudience = false;
     options.MapInboundClaims = false;
 });
 
-//builder.AddMasaConfiguration(configurationBuilder =>
-//{
-//    configurationBuilder.UseDcc();
-//    configurationBuilder.UseMasaOptions(option => option.MappingConfigurationApi<IsolationDbConnectionOptions>(""));
-//});
 MapsterAdapterConfig.TypeAdapter();
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig")).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
+
+builder.AddMasaConfiguration(configurationBuilder =>
+{
+    configurationBuilder.UseDcc();
+});
+
+builder.Services.AddDccClient();
+var redisConfigOption = builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
+builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationAPI:Masa_Auth_Web:AppSettings:PmClient:Url"));
 builder.Services.AddLadpContext();
 
-builder.Services.AddElasticsearchClient("auth", option => option.UseNodes("http://10.10.90.44:31920/").UseDefault())
-                .AddAutoComplete(option => option.UseIndexName("user_index"));
+builder.Services.AddElasticsearchAutoComplete();
 
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
@@ -120,14 +122,13 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-var option = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddOidcCache(option);
+builder.Services.AddOidcCache(redisConfigOption);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.Configuration.GetSection("Client").Get<ClientModel>().Adapt<Client>()
+        builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:Client").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });

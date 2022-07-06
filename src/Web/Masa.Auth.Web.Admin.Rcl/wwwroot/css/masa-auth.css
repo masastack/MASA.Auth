@@ -96,10 +96,10 @@
     margin-top: 0px !important;
 }
 
-.m-input__append-inner {
+/*.m-input__append-inner {
     margin-top: auto !important;
     margin-bottom: auto !important;
-}
+}*/
 
 .button-group {
     background: #F6F8FD !important;
@@ -452,13 +452,13 @@
     height: 100%;
 }
 
-.m-text-field--outlined:not(.m-textarea) {
+/*.m-text-field--outlined:not(.m-textarea) {
     height: 48px !important;
 }
 
     .m-text-field--outlined:not(.m-textarea) fieldset {
         height: 53px !important;
-    }
+    }*/
 
 .m-select.m-text-field--outlined .m-label {
     top: 14px !important;

@@ -6,17 +6,22 @@ namespace Masa.Auth.Service.Admin.Application.Projects;
 public class QueryHandler
 {
     readonly IPmClient _pmClient;
+    readonly IDccClient _dccClient;
     readonly IAppNavigationTagRepository _appNavigationTagRepository;
     readonly IPermissionRepository _permissionRepository;
     readonly UserDomainService _userDomainService;
 
-    public QueryHandler(IPmClient pmClient, IAppNavigationTagRepository appNavigationTagRepository,
-            IPermissionRepository permissionRepository, UserDomainService userDomainService)
+    public QueryHandler(IPmClient pmClient,
+                        IAppNavigationTagRepository appNavigationTagRepository,
+                        IPermissionRepository permissionRepository,
+                        UserDomainService userDomainService,
+                        IDccClient dccClient)
     {
         _pmClient = pmClient;
         _permissionRepository = permissionRepository;
         _appNavigationTagRepository = appNavigationTagRepository;
         _userDomainService = userDomainService;
+        _dccClient = dccClient;
     }
 
     [EventHandler]
@@ -113,9 +118,8 @@ public class QueryHandler
     [EventHandler]
     public async Task AppTagsAsync(AppTagsQuery query)
     {
-#warning change dcc tag
-        var tags = new List<string>() { "Tag1", "Tag2", "Tag3" };
-        query.Result = tags;
+        var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectTag");
+        query.Result = tags.Select(t => t.Name).ToList();
         await Task.CompletedTask;
     }
 }

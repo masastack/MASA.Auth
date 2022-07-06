@@ -3,14 +3,13 @@
 @using Microsoft.AspNetCore.Components.Rendering
 @inherits LayoutComponentBase
 @inject GlobalConfig GlobalConfig
+@inject NavigationManager Navigation
 
-<Layout AppId="Masa_Auth_Web"
+<Layout AppId="Masa_Auth_Web" OnSignOut="SignOut"
         Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
         MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
     <MErrorHandler OnErrorHandleAsync="OnError">
-        <div class="pt-6 full-height">
-            @Body
-        </div>
+        @Body
     </MErrorHandler>
 </Layout>
 
@@ -23,5 +22,10 @@
         PopupService.AlertAsync(exception.Message, AlertTypes.Error);
         GlobalConfig.Loading = false;
         return Task.CompletedTask;
+    }
+
+    void SignOut()
+    {
+        Navigation.NavigateTo("/Logout",true);
     }
 }
