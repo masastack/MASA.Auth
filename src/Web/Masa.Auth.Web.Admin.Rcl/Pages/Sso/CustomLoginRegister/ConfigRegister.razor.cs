@@ -19,6 +19,7 @@ public partial class ConfigRegister
 
     protected override void OnInitialized()
     {
+        PageName = "CustomLoginBlock";
         if (Value.Count == 0)
         {
             Value.Add(new RegisterFieldDto(RegisterFieldTypes.Account, 1, true));

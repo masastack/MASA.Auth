@@ -73,8 +73,8 @@ public partial class ThirdPartyIdp
     public List<DataTableHeader<ThirdPartyIdpDto>> GetHeaders() => new()
     {
         new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpDto.Icon), Sortable = false },
-        new() { Text = T("ThirdPartyIdp.Name"), Value = nameof(ThirdPartyIdpDto.Name), Sortable = false },
-        new() { Text = T("ThirdPartyIdp.DisplayName"), Value = nameof(ThirdPartyIdpDto.DisplayName), Sortable = false },
+        new() { Text = T("Name"), Value = nameof(ThirdPartyIdpDto.Name), Sortable = false },
+        new() { Text = T("DisplayName"), Value = nameof(ThirdPartyIdpDto.DisplayName), Sortable = false },
         new() { Text = T("Type"), Value = nameof(ThirdPartyIdpDto.VerifyType), Sortable = false },
         new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },
         new() { Text = T("URL"), Value = nameof(ThirdPartyIdpDto.Url), Sortable = false },

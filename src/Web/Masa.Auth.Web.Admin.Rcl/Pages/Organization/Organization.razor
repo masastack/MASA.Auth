@@ -117,7 +117,7 @@
                             </div>
                         </HeaderContent>
                         <AutoHeightContent>
-                            <DefaultDataTable Headers="_headers" Items="@_paginationStaffs.Items" TItem="StaffDto">
+                            <DefaultDataTable Headers="GetHeaders()" Items="@_paginationStaffs.Items" TItem="StaffDto">
                                 <HeaderColContent Context="header">
                                     <span class="body-bold">@header.Text</span>
                                 </HeaderColContent>

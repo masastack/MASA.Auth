@@ -30,6 +30,7 @@ public partial class RegisterFieldSelect
 
     protected override void OnInitialized()
     {
+        PageName = "CustomLoginBlock";
         RegisterFields = Enum.GetValues<RegisterFieldTypes>().ToList();
     }
 }

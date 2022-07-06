@@ -24,6 +24,8 @@ public partial class AddCustomLoginRegisterDialog
 
     private ClientSelect? ClientSelectRef { get; set; }
 
+    protected override string? PageName { get; set; } = "CustomLoginBlock";
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
