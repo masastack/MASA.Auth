@@ -24,7 +24,7 @@ public class TeamCommandHandler
         _teamDomainService = teamDomainService;
         _aliyunClient = aliyunClient;
 
-        _bucket = daprClient.GetSecretAsync("localsecretstore", "bucket").Result.FirstOrDefault().Value;
+        _bucket = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result["bucket"];
         _cdnEndpoint = masaConfiguration.GetConfiguration(SectionTypes.Local).GetValue<string>("CdnEndpoint");
     }
 
