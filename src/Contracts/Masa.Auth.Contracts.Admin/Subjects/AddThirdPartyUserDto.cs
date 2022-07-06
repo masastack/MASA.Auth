@@ -11,13 +11,16 @@ public class AddThirdPartyUserDto
 
     public string ThridPartyIdentity { get; set; } = "";
 
+    public string ExtendedData { get; private set; } = "";
+
     public AddUserDto User { get; set; } = new();
 
-    public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, AddUserDto user)
+    public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
+        ExtendedData = extendedData;
         User = user;
     }
 }

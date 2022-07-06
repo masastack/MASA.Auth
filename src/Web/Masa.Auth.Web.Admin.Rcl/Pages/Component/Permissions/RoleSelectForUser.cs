@@ -10,8 +10,8 @@ public partial class RoleSelectForUser : RoleSelect
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
-        Label = T("Inherited Role");
         await base.SetParametersAsync(parameters);
+        Label = T("Inherited Role");
     }
 
     protected override async Task OnInitializedAsync()

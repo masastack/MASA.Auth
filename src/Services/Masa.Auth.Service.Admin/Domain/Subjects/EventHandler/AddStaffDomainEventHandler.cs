@@ -20,7 +20,7 @@ public class AddStaffDomainEventHandler
     public async Task AddUserAsync(AddStaffDomainEvent staffEvent)
     {
         var staffDto = staffEvent.Staff;
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == u.PhoneNumber);
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == staffDto.PhoneNumber);
         if (user is null)
         {
             var command = new AddUserCommand(new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Department, staffDto.Position ?? "", staffDto.Account, staffDto.Password, staffDto.Gender, new(), new()));

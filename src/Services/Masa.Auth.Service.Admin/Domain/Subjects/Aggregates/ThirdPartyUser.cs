@@ -31,6 +31,8 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public string ThridPartyIdentity { get; private set; }
 
+    public string ExtendedData { get; private set; } = "";
+
     private ILazyLoader? LazyLoader { get; set; }
 
     private ThirdPartyUser(ILazyLoader lazyLoader)
@@ -39,12 +41,13 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         ThridPartyIdentity = string.Empty;
     }
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity)
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         UserId = userId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
+        ExtendedData = extendedData;
     }
 
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)

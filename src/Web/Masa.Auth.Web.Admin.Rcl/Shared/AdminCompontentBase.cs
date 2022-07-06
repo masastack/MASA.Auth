@@ -23,7 +23,7 @@ public abstract class AdminCompontentBase : ComponentBase
         }
     }
 
-    [Inject]
+    [CascadingParameter]
     public I18n I18n
     {
         get
