@@ -312,7 +312,7 @@ public class CommandHandler
             try
             {
                 //todo:change bulk
-                var thirdPartyUserDtp = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid,
+                var thirdPartyUserDtp = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
                     new AddUserDto
                     {
                         Name = ldapUser.Name,

@@ -58,8 +58,6 @@ public partial class Staff
 
     public StaffDto CurrentStaff { get; set; } = new();
 
-    public List<DataTableHeader<StaffDto>> Headers { get; set; } = new();
-
     public bool AddStaffDialogVisible { get; set; }
 
     public bool UpdateStaffDialogVisible { get; set; }
@@ -73,18 +71,18 @@ public partial class Staff
     protected override async Task OnInitializedAsync()
     {
         PageName = "StaffBlock";
-        Headers = new()
-        {
-            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
-            new() { Text = T(nameof(StaffDto.Department)), Value = nameof(StaffDto.Department), Sortable = false },
-            new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
-            new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
-            new() { Text = T("State"), Value = nameof(StaffDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
-        };
-
         await GetStaffAsync();
     }
+
+    public List<DataTableHeader<StaffDto>> GetHeaders() => new()
+    {
+        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
+        new() { Text = T(nameof(StaffDto.Department)), Value = nameof(StaffDto.Department), Sortable = false },
+        new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
+        new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
+        new() { Text = T("State"), Value = nameof(StaffDto.Enabled), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     public async Task GetStaffAsync()
     {

@@ -84,6 +84,8 @@
   "ThirdPartyUser": "第三方用户",
   "Role": "角色",
   "UserClaim": "用户声明",
+  "Basic Information": "基础信息",
+  "Detail Information": "详细信息",
 
   "OrganizationBlock": {
     "Department": "部门",
@@ -219,12 +221,10 @@
     "Failed to authorize user:": "授权用户失败:",
     "Another": "换一个",
     "Give him a nickname!": "给Ta取个昵称吧!",
-    "Basic Information": "基础信息",
-    "Detail Information": "详细信息",
     "Successfully set user permissions": "设置用户权限成功"
   },
 
-  "StaffBlcok": {
+  "StaffBlock": {
     "Add Staff": "添加员工",
     "Update Staff": "编辑员工",
     "JobNumber": "员工工号",

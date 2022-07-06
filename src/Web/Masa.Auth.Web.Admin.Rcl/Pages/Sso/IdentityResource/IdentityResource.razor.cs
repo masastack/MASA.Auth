@@ -49,25 +49,23 @@ public partial class IdentityResource
 
     public bool UpdateIdentityResourceDialogVisible { get; set; }
 
-    public List<DataTableHeader<IdentityResourceDto>> Headers { get; set; } = new();
-
     private IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
     protected override async Task OnInitializedAsync()
     {
         PageName = "IdentityResourceBlock";
-        Headers = new()
-        {
-            new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false },
-            new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false },
-            new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
-            new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
-            new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
-        };
-
         await GetIdentityResourcesAsync();
     }
+
+    public List<DataTableHeader<IdentityResourceDto>> GetHeaders() => new()
+    {
+        new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false },
+        new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false },
+        new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
+        new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
+        new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     public async Task GetIdentityResourcesAsync()
     {

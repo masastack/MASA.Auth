@@ -18,7 +18,7 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <DefaultDataTable Headers="Headers" Items="CustomLogins" TItem="CustomLoginDto" ItemsPerPage="PageSize">
+            <DefaultDataTable Headers="GetHeaders()" Items="CustomLogins" TItem="CustomLoginDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>

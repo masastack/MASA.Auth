@@ -49,26 +49,24 @@ public partial class CustomLoginRegister
 
     public bool UpdateCustomLoginRegisterDialogVisible { get; set; }
 
-    public List<DataTableHeader<CustomLoginDto>> Headers { get; set; } = new();
-
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
     protected override async Task OnInitializedAsync()
     {
-        Headers = new()
-        {
-            new() { Text = T(nameof(ClientDto.LogoUri)), Value = nameof(ClientDto.LogoUri), Sortable = false },
-            new() { Text = T("CustomLogin.Name"), Value = nameof(CustomLoginDto.Name), Sortable = false },
-            new() { Text = T("ClientDto.ClientName"), Value = nameof(ClientDto.ClientName), Sortable = false },
-            new() { Text = T(nameof(CustomLoginDto.CreationTime)), Value = nameof(CustomLoginDto.CreationTime), Sortable = false },
-            new() { Text = T(nameof(CustomLoginDto.ModificationTime)), Value = nameof(CustomLoginDto.ModificationTime), Sortable = false },
-            new() { Text = T(nameof(CustomLoginDto.Modifier)), Value = nameof(CustomLoginDto.Modifier), Sortable = false },
-            new() { Text = T("State"), Value = nameof(CustomLoginDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
-        };
-
         await GetCustomLoginsAsync();
     }
+
+    public List<DataTableHeader<CustomLoginDto>> GetHeaders() => new()
+    {
+        new() { Text = T(nameof(ClientDto.LogoUri)), Value = nameof(ClientDto.LogoUri), Sortable = false },
+        new() { Text = T("CustomLogin.Name"), Value = nameof(CustomLoginDto.Name), Sortable = false },
+        new() { Text = T("ClientDto.ClientName"), Value = nameof(ClientDto.ClientName), Sortable = false },
+        new() { Text = T(nameof(CustomLoginDto.CreationTime)), Value = nameof(CustomLoginDto.CreationTime), Sortable = false },
+        new() { Text = T(nameof(CustomLoginDto.ModificationTime)), Value = nameof(CustomLoginDto.ModificationTime), Sortable = false },
+        new() { Text = T(nameof(CustomLoginDto.Modifier)), Value = nameof(CustomLoginDto.Modifier), Sortable = false },
+        new() { Text = T("State"), Value = nameof(CustomLoginDto.Enabled), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     public async Task GetCustomLoginsAsync()
     {

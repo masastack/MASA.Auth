@@ -49,23 +49,21 @@ public partial class ApiResource
 
     public bool UpdateApiResourceDialogVisible { get; set; }
 
-    public List<DataTableHeader<ApiResourceDto>> Headers { get; set; } = new();
-
     private ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
     protected override async Task OnInitializedAsync()
     {
-        Headers = new()
-        {
-            new() { Text = T("ApiResource.Name"), Value = nameof(ApiResourceDto.Name), Sortable = false },
-            new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false },
-            new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
-            new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false },
-            new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
-        };
-
         await GetApiResourcesAsync();
     }
+
+    public List<DataTableHeader<ApiResourceDto>> GetHeaders() => new()
+    {
+        new() { Text = T("ApiResource.Name"), Value = nameof(ApiResourceDto.Name), Sortable = false },
+        new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false },
+        new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
+        new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+    };
 
     public async Task GetApiResourcesAsync()
     {
