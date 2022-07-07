@@ -43,10 +43,6 @@ public partial class UpdateRoleDialog
         {
             Visible = visible;
         }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
-        }
     }
 
     protected override async Task OnParametersSetAsync()

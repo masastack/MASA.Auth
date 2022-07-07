@@ -20,8 +20,6 @@ public partial class AddUserDialog
 
     public bool Preview { get; set; }
 
-    private MForm? Form { get; set; }
-
     private AddUserDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
@@ -37,10 +35,6 @@ public partial class AddUserDialog
         else
         {
             Visible = false;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

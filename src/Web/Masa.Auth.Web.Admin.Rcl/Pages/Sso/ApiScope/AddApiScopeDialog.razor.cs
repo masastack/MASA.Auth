@@ -18,8 +18,6 @@ public partial class AddApiScopeDialog
 
     private ApiScopeService ApiScopeService => AuthCaller.ApiScopeService;
 
-    private MForm? Form { get; set; }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -29,10 +27,6 @@ public partial class AddApiScopeDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 
