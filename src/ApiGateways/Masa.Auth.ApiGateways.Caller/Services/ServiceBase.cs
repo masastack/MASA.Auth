@@ -42,7 +42,7 @@ public abstract class ServiceBase
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true
         };
-        return System.Text.Json.JsonSerializer.Deserialize<TResponse>(json, serializeOptions) ?? throw new UserFriendlyException("Internal error, please contact administrator");
+        return JsonSerializer.Deserialize<TResponse>(json, serializeOptions) ?? throw new UserFriendlyException("Internal error, please contact administrator");
     }
 
     protected async Task<TResponse?> PostAsync<TRequest, TResponse>(string methodName, TRequest data)
