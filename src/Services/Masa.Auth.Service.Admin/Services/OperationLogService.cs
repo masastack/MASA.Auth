@@ -22,5 +22,5 @@ public class OperationLogService : RestServiceBase
         var query = new OperationLogDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
-    }   
+    }
 }

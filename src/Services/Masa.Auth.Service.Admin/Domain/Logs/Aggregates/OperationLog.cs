@@ -3,12 +3,12 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Logs.Aggregates
 {
-    public class OperationLog: AggregateRoot<Guid>
+    public class OperationLog : AggregateRoot<Guid>
     {
         public Guid Operator { get; private set; }
 
         public string OperatorName { get; private set; } = "";
-       
+
         public OperationTypes OperationType { get; private set; }
 
         public DateTime OperationTime { get; private set; }

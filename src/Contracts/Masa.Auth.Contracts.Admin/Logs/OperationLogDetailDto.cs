@@ -8,11 +8,11 @@ public class OperationLogDetailDto : OperationLogDto
     public OperationLogDetailDto() { }
 
     public OperationLogDetailDto(
-        Guid id, 
-        Guid @operator, 
-        string operatorName, 
-        OperationTypes operationType, 
-        DateTime operationTime, 
+        Guid id,
+        Guid @operator,
+        string operatorName,
+        OperationTypes operationType,
+        DateTime operationTime,
         string operationDescription
         ) : base(id, @operator, operatorName, operationType, operationTime, operationDescription)
     {

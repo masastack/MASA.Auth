@@ -4,7 +4,7 @@
 namespace Masa.Auth.Service.Admin.Application.Logs.Queries;
 
 public record OperationLogsQuery(
-    int Page, 
+    int Page,
     int PageSize,
     Guid Operator,
     DateTime? StartTime,

@@ -20,11 +20,11 @@ public class OperationLogDto
     public OperationLogDto() { }
 
     public OperationLogDto(
-        Guid id, 
-        Guid @operator, 
+        Guid id,
+        Guid @operator,
         string operatorName,
         OperationTypes operationType,
-        DateTime operationTime, 
+        DateTime operationTime,
         string operationDescription)
     {
         Id = id;

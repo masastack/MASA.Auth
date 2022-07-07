@@ -5,6 +5,6 @@ namespace Masa.Auth.Service.Admin.Application.Logs;
 
 public class CommandHandler
 {
-    
+
 }
 
