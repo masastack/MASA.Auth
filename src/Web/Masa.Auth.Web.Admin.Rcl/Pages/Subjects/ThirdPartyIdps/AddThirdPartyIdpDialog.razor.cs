@@ -21,8 +21,6 @@ public partial class AddThirdPartyIdpDialog
 
     private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
-    private MForm? Form { get; set; }
-
     protected override string? PageName { get; set; } = "ThirdPartyIdpBlock";
 
     private async Task UpdateVisible(bool visible)
@@ -34,10 +32,6 @@ public partial class AddThirdPartyIdpDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

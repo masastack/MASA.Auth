@@ -25,8 +25,6 @@ public partial class UpdateStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
-    private MForm? Form { get; set; }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -36,10 +34,6 @@ public partial class UpdateStaffDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

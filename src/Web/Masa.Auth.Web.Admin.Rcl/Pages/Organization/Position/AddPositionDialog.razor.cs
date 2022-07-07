@@ -18,8 +18,6 @@ public partial class AddPositionDialog
 
     private PositionService PositionService => AuthCaller.PositionService;
 
-    private MForm? Form { get; set; }
-
     protected override string? PageName { get; set; } = "PositionBlock";
 
     private async Task UpdateVisible(bool visible)
@@ -31,10 +29,6 @@ public partial class AddPositionDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

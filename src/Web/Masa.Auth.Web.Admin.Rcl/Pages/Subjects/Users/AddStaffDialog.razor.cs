@@ -14,8 +14,6 @@ public partial class AddStaffDialog
     [Parameter]
     public EventCallback OnSubmitSuccess { get; set; }
 
-    private MForm? Form { get; set; }
-
     private int Step { get; set; } = 1;
 
     private AddStaffDto Staff { get; set; } = new();
@@ -31,10 +29,6 @@ public partial class AddStaffDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

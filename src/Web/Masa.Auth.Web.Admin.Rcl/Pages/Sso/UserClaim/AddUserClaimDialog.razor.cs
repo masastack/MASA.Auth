@@ -18,8 +18,6 @@ public partial class AddUserClaimDialog
 
     private UserClaimService UserClaimService => AuthCaller.UserClaimService;
 
-    private MForm? Form { get; set; }
-
     protected override string? PageName { get; set; } = "UserClaimBlock";
 
     private async Task UpdateVisible(bool visible)
@@ -31,10 +29,6 @@ public partial class AddUserClaimDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

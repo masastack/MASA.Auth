@@ -23,8 +23,6 @@ public partial class UpdateIdentityResourceDialog
 
     private IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
-    private MForm? Form { get; set; }
-
     protected override string? PageName { get; set; } = "IdentityResourceBlock";
 
     private async Task UpdateVisible(bool visible)
@@ -36,10 +34,6 @@ public partial class UpdateIdentityResourceDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

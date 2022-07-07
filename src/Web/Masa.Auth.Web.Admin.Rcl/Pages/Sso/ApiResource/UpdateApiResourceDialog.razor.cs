@@ -23,8 +23,6 @@ public partial class UpdateApiResourceDialog
 
     private ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
-    private MForm? Form { get; set; }
-
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -34,10 +32,6 @@ public partial class UpdateApiResourceDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 
