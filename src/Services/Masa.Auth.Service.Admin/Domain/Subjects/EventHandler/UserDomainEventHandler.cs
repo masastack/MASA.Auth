@@ -10,8 +10,8 @@ public class UserDomainEventHandler
     IStaffRepository _staffRepository;
 
     public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient, 
-        AuthDbContext authDbContext, 
+        IAutoCompleteClient autoCompleteClient,
+        AuthDbContext authDbContext,
         IStaffRepository staffRepository)
     {
         _autoCompleteClient = autoCompleteClient;

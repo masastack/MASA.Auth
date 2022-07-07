@@ -40,3 +40,4 @@ global using Microsoft.AspNetCore.Components.Rendering;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.Extensions.DependencyInjection;
 global using System.Net.Http.Headers;
+global using Masa.Auth.Contracts.Admin.Logs;
