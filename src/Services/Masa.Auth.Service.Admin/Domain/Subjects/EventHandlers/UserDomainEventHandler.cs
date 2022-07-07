@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
+namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandlers;
 
 public class UserDomainEventHandler
 {
@@ -10,8 +10,8 @@ public class UserDomainEventHandler
     IStaffRepository _staffRepository;
 
     public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient, 
-        AuthDbContext authDbContext, 
+        IAutoCompleteClient autoCompleteClient,
+        AuthDbContext authDbContext,
         IStaffRepository staffRepository)
     {
         _autoCompleteClient = autoCompleteClient;

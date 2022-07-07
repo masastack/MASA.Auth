@@ -79,9 +79,9 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByNameQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Account == query.Account);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { "Roles" });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
