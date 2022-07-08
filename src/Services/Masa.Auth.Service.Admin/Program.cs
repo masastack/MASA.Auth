@@ -6,30 +6,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddObservability();
 
 #if DEBUG
-//builder.Services.AddDaprStarter(opt =>
-//{
-//    opt.DaprHttpPort = 3600;
-//    opt.DaprGrpcPort = 3601;
-//});
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
 #endif
 
 builder.Services.AddDaprClient();
 builder.Services.AddAliyunStorage(serviceProvider =>
 {
-    //var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    //var aliyunOssConfig = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result;
-    //var accessId = aliyunOssConfig["access_id"];
-    //var accessSecret = aliyunOssConfig["access_secret"];
-    //var endpoint = aliyunOssConfig["endpoint"];
-    //var roleArn = aliyunOssConfig["role_arn"];
-    //return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
-    //{
-    //    Sts = new AliyunStsOptions()
-    //    {
-    //        RegionId = "cn-hangzhou"
-    //    }
-    //};
-    return new AliyunStorageOptions("accessId", "accessSecret", "endpoint", "roleArn", "SessionTest")
+    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
+    var aliyunOssConfig = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result;
+    var accessId = aliyunOssConfig["access_id"];
+    var accessSecret = aliyunOssConfig["access_secret"];
+    var endpoint = aliyunOssConfig["endpoint"];
+    var roleArn = aliyunOssConfig["role_arn"];
+    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
     {
         Sts = new AliyunStsOptions()
         {

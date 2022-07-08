@@ -44,26 +44,24 @@ public partial class SyncStaffDialog
         if (File is not null)
         {
             Loading = true;
-            using (var content = new MultipartFormDataContent())
+            using var content = new MultipartFormDataContent();
+            var stream = File.OpenReadStream(MaxFileSize);
+            var fileContent = new StreamContent(stream);
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(File.ContentType);
+            content.Add(fileContent, "\"files\"", File.Name);
+            stream.Seek(0, SeekOrigin.Begin);
+            SyncStaffResults = await StaffService.SyncAsync(content);
+            if (SyncStaffResults?.IsValid is false)
             {
-                using (var fileContent = new StreamContent(File.OpenReadStream(MaxFileSize)))
-                {
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(File.ContentType);
-                    content.Add(fileContent, "\"files\"", File.Name);
-                    SyncStaffResults = await StaffService.SyncAsync(content);
-                    if (SyncStaffResults?.IsValid is false)
-                    {
-                        OpenSuccessMessage(T("Sync staff success"));
-                        await UpdateVisible(false);
-                        await OnSubmitSuccess.InvokeAsync();
-                    }
-                    else
-                    {
-                        OpenErrorMessage(T("Sync staff failed"));
-                    }
-                    Loading = false;
-                }
+                OpenSuccessMessage(T("Sync staff success"));
+                await UpdateVisible(false);
+                await OnSubmitSuccess.InvokeAsync();
             }
+            else
+            {
+                OpenErrorMessage(T("Sync staff failed"));
+            }
+            Loading = false;
         }
     }
 
