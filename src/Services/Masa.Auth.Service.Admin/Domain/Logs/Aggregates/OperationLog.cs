@@ -14,5 +14,7 @@ namespace Masa.Auth.Service.Admin.Domain.Logs.Aggregates
         public DateTime OperationTime { get; private set; }
 
         public string OperationDescription { get; private set; } = "";
+
+        public string TraceIdentifier { get; private set; } = "";
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public partial class DateRangePicker
+public partial class DateTimeRangePicker
 {
     [Parameter]
     public string Class { get; set; } = "";
@@ -12,22 +12,22 @@ public partial class DateRangePicker
     public string Style { get; set; } = "";
 
     [Parameter]
-    public DateOnly? StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
 
     [Parameter]
-    public EventCallback<DateOnly?> StartTimeChanged { get; set; }
+    public EventCallback<DateTime?> StartTimeChanged { get; set; }
 
     [Parameter]
-    public DateOnly? EndTime { get; set; }
+    public DateTime? EndTime { get; set; }
 
     [Parameter]
-    public EventCallback<DateOnly?> EndTimeChanged { get; set; }
+    public EventCallback<DateTime?> EndTimeChanged { get; set; }
 
     private bool StartTimeVisible { get; set; }
 
     private bool EndTimeVisible { get; set; }
 
-    private async Task UpdateStartTimeAsync(DateOnly? dateTime)
+    private async Task UpdateStartTimeAsync(DateTime? dateTime)
     {
         if (dateTime > EndTime) OpenWarningMessage(T("Start time cannot be greater than end time"));
         else
@@ -37,7 +37,7 @@ public partial class DateRangePicker
         }
     }
 
-    private async Task UpdateEndTimeAsync(DateOnly? dateTime)
+    private async Task UpdateEndTimeAsync(DateTime? dateTime)
     {
         if (dateTime < StartTime) OpenWarningMessage(T("End time cannot be less than start time"));
         else

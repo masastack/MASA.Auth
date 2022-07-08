@@ -381,6 +381,13 @@
     "Register configuration items are required": "注册配置项必填"
   },
 
+  "OperationLog": "操作日志",
+  "OperationLogBlock": {
+    "Operator": "操作人",
+    "OperatorType": "操作类型",
+    "OperationDescription": "操作描述"
+  },
+
   "ValidationBlock": {
     "Account is required": "账号必须填写",
     "Password is required": "密码必须填写",

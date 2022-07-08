@@ -9,8 +9,8 @@ public partial class OperationLog
     private int _page = 1;
     private int _pageSize = 10;
     private Guid _userId;
-    private DateOnly? _startTime;
-    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private DateTime? _startTime;
+    private DateTime? _endTime = DateTime.Now;
 
     public Guid UserId
     {
@@ -22,7 +22,7 @@ public partial class OperationLog
         }
     }
 
-    public DateOnly? StartTime
+    public DateTime? StartTime
     {
         get => _startTime;
         set
@@ -32,7 +32,7 @@ public partial class OperationLog
         }
     }
 
-    public DateOnly? EndTime
+    public DateTime? EndTime
     {
         get => _endTime;
         set
@@ -85,7 +85,51 @@ public partial class OperationLog
     protected override async Task OnInitializedAsync()
     {
         PageName = "OperationLogBlock";
-        await GetOperationLogsAsync();
+        //await GetOperationLogsAsync();
+        OperationLogs = new List<OperationLogDto>()
+        {
+            new OperationLogDto
+            {
+                OperatorName ="吴炜来",
+                OperationTime = DateTime.Now.AddDays(-10),
+                OperationType = OperationTypes.Add,
+                OperationDescription = "创建用户吴江"
+            },
+            new OperationLogDto
+            {
+                OperatorName ="吴江",
+                OperationTime = DateTime.Now.AddYears(-10),
+                OperationType = OperationTypes.Update,
+                OperationDescription = "编辑用户吴炜来"
+            },
+            new OperationLogDto
+            {
+                OperatorName ="吴邪",
+                OperationTime = DateTime.Now.AddYears(-10),
+                OperationType = OperationTypes.Delete,
+                OperationDescription = "删除用户吴敌"
+            },new OperationLogDto
+            {
+                OperatorName ="吴炜来",
+                OperationTime = DateTime.Now.AddDays(-10),
+                OperationType = OperationTypes.Add,
+                OperationDescription = "创建用户吴江"
+            },
+            new OperationLogDto
+            {
+                OperatorName ="吴江",
+                OperationTime = DateTime.Now.AddYears(-10),
+                OperationType = OperationTypes.Update,
+                OperationDescription = "编辑用户吴炜来"
+            },
+            new OperationLogDto
+            {
+                OperatorName ="吴邪",
+                OperationTime = DateTime.Now.AddYears(-10),
+                OperationType = OperationTypes.Delete,
+                OperationDescription = "删除用户吴敌"
+            }
+        };
     }
 
     public List<DataTableHeader<OperationLogDto>> GetHeaders() => new()
@@ -100,7 +144,7 @@ public partial class OperationLog
     public async Task GetOperationLogsAsync()
     {
         Loading = true;
-        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue), Search);
+        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, Search);
         var response = await OperationLogService.GetListAsync(reuquest);
         OperationLogs = response.Items;
         Total = response.Total;

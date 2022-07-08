@@ -8,5 +8,10 @@ public class OperationLogEntityTypeConfiguration : IEntityTypeConfiguration<Oper
     public void Configure(EntityTypeBuilder<OperationLog> builder)
     {
         builder.HasKey(p => p.Id);
+        builder.HasIndex(p => p.Operator);
+        builder.HasIndex(p => p.TraceIdentifier);
+        builder.HasIndex(p => p.OperationTime);
+        builder.HasIndex(p => p.OperationType);
+        builder.HasIndex(p => p.OperationDescription);
     }
 }

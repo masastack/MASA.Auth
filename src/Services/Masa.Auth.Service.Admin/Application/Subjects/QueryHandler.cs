@@ -16,22 +16,31 @@ public class QueryHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
 
-    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository,
-        IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
-        AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient,
-        ILdapIdpRepository ldapIdpRepository, IMemoryCacheClient memoryCacheClient)
+    public QueryHandler(
+        IUserRepository userRepository, 
+        ITeamRepository teamRepository, 
+        IStaffRepository staffRepository, 
+        IThirdPartyUserRepository thirdPartyUserRepository, 
+        IThirdPartyIdpRepository thirdPartyIdpRepository, 
+        ILdapIdpRepository ldapIdpRepository, 
+        AuthDbContext authDbContext, 
+        IEventBus eventBus, 
+        IAutoCompleteClient autoCompleteClient, 
+        IMemoryCacheClient memoryCacheClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _staffRepository = staffRepository;
         _thirdPartyUserRepository = thirdPartyUserRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
+        _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
         _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
-        _ldapIdpRepository = ldapIdpRepository;
         _memoryCacheClient = memoryCacheClient;
     }
+
+
 
     #region User
 
