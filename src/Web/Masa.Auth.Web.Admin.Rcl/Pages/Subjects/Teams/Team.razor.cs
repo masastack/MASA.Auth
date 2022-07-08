@@ -1,16 +1,17 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class Team
 {
     string _search = string.Empty;
-    bool _showAdd, _showEdit;
+    bool _showEdit;
     TeamDetailDto _editTeamDto = new();
     List<TeamDto> _teams = new();
+    AddSheet _addSheet = null!;
+    UpdateSheet _updateSheet = null!;
+
     TeamService TeamService => AuthCaller.TeamService;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -39,7 +40,7 @@ public partial class Team
     private async Task EditTeamHandler(Guid id)
     {
         _editTeamDto = await TeamService.GetAsync(id);
-        _showEdit = true;
+        await _updateSheet.Show(_editTeamDto);
     }
 
     private async Task OnCreate(TeamDetailDto dto)

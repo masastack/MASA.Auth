@@ -16,6 +16,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapPost(Visit);
             MapGet(VisitedList);
             MapPut(ResetUserPasswordAsync);
+            MapPost(UserPortraitsAsync, "portraits");
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -169,6 +170,14 @@ namespace Masa.Auth.Service.Admin.Services
             [FromBody] UpdateUserBasicInfoModel user)
         {
             await eventBus.PublishAsync(new UpdateUserBasicInfoCommand(user));
+        }
+
+        public async Task<List<UserPortraitModel>> UserPortraitsAsync(IEventBus eventBus,
+            [FromBody] List<Guid> userIds)
+        {
+            var query = new UserPortraitsQuery(userIds);
+            await eventBus.PublishAsync(query);
+            return query.Result;
         }
     }
 }

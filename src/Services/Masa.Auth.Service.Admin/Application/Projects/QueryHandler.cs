@@ -27,7 +27,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(query.Environment);
+        query.Result = await GetProjectDtoListAsync(query.Environment, AppTypes.UI, AppTypes.Service);
 
         if (query.HasMenu)
         {
@@ -48,7 +48,7 @@ public class QueryHandler
     [EventHandler]
     public async Task NavigationListQueryAsync(NavigationListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(query.Environment);
+        query.Result = await GetProjectDtoListAsync(query.Environment, AppTypes.UI);
 
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
         var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
@@ -68,7 +68,7 @@ public class QueryHandler
         });
     }
 
-    private async Task<List<ProjectDto>> GetProjectDtoListAsync(string env)
+    private async Task<List<ProjectDto>> GetProjectDtoListAsync(string env, params AppTypes[] appTypes)
     {
         var result = new List<ProjectDto>();
         var projects = await _pmClient.ProjectService.GetProjectAppsAsync(env);
@@ -80,14 +80,15 @@ public class QueryHandler
                 Name = p.Name,
                 Id = p.Id,
                 Identity = p.Identity,
-                Apps = p.Apps.DistinctBy(a => a.Identity).Select(a => new AppDto
-                {
-                    Name = a.Name,
-                    Id = a.Id,
-                    Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
-                    Identity = a.Identity,
-                    ProjectId = a.ProjectId
-                }).ToList()
+                Apps = p.Apps.Where(a => appTypes.Contains(a.Type))
+                    .DistinctBy(a => a.Identity).Select(a => new AppDto
+                    {
+                        Name = a.Name,
+                        Id = a.Id,
+                        Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
+                        Identity = a.Identity,
+                        ProjectId = a.ProjectId
+                    }).ToList()
             }).ToList();
         }
         return result;

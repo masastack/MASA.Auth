@@ -23,7 +23,7 @@
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.5.0-preview.4" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.5.0-preview.4" />
-		<!--<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-preview.4" />-->
+		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.5.0-preview.4" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.5.0-preview.4" />
@@ -71,7 +71,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BasicAbility\Masa.Contrib.BasicAbility.Pm\Masa.Contrib.BasicAbility.Pm.csproj" />
 	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\BasicAbility\Masa.BuildingBlocks.BasicAbility.Auth.Contracts\Masa.BuildingBlocks.BasicAbility.Auth.Contracts.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>

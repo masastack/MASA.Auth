@@ -8,12 +8,14 @@ public partial class Organization
     List<Guid> _active = new List<Guid>();
     Guid _currentStaffId = Guid.Empty;
     List<DepartmentDto> _departments = new();
-    bool _showAdd, _showCopy, _addStaff, _updateStaff;
+    bool _showAdd, _addStaff, _updateStaff;
     DepartmentChildrenCountDto _departmentChildrenCountDto = new();
     PaginationDto<StaffDto> _paginationStaffs = new();
     UpsertDepartmentDto _upsertDepartmentDto = new();
     CopyDepartmentDto _copyDepartmentDto = new();
     GetStaffsDto _getStaffsDto = new GetStaffsDto(1, 10, "", Guid.Empty);
+    CopyOrgSheet _copyOrgSheet = null!;
+
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
     StaffService StaffService => AuthCaller.StaffService;
 
@@ -107,7 +109,6 @@ public partial class Organization
     {
         await DepartmentService.UpsertAsync(dto);
         await LoadDepartmentsAsync();
-        _showCopy = false;
     }
 
     private async Task Copy(Guid sourceId)
@@ -123,7 +124,7 @@ public partial class Organization
         _copyDepartmentDto.Enabled = department.Enabled;
         _copyDepartmentDto.ParentId = department.ParentId;
         _copyDepartmentDto.Staffs = department.StaffList;
-        _showCopy = true;
+        await _copyOrgSheet.Show(_copyDepartmentDto);
     }
 
     private async Task ActiveUpdated(List<DepartmentDto> activedItems)
