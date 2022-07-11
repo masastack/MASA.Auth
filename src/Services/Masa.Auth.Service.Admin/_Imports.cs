@@ -82,7 +82,6 @@ global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Contrib.Data.Contracts.EF;
 global using Masa.Contrib.Data.EntityFrameworkCore;
-global using Masa.Contrib.Data.EntityFrameworkCore.SqlServer;
 global using Masa.Contrib.Ddd.Domain;
 global using Masa.Contrib.Ddd.Domain.Repository.EF;
 global using Masa.Contrib.Dispatcher.Events;

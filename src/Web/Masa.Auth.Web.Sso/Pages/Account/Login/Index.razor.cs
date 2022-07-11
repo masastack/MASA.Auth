@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Components.Web;
 using UrlHelper = Masa.Auth.Web.Sso.Infrastructure.UrlHelper;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
@@ -167,6 +168,14 @@ public partial class Index
             // since we don't have a valid context, then we just go back to the home page
             Navigation.NavigateTo("/", true);
             return;
+        }
+    }
+
+    private async Task KeyDownHandler(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await Login();
         }
     }
 }

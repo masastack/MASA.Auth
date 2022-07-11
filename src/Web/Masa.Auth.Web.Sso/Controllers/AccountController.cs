@@ -48,6 +48,7 @@ public class AccountController : Controller
             };
             isuser.AdditionalClaims.Add(new Claim("userName", userName));
             isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
+            isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.Roles)));
             //us duende sign in
             await HttpContext.SignInAsync(isuser, props);
 

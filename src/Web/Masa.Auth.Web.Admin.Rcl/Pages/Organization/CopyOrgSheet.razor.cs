@@ -14,7 +14,6 @@ public partial class CopyOrgSheet
     [Parameter]
     public EventCallback<bool> VisibleChanged { get; set; }
 
-    [EditorRequired]
     [Parameter]
     public CopyDepartmentDto Dto { get; set; } = new();
 
@@ -69,7 +68,14 @@ public partial class CopyOrgSheet
 
     public async Task Show(CopyDepartmentDto model)
     {
+        Dto = model;
+        Dto.Name = model.Name + "副本";
         _step = 1;
         await Toggle(true);
+    }
+
+    private async Task DialogValueChanged(bool value)
+    {
+        await Toggle(value);
     }
 }

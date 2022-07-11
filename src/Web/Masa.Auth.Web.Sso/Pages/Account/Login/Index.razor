@@ -20,7 +20,7 @@
             <MTextField @bind-Value="_inputModel.UserName" Label="Username" Placeholder="john@example.com" Outlined Dense
                     HideDetails="@("auto")">
             </MTextField>
-            <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="Password"
+            <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="Password" OnKeyDown="KeyDownHandler"
                     Type="@(_show ? "text" : "password")" Placeholder="john@example.com"
                     AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_show = !_show" Outlined Dense
                     HideDetails="@("auto")">
