@@ -230,7 +230,7 @@
   "StaffBlock": {
     "Add Staff": "添加员工",
     "Update Staff": "编辑员工",
-    "JobNumber": "员工工号",
+    "JobNumber": "工号",
     "StaffType": "员工类型",
     "InternalStaff": "内部员工",
     "ExternalStaff": "驻场员工",

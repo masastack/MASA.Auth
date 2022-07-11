@@ -27,80 +27,71 @@ public class QueryHandler
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        var projects = await _pmClient.ProjectService.GetProjectAppsAsync(query.Environment);
-        if (projects.Any())
-        {
-            var appTags = await _appNavigationTagRepository.GetListAsync();
-            query.Result = projects.Select(p => new ProjectDto
-            {
-                Name = p.Name,
-                Id = p.Id,
-                Identity = p.Identity,
-                Apps = p.Apps.DistinctBy(a => a.Identity).Select(a => new AppDto
-                {
-                    Name = a.Name,
-                    Id = a.Id,
-                    Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
-                    Identity = a.Identity,
-                    ProjectId = a.ProjectId
-                }).ToList()
-            }).ToList();
+        query.Result = await GetProjectDtoListAsync(query.Environment, AppTypes.UI, AppTypes.Service);
 
-            if (query.HasMenu)
+        if (query.HasMenu)
+        {
+            var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
+                || p.Type == PermissionTypes.Element);
+            query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
             {
-                var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
-                    || p.Type == PermissionTypes.Element);
-                query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
+                a.Navs = menuPermissions.Where(p => p.AppId == a.Identity).Where(p => p.ParentId == Guid.Empty).Select(p => new PermissionNavDto
                 {
-                    a.Navs = menuPermissions.Where(p => p.AppId == a.Identity).Where(p => p.ParentId == Guid.Empty).Select(p => new PermissionNavDto
-                    {
-                        Name = p.Name,
-                        Code = p.Id.ToString(),
-                        Children = GetChildren(p.Id, menuPermissions)
-                    }).ToList();
-                });
-            }
+                    Name = p.Name,
+                    Code = p.Id.ToString(),
+                    Children = GetChildren(p.Id, menuPermissions)
+                }).ToList();
+            });
         }
     }
 
     [EventHandler]
     public async Task NavigationListQueryAsync(NavigationListQuery query)
     {
-        var projects = await _pmClient.ProjectService.GetProjectAppsAsync(query.Environment);
+        query.Result = await GetProjectDtoListAsync(query.Environment, AppTypes.UI);
+
+        var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
+        var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
+                                && permissionIds.Contains(p.Id));
+        query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
+        {
+            a.Navs = menuPermissions.Where(p => p.AppId == a.Identity)
+                .Where(p => p.ParentId == Guid.Empty)
+                .Select(p => new PermissionNavDto
+                {
+                    Name = p.Name,
+                    Icon = p.Icon,
+                    Url = p.Url,
+                    Code = p.Id.ToString(),
+                    Children = GetChildren(p.Id, menuPermissions)
+                }).ToList();
+        });
+    }
+
+    private async Task<List<ProjectDto>> GetProjectDtoListAsync(string env, params AppTypes[] appTypes)
+    {
+        var result = new List<ProjectDto>();
+        var projects = await _pmClient.ProjectService.GetProjectAppsAsync(env);
         if (projects.Any())
         {
             var appTags = await _appNavigationTagRepository.GetListAsync();
-            query.Result = projects.Select(p => new ProjectDto
+            result = projects.Select(p => new ProjectDto
             {
                 Name = p.Name,
                 Id = p.Id,
                 Identity = p.Identity,
-                Apps = p.Apps.DistinctBy(a => a.Identity).Select(a => new AppDto
-                {
-                    Name = a.Name,
-                    Id = a.Id,
-                    Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
-                    Identity = a.Identity,
-                    ProjectId = a.ProjectId
-                }).ToList()
-            }).ToList();
-            var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
-            var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
-                                    && permissionIds.Contains(p.Id));
-            query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
-            {
-                a.Navs = menuPermissions.Where(p => p.AppId == a.Identity)
-                    .Where(p => p.ParentId == Guid.Empty)
-                    .Select(p => new PermissionNavDto
+                Apps = p.Apps.Where(a => appTypes.Contains(a.Type))
+                    .DistinctBy(a => a.Identity).Select(a => new AppDto
                     {
-                        Name = p.Name,
-                        Icon = p.Icon,
-                        Url = p.Url,
-                        Code = p.Id.ToString(),
-                        Children = GetChildren(p.Id, menuPermissions)
-                    }).ToList();
-            });
+                        Name = a.Name,
+                        Id = a.Id,
+                        Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
+                        Identity = a.Identity,
+                        ProjectId = a.ProjectId
+                    }).ToList()
+            }).ToList();
         }
+        return result;
     }
 
     private List<PermissionNavDto> GetChildren(Guid parentId, IEnumerable<Permission> all)

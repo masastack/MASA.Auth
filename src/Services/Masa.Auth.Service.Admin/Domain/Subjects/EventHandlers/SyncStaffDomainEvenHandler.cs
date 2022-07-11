@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandler;
+namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandlers;
 
 public class SyncStaffDomainEvenHandler
 {
@@ -56,9 +56,9 @@ public class SyncStaffDomainEvenHandler
         foreach (var staff in syncStaffs)
         {
             var existUsers = allUsers.Where(u =>
-                (string.IsNullOrEmpty(u.PhoneNumber) is false && u.PhoneNumber == staff.PhoneNumber) ||
-                (string.IsNullOrEmpty(u.Email) is false && u.Email == staff.Email) ||
-                (string.IsNullOrEmpty(u.IdCard) is false && u.IdCard == staff.IdCard));
+                string.IsNullOrEmpty(u.PhoneNumber) is false && u.PhoneNumber == staff.PhoneNumber ||
+                string.IsNullOrEmpty(u.Email) is false && u.Email == staff.Email ||
+                string.IsNullOrEmpty(u.IdCard) is false && u.IdCard == staff.IdCard);
             var oldUser = allUsers.FirstOrDefault(s => s.Account == staff.Account);
             if (existUsers.Count(u => u.Id != oldUser?.Id) > 0)
             {
@@ -110,10 +110,10 @@ public class SyncStaffDomainEvenHandler
             var position = allPositions.FirstOrDefault(p => p.Name == staff.Position);
             var oldStaff = allStaffs.FirstOrDefault(s => s.Account == staff.Account);
             var existStaffs = allStaffs.Where(s =>
-                (string.IsNullOrEmpty(s.JobNumber) is false && s.JobNumber == staff.JobNumber) ||
-                (string.IsNullOrEmpty(s.PhoneNumber) is false && s.PhoneNumber == staff.PhoneNumber) ||
-                (string.IsNullOrEmpty(s.Email) is false && s.Email == staff.Email) ||
-                (string.IsNullOrEmpty(s.IdCard) is false && s.IdCard == staff.IdCard));
+                string.IsNullOrEmpty(s.JobNumber) is false && s.JobNumber == staff.JobNumber ||
+                string.IsNullOrEmpty(s.PhoneNumber) is false && s.PhoneNumber == staff.PhoneNumber ||
+                string.IsNullOrEmpty(s.Email) is false && s.Email == staff.Email ||
+                string.IsNullOrEmpty(s.IdCard) is false && s.IdCard == staff.IdCard);
             if (existStaffs.Count(s => s.Id != oldStaff?.Id) > 0)
             {
                 syncResults[staff.Index] = new()

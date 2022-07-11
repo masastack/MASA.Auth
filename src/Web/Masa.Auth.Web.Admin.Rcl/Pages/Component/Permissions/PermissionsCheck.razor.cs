@@ -81,9 +81,7 @@ public partial class PermissionsCheck
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
-        _allData.AddRange(_categories.SelectMany(category =>
-            category.Apps.SelectMany(app => app.Navs.Select(nav =>
-                new CategoryAppNav(category.Code, app.Code, nav.Code)))));
+        _allData = DataConversion(_categories);
     }
 
     private async Task LoadRolePermissions()
@@ -96,5 +94,42 @@ public partial class PermissionsCheck
     {
         _initValue.AddRange(_allData.Where(i => checkedItems.Contains(i.Nav ?? "")));
         _initValue = _initValue.Distinct().ToList();
+    }
+
+    private List<CategoryAppNav> DataConversion(List<Category> catetories)
+    {
+        var result = new List<CategoryAppNav>();
+
+        var levelData = catetories.SelectMany(category =>
+            category.Apps.SelectMany(app => app.Navs.Select(nav => new
+            {
+                Category = category.Code,
+                App = app.Code,
+                Nav = nav
+            })));
+
+        foreach (var item in levelData)
+        {
+            result.Add(new CategoryAppNav(item.Category));
+            result.Add(new CategoryAppNav(item.Category, item.App));
+            result.Add(new CategoryAppNav(item.Category, item.App, item.Nav.Code));
+            result.AddRange(CategoryAppNavs(item.Category, item.App, item.Nav));
+        }
+
+        return result;
+
+        List<CategoryAppNav> CategoryAppNavs(string category, string app, Nav nav)
+        {
+            var childResult = new List<CategoryAppNav>();
+            foreach (var item in nav.Children)
+            {
+                childResult.Add(new CategoryAppNav(category, app, item.Code));
+                if (item.HasChildren)
+                {
+                    childResult.AddRange(CategoryAppNavs(category, app, item));
+                }
+            }
+            return childResult;
+        }
     }
 }

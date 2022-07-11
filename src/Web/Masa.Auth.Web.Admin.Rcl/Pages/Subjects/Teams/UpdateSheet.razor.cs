@@ -6,12 +6,11 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 public partial class UpdateSheet
 {
     [Parameter]
-    public bool Show { get; set; }
+    public bool Visible { get; set; }
 
     [Parameter]
-    public EventCallback<bool> ShowChanged { get; set; }
+    public EventCallback<bool> VisibleChanged { get; set; }
 
-    [EditorRequired]
     [Parameter]
     public TeamDetailDto Dto { get; set; } = new();
 
@@ -29,7 +28,25 @@ public partial class UpdateSheet
 
     bool _adminPreview, _memberPreview;
 
-    public async Task OnUpdateBaseHandler()
+    public async Task Show(TeamDetailDto model)
+    {
+        Dto = model;
+        await Toggle(true);
+    }
+
+    private async Task Toggle(bool visible)
+    {
+        if (VisibleChanged.HasDelegate)
+        {
+            await VisibleChanged.InvokeAsync(visible);
+        }
+        else
+        {
+            Visible = visible;
+        }
+    }
+
+    private async Task OnUpdateBaseHandler()
     {
         if (OnUpdateBase.HasDelegate)
         {
@@ -42,10 +59,10 @@ public partial class UpdateSheet
                 Avatar = Dto.TeamBasicInfo.Avatar
             });
         }
-        await ShowChanged.InvokeAsync(false);
+        await Toggle(false);
     }
 
-    public async Task OnUpdateAdminHandler()
+    private async Task OnUpdateAdminHandler()
     {
         if (OnUpdateAdmin.HasDelegate)
         {
@@ -57,10 +74,10 @@ public partial class UpdateSheet
                 Permissions = Dto.TeamAdmin.Permissions
             });
         }
-        await ShowChanged.InvokeAsync(false);
+        await Toggle(false);
     }
 
-    public async Task OnUpdateMemberHandler()
+    private async Task OnUpdateMemberHandler()
     {
         if (OnUpdateMember.HasDelegate)
         {
@@ -72,15 +89,20 @@ public partial class UpdateSheet
                 Permissions = Dto.TeamMember.Permissions
             });
         }
-        await ShowChanged.InvokeAsync(false);
+        await Toggle(false);
     }
 
-    public async Task OnDeleteHandler()
+    private async Task OnDeleteHandler()
     {
         if (OnDelete.HasDelegate)
         {
             await OnDelete.InvokeAsync(Dto.Id);
         }
-        await ShowChanged.InvokeAsync(false);
+        await Toggle(false);
+    }
+
+    private async Task DialogValueChanged(bool value)
+    {
+        await Toggle(value);
     }
 }

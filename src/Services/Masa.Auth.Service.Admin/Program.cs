@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Bearer", options =>
 {
-    options.Authority = builder.Configuration["ConfigurationAPI:Masa_Auth_Web:AppSettings:IdentityServerUrl"];
+    options.Authority = builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("AppSettings:IdentityServerUrl");
     options.RequireHttpsMetadata = false;
     //options.Audience = "";
     options.TokenValidationParameters.ValidateAudience = false;
@@ -61,9 +61,11 @@ builder.AddMasaConfiguration(configurationBuilder =>
 });
 
 builder.Services.AddDccClient();
-var redisConfigOption = builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
+var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+        .GetSection("AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationAPI:Masa_Auth_Web:AppSettings:PmClient:Url"));
+builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+    .GetValue<string>("AppSettings:PmClient:Url"));
 builder.Services.AddLadpContext();
 
 builder.Services.AddElasticsearchAutoComplete();
@@ -110,7 +112,7 @@ builder.Services
 .AddDomainEventBus(dispatcherOptions =>
 {
     dispatcherOptions
-    .UseDaprEventBus<IntegrationEventLogService>(options => options.UseEventLog<AuthDbContext>())
+    .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
@@ -129,7 +131,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:Client").Get<ClientModel>().Adapt<Client>()
+        builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("AppSettings:Client").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
@@ -143,17 +145,14 @@ app.MigrateDbContext<AuthDbContext>((context, services) =>
     var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
     new AuthDbContextSeed().SeedAsync(context, logger).Wait();
 });
-
-app.UseMasaExceptionHandling(opt =>
+app.UseMasaExceptionHandler(opt =>
 {
-    opt.CustomExceptionHandler = exception =>
+    opt.ExceptionHandler = context =>
     {
-        Exception friendlyException = exception;
-        if (exception is ValidationException validationException)
+        if (context.Exception is ValidationException validationException)
         {
-            friendlyException = new UserFriendlyException(validationException.Errors.Select(err => err.ToString()).FirstOrDefault()!);
+            context.ToResult(validationException.Errors.Select(err => err.ToString()).FirstOrDefault()!);
         }
-        return (friendlyException, false);
     };
 });
 

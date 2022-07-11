@@ -25,7 +25,7 @@ public class TeamCommandHandler
         _aliyunClient = aliyunClient;
 
         _bucket = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result["bucket"];
-        _cdnEndpoint = masaConfiguration.GetConfiguration(SectionTypes.Local).GetValue<string>("CdnEndpoint");
+        _cdnEndpoint = masaConfiguration.Local.GetValue<string>("CdnEndpoint");
     }
 
 
@@ -33,13 +33,19 @@ public class TeamCommandHandler
     public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
     {
         var dto = addTeamCommand.AddTeamDto;
+
+        if (_teamRepository.Any(t => t.Name == dto.Name))
+        {
+            throw new UserFriendlyException($"Team name {dto.Name} already exists");
+        }
+
         var teamId = Guid.NewGuid();
         var avatarName = $"{teamId}.png";
 
         var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
         await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
 
-        Team team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
+        var team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.AddAsync(team);
         await _teamRepository.UnitOfWork.SaveChangesAsync();
 

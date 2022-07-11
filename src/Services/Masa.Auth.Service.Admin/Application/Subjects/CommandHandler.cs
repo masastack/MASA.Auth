@@ -29,7 +29,7 @@ public class CommandHandler
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapIdpRepository = ldapIdpRepository;
-        _configuration = masaConfiguration.GetConfiguration(SectionTypes.Local);
+        _configuration = masaConfiguration.Local;
         _logger = logger;
     }
 
@@ -158,7 +158,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserAsync(userModel.Id);
-        if (user.VerifyPassword(userModel.OldPassword))
+        if (!user.VerifyPassword(userModel.OldPassword))
         {
             throw new UserFriendlyException("password verification failed");
         }

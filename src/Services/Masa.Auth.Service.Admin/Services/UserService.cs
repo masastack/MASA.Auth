@@ -5,14 +5,18 @@ namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : RestServiceBase
     {
-        public UserService(IServiceCollection services) : base(services, "api/user")
+        readonly IMemoryCacheClient _memoryCacheClient;
+
+        public UserService(IServiceCollection services, IMemoryCacheClient memoryCacheClient) : base(services, "api/user")
         {
+            _memoryCacheClient = memoryCacheClient;
             MapGet(FindByAccountAsync);
             MapGet(FindByIdAsync);
             MapPost(ValidateByAccountAsync);
             MapPost(Visit);
             MapGet(VisitedList);
             MapPut(ResetUserPasswordAsync);
+            MapPost(UserPortraitsAsync, "portraits");
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -134,7 +138,12 @@ namespace Masa.Auth.Service.Admin.Services
                 Address = new AddressValueModel
                 {
                     Address = user.Address.Address
-                }
+                },
+                Roles = user.RoleIds.Select(r => new RoleModel
+                {
+                    Id = r,
+                    Name = _memoryCacheClient.Get<CacheRole>($"{CacheKey.ROLE_CACHE_KEY_PRE}{r}")?.Name ?? "",
+                }).ToList(),
             };
         }
 
@@ -161,6 +170,14 @@ namespace Masa.Auth.Service.Admin.Services
             [FromBody] UpdateUserBasicInfoModel user)
         {
             await eventBus.PublishAsync(new UpdateUserBasicInfoCommand(user));
+        }
+
+        public async Task<List<UserPortraitModel>> UserPortraitsAsync(IEventBus eventBus,
+            [FromBody] List<Guid> userIds)
+        {
+            var query = new UserPortraitsQuery(userIds);
+            await eventBus.PublishAsync(query);
+            return query.Result;
         }
     }
 }

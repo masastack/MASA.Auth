@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Show Title="@T("Copy Department")" ValueChanged="ShowChanged" ContentClass="px-sheet-dialog">
+<SheetDialog Value=Visible Title="@T("Copy Department")" ValueChanged="DialogValueChanged" ContentClass="px-sheet-dialog">
     <MWindow @bind-Value="_step" Class="full-height">
         <MWindowItem Value="1" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center full-height">
                     <div class="full-width">
-                        <DefaultTextField @bind-Value="@Dto.Name" class="mx-auto font-24-bold" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></DefaultTextField>
-                        <MCheckbox class="mt-12 d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
+                        <PlaceholderTextFiled @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
+                        <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">
                                     @T("Relocate former department staff")
@@ -16,7 +16,7 @@
                         </MCheckbox>
                     </div>
                 </MCardText>
-                <MCardActions class="d-flex justify-end mt-12 mb-10 px-6">
+                <MCardActions class="d-flex justify-end mb-12 py-0">
                     <DefaultButton Medium OnClick="NextStep">@T("Next step")</DefaultButton>
                 </MCardActions>
             </MCard>
@@ -24,14 +24,14 @@
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column full-height">
-                    <MTextField class="mx-auto font-24-bold regular3--text" @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></MTextField>
-                    <MCascader Items="Departments" Dense class="mt-6" Label="@T("Department Location")"
+                    <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
+                    <MCascader Items="Departments" Dense Label="@T("Department Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
                                ItemValue="u => u.Id"
                                ItemChildren="u => u.Children">
                     </MCascader>
                     <div class="d-flex align-center mt-6">
-                        <span class="font-24-bold emphasis2--text">@T("Member")</span>
+                        <span class="h5 emphasis2--text">@T("Member")</span>
                         <MSpacer />
                         <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
                                        ItemText="r=>r.Name" PrependInnerIcon="@IconConstants.Search"
@@ -53,18 +53,18 @@
                             </ItemContent>
                         </MAutocomplete>
                     </div>
-                    <MRow class="mt-6 flex-grow-1" style="min-height:300px;overflow-y:scroll;">
+                    <MRow class="mt-6 flex-grow-1" style="min-height:calc(100vh - 560px);overflow-y:scroll;">
                         @foreach (var staff in Dto.Staffs)
                         {
                             <MCol Md="3">
                                 <MHover Context="hoverComtext">
                                     <MListItem @attributes="hoverComtext.Attrs" class="px-4" Ripple=false>
                                         <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
-                                            <img src="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png" />
+                                            <img src="@staff.Avatar" />
                                         </MListItemAvatar>
                                         <MListItemContent class="py-1">
                                             <MListItemTitle class="subtitle emphasis2--text">@staff.DisplayName</MListItemTitle>
-                                            <MListItemSubtitle class="font-14 regular-secondary--text">@staff.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
+                                            <MListItemSubtitle class="body2 regular-secondary--text">@staff.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
                                         </MListItemContent>
                                         <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
                                             <MIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</MIcon>

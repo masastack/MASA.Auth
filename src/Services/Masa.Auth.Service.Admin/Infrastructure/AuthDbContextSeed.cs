@@ -7,6 +7,7 @@ public class AuthDbContextSeed
 {
     public async Task SeedAsync(AuthDbContext context, ILogger<AuthDbContextSeed> logger)
     {
+        //todo change to eventbus add(can cache redis)
         var menus = new List<Permission>() {
             new Permission("MASA_Auth","Masa_Auth_Web","User","user","User","mdi-account-outline",PermissionTypes.Menu),
 

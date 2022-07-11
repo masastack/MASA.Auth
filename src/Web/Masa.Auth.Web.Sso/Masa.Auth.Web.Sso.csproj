@@ -11,12 +11,12 @@
 	<PackageReference Include="IdentityServer4" Version="4.1.2" />
 	<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
 	<PackageReference Include="Mapster" Version="7.3.0" />
-	<PackageReference Include="Masa.Blazor" Version="0.5.0-preview.5" />
-	<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache.Storage" Version="0.5.0-preview.4" />
-	<PackageReference Include="Masa.Contrib.BasicAbility.Auth" Version="0.5.0-preview.4" />
-	<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-preview.4" />
-	<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-preview.4" />
-	<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-preview.4" />
+	<PackageReference Include="Masa.Blazor" Version="0.5.0-rc.2" />
+	<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache.Storage" Version="0.5.0-preview.5" />
+	<PackageReference Include="Masa.Contrib.BasicAbility.Auth" Version="0.5.0-preview.5" />
+	<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-preview.5" />
+	<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-preview.5" />
+	<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-preview.5" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
   </ItemGroup>
 
