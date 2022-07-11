@@ -29,7 +29,7 @@ public class CommandHandler
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapIdpRepository = ldapIdpRepository;
-        _configuration = masaConfiguration.GetConfiguration(SectionTypes.Local);
+        _configuration = masaConfiguration.Local;
         _logger = logger;
     }
 

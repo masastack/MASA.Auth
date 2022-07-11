@@ -61,9 +61,9 @@ builder.AddMasaConfiguration(configurationBuilder =>
 });
 
 builder.Services.AddDccClient();
-var redisConfigOption = builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
+var redisConfigOption = builder.Configuration.GetSection("ConfigurationApi:Masa_Auth_Web:AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationAPI:Masa_Auth_Web:AppSettings:PmClient:Url"));
+builder.Services.AddPmClient(builder.Configuration.GetValue<string>("ConfigurationApi:Masa_Auth_Web:AppSettings:PmClient:Url"));
 builder.Services.AddLadpContext();
 
 builder.Services.AddElasticsearchAutoComplete();
@@ -129,7 +129,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.Configuration.GetSection("ConfigurationAPI:Masa_Auth_Web:AppSettings:Client").Get<ClientModel>().Adapt<Client>()
+        builder.Configuration.GetSection("ConfigurationApi:Masa_Auth_Web:AppSettings:Client").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
