@@ -85,51 +85,51 @@ public partial class OperationLog
     protected override async Task OnInitializedAsync()
     {
         PageName = "OperationLogBlock";
-        //await GetOperationLogsAsync();
-        OperationLogs = new List<OperationLogDto>()
-        {
-            new OperationLogDto
-            {
-                OperatorName ="吴炜来",
-                OperationTime = DateTime.Now.AddDays(-10),
-                OperationType = OperationTypes.Add,
-                OperationDescription = "创建用户吴江"
-            },
-            new OperationLogDto
-            {
-                OperatorName ="吴江",
-                OperationTime = DateTime.Now.AddYears(-10),
-                OperationType = OperationTypes.Update,
-                OperationDescription = "编辑用户吴炜来"
-            },
-            new OperationLogDto
-            {
-                OperatorName ="吴邪",
-                OperationTime = DateTime.Now.AddYears(-10),
-                OperationType = OperationTypes.Delete,
-                OperationDescription = "删除用户吴敌"
-            },new OperationLogDto
-            {
-                OperatorName ="吴炜来",
-                OperationTime = DateTime.Now.AddDays(-10),
-                OperationType = OperationTypes.Add,
-                OperationDescription = "创建用户吴江"
-            },
-            new OperationLogDto
-            {
-                OperatorName ="吴江",
-                OperationTime = DateTime.Now.AddYears(-10),
-                OperationType = OperationTypes.Update,
-                OperationDescription = "编辑用户吴炜来"
-            },
-            new OperationLogDto
-            {
-                OperatorName ="吴邪",
-                OperationTime = DateTime.Now.AddYears(-10),
-                OperationType = OperationTypes.Delete,
-                OperationDescription = "删除用户吴敌"
-            }
-        };
+        await GetOperationLogsAsync();
+        //OperationLogs = new List<OperationLogDto>()
+        //{
+        //    new OperationLogDto
+        //    {
+        //        OperatorName ="吴炜来",
+        //        OperationTime = DateTime.Now.AddDays(-10),
+        //        OperationType = OperationTypes.Add,
+        //        OperationDescription = "创建用户吴江"
+        //    },
+        //    new OperationLogDto
+        //    {
+        //        OperatorName ="吴江",
+        //        OperationTime = DateTime.Now.AddYears(-10),
+        //        OperationType = OperationTypes.Update,
+        //        OperationDescription = "编辑用户吴炜来"
+        //    },
+        //    new OperationLogDto
+        //    {
+        //        OperatorName ="吴邪",
+        //        OperationTime = DateTime.Now.AddYears(-10),
+        //        OperationType = OperationTypes.Delete,
+        //        OperationDescription = "删除用户吴敌"
+        //    },new OperationLogDto
+        //    {
+        //        OperatorName ="吴炜来",
+        //        OperationTime = DateTime.Now.AddDays(-10),
+        //        OperationType = OperationTypes.Add,
+        //        OperationDescription = "创建用户吴江"
+        //    },
+        //    new OperationLogDto
+        //    {
+        //        OperatorName ="吴江",
+        //        OperationTime = DateTime.Now.AddYears(-10),
+        //        OperationType = OperationTypes.Update,
+        //        OperationDescription = "编辑用户吴炜来"
+        //    },
+        //    new OperationLogDto
+        //    {
+        //        OperatorName ="吴邪",
+        //        OperationTime = DateTime.Now.AddYears(-10),
+        //        OperationType = OperationTypes.Delete,
+        //        OperationDescription = "删除用户吴敌"
+        //    }
+        //};
     }
 
     public List<DataTableHeader<OperationLogDto>> GetHeaders() => new()

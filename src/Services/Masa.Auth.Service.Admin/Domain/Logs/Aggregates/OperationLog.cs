@@ -15,6 +15,13 @@ namespace Masa.Auth.Service.Admin.Domain.Logs.Aggregates
 
         public string OperationDescription { get; private set; } = "";
 
-        public string TraceIdentifier { get; private set; } = "";
+        public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string operationDescription)
+        {
+            Operator = @operator;
+            OperatorName = operatorName;
+            OperationType = operationType;
+            OperationTime = operationTime;
+            OperationDescription = operationDescription;
+        }
     }
 }

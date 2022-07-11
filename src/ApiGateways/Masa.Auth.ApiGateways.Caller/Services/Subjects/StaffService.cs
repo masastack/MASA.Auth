@@ -54,14 +54,6 @@ public class StaffService : ServiceBase
 
     public async Task<SyncStaffResultsDto> SyncAsync(HttpContent content)
     {
-        //using HttpClient client = new HttpClient();
-        //var response = await client.PostAsync("https://auth-service-staging.masastack.com/api/staff/sync", content);
-        //var json = await response.Content.ReadAsStringAsync();
-        //var serializeOptions = new JsonSerializerOptions
-        //{
-        //    PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true
-        //};
-        //var newUploadResults = JsonSerializer.Serialize(response);
         return await PostAsync<SyncStaffResultsDto>("sync", content: content);
     }
 }

@@ -49,7 +49,6 @@ public partial class SyncStaffDialog
             var fileContent = new StreamContent(stream);
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(File.ContentType);
             content.Add(fileContent, "\"files\"", File.Name);
-            stream.Seek(0, SeekOrigin.Begin);
             SyncStaffResults = await StaffService.SyncAsync(content);
             if (SyncStaffResults?.IsValid is false)
             {

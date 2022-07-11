@@ -4,44 +4,46 @@
 <PageTitle>
     @T("OperationLog")
 </PageTitle>
-
-<AutoHeight AutoClass="mt-6">
-    <HeaderContent>
-        <DateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime Style="width:500px;" />
-    </HeaderContent>
-    <AutoHeightContent>
-        <DefaultCard>
-            @foreach(var log in OperationLogs)
-            {
-                <div class="d-flex mb-6" style="height:36px;">
-                    <div class="mr-1 h5 regular--text">@log.OperationTime.ToString("MM-dd")</div>
-                    <div class="mt-auto body regular3--text">@log.OperationTime.ToString("HH:mm:ss")</div>
-                </div>
-                <div>
-                    @foreach(var (key,value) in new List<(string, string)>
-                    {
-                        (T(nameof(OperationLogDto.Operator)),log.OperatorName),
-                        (T(nameof(OperationLogDto.OperationType)),@T(log.OperationType.ToString())),
-                        (T(nameof(OperationLogDto.OperationDescription)),@log.OperationDescription)
-                    })
-                    {
-                        <div class="d-flex mb-6">
-                            <div class="mr-6" style="max-width:185px;width:185px;">
-                                <div class="body emphasis--text fill-background py-1 px-4" style="height:32px;">
-                                    @key
+<div style="height: calc(100vh - 204px);">
+    <AutoHeight AutoClass="mt-6 m-sheet theme--light m-card pa-6 full-height pr-0">
+        <HeaderContent>
+            <DateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime Style="width:500px;" />
+        </HeaderContent>
+        <AutoHeightContent>
+            <div class="overflow-y full-height pr-4">
+                @foreach (var log in OperationLogs)
+                {
+                    <div class="d-flex mb-6" style="height:36px;">
+                        <div class="mr-1 h5 regular--text">@log.OperationTime.ToString("MM-dd")</div>
+                        <div class="mt-auto body regular3--text">@log.OperationTime.ToString("HH:mm:ss")</div>
+                    </div>
+                    <div>
+                        @foreach (var (key, value) in new List<(string, string)>
+                        {
+                            (T(nameof(OperationLogDto.Operator)),log.OperatorName),
+                            (T(nameof(OperationLogDto.OperationType)),@T(log.OperationType.ToString())),
+                            (T(nameof(OperationLogDto.OperationDescription)),@log.OperationDescription)
+                        })
+                        {
+                            <div class="d-flex mb-6">
+                                <div class="mr-6" style="max-width:185px;width:185px;">
+                                    <div class="body emphasis--text fill-background py-1 px-4" style="height:32px;">
+                                        @key
+                                    </div>
+                                </div>
+                                <div class="d-flex body regular--text">
+                                    <div class="my-auto">：@value</div>
                                 </div>
                             </div>
-                            <div class="d-flex body regular--text">
-                                <div class="my-auto">：@value</div>
-                            </div>
-                        </div>
-                    }                                      
-                </div>
-                <MDivider Class="mb-6" />
-            }
-        </DefaultCard>
-    </AutoHeightContent>
-    <FooterContent>
-        <Pagination Class="mt-6" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
-    </FooterContent>
-</AutoHeight>
+                        }
+                    </div>
+                    <MDivider Class="mb-6" />
+                }
+            </div>
+
+        </AutoHeightContent>
+        <FooterContent>
+            <Pagination Class="mt-6" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        </FooterContent>
+    </AutoHeight>
+</div>

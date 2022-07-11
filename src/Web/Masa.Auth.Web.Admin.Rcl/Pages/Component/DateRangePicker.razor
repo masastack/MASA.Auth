@@ -1,12 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex px-6 fill @Class" style="border: 1px solid #E2E7F4;box-sizing: border-box;border-radius: 8px;height: 48px;min-width: 350px;@Style;">
-    <div class="ma-auto d-flex" style="height:24px;min-width:300px;">
+<div class="d-flex px-6 fill @Class" style="border: 1px solid #E2E7F4;box-sizing: border-box;border-radius: 8px;height: 48px;min-width: 250px;@Style;">
+    <div class="ma-auto d-flex" style="height:24px;min-width:200px;">
         <MIcon Size=24 Color="emphasis2">mdi-calendar-month</MIcon>        
         <MMenu @bind-Value="StartTimeVisible" CloseOnContentClick="false" OffsetY Transition="scale-transition">
             <ActivatorContent>
                 <div class="ml-5 body2 my-auto hover-pointer" style="min-width:80px;height:20px;" @attributes="@context.Attrs">
-                    @(StartTime?.ToString(T("$DateFormat")))
+                    @(StartTime?.ToString(T("$DateFormat"))??T("Please select a start time"))
                 </div>
             </ActivatorContent>
             <ChildContent>
@@ -17,7 +17,7 @@
         <MMenu @bind-Value="EndTimeVisible" CloseOnContentClick="false" OffsetY Transition="scale-transition">
             <ActivatorContent>
                 <div class="ml-5 body2 my-auto hover-pointer" style="min-width:80px;height:20px;" @attributes="@context.Attrs">
-                    @(EndTime?.ToString(T("$DateFormat")))
+                    @(EndTime?.ToString(T("$DateFormat"))??T("Please select an end time"))
                 </div>
             </ActivatorContent>
             <ChildContent>
