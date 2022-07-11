@@ -120,3 +120,8 @@ global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using Client = Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client;
 global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
+global using Masa.Auth.Service.Admin.Domain.Logs.Aggregates;
+global using Masa.Auth.Service.Admin.Domain.Logs.Repositories;
+global using Masa.Auth.Contracts.Admin.Logs;
+global using Masa.Auth.Service.Admin.Application.Logs.Queries;
+global using Masa.Auth.Service.Admin.Application.Logs.Commands;

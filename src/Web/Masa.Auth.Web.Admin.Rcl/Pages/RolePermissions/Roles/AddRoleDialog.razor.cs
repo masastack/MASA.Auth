@@ -18,8 +18,6 @@ public partial class AddRoleDialog
 
     private RoleService RoleService => AuthCaller.RoleService;
 
-    private MForm? Form { get; set; }
-
     private RoleSelectForRole? RoleSelect { get; set; }
 
     public bool Preview { get; set; }
@@ -35,10 +33,6 @@ public partial class AddRoleDialog
         else
         {
             Visible = visible;
-        }
-        if (Form is not null)
-        {
-            await Form.ResetValidationAsync();
         }
     }
 

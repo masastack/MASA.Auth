@@ -22,3 +22,4 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;
 global using System.Reflection;
 global using System.Text.Json;
+global using Masa.Auth.Contracts.Admin.Logs;
