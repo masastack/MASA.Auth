@@ -380,7 +380,7 @@
   "OperationLog": "操作日志",
   "OperationLogBlock": {
     "Operator": "操作人",
-    "OperatorType": "操作类型",
+    "OperationType": "操作类型",
     "OperationDescription": "操作描述"
   },
 

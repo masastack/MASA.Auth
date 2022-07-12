@@ -11,6 +11,7 @@ public partial class OperationLog
     private Guid _userId;
     private DateTime? _startTime;
     private DateTime? _endTime = DateTime.Now;
+    private OperationTypes _operationType;
 
     public Guid UserId
     {
@@ -18,6 +19,16 @@ public partial class OperationLog
         set
         {
             _userId = value;
+            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public OperationTypes OperationType
+    {
+        get { return _operationType; }
+        set
+        {
+            _operationType = value;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -144,7 +155,7 @@ public partial class OperationLog
     public async Task GetOperationLogsAsync()
     {
         Loading = true;
-        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, Search);
+        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, OperationType,Search);
         var response = await OperationLogService.GetListAsync(reuquest);
         OperationLogs = response.Items;
         Total = response.Total;

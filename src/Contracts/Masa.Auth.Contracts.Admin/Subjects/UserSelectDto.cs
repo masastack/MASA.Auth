@@ -38,5 +38,6 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
         PhoneNumber = phoneNumber;
         Email = email;
         Avatar = avatar;
+        Text = $"{Name},{Account},{PhoneNumber},{Email}";
     }
 }
