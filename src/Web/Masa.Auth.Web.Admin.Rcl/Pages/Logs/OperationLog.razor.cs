@@ -155,7 +155,7 @@ public partial class OperationLog
     public async Task GetOperationLogsAsync()
     {
         Loading = true;
-        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, OperationType,Search);
+        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, OperationType, Search);
         var response = await OperationLogService.GetListAsync(reuquest);
         OperationLogs = response.Items;
         Total = response.Total;

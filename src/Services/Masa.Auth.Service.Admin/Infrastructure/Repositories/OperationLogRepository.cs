@@ -8,8 +8,8 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
     IUserContext _userContext;
 
     public OperationLogRepository(
-        AuthDbContext context, 
-        IUnitOfWork unitOfWork, 
+        AuthDbContext context,
+        IUnitOfWork unitOfWork,
         IUserContext userContext) : base(context, unitOfWork)
     {
         _userContext = userContext;

@@ -15,7 +15,7 @@ public class GetOperationLogsDto : Pagination<GetOperationLogsDto>
 
     public string Search { get; set; }
 
-    public GetOperationLogsDto(int page, int pageSize, Guid @operator, DateTime? startTime, DateTime? endTime, OperationTypes operationType,string search)
+    public GetOperationLogsDto(int page, int pageSize, Guid @operator, DateTime? startTime, DateTime? endTime, OperationTypes operationType, string search)
     {
         Page = page;
         PageSize = pageSize;

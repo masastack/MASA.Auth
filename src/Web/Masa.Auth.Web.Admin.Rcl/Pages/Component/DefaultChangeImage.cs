@@ -14,9 +14,9 @@ public class DefaultChangeImage : DefaultUploadImage
     public GenderTypes Gender
     {
         get => _gender;
-        set 
+        set
         {
-            if(value!=_gender)
+            if (value != _gender)
             {
                 _gender = value;
                 ChangeAvayarAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));

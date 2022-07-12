@@ -121,7 +121,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task SyncOperationLogAsync(SyncStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.SyncStaff, $"同步员工：{string.Join(',',command.Staffs.Select(staff => staff.Account))}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.SyncStaff, $"同步员工：{string.Join(',', command.Staffs.Select(staff => staff.Account))}");
         }
 
         #endregion
