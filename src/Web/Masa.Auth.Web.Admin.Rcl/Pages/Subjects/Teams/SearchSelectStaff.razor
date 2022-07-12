@@ -8,7 +8,7 @@
                ItemValue="r=>r.Id"
                Outlined
                Dense Class="@Class" Style="@Style"
-               Chips
+               Chips HideDetails="true"
                SmallChips
                Label="@Label"
                Multiple>
@@ -90,7 +90,7 @@
         }
 
         _staffLoading = true;
-        _staffs = await StaffService.GetSelectAsync(search);
+        _staffs = _staffs.Union(await StaffService.GetSelectAsync(search)).ToList();
         _staffLoading = false;
         StateHasChanged();
     }

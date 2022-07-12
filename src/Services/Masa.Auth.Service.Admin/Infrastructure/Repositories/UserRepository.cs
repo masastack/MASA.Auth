@@ -10,6 +10,20 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
     {
     }
 
+    public Task<User?> FindWithIncludAsync(Expression<Func<User, bool>> predicate, List<string>? includeProperties = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = Context.Set<User>().Where(predicate);
+        if (includeProperties != null)
+        {
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+        }
+        return query.FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<List<User>> GetAllAsync()
     {
         return await Context.Set<User>().ToListAsync();

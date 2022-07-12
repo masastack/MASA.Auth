@@ -10,6 +10,7 @@ public partial class PermissionsPreview
     List<Category> _categories = new();
     List<CategoryAppNav> _initValue = new();
     List<CategoryAppNav> _allData = new();
+    List<string> _oldValue = new();
     string _idPrefix = RandomUtils.GenerateSpecifiedString(6);
 
     [Parameter]
@@ -23,15 +24,16 @@ public partial class PermissionsPreview
 
     ProjectService ProjectService => AuthCaller.ProjectService;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnParametersSetAsync()
     {
-        if (firstRender)
+        if (Value.Count > 0 && !Value.SequenceEqual(_oldValue))
         {
+            _oldValue = Value;
             await LoadData();
-            //_initValue.AddRange(_allData.Where(i => Value.Contains(i.Nav ?? "")));
-            //StateHasChanged();
+            _initValue.AddRange(_allData.Where(i => Value.Contains(i.Nav ?? "")));
+            StateHasChanged();
         }
-        await base.OnAfterRenderAsync(firstRender);
+        base.OnParametersSet();
     }
 
     private async Task LoadData()
@@ -43,8 +45,44 @@ public partial class PermissionsPreview
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
-        _allData.AddRange(_categories.SelectMany(category =>
-            category.Apps.SelectMany(app => app.Navs.Select(nav =>
-                new CategoryAppNav(category.Code, app.Code, nav.Code)))));
+        //todo repeat code ,wait ExpansionWrapper refactor
+        _allData = DataConversion(_categories);
+    }
+
+    private List<CategoryAppNav> DataConversion(List<Category> catetories)
+    {
+        var result = new List<CategoryAppNav>();
+
+        var levelData = catetories.SelectMany(category =>
+            category.Apps.SelectMany(app => app.Navs.Select(nav => new
+            {
+                Category = category.Code,
+                App = app.Code,
+                Nav = nav
+            })));
+
+        foreach (var item in levelData)
+        {
+            result.Add(new CategoryAppNav(item.Category));
+            result.Add(new CategoryAppNav(item.Category, item.App));
+            result.Add(new CategoryAppNav(item.Category, item.App, item.Nav.Code));
+            result.AddRange(CategoryAppNavs(item.Category, item.App, item.Nav));
+        }
+
+        return result;
+
+        List<CategoryAppNav> CategoryAppNavs(string category, string app, Nav nav)
+        {
+            var childResult = new List<CategoryAppNav>();
+            foreach (var item in nav.Children)
+            {
+                childResult.Add(new CategoryAppNav(category, app, item.Code));
+                if (item.HasChildren)
+                {
+                    childResult.AddRange(CategoryAppNavs(category, app, item));
+                }
+            }
+            return childResult;
+        }
     }
 }

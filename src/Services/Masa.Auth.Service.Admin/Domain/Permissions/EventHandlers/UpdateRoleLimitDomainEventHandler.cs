@@ -3,7 +3,7 @@
 
 using Masa.Auth.Service.Admin.Domain.Permissions.Events;
 
-namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandler
+namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
 {
     public class UpdateRoleLimitDomainEventHandler
     {

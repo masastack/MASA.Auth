@@ -9,12 +9,11 @@ public partial class CopyOrgSheet
     List<StaffDto> _removeStaffs = new();
 
     [Parameter]
-    public bool Show { get; set; }
+    public bool Visible { get; set; }
 
     [Parameter]
-    public EventCallback<bool> ShowChanged { get; set; }
+    public EventCallback<bool> VisibleChanged { get; set; }
 
-    [EditorRequired]
     [Parameter]
     public CopyDepartmentDto Dto { get; set; } = new();
 
@@ -34,12 +33,13 @@ public partial class CopyOrgSheet
         }
     }
 
-    public async Task OnSubmitHandler()
+    private async Task OnSubmitHandler()
     {
         if (OnSubmit.HasDelegate)
         {
             await OnSubmit.InvokeAsync(Dto);
         }
+        await Toggle(false);
     }
 
     private void RemoveStaff(StaffDto staffDto)
@@ -52,5 +52,30 @@ public partial class CopyOrgSheet
     {
         _removeStaffs.Remove(staffDto);
         Dto.Staffs.Add(staffDto);
+    }
+
+    private async Task Toggle(bool value)
+    {
+        if (VisibleChanged.HasDelegate)
+        {
+            await VisibleChanged.InvokeAsync(value);
+        }
+        else
+        {
+            Visible = value;
+        }
+    }
+
+    public async Task Show(CopyDepartmentDto model)
+    {
+        Dto = model;
+        Dto.Name = model.Name + "副本";
+        _step = 1;
+        await Toggle(true);
+    }
+
+    private async Task DialogValueChanged(bool value)
+    {
+        await Toggle(value);
     }
 }

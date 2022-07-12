@@ -158,7 +158,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserAsync(userModel.Id);
-        if (user.VerifyPassword(userModel.OldPassword))
+        if (!user.VerifyPassword(userModel.OldPassword))
         {
             throw new UserFriendlyException("password verification failed");
         }
@@ -180,7 +180,6 @@ public class CommandHandler
         var user = await _userRepository.FindAsync(u => u.Id == userId);
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
-
 
         return user;
     }

@@ -7,7 +7,8 @@ public class AuthDbContextSeed
 {
     public async Task SeedAsync(AuthDbContext context, ILogger<AuthDbContextSeed> logger)
     {
-        var menus = new List<Permission>() {
+        //todo change to eventbus add(can cache redis)
+        var authMenus = new List<Permission>() {
             new Permission("MASA_Auth","Masa_Auth_Web","User","user","User","mdi-account-outline",PermissionTypes.Menu),
 
             new Permission("MASA_Auth","Masa_Auth_Web","RolePermission","RolePermission","","mdi-shield-half-full",new List<Permission>{
@@ -31,9 +32,43 @@ public class AuthDbContextSeed
             new Permission("MASA_Auth","Masa_Auth_Web","Position","position","organization/position","fa-solid fa-user-plus",PermissionTypes.Menu),
         };
 
-        if (!context.Set<Permission>().Any())
+        //new Nav("channelManagement", "Permission.ChannelManagement", "mdi-email-outline", "channels/channelManagement", 1),
+        //        new Nav("messageManagement", "Permission.MessageManagement", "fas fa-tasks", 1, new List<Nav>
+        //        {
+        //            new Nav("sendMessage", "Permission.SendMessage", "messageTasks/sendMessage", 2, "messageManagement"),
+        //            new Nav("messageRecord", "Permission.MessageRecord", "messageRecords/messageRecordManagement", 2, "messageManagement"),
+        //        }),
+        //        new Nav("messageTemplateManagement", "Permission.MessageTemplateManagement", "mdi-collage", 1, new List<Nav>
+        //        {
+        //            new Nav("sms", "Sms", "messageTemplates/smsTemplateManagement", 2, "messageTemplateManagement"),
+        //            new Nav("email", "Email", "messageTemplates/emailTemplateManagement", 2, "messageTemplateManagement"),
+        //            new Nav("websiteMessage", "WebsiteMessage", "messageTemplates/websiteMessageTemplateManagement", 2, "messageTemplateManagement"),
+        //        }),
+        //        new Nav("receiverGroupManagement", "Permission.ReceiverGroupManagement", "fas fa-object-ungroup", "receiverGroups/receiverGroupManagement", 1),
+
+        if (!context.Set<Permission>().Any(p => p.SystemId == "MASA_Auth"))
         {
-            context.Set<Permission>().AddRange(menus);
+            context.Set<Permission>().AddRange(authMenus);
+        }
+
+        var pmMenus = new List<Permission>() {
+            new Permission("MASA_Pm","Masa-Pm-Web","Landscape","Landscape.Pm","Landscape","mdi-flag",PermissionTypes.Menu),
+        };
+
+        if (!context.Set<Permission>().Any(p => p.SystemId == "MASA_Pm"))
+        {
+            context.Set<Permission>().AddRange(pmMenus);
+        }
+
+        var dccMenus = new List<Permission>() {
+            new Permission("MASA_Dcc","Masa-Dcc-Web","Landscape","Landscape.Dcc","Landscape","mdi-flag",PermissionTypes.Menu),
+            new Permission("MASA_Dcc","Masa-Dcc-Web","Public","Public","Public","mdi-flag",PermissionTypes.Menu),
+            new Permission("MASA_Dcc","Masa-Dcc-Web","Label Management","Label","Label","mdi-flag",PermissionTypes.Menu),
+        };
+
+        if (!context.Set<Permission>().Any(p => p.SystemId == "MASA_Dcc"))
+        {
+            context.Set<Permission>().AddRange(dccMenus);
         }
 
         if (!context.Set<User>().Any(u => u.Account == "admin"))

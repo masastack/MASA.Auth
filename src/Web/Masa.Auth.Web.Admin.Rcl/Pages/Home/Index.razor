@@ -1,8 +1,11 @@
 ﻿@page "/"
+@using Masa.BuildingBlocks.Identity.IdentityModel
+@using Microsoft.AspNetCore.Http
 @inherits LayoutComponentBase
 @inject NavigationManager Nav
 
 @code {
+
     protected override void OnAfterRender(bool firstRender)
     {
         if(firstRender)

@@ -19,7 +19,8 @@ public partial class TeamBasicInfo
 
     private async Task OnNameChanged(string name)
     {
-        if (!string.IsNullOrWhiteSpace(name) && Value.Name.FirstOrDefault() != Value.Avatar.Name.FirstOrDefault())
+        if (!string.IsNullOrWhiteSpace(name) &&
+            (string.IsNullOrWhiteSpace(Value.Avatar.Name) || Value.Name.FirstOrDefault() != Value.Avatar.Name.FirstOrDefault()))
         {
             Value.Avatar.Name = name.FirstOrDefault().ToString();
         }

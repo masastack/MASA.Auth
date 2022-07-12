@@ -4,13 +4,12 @@
 <PageTitle>@T("Team")</PageTitle>
 
 <MRow>
-    <MCol Md="12">
+    <MCol Md="12" Class="d-flex justify-space-between">
         <OutlinedSearchTextField @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
-    </MCol>
-    <MCol Md="4">
-        <MCard Outlined class="d-flex justify-center align-center" Style="border-style: dashed;background-color:#F6F8FD;" Height="230">
-            <MButton OnClick="()=> _showAdd = true" Ripple=false Plain><MIcon Left>@IconConstants.Add</MIcon>@T("Create Team")</MButton>
-        </MCard>
+        <DefaultButton Small Class="ml-4" OnClick="_addSheet.Show">
+                <MIcon Size=18>@IconConstants.Add</MIcon>
+                <span class="ml-2 btn">@T("Create Team")</span>
+            </DefaultButton>
     </MCol>
     @foreach (var team in _teams)
     {
@@ -20,6 +19,6 @@
     }
 </MRow>
 
-<AddSheet @bind-Show=_showAdd OnSubmit="OnCreate" />
-<UpdateSheet @bind-Show=_showEdit Dto=_editTeamDto OnUpdateBase="OnUpdateBasicInfo"
-             OnUpdateAdmin="OnUpdateAdminPersonnel" OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete" />
+<AddSheet OnSubmit="OnCreate" @ref="_addSheet"/>
+<UpdateSheet @ref="_updateSheet" OnUpdateBase="OnUpdateBasicInfo" OnUpdateAdmin="OnUpdateAdminPersonnel" 
+    OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete" />

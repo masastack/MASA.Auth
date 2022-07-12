@@ -7,10 +7,10 @@ public static class ImageSharper
 {
     public static MemoryStream GeneratePortrait(char show, Color textColor, Color backgroundColor, int size)
     {
-        MemoryStream ms = new MemoryStream();
+        var ms = new MemoryStream();
         using var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))
+        var textOptions = new TextOptions(new Font(GetFontFamily(), size))
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
@@ -26,7 +26,7 @@ public static class ImageSharper
     {
         using var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))
+        var textOptions = new TextOptions(new Font(GetFontFamily(), size))
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
@@ -34,5 +34,18 @@ public static class ImageSharper
         };
         image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
         image.SaveAsPng(path);
+    }
+
+    private static FontFamily GetFontFamily()
+    {
+        var fonts = new FontCollection();
+        if (File.Exists("./Assets/Fonts/arial.ttf"))
+        {
+            return fonts.Add("./Assets/Fonts/arial.ttf");
+        }
+        else
+        {
+            return SystemFonts.Families.FirstOrDefault();
+        }
     }
 }

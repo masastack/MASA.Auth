@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Show ValueChanged=ShowChanged Title="@T("Update Team")" ContentClass="px-sheet-dialog">
+<SheetDialog Value=Visible ValueChanged=DialogValueChanged Title="@T("Update Team")" ContentClass="px-sheet-dialog">
     <ElevationTab Dense Class="pt-12 full-height" Tabs='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' ItemsClass="mt-8 full-height">
         <ElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
@@ -16,7 +16,7 @@
         </ElevationTabItem>
         <ElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                @if (Show)
+                @if (Visible)
                 {
                     <TeamAdmin @bind-Value="Dto.TeamAdmin" />
                 }
@@ -32,7 +32,7 @@
         </ElevationTabItem>
         <ElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                @if (Show)
+                @if (Visible)
                 {
                     <TeamMember @bind-Value="Dto.TeamMember" />
                 }

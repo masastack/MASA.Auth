@@ -70,7 +70,7 @@
                         </MListItemAvatar>
                         <MListItemContent>
                             <MListItemTitle class="h5 regular-secondary--text">@T("Secondary Department")</MListItemTitle>
-                            <MListItemSubtitle class="font-24-bold emphasis2--text">@_departmentChildrenCountDto.SecondLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
+                            <MListItemSubtitle class="h5 emphasis2--text">@_departmentChildrenCountDto.SecondLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -83,7 +83,7 @@
                         </MListItemAvatar>
                         <MListItemContent>
                             <MListItemTitle class="h5 regular-secondary--text">@T("Tertiary Department")</MListItemTitle>
-                            <MListItemSubtitle class="font-24-bold emphasis2--text">@_departmentChildrenCountDto.ThirdLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
+                            <MListItemSubtitle class="h5 emphasis2--text">@_departmentChildrenCountDto.ThirdLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -96,7 +96,7 @@
                         </MListItemAvatar>
                         <MListItemContent>
                             <MListItemTitle class="h5 regular-secondary--text">@T("Fourth Department")</MListItemTitle>
-                            <MListItemSubtitle class="font-24-bold emphasis2--text">@_departmentChildrenCountDto.FourthLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
+                            <MListItemSubtitle class="h5 emphasis2--text">@_departmentChildrenCountDto.FourthLevel<span class="subtitle2 ml-1">@T("PCS")</span></MListItemSubtitle>
                         </MListItemContent>
                     </MListItem>
                 </MCard>
@@ -153,7 +153,7 @@
 </MRow>
 
 <OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
-<CopyOrgSheet @bind-Show=_showCopy Dto="_copyDepartmentDto" Departments=_departments OnSubmit="SubmitAsync" />
+<CopyOrgSheet @ref="_copyOrgSheet" Departments=_departments OnSubmit="SubmitAsync" />
 
 
 <Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync" />

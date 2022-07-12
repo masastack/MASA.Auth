@@ -3,12 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
 {
-    public class DisabledCommandMiddleware<TEvent> : IMiddleware<TEvent>
+    public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
         where TEvent : notnull, IEvent
     {
-        public bool SupportRecursive => true;
-
-        public async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
+        public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
         {
             if (@event is ICommand)
             {

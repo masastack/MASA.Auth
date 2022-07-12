@@ -13,7 +13,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth" Version="0.5.0-preview.6" />
+		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth.Contracts" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-preview.6" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-preview.6" />
@@ -77,6 +77,12 @@
 	<ItemGroup>
 	  <Folder Include="Application\Organizations\Commands\" />
 	  <Folder Include="Migrations\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Update="Assets\Fonts\arial.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 	
 	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
