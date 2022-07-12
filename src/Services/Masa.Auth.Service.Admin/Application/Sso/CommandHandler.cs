@@ -68,9 +68,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
-        //var client = (await _oidcDbContext.Set<Client>().FindAsync(removeClientCommand.ClientId))
-        //    ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
-        var client = await _clientRepository.GetDetailAsync(removeClientCommand.ClientId)
+        var client = await _clientRepository.FindAsync(client => client.Id == removeClientCommand.ClientId)
             ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
         await _clientRepository.RemoveAsync(client);
     }

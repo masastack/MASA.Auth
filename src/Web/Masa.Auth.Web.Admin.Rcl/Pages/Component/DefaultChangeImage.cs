@@ -5,11 +5,24 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultChangeImage : DefaultUploadImage
 {
+    private GenderTypes _gender { get; set; }
+
     [Inject]
     public I18n? I18n { get; set; }
 
     [Parameter]
-    public GenderTypes Gender { get; set; }
+    public GenderTypes Gender
+    {
+        get => _gender;
+        set 
+        {
+            if(value!=_gender)
+            {
+                _gender = value;
+                ChangeAvayarAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            }
+        }
+    }
 
     private List<GetDefaultImagesDto> DefaultImages { get; set; } = new();
 

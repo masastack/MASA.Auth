@@ -79,11 +79,15 @@ public partial class IdentityResource
 
     private async Task AddStandardIdentityResourcesAsync()
     {
-        Loading = true;
-        await IdentityResourceService.AddStandardIdentityResourcesAsync();
-        OpenSuccessMessage(T("Add standard identityResource data success"));
-        await GetIdentityResourcesAsync();
-        Loading = false;
+        var confirm = await OpenConfirmDialog(T("Operation confirmation"), T("Are you sure create standard identityResources"), AlertTypes.Info);
+        if (confirm)
+        {
+            Loading = true;
+            await IdentityResourceService.AddStandardIdentityResourcesAsync();
+            OpenSuccessMessage(T("Add standard identityResource data success"));
+            await GetIdentityResourcesAsync();
+            Loading = false;
+        }
     }
 
     public void OpenAddRoleDialog()

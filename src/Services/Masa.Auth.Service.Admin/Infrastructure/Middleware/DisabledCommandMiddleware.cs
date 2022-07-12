@@ -6,7 +6,7 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
     public class DisabledCommandMiddleware<TEvent> : IMiddleware<TEvent>
         where TEvent : notnull, IEvent
     {
-        public bool SupportRecursive => throw new NotImplementedException();
+        public bool SupportRecursive => true;
 
         public async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
         {
