@@ -59,10 +59,9 @@ builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-
 builder.Services.AddDccClient();
 var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-        .GetSection("AppSettings:RedisConfig").Get<RedisConfigurationOptions>();
+        .GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
     .GetValue<string>("AppSettings:PmClient:Url"));
@@ -131,7 +130,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("AppSettings:Client").Get<ClientModel>().Adapt<Client>()
+        builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });

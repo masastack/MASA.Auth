@@ -90,7 +90,7 @@
         }
 
         _staffLoading = true;
-        _staffs = await StaffService.GetSelectAsync(search);
+        _staffs = _staffs.Union(await StaffService.GetSelectAsync(search)).ToList();
         _staffLoading = false;
         StateHasChanged();
     }

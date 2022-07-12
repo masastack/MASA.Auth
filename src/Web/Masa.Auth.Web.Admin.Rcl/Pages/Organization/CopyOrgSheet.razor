@@ -27,7 +27,7 @@
                     <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
                     <MCascader Items="Departments" Dense Label="@T("Department Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
-                               ItemValue="u => u.Id"
+                               ItemValue="u => u.Id" Readonly
                                ItemChildren="u => u.Children">
                     </MCascader>
                     <div class="d-flex align-center mt-6">
