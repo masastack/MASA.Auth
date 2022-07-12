@@ -54,6 +54,7 @@ public partial class PermissionsCheck
             {
                 _initValue = _checkedItems;
             }
+            InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
         }
     }
 

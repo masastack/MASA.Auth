@@ -79,5 +79,11 @@
 	  <Folder Include="Migrations\" />
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <None Update="Assets\Fonts\arial.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	
 	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>
