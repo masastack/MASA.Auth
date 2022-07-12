@@ -7,7 +7,7 @@ public static class ImageSharper
 {
     public static MemoryStream GeneratePortrait(char show, Color textColor, Color backgroundColor, int size)
     {
-        MemoryStream ms = new MemoryStream();
+        using var ms = new MemoryStream();
         using var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
         var textOptions = new TextOptions(new Font(SystemFonts.Get("STKAITI"), size))

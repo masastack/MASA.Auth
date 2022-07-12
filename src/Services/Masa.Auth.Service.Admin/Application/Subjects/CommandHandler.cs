@@ -181,7 +181,6 @@ public class CommandHandler
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
-
         return user;
     }
 
