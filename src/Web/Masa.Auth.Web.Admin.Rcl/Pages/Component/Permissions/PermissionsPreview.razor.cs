@@ -30,7 +30,7 @@ public partial class PermissionsPreview
         {
             _oldValue = Value;
             await LoadData();
-            _initValue.AddRange(_allData.Where(i => Value.Contains(i.Nav ?? "")));
+            _initValue = _allData.Where(i => Value.Contains(i.Nav ?? "")).ToList();
             StateHasChanged();
         }
         base.OnParametersSet();

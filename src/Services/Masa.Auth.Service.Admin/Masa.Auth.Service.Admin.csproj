@@ -80,6 +80,12 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <Reference Include="Masa.BuildingBlocks.Dispatcher.Events">
+	    <HintPath>..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\Dispatcher\Masa.BuildingBlocks.Dispatcher.Events\obj\Debug\net6.0\ref\Masa.BuildingBlocks.Dispatcher.Events.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+	
+	<ItemGroup>
 	  <None Update="Assets\Fonts\arial.ttf">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

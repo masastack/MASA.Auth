@@ -63,6 +63,7 @@ global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Model;
 global using Masa.BuildingBlocks.BasicAbility.Dcc;
 global using Masa.BuildingBlocks.BasicAbility.Pm;
+global using Masa.BuildingBlocks.BasicAbility.Pm.Enum;
 global using Masa.BuildingBlocks.Configuration;
 global using Masa.BuildingBlocks.Data.UoW;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;

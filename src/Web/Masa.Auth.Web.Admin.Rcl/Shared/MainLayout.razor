@@ -5,7 +5,7 @@
 @inject GlobalConfig GlobalConfig
 @inject NavigationManager Navigation
 
-<Layout AppId="Masa_Auth_Web" OnSignOut="SignOut" OnErrorAsync="OnError"
+<Layout AppId="@MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID" OnSignOut="SignOut" OnErrorAsync="OnError"
         Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
         MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
         @Body
@@ -17,7 +17,7 @@
 
     Task OnError(Exception exception)
     {
-        PopupService.AlertAsync(exception.Message, AlertTypes.Error);
+        //PopupService.AlertAsync(exception.Message, AlertTypes.Error);
         GlobalConfig.Loading = false;
         return Task.CompletedTask;
     }
