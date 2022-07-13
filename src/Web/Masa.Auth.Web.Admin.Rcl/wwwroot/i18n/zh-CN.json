@@ -384,6 +384,7 @@
     "Operator": "操作人",
     "OperationType": "操作类型",
     "OperationDescription": "操作描述",
+    "Please select type": "请选择操作类型",
     "AddUser": "新增用户",
     "UpdateUser": "修改用户",
     "UpdateUserAuthorization": "编辑用户权限",

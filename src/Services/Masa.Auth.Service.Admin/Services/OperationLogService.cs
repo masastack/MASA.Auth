@@ -12,7 +12,7 @@ public class OperationLogService : RestServiceBase
 
     private async Task<PaginationDto<OperationLogDto>> GetListAsync(IEventBus eventBus, GetOperationLogsDto operationLog)
     {
-        var query = new OperationLogsQuery(operationLog.Page, operationLog.PageSize, operationLog.Operator, operationLog.StartTime, operationLog.EndTime, operationLog.Search);
+        var query = new OperationLogsQuery(operationLog.Page, operationLog.PageSize, operationLog.Operator, operationLog.OperationType, operationLog.StartTime, operationLog.EndTime, operationLog.Search);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

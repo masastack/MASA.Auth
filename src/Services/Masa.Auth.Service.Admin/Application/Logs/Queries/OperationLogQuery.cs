@@ -7,6 +7,7 @@ public record OperationLogsQuery(
     int Page,
     int PageSize,
     Guid Operator,
+    OperationTypes OperationType,
     DateTime? StartTime,
     DateTime? EndTime,
     string Search
