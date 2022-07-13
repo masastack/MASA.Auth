@@ -9,8 +9,9 @@ public partial class OperationLog
     private int _page = 1;
     private int _pageSize = 10;
     private Guid _userId;
-    private DateOnly? _startTime;
-    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private DateTime? _startTime;
+    private DateTime? _endTime = DateTime.Now;
+    private OperationTypes _operationType;
 
     public Guid UserId
     {
@@ -22,7 +23,17 @@ public partial class OperationLog
         }
     }
 
-    public DateOnly? StartTime
+    public OperationTypes OperationType
+    {
+        get { return _operationType; }
+        set
+        {
+            _operationType = value;
+            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public DateTime? StartTime
     {
         get => _startTime;
         set
@@ -32,7 +43,7 @@ public partial class OperationLog
         }
     }
 
-    public DateOnly? EndTime
+    public DateTime? EndTime
     {
         get => _endTime;
         set
@@ -85,7 +96,7 @@ public partial class OperationLog
     protected override async Task OnInitializedAsync()
     {
         PageName = "OperationLogBlock";
-        await GetOperationLogsAsync();
+        await GetOperationLogsAsync();        
     }
 
     public List<DataTableHeader<OperationLogDto>> GetHeaders() => new()
@@ -100,7 +111,7 @@ public partial class OperationLog
     public async Task GetOperationLogsAsync()
     {
         Loading = true;
-        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue), Search);
+        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, OperationType, Search);
         var response = await OperationLogService.GetListAsync(reuquest);
         OperationLogs = response.Items;
         Total = response.Total;

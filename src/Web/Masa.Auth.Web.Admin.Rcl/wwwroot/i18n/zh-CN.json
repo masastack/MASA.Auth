@@ -46,14 +46,11 @@
   "All": "全部",
   "Application Group": "应用程序分组",
   "History record": "历史记录",
-  "Start time cannot be greater than end time": "开始时间不能大于结束时间",
-  "End time cannot be less than start time": "结束时间不能小于开始时间",
   "Create": "创建",
   "Update": "修改",
   "RolePermission": "角色权限",
   "Yes": "是",
   "No": "否",
-  "Reset": "重置密码",
   "Required": "必填",
   "DisplayName": "显示名称",
   "True": "是",
@@ -72,8 +69,6 @@
   "Password changed successfully": "密码修改成功",
   "Operational qualification": "操作确认",
   "Please enter：": "请输入：",
-  "I confirm to change the password": "我确认修改密码",
-  "Enter \"{0}\" in the input box below to confirm the operation": "在下面的输入框中输入“{0}”以确认操作",
   "Organization": "组织架构",
   "ThirdPartyIdp": "第三方平台",
   "Position": "职位",
@@ -204,6 +199,7 @@
   "UserBlock": {
     "Add User": "添加用户",
     "Update User": "编辑用户",
+    "UserState": "用户状态",
     "Name": "姓名",
     "Avatr": "头像",
     "User.DisplayName": "用户昵称",
@@ -291,7 +287,8 @@
     "Name": "名称",
     "Standard": "标准",
     "Customize": "自定义",
-    "Create standard userClaims": "创建标准的用户申明",
+    "Quickly create standard declarations": "快速创建标准申明",
+    "Are you sure create standard userClaims": "创建标准的用户申明",
     "Add standard userClaim data success": "创建标准的用户申明成功",
     "Add UserClaim": "新增用户声明",
     "Update UserClaim": "编辑用户声明",
@@ -304,7 +301,8 @@
     "Emphasize": "强调",
     "ShowInDiscoveryDocument": "在文档中展示",
     "Add IdentityResource": "新增身份资源",
-    "Create standard identityResource": "创建标准的身份资源",
+    "Quickly create standard identity resources": "快速创建标准身份资源",
+    "Are you sure create standard identityResources": "创建标准的身份资源",
     "Add standard identityResource data success": "创建标准的身份资源成功",
     "Update IdentityResource": "编辑身份资源",
     "Name": "配置名称",
@@ -379,6 +377,13 @@
     "ConfirmPassword": "确认密码",
     "Login configuration items are required": "登录配置项必填",
     "Register configuration items are required": "注册配置项必填"
+  },
+
+  "OperationLog": "操作日志",
+  "OperationLogBlock": {
+    "Operator": "操作人",
+    "OperationType": "操作类型",
+    "OperationDescription": "操作描述"
   },
 
   "ValidationBlock": {

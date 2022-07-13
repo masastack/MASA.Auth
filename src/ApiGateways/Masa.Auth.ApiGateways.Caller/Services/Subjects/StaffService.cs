@@ -54,7 +54,7 @@ public class StaffService : ServiceBase
 
     public async Task<SyncStaffResultsDto> SyncAsync(HttpContent content)
     {
-        return await PostAsync<SyncStaffResultsDto>(nameof(SyncAsync), content: content);
+        return await PostAsync<SyncStaffResultsDto>("sync", content: content);
     }
 }
 
