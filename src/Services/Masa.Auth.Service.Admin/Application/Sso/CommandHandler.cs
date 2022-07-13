@@ -68,7 +68,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
-        var client = await _clientRepository.GetDetailAsync(removeClientCommand.ClientId)
+        var client = await _clientRepository.FindAsync(c => c.Id == removeClientCommand.ClientId)
             ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
         await _clientRepository.RemoveAsync(client);
     }

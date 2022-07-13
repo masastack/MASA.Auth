@@ -26,7 +26,7 @@ builder.Services.AddGlobalForServer();
 builder.Services.AddAutoComplete();
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
 
-builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"]);
+builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"], builder.Configuration["McServiceBaseAddress"]);
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 

@@ -11,7 +11,7 @@ public class AuthDbContext : IsolationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
-        .LogTo(Console.WriteLine, LogLevel.Information)
+        .LogTo(Console.WriteLine, LogLevel.Debug)
         .EnableSensitiveDataLogging()
         .EnableDetailedErrors();
 
