@@ -19,9 +19,9 @@ public class AuthDbContextSeed
             }),
 
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Team","team","team/index","mdi-account-multiple",PermissionTypes.Menu),
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Organization","org","organization/index","fa-solid fa-sitemap",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Organization","org","organization/index","mdi-file-tree-outline",PermissionTypes.Menu),
 
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"SSO","sso","","fa-solid fa-id-card",new List<Permission>{
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"SSO","sso","","mdi-login-variant",new List<Permission>{
                 new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"UserClaim","userClaim","sso/userClaim","mdi-circle",PermissionTypes.Menu),
                 new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"IdentityResource","IdentityResource","sso/identityResource","mdi-circle",PermissionTypes.Menu),
                 new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"ApiScope","ApiScope","sso/apiScope","mdi-circle",PermissionTypes.Menu),
@@ -30,9 +30,9 @@ public class AuthDbContextSeed
                 new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"CustomLogin","CustomLogin","sso/customLogin","mdi-circle",PermissionTypes.Menu)
             }),
 
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-calendar-check-outline",PermissionTypes.Menu),
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Position","position","organization/position","fa-solid fa-user-plus",PermissionTypes.Menu),
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"OperationLog","operationLog","operationLog","fa-solid fa-user-plus",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-home-floor-3",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Position","position","organization/position","mdi-post",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"OperationLog","operationLog","operationLog","mdi-record-circle",PermissionTypes.Menu),
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.AUTH_SYSTEM_ID))
