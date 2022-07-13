@@ -16,22 +16,31 @@ public class QueryHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
 
-    public QueryHandler(IUserRepository userRepository, ITeamRepository teamRepository, IStaffRepository staffRepository,
-        IThirdPartyUserRepository thirdPartyUserRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
-        AuthDbContext authDbContext, IEventBus eventBus, IAutoCompleteClient autoCompleteClient,
-        ILdapIdpRepository ldapIdpRepository, IMemoryCacheClient memoryCacheClient)
+    public QueryHandler(
+        IUserRepository userRepository,
+        ITeamRepository teamRepository,
+        IStaffRepository staffRepository,
+        IThirdPartyUserRepository thirdPartyUserRepository,
+        IThirdPartyIdpRepository thirdPartyIdpRepository,
+        ILdapIdpRepository ldapIdpRepository,
+        AuthDbContext authDbContext,
+        IEventBus eventBus,
+        IAutoCompleteClient autoCompleteClient,
+        IMemoryCacheClient memoryCacheClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
         _staffRepository = staffRepository;
         _thirdPartyUserRepository = thirdPartyUserRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
+        _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
         _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
-        _ldapIdpRepository = ldapIdpRepository;
         _memoryCacheClient = memoryCacheClient;
     }
+
+
 
     #region User
 
@@ -79,9 +88,9 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByNameQueryAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { "Roles" });
+        var user = await _userRepository.FindAsync(u => u.Account == query.Account);
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
@@ -92,7 +101,9 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
-        var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(query.Search);
+        var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(
+            query.Search.TrimStart(' ').TrimEnd(' ')
+        );
         query.Result = response.Data;
     }
 
@@ -353,19 +364,10 @@ public class QueryHandler
         {
             condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == teamListQuery.StaffId));
         }
-        var teams = await _teamRepository.GetListInCludeAsync(condition,
-            tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
-        foreach (var team in teams.ToList())
-        {
-            var modifierName = _memoryCacheClient.Get<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{team.Modifier}")?.DisplayName ?? "";
-            var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
-                    .Select(s => s.StaffId);
-
-            var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
-
-            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, team.Avatar.Url, team.Description, team.MemberCount,
-                adminAvatar, modifierName, team.ModificationTime));
-        }
+        teamListQuery.Result = (await _teamRepository.GetListAsync(condition))
+                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount,
+                "", "", "", t.ModificationTime))
+                .ToList();
     }
 
     [EventHandler]
@@ -457,26 +459,6 @@ public class QueryHandler
                 Url = v,
                 Name = menus.ContainsKey(v) ? menus[v] : ""
             }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
-        }
-    }
-
-    [EventHandler]
-    public async Task UserPortraitsQueryAsync(UserPortraitsQuery userPortraitsQuery)
-    {
-        foreach (var userId in userPortraitsQuery.UserIds)
-        {
-            var userCache = await _memoryCacheClient.GetAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{userId}");
-            if (userCache != null)
-            {
-                userPortraitsQuery.Result.Add(new UserPortraitModel
-                {
-                    Id = userId,
-                    Name = userCache.Name,
-                    DisplayName = userCache.DisplayName,
-                    Avatar = userCache.Avatar,
-                    Account = userCache.Account
-                });
-            }
         }
     }
 }

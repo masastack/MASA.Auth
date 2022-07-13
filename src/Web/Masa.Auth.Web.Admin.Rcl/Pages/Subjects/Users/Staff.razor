@@ -66,4 +66,4 @@
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
 <UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
 <UserAuthorizeDialog UserId=CurrentStaff.UserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
-<SyncStaffDialog @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
+<SyncStaffDialog @key=SyncStaffDialogVisible @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=GetStaffAsync />
