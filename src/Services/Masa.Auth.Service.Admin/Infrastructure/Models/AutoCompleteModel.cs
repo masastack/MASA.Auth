@@ -12,7 +12,7 @@ public class AutoCompleteModel : ConfigurationApiMasaConfigurationOptions
     public List<DocumentModel> Documents { get; set; } = new();
 
     [JsonIgnore]
-    public override string AppId => "Masa_Auth_Service";
+    public override string AppId => "masa-auth-service-admin";
 
     [JsonIgnore]
     public override string? ObjectName { get; } = "AutoComplete";

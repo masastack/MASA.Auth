@@ -18,7 +18,7 @@ public class ClientSerivce : ServiceBase
 
     private async Task<PaginationDto<ClientDto>> GetListAsync(IEventBus eventBus, GetClientPaginationDto clientPaginationDto)
     {
-        var query = new ClientPaginationListQuery(clientPaginationDto.Page, clientPaginationDto.PageSize);
+        var query = new ClientPaginationListQuery(clientPaginationDto.Page, clientPaginationDto.PageSize, clientPaginationDto.Search);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

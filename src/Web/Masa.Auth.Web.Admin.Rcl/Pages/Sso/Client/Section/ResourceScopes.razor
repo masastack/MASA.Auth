@@ -8,8 +8,10 @@
             </MCol>
             @foreach (var identityScope in Dto.IdentityScopes)
             {
+                var mandatoryResource = _mandatoryResource.Contains(identityScope.Id);
+                identityScope.Selected = mandatoryResource||identityScope.Selected;
                 <MCol Md=6 Class="py-0">
-                    <MCheckbox @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
+                    <MCheckbox Disabled="mandatoryResource" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
                 </MCol>
             }
         </MRow>
@@ -36,6 +38,8 @@
 
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
+    
+    string[] _mandatoryResource = new string[]{ "openid","profile" };
 
     ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 

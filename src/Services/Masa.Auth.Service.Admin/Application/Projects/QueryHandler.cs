@@ -109,7 +109,7 @@ public class QueryHandler
     [EventHandler]
     public async Task AppTagsAsync(AppTagsQuery query)
     {
-        var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectTag");
+        var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
         query.Result = tags.Select(t => t.Name).ToList();
         await Task.CompletedTask;
     }

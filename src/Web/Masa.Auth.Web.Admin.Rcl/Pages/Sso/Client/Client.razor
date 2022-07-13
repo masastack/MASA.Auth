@@ -9,7 +9,7 @@
     <AutoHeight>
         <HeaderContent>
             <div class="d-flex mb-6">
-                <SearchTextField @bind-Value="_clientPaginationDto.Search" FullWidth=false Color="primary" Class="rounded-2 search" />
+                <SearchTextField @bind-Value="_clientPaginationDto.Search" OnKeyDown="SearchKeyHandler" FullWidth=false Color="primary" Class="rounded-2 search" />
                 <MSpacer />
                 <DefaultButton Small OnClick="()=>{_addDialog=true;}">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
@@ -18,7 +18,7 @@
             </div>           
         </HeaderContent>
         <AutoHeightContent>
-            <DefaultDataTable Headers="GetHeaders()" Items="_clients" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize">
+            <DefaultDataTable Headers="GetHeaders()" Items="_paginationDto.Items" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -49,7 +49,8 @@
             </DefaultDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-4" @bind-Page="_clientPaginationDto.Page" @bind-PageSize=_clientPaginationDto.PageSize Total=100 />
+            <Pagination Class="mt-4" Page="_clientPaginationDto.Page" PageSize=_clientPaginationDto.PageSize 
+                        Total=_paginationDto.Total PageChanged="PageChangedHandler" PageSizeChanged="PageSizeChangedHandler"/>
         </FooterContent>
     </AutoHeight>
 </DefaultCard>

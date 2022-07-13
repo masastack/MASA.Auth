@@ -8,8 +8,7 @@ public partial class Client
     bool _addDialog, _updateDialog;
     UpdateClientDialog _updateClientDialog = null!;
     GetClientPaginationDto _clientPaginationDto = new();
-
-    public List<ClientDto> _clients { get; set; } = new();
+    PaginationDto<ClientDto> _paginationDto = new();
 
     ClientService _clientService => AuthCaller.ClientService;
 
@@ -37,12 +36,31 @@ public partial class Client
 
     private async Task LoadData()
     {
-        var data = await _clientService.GetListAsync(_clientPaginationDto);
-        _clients = data.Items;
+        _paginationDto = await _clientService.GetListAsync(_clientPaginationDto);
     }
 
     private async Task OpenUpdateDialog(int clientId)
     {
         await _updateClientDialog.ShowAsync(clientId);
+    }
+
+    private async Task PageChangedHandler(int page)
+    {
+        _clientPaginationDto.Page = page;
+        await LoadData();
+    }
+
+    private async Task PageSizeChangedHandler(int pageSize)
+    {
+        _clientPaginationDto.PageSize = pageSize;
+        await LoadData();
+    }
+
+    private async Task SearchKeyHandler(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == Keyboards.Enter)
+        {
+            await LoadData();
+        }
     }
 }

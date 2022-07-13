@@ -31,7 +31,12 @@ public class QueryHandler
     [EventHandler]
     public async Task ClientPaginationListAsync(ClientPaginationListQuery clientPaginationListQuery)
     {
-        var result = await _clientRepository.GetPaginatedListAsync(clientPaginationListQuery.Page, clientPaginationListQuery.PageSize);
+        var searchKey = clientPaginationListQuery.SearchKey;
+        Expression<Func<Client, bool>> condition = client => true;
+        if (!string.IsNullOrWhiteSpace(searchKey))
+            condition = condition.And(client => client.ClientName.Contains(searchKey) || client.ClientId.Contains(searchKey));
+
+        var result = await _clientRepository.GetPaginatedListAsync(clientPaginationListQuery.Page, clientPaginationListQuery.PageSize, condition);
         clientPaginationListQuery.Result = new PaginationDto<ClientDto>(result.Total, result.Result.Adapt<List<ClientDto>>());
     }
 
