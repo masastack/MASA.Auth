@@ -215,6 +215,33 @@ public class QueryHandler
         query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
     }
 
+    [EventHandler]
+    public async Task GetStaffTotalByDepartmentAsync(StaffTotalByDepartmentQuery query)
+    {
+        var total = await _authDbContext.Set<Staff>()
+                                         .CountAsync(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId));
+
+        query.Result = total;
+    }
+
+    [EventHandler]
+    public async Task GetStaffTotalByTeamAsync(StaffTotalByTeamQuery query)
+    {
+        var total = await _authDbContext.Set<Staff>()
+                                         .CountAsync(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId));
+
+        query.Result = total;
+    }
+
+    [EventHandler]
+    public async Task GetStaffTotalByRoleAsync(StaffTotalByRoleQuery query)
+    {
+        var total = await _authDbContext.Set<Staff>()
+                                         .CountAsync(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId));
+
+        query.Result = total;
+    }
+
     #endregion
 
     #region ThirdPartyUser
