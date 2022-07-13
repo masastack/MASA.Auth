@@ -96,10 +96,10 @@
     margin-top: 0px !important;
 }
 
-/*.m-input__append-inner {
+.m-input__append-inner {
     margin-top: auto !important;
     margin-bottom: auto !important;
-}*/
+}
 
 .button-group {
     background: #F6F8FD !important;

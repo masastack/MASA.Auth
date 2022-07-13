@@ -77,11 +77,15 @@ public partial class UserClaim
 
     private async Task AddStandardUserClaimsAsync()
     {
-        Loading = true;
-        await UserClaimService.AddStandardUserClaimsAsync();
-        OpenSuccessMessage(T("Add standard userClaim data success"));
-        await GetUserClaimsAsync();
-        Loading = false;
+        var confirm = await OpenConfirmDialog(T("Operation confirmation"), T("Are you sure create standard userClaims"), AlertTypes.Info);
+        if (confirm)
+        {
+            Loading = true;
+            await UserClaimService.AddStandardUserClaimsAsync();
+            OpenSuccessMessage(T("Add standard userClaim data success"));
+            await GetUserClaimsAsync();
+            Loading = false;
+        }
     }
 
     public void OpenAddApiResourceDialog()
