@@ -41,7 +41,7 @@ public partial class PermissionsPreview
         var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
         _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
         {
-            Code = ag.Key,
+            Code = ag.Key.Replace(" ", ""),
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
