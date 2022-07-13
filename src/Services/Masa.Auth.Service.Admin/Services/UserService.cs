@@ -11,6 +11,8 @@ namespace Masa.Auth.Service.Admin.Services
         {
             _memoryCacheClient = memoryCacheClient;
             MapGet(FindByAccountAsync);
+            MapGet(FindByPhoneNumberAsync);
+            MapGet(FindByEmailAsync);
             MapGet(FindByIdAsync);
             MapPost(ValidateByAccountAsync);
             MapPost(Visit);
@@ -108,6 +110,20 @@ namespace Masa.Auth.Service.Admin.Services
         private async Task<UserModel> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
         {
             var query = new FindUserByAccountQuery(account);
+            await eventBus.PublishAsync(query);
+            return ConvertToModel(query.Result);
+        }
+
+        private async Task<UserModel> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
+        {
+            var query = new FindUserByEmailQuery(email);
+            await eventBus.PublishAsync(query);
+            return ConvertToModel(query.Result);
+        }
+
+        private async Task<UserModel> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
+        {
+            var query = new FindUserByPhoneNumberQuery(phoneNumber);
             await eventBus.PublishAsync(query);
             return ConvertToModel(query.Result);
         }

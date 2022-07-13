@@ -88,7 +88,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByNameQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.Account == query.Account);
         if (user is null)
@@ -97,6 +97,29 @@ public class QueryHandler
         }
         query.Result = user;
     }
+
+    [EventHandler]
+    public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.Email == query.Email);
+        if (user is null)
+        {
+            throw new UserFriendlyException("This user data does not exist");
+        }
+        query.Result = user;
+    }
+
+    [EventHandler]
+    public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        if (user is null)
+        {
+            throw new UserFriendlyException("This user data does not exist");
+        }
+        query.Result = user;
+    }
+
 
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
@@ -230,7 +253,8 @@ public class QueryHandler
     public async Task GetStaffTotalByDepartmentAsync(StaffTotalByDepartmentQuery query)
     {
         var total = await _authDbContext.Set<Staff>()
-                                         .CountAsync(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId));
+                                        .Include(staff => staff.DepartmentStaffs)
+                                        .CountAsync(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId));
 
         query.Result = total;
     }
@@ -239,7 +263,8 @@ public class QueryHandler
     public async Task GetStaffTotalByTeamAsync(StaffTotalByTeamQuery query)
     {
         var total = await _authDbContext.Set<Staff>()
-                                         .CountAsync(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId));
+                                        .Include(staff => staff.TeamStaffs)
+                                        .CountAsync(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId));
 
         query.Result = total;
     }
@@ -248,7 +273,9 @@ public class QueryHandler
     public async Task GetStaffTotalByRoleAsync(StaffTotalByRoleQuery query)
     {
         var total = await _authDbContext.Set<Staff>()
-                                         .CountAsync(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId));
+                                        .Include(staff => staff.User)
+                                        .ThenInclude(user => user.Roles)
+                                        .CountAsync(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId));
 
         query.Result = total;
     }
@@ -364,10 +391,19 @@ public class QueryHandler
         {
             condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == teamListQuery.StaffId));
         }
-        teamListQuery.Result = (await _teamRepository.GetListAsync(condition))
-                .Select(t => new TeamDto(t.Id, t.Name, t.Avatar.Url, t.Description, t.MemberCount,
-                "", "", "", t.ModificationTime))
-                .ToList();
+        var teams = await _teamRepository.GetListInCludeAsync(condition,
+            tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
+        foreach (var team in teams.ToList())
+        {
+            var modifierName = _memoryCacheClient.Get<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{team.Modifier}")?.DisplayName ?? "";
+            var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
+                    .Select(s => s.StaffId);
+
+            var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
+
+            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, team.Avatar.Url, team.Description, team.MemberCount,
+                adminAvatar, modifierName, team.ModificationTime));
+        }
     }
 
     [EventHandler]
