@@ -39,9 +39,9 @@ public static class ImageSharper
     private static FontFamily GetFontFamily()
     {
         var fonts = new FontCollection();
-        if (File.Exists("./Assets/Fonts/arial.ttf"))
+        if (File.Exists("./Assets/Fonts/SourceHanSansCN-Normal.ttf"))
         {
-            return fonts.Add("./Assets/Fonts/arial.ttf");
+            return fonts.Add("./Assets/Fonts/SourceHanSansCN-Normal.ttf");
         }
         else
         {

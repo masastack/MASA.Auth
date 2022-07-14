@@ -80,7 +80,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <None Update="Assets\Fonts\arial.ttf">
+	  <None Update="Assets\Fonts\SourceHanSansCN-Normal.ttf">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

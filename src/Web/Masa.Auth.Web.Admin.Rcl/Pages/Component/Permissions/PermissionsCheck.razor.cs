@@ -67,7 +67,7 @@ public partial class PermissionsCheck
             {
                 await LoadRolePermissions();
             }
-            InitChecked(Value.Select(v => v.Key.ToString()).ToList());
+            InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -78,7 +78,7 @@ public partial class PermissionsCheck
         var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
         _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
         {
-            Code = ag.Key,
+            Code = ag.Key.Replace(" ", ""),
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
@@ -93,8 +93,7 @@ public partial class PermissionsCheck
 
     private void InitChecked(List<string> checkedItems)
     {
-        _initValue.AddRange(_allData.Where(i => checkedItems.Contains(i.Nav ?? "")));
-        _initValue = _initValue.Distinct().ToList();
+        _initValue = _allData.Where(i => checkedItems.Contains(i.Nav ?? "")).ToList();
     }
 
     private List<CategoryAppNav> DataConversion(List<Category> catetories)

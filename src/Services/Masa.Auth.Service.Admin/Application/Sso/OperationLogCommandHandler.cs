@@ -32,7 +32,7 @@ public class OperationLogCommandHandler
     {
         var client = await _authDbContext.Set<Client>().FirstOrDefaultAsync(client => client.Id == command.ClientId);
         if (client is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateClient, $"删除客户端：{client.ClientName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveClient, $"删除客户端：{client.ClientName}");
     }
     #endregion
 
@@ -58,7 +58,7 @@ public class OperationLogCommandHandler
             await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateIdentityResource, $"编辑身份资源：{name}");
     }
 
-    [EventHandler]
+    [EventHandler(0)]
     public async Task RemoveIdentityResourceOperationLogAsync(RemoveIdentityResourceCommand command)
     {
         var name = await GetIdentityResourceNameByIdAsync(command.IdentityResource.Id);
@@ -90,15 +90,15 @@ public class OperationLogCommandHandler
     {
         var name = await GetApiResourceNameByIdAsync(command.ApiResource.Id);
         if (name is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiResource, $"编辑Api资源：{name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateApiResource, $"编辑Api资源：{name}");
     }
 
-    [EventHandler]
+    [EventHandler(0)]
     public async Task RemoveApiResourceOperationLogAsync(RemoveApiResourceCommand command)
     {
         var name = await GetApiResourceNameByIdAsync(command.ApiResource.Id);
         if (name is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiResource, $"删除Api资源：{name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveApiResource, $"删除Api资源：{name}");
     }
 
     async Task<string?> GetApiResourceNameByIdAsync(int id)
@@ -117,19 +117,24 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddApiScopeOperationLogAsync(AddApiScopeCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiScope, $"添加Api范围：{command.ApiScope.Name}");
     }
 
     [EventHandler]
     public async Task UpdateApiScopeOperationLogAsync(UpdateApiScopeCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateApiScope, $"编辑Api范围：{command.ApiScope.Name}");
     }
 
-    [EventHandler]
+    [EventHandler(0)]
     public async Task RemoveApiScopeOperationLogAsync(RemoveApiScopeCommand command)
     {
-
+        var name = await _authDbContext.Set<ApiScope>()
+                                            .Where(apiScope => apiScope.Id == command.ApiScope.Id)
+                                            .Select(apiScope => apiScope.Name)
+                                            .FirstOrDefaultAsync();
+        if (name is not null)
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveApiScope, $"删除Api范围：{name}");
     }
 
     #endregion
@@ -139,25 +144,30 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddUserClaimOperationLogAsync(AddUserClaimCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUserClaim, $"添加用户申明：{command.UserClaim.Name}");
     }
 
     [EventHandler]
     public async Task AddStandardUserClaimsOperationLogAsync(AddStandardUserClaimsCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStandardUserClaims, $"添加标准的用户申明");
     }
 
     [EventHandler]
     public async Task UpdateUserClaimOperationLogAsync(UpdateUserClaimCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUserClaim, $"编辑用户申明：{command.UserClaim.Name}");
     }
 
-    [EventHandler]
+    [EventHandler(0)]
     public async Task RemoveUserClaimOperationLogAsync(RemoveUserClaimCommand command)
     {
-
+        var name = await _authDbContext.Set<UserClaim>()
+                                            .Where(userClaim => userClaim.Id == command.UserClaim.Id)
+                                            .Select(userClaim => userClaim.Name)
+                                            .FirstOrDefaultAsync();
+        if (name is not null)
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveUserClaim, $"删除用户申明：{name}");
     }
 
     #endregion
@@ -167,19 +177,24 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddCustomLoginOperationLogAsync(AddCustomLoginCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddCustomLogin, $"添加自定义登录注册：{command.CustomLogin.Name}");
     }
 
     [EventHandler]
     public async Task UpdateCustomLoginOperationLogAsync(UpdateCustomLoginCommand command)
     {
-
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateCustomLogin, $"编辑自定义登录注册：{command.CustomLogin.Name}");
     }
 
-    [EventHandler]
+    [EventHandler(0)]
     public async Task RemoveCustomLoginOperationLogAsync(RemoveCustomLoginCommand command)
     {
-
+        var name = await _authDbContext.Set<CustomLogin>()
+                                           .Where(customLogin => customLogin.Id == command.CustomLogin.Id)
+                                           .Select(customLogin => customLogin.Name)
+                                           .FirstOrDefaultAsync();
+        if (name is not null)
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveCustomLogin, $"删除自定义登录注册：{name}");
     }
 
     #endregion

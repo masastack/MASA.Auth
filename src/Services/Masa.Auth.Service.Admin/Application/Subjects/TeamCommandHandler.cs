@@ -59,7 +59,7 @@ public class TeamCommandHandler
         var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
         var team = await _teamRepository.GetByIdAsync(dto.Id);
         var avatarName = $"{team.Id}.png";
-        if ((team.Avatar.Name != dto.Avatar.Name && team.Avatar.Color != dto.Avatar.Color) ||
+        if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||
                 string.IsNullOrWhiteSpace(team.Avatar.Url))
         {
             var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
