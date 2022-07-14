@@ -148,18 +148,21 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Password = MD5Utils.EncryptRepeat(password);
     }
 
-    public void AddDepartmentStaff(Guid departmentId)
+    public void SetDepartmentStaff(Guid departmentId)
     {
         _departmentStaffs.Clear();
         if (departmentId != default) _departmentStaffs.Add(new DepartmentStaff(departmentId, Guid.Empty));
     }
 
-    public void AddTeamStaff(List<Guid> teams)
+    public void SetTeamStaff(List<Guid> teams)
     {
-        _teamStaffs.Clear();
-        foreach (var teamId in teams)
+        var oldTeamIds = _teamStaffs.Select(t => t.TeamId).ToList();
+        var removeTeamIds = oldTeamIds.Except(teams).ToList();
+        _teamStaffs.RemoveAll(t => removeTeamIds.Contains(t.TeamId));
+        var addTeamIds = teams.Except(oldTeamIds).ToList();
+        foreach (var addTeamId in addTeamIds)
         {
-            _teamStaffs.Add(new TeamStaff(teamId, default, TeamMemberTypes.Member));
+            _teamStaffs.Add(new TeamStaff(addTeamId, default, TeamMemberTypes.Member));
         }
     }
 }

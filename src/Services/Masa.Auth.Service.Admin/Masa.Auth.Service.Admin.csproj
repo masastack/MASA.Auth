@@ -17,7 +17,7 @@
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-preview.6" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-preview.6" />
-		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-preview.6" />
+		<!--<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-preview.6" />-->
 		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.5.0-preview.6" />
@@ -71,6 +71,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\Authentication\Masa.Contrib.Authentication.Oidc.EntityFrameworkCore\Masa.Contrib.Authentication.Oidc.EntityFrameworkCore.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\Ddd\Masa.BuildingBlocks.Ddd.Domain\Masa.BuildingBlocks.Ddd.Domain.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\Dispatcher\Masa.BuildingBlocks.Dispatcher.Events\Masa.BuildingBlocks.Dispatcher.Events.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

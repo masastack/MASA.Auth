@@ -6,12 +6,16 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandlers;
 public class UpdateStaffDomainEventHandler
 {
     readonly IStaffRepository _staffRepository;
+    readonly ITeamRepository _teamRepository;
     readonly IEventBus _eventBus;
 
-    public UpdateStaffDomainEventHandler(IStaffRepository staffRepository, IEventBus eventBus)
+    public UpdateStaffDomainEventHandler(IStaffRepository staffRepository,
+                                         IEventBus eventBus,
+                                         ITeamRepository teamRepository)
     {
         _staffRepository = staffRepository;
         _eventBus = eventBus;
+        _teamRepository = teamRepository;
     }
 
     //[EventHandler(1)]
@@ -66,8 +70,8 @@ public class UpdateStaffDomainEventHandler
             staffDto.PositionId, staffDto.StaffType, staffDto.Enabled, staffDto.Name,
             staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName,
             staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Gender);
-        staff.AddDepartmentStaff(staffDto.DepartmentId);
-        staff.AddTeamStaff(staffDto.Teams);
+        staff.SetDepartmentStaff(staffDto.DepartmentId);
+        staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);
     }
 }

@@ -12,7 +12,6 @@ public class QueryHandler
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly AuthDbContext _authDbContext;
-    readonly IEventBus _eventBus;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
 
@@ -24,7 +23,6 @@ public class QueryHandler
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
-        IEventBus eventBus,
         IAutoCompleteClient autoCompleteClient,
         IMemoryCacheClient memoryCacheClient)
     {
@@ -35,7 +33,6 @@ public class QueryHandler
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
-        _eventBus = eventBus;
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
     }
@@ -347,7 +344,7 @@ public class QueryHandler
 
             var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
 
-            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, team.Avatar.Url, team.Description, team.MemberCount,
+            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, team.Avatar.Url, team.Description, team.TeamStaffs.Count,
                 adminAvatar, modifierName, team.ModificationTime));
         }
     }

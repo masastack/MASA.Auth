@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.EntityFrameworkCore.Design;
-
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthDbContext : IsolationDbContext
@@ -13,7 +11,7 @@ public class AuthDbContext : IsolationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
-        .LogTo(Console.WriteLine, LogLevel.Debug)
+        .LogTo(Console.WriteLine, LogLevel.Warning)
         .EnableSensitiveDataLogging()
         .EnableDetailedErrors();
 
@@ -38,22 +36,5 @@ public class AuthDbContext : IsolationDbContext
         builder.ApplyConfigurationsFromAssembly(typeof(UserClaimRepository).Assembly);
 
         base.OnModelCreatingExecuting(builder);
-    }
-}
-
-public class AuthDbContextFactory : IDesignTimeDbContextFactory<AuthDbContext>
-{
-    public AuthDbContext CreateDbContext(string[] args)
-    {
-        var optionsBuilder = new MasaDbContextOptionsBuilder<AuthDbContext>();
-        var configurationBuilder = new ConfigurationBuilder();
-        var configuration = configurationBuilder
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile("appsettings.Development.json")
-            .Build();
-
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-
-        return new AuthDbContext(optionsBuilder.MasaOptions);
     }
 }

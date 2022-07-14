@@ -257,6 +257,6 @@
     </MCol>
 </MRow>
 
-<AddMenuPermission @bind-Show=_addMenuPermission PermissionTypes=_menuPermissionTypes OnSubmit="AddMenuPermissionAsync"
+<AddMenuPermission @bind-Show=_addMenuPermission SelectPermissionTypes=_menuPermissionTypes OnSubmit="AddMenuPermissionAsync"
                    ParentId=_parentMenuId AppItems=_curAppItems />
 <AddApiPermission @bind-Show=_addApiPermission PermissionTypes=_apiPermissionTypes OnSubmit="AddApiPermissionAsync" AppItems=_curAppItems />

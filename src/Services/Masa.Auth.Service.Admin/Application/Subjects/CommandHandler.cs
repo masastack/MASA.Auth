@@ -15,11 +15,20 @@ public class CommandHandler
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<CommandHandler> _logger;
+    readonly IUserContext _userContext;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
-        StaffDomainService staffDomainService, ILdapFactory ldapFactory,
-        UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IMasaConfiguration masaConfiguration, ILogger<CommandHandler> logger)
+    public CommandHandler(
+        IUserRepository userRepository,
+        IStaffRepository staffRepository,
+        IThirdPartyIdpRepository thirdPartyIdpRepository,
+        StaffDomainService staffDomainService,
+        ILdapFactory ldapFactory,
+        UserDomainService userDomainService,
+        ThirdPartyUserDomainService thirdPartyUserDomainService,
+        ILdapIdpRepository ldapIdpRepository,
+        IMasaConfiguration masaConfiguration,
+        ILogger<CommandHandler> logger,
+        IUserContext userContext)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -31,6 +40,7 @@ public class CommandHandler
         _ldapIdpRepository = ldapIdpRepository;
         _configuration = masaConfiguration.Local;
         _logger = logger;
+        _userContext = userContext;
     }
 
     #region User
@@ -115,6 +125,16 @@ public class CommandHandler
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
         var user = await CheckUserAsync(command.User.Id);
+
+        if (user.Account == "admin")
+        {
+            throw new UserFriendlyException("超级管理员 无法删除");
+        }
+
+        if (user.Id == _userContext.GetUserId<Guid>())
+        {
+            throw new UserFriendlyException("当前用户不能删除自己");
+        }
 
         await _userRepository.RemoveAsync(user);
         await _userDomainService.RemoveAsync(user.Id);
