@@ -9,9 +9,8 @@
         <HeaderContent>
             <div class="d-flex">
                 <DateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />
-                @*<EnumSimpleSelect @bind-Value="OperationType" TValue="OperationTypes" DefaultText="@T("Please select type")" Class="ml-6" />*@
-                <EnumSelect @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" Class="ml-6" Style="width: 100px !important;" />
+                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />                
+                <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" FillBackground=false Class="ml-6" Style="width: 100px !important;" />
                 <MSpacer />
                 <UserAutoComplete @bind-Value="UserId" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
                 <SearchTextField @bind-Value="Search" FillBackground=false Class="ml-6" Style="width: 134px !important;" />

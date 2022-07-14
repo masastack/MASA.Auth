@@ -60,9 +60,11 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         }
 
         [EventHandler]
-        public async Task UserValidateByAccountOperationLogAsync(ValidateByAccountCommand command)
+        public async Task ValidateByAccountOperationLogAsync(ValidateByAccountCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.Login, $"用户：{command.Account}登录");
+            var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(user => user.Account == command.Account);
+            if (user is null) return;
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.Login, $"用户：{command.Account}登录", user.Id);
         }
 
         [EventHandler]
