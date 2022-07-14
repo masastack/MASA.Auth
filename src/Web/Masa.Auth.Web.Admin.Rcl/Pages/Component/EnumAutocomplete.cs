@@ -31,6 +31,6 @@ public class EnumAutocomplete<TValue> : MAutocomplete<KeyValuePair<string, TValu
     protected override void OnParametersSet()
     {
         if (Style.Contains("width:340px;height:40px;") is false) Style += "width:340px;height:40px;";
-        if(Class.Contains("rounded-2") is false) Class += " rounded-2";
+        if (Class.Contains("rounded-2") is false) Class += " rounded-2";
     }
 }

@@ -8,6 +8,6 @@ public class CacheLogin
     public string Account { get; set; } = "";
 
     public int LoginErrorCount { get; set; }
-    
+
     public DateTimeOffset FreezeTime { get; set; }
 }

@@ -154,7 +154,7 @@ public class CommandHandler
         if (user != null)
         {
             var success = user.VerifyPassword(validateByAccountCommand.Password);
-            if(success)
+            if (success)
             {
                 if (loginCache is not null) await _cache.RemoveAsync<CacheLogin>(key);
             }
@@ -172,7 +172,7 @@ public class CommandHandler
                 await _cache.SetAsync(key, loginCache, options);
                 throw new UserFriendlyException("账号或密码错误");
             }
-            validateByAccountCommand.Result = success;                      
+            validateByAccountCommand.Result = success;
         }
     }
 
