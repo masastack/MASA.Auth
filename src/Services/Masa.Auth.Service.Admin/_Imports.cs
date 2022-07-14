@@ -97,6 +97,7 @@ global using Masa.Contrib.Isolation.MultiEnvironment;
 global using Masa.Contrib.Isolation.UoW.EF;
 global using Masa.Contrib.Service.MinimalAPIs;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
+global using Masa.Utils.Caching.Core.Interfaces;
 global using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
 global using Masa.Utils.Caching.DistributedMemory.Interfaces;
 global using Masa.Utils.Caching.Redis.Models;

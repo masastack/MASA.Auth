@@ -28,45 +28,56 @@ public class AccountController : Controller
         var userName = inputModel.UserName;
         // check if we are in the context of an authorization request
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-        if (await _authClient.UserService.ValidateCredentialsByAccountAsync(userName, inputModel.Password))
+        try
         {
-            var user = await _authClient.UserService.FindByAccountAsync(userName);
-            // only set explicit expiration here if user chooses "remember me". 
-            // otherwise we rely upon expiration configured in cookie middleware.
-            AuthenticationProperties? props = null;
-            if (LoginOptions.AllowRememberLogin && inputModel.RememberLogin)
+            var success = await _authClient.UserService
+                                           .ValidateCredentialsByAccountAsync(userName, inputModel.Password);
+            if (success)
             {
-                props = new AuthenticationProperties
+                var user = await _authClient.UserService.FindByAccountAsync(userName);
+                // only set explicit expiration here if user chooses "remember me". 
+                // otherwise we rely upon expiration configured in cookie middleware.
+                AuthenticationProperties? props = null;
+                if (LoginOptions.AllowRememberLogin && inputModel.RememberLogin)
                 {
-                    IsPersistent = true,
-                    ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
+                    props = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
+                    };
                 };
-            };
-            var isuser = new IdentityServerUser(user.Id.ToString())
-            {
-                DisplayName = user.DisplayName
-            };
-            isuser.AdditionalClaims.Add(new Claim("userName", userName));
-            isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
-            isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.Roles)));
-            //us duende sign in
-            await HttpContext.SignInAsync(isuser, props);
+                var isuser = new IdentityServerUser(user.Id.ToString())
+                {
+                    DisplayName = user.DisplayName
+                };
+                isuser.AdditionalClaims.Add(new Claim("userName", userName));
+                isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
+                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.Roles)));
+                //us duende sign in
+                await HttpContext.SignInAsync(isuser, props);
 
-            await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
 
-            if (context != null && context.IsNativeClient())
-            {
-                // The client is native, so this change in how to
-                // return the response is for better UX for the end user.
-                return this.LoadingPage(returnUrl);
+                if (context != null && context.IsNativeClient())
+                {
+                    // The client is native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return this.LoadingPage(returnUrl);
+                }
+                return Ok();
             }
-            return Ok();
         }
-        else
+        catch (Exception ex)
         {
-            await _events.RaiseAsync(new UserLoginFailureEvent(userName, "invalid credentials", clientId: context?.Client.ClientId));
-            return Content("username and password validate error");
+            if (ex is UserFriendlyException)
+            {
+                return Content(ex.Message);
+            }
+            else return Content("Unknown exception,Please contact the administrator");
         }
+
+        await _events.RaiseAsync(new UserLoginFailureEvent(userName, "invalid credentials", clientId: context?.Client.ClientId));
+        return Content("username and password validate error");
     }
 
     [HttpGet]

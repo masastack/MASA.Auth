@@ -39,6 +39,27 @@ public class StaffService : RestServiceBase
         return query.Result.Select(staff => ConvertToModel(staff)).ToList();
     }
 
+    private async Task<int> GetTotalByDepartmentAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new StaffTotalByDepartmentQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<int> GetTotalByTeamAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new StaffTotalByTeamQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<int> GetTotalByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new StaffTotalByRoleQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private StaffModel ConvertToModel(StaffDto staff)
     {
         return new StaffModel()

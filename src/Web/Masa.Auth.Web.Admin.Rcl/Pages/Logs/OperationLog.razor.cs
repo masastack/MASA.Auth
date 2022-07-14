@@ -96,7 +96,7 @@ public partial class OperationLog
     protected override async Task OnInitializedAsync()
     {
         PageName = "OperationLogBlock";
-        await GetOperationLogsAsync();        
+        await GetOperationLogsAsync();
     }
 
     public List<DataTableHeader<OperationLogDto>> GetHeaders() => new()
