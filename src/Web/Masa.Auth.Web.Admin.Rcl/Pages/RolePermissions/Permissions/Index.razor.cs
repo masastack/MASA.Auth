@@ -6,7 +6,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 public partial class Index
 {
     string _tab = "";
-    bool _searchApiLoading, _showMenuInfo, _showApiInfo;
+    bool _showMenuInfo, _showApiInfo;
     List<AppPermissionsViewModel> _menuPermissions = new();
     List<AppPermissionsViewModel> _apiPermissions = new();
     List<Guid> _menuPermissionActive = new List<Guid>();
@@ -43,10 +43,7 @@ public partial class Index
             {
                 return;
             }
-            _curProjectId = _projectItems.First().Identity;
-            _curAppItems = _projectItems.First().Apps;
-
-            await InitAppPermissions();
+            await SelectProjectItem(_projectItems.First());
             await GetAppTags();
             StateHasChanged();
         }
@@ -65,7 +62,7 @@ public partial class Index
     {
         _curAppItems = project.Apps;
         _curProjectId = project.Identity;
-
+        _childApiItems = await PermissionService.GetApiPermissionSelectAsync(_curProjectId);
         await InitAppPermissions();
     }
 
@@ -188,13 +185,6 @@ public partial class Index
     private void AddApiPermission()
     {
         _addApiPermission = true;
-    }
-
-    private async Task UpdateSearchApiAsync(string val)
-    {
-        _searchApiLoading = true;
-        _childApiItems = await PermissionService.GetApiPermissionSelectAsync(val);
-        _searchApiLoading = false;
     }
 
     private async Task AddMenuPermissionAsync(MenuPermissionDetailDto dto)

@@ -61,7 +61,7 @@
     {
         if (Dto.RedirectUris.IndexOf(Dto.RedirectUri) < 0)
         {
-            Dto.RedirectUris.Add($"{Dto.RedirectUri}{redirectUriSuffix}");
+            Dto.RedirectUris.Add($"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}");
             Dto.RedirectUri = string.Empty;
         }
     }
@@ -70,7 +70,7 @@
     {
         if (Dto.PostLogoutRedirectUris.IndexOf(Dto.PostLogoutRedirectUri) < 0)
         {
-            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri}{logoutRedirectUriSuffix}");
+            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}");
             Dto.PostLogoutRedirectUri = string.Empty;
         }
     }

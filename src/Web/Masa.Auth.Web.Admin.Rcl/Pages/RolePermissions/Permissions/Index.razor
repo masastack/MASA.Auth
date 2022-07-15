@@ -10,7 +10,7 @@
         <SearchableExtend Split=true MaxWidth=300>
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
-                           Solo Dense Class="elevation-0"
+                           Solo Class="elevation-0"
                            Items="@_projectItems"
                            ItemText="u => u.Name"
                            ItemValue="u => u.Identity"></MAutocomplete>
@@ -81,7 +81,7 @@
                                         <MCol Md=6>
                                             <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
                                              Label="@T("Pre Code Select")"
-                                             Outlined Dense HideDetails="@("auto")"
+                                             Outlined HideDetails="@("auto")"
                                              Items="_curAppItems"
                                              ItemText="u => u.Name"
                                              ItemValue="u => u.Identity">
@@ -121,7 +121,7 @@
                                         <MCol Md=6>
                                             <MSelect @bind-Value="_menuPermissionDetailDto.Type"
                                              Label="@T("Permission Type")"
-                                             Outlined Dense HideDetails="@("auto")"
+                                             Outlined HideDetails="@("auto")"
                                              Items="@_menuPermissionTypes"
                                              ItemText="u => u.Text"
                                              ItemValue="u => u.Value">
@@ -136,18 +136,16 @@
                                         <MCol Md=12>
                                             <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
                                                    Items="_childApiItems"
-                                                   Loading="_searchApiLoading"
-                                                   OnSearchInputUpdate="UpdateSearchApiAsync"
                                                    ItemText="r=>r.Text"
                                                    ItemValue="r=>r.Value"
                                                    Outlined HideSelected
-                                                   Dense Chips
+                                                   Chips
                                                    SmallChips
                                                    Label="@T("Mount Api Permission")"
                                                    Multiple></MAutocomplete>
                                         </MCol>
                                         <MCol Md=12>
-                                            <GroupBox Title="@T("Permission Role")" Class="mt-2" Style="min-height: 48px;">
+                                            <GroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
                                                 @foreach (var role in _menuPermissionDetailDto.Roles)
                                                 {
                                                     <MChip Small>
@@ -157,7 +155,7 @@
                                             </GroupBox>
                                         </MCol>
                                         <MCol Md=12>
-                                            <GroupBox Title="@T("Permission User")" Class="mt-2" Style="min-height: 48px;">
+                                            <GroupBox Title="@T("Permission User")" Style="min-height: 48px;">
                                                 <div>
                                                     @foreach (var item in _menuPermissionDetailDto.Users)
                                                     {
@@ -177,7 +175,7 @@
                                             </GroupBox>
                                         </MCol>
                                         <MCol Md=12>
-                                            <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                            <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
                                             </MTextarea>
                                         </MCol>
                                     </MRow>

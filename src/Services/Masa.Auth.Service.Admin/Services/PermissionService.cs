@@ -31,9 +31,9 @@ public class PermissionService : ServiceBase
         return query.Result;
     }
 
-    private async Task<List<SelectItemDto<Guid>>> GetApiPermissionSelectAsync(IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<SelectItemDto<Guid>>> GetApiPermissionSelectAsync(IEventBus eventBus, [FromQuery] string systemId)
     {
-        var query = new ApiPermissionSelectQuery(name);
+        var query = new ApiPermissionSelectQuery(systemId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
