@@ -131,6 +131,7 @@ public class CommandHandler
         user.AddRoles(userDto.Roles.ToArray());
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
+        await _userDomainService.SetAsync(user);
     }
 
     [EventHandler(1)]
@@ -173,6 +174,7 @@ public class CommandHandler
         var user = await CheckUserAsync(userModel.Id);
         user.UpdateBasicInfo(userModel.DisplayName, userModel.PhoneNumber, userModel.Email, userModel.Avatar, userModel.Gender);
         await _userRepository.UpdateAsync(user);
+        await _userDomainService.SetAsync(user);
     }
 
     private async Task<User> CheckUserAsync(Guid userId)

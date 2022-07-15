@@ -16,6 +16,8 @@ public partial class PermissionsCheck
     [Parameter]
     public List<Guid> RoleIds { get; set; } = new();
 
+    private List<Guid> InternalRoleIds { get; set; } = new();
+
     [Parameter]
     public Dictionary<Guid, bool> Value { get; set; } = new();
 
@@ -63,14 +65,24 @@ public partial class PermissionsCheck
         if (firstRender)
         {
             await LoadData();
-            if (RoleIds.Any())
-            {
-                await LoadRolePermissions();
-            }
-            InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
-            StateHasChanged();
+            //if (RoleIds.Any())
+            //{
+            //    await LoadRolePermissions();
+            //}
+            //InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
+            //StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(RoleIds.Count != InternalRoleIds.Count)
+        {
+            InternalRoleIds = RoleIds;
+            await LoadRolePermissions();
+            //InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
+        }
     }
 
     private async Task LoadData()

@@ -142,7 +142,7 @@ var app = builder.Services.AddServices(builder);
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {
     var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
+    //new AuthDbContextSeed().SeedAsync(context, logger).Wait();
 });
 app.UseMasaExceptionHandler(opt =>
 {
