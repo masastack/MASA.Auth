@@ -154,6 +154,7 @@ public class CommandHandler
             throw new UserFriendlyException("The current user does not exist");
 
         user.AddRoles(userDto.Roles.ToArray());
+
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
     }

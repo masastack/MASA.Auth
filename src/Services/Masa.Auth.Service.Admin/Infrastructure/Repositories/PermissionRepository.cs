@@ -22,4 +22,25 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current permission does not exist");
     }
+
+    public async Task<List<Guid>> GetParentAsync(Guid Id, bool recursive = true)
+    {
+        var result = new List<Guid>();
+        var item = await Context.Set<Permission>().FindAsync(Id);
+        if (item is null)
+        {
+            throw new UserFriendlyException($"The permission {Id} does not exist");
+        }
+        if (item.ParentId == Guid.Empty)
+        {
+            return new();
+        }
+        result.Add(item.ParentId);
+        if (!recursive)
+        {
+            return result;
+        }
+        result.AddRange(await GetParentAsync(item.ParentId, recursive));
+        return result;
+    }
 }
