@@ -60,19 +60,9 @@ public partial class PermissionsCheck
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
-        {
-            await LoadData();
-            //if (RoleIds.Any())
-            //{
-            //    await LoadRolePermissions();
-            //}
-            //InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
-            //StateHasChanged();
-        }
-        await base.OnAfterRenderAsync(firstRender);
+        await LoadData();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -106,6 +96,11 @@ public partial class PermissionsCheck
     private void InitChecked(List<string> checkedItems)
     {
         _initValue = _allData.Where(i => checkedItems.Contains(i.Nav ?? "")).ToList();
+    }
+
+    private void UpadteValueAsync()
+    {
+
     }
 
     private List<CategoryAppNav> DataConversion(List<Category> catetories)
