@@ -64,6 +64,7 @@ public partial class Index
     private async Task SelectProjectItem(ProjectDto project)
     {
         _curAppItems = project.Apps;
+        _curProjectId = project.Identity;
 
         await InitAppPermissions();
     }

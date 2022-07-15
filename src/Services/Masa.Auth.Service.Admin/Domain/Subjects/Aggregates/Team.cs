@@ -13,8 +13,6 @@ public class Team : FullAggregateRoot<Guid, Guid>
 
     public TeamTypes TeamType { get; private set; }
 
-    public int MemberCount { get; private set; }
-
     private List<TeamStaff> teamStaffs = new();
 
     public IReadOnlyCollection<TeamStaff> TeamStaffs => teamStaffs;
@@ -57,7 +55,6 @@ public class Team : FullAggregateRoot<Guid, Guid>
     {
         teamStaffs.RemoveAll(ts => ts.TeamMemberType == memberType);
         teamStaffs.AddRange(staffIds.Select(s => new TeamStaff(s, memberType)));
-        MemberCount = teamStaffs.Count;
     }
 
     public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissionsIds)
