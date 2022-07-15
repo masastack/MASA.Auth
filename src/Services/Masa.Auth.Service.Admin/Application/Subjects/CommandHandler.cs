@@ -31,6 +31,7 @@ public class CommandHandler
         ILdapIdpRepository ldapIdpRepository,
         IMasaConfiguration masaConfiguration,
         ILogger<CommandHandler> logger,
+        IDistributedCacheClient cache,
         IUserContext userContext)
     {
         _userRepository = userRepository;
@@ -41,7 +42,7 @@ public class CommandHandler
         _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
-        _configuration = configuration;
+        _configuration = masaConfiguration.Local;
         _logger = logger;
         _cache = cache;
         _userContext = userContext;
