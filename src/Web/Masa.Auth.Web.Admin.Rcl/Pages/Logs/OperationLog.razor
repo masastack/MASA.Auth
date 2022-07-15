@@ -4,15 +4,16 @@
 <PageTitle>
     @T("OperationLog")
 </PageTitle>
-<div style="height: calc(100vh - 250px);@(OperationLogs.Count==0?"min-height: calc(100vh - 120px);":"")">
+<div style="height: calc(100vh - 250px);@(OperationLogs.Count<=2?"min-height: calc(100vh - 120px);":"")">
     <AutoHeight AutoClass="mt-6 m-sheet theme--light m-card pa-6 full-height pr-0">
         <HeaderContent>
             <div class="d-flex">
                 <DateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />
-                <UserAutoComplete @bind-Value="UserId" Class="ml-6" />
-                <EnumSelect @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" Class="ml-6" />
-                <SearchTextField @bind-Value="Search" Class="ml-6" />
+                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />                
+                <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" FillBackground=false Class="ml-6" Style="width: 100px !important;" />
+                <MSpacer />
+                <UserAutoComplete @bind-Value="UserId" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
+                <SearchTextField @bind-Value="Search" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
             </div>        
         </HeaderContent>
         <AutoHeightContent>

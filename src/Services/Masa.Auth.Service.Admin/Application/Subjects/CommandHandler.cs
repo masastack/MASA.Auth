@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Utils.Caching.Core.Models;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -15,22 +17,21 @@ public class CommandHandler
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<CommandHandler> _logger;
+    readonly IDistributedCacheClient _cache;
 
-    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository,
-        StaffDomainService staffDomainService, ILdapFactory ldapFactory,
-        UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, ILdapIdpRepository ldapIdpRepository,
-        IMasaConfiguration masaConfiguration, ILogger<CommandHandler> logger)
+    public CommandHandler(IUserRepository userRepository, IStaffRepository staffRepository, IThirdPartyIdpRepository thirdPartyIdpRepository, ILdapIdpRepository ldapIdpRepository, StaffDomainService staffDomainService, ILdapFactory ldapFactory, UserDomainService userDomainService, ThirdPartyUserDomainService thirdPartyUserDomainService, IConfiguration configuration, ILogger<CommandHandler> logger, IDistributedCacheClient cache)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
+        _ldapIdpRepository = ldapIdpRepository;
         _staffDomainService = staffDomainService;
         _ldapFactory = ldapFactory;
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
-        _ldapIdpRepository = ldapIdpRepository;
-        _configuration = masaConfiguration.Local;
+        _configuration = configuration;
         _logger = logger;
+        _cache = cache;
     }
 
     #region User
@@ -145,12 +146,34 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task UserValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
+    public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
+        var key = $"auth_login_{validateByAccountCommand.Account}";
+        var loginCache = await _cache.GetAsync<CacheLogin>(key);
+        if (loginCache is not null && loginCache.LoginErrorCount >= 5) throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
         var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account);
         if (user != null)
         {
-            validateByAccountCommand.Result = user.VerifyPassword(validateByAccountCommand.Password);
+            var success = user.VerifyPassword(validateByAccountCommand.Password);
+            if (success)
+            {
+                if (loginCache is not null) await _cache.RemoveAsync<CacheLogin>(key);
+            }
+            else
+            {
+                loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = validateByAccountCommand.Account };
+                loginCache.LoginErrorCount++;
+                var options = new CombinedCacheEntryOptions<CacheLogin>
+                {
+                    DistributedCacheEntryOptions = new()
+                    {
+                        AbsoluteExpiration = loginCache.FreezeTime
+                    }
+                };
+                await _cache.SetAsync(key, loginCache, options);
+                throw new UserFriendlyException("账号或密码错误");
+            }
+            validateByAccountCommand.Result = success;
         }
     }
 

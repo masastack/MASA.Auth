@@ -14,7 +14,7 @@ public static class ElasticsearchAutoCompleteExtensions
                 .UseDefault());
         foreach (var doc in autoCompleteModel.Documents)
         {
-            esBuilder.AddAutoComplete(option => option.UseIndexName(doc.Index).UseAlias(doc.Alias));
+            esBuilder.AddAutoComplete(option => option.UseIndexName(doc.Index));
         }
     }
 }

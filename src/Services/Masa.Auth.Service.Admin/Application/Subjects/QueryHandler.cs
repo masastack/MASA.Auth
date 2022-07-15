@@ -88,7 +88,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByNameQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.Account == query.Account);
         if (user is null)
@@ -97,6 +97,29 @@ public class QueryHandler
         }
         query.Result = user;
     }
+
+    [EventHandler]
+    public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.Email == query.Email);
+        if (user is null)
+        {
+            throw new UserFriendlyException("This user data does not exist");
+        }
+        query.Result = user;
+    }
+
+    [EventHandler]
+    public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        if (user is null)
+        {
+            throw new UserFriendlyException("This user data does not exist");
+        }
+        query.Result = user;
+    }
+
 
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
@@ -224,6 +247,37 @@ public class QueryHandler
                                          .ToListAsync();
 
         query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetStaffTotalByDepartmentAsync(StaffTotalByDepartmentQuery query)
+    {
+        var total = await _authDbContext.Set<Staff>()
+                                        .Include(staff => staff.DepartmentStaffs)
+                                        .CountAsync(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId));
+
+        query.Result = total;
+    }
+
+    [EventHandler]
+    public async Task GetStaffTotalByTeamAsync(StaffTotalByTeamQuery query)
+    {
+        var total = await _authDbContext.Set<Staff>()
+                                        .Include(staff => staff.TeamStaffs)
+                                        .CountAsync(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId));
+
+        query.Result = total;
+    }
+
+    [EventHandler]
+    public async Task GetStaffTotalByRoleAsync(StaffTotalByRoleQuery query)
+    {
+        var total = await _authDbContext.Set<Staff>()
+                                        .Include(staff => staff.User)
+                                        .ThenInclude(user => user.Roles)
+                                        .CountAsync(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId));
+
+        query.Result = total;
     }
 
     #endregion

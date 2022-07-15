@@ -18,6 +18,8 @@ public class QueryHandler
         Expression<Func<OperationLog, bool>> condition = operationLog => true;
         if (query.Operator != default)
             condition = condition.And(operationLog => operationLog.Operator == query.Operator);
+        if (query.OperationType != default)
+            condition = condition.And(operationLog => operationLog.OperationType == query.OperationType);
         if (query.StartTime is not null)
             condition = condition.And(operationLog => operationLog.OperationTime >= query.StartTime);
         if (query.EndTime is not null)

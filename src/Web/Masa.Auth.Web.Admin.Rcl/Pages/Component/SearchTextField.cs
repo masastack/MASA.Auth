@@ -8,13 +8,16 @@ public class SearchTextField : MTextField<string>
     [Inject]
     public I18n? I18n { get; set; }
 
+    [Parameter]
+    public bool FillBackground { get; set; } = true;
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         Flat = true;
         Dense = true;
         Solo = true;
         HideDetails = "auto";
-        BackgroundColor = "fill-background";
+        BackgroundColor = FillBackground ? "fill-background" : "";
         Style = "max-width:340px;";
         Placeholder = I18n!.T("Search");
         PrependInnerContent = builder =>
