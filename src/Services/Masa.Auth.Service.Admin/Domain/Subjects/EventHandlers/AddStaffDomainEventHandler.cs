@@ -76,8 +76,8 @@ public class AddStaffDomainEventHandler
             staffDto.IdCard, staffDto.Account, staffDto.Password, staffDto.CompanyName,
             staffDto.Gender, staffDto.PhoneNumber, staffDto.Email, staffDto.Address,
             staffDto.JobNumber, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
-        staff.AddDepartmentStaff(staffDto.DepartmentId);
-        staff.AddTeamStaff(staffDto.Teams);
+        staff.SetDepartmentStaff(staffDto.DepartmentId);
+        staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
     }
 }

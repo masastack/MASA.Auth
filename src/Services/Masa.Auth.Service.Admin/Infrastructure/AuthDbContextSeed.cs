@@ -43,7 +43,7 @@ public class AuthDbContextSeed
 
         #region Pm
         var pmMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Landscape","Landscape.Pm","Landscape","mdi-flag",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",PermissionTypes.Menu),
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.PM_SYSTEM_ID))
@@ -54,7 +54,7 @@ public class AuthDbContextSeed
 
         #region Dcc
         var dccMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Landscape","Landscape.Dcc","Landscape","mdi-flag",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",PermissionTypes.Menu),
             new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Public","Public","Public","mdi-flag",PermissionTypes.Menu),
             new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Label Management","Label","Label","mdi-flag",PermissionTypes.Menu),
         };

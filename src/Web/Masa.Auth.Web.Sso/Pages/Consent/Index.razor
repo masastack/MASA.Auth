@@ -20,7 +20,7 @@
 
             @if (_viewModel.ClientLogoUrl != null)
             {
-                <div class="text-center mt-4"><img src="@_viewModel.ClientLogoUrl"></div>
+                <div class="text-center mt-4"><img style="max-height:120px;max-width:120px;" src="@_viewModel.ClientLogoUrl"></div>
             }
 
             @if (_viewModel.IdentityScopes.Any())

@@ -43,7 +43,7 @@ public class QueryHandler
     [EventHandler]
     public async Task ClientDetailQueryAsync(ClientDetailQuery clientDetailQuery)
     {
-        var client = await _clientRepository.GetDetailAsync(clientDetailQuery.ClientId);
+        var client = await _clientRepository.FindAsync(client => client.Id == clientDetailQuery.ClientId);
         client.Adapt(clientDetailQuery.Result);
     }
 

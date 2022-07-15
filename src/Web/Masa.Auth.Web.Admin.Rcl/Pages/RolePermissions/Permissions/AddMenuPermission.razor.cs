@@ -24,7 +24,7 @@ public partial class AddMenuPermission
 
     [EditorRequired]
     [Parameter]
-    public List<SelectItemDto<PermissionTypes>> PermissionTypes { get; set; } = new();
+    public List<SelectItemDto<PermissionTypes>> SelectPermissionTypes { get; set; } = new();
 
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     MForm _form = default!;
