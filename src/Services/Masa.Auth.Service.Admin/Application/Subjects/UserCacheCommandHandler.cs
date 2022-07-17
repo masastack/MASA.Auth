@@ -74,4 +74,12 @@ public class UserCacheCommandHandler
         }
         await _memoryCacheClient.SetAsync(key, visited);
     }
+
+    [EventHandler(99)]
+    public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand saveUserSystemBusinessDataCommand)
+    {
+        await _memoryCacheClient.SetAsync(
+            CacheKey.UserSystemDataKey(saveUserSystemBusinessDataCommand.UserId, saveUserSystemBusinessDataCommand.SystemId),
+            saveUserSystemBusinessDataCommand.Data);
+    }
 }
