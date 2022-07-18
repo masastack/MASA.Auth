@@ -1,0 +1,10 @@
+﻿@inherits AdminCompontentBase
+
+<GlobalNavigationUnique
+    ValueChanged="ValueChangedAsync" 
+    Value="Value.Select(value => value.ToString()).ToList()" 
+    Checkable                                                        
+    Categories=Categories 
+    FavoriteNavs=new() 
+    Class="@Class" 
+    Style="@Style" />

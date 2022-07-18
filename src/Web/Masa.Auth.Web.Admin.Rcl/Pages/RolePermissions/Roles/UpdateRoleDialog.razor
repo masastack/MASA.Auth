@@ -25,10 +25,14 @@
                     <MWindowItem Value="UpdateRoleTabs.Permission.ToString()">
                         <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mb-6 mt-1" />
                         <div class="global-nav" style="display: flex;height: auto">
-                            <PermissionsCheck RoleIds=Role.ChildrenRoles
+@*                            <PermissionsCheck RoleIds=Role.ChildrenRoles
                                           Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
                                           ValueChanged="PermissionsChanged"
-                                          Style="max-height:calc(100vh - 300px);" />
+                                          Style="max-height:calc(100vh - 300px);" />*@
+                            <PermissionsConfigure 
+                                RoleIds=Role.ChildrenRoles 
+                                @bind-Value=Role.Permissions 
+                                Style="max-height:calc(100vh - 300px);" />
                         </div>
                     </MWindowItem>
                 </MWindow>

@@ -16,7 +16,8 @@ public static class TypeAdapterExtensions
             .Map(dest => dest.Code, src => src.Identity);
         TypeAdapterConfig<ProjectDto, Category>.ForType()
             .Map(dest => dest.Code, src => src.Identity);
-        TypeAdapterConfig<PermissionNavDto, StackNav>.ForType();
+        TypeAdapterConfig<PermissionNavDto, StackNav>.ForType()
+            .Map(dest => dest.IsAction, src => src.PermissionType == PermissionTypes.Element);
 
         return services;
     }
