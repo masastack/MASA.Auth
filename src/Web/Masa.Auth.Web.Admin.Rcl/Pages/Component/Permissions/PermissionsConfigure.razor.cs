@@ -24,11 +24,24 @@ public partial class PermissionsConfigure
     [Parameter]
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
+    public List<Guid> RolePermissions { get; set; } = new();
+
+    protected virtual List<UniqueModel> ExpansionWrapperUniqueValue
+    {
+        get
+        {
+            var value = Value.Except(RolePermissions);
+            return value.Select(value => new UniqueModel(value.ToString(),false))
+                        .Union(RolePermissions.Select(value => new UniqueModel(value.ToString(), true)))
+                        .ToList();
+        }
+    }
+
     private List<Category> Categories { get; set; } = new();
 
     private ProjectService ProjectService => AuthCaller.ProjectService;
 
-    private RoleService RoleService => AuthCaller.RoleService;
+    private RoleService RoleService => AuthCaller.RoleService;  
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,11 +53,7 @@ public partial class PermissionsConfigure
         if (RoleIds.Count != InternalRoleIds.Count || RoleIds.Except(InternalRoleIds).Count() > 0)
         {
             InternalRoleIds = RoleIds;
-            var permissions = await GetRolePermissions();
-            var value = new List<Guid>();
-            value.AddRange(Value);
-            value.AddRange(permissions);
-            await UpdateValueAsync(value.Distinct().ToList());
+            await GetRolePermissions();
         }
     }
 
@@ -59,11 +68,12 @@ public partial class PermissionsConfigure
         }).ToList();
     }
 
-    private async Task<List<Guid>> GetRolePermissions() => await RoleService.GetPermissionsByRoleAsync(RoleIds);
+    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(RoleIds);
 
-    private async Task ValueChangedAsync(List<string> permissions)
+    protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
-        await UpdateValueAsync(permissions.Select(permission => Guid.Parse(permission)).ToList());
+        var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RolePermissions).ToList();
+        await UpdateValueAsync(value);
     }
 
     private async Task UpdateValueAsync(List<Guid> value)
