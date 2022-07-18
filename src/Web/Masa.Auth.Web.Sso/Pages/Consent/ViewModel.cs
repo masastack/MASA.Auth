@@ -9,9 +9,16 @@ public class ViewModel
     public string ClientUrl { get; set; } = string.Empty;
     public string ClientLogoUrl { get; set; } = string.Empty;
     public bool AllowRememberConsent { get; set; }
-
+    public bool RememberConsent { get; set; } = true;
     public IEnumerable<ScopeViewModel> IdentityScopes { get; set; } = new List<ScopeViewModel>();
     public IEnumerable<ScopeViewModel> ApiScopes { get; set; } = new List<ScopeViewModel>();
+    public IEnumerable<string> ScopesConsented
+    {
+        get
+        {
+            return IdentityScopes.Where(i => i.Checked).Select(i => i.Name).Union(ApiScopes.Where(a => a.Checked).Select(a => a.Name));
+        }
+    }
 }
 
 public class ScopeViewModel

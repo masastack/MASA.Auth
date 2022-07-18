@@ -19,6 +19,7 @@ public class CommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly IUserContext _userContext;
     readonly IDistributedCacheClient _cache;
+    readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -32,7 +33,8 @@ public class CommandHandler
         IMasaConfiguration masaConfiguration,
         ILogger<CommandHandler> logger,
         IDistributedCacheClient cache,
-        IUserContext userContext)
+        IUserContext userContext,
+        IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -46,6 +48,7 @@ public class CommandHandler
         _logger = logger;
         _cache = cache;
         _userContext = userContext;
+        _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
     }
 
     #region User
@@ -154,6 +157,7 @@ public class CommandHandler
             throw new UserFriendlyException("The current user does not exist");
 
         user.AddRoles(userDto.Roles.ToArray());
+
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
     }

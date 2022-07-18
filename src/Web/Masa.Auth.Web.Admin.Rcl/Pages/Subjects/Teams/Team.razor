@@ -6,10 +6,12 @@
 <MRow>
     <MCol Md="12" Class="d-flex justify-space-between">
         <OutlinedSearchTextField @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
-        <DefaultButton Small Class="ml-4" OnClick="_addSheet.Show">
+        <PermissionView Code="@ElementPermissionCodes.TeamAdd">
+            <DefaultButton Small Class="ml-4" OnClick="_addSheet.Show">
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Create Team")</span>
             </DefaultButton>
+        </PermissionView>
     </MCol>
     @foreach (var team in _teams)
     {
@@ -19,6 +21,6 @@
     }
 </MRow>
 
-<AddSheet OnSubmit="OnCreate" @ref="_addSheet"/>
-<UpdateSheet @ref="_updateSheet" OnUpdateBase="OnUpdateBasicInfo" OnUpdateAdmin="OnUpdateAdminPersonnel" 
-    OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete" />
+<AddSheet OnSubmit="OnCreate" @ref="_addSheet" />
+<UpdateSheet @ref="_updateSheet" OnUpdateBase="OnUpdateBasicInfo" OnUpdateAdmin="OnUpdateAdminPersonnel"
+             OnUpdateMember="OnUpdateMemberPersonnel" OnDelete="OnDelete" />

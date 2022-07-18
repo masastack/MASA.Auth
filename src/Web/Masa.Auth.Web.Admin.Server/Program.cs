@@ -5,6 +5,8 @@ using Masa.Auth.ApiGateways.Caller;
 using Masa.Auth.Contracts.Admin.Subjects.Validator;
 using Masa.Auth.Web.Admin.Rcl;
 using Masa.Auth.Web.Admin.Rcl.Global;
+using Masa.Auth.Web.Admin.Rcl.Shared;
+using Masa.Blazor;
 using Masa.Stack.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using System.Security.Cryptography.X509Certificates;
@@ -25,6 +27,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddAutoComplete();
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
+
+builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"], builder.Configuration["McServiceBaseAddress"]);
 builder.Services.AddSingleton<AddStaffValidator>();

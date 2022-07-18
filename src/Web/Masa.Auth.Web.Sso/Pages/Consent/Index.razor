@@ -48,7 +48,7 @@
 
         @if (_viewModel.AllowRememberConsent)
         {
-            <MCheckbox @bind-Value="_inputModel.RememberConsent" Label="Remember My Decision"></MCheckbox>
+            <MCheckbox @bind-Value="_viewModel.RememberConsent" Label="Remember My Decision"></MCheckbox>
         }
 
         <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">同意</MButton>

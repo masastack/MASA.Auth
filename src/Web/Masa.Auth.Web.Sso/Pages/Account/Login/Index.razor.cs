@@ -136,8 +136,6 @@ public partial class Index
                 }
             }
         }
-        // something went wrong, show form with error
-        await BuildModelAsync(_inputModel.ReturnUrl);
     }
 
     private async Task Cancel()

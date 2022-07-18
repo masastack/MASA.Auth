@@ -8,7 +8,7 @@
     @foreach (var uri in Dto.RedirectUris)
     {
         <MCol Md=6 Class="d-flex">
-            <DefaultTextField Dense HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
+            <DefaultTextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
             <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
         </MCol>
     }
@@ -19,7 +19,7 @@
     @foreach (var uri in Dto.PostLogoutRedirectUris)
     {
         <MCol Md=6 Class="d-flex">
-            <DefaultTextField Dense HideDetails="true" Value="uri" Filled Disabled />
+            <DefaultTextField HideDetails="true" Value="uri" Filled Disabled />
             <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
         </MCol>
     }
@@ -61,7 +61,7 @@
     {
         if (Dto.RedirectUris.IndexOf(Dto.RedirectUri) < 0)
         {
-            Dto.RedirectUris.Add($"{Dto.RedirectUri}{redirectUriSuffix}");
+            Dto.RedirectUris.Add($"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}");
             Dto.RedirectUri = string.Empty;
         }
     }
@@ -70,7 +70,7 @@
     {
         if (Dto.PostLogoutRedirectUris.IndexOf(Dto.PostLogoutRedirectUri) < 0)
         {
-            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri}{logoutRedirectUriSuffix}");
+            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}");
             Dto.PostLogoutRedirectUri = string.Empty;
         }
     }
