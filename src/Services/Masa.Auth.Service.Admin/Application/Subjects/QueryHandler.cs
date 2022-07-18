@@ -134,6 +134,26 @@ public class QueryHandler
         query.Result = users;
     }
 
+    [EventHandler]
+    public async Task UserPortraitsQueryAsync(UserPortraitsQuery userPortraitsQuery)
+    {
+        foreach (var userId in userPortraitsQuery.UserIds)
+        {
+            var userCache = await _memoryCacheClient.GetAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{userId}");
+            if (userCache != null)
+            {
+                userPortraitsQuery.Result.Add(new UserPortraitModel
+                {
+                    Id = userId,
+                    Name = userCache.Name,
+                    DisplayName = userCache.DisplayName,
+                    Avatar = userCache.Avatar,
+                    Account = userCache.Account
+                });
+            }
+        }
+    }
+
     #endregion
 
     #region Staff
@@ -384,9 +404,15 @@ public class QueryHandler
         {
             condition = condition.And(t => t.Name.Contains(teamListQuery.Name));
         }
-        if (teamListQuery.StaffId != Guid.Empty)
+        if (teamListQuery.UserId != Guid.Empty)
         {
-            condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == teamListQuery.StaffId));
+            var staffId = await _authDbContext.Set<Staff>()
+                                        .Where(staff => staff.UserId == teamListQuery.UserId)
+                                        .Select(staff => staff.Id)
+                                        .FirstOrDefaultAsync();
+            if (staffId != default)
+                condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
+            else return;
         }
         var teams = await _teamRepository.GetListInCludeAsync(condition,
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
