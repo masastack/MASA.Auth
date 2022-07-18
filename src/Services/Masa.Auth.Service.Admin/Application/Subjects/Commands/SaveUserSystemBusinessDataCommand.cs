@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record SaveUserSystemBusinessDataCommand(Guid UserId, string SystemId, string Data) : Command
+public record SaveUserSystemBusinessDataCommand(UserSystemDataDto UserSystemData) : Command
 {
 }

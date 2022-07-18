@@ -324,7 +324,7 @@ public class QueryHandler
     [EventHandler]
     public async Task CollectMenuListQueryAsync(FavoriteMenuListQuery favoriteMenuListQuery)
     {
-        var permissionIds = await _memoryCacheClient.GetAsync<HashSet<Guid>>($"{CacheKey.USER_MENU_COLLECT_PRE}{favoriteMenuListQuery.UserId}");
+        var permissionIds = await _memoryCacheClient.GetAsync<HashSet<Guid>>(CacheKey.UserMenuCollectKey(favoriteMenuListQuery.UserId));
         if (permissionIds == null)
         {
             return;
