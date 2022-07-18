@@ -7,8 +7,7 @@ namespace Masa.Auth.Web.Sso.Pages.Consent;
 [SecurityHeaders]
 public partial class Index
 {
-    ViewModel? _viewModel = new();
-    InputModel _inputModel = new();
+    ViewModel _viewModel = new();
 
     [Parameter]
     [SupplyParameterFromQuery]
@@ -18,16 +17,13 @@ public partial class Index
     {
         if (firstRender)
         {
-            _viewModel = BuildViewModelAsync(ReturnUrl);
-            _inputModel = new InputModel
-            {
-                ReturnUrl = ReturnUrl,
-            };
-            if (_viewModel is null)
+            var viewModel = BuildViewModelAsync(ReturnUrl);
+            if (viewModel is null)
             {
                 Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
                 return;
             }
+            _viewModel = viewModel;
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -39,15 +35,11 @@ public partial class Index
         {
             { "consent", consent.ToString() },
             { "returnUrl", ReturnUrl },
-            { "rememberConsent", _inputModel.RememberConsent.ToString() },
-            { "description", _inputModel.Description },
-            { "scopes", _inputModel.ScopesConsented.ToString() },
+            { "rememberConsent", _viewModel.RememberConsent.ToString() },
+            { "scopes", JsonSerializer.Serialize(_viewModel.ScopesConsented) }
         };
         var url = QueryHelpers.AddQueryString("consent/consent", queryArguments);
         Navigation.NavigateTo(url, true);
-
-        // we need to redisplay the consent UI
-        _viewModel = BuildViewModelAsync(_inputModel.ReturnUrl);
     }
 
     private ViewModel? BuildViewModelAsync(string returnUrl)
@@ -55,13 +47,13 @@ public partial class Index
         var request = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);
         if (request != null)
         {
-            return CreateConsentViewModel(_inputModel, returnUrl, request);
+            return CreateConsentViewModel(returnUrl, request);
         }
         return null;
     }
 
     private ViewModel CreateConsentViewModel(
-        InputModel model, string returnUrl,
+        string returnUrl,
         AuthorizationRequest request)
     {
         var vm = new ViewModel
@@ -73,7 +65,7 @@ public partial class Index
         };
 
         vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources
-            .Select(x => CreateScopeViewModel(x, model?.ScopesConsented == null || model.ScopesConsented?.Contains(x.Name) == true))
+            .Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) == true))
             .ToArray();
 
         var apiScopes = new List<ScopeViewModel>();
@@ -82,13 +74,13 @@ public partial class Index
             var apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName);
             if (apiScope != null)
             {
-                var scopeVm = CreateScopeViewModel(parsedScope, apiScope, model == null || model.ScopesConsented?.Contains(parsedScope.RawValue) == true);
+                var scopeVm = CreateScopeViewModel(parsedScope, apiScope, vm.ScopesConsented.Contains(parsedScope.RawValue) == true);
                 apiScopes.Add(scopeVm);
             }
         }
         if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
         {
-            apiScopes.Add(GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(IdentityServerConstants.StandardScopes.OfflineAccess) == true));
+            apiScopes.Add(GetOfflineAccessScope(vm.ScopesConsented.Contains(IdentityServerConstants.StandardScopes.OfflineAccess) == true));
         }
         vm.ApiScopes = apiScopes;
 

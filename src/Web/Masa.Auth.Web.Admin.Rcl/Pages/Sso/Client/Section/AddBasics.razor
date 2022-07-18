@@ -23,7 +23,7 @@
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
         @foreach (var uri in Dto.RedirectUris)
         {
-            <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
+            <DefaultTextField HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
         }
     </MCol>
     <MCol Md=6>

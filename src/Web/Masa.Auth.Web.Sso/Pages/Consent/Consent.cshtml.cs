@@ -14,7 +14,7 @@ public class ConsentModel : PageModel
         _events = events;
     }
 
-    public async Task<IActionResult> OnGet(bool consent, string returnUrl, bool rememberConsent, string description, List<string> scopes)
+    public async Task<IActionResult> OnGet(bool consent, string returnUrl, bool rememberConsent, List<string> scopes)
     {
         var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
 
@@ -29,8 +29,7 @@ public class ConsentModel : PageModel
             grantedConsent = new ConsentResponse
             {
                 RememberConsent = rememberConsent,
-                ScopesValuesConsented = scopes.ToArray(),
-                Description = description
+                ScopesValuesConsented = scopes.ToArray()
             };
             // emit event
             await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
