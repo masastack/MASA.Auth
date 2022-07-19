@@ -56,4 +56,9 @@ public class PermissionService : ServiceBase
     {
         await DeleteAsync($"Delete?id={permissionId}");
     }
+
+    public async Task<List<string>> GetElementPermissionsAsync(Guid userId, string appId)
+    {
+        return await GetAsync<List<string>>($"element-permissions?userId={userId}&appId={appId}");
+    }
 }
