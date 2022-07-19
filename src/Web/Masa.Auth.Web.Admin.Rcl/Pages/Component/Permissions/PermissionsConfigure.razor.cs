@@ -26,11 +26,13 @@ public partial class PermissionsConfigure
 
     public List<Guid> RolePermissions { get; set; } = new();
 
+    private Dictionary<Guid,Guid> PermissionMap { get; set; } = new();
+
     protected virtual List<UniqueModel> ExpansionWrapperUniqueValue
     {
         get
         {
-            var value = Value.Except(RolePermissions);
+            var value = Value.Except(RolePermissions).Except(PermissionMap.Values);
             return value.Select(value => new UniqueModel(value.ToString(),false))
                         .Union(RolePermissions.Select(value => new UniqueModel(value.ToString(), true)))
                         .ToList();
@@ -60,6 +62,11 @@ public partial class PermissionsConfigure
     private async Task GetCategoriesAsync()
     {
         var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
+        PermissionMap = apps.SelectMany(app => app.Navs)
+                            .Where(nav => nav.PermissionType == default && nav.Children.Any(child => child.PermissionType == PermissionTypes.Menu))
+                            .SelectMany(nav => nav.Children.Select(item => (Code: item.Code, ParentCode: nav.Code)))
+                            .ToDictionary(item => Guid.Parse(item.Code), item => Guid.Parse(item.ParentCode));
+
         Categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
         {
             Code = ag.Key.Replace(" ", ""),
@@ -73,7 +80,11 @@ public partial class PermissionsConfigure
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
         var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RolePermissions).ToList();
-        await UpdateValueAsync(value);
+        foreach (var (code,parentCode) in PermissionMap)
+        {
+            if(value.Contains(code)) value.Add(parentCode);
+        }
+        await UpdateValueAsync(value.Distinct().ToList());
     }
 
     private async Task UpdateValueAsync(List<Guid> value)
