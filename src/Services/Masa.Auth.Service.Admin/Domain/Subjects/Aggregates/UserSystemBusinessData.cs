@@ -17,4 +17,9 @@ public class UserSystemBusinessData : FullAggregateRoot<Guid, Guid>
         Data = data;
         SystemId = systemId;
     }
+
+    public void Update(string data)
+    {
+        Data = data;
+    }
 }

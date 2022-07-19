@@ -19,6 +19,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapGet(VisitedList);
             MapPut(ResetUserPasswordAsync);
             MapPost(UserPortraitsAsync, "portraits");
+            MapPost(PostUserSystemData, "UserSystemData");
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -158,7 +159,7 @@ namespace Masa.Auth.Service.Admin.Services
                 Roles = user.RoleIds.Select(r => new RoleModel
                 {
                     Id = r,
-                    Name = _memoryCacheClient.Get<CacheRole>($"{CacheKey.ROLE_CACHE_KEY_PRE}{r}")?.Name ?? "",
+                    Name = _memoryCacheClient.Get<CacheRole>(CacheKey.RoleKey(r))?.Name ?? "",
                 }).ToList(),
             };
         }
@@ -192,6 +193,19 @@ namespace Masa.Auth.Service.Admin.Services
             [FromBody] List<Guid> userIds)
         {
             var query = new UserPortraitsQuery(userIds);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        public async Task PostUserSystemData(IEventBus eventBus, [FromBody] UserSystemDataDto data)
+        {
+            var command = new SaveUserSystemBusinessDataCommand(data);
+            await eventBus.PublishAsync(command);
+        }
+
+        public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+        {
+            var query = new UserSystemBusinessDataQuery(userId, systemId);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

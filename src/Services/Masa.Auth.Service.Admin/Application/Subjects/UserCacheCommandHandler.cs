@@ -15,19 +15,19 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task AddUserAsync(AddUserCommand addUserCommand)
     {
-        await _memoryCacheClient.SetAsync($"{CacheKey.USER_CACHE_KEY_PRE}{addUserCommand.NewUser.Id}", addUserCommand.User.Adapt<CacheUser>());
+        await _memoryCacheClient.SetAsync(CacheKey.UserKey(addUserCommand.NewUser.Id), addUserCommand.User.Adapt<CacheUser>());
     }
 
     [EventHandler(99, IsCancel = true)]
     public async Task FailAddUserAsync(AddUserCommand addUserCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{addUserCommand.NewUser.Id}");
+        await _memoryCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(addUserCommand.NewUser.Id));
     }
 
     [EventHandler(99)]
     public async Task UpdateUserAsync(UpdateUserCommand updateUserCommand)
     {
-        var key = $"{CacheKey.USER_CACHE_KEY_PRE}{updateUserCommand.User.Id}";
+        var key = CacheKey.UserKey(updateUserCommand.User.Id);
         var cacheUser = updateUserCommand.User.Adapt<CacheUser>();
         var oldCache = _memoryCacheClient.Get<CacheUser>(key);
         if (oldCache != null)
@@ -41,7 +41,7 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand updateUserAuthorizationCommand)
     {
-        var key = $"{CacheKey.USER_CACHE_KEY_PRE}{updateUserAuthorizationCommand.User.Id}";
+        var key = CacheKey.UserKey(updateUserAuthorizationCommand.User.Id);
         var oldCache = _memoryCacheClient.Get<CacheUser>(key);
         if (oldCache != null)
         {
@@ -54,14 +54,14 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task RemoveUserAsync(RemoveUserCommand removeUserCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{removeUserCommand.User.Id}");
+        await _memoryCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(removeUserCommand.User.Id));
     }
 
     [EventHandler]
     public async Task UserVisitedAsync(UserVisitedCommand userVisitedCommand)
     {
         //todo zset
-        var key = $"{CacheKey.USER_VISIT_PRE}{userVisitedCommand.UserId}";
+        var key = CacheKey.UserVisitKey(userVisitedCommand.UserId);
         var visited = await _memoryCacheClient.GetOrSetAsync<List<string>>(key, () =>
         {
             return new List<string>();
@@ -78,8 +78,9 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand saveUserSystemBusinessDataCommand)
     {
+        var userSystemData = saveUserSystemBusinessDataCommand.UserSystemData;
         await _memoryCacheClient.SetAsync(
-            CacheKey.UserSystemDataKey(saveUserSystemBusinessDataCommand.UserId, saveUserSystemBusinessDataCommand.SystemId),
-            saveUserSystemBusinessDataCommand.Data);
+            CacheKey.UserSystemDataKey(userSystemData.UserId, userSystemData.SystemId),
+            userSystemData.Data);
     }
 }

@@ -14,6 +14,7 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -24,7 +25,8 @@ public class QueryHandler
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
-        IMemoryCacheClient memoryCacheClient)
+        IMemoryCacheClient memoryCacheClient,
+        IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -35,6 +37,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
+        _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
     }
 
 
@@ -139,7 +142,7 @@ public class QueryHandler
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
-            var userCache = await _memoryCacheClient.GetAsync<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{userId}");
+            var userCache = await _memoryCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(userId));
             if (userCache != null)
             {
                 userPortraitsQuery.Result.Add(new UserPortraitModel
@@ -418,7 +421,7 @@ public class QueryHandler
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
         foreach (var team in teams.ToList())
         {
-            var modifierName = _memoryCacheClient.Get<CacheUser>($"{CacheKey.USER_CACHE_KEY_PRE}{team.Modifier}")?.DisplayName ?? "";
+            var modifierName = _memoryCacheClient.Get<CacheUser>(CacheKey.UserKey(team.Modifier))?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 
@@ -503,7 +506,7 @@ public class QueryHandler
     [EventHandler]
     public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
     {
-        var key = $"{CacheKey.USER_VISIT_PRE}{userVisitedListQuery.UserId}";
+        var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
         var visited = await _memoryCacheClient.GetAsync<List<string>>(key);
         if (visited != null)
         {
@@ -519,5 +522,12 @@ public class QueryHandler
                 Name = menus.ContainsKey(v) ? menus[v] : ""
             }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
         }
+    }
+
+    [EventHandler]
+    public async Task UserSystemBizDataQueryAsync(UserSystemBusinessDataQuery userSystemBusinessData)
+    {
+        userSystemBusinessData.Result = await _memoryCacheClient.GetAsync<string>(
+            CacheKey.UserSystemDataKey(userSystemBusinessData.UserId, userSystemBusinessData.SystemId)) ?? "";
     }
 }
