@@ -9,11 +9,16 @@
         </HeaderContent>
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;height: auto">
-                <PermissionExtensionConfigure 
+                @*<PermissionExtensionConfigure 
                                 RoleIds=Authorization.Roles 
                                 @bind-ExtensionValue=Authorization.Permissions 
                                 @bind-Preview=Preview
-                                Style="max-height:calc(100vh - 350px);" />
+                                Style="max-height:calc(100vh - 350px);" />*@
+                <PermissionsConfigure RoleIds=Authorization.Roles
+                                              Value="Authorization.Permissions.Select(p => p.PermissionId).ToList()"
+                                              ValueChanged="value => Authorization.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
+                                              @bind-Preview=Preview
+                                              Style="max-height:calc(100vh - 350px);" />
             </div>
         </AutoHeightContent>
         <FooterContent>
