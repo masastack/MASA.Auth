@@ -8,6 +8,7 @@ public class AddApiResourceValidator : AbstractValidator<AddApiResourceDto>
     public AddApiResourceValidator()
     {
         RuleFor(apiResource => apiResource.Name).Required();
+        RuleFor(apiResource => apiResource.DisplayName).Required();
     }
 }
 

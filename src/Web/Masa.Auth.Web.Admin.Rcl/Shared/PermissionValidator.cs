@@ -21,8 +21,11 @@ public class PermissionValidator : IPermissionValidator
         var userId = _userContext.GetUserId<Guid>();
         if (_globalConfig.ElementPermissions == null)
         {
-            _globalConfig.ElementPermissions = _permissionService.GetElementPermissionsAsync(userId, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID).Result;
+            Task.Run(async () =>
+            {
+                _globalConfig.ElementPermissions = await _permissionService.GetElementPermissionsAsync(userId, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID);
+            }).Wait();
         }
-        return _globalConfig.ElementPermissions.Contains(code);
+        return _globalConfig.ElementPermissions!.Contains(code);
     }
 }

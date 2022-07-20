@@ -39,7 +39,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
             set
             {
                 _elementPermissions = value;
-                _cookieStorage.SetItemAsync(ElementPermissionsCookieKey, value);
+                _cookieStorage.SetItemAsync(ElementPermissionsCookieKey, JsonSerializer.Serialize(value));
             }
         }
 
@@ -51,7 +51,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
         public delegate void GlobalConfigChanged();
         public delegate void LoadingChanged(bool Loading);
 
-        public event GlobalConfigChanged? OnCurrentNavChanged;
         public event LoadingChanged? OnLoadingChanged;
 
         #endregion

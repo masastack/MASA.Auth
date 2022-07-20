@@ -18,7 +18,7 @@ public class RoleRelation : FullEntity<Guid, Guid>
         ParentId = parentId;
     }
 
-    public RoleRelation(Guid roleId, Guid parentId)
+    public RoleRelation(Guid roleId, Guid parentId) : this(parentId)
     {
         RoleId = roleId;
     }
