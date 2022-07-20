@@ -11,6 +11,7 @@ public class DepartmentService : ServiceBase
         MapGet(ListAsync);
         MapGet(CountAsync);
         MapPost(SaveAsync);
+        MapPost(CopyAsync);
         MapDelete(RemoveAsync);
     }
 
@@ -18,6 +19,11 @@ public class DepartmentService : ServiceBase
         [FromBody] UpsertDepartmentDto upsertDepartmentDto)
     {
         await eventBus.PublishAsync(new AddDepartmentCommand(upsertDepartmentDto));
+    }
+
+    private async Task CopyAsync(IEventBus eventBus, [FromBody] CopyDepartmentDto copyDepartmentDto)
+    {
+        await eventBus.PublishAsync(new CopyDepartmentCommand(copyDepartmentDto));
     }
 
     private async Task<DepartmentDetailDto> GetAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)

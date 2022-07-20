@@ -23,7 +23,7 @@
     <MCol Md=6>
         <MSelect @bind-Value="@Dto.AccessTokenType"
                  Label="AccessTokenType"
-                 Outlined Dense
+                 Outlined
                  Items="@_accessTokenType"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
@@ -41,7 +41,7 @@
     <MCol Md=6>
         <MSelect @bind-Value="@Dto.RefreshTokenUsage"
                  Label="RefreshTokenUsage"
-                 Outlined Dense
+                 Outlined
                  Items="@_refreshTokenUsage"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
@@ -50,7 +50,7 @@
     <MCol Md=6>
         <MSelect @bind-Value="@Dto.RefreshTokenExpiration"
                  Label="RefreshTokenExpiration"
-                 Outlined Dense
+                 Outlined
                  Items="@_refreshTokenExpiration"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">

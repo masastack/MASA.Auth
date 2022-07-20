@@ -27,6 +27,11 @@ public class DepartmentService : ServiceBase
         await PostAsync("Save", upsertDepartmentDto);
     }
 
+    public async Task CopyAsync(CopyDepartmentDto copyDepartmentDto)
+    {
+        await PostAsync("Copy", copyDepartmentDto);
+    }
+
     public async Task RemoveAsync(Guid departmentId)
     {
         await DeleteAsync($"Remove?id={departmentId}");

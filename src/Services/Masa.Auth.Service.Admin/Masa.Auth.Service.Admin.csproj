@@ -75,7 +75,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Application\Organizations\Commands\" />
 	  <Folder Include="Migrations\" />
 	</ItemGroup>
 	

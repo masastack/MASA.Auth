@@ -107,7 +107,7 @@ public partial class Organization
 
     private async Task SubmitAsync(CopyDepartmentDto dto)
     {
-        await DepartmentService.UpsertAsync(dto);
+        await DepartmentService.CopyAsync(dto);
         await LoadDepartmentsAsync();
     }
 
@@ -120,6 +120,7 @@ public partial class Organization
         }
         _copyDepartmentDto = new CopyDepartmentDto();
         _copyDepartmentDto.Name = department.Name;
+        _copyDepartmentDto.SourceId = sourceId;
         _copyDepartmentDto.Description = department.Description;
         _copyDepartmentDto.Enabled = department.Enabled;
         _copyDepartmentDto.ParentId = department.ParentId;

@@ -3,10 +3,11 @@
 
 namespace Masa.Auth.Contracts.Admin.Organizations.Validator;
 
-public class UpsertDepartmentValidator : AbstractValidator<UpsertDepartmentDto>
+public class CopyDepartmentValidator : AbstractValidator<CopyDepartmentDto>
 {
-    public UpsertDepartmentValidator()
+    public CopyDepartmentValidator()
     {
         RuleFor(d => d.Name).Required();
+        RuleFor(d => d.SourceId).Required();
     }
 }
