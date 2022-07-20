@@ -24,15 +24,21 @@ public partial class PermissionsConfigure
     [Parameter]
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
+    [Parameter]
+    public bool Preview { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> PreviewChanged { get; set; }
+
     public List<Guid> RolePermissions { get; set; } = new();
 
-    private Dictionary<Guid,Guid> PermissionMap { get; set; } = new();
+    protected Dictionary<Guid,Guid> EmptyPermissionMap { get; set; } = new();
 
     protected virtual List<UniqueModel> ExpansionWrapperUniqueValue
     {
         get
         {
-            var value = Value.Except(RolePermissions).Except(PermissionMap.Values);
+            var value = Value.Except(RolePermissions).Except(EmptyPermissionMap.Values);
             return value.Select(value => new UniqueModel(value.ToString(),false))
                         .Union(RolePermissions.Select(value => new UniqueModel(value.ToString(), true)))
                         .ToList();
@@ -62,7 +68,7 @@ public partial class PermissionsConfigure
     private async Task GetCategoriesAsync()
     {
         var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
-        PermissionMap = apps.SelectMany(app => app.Navs)
+        EmptyPermissionMap = apps.SelectMany(app => app.Navs)
                             .Where(nav => nav.PermissionType == default && nav.Children.Any(child => child.PermissionType == PermissionTypes.Menu))
                             .SelectMany(nav => nav.Children.Select(item => (Code: item.Code, ParentCode: nav.Code)))
                             .ToDictionary(item => Guid.Parse(item.Code), item => Guid.Parse(item.ParentCode));
@@ -80,7 +86,7 @@ public partial class PermissionsConfigure
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
         var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RolePermissions).ToList();
-        foreach (var (code,parentCode) in PermissionMap)
+        foreach (var (code,parentCode) in EmptyPermissionMap)
         {
             if(value.Contains(code)) value.Add(parentCode);
         }

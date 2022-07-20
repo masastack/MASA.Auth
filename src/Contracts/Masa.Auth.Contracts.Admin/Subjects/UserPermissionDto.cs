@@ -14,5 +14,15 @@ public class UserPermissionDto
         PermissionId = permissionId;
         Effect = effect;
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is UserPermissionDto userPermission && userPermission.PermissionId == PermissionId;
+    }
+
+    public override int GetHashCode()
+    {
+        return 1;
+    }
 }
 
