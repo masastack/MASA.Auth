@@ -34,7 +34,6 @@ public class AuthDbContextSeed
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Position","position","organization/position","mdi-post",PermissionTypes.Menu),
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"OperationLog","operationLog","operationLog","mdi-record-circle",PermissionTypes.Menu),
         };
-
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.AUTH_SYSTEM_ID))
         {
             context.Set<Permission>().AddRange(authMenus);
@@ -45,7 +44,6 @@ public class AuthDbContextSeed
         var pmMenus = new List<Permission>() {
             new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",PermissionTypes.Menu),
         };
-
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.PM_SYSTEM_ID))
         {
             context.Set<Permission>().AddRange(pmMenus);
@@ -54,31 +52,44 @@ public class AuthDbContextSeed
 
         #region Dcc
         var dccMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",PermissionTypes.Menu),
-            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Public","Public","Public","mdi-flag",PermissionTypes.Menu),
-            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Label Management","Label","Label","mdi-flag",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Public","Public","Public","mdi-flag",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Label Management","Label","Label","mdi-flag",PermissionTypes.Menu),
         };
-
-        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.MC_SYSTEM_ID))
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.DCC_SYSTEM_ID))
         {
             context.Set<Permission>().AddRange(dccMenus);
         }
         #endregion
 
         #region Mc
-        //new Nav("channelManagement", "Permission.ChannelManagement", "mdi-email-outline", "channels/channelManagement", 1),
-        //        new Nav("messageManagement", "Permission.MessageManagement", "fas fa-tasks", 1, new List<Nav>
-        //        {
-        //            new Nav("sendMessage", "Permission.SendMessage", "messageTasks/sendMessage", 2, "messageManagement"),
-        //            new Nav("messageRecord", "Permission.MessageRecord", "messageRecords/messageRecordManagement", 2, "messageManagement"),
-        //        }),
-        //        new Nav("messageTemplateManagement", "Permission.MessageTemplateManagement", "mdi-collage", 1, new List<Nav>
-        //        {
-        //            new Nav("sms", "Sms", "messageTemplates/smsTemplateManagement", 2, "messageTemplateManagement"),
-        //            new Nav("email", "Email", "messageTemplates/emailTemplateManagement", 2, "messageTemplateManagement"),
-        //            new Nav("websiteMessage", "WebsiteMessage", "messageTemplates/websiteMessageTemplateManagement", 2, "messageTemplateManagement"),
-        //        }),
-        //        new Nav("receiverGroupManagement", "Permission.ReceiverGroupManagement", "fas fa-object-ungroup", "receiverGroups/receiverGroupManagement", 1),
+        var mcMenus = new List<Permission>() {
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"ChannelManagement","channelManagement","channels/channelManagement","mdi-email-outline",PermissionTypes.Menu),
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"MessageManagement","messageManagement","","fas fa-tasks",new List<Permission>{
+                new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"SendMessage","sendMessage","messageTasks/sendMessage","mdi-circle",PermissionTypes.Menu),
+                new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"MessageRecord","messageRecord","messageRecords/messageRecordManagement","mdi-circle",PermissionTypes.Menu)
+            }),
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"MessageTemplate","messageTemplate","","mdi-collage",new List<Permission>{
+                new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"Sms","sms","messageTemplates/smsTemplateManagement","mdi-circle",PermissionTypes.Menu),
+                new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"Email","email","messageTemplates/emailTemplateManagement","mdi-circle",PermissionTypes.Menu),
+                new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"WebsiteMessage","websiteMessage","messageTemplates/websiteMessageTemplateManagement","mdi-circle",PermissionTypes.Menu)
+            }),
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fas fa-object-ungroup",PermissionTypes.Menu)
+        };
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.MC_SYSTEM_ID))
+        {
+            context.Set<Permission>().AddRange(mcMenus);
+        }
+        #endregion
+
+        #region scheduler
+        var schedulerMenus = new List<Permission>() {
+            new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"ResourceFiles","scheduler.resource","pages/resource","mdi-file-document-outline",PermissionTypes.Menu),
+        };
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.SCHEDULER_SYSTEM_ID))
+        {
+            context.Set<Permission>().AddRange(schedulerMenus);
+        }
         #endregion
 
         if (!context.Set<User>().Any(u => u.Account == "admin"))

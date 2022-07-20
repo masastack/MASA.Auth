@@ -11,7 +11,7 @@
                     <MCol Md=6>
                         <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
                                  Label="@T("Pre Code Select")"
-                                 Outlined Dense HideDetails="@("auto")"
+                                 Outlined HideDetails="@("auto")"
                                  Items="@AppItems"
                                  ItemText="u => u.Name"
                                  ItemValue="u => u.Identity">
@@ -23,7 +23,7 @@
                     <MCol Md=12>
                         <MSelect @bind-Value="_apiPermissionDetailDto.Type"
                                  Label="@T("Permission Type")"
-                                 Outlined Dense HideDetails="@("auto")"
+                                 Outlined HideDetails="@("auto")"
                                  Items="@PermissionTypes"
                                  ItemText="u => u.Text"
                                  ItemValue="u => u.Value">

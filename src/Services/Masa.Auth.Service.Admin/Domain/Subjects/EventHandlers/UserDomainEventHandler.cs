@@ -85,7 +85,7 @@ public class UserDomainEventHandler
     public void UserTeamPermission(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
     {
         var teamIdAndTypes = _authDbContext.Set<TeamStaff>()
-                    .Where(t => t.StaffId == queryUserPermissionDomainEvent.UserId && !t.IsDeleted)
+                    .Where(t => t.Staff.UserId == queryUserPermissionDomainEvent.UserId && !t.IsDeleted)
                     .Select(t => new { t.TeamId, t.TeamMemberType });
         var teamPermissions = _authDbContext.Set<TeamPermission>()
             .Where(t => teamIdAndTypes.Any(a => a.TeamId == t.Team.Id

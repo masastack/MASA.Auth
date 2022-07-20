@@ -4,6 +4,7 @@ using Masa.Auth.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220718073639_AddUserSystemBusinessData")]
+    partial class AddUserSystemBusinessData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2411,7 +2413,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff.Address#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
                         {
                             b1.Property<Guid>("StaffId")
                                 .HasColumnType("uniqueidentifier");
@@ -2454,7 +2456,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
                 {
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team.Avatar#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
                         {
                             b1.Property<Guid>("TeamId")
                                 .HasColumnType("uniqueidentifier");
@@ -2575,7 +2577,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
                 {
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User.Address#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");

@@ -214,8 +214,10 @@ public class QueryHandler
     public async Task ApiPermissionSelectQueryAsync(ApiPermissionSelectQuery apiPermissionSelectQuery)
     {
         Expression<Func<Permission, bool>> condition = permission => permission.Type == PermissionTypes.Api;
-        if (!string.IsNullOrEmpty(apiPermissionSelectQuery.Name))
-            condition = condition.And(permission => permission.Name.Contains(apiPermissionSelectQuery.Name));
+        if (!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId))
+        {
+            condition = condition.And(permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
+        }
 
         var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount);
         apiPermissionSelectQuery.Result = permissions.Select(p => new SelectItemDto<Guid>
@@ -322,7 +324,7 @@ public class QueryHandler
     [EventHandler]
     public async Task CollectMenuListQueryAsync(FavoriteMenuListQuery favoriteMenuListQuery)
     {
-        var permissionIds = await _memoryCacheClient.GetAsync<HashSet<Guid>>($"{CacheKey.USER_MENU_COLLECT_PRE}{favoriteMenuListQuery.UserId}");
+        var permissionIds = await _memoryCacheClient.GetAsync<HashSet<Guid>>(CacheKey.UserMenuCollectKey(favoriteMenuListQuery.UserId));
         if (permissionIds == null)
         {
             return;

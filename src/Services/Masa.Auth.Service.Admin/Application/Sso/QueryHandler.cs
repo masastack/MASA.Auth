@@ -43,7 +43,7 @@ public class QueryHandler
     [EventHandler]
     public async Task ClientDetailQueryAsync(ClientDetailQuery clientDetailQuery)
     {
-        var client = await _clientRepository.FindAsync(client => client.Id == clientDetailQuery.ClientId);
+        var client = await _clientRepository.GetDetailAsync(clientDetailQuery.ClientId);
         client.Adapt(clientDetailQuery.Result);
     }
 
@@ -135,6 +135,7 @@ public class QueryHandler
             Id = apiResource.Id,
             Enabled = apiResource.Enabled,
             Name = apiResource.Name,
+            DisplayName = apiResource.DisplayName,
             Description = apiResource.Description,
             AllowedAccessTokenSigningAlgorithms = apiResource.AllowedAccessTokenSigningAlgorithms,
             ShowInDiscoveryDocument = apiResource.ShowInDiscoveryDocument,
@@ -154,6 +155,7 @@ public class QueryHandler
             Id = apiResource.Id,
             Enabled = apiResource.Enabled,
             Name = apiResource.Name,
+            DisplayName = apiResource.DisplayName,
             Description = apiResource.Description,
             AllowedAccessTokenSigningAlgorithms = apiResource.AllowedAccessTokenSigningAlgorithms,
             ShowInDiscoveryDocument = apiResource.ShowInDiscoveryDocument,

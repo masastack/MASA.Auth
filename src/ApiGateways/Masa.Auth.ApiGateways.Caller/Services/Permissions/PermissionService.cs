@@ -47,13 +47,18 @@ public class PermissionService : ServiceBase
         return await GetAsync<ApiPermissionDetailDto>($"GetApiPermission?id={id}");
     }
 
-    public async Task<List<SelectItemDto<Guid>>> GetApiPermissionSelectAsync(string name)
+    public async Task<List<SelectItemDto<Guid>>> GetApiPermissionSelectAsync(string systemId)
     {
-        return await GetAsync<List<SelectItemDto<Guid>>>($"GetApiPermissionSelect?name={name}");
+        return await GetAsync<List<SelectItemDto<Guid>>>($"GetApiPermissionSelect?systemId={systemId}");
     }
 
     public async Task RemoveAsync(Guid permissionId)
     {
         await DeleteAsync($"Delete?id={permissionId}");
+    }
+
+    public async Task<List<string>> GetElementPermissionsAsync(Guid userId, string appId)
+    {
+        return await GetAsync<List<string>>($"element-permissions?userId={userId}&appId={appId}");
     }
 }

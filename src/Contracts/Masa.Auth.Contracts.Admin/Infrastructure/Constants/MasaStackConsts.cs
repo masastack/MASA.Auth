@@ -13,6 +13,8 @@ public class MasaStackConsts
     public const string DCC_SYSTEM_WEB_APP_ID = "masa-dcc-web-admin";
     public const string MC_SYSTEM_ID = "masa-mc";
     public const string MC_SYSTEM_WEB_APP_ID = "masa-mc-web-admin";
+    public const string SCHEDULER_SYSTEM_ID = "masa-scheduler";
+    public const string SCHEDULER_SYSTEM_WEB_APP_ID = "masa-scheduler-web-admin";
 
     public const string ORGANIZATION_NAME = "MasaStack";
     public const string ORGANIZATION_DESCRIPTION = "MasaStack Root Department";

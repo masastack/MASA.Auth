@@ -41,6 +41,22 @@ public class CommandHandler
     }
 
     [EventHandler]
+    public async Task CopyDepartmentAsync(CopyDepartmentCommand copyDepartmentCommand)
+    {
+        var dto = copyDepartmentCommand.CopyDepartmentDto;
+        var sourceDepartment = await _departmentRepository.GetByIdAsync(dto.SourceId);
+        if (sourceDepartment != null)
+        {
+            sourceDepartment.RemoveStaffs(dto.StaffIds.ToArray());
+            await _departmentRepository.UpdateAsync(sourceDepartment);
+        }
+        var parent = await _departmentRepository.FindAsync(dto.ParentId);
+        var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
+        addDepartment.SetStaffs(dto.StaffIds.ToArray());
+        await _departmentRepository.AddAsync(addDepartment);
+    }
+
+    [EventHandler]
     public async Task RemoveDepartmentAsync(RemoveDepartmentCommand removeDepartmentCommand)
     {
         var department = await _departmentRepository.GetByIdAsync(removeDepartmentCommand.DepartmentId);

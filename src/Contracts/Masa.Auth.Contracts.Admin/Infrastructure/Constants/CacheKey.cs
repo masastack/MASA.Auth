@@ -3,15 +3,43 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
-public class CacheKey
+public sealed class CacheKey
 {
-    public const string PERMISSION_CACHE_KEY_PRE = "permission:";
+    const string PERMISSION_CACHE_KEY_PRE = "permission:";
+    const string ROLE_CACHE_KEY_PRE = "role:";
+    const string USER_CACHE_KEY_PRE = "user:";
+    const string USER_MENU_COLLECT_PRE = "menu_collect:";
+    const string USER_VISIT_PRE = "user_visit:";
 
-    public const string ROLE_CACHE_KEY_PRE = "role:";
+    const string USER_SYSTEM_DATA_PRE = "user_system_data:";
 
-    public const string USER_CACHE_KEY_PRE = "user:";
+    public static string PermissionKey(Guid permissionId)
+    {
+        return $"{PERMISSION_CACHE_KEY_PRE}{permissionId}";
+    }
 
-    public const string USER_MENU_COLLECT_PRE = "menu_collect:";
+    public static string RoleKey(Guid roleId)
+    {
+        return $"{ROLE_CACHE_KEY_PRE}{roleId}";
+    }
 
-    public const string USER_VISIT_PRE = "user_visit:";
+    public static string UserKey(Guid userId)
+    {
+        return $"{USER_CACHE_KEY_PRE}{userId}";
+    }
+
+    public static string UserMenuCollectKey(Guid userId)
+    {
+        return $"{USER_MENU_COLLECT_PRE}{userId}";
+    }
+
+    public static string UserVisitKey(Guid userId)
+    {
+        return $"{USER_VISIT_PRE}{userId}";
+    }
+
+    public static string UserSystemDataKey(Guid userId, string systemId)
+    {
+        return $"{USER_SYSTEM_DATA_PRE}{userId}::{systemId}";
+    }
 }

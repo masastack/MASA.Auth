@@ -23,7 +23,7 @@
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
         @foreach (var uri in Dto.RedirectUris)
         {
-            <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
+            <DefaultTextField HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
         }
     </MCol>
     <MCol Md=6>
@@ -55,7 +55,7 @@
     {
         if (!string.IsNullOrWhiteSpace(Dto.RedirectUri) && Dto.RedirectUris.IndexOf(Dto.RedirectUri) < 0)
         {
-            Dto.RedirectUris.Add($"{Dto.RedirectUri}{redirectUriSuffix}");
+            Dto.RedirectUris.Add($"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}");
             Dto.RedirectUri = string.Empty;
         }
     }
@@ -65,7 +65,7 @@
         if (!string.IsNullOrWhiteSpace(Dto.PostLogoutRedirectUri) &&
             Dto.PostLogoutRedirectUris.IndexOf(Dto.PostLogoutRedirectUri) < 0)
         {
-            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri}{logoutRedirectUriSuffix}");
+            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}");
             Dto.PostLogoutRedirectUri = string.Empty;
         }
     }
