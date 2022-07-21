@@ -32,7 +32,6 @@ builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"], builder.Configuration["McServiceBaseAddress"]);
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-
 builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.WebHost.UseStaticWebAssets();
@@ -54,12 +53,12 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.Run();
