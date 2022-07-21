@@ -161,12 +161,17 @@ public class CommandHandler
     [EventHandler]
     public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
+        //todo UserDomainService
         var key = $"auth_login_{validateByAccountCommand.Account}";
         var loginCache = await _cache.GetAsync<CacheLogin>(key);
         if (loginCache is not null && loginCache.LoginErrorCount >= 5) throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
         var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account);
         if (user != null)
         {
+            if (!user.Enabled)
+            {
+                throw new UserFriendlyException("账号已禁用");
+            }
             var success = user.VerifyPassword(validateByAccountCommand.Password);
             if (success)
             {
