@@ -169,6 +169,18 @@ public class User : FullAggregateRoot<Guid, Guid>
         Landline = landline;
     }
 
+    public void Update(string name, string? displayName, string? idCard, string? companyName, string phoneNumber, string? email, GenderTypes genderType)
+    {
+        Name = name;
+        DisplayName = displayName ?? "";
+        IdCard = idCard ?? "";
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        Position = position ?? "";
+        GenderType = genderType;
+        Landline = landline;
+    }
+
     public void UpdateBasicInfo(string? displayName, string? phoneNumber, string? email, string avatar, GenderTypes genderType)
     {
         DisplayName = displayName ?? "";

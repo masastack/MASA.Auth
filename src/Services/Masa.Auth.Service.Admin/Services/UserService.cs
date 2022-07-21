@@ -43,7 +43,7 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        private async Task<UserDto> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserModel model)
+        private async Task<UserModel> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserModel model)
         {
             var dto = new AddUserDto()
             {
@@ -66,6 +66,13 @@ namespace Masa.Auth.Service.Admin.Services
             }
             if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
             var command = new AddUserCommand(dto);
+            await eventBus.PublishAsync(command);
+            return command.NewUser.Adapt<UserModel>();
+        }
+
+        private async Task<UserModel> UpsertExternalAsync(IEventBus eventBus, [FromBody] UpsertUserModel model)
+        {
+            var command = new UpsertUserCommand(model);
             await eventBus.PublishAsync(command);
             return command.NewUser;
         }

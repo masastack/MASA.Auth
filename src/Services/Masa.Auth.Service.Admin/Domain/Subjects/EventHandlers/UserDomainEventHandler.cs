@@ -26,30 +26,10 @@ public class UserDomainEventHandler
         var response = await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(list);
     }
 
-    [EventHandler(2)]
-    public async Task UpdateRoleLimitAsync(SetUserDomainEvent userEvent)
-    {
-        var influenceRoles = userEvent.Users.SelectMany(user => user.Roles.Select(role => role.RoleId)).ToList();
-        if (influenceRoles.Count == 0)
-        {
-            var userIds = userEvent.Users.Select(user => user.Id);
-            var roles = await GetRolesFromUsersAsync(userIds);
-            influenceRoles.AddRange(roles);
-        }
-        await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
-    }
-
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserDomainEvent userEvent)
     {
-        var response = await _autoCompleteClient.DeleteAsync(userEvent.UserIds);
-    }
-
-    [EventHandler(2)]
-    public async Task UpdateRoleLimitAsync(RemoveUserDomainEvent userEvent)
-    {
-        var roles = await GetRolesFromUsersAsync(userEvent.UserIds);
-        await _roleDomainService.UpdateRoleLimitAsync(roles);
+        var response = await _autoCompleteClient.DeleteAsync(userEvent.userIds);
     }
 
     [EventHandler(2)]

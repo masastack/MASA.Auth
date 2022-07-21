@@ -202,13 +202,28 @@ public class CommandHandler
         await _userRepository.UpdateAsync(user);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         var userModel = command.User;
         var user = await CheckUserAsync(userModel.Id);
         user.UpdateBasicInfo(userModel.DisplayName, userModel.PhoneNumber, userModel.Email, userModel.Avatar, userModel.Gender);
         await _userRepository.UpdateAsync(user);
+        await _userDomainService.SetAsync(user);
+    }
+
+    [EventHandler(1)]
+    public async Task UpsertUserAsync(UpsertUserCommand command)
+    {
+        var userModel = command.User;
+        if(userModel.Id != default)
+        {
+            var user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
+            if(user is not null)
+            {
+                user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.PhoneNumber, userModel.Email, userModel.Gender);
+            }
+        }
     }
 
     private async Task<User> CheckUserAsync(Guid userId)
