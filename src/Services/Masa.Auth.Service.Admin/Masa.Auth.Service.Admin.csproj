@@ -49,7 +49,7 @@
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.5.0-preview.6" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-preview.6" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-rc.1" />
 		<PackageReference Include="Masa.Utils.Extensions.Expressions" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="0.5.0-preview.6" />
 		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="0.5.0-preview.6" />
@@ -71,6 +71,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\..\MASA.Contrib\src\BasicAbility\Masa.Contrib.BasicAbility.Auth\Masa.Contrib.BasicAbility.Auth.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\BasicAbility\Masa.BuildingBlocks.BasicAbility.Auth.Contracts\Masa.BuildingBlocks.BasicAbility.Auth.Contracts.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\BasicAbility\Masa.BuildingBlocks.BasicAbility.Auth\Masa.BuildingBlocks.BasicAbility.Auth.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

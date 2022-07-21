@@ -42,82 +42,32 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        Expression<Func<User, bool>> condition = user => user.Account == userDto.Account;
-        if (!string.IsNullOrEmpty(userDto.PhoneNumber))
-            condition = condition.Or(user => user.PhoneNumber == userDto.PhoneNumber);
-        if (!string.IsNullOrEmpty(userDto.Landline))
-            condition = condition.Or(user => user.Landline == userDto.Landline);
-        if (!string.IsNullOrEmpty(userDto.Email))
-            condition = condition.Or(user => user.Email == userDto.Email);
-        if (!string.IsNullOrEmpty(userDto.IdCard))
-            condition = condition.Or(user => user.IdCard == userDto.IdCard);
+        await VerifyUserAsync(default, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, userDto.Account);
 
-        var user = await _userRepository.FindAsync(condition);
-        if (user is not null)
-        {
-            if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == user.PhoneNumber)
-                throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
-            if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == user.Landline)
-                throw new UserFriendlyException($"User with landline {userDto.Landline} already exists");
-            if (string.IsNullOrEmpty(userDto.Account) is false && userDto.Account == user.Account)
-                throw new UserFriendlyException($"User with account {userDto.Account} already exists");
-            if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == user.Email)
-                throw new UserFriendlyException($"User with email {userDto.Email} already exists");
-            if (string.IsNullOrEmpty(userDto.IdCard) is false && userDto.IdCard == user.IdCard)
-                throw new UserFriendlyException($"User with idCard {userDto.IdCard} already exists");
-        }
-        else
-        {
-            user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
-            user.AddRoles(userDto.Roles.ToArray());
-            user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
-            await _userRepository.AddAsync(user);
-            command.NewUser = user;
-            await _userDomainService.SetAsync(user);
-        }
+        var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
+        user.AddRoles(userDto.Roles.ToArray());
+        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        await _userRepository.AddAsync(user);
+        command.NewUser = user;
+        await _userDomainService.SetAsync(user);
     }
 
     [EventHandler(1)]
     public async Task UpdateUserAsync(UpdateUserCommand command)
     {
         var userDto = command.User;
-        var user = await CheckUserAsync(userDto.Id);
+        var user = await CheckUserExistAsync(userDto.Id);
+        await VerifyUserAsync(userDto.Id, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, default);
 
-        Expression<Func<User, bool>> condition = user => false;
-        if (!string.IsNullOrEmpty(userDto.PhoneNumber))
-            condition = condition.Or(user => user.PhoneNumber == userDto.PhoneNumber);
-        if (!string.IsNullOrEmpty(userDto.Landline))
-            condition = condition.Or(user => user.Landline == userDto.Landline);
-        if (!string.IsNullOrEmpty(userDto.Email))
-            condition = condition.Or(user => user.Email == userDto.Email);
-        if (!string.IsNullOrEmpty(userDto.IdCard))
-            condition = condition.Or(user => user.IdCard == userDto.IdCard);
-
-        Expression<Func<User, bool>> condition2 = user => user.Id != userDto.Id;
-        var exitUser = await _userRepository.FindAsync(condition2.And(condition));
-        if (exitUser is not null)
-        {
-            if (string.IsNullOrEmpty(userDto.PhoneNumber) is false && userDto.PhoneNumber == exitUser.PhoneNumber)
-                throw new UserFriendlyException($"User with phone number {userDto.PhoneNumber} already exists");
-            if (string.IsNullOrEmpty(userDto.Landline) is false && userDto.Landline == exitUser.Landline)
-                throw new UserFriendlyException($"User with landline {userDto.Landline} already exists");
-            if (string.IsNullOrEmpty(userDto.Email) is false && userDto.Email == exitUser.Email)
-                throw new UserFriendlyException($"User with email {userDto.Email} already exists");
-            if (string.IsNullOrEmpty(userDto.IdCard) is false && userDto.IdCard == exitUser.IdCard)
-                throw new UserFriendlyException($"User with idCard {userDto.IdCard} already exists");
-        }
-        else
-        {
-            user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
-            await _userRepository.UpdateAsync(user);
-            await _userDomainService.SetAsync(user);
-        }
+        user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
+        await _userRepository.UpdateAsync(user);
+        await _userDomainService.SetAsync(user);
     }
 
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await CheckUserAsync(command.User.Id);
+        var user = await CheckUserExistAsync(command.User.Id);
 
         if (user.Account == "admin")
         {
@@ -151,7 +101,7 @@ public class CommandHandler
     public async Task UpdateUserPasswordAsync(ResetUserPasswordCommand command)
     {
         var userDto = command.User;
-        var user = await CheckUserAsync(userDto.Id);
+        var user = await CheckUserExistAsync(userDto.Id);
 
         user.UpdatePassword(userDto.Password);
         await _userRepository.UpdateAsync(user);
@@ -193,7 +143,7 @@ public class CommandHandler
     public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
     {
         var userModel = command.User;
-        var user = await CheckUserAsync(userModel.Id);
+        var user = await CheckUserExistAsync(userModel.Id);
         if (!user.VerifyPassword(userModel.OldPassword))
         {
             throw new UserFriendlyException("password verification failed");
@@ -206,7 +156,8 @@ public class CommandHandler
     public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         var userModel = command.User;
-        var user = await CheckUserAsync(userModel.Id);
+        var user = await CheckUserExistAsync(userModel.Id);
+        await VerifyUserAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, default, default);
         user.UpdateBasicInfo(userModel.DisplayName, userModel.PhoneNumber, userModel.Email, userModel.Avatar, userModel.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.SetAsync(user);
@@ -216,23 +167,68 @@ public class CommandHandler
     public async Task UpsertUserAsync(UpsertUserCommand command)
     {
         var userModel = command.User;
-        if(userModel.Id != default)
+        var user = default(User);
+        if (userModel.Id != default)
         {
-            var user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
-            if(user is not null)
+            user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
+            if (user is not null)
             {
-                user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.PhoneNumber, userModel.Email, userModel.Gender);
+                await VerifyUserAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
+                user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.CompanyName, userModel.PhoneNumber, userModel.Email, userModel.Gender);
+                await _userRepository.UpdateAsync(user);
+                await _userDomainService.SetAsync(user);
+                command.NewUser = user.Adapt<UserModel>();
+                return;
             }
         }
+        user = new User(userModel.Name, userModel.DisplayName ?? "", "", userModel.IdCard ?? "", userModel.Account ?? "", DefaultUserAttributes.Password, userModel.CompanyName ?? "", "", "", true, userModel.PhoneNumber ?? "", "", userModel.Email ?? "", new(), userModel.Gender);
+        await _userRepository.AddAsync(user);
+        await _userDomainService.SetAsync(user);
+        command.NewUser = user.Adapt<UserModel>(); ;
     }
 
-    private async Task<User> CheckUserAsync(Guid userId)
+    private async Task<User> CheckUserExistAsync(Guid userId)
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
         return user;
+    }
+
+    private async Task VerifyUserAsync(Guid? userId, string? phoneNumber, string? landline, string? email, string? idCard, string? account)
+    {
+        Expression<Func<User, bool>> condition = user => false;
+        if (!string.IsNullOrEmpty(account))
+            condition = condition.Or(user => user.Account == account);
+        if (!string.IsNullOrEmpty(phoneNumber))
+            condition = condition.Or(user => user.PhoneNumber == phoneNumber);
+        if (!string.IsNullOrEmpty(landline))
+            condition = condition.Or(user => user.Landline == landline);
+        if (!string.IsNullOrEmpty(email))
+            condition = condition.Or(user => user.Email == email);
+        if (!string.IsNullOrEmpty(idCard))
+            condition = condition.Or(user => user.IdCard == idCard);
+        if (userId is not null)
+        {
+            Expression<Func<User, bool>> condition2 = user => user.Id != userId;
+            condition = condition2.And(condition);
+        }
+
+        var exitUser = await _userRepository.FindAsync(condition);
+        if (exitUser is not null)
+        {
+            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
+                throw new UserFriendlyException($"User with phone number {phoneNumber} already exists");
+            if (string.IsNullOrEmpty(landline) is false && landline == exitUser.Landline)
+                throw new UserFriendlyException($"User with landline {landline} already exists");
+            if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
+                throw new UserFriendlyException($"User with email {email} already exists");
+            if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
+                throw new UserFriendlyException($"User with idCard {idCard} already exists");
+            if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
+                throw new UserFriendlyException($"User with account {account} already exists");
+        }
     }
 
     #endregion
