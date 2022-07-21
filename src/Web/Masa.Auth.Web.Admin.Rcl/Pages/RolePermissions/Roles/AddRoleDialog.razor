@@ -17,9 +17,14 @@
             </HeaderContent>
             <AutoHeightContent>
                 <div class="global-nav" style="display: flex;height: auto">
-                    <PermissionsCheck RoleIds=Role.ChildrenRoles
+                    <PermissionsConfigure 
+                                RoleIds=Role.ChildrenRoles 
+                                @bind-Value=Role.Permissions
+                                @bind-Preview=Preview
+                                Style="max-height:calc(100vh - 345px);" />
+@*                    <PermissionsCheck RoleIds=Role.ChildrenRoles
                                   Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
-                                  ValueChanged="PermissionsChanged" />
+                                  ValueChanged="PermissionsChanged" />*@
                 </div>
             </AutoHeightContent>
             <FooterContent>
@@ -33,5 +38,3 @@
         </AutoHeight>
     </MForm>
 </DefaultSheetDialog>
-
-<PermissionsPreview @bind-Show="Preview" Value="Role.Permissions.Select(id => id.ToString()).ToList()" />

@@ -63,6 +63,7 @@ public class QueryHandler
                     Icon = p.Icon,
                     Url = p.Url,
                     Code = p.Id.ToString(),
+                    PermissionType = p.Type,
                     Children = GetChildren(p.Id, menuPermissions)
                 }).ToList();
         });
@@ -102,6 +103,7 @@ public class QueryHandler
             Icon = p.Icon,
             Url = p.Url,
             Code = p.Id.ToString(),
+            PermissionType = p.Type,
             Children = GetChildren(p.Id, all)
         }).ToList();
     }

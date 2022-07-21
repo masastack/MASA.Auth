@@ -13,5 +13,7 @@ public class PermissionNavDto
 
     public string Url { get; set; } = string.Empty;
 
+    public PermissionTypes PermissionType { get; set; }
+
     public List<PermissionNavDto> Children { get; set; } = new();
 }

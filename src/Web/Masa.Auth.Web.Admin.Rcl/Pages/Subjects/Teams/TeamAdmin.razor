@@ -4,6 +4,11 @@
     <SearchSelectStaff @bind-Value="Value.Staffs" Class="mb-6" Label="@T("Team Admin")"/>
     <RoleSelectForTeam @bind-Value="Value.Roles" Class="mb-6" Label="@T("Role")"/>
     <div class="global-nav" style="height:auto">
-        <PermissionsCheck RoleIds="Value.Roles" @bind-Value="Value.Permissions" Style="height: calc(100vh - 440px);"/>
+        <PermissionsConfigure 
+            RoleIds=Value.Roles 
+            Value="Value.Permissions.Select(permission => permission.Key).ToList()"
+            ValueChanged="value => Value.Permissions=value.ToDictionary(item => item,ItemColProps => true)"
+            Style="max-height:calc(100vh - 440px);" />
+        @*<PermissionsCheck RoleIds="Value.Roles" @bind-Value="Value.Permissions" Style="height: calc(100vh - 440px);"/>*@
     </div>
 </MCardText>
