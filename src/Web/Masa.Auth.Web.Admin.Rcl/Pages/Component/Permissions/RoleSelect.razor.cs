@@ -32,7 +32,7 @@ public partial class RoleSelect
 
     protected virtual bool RoleDisabled(RoleSelectDto role) => false;
 
-    protected async void RemoveRole(RoleSelectDto role)
+    protected async Task RemoveRole(RoleSelectDto role)
     {
         if (Readonly is false)
         {
