@@ -16,6 +16,8 @@ public partial class PermissionsCheck
     [Parameter]
     public List<Guid> RoleIds { get; set; } = new();
 
+    private List<Guid> InternalRoleIds { get; set; } = new();
+
     [Parameter]
     public Dictionary<Guid, bool> Value { get; set; } = new();
 
@@ -58,19 +60,19 @@ public partial class PermissionsCheck
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
+        await LoadData();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(RoleIds.Count != InternalRoleIds.Count)
         {
-            await LoadData();
-            if (RoleIds.Any())
-            {
-                await LoadRolePermissions();
-            }
-            InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
-            StateHasChanged();
+            InternalRoleIds = RoleIds;
+            await LoadRolePermissions();
+            //InitChecked(Value.Where(v => v.Value).Select(v => v.Key.ToString()).ToList());
         }
-        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task LoadData()
@@ -94,6 +96,11 @@ public partial class PermissionsCheck
     private void InitChecked(List<string> checkedItems)
     {
         _initValue = _allData.Where(i => checkedItems.Contains(i.Nav ?? "")).ToList();
+    }
+
+    private void UpadteValueAsync()
+    {
+
     }
 
     private List<CategoryAppNav> DataConversion(List<Category> catetories)

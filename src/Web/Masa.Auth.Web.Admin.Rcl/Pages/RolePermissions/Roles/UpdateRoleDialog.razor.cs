@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
 public partial class UpdateRoleDialog
@@ -76,7 +74,7 @@ public partial class UpdateRoleDialog
 
     private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
     {
-        Role.Permissions = permissiionMap.Select(kv => kv.Key).ToList();
+        Role.Permissions = permissiionMap.Where(permissiion => permissiion.Value is true).Select(kv => kv.Key).ToList();
     }
 
     private void LimitChanged(int limit)

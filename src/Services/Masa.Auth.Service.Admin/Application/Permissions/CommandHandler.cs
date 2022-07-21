@@ -16,6 +16,8 @@ public class CommandHandler
         _roleDomainService = roleDomainService;
     }
 
+    #region Role
+
     [EventHandler(1)]
     public async Task AddRoleAsync(AddRoleCommand command)
     {
@@ -58,10 +60,12 @@ public class CommandHandler
         await _roleRepository.RemoveAsync(role);
     }
 
+    #endregion
+
     #region Permission
 
     [EventHandler(1)]
-    public async Task ReomvePermissionAsync(RemovePermissionCommand removePermissionCommand)
+    public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
         var permission = await _permissionRepository.GetByIdAsync(removePermissionCommand.PermissionId);
         permission.DeleteCheck();

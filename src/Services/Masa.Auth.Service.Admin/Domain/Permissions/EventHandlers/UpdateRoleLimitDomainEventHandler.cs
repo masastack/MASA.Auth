@@ -32,7 +32,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
                 if (availableQuantity >= 0)
                     role.UpdateAvailableQuantity(availableQuantity);
                 else
-                    throw new UserFriendlyException($"Role：{role.Name} exceed the limit!");
+                    throw new UserFriendlyException($"角色：{role.Name} 超出绑定限制，最多只能绑定{role.Limit}人!");
             }
 
             await _roleRepository.UpdateRangeAsync(roles);
