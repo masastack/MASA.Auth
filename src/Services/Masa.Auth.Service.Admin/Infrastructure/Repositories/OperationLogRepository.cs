@@ -18,9 +18,9 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
     public async Task AddDefaultAsync(OperationTypes operationType, string operationDescription, Guid? @operator = null)
     {
         @operator ??= _userContext.GetUserId<Guid>();
-        var operatorName = await Context.Set<User>().Where(user => user.Id == @operator).Select(user => user.Name).FirstAsync();
+        var operatorName = await Context.Set<User>().Where(user => user.Id == @operator).Select(user => user.Name).FirstOrDefaultAsync();
         await AddAsync(new OperationLog(
-            @operator.Value, operatorName, operationType, DateTime.Now, operationDescription
+            @operator.Value, operatorName ?? "", operationType, DateTime.Now, operationDescription
         ));
     }
 }

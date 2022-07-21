@@ -32,11 +32,14 @@ public partial class RoleSelect
 
     protected virtual bool RoleDisabled(RoleSelectDto role) => false;
 
-    protected void RemoveRole(RoleSelectDto role)
+    protected async Task RemoveRole(RoleSelectDto role)
     {
         if (Readonly is false)
         {
-            Value.Remove(role.Id);
+            var value = new List<Guid>();
+            value.AddRange(Value);
+            value.Remove(role.Id);
+            await ValueChanged.InvokeAsync(value);
         }
     }
 }

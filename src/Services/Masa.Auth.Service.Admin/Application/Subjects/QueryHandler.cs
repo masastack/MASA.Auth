@@ -40,8 +40,6 @@ public class QueryHandler
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
     }
 
-
-
     #region User
 
     [EventHandler]

@@ -8,34 +8,61 @@ public class UserDomainEventHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly AuthDbContext _authDbContext;
     IStaffRepository _staffRepository;
+    readonly RoleDomainService _roleDomainService;
 
-    public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient,
-        AuthDbContext authDbContext,
-        IStaffRepository staffRepository)
+    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, IStaffRepository staffRepository, RoleDomainService roleDomainService)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
         _staffRepository = staffRepository;
+        _roleDomainService = roleDomainService;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task SetUserAsync(SetUserDomainEvent userEvent)
     {
         var list = userEvent.Users.Select(user => new UserSelectDto(user.Id, user.Name, user.DisplayName, user.Account, user.PhoneNumber, user.Email, user.Avatar));
         var response = await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(list);
     }
 
+    [EventHandler(2)]
+    public async Task UpdateRoleLimitAsync(SetUserDomainEvent userEvent)
+    {
+        var influenceRoles = userEvent.Users.SelectMany(user => user.Roles.Select(role => role.RoleId)).ToList();
+        if(influenceRoles.Count == 0)
+        {
+            var userIds = userEvent.Users.Select(user => user.Id);
+            var roles = await GetRolesFromUsersAsync(userIds);
+            influenceRoles.AddRange(roles);
+        }       
+        await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
+    }
+
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserDomainEvent userEvent)
+    {        
+        var response = await _autoCompleteClient.DeleteAsync(userEvent.UserIds);     
+    }
+
+    [EventHandler(2)]
+    public async Task UpdateRoleLimitAsync(RemoveUserDomainEvent userEvent)
     {
-        var response = await _autoCompleteClient.DeleteAsync(userEvent.userIds);
+        var roles = await GetRolesFromUsersAsync(userEvent.UserIds);
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
+    }
+
+    async Task<List<Guid>> GetRolesFromUsersAsync(IEnumerable<Guid> userIds)
+    {
+        return await _authDbContext.Set<UserRole>()
+                          .Where(ur => userIds.Contains(ur.UserId))
+                          .Select(ur => ur.RoleId)
+                          .ToListAsync();
     }
 
     [EventHandler(2)]
     public async Task RemoveStaffAsync(RemoveUserDomainEvent userEvent)
     {
-        var staffs = await _authDbContext.Set<Staff>().Where(staff => userEvent.userIds.Contains(staff.UserId)).ToListAsync();
+        var staffs = await _authDbContext.Set<Staff>().Where(staff => userEvent.UserIds.Contains(staff.UserId)).ToListAsync();
         await _staffRepository.RemoveRangeAsync(staffs);
     }
 

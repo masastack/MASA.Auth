@@ -9,10 +9,16 @@
         </HeaderContent>
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;height: auto">
-                <PermissionsCheck RoleIds=Authorization.Roles
-                                  Value="@(Authorization.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
-                                  ValueChanged="PermissionsChanged" 
-                                  Style="max-height:calc(100vh - 350px);" />
+                @*<PermissionExtensionConfigure 
+                                RoleIds=Authorization.Roles 
+                                @bind-ExtensionValue=Authorization.Permissions 
+                                @bind-Preview=Preview
+                                Style="max-height:calc(100vh - 350px);" />*@
+                <PermissionsConfigure RoleIds=Authorization.Roles
+                                              Value="Authorization.Permissions.Select(p => p.PermissionId).ToList()"
+                                              ValueChanged="value => Authorization.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
+                                              @bind-Preview=Preview
+                                              Style="max-height:calc(100vh - 350px);" />
             </div>
         </AutoHeightContent>
         <FooterContent>
@@ -24,5 +30,3 @@
         </FooterContent>
     </AutoHeight>
 </DefaultSheetDialog>
-
-<PermissionsPreview @bind-Show="Preview" Value="Authorization.Permissions.Where(p => p.Effect is true).Select(p => p.PermissionId.ToString()).ToList()" />

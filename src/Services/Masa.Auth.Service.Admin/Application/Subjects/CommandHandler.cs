@@ -95,6 +95,7 @@ public class CommandHandler
 
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
+        await _userDomainService.SetAsync(user);
     }
 
     [EventHandler(1)]
