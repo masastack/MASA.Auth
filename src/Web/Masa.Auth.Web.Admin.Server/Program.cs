@@ -8,7 +8,6 @@ using Masa.Auth.Web.Admin.Rcl.Global;
 using Masa.Auth.Web.Admin.Rcl.Shared;
 using Masa.Blazor;
 using Masa.Stack.Components;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +35,7 @@ builder.Services.AddTypeAdapter();
 
 builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
-StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
 
