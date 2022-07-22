@@ -56,5 +56,10 @@ public class StaffService : ServiceBase
     {
         return await PostAsync<SyncStaffResultsDto>("sync", content: content);
     }
+
+    public async Task<SyncStaffResultsDto> SyncAsync(UploadFileDto file)
+    {
+        return await PostAsync<UploadFileDto, SyncStaffResultsDto>("sync", file);
+    }
 }
 

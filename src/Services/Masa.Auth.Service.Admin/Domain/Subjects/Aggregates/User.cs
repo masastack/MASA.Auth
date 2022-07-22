@@ -189,6 +189,11 @@ public class User : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
     }
 
+    public void Disabled()
+    {
+        Enabled = false;
+    }
+
     [MemberNotNull(nameof(Password))]
     public void UpdatePassword(string password)
     {

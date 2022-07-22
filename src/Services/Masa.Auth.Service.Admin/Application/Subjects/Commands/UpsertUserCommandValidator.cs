@@ -7,7 +7,7 @@ public class UpsertUserCommandValidator : AbstractValidator<UpsertUserCommand>
 {
     public UpsertUserCommandValidator()
     {
-        RuleFor(command => command.User.DisplayName!).ChineseLetterNumber().MaxLength(20);
+        RuleFor(command => command.User.DisplayName!).Required().ChineseLetterNumber().MaxLength(20);
         RuleFor(command => command.User.PhoneNumber!).Phone();
         RuleFor(command => command.User.Email!).Email();
     }

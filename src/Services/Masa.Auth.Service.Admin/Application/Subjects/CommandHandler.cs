@@ -182,10 +182,23 @@ public class CommandHandler
                 return;
             }
         }
-        user = new User(userModel.Name, userModel.DisplayName ?? "", "", userModel.IdCard ?? "", userModel.Account ?? "", DefaultUserAttributes.Password, userModel.CompanyName ?? "", "", "", true, userModel.PhoneNumber ?? "", "", userModel.Email ?? "", new(), userModel.Gender);
+        user = new User(userModel.Name, userModel.DisplayName ?? "", DefaultUserAttributes.GetDefaultAvatar(userModel.Gender), userModel.IdCard ?? "", userModel.Account ?? "", DefaultUserAttributes.Password, userModel.CompanyName ?? "", "", "", true, userModel.PhoneNumber ?? "", "", userModel.Email ?? "", new(), userModel.Gender);
         await _userRepository.AddAsync(user);
         await _userDomainService.SetAsync(user);
         command.NewUser = user.Adapt<UserModel>(); ;
+    }
+
+    [EventHandler(1)]
+    public async Task DisableUserAsync(DisableUserCommand command)
+    {
+        var userModel = command.User;
+        var user = await _userRepository.FindAsync(u => u.Account == userModel.Account);
+        if (user is null)
+            throw new UserFriendlyException($"User with account {userModel.Account} does not exist");
+
+        user.Disabled();
+        await _userRepository.UpdateAsync(user);
+        command.Result = true;
     }
 
     private async Task<User> CheckUserExistAsync(Guid userId)

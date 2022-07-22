@@ -25,7 +25,7 @@
                 <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
                 <MRow class="ml-6">
                     <MCol Md=4>
-                        <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
+                        <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
                     </MCol>
                 </MRow>
             </div>
@@ -45,7 +45,7 @@
                                 <img src="@context.Item.Avatar" />
                             </MAvatar>
                             <div class="ml-2 my-auto">
-                                <div>@context.Item.Name</div>
+                                <div>@context.Item.DisplayName</div>
                                 <div class="regular2--text caption">@context.Item.PhoneNumber</div>
                             </div>
                         </div>

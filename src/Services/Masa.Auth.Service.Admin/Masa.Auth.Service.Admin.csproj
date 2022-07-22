@@ -13,39 +13,39 @@
 	
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth.Contracts" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-rc.2" />
+		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth.Contracts" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-rc.3" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.5.0-rc.2" />
+		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Authentication.Oidc.EntityFrameworkCore" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.5.0-rc.3" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Configuration" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.5.0-rc.2" />
+		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Configuration" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.5.0-rc.3" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
-		<PackageReference Include="Masa.Contrib.BasicAbility.Dcc" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.BasicAbility.Tsc" Version="0.5.0-rc.2" />
+		<PackageReference Include="Masa.Contrib.BasicAbility.Dcc" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.BasicAbility.Tsc" Version="0.5.0-rc.3" />
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Isolation" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Isolation.UoW.EF" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.5.0-rc.2" />
-		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="0.5.0-rc.2" />
+		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EF" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Isolation" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Isolation.UoW.EF" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.5.0-rc.3" />
+		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="0.5.0-rc.3" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.5.0-rc.1" />
 		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.5.0-rc.1" />
 		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.5.0-rc.1" />
@@ -54,7 +54,7 @@
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="0.5.0-rc.1" />
 		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="0.5.0-rc.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
-		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.5.0-rc.2" />
+		<PackageReference Include="Masa.Contrib.Data.UoW.EF" Version="0.5.0-rc.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.6" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
@@ -71,9 +71,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\..\MASA.Contrib\src\BasicAbility\Masa.Contrib.BasicAbility.Auth\Masa.Contrib.BasicAbility.Auth.csproj" />
-	  <ProjectReference Include="..\..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\BasicAbility\Masa.BuildingBlocks.BasicAbility.Auth.Contracts\Masa.BuildingBlocks.BasicAbility.Auth.Contracts.csproj" />
-	  <ProjectReference Include="..\..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\BasicAbility\Masa.BuildingBlocks.BasicAbility.Auth\Masa.BuildingBlocks.BasicAbility.Auth.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

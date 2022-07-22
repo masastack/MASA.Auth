@@ -20,6 +20,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapPut(ResetUserPasswordAsync);
             MapPost(UserPortraitsAsync, "portraits");
             MapPost(PostUserSystemData, "UserSystemData");
+            MapPut(DisableAsync, "disable");
         }
 
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -54,15 +55,13 @@ namespace Masa.Auth.Service.Admin.Services
                 CompanyName = model.CompanyName ?? "",
                 PhoneNumber = model.PhoneNumber ?? "",
                 Email = model.Email ?? "",
-                Gender = Enum.Parse<GenderTypes>(model.Gender.ToString())
+                Gender = model.Gender == default ? GenderTypes.Male : model.Gender,
+                Password = string.IsNullOrEmpty(model.Password) ? DefaultUserAttributes.Password : model.Password,
+                Enabled = true,
             };
-            dto.Enabled = true;
-            dto.Password = DefaultUserAttributes.Password;
-            if (dto.Gender == default) dto.Gender = GenderTypes.Male;
             if (string.IsNullOrEmpty(dto.Avatar))
             {
-                if (dto.Gender == GenderTypes.Male) dto.Avatar = DefaultUserAttributes.MaleAvatar;
-                else dto.Avatar = DefaultUserAttributes.FemaleAvatar;
+                dto.Avatar = DefaultUserAttributes.GetDefaultAvatar(dto.Gender);
             }
             if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
             var command = new AddUserCommand(dto);
@@ -75,6 +74,13 @@ namespace Masa.Auth.Service.Admin.Services
             var command = new UpsertUserCommand(model);
             await eventBus.PublishAsync(command);
             return command.NewUser;
+        }
+
+        private async Task<bool> DisableAsync(IEventBus eventBus, [FromBody] DisableUserModel model)
+        {
+            var command = new DisableUserCommand(model);
+            await eventBus.PublishAsync(command);
+            return command.Result;
         }
 
         private async Task AddAsync(IEventBus eventBus, [FromBody] AddUserDto dto)

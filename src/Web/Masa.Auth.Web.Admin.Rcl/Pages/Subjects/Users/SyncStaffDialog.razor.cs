@@ -39,17 +39,44 @@ public partial class SyncStaffDialog
         File = file;
     }
 
+    //private async Task SyncAsync()
+    //{
+    //    if (File is not null)
+    //    {
+    //        Loading = true;
+    //        using var content = new MultipartFormDataContent();
+    //        var stream = File.OpenReadStream(MaxFileSize);
+    //        var fileContent = new StreamContent(stream);
+    //        fileContent.Headers.ContentType = new MediaTypeHeaderValue(File.ContentType);
+    //        content.Add(fileContent, "\"files\"", File.Name);
+    //        SyncStaffResults = await StaffService.SyncAsync(content);
+    //        if (SyncStaffResults?.IsValid is false)
+    //        {
+    //            OpenSuccessMessage(T("Sync staff success"));
+    //            await UpdateVisible(false);
+    //            await OnSubmitSuccess.InvokeAsync();
+    //        }
+    //        else
+    //        {
+    //            OpenErrorMessage(T("Sync staff failed"));
+    //        }
+    //        Loading = false;
+    //    }
+    //}
+
     private async Task SyncAsync()
     {
         if (File is not null)
         {
             Loading = true;
-            using var content = new MultipartFormDataContent();
-            var stream = File.OpenReadStream(MaxFileSize);
-            var fileContent = new StreamContent(stream);
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(File.ContentType);
-            content.Add(fileContent, "\"files\"", File.Name);
-            SyncStaffResults = await StaffService.SyncAsync(content);
+            var fileContent = await ReadFile(File);
+            if (FileEncoderHelper.GetTextFileEncodingType(fileContent) != Encoding.UTF8)
+            {
+                OpenWarningMessage(T("Please upload the UTF-8 encoded CSV file"));
+                return;
+            }
+            var dto = new UploadFileDto(File.Name, fileContent,File.Size, "text/csv");
+            SyncStaffResults = await StaffService.SyncAsync(dto);
             if (SyncStaffResults?.IsValid is false)
             {
                 OpenSuccessMessage(T("Sync staff success"));
