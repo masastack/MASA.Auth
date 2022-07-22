@@ -252,7 +252,7 @@ public class QueryHandler
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Select(up => new UserSelectDto
             {
-                Id = up.User.Id,
+                UserId = up.User.Id,
                 Name = up.User.Name,
                 Avatar = up.User.Avatar
             }).ToList()

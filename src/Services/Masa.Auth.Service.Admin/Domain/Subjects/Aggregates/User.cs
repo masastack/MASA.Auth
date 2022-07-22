@@ -169,6 +169,17 @@ public class User : FullAggregateRoot<Guid, Guid>
         Landline = landline;
     }
 
+    public void Update(string name, string? displayName, string? idCard, string? companyName, string? phoneNumber, string? email, GenderTypes genderType)
+    {
+        Name = name;
+        DisplayName = displayName ?? "";
+        IdCard = idCard ?? "";
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        GenderType = genderType;
+        CompanyName = companyName ?? "";
+    }
+
     public void UpdateBasicInfo(string? displayName, string? phoneNumber, string? email, string avatar, GenderTypes genderType)
     {
         DisplayName = displayName ?? "";
@@ -176,6 +187,11 @@ public class User : FullAggregateRoot<Guid, Guid>
         Email = email ?? "";
         GenderType = genderType;
         Avatar = avatar;
+    }
+
+    public void Disabled()
+    {
+        Enabled = false;
     }
 
     [MemberNotNull(nameof(Password))]

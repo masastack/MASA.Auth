@@ -79,9 +79,11 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
-                                <PermissionsCheck RoleIds=User.Roles
-                                                  Value="@(User.Permissions.ToDictionary(p => p.PermissionId,p => p.Effect))"
-                                                  ValueChanged="PermissionsChanged" />
+                                <PermissionsConfigure RoleIds=User.Roles
+                                                      Value="User.Permissions.Select(p => p.PermissionId).ToList()"
+                                                      ValueChanged="value => User.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
+                                                      @bind-Preview=Preview
+                                                      Style="max-height:calc(100vh - 350px);" />
                             </div>
                         </AutoHeightContent>
                         <FooterContent>
@@ -98,5 +100,3 @@
         </MStepper>
     </MForm>
 </DefaultSheetDialog>
-
-<PermissionsPreview @bind-Show="Preview" Value="User.Permissions.Where(p => p.Effect is true).Select(p => p.PermissionId.ToString()).ToList()" />

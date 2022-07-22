@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class SearchTextField : MTextField<string>
+public class SearchTextField : DefaultTextField<string>
 {
     [Inject]
     public I18n? I18n { get; set; }
@@ -14,9 +14,8 @@ public class SearchTextField : MTextField<string>
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         Flat = true;
-        Dense = true;
         Solo = true;
-        HideDetails = "auto";
+        Small = true;
         BackgroundColor = FillBackground ? "fill-background" : "";
         Style = "max-width:340px;";
         Placeholder = I18n!.T("Search");

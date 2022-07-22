@@ -17,7 +17,7 @@ public class SubjectService : RestServiceBase
         //user
         var userQuery = new UserSelectQuery(filter);
         await eventBus.PublishAsync(userQuery);
-        var users = userQuery.Result.Select(user => new SubjectModel(user.Id, user.Name, user.DisplayName, user.Avatar, user.PhoneNumber, user.Email, SubjectTypes.User));
+        var users = userQuery.Result.Select(user => new SubjectModel(user.UserId, user.Name, user.DisplayName, user.Avatar, user.PhoneNumber, user.Email, SubjectTypes.User));
         //department
         var departmentQuery = new DepartmentSelectQuery(filter);
         await eventBus.PublishAsync(departmentQuery);
