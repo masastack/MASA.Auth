@@ -18,8 +18,9 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                                            .ValidateCredentialsByAccountAsync(context.UserName, context.Password);
         if (success)
         {
+            var user = await _authClient.UserService.FindByAccountAsync(context.UserName);
             context.Result = new GrantValidationResult(
-                 subject: context.UserName,
+                 subject: user.Id.ToString(),
                  authenticationMethod: OidcConstants.AuthenticationMethods.Password,
                  claims: GetUserClaims(context.UserName));
 
