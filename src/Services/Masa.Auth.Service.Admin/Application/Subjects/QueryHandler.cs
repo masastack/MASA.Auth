@@ -407,10 +407,8 @@ public class QueryHandler
         }
         if (teamListQuery.UserId != Guid.Empty)
         {
-            var staffId = await _authDbContext.Set<Staff>()
-                                        .Where(staff => staff.UserId == teamListQuery.UserId)
-                                        .Select(staff => staff.Id)
-                                        .FirstOrDefaultAsync();
+            var staffId = (await _authDbContext.Set<Staff>()
+                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
             if (staffId != default)
                 condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
             else return;
