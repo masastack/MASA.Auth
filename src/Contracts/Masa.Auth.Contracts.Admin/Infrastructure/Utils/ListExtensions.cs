@@ -36,5 +36,15 @@ public static class ListExtensions
         duplicate = null;
         return false;
     }
+
+    public static List<TSource> MergeBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TSource> target, Func<TSource, TKey> keySelector)
+    {
+        var removes = source.ExceptBy(target.Select(keySelector), keySelector);
+        var adds = target.ExceptBy(source.Select(keySelector), keySelector);
+        var merge = new List<TSource>().Union(source).ToList();
+        merge.RemoveAll(data => removes.Contains(data));
+        merge.AddRange(adds);
+        return merge;
+    }
 }
 

@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("User roles and permissions settings")">
-    <AutoHeight Overflow>
+    <AutoHeight>
         <HeaderContent>
             <div class="height:55px;">
                 <RoleSelectForUser Class="mb-13" @bind-Value="Authorization.Roles" />

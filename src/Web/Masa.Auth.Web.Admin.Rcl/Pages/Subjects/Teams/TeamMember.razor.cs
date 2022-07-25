@@ -11,4 +11,12 @@ public partial class TeamMember
 
     [Parameter]
     public EventCallback<TeamPersonnelDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool Preview { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> PreviewChanged { get; set; }
+
+    private RoleSelectForTeam? RoleSelectRef { get; set; }
 }

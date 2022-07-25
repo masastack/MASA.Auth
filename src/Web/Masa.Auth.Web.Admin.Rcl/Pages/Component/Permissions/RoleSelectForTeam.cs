@@ -8,7 +8,7 @@ public partial class RoleSelectForTeam : RoleSelect
     [Parameter]
     public int TeamUserCount { get; set; }
 
-    public int Limit => Roles.Where(r => r.Limit != 0).Min(r => r.AvailableQuantity);
+    public int Limit => Roles.Where(r => Value.Contains(r.Id) && r.Limit != 0).Any() ? Roles.Where(r => Value.Contains(r.Id) && r.Limit != 0).Min(r => r.AvailableQuantity) : int.MaxValue;
 
     protected override async Task OnInitializedAsync()
     {

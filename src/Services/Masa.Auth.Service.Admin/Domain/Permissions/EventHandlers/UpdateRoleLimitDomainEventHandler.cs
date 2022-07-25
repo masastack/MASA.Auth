@@ -20,11 +20,12 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
         public async Task UpdateRoleLimitAsync(UpdateRoleLimitDomainEvent roleEvent)
         {
             var roles = await _authDbContext.Set<Role>()
+                                    .Where(r => r.Limit != 0 && roleEvent.Roles.Contains(r.Id))
                                     .Include(r => r.Users)
                                     .Include(r => r.Teams)
                                     .ThenInclude(teamUser => teamUser.Team)
                                     .ThenInclude(t => t.TeamStaffs)
-                                    .Where(r => r.Limit != 0 && roleEvent.Roles.Contains(r.Id))
+                                    .AsSplitQuery()
                                     .ToListAsync();
             foreach (var role in roles)
             {

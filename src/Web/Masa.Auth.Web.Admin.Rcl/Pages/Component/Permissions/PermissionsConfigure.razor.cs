@@ -30,6 +30,9 @@ public partial class PermissionsConfigure
     [Parameter]
     public EventCallback<bool> PreviewChanged { get; set; }
 
+    [Parameter]
+    public string TagIdPrefix { get; set; } = "";
+
     public List<Guid> RolePermissions { get; set; } = new();
 
     protected Dictionary<Guid,Guid> EmptyPermissionMap { get; set; } = new();
