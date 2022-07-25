@@ -118,7 +118,6 @@ public class QueryHandler
         query.Result = user;
     }
 
-
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {

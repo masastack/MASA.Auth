@@ -37,6 +37,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\..\MASA.Utils\src\Caching\Masa.Utils.Caching.DistributedMemory\Masa.Utils.Caching.DistributedMemory.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Certificates\7348307__lonsid.cn.pfx">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

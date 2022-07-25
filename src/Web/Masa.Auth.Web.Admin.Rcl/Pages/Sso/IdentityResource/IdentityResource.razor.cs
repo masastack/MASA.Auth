@@ -15,6 +15,7 @@ public partial class IdentityResource
         set
         {
             _search = value;
+            _page = 1;
             GetIdentityResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

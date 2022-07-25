@@ -43,7 +43,7 @@
                                 <img src="@context.Item.User.Avatar" />
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div>@context.Item.User.DisplayName</div>
+                                <div>@ReturnNotNullValue(context.Item.User.DisplayName,context.Item.User.Name,context.Item.User.Account)</div>
                             </div>
                         </div>
                         break;

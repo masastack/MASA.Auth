@@ -29,7 +29,7 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
         Avatar = "";
     }
 
-    public UserSelectDto(Guid userId, string name, string displayName, string account, string phoneNumber, string email, string avatar) : base(userId.ToString(), $"{name},{account},{phoneNumber},{email}", userId)
+    public UserSelectDto(Guid userId, string name, string displayName, string account, string phoneNumber, string email, string avatar) : base(userId.ToString(), $"{name},{account},{displayName},{phoneNumber},{email}", userId)
     {
         UserId = userId;
         Name = name;

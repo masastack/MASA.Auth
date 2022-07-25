@@ -71,6 +71,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\..\MASA.Utils\src\Caching\Masa.Utils.Caching.Core\Masa.Utils.Caching.Core.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\MASA.Utils\src\Caching\Masa.Utils.Caching.DistributedMemory\Masa.Utils.Caching.DistributedMemory.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	
