@@ -28,19 +28,19 @@ public class UserDomainEventHandler
     public async Task UpdateRoleLimitAsync(SetUserDomainEvent userEvent)
     {
         var influenceRoles = userEvent.Users.SelectMany(user => user.Roles.Select(role => role.RoleId)).ToList();
-        if(influenceRoles.Count == 0)
+        if (influenceRoles.Count == 0)
         {
             var userIds = userEvent.Users.Select(user => user.Id);
             var roles = await GetRolesFromUsersAsync(userIds);
             influenceRoles.AddRange(roles);
-        }       
+        }
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
     }
 
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserDomainEvent userEvent)
-    {        
-        var response = await _autoCompleteClient.DeleteAsync(userEvent.UserIds);     
+    {
+        var response = await _autoCompleteClient.DeleteAsync(userEvent.UserIds);
     }
 
     [EventHandler(2)]
@@ -87,6 +87,7 @@ public class UserDomainEventHandler
         var teamIdAndTypes = _authDbContext.Set<TeamStaff>()
                     .Where(t => t.Staff.UserId == queryUserPermissionDomainEvent.UserId && !t.IsDeleted)
                     .Select(t => new { t.TeamId, t.TeamMemberType });
+
         var teamPermissions = _authDbContext.Set<TeamPermission>()
             .Where(t => teamIdAndTypes.Any(a => a.TeamId == t.Team.Id
             && a.TeamMemberType == t.TeamMemberType) && t.Effect && !t.IsDeleted)

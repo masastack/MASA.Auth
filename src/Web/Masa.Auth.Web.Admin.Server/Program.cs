@@ -6,8 +6,10 @@ using Masa.Auth.Contracts.Admin.Subjects.Validator;
 using Masa.Auth.Web.Admin.Rcl;
 using Masa.Auth.Web.Admin.Rcl.Global;
 using Masa.Auth.Web.Admin.Rcl.Shared;
+using Masa.Auth.Web.Admin.Server;
 using Masa.Blazor;
 using Masa.Stack.Components;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +37,7 @@ builder.Services.AddTypeAdapter();
 builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.WebHost.UseStaticWebAssets();
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, DefaultAuthorizationMiddlewareResultHandler>();
 
 var app = builder.Build();
 
