@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class EnumSelect<TValue> : DefaultSelect<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
+public class BooleanSelect: DefaultSelect<KeyValuePair<string, bool?>, bool?, bool?>
 {
     [CascadingParameter]
     public I18n I18N { get; set; } = default!;
@@ -12,8 +12,12 @@ public class EnumSelect<TValue> : DefaultSelect<KeyValuePair<string, TValue>, TV
     {
         Clearable = true;
         await base.SetParametersAsync(parameters);
-        Items = Enum.GetValues<TValue>().Select(e => new KeyValuePair<string, TValue>(e.ToString(), e)).ToList();
-        ItemText = kv => I18N.T(kv.Key, true);
+        Items = new List<KeyValuePair<string, bool?>>()
+        {
+            new(I18N.T("Enable"), true),
+            new(I18N.T("Disabled"), false)
+        };
+        ItemText = kv => kv.Key;
         ItemValue = kv => kv.Value;
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpsertUserCommand(UpsertUserModel User) : Command
+public record DisableUserCommand(DisableUserModel User) : Command
 {
-    public UserModel NewUser { get; set; } = null!;
+    public bool Result { get; set; }
 }

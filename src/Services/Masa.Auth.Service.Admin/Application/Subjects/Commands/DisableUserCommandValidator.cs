@@ -3,7 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpsertUserCommand(UpsertUserModel User) : Command
+public class DisableUserCommandValidator : AbstractValidator<DisableUserCommand>
 {
-    public UserModel NewUser { get; set; } = null!;
+    public DisableUserCommandValidator()
+    {
+        RuleFor(command => command.User.Account).Required();
+    }
 }

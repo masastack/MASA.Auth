@@ -73,7 +73,7 @@ public class SyncStaffDomainEvenHandler
                 if (oldUser is null)
                 {
                     userRange.Add(new User(
-                        staff.Name, staff.DisplayName ?? "", DefaultUserAttributes.MaleAvatar, staff.IdCard ?? "",
+                        staff.Name, staff.DisplayName ?? "", DefaultUserAttributes.GetDefaultAvatar(staff.Gender), staff.IdCard ?? "",
                         staff.Account, staff.Password, "", "", staff.Position ?? "", true,
                         staff.PhoneNumber ?? "", "", staff.Email ?? "", staff.Gender)
                    );

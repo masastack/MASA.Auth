@@ -132,14 +132,25 @@ public class StaffService : RestServiceBase
         await eventBus.PublishAsync(deleteCommand);
     }
 
-    private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, HttpRequest request)
+    //private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, HttpRequest request)
+    //{
+    //    if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
+    //    var form = await request.ReadFormAsync();
+    //    if (form.Files.Count <= 0) throw new UserFriendlyException("File not found");
+    //    var file = form.Files.First();
+    //    ICsvImporter importer = new CsvImporter();
+    //    using var stream = file.OpenReadStream();
+    //    var import = await importer.Import<SyncStaffDto>(stream);
+    //    if (import.HasError) throw new UserFriendlyException("Read file data failed");
+    //    var syncCommand = new SyncStaffCommand(import.Data.ToList());
+    //    await eventBus.PublishAsync(syncCommand);
+    //    return syncCommand.Result;
+    //}
+
+    private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, UploadFileDto file)
     {
-        if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
-        var form = await request.ReadFormAsync();
-        if (form.Files.Count <= 0) throw new UserFriendlyException("File not found");
-        var file = form.Files.First();
         ICsvImporter importer = new CsvImporter();
-        using var stream = file.OpenReadStream();
+        using var stream = new MemoryStream(file.FileContent);
         var import = await importer.Import<SyncStaffDto>(stream);
         if (import.HasError) throw new UserFriendlyException("Read file data failed");
         var syncCommand = new SyncStaffCommand(import.Data.ToList());

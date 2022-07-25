@@ -36,8 +36,10 @@ builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
-builder.WebHost.UseStaticWebAssets();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, DefaultAuthorizationMiddlewareResultHandler>();
+
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+//builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
 

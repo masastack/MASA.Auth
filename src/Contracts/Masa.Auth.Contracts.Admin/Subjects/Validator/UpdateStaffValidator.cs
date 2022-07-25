@@ -8,7 +8,7 @@ public class UpdateStaffValidator : AbstractValidator<UpdateStaffDto>
     public UpdateStaffValidator()
     {
         RuleFor(staff => staff.JobNumber).Required();
-        RuleFor(user => user.DisplayName).ChineseLetter().MaxLength(20);
+        RuleFor(user => user.DisplayName).Required().ChineseLetterNumber().MaxLength(20);
         RuleFor(user => user.Name).ChineseLetter().MaxLength(20);
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();
