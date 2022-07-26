@@ -45,7 +45,7 @@ public class CommandHandler
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
-        await _roleRepository.UnitOfWork.SaveChangesAsync();
+        //await _roleRepository.UnitOfWork.SaveChangesAsync();
         // update and check role limit
         var influenceRoles = new List<Guid> { role.Id };
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);

@@ -80,14 +80,16 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public void BindChildrenRoles(List<Guid> childrenRoles)
     {
-        _childrenRoles.Clear();
-        _childrenRoles.AddRange(childrenRoles.Select(roleId => new RoleRelation(roleId, default)));
+        _childrenRoles = _childrenRoles.MergeBy(
+            childrenRoles.Select(roleId => new RoleRelation(roleId, default)),
+            item => item.RoleId);
     }
 
     public void BindPermissions(List<Guid> permissions)
     {
-        _permissions.Clear();
-        _permissions.AddRange(permissions.Select(roleId => new RolePermission(roleId)));
+        _permissions = _permissions.MergeBy(
+            permissions.Select(prmission => new RolePermission(prmission)),
+            item => item.PermissionId);
     }
 
     public void Update(string name, string description, bool enabled, int limit)

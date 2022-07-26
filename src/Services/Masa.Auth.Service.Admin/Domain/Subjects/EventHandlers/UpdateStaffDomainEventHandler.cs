@@ -7,15 +7,22 @@ public class UpdateStaffDomainEventHandler
 {
     readonly IStaffRepository _staffRepository;
     readonly ITeamRepository _teamRepository;
+    readonly AuthDbContext _authDbContext;
+    readonly RoleDomainService _roleDomainService;
     readonly IEventBus _eventBus;
 
-    public UpdateStaffDomainEventHandler(IStaffRepository staffRepository,
-                                         IEventBus eventBus,
-                                         ITeamRepository teamRepository)
+    public UpdateStaffDomainEventHandler(
+        IStaffRepository staffRepository, 
+        ITeamRepository teamRepository, 
+        AuthDbContext authDbContext, 
+        RoleDomainService roleDomainService, 
+        IEventBus eventBus)
     {
         _staffRepository = staffRepository;
-        _eventBus = eventBus;
         _teamRepository = teamRepository;
+        _authDbContext = authDbContext;
+        _roleDomainService = roleDomainService;
+        _eventBus = eventBus;
     }
 
     //[EventHandler(1)]
@@ -71,7 +78,14 @@ public class UpdateStaffDomainEventHandler
             staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName,
             staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Gender);
         staff.SetDepartmentStaff(staffDto.DepartmentId);
+        var teams = staff.TeamStaffs.Select(team => team.TeamId).Union(staffDto.Teams).Distinct().ToList();
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);
+
+        var roleIds = await _authDbContext.Set<TeamRole>()
+                                    .Where(team => teams.Contains(team.TeamId))
+                                    .Select(team => team.RoleId)
+                                    .ToListAsync();
+        await _roleDomainService.UpdateRoleLimitAsync(roleIds);
     }
 }

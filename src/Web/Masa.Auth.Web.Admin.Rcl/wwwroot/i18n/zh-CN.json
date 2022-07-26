@@ -242,6 +242,7 @@
     "Gender": "性别",
     "Male/Female": "男/女",
     "Delete Staff": "删除员工",
+    "Update Staff Success": "编辑员工成功",
     "InternalStaff/ExternalStaff": "内部员工/驻场员工",
     "Failed to query staffList data:": "获取员工列表数据失败:",
     "Failed to query staffDetail data:": "获取员工详情数据失败",
