@@ -1,8 +1,8 @@
 ﻿@inherits AdminCompontentBase
 
 <MCardText Class="py-0">
-    <StaffSelect @bind-Value="Value.Staffs" Limit="RoleSelectRef?.Limit??0" Class="mb-6" Label="@T("Team Member")"/>    
-    <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count @ref="RoleSelectRef" Class="mb-6" Label="@T("Role")"/> 
+    <StaffSelect @bind-Value="Value.Staffs" RoleLimit=RoleLimit Class="mb-6" Label="@T("Team Member")"/>
+    <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count RoleLimitChanged="value => RoleLimit=value" Class="mb-6" Label="@T("Role")"/>
     <div class="global-nav" style="height:auto">
         <PermissionsConfigure 
             RoleIds=Value.Roles 
@@ -12,6 +12,5 @@
             PreviewChanged=PreviewChanged
             TagIdPrefix="Admin"
             Style="max-height:calc(100vh - 440px);" />
-        @*<PermissionsCheck RoleIds="Value.Roles" @bind-Value="Value.Permissions" Style="height: calc(100vh - 440px);"/>*@
     </div>
 </MCardText>

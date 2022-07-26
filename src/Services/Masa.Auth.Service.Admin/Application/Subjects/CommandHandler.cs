@@ -10,6 +10,7 @@ public class CommandHandler
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly AuthDbContext _authDbContext;
     readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
     readonly IUserContext _userContext;
@@ -20,6 +21,7 @@ public class CommandHandler
         IUserRepository userRepository,
         IStaffRepository staffRepository,
         IThirdPartyIdpRepository thirdPartyIdpRepository,
+        AuthDbContext authDbContext,
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
         IDistributedCacheClient cache,
@@ -29,6 +31,7 @@ public class CommandHandler
         _userRepository = userRepository;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
+        _authDbContext = authDbContext;
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
         _cache = cache;
@@ -67,13 +70,14 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await CheckUserExistAsync(command.User.Id);
+        var user = await _userRepository.GetDetailAsync(command.User.Id);
+        if (user is null)
+            throw new UserFriendlyException("The current user does not exist");
 
         if (user.Account == "admin")
         {
             throw new UserFriendlyException("超级管理员 无法删除");
         }
-
         if (user.Id == _userContext.GetUserId<Guid>())
         {
             throw new UserFriendlyException("当前用户不能删除自己");
@@ -281,7 +285,10 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staff = await _staffRepository.FindAsync(command.Staff.Id);
+        var staff = await _authDbContext.Set<Staff>()
+                                            .Include(s => s.DepartmentStaffs)
+                                            .Include(s => s.TeamStaffs)
+                                            .FirstOrDefaultAsync(s => s.Id == command.Staff.Id);
         if (staff == null)
         {
             throw new UserFriendlyException("the current staff not found");

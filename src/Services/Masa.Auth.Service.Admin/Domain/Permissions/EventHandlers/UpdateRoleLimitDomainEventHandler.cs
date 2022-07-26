@@ -41,12 +41,12 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
 
             int GetAvailableQuantity(Role role)
             {
-                var availableQuantity = role.Limit - role.Users.Count;
+                var availableQuantity = role.Limit - role.Users.Where(user => user.IsDeleted == false).Count();
                 if (role.Teams.Count > 0)
                 {
                     foreach (var teamRole in role.Teams)
                     {
-                        availableQuantity -= teamRole.Team.TeamStaffs.Where(ts => ts.TeamMemberType == teamRole.TeamMemberType).Count();
+                        availableQuantity -= teamRole.Team.TeamStaffs.Where(ts => ts.IsDeleted == false && ts.TeamMemberType == teamRole.TeamMemberType).Count();
                     }
                 }
 

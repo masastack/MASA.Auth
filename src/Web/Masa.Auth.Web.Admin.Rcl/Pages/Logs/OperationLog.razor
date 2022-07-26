@@ -9,11 +9,11 @@
         <HeaderContent>
             <div class="d-flex">
                 <DateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />                
-                <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" FillBackground=false Class="ml-6" Style="width: 100px !important;" />
+                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />
                 <MSpacer />
-                <UserAutoComplete @bind-Value="UserId" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
-                <SearchTextField @bind-Value="Search" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
+                <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" FillBackground=false Class="ml-6" Style="width: 100px !important;" />               
+                <UserAutoComplete @bind-Value="UserId" Lable="@T("Operator")" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
+                <SearchTextField @bind-Value="Search" Placeholder="@T("Please enter operation description")" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
             </div>        
         </HeaderContent>
         <AutoHeightContent>

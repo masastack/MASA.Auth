@@ -157,7 +157,8 @@
     "Setup team admins": "设置团队管理员",
     "Setup team members": "设置团队成员",
     "Team Admin": "团队管理员",
-    "Team Member": "团队成员"
+    "Team Member": "团队成员",
+    "Due to the role {0} limit constraint, a maximum of {1} members can be selected": "由于角色{0}约束限制,当前最多只能选择{1}人"
   },
 
   "PermissionBlock": {
@@ -388,6 +389,7 @@
     "OperationType": "操作类型",
     "OperationDescription": "操作描述",
     "Please select type": "请选择操作类型",
+    "Please enter operation description": "请输入操作描述",
     "AddUser": "新增用户",
     "UpdateUser": "修改用户",
     "UpdateUserAuthorization": "编辑用户权限",
@@ -435,7 +437,11 @@
     "SignOut": "退出登录",
     "AddThirdPartyIdp": "新增第三方平台",
     "UpdateThirdPartyIdp": "编辑第三方平台",
-    "RemoveThirdPartyIdp": "删除第三方平台"
+    "RemoveThirdPartyIdp": "删除第三方平台",
+    "AddPosition": "添加职位",
+    "UpdatePosition": "编辑职位",
+    "RemovePosition": "删除职位",
+    "UpsertAppTag": "编辑应用标签"
   },
 
   "ValidationBlock": {

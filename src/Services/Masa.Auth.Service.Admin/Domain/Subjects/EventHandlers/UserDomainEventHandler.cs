@@ -39,16 +39,16 @@ public class UserDomainEventHandler
     }
 
     [EventHandler(1)]
-    public async Task RemoveUserAsync(RemoveUserDomainEvent userEvent)
-    {        
-        var response = await _autoCompleteClient.DeleteAsync(userEvent.UserIds);     
-    }
-
-    [EventHandler(2)]
     public async Task UpdateRoleLimitAsync(RemoveUserDomainEvent userEvent)
     {
         var roles = await GetRolesFromUsersAsync(userEvent.UserIds);
         await _roleDomainService.UpdateRoleLimitAsync(roles);
+    }
+
+    [EventHandler(99)]
+    public async Task RemoveAutoCompleteUserAsync(RemoveUserDomainEvent userEvent)
+    {
+        await _autoCompleteClient.DeleteAsync(userEvent.UserIds);
     }
 
     async Task<List<Guid>> GetRolesFromUsersAsync(IEnumerable<Guid> userIds)

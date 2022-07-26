@@ -7,14 +7,22 @@ public class CommandHandler
 {
     readonly IRoleRepository _roleRepository;
     readonly IPermissionRepository _permissionRepository;
+    readonly AuthDbContext _authDbContext;
     readonly RoleDomainService _roleDomainService;
 
-    public CommandHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository, RoleDomainService roleDomainService)
+    public CommandHandler(
+        IRoleRepository roleRepository, 
+        IPermissionRepository permissionRepository, 
+        AuthDbContext authDbContext, 
+        RoleDomainService roleDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
+        _authDbContext = authDbContext;
         _roleDomainService = roleDomainService;
     }
+
+
 
     #region Role
 
@@ -54,7 +62,14 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveRoleAsync(RemoveRoleCommand command)
     {
-        var role = await _roleRepository.FindAsync(u => u.Id == command.Role.Id);
+        var role = await _authDbContext.Set<Role>()
+                                    .Where(r => r.Id == command.Role.Id)
+                                    .Include(r => r.ChildrenRoles)
+                                    .Include(r => r.Permissions)
+                                    .Include(r => r.Users)
+                                    .Include(r => r.Teams)
+                                    .AsSplitQuery()
+                                    .FirstOrDefaultAsync();
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 
