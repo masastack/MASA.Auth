@@ -5,7 +5,7 @@
     <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count RoleLimitChanged="value => RoleLimit=value" Class="mb-6" Label="@T("Role")"/>
     <div class="global-nav" style="height:auto">
         <PermissionsConfigure 
-            RoleIds=Value.Roles 
+            Roles=Value.Roles 
             Value="Value.Permissions.Select(permission => permission.Key).ToList()"
             ValueChanged="value => Value.Permissions=value.ToDictionary(item => item,ItemColProps => true)"
             Preview=Preview

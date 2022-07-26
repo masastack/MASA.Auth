@@ -14,9 +14,9 @@ public partial class PermissionsConfigure
     public string Class { get; set; } = "";
 
     [Parameter]
-    public List<Guid> RoleIds { get; set; } = new();
+    public List<Guid> Roles { get; set; } = new();
 
-    private List<Guid> InternalRoleIds { get; set; } = new();
+    private List<Guid> InternalRoles { get; set; } = new();
 
     [Parameter]
     public List<Guid> Value { get; set; } = new();
@@ -61,9 +61,9 @@ public partial class PermissionsConfigure
 
     protected override async Task OnParametersSetAsync()
     {
-        if (RoleIds.Count != InternalRoleIds.Count || RoleIds.Except(InternalRoleIds).Count() > 0)
+        if (Roles.Count != InternalRoles.Count || Roles.Except(InternalRoles).Count() > 0)
         {
-            InternalRoleIds = RoleIds;
+            InternalRoles = Roles;
             await GetRolePermissions();
         }
     }
@@ -84,7 +84,7 @@ public partial class PermissionsConfigure
         }).ToList();
     }
 
-    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(RoleIds);
+    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(UserRoles);
 
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {

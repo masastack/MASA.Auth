@@ -18,12 +18,12 @@ public partial class RoleSelectForTeam : RoleSelect
                 _value = value;
                 if (RoleLimitChanged.HasDelegate)
                 {
-                    var minLimitRole = Roles.Where(role => _value.Contains(role.Id) && role.Limit != 0).OrderBy(role => role.Limit).FirstOrDefault();
+                    var minLimitRole = Roles.Where(role => _value.Contains(role.Id) && role.Limit != 0).OrderBy(role => role.AvailableQuantity).FirstOrDefault();
                     if (minLimitRole != null)
                     {
-                        RoleLimitChanged.InvokeAsync((minLimitRole.Name, minLimitRole.Limit));
+                        RoleLimitChanged.InvokeAsync(new (minLimitRole.Name, minLimitRole.AvailableQuantity));
                     }
-                    else RoleLimitChanged.InvokeAsync(("", int.MaxValue));
+                    else RoleLimitChanged.InvokeAsync(new ("", int.MaxValue));
                 }
             }
         }
@@ -32,10 +32,8 @@ public partial class RoleSelectForTeam : RoleSelect
     [Parameter]
     public int TeamUserCount { get; set; }
 
-    //public int Limit => Roles.Where(r => Value.Contains(r.Id) && r.Limit != 0).Any() ? Roles.Where(r => Value.Contains(r.Id) && r.Limit != 0).Min(r => r.AvailableQuantity) : int.MaxValue;
-
     [Parameter]
-    public EventCallback<(string Role, int Limit)> RoleLimitChanged { get; set; }
+    public EventCallback<RoleLimitModel> RoleLimitChanged { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

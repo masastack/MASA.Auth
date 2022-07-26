@@ -4,6 +4,7 @@
     <AutoHeight>
         <HeaderContent>
             <div class="height:55px;">
+                <TeamRoleSelect RolesChanged="roles => TeamRoles = roles" Class="mb-4" />
                 <RoleSelectForUser Class="mb-13" @bind-Value="Authorization.Roles" />
             </div>
         </HeaderContent>
@@ -14,7 +15,7 @@
                                 @bind-ExtensionValue=Authorization.Permissions 
                                 @bind-Preview=Preview
                                 Style="max-height:calc(100vh - 350px);" />*@
-                <PermissionsConfigure RoleIds=Authorization.Roles
+                <PermissionsConfigure Roles=Authorization.Roles.Union(TeamRoles).Distinct().ToList()
                                               Value="Authorization.Permissions.Select(p => p.PermissionId).ToList()"
                                               ValueChanged="value => Authorization.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
                                               @bind-Preview=Preview

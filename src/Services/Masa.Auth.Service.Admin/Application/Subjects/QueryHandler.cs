@@ -496,6 +496,21 @@ public class QueryHandler
                 .ToList();
     }
 
+    [EventHandler]
+    public async Task GetTeamRoleSelectAsync(TeamRoleSelectQuery teamRoleSelectQuery)
+    {
+        Expression<Func<Team, bool>> condition = _ => true;
+        if (!string.IsNullOrEmpty(teamRoleSelectQuery.Name))
+        {
+            condition = condition.And(s => s.Name.Contains(teamRoleSelectQuery.Name));
+        }
+        var teams = await _authDbContext.Set<Team>()
+                                        .Include(team => team.TeamRoles)
+                                        .ThenInclude(tr => tr.Role)
+                                        .ToListAsync();
+        teamRoleSelectQuery.Result = teams.Select(team => team.Adapt<TeamRoleSelectDto>()).ToList();
+    }
+
     #endregion
 
     [EventHandler]

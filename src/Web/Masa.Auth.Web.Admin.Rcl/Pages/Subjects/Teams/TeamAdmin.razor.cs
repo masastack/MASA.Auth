@@ -17,7 +17,5 @@ public partial class TeamAdmin
     [Parameter]
     public EventCallback<bool> PreviewChanged { get; set; }
 
-    public (string Role, int Limit) RoleLimit { get; set; } = ("", int.MaxValue);
-
-    private RoleSelectForTeam? RoleSelectRef { get; set; }
+    public RoleLimitModel RoleLimit { get; set; } = new ("", int.MaxValue);
 }

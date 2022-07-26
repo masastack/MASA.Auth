@@ -22,7 +22,7 @@ global using System.ComponentModel;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Numerics;
 global using System.Reflection;
+global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
-global using System.Text;
-
+global using Masa.Auth.Contracts.Admin.Permissions;

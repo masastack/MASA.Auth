@@ -44,3 +44,4 @@ global using System.Net.Http.Headers;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model;
 global using System.Security.Claims;
 global using System.Text;
+global using Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions.Model;

@@ -21,7 +21,7 @@ public partial class StaffSelect
     public string Class { get; set; } = "";
 
     [Parameter]
-    public (string Role, int Limit) RoleLimit { get; set; } = ("", int.MaxValue);
+    public RoleLimitModel RoleLimit { get; set; } = new ("", int.MaxValue);
 
     protected List<StaffSelectDto> Staffs { get; set; } = new();
 
@@ -49,7 +49,7 @@ public partial class StaffSelect
         if (value.Count > RoleLimit.Limit)
         {
             value.Remove(value.Last());
-            OpenErrorMessage(string.Format(T("Due to the role {0} limit constraint, a maximum of {1} members can be selected"), RoleLimit.Role, RoleLimit.Limit));
+            OpenErrorMessage(string.Format(T("Due to the role [{0}] limit constraint, a maximum of {1} members can be selected"), RoleLimit.Role, RoleLimit.Limit));
         }
         else
         {

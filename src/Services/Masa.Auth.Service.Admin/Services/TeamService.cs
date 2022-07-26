@@ -11,6 +11,7 @@ public class TeamService : ServiceBase
         MapGet(GetDetailForExternalAsync, "detail");
         MapGet(ListAsync);
         MapGet(SelectAsync);
+        MapGet(GetTeamRoleSelectAsync);        
         MapPost(CreateAsync);
         MapPost(UpdateBasicInfoAsync);
         MapPost(UpdateAdminPersonnelAsync);
@@ -62,6 +63,13 @@ public class TeamService : ServiceBase
     private async Task<List<TeamSelectDto>> SelectAsync(IEventBus eventBus, [FromQuery] string name)
     {
         var query = new TeamSelectListQuery(name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<TeamRoleSelectDto>> GetTeamRoleSelectAsync(IEventBus eventBus, [FromQuery] string name)
+    {
+        var query = new TeamRoleSelectQuery(name);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
