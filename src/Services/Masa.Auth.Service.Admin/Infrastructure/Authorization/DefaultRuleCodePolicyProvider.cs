@@ -19,10 +19,11 @@ public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
 
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
+        //provider DefaultRuleCode policy or AddAuthorization set default policy
         if (policyName == "DefaultRuleCode")
         {
             var policy = new AuthorizationPolicyBuilder();
-            policy.AddRequirements(new DefaultRuleCodeRequirement("appId"));
+            policy.AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID));
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
         return FallbackPolicyProvider.GetPolicyAsync(policyName);

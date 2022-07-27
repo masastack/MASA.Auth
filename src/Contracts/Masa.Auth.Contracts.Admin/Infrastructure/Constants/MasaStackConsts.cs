@@ -7,6 +7,7 @@ public class MasaStackConsts
 {
     public const string AUTH_SYSTEM_ID = "masa-auth";
     public const string AUTH_SYSTEM_WEB_APP_ID = "masa-auth-web-admin";
+    public const string AUTH_SYSTEM_SERVICE_APP_ID = "masa-auth-service-admin";
     public const string PM_SYSTEM_ID = "masa-pm";
     public const string PM_SYSTEM_WEB_APP_ID = "masa-pm-web-admin";
     public const string DCC_SYSTEM_ID = "masa-dcc";

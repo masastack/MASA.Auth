@@ -2,7 +2,6 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Masa.Auth.Service.Admin.Infrastructure.Authorization;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,12 +43,11 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 builder.Services.AddSingleton<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
-builder.Services.AddSingleton<IAuthorizationHandler, DefaultRuleCodeHandler>();
 builder.Services.AddAuthorization(options =>
 {
     var unexpiredPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
-        .AddRequirements(new DefaultRuleCodeRequirement("AppId"))
+        .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
         .Build();
     options.DefaultPolicy = unexpiredPolicy;
     //options.AddPolicy("DefaultRuleCode", policy =>

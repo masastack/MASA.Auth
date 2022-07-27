@@ -20,7 +20,6 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
         var allowAnonymousAttribute = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
         if (allowAnonymousAttribute == null)
         {
-            var claims = context.User.Claims;
             var masaAuthorizeAttribute = endpoint?.Metadata.GetMetadata<MasaAuthorizeAttribute>();
             if (masaAuthorizeAttribute != null)
             {
@@ -30,32 +29,32 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return;
                 }
-
-                var code = masaAuthorizeAttribute.Code;
-                if (string.IsNullOrWhiteSpace(code))
+            }
+            var code = masaAuthorizeAttribute?.Code;
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                //dafault code rule
+                code = Regex.Replace(context.Request.Path, @"\\", ".");
+                code = Regex.Replace(code, "/", ".").Trim('.');
+                var requirement = policy.Requirements.Where(r => r is DefaultRuleCodeRequirement)
+                    .Select(r => r as DefaultRuleCodeRequirement).FirstOrDefault();
+                if (requirement != null)
                 {
-                    //dafault code rule
-                    code = Regex.Replace(context.Request.Path, @"\\", ".");
-                    code = Regex.Replace(code, "/", ".").Trim('.');
-                    var requirement = policy.Requirements.Where(r => r is DefaultRuleCodeRequirement)
-                        .Select(r => r as DefaultRuleCodeRequirement).FirstOrDefault();
-                    if (requirement != null)
-                    {
-                        code = $"{requirement.AppId}.{code}";
-                    }
+                    code = $"{requirement.AppId}.{code}";
                 }
-                if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeList(), code))
-                {
-                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                    return;
-                }
+            }
+            if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeList(), code))
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return;
             }
         }
         await defaultHandler.HandleAsync(next, context, policy, authorizeResult);
 
         bool WildCardContainsCode(IEnumerable<string> data, string code)
         {
-            return data.Any(item => Regex.IsMatch(code, Regex.Escape(item).Replace(@"\*", ".*").Replace(@"\?", ".")));
+            return data.Any(item => Regex.IsMatch(code.ToLower(),
+                Regex.Escape(item.ToLower()).Replace(@"\*", ".*").Replace(@"\?", ".")));
         }
     }
 }
