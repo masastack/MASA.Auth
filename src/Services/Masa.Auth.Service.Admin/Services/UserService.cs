@@ -23,7 +23,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapPut(DisableAsync, "disable");
         }
 
-        [Authorize]
+        //[Authorize]
         [MasaAuthorize]
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
         {
