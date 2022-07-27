@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Service.Admin.Infrastructure.Attributes;
-using Microsoft.AspNetCore.Authorization;
-
 namespace Masa.Auth.Service.Admin.Services
 {
     public class UserService : RestServiceBase
@@ -27,7 +24,7 @@ namespace Masa.Auth.Service.Admin.Services
         }
 
         [Authorize(Policy = "DefaultRuleCode")]
-        [MasaAuthorize("code")]
+        [MasaAuthorize]
         private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
         {
             var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled, user.StartTime, user.EndTime);

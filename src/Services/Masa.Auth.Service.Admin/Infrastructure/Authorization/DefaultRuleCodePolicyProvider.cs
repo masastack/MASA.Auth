@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Authorization;
-
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
 public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
@@ -24,7 +22,7 @@ public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
         if (policyName == "DefaultRuleCode")
         {
             var policy = new AuthorizationPolicyBuilder();
-            policy.AddRequirements(new DefaultRuleCodeRequirement());
+            policy.AddRequirements(new DefaultRuleCodeRequirement("appId"));
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
         return FallbackPolicyProvider.GetPolicyAsync(policyName);

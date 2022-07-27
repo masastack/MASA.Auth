@@ -3,7 +3,6 @@
 
 using Masa.Auth.Service.Admin.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +41,7 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
     options.UserId = "sub";
 });
 
+builder.Services.AddSingleton<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
 builder.Services.AddSingleton<IAuthorizationHandler, DefaultRuleCodeHandler>();
@@ -49,7 +49,7 @@ builder.Services.AddAuthorization(options =>
 {
     var unexpiredPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
-        .AddRequirements(new DefaultRuleCodeRequirement())
+        .AddRequirements(new DefaultRuleCodeRequirement("AppId"))
         .Build();
     options.DefaultPolicy = unexpiredPolicy;
     //options.AddPolicy("DefaultRuleCode", policy =>
@@ -171,18 +171,6 @@ app.UseMasaExceptionHandler(opt =>
     };
 });
 
-app.Use((context, next) =>
-{
-    var endpoint = context.GetEndpoint();
-    var endpoint1 = context.Features.Get<IEndpointFeature>()?.Endpoint;
-    if (endpoint != null)
-    {
-        var metadata = endpoint.Metadata;
-    }
-
-    return next();
-});
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsProduction())
 {
@@ -210,10 +198,5 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions
 {
     Predicate = r => r.Name.Contains("self")
 });
-
-app.MapGet("/weatherforecast", [Authorize] () =>
-{
-    return "";
-}).RequireAuthorization();
 
 app.Run();

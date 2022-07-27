@@ -3,12 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
-public class DefaultRuleCodeRequirement : IAuthorizationRequirement
+public interface IMasaAuthorizeDataProvider
 {
-    public string AppId { get; }
+    string GetAccount();
 
-    public DefaultRuleCodeRequirement(string appId)
-    {
-        AppId = appId;
-    }
+    List<string> GetAllowCodeList();
 }
