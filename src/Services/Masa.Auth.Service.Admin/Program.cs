@@ -50,8 +50,6 @@ builder.Services.AddAuthorization(options =>
         .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
         .Build();
     options.DefaultPolicy = unexpiredPolicy;
-    //options.AddPolicy("DefaultRuleCode", policy =>
-    //    policy.Requirements.Add(new DefaultRuleCodeRequirement()));
 });
 builder.Services.AddAuthentication(options =>
 {
