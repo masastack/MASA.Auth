@@ -3,15 +3,15 @@
 <SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Create Client")" ContentClass="px-sheet-dialog full-height">
     <MCard Style="height: calc(100vh - 140px);">
         <MCardText Class="full-height">
-            <ElevationTab Dense Class="pt-8 full-height" Tabs='new List<string>{ T("Basic Information"),T("Resource Information")}' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
-                <ElevationTabItem>
+            <SElevationTab Dense Class="pt-8 full-height" Tabs='new List<string>{ T("Basic Information"),T("Resource Information")}' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
+                <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType" />
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.AddBasics @bind-Dto="_addBasicDto" />
-                </ElevationTabItem>
-                <ElevationTabItem>
+                </SElevationTabItem>
+                <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScopes @bind-Dto="_clientScopesDto" />
-                </ElevationTabItem>
-            </ElevationTab>
+                </SElevationTabItem>
+            </SElevationTab>
         </MCardText>
         <MCardActions Class="d-flex justify-end">
             <MButton class="rounded-pill primary" MinWidth="100" OnClick="SaveAsync">@T("Submit")</MButton>

@@ -1,8 +1,8 @@
 ﻿@inherits AdminCompontentBase
 
 <SheetDialog Value=Visible ValueChanged=DialogValueChanged Title="@T("Update Team")" ContentClass="px-sheet-dialog">
-    <ElevationTab Dense Class="pt-12 full-height" Tabs='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' ItemsClass="mt-8 full-height">
-        <ElevationTabItem>
+    <SElevationTab Dense Class="pt-12 full-height" Tabs='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' ItemsClass="mt-8 full-height">
+        <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
                 <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
                 <MCardActions class="d-flex align-center mb-10 px-6">
@@ -13,8 +13,8 @@
                     <SButton Medium OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</SButton>
                 </MCardActions>
             </MCard>
-        </ElevationTabItem>
-        <ElevationTabItem>
+        </SElevationTabItem>
+        <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
                 @if (Visible)
                 {
@@ -29,8 +29,8 @@
                     <SButton Medium MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</SButton>
                 </MCardActions>
             </MCard>
-        </ElevationTabItem>
-        <ElevationTabItem>
+        </SElevationTabItem>
+        <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
                 @if (Visible)
                 {
@@ -45,8 +45,8 @@
                     <SButton Medium OnClick="OnUpdateMemberHandler">@T("Save")</SButton>
                 </MCardActions>
             </MCard>
-        </ElevationTabItem>
-    </ElevationTab>
+        </SElevationTabItem>
+    </SElevationTab>
 </SheetDialog>
 
 @*<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />

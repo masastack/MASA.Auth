@@ -11,7 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-rc.3" />
     <PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.5.0-rc.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.0" />
   </ItemGroup>

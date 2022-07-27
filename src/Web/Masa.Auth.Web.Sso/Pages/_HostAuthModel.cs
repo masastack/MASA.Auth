@@ -7,15 +7,12 @@ public class _HostAuthModel : PageModel
 {
     readonly SsoAuthenticationStateCache _ssoAuthenticationStateCache;
     readonly IIdentityServerInteractionService _identityServerInteractionService;
-    readonly IDeviceFlowInteractionService _deviceFlowInteractionService;
 
     public _HostAuthModel(SsoAuthenticationStateCache ssoAuthenticationStateCache,
-        IIdentityServerInteractionService identityServerInteractionService,
-        IDeviceFlowInteractionService deviceFlowInteractionService)
+        IIdentityServerInteractionService identityServerInteractionService)
     {
         _ssoAuthenticationStateCache = ssoAuthenticationStateCache;
         _identityServerInteractionService = identityServerInteractionService;
-        _deviceFlowInteractionService = deviceFlowInteractionService;
     }
 
     public async Task<IActionResult> OnGet()

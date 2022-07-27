@@ -3,7 +3,7 @@
 <div class="d-flex full-height" style="width:512px;">
     <div class="login ma-auto ml-5">
         <SlideXTransition LeaveAbsolute>
-            <TabSheets 
+            <STabSheets 
                 Value="@T(Tab)"
                 Tabs="@(new List<string>{T(CustomLoginTab.Login),T(CustomLoginTab.Register)})"
                 Class="overflow-y"
@@ -23,7 +23,7 @@
                     </div>
                 }
                 <MTabItem Value="T(CustomLoginTab.Login)">
-                    <MForm Model=Login EnableI18n EnableValidation>
+                    <MForm Model=Login EnableValidation EnableI18n>
                         <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 mt-1" Height="58" Label="@T(nameof(Login.Account))" />
                         <SPassword @bind-Value="Login.Password" Class="mb-1" />
                         <div class="d-flex mb-13">
@@ -54,7 +54,7 @@
                     }
                 </MTabItem>
                 <MTabItem Value="T(CustomLoginTab.Register)">
-                    <MForm Model=Register EnableI18n EnableValidation>
+                    <MForm Model=Register EnableValidation EnableI18n>
                         <div>
                             @foreach (var registerField in RegisterFields)
                             {
@@ -95,7 +95,7 @@
                         </div>
                     </MForm>
                 </MTabItem>
-            </TabSheets>
+            </STabSheets>
         </SlideXTransition>
     </div>
 </div>
