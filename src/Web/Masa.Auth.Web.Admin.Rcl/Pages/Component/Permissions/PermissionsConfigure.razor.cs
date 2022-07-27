@@ -84,7 +84,7 @@ public partial class PermissionsConfigure
         }).ToList();
     }
 
-    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(UserRoles);
+    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(Roles);
 
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {

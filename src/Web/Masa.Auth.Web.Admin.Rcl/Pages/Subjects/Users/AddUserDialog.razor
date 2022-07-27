@@ -79,7 +79,7 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
-                                <PermissionsConfigure RoleIds=User.Roles
+                                <PermissionsConfigure Roles=User.Roles
                                                       Value="User.Permissions.Select(p => p.PermissionId).ToList()"
                                                       ValueChanged="value => User.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
                                                       @bind-Preview=Preview

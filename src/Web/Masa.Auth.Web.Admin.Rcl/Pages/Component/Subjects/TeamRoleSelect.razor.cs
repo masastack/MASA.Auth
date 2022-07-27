@@ -12,6 +12,9 @@ public partial class TeamRoleSelect
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     [Parameter]
+    public List<Guid> Excludes { get; set; } = new();
+
+    [Parameter]
     public EventCallback<List<Guid>> RolesChanged { get; set; }
 
     [Parameter]
@@ -26,23 +29,26 @@ public partial class TeamRoleSelect
         Teams = await TeamService.GetTeamRoleSelectAsync();
     }
 
-    public async Task UpdateValueAsync(List<Guid> teams)
+    public async Task UpdateValueAsync(List<Guid> value)
     {
-        var roles = Teams.Where(team => teams.Contains(team.Id))
-                                 .SelectMany(team => team.Roles)
-                                 .ToList();
-        var minLimitRole = roles.OrderBy(role => role.AvailableQuantity)
+        var newTeams = value.Except(Excludes).ToList();
+        var minLimitRole = Teams.Where(team => newTeams.Contains(team.Id))
+                                .SelectMany(team => team.Roles)
+                                .OrderBy(role => role.AvailableQuantity)
                                 .FirstOrDefault();
         if (minLimitRole is not null && minLimitRole.AvailableQuantity <= 0)
         {
             var team = Teams.First(team => team.Roles.Contains(minLimitRole));
             OpenErrorMessage(string.Format(T("Due to the role [{0}] limit constraint, Team [{1}] cannot add members"), minLimitRole.Name, team.Name));
-            teams.Remove(team.Id);
+            value.Remove(team.Id);
         }
-        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(teams);
-        else Value = Value;
+        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value);
+        else Value = value;
         if(RolesChanged.HasDelegate)
         {
+            var roles = Teams.Where(team => value.Contains(team.Id))
+                             .SelectMany(team => team.Roles)
+                             .Distinct();
             await RolesChanged.InvokeAsync(roles.Select(role => role.Id).ToList());
         }
     }

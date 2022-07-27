@@ -13,6 +13,7 @@ public class CommandHandler
     readonly AuthDbContext _authDbContext;
     readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
+    readonly RoleDomainService _roleDomainService;
     readonly IUserContext _userContext;
     readonly IDistributedCacheClient _cache;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
@@ -24,6 +25,7 @@ public class CommandHandler
         AuthDbContext authDbContext,
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
+        RoleDomainService roleDomainService,
         IDistributedCacheClient cache,
         IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
@@ -34,6 +36,7 @@ public class CommandHandler
         _authDbContext = authDbContext;
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
+        _roleDomainService = roleDomainService;
         _cache = cache;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
@@ -53,6 +56,7 @@ public class CommandHandler
         await _userRepository.AddAsync(user);
         command.NewUser = user;
         await _userDomainService.SetAsync(user);
+        await _roleDomainService.UpdateRoleLimitAsync(userDto.Roles);
     }
 
     [EventHandler(1)]
@@ -84,6 +88,7 @@ public class CommandHandler
         }
 
         await _userRepository.RemoveAsync(user);
+        await _roleDomainService.UpdateRoleLimitAsync(user.Roles.Select(role => role.RoleId));
         await _userDomainService.RemoveAsync(user.Id);
     }
 
@@ -95,11 +100,13 @@ public class CommandHandler
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
+        var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles.ToArray());
 
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
-        await _userDomainService.SetAsync(user);
+
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
     }
 
     [EventHandler(1)]
@@ -282,7 +289,7 @@ public class CommandHandler
         await _staffRepository.UpdateAsync(staff);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
         var staff = await _authDbContext.Set<Staff>()
@@ -294,6 +301,13 @@ public class CommandHandler
             throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
+
+        var teams = staff.TeamStaffs.Select(ts => ts.TeamId);
+        var roles = await _authDbContext.Set<TeamRole>()
+                                .Where(tr => teams.Contains(tr.TeamId))
+                                .Select(tr => tr.RoleId)
+                                .ToListAsync();
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
     }
 
     [EventHandler]

@@ -34,7 +34,7 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <TeamSelect @bind-Value="Staff.Teams" />
+                        <TeamRoleSelect @bind-Value="Staff.Teams" Excludes="StaffDetail.TeamIds" />
                     </MCol>
                     <MCol>
                         <DefaultTextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />

@@ -508,7 +508,11 @@ public class QueryHandler
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .ToListAsync();
-        teamRoleSelectQuery.Result = teams.Select(team => team.Adapt<TeamRoleSelectDto>()).ToList();
+        teamRoleSelectQuery.Result = teams.Select(team => new TeamRoleSelectDto(
+            team.Id,
+            team.Name,
+            team.Avatar.Url,
+            team.TeamRoles.Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity)).ToList())).ToList();
     }
 
     #endregion
