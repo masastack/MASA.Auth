@@ -44,7 +44,7 @@ public partial class TeamRoleSelect
         }
         if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value);
         else Value = value;
-        if(RolesChanged.HasDelegate)
+        if (RolesChanged.HasDelegate)
         {
             var roles = Teams.Where(team => value.Contains(team.Id))
                              .SelectMany(team => team.Roles)

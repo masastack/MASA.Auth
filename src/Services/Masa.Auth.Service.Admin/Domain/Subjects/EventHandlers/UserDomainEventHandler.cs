@@ -12,10 +12,10 @@ public class UserDomainEventHandler
     readonly IEventBus _eventBus;
 
     public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient, 
-        AuthDbContext authDbContext, 
+        IAutoCompleteClient autoCompleteClient,
+        AuthDbContext authDbContext,
         IStaffRepository staffRepository,
-        RoleDomainService roleDomainService, 
+        RoleDomainService roleDomainService,
         IEventBus eventBus)
     {
         _autoCompleteClient = autoCompleteClient;
@@ -39,7 +39,7 @@ public class UserDomainEventHandler
                                         .Where(staff => userEvent.UserIds.Contains(staff.UserId))
                                         .Select(staff => staff.Id)
                                         .ToListAsync();
-        foreach(var staff in staffs)
+        foreach (var staff in staffs)
         {
             await _eventBus.PublishAsync(new RemoveStaffCommand(new(staff)));
         }

@@ -47,7 +47,7 @@ public static class ListExtensions
         return merge;
     }
 
-    public static List<TSource> MergeBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TSource> target, Func<TSource, TKey> keySelector,Func<TSource, TSource, TSource> replace) where TKey : notnull
+    public static List<TSource> MergeBy<TSource, TKey>(this IEnumerable<TSource> source, IEnumerable<TSource> target, Func<TSource, TKey> keySelector, Func<TSource, TSource, TSource> replace) where TKey : notnull
     {
         var removes = source.ExceptBy(target.Select(keySelector), keySelector);
         var adds = target.ExceptBy(source.Select(keySelector), keySelector);

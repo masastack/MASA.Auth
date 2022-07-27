@@ -11,9 +11,9 @@ public class CommandHandler
     readonly RoleDomainService _roleDomainService;
 
     public CommandHandler(
-        IRoleRepository roleRepository, 
-        IPermissionRepository permissionRepository, 
-        AuthDbContext authDbContext, 
+        IRoleRepository roleRepository,
+        IPermissionRepository permissionRepository,
+        AuthDbContext authDbContext,
         RoleDomainService roleDomainService)
     {
         _roleRepository = roleRepository;

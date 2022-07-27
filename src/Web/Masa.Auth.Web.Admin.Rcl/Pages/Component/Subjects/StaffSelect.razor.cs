@@ -21,7 +21,7 @@ public partial class StaffSelect
     public string Class { get; set; } = "";
 
     [Parameter]
-    public RoleLimitModel RoleLimit { get; set; } = new ("", int.MaxValue);
+    public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 
     protected List<StaffSelectDto> Staffs { get; set; } = new();
 

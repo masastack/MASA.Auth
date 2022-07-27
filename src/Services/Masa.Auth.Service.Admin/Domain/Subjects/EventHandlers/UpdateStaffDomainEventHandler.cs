@@ -12,10 +12,10 @@ public class UpdateStaffDomainEventHandler
     readonly IEventBus _eventBus;
 
     public UpdateStaffDomainEventHandler(
-        IStaffRepository staffRepository, 
-        ITeamRepository teamRepository, 
-        AuthDbContext authDbContext, 
-        RoleDomainService roleDomainService, 
+        IStaffRepository staffRepository,
+        ITeamRepository teamRepository,
+        AuthDbContext authDbContext,
+        RoleDomainService roleDomainService,
         IEventBus eventBus)
     {
         _staffRepository = staffRepository;

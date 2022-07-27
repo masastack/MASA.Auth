@@ -11,7 +11,7 @@ public class TeamService : ServiceBase
         MapGet(GetDetailForExternalAsync, "detail");
         MapGet(ListAsync);
         MapGet(SelectAsync);
-        MapGet(GetTeamRoleSelectAsync);        
+        MapGet(GetTeamRoleSelectAsync);
         MapPost(CreateAsync);
         MapPost(UpdateBasicInfoAsync);
         MapPost(UpdateAdminPersonnelAsync);

@@ -219,9 +219,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         _permissions = _permissions.MergeBy(
            permissions,
            item => item.PermissionId,
-           (oldValue, newValue) => 
+           (oldValue, newValue) =>
            {
-               oldValue.Update(newValue.PermissionId, newValue.Effect);    
+               oldValue.Update(newValue.PermissionId, newValue.Effect);
                return oldValue;
            });
     }

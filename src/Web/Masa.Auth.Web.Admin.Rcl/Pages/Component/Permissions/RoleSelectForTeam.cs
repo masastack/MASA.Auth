@@ -21,9 +21,9 @@ public partial class RoleSelectForTeam : RoleSelect
                     var minLimitRole = Roles.Where(role => _value.Contains(role.Id) && role.Limit != 0).OrderBy(role => role.AvailableQuantity).FirstOrDefault();
                     if (minLimitRole != null)
                     {
-                        RoleLimitChanged.InvokeAsync(new (minLimitRole.Name, minLimitRole.AvailableQuantity));
+                        RoleLimitChanged.InvokeAsync(new(minLimitRole.Name, minLimitRole.AvailableQuantity));
                     }
-                    else RoleLimitChanged.InvokeAsync(new ("", int.MaxValue));
+                    else RoleLimitChanged.InvokeAsync(new("", int.MaxValue));
                 }
             }
         }

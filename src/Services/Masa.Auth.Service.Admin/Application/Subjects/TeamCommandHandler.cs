@@ -83,7 +83,7 @@ public class TeamCommandHandler
         {
             roles = dto.Roles.Union(team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Admin)
                                                     .Select(tr => tr.RoleId)).ToList();
-            await _teamDomainService.SetTeamAdminAsync(team, dto.Staffs, dto.Roles, dto.Permissions);            
+            await _teamDomainService.SetTeamAdminAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
         }
         else
         {

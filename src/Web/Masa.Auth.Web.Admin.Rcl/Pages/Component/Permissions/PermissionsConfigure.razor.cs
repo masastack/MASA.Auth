@@ -35,14 +35,14 @@ public partial class PermissionsConfigure
 
     public List<Guid> RolePermissions { get; set; } = new();
 
-    protected Dictionary<Guid,Guid> EmptyPermissionMap { get; set; } = new();
+    protected Dictionary<Guid, Guid> EmptyPermissionMap { get; set; } = new();
 
     protected virtual List<UniqueModel> ExpansionWrapperUniqueValue
     {
         get
         {
             var value = Value.Except(RolePermissions).Except(EmptyPermissionMap.Values);
-            return value.Select(value => new UniqueModel(value.ToString(),false))
+            return value.Select(value => new UniqueModel(value.ToString(), false))
                         .Union(RolePermissions.Select(value => new UniqueModel(value.ToString(), true)))
                         .ToList();
         }
@@ -52,7 +52,7 @@ public partial class PermissionsConfigure
 
     private ProjectService ProjectService => AuthCaller.ProjectService;
 
-    private RoleService RoleService => AuthCaller.RoleService;  
+    private RoleService RoleService => AuthCaller.RoleService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,9 +89,9 @@ public partial class PermissionsConfigure
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
         var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RolePermissions).ToList();
-        foreach (var (code,parentCode) in EmptyPermissionMap)
+        foreach (var (code, parentCode) in EmptyPermissionMap)
         {
-            if(value.Contains(code)) value.Add(parentCode);
+            if (value.Contains(code)) value.Add(parentCode);
         }
         await UpdateValueAsync(value.Distinct().ToList());
     }
