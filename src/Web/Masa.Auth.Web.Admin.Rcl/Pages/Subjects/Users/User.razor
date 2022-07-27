@@ -6,23 +6,23 @@
         <div class="d-flex">
             <MSpacer />
             <div>
-                <UserAutoComplete @bind-Value="UserId" />
+                <SUserAutoComplete @bind-Value="UserId" />
             </div>     
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter ? IconConstants.Filter : IconConstants.FilterOff)
                 </MIcon>
             </div>
-            <DefaultButton Small Class="ml-4" OnClick=OpenAddUserDialog>
+            <SButton Small Class="ml-4" OnClick=OpenAddUserDialog>
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Add")</span>
-            </DefaultButton>
+            </SButton>
         </div>
 
         @if (Filter)
         {
             <div class="d-flex mt-6">
-                <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+                <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
                 <MRow class="ml-6">
                     <MCol Md=4>
                         <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
@@ -32,7 +32,7 @@
         }
     </HeaderContent>
     <AutoHeightContent>
-        <DefaultDataTable Class="mt-6" Headers="GetHeaders()" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
+        <SDataTable Class="mt-6" Headers="GetHeaders()" Items="Users" TItem="UserDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>
@@ -71,10 +71,10 @@
                         break;
                 }
             </ItemColContent>
-        </DefaultDataTable>
+        </SDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

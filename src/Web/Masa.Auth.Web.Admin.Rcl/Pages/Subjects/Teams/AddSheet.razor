@@ -20,7 +20,7 @@
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamBasicInfo @bind-Value="_teamDetailDto.TeamBasicInfo" />
                     <MCardActions class="d-flex justify-end align-center mb-6">
-                        <DefaultButton Medium Disabled="@string.IsNullOrWhiteSpace(_teamDetailDto.TeamBasicInfo.Name)" OnClick="()=>{ _step++; }">@T("Next step")</DefaultButton>
+                        <SButton Medium Disabled="@string.IsNullOrWhiteSpace(_teamDetailDto.TeamBasicInfo.Name)" OnClick="()=>{ _step++; }">@T("Next step")</SButton>
                     </MCardActions>
                 </MCard>
             </MStepperContent>
@@ -28,8 +28,8 @@
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin" />
                     <MCardActions class="d-flex justify-end align-center mb-6">
-                        <DefaultButton Medium Class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</DefaultButton>
-                        <DefaultButton Medium OnClick="()=> _step++ ">@T("Next step")</DefaultButton>
+                        <SButton Medium Class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
+                        <SButton Medium OnClick="()=> _step++ ">@T("Next step")</SButton>
                     </MCardActions>
                 </MCard>
             </MStepperContent>
@@ -37,8 +37,8 @@
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamMember @bind-Value="_teamDetailDto.TeamMember" />
                     <MCardActions class="d-flex justify-end align-center mb-6">
-                        <DefaultButton Medium class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</DefaultButton>
-                        <DefaultButton Medium OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
+                        <SButton Medium class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
+                        <SButton Medium OnClick="OnSubmitHandler">@T("Submit")</SButton>
                     </MCardActions>
                 </MCard>
             </MStepperContent>

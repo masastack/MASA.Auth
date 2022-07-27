@@ -11,14 +11,14 @@
                     <span class="caption emphasis2--text">@T("Sync")</span>
                 </div>
             </div>
-            <DefaultButton Small Class="ml-4" OnClick=OpenAddStaffDialog>
+            <SButton Small Class="ml-4" OnClick=OpenAddStaffDialog>
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Add")</span>
-            </DefaultButton>
+            </SButton>
         </div>
     </HeaderContent>
     <AutoHeightContent>
-        <DefaultDataTable Class="mt-6" Headers="GetHeaders()" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
+        <SDataTable Class="mt-6" Headers="GetHeaders()" Items="Staffs" TItem="StaffDto" ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>
@@ -56,10 +56,10 @@
                         break;
                 }
             </ItemColContent>
-        </DefaultDataTable>
+        </SDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <SPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

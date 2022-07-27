@@ -15,11 +15,11 @@
                 <MWindow Value="Tab.ToString()" Class="full-height">
                     <MWindowItem Value="UpdateRoleTabs.BasicInformation.ToString()">
                         <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
-                        <DefaultTextField @bind-Value="Role.Name" Class="mb-6" Label="@T("Name")" />
-                        <DefaultTextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Class="mb-6" Label="@T("Limit the number of bindings")" />
+                        <STextField @bind-Value="Role.Name" Class="mb-6" Label="@T("Name")" />
+                        <STextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Class="mb-6" Label="@T("Limit the number of bindings")" />
                         <RoleSelect Value="RoleDetail.ParentRoles" Class="mb-12" Readonly Label="@T("Superior Role")" />
                         <RoleOwner RoleId=RoleId Class="mb-12" />
-                        <DefaultTextField @bind-Value="Role.Description" Class="mb-12" Label="@T("Description")" />
+                        <STextField @bind-Value="Role.Description" Class="mb-12" Label="@T("Description")" />
                         <Record Creator="@RoleDetail.Creator" CreationTime="@RoleDetail.CreationTime" Modifier="@RoleDetail.Modifier" ModificationTime="@RoleDetail.ModificationTime" />                      
                     </MWindowItem>
                     <MWindowItem Value="UpdateRoleTabs.Permission.ToString()">
@@ -38,8 +38,8 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="Role.Enabled" />
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium Outlined Class="mr-6" OnClick="() => Preview = true">@T("Preview")</DefaultButton>
-                    <DefaultButton Medium OnClick="async () => await UpdateRoleAsync(context)">@T("Save")</DefaultButton>
+                    <SButton Medium Outlined Class="mr-6" OnClick="() => Preview = true">@T("Preview")</SButton>
+                    <SButton Medium OnClick="async () => await UpdateRoleAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

@@ -18,7 +18,7 @@
                         <FooterContent>
                             <div class="d-flex">
                                 <MSpacer></MSpacer>
-                                <DefaultButton Medium OnClick="()=>Step=2">@T("Next step")</DefaultButton>
+                                <SButton Medium OnClick="()=>Step=2">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
@@ -39,15 +39,15 @@
                             <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
                             <MRow>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.Name" Label="@T("Name")" />
+                                    <STextField @bind-Value="Staff.Name" Label="@T("Name")" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
+                                    <STextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.Email" Label="@T("Email")" />
+                                    <STextField @bind-Value="Staff.Email" Label="@T("Email")" />
                                 </MCol>
                                 <MCol>
                                     <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
@@ -58,12 +58,12 @@
                                     <TeamRoleSelect @bind-Value="Staff.Teams" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />
+                                    <STextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
+                                    <STextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
                                 </MCol>
                                 <MCol>
                                     <DepartmentSelect @bind-Value="Staff.DepartmentId" />
@@ -71,7 +71,7 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
+                                    <STextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
                                 </MCol>
                                 <MCol>
                                     <PositionSelect @bind-Value="Staff.Position" />
@@ -79,10 +79,10 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.Account" Label="@T("Account")" />
+                                    <STextField @bind-Value="Staff.Account" Label="@T("Account")" />
                                 </MCol>
                                 <MCol>
-                                    <DefaultTextField @bind-Value="Staff.Password" Label="@T("Password")" />
+                                    <STextField @bind-Value="Staff.Password" Label="@T("Password")" />
                                 </MCol>
                             </MRow>
                         </AutoHeightContent>
@@ -90,7 +90,7 @@
                             <div class="d-flex mt-6">
                                 <EnableSwitch Class="ml-1" @bind-Value="Staff.Enabled" />
                                 <MSpacer></MSpacer>
-                                <DefaultButton Medium OnClick="async() => await AddStaffAsync(context)">@T("Submit")</DefaultButton>
+                                <SButton Medium OnClick="async() => await AddStaffAsync(context)">@T("Submit")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>

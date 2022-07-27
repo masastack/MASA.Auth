@@ -7,15 +7,15 @@
                 <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ApiScope.DisplayName" Label="@T("DisplayName")" />
+                        <STextField @bind-Value="ApiScope.DisplayName" Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="ApiScope.Name" Label="@T("ApiScope.Name")" />
+                        <STextField @bind-Value="ApiScope.Name" Label="@T("ApiScope.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ApiScope.Description" Label="@T("Description")" />
+                        <STextField @bind-Value="ApiScope.Description" Label="@T("Description")" />
                     </MCol>
                 </MRow>            
                 <div class="d-flex mb-10">
@@ -30,7 +30,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ApiScope.Enabled" />
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium OnClick="async () => await AddApiScopeAsync(context)">@T("Submit")</DefaultButton>
+                    <SButton Medium OnClick="async () => await AddApiScopeAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

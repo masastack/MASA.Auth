@@ -13,23 +13,23 @@
             <AutoHeightContent>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.Name" Label="@T("Name")" />
+                        <STextField @bind-Value="ThirdPartyIdp.Name" Label="@T("Name")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
-                    </MCol>
-                </MRow>
-                <MRow Class="mb-6">
-                    <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
-                    </MCol>
-                    <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
+                        <STextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.Url" Label="@T("URL")" />
+                        <STextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
+                    </MCol>
+                    <MCol>
+                        <STextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <STextField @bind-Value="ThirdPartyIdp.Url" Label="@T("URL")" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
@@ -62,7 +62,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ThirdPartyIdp.Enabled" />
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium OnClick="async () => await AddThirdPartyIdpAsync(context)">@T("Submit")</DefaultButton>
+                    <SButton Medium OnClick="async () => await AddThirdPartyIdpAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

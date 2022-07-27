@@ -8,11 +8,11 @@
     <AutoHeight AutoClass="mt-6 m-sheet theme--light m-card pa-6 full-height pr-0">
         <HeaderContent>
             <div class="d-flex">
-                <DateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <RelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />
+                <SDateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+                <SRelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />
                 <MSpacer />
                 <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" FillBackground=false Class="ml-6" Style="width: 100px !important;" />               
-                <UserAutoComplete @bind-Value="UserId" Lable="@T("Operator")" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
+                <SUserAutoComplete @bind-Value="UserId" Lable="@T("Operator")" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
                 <SearchTextField @bind-Value="Search" Placeholder="@T("Please enter operation description")" FillBackground=false Class="ml-6" Style="width: 134px !important;" />
             </div>        
         </HeaderContent>
@@ -78,7 +78,7 @@
             </div>*@
         </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-6" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <SPagination Class="mt-6" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </AutoHeight>
 </div>

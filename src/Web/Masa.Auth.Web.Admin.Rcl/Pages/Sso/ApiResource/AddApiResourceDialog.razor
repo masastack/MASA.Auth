@@ -7,15 +7,15 @@
                 <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
+                        <STextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" />
+                        <STextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ApiResource.Description" Label="@T("Description")" />
+                        <STextField @bind-Value="ApiResource.Description" Label="@T("Description")" />
                     </MCol>
                 </MRow>
                 <div class="d-flex mb-10">
@@ -36,7 +36,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ApiResource.Enabled" />
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium OnClick="async () => await AddApiResourceAsync(context)">@T("Submit")</DefaultButton>
+                    <SButton Medium OnClick="async () => await AddApiResourceAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

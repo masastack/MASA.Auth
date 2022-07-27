@@ -25,7 +25,7 @@
                     @T("Delete")
                 </MButton>
             }
-            <DefaultButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
+            <SButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</SButton>
         </MCardActions>
     </MCard>
 </SheetDialog>

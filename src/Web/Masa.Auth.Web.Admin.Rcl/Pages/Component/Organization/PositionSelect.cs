@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Organization;
 
-public class PositionSelect : Combox<PositionSelectDto>
+public class PositionSelect : SComboBox<PositionSelectDto>
 {
     [Inject]
     public I18n? I18n { get; set; }

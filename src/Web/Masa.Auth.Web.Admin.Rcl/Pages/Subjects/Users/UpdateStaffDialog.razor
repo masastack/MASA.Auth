@@ -18,15 +18,15 @@
                 </div>
                 <MRow Class="mt-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.Name" Label="@T("Name")" />
+                        <STextField @bind-Value="Staff.Name" Label="@T("Name")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
+                        <STextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.Email" Label="@T("Email")" />
+                        <STextField @bind-Value="Staff.Email" Label="@T("Email")" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
@@ -37,12 +37,12 @@
                         <TeamRoleSelect @bind-Value="Staff.Teams" Excludes="StaffDetail.TeamIds" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />
+                        <STextField @bind-Value="Staff.IdCard" Label="@T("IdCard")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
+                        <STextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
                     </MCol>
                     <MCol>
                         <DepartmentSelect @bind-Value="Staff.DepartmentId" />
@@ -50,7 +50,7 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
+                        <STextField @bind-Value="Staff.JobNumber" Label="@T("JobNumber")" />
                     </MCol>
                     <MCol>
                         <PositionSelect @bind-Value="Staff.Position" />
@@ -58,7 +58,7 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <DefaultTextField Value="StaffDetail.Account" Readonly Label="@T("Account")" />
+                        <STextField Value="StaffDetail.Account" Readonly Label="@T("Account")" />
                     </MCol>
                     <MCol>
                         <CopyPassword Value="@StaffPassword.Password" ValueChanged="UpdateStaffPasswordAsync" />
@@ -72,8 +72,8 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="Staff.Enabled" />
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium Class="mr-6" Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</DefaultButton>
-                    <DefaultButton Medium OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</DefaultButton>
+                    <SButton Medium Class="mr-6" Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</SButton>
+                    <SButton Medium OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
             </AutoHeight>

@@ -7,17 +7,17 @@
 
 <MRow Class="full-height" NoGutters>
     <MCol Md="@("auto")" Class="d-flex flex-column">
-        <SearchableExtend Split=true MaxWidth=300>
+        <SSearchableExtend Split=true MaxWidth=300>
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
                            Solo Class="elevation-0"
                            Items="@_projectItems"
                            ItemText="u => u.Name"
                            ItemValue="u => u.Identity"></MAutocomplete>
-        </SearchableExtend>
+        </SSearchableExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
-            <ElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-Tab="_tab">
-                <ElevationTabItem>
+            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-Tab="_tab">
+                <SElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
                                Items="_menuPermissions"
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
@@ -36,8 +36,8 @@
                             </MHover>
                         </LabelContent>
                     </MTreeview>
-                </ElevationTabItem>
-                <ElevationTabItem>
+                </SElevationTabItem>
+                <SElevationTabItem>
                     <MTreeview @bind-Active="_apiPermissionActive"
                                Items="_apiPermissions"
                                OnActiveUpdate="ActiveApiPermission"
@@ -56,8 +56,8 @@
                             </MHover>
                         </LabelContent>
                     </MTreeview>
-                </ElevationTabItem>
-            </ElevationTab>
+                </SElevationTabItem>
+            </SElevationTab>
         </MCard>
     </MCol>
     <MCol Class="full-height ml-6">
@@ -88,11 +88,11 @@
                                             </MSelect>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
-                                            </DefaultTextField>
+                                            <STextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                            </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></DefaultTextField>
+                                            <STextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></STextField>
                                         </MCol>
 
                                         <MCol Md=6>
@@ -108,7 +108,7 @@
                                         </MCol>
 
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Icon Code")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
+                                            <STextField Label="@T("Icon Code")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
                                                 <PrependContent>
                                                     <div class="d-flex align-center mt-n1">
                                                         <MIcon Size=30 Style="max-height:30px;max-width:30px;">
@@ -116,7 +116,7 @@
                                                         </MIcon>
                                                     </div>
                                                 </PrependContent>
-                                            </DefaultTextField>
+                                            </STextField>
                                         </MCol>
                                         <MCol Md=6>
                                             <MSelect @bind-Value="_menuPermissionDetailDto.Type"
@@ -130,7 +130,7 @@
                                         @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
                                         {
                                             <MCol Md=12>
-                                                <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
+                                                <STextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
                                             </MCol>
                                         }
                                         <MCol Md=12>
@@ -217,14 +217,14 @@
                                             </MSelect>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
-                                            </DefaultTextField>
+                                            <STextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                            </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name"></DefaultTextField>
+                                            <STextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultTextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></DefaultTextField>
+                                            <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
                                             <MSelect @bind-Value="@_apiPermissionDetailDto.Type"

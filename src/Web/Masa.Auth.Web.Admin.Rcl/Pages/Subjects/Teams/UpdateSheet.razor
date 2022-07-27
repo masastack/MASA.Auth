@@ -10,7 +10,7 @@
                         @T("Delete")
                     </MButton>
                     <MSpacer />
-                    <DefaultButton Medium OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</DefaultButton>
+                    <SButton Medium OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</SButton>
                 </MCardActions>
             </MCard>
         </ElevationTabItem>
@@ -25,8 +25,8 @@
                         @T("Delete")
                     </MButton>
                     <MSpacer />
-                    <DefaultButton Medium Class="mr-4"  OnClick="()=>{_adminPreview = true;}">@T("Preview")</DefaultButton>
-                    <DefaultButton Medium MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</DefaultButton>
+                    <SButton Medium Class="mr-4"  OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>
+                    <SButton Medium MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</SButton>
                 </MCardActions>
             </MCard>
         </ElevationTabItem>
@@ -41,8 +41,8 @@
                         @T("Delete")
                     </MButton>
                     <MSpacer />
-                    <DefaultButton Medium Class="mr-4" OnClick="()=>{_memberPreview = true;}">@T("Preview")</DefaultButton>
-                    <DefaultButton Medium OnClick="OnUpdateMemberHandler">@T("Save")</DefaultButton>
+                    <SButton Medium Class="mr-4" OnClick="()=>{_memberPreview = true;}">@T("Preview")</SButton>
+                    <SButton Medium OnClick="OnUpdateMemberHandler">@T("Save")</SButton>
                 </MCardActions>
             </MCard>
         </ElevationTabItem>

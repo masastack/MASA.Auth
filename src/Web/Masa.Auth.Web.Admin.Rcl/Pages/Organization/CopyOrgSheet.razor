@@ -17,7 +17,7 @@
                     </div>
                 </MCardText>
                 <MCardActions class="d-flex justify-end mb-12 py-0">
-                    <DefaultButton Medium OnClick="NextStep">@T("Next step")</DefaultButton>
+                    <SButton Medium OnClick="NextStep">@T("Next step")</SButton>
                 </MCardActions>
             </MCard>
         </MWindowItem>
@@ -79,8 +79,8 @@
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <MSwitch @bind-Value="@Dto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
                     <MSpacer />
-                    <DefaultButton Medium Outlined OnClick="()=> _step = 1 ">@T("Previous step")</DefaultButton>
-                    <DefaultButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
+                    <SButton Medium Outlined OnClick="()=> _step = 1 ">@T("Previous step")</SButton>
+                    <SButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</SButton>
                 </MCardActions>
             </MCard>
         </MWindowItem>

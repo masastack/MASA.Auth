@@ -6,24 +6,24 @@
             <MForm Model=_ldapDetailDto EnableValidation @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Ldap Root User")" @bind-Value="_ldapDetailDto.RootUserDn"></DefaultTextField>
+                        <STextField Label="@T("Ldap Root User")" @bind-Value="_ldapDetailDto.RootUserDn"></STextField>
                     </MCol>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Ldap Root User Pwd")" @bind-Value="_ldapDetailDto.RootUserPassword"></DefaultTextField>
+                        <STextField Label="@T("Ldap Root User Pwd")" @bind-Value="_ldapDetailDto.RootUserPassword"></STextField>
                     </MCol>
                     <MCol Md=12 Class="d-flex align-center">
-                        <DefaultTextField Label="@T("Server Address")" Style="width:calc(100vh - 320px);" @bind-Value="_ldapDetailDto.ServerAddress"></DefaultTextField>
-                        <DefaultTextField Style="max-width:140px;" Class="mx-4" Clearable=false Label="@T("Server Port")" @bind-Value="_ldapDetailDto.ServerPort"></DefaultTextField>
+                        <STextField Label="@T("Server Address")" Style="width:calc(100vh - 320px);" @bind-Value="_ldapDetailDto.ServerAddress"></STextField>
+                        <STextField Style="max-width:140px;" Class="mx-4" Clearable=false Label="@T("Server Port")" @bind-Value="_ldapDetailDto.ServerPort"></STextField>
                         <MCheckbox @bind-Value="_ldapDetailDto.IsLdaps" Class="mt-0" Style="width:140px;" Label="@T("Is Ldaps")"></MCheckbox>
                     </MCol>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("BaseDn")" @bind-Value="_ldapDetailDto.BaseDn"></DefaultTextField>
+                        <STextField Label="@T("BaseDn")" @bind-Value="_ldapDetailDto.BaseDn"></STextField>
                     </MCol>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("User Search BaseDn")" @bind-Value="_ldapDetailDto.UserSearchBaseDn"></DefaultTextField>
+                        <STextField Label="@T("User Search BaseDn")" @bind-Value="_ldapDetailDto.UserSearchBaseDn"></STextField>
                     </MCol>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Group Search BaseDn")" @bind-Value="_ldapDetailDto.GroupSearchBaseDn"></DefaultTextField>
+                        <STextField Label="@T("Group Search BaseDn")" @bind-Value="_ldapDetailDto.GroupSearchBaseDn"></STextField>
                     </MCol>
                 </MRow>
             </MForm>

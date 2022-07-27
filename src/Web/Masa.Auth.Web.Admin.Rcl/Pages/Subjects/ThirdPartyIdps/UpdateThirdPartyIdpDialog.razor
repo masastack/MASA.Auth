@@ -13,23 +13,23 @@
             <AutoHeightContent>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdpDetail.Name" Readonly Label="@T("ThirdPartyIdp.Name")" />
+                        <STextField @bind-Value="ThirdPartyIdpDetail.Name" Readonly Label="@T("ThirdPartyIdp.Name")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
-                    </MCol>
-                </MRow>
-                <MRow Class="mb-6">
-                    <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
-                    </MCol>
-                    <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
+                        <STextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <DefaultTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
+                        <STextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
+                    </MCol>
+                    <MCol>
+                        <STextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <STextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
@@ -63,7 +63,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ThirdPartyIdp.Enabled" />
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium OnClick="async () => await UpdateThirdPartyIdpAsync(context)">@T("Submit")</DefaultButton>
+                    <SButton Medium OnClick="async () => await UpdateThirdPartyIdpAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>
