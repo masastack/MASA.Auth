@@ -29,8 +29,7 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         {
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
-                "invalid custom credential"
-                );
+                "invalid custom credential");
         }
     }
 

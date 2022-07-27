@@ -15,7 +15,8 @@ public class ClientScopesDto
     {
         get
         {
-            return IdentityScopes.Union(ApiScopes).Where(s => s.Selected).Select(s => s.Id).ToList();
+            return IdentityScopes.Union(ApiScopes).Where(s => s.Selected)
+                .Select(s => s.Id).Union(_AllowedScopes).ToList();
         }
         set
         {

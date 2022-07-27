@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Service.Admin.Infrastructure.Authorization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddObservability();
@@ -38,7 +40,17 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
     options.UserId = "sub";
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddSingleton<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
+builder.Services.AddAuthorization(options =>
+{
+    var unexpiredPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
+        .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+        .Build();
+    options.DefaultPolicy = unexpiredPolicy;
+});
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
