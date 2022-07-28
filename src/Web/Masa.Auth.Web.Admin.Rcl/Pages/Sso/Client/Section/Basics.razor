@@ -2,13 +2,13 @@
 
 <MRow Class="full-height pt-4">
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.ClientId" Disabled Label="@T("ClientId")" />
+        <STextField @bind-Value="Dto.ClientId" Disabled Label="@T("ClientId")" />
     </MCol>
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+        <STextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
     </MCol>
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.Description" Label="@T("Description")" />
+        <STextField @bind-Value="Dto.Description" Label="@T("Description")" />
     </MCol>
     <MCol Md=12 Class="py-0">
         <MCheckbox @bind-Value="Dto.Enabled" Label="@T("Enabled")"></MCheckbox>
@@ -17,12 +17,12 @@
         <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="@T("RequireRequestObject")"></MCheckbox>
     </MCol>
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="@IconConstants.Add" />
+        <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="@IconConstants.Add" />
     </MCol>
     @foreach (var origin in Dto.AllowedCorsOrigins)
     {
         <MCol Md=12 Class="d-flex">
-            <DefaultTextField HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
+            <STextField HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
             <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
         </MCol>
     }
@@ -30,10 +30,10 @@
         <h5 class="subtitle2 default--text mb-4">Properties</h5>
         <MRow>
             <MCol>
-                <DefaultTextField @bind-Value="@Dto.Property.Key" Label="Key" />
+                <STextField @bind-Value="@Dto.Property.Key" Label="Key" />
             </MCol>
             <MCol>
-                <DefaultTextField @bind-Value="@Dto.Property.Value" Label="Value" />
+                <STextField @bind-Value="@Dto.Property.Value" Label="Value" />
             </MCol>
             <MCol Md="@("auto")" Class="d-flex align-center">
                 <MIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>

@@ -1,29 +1,29 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Update Client")" ContentClass="px-sheet-dialog">
+<SSheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Update Client")" ContentClass="px-sheet-dialog">
     <MCard Style="height: calc(100vh - 140px);">
         <MCardText Class="full-height">
-            <ElevationTab Dense Class="pt-8 full-height" Tabs='_tabHeader' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
-                <ElevationTabItem>
+            <SElevationTab Dense Class="pt-8 full-height" Tabs='_tabHeader' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
+                <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Basics @bind-Dto=_basicDto />
-                </ElevationTabItem>
-                <ElevationTabItem>
+                </SElevationTabItem>
+                <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Consent @bind-Dto=_consentDto />
-                </ElevationTabItem>
-                <ElevationTabItem>
+                </SElevationTabItem>
+                <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.Authentication @bind-Dto=_authenticationDto />
-                </ElevationTabItem>
-                <ElevationTabItem>
+                </SElevationTabItem>
+                <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ResourceScopes @bind-Dto=_clientScopesDto />
-                </ElevationTabItem>
-                <ElevationTabItem>
+                </SElevationTabItem>
+                <SElevationTabItem>
                     <DynamicComponent Type="@_otherType" Parameters=_componentMetadata />
-                </ElevationTabItem>
-            </ElevationTab>
+                </SElevationTabItem>
+            </SElevationTab>
         </MCardText>
         <MCardActions class="d-flex justify-space-between">
             <MButton OnClick="DeleteAsync" Text Color="error">@T("Delete")</MButton>
             <MButton OnClick="SaveAsync" class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
         </MCardActions>
     </MCard>
-</SheetDialog>
+</SSheetDialog>

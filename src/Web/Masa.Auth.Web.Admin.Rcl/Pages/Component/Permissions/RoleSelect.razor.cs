@@ -6,7 +6,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 public partial class RoleSelect
 {
     [Parameter]
-    public List<Guid> Value { get; set; } = new();
+    public virtual List<Guid> Value { get; set; } = new();
 
     [Parameter]
     public EventCallback<List<Guid>> ValueChanged { get; set; }
@@ -41,6 +41,12 @@ public partial class RoleSelect
             value.Remove(role.Id);
             await ValueChanged.InvokeAsync(value);
         }
+    }
+
+    protected virtual async Task UpdateValueAsync(List<Guid> value)
+    {
+        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value);
+        else Value = value;
     }
 }
 

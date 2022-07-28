@@ -128,5 +128,10 @@ public abstract class AdminCompontentBase : ComponentBase
             new(T("Disabled"), false)
         };
     }
+
+    public string ReturnNotNullValue(params string?[] values)
+    {
+        return values.FirstOrDefault(value => string.IsNullOrEmpty(value) is false) ?? "";
+    }
 }
 

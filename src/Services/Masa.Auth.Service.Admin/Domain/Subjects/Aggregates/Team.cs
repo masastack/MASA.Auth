@@ -13,17 +13,17 @@ public class Team : FullAggregateRoot<Guid, Guid>
 
     public TeamTypes TeamType { get; private set; }
 
-    private List<TeamStaff> teamStaffs = new();
+    private List<TeamStaff> _teamStaffs = new();
 
-    public IReadOnlyCollection<TeamStaff> TeamStaffs => teamStaffs;
+    public IReadOnlyCollection<TeamStaff> TeamStaffs => _teamStaffs;
 
-    private List<TeamPermission> teamPermissions = new();
+    private List<TeamPermission> _teamPermissions = new();
 
-    public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
+    public IReadOnlyCollection<TeamPermission> TeamPermissions => _teamPermissions;
 
-    private List<TeamRole> teamRoles = new();
+    private List<TeamRole> _teamRoles = new();
 
-    public IReadOnlyCollection<TeamRole> TeamRoles => teamRoles;
+    public IReadOnlyCollection<TeamRole> TeamRoles => _teamRoles;
 
     public Team(string name, string description, TeamTypes teamType, AvatarValue avatar) : this(Guid.Empty, name, description, teamType, avatar)
     {
@@ -53,30 +53,39 @@ public class Team : FullAggregateRoot<Guid, Guid>
 
     public void SetStaff(TeamMemberTypes memberType, List<Guid> staffIds)
     {
-        teamStaffs.RemoveAll(ts => ts.TeamMemberType == memberType);
-        teamStaffs.AddRange(staffIds.Select(s => new TeamStaff(s, memberType)));
+        var teamStaffs = _teamStaffs.Where(ts => ts.TeamMemberType == memberType).ToList();
+        teamStaffs = teamStaffs.MergeBy(
+           staffIds.Select(staffId => new TeamStaff(staffId, memberType)),
+           item => item.StaffId);
+        teamStaffs.AddRange(_teamStaffs.Where(ts => ts.TeamMemberType != memberType));
+        _teamStaffs = teamStaffs;
     }
 
-    public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissionsIds)
+    public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissions)
     {
-        teamPermissions.RemoveAll(ts => ts.TeamMemberType == memberType);
-        teamPermissions.AddRange(permissionsIds.Select(p => new TeamPermission(p.Key, p.Value, memberType)));
-    }
-
-    public List<Guid> GetAdminRoleIds()
-    {
-        return teamRoles.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(a => a.RoleId).ToList();
-    }
-
-    public List<Guid> GetMemberRoleIds()
-    {
-        return teamRoles.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(a => a.RoleId).ToList();
+        var teamPermissions = _teamPermissions.Where(ts => ts.TeamMemberType == memberType).ToList();
+        teamPermissions = teamPermissions.MergeBy(
+           permissions.Select(permission => new TeamPermission(permission.Key, permission.Value, memberType)),
+           item => item.PermissionId);
+        teamPermissions.AddRange(_teamPermissions.Where(ts => ts.TeamMemberType != memberType));
+        _teamPermissions = teamPermissions;
     }
 
     public void SetRole(TeamMemberTypes memberType, params Guid[] roleIds)
     {
-        teamRoles.RemoveAll(tr => tr.TeamMemberType == memberType);
-        teamRoles.AddRange(roleIds.Select(roleId => new TeamRole(roleId, memberType)));
+        _teamRoles = _teamRoles.MergeBy(
+           roleIds.Select(roleId => new TeamRole(roleId, memberType)),
+           item => item.RoleId);
+    }
+
+    public List<Guid> GetAdminRoleIds()
+    {
+        return _teamRoles.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(a => a.RoleId).ToList();
+    }
+
+    public List<Guid> GetMemberRoleIds()
+    {
+        return _teamRoles.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(a => a.RoleId).ToList();
     }
 }
 

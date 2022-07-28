@@ -19,6 +19,7 @@ public partial class ThirdPartyUser
         set
         {
             _userId = value;
+            _page = 1;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -29,6 +30,7 @@ public partial class ThirdPartyUser
         set
         {
             _enabled = value;
+            _page = 1;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -39,6 +41,7 @@ public partial class ThirdPartyUser
         set
         {
             _startTime = value;
+            _page = 1;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -49,6 +52,7 @@ public partial class ThirdPartyUser
         set
         {
             _endTime = value;
+            _page = 1;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

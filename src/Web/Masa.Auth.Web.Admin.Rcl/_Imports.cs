@@ -25,6 +25,7 @@ global using Masa.Auth.Contracts.Admin.Sso;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Web.Admin.Rcl.Global.Config;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
+global using Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions.Model;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Component.Sso;
 global using Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions.ViewModels;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section;

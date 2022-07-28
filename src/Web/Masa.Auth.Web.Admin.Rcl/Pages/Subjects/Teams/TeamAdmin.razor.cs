@@ -10,4 +10,12 @@ public partial class TeamAdmin
 
     [Parameter]
     public EventCallback<TeamPersonnelDto> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool Preview { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> PreviewChanged { get; set; }
+
+    public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 }

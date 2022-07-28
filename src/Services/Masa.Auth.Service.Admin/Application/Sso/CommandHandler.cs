@@ -68,7 +68,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
-        var client = await _clientRepository.FindAsync(client => client.Id == removeClientCommand.ClientId)
+        var client = await _clientRepository.GetDetailAsync(removeClientCommand.ClientId)
             ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
         await _clientRepository.RemoveAsync(client);
     }
@@ -111,7 +111,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveIdentityResourceAsync(RemoveIdentityResourceCommand command)
     {
-        var idrs = await _identityResourceRepository.FindAsync(idrs => idrs.Id == command.IdentityResource.Id);
+        var idrs = await _identityResourceRepository.GetDetailAsync(command.IdentityResource.Id);
         if (idrs == null)
             throw new UserFriendlyException("The current identityResource does not exist");
 
@@ -152,7 +152,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveApiResourceAsync(RemoveApiResourceCommand command)
     {
-        var apiResource = await _apiResourceRepository.FindAsync(apiResource => apiResource.Id == command.ApiResource.Id);
+        var apiResource = await _apiResourceRepository.GetDetailAsync(command.ApiResource.Id);
         if (apiResource == null)
             throw new UserFriendlyException("The current apiResource does not exist");
 
@@ -191,7 +191,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveApiScopeAsync(RemoveApiScopeCommand command)
     {
-        var apiScope = await _apiScopeRepository.FindAsync(apiScope => apiScope.Id == command.ApiScope.Id);
+        var apiScope = await _apiScopeRepository.GetDetailAsync(command.ApiScope.Id);
         if (apiScope == null)
             throw new UserFriendlyException("The current apiScope does not exist");
 
@@ -284,7 +284,7 @@ public class CommandHandler
     [EventHandler]
     public async Task RemoveCustomLoginAsync(RemoveCustomLoginCommand command)
     {
-        var customLogin = await _customLoginRepository.FindAsync(customLogin => customLogin.Id == command.CustomLogin.Id);
+        var customLogin = await _customLoginRepository.GetDetailAsync(command.CustomLogin.Id);
         if (customLogin == null)
             throw new UserFriendlyException("The current customLogin does not exist");
 

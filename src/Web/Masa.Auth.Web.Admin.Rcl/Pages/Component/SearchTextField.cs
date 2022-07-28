@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class SearchTextField : DefaultTextField<string>
+public class SearchTextField : STextField<string>
 {
     [Inject]
     public I18n? I18n { get; set; }

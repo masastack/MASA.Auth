@@ -5,38 +5,28 @@
                         Checkable
                         Categories=Categories
                         FavoriteNavs=new()
+                        TagIdPrefix="@($"{TagIdPrefix}Configure")"
                         Class="@Class"
                         Style="@Style" />
 
-<SheetDialog Value="Preview" ValueChanged="PreviewChanged" Title="@T("Preview Permissions")" ContentClass="px-sheet-dialog global-nav">
-    @*    <AutoHeight>
-    <AutoHeightContent>
-    <div class="global-nav" style="display: flex;height: auto;height: calc(100vh - 192px);">
-    <ExpansionWrapperUnique
-    Value="ExpansionWrapperUniqueValue"
-    Categories=Categories
-    InPreview=Preview />
-    </div>
-    </AutoHeightContent>
-    <FooterContent>
-    <div class="d-flex mt-6">
-    <MSpacer />
-    <DefaultButton OnClick="async() => await PreviewChanged.InvokeAsync(false)" Medium Outlined>
-    @T("Back")
-    </DefaultButton>
-    </div>
-    </FooterContent>
-    </AutoHeight>*@
-    <div class="full-width py-12">
-        <div class="d-flex" style="height: calc(100vh - 192px);">
-            <ExpansionWrapperUnique Value="ExpansionWrapperUniqueValue"
-                                    Categories=Categories
-                                    InPreview />
-        </div>
-        <div class="d-flex justify-end">
-            <DefaultButton OnClick="async() => await PreviewChanged.InvokeAsync(false)" Medium Outlined>
-                @T("Back")
-            </DefaultButton>
-        </div>
-    </div>
-</SheetDialog>
+<DefaultSheetDialog Value="Preview" ValueChanged="PreviewChanged" Title="@T("Preview Permissions")">
+    <AutoHeight>
+        <AutoHeightContent>
+            <div class="global-nav" style="display: flex;height: auto;">
+                <ExpansionWrapperUnique Value="ExpansionWrapperUniqueValue"
+                                        Categories=Categories
+                                        InPreview=Preview
+                                        TagIdPrefix="@($"{TagIdPrefix}Preview")"
+                                        Style="max-height:calc(100vh - 250px);" />
+            </div>
+        </AutoHeightContent>
+        <FooterContent>
+            <div class="d-flex mt-6">
+                <MSpacer />
+                <SButton OnClick="async() => await PreviewChanged.InvokeAsync(false)" Medium Outlined>
+                    @T("Back")
+                </SButton>
+            </div>
+        </FooterContent>
+    </AutoHeight>
+</DefaultSheetDialog>

@@ -1,7 +1,10 @@
 ﻿@inherits AdminCompontentBase
 
 <MAutocomplete Value="Value"
-               ValueChanged=ValueChanged
+               ValueChanged=UpdateValueAsync
+               TItem="RoleSelectDto"
+               TValue="List<Guid>"
+               TItemValue="Guid"
                Items="Roles"
                Outlined
                Height=55

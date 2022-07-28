@@ -15,6 +15,7 @@ public partial class ApiScope
         set
         {
             _search = value;
+            _page = 1;
             GetApiScopesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

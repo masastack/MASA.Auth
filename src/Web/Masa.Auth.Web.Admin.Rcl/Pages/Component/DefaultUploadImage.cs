@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class DefaultUploadImage : UploadImage
+public class DefaultUploadImage : SUploadImage
 {
     [Inject]
     public AuthCaller? AuthCaller { get; set; }

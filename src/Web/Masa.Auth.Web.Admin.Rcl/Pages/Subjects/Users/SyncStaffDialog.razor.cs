@@ -75,7 +75,7 @@ public partial class SyncStaffDialog
                 OpenWarningMessage(T("Please upload the UTF-8 encoded CSV file"));
                 return;
             }
-            var dto = new UploadFileDto(File.Name, fileContent,File.Size, "text/csv");
+            var dto = new UploadFileDto(File.Name, fileContent, File.Size, "text/csv");
             SyncStaffResults = await StaffService.SyncAsync(dto);
             if (SyncStaffResults?.IsValid is false)
             {

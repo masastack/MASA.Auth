@@ -57,7 +57,7 @@
         </MSelect>
     </MCol>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.PairWiseSubjectSalt" Label="PairWiseSubjectSalt" />
+        <STextField @bind-Value="Dto.PairWiseSubjectSalt" Label="PairWiseSubjectSalt" />
     </MCol>
     <MCol Md=6>
         <MCheckbox Dense @bind-Value="Dto.IncludeJwtId" Label="IncludeJwtId"></MCheckbox>
@@ -78,10 +78,10 @@
 </MRow>
 <MRow>
     <MCol>
-        <DefaultTextField @bind-Value="Dto.ClientClaimDto.Type" Label="Type" />
+        <STextField @bind-Value="Dto.ClientClaimDto.Type" Label="Type" />
     </MCol>
     <MCol>
-        <DefaultTextField @bind-Value="Dto.ClientClaimDto.Value" Label="Value" />
+        <STextField @bind-Value="Dto.ClientClaimDto.Value" Label="Value" />
     </MCol>
     <MCol Md="@("auto")" Class="d-flex align-center">
         <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>

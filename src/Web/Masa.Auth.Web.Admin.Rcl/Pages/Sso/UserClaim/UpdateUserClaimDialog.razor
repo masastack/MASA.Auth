@@ -1,17 +1,17 @@
 ﻿@inherits AdminCompontentBase
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update UserClaim")">
-    <MForm Model=UserClaim EnableValidation>
+    <MForm Model=UserClaim EnableValidation EnableI18n>
         <AutoHeight Overflow>
             <AutoHeightContent>
                 <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
-                <DefaultTextField Readonly Value="UserClaim.Name" Label="@T("Name")" Class="mb-12" />
+                <STextField Readonly Value="UserClaim.Name" Label="@T("Name")" Class="mb-12" />
                 <MTextarea @bind-Value="UserClaim.Description" Outlined Label="@T("Description")" Class="mb-12" />
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">
                     <MSpacer></MSpacer>
-                    <DefaultButton Medium OnClick="async () => await UpdatetUserClaimAsync(context)">@T("Submit")</DefaultButton>
+                    <SButton Medium OnClick="async () => await UpdatetUserClaimAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

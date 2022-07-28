@@ -19,6 +19,7 @@ public partial class OperationLog
         set
         {
             _userId = value;
+            _page = 1;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -29,6 +30,7 @@ public partial class OperationLog
         set
         {
             _operationType = value;
+            _page = 1;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -39,6 +41,7 @@ public partial class OperationLog
         set
         {
             _startTime = value;
+            _page = 1;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -49,6 +52,7 @@ public partial class OperationLog
         set
         {
             _endTime = value;
+            _page = 1;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -59,6 +63,7 @@ public partial class OperationLog
         set
         {
             _search = value;
+            _page = 1;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

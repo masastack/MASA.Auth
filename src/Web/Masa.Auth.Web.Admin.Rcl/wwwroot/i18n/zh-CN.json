@@ -85,6 +85,7 @@
   "Password": "用户密码",
   "IdCard": "身份证号",
   "Operation confirmation": "操作确认",
+  "Due to the role [{0}] limit constraint, Team [{1}] cannot add members": "由于角色[{0}]约束限制,团队[{1}]] 无法添加成员",
 
   "OrganizationBlock": {
     "Department": "部门",
@@ -157,7 +158,8 @@
     "Setup team admins": "设置团队管理员",
     "Setup team members": "设置团队成员",
     "Team Admin": "团队管理员",
-    "Team Member": "团队成员"
+    "Team Member": "团队成员",
+    "Due to the role [{0}] limit constraint, a maximum of {1} members can be selected": "由于角色:[{0}]约束限制,当前最多只能选择{1}人"
   },
 
   "PermissionBlock": {
@@ -243,6 +245,7 @@
     "Gender": "性别",
     "Male/Female": "男/女",
     "Delete Staff": "删除员工",
+    "Update Staff Success": "编辑员工成功",
     "InternalStaff/ExternalStaff": "内部员工/驻场员工",
     "Failed to query staffList data:": "获取员工列表数据失败:",
     "Failed to query staffDetail data:": "获取员工详情数据失败",
@@ -250,6 +253,7 @@
     "Failed to add staff:": "新增员工数据失败:",
     "Edit staff data success": "编辑员工数据成功",
     "Failed to edit staff:": "编辑员工数据失败:",
+    "Are you sure delete staff data": "确定删除员工数据",
     "Delete staff data success": "删除员工数据成功",
     "Delete staff data failed:": "删除员工数据失败:",
     "Are you sure delete user data": "确定删除员工数据",
@@ -387,6 +391,7 @@
     "OperationType": "操作类型",
     "OperationDescription": "操作描述",
     "Please select type": "请选择操作类型",
+    "Please enter operation description": "请输入操作描述",
     "AddUser": "新增用户",
     "UpdateUser": "修改用户",
     "UpdateUserAuthorization": "编辑用户权限",
@@ -434,14 +439,20 @@
     "SignOut": "退出登录",
     "AddThirdPartyIdp": "新增第三方平台",
     "UpdateThirdPartyIdp": "编辑第三方平台",
-    "RemoveThirdPartyIdp": "删除第三方平台"
+    "RemoveThirdPartyIdp": "删除第三方平台",
+    "AddPosition": "添加职位",
+    "UpdatePosition": "编辑职位",
+    "RemovePosition": "删除职位",
+    "UpsertAppTag": "编辑应用标签"
   },
 
-  "ValidationBlock": {
-    "Account is required": "账号必须填写",
-    "Password is required": "密码必须填写",
-    "Name is required": "名称必须填写",
-    "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数",
-    "The password is inconsistent with the confirm password": "密码和确认密码不一致"
-  }
+  "Account is required": "账号必须填写",
+  "Password is required": "密码必须填写",
+  "Job Number is required": "工号必须填写",
+  "Display Name is required": "昵称必须填写",
+  "Phone Number is required": "手机号必须填写",
+  "Can only input upper chinese and letter and number of Account": "账号只能输入中英文数字",
+  "Phone Number format is incorrect": "手机号码格式错误",
+  "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数",
+  "The password is inconsistent with the confirm password": "密码和确认密码不一致"
 }

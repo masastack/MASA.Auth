@@ -15,6 +15,7 @@ public partial class UserClaim
         set
         {
             _search = value;
+            _page = 1;
             GetUserClaimsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
