@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
-
 namespace Masa.Auth.Contracts.Admin.Permissions.Validator;
 
 public class PermissionDetailDtoValidator<T> : AbstractValidator<T> where T : PermissionDetailDto
