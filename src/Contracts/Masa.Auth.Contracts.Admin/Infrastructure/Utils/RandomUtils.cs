@@ -11,7 +11,7 @@ public class RandomUtils
 
     public static string GenerateSpecifiedString(int length, bool includeNumbers = false)
     {
-        var sb = new StringBuilder();
+        var sb = includeNumbers ? new StringBuilder(length * 2) : new StringBuilder(length);
         for (var i = 0; i < length; i++)
         {
             var index = Random.Shared.Next(LETTERS.Length);
