@@ -20,7 +20,7 @@
                     <MCol Md=6>
                         <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
                     </MCol>
-                    <MCol Md=12>
+                    <MCol Md=6>
                         <MSelect @bind-Value="_menuPermissionDetailDto.Type"
                                  Label="@T("Permission Type")"
                                  Outlined HideDetails="@("auto")"
@@ -28,6 +28,9 @@
                                  ItemText="u => u.Text"
                                  ItemValue="u => u.Value">
                         </MSelect>
+                    </MCol>
+                    <MCol Md=6>
+                        <DefaultNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                     </MCol>
                     @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
                     {

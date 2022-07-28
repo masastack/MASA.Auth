@@ -81,15 +81,19 @@ public class CommandHandler
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
             _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-                permissionBaseInfo.Description, addPermissionCommand.Enabled);
+                permissionBaseInfo.Description, permissionBaseInfo.Order, addPermissionCommand.Enabled);
             _permission.SetParent(addPermissionCommand.ParentId);
             _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
             await _permissionRepository.UpdateAsync(_permission);
             return;
         }
+        if (permissionBaseInfo.Order == 0)
+        {
+            permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(addPermissionCommand.ParentId);
+        }
         var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-            permissionBaseInfo.Description, addPermissionCommand.Enabled);
+            permissionBaseInfo.Description, permissionBaseInfo.Order, addPermissionCommand.Enabled);
         permission.SetParent(addPermissionCommand.ParentId);
         permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);

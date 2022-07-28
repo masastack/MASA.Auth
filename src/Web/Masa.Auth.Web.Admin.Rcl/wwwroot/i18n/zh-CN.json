@@ -162,6 +162,7 @@
 
   "PermissionBlock": {
     "Api Permission": "API",
+    "Permission Order": "权限排序",
     "Menu Permission": "前端权限",
     "Permission Info": "权限信息",
     "Permission Name": "权限名称",

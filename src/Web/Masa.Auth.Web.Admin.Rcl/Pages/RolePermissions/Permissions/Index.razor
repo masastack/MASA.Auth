@@ -79,13 +79,13 @@
                                 <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
                                     <MRow>
                                         <MCol Md=6>
-                                            <MSelect @bind-Value="_menuPermissionDetailDto.AppId"
-                                             Label="@T("Pre Code Select")"
-                                             Outlined HideDetails="@("auto")"
-                                             Items="_curAppItems"
-                                             ItemText="u => u.Name"
-                                             ItemValue="u => u.Identity">
-                                            </MSelect>
+                                            <DefaultSelect @bind-Value="_menuPermissionDetailDto.AppId"
+                                                Label="@T("Pre Code Select")"
+                                                Outlined HideDetails="@("auto")"
+                                                Items="_curAppItems"
+                                                ItemText="u => u.Name"
+                                                ItemValue="u => u.Identity">
+                                            </DefaultSelect>
                                         </MCol>
                                         <MCol Md=6>
                                             <DefaultTextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
@@ -99,10 +99,10 @@
                                             @if (_menuPermissionDetailDto.ParentId != Guid.Empty)
                                             {
                                                 <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                                    Items="_menuPermissions" Dense HideDetails="true" Outlined
-                                                    ItemText="u => u.Name"
-                                                    ItemValue="u => u.Id"
-                                                    ItemChildren="u => u.Children">
+                                               Items="_menuPermissions" Dense HideDetails="true" Outlined
+                                               ItemText="u => u.Name"
+                                               ItemValue="u => u.Id"
+                                               ItemChildren="u => u.Children">
                                                 </MCascader>
                                             }
                                         </MCol>
@@ -119,20 +119,23 @@
                                             </DefaultTextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <MSelect @bind-Value="_menuPermissionDetailDto.Type"
-                                             Label="@T("Permission Type")"
-                                             Outlined HideDetails="@("auto")"
-                                             Items="@_menuPermissionTypes"
-                                             ItemText="u => u.Text"
-                                             ItemValue="u => u.Value">
-                                            </MSelect>
+                                            <DefaultSelect @bind-Value="_menuPermissionDetailDto.Type"
+                                                Label="@T("Permission Type")"
+                                                Outlined HideDetails="@("auto")"
+                                                Items="@_menuPermissionTypes"
+                                                ItemText="u => u.Text"
+                                                ItemValue="u => u.Value">
+                                            </DefaultSelect>
                                         </MCol>
                                         @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
                                         {
-                                            <MCol Md=12>
+                                            <MCol Md=6>
                                                 <DefaultTextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></DefaultTextField>
                                             </MCol>
                                         }
+                                        <MCol Md=6>
+                                            <DefaultNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
+                                        </MCol>
                                         <MCol Md=12>
                                             <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
                                                    Items="_childApiItems"
@@ -208,13 +211,13 @@
                                 <MForm EnableValidation Model=_apiPermissionDetailDto @ref="_formApi">
                                     <MRow>
                                         <MCol Md=6>
-                                            <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
-                                             Label="@T("Pre Code Select")"
-                                             Outlined Dense HideDetails="@("auto")"
-                                             Items="_curAppItems"
-                                             ItemText="u => u.Name"
-                                             ItemValue="u => u.Identity">
-                                            </MSelect>
+                                            <DefaultSelect @bind-Value="_apiPermissionDetailDto.AppId"
+                                                Label="@T("Pre Code Select")"
+                                                Outlined Dense HideDetails="@("auto")"
+                                                Items="_curAppItems"
+                                                ItemText="u => u.Name"
+                                                ItemValue="u => u.Identity">
+                                            </DefaultSelect>
                                         </MCol>
                                         <MCol Md=6>
                                             <DefaultTextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
@@ -227,13 +230,16 @@
                                             <DefaultTextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></DefaultTextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <MSelect @bind-Value="@_apiPermissionDetailDto.Type"
-                                             Label="@T("Permission Type")"
-                                             Outlined Dense HideDetails="@("auto")"
-                                             Items="@_apiPermissionTypes"
-                                             ItemText="u => u.Text"
-                                             ItemValue="u => u.Value">
-                                            </MSelect>
+                                            <DefaultNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
+                                        </MCol>
+                                        <MCol Md=6>
+                                            <DefaultSelect @bind-Value="@_apiPermissionDetailDto.Type"
+                                                Label="@T("Permission Type")"
+                                                Outlined Dense HideDetails="@("auto")"
+                                                Items="@_apiPermissionTypes"
+                                                ItemText="u => u.Text"
+                                                ItemValue="u => u.Value">
+                                            </DefaultSelect>
                                         </MCol>
                                         <MCol Md=12>
                                             <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>

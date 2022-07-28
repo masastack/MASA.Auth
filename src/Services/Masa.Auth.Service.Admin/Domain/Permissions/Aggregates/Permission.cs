@@ -19,6 +19,8 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; } = "";
 
+    public int Order { get; set; }
+
     public PermissionTypes Type { get; private set; }
 
     public string Description { get; private set; } = "";
@@ -54,18 +56,18 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, List<Permission> childPermissions) : this(systemId, appId, name, code, url, icon, PermissionTypes.Menu, "", true)
+        string icon, List<Permission> childPermissions) : this(systemId, appId, name, code, url, icon, PermissionTypes.Menu, "", 0, true)
     {
         this.childPermissions = childPermissions;
     }
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", true)
+        string icon, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", 0, true)
     {
     }
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description, bool enabled)
+        string icon, PermissionTypes type, string description, int order, bool enabled)
     {
         SystemId = systemId;
         AppId = appId;
@@ -76,6 +78,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Type = type;
         Description = description;
         Enabled = enabled;
+        Order = order;
     }
 
     public void DeleteCheck()
@@ -117,7 +120,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     }
 
     public void Update(string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description, bool enabled)
+        string icon, PermissionTypes type, string description, int order, bool enabled)
     {
         appId.ThrowIfEmpty();
         name.ThrowIfEmpty();
@@ -129,6 +132,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Icon = icon;
         Type = type;
         Description = description;
+        Order = order;
         Enabled = enabled;
     }
 }
