@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add User")">
-    <MForm Model=User EnableValidation>
+    <MForm Model=User EnableValidation EnableI18n>
         <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
@@ -18,7 +18,7 @@
                         <FooterContent>
                             <div class="d-flex">
                                 <MSpacer></MSpacer>
-                                <DefaultButton Medium OnClick="()=>Step=2">@T("Next step")</DefaultButton>
+                                <SButton Medium OnClick="()=>Step=2">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
@@ -37,12 +37,12 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
-                            <DefaultTextField @bind-Value="User.Name" Class="mb-12" Label="@T("Name")" />
-                            <DefaultTextField @bind-Value="User.PhoneNumber" Class="mb-12" Label="@T("PhoneNumber")" />
-                            <DefaultTextField @bind-Value="User.Email" Class="mb-12" Label="@T("Email")" />
-                            <DefaultTextField @bind-Value="User.IdCard" Class="mb-12" Label="@T("IdCard")" />
-                            <DefaultTextField @bind-Value="User.Account" Class="mb-12" Label="@T("Account")" />
-                            <DefaultTextField @bind-Value="User.Password" Label="@T("Password")" />
+                            <STextField @bind-Value="User.Name" Class="mb-12" Label="@T("Name")" />
+                            <STextField @bind-Value="User.PhoneNumber" Class="mb-12" Label="@T("PhoneNumber")" />
+                            <STextField @bind-Value="User.Email" Class="mb-12" Label="@T("Email")" />
+                            <STextField @bind-Value="User.IdCard" Class="mb-12" Label="@T("IdCard")" />
+                            <STextField @bind-Value="User.Account" Class="mb-12" Label="@T("Account")" />
+                            <STextField @bind-Value="User.Password" Label="@T("Password")" />
                             @if (Fill is false)
                             {
                                 <div @onclick="() => Fill = true" class="mt-12 hover-pointer d-flex" style="text-align:center;height:48px;">
@@ -55,17 +55,17 @@
                             else
                             {
                                 <DefaultTitle Class="mt-12 mb-6">@T("Detail Information")</DefaultTitle>
-                                <DefaultTextField @bind-Value="User.CompanyName" Class="mt-4 mb-12" Label="@T("CompanyName")" />
-                                <DefaultTextField @bind-Value="User.Address.Address" Class="mb-12" Label="@T("Address")" />
-                                <DefaultTextField @bind-Value="User.Department" Class="mb-12" Label="@T("Department")" />
-                                <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
+                                <STextField @bind-Value="User.CompanyName" Class="mt-4 mb-12" Label="@T("CompanyName")" />
+                                <STextField @bind-Value="User.Address.Address" Class="mb-12" Label="@T("Address")" />
+                                <STextField @bind-Value="User.Department" Class="mb-12" Label="@T("Department")" />
+                                <STextField @bind-Value="User.Position" Label="@T("Position")" />
                             }
                         </AutoHeightContent>
                         <FooterContent>
                             <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
-                                <DefaultButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</DefaultButton>
-                                <DefaultButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</DefaultButton>
+                                <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
+                                <SButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
@@ -79,7 +79,7 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
-                                <PermissionsConfigure RoleIds=User.Roles
+                                <PermissionsConfigure Roles=User.Roles
                                                       Value="User.Permissions.Select(p => p.PermissionId).ToList()"
                                                       ValueChanged="value => User.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
                                                       @bind-Preview=Preview
@@ -89,9 +89,9 @@
                         <FooterContent>
                             <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
-                                <DefaultButton Medium OnClick="()=>Step=2" Outlined>@T("Previous step")</DefaultButton>
-                                <DefaultButton Medium Outlined OnClick="()=> Preview=true" Class="ml-6">@T("Preview")</DefaultButton>
-                                <DefaultButton Medium OnClick="async () => await AddUserAsync(context)" Class="ml-6">@T("Submit")</DefaultButton>
+                                <SButton Medium OnClick="()=>Step=2" Outlined>@T("Previous step")</SButton>
+                                <SButton Medium Outlined OnClick="()=> Preview=true" Class="ml-6">@T("Preview")</SButton>
+                                <SButton Medium OnClick="async () => await AddUserAsync(context)" Class="ml-6">@T("Submit")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>

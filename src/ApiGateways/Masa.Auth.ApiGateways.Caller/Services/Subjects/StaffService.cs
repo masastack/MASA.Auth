@@ -17,7 +17,7 @@ public class StaffService : ServiceBase
         return await SendAsync<GetStaffsDto, PaginationDto<StaffDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<StaffSelectDto>> GetSelectAsync(string name)
+    public async Task<List<StaffSelectDto>> GetSelectAsync(string? name = null)
     {
         return await SendAsync<object, List<StaffSelectDto>>(nameof(GetSelectAsync), new { name });
     }

@@ -5,22 +5,22 @@
         <div class="d-flex">
             <MSpacer />
             <div>
-                <UserAutoComplete @bind-Value="UserId" />
+                <SUserAutoComplete @bind-Value="UserId" />
             </div>           
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter ? "mdi-filter" : "mdi-filter-off")
                 </MIcon>
             </div>
-            <DefaultButton Small Class="ml-4" OnClick=OpenLdapDialog>
+            <SButton Small Class="ml-4" OnClick=OpenLdapDialog>
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Ldap")</span>
-            </DefaultButton>
+            </SButton>
         </div>
         @if (Filter)
         {
             <div class="d-flex mt-6">
-                <DateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+                <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
                 <MRow class="ml-6">
                     <MCol Md=4>
                         <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
@@ -30,7 +30,7 @@
         }
     </HeaderContent>
     <AutoHeightContent>
-        <DefaultDataTable Headers="GetHeaders()" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" Class="mt-6">
+        <SDataTable Headers="GetHeaders()" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" Class="mt-6">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>
@@ -43,7 +43,7 @@
                                 <img src="@context.Item.User.Avatar" />
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div>@context.Item.User.DisplayName</div>
+                                <div>@ReturnNotNullValue(context.Item.User.DisplayName,context.Item.User.Name,context.Item.User.Account)</div>
                             </div>
                         </div>
                         break;
@@ -79,10 +79,10 @@
                         break;
                 }
             </ItemColContent>
-        </DefaultDataTable>
+        </SDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <Pagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 

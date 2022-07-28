@@ -2,35 +2,35 @@
 
 <MRow Class="pt-4">
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
+        <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
     </MCol>
     @foreach (var uri in Dto.RedirectUris)
     {
         <MCol Md=6 Class="d-flex">
-            <DefaultTextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
+            <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
             <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
         </MCol>
     }
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
+        <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
     </MCol>
     @foreach (var uri in Dto.PostLogoutRedirectUris)
     {
         <MCol Md=6 Class="d-flex">
-            <DefaultTextField HideDetails="true" Value="uri" Filled Disabled />
+            <STextField HideDetails="true" Value="uri" Filled Disabled />
             <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
         </MCol>
     }
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.FrontChannelLogoutUri" Label="FrontChannelLogoutUri" />
+        <STextField @bind-Value="Dto.FrontChannelLogoutUri" Label="FrontChannelLogoutUri" />
     </MCol>
     <MCol Md=6>
         <MCheckbox @bind-Value="Dto.FrontChannelLogoutSessionRequired" Label="FrontChannelLogoutSessionRequired"></MCheckbox>
     </MCol>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.BackChannelLogoutUri" Label="BackChannelLogoutUri" />
+        <STextField @bind-Value="Dto.BackChannelLogoutUri" Label="BackChannelLogoutUri" />
     </MCol>
     <MCol Md=6>
         <MCheckbox @bind-Value="Dto.BackChannelLogoutSessionRequired" Label="BackChannelLogoutSessionRequired"></MCheckbox>
@@ -42,7 +42,7 @@
         <MCheckbox @bind-Value="Dto.EnableLocalLogin" Label="@T("EnableLocalLogin")" />
     </MCol>
     @*        <MCol Md=12>
-    <DefaultTextField TValue="string" Label="IdentityProviderRestriction" />
+    <STextField TValue="string" Label="IdentityProviderRestriction" />
     </MCol>*@
 </MRow>
 

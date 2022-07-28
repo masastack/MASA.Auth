@@ -45,14 +45,18 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public void BindThirdPartyIdps(IEnumerable<CustomLoginThirdPartyIdpDto> thirdPartyIdps)
         {
-            _thirdPartyIdps.Clear();
-            _thirdPartyIdps.AddRange(thirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdp(tp.Id, tp.Sort)));
+            _thirdPartyIdps = _thirdPartyIdps.MergeBy(
+                thirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdp(tp.Id, tp.Sort)),
+                item => item.ThirdPartyIdpId,
+                (oldValue, newValue) => new CustomLoginThirdPartyIdp(oldValue.Id, newValue.ThirdPartyIdpId, newValue.Sort));
         }
 
         public void BindRegisterFields(IEnumerable<RegisterFieldDto> registerFields)
         {
-            _registerFields.Clear();
-            _registerFields.AddRange(registerFields.Select(registerField => new RegisterField(registerField.RegisterFieldType, registerField.Sort, registerField.Required)));
+            _registerFields = _registerFields.MergeBy(
+                registerFields.Select(registerField => new RegisterField(registerField.RegisterFieldType, registerField.Sort, registerField.Required)),
+                item => item.RegisterFieldType,
+                (oldValue, newValue) => new RegisterField(oldValue.Id, newValue.RegisterFieldType, newValue.Sort, newValue.Required));
         }
     }
 }

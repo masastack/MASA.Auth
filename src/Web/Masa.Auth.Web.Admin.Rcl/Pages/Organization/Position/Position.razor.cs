@@ -15,6 +15,7 @@ public partial class Position
         set
         {
             _search = value;
+            _page = 1;
             GetPositionsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

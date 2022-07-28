@@ -11,14 +11,14 @@
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="Search" />
                 <MSpacer />
-                <DefaultButton Small OnClick="() => OpenAddThirdPartyIdpDialog()">
+                <SButton Small OnClick="() => OpenAddThirdPartyIdpDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
-                </DefaultButton>
+                </SButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <DefaultDataTable Headers="GetHeaders()" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize">
+            <SDataTable Headers="GetHeaders()" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -56,10 +56,10 @@
                             break;
                     }
                 </ItemColContent>
-            </DefaultDataTable>
+            </SDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <SPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </AutoHeight>
 </DefaultCard>

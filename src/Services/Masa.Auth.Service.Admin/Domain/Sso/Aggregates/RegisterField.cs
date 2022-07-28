@@ -19,5 +19,13 @@ public class RegisterField : Entity<int>
         Sort = sort;
         Required = required;
     }
+
+    public RegisterField(int id, RegisterFieldTypes registerFieldType, int sort, bool required)
+    {
+        Id = id;
+        RegisterFieldType = registerFieldType;
+        Sort = sort;
+        Required = required;
+    }
 }
 

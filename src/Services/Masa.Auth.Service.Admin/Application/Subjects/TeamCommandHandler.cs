@@ -9,6 +9,7 @@ public class TeamCommandHandler
     readonly ITeamRepository _teamRepository;
 
     readonly TeamDomainService _teamDomainService;
+    readonly RoleDomainService _roleDomainService;
     readonly IClient _aliyunClient;
 
     string _bucket = "";
@@ -16,12 +17,14 @@ public class TeamCommandHandler
 
     public TeamCommandHandler(ITeamRepository teamRepository,
                               TeamDomainService teamDomainService,
+                              RoleDomainService roleDomainService,
                               IMasaConfiguration masaConfiguration,
                               IClient aliyunClient,
                               DaprClient daprClient)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
+        _roleDomainService = roleDomainService;
         _aliyunClient = aliyunClient;
 
         _bucket = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result["bucket"];
@@ -51,6 +54,7 @@ public class TeamCommandHandler
 
         await _teamDomainService.SetTeamAdminAsync(team, dto.AdminStaffs, dto.AdminRoles, dto.AdminPermissions);
         await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
+        await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles));
     }
 
     [EventHandler]
@@ -74,14 +78,20 @@ public class TeamCommandHandler
     {
         var dto = updateTeamPersonnelCommand.UpdateTeamPersonnelDto;
         var team = await _teamRepository.GetByIdAsync(dto.Id);
+        var roles = new List<Guid>();
         if (updateTeamPersonnelCommand.MemberType == TeamMemberTypes.Admin)
         {
+            roles = dto.Roles.Union(team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Admin)
+                                                    .Select(tr => tr.RoleId)).ToList();
             await _teamDomainService.SetTeamAdminAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
         }
         else
         {
+            roles = dto.Roles.Union(team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Member)
+                                        .Select(tr => tr.RoleId)).ToList();
             await _teamDomainService.SetTeamMemberAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
         }
+        await _roleDomainService.UpdateRoleLimitAsync(dto.Roles);
     }
 
 
@@ -94,6 +104,7 @@ public class TeamCommandHandler
             throw new UserFriendlyException("the team has staffs can`t delete");
         }
         await _teamRepository.RemoveAsync(team);
-    }
 
+        await _roleDomainService.UpdateRoleLimitAsync(team.TeamRoles.Select(tr => tr.RoleId));
+    }
 }

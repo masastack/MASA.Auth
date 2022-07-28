@@ -29,9 +29,9 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<Permission> ChildPermissions => childPermissions;
 
-    private List<PermissionRelation> childPermissionRelations = new();
+    private List<PermissionRelation> _childPermissionRelations = new();
 
-    public IReadOnlyCollection<PermissionRelation> ChildPermissionRelations => childPermissionRelations;
+    public IReadOnlyCollection<PermissionRelation> ChildPermissionRelations => _childPermissionRelations;
 
     private List<Permission> parentPermissions = new();
 
@@ -94,17 +94,15 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         }
     }
 
-    public void BindApiPermission(params Guid[] childrenId)
+    public void BindApiPermission(params Guid[] childrenIds)
     {
-        if (Type == PermissionTypes.Api && childrenId.Any())
+        if (Type == PermissionTypes.Api && childrenIds.Any())
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
-        childPermissionRelations.Clear();
-        foreach (var childId in childrenId)
-        {
-            childPermissionRelations.Add(new PermissionRelation(Id, childId));
-        }
+        _childPermissionRelations = _childPermissionRelations.MergeBy(
+            childrenIds.Select(childrenId => new PermissionRelation(Id, childrenId)),
+            item => item.ChildPermissionId);
     }
 
     public void SetParent(Guid parentId)

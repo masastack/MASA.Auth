@@ -1,12 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Show Title="@T("Add Api Permission")" ValueChanged="ShowChanged">
+<SSheetDialog Value=Show Title="@T("Add Api Permission")" ValueChanged="ShowChanged">
     <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
         <MCardText>
             <MForm Model=_apiPermissionDetailDto EnableValidation @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name" />
+                        <STextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=6>
                         <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
@@ -18,7 +18,7 @@
                         </MSelect>
                     </MCol>
                     <MCol Md=6>
-                        <DefaultTextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
+                        <STextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
                     </MCol>
                     <MCol Md=12>
                         <MSelect @bind-Value="_apiPermissionDetailDto.Type"
@@ -30,7 +30,7 @@
                         </MSelect>
                     </MCol>
                     <MCol Md=12>
-                        <DefaultTextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url" />
+                        <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url" />
                     </MCol>
                     <MCol Md=12>
                         <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
@@ -41,7 +41,7 @@
         </MCardText>
         <MCardActions class="d-flex align-center mb-12 px-6">
             <MSpacer />
-            <DefaultButton Medium OnClick="OnSubmitHandler">@T("Submit")</DefaultButton>
+            <SButton Medium OnClick="OnSubmitHandler">@T("Submit")</SButton>
         </MCardActions>
     </MCard>
-</SheetDialog>
+</SSheetDialog>

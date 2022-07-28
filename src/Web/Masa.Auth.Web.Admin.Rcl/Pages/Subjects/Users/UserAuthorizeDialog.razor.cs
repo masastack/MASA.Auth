@@ -17,6 +17,8 @@ public partial class UserAuthorizeDialog
     [Parameter]
     public Guid UserId { get; set; }
 
+    public List<Guid> TeamRoles { get; set; } = new();
+
     public UpdateUserAuthorizationDto Authorization { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;

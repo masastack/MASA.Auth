@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update User")">
-    <MForm Model=User EnableValidation>
+    <MForm Model=User EnableValidation EnableI18n>
         <AutoHeight Overflow AutoClass="mt-6">
             <HeaderContent>
                 <div class="d-flex">
@@ -18,43 +18,43 @@
                 </div>
                 <MRow>
                     <MCol>
-                        <DefaultTextField @bind-Value="User.Name" Label="@T("Name")" />
+                        <STextField @bind-Value="User.Name" Label="@T("Name")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" />
-                    </MCol>
-                </MRow>
-                <MRow>
-                    <MCol>
-                        <DefaultTextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" />
-                    </MCol>
-                    <MCol>
-                        <DefaultTextField @bind-Value="User.Email" Label="@T("Email")" />
+                        <STextField @bind-Value="User.PhoneNumber" Label="@T("PhoneNumber")" />
                     </MCol>
                 </MRow>
                 <MRow>
                     <MCol>
-                        <DefaultTextField Readonly Value="UserDetail.Account" Label="@T("Account")" />
+                        <STextField @bind-Value="User.CompanyName" Label="@T("CompanyName")" />
                     </MCol>
                     <MCol>
-                        <CopyPassword Value="@UserPassword.Password" ValueChanged="ResetUserPasswordAsync" />
+                        <STextField @bind-Value="User.Email" Label="@T("Email")" />
+                    </MCol>
+                </MRow>
+                <MRow>
+                    <MCol>
+                        <STextField Readonly Value="UserDetail.Account" Label="@T("Account")" />
+                    </MCol>
+                    <MCol>
+                        <SCopyPassword Value="@UserPassword.Password" ValueChanged="ResetUserPasswordAsync" />
                     </MCol>
                 </MRow>
                 <DefaultTitle>@T("Detail Information")</DefaultTitle>
                 <MRow>
                     <MCol>
-                        <DefaultTextField @bind-Value="User.IdCard" Label="@T("IdCard")" />
+                        <STextField @bind-Value="User.IdCard" Label="@T("IdCard")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="User.Address.Address" Label="@T("Address")" />
+                        <STextField @bind-Value="User.Address.Address" Label="@T("Address")" />
                     </MCol>
                 </MRow>
                 <MRow>
                     <MCol>
-                        <DefaultTextField @bind-Value="User.Department" Label="@T("Department")" />
+                        <STextField @bind-Value="User.Department" Label="@T("Department")" />
                     </MCol>
                     <MCol>
-                        <DefaultTextField @bind-Value="User.Position" Label="@T("Position")" />
+                        <STextField @bind-Value="User.Position" Label="@T("Position")" />
                     </MCol>
                 </MRow>
                 <Authorization Avatars=UserDetail.ThirdPartyIdpAvatars />

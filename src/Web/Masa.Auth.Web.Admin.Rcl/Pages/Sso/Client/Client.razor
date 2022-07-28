@@ -11,14 +11,14 @@
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="_clientPaginationDto.Search" OnKeyDown="SearchKeyHandler" FullWidth=false Color="primary" Class="rounded-2 search" />
                 <MSpacer />
-                <DefaultButton Small OnClick="()=>{_addDialog=true;}">
+                <SButton Small OnClick="()=>{_addDialog=true;}">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
-                </DefaultButton>
+                </SButton>
             </div>           
         </HeaderContent>
         <AutoHeightContent>
-            <DefaultDataTable Headers="GetHeaders()" Items="_paginationDto.Items" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize">
+            <SDataTable Headers="GetHeaders()" Items="_paginationDto.Items" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -46,10 +46,10 @@
                             break;
                     }
                 </ItemColContent>
-            </DefaultDataTable>
+            </SDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-4" Page="_clientPaginationDto.Page" PageSize=_clientPaginationDto.PageSize 
+            <SPagination Class="mt-4" Page="_clientPaginationDto.Page" PageSize=_clientPaginationDto.PageSize 
                         Total=_paginationDto.Total PageChanged="PageChangedHandler" PageSizeChanged="PageSizeChangedHandler"/>
         </FooterContent>
     </AutoHeight>

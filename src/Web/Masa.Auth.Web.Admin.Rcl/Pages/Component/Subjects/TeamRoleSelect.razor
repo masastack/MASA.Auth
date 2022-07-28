@@ -1,0 +1,40 @@
+﻿@inherits AdminCompontentBase
+
+<MAutocomplete Value="Value"
+               ValueChanged=UpdateValueAsync
+               Items="Teams"
+               TItem="TeamRoleSelectDto"
+               TValue="List<Guid>"
+               TItemValue="Guid"
+               Outlined
+               Height=55
+               Chips
+               Color="primary"
+               Label="@T("Team")"
+               HideDetails="@("auto")"
+               ItemText="t=>t.Name"
+               ItemValue="t=>t.Id"
+               Multiple
+               Class="@Class">
+    <SelectionContent Context="data">
+        <MChip Close
+               OnCloseClick="()=>Value.Remove(data.Item.Id)">
+            <MAvatar Left>
+                <img src="@data.Item.Avatar" />
+            </MAvatar>
+            @data.Item.Name
+        </MChip>
+    </SelectionContent>
+    <ItemContent Context="data">
+        <MListItemAvatar>
+            <MAvatar>
+                <img src="@data.Item.Avatar" />
+            </MAvatar>           
+        </MListItemAvatar>
+        <MListItemContent>
+            <MListItemTitle>
+                @data.Item.Name
+            </MListItemTitle>
+        </MListItemContent>
+    </ItemContent>
+</MAutocomplete>

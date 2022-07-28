@@ -8,10 +8,10 @@
         </MListItemAvatar>
         <MListItemContent class="py-0">
             <MListItemTitle>
-                <DefaultTextField @bind-Value="@Value.Avatar.Name" Placeholder="Michael Harmen"></DefaultTextField>
+                <STextField @bind-Value="@Value.Avatar.Name" Placeholder="Michael Harmen"></STextField>
             </MListItemTitle>
             <MListItemSubtitle class="mt-2">
-                <ColorGroup @bind-Value="@Value.Avatar.Color" Colors='_colors' />
+                <SColorGroup @bind-Value="@Value.Avatar.Color" Colors='_colors' />
             </MListItemSubtitle>
         </MListItemContent>
     </MListItem>

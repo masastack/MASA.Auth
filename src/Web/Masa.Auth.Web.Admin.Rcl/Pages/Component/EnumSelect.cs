@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class EnumSelect<TValue> : DefaultSelect<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
+public class EnumSelect<TValue> : SSelect<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
 {
     [CascadingParameter]
     public I18n I18N { get; set; } = default!;

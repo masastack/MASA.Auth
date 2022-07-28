@@ -38,11 +38,9 @@ public class Department : FullAggregateRoot<Guid, Guid>
 
     public void SetStaffs(params Guid[] staffIds)
     {
-        _departmentStaffs.Clear();
-        foreach (var staffId in staffIds)
-        {
-            _departmentStaffs.Add(new DepartmentStaff(staffId));
-        }
+        _departmentStaffs = _departmentStaffs.MergeBy(
+            staffIds.Select(staffId => new DepartmentStaff(staffId)),
+            item => item.StaffId);
     }
 
     public void ResetStaffs(params Guid[] staffIds)

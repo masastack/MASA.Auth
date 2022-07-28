@@ -29,8 +29,8 @@ public class FileEncoderHelper
 
     private static bool IsUTF8Bytes(byte[] data)
     {
-        int charByteCounter = 1; 
-        byte curByte; 
+        int charByteCounter = 1;
+        byte curByte;
         for (int i = 0; i < data.Length; i++)
         {
             curByte = data[i];
