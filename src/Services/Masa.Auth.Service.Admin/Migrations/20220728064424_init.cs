@@ -1,11 +1,13 @@
-﻿using System;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Masa.Auth.Service.Admin.Migrations
 {
-    public partial class FullEntity : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -269,18 +271,36 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OperationLog",
+                schema: "auth",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Operator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OperatorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OperationType = table.Column<int>(type: "int", nullable: false),
+                    OperationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OperationDescription = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperationLog", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Permission",
                 schema: "auth",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SystemId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SystemId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AppId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
@@ -351,7 +371,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Avatar_Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     TeamType = table.Column<int>(type: "int", nullable: false),
-                    MemberCount = table.Column<int>(type: "int", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -416,6 +435,26 @@ namespace Masa.Auth.Service.Admin.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserClaim", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserSystemBusinessData",
+                schema: "auth",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SystemId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSystemBusinessData", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -963,6 +1002,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     ThridPartyIdentity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExtendedData = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdentityProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -1651,10 +1691,34 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: new[] { "State", "TimesSent", "ModificationTime" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permission_AppId_Code",
+                name: "IX_OperationLog_OperationDescription",
+                schema: "auth",
+                table: "OperationLog",
+                column: "OperationDescription");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OperationLog_OperationTime",
+                schema: "auth",
+                table: "OperationLog",
+                column: "OperationTime");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OperationLog_OperationType",
+                schema: "auth",
+                table: "OperationLog",
+                column: "OperationType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OperationLog_Operator",
+                schema: "auth",
+                table: "OperationLog",
+                column: "Operator");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Permission_SystemId_AppId_Code",
                 schema: "auth",
                 table: "Permission",
-                columns: new[] { "AppId", "Code" },
+                columns: new[] { "SystemId", "AppId", "Code" },
                 unique: true,
                 filter: "[IsDeleted] = 0");
 
@@ -1763,9 +1827,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "IX_Staff_PositionId",
                 schema: "auth",
                 table: "Staff",
-                column: "PositionId",
-                unique: true,
-                filter: "[PositionId] IS NOT NULL");
+                column: "PositionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Staff_UserId",
@@ -1901,6 +1963,14 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 table: "UserRole",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSystemBusinessData_UserId_SystemId",
+                schema: "auth",
+                table: "UserSystemBusinessData",
+                columns: new[] { "UserId", "SystemId" },
+                unique: true,
+                filter: "[IsDeleted] = 0");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1994,6 +2064,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
+                name: "OperationLog",
+                schema: "auth");
+
+            migrationBuilder.DropTable(
                 name: "PermissionRelation",
                 schema: "auth");
 
@@ -2035,6 +2109,10 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRole",
+                schema: "auth");
+
+            migrationBuilder.DropTable(
+                name: "UserSystemBusinessData",
                 schema: "auth");
 
             migrationBuilder.DropTable(

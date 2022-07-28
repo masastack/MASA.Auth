@@ -234,6 +234,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -2190,6 +2193,56 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("UserClaim", "auth");
                 });
 
+            modelBuilder.Entity("Masa.BuildingBlocks.Dispatcher.IntegrationEvents.Logs.IntegrationEventLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EventTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimesSent")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TransactionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "EventId", "RowVersion" }, "index_eventid_version");
+
+                    b.HasIndex(new[] { "State", "ModificationTime" }, "index_state_modificationtime");
+
+                    b.HasIndex(new[] { "State", "TimesSent", "ModificationTime" }, "index_state_timessent_modificationtime");
+
+                    b.ToTable("IntegrationEventLog", "auth");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.LdapIdp", b =>
                 {
                     b.HasBaseType("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider");
@@ -2411,7 +2464,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff.Address#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
                         {
                             b1.Property<Guid>("StaffId")
                                 .HasColumnType("uniqueidentifier");
@@ -2454,7 +2507,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
                 {
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team.Avatar#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
                         {
                             b1.Property<Guid>("TeamId")
                                 .HasColumnType("uniqueidentifier");
@@ -2575,7 +2628,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
                 {
-                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User.Address#Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");

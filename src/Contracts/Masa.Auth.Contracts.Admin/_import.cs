@@ -3,6 +3,7 @@
 
 global using FluentValidation;
 global using Magicodes.ExporterAndImporter.Core;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Converters;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;

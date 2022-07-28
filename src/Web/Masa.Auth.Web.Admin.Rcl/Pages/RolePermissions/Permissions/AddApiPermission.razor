@@ -29,8 +29,11 @@
                                  ItemValue="u => u.Value">
                         </MSelect>
                     </MCol>
-                    <MCol Md=12>
+                    <MCol Md=6>
                         <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url" />
+                    </MCol>
+                    <MCol Md=6>
+                        <SNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                     </MCol>
                     <MCol Md=12>
                         <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
