@@ -143,7 +143,13 @@
                             </DefaultDataTable>
                         </AutoHeightContent>
                         <FooterContent>
-                            <Pagination Class="mt-4" @bind-Page="_getStaffsDto.Page" @bind-PageSize=_getStaffsDto.PageSize Total=_paginationStaffs.Total />
+                            <Pagination 
+                                Class="mt-4" 
+                                Page="_getStaffsDto.Page" 
+                                PageSize=_getStaffsDto.PageSize 
+                                Total=_paginationStaffs.Total 
+                                PageChanged="PageChangedHandler" 
+                                PageSizeChanged="PageSizeChangedHandler" />
                         </FooterContent>
                     </AutoHeight>
                 </DefaultCard>            
