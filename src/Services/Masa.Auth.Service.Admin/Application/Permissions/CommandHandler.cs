@@ -89,7 +89,7 @@ public class CommandHandler
         }
         if (permissionBaseInfo.Order == 0)
         {
-            permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(addPermissionCommand.ParentId);
+            permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(permissionBaseInfo.AppId, addPermissionCommand.ParentId);
         }
         var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,

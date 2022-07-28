@@ -55,14 +55,14 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
-    public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, List<Permission> childPermissions) : this(systemId, appId, name, code, url, icon, PermissionTypes.Menu, "", 0, true)
+    public Permission(Guid id, string systemId, string appId, string name, string code, string url,
+        string icon, int order, PermissionTypes type) : this(systemId, appId, name, code, url, icon, order, type)
     {
-        this.childPermissions = childPermissions;
+        Id = id;
     }
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", 0, true)
+        string icon, int order, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", order, true)
     {
     }
 

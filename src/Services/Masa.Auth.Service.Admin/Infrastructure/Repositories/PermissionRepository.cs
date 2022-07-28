@@ -23,10 +23,12 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
             ?? throw new UserFriendlyException("The current permission does not exist");
     }
 
-    public int GetIncrementOrder(Guid parentId)
+    public int GetIncrementOrder(string appId, Guid parentId)
     {
-        var maxOrder = Context.Set<Permission>().Where(p => p.ParentId == parentId)
-            .Select(p => p.Order).Max();
+        var maxOrder = Context.Set<Permission>()
+            .Where(p => p.ParentId == parentId && p.AppId == appId)
+            .Select(p => p.Order)
+            .Max();
         return Math.Min(maxOrder + 1, BusinessConsts.PERMISSION_ORDER_MAX_VALUE);
     }
 

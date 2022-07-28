@@ -9,5 +9,5 @@ public interface IPermissionRepository : IRepository<Permission, Guid>
 
     Task<List<Guid>> GetParentAsync(Guid Id, bool recursive = true);
 
-    int GetIncrementOrder(Guid parentId);
+    int GetIncrementOrder(string appId, Guid parentId);
 }
