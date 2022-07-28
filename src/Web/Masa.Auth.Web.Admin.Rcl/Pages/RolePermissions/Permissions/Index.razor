@@ -145,17 +145,17 @@
                                                    Multiple></MAutocomplete>
                                         </MCol>
                                         <MCol Md=12>
-                                            <GroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
+                                            <SGroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
                                                 @foreach (var role in _menuPermissionDetailDto.Roles)
                                                 {
                                                     <MChip Small>
                                                         @role.Name
                                                     </MChip>
                                                 }
-                                            </GroupBox>
+                                            </SGroupBox>
                                         </MCol>
                                         <MCol Md=12>
-                                            <GroupBox Title="@T("Permission User")" Style="min-height: 48px;">
+                                            <SGroupBox Title="@T("Permission User")" Style="min-height: 48px;">
                                                 <div>
                                                     @foreach (var item in _menuPermissionDetailDto.Users)
                                                     {
@@ -172,7 +172,7 @@
                                                         </MChip>
                                                     }
                                                 </div>
-                                            </GroupBox>
+                                            </SGroupBox>
                                         </MCol>
                                         <MCol Md=12>
                                             <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>

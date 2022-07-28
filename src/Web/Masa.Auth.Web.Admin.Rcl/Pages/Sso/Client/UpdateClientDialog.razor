@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Update Client")" ContentClass="px-sheet-dialog">
+<SSheetDialog Value=Value ValueChanged=ValueChanged Title="@T("Update Client")" ContentClass="px-sheet-dialog">
     <MCard Style="height: calc(100vh - 140px);">
         <MCardText Class="full-height">
             <SElevationTab Dense Class="pt-8 full-height" Tabs='_tabHeader' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
@@ -26,4 +26,4 @@
             <MButton OnClick="SaveAsync" class="rounded-pill primary" MinWidth="100">@T("Save")</MButton>
         </MCardActions>
     </MCard>
-</SheetDialog>
+</SSheetDialog>

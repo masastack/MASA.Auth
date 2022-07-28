@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SheetDialog Value=Visible ValueChanged=DialogValueChanged Title="@T("Update Team")" ContentClass="px-sheet-dialog">
+<SSheetDialog Value=Visible ValueChanged=DialogValueChanged Title="@T("Update Team")" ContentClass="px-sheet-dialog">
     <SElevationTab Dense Class="pt-12 full-height" Tabs='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' ItemsClass="mt-8 full-height">
         <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
@@ -47,7 +47,7 @@
             </MCard>
         </SElevationTabItem>
     </SElevationTab>
-</SheetDialog>
+</SSheetDialog>
 
 @*<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />
 <PermissionsPreview @bind-Show="_memberPreview" Value="Dto.TeamMember.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />*@
