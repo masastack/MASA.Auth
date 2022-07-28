@@ -209,18 +209,20 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public void AddRoles(params Guid[] roleIds)
     {
-        _roles.Clear();
-        _roles.AddRange(roleIds.Select(roleId => new UserRole(roleId)));
-    }
-
-    public void RemoveRoles(params Guid[] roleIds)
-    {
-        _roles.RemoveAll(ur => roleIds.Contains(ur.RoleId));
+        _roles = _roles.MergeBy(
+           roleIds.Select(roleId => new UserRole(roleId)),
+           item => item.RoleId);
     }
 
     public void AddPermissions(List<UserPermission> permissions)
     {
-        _permissions.Clear();
-        _permissions.AddRange(permissions);
+        _permissions = _permissions.MergeBy(
+           permissions,
+           item => item.PermissionId,
+           (oldValue, newValue) =>
+           {
+               oldValue.Update(newValue.PermissionId, newValue.Effect);
+               return oldValue;
+           });
     }
 }

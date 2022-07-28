@@ -1,0 +1,53 @@
+﻿@inherits AdminCompontentBase
+
+<MAutocomplete Value="Value"
+               ValueChanged="async value => await UpdateValueAsync(value)"
+               TValue="List<Guid>"
+               TItem="StaffSelectDto"
+               TItemValue="Guid"
+               Items="Staffs"
+               Outlined
+               Height=55
+               Chips
+               Color="primary"
+               Disabled=Readonly
+               Label="@Label"
+               HideDetails="@("auto")"
+               ItemText="t=>t.Name"
+               ItemValue="t=>t.Id"
+               Multiple
+               Class="@Class">
+    <SelectionContent Context="data">
+        <MChip Close Style="height:28px;" OnCloseClick="()=>RemoveStaff(data.Item)">
+            @if (!string.IsNullOrEmpty(data.Item.Avatar))
+            {
+                <MAvatar Left>
+                    <MImage Src="@data.Item.Avatar"></MImage>
+                </MAvatar>
+            }
+            <span class="body2 regular--text">
+                @ReturnNotNullValue(data.Item.DisplayName,data.Item.Name,data.Item.Account)
+            </span>
+        </MChip>
+    </SelectionContent>
+    <ItemContent Context="data">
+        @if (!string.IsNullOrEmpty(data.Item.Avatar))
+        {
+            <MListItemAvatar>
+                <img src="@data.Item.Avatar">
+            </MListItemAvatar>
+        }
+        <MListItemContent>
+            <MListItemTitle>
+                <span class="body2 regular--text">
+                    @data.Item.DisplayName
+                </span>
+            </MListItemTitle>
+            <MListItemSubtitle>
+                <span class="body2 regular--text">
+                    @data.Item.JobNumber
+                </span>
+            </MListItemSubtitle>
+        </MListItemContent>
+    </ItemContent>
+</MAutocomplete>

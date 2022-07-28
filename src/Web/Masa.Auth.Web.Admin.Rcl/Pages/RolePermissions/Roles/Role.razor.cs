@@ -16,6 +16,7 @@ public partial class Role
         set
         {
             _search = value;
+            _page = 1;
             GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -26,6 +27,7 @@ public partial class Role
         set
         {
             _enabled = value;
+            _page = 1;
             GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

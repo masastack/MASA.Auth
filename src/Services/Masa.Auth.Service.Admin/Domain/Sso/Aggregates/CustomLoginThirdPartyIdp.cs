@@ -18,5 +18,12 @@ public class CustomLoginThirdPartyIdp : Entity<int>
         ThirdPartyIdpId = thirdPartyIdpId;
         Sort = sort;
     }
+
+    public CustomLoginThirdPartyIdp(int id, Guid thirdPartyIdpId, int sort)
+    {
+        Id = id;
+        ThirdPartyIdpId = thirdPartyIdpId;
+        Sort = sort;
+    }
 }
 

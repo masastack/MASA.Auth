@@ -7,10 +7,10 @@
     <MCol Md="12" Class="d-flex justify-space-between">
         <OutlinedSearchTextField @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
         <PermissionView Code="@ElementPermissionCodes.TeamAdd">
-            <DefaultButton Small Class="ml-4" OnClick="_addSheet.Show">
+            <SButton Small Class="ml-4" OnClick="_addSheet.Show">
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Create Team")</span>
-            </DefaultButton>
+            </SButton>
         </PermissionView>
     </MCol>
     @foreach (var team in _teams)

@@ -18,6 +18,7 @@ public class TeamStaff : FullEntity<Guid, Guid>
         StaffId = staffId;
         TeamMemberType = teamMemberType;
     }
+
     public TeamStaff(Guid teamId, Guid staffId, TeamMemberTypes teamMemberType)
     {
         TeamId = teamId;

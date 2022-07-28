@@ -18,6 +18,7 @@ public partial class User
         set
         {
             _userId = value;
+            _page = 1;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -28,6 +29,7 @@ public partial class User
         set
         {
             _enabled = value;
+            _page = 1;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -38,6 +40,7 @@ public partial class User
         set
         {
             _startTime = value;
+            _page = 1;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -48,6 +51,7 @@ public partial class User
         set
         {
             _endTime = value;
+            _page = 1;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

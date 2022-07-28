@@ -15,6 +15,7 @@ public partial class CustomLoginRegister
         set
         {
             _search = value;
+            _page = 1;
             GetCustomLoginsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

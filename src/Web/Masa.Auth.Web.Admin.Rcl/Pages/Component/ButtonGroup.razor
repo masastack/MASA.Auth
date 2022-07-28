@@ -22,12 +22,12 @@
 } 
 else
 {
-    <LabeledRadioGroup Value="Value.ToString()" Dense>
+    <SLabeledRadioGroup Value="Value.ToString()" Dense>
         @foreach (var (key, value) in KeyValues)
         {
-            <LabeledRadio MinWidth=70 Value="@value.ToString()" OnClick="async() => await ValueChanged.InvokeAsync(value)">
+            <SLabeledRadio MinWidth=70 Value="@value.ToString()" OnClick="async() => await ValueChanged.InvokeAsync(value)">
                 <span class="@(Value.Equals(value) ? "subtitle2 emphasis2--text":"btn regular2--text")">@T(key)</span>
-            </LabeledRadio>
+            </SLabeledRadio>
         }
-    </LabeledRadioGroup>
+    </SLabeledRadioGroup>
 }

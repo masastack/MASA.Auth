@@ -15,6 +15,7 @@ public partial class ApiResource
         set
         {
             _search = value;
+            _page = 1;
             GetApiResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

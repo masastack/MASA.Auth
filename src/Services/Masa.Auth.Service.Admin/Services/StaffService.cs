@@ -93,7 +93,7 @@ public class StaffService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<StaffSelectDto>> GetSelectAsync(IEventBus eventBus, [FromQuery] string name)
+    private async Task<List<StaffSelectDto>> GetSelectAsync(IEventBus eventBus, [FromQuery] string? name)
     {
         var query = new StaffSelectQuery(name);
         await eventBus.PublishAsync(query);

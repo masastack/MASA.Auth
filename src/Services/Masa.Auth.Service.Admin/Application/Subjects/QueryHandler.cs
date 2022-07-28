@@ -118,7 +118,6 @@ public class QueryHandler
         query.Result = user;
     }
 
-
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
@@ -212,17 +211,17 @@ public class QueryHandler
     {
         Expression<Func<Staff, bool>> condition = staff => true;
         if (!string.IsNullOrEmpty(query.Search))
-            condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
-        var staffs = await _staffRepository.GetPaginatedListAsync(condition, 0, query.MaxCount);
+            condition = condition.And(s => s.DisplayName.Contains(query.Search) || s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
+        var staffs = await _staffRepository.GetListAsync(condition);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.Avatar)).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.Account, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
     }
 
     [EventHandler]
     public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
     {
         var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
-        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.Avatar)).ToList();
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.Account, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
     }
 
     [EventHandler]
@@ -495,6 +494,25 @@ public class QueryHandler
         teamSelectListQuery.Result = (await _teamRepository.GetListAsync(condition))
                 .Select(t => new TeamSelectDto(t.Id, t.Name, t.Avatar.Url))
                 .ToList();
+    }
+
+    [EventHandler]
+    public async Task GetTeamRoleSelectAsync(TeamRoleSelectQuery teamRoleSelectQuery)
+    {
+        Expression<Func<Team, bool>> condition = _ => true;
+        if (!string.IsNullOrEmpty(teamRoleSelectQuery.Name))
+        {
+            condition = condition.And(s => s.Name.Contains(teamRoleSelectQuery.Name));
+        }
+        var teams = await _authDbContext.Set<Team>()
+                                        .Include(team => team.TeamRoles)
+                                        .ThenInclude(tr => tr.Role)
+                                        .ToListAsync();
+        teamRoleSelectQuery.Result = teams.Select(team => new TeamRoleSelectDto(
+            team.Id,
+            team.Name,
+            team.Avatar.Url,
+            team.TeamRoles.Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity)).ToList())).ToList();
     }
 
     #endregion

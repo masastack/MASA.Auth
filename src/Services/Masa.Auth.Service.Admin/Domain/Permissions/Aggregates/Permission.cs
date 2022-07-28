@@ -19,6 +19,8 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; } = "";
 
+    public int Order { get; set; }
+
     public PermissionTypes Type { get; private set; }
 
     public string Description { get; private set; } = "";
@@ -29,9 +31,9 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<Permission> ChildPermissions => childPermissions;
 
-    private List<PermissionRelation> childPermissionRelations = new();
+    private List<PermissionRelation> _childPermissionRelations = new();
 
-    public IReadOnlyCollection<PermissionRelation> ChildPermissionRelations => childPermissionRelations;
+    public IReadOnlyCollection<PermissionRelation> ChildPermissionRelations => _childPermissionRelations;
 
     private List<Permission> parentPermissions = new();
 
@@ -53,19 +55,19 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<TeamPermission> TeamPermissions => teamPermissions;
 
-    public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, List<Permission> childPermissions) : this(systemId, appId, name, code, url, icon, PermissionTypes.Menu, "", true)
+    public Permission(Guid id, string systemId, string appId, string name, string code, string url,
+        string icon, int order, PermissionTypes type) : this(systemId, appId, name, code, url, icon, order, type)
     {
-        this.childPermissions = childPermissions;
+        Id = id;
     }
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", true)
+        string icon, int order, PermissionTypes type) : this(systemId, appId, name, code, url, icon, type, "", order, true)
     {
     }
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description, bool enabled)
+        string icon, PermissionTypes type, string description, int order, bool enabled)
     {
         SystemId = systemId;
         AppId = appId;
@@ -76,6 +78,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Type = type;
         Description = description;
         Enabled = enabled;
+        Order = order;
     }
 
     public void DeleteCheck()
@@ -94,17 +97,15 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         }
     }
 
-    public void BindApiPermission(params Guid[] childrenId)
+    public void BindApiPermission(params Guid[] childrenIds)
     {
-        if (Type == PermissionTypes.Api && childrenId.Any())
+        if (Type == PermissionTypes.Api && childrenIds.Any())
         {
             throw new UserFriendlyException("the permission of api type can`t bind api permission");
         }
-        childPermissionRelations.Clear();
-        foreach (var childId in childrenId)
-        {
-            childPermissionRelations.Add(new PermissionRelation(Id, childId));
-        }
+        _childPermissionRelations = _childPermissionRelations.MergeBy(
+            childrenIds.Select(childrenId => new PermissionRelation(Id, childrenId)),
+            item => item.ChildPermissionId);
     }
 
     public void SetParent(Guid parentId)
@@ -117,7 +118,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     }
 
     public void Update(string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description, bool enabled)
+        string icon, PermissionTypes type, string description, int order, bool enabled)
     {
         appId.ThrowIfEmpty();
         name.ThrowIfEmpty();
@@ -129,6 +130,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Icon = icon;
         Type = type;
         Description = description;
+        Order = order;
         Enabled = enabled;
     }
 }

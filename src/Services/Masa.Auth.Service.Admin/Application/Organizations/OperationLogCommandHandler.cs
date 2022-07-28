@@ -17,7 +17,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task UpsertDepartmentOperationLogAsync(AddDepartmentCommand command)
     {
-        if(command.UpsertDepartmentDto.Id== Guid.Empty)
+        if (command.UpsertDepartmentDto.Id == Guid.Empty)
             await _operationLogRepository.AddDefaultAsync(OperationTypes.AddDepartment, $"添加部门：{command.UpsertDepartmentDto.Name}");
         else
             await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateDepartment, $"编辑部门：{command.UpsertDepartmentDto.Name}");
@@ -30,7 +30,7 @@ public class OperationLogCommandHandler
                                               .Where(department => department.Id == command.DepartmentId)
                                               .Select(department => department.Name)
                                               .FirstAsync();
-        if(name is not null)
+        if (name is not null)
             await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveDepartment, $"删除部门：{name}");
     }
 
