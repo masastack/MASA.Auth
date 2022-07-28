@@ -11,18 +11,21 @@ public class RandomUtils
 
     public static string GenerateSpecifiedString(int length, bool includeNumbers = false)
     {
-        var sb = includeNumbers ? new StringBuilder(length * 2) : new StringBuilder(length);
+        var sb = new StringBuilder(length);
+        var numberModel = includeNumbers;
         for (var i = 0; i < length; i++)
-        {
-            var index = Random.Shared.Next(LETTERS.Length);
-
-            sb.Append(LETTERS[index]);
-
-            if (includeNumbers)
+        {          
+            if (numberModel)
             {
-                index = Random.Shared.Next(NUMBERS.Length);
+                var index = Random.Shared.Next(NUMBERS.Length);
                 sb.Append(NUMBERS[index]);
             }
+            else
+            {
+                var index = Random.Shared.Next(LETTERS.Length);
+                sb.Append(LETTERS[index]);
+            }
+            if (includeNumbers) numberModel = !numberModel;
         }
         return sb.ToString();
     }
