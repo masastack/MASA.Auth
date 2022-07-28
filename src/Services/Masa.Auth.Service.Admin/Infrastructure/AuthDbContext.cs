@@ -33,7 +33,7 @@ public class AuthDbContext : IsolationDbContext
         //}
 
         builder.ApplyConfiguration(new IntegrationEventLogEntityTypeConfiguration());
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetEntryAssembly()!);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()!);
         builder.ApplyConfigurationsFromAssembly(typeof(UserClaimRepository).Assembly);
 
         base.OnModelCreatingExecuting(builder);

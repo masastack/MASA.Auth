@@ -79,13 +79,13 @@
                                 <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
                                     <MRow>
                                         <MCol Md=6>
-                                            <DefaultSelect @bind-Value="_menuPermissionDetailDto.AppId"
+                                            <SSelect @bind-Value="_menuPermissionDetailDto.AppId"
                                                 Label="@T("Pre Code Select")"
                                                 Outlined HideDetails="@("auto")"
                                                 Items="_curAppItems"
                                                 ItemText="u => u.Name"
                                                 ItemValue="u => u.Identity">
-                                            </DefaultSelect>
+                                            </SSelect>
                                         </MCol>
                                         <MCol Md=6>
                                             <STextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
@@ -119,13 +119,13 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultSelect @bind-Value="_menuPermissionDetailDto.Type"
+                                            <SSelect @bind-Value="_menuPermissionDetailDto.Type"
                                                 Label="@T("Permission Type")"
                                                 Outlined HideDetails="@("auto")"
                                                 Items="@_menuPermissionTypes"
                                                 ItemText="u => u.Text"
                                                 ItemValue="u => u.Value">
-                                            </DefaultSelect>
+                                            </SSelect>
                                         </MCol>
                                         @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
                                         {
@@ -134,7 +134,7 @@
                                             </MCol>
                                         }
                                         <MCol Md=6>
-                                            <DefaultNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
+                                            <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=12>
                                             <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
@@ -211,13 +211,13 @@
                                 <MForm EnableValidation Model=_apiPermissionDetailDto @ref="_formApi">
                                     <MRow>
                                         <MCol Md=6>
-                                            <DefaultSelect @bind-Value="_apiPermissionDetailDto.AppId"
+                                            <SSelect @bind-Value="_apiPermissionDetailDto.AppId"
                                                 Label="@T("Pre Code Select")"
                                                 Outlined Dense HideDetails="@("auto")"
                                                 Items="_curAppItems"
                                                 ItemText="u => u.Name"
                                                 ItemValue="u => u.Identity">
-                                            </DefaultSelect>
+                                            </SSelect>
                                         </MCol>
                                         <MCol Md=6>
                                             <STextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
@@ -230,16 +230,16 @@
                                             <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
+                                            <SNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=6>
-                                            <DefaultSelect @bind-Value="@_apiPermissionDetailDto.Type"
+                                            <SSelect @bind-Value="@_apiPermissionDetailDto.Type"
                                                 Label="@T("Permission Type")"
                                                 Outlined Dense HideDetails="@("auto")"
                                                 Items="@_apiPermissionTypes"
                                                 ItemText="u => u.Text"
                                                 ItemValue="u => u.Value">
-                                            </DefaultSelect>
+                                            </SSelect>
                                         </MCol>
                                         <MCol Md=12>
                                             <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>

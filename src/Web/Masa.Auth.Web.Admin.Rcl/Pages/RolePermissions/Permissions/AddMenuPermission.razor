@@ -30,7 +30,7 @@
                         </MSelect>
                     </MCol>
                     <MCol Md=6>
-                        <DefaultNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
+                        <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                     </MCol>
                     @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
                     {

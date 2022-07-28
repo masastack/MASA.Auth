@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220727061057_init")]
+    [Migration("20220728064424_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,528 @@ namespace Masa.Auth.Service.Admin.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Logs.Aggregates.OperationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OperationDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("OperationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OperationType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("Operator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OperatorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationDescription");
+
+                    b.HasIndex("OperationTime");
+
+                    b.HasIndex("OperationType");
+
+                    b.HasIndex("Operator");
+
+                    b.ToTable("OperationLog", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Department", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Level")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Level")
+                        .IsUnique()
+                        .HasFilter("Level = 1");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("Department", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.DepartmentStaff", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StaffId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("DepartmentStaff", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Position", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SystemId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SystemId", "AppId", "Code")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("Permission", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChildPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ParentPermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildPermissionId");
+
+                    b.HasIndex("ParentPermissionId", "ChildPermissionId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("PermissionRelation", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Limit")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Creator");
+
+                    b.HasIndex("Modifier");
+
+                    b.ToTable("Role", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RolePermission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RolePermission", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RoleRelation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleRelation", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Projects.Aggregates.AppNavigationTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppIdentity")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppNavigationTag", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Creator");
+
+                    b.HasIndex("Modifier");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("CustomLogin", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLoginThirdPartyIdp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CustomLoginId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ThirdPartyIdpId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomLoginId");
+
+                    b.HasIndex("ThirdPartyIdpId");
+
+                    b.ToTable("CustomLoginThirdPartyIdp", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.RegisterField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CustomLoginId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RegisterFieldType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomLoginId");
+
+                    b.ToTable("RegisterField", "auth");
+                });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", b =>
                 {
@@ -43,7 +565,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
@@ -66,13 +589,275 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("IdentityProvider", "auth");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityProvider");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdCard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("StaffType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Creator");
+
+                    b.HasIndex("JobNumber")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.HasIndex("Modifier");
+
+                    b.HasIndex("PositionId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Staff", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("TeamType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("Team", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamPermission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Effect")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TeamMemberType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("TeamPermission", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TeamMemberType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("TeamRole", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamStaff", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StaffId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TeamMemberType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("TeamStaff", "auth");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyUser", b =>
@@ -118,9 +903,229 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Creator");
+
                     b.HasIndex("IdentityProviderId");
 
+                    b.HasIndex("Modifier");
+
+                    b.HasIndex("ThirdPartyIdpId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("ThirdPartyUser", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("GenderType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdCard")
+                        .IsRequired()
+                        .HasMaxLength(18)
+                        .HasColumnType("nvarchar(18)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Landline")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and Email!=''");
+
+                    b.HasIndex("IdCard")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and IdCard!=''");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and PhoneNumber!=''");
+
+                    b.ToTable("User", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserPermission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Effect")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPermission", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRole", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserSystemBusinessData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SystemId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "SystemId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("UserSystemBusinessData", "auth");
                 });
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", b =>
@@ -1246,22 +2251,26 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("BaseDn")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("GroupSearchBaseDn")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("IsSSL")
                         .HasColumnType("bit");
 
                     b.Property<string>("RootUserDn")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("RootUserPassword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("ServerAddress")
                         .IsRequired()
@@ -1272,7 +2281,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("UserSearchBaseDn")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasDiscriminator().HasValue("LDAP");
                 });
@@ -1283,11 +2293,13 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("ClientSecret")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -1303,11 +2315,390 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasDiscriminator().HasValue("ThirdParty");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.DepartmentStaff", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Department", "Department")
+                        .WithMany("DepartmentStaffs")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "Staff")
+                        .WithMany("DepartmentStaffs")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.PermissionRelation", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ChildPermission")
+                        .WithMany("ParentPermissionRelations")
+                        .HasForeignKey("ChildPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "ParentPermission")
+                        .WithMany("ChildPermissionRelations")
+                        .HasForeignKey("ParentPermissionId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("ChildPermission");
+
+                    b.Navigation("ParentPermission");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
+                        .WithMany()
+                        .HasForeignKey("Creator");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
+                        .WithMany()
+                        .HasForeignKey("Modifier");
+
+                    b.Navigation("CreateUser");
+
+                    b.Navigation("ModifyUser");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RolePermission", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
+                        .WithMany("Permissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RoleRelation", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "ParentRole")
+                        .WithMany("ChildrenRoles")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
+                        .WithMany("ParentRoles")
+                        .HasForeignKey("RoleId")
+                        .IsRequired();
+
+                    b.Navigation("ParentRole");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
+                        .WithMany()
+                        .HasForeignKey("Creator");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
+                        .WithMany()
+                        .HasForeignKey("Modifier");
+
+                    b.Navigation("CreateUser");
+
+                    b.Navigation("ModifyUser");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLoginThirdPartyIdp", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", null)
+                        .WithMany("ThirdPartyIdps")
+                        .HasForeignKey("CustomLoginId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyIdp", "ThirdPartyIdp")
+                        .WithMany()
+                        .HasForeignKey("ThirdPartyIdpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ThirdPartyIdp");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.RegisterField", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", null)
+                        .WithMany("RegisterFields")
+                        .HasForeignKey("CustomLoginId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
+                        .WithMany()
+                        .HasForeignKey("Creator");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
+                        .WithMany()
+                        .HasForeignKey("Modifier");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
+                        .WithOne()
+                        .HasForeignKey("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("StaffId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("CityCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("DistrictCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ProvinceCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("StaffId");
+
+                            b1.ToTable("Staff", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StaffId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("CreateUser");
+
+                    b.Navigation("ModifyUser");
+
+                    b.Navigation("Position");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
+                {
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AvatarValue", "Avatar", b1 =>
+                        {
+                            b1.Property<Guid>("TeamId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Color")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Url")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("TeamId");
+
+                            b1.ToTable("Team", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TeamId");
+                        });
+
+                    b.Navigation("Avatar")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamPermission", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "Permission")
+                        .WithMany("TeamPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
+                        .WithMany("TeamPermissions")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamRole", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
+                        .WithMany("Teams")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "Team")
+                        .WithMany("TeamRoles")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.TeamStaff", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", "Staff")
+                        .WithMany("TeamStaffs")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", null)
+                        .WithMany("TeamStaffs")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Staff");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.ThirdPartyUser", b =>
                 {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
+                        .WithMany()
+                        .HasForeignKey("Creator");
+
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", null)
                         .WithMany("ThirdPartyUsers")
                         .HasForeignKey("IdentityProviderId");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
+                        .WithMany()
+                        .HasForeignKey("Modifier");
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", "IdentityProvider")
+                        .WithMany()
+                        .HasForeignKey("ThirdPartyIdpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
+                        .WithMany("ThirdPartyUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreateUser");
+
+                    b.Navigation("IdentityProvider");
+
+                    b.Navigation("ModifyUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
+                {
+                    b.OwnsOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.AddressValue", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("CityCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("DistrictCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ProvinceCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("User", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserPermission", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
+                        .WithMany("Permissions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.UserRole", b =>
+                {
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceClaim", b =>
@@ -1529,8 +2920,71 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("IdentityResource");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Department", b =>
+                {
+                    b.Navigation("DepartmentStaffs");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Permission", b =>
+                {
+                    b.Navigation("ChildPermissionRelations");
+
+                    b.Navigation("ParentPermissionRelations");
+
+                    b.Navigation("RolePermissions");
+
+                    b.Navigation("TeamPermissions");
+
+                    b.Navigation("UserPermissions");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
+                {
+                    b.Navigation("ChildrenRoles");
+
+                    b.Navigation("ParentRoles");
+
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Teams");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
+                {
+                    b.Navigation("RegisterFields");
+
+                    b.Navigation("ThirdPartyIdps");
+                });
+
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider", b =>
                 {
+                    b.Navigation("ThirdPartyUsers");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
+                {
+                    b.Navigation("DepartmentStaffs");
+
+                    b.Navigation("TeamStaffs");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", b =>
+                {
+                    b.Navigation("TeamPermissions");
+
+                    b.Navigation("TeamRoles");
+
+                    b.Navigation("TeamStaffs");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", b =>
+                {
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Roles");
+
                     b.Navigation("ThirdPartyUsers");
                 });
 
