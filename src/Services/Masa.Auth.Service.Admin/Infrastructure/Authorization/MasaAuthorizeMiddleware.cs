@@ -6,18 +6,30 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 public class MasaAuthorizeMiddleware : IMiddleware
 {
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
-    readonly IEnumerable<EndpointDataSource> _endpointSources;
+
+    List<string?> _endpoints = new();
 
     public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider, IEnumerable<EndpointDataSource> endpointSources)
     {
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
-        _endpointSources = endpointSources;
+        var d = endpointSources.Select(source => source).ToList();
+        _endpoints = endpointSources.SelectMany(source => source.Endpoints)
+            .Where(endpoint => endpoint is RouteEndpoint)
+            .Select(endpoint => (endpoint as RouteEndpoint)!.RoutePattern.RawText).ToList();
     }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var d = _endpointSources.SelectMany(source => source.Endpoints);
         var endpoint = context.GetEndpoint();
+        var routeEndpoint = endpoint as RouteEndpoint;
+        if (routeEndpoint == null)
+        {
+            return next(context);
+        }
+        if (!_endpoints.Contains(routeEndpoint.RoutePattern.RawText))
+        {
+            return next(context);
+        }
         var allowAnonymousAttribute = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
         if (endpoint != null && allowAnonymousAttribute == null)
         {
