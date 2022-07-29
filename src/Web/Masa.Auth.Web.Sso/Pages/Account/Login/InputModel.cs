@@ -18,5 +18,5 @@ public class InputModel
     public string Environment { get; set; } = string.Empty;
 
     //todo remove this and ldap account auto login
-    public bool LDAPLogin { get; set; }
+    public bool LdapLogin { get; set; }
 }
