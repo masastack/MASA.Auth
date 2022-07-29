@@ -4,7 +4,7 @@
 namespace Masa.Auth.Service.Admin.Infrastructure.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class MasaAuthorizeAttribute : Attribute, IMasaAuthorizeData
+public sealed class MasaAuthorizeAttribute : Attribute, IMasaAuthorizeData
 {
     public string Code { get; set; }
 
