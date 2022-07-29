@@ -9,11 +9,11 @@
             <MButton Style="opacity: 1 !important;" OnClick="async() => await ValueChanged.InvokeAsync(value)" Width=100 Value="@value.ToString()" Class="@(Value.Equals(value) ? "button-group-active emphasis--text":"button-group regular3--text")">
                 @if (key == "Male")
                 {
-                    <MIcon Size=20 Class="@(Value.Equals(value) ? "emphasis--text":"regular3--text")">fa fa-solid fa-mars</MIcon>
+                    <SIcon Class="@(Value.Equals(value) ? "emphasis--text":"regular3--text")">fa fa-solid fa-mars</SIcon>
                 }
                 else if(key == "Female")
                 {
-                    <MIcon Size=20 Class="@(Value.Equals(value) ? "emphasis--text":"regular3--text")">fa fa-solid fa-venus</MIcon>
+                    <SIcon Class="@(Value.Equals(value) ? "emphasis--text":"regular3--text")">fa fa-solid fa-venus</SIcon>
                 }
                 <span class="ml-1 subtitle">@T(key)</span>
             </MButton>

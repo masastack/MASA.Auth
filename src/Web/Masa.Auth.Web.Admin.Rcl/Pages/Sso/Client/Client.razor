@@ -39,7 +39,7 @@
                             <EnableChip Value=context.Item.Enabled />
                             break;
                         case "Action":
-                            <MIcon Size="20" Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">@IconConstants.Update</MIcon>
+                            <SIcon Tooltip="@T("Edit")" Size="20" Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">@IconConstants.Update</SIcon>
                             break;
                         default:
                             <span>@context.Value</span>
