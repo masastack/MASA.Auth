@@ -11,10 +11,11 @@ public class MasaAuthorizeMiddleware : IMiddleware
 
     public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider, IEnumerable<EndpointDataSource> endpointSources)
     {
+        //todo endpoint.DisplayName.Contains("=>") is bad code
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
-        var d = endpointSources.Select(source => source).ToList();
         _endpoints = endpointSources.SelectMany(source => source.Endpoints)
-            .Where(endpoint => endpoint is RouteEndpoint)
+            .Where(endpoint => endpoint is RouteEndpoint && endpoint.DisplayName != null
+            && endpoint.DisplayName.Contains("=>"))
             .Select(endpoint => (endpoint as RouteEndpoint)!.RoutePattern.RawText).ToList();
     }
 
