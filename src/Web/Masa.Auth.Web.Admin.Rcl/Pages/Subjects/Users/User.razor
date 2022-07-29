@@ -63,8 +63,8 @@
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MIcon Size="20" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</MIcon>
-                        <MIcon Size="20" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</MIcon>
+                        <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</SIcon>
+                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
                         break;
                     default:
                         <span>@context.Value</span>

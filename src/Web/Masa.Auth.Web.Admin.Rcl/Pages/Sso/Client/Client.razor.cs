@@ -60,6 +60,7 @@ public partial class Client
     {
         if (eventArgs.Key == Keyboards.Enter)
         {
+            _clientPaginationDto.Page = 1;
             await LoadData();
         }
     }

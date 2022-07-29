@@ -49,8 +49,8 @@
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <MIcon Size="20" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Size="20" Class="ml-6" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateCustomLoginDialog(context.Item)">@IconConstants.Update</SIcon>
+                            <SIcon Tooltip="@T("Delete")" Class="ml-6" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">@IconConstants.Remove</SIcon>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

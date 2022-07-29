@@ -47,7 +47,7 @@
                         @switch (context.Header.Value)
                         {
                             case "Action":
-                                <MIcon Size=20 OnClick="()=>Dto.Properties.Remove(context.Item)" Color="regular">mdi-close</MIcon>
+                                <SIcon Tooltip="@T("Delete")" OnClick="()=>Dto.Properties.Remove(context.Item)" Color="regular">mdi-close</SIcon>
                                 break;
                             default:
                                 <span class="subtitle">@context.Value</span>

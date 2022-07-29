@@ -67,10 +67,23 @@ public partial class Organization
         _showAdd = true;
     }
 
+    private async Task PageChangedHandler(int page)
+    {
+        _getStaffsDto.Page = page;
+        await LoadStaffsAsync();
+    }
+
+    private async Task PageSizeChangedHandler(int pageSize)
+    {
+        _getStaffsDto.PageSize = pageSize;
+        await LoadStaffsAsync();
+    }
+
     private async Task EnterSearch(KeyboardEventArgs eventArgs)
     {
         if (eventArgs.Key == Keyboards.Enter)
         {
+            _getStaffsDto.Page = 1;
             await LoadStaffsAsync();
         }
     }

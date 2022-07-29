@@ -31,7 +31,7 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <MIcon Size=20 OnClick="()=>AddMenuPermission(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</MIcon>
+                                    <SIcon Tooltip="@T("Add")" OnClick="()=>AddMenuPermission(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -51,7 +51,7 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <MIcon Size=20 OnClick="AddApiPermission" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</MIcon>
+                                    <SIcon Tooltip="@T("Add")" OnClick="AddApiPermission" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
                                 </div>
                             </MHover>
                         </LabelContent>

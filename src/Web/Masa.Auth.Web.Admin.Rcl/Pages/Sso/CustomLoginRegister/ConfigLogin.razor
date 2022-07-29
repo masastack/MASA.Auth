@@ -36,9 +36,9 @@
                         </MCol>
                         <MCol Class="d-flex">
                             <div class="my-auto">
-                                <MIcon OnClick="async () =>await Up(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</MIcon>
-                                <MIcon OnClick="async () =>await Down(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</MIcon>
-                                <MIcon OnClick="async () =>await Remove(thirdPartyIdp)" Class="mr-8">mdi-delete-outline</MIcon>
+                                <SIcon Tooltip="@T("Up")" OnClick="async () =>await Up(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</SIcon>
+                                <SIcon Tooltip="@T("Down")" OnClick="async () =>await Down(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</SIcon>
+                                <SIcon Tooltip="@T("Delete")" OnClick="async () =>await Remove(thirdPartyIdp)" Class="mr-8">mdi-delete-outline</SIcon>
                             </div>
                         </MCol>
                     </MRow>

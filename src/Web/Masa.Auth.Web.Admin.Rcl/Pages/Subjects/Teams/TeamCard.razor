@@ -11,7 +11,7 @@
                 <MListItemContent class="pb-0">
                     <MListItemTitle class="d-flex justify-space-between align-center">
                         <span class="body2 regular3--text">@T("Member") : @Team.MemberCount </span>
-                        <MIcon Size=20 OnClick="HandleEditClick">@IconConstants.Update</MIcon>
+                        <SIcon Tooltip="@T("Edit")" OnClick="HandleEditClick">@IconConstants.Update</SIcon>
                     </MListItemTitle>
                     <MListItemSubtitle class="h5 emphasis2--text">@Team.Name</MListItemSubtitle>
                 </MListItemContent>

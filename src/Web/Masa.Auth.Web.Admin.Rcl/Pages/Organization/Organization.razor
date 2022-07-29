@@ -133,7 +133,7 @@
                                             </div>
                                             break;
                                         case "Action":
-                                            <MIcon Size="20" OnClick="()=>UpdateStaff(context.Item.Id)">@IconConstants.Update</MIcon>
+                                            <SIcon Tooltip="@T("Edit")" OnClick="()=>UpdateStaff(context.Item.Id)">@IconConstants.Update</SIcon>
                                             break;
                                         default:
                                             <span>@context.Value</span>
@@ -143,7 +143,13 @@
                             </SDataTable>
                         </AutoHeightContent>
                         <FooterContent>
-                            <SPagination Class="mt-4" @bind-Page="_getStaffsDto.Page" @bind-PageSize=_getStaffsDto.PageSize Total=_paginationStaffs.Total />
+                            <SPagination 
+                                Class="mt-4" 
+                                Page="_getStaffsDto.Page" 
+                                PageSize=_getStaffsDto.PageSize 
+                                Total=_paginationStaffs.Total 
+                                PageChanged="PageChangedHandler" 
+                                PageSizeChanged="PageSizeChangedHandler" />
                         </FooterContent>
                     </AutoHeight>
                 </DefaultCard>            
