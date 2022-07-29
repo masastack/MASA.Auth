@@ -10,8 +10,10 @@ public class CommandHandler
     readonly IUserRepository _userRepository;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly AuthDbContext _authDbContext;
     readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
+    readonly RoleDomainService _roleDomainService;
     readonly IUserContext _userContext;
     readonly IDistributedCacheClient _cache;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
@@ -20,8 +22,10 @@ public class CommandHandler
         IUserRepository userRepository,
         IStaffRepository staffRepository,
         IThirdPartyIdpRepository thirdPartyIdpRepository,
+        AuthDbContext authDbContext,
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
+        RoleDomainService roleDomainService,
         IDistributedCacheClient cache,
         IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
@@ -29,8 +33,10 @@ public class CommandHandler
         _userRepository = userRepository;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
+        _authDbContext = authDbContext;
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
+        _roleDomainService = roleDomainService;
         _cache = cache;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
@@ -50,6 +56,7 @@ public class CommandHandler
         await _userRepository.AddAsync(user);
         command.NewUser = user;
         await _userDomainService.SetAsync(user);
+        await _roleDomainService.UpdateRoleLimitAsync(userDto.Roles);
     }
 
     [EventHandler(1)]
@@ -67,19 +74,21 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await CheckUserExistAsync(command.User.Id);
+        var user = await _userRepository.GetDetailAsync(command.User.Id);
+        if (user is null)
+            throw new UserFriendlyException("The current user does not exist");
 
         if (user.Account == "admin")
         {
             throw new UserFriendlyException("超级管理员 无法删除");
         }
-
         if (user.Id == _userContext.GetUserId<Guid>())
         {
             throw new UserFriendlyException("当前用户不能删除自己");
         }
 
         await _userRepository.RemoveAsync(user);
+        await _roleDomainService.UpdateRoleLimitAsync(user.Roles.Select(role => role.RoleId));
         await _userDomainService.RemoveAsync(user.Id);
     }
 
@@ -91,11 +100,13 @@ public class CommandHandler
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
+        var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles.ToArray());
 
         user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
         await _userRepository.UpdateAsync(user);
-        await _userDomainService.SetAsync(user);
+
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
     }
 
     [EventHandler(1)]
@@ -278,15 +289,25 @@ public class CommandHandler
         await _staffRepository.UpdateAsync(staff);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staff = await _staffRepository.FindAsync(command.Staff.Id);
+        var staff = await _authDbContext.Set<Staff>()
+                                            .Include(s => s.DepartmentStaffs)
+                                            .Include(s => s.TeamStaffs)
+                                            .FirstOrDefaultAsync(s => s.Id == command.Staff.Id);
         if (staff == null)
         {
             throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
+
+        var teams = staff.TeamStaffs.Select(ts => ts.TeamId);
+        var roles = await _authDbContext.Set<TeamRole>()
+                                .Where(tr => teams.Contains(tr.TeamId))
+                                .Select(tr => tr.RoleId)
+                                .ToListAsync();
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
     }
 
     [EventHandler]

@@ -5,7 +5,7 @@
         <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
     </MCol>
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+        <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
     </MCol>
     <MCol Md=12 Class="py-0">
         <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
@@ -14,7 +14,7 @@
         <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
     </MCol>
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
+        <STextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
     </MCol>
 </MRow>
 

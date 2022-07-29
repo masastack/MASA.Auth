@@ -16,6 +16,7 @@ public partial class Staff
         set
         {
             _search = value;
+            _page = 1;
             GetStaffAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -26,6 +27,7 @@ public partial class Staff
         set
         {
             _enabled = value;
+            _page = 1;
             GetStaffAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

@@ -3,10 +3,12 @@
 
 global using FluentValidation;
 global using Magicodes.ExporterAndImporter.Core;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Converters;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
+global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.BuildingBlocks.Authentication.Oidc.Domain.Enums;
 global using Masa.BuildingBlocks.Authentication.Oidc.Models.Enums;
@@ -22,7 +24,6 @@ global using System.ComponentModel;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Numerics;
 global using System.Reflection;
+global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
-global using System.Text;
-

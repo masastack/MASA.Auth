@@ -11,18 +11,18 @@
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="Search" />
                 <MSpacer />
-                <DefaultButton Small OnClick="() => AddStandardUserClaimsAsync()">
+                <SButton Small OnClick="() => AddStandardUserClaimsAsync()">
                     <MIcon Size=18>@IconConstants.Setting</MIcon>
                     <span class="ml-2 btn">@T("Quickly create standard declarations")</span>
-                </DefaultButton>
-                <DefaultButton Small Class="ml-4" OnClick="() => OpenAddApiResourceDialog()">
+                </SButton>
+                <SButton Small Class="ml-4" OnClick="() => OpenAddApiResourceDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
-                </DefaultButton>
+                </SButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <DefaultDataTable Headers="GetHeaders()" Items="UserClaims" TItem="UserClaimDto" ItemsPerPage="PageSize">
+            <SDataTable Headers="GetHeaders()" Items="UserClaims" TItem="UserClaimDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -49,10 +49,10 @@
                             break;
                     }
                 </ItemColContent>
-            </DefaultDataTable>
+            </SDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <SPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
         </FooterContent>
     </AutoHeight>
 </DefaultCard>

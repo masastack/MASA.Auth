@@ -187,6 +187,7 @@ public class QueryHandler
         var permissions = await _permissionRepository.GetListAsync(p => p.ParentId == childMenuPermissionsQuery.PermissionId
                             && p.Type != PermissionTypes.Api);
         childMenuPermissionsQuery.Result = permissions
+            .OrderBy(p => p.Order)
             .Select(p => new PermissionDto
             {
                 Id = p.Id,
@@ -201,13 +202,15 @@ public class QueryHandler
         var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == applicationPermissionsQuery.SystemId
                 && p.ParentId == Guid.Empty);
 
-        applicationPermissionsQuery.Result = permissions.Select(p => new AppPermissionDto
-        {
-            AppId = p.AppId,
-            PermissonId = p.Id,
-            PermissonName = p.Name,
-            Type = p.Type
-        }).ToList();
+        applicationPermissionsQuery.Result = permissions
+            .OrderBy(p => p.Order)
+            .Select(p => new AppPermissionDto
+            {
+                AppId = p.AppId,
+                PermissonId = p.Id,
+                PermissonName = p.Name,
+                Type = p.Type
+            }).ToList();
     }
 
     [EventHandler]
@@ -220,11 +223,13 @@ public class QueryHandler
         }
 
         var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount);
-        apiPermissionSelectQuery.Result = permissions.Select(p => new SelectItemDto<Guid>
-        {
-            Value = p.Id,
-            Text = p.Name
-        }).ToList();
+        apiPermissionSelectQuery.Result = permissions
+            .OrderBy(p => p.Order)
+            .Select(p => new SelectItemDto<Guid>
+            {
+                Value = p.Id,
+                Text = p.Name
+            }).ToList();
     }
 
     [EventHandler]
@@ -247,6 +252,7 @@ public class QueryHandler
             Enabled = permission.Enabled,
             ParentId = permission.ParentId,
             AppId = permission.AppId,
+            Order = permission.Order,
             ApiPermissions = permission.ChildPermissionRelations.Select(pr => pr.ChildPermissionId).ToList(),
             Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
@@ -277,7 +283,8 @@ public class QueryHandler
             Url = permission.Url,
             Type = permission.Type,
             Id = permission.Id,
-            AppId = permission.AppId
+            AppId = permission.AppId,
+            Order = permission.Order
         };
     }
 
@@ -291,15 +298,17 @@ public class QueryHandler
 
         List<MenuDto> GetMenus(List<Permission> menus, Guid parentId)
         {
-            return menus.Where(m => m.ParentId == parentId).Select(m => new MenuDto
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Code = m.Code,
-                Url = m.Url,
-                Icon = m.Icon,
-                Children = GetMenus(menus, m.Id)
-            }).ToList();
+            return menus.Where(m => m.ParentId == parentId)
+                .OrderBy(m => m.Order)
+                .Select(m => new MenuDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Code = m.Code,
+                    Url = m.Url,
+                    Icon = m.Icon,
+                    Children = GetMenus(menus, m.Id)
+                }).ToList();
         }
     }
 

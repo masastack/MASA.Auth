@@ -5,13 +5,13 @@
         <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
     </MCol>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
+        <STextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
     </MCol>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+        <STextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
     </MCol>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+        <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
     </MCol>
     <MCol Md=6>
         <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
@@ -19,25 +19,25 @@
 </MRow>
 <MRow>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
+        <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
         @foreach (var uri in Dto.RedirectUris)
         {
-            <DefaultTextField HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
+            <STextField HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveCallBackRedirectUri(uri)" />
         }
     </MCol>
     <MCol Md=6>
-        <DefaultTextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
+        <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
         @foreach (var uri in Dto.PostLogoutRedirectUris)
         {
-            <DefaultTextField Dense HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
+            <STextField Dense HideDetails="true" Value="uri" Readonly Class="mt-2" AppendOuterIcon="mdi-close-circle" OnAppendOuterClick="()=>RemoveLogoutRedirectUri(uri)" />
         }
     </MCol>
 </MRow>
 <MRow>
     <MCol Md=12>
-        <DefaultTextField @bind-Value="Dto.Description" Label="@T("Description")" />
+        <STextField @bind-Value="Dto.Description" Label="@T("Description")" />
     </MCol>
 </MRow>
 

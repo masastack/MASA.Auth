@@ -38,4 +38,10 @@ public class UserPermission : FullEntity<Guid, Guid>
         PermissionId = permissionId;
         Effect = effect;
     }
+
+    public void Update(Guid permissionId, bool effect)
+    {
+        PermissionId = permissionId;
+        Effect = effect;
+    }
 }

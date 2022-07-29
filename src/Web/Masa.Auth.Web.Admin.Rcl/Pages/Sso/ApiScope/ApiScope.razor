@@ -11,14 +11,14 @@
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="Search" />
                 <MSpacer />
-                <DefaultButton Small Class="ml-6" OnClick="() => OpenAddApiResourceDialog()">
+                <SButton Small Class="ml-6" OnClick="() => OpenAddApiResourceDialog()">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
-                </DefaultButton>
+                </SButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <DefaultDataTable Headers="GetHeaders()" Items="ApiScopes" TItem="ApiScopeDto" ItemsPerPage="PageSize">
+            <SDataTable Headers="GetHeaders()" Items="ApiScopes" TItem="ApiScopeDto" ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -51,10 +51,10 @@
                             break;
                     }
                 </ItemColContent>
-            </DefaultDataTable>
+            </SDataTable>
         </AutoHeightContent>
         <FooterContent>
-            <Pagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total/>
+            <SPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total/>
         </FooterContent>
     </AutoHeight>
 </DefaultCard>

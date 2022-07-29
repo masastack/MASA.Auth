@@ -6,14 +6,14 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto">
-                        <LabeledRadioGroup @bind-Value="Tab" Dense>
+                        <SLabeledRadioGroup @bind-Value="Tab" Dense>
                             @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
                             {
-                                <LabeledRadio Value="tab" MinWidth=70>
+                                <SLabeledRadio Value="tab" MinWidth=70>
                                     @T(tab)
-                                </LabeledRadio>
+                                </SLabeledRadio>
                             }
-                        </LabeledRadioGroup>
+                        </SLabeledRadioGroup>
                     </div>
                 </div>
             </HeaderContent>
@@ -27,10 +27,10 @@
                         </div>
                         <MRow Class="mb-6">
                             <MCol>
-                                <DefaultTextField @bind-Value="CustomLogin.Name" Label="@T("Name")" />
+                                <STextField @bind-Value="CustomLogin.Name" Label="@T("Name")" />
                             </MCol>
                             <MCol>
-                                <DefaultTextField @bind-Value="CustomLogin.Title" Label="@T("Title")" />
+                                <STextField @bind-Value="CustomLogin.Title" Label="@T("Title")" />
                             </MCol>
                         </MRow>
                         <MRow>
@@ -53,12 +53,12 @@
                     <MSpacer></MSpacer>
                     @if (Tab != CustomLoginTab.BasicInformation)
                     {
-                        <DefaultButton Medium OnClick="AddConfig" Class="mr-6">
+                        <SButton Medium OnClick="AddConfig" Class="mr-6">
                             <MIcon Size=18>@IconConstants.Add</MIcon>
                             <span class="ml-2">@T("Add")</span>
-                        </DefaultButton>
+                        </SButton>
                     }
-                    <DefaultButton Medium OnClick="async () => await UpdateCustomLoginAsync(context)">@T("Submit")</DefaultButton>
+                    <SButton Medium OnClick="async () => await UpdateCustomLoginAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

@@ -7,14 +7,22 @@ public class CommandHandler
 {
     readonly IRoleRepository _roleRepository;
     readonly IPermissionRepository _permissionRepository;
+    readonly AuthDbContext _authDbContext;
     readonly RoleDomainService _roleDomainService;
 
-    public CommandHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository, RoleDomainService roleDomainService)
+    public CommandHandler(
+        IRoleRepository roleRepository,
+        IPermissionRepository permissionRepository,
+        AuthDbContext authDbContext,
+        RoleDomainService roleDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
+        _authDbContext = authDbContext;
         _roleDomainService = roleDomainService;
     }
+
+
 
     #region Role
 
@@ -45,6 +53,7 @@ public class CommandHandler
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
+        //await _roleRepository.UnitOfWork.SaveChangesAsync();
         // update and check role limit
         var influenceRoles = new List<Guid> { role.Id };
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
@@ -53,7 +62,14 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveRoleAsync(RemoveRoleCommand command)
     {
-        var role = await _roleRepository.FindAsync(u => u.Id == command.Role.Id);
+        var role = await _authDbContext.Set<Role>()
+                                    .Where(r => r.Id == command.Role.Id)
+                                    .Include(r => r.ChildrenRoles)
+                                    .Include(r => r.Permissions)
+                                    .Include(r => r.Users)
+                                    .Include(r => r.Teams)
+                                    .AsSplitQuery()
+                                    .FirstOrDefaultAsync();
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 
@@ -81,15 +97,19 @@ public class CommandHandler
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
             _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-                permissionBaseInfo.Description, addPermissionCommand.Enabled);
+                permissionBaseInfo.Description, permissionBaseInfo.Order, addPermissionCommand.Enabled);
             _permission.SetParent(addPermissionCommand.ParentId);
             _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
             await _permissionRepository.UpdateAsync(_permission);
             return;
         }
+        if (permissionBaseInfo.Order == 0)
+        {
+            permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(permissionBaseInfo.AppId, addPermissionCommand.ParentId);
+        }
         var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-            permissionBaseInfo.Description, addPermissionCommand.Enabled);
+            permissionBaseInfo.Description, permissionBaseInfo.Order, addPermissionCommand.Enabled);
         permission.SetParent(addPermissionCommand.ParentId);
         permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);

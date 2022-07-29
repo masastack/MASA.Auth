@@ -54,7 +54,7 @@ public enum OperationTypes
     UpdateThirdPartyIdp = 47,
     RemoveThirdPartyIdp = 48,
     AddPosition = 49,
-    UpdatePosition =50,
+    UpdatePosition = 50,
     RemovePosition = 51,
     UpsertAppTag = 52,
 }

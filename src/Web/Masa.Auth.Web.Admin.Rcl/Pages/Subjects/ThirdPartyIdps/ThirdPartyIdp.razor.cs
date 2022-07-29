@@ -16,6 +16,7 @@ public partial class ThirdPartyIdp
         set
         {
             _search = value;
+            _page = 1;
             GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }
@@ -26,6 +27,7 @@ public partial class ThirdPartyIdp
         set
         {
             _enabled = value;
+            _page = 1;
             GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
     }

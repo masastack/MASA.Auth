@@ -110,14 +110,14 @@
                             <div class="d-flex mb-6">
                                 <SearchTextField @bind-Value="@_getStaffsDto.Search" PrependInnerIcon="@IconConstants.Search" OnKeyDown="EnterSearch" />
                                 <MSpacer />
-                                <DefaultButton Small OnClick="()=>_addStaff=true">
+                                <SButton Small OnClick="()=>_addStaff=true">
                                     <MIcon Size=18>@IconConstants.Add</MIcon>
                                     <span class="ml-2 btn">@T("Add")</span>
-                                </DefaultButton>
+                                </SButton>
                             </div>
                         </HeaderContent>
                         <AutoHeightContent>
-                            <DefaultDataTable Headers="GetHeaders()" Items="@_paginationStaffs.Items" TItem="StaffDto">
+                            <SDataTable Headers="GetHeaders()" Items="@_paginationStaffs.Items" TItem="StaffDto">
                                 <HeaderColContent Context="header">
                                     <span class="body-bold">@header.Text</span>
                                 </HeaderColContent>
@@ -140,7 +140,7 @@
                                             break;
                                     }
                                 </ItemColContent>
-                            </DefaultDataTable>
+                            </SDataTable>
                         </AutoHeightContent>
                         <FooterContent>
                             <Pagination 

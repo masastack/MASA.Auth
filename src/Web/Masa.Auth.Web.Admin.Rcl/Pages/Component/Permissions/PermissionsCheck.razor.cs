@@ -67,7 +67,7 @@ public partial class PermissionsCheck
 
     protected override async Task OnParametersSetAsync()
     {
-        if(RoleIds.Count != InternalRoleIds.Count)
+        if (RoleIds.Count != InternalRoleIds.Count)
         {
             InternalRoleIds = RoleIds;
             await LoadRolePermissions();

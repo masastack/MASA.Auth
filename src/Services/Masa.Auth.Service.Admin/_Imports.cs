@@ -50,6 +50,7 @@ global using Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
 global using Masa.Auth.Service.Admin.Domain.Subjects.Services;
 global using Masa.Auth.Service.Admin.Infrastructure;
 global using Masa.Auth.Service.Admin.Infrastructure.Attributes;
+global using Masa.Auth.Service.Admin.Infrastructure.Authorization;
 global using Masa.Auth.Service.Admin.Infrastructure.CacheModels;
 global using Masa.Auth.Service.Admin.Infrastructure.Constants;
 global using Masa.Auth.Service.Admin.Infrastructure.Extensions;

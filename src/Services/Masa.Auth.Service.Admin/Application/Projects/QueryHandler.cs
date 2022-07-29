@@ -55,7 +55,8 @@ public class QueryHandler
                                 && permissionIds.Contains(p.Id));
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
-            a.Navs = menuPermissions.Where(p => p.AppId == a.Identity)
+            a.Navs = menuPermissions.OrderBy(p => p.Order)
+                .Where(p => p.AppId == a.Identity)
                 .Where(p => p.ParentId == Guid.Empty)
                 .Select(p => new PermissionNavDto
                 {

@@ -1,10 +1,11 @@
 ﻿@inherits AdminCompontentBase
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("User roles and permissions settings")">
-    <AutoHeight Overflow>
+    <AutoHeight>
         <HeaderContent>
             <div class="height:55px;">
-                <RoleSelectForUser Class="mb-13" @bind-Value="Authorization.Roles" />
+                <TeamRoleSelect RolesChanged="roles => TeamRoles = roles" Class="mb-4" />
+                <RoleSelectForUser Class="mb-6" @bind-Value="Authorization.Roles" />
             </div>
         </HeaderContent>
         <AutoHeightContent>
@@ -14,18 +15,18 @@
                                 @bind-ExtensionValue=Authorization.Permissions 
                                 @bind-Preview=Preview
                                 Style="max-height:calc(100vh - 350px);" />*@
-                <PermissionsConfigure RoleIds=Authorization.Roles
+                <PermissionsConfigure Roles=Authorization.Roles.Union(TeamRoles).Distinct().ToList()
                                               Value="Authorization.Permissions.Select(p => p.PermissionId).ToList()"
                                               ValueChanged="value => Authorization.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
                                               @bind-Preview=Preview
-                                              Style="max-height:calc(100vh - 350px);" />
+                                              Style="max-height:calc(100vh - 406px);" />
             </div>
         </AutoHeightContent>
         <FooterContent>
             <div class="d-flex mt-6">
                 <MSpacer></MSpacer>
-                <DefaultButton Medium Outlined OnClick="() => Preview = true">@T("Preview")</DefaultButton>
-                <DefaultButton Medium Class="ml-6" OnClick="async () => await UpdateAuthorizationAsync()">@T("Submit")</DefaultButton>
+                <SButton Medium Outlined OnClick="() => Preview = true">@T("Preview")</SButton>
+                <SButton Medium Class="ml-6" OnClick="async () => await UpdateAuthorizationAsync()">@T("Submit")</SButton>
             </div>
         </FooterContent>
     </AutoHeight>
