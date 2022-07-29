@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Magicodes.ExporterAndImporter.Core.Extension;
 using Masa.Utils.Caching.Core.Models;
+using Novell.Directory.Ldap;
 
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
@@ -17,6 +19,10 @@ public class CommandHandler
     readonly IUserContext _userContext;
     readonly IDistributedCacheClient _cache;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
+    readonly ILdapFactory _ldapFactory;
+    readonly ILdapIdpRepository _ldapIdpRepository;
+    readonly ILogger<CommandHandler> _logger;
+    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -28,7 +34,11 @@ public class CommandHandler
         RoleDomainService roleDomainService,
         IDistributedCacheClient cache,
         IUserContext userContext,
-        IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
+        IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
+        ILdapFactory ldapFactory,
+        ILdapIdpRepository ldapIdpRepository,
+        ILogger<CommandHandler> logger,
+        ThirdPartyUserDomainService thirdPartyUserDomainService)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -40,6 +50,10 @@ public class CommandHandler
         _cache = cache;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
+        _ldapFactory = ldapFactory;
+        _ldapIdpRepository = ldapIdpRepository;
+        _logger = logger;
+        _thirdPartyUserDomainService = thirdPartyUserDomainService;
     }
 
     #region User
@@ -67,6 +81,11 @@ public class CommandHandler
         await VerifyUserAsync(userDto.Id, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, default);
 
         user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
+        if (!string.IsNullOrWhiteSpace(userDto.Password))
+        {
+            //add for update ldap password
+            user.UpdatePassword(userDto.Password);
+        }
         await _userRepository.UpdateAsync(user);
         await _userDomainService.SetAsync(user);
     }
@@ -123,24 +142,76 @@ public class CommandHandler
     public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
         //todo UserDomainService
-        var key = $"auth_login_{validateByAccountCommand.Account}";
+        var account = validateByAccountCommand.UserAccountValidateDto.Account;
+        var password = validateByAccountCommand.UserAccountValidateDto.Password;
+        var key = CacheKey.AccountLoginKey(account);
         var loginCache = await _cache.GetAsync<CacheLogin>(key);
-        if (loginCache is not null && loginCache.LoginErrorCount >= 5) throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
-        var user = await _userRepository.FindAsync(u => u.Account == validateByAccountCommand.Account);
+        if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+        {
+            throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
+        }
+
+        var isLdap = validateByAccountCommand.UserAccountValidateDto.IsLdap;
+        if (isLdap)
+        {
+            var ldaps = await _ldapIdpRepository.GetListAsync();
+            if (!ldaps.Any())
+            {
+                throw new UserFriendlyException("没有配置LDAP认证");
+            }
+            if (ldaps.Count() > 1)
+            {
+                _logger.LogWarning("存在多个Ldap配置,域账号登录时只使用第一个配置");
+            }
+            var ldap = ldaps.First();
+            var ldapOptions = ldap.Adapt<LdapOptions>();
+            var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+
+            var ldapUser = await ldapProvider.GetUserByUserNameAsync(account);
+            if (ldapUser == null)
+            {
+                throw new UserFriendlyException("域账号不存在");
+            }
+
+            var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
+            if (!await ldapProvider.AuthenticateAsync($"{dc}\\{account}", password))
+            {
+                throw new UserFriendlyException("域账号验证失败");
+            }
+
+            var thirdPartyUserDtp = new AddThirdPartyUserDto(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
+                    new AddUserDto
+                    {
+                        Name = ldapUser.Name,
+                        DisplayName = ldapUser.DisplayName,
+                        Enabled = true,
+                        Email = ldapUser.EmailAddress,
+                        Account = ldapUser.SamAccountName,
+                        Password = password
+                    });
+            //phone number regular match
+            if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
+            {
+                thirdPartyUserDtp.User.PhoneNumber = ldapUser.Phone;
+            }
+            else
+            {
+                thirdPartyUserDtp.User.Landline = ldapUser.Phone;
+            }
+            await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
+        }
+
+        var user = await _userRepository.FindAsync(u => u.Account == account);
         if (user != null)
         {
             if (!user.Enabled)
             {
                 throw new UserFriendlyException("账号已禁用");
             }
-            var success = user.VerifyPassword(validateByAccountCommand.Password);
-            if (success)
+            var success = user.VerifyPassword(password);
+            if (!success)
             {
-                if (loginCache is not null) await _cache.RemoveAsync<CacheLogin>(key);
-            }
-            else
-            {
-                loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = validateByAccountCommand.Account };
+                loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
                 var options = new CombinedCacheEntryOptions<CacheLogin>
                 {
@@ -151,6 +222,11 @@ public class CommandHandler
                 };
                 await _cache.SetAsync(key, loginCache, options);
                 throw new UserFriendlyException("账号或密码错误");
+            }
+
+            if (loginCache is not null)
+            {
+                await _cache.RemoveAsync<CacheLogin>(key);
             }
             validateByAccountCommand.Result = success;
         }

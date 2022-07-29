@@ -59,8 +59,8 @@ public class AuthDbContextSeed
         #region Dcc
         var dccMenus = new List<Permission>() {
             new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",1,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Public","Public","Public","mdi-flag",2,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Label Management","Label","Label","mdi-flag",3,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"PublicConfig","PublicConfig","Public","mdi-flag",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"LabelManagement","Label","Label","mdi-flag",3,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.DCC_SYSTEM_ID))
         {

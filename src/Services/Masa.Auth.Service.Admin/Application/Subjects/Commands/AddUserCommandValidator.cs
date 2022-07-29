@@ -17,8 +17,8 @@ public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
         RuleFor(command => command.User.Position).ChineseLetterNumber().MaxLength(20);
         RuleFor(command => command.User.Account).Required().ChineseLetterNumber();
         RuleFor(command => command.User.Password).Required()
-                                      .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
-                                      .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
+                                      .Matches(@"^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
+                                      .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
                                       .MaxLength(30);
     }
 }

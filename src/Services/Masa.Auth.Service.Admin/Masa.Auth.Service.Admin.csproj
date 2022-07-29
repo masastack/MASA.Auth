@@ -13,7 +13,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-		<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth.Contracts" Version="0.5.0-rc.3" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.BasicAbility.Auth.Contracts" Version="0.5.0-rc.3" />-->
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.5.0-rc.3" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Oidc.Cache" Version="0.5.0-rc.3" />
@@ -71,6 +71,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Contrib\src\BuildingBlocks\MASA.BuildingBlocks\src\BasicAbility\Masa.BuildingBlocks.BasicAbility.Auth.Contracts\Masa.BuildingBlocks.BasicAbility.Auth.Contracts.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

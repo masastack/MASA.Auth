@@ -31,7 +31,7 @@ public class AccountController : Controller
         try
         {
             var success = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(userName, inputModel.Password);
+                                           .ValidateCredentialsByAccountAsync(userName, inputModel.Password, inputModel.LDAPLogin);
             if (success)
             {
                 var user = await _authClient.UserService.FindByAccountAsync(userName);

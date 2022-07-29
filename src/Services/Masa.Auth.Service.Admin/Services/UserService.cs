@@ -118,7 +118,7 @@ namespace Masa.Auth.Service.Admin.Services
 
         private async Task<bool> ValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
         {
-            var validateCommand = new ValidateByAccountCommand(accountValidateDto.Account, accountValidateDto.Password);
+            var validateCommand = new ValidateByAccountCommand(accountValidateDto);
             await eventBus.PublishAsync(validateCommand);
             return validateCommand.Result;
         }
