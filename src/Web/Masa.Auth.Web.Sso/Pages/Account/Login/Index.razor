@@ -47,6 +47,9 @@
         <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
             Cancel
         </MButton>
+        <div class="d-flex justify-center mt-4">
+            <MCheckbox @bind-Value="_inputModel.LdapLogin" HideDetails="true" Label="LDAP Login"></MCheckbox>
+        </div>
     </MCard>
 }
 

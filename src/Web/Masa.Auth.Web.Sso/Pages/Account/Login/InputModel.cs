@@ -16,4 +16,7 @@ public class InputModel
     public string ReturnUrl { get; set; } = string.Empty;
 
     public string Environment { get; set; } = string.Empty;
+
+    //todo remove this and ldap account auto login
+    public bool LdapLogin { get; set; }
 }
