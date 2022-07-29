@@ -31,8 +31,8 @@
                             </div>
                             break;
                         case "Action":
-                            <MIcon Size="20" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</MIcon>
-                            <MIcon Size="20" Class="ml-6" OnClick="()=> OpenRemovePositionDialog(context.Item)">@IconConstants.Remove</MIcon>
+                            <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</SIcon>
+                            <SIcon Tooltip="@T("Delete")" Class="ml-6" OnClick="()=> OpenRemovePositionDialog(context.Item)">@IconConstants.Remove</SIcon>
                             break;
                         default:
                             <span>@context.Value</span>
