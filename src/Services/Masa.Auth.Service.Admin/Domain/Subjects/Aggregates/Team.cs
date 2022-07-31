@@ -51,11 +51,11 @@ public class Team : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
     }
 
-    public void SetStaff(TeamMemberTypes memberType, List<Guid> staffIds)
+    public void SetStaff(TeamMemberTypes memberType, IEnumerable<Staff> staffs)
     {
         var teamStaffs = _teamStaffs.Where(ts => ts.TeamMemberType == memberType).ToList();
         teamStaffs = teamStaffs.MergeBy(
-           staffIds.Select(staffId => new TeamStaff(staffId, memberType)),
+           staffs.Select(staff => new TeamStaff(staff.Id, memberType, staff.UserId)),
            item => item.StaffId);
         teamStaffs.AddRange(_teamStaffs.Where(ts => ts.TeamMemberType != memberType));
         _teamStaffs = teamStaffs;

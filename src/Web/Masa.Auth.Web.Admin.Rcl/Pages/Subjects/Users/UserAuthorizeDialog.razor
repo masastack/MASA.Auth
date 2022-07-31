@@ -4,7 +4,7 @@
     <AutoHeight>
         <HeaderContent>
             <div class="height:55px;">
-                <TeamRoleSelect RolesChanged="roles => TeamRoles = roles" Class="mb-4" />
+                <TeamSwitch UserId="UserId" RolesChanged="roles => TeamRoles = roles" Class="mb-4" />
                 <RoleSelectForUser Class="mb-6" @bind-Value="Authorization.Roles" />
             </div>
         </HeaderContent>

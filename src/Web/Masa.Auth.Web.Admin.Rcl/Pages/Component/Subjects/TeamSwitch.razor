@@ -1,0 +1,19 @@
+﻿@inherits AdminCompontentBase
+
+<div class="d-flex">
+    <SSelect Value="Value"
+             ValueChanged=UpdateValueAsync
+             Items="Teams"
+             TItem="TeamRoleSelectDto"
+             TValue="Guid"
+             TItemValue="Guid"
+             ItemText="t=>t.Name"
+             ItemValue="t=>t.Id"
+             Medium
+             Class="@Class"
+             Clearable
+             Label="@T("Team")" />
+    <div>
+        
+    </div>
+</div>
