@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Microsoft.AspNetCore.Components.Web;
+using System.Globalization;
 using UrlHelper = Masa.Auth.Web.Sso.Infrastructure.UrlHelper;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
@@ -175,5 +176,19 @@ public partial class Index
         {
             await Login();
         }
+    }
+
+    private void ChangeLanguage()
+    {
+        string? changeLanguage;
+        if (LanguageProvider.Culture.Name == "zh-CN")
+        {
+            changeLanguage = "en-US";
+        }
+        else
+        {
+            changeLanguage = "zh-CN";
+        }
+        LanguageProvider.SetCulture(new CultureInfo(changeLanguage));
     }
 }
