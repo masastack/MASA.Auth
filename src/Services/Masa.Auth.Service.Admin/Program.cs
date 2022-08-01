@@ -172,6 +172,7 @@ if (!app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseRouting();
 
 app.UseMiddleware<MasaAuthorizeMiddleware>();

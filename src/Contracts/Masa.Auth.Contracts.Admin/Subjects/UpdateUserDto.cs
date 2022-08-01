@@ -33,6 +33,8 @@ public class UpdateUserDto
 
     public GenderTypes Gender { get; set; }
 
+    public string? Password { get; set; }
+
     public UpdateUserDto()
     {
         Name = "";
