@@ -187,7 +187,7 @@
                                 </MForm>
                             </MCardText>
                             <MCardActions class="d-flex align-center mb-10 px-6">
-                                <MSwitch @bind-Value="_menuPermissionDetailDto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+                                <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
                                 <MSpacer />
                                 <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto.Id)">@T("Delete Permission")</MButton>
                                 <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</MButton>

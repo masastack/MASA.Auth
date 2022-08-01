@@ -26,8 +26,8 @@
                 <MCardText Class="d-flex flex-column full-height">
                     <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
                     <MCascader Items="Departments" Dense Label="@T("Department Location")"
-                               ItemText="u => u.Name" @bind-Value="@Dto.ParentId"
-                               ItemValue="u => u.Id" Readonly
+                               ItemText="u => u.Name" @bind-Value="@Dto.ParentId" Class="mt-6"
+                               ItemValue="u => u.Id" Readonly HideDetails="@("auto")"
                                ItemChildren="u => u.Children">
                     </MCascader>
                     <div class="d-flex align-center mt-6">
@@ -36,7 +36,7 @@
                         <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
                                        ItemText="r=>r.Name" PrependInnerIcon="@IconConstants.Search"
                                        ItemValue="r=>r" HideDetails="true" OnSelectedItemUpdate="AddStaff"
-                                       Outlined Clearable Style="max-width:340px;"
+                                       Outlined Clearable Style="max-width:340px;" Dense
                                        Label="@T("Search for members")">
                             <ItemContent Context="data">
                                 <MListItemAvatar>
@@ -53,12 +53,12 @@
                             </ItemContent>
                         </MAutocomplete>
                     </div>
-                    <MRow class="mt-6 flex-grow-1" style="min-height:calc(100vh - 560px);overflow-y:scroll;">
+                    <MRow class="mt-6 mb-0 mx-0 flex-grow-1" style="min-height:calc(100vh - 560px);overflow-y:scroll;border: 1px solid #E2E7F4;border-radius: 4px;">
                         @foreach (var staff in Dto.Staffs)
                         {
                             <MCol Md="3">
                                 <MHover Context="hoverComtext">
-                                    <MListItem @attributes="hoverComtext.Attrs" class="px-4" Ripple=false>
+                                    <MListItem @attributes="hoverComtext.Attrs" class="px-4" style="@(hoverComtext.Hover?"background: #F6F8FD;border-radius: 8px;":"background:none")" Ripple=false>
                                         <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
                                             <img src="@staff.Avatar" />
                                         </MListItemAvatar>
@@ -74,10 +74,10 @@
                             </MCol>
                         }
                     </MRow>
-                    <MTextarea class="mt-6" @bind-Value="Dto.Description" Label="@T("Description")" Outlined Height="120" NoResize />
+                    <MTextarea class="mt-6" @bind-Value="Dto.Description" Label="@T("Description")" Outlined Height="120" NoResize HideDetails="@("auto")" />
                 </MCardText>
                 <MCardActions class="d-flex align-center mb-10 px-6">
-                    <MSwitch @bind-Value="@Dto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+                    <EnableSwitch @bind-Value="Dto.Enabled" />
                     <MSpacer />
                     <SButton Medium Outlined OnClick="()=> _step = 1 ">@T("Previous step")</SButton>
                     <SButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</SButton>

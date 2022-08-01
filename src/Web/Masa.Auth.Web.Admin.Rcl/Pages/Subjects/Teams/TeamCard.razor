@@ -17,8 +17,10 @@
                 </MListItemContent>
             </MListItem>
         </MCardTitle>
-        <MCardText class="flex-grow-1" style="text-align: justified;">
-            <span class="subtitle"> @Team.Description</span>
+        <MCardText class="flex-grow-1" style="text-align: justified;max-height:100px;">
+            <span class="subtitle" style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;">
+                @Team.Description
+            </span>
         </MCardText>
         <MCardActions class="px-4 pb-4">
             <img src="@Team.AdminAvatar.FirstOrDefault()" height=24 width=24 />

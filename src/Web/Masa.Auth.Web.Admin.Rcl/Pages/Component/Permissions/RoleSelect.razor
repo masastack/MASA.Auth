@@ -6,16 +6,14 @@
                TValue="List<Guid>"
                TItemValue="Guid"
                Items="Roles"
-               Outlined
-               Height=55
-               Chips
+               Outlined Chips Multiple
                Color="primary"
+               Height="48"
                Disabled=Readonly
                Label="@Label"
                HideDetails="@("auto")"
                ItemText="t=>t.Name"
                ItemValue="t=>t.Id"
-               Multiple
                Class="@Class"
                ItemDisabled="RoleDisabled">
     <SelectionContent Context="data">
