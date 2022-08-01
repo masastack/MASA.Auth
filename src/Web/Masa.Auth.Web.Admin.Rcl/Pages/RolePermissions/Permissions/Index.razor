@@ -7,7 +7,7 @@
 
 <MRow Class="full-height" NoGutters>
     <MCol Md="@("auto")" Class="d-flex flex-column">
-        <SSearchableExtend Split=true MaxWidth=300>
+        <SSearchableExtend Split=true MaxWidth=300 @bind-Value="_search">
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
                            Solo Class="elevation-0"
@@ -23,6 +23,8 @@
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid"
+                               Search="@_search"
+                               Filter="Filter"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"

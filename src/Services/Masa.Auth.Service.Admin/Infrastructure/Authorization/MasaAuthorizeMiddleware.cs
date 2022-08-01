@@ -3,6 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
+/// <summary>
+/// all route into this,and all RequestDelegateFactory create route handler will Authorization code
+/// </summary>
 public class MasaAuthorizeMiddleware : IMiddleware
 {
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
@@ -31,6 +34,7 @@ public class MasaAuthorizeMiddleware : IMiddleware
         {
             return next(context);
         }
+        //todo repeat code from CodeAuthorizationMiddlewareResultHandler
         var allowAnonymousAttribute = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
         if (endpoint != null && allowAnonymousAttribute == null)
         {

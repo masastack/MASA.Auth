@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class Index
 {
-    string _tab = "";
+    string _tab = "", _search = "";
     bool _showMenuInfo, _showApiInfo;
     List<AppPermissionsViewModel> _menuPermissions = new();
     List<AppPermissionsViewModel> _apiPermissions = new();

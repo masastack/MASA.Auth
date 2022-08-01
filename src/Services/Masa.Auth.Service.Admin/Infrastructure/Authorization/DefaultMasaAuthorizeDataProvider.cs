@@ -21,7 +21,7 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
     {
         return new List<string>
         {
-            "*123333"
+            "*"
         };
     }
 }

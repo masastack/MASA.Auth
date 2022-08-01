@@ -3,6 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
+/// <summary>
+/// all route with delegate use Authorize Attribute into this,and will Authorization code
+/// </summary>
 public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddlewareResultHandler
 {
     readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
