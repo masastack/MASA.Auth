@@ -6,10 +6,10 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
 public partial class UpdateClientDialog
 {
     [Parameter]
-    public bool Value { get; set; }
+    public bool Visible { get; set; }
 
     [Parameter]
-    public EventCallback<bool> ValueChanged { get; set; }
+    public EventCallback<bool> VisibleChanged { get; set; }
 
     [Parameter]
     public EventCallback OnSuccessed { get; set; }
@@ -44,14 +44,8 @@ public partial class UpdateClientDialog
 
         PrepareHeader();
 
-        if (ValueChanged.HasDelegate)
-        {
-            await ValueChanged.InvokeAsync(true);
-        }
-        else
-        {
-            Value = true;
-        }
+        await Toggle(true);
+
         StateHasChanged();
     }
 
@@ -118,13 +112,18 @@ public partial class UpdateClientDialog
 
     private async Task CloseAsync()
     {
-        if (ValueChanged.HasDelegate)
+        await Toggle(false);
+    }
+
+    private async Task Toggle(bool visible)
+    {
+        if (VisibleChanged.HasDelegate)
         {
-            await ValueChanged.InvokeAsync(false);
+            await VisibleChanged.InvokeAsync(visible);
         }
         else
         {
-            Value = false;
+            Visible = visible;
         }
     }
 }

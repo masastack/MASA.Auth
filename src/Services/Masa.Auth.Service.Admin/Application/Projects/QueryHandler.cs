@@ -52,7 +52,7 @@ public class QueryHandler
 
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
         var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
-                                && permissionIds.Contains(p.Id));
+                                && permissionIds.Contains(p.Id) && p.Enabled);
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
             a.Navs = menuPermissions.OrderBy(p => p.Order)

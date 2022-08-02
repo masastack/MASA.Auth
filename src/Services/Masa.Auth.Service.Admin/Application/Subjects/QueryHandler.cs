@@ -409,8 +409,10 @@ public class QueryHandler
             var staffId = (await _authDbContext.Set<Staff>()
                                         .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
             if (staffId != default)
-                condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
-            else return;
+            {
+                return;
+            }
+            condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
         }
         var teams = await _teamRepository.GetListInCludeAsync(condition,
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
@@ -422,7 +424,7 @@ public class QueryHandler
 
             var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
 
-            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, team.Avatar.Url, team.Description, team.TeamStaffs.Count,
+            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, $"{team.Avatar.Url}?stamp={team.ModificationTime.Second}", team.Description, team.TeamStaffs.Count,
                 adminAvatar, modifierName, team.ModificationTime));
         }
     }

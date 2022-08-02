@@ -5,9 +5,16 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
 public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
 {
+    readonly IUserContext _userContext;
+
+    public DefaultMasaAuthorizeDataProvider(IUserContext userContext)
+    {
+        _userContext = userContext;
+    }
+
     public string GetAccount()
     {
-        return "admin";
+        return _userContext.UserName ?? "";
     }
 
     public List<string> GetAllowCodeList()

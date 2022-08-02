@@ -293,7 +293,7 @@ public class QueryHandler
     {
         var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appMenuListQuery.UserId);
         var menus = await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
-                            && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id));
+                            && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled);
         appMenuListQuery.Result = GetMenus(menus.ToList(), Guid.Empty);
 
         List<MenuDto> GetMenus(List<Permission> menus, Guid parentId)
@@ -317,7 +317,7 @@ public class QueryHandler
     {
         var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appElementPermissionCodeListQuery.UserId);
         var elements = await _permissionRepository.GetListAsync(p => p.AppId == appElementPermissionCodeListQuery.AppId
-                            && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id));
+                            && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled);
         appElementPermissionCodeListQuery.Result = elements.Select(e => e.Code).ToList();
     }
 
