@@ -56,7 +56,7 @@ public partial class UpdateUserClaimDialog
         {
             Loading = true;
             await UserClaimService.UpdateAsync(UserClaim);
-            OpenSuccessMessage("Update userClaim success");
+            OpenSuccessMessage(T("Edit userClaim data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

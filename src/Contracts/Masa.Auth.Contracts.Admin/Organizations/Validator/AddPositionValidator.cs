@@ -7,6 +7,6 @@ public class AddPositionValidator : AbstractValidator<AddPositionDto>
 {
     public AddPositionValidator()
     {
-        RuleFor(p => p.Name).Required();
+        RuleFor(p => p.Name).Required().MaxLength(20);
     }
 }

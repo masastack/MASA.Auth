@@ -117,7 +117,12 @@
                             </div>
                         </HeaderContent>
                         <AutoHeightContent>
-                            <SDataTable Headers="GetHeaders()" Items="@_paginationStaffs.Items" TItem="StaffDto">
+                            <SDataTable
+                                FixedHeader
+                                Height="@("calc(100vh - 420px)")"
+                                Headers="GetHeaders()" 
+                                Items="@_paginationStaffs.Items" 
+                                TItem="StaffDto">
                                 <HeaderColContent Context="header">
                                     <span class="body-bold">@header.Text</span>
                                 </HeaderColContent>

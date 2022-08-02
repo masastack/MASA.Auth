@@ -18,7 +18,13 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable Headers="GetHeaders()" Items="Positions" TItem="PositionDto" ItemsPerPage="PageSize">
+            <SDataTable
+                FixedHeader
+                Height="@("calc(100vh - 285px)")"
+                Headers="GetHeaders()" 
+                Items="Positions" 
+                TItem="PositionDto" 
+                ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>

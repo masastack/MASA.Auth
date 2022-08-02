@@ -7,7 +7,7 @@ public class AddThirdPartyIdpValidator : AbstractValidator<AddThirdPartyIdpDto>
 {
     public AddThirdPartyIdpValidator()
     {
-        RuleFor(thirdPartyIdp => thirdPartyIdp.Name).Required().ChineseLetterNumber().MaxLength(255);
+        RuleFor(thirdPartyIdp => thirdPartyIdp.Name).Required().ChineseLetterNumber().MaxLength(20);
         RuleFor(thirdPartyIdp => thirdPartyIdp.DisplayName).ChineseLetterNumber().MinLength(4).MaxLength(50);
         RuleFor(staff => staff.ClientId).Required().LetterNumber().MinLength(4).MaxLength(50);
         RuleFor(staff => staff.ClientSecret).Required().MaxLength(255);

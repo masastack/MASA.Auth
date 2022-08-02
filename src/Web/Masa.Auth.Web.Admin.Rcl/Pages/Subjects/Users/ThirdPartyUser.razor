@@ -30,7 +30,14 @@
         }
     </HeaderContent>
     <AutoHeightContent>
-        <SDataTable Headers="GetHeaders()" Items="ThirdPartyUsers" TItem="ThirdPartyUserDto" ItemsPerPage="PageSize" Class="mt-6">
+        <SDataTable
+            FixedHeader
+            Height="@("calc(100vh - 285px)")"
+            Headers="GetHeaders()" 
+            Items="ThirdPartyUsers" 
+            TItem="ThirdPartyUserDto" 
+            ItemsPerPage="PageSize" 
+            Class="mt-6">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>

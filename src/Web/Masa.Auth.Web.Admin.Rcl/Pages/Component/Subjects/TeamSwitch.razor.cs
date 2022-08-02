@@ -22,6 +22,8 @@ public partial class TeamSwitch
 
     private List<TeamRoleSelectDto> Teams { get; set; } = new();
 
+    private TeamRoleSelectDto? CurrentTeam => Teams.FirstOrDefault(team => team.Id == Value);
+
     private TeamService TeamService => AuthCaller.TeamService;
 
     protected override async Task OnInitializedAsync()

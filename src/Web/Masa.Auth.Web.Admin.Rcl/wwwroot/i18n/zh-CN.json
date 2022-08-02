@@ -116,12 +116,12 @@
     "Unique identification of third-party platforms": "第三方平台唯一识别",
     "Failed to query thirdPartyIdpList data:": "查询第三方平台详情列表失败:",
     "Failed to query thirdPartyIdpDetail data:": "查询第三方平台详情数据失败:",
-    "Add thirdPartyIdp success": "新增第三方平台详情数据成功",
-    "Failed to add thirdPartyIdp:": "新增第三方平台详情数据失败:",
-    "Edit thirdPartyIdp success": "编辑第三方平台详情数据成功",
-    "Failed to edit thirdPartyIdp:": "编辑第三方平台详情数据失败:",
-    "Delete thirdPartyIdp success": "删除第三方平台成功",
-    "Failed to delete thirdPartyIdp:": "删除第三方平台失败:",
+    "Add thirdPartyIdp success": "新增第三方平台数据成功",
+    "Failed to add thirdPartyIdp:": "新增第三方平台数据失败:",
+    "Edit thirdPartyIdp data success": "编辑第三方平台数据成功",
+    "Failed to edit thirdPartyIdp:": "编辑第三方平台数据失败:",
+    "Delete thirdPartyIdp data success": "删除第三方平台数据成功",
+    "Failed to delete thirdPartyIdp data:": "删除第三方平台失败:",
     "Configure Domain Account": "配置域账户",
     "Ldap Root User": "LDAP管理员",
     "Ldap Root User Pwd": "LDAP管理员密码",
@@ -137,7 +137,10 @@
   },
 
   "PositionBlock": {
-    "Name": "名称"
+    "Name": "名称",
+    "Add position success": "新增职位成功",
+    "Edit position data success": "编辑职位数据成功",
+    "Delete position data success": "删除职位数据成功"
   },
 
   "TeamBlock": {
@@ -220,6 +223,7 @@
     "Failed to edit user:": "编辑用户数据失败:",
     "Authorized user succeeded": "授权用户成功",
     "Failed to authorize user:": "授权用户失败:",
+    "Delete user data success": "删除用户数据成功",
     "Another": "换一个",
     "Give him a nickname!": "给Ta取个昵称吧!",
     "Successfully set user permissions": "设置用户权限成功",
@@ -246,7 +250,6 @@
     "Gender": "性别",
     "Male/Female": "男/女",
     "Delete Staff": "删除员工",
-    "Update Staff Success": "编辑员工成功",
     "InternalStaff/ExternalStaff": "内部员工/驻场员工",
     "Failed to query staffList data:": "获取员工列表数据失败:",
     "Failed to query staffDetail data:": "获取员工详情数据失败",
@@ -286,6 +289,7 @@
     "Failed to add role:": "添加角色数据失败:",
     "Edit role data success": "编辑角色数据成功",
     "Failed to edit role": "编辑角色数据失败:",
+    "Delete role data success": "删除角色数据成功",
     "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作",
     "Are you sure delete role data": "确定删除角色数据"
   },
@@ -300,6 +304,9 @@
     "Add UserClaim": "新增用户声明",
     "Update UserClaim": "编辑用户声明",
     "Delete UserClaim": "删除用户声明",
+    "Add userClaim success": "新增用户声明成功",
+    "Delete userClaim data success": "删除用户声明数据成功",
+    "Edit userClaim data success": "编辑用户声明数据成功",
     "Are you sure delete userClaim data": "确定删除用户声明吗"
   },
 
@@ -316,6 +323,9 @@
     "Required": "是否必须",
     "User Claims": "用户声明",
     "Delete IdentityResource": "删除身份资源",
+    "Add identityResource success": "新增身份资源成功",
+    "Delete identityResource data success": "删除身份资源数据成功",
+    "Edit identityResource data success": "编辑身份资源数据成功",
     "Are you sure delete identityResource data": "确定删除身份资源吗"
   },
 
@@ -327,7 +337,10 @@
     "ApiScope.Name": "配置名称",
     "ApiScope.Required": "是否必须",
     "Delete ApiScope": "删除Api范围",
-    "Are you sure delete apiScope data": "确定删除Api范围吗"
+    "Are you sure delete apiScope data": "确定删除Api范围吗",
+    "Add apiScope success": "新增Api范围成功",
+    "Delete apiScope data success": "删除Api范围数据成功",
+    "Edit apiScope data success": "编辑Api范围数据成功"
   },
 
   "ApiResource": "Api资源",
@@ -337,7 +350,10 @@
     "ApiResource.Name": "配置名称",
     "ApiResource.Required": "是否必须",
     "Delete ApiResource": "删除Api资源",
-    "Are you sure delete apiResource data": "确定删除Api资源吗"
+    "Are you sure delete apiResource data": "确定删除Api资源吗",
+    "Add apiResource success": "新增Api资源成功",
+    "Delete apiResource data success": "删除Api资源数据成功",
+    "Edit apiResource data success": "编辑Api资源数据成功"
   },
 
   "Client": "客户端",
@@ -385,7 +401,10 @@
     "Category": "分类",
     "ConfirmPassword": "确认密码",
     "Login configuration items are required": "登录配置项必填",
-    "Register configuration items are required": "注册配置项必填"
+    "Register configuration items are required": "注册配置项必填",
+    "Add Custom Login success": "新增自定义登录成功",
+    "Delete Custom Login data success": "删除自定义登录数据成功",
+    "Edit Custom Login data success": "编辑自定义登录数据成功"
   },
 
   "OperationLog": "操作日志",
@@ -454,8 +473,19 @@
   "Job Number is required": "工号必须填写",
   "Display Name is required": "昵称必须填写",
   "Phone Number is required": "手机号必须填写",
-  "Can only input upper chinese and letter and number of Account": "账号只能输入中英文数字",
+  "Name is required": "名称必须填写",
+  "Client Id is required": "客户端ID必须填写",
+  "Client Secret is required": "客户端密钥必须填写",
+  "Url is required": "Url地址必须填写",
+  "Please enter a number greater than 4 of Display Name": "显示名称请输入大于等于4个字符",
+  "Can only input upper chinese and letter of Name": "只可以输入中文字母",
+  "Can only input upper chinese and letter and number of Name": "只可以输入中文字母数字",
+  "Can only input upper chinese and letter and number of Account": "账号只能输入中文字母数字",
+  "Can only input upper chinese and letter of Company Name": "公司名称只能输入中文字母",
+  "Can only input upper chinese and letter and number of Position": "职位账号只能输入中文字母数字",
   "Phone Number format is incorrect": "手机号码格式错误",
+  "Email format is incorrect": "邮箱格式错误",
+  "Id Card format is incorrect": "身份证号格式错误",
   "Password must contain numbers and letter, and not less than 8 digits": "密码必须包含数字和字母，且长度不小于8位数",
   "The password is inconsistent with the confirm password": "密码和确认密码不一致"
 }

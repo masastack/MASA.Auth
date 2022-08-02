@@ -45,7 +45,7 @@
                             <span>@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
                             break;
                         case nameof(ThirdPartyIdpDto.Url):
-                            <span>@context.Item.Url</span>
+                            <span class="description">@context.Item.Url</span>
                             break;
                         case "Action":
                             <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">@IconConstants.Update</SIcon>
