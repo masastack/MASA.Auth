@@ -1,0 +1,20 @@
+﻿@inherits AdminCompontentBase
+
+<STextField 
+    Value="TextValue" 
+    ValueChanged="ValueTextUpdateAsync"
+    TValue="string"
+    Class="urlTextField"
+    Label="@Label">
+    <PrependContent>
+        <SSelect                    
+            Items="Items" 
+            ItemText="v => v"
+            ItemValue="v => v"
+            TItem="string"
+            TItemValue="string" 
+            TValue="string"
+            Value="Protocol"
+            ValueChanged="ProtocolUpdateAsync" />
+    </PrependContent>
+</STextField>

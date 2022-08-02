@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex teamSwitch">
+<div class="d-flex teamSwitch @Class" style="@Style;">
     <div style="width:250px;">
         <SSelect Value="Value"
              ValueChanged=UpdateValueAsync
@@ -10,8 +10,7 @@
              TItemValue="Guid"
              ItemText="t=>t.Name"
              ItemValue="t=>t.Id"
-             Medium            
-             Class="@Class"
+             Medium
              Clearable
              Label="@T("Team")" />
     </div>

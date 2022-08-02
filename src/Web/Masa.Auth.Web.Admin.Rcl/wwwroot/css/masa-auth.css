@@ -1053,3 +1053,23 @@ input::-webkit-input-placeholder {
     white-space: nowrap;
     max-width: 300px;
 }
+
+/*
+    urlTextField
+*/
+
+.urlTextField .m-input__prepend-outer {
+    width: 120px !important;
+    margin: 0 !important;
+}
+
+.urlTextField .m-input__prepend-outer .m-select fieldset {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0!important;
+}
+
+.urlTextField .m-input__prepend-outer + .m-input__control .m-input__slot fieldset {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left: 0 !important;
+}

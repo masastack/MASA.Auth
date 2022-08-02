@@ -53,11 +53,11 @@ public partial class UpdateThirdPartyIdpDialog
 
     public async Task UpdateThirdPartyIdpAsync(EditContext context)
     {
-        if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
-        {
-            OpenErrorMessage(T("Please upload ThirdPartyIdp icon"));
-            return;
-        }
+        //if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
+        //{
+        //    OpenErrorMessage(T("Please upload ThirdPartyIdp icon"));
+        //    return;
+        //}
         var success = context.Validate();
         if (success)
         {
