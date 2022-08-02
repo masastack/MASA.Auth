@@ -141,7 +141,8 @@
     "Name": "名称",
     "Add position success": "新增职位成功",
     "Edit position data success": "编辑职位数据成功",
-    "Delete position data success": "删除职位数据成功"
+    "Delete position data success": "删除职位数据成功",
+    "Are you sure delete position data": "确定删除职位数据"
   },
 
   "TeamBlock": {
