@@ -50,7 +50,7 @@
                                     <STextField @bind-Value="Staff.Email" Label="@T("Email")" />
                                 </MCol>
                                 <MCol>
-                                    <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Label="@T("StaffType")" />
+                                    <EnumSelect @bind-Value=Staff.StaffType TValue="StaffTypes" Clearable=false Label="@T("StaffType")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">
@@ -66,7 +66,7 @@
                                     <STextField @bind-Value="Staff.Address.Address" Label="@T("Address")" />
                                 </MCol>
                                 <MCol>
-                                    <DepartmentSelect @bind-Value="Staff.DepartmentId" />
+                                    <DepartmenCascader @bind-Value="Staff.DepartmentId" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">

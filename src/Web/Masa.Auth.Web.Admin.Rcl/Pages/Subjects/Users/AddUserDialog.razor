@@ -65,7 +65,7 @@
                             <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
-                                <SButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</SButton>
+                                <SButton Medium OnClick="async ()=> await NextStepAsync(context)" Class="ml-6">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>

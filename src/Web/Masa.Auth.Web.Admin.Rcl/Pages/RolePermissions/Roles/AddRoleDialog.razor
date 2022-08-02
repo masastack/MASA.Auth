@@ -2,7 +2,7 @@
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
     <MForm Model="Role" EnableValidation EnableI18n>
-        <AutoHeight Overflow>
+        <AutoHeight>
             <HeaderContent>
                 <div class="d-flex mb-6">
                     <div class="mx-auto">
@@ -21,10 +21,7 @@
                                 Roles=Role.ChildrenRoles 
                                 @bind-Value=Role.Permissions
                                 @bind-Preview=Preview
-                                Style="max-height:calc(100vh - 345px);" />
-@*                    <PermissionsCheck RoleIds=Role.ChildrenRoles
-                                  Value="@(Role.Permissions.ToDictionary(id => id,id => true))"
-                                  ValueChanged="PermissionsChanged" />*@
+                                Style="max-height:calc(100vh - 555px);" />
                 </div>
             </AutoHeightContent>
             <FooterContent>

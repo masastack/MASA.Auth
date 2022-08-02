@@ -86,6 +86,7 @@
   "Password": "用户密码",
   "IdCard": "身份证号",
   "Operation confirmation": "操作确认",
+  "Please Select": "请选择",
   "Due to the role [{0}] limit constraint, Team [{1}] cannot add members": "由于角色[{0}]约束限制,团队[{1}]] 无法添加成员",
 
   "OrganizationBlock": {
