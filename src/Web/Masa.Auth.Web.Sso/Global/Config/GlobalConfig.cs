@@ -6,32 +6,36 @@ namespace Masa.Auth.Web.Sso.Global.Config;
 public class GlobalConfig
 {
     #region Field
-
-    private bool _isDark;
     private CookieStorage? _cookieStorage;
-
     #endregion
 
     #region Property
 
-    public static string IsDarkCookieKey { get; set; } = "GlobalConfig_IsDark";
+    public I18n I18n { get; set; }
 
-    public bool IsDark
+    public CultureInfo? Culture
     {
-        get => _isDark;
+        get => I18n.Culture;
         set
         {
-            _isDark = value;
-            _cookieStorage?.SetItemAsync(IsDarkCookieKey, value);
+            if (I18n is not null)
+            {
+                I18n.SetCulture(value);
+                OnLanguageChanged?.Invoke();
+            }
         }
     }
 
     #endregion
 
-    public GlobalConfig(CookieStorage cookieStorage, IHttpContextAccessor httpContextAccessor)
+    public GlobalConfig(CookieStorage cookieStorage, I18n i18n, IHttpContextAccessor httpContextAccessor)
     {
         _cookieStorage = cookieStorage;
-        if (httpContextAccessor.HttpContext is not null) Initialization(httpContextAccessor.HttpContext.Request.Cookies);
+        I18n = i18n;
+        if (httpContextAccessor.HttpContext is not null)
+        {
+            Initialization(httpContextAccessor.HttpContext.Request.Cookies);
+        }
     }
 
     #region event
@@ -45,7 +49,6 @@ public class GlobalConfig
 
     public void Initialization(IRequestCookieCollection cookies)
     {
-        _isDark = Convert.ToBoolean(cookies[IsDarkCookieKey]);
     }
     #endregion
 }

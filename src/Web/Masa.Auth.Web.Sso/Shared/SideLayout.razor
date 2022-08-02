@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Components.Rendering
-@inherits SsoLayoutComponentBase
+﻿@inherits SsoLayoutComponentBase
+@inject GlobalConfig GlobalConfig
+@implements IDisposable
 
 <MApp>
     <MErrorHandler>
@@ -25,3 +26,15 @@
         </MMain>
     </MErrorHandler>
 </MApp>
+
+@code {
+    protected override void OnInitialized()
+    {
+        GlobalConfig.OnLanguageChanged += base.StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        GlobalConfig.OnLanguageChanged -= base.StateHasChanged;
+    }
+}
