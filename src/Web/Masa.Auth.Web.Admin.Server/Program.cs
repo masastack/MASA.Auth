@@ -1,18 +1,6 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.ApiGateways.Caller;
-using Masa.Auth.Contracts.Admin.Subjects.Validator;
-using Masa.Auth.Service.Admin;
-using Masa.Auth.Web.Admin.Rcl;
-using Masa.Auth.Web.Admin.Rcl.Global;
-using Masa.Auth.Web.Admin.Rcl.Shared;
-using Masa.Auth.Web.Admin.Server;
-using Masa.Blazor;
-using Masa.Stack.Components;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using System.Security.Cryptography.X509Certificates;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.UseKestrel(option =>

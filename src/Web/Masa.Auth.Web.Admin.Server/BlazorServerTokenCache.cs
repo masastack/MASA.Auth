@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Admin.Server;
-using Microsoft.Extensions.Caching.Memory;
-
 namespace Masa.Auth.Service.Admin;
 
 public class BlazorServerTokenCache
@@ -15,7 +12,7 @@ public class BlazorServerTokenCache
         System.Diagnostics.Debug.WriteLine($"Caching sid: {subjectId}");
         _memoryCache.Set(subjectId, data, new MemoryCacheEntryOptions()
         {
-            SlidingExpiration = TimeSpan.FromDays(1)
+            SlidingExpiration = TimeSpan.FromDays(5)
         });
     }
 

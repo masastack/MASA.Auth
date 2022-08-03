@@ -1,10 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.ApiGateways.Caller;
-using Masa.Auth.Service.Admin;
-using Masa.BuildingBlocks.Identity.IdentityModel;
-
 namespace Masa.Auth.Web.Admin.Server;
 
 public class TokenProvider : ITokenProvider

@@ -8,7 +8,6 @@ public class PermissionService : ServiceBase
     public PermissionService(IServiceCollection services) : base(services, "api/permission")
     {
         MapGet(GetApplicationPermissionsAsync);
-        MapGet(GetChildMenuPermissionsAsync);
         MapGet(GetTypesAsync);
         MapGet(GetApiPermissionSelectAsync);
         MapGet(GetMenuPermissionAsync);
@@ -58,13 +57,6 @@ public class PermissionService : ServiceBase
     private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] string systemId)
     {
         var funcQuery = new ApplicationPermissionsQuery(systemId);
-        await eventBus.PublishAsync(funcQuery);
-        return funcQuery.Result;
-    }
-
-    private async Task<List<PermissionDto>> GetChildMenuPermissionsAsync(IEventBus eventBus, [FromQuery] Guid permissionId)
-    {
-        var funcQuery = new ChildMenuPermissionsQuery(permissionId);
         await eventBus.PublishAsync(funcQuery);
         return funcQuery.Result;
     }

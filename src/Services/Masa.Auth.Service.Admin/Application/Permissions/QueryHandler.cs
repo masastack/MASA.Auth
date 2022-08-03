@@ -182,34 +182,24 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task ChildMenuPermissionsQueryAsync(ChildMenuPermissionsQuery childMenuPermissionsQuery)
-    {
-        var permissions = await _permissionRepository.GetListAsync(p => p.ParentId == childMenuPermissionsQuery.PermissionId
-                            && p.Type != PermissionTypes.Api);
-        childMenuPermissionsQuery.Result = permissions
-            .OrderBy(p => p.Order)
-            .Select(p => new PermissionDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Type = p.Type
-            }).ToList();
-    }
-
-    [EventHandler]
     public async Task ApplicationPermissionsQueryAsync(ApplicationPermissionsQuery applicationPermissionsQuery)
     {
-        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == applicationPermissionsQuery.SystemId
-                && p.ParentId == Guid.Empty);
+        var permissions = await _permissionRepository.GetListAsync(p => p.SystemId == applicationPermissionsQuery.SystemId);
 
-        applicationPermissionsQuery.Result = permissions
+        applicationPermissionsQuery.Result = GetChildrenPermissions(Guid.Empty, permissions);
+    }
+
+    private List<AppPermissionDto> GetChildrenPermissions(Guid parentId, IEnumerable<Permission> all)
+    {
+        return all.Where(p => p.ParentId == parentId)
             .OrderBy(p => p.Order)
             .Select(p => new AppPermissionDto
             {
                 AppId = p.AppId,
                 PermissonId = p.Id,
-                PermissonName = p.Name,
-                Type = p.Type
+                PermissionName = p.Name,
+                Type = p.Type,
+                Children = GetChildrenPermissions(p.Id, all)
             }).ToList();
     }
 

@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Service.Admin;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-
 namespace Masa.Auth.Web.Admin.Server.Pages;
 
 public class _HostAuthModel : PageModel
