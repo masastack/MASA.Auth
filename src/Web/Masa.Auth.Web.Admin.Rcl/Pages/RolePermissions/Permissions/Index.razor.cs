@@ -90,25 +90,13 @@ public partial class Index
 
         _menuPermissions.ForEach(mp =>
         {
-            var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Menu && p.AppId == mp.AppId)
-            .Select(p => new AppPermissionsViewModel
-            {
-                IsPermission = true,
-                Name = p.PermissonName,
-                Id = p.PermissonId
-            });
-            mp.Children.AddRange(permissions);
+            var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Menu && p.AppId == mp.AppId);
+            mp.Children.AddRange(permissions.Adapt<List<AppPermissionsViewModel>>());
         });
         _apiPermissions.ForEach(mp =>
         {
-            var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Api && p.AppId == mp.AppId)
-            .Select(p => new AppPermissionsViewModel
-            {
-                IsPermission = true,
-                Name = p.PermissonName,
-                Id = p.PermissonId
-            });
-            mp.Children.AddRange(permissions);
+            var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Api && p.AppId == mp.AppId);
+            mp.Children.AddRange(permissions.Adapt<List<AppPermissionsViewModel>>());
         });
     }
 
@@ -122,16 +110,6 @@ public partial class Index
             {
                 _appTagDto = new AppTagDetailDto();
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
-                if (!curItem.Children.Any())
-                {
-                    var childPermissions = await PermissionService.GetChildMenuPermissionsAsync(curItem.Id);
-                    curItem.Children.AddRange(childPermissions.Select(a => new AppPermissionsViewModel
-                    {
-                        IsPermission = true,
-                        Name = a.Name,
-                        Id = a.Id
-                    }));
-                }
             }
             else
             {

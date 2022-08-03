@@ -11,5 +11,7 @@ public class AppPermissionDto
 
     public Guid PermissonId { get; set; }
 
-    public string PermissonName { get; set; } = string.Empty;
+    public string PermissionName { get; set; } = string.Empty;
+
+    public List<AppPermissionDto> Children { get; set; } = new();
 }

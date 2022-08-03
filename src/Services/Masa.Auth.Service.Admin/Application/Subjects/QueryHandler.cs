@@ -406,13 +406,21 @@ public class QueryHandler
         }
         if (teamListQuery.UserId != Guid.Empty)
         {
-            var staffId = (await _authDbContext.Set<Staff>()
-                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
-            if (staffId != default)
+            var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == teamListQuery.UserId);
+            if (user == null)
             {
                 return;
             }
-            condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
+            if (!user.IsAdmin())
+            {
+                var staffId = (await _authDbContext.Set<Staff>()
+                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
+                if (staffId != default)
+                {
+                    return;
+                }
+                condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
+            }
         }
         var teams = await _teamRepository.GetListInCludeAsync(condition,
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
