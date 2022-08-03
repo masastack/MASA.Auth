@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
+namespace Masa.Auth.ApiGateways.Caller.Services.Sso;
 
 public class ApiResourceService : ServiceBase
 {

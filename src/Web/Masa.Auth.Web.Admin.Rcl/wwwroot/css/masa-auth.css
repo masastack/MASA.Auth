@@ -311,61 +311,6 @@
     text-transform: none !important;
 }
 
-.masa-stack-components .table-border-none thead th {
-    border-bottom: 0px !important;
-    box-shadow: none;
-    padding-top: 24px !important;
-    padding-bottom: 24px !important;
-    color: #A3AED0 !important;
-    font-size: 0.875rem !important;
-    font-weight: 400 !important;
-    line-height: 1.3125rem !important;
-    letter-spacing: 0.015625em !important;
-}
-
-.masa-stack-components .table-border-none td {
-    border-bottom: 0px !important;
-    box-shadow: none;
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
-}
-
-.masa-stack-components .table-border-none tbody tr:hover {
-    background-color: #F6F8FD !important;
-}
-
-.masa-stack-components .table-border-none tr td:first-child {
-    font-style: normal !important;
-    font-weight: 500 !important;
-    font-size: 1rem !important;
-    color: #1B2559 !important;
-    line-height: 1.5rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa-stack-components .table-border-none tr td {
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 1rem !important;
-    color: #485585 !important;
-    line-height: 1.5rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa-stack-components .table-border-none tr .m-icon {
-    color: #485585 !important;
-}
-
-.masa-stack-components .table-border-none tr td:first-child, th:first-child {
-    border-top-left-radius: 8px !important;
-    border-bottom-left-radius: 8px !important;
-}
-
-.masa-stack-components .table-border-none tr td:last-child, th:last-child {
-    border-top-right-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
-}
-
 .table-border-solid td, th {
     border-bottom: 0 !important;
     box-shadow: none;
@@ -452,31 +397,6 @@
     height: 100%;
 }
 
-/*.m-text-field--outlined:not(.m-textarea) {
-    height: 48px !important;
-}
-
-    .m-text-field--outlined:not(.m-textarea) fieldset {
-        height: 53px !important;
-    }*/
-
-/*.m-select.m-text-field--outlined .m-label {
-    top: 14px !important;
-}
-
-    .m-select.m-text-field--outlined .m-label.m-label--active {
-        top: 18px !important;
-    }
-
-.m-text-field--outlined .m-text-field__details {
-    margin-top: -5px !important;
-}
-
-.m-text-field--outlined:not(.m-textarea) .m-input__slot {
-    height: 48px !important;
-    min-height: 0px !important;
-}*/
-
 .m-text-field--outlined input {
     font-family: 'Roboto' !important;
     font-style: normal !important;
@@ -501,13 +421,6 @@
     height: 100% !important;
 }
 
-/* pagetabs */
-/*组件样式全局修改end*/
-
-/*.m-text-field.m-input--dense:not(.m-text-field--outlined) .m-text-field__prefix, .m-text-field.m-input--dense:not(.m-text-field--outlined) .m-text-field__suffix, .m-text-field.m-input--dense:not(.m-text-field--outlined) input {
-    padding-top: 0;
-}
-*/
 .max-height {
     height: 100% !important;
 }
@@ -593,15 +506,6 @@
     pointer-events: none;
 }
 
-/*.body2 .m-label {
-    color: #323D6F;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
-}*/
-
 .mtab-tab-linear-primary {
     background: linear-gradient(270deg, #4318FF 5.56%, rgba(67, 24, 255, 0) 100%);
 }
@@ -661,14 +565,6 @@
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     overflow-y: scroll;
 }
-
-/*.emphasis2--text .m-label {
-    color: #323D6F !important;
-}
-
-.regular3--text .m-label {
-    color: #A3AED0 !important;
-}*/
 
 .theme--light.m-text-field--outlined.regular3--text > .m-input__control > .m-input__slot fieldset {
     color: #A3AED0 !important;
@@ -849,21 +745,20 @@ input::-webkit-input-placeholder {
     padding-bottom: 2px;
 }
 
-    .m-input.mx-auto .m-text-field__slot input {
-        font-family: 'Roboto';
-        font-style: normal;
-        font-weight: 700;
-        font-size: 20px;
-        line-height: 30px;
-        /* identical to box height, or 150% */
-        text-align: center;
-        letter-spacing: 0.01em;
-        /* text/1-2强调 */
-        color: #323D6F;
-    }
 
 .m-input.mx-auto .m-input__slot::before {
     border-color: #E2E7F4 !important;
+}
+
+.m-input.mx-auto .m-text-field__slot input {
+    text-align: center;
+    color: #A3AED0 !important;
+    font-family: Roboto !important;
+    font-size: 1.5rem !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: normal !important;
+    letter-spacing: 0em !important;
 }
 
 .m-input.mx-auto .m-text-field__slot input::placeholder {
@@ -877,14 +772,6 @@ input::-webkit-input-placeholder {
     letter-spacing: 0em !important;
 }
 
-/*.masa-stack-components .m-input .m-text-field__slot input::placeholder {
-    font-family: 'Roboto' !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 14px !important;
-    line-height: 21px !important;
-    color: red !important;
-}*/
 
 .m-data-table.table-space-v-4 > .m-data-table__wrapper > table {
     border-spacing: 0px 16px !important;
@@ -956,12 +843,12 @@ input::-webkit-input-placeholder {
     position: absolute;
 }
 
-.sheetDialogPadding .m-stepper__content {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-bottom: 0 !important;
-    padding-top: 0 !important;
-}
+    .sheetDialogPadding .m-stepper__content {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 0 !important;
+        padding-top: 0 !important;
+    }
 
 .m-stepper__content.full-height .m-stepper__wrapper {
     height: 100% !important;
@@ -1082,4 +969,107 @@ input::-webkit-input-placeholder {
     line-height: 0.9375rem !important;
     letter-spacing: 0 !important;
     text-transform: none !important;
+}
+
+.teamSwitch .roles {
+    height: 48px;
+    width: 100%;
+    border: 1px solid #E2E7F4;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.teamSwitch .role {
+    background: #F6F8FD;
+    border-radius: 18px;
+    padding: 2px 8px;
+}
+
+.teamSwitch .m-input--dense-48 .m-input__control .m-input__slot fieldset {
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-right-width: 0 !important;
+}
+
+@keyframes show {
+    0% {
+        height: 0px;
+    }
+
+    25% {
+        height: 10px
+    }
+
+    50% {
+        height: 20px
+    }
+
+    75% {
+        height: 30px
+    }
+
+    100% {
+        height: 40px
+    }
+}
+
+.show {
+    animation-name: show;
+    animation-duration: 0.3s;
+}
+
+@keyframes hide {
+    0% {
+        opacity: 1;
+    }
+
+    25% {
+        opacity: 0.75;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    75% {
+        opacity: 0.25;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.close {
+    display:none;
+    animation-name: hide;
+    animation-duration: 1s;
+}
+
+.masa-stack-components .table-border-none tr td:not(:last-child) > *:not(.description) {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+}
+
+/*
+    urlTextField
+*/
+
+.urlTextField .m-input__prepend-outer {
+    width: 120px !important;
+    margin: 0 !important;
+}
+
+.urlTextField .m-input__prepend-outer .m-select fieldset {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0!important;
+}
+
+.urlTextField .m-input__prepend-outer + .m-input__control .m-input__slot fieldset {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-left: 0 !important;
 }

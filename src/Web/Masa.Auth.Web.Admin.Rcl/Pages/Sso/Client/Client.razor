@@ -18,7 +18,14 @@
             </div>           
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable Headers="GetHeaders()" Items="_paginationDto.Items" TItem="ClientDto" ItemsPerPage="_clientPaginationDto.PageSize">
+            <SDataTable
+                FixedHeader
+                Height="@("calc(100vh - 285px)")"
+                Headers="GetHeaders()" 
+                Items="_paginationDto.Items" 
+                TItem="ClientDto"
+                ItemsPerPage="_clientPaginationDto.PageSize">
+
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -34,6 +41,9 @@
                                     <div>@context.Item.ClientName</div>
                                 </div>
                             </div>
+                            break;
+                        case nameof(ClientDto.Description):
+                            <span class="description">@context.Item.Description</span>
                             break;
                         case nameof(ClientDto.Enabled):
                             <EnableChip Value=context.Item.Enabled />

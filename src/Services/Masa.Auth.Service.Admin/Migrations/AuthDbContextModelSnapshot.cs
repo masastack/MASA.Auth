@@ -182,7 +182,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Position", "auth");
                 });
@@ -848,6 +849,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<int>("TeamMemberType")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

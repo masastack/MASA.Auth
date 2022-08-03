@@ -21,6 +21,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapPost(UserPortraitsAsync, "portraits");
             MapPost(PostUserSystemData, "UserSystemData");
             MapPut(DisableAsync, "disable");
+            MapPost(VerifyUserRepeatAsync);
         }
 
         //[Authorize]
@@ -81,6 +82,13 @@ namespace Masa.Auth.Service.Admin.Services
         private async Task<bool> DisableAsync(IEventBus eventBus, [FromBody] DisableUserModel model)
         {
             var command = new DisableUserCommand(model);
+            await eventBus.PublishAsync(command);
+            return command.Result;
+        }
+
+        private async Task<bool> VerifyUserRepeatAsync(IEventBus eventBus, [FromBody] VerifyUserRepeatDto user)
+        {
+            var command = new VerifyUserRepeatCommand(user);
             await eventBus.PublishAsync(command);
             return command.Result;
         }

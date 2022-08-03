@@ -214,6 +214,11 @@ public class User : FullAggregateRoot<Guid, Guid>
            item => item.RoleId);
     }
 
+    public bool IsAdmin()
+    {
+        return Account == "admin";
+    }
+
     public void AddPermissions(List<UserPermission> permissions)
     {
         _permissions = _permissions.MergeBy(

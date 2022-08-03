@@ -62,7 +62,7 @@ public class QueryHandler
                 {
                     Name = p.Name,
                     Icon = p.Icon,
-                    Url = p.Url,
+                    Url = Path.Combine(a.Url, p.Url),
                     Code = p.Id.ToString(),
                     PermissionType = p.Type,
                     Children = GetChildren(p.Id, menuPermissions)

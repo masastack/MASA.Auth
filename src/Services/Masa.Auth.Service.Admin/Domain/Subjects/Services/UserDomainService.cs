@@ -23,8 +23,12 @@ public class UserDomainService : DomainService
     public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId)
     {
         //todo query from cache
-        var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Account == "admin" && u.Id == userId);
-        if (user is not null)
+        var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            return new List<Guid>();
+        }
+        if (user.IsAdmin())
         {
             var permissions = _authDbContext.Set<Permission>()
                     .Select(a => a.Id).ToList();

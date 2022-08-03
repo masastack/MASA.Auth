@@ -74,8 +74,7 @@ public class AuthCaller : HttpClientCallerBase
 
     protected override IHttpClientBuilder UseHttpClient()
     {
-        return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            .AddHttpMessageHandler<HttpClientEnvironmentDelegatingHandler>();
+        return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
     }
 }
 

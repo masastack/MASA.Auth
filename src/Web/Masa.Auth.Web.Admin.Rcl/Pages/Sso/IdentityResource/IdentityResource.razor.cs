@@ -60,11 +60,11 @@ public partial class IdentityResource
 
     public List<DataTableHeader<IdentityResourceDto>> GetHeaders() => new()
     {
-        new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false },
-        new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false },
-        new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false },
+        new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false, Width="250px"},
+        new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false, Width="250px" },
+        new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false, Width="105px" },
         new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
-        new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false },
+        new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false, Width="105px" },
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
     };
 

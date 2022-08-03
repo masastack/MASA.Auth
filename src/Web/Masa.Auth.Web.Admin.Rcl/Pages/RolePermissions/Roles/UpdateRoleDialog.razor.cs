@@ -65,7 +65,7 @@ public partial class UpdateRoleDialog
         {
             Loading = true;
             await RoleService.UpdateAsync(Role);
-            OpenSuccessMessage(T("Update role data success"));
+            OpenSuccessMessage(T("Edit role data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

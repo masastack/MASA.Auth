@@ -56,7 +56,7 @@ public partial class UpdateApiScopeDialog
         {
             Loading = true;
             await ApiScopeService.UpdateAsync(ApiScope);
-            OpenSuccessMessage("Update apiScope success");
+            OpenSuccessMessage(T("Edit apiScope data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

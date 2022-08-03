@@ -10,7 +10,7 @@
                         <STextField @bind-Value="ApiScope.DisplayName" Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <STextField Readonly Value="ApiScope.Name" Label="@T("ApiScope.Name")" />
+                        <STextField Disabled Value="ApiScope.Name" Label="@T("ApiScope.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
@@ -30,7 +30,7 @@
                 <div Class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ApiScope.Enabled" />
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await UpdatetApiScopeAsync(context)">@T("Submit")</SButton>
+                    <SButton Medium OnClick="async () => await UpdatetApiScopeAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>
