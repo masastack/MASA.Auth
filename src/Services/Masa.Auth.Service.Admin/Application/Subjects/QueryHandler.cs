@@ -415,7 +415,7 @@ public class QueryHandler
             {
                 var staffId = (await _authDbContext.Set<Staff>()
                                         .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
-                if (staffId != default)
+                if (staffId == default)
                 {
                     return;
                 }
