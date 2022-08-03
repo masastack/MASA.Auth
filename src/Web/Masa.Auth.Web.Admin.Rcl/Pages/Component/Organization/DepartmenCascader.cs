@@ -18,6 +18,8 @@ public class DepartmenCascader : MCascader<DepartmentDto, Guid>
         ItemValue = value => value.Id;
         ItemChildren = value => value.Children;
         ChangeOnSelect = true;
+        Dense = true;
+        Height = 48;
         await base.SetParametersAsync(parameters);
     }
 
