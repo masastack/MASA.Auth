@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
-public partial class Register
+public partial class RegisterSection
 {
 }

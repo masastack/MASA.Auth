@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Pages\Account\Forget\**" />
+	  <Content Remove="Pages\Account\Forget\**" />
+	  <EmbeddedResource Remove="Pages\Account\Forget\**" />
+	  <None Remove="Pages\Account\Forget\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
@@ -32,7 +39,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Pages\Account\Forget\" />
 		<Folder Include="wwwroot\js\" />
 	</ItemGroup>
 

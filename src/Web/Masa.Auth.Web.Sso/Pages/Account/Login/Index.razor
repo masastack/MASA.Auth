@@ -6,7 +6,6 @@
 @inject IAuthenticationSchemeProvider _schemeProvider
 @inject IPmClient _pmClient
 @inject GlobalConfig GlobalConfig;
-@inject IJSRuntime _js
 @layout SideLayout
 
 @if (_viewModel.EnableLocalLogin)
@@ -20,10 +19,10 @@
     </MTabs>
     <MTabsItems Value="@tab">
         <MTabItem Value="@("login")">
-            <Login />
+            <LoginSection/>
         </MTabItem>
         <MTabItem Value="@("register")">
-            <Register />
+            <RegisterSection />
         </MTabItem>
     </MTabsItems>
 }

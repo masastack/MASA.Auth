@@ -1,4 +1,7 @@
-﻿<MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
+﻿@inherits SsoCompontentBase
+@inject IJSRuntime _js
+
+<MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
     <div style="height:60px;"></div>
     <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
         <MAvatar Size=80 Class="mb-12">
@@ -29,7 +32,7 @@
             </MCol>
         </MRow>
     </MForm>
-    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=Login Height=46 Width=340 Color="primary">
+    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=LoginHandler Height=46 Width=340 Color="primary">
         @T("Login")
     </MButton>
     <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
