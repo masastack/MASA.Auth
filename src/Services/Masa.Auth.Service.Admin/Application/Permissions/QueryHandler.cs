@@ -163,7 +163,7 @@ public class QueryHandler
                 permissions.AddRange(await GetPermissions(childRoles));
             }
 
-            return permissions;
+            return permissions.Distinct().ToList();
         }
     }
 

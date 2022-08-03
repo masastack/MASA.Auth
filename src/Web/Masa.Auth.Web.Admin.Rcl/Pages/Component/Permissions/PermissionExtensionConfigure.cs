@@ -15,12 +15,23 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     {
         get
         {
-            var reject = ExtensionValue.Where(value => value.Effect is false).Select(value => new UniqueModel(value.PermissionId.ToString()));
+            var reject = ExtensionValue.Where(value => value.Effect is false)
+                                       .Select(value => new UniqueModel(value.PermissionId.ToString()));
 
-            return ExtensionValue.Select(value => new UniqueModel(value.PermissionId.ToString()))
-                                .Concat(RolePermissions.Select(value => new UniqueModel(value.ToString())))
-                                .Except(reject)
-                                .ToList();
+            return ExtensionValue.Select(value =>
+            {
+                if (value.Effect is false)
+                {
+                    return new UniqueModel(value.PermissionId.ToString(), false, true, false);
+                }
+                else return new UniqueModel(value.PermissionId.ToString());
+            })
+            .Union(RolePermissions.Select(value => new UniqueModel(value.ToString())))
+            .ToList();
+            //return ExtensionValue.Select(value => new UniqueModel(value.PermissionId.ToString()))
+            //                    .Concat(RolePermissions.Select(value => new UniqueModel(value.ToString())))
+            //                    .Except(reject)
+            //                    .ToList();
         }
     }
 
@@ -38,7 +49,11 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             {
                 value.Add(new(permission, false));
             }
-            else value.Remove(rolePermissionValue);
+            else
+            {
+                value.Remove(rolePermissionValue);
+                ExtensionValue.Remove(rolePermissionValue);
+            }
         }
         value.AddRange(ExtensionValue.Where(value => value.Effect is false));
         await UpdateExtensionValueAsync(value.Distinct().ToList());
