@@ -11,53 +11,21 @@
 
 @if (_viewModel.EnableLocalLogin)
 {
-    <MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
-        <div style="height:60px;"></div>
-        <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
-            <MAvatar Size=80 Class="mb-12">
-                <MImage Src="/img/avatar/1.svg">
-                </MImage>
-            </MAvatar>
-            <MTextField @bind-Value="_inputModel.UserName" Label="@T("UserName")" Placeholder="@T("UserNamePlaceHolder")" Outlined Dense
-                    HideDetails="@("auto")">
-            </MTextField>
-            <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="@T("Password")" OnKeyDown="KeyDownHandler"
-                    Type="@(_show ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
-                    AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_show = !_show" Outlined Dense
-                    HideDetails="@("auto")">
-            </MTextField>
-            <MRow Class="mt-6">
-                <MCol Md="6" Class="d-flex justify-space-between">
-                    <MIcon Size="16"
-                       Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
-                        mdi-record-circle
-                    </MIcon>
-                    <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
-                         Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
-                    </MSelect>
-                </MCol>
-                <MCol Md="6" Class="d-flex justify-end">
-                    <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
-                           Label="@T("RememberLogin")"></MCheckbox>
-                </MCol>
-            </MRow>
-        </MForm>
-        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=Login Height=46 Width=340 Color="primary">
-            @T("Login")
-        </MButton>
-        <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
-            @T("Cancel")
-        </MButton>
-        <div class="d-flex justify-space-between align-center mt-4">
-            <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")"></MCheckbox>
-            <span class="hover-pointer" @onclick="ChangeLanguage">
-                <MIcon>mdi-swap-horizontal</MIcon>
-                <span class="text-body3">
-                     @(LanguageProvider.Culture.Name == "zh-CN"?"EN": "中")
-                </span>
-            </span>
-        </div>
-    </MCard>
+    <MTabs @bind-Value="tab"
+       BackgroundColor="transparent"
+       Color="basil"
+       Grow>
+        <MTab Value="@("login")">Login</MTab>
+        <MTab Value="@("register")">Register</MTab>
+    </MTabs>
+    <MTabsItems Value="@tab">
+        <MTabItem Value="@("login")">
+            <Login />
+        </MTabItem>
+        <MTabItem Value="@("register")">
+            <Register />
+        </MTabItem>
+    </MTabsItems>
 }
 
 @if (_viewModel.VisibleExternalProviders.Any())
@@ -71,6 +39,7 @@
                 <ul class="list-inline">
                     @foreach (var provider in _viewModel.VisibleExternalProviders)
                     {
+                        //todo
                         <li class="list-inline-item">
                             <a class="btn btn-secondary" asp-page="/ExternalLogin/Challenge"
                        asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@_inputModel.ReturnUrl">

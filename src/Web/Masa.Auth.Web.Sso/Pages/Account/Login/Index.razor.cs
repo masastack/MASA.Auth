@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+using BlazorComponent;
 using UrlHelper = Masa.Auth.Web.Sso.Infrastructure.UrlHelper;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
@@ -10,8 +11,8 @@ public partial class Index
 {
     ViewModel _viewModel = new();
     InputModel _inputModel = new();
-    bool _show;
     MForm? _loginForm;
+    StringNumber tab = "login";
 
     [Parameter]
     [SupplyParameterFromQuery]
