@@ -28,6 +28,7 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         var maxOrder = Context.Set<Permission>()
             .Where(p => p.ParentId == parentId && p.AppId == appId)
             .Select(p => p.Order)
+            .DefaultIfEmpty()
             .Max();
         return Math.Min(maxOrder + 1, BusinessConsts.PERMISSION_ORDER_MAX_VALUE);
     }

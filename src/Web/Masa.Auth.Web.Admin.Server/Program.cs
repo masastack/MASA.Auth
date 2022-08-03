@@ -3,9 +3,11 @@
 
 using Masa.Auth.ApiGateways.Caller;
 using Masa.Auth.Contracts.Admin.Subjects.Validator;
+using Masa.Auth.Service.Admin;
 using Masa.Auth.Web.Admin.Rcl;
 using Masa.Auth.Web.Admin.Rcl.Global;
 using Masa.Auth.Web.Admin.Rcl.Shared;
+using Masa.Auth.Web.Admin.Server;
 using Masa.Blazor;
 using Masa.Stack.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
@@ -26,6 +28,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddAutoComplete();
+builder.Services.AddSingleton<BlazorServerTokenCache>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
 
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
