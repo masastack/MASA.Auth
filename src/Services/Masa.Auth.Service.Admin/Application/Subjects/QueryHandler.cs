@@ -86,7 +86,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.Account == query.Account);
         if (user is null)
@@ -97,7 +97,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
+    public async Task GetUsersByAccountAsync(UsersByAccountQuery query)
+    {
+        var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account));
+        query.Result = users.Adapt<List<UserSimpleModel>>();
+    }
+
+    [EventHandler]
+    public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.Email == query.Email);
         if (user is null)
@@ -108,7 +115,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
+    public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
         var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
         if (user is null)
@@ -135,7 +142,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task UserPortraitsQueryAsync(UserPortraitsQuery userPortraitsQuery)
+    public async Task UserPortraitsAsync(UserPortraitsQuery userPortraitsQuery)
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
@@ -204,6 +211,32 @@ public class QueryHandler
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
         query.Result = staff;
+    }
+
+    [EventHandler]
+    public async Task GetStaffDetailByUserIdAsync(StaffDetailByUserIdQuery query)
+    {
+        var staff = await _authDbContext.Set<Staff>()
+                                        .Include(s => s.User)
+                                        .ThenInclude(user => user.Roles)
+                                        .ThenInclude(ur => ur.Role)
+                                        .Include(s => s.DepartmentStaffs)
+                                        .ThenInclude(ds => ds.Department)
+                                        .Include(s => s.TeamStaffs)
+                                        .Include(s => s.Position)
+                                        .Include(s => s.CreateUser)
+                                        .Include(s => s.ModifyUser)
+                                        .AsSplitQuery()
+                                        .FirstOrDefaultAsync(s => s.UserId == query.UserId);
+        if (staff is not null)
+        {
+            var staffDetailModel = staff.Adapt<StaffDetailModel>();
+            staffDetailModel.Department = staff.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "";
+            staffDetailModel.Position = staff.Position?.Name ?? "";
+            staffDetailModel.Roles = staff.User.Roles.Select(ur => ur.Role).Adapt<List<RoleModel>>();
+            staffDetailModel.Teams = new();
+        }
+        else query.Result = null;
     }
 
     [EventHandler]

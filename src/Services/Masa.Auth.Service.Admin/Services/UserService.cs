@@ -130,6 +130,13 @@ namespace Masa.Auth.Service.Admin.Services
             return ConvertToModel(query.Result);
         }
 
+        private async Task<List<UserSimpleModel>> GetUsersByAccountAsync(IEventBus eventBus, [FromQuery] string accounts)
+        {
+            var query = new UsersByAccountQuery(accounts.Split(','));
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
         private async Task<UserModel> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
         {
             var query = new FindUserByEmailQuery(email);
