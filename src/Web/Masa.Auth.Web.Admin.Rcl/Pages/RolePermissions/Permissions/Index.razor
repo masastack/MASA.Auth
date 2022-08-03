@@ -7,7 +7,7 @@
 
 <MRow Class="full-height" NoGutters>
     <MCol Md="@("auto")" Class="d-flex flex-column">
-        <SSearchableExtend Split=true MaxWidth=300>
+        <SSearchableExtend Split=true MaxWidth=300 @bind-Value="_search">
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
                            Solo Class="elevation-0"
@@ -23,6 +23,8 @@
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid"
+                               Search="@_search"
+                               Filter="Filter"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"
@@ -185,7 +187,7 @@
                                 </MForm>
                             </MCardText>
                             <MCardActions class="d-flex align-center mb-10 px-6">
-                                <MSwitch @bind-Value="_menuPermissionDetailDto.Enabled" Inset Label="@T("Enable")" class="mt-0"></MSwitch>
+                                <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
                                 <MSpacer />
                                 <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto.Id)">@T("Delete Permission")</MButton>
                                 <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</MButton>

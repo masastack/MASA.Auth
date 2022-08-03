@@ -15,7 +15,7 @@ public class AuthDbContextSeed
         role.SetParent(rolePermission.Id);
         permission.SetParent(rolePermission.Id);
 
-        var sso = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "SSO", "sso", "", "mdi-login-variant", 3, PermissionTypes.Menu);
+        var sso = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "SSO", "sso", "", "mdi-login-variant", 5, PermissionTypes.Menu);
         var userClaim = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "UserClaim", "userClaim", "sso/userClaim", "mdi-circle", 1, PermissionTypes.Menu);
         var identityResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "IdentityResource", "IdentityResource", "sso/identityResource", "mdi-circle", 2, PermissionTypes.Menu);
         var apiScope = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiScope", "ApiScope", "sso/apiScope", "mdi-circle", 3, PermissionTypes.Menu);
@@ -59,8 +59,8 @@ public class AuthDbContextSeed
         #region Dcc
         var dccMenus = new List<Permission>() {
             new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Landscape","Landscape","Landscape","mdi-flag",1,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Public","Public","Public","mdi-flag",2,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Label Management","Label","Label","mdi-flag",3,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"PublicConfig","PublicConfig","Public","mdi-flag",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"LabelManagement","Label","Label","mdi-flag",3,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.DCC_SYSTEM_ID))
         {

@@ -2,7 +2,6 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 global using BlazorComponent.I18n;
-global using HealthChecks.UI.Client;
 global using IdentityModel;
 global using IdentityServer4;
 global using IdentityServer4.EntityFramework.Services;
@@ -33,7 +32,7 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Server;
-global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Filters;
@@ -44,6 +43,7 @@ global using Microsoft.JSInterop;
 global using System.Collections.Concurrent;
 global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics;
+global using System.Globalization;
 global using System.Security.Claims;
 global using System.Security.Cryptography.X509Certificates;
 global using System.Text;

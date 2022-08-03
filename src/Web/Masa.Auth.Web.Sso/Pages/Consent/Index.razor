@@ -10,10 +10,11 @@
         <MCardTitle>
             <div style="height:40px;"></div>
             <span class="h5">
-                授权
+                @T("Authorize")
             </span>
             <p>
-                <span>@_viewModel.ClientName</span>将获取以下权限
+                <span>@_viewModel.ClientName</span>
+                @T("FollowingPermissions")
             </p>
         </MCardTitle>
         <MCardText Style="height: auto;">
@@ -48,11 +49,11 @@
 
         @if (_viewModel.AllowRememberConsent)
         {
-            <MCheckbox @bind-Value="_viewModel.RememberConsent" Label="Remember My Decision"></MCheckbox>
+            <MCheckbox @bind-Value="_viewModel.RememberConsent" Label="@T("RememberMyDecision")"></MCheckbox>
         }
 
-        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">同意</MButton>
-        <MButton Class="mt-6 rounded-4 text-btn primary--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>拒绝</MButton>
+        <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">@T("Agree")</MButton>
+        <MButton Class="mt-6 rounded-4 text-btn primary--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>@T("Reject")</MButton>
 
         <div class="col-sm-4 col-lg-auto">
             @if (_viewModel.ClientUrl != null)

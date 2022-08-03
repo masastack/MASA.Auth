@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-
-using Microsoft.AspNetCore.Components.Web;
 using UrlHelper = Masa.Auth.Web.Sso.Infrastructure.UrlHelper;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
@@ -175,5 +173,19 @@ public partial class Index
         {
             await Login();
         }
+    }
+
+    private void ChangeLanguage()
+    {
+        string? changeLanguage;
+        if (GlobalConfig.Culture?.Name == "zh-CN")
+        {
+            changeLanguage = "en-US";
+        }
+        else
+        {
+            changeLanguage = "zh-CN";
+        }
+        GlobalConfig.Culture = new CultureInfo(changeLanguage);
     }
 }

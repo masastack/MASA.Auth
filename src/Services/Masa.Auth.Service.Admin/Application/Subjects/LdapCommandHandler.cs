@@ -55,7 +55,6 @@ public class LdapCommandHandler
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
-
         var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();

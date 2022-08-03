@@ -38,8 +38,9 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
     options.UserId = "sub";
 });
 
-builder.Services.AddSingleton<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
-builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
+builder.Services.AddScoped<MasaAuthorizeMiddleware>();
+builder.Services.AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
+builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
 builder.Services.AddAuthorization(options =>
 {
@@ -171,7 +172,10 @@ if (!app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseRouting();
+
+app.UseMiddleware<MasaAuthorizeMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

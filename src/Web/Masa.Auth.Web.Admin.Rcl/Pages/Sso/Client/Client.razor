@@ -11,7 +11,7 @@
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="_clientPaginationDto.Search" OnKeyDown="SearchKeyHandler" FullWidth=false Color="primary" Class="rounded-2 search" />
                 <MSpacer />
-                <SButton Small OnClick="()=>{_addDialog=true;}">
+                <SButton Small OnClick="_addClientDialog.Show" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </SButton>
@@ -65,5 +65,5 @@
     </AutoHeight>
 </DefaultCard>
 
-<AddClientDialog @bind-Value="_addDialog" OnSuccessed="LoadData" />
-<UpdateClientDialog @ref="_updateClientDialog" @bind-Value=_updateDialog OnSuccessed="LoadData" OnDeleted="LoadData" />
+<AddClientDialog @ref="_addClientDialog" OnSuccessed="LoadData" />
+<UpdateClientDialog @ref="_updateClientDialog" @bind-Visible=_updateDialog OnSuccessed="LoadData" OnDeleted="LoadData" />

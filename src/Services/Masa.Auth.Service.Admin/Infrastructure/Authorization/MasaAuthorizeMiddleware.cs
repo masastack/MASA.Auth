@@ -4,24 +4,39 @@
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
 /// <summary>
-/// all route with delegate use Authorize Attribute into this,and will Authorization code
+/// all route into this,and all RequestDelegateFactory create route handler will Authorization code
 /// </summary>
-public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddlewareResultHandler
+public class MasaAuthorizeMiddleware : IMiddleware
 {
-    readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
 
-    public CodeAuthorizationMiddlewareResultHandler(IMasaAuthorizeDataProvider masaAuthorizeDataProvider)
+    List<string?> _endpoints = new();
+
+    public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider, IEnumerable<EndpointDataSource> endpointSources)
     {
+        //todo endpoint.DisplayName.Contains("=>") is bad code
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
+        _endpoints = endpointSources.SelectMany(source => source.Endpoints)
+            .Where(endpoint => endpoint is RouteEndpoint && endpoint.DisplayName != null
+            && endpoint.DisplayName.Contains("=>"))
+            .Select(endpoint => (endpoint as RouteEndpoint)!.RoutePattern.RawText).ToList();
     }
 
-    public async Task HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+    public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        //Enhance the default challenge or forbid responses.
         var endpoint = context.GetEndpoint();
+        var routeEndpoint = endpoint as RouteEndpoint;
+        if (routeEndpoint == null)
+        {
+            return next(context);
+        }
+        if (!_endpoints.Contains(routeEndpoint.RoutePattern.RawText))
+        {
+            return next(context);
+        }
+        //todo repeat code from CodeAuthorizationMiddlewareResultHandler
         var allowAnonymousAttribute = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
-        if (allowAnonymousAttribute == null)
+        if (endpoint != null && allowAnonymousAttribute == null)
         {
             var masaAuthorizeAttribute = endpoint?.Metadata.GetMetadata<MasaAuthorizeAttribute>();
             if (masaAuthorizeAttribute != null)
@@ -30,7 +45,7 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
                     && !masaAuthorizeAttribute.Account.Equals(_masaAuthorizeDataProvider.GetAccount()))
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                    return;
+                    return Task.CompletedTask;
                 }
             }
             var code = masaAuthorizeAttribute?.Code;
@@ -39,20 +54,16 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
                 //dafault code rule
                 code = Regex.Replace(context.Request.Path, @"\\", ".");
                 code = Regex.Replace(code, "/", ".").Trim('.');
-                var requirement = policy.Requirements.Where(r => r is DefaultRuleCodeRequirement)
-                    .Select(r => r as DefaultRuleCodeRequirement).FirstOrDefault();
-                if (requirement != null)
-                {
-                    code = $"{requirement.AppId}.{code}";
-                }
+                //todo replace MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID
+                code = $"{MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID}.{code}";
             }
             if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeList(), code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                return;
+                return Task.CompletedTask;
             }
         }
-        await defaultHandler.HandleAsync(next, context, policy, authorizeResult);
+        return next(context);
 
         bool WildCardContainsCode(IEnumerable<string> data, string code)
         {

@@ -7,7 +7,7 @@
     <MCol Md="12" Class="d-flex justify-space-between">
         <OutlinedSearchTextField @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
         <PermissionView Code="@ElementPermissionCodes.TeamAdd">
-            <SButton Small Class="ml-4" OnClick="_addSheet.Show">
+            <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Create Team")</span>
             </SButton>

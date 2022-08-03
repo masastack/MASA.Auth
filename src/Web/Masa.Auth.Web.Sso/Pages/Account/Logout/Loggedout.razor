@@ -7,15 +7,14 @@
 
 <div>
     <h5>
-        Logout
-        <small>You are now logged out</small>
+        @T("LogoutSuccessed")
     </h5>
 
     @if (_viewModel.PostLogoutRedirectUri != null)
     {
         <div>
-            Click <a class="PostLogoutRedirectUri" href="@_viewModel.PostLogoutRedirectUri">here</a> to return to the
-            <span>@_viewModel.ClientName</span> application.
+            @T("Click") <a class="PostLogoutRedirectUri" href="@_viewModel.PostLogoutRedirectUri">@T("Here")</a> @T("Return")
+            <span>@_viewModel.ClientName</span> @T("Application")
         </div>
     }
 

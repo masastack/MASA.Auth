@@ -5,10 +5,11 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
 
 public partial class Client
 {
-    bool _addDialog, _updateDialog;
+    bool _updateDialog;
     UpdateClientDialog _updateClientDialog = null!;
     GetClientPaginationDto _clientPaginationDto = new();
     PaginationDto<ClientDto> _paginationDto = new();
+    AddClientDialog _addClientDialog = null!;
 
     ClientService _clientService => AuthCaller.ClientService;
 

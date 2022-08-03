@@ -11,11 +11,11 @@
             <div class="d-flex mb-6">
                 <SearchTextField @bind-Value="Search" />
                 <MSpacer />
-                <SButton Small OnClick="() => AddStandardUserClaimsAsync()">
+                <SButton Small OnClick="() => AddStandardUserClaimsAsync()" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Setting</MIcon>
                     <span class="ml-2 btn">@T("Quickly create standard declarations")</span>
                 </SButton>
-                <SButton Small Class="ml-4" OnClick="() => OpenAddApiResourceDialog()">
+                <SButton Small Class="ml-4" OnClick="() => OpenAddApiResourceDialog()" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </SButton>
