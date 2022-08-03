@@ -18,7 +18,13 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable Headers="GetHeaders()" Items="ApiScopes" TItem="ApiScopeDto" ItemsPerPage="PageSize">
+            <SDataTable
+                FixedHeader
+                Height="@("calc(100vh - 285px)")"
+                Headers="GetHeaders()" 
+                Items="ApiScopes" 
+                TItem="ApiScopeDto" 
+                ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -37,7 +43,7 @@
                             <span>@(context.Item.Required ? T("Yes") : T("No"))</span>
                             break;
                         case (nameof(ApiScopeDto.Description)):
-                            <span>@context.Item.Description</span>
+                            <span class="description">@context.Item.Description</span>
                             break;
                         case nameof(ApiScopeDto.Enabled):
                             <EnableChip Value="@context.Item.Enabled" />

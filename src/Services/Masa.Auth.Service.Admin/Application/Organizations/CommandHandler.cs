@@ -83,6 +83,7 @@ public class CommandHandler
             position = new(command.Position.Name);
             await _positionRepository.AddAsync(position);
         }
+        else throw new UserFriendlyException($"Position with name {command.Position.Name} already exists");
         command.Result = position.Id;
     }
 
@@ -95,6 +96,18 @@ public class CommandHandler
 
         position.Update(positionDto.Name);
         await _positionRepository.UpdateAsync(position);
+    }
+
+    [EventHandler]
+    public async Task UpsertPositionAsync(UpsertPositionCommand command)
+    {
+        var position = await _positionRepository.FindAsync(p => p.Name == command.Position.Name);
+        if (position is null)
+        {
+            position = new(command.Position.Name);
+            await _positionRepository.AddAsync(position);
+        }
+        command.Result = position.Id;
     }
 
     [EventHandler]

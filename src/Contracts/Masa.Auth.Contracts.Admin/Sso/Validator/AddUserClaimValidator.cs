@@ -7,7 +7,8 @@ public class AddUserClaimValidator : AbstractValidator<AddUserClaimDto>
 {
     public AddUserClaimValidator()
     {
-        RuleFor(UserClaim => UserClaim.Name).Required();
+        RuleFor(UserClaim => UserClaim.Name).Required().MaxLength(20);
+        RuleFor(UserClaim => UserClaim.Description).Required().MaxLength(100);
     }
 }
 

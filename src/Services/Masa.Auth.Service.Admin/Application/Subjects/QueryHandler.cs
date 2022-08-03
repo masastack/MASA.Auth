@@ -504,9 +504,17 @@ public class QueryHandler
         Expression<Func<Team, bool>> condition = _ => true;
         if (!string.IsNullOrEmpty(teamRoleSelectQuery.Name))
         {
-            condition = condition.And(s => s.Name.Contains(teamRoleSelectQuery.Name));
+            condition = condition.And(team => team.Name.Contains(teamRoleSelectQuery.Name));
+        }
+        Expression<Func<Team, bool>> teamStaffCondition = _ => true;
+        if (teamRoleSelectQuery.UserId != default)
+        {
+            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == teamRoleSelectQuery.UserId));
         }
         var teams = await _authDbContext.Set<Team>()
+                                        .Where(condition)
+                                        .Include(team => team.TeamStaffs)
+                                        .Where(teamStaffCondition)
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .ToListAsync();

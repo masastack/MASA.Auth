@@ -7,7 +7,9 @@ public class UpdateApiScopeValidator : AbstractValidator<UpdateApiScopeDto>
 {
     public UpdateApiScopeValidator()
     {
-        RuleFor(apiScope => apiScope.Name).Required();
+        RuleFor(apiScope => apiScope.Name).Required().MaxLength(20);
+        RuleFor(apiScope => apiScope.DisplayName).Required().MaxLength(50);
+        RuleFor(apiScope => apiScope.Description).MaxLength(100);
     }
 }
 

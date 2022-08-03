@@ -191,7 +191,7 @@ public partial class Index
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
         {
-            OpenErrorMessage(I18n.T("Project identifier is empty"));
+            OpenErrorMessage(T("Project identifier is empty"));
             return;
         }
         dto.SystemId = _curProjectId;
@@ -201,14 +201,14 @@ public partial class Index
             await InitAppPermissions();
         }
         _addMenuPermission = false;
-        OpenSuccessMessage(I18n.T("Add menu permission data success"));
+        OpenSuccessMessage(T("Add menu permission data success"));
     }
 
     private async Task AddApiPermissionAsync(ApiPermissionDetailDto dto)
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
         {
-            OpenErrorMessage(I18n.T("Project identifier is empty"));
+            OpenErrorMessage(T("Project identifier is empty"));
             return;
         }
         dto.SystemId = _curProjectId;
@@ -218,7 +218,7 @@ public partial class Index
             await InitAppPermissions();
         }
         _addApiPermission = false;
-        OpenSuccessMessage(I18n.T("Add api permission data success"));
+        OpenSuccessMessage(T("Add api permission data success"));
     }
 
     private async Task UpdateMenuPermissionAsync()
@@ -228,7 +228,7 @@ public partial class Index
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
             _addMenuPermission = false;
-            OpenSuccessMessage(I18n.T("Edit menu permission data success"));
+            OpenSuccessMessage(T("Edit menu permission data success"));
         }
     }
 
@@ -239,13 +239,13 @@ public partial class Index
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
             _addMenuPermission = false;
-            OpenSuccessMessage(I18n.T("Edit api permission data success"));
+            OpenSuccessMessage(T("Edit api permission data success"));
         }
     }
 
     private async Task DeletePermissionAsync(Guid id)
     {
-        var isConfirmed = await OpenConfirmDialog(I18n.T("Delete Permission"), I18n.T("Are you sure you want to delete this permission"), AlertTypes.Warning);
+        var isConfirmed = await OpenConfirmDialog(T("Delete Permission"), T("Are you sure you want to delete this permission"), AlertTypes.Warning);
         if (isConfirmed)
         {
             await PermissionService.RemoveAsync(id);

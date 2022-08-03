@@ -4,8 +4,20 @@
     <AutoHeight>
         <HeaderContent>
             <div class="height:55px;">
-                <TeamRoleSelect RolesChanged="roles => TeamRoles = roles" Class="mb-4" />
-                <RoleSelectForUser Class="mb-6" @bind-Value="Authorization.Roles" />
+                <div class="mb-4 d-flex">
+                    <TeamSwitch UserId="UserId" RolesChanged="roles => TeamRoles = roles" Style="width:100%;" />
+                    <div class="d-flex" style="width:200px;">
+                        <MSpacer />
+                        <div class="my-auto mr-2 emphasis2-text subtitle">@User.DisplayName</div>
+                        <MAvatar Size=48>
+                            <img src="@User.Avatar" />
+                        </MAvatar>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <RoleSelectForUser Class="mb-6" @bind-Value="Authorization.Roles" />
+                    <div style="width:174px;" />
+                </div>             
             </div>
         </HeaderContent>
         <AutoHeightContent>
@@ -26,7 +38,7 @@
             <div class="d-flex mt-6">
                 <MSpacer></MSpacer>
                 <SButton Medium Outlined OnClick="() => Preview = true">@T("Preview")</SButton>
-                <SButton Medium Class="ml-6" OnClick="async () => await UpdateAuthorizationAsync()">@T("Submit")</SButton>
+                <SButton Medium Class="ml-6" OnClick="async () => await UpdateAuthorizationAsync()">@T("Save")</SButton>
             </div>
         </FooterContent>
     </AutoHeight>

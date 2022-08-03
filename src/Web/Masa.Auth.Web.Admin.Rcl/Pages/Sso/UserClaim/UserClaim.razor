@@ -22,7 +22,13 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable Headers="GetHeaders()" Items="UserClaims" TItem="UserClaimDto" ItemsPerPage="PageSize">
+            <SDataTable
+                FixedHeader
+                Height="@("calc(100vh - 285px)")"
+                Headers="GetHeaders()" 
+                Items="UserClaims" 
+                TItem="UserClaimDto" 
+                ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -35,7 +41,7 @@
                             </div>
                             break;
                         case (nameof(UserClaimDto.Description)):
-                            <span>@context.Item.Description</span>
+                            <span class="description">@context.Item.Description</span>
                             break;
                         case nameof(UserClaimDto.UserClaimType):
                             <span>@T(context.Item.UserClaimType.ToString())</span>

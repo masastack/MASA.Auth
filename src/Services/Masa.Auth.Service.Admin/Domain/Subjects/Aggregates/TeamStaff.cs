@@ -13,16 +13,20 @@ public class TeamStaff : FullEntity<Guid, Guid>
 
     public TeamMemberTypes TeamMemberType { get; private set; }
 
-    public TeamStaff(Guid staffId, TeamMemberTypes teamMemberType)
+    public Guid UserId { get; private set; }
+
+    public TeamStaff(Guid staffId, TeamMemberTypes teamMemberType, Guid userId)
     {
         StaffId = staffId;
         TeamMemberType = teamMemberType;
+        UserId = userId;
     }
 
-    public TeamStaff(Guid teamId, Guid staffId, TeamMemberTypes teamMemberType)
+    public TeamStaff(Guid teamId, Guid staffId, TeamMemberTypes teamMemberType, Guid userId)
     {
         TeamId = teamId;
         TeamMemberType = teamMemberType;
+        UserId = userId;
     }
 }
 

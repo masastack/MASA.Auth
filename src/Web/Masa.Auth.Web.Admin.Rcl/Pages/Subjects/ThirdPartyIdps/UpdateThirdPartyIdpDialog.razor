@@ -29,7 +29,7 @@
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
@@ -63,7 +63,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ThirdPartyIdp.Enabled" />
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await UpdateThirdPartyIdpAsync(context)">@T("Submit")</SButton>
+                    <SButton Medium OnClick="async () => await UpdateThirdPartyIdpAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

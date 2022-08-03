@@ -27,9 +27,9 @@ public class TeamService : ServiceBase
         return await GetAsync<List<TeamSelectDto>>($"Select?name={name}");
     }
 
-    public async Task<List<TeamRoleSelectDto>> GetTeamRoleSelectAsync(string name = "")
+    public async Task<List<TeamRoleSelectDto>> GetTeamRoleSelectAsync(string name = "", Guid userId = default)
     {
-        return await SendAsync<object, List<TeamRoleSelectDto>>(nameof(GetTeamRoleSelectAsync), new { name });
+        return await SendAsync<object, List<TeamRoleSelectDto>>(nameof(GetTeamRoleSelectAsync), new { name, userId });
     }
 
     public async Task CreateAsync(AddTeamDto addTeamDto)

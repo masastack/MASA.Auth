@@ -48,12 +48,22 @@ public partial class AddUserDialog
         }
     }
 
-    private void NextStep(EditContext context)
+    private async Task NextStepAsync(EditContext context)
     {
         var success = context.Validate();
         if (success)
         {
-            Step = 3;
+            var isRepeat = await UserService.VerifyUserRepeatAsync(new()
+            {
+                Account = User.Account,
+                Email = User.Email,
+                PhoneNumber = User.PhoneNumber,
+                IdCard = User.IdCard,
+            });
+            if(isRepeat is false)
+            {
+                Step = 3;
+            }          
         }
     }
 

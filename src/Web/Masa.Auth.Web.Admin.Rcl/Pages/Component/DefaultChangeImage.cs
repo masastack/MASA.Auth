@@ -19,7 +19,10 @@ public class DefaultChangeImage : DefaultUploadImage
             if (value != _gender)
             {
                 _gender = value;
-                ChangeAvayarAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+                if(DefaultImages.Any(image => image.Url == Value))
+                {
+                    ChangeAvayarAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+                }              
             }
         }
     }

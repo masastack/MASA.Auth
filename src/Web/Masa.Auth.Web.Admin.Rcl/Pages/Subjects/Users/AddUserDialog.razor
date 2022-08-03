@@ -10,8 +10,8 @@
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <div>
-                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" WhenFileChangeUpload Class="mt-12" />
+                                <div class="mt-12">
+                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" WhenFileChangeUpload />
                                 </div>
                             </div>
                         </AutoHeightContent>
@@ -65,7 +65,7 @@
                             <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
-                                <SButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</SButton>
+                                <SButton Medium OnClick="async ()=> await NextStepAsync(context)" Class="ml-6">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>

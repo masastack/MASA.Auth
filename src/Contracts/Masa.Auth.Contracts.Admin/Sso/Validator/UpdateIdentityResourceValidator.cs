@@ -7,6 +7,8 @@ public class UpdateIdentityResourceValidator : AbstractValidator<UpdateIdentityR
 {
     public UpdateIdentityResourceValidator()
     {
+        RuleFor(identityResource => identityResource.DisplayName).Required().MaxLength(50);
+        RuleFor(identityResource => identityResource.Description).MaxLength(100);
     }
 }
 

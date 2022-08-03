@@ -29,7 +29,7 @@
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdp.Url" Label="@T("URL")" />
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.Url" Label="@T("URL")" />                      
                     </MCol>
                     <MCol>
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />

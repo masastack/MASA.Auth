@@ -56,7 +56,7 @@ public partial class UpdateApiResourceDialog
         {
             Loading = true;
             await ApiResourceService.UpdateAsync(ApiResource);
-            OpenSuccessMessage("Update apiResource success");
+            OpenSuccessMessage(T("Edit apiResource data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

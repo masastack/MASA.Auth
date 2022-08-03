@@ -7,7 +7,7 @@ public class AddCustomLoginValidator : AbstractValidator<AddCustomLoginDto>
 {
     public AddCustomLoginValidator()
     {
-        RuleFor(CustomLogin => CustomLogin.Name).Required();
+        RuleFor(CustomLogin => CustomLogin.Name).Required().MaxLength(20);
     }
 }
 
