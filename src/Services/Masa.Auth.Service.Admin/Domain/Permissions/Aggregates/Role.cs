@@ -70,7 +70,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     public static implicit operator RoleDetailDto(Role role)
     {
         return new(role.Id, role.Name, role.Description, role.Enabled, role.Limit,
-            role.Permissions.Select(spr => (SubjectPermissionRelationDto)spr).ToList(),
+            role.Permissions.Select(rp => (SubjectPermissionRelationDto)rp).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
             role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
