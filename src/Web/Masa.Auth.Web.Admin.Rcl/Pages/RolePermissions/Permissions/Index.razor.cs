@@ -12,18 +12,16 @@ public partial class Index
     List<Guid> _menuPermissionActive = new List<Guid>();
     List<Guid> _apiPermissionActive = new List<Guid>();
     string _curProjectId = "";
-    bool _addApiPermission, _addMenuPermission;
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
-    List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
-    List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
     List<ProjectDto> _projectItems = new();
     List<AppDto> _curAppItems = new();
     List<SelectItemDto<Guid>> _childApiItems = new();
-    Guid _parentMenuId;
     MForm _formMenu = default!, _formApi = default!;
     List<string> _appTags = new();
     AppTagDetailDto _appTagDto = new();
+    AddMenuPermission _addMenuPermission = null!;
+    AddApiPermission _addApiPermission = null!;
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
@@ -34,9 +32,6 @@ public partial class Index
         if (firstRender)
         {
             _tab = T("Menu Permission");
-            var permissionTypes = await PermissionService.GetTypesAsync();
-            _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
-            _apiPermissionTypes = permissionTypes.Where(a => a.Value == PermissionTypes.Api).ToList();
 
             _projectItems = await ProjectService.GetListAsync();
             if (!_projectItems.Any())
@@ -156,13 +151,12 @@ public partial class Index
 
     private void AddMenuPermission(AppPermissionsViewModel appPermissionsViewModel)
     {
-        _addMenuPermission = true;
-        _parentMenuId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
+        _addMenuPermission.Show(appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty);
     }
 
     private void AddApiPermission()
     {
-        _addApiPermission = true;
+        _addApiPermission.Show();
     }
 
     private async Task AddMenuPermissionAsync(MenuPermissionDetailDto dto)
@@ -178,7 +172,6 @@ public partial class Index
         {
             await InitAppPermissions();
         }
-        _addMenuPermission = false;
         OpenSuccessMessage(T("Add menu permission data success"));
     }
 
@@ -195,7 +188,6 @@ public partial class Index
         {
             await InitAppPermissions();
         }
-        _addApiPermission = false;
         OpenSuccessMessage(T("Add api permission data success"));
     }
 
@@ -205,7 +197,6 @@ public partial class Index
         {
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
-            _addMenuPermission = false;
             OpenSuccessMessage(T("Edit menu permission data success"));
         }
     }
@@ -216,7 +207,6 @@ public partial class Index
         {
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
-            _addMenuPermission = false;
             OpenSuccessMessage(T("Edit api permission data success"));
         }
     }

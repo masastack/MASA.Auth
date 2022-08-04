@@ -15,13 +15,12 @@
             </MListItemSubtitle>
         </MListItemContent>
     </MListItem>
-    <MSelect class="mt-12" @bind-Value="@Value.Type" Dense
+    <SSelect class="mt-12" @bind-Value="@Value.Type" Dense
              Label="@T("Team Type")"
-             Outlined HideDetails="true"
              Items="@_teamTypes"
              ItemText="u => u.Name"
              ItemValue="u => u.Id">
-    </MSelect>
+    </SSelect>
     <MTextarea class="mt-12" Label="@T("Description")" HideDetails="true" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
     </MTextarea>
 </MCardText>
