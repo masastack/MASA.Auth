@@ -9,30 +9,25 @@ public partial class AddMenuPermission
     [Parameter]
     public List<AppDto> AppItems { get; set; } = new();
 
-    [EditorRequired]
-    [Parameter]
-    public Guid ParentId { get; set; }
-
-    [Parameter]
-    public bool Show { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> ShowChanged { get; set; }
-
     [Parameter]
     public EventCallback<MenuPermissionDetailDto> OnSubmit { get; set; }
 
-    [EditorRequired]
-    [Parameter]
-    public List<SelectItemDto<PermissionTypes>> SelectPermissionTypes { get; set; } = new();
-
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     MForm _form = default!;
+    bool _visible { get; set; }
 
-    protected override void OnParametersSet()
+    List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
+
+    PermissionService PermissionService => AuthCaller.PermissionService;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _menuPermissionDetailDto.ParentId = ParentId;
-        base.OnParametersSet();
+        if (firstRender)
+        {
+            var permissionTypes = await PermissionService.GetTypesAsync();
+            _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task OnSubmitHandler()
@@ -43,6 +38,13 @@ public partial class AddMenuPermission
             {
                 await OnSubmit.InvokeAsync(_menuPermissionDetailDto);
             }
+            _visible = false;
         }
+    }
+    public void Show(Guid parentId)
+    {
+        _menuPermissionDetailDto = new();
+        _menuPermissionDetailDto.ParentId = parentId;
+        _visible = true;
     }
 }

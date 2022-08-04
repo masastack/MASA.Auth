@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog Value=Visible ValueChanged=DialogValueChanged Title="@T("Create Team")" ContentClass="px-sheet-dialog">
+<SSheetDialog @bind-Value=_visible Title="@T("Create Team")" ContentClass="px-sheet-dialog">
     <MStepper Value="_step" Elevation=0 Class="d-flex flex-column full-height pt-6">
         <MStepperHeader Class="mx-6" Style="box-shadow:none !important">
             <MStepperStep Step="1" Complete="_step>1">
