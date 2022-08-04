@@ -5,15 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class CopyOrgSheet
 {
-    StringNumber _step = 1;
-    List<StaffDto> _removeStaffs = new();
-
-    [Parameter]
-    public bool Visible { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> VisibleChanged { get; set; }
-
     [Parameter]
     public CopyDepartmentDto Dto { get; set; } = new();
 
@@ -22,6 +13,10 @@ public partial class CopyOrgSheet
 
     [Parameter]
     public EventCallback<CopyDepartmentDto> OnSubmit { get; set; }
+
+    StringNumber _step = 1;
+    List<StaffDto> _removeStaffs = new();
+    bool _visible;
 
     private void NextStep()
     {
@@ -39,7 +34,7 @@ public partial class CopyOrgSheet
         {
             await OnSubmit.InvokeAsync(Dto);
         }
-        await Toggle(false);
+        _visible = false;
     }
 
     private void RemoveStaff(StaffDto staffDto)
@@ -54,28 +49,12 @@ public partial class CopyOrgSheet
         Dto.Staffs.Add(staffDto);
     }
 
-    private async Task Toggle(bool value)
-    {
-        if (VisibleChanged.HasDelegate)
-        {
-            await VisibleChanged.InvokeAsync(value);
-        }
-        else
-        {
-            Visible = value;
-        }
-    }
-
-    public async Task Show(CopyDepartmentDto model)
+    public void Show(CopyDepartmentDto model)
     {
         Dto = model;
         Dto.Name = model.Name + "副本";
         _step = 1;
-        await Toggle(true);
-    }
-
-    private async Task DialogValueChanged(bool value)
-    {
-        await Toggle(value);
+        _removeStaffs = new();
+        _visible = true;
     }
 }

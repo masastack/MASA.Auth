@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog Value=Visible Title="@T("Copy Department")" ValueChanged="DialogValueChanged" ContentClass="px-sheet-dialog">
+<SSheetDialog @bind-Value=_visible Title="@T("Copy Department")" ContentClass="px-sheet-dialog">
     <MWindow @bind-Value="_step" Class="full-height">
         <MWindowItem Value="1" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">

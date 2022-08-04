@@ -22,9 +22,8 @@
                                Items="_menuPermissions"
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
-                               TKey="Guid"
+                               TKey="Guid" MandatoryActive
                                Search="@_search"
-                               Filter="Filter"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"
