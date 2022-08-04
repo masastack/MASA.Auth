@@ -81,7 +81,7 @@
                             <div class="global-nav" style="display: flex;height: auto">
                                 <PermissionsConfigure Roles=User.Roles
                                                       Value="User.Permissions.Select(p => p.PermissionId).ToList()"
-                                                      ValueChanged="value => User.Permissions=value.Select(item => new PermissionSubjectRelationDto(item,true)).ToList()"
+                                                      ValueChanged="value => User.Permissions=value.Select(item => new SubjectPermissionRelationDto(item,true)).ToList()"
                                                       @bind-Preview=Preview
                                                       Style="max-height:calc(100vh - 350px);" />
                             </div>

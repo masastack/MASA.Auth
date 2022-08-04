@@ -15,9 +15,9 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
             .Where(p => p.Id == id)
             .Include(p => p.ChildPermissionRelations)
             .Include(p => p.ParentPermissionRelations)
-            .Include(p => p.UserPermissions).ThenInclude(up => up.User)
-            .Include(p => p.RolePermissions).ThenInclude(rp => rp.Role)
-            .Include(p => p.TeamPermissions).ThenInclude(tp => tp.Team)
+            .Include(p => p.UserPermissions).ThenInclude(spr => spr.User)
+            .Include(p => p.RolePermissions).ThenInclude(spr => spr.Role)
+            .Include(p => p.TeamPermissions).ThenInclude(spr => spr.Team)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current permission does not exist");

@@ -37,7 +37,7 @@ public class AddUserDto
 
     public List<Guid> Roles { get; set; }
 
-    public List<PermissionSubjectRelationDto> Permissions { get; set; }
+    public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
     public AddUserDto()
     {
@@ -55,11 +55,11 @@ public class AddUserDto
         Password = "";
         Gender = GenderTypes.Male;
         Roles = new List<Guid>();
-        Permissions = new List<PermissionSubjectRelationDto>();
+        Permissions = new List<SubjectPermissionRelationDto>();
         Landline = "";
     }
 
-    public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password, GenderTypes genderType, List<Guid> roleIds, List<PermissionSubjectRelationDto> permissions)
+    public AddUserDto(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, string department, string position, string account, string password, GenderTypes genderType, List<Guid> roleIds, List<SubjectPermissionRelationDto> permissions)
     {
         Name = name ?? "";
         DisplayName = displayName ?? "";

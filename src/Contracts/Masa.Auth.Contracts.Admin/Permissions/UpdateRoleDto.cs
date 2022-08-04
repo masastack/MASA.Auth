@@ -15,7 +15,7 @@ public class UpdateRoleDto
 
     public int Limit { get; set; }
 
-    public List<PermissionSubjectRelationDto> Permissions { get; set; }
+    public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
     public List<Guid> ChildrenRoles { get; set; }
 
@@ -27,7 +27,7 @@ public class UpdateRoleDto
         ChildrenRoles = new();
     }
 
-    public UpdateRoleDto(Guid id, string name, string description, bool enabled, int limit, List<PermissionSubjectRelationDto> permissions, List<Guid> childRoles)
+    public UpdateRoleDto(Guid id, string name, string description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles)
     {
         Id = id;
         Name = name;

@@ -3,13 +3,13 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class PermissionSubjectRelationDto
+public class SubjectPermissionRelationDto
 {
     public Guid PermissionId { get; set; }
 
     public bool Effect { get; set; }
 
-    public PermissionSubjectRelationDto(Guid permissionId, bool effect)
+    public SubjectPermissionRelationDto(Guid permissionId, bool effect)
     {
         PermissionId = permissionId;
         Effect = effect;
@@ -17,7 +17,7 @@ public class PermissionSubjectRelationDto
 
     public override bool Equals(object? obj)
     {
-        return obj is PermissionSubjectRelationDto psr && psr.PermissionId == PermissionId;
+        return obj is SubjectPermissionRelationDto spr && spr.PermissionId == PermissionId;
     }
 
     public override int GetHashCode()

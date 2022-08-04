@@ -6,10 +6,10 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 public class PermissionExtensionConfigure : PermissionsConfigure
 {
     [Parameter]
-    public List<PermissionSubjectRelationDto> ExtensionValue { get; set; } = new();
+    public List<SubjectPermissionRelationDto> ExtensionValue { get; set; } = new();
 
     [Parameter]
-    public EventCallback<List<PermissionSubjectRelationDto>> ExtensionValueChanged { get; set; }
+    public EventCallback<List<SubjectPermissionRelationDto>> ExtensionValueChanged { get; set; }
 
     protected override List<UniqueModel> ExpansionWrapperUniqueValue
     {
@@ -30,7 +30,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
 
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
-        var value = permissions.Select(permission => new PermissionSubjectRelationDto(Guid.Parse(permission.Code), true)).ToList();
+        var value = permissions.Select(permission => new SubjectPermissionRelationDto(Guid.Parse(permission.Code), true)).ToList();
         value = value.Where(v => EmptyPermissionMap.Values.Contains(v.PermissionId) is false).ToList();
         foreach (var (code, parentCode) in EmptyPermissionMap)
         {
@@ -53,7 +53,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
 
-    private async Task UpdateExtensionValueAsync(List<PermissionSubjectRelationDto> value)
+    private async Task UpdateExtensionValueAsync(List<SubjectPermissionRelationDto> value)
     {
         if (ExtensionValueChanged.HasDelegate) await ExtensionValueChanged.InvokeAsync(value);
         else ExtensionValue = value;

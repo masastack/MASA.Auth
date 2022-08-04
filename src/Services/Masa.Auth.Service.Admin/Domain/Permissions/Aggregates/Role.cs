@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
 public class Role : FullAggregateRoot<Guid, Guid>
 {
-    private List<PermissionSubjectRelation> _permissions = new();
+    private List<SubjectPermissionRelation> _permissions = new();
     private List<RoleRelation> _childrenRoles = new();
     private List<RoleRelation> _parentRoles = new();
     private List<UserRole> _users = new();
@@ -34,7 +34,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public int AvailableQuantity { get; private set; }
 
-    public IReadOnlyCollection<PermissionSubjectRelation> Permissions => _permissions;
+    public IReadOnlyCollection<SubjectPermissionRelation> Permissions => _permissions;
 
     public IReadOnlyCollection<RoleRelation> ChildrenRoles => _childrenRoles;
 
@@ -70,7 +70,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     public static implicit operator RoleDetailDto(Role role)
     {
         return new(role.Id, role.Name, role.Description, role.Enabled, role.Limit,
-            role.Permissions.Select(psr => (PermissionSubjectRelationDto)psr).ToList(),
+            role.Permissions.Select(spr => (SubjectPermissionRelationDto)spr).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
             role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
@@ -85,10 +85,10 @@ public class Role : FullAggregateRoot<Guid, Guid>
             item => item.RoleId);
     }
 
-    public void BindPermissions(List<PermissionSubjectRelationDto> permissions)
+    public void BindPermissions(List<SubjectPermissionRelationDto> permissions)
     {
         _permissions = _permissions.MergeBy(
-            permissions.Select(psr => new PermissionSubjectRelation(psr.PermissionId, PermissionRelationTypes.RolePermission, psr.Effect)),
+            permissions.Select(spr => new SubjectPermissionRelation(spr.PermissionId, PermissionRelationTypes.RolePermission, spr.Effect)),
             item => item.PermissionId,
             (oldValue, newValue) =>
             {

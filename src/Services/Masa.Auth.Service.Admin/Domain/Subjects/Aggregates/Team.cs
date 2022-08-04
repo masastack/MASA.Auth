@@ -61,13 +61,13 @@ public class Team : FullAggregateRoot<Guid, Guid>
         _teamStaffs = teamStaffs;
     }
 
-    public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissions)
+    public void SetPermission(TeamMemberTypes teamMemberType, List<SubjectPermissionRelationDto> permissions)
     {
-        var teamPermissions = _teamPermissions.Where(ts => ts.TeamMemberType == memberType).ToList();
+        var teamPermissions = _teamPermissions.Where(ts => ts.TeamMemberType == teamMemberType).ToList();
         teamPermissions = teamPermissions.MergeBy(
-           permissions.Select(permission => new TeamPermission(permission.Key, permission.Value, memberType)),
+           permissions.Select(permission => new TeamPermission(permission.PermissionId, permission.Effect, teamMemberType)),
            item => item.PermissionId);
-        teamPermissions.AddRange(_teamPermissions.Where(ts => ts.TeamMemberType != memberType));
+        teamPermissions.AddRange(_teamPermissions.Where(ts => ts.TeamMemberType != teamMemberType));
         _teamPermissions = teamPermissions;
     }
 

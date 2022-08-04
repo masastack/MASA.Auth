@@ -156,7 +156,7 @@ public class QueryHandler
                                           .Include(r => r.Permissions)
                                           .Select(r => new { r.Permissions, r.ChildrenRoles })
                                           .ToListAsync();
-            permissions.AddRange(roles.SelectMany(r => r.Permissions.Select(p => p.PermissionId)));
+            permissions.AddRange(roles.SelectMany(r => r.Permissions.Where(p => p.Effect == true).Select(p => p.PermissionId)));
             var childRoles = roles.SelectMany(r => r.ChildrenRoles.Select(cr => cr.RoleId)).ToList();
             if (childRoles.Count > 0)
             {
@@ -244,13 +244,13 @@ public class QueryHandler
             AppId = permission.AppId,
             Order = permission.Order,
             ApiPermissions = permission.ChildPermissionRelations.Select(pr => pr.ChildPermissionId).ToList(),
-            Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
-            Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
-            Users = permission.UserPermissions.Select(up => new UserSelectDto
+            Roles = permission.RolePermissions.Select(spr => new RoleSelectDto(spr.Role.Id, spr.Role.Name, spr.Role.Limit, spr.Role.AvailableQuantity)).ToList(),
+            Teams = permission.TeamPermissions.Select(spr => new TeamSelectDto(spr.Team.Id, spr.Team.Name, spr.Team.Avatar.Url)).ToList(),
+            Users = permission.UserPermissions.Select(spr => new UserSelectDto
             {
-                UserId = up.User.Id,
-                Name = up.User.Name,
-                Avatar = up.User.Avatar
+                UserId = spr.User.Id,
+                Name = spr.User.Name,
+                Avatar = spr.User.Avatar
             }).ToList()
         };
     }

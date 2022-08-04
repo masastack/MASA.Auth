@@ -6,7 +6,7 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 public class User : FullAggregateRoot<Guid, Guid>
 {
     private List<UserRole> _roles = new();
-    private List<UserPermission> _permissions = new();
+    private List<SubjectPermissionRelation> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
 
     public string Name { get; private set; }
@@ -45,7 +45,7 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<UserRole> Roles => _roles;
 
-    public IReadOnlyCollection<UserPermission> Permissions => _permissions;
+    public IReadOnlyCollection<SubjectPermissionRelation> Permissions => _permissions;
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
@@ -135,7 +135,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     public static implicit operator UserDetailDto(User user)
     {
         var roles = user.Roles.Select(r => r.RoleId).ToList();
-        var permissions = user.Permissions.Select(p => new PermissionSubjectRelationDto(p.PermissionId, p.Effect)).ToList();
+        var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
         return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions);
     }
@@ -219,14 +219,14 @@ public class User : FullAggregateRoot<Guid, Guid>
         return Account == "admin";
     }
 
-    public void AddPermissions(List<UserPermission> permissions)
+    public void AddPermissions(List<SubjectPermissionRelationDto> permissions)
     {
         _permissions = _permissions.MergeBy(
-           permissions,
+           permissions.Select(spr => new SubjectPermissionRelation(spr.PermissionId, PermissionRelationTypes.UserPermission, spr.Effect)),
            item => item.PermissionId,
            (oldValue, newValue) =>
            {
-               oldValue.Update(newValue.PermissionId, newValue.Effect);
+               oldValue.Update(newValue.Effect);
                return oldValue;
            });
     }
