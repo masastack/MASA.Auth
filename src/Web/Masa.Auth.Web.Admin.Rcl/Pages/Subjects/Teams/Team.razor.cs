@@ -40,7 +40,7 @@ public partial class Team
     private async Task EditTeamHandler(Guid id)
     {
         _editTeamDto = await TeamService.GetAsync(id);
-        await _updateSheet.Show(_editTeamDto);
+        _updateSheet.Show(_editTeamDto);
     }
 
     private async Task OnCreate(TeamDetailDto dto)
