@@ -60,10 +60,10 @@ public partial class AddUserDialog
                 PhoneNumber = User.PhoneNumber,
                 IdCard = User.IdCard,
             });
-            if(verifySuccess)
+            if (verifySuccess)
             {
                 Step = 3;
-            }          
+            }
         }
     }
 

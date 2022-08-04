@@ -67,8 +67,8 @@ public class Team : FullAggregateRoot<Guid, Guid>
         teamPermissions = teamPermissions.MergeBy(
            permissions.Select(permission => new TeamPermission(permission.PermissionId, permission.Effect, teamMemberType)),
            item => item.PermissionId,
-           (oldValue, newValue) => 
-           { 
+           (oldValue, newValue) =>
+           {
                oldValue.Update(newValue.Effect);
                return oldValue;
            });

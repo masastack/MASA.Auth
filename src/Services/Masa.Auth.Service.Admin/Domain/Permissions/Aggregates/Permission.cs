@@ -42,7 +42,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     private List<PermissionRelation> parentPermissionRelations = new();
 
     public IReadOnlyCollection<PermissionRelation> ParentPermissionRelations => parentPermissionRelations;
-    
+
     private List<UserPermission> _userPermissions = new();
 
     public IReadOnlyCollection<UserPermission> UserPermissions => _userPermissions;
