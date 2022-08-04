@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
 public class Role : FullAggregateRoot<Guid, Guid>
 {
-    private List<SubjectPermissionRelation> _permissions = new();
+    private List<RolePermission> _permissions = new();
     private List<RoleRelation> _childrenRoles = new();
     private List<RoleRelation> _parentRoles = new();
     private List<UserRole> _users = new();
@@ -34,7 +34,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public int AvailableQuantity { get; private set; }
 
-    public IReadOnlyCollection<SubjectPermissionRelation> Permissions => _permissions;
+    public IReadOnlyCollection<RolePermission> Permissions => _permissions;
 
     public IReadOnlyCollection<RoleRelation> ChildrenRoles => _childrenRoles;
 
@@ -88,7 +88,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     public void BindPermissions(List<SubjectPermissionRelationDto> permissions)
     {
         _permissions = _permissions.MergeBy(
-            permissions.Select(spr => new SubjectPermissionRelation(spr.PermissionId, PermissionRelationTypes.RolePermission, spr.Effect)),
+            permissions.Select(spr => new RolePermission(spr.PermissionId, spr.Effect)),
             item => item.PermissionId,
             (oldValue, newValue) =>
             {

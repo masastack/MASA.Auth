@@ -62,8 +62,8 @@ public class UserDomainEventHandler
     [EventHandler(2)]
     public void UserPermissions(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
     {
-        queryUserPermissionDomainEvent.Permissions = _authDbContext.Set<SubjectPermissionRelation>()
-            .Where(spr => spr.SubjectRelationId == queryUserPermissionDomainEvent.UserId && spr.Effect && !spr.IsDeleted)
+        queryUserPermissionDomainEvent.Permissions = _authDbContext.Set<UserPermission>()
+            .Where(spr => spr.UserId == queryUserPermissionDomainEvent.UserId && spr.Effect && !spr.IsDeleted)
             .Select(spr => spr.PermissionId).ToList();
     }
 
@@ -90,8 +90,8 @@ public class UserDomainEventHandler
     [EventHandler(2)]
     public void AuthorizedUserPermission(UserAuthorizedDomainEvent userAuthorizedDomainEvent)
     {
-        var userPermissions = _authDbContext.Set<SubjectPermissionRelation>()
-            .Where(spr => spr.SubjectRelationId == userAuthorizedDomainEvent.UserId
+        var userPermissions = _authDbContext.Set<UserPermission>()
+            .Where(spr => spr.UserId == userAuthorizedDomainEvent.UserId
             && spr.PermissionId == userAuthorizedDomainEvent.PermissionId && spr.Effect && !spr.IsDeleted)
             .Select(up => up.PermissionId).ToList();
         //permission addition

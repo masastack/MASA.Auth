@@ -42,18 +42,18 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     private List<PermissionRelation> parentPermissionRelations = new();
 
     public IReadOnlyCollection<PermissionRelation> ParentPermissionRelations => parentPermissionRelations;
+    
+    private List<UserPermission> _userPermissions = new();
 
-    private List<SubjectPermissionRelation> _rolePermissions = new();
+    public IReadOnlyCollection<UserPermission> UserPermissions => _userPermissions;
 
-    public IReadOnlyCollection<SubjectPermissionRelation> RolePermissions => _rolePermissions;
+    private List<RolePermission> _rolePermissions = new();
 
-    private List<SubjectPermissionRelation> _userPermissions = new();
+    public IReadOnlyCollection<RolePermission> RolePermissions => _rolePermissions;
 
-    public IReadOnlyCollection<SubjectPermissionRelation> UserPermissions => _userPermissions;
+    private List<TeamPermission> _teamPermissions = new();
 
-    private List<SubjectPermissionRelation> _teamPermissions = new();
-
-    public IReadOnlyCollection<SubjectPermissionRelation> TeamPermissions => _teamPermissions;
+    public IReadOnlyCollection<TeamPermission> TeamPermissions => _teamPermissions;
 
     public Permission(Guid id, string systemId, string appId, string name, string code, string url,
         string icon, int order, PermissionTypes type) : this(systemId, appId, name, code, url, icon, order, type)
@@ -83,11 +83,11 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public void DeleteCheck()
     {
-        if (_rolePermissions.Any())
+        if (RolePermissions.Any())
         {
             throw new UserFriendlyException("current permission can`t delete,some role used!");
         }
-        if (_userPermissions.Any())
+        if (UserPermissions.Any())
         {
             throw new UserFriendlyException("current permission can`t delete,some user used!");
         }

@@ -7,11 +7,11 @@ public class TeamPermission : SubjectPermissionRelation
 {
     public TeamMemberTypes TeamMemberType { get; private set; }
 
-    public TeamPermission(
-        Guid permissionId, 
-        bool effect, 
-        TeamMemberTypes teamMemberType) 
-        : base(permissionId, PermissionRelationTypes.TeamPermission, effect)
+    public Guid TeamId { get; private set; }
+
+    public Team Team { get; private set; } = default!;
+
+    public TeamPermission(Guid permissionId, bool effect, TeamMemberTypes teamMemberType) : base(permissionId, effect)
     {
         TeamMemberType = teamMemberType;
     }

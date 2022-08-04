@@ -7,24 +7,13 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates
     {
         public Guid PermissionId { get; protected set; }
 
-        public PermissionRelationTypes PermissionRelationType { get; protected set; }
-
-        public Guid SubjectRelationId { get; protected set; }
-
         public bool Effect { get; protected set; }
 
         public Permission Permission { get; protected set; } = default!;
 
-        public Role Role { get; protected set; } = default!;
-
-        public User User { get; protected set; } = default!;
-
-        public Team Team { get; protected set; } = default!;
-
-        public SubjectPermissionRelation(Guid permissionId, PermissionRelationTypes permissionRelationType, bool effect)
+        public SubjectPermissionRelation(Guid permissionId, bool effect)
         {
             PermissionId = permissionId;
-            PermissionRelationType = permissionRelationType;
             Effect = effect;
         }
 

@@ -16,7 +16,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
         builder.OwnsOne(u => u.Address);
         builder.HasMany(u => u.Roles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId);
-        builder.HasMany(u => u.Permissions).WithOne(spr => spr.User).HasForeignKey(spr => spr.SubjectRelationId);
+        builder.HasMany(u => u.Permissions).WithOne(spr => spr.User).HasForeignKey(spr => spr.UserId);
         builder.HasMany(u => u.ThirdPartyUsers).WithOne(tpu => tpu.User).HasForeignKey(tpu => tpu.UserId);
     }
 }
