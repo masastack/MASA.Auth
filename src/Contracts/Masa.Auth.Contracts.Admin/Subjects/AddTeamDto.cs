@@ -17,13 +17,13 @@ public class AddTeamDto
 
     public List<Guid> AdminRoles { get; set; } = new();
 
-    public Dictionary<Guid, bool> AdminPermissions { get; set; } = new();
+    public List<SubjectPermissionRelationDto> AdminPermissions { get; set; } = new();
 
     public List<Guid> MemberStaffs { get; set; } = new();
 
     public List<Guid> MemberRoles { get; set; } = new();
 
-    public Dictionary<Guid, bool> MemberPermissions { get; set; } = new();
+    public List<SubjectPermissionRelationDto> MemberPermissions { get; set; } = new();
 
     public static implicit operator AddTeamDto(TeamDetailDto team)
     {

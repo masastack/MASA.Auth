@@ -3,11 +3,11 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Permissions;
 
-public class RolePermissionEntityTypeConfiguration : IEntityTypeConfiguration<RolePermission>
+public class SubjectPermissionRelationEntityTypeConfiguration : IEntityTypeConfiguration<SubjectPermissionRelation>
 {
-    public void Configure(EntityTypeBuilder<RolePermission> builder)
+    public void Configure(EntityTypeBuilder<SubjectPermissionRelation> builder)
     {
-        builder.HasKey(rp => rp.Id);
+        builder.HasKey(spr => spr.Id);
     }
 }
 

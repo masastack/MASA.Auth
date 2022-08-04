@@ -3,17 +3,14 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
-public class RolePermission : FullEntity<Guid, Guid>
+public class RolePermission : SubjectPermissionRelation
 {
-    public Role Role { get; set; } = null!;
+    public Guid RoleId { get; private set; }
 
-    public Guid PermissionId { get; set; }
+    public Role Role { get; private set; } = default!;
 
-    public Permission Permission { get; set; } = null!;
-
-    public RolePermission(Guid permissionId)
+    public RolePermission(Guid permissionId, bool effect) : base(permissionId, effect)
     {
-        PermissionId = permissionId;
     }
 }
 
