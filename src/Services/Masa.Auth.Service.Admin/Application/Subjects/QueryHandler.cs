@@ -14,7 +14,6 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
-    readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -37,7 +36,6 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
-        _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
     }
 
     #region User
@@ -422,7 +420,7 @@ public class QueryHandler
                 condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
             }
         }
-        var teams = await _teamRepository.GetListInCludeAsync(condition,
+        var teams = await _authDbContext.GetListInCludeAsync(condition,
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
         foreach (var team in teams.ToList())
         {

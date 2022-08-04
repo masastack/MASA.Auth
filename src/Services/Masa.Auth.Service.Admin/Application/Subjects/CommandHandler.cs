@@ -19,6 +19,7 @@ public class CommandHandler
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILogger<CommandHandler> _logger;
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
+    readonly IConfiguration _configuration;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -34,7 +35,8 @@ public class CommandHandler
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
-        ThirdPartyUserDomainService thirdPartyUserDomainService)
+        ThirdPartyUserDomainService thirdPartyUserDomainService,
+        IMasaConfiguration masaConfiguration)
     {
         _userRepository = userRepository;
         _staffRepository = staffRepository;
@@ -50,6 +52,7 @@ public class CommandHandler
         _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
+        _configuration = masaConfiguration.Local;
     }
 
     #region User
@@ -183,7 +186,8 @@ public class CommandHandler
                         Enabled = true,
                         Email = ldapUser.EmailAddress,
                         Account = ldapUser.SamAccountName,
-                        Password = password
+                        Password = password,
+                        Avatar = _configuration.GetValue<string>("Subjects:Avatar")
                     });
             //phone number regular match
             if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
