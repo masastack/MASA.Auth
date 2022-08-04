@@ -43,9 +43,9 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<PermissionRelation> ParentPermissionRelations => parentPermissionRelations;
 
-    private List<RolePermission> rolePermissions = new();
+    private List<PermissionSubjectRelation> _rolePermissions = new();
 
-    public IReadOnlyCollection<RolePermission> RolePermissions => rolePermissions;
+    public IReadOnlyCollection<PermissionSubjectRelation> RolePermissions => _rolePermissions;
 
     private List<UserPermission> userPermissions = new();
 
@@ -83,7 +83,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public void DeleteCheck()
     {
-        if (rolePermissions.Any())
+        if (_rolePermissions.Any())
         {
             throw new UserFriendlyException("current permission can`t delete,some role used!");
         }

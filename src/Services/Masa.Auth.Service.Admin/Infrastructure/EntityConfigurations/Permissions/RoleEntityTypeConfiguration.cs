@@ -8,7 +8,7 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.HasKey(r => r.Id);
-        builder.HasMany(r => r.Permissions).WithOne(rp => rp.Role);
+        builder.HasMany(r => r.Permissions).WithOne(psr => psr.Role).HasForeignKey(psr => psr.SubjectRelationId);
         builder.HasMany(r => r.ChildrenRoles).WithOne(ri => ri.ParentRole).HasForeignKey(ri => ri.ParentId);
         builder.HasMany(r => r.ParentRoles).WithOne(ri => ri.Role).HasForeignKey(ri => ri.RoleId).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasMany(r => r.Users).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId);

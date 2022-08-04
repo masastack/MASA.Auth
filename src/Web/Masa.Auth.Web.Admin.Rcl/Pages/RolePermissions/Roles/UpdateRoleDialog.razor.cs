@@ -72,11 +72,6 @@ public partial class UpdateRoleDialog
         }
     }
 
-    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
-    {
-        Role.Permissions = permissiionMap.Where(permissiion => permissiion.Value is true).Select(kv => kv.Key).ToList();
-    }
-
     private void LimitChanged(int limit)
     {
         if (limit != 0)

@@ -69,7 +69,7 @@ public partial class AddUserDialog
 
     private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
     {
-        User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value)).ToList();
+        User.Permissions = permissiionMap.Select(kv => new PermissionSubjectRelationDto(kv.Key, kv.Value)).ToList();
     }
 
     public async Task AddUserAsync(EditContext context)
