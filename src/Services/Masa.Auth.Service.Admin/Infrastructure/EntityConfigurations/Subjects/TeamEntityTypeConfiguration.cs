@@ -12,7 +12,7 @@ public class TeamEntityTypeConfiguration : IEntityTypeConfiguration<Team>
         builder.Property(p => p.Name).HasMaxLength(20).IsRequired();
         builder.Property(p => p.Description).HasMaxLength(255);
         builder.HasMany(team => team.TeamStaffs);
-        builder.HasMany(team => team.TeamPermissions).WithOne(teamPermission => teamPermission.Team);
+        builder.HasMany(team => team.TeamPermissions).WithOne(teamPermission => teamPermission.Team).HasForeignKey(teamPermission => teamPermission.TeamId);
         builder.HasMany(team => team.TeamRoles).WithOne(tr => tr.Team).HasForeignKey(tr => tr.TeamId);
         builder.OwnsOne(team => team.Avatar);
     }

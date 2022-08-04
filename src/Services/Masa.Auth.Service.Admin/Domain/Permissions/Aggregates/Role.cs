@@ -70,7 +70,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     public static implicit operator RoleDetailDto(Role role)
     {
         return new(role.Id, role.Name, role.Description, role.Enabled, role.Limit,
-            role.Permissions.Select(rp => rp.PermissionId).ToList(),
+            role.Permissions.Select(rp => (SubjectPermissionRelationDto)rp).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
             role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
@@ -85,11 +85,16 @@ public class Role : FullAggregateRoot<Guid, Guid>
             item => item.RoleId);
     }
 
-    public void BindPermissions(List<Guid> permissions)
+    public void BindPermissions(List<SubjectPermissionRelationDto> permissions)
     {
         _permissions = _permissions.MergeBy(
-            permissions.Select(prmission => new RolePermission(prmission)),
-            item => item.PermissionId);
+            permissions.Select(spr => new RolePermission(spr.PermissionId, spr.Effect)),
+            item => item.PermissionId,
+            (oldValue, newValue) =>
+            {
+                oldValue.Update(newValue.Effect);
+                return oldValue;
+            });
     }
 
     public void Update(string name, string description, bool enabled, int limit)

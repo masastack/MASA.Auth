@@ -65,7 +65,7 @@ public class CommandHandler
 
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
         user.AddRoles(userDto.Roles.ToArray());
-        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        user.AddPermissions(userDto.Permissions);
         await _userRepository.AddAsync(user);
         command.NewUser = user;
         await _userDomainService.SetAsync(user);
@@ -121,7 +121,7 @@ public class CommandHandler
         var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles.ToArray());
 
-        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        user.AddPermissions(userDto.Permissions);
         await _userRepository.UpdateAsync(user);
 
         await _roleDomainService.UpdateRoleLimitAsync(roles);

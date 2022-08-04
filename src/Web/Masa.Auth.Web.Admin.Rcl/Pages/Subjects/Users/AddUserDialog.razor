@@ -71,17 +71,16 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="3">
-                    <AutoHeight Overflow>
+                    <AutoHeight>
                         <HeaderContent>
                             <div>
-                                <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                                <RoleSelectForUser @bind-Value="User.Roles" Class="mb-12 mt-1" />
                             </div>                           
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
-                                <PermissionsConfigure Roles=User.Roles
-                                                      Value="User.Permissions.Select(p => p.PermissionId).ToList()"
-                                                      ValueChanged="value => User.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
+                                <PermissionExtensionConfigure Roles=User.Roles
+                                                      @bind-ExtensionValue="User.Permissions"                                                    
                                                       @bind-Preview=Preview
                                                       Style="max-height:calc(100vh - 350px);" />
                             </div>

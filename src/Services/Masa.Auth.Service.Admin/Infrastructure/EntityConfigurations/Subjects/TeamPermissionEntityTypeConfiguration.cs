@@ -7,7 +7,6 @@ public class TeamPermissionEntityTypeConfiguration : IEntityTypeConfiguration<Te
 {
     public void Configure(EntityTypeBuilder<TeamPermission> builder)
     {
-        builder.HasKey(u => u.Id);
     }
 }
 
