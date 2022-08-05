@@ -132,15 +132,14 @@
                                             <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=12>
-                                            <MAutocomplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
+                                            <SAutoComplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
                                                    Items="_childApiItems"
                                                    ItemText="r=>r.Text"
                                                    ItemValue="r=>r.Value"
-                                                   Outlined HideSelected
                                                    Chips
                                                    SmallChips
                                                    Label="@T("Mount Api Permission")"
-                                                   Multiple></MAutocomplete>
+                                                   Multiple />
                                         </MCol>
                                         <MCol Md=12>
                                             <SGroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
