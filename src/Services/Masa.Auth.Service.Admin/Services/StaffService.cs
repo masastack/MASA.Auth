@@ -93,7 +93,7 @@ public class StaffService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<StaffDetailModel?> GetStaffDetailByUserIdAsync(IEventBus eventBus, [FromQuery] Guid userId)
+    private async Task<StaffDetailModel?> GetDetailByUserIdAsync(IEventBus eventBus, [FromQuery] Guid userId)
     {
         var query = new StaffDetailByUserIdQuery(userId);
         await eventBus.PublishAsync(query);
