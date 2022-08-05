@@ -358,18 +358,6 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UpdateStaffPasswordAsync(UpdateStaffPasswordCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(u => u.Id == staffDto.Id);
-        if (staff is null)
-            throw new UserFriendlyException("The current user does not exist");
-
-        staff.UpdatePassword(staffDto.Password);
-        await _staffRepository.UpdateAsync(staff);
-    }
-
-    [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
         var staff = await _authDbContext.Set<Staff>()

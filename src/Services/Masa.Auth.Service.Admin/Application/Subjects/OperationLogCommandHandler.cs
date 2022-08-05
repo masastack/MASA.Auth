@@ -25,7 +25,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task UpdateUserOperationLogAsync(UpdateUserCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUser, $"编辑用户：{command.User.Name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUser, $"编辑用户：{command.User.DisplayName}");
         }
 
         async Task<string> GetUserAccountByIdAsync(Guid id)
@@ -93,30 +93,23 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task UpdateStaffOperationLogAsync(UpdateStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateStaff, $"编辑员工：{command.Staff.Name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateStaff, $"编辑员工：{command.Staff.DisplayName}");
         }
 
-        async Task<string> GetStaffAccountByIdAsync(Guid id)
+        async Task<string> GetStaffDisplayNameByIdAsync(Guid id)
         {
-            var account = await _authDbContext.Set<Staff>()
+            var displayName = await _authDbContext.Set<Staff>()
                                               .Where(staff => staff.Id == id)
-                                              .Select(staff => staff.Account)
+                                              .Select(staff => staff.DisplayName)
                                               .FirstAsync();
 
-            return account;
-        }
-
-        [EventHandler]
-        public async Task UpdateStaffPasswordOperationLogAsync(UpdateStaffPasswordCommand command)
-        {
-            var account = await GetStaffAccountByIdAsync(command.Staff.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateStaffPassword, $"编辑员工密码：{account}");
+            return displayName;
         }
 
         [EventHandler(0)]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
-            var account = await GetStaffAccountByIdAsync(command.Staff.Id);
+            var account = await GetStaffDisplayNameByIdAsync(command.Staff.Id);
             await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUser, $"编辑用户：{account}");
         }
 

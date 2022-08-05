@@ -42,11 +42,6 @@ public class StaffService : ServiceBase
         await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task UpdateStaffPasswordAsync(UpdateStaffPasswordDto request)
-    {
-        await SendAsync(nameof(UpdateStaffPasswordAsync), request);
-    }
-
     public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveStaffDto(id));
