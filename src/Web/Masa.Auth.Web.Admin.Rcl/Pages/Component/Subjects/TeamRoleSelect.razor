@@ -1,13 +1,11 @@
 ﻿@inherits AdminCompontentBase
 
-<MAutocomplete Value="Value"
+<SAutoComplete Value="Value"
                ValueChanged=UpdateValueAsync
                Items="Teams"
                TItem="TeamRoleSelectDto"
                TValue="List<Guid>"
                TItemValue="Guid"
-               Outlined
-               Height=55
                Chips
                Color="primary"
                Label="@T("Team")"
@@ -37,4 +35,4 @@
             </MListItemTitle>
         </MListItemContent>
     </ItemContent>
-</MAutocomplete>
+</SAutoComplete>

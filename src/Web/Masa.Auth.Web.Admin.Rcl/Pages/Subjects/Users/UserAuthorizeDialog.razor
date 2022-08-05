@@ -23,7 +23,7 @@
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;height: auto">
                 <PermissionExtensionConfigure 
-                                Roles=Authorization.Roles 
+                                Roles=Authorization.Roles.Union(TeamRoles).ToList()
                                 @bind-ExtensionValue=Authorization.Permissions 
                                 @bind-Preview=Preview
                                 Style="max-height:calc(100vh - 406px);" />

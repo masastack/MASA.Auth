@@ -8,9 +8,9 @@
             <div>
                 <SUserAutoComplete @bind-Value="UserId" />
             </div>     
-            <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
+            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
-                    @(Filter ? IconConstants.Filter : IconConstants.FilterOff)
+                    @(Filter is true ? IconConstants.Filter : IconConstants.FilterOff)
                 </MIcon>
             </div>
             <SButton Small Class="ml-4" OnClick=OpenAddUserDialog BorderRadiusClass="rounded-lg">
@@ -18,7 +18,7 @@
                 <span class="ml-2 btn">@T("Add")</span>
             </SButton>
         </div>
-        <div class="mt-6 @(Filter?"show d-flex":"close")">
+        <div class="@FilterClass">
             <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
             <MRow class="ml-6">
                 <MCol Md=4>
@@ -29,12 +29,12 @@
     </HeaderContent>
     <AutoHeightContent>
         <SDataTable 
-            Class="mt-6" 
-            FixedHeader
-            Height="@("calc(100vh - 285px)")"
+            Class="mt-6"
+            Dense
+            Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
             Headers="GetHeaders()"
             Items="Users" 
-            TItem="UserDto" 
+            TItem="UserDto"          
             ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>

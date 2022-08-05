@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class EnumAutocomplete<TValue> : MAutocomplete<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
+public class EnumAutocomplete<TValue> : SAutoComplete<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
 {
     [CascadingParameter]
     public I18n I18N { get; set; } = default!;
@@ -14,13 +14,7 @@ public class EnumAutocomplete<TValue> : MAutocomplete<KeyValuePair<string, TValu
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         Flat = true;
-        Dense = true;
         Solo = true;
-        HideDetails = "auto";
-        Color = "primary";
-        Style = "";
-        Class = "";
-        HideDetails = "auto";
         await base.SetParametersAsync(parameters);
         Items = Enum.GetValues<TValue>().Select(e => new KeyValuePair<string, TValue>(e.ToString(), e)).ToList();
         ItemText = kv => I18N.T(kv.Key, true);

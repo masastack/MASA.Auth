@@ -33,11 +33,18 @@
                     <div class="d-flex align-center mt-6">
                         <span class="h5 emphasis2--text">@T("Member")</span>
                         <MSpacer />
-                        <MAutocomplete Items="_removeStaffs" TItem="StaffDto" TValue="Guid" TItemValue="StaffDto"
-                                       ItemText="r=>r.Name" PrependInnerIcon="@IconConstants.Search"
-                                       ItemValue="r=>r" HideDetails="true" OnSelectedItemUpdate="AddStaff"
-                                       Outlined Clearable Style="max-width:340px;" Dense
-                                       Label="@T("Search for members")">
+                        <SAutoComplete 
+                            Items="_removeStaffs" 
+                            TItem="StaffDto" TValue="Guid" 
+                            TItemValue="StaffDto"                                     
+                            ItemText="r=>r.Name" 
+                            PrependInnerIcon="@IconConstants.Search"                                      
+                            ItemValue="r=>r" 
+                            HideDetails="true" 
+                            OnSelectedItemUpdate="AddStaff"
+                            Clearable 
+                            Style="max-width:340px;" 
+                            Label="@T("Search for members")">
                             <ItemContent Context="data">
                                 <MListItemAvatar>
                                     <img src="@data.Item.Avatar">
@@ -51,7 +58,7 @@
                                     </MListItemSubtitle>
                                 </MListItemContent>
                             </ItemContent>
-                        </MAutocomplete>
+                        </SAutoComplete>
                     </div>
                     <div class="mt-6" style="min-height:calc(100vh - 560px);overflow-y:auto;border: 1px solid #E2E7F4;border-radius: 8px;">
                         <MRow Class="mt-1 mb-0 mx-0">
