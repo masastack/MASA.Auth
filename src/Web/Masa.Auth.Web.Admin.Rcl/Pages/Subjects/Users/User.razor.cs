@@ -76,7 +76,9 @@ public partial class User
         }
     }
 
-    public bool Filter { get; set; }
+    public bool? Filter { get; set; }
+
+    public string FilterClass => Filter is true ? "d-flex show" : (Filter is false ? "d-flex close" : "hide");
 
     public long Total { get; set; }
 
@@ -135,6 +137,11 @@ public partial class User
     {
         CurrentUserId = user.Id;
         AuthorizeDialogVisible = true;
+    }
+
+    public void SwitchFilter()
+    {
+        Filter = !(Filter ?? false);
     }
 }
 

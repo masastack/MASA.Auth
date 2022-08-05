@@ -18,7 +18,12 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable Headers="GetHeaders()" Items="ThirdPartyIdps" TItem="ThirdPartyIdpDto" ItemsPerPage="PageSize">
+            <SDataTable
+                Dense
+                Headers="GetHeaders()" 
+                Items="ThirdPartyIdps" 
+                TItem="ThirdPartyIdpDto" 
+                ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -42,7 +47,7 @@
                             <span>@T(context.Item.VerifyType.ToString())</span>
                             break;
                         case nameof(ThirdPartyIdpDto.CreationTime):
-                            <span>@context.Item.CreationTime.ToString(T("$DateTimeFormat"))</span>
+                            <DateTimeTitle Value="@context.Item.CreationTime" />
                             break;
                         case nameof(ThirdPartyIdpDto.Url):
                             <span class="description">@context.Item.Url</span>
