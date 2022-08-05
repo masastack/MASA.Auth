@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record TeamRoleSelectQuery(string Name) : Query<List<TeamRoleSelectDto>>
+public record TeamRoleSelectQuery(string Name, Guid UserId) : Query<List<TeamRoleSelectDto>>
 {
     public override List<TeamRoleSelectDto> Result { get; set; } = new();
 }

@@ -59,11 +59,11 @@ public partial class ApiScope
 
     public List<DataTableHeader<ApiScopeDto>> GetHeaders() => new()
     {
-        new() { Text = T("ApiScope.Name"), Value = nameof(ApiScopeDto.Name), Sortable = false },
-        new() { Text = T(nameof(ApiScopeDto.DisplayName)), Value = nameof(ApiScopeDto.DisplayName), Sortable = false },
-        new() { Text = T("ApiScope.Required"), Value = nameof(ApiScopeDto.Required), Sortable = false },
+        new() { Text = T("ApiScope.Name"), Value = nameof(ApiScopeDto.Name), Sortable = false, Width="250px" },
+        new() { Text = T(nameof(ApiScopeDto.DisplayName)), Value = nameof(ApiScopeDto.DisplayName), Sortable = false , Width="250px"},
+        new() { Text = T("ApiScope.Required"), Value = nameof(ApiScopeDto.Required), Sortable = false, Width="105px" },
         new() { Text = T(nameof(ApiScopeDto.Description)), Value = nameof(ApiScopeDto.Description), Sortable = false },
-        new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false },
+        new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false, Width="105px" },
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
     };
 

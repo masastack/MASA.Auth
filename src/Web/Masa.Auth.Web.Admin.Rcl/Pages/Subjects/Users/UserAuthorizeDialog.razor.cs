@@ -21,6 +21,8 @@ public partial class UserAuthorizeDialog
 
     public UpdateUserAuthorizationDto Authorization { get; set; } = new();
 
+    public UserDetailDto User { get; set; } = new();
+
     private UserService UserService => AuthCaller.UserService;
 
     public bool Preview { get; set; }
@@ -41,14 +43,14 @@ public partial class UserAuthorizeDialog
     {
         if (Visible)
         {
-            var user = await UserService.GetDetailAsync(UserId);
-            Authorization = new(user.Id, user.RoleIds, user.Permissions);
+            User = await UserService.GetDetailAsync(UserId);
+            Authorization = new(User.Id, User.RoleIds, User.Permissions);
         }
     }
 
     private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
     {
-        Authorization.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value))
+        Authorization.Permissions = permissiionMap.Select(kv => new SubjectPermissionRelationDto(kv.Key, kv.Value))
                                                    .ToList();
     }
 

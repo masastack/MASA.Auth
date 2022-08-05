@@ -24,6 +24,12 @@ public class AuthDbContext : IsolationDbContext
             .HasValue<ThirdPartyIdp>("ThirdParty")
             .HasValue<LdapIdp>("LDAP");
 
+        builder.Entity<SubjectPermissionRelation>()
+            .HasDiscriminator<string>("_businessType")
+            .HasValue<UserPermission>("User")
+            .HasValue<RolePermission>("Role")
+            .HasValue<TeamPermission>("Team");
+
         //foreach (var entityType in builder.Model.GetEntityTypes())
         //{
         //    if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))

@@ -79,7 +79,7 @@ public partial class Role
         new() { Text = T(nameof(RoleDto.ModificationTime)), Value = nameof(RoleDto.ModificationTime), Sortable = false },
         new() { Text = T(nameof(RoleDto.Creator)), Value = nameof(RoleDto.Creator), Sortable = false },
         new() { Text = T(nameof(RoleDto.Modifier)), Value = nameof(RoleDto.Modifier), Sortable = false },
-        new() { Text = T("State"), Value = nameof(RoleDto.Enabled), Sortable = false },
+        new() { Text = T("State"), Value = nameof(RoleDto.Enabled), Sortable = false , Width="105px"},
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px"},
     };
 

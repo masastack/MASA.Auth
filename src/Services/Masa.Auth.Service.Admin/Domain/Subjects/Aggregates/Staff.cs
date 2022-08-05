@@ -150,15 +150,19 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public void SetDepartmentStaff(Guid departmentId)
     {
-        _departmentStaffs = _departmentStaffs.MergeBy(
-            new[] { new DepartmentStaff(departmentId, default) },
-            item => item.DepartmentId);
+        if (departmentId != default)
+        {
+            _departmentStaffs = _departmentStaffs.MergeBy(
+                new[] { new DepartmentStaff(departmentId, default) },
+                item => item.DepartmentId);
+        }
+        else _departmentStaffs.Clear();
     }
 
     public void SetTeamStaff(List<Guid> teams)
     {
         _teamStaffs = _teamStaffs.MergeBy(
-            teams.Select(teamId => new TeamStaff(teamId, default, TeamMemberTypes.Member)),
+            teams.Select(teamId => new TeamStaff(teamId, default, TeamMemberTypes.Member, UserId)),
             team => team.TeamId);
     }
 }

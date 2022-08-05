@@ -15,5 +15,7 @@ public class AppDto
 
     public int ProjectId { get; set; }
 
+    public string Url { get; set; } = string.Empty;
+
     public List<PermissionNavDto> Navs { get; set; } = new();
 }

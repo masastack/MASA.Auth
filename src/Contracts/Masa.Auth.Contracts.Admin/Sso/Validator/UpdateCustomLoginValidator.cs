@@ -7,7 +7,7 @@ public class UpdateCustomLoginValidator : AbstractValidator<UpdateCustomLoginDto
 {
     public UpdateCustomLoginValidator()
     {
-        RuleFor(CustomLogin => CustomLogin.Name).Required();
+        RuleFor(CustomLogin => CustomLogin.Name).Required().MaxLength(20);
     }
 }
 

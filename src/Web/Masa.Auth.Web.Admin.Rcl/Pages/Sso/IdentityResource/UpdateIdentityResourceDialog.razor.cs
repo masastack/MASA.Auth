@@ -58,7 +58,7 @@ public partial class UpdateIdentityResourceDialog
         {
             Loading = true;
             await IdentityResourceService.UpdateAsync(IdentityResource);
-            OpenSuccessMessage("Update identityResource success");
+            OpenSuccessMessage(T("Edit identityResource data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

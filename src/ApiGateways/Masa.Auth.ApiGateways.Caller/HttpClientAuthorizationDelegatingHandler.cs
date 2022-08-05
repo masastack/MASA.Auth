@@ -5,19 +5,18 @@ namespace Masa.Auth.ApiGateways.Caller;
 
 public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    readonly ITokenProvider _tokenProvider;
 
-    public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccessor)
+    public HttpClientAuthorizationDelegatingHandler(ITokenProvider tokenProvider)
     {
-        _httpContextAccessor = httpContextAccessor;
+        _tokenProvider = tokenProvider;
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        if (_httpContextAccessor.HttpContext != null)
+        if (!string.IsNullOrWhiteSpace(_tokenProvider.AccessToken))
         {
-            var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
         }
         return await base.SendAsync(request, cancellationToken);
     }

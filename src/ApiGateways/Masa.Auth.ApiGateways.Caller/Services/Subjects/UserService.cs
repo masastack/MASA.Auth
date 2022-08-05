@@ -51,5 +51,10 @@ public class UserService : ServiceBase
     {
         await SendAsync(nameof(RemoveAsync), new RemoveUserDto(id));
     }
+
+    public async Task<bool> VerifyUserRepeatAsync(VerifyUserRepeatDto user)
+    {
+        return await PostAsync<VerifyUserRepeatDto, bool>(nameof(VerifyUserRepeatAsync), user);
+    }
 }
 

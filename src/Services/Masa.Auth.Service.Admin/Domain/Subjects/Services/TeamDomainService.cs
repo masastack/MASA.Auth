@@ -9,15 +9,15 @@ public class TeamDomainService : DomainService
     {
     }
 
-    public async Task SetTeamAdminAsync(Team team, List<Guid> staffIds, List<Guid> roleIds, Dictionary<Guid, bool> permissionsIds)
+    public async Task SetTeamAdminAsync(Team team, List<Guid> staffIds, List<Guid> roleIds, List<SubjectPermissionRelationDto> permissions)
     {
-        var _event = new SetTeamPersonnelInfoDomainEvent(team, TeamMemberTypes.Admin, staffIds, roleIds, permissionsIds);
+        var _event = new SetTeamPersonnelInfoDomainEvent(team, TeamMemberTypes.Admin, staffIds, roleIds, permissions);
         await EventBus.PublishAsync(_event);
     }
 
-    public async Task SetTeamMemberAsync(Team team, List<Guid> staffIds, List<Guid> roleIds, Dictionary<Guid, bool> permissionsIds)
+    public async Task SetTeamMemberAsync(Team team, List<Guid> staffIds, List<Guid> roleIds, List<SubjectPermissionRelationDto> permissions)
     {
-        var _event = new SetTeamPersonnelInfoDomainEvent(team, TeamMemberTypes.Member, staffIds, roleIds, permissionsIds);
+        var _event = new SetTeamPersonnelInfoDomainEvent(team, TeamMemberTypes.Member, staffIds, roleIds, permissions);
         await EventBus.PublishAsync(_event);
     }
 }

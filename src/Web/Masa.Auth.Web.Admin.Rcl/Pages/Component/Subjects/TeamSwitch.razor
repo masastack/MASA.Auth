@@ -1,0 +1,29 @@
+﻿@inherits AdminCompontentBase
+
+<div class="d-flex teamSwitch @Class" style="@Style;">
+    <div style="width:250px;">
+        <SSelect Value="Value"
+             ValueChanged=UpdateValueAsync
+             Items="Teams"
+             TItem="TeamRoleSelectDto"
+             TValue="Guid"
+             TItemValue="Guid"
+             ItemText="t=>t.Name"
+             ItemValue="t=>t.Id"
+             Medium
+             Clearable
+             Label="@T("Team")" />
+    </div>
+    <div class="roles d-flex">
+        <div class="ma-auto d-flex" style="width:100%;">
+            @foreach(var role in CurrentTeam?.Roles ?? new())
+            {
+                <MChip Style="height:28px;" Class="mx-3">
+                    <span class="body2 regular--text">
+                        @role.Name
+                    </span>
+                </MChip>
+            }
+        </div>
+    </div>
+</div>

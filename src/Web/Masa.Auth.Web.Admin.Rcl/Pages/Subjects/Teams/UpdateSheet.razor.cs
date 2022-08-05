@@ -6,12 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 public partial class UpdateSheet
 {
     [Parameter]
-    public bool Visible { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> VisibleChanged { get; set; }
-
-    [Parameter]
     public TeamDetailDto Dto { get; set; } = new();
 
     [Parameter]
@@ -26,24 +20,12 @@ public partial class UpdateSheet
     [Parameter]
     public EventCallback<Guid> OnDelete { get; set; }
 
-    bool _adminPreview, _memberPreview;
+    bool _adminPreview, _memberPreview, _visible;
 
-    public async Task Show(TeamDetailDto model)
+    public void Show(TeamDetailDto model)
     {
         Dto = model;
-        await Toggle(true);
-    }
-
-    private async Task Toggle(bool visible)
-    {
-        if (VisibleChanged.HasDelegate)
-        {
-            await VisibleChanged.InvokeAsync(visible);
-        }
-        else
-        {
-            Visible = visible;
-        }
+        _visible = true;
     }
 
     private async Task OnUpdateBaseHandler()
@@ -59,7 +41,7 @@ public partial class UpdateSheet
                 Avatar = Dto.TeamBasicInfo.Avatar
             });
         }
-        await Toggle(false);
+        _visible = false;
     }
 
     private async Task OnUpdateAdminHandler()
@@ -74,7 +56,7 @@ public partial class UpdateSheet
                 Permissions = Dto.TeamAdmin.Permissions
             });
         }
-        await Toggle(false);
+        _visible = false;
     }
 
     private async Task OnUpdateMemberHandler()
@@ -89,7 +71,7 @@ public partial class UpdateSheet
                 Permissions = Dto.TeamMember.Permissions
             });
         }
-        await Toggle(false);
+        _visible = false;
     }
 
     private async Task OnDeleteHandler()
@@ -98,11 +80,6 @@ public partial class UpdateSheet
         {
             await OnDelete.InvokeAsync(Dto.Id);
         }
-        await Toggle(false);
-    }
-
-    private async Task DialogValueChanged(bool value)
-    {
-        await Toggle(value);
+        _visible = false;
     }
 }

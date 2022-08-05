@@ -7,7 +7,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
     public UpdateUserCommandValidator()
     {
-        RuleFor(command => command.User.DisplayName).Required().ChineseLetterNumber().MaxLength(20);
+        RuleFor(command => command.User.DisplayName).Required().MaxLength(50);
         RuleFor(command => command.User.Name).ChineseLetter().MaxLength(20);
         RuleFor(command => command.User.PhoneNumber).Phone();
         //RuleFor(user => command.User.Landline).NotEmpty().When(u => string.IsNullOrEmpty(u.PhoneNumber));

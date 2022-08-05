@@ -58,11 +58,11 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        await VerifyUserAsync(default, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, userDto.Account);
+        await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, userDto.Account);
 
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
         user.AddRoles(userDto.Roles.ToArray());
-        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        user.AddPermissions(userDto.Permissions);
         await _userRepository.AddAsync(user);
         command.NewUser = user;
         await _userDomainService.SetAsync(user);
@@ -74,7 +74,7 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        await VerifyUserAsync(userDto.Id, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, default);
+        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, default);
 
         user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         if (!string.IsNullOrWhiteSpace(userDto.Password))
@@ -118,7 +118,7 @@ public class CommandHandler
         var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles.ToArray());
 
-        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        user.AddPermissions(userDto.Permissions);
         await _userRepository.UpdateAsync(user);
 
         await _roleDomainService.UpdateRoleLimitAsync(roles);
@@ -246,7 +246,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        await VerifyUserAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, default, default);
+        await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, default, default);
         user.UpdateBasicInfo(userModel.DisplayName, userModel.PhoneNumber, userModel.Email, userModel.Avatar, userModel.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.SetAsync(user);
@@ -262,7 +262,7 @@ public class CommandHandler
             user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
             if (user is not null)
             {
-                await VerifyUserAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
+                await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
                 user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.CompanyName, userModel.PhoneNumber, userModel.Email, userModel.Gender);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.SetAsync(user);
@@ -289,6 +289,14 @@ public class CommandHandler
         command.Result = true;
     }
 
+    [EventHandler(1)]
+    public async Task VerifyUserRepeatAsync(VerifyUserRepeatCommand command)
+    {
+        var user = command.User;
+        await VerifyUserRepeatAsync(user.Id, user.PhoneNumber, user.Landline, user.Email, user.IdCard, user.Account);
+        command.Result = true;
+    }
+
     private async Task<User> CheckUserExistAsync(Guid userId)
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
@@ -298,7 +306,7 @@ public class CommandHandler
         return user;
     }
 
-    private async Task VerifyUserAsync(Guid? userId, string? phoneNumber, string? landline, string? email, string? idCard, string? account)
+    private async Task VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? landline, string? email, string? idCard, string? account)
     {
         Expression<Func<User, bool>> condition = user => false;
         if (!string.IsNullOrEmpty(account))

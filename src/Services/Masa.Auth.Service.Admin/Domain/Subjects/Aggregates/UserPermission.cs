@@ -3,45 +3,14 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
-public class UserPermission : FullEntity<Guid, Guid>
+public class UserPermission : SubjectPermissionRelation
 {
-    private User? _user;
-    private Permission? _permission;
-
-    public User User
-    {
-        get => _user ?? throw new UserFriendlyException("Failed to get user data");
-        set => _user = value;
-    }
-
-    public Permission Permission
-    {
-        get => _permission ?? throw new UserFriendlyException("Failed to get permission data");
-        set => _permission = value;
-    }
-
     public Guid UserId { get; private set; }
 
-    public Guid PermissionId { get; private set; }
+    public User User { get; private set; } = default!;
 
-    public bool Effect { get; private set; }
-
-    public UserPermission(Guid userId, Guid permissionId, bool effect)
+    public UserPermission(Guid permissionId, bool effect) : base(permissionId, effect)
     {
-        UserId = userId;
-        PermissionId = permissionId;
-        Effect = effect;
-    }
-
-    public UserPermission(Guid permissionId, bool effect)
-    {
-        PermissionId = permissionId;
-        Effect = effect;
-    }
-
-    public void Update(Guid permissionId, bool effect)
-    {
-        PermissionId = permissionId;
-        Effect = effect;
     }
 }
+

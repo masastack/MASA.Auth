@@ -439,13 +439,21 @@ public class QueryHandler
         }
         if (teamListQuery.UserId != Guid.Empty)
         {
-            var staffId = (await _authDbContext.Set<Staff>()
-                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
-            if (staffId != default)
+            var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == teamListQuery.UserId);
+            if (user == null)
             {
                 return;
             }
-            condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
+            if (!user.IsAdmin())
+            {
+                var staffId = (await _authDbContext.Set<Staff>()
+                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
+                if (staffId == default)
+                {
+                    return;
+                }
+                condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
+            }
         }
         var teams = await _teamRepository.GetListInCludeAsync(condition,
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
@@ -485,13 +493,13 @@ public class QueryHandler
             {
                 Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin).Select(s => s.StaffId).ToList(),
                 Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Admin).Select(r => r.RoleId).ToList(),
-                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).ToDictionary(p => p.PermissionId, p => p.Effect)
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
             },
             TeamMember = new TeamPersonnelDto
             {
                 Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Member).Select(s => s.StaffId).ToList(),
                 Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Member).Select(r => r.RoleId).ToList(),
-                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).ToDictionary(p => p.PermissionId, p => p.Effect)
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
             }
         };
     }
@@ -537,9 +545,17 @@ public class QueryHandler
         Expression<Func<Team, bool>> condition = _ => true;
         if (!string.IsNullOrEmpty(teamRoleSelectQuery.Name))
         {
-            condition = condition.And(s => s.Name.Contains(teamRoleSelectQuery.Name));
+            condition = condition.And(team => team.Name.Contains(teamRoleSelectQuery.Name));
+        }
+        Expression<Func<Team, bool>> teamStaffCondition = _ => true;
+        if (teamRoleSelectQuery.UserId != default)
+        {
+            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == teamRoleSelectQuery.UserId));
         }
         var teams = await _authDbContext.Set<Team>()
+                                        .Where(condition)
+                                        .Include(team => team.TeamStaffs)
+                                        .Where(teamStaffCondition)
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .ToListAsync();

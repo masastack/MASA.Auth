@@ -111,7 +111,7 @@ public partial class ThirdPartyIdp
         {
             Loading = true;
             await ThirdPartyIdpService.RemoveAsync(thirdPartyIdp.Id);
-            OpenSuccessMessage(T("Success to delete thirdPartyIdp"));
+            OpenSuccessMessage(T("Delete thirdPartyIdp data success"));
             Loading = false;
             await GetThirdPartyIdpsAsync();
         }

@@ -65,16 +65,11 @@ public partial class UpdateRoleDialog
         {
             Loading = true;
             await RoleService.UpdateAsync(Role);
-            OpenSuccessMessage(T("Update role data success"));
+            OpenSuccessMessage(T("Edit role data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
-    }
-
-    private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
-    {
-        Role.Permissions = permissiionMap.Where(permissiion => permissiion.Value is true).Select(kv => kv.Key).ToList();
     }
 
     private void LimitChanged(int limit)

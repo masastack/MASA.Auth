@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog Value=Show Title="@T("Add Api Permission")" ValueChanged="ShowChanged">
+<SSheetDialog @bind-Value=_visible Title="@T("Add Api Permission")">
     <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
         <MCardText>
             <MForm Model=_apiPermissionDetailDto EnableValidation @ref="_form">
@@ -9,25 +9,23 @@
                         <STextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=6>
-                        <MSelect @bind-Value="_apiPermissionDetailDto.AppId"
+                        <SSelect @bind-Value="_apiPermissionDetailDto.AppId"
                                  Label="@T("Pre Code Select")"
-                                 Outlined HideDetails="@("auto")"
                                  Items="@AppItems"
                                  ItemText="u => u.Name"
                                  ItemValue="u => u.Identity">
-                        </MSelect>
+                        </SSelect>
                     </MCol>
                     <MCol Md=6>
                         <STextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
                     </MCol>
                     <MCol Md=12>
-                        <MSelect @bind-Value="_apiPermissionDetailDto.Type"
+                        <SSelect @bind-Value="_apiPermissionDetailDto.Type"
                                  Label="@T("Permission Type")"
-                                 Outlined HideDetails="@("auto")"
-                                 Items="@PermissionTypes"
+                                 Items="@_apiPermissionTypes"
                                  ItemText="u => u.Text"
                                  ItemValue="u => u.Value">
-                        </MSelect>
+                        </SSelect>
                     </MCol>
                     <MCol Md=6>
                         <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url" />
@@ -36,8 +34,7 @@
                         <SNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                     </MCol>
                     <MCol Md=12>
-                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
-                        </MTextarea>
+                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize />
                     </MCol>
                 </MRow>
             </MForm>

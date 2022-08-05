@@ -22,6 +22,6 @@ public class SetTeamPersonnelInfoDomainEventHandler
     public void SetPermission(SetTeamPersonnelInfoDomainEvent setTeamPersonnelInfoDomainEvent)
     {
         setTeamPersonnelInfoDomainEvent.Team.SetPermission(setTeamPersonnelInfoDomainEvent.Type
-                , setTeamPersonnelInfoDomainEvent.PermissionsIds);
+                , setTeamPersonnelInfoDomainEvent.Permissionss);
     }
 }

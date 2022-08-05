@@ -27,7 +27,7 @@
                     <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
                     <MCascader Items="Departments" Dense Label="@T("Department Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId" Class="mt-6"
-                               ItemValue="u => u.Id" Readonly HideDetails="@("auto")"
+                               ItemValue="u => u.Id" HideDetails="@("auto")" ChangeOnSelect
                                ItemChildren="u => u.Children">
                     </MCascader>
                     <div class="d-flex align-center mt-6">
@@ -53,27 +53,29 @@
                             </ItemContent>
                         </MAutocomplete>
                     </div>
-                    <MRow class="mt-6 mb-0 mx-0 flex-grow-1" style="min-height:calc(100vh - 560px);overflow-y:scroll;border: 1px solid #E2E7F4;border-radius: 4px;">
-                        @foreach (var staff in Dto.Staffs)
-                        {
-                            <MCol Md="3">
-                                <MHover Context="hoverComtext">
-                                    <MListItem @attributes="hoverComtext.Attrs" class="px-4" style="@(hoverComtext.Hover?"background: #F6F8FD;border-radius: 8px;":"background:none")" Ripple=false>
-                                        <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
-                                            <img src="@staff.Avatar" />
-                                        </MListItemAvatar>
-                                        <MListItemContent class="py-1">
-                                            <MListItemTitle class="subtitle emphasis2--text">@staff.DisplayName</MListItemTitle>
-                                            <MListItemSubtitle class="body2 regular-secondary--text">@staff.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
-                                        </MListItemContent>
-                                        <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
-                                            <SIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</SIcon>
-                                        </div>
-                                    </MListItem>
-                                </MHover>
-                            </MCol>
-                        }
-                    </MRow>
+                    <div class="mt-6" style="min-height:calc(100vh - 560px);overflow-y:auto;border: 1px solid #E2E7F4;border-radius: 8px;">
+                        <MRow Class="mt-1 mb-0 mx-0">
+                            @foreach (var staff in Dto.Staffs)
+                            {
+                                <MCol Md="3">
+                                    <MHover Context="hoverComtext">
+                                        <MListItem @attributes="hoverComtext.Attrs" class="px-4" style="@(hoverComtext.Hover?"background: #F6F8FD;border-radius: 8px;":"background:none")" Ripple=false>
+                                            <MListItemAvatar MinHeight=40 MinWidth=40 Height=40 Width=40>
+                                                <img src="@staff.Avatar" />
+                                            </MListItemAvatar>
+                                            <MListItemContent class="py-1">
+                                                <MListItemTitle class="subtitle emphasis2--text">@staff.DisplayName</MListItemTitle>
+                                                <MListItemSubtitle class="body2 regular-secondary--text">@staff.Name<MDivider Vertical /> @staff.JobNumber</MListItemSubtitle>
+                                            </MListItemContent>
+                                            <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
+                                                <SIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</SIcon>
+                                            </div>
+                                        </MListItem>
+                                    </MHover>
+                                </MCol>
+                            }
+                        </MRow>
+                    </div>
                     <MTextarea class="mt-6" @bind-Value="Dto.Description" Label="@T("Description")" Outlined Height="120" NoResize HideDetails="@("auto")" />
                 </MCardText>
                 <MCardActions class="d-flex align-center mb-10 px-6">

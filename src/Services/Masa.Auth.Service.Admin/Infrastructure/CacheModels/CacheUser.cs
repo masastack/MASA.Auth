@@ -35,5 +35,5 @@ public class CacheUser
 
     public List<Guid> Roles { get; set; } = new();
 
-    public List<UserPermissionDto> Permissions { get; set; } = new();
+    public List<SubjectPermissionRelationDto> Permissions { get; set; } = new();
 }

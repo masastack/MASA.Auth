@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog Value=Visible ValueChanged=DialogValueChanged Title="@T("Update Team")" ContentClass="px-sheet-dialog">
+<SSheetDialog @bind-Value=_visible Title="@T("Update Team")" ContentClass="px-sheet-dialog">
     <SElevationTab Dense Class="pt-12 full-height" Tabs='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' ItemsClass="mt-8 full-height">
         <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
@@ -16,7 +16,7 @@
         </SElevationTabItem>
         <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                @if (Visible)
+                @if (_visible)
                 {
                     <TeamAdmin @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
                 }
@@ -32,7 +32,7 @@
         </SElevationTabItem>
         <SElevationTabItem>
             <MCard Class="d-flex flex-column full-height">
-                @if (Visible)
+                @if (_visible)
                 {
                     <TeamMember @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
                 }

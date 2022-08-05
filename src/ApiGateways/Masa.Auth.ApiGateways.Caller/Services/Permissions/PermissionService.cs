@@ -32,11 +32,6 @@ public class PermissionService : ServiceBase
         return await GetAsync<List<AppPermissionDto>>($"GetApplicationPermissions?systemId={systemId}");
     }
 
-    public async Task<List<PermissionDto>> GetChildMenuPermissionsAsync(Guid permissionId)
-    {
-        return await GetAsync<List<PermissionDto>>($"GetChildMenuPermissions?permissionId={permissionId}");
-    }
-
     public async Task<MenuPermissionDetailDto> GetMenuPermissionDetailAsync(Guid id)
     {
         return await GetAsync<MenuPermissionDetailDto>($"GetMenuPermission?id={id}");

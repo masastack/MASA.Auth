@@ -40,40 +40,40 @@ public partial class Team
     private async Task EditTeamHandler(Guid id)
     {
         _editTeamDto = await TeamService.GetAsync(id);
-        await _updateSheet.Show(_editTeamDto);
+        _updateSheet.Show(_editTeamDto);
     }
 
     private async Task OnCreate(TeamDetailDto dto)
     {
         await TeamService.CreateAsync(dto);
         await LoadTeams();
-        OpenSuccessMessage(I18n.T("Add team data success"));
+        OpenSuccessMessage(T("Add team data success"));
     }
 
     private async Task OnUpdateBasicInfo(UpdateTeamBasicInfoDto dto)
     {
         await TeamService.UpdateBasicInfo(dto);
-        OpenSuccessMessage(I18n.T("Edit team data success"));
+        OpenSuccessMessage(T("Edit team data success"));
         await LoadTeams();
     }
 
     private async Task OnUpdateAdminPersonnel(UpdateTeamPersonnelDto dto)
     {
         await TeamService.UpdateAdminPersonnel(dto);
-        OpenSuccessMessage(I18n.T("Edit team data success"));
+        OpenSuccessMessage(T("Edit team data success"));
         await LoadTeams();
     }
 
     private async Task OnUpdateMemberPersonnel(UpdateTeamPersonnelDto dto)
     {
         await TeamService.UpdateMemberPersonnel(dto);
-        OpenSuccessMessage(I18n.T("Edit team data success"));
+        OpenSuccessMessage(T("Edit team data success"));
         await LoadTeams();
     }
 
     private async Task OnDelete(Guid id)
     {
-        var isConfirmed = await OpenConfirmDialog(I18n.T("Delete Team"), I18n.T("Are you sure you want to delete this team"), AlertTypes.Warning);
+        var isConfirmed = await OpenConfirmDialog(T("Delete Team"), T("Are you sure you want to delete this team"), AlertTypes.Warning);
         if (isConfirmed)
         {
             await TeamService.DeleteAsync(id);

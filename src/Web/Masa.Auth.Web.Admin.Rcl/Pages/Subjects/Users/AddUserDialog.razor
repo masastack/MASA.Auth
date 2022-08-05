@@ -10,8 +10,8 @@
                             <div class="ma-auto text-center">
                                 <ButtonGroup @bind-Value="User.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
-                                <div>
-                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" WhenFileChangeUpload Class="mt-12" />
+                                <div class="mt-12">
+                                    <DefaultChangeImage @bind-Value="User.Avatar" Gender="User.Gender" WhenFileChangeUpload />
                                 </div>
                             </div>
                         </AutoHeightContent>
@@ -65,23 +65,22 @@
                             <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
-                                <SButton Medium OnClick="()=>NextStep(context)" Class="ml-6">@T("Next step")</SButton>
+                                <SButton Medium OnClick="async ()=> await NextStepAsync(context)" Class="ml-6">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="3">
-                    <AutoHeight Overflow>
+                    <AutoHeight>
                         <HeaderContent>
                             <div>
-                                <RoleSelectForUser @bind-Value="User.Roles" Class="mb-13" />
+                                <RoleSelectForUser @bind-Value="User.Roles" Class="mb-12 mt-1" />
                             </div>                           
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
-                                <PermissionsConfigure Roles=User.Roles
-                                                      Value="User.Permissions.Select(p => p.PermissionId).ToList()"
-                                                      ValueChanged="value => User.Permissions=value.Select(item => new UserPermissionDto(item,true)).ToList()"
+                                <PermissionExtensionConfigure Roles=User.Roles
+                                                      @bind-ExtensionValue="User.Permissions"                                                    
                                                       @bind-Preview=Preview
                                                       Style="max-height:calc(100vh - 350px);" />
                             </div>

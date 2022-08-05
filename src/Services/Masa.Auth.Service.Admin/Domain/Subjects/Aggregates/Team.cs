@@ -51,31 +51,39 @@ public class Team : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
     }
 
-    public void SetStaff(TeamMemberTypes memberType, List<Guid> staffIds)
+    public void SetStaff(TeamMemberTypes memberType, IEnumerable<Staff> staffs)
     {
         var teamStaffs = _teamStaffs.Where(ts => ts.TeamMemberType == memberType).ToList();
         teamStaffs = teamStaffs.MergeBy(
-           staffIds.Select(staffId => new TeamStaff(staffId, memberType)),
+           staffs.Select(staff => new TeamStaff(staff.Id, memberType, staff.UserId)),
            item => item.StaffId);
         teamStaffs.AddRange(_teamStaffs.Where(ts => ts.TeamMemberType != memberType));
         _teamStaffs = teamStaffs;
     }
 
-    public void SetPermission(TeamMemberTypes memberType, Dictionary<Guid, bool> permissions)
+    public void SetPermission(TeamMemberTypes teamMemberType, List<SubjectPermissionRelationDto> permissions)
     {
-        var teamPermissions = _teamPermissions.Where(ts => ts.TeamMemberType == memberType).ToList();
+        var teamPermissions = _teamPermissions.Where(ts => ts.TeamMemberType == teamMemberType).ToList();
         teamPermissions = teamPermissions.MergeBy(
-           permissions.Select(permission => new TeamPermission(permission.Key, permission.Value, memberType)),
-           item => item.PermissionId);
-        teamPermissions.AddRange(_teamPermissions.Where(ts => ts.TeamMemberType != memberType));
+           permissions.Select(permission => new TeamPermission(permission.PermissionId, permission.Effect, teamMemberType)),
+           item => item.PermissionId,
+           (oldValue, newValue) =>
+           {
+               oldValue.Update(newValue.Effect);
+               return oldValue;
+           });
+        teamPermissions.AddRange(_teamPermissions.Where(ts => ts.TeamMemberType != teamMemberType));
         _teamPermissions = teamPermissions;
     }
 
     public void SetRole(TeamMemberTypes memberType, params Guid[] roleIds)
     {
-        _teamRoles = _teamRoles.MergeBy(
-           roleIds.Select(roleId => new TeamRole(roleId, memberType)),
+        var teamRoles = _teamRoles.Where(ts => ts.TeamMemberType == memberType).ToList();
+        teamRoles = teamRoles.MergeBy(
+          roleIds.Select(roleId => new TeamRole(roleId, memberType)),
            item => item.RoleId);
+        teamRoles.AddRange(_teamRoles.Where(ts => ts.TeamMemberType != memberType));
+        _teamRoles = teamRoles;
     }
 
     public List<Guid> GetAdminRoleIds()

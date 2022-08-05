@@ -9,7 +9,7 @@ public class UpdateUserAuthorizationDto
 
     public List<Guid> Roles { get; set; }
 
-    public List<UserPermissionDto> Permissions { get; set; }
+    public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
     public UpdateUserAuthorizationDto()
     {
@@ -17,7 +17,7 @@ public class UpdateUserAuthorizationDto
         Permissions = new();
     }
 
-    public UpdateUserAuthorizationDto(Guid id, List<Guid> roles, List<UserPermissionDto> permissions)
+    public UpdateUserAuthorizationDto(Guid id, List<Guid> roles, List<SubjectPermissionRelationDto> permissions)
     {
         Id = id;
         Roles = roles;
