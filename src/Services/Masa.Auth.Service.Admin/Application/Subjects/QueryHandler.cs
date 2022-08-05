@@ -14,6 +14,7 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IPmClient _pmClient;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -25,7 +26,8 @@ public class QueryHandler
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
         IMemoryCacheClient memoryCacheClient,
-        IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
+        IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
+        IPmClient pmClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -36,6 +38,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
+        _pmClient = pmClient;
     }
 
     #region User
@@ -537,20 +540,24 @@ public class QueryHandler
     public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
     {
         var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
-        var visited = await _memoryCacheClient.GetAsync<List<string>>(key);
+        var visited = await _memoryCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var menus = _authDbContext.Set<Permission>().Where(p => visited.Contains(p.Url))
-                .Select(p => new
+            var apps = await _pmClient.AppService.GetListAsync();
+            //todo cache
+            var menus = _authDbContext.Set<Permission>().AsEnumerable()
+                .Where(p => visited.Any(v => v.AppId == p.AppId && v.Url.ToLower() == p.Url.ToLower()))
+                .Join(apps, p => p.AppId, a => a.Identity, (p, a) => new
                 {
+                    p.Id,
                     p.Name,
-                    p.Url
+                    Url = Path.Combine(a.Url, p.Url)
                 }).ToDictionary(p => p.Url, p => p.Name);
-            userVisitedListQuery.Result = visited.Select(v => new UserVisitedDto
+            userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
             {
-                Url = v,
-                Name = menus.ContainsKey(v) ? menus[v] : ""
-            }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
+                Url = v.Key,
+                Name = v.Value
+            }).ToList();
         }
     }
 

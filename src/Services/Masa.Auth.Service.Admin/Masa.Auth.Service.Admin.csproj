@@ -23,7 +23,7 @@
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.6.0-preview.1" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.6.0-preview.1" />
-		<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.6.0-preview.1" />
+		<!--<PackageReference Include="Masa.Contrib.BasicAbility.Pm" Version="0.6.0-preview.1" />-->
 		<PackageReference Include="Masa.Contrib.Configuration" Version="0.6.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EF" Version="0.6.0-preview.1" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.6.0-preview.1" />
@@ -71,6 +71,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\StackSdks\Masa.Contrib.StackSdks.Pm\Masa.Contrib.StackSdks.Pm.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Caching\Distributed\Masa.Utils.Caching.Redis\Masa.Utils.Caching.Redis.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Masa.Utils.Exceptions\Masa.Utils.Exceptions.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

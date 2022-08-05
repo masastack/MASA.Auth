@@ -20,7 +20,7 @@
 		<PackageReference Include="Humanizer.Core.zh-CN" Version="2.14.1" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Masa.Blazor" Version="0.6.0-preview.2" />
-		<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.6.0-preview.1" />
+		<!--<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.6.0-preview.1" />-->
 		<!--<PackageReference Include="Masa.Stack.Components" Version="0.0.88" />-->
 		<PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.5.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.7" />
@@ -28,6 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\Masa.Contrib.Authentication.Identity\Masa.Contrib.Authentication.Identity.csproj" />
 		<ProjectReference Include="..\..\..\..\MASA.Stack.Components\src\Masa.Stack.Components\Masa.Stack.Components.csproj" />
 		<ProjectReference Include="..\..\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj" />
 		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />

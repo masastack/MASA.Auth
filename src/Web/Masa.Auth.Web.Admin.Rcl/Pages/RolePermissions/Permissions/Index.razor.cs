@@ -151,7 +151,7 @@ public partial class Index
 
     private void AddMenuPermission(AppPermissionsViewModel appPermissionsViewModel)
     {
-        _addMenuPermission.Show(appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty);
+        _addMenuPermission.Show(appPermissionsViewModel.AppId, appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty);
     }
 
     private void AddApiPermission()

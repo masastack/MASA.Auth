@@ -89,7 +89,8 @@ public class QueryHandler
                         Id = a.Id,
                         Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
                         Identity = a.Identity,
-                        ProjectId = a.ProjectId
+                        ProjectId = a.ProjectId,
+                        Url = a.Url
                     }).ToList()
             }).ToList();
         }

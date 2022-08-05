@@ -189,11 +189,11 @@ namespace Masa.Auth.Service.Admin.Services
 
         private async Task Visit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)
         {
-            var visitCommand = new UserVisitedCommand(addUserVisitedDto.UserId, addUserVisitedDto.Url);
+            var visitCommand = new UserVisitedCommand(addUserVisitedDto);
             await eventBus.PublishAsync(visitCommand);
         }
 
-        private async Task<List<UserVisitedDto>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
+        private async Task<List<UserVisitedModel>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
         {
             var visitListQuery = new UserVisitedListQuery(userId);
             await eventBus.PublishAsync(visitListQuery);

@@ -5,10 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class AddApiPermission
 {
-    [EditorRequired]
-    [Parameter]
-    public List<AppDto> AppItems { get; set; } = new();
-
     [Parameter]
     public EventCallback<ApiPermissionDetailDto> OnSubmit { get; set; }
 
