@@ -22,6 +22,7 @@ namespace Masa.Auth.Service.Admin.Services
             MapPost(PostUserSystemData, "UserSystemData");
             MapPut(DisableAsync, "disable");
             MapPost(VerifyUserRepeatAsync);
+            MapPost(SyncUserAutoCompleteAsync);
         }
 
         //[Authorize]
@@ -231,6 +232,12 @@ namespace Masa.Auth.Service.Admin.Services
             var query = new UserSystemBusinessDataQuery(userId, systemId);
             await eventBus.PublishAsync(query);
             return query.Result;
+        }
+
+        public async Task SyncUserAutoCompleteAsync(IEventBus eventBus,  [FromBody] SyncUserAutoCompleteDto dto)
+        {
+            var command = new SyncUserAutoCompleteCommand(dto);
+            await eventBus.PublishAsync(command);
         }
     }
 }
