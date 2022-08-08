@@ -35,10 +35,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public string IdCard { get; private set; } = "";
 
-    public string Account { get; private set; } = "";
-
-    public string Password { get; private set; } = "";
-
     public string CompanyName { get; private set; } = "";
 
     public GenderTypes Gender { get; private set; }
@@ -69,15 +65,13 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string account, string password, string companyName, GenderTypes gender, string? phoneNumber, string? email, AddressValue address, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
+    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string companyName, GenderTypes gender, string? phoneNumber, string? email, AddressValue address, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
     {
         UserId = userId;
         Name = name ?? "";
         DisplayName = displayName ?? "";
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
-        Account = account ?? "";
-        Password = password ?? throw new UserFriendlyException("Password cannot be empty");
         CompanyName = companyName ?? "";
         Gender = gender;
         PhoneNumber = phoneNumber ?? "";
@@ -89,15 +83,13 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
     }
 
-    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string account, string password, string companyName, GenderTypes gender, string? phoneNumber, string? email, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
+    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string companyName, GenderTypes gender, string? phoneNumber, string? email, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
     {
         UserId = userId;
         Name = name ?? "";
         DisplayName = displayName ?? "";
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
-        Account = account ?? "";
-        UpdatePassword(password);
         CompanyName = companyName ?? "";
         Gender = gender;
         PhoneNumber = phoneNumber ?? "";
@@ -113,13 +105,13 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         var teams = staff.TeamStaffs.Select(t => t.TeamId).ToList();
         var departmentStaff = staff.DepartmentStaffs.FirstOrDefault();
         UserDetailDto user = staff.User;
-        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, staff.Password, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
+        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
     public static implicit operator StaffDto(Staff staff)
     {
         var department = staff.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? ""; ;
-        return new StaffDto(staff.Id, staff.UserId, department, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.Account, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
+        return new StaffDto(staff.Id, staff.UserId, department, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
     public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string? displayName, string? avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValueDto? address, GenderTypes gender)
@@ -138,14 +130,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         CompanyName = companyName ?? "";
         Enabled = enabled;
         Address = address ?? new();
-    }
-
-    [MemberNotNull(nameof(Password))]
-    public void UpdatePassword(string password)
-    {
-        if (password is null) throw new UserFriendlyException("Password cannot be null");
-
-        Password = MD5Utils.EncryptRepeat(password);
     }
 
     public void SetDepartmentStaff(Guid departmentId)

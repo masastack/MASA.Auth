@@ -56,14 +56,6 @@
                         <PositionSelect @bind-Value="Staff.Position" />
                     </MCol>
                 </MRow>
-                <MRow Class="mt-1">
-                    <MCol>
-                        <STextField Value="StaffDetail.Account" Readonly Label="@T("Account")" />
-                    </MCol>
-                    <MCol>
-                        <SCopyPassword Value="@StaffPassword.Password" ValueChanged="UpdateStaffPasswordAsync" />
-                    </MCol>
-                </MRow>
 
                 <Authorization Avatars=StaffDetail.ThirdPartyIdpAvatars />
                 <Record Creator="@StaffDetail.Creator" CreationTime="@StaffDetail.CreationTime" Modifier="@StaffDetail.Modifier" ModificationTime="@StaffDetail.ModificationTime" />
