@@ -12,6 +12,9 @@ public partial class User
     private DateOnly? _startTime;
     private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
 
+    [Inject]
+    public IJSRuntime? Js { get; set; }
+
     public Guid UserId
     {
         get { return _userId; }
@@ -78,7 +81,7 @@ public partial class User
 
     public bool? Filter { get; set; }
 
-    public string FilterClass => Filter is true ? "d-flex show" : (Filter is false ? "d-flex close" : "hide");
+    public string FilterClass => Filter is true ? "d-flex show showAnimation" : (Filter is false ? "d-flex close closeAnimation" : "hide");
 
     public long Total { get; set; }
 
@@ -100,6 +103,15 @@ public partial class User
     {
         PageName = "UserBlock";
         await GetUserAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await using var businessJs = await Js!.InvokeAsync<IJSObjectReference>("import", "./_content/Masa.Auth.Web.Admin.Rcl/js/business.js");
+            await businessJs.InvokeVoidAsync("onUserFileterAnimationEnd");
+        }
     }
 
     public List<DataTableHeader<UserDto>> GetHeaders() => new()

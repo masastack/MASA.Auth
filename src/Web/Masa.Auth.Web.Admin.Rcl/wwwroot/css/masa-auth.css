@@ -1006,9 +1006,12 @@ input::-webkit-input-placeholder {
 }
 
 .show {
-    animation-name: show;
-    animation-duration: 0.8s;
     margin-top: 28px;
+}
+
+.showAnimation {
+    animation-name: show;
+    animation-duration: 0.8s;   
 }
 
 @keyframes hide {
@@ -1028,6 +1031,9 @@ input::-webkit-input-placeholder {
 .close {
     height: 0;
     visibility: hidden;
+}
+
+.closeAnimation {   
     animation-name: hide;
     animation-duration: 0.8s;
 }

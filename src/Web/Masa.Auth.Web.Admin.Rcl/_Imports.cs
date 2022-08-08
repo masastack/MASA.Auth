@@ -45,3 +45,4 @@ global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.Extensions.DependencyInjection;
 global using System.Security.Claims;
 global using System.Text;
+global using Microsoft.JSInterop;
