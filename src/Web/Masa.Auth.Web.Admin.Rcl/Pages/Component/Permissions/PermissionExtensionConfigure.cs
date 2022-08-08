@@ -46,11 +46,11 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             else
             {
                 var exisValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && v.Effect is true);
-                if(exisValue is null)
+                if (exisValue is null)
                 {
                     value.Remove(rolePermissionValue);
                     ExtensionValue.Remove(rolePermissionValue);
-                }               
+                }
             }
         }
         value.AddRange(ExtensionValue.Where(value => value.Effect is false));

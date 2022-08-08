@@ -43,6 +43,6 @@ global using Microsoft.AspNetCore.Components.Forms;
 global using Microsoft.AspNetCore.Components.Rendering;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.JSInterop;
 global using System.Security.Claims;
 global using System.Text;
-global using Microsoft.JSInterop;
