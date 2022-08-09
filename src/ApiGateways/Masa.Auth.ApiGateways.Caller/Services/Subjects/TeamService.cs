@@ -7,7 +7,7 @@ public class TeamService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal TeamService(ICallerProvider callerProvider) : base(callerProvider)
+    internal TeamService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/team/";
     }

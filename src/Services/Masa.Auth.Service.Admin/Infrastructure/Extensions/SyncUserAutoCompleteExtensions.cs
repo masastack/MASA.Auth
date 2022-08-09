@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using HttpMethods = Masa.BuildingBlocks.BasicAbility.Scheduler.Enum.HttpMethods;
+using HttpMethods = Masa.BuildingBlocks.StackSdks.Scheduler.Enum.HttpMethods;
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Extensions;
 

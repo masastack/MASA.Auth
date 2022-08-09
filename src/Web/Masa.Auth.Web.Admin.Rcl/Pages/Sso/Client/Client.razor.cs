@@ -5,7 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
 
 public partial class Client
 {
-    bool _updateDialog;
     UpdateClientDialog _updateClientDialog = null!;
     GetClientPaginationDto _clientPaginationDto = new();
     PaginationDto<ClientDto> _paginationDto = new();

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using SubjectTypes = Masa.BuildingBlocks.BasicAbility.Auth.Contracts.Enum.SubjectTypes;
+using SubjectTypes = Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum.SubjectTypes;
 
 namespace Masa.Auth.Service.Admin.Services;
 
