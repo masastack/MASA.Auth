@@ -41,8 +41,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Rcl", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Sso", "src\Web\Masa.Auth.Web.Sso\Masa.Auth.Web.Sso.csproj", "{23B71507-6474-4AE0-878E-1BA7113EBE0E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "temp", "temp", "{AF751B6A-709B-4EC5-9977-CE9EC0864D6E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.ApiGateways.Caller", "src\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj", "{58F03BDE-6640-4231-A5FA-399BF2EF3773}"
 EndProject
 Global
