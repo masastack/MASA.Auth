@@ -3,11 +3,7 @@
 
 <MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
     <div style="height:60px;"></div>
-    <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
-        <MAvatar Size=80 Class="mb-12">
-            <MImage Src="/img/avatar/1.svg">
-            </MImage>
-        </MAvatar>
+    <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;"> 
         <MTextField @bind-Value="_inputModel.UserName" Label="@T("UserName")" Placeholder="@T("UserNamePlaceHolder")" Outlined Dense
                     HideDetails="@("auto")">
         </MTextField>
@@ -32,8 +28,14 @@
             </MCol>
         </MRow>
     </MForm>
-    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=LoginHandler Height=46 Width=340 Color="primary">
-        @T("Login")
+    <MForm EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
+        
+    </MForm>
+    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=PasswordLogin Height=46 Width=340 Color="primary">
+        @T("PasswordLogin")
+    </MButton>
+    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=PhoneLogin Height=46 Width=340 Color="primary">
+        @T("PhoneLogin")
     </MButton>
     <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
         @T("Cancel")

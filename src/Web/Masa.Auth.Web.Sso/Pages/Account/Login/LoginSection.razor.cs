@@ -11,7 +11,7 @@ public partial class LoginSection
     [CascadingParameter(Name = "HttpContext")]
     public HttpContext? HttpContext { get; set; }
 
-    private async Task LoginHandler()
+    private async Task PasswordLogin()
     {
         //validate
         if (_loginForm != null && await _loginForm.ValidateAsync())
@@ -41,6 +41,11 @@ public partial class LoginSection
                 }
             }
         }
+    }
+
+    private async Task PhoneLogin()
+    {
+
     }
 
     private async Task Cancel()
@@ -78,7 +83,8 @@ public partial class LoginSection
     {
         if (args.Key == "Enter")
         {
-            await LoginHandler();
+            //todo phone
+            await PasswordLogin();
         }
     }
 }
