@@ -9,7 +9,7 @@ public class BlazorServerTokenCache
 
     public void Add(string subjectId, BlazorServerTokenData data)
     {
-        System.Diagnostics.Debug.WriteLine($"Caching sid: {subjectId}");
+        Debug.WriteLine($"Caching sid: {subjectId}");
         _memoryCache.Set(subjectId, data, new MemoryCacheEntryOptions()
         {
             SlidingExpiration = TimeSpan.FromDays(5)
@@ -24,7 +24,7 @@ public class BlazorServerTokenCache
 
     public void Remove(string subjectId)
     {
-        System.Diagnostics.Debug.WriteLine($"Removing sid: {subjectId}");
+        Debug.WriteLine($"Removing sid: {subjectId}");
         _memoryCache.Remove(subjectId);
     }
 }

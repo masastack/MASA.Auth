@@ -14,7 +14,7 @@ public class EnvironmentMiddleware : IMiddleware
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        context.Items.Add(IsolationConsts.ENVIRONMENT_KEY, _multiEnvironmentUserContext.Environment);
+        context.Items.Add(IsolationConsts.ENVIRONMENT, _multiEnvironmentUserContext.Environment);
         return next(context);
     }
 }

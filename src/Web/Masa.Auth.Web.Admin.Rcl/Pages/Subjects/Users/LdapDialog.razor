@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog Value=Show Title="@T("Configure Domain Account")" ValueChanged="ShowChanged">
+<SSheetDialog @bind-Value=_visible Title="@T("Configure Domain Account")">
     <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
         <MCardText>
             <MForm Model=_ldapDetailDto EnableValidation @ref="_form">
@@ -39,18 +39,14 @@
 @code {
     MForm _form = null!;
     LdapDetailDto _ldapDetailDto = new();
+    bool _visible;
+
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
-
-    [Parameter]
-    public bool Show { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> ShowChanged { get; set; }
 
     public async Task OpenAsync()
     {
         _ldapDetailDto = await ThirdPartyIdpService.GetLdapDetailAsync();
-        Show = true;
+        _visible = true;
         StateHasChanged();
     }
 

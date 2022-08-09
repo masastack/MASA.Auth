@@ -6,7 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 public partial class Team
 {
     string _search = string.Empty;
-    bool _showEdit;
     TeamDetailDto _editTeamDto = new();
     List<TeamDto> _teams = new();
     AddSheet _addSheet = null!;

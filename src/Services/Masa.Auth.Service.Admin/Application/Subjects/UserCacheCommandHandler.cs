@@ -60,17 +60,23 @@ public class UserCacheCommandHandler
     [EventHandler]
     public async Task UserVisitedAsync(UserVisitedCommand userVisitedCommand)
     {
+        var dto = userVisitedCommand.AddUserVisitedDto;
         //todo zset
-        var key = CacheKey.UserVisitKey(userVisitedCommand.UserId);
-        var visited = await _memoryCacheClient.GetOrSetAsync<List<string>>(key, () =>
+        var key = CacheKey.UserVisitKey(dto.UserId);
+        var visited = await _memoryCacheClient.GetOrSetAsync<List<CacheUserVisited>>(key, () =>
         {
-            return new List<string>();
+            return new List<CacheUserVisited>();
         });
-        visited?.Remove(userVisitedCommand.Url);
-        visited?.Insert(0, userVisitedCommand.Url);
-        if (visited?.Count > 5)
+        var item = new CacheUserVisited
         {
-            visited = visited.GetRange(0, 5);
+            AppId = dto.AppId,
+            Url = dto.Url.Trim('/').ToLower()
+        };
+        visited?.RemoveAll(v => v.AppId == item.AppId && v.Url == item.Url);
+        visited?.Insert(0, item);
+        if (visited?.Count > 10)
+        {
+            visited = visited.GetRange(0, 10);
         }
         await _memoryCacheClient.SetAsync(key, visited);
     }
