@@ -1,13 +1,15 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Sso;
 
 public class IdentityResourceService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal IdentityResourceService(ICallerProvider callerProvider) : base(callerProvider)
+    internal IdentityResourceService(ICaller callerProvider) : base(callerProvider)
     {
         BaseUrl = "api/sso/identityResource";
     }

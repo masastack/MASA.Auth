@@ -11,6 +11,7 @@ public partial class AddMenuPermission
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     MForm _form = default!;
     bool _visible { get; set; }
+    string _showUrlPrefix = "";
 
     List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
 
@@ -37,11 +38,12 @@ public partial class AddMenuPermission
             _visible = false;
         }
     }
-    public void Show(string appId, Guid parentId)
+    public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
         _menuPermissionDetailDto = new();
-        _menuPermissionDetailDto.AppId = appId;
-        _menuPermissionDetailDto.ParentId = parentId;
+        _menuPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
+        _menuPermissionDetailDto.ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
+        _showUrlPrefix = appPermissionsViewModel.AppUrl;
         _visible = true;
     }
 }

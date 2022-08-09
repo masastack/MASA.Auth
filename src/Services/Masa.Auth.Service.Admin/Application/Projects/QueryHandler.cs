@@ -10,24 +10,28 @@ public class QueryHandler
     readonly IAppNavigationTagRepository _appNavigationTagRepository;
     readonly IPermissionRepository _permissionRepository;
     readonly UserDomainService _userDomainService;
+    readonly IEnvironmentContext _environmentContext;
 
-    public QueryHandler(IPmClient pmClient,
-                        IAppNavigationTagRepository appNavigationTagRepository,
-                        IPermissionRepository permissionRepository,
-                        UserDomainService userDomainService,
-                        IDccClient dccClient)
+    public QueryHandler(
+        IPmClient pmClient,
+        IAppNavigationTagRepository appNavigationTagRepository,
+        IPermissionRepository permissionRepository,
+        UserDomainService userDomainService,
+        IDccClient dccClient,
+        IEnvironmentContext environmentContext)
     {
         _pmClient = pmClient;
         _permissionRepository = permissionRepository;
         _appNavigationTagRepository = appNavigationTagRepository;
         _userDomainService = userDomainService;
         _dccClient = dccClient;
+        _environmentContext = environmentContext;
     }
 
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(query.Environment, AppTypes.UI, AppTypes.Service);
+        query.Result = await GetProjectDtoListAsync(_environmentContext.CurrentEnvironment, AppTypes.UI, AppTypes.Service);
 
         if (query.HasMenu)
         {
@@ -48,7 +52,7 @@ public class QueryHandler
     [EventHandler]
     public async Task NavigationListQueryAsync(NavigationListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(query.Environment, AppTypes.UI);
+        query.Result = await GetProjectDtoListAsync(_environmentContext.CurrentEnvironment, AppTypes.UI);
 
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
         var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu

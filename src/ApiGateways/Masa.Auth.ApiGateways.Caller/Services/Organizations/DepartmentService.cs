@@ -1,13 +1,15 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Service.Caller;
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Organizations;
 
 public class DepartmentService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal DepartmentService(ICallerProvider callerProvider) : base(callerProvider)
+    internal DepartmentService(ICaller callerProvider) : base(callerProvider)
     {
         BaseUrl = "api/department";
     }

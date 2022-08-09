@@ -7,7 +7,7 @@ public class UserClaimService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal UserClaimService(ICallerProvider callerProvider) : base(callerProvider)
+    internal UserClaimService(ICaller callerProvider) : base(callerProvider)
     {
         BaseUrl = "api/sso/userClaim";
     }

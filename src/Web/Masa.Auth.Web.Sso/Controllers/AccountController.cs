@@ -1,10 +1,13 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Web.Sso.Infrastructure.Environment;
+
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
 [Authorize]
+[SecurityHeaders]
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
@@ -30,6 +33,11 @@ public class AccountController : Controller
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
         {
+            var ssoEnvironmentProvider = HttpContext.RequestServices.GetService<IEnvironmentProvider>() as ISsoEnvironmentProvider;
+            if (ssoEnvironmentProvider != null)
+            {
+                ssoEnvironmentProvider.SetEnvironment(inputModel.Environment);
+            }
             var success = await _authClient.UserService
                                            .ValidateCredentialsByAccountAsync(userName, inputModel.Password, inputModel.LdapLogin);
             if (success)
@@ -52,7 +60,7 @@ public class AccountController : Controller
                 };
                 isuser.AdditionalClaims.Add(new Claim("userName", userName));
                 isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
-                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.Roles)));
+                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
                 //us duende sign in
                 await HttpContext.SignInAsync(isuser, props);
 

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Isolation.Environment;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -15,6 +17,7 @@ public class QueryHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
     readonly IPmClient _pmClient;
+    readonly IEnvironmentContext _environmentContext;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -27,7 +30,8 @@ public class QueryHandler
         IAutoCompleteClient autoCompleteClient,
         IMemoryCacheClient memoryCacheClient,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
-        IPmClient pmClient)
+        IPmClient pmClient,
+        IEnvironmentContext environmentContext)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -39,6 +43,7 @@ public class QueryHandler
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
         _pmClient = pmClient;
+        _environmentContext = environmentContext;
     }
 
     #region User
@@ -89,7 +94,7 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Account == query.Account);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
@@ -100,7 +105,7 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Email == query.Email);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
@@ -111,7 +116,7 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");

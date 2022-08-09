@@ -69,6 +69,7 @@ public partial class Index
             AppId = a.Identity,
             AppTag = a.Tag,
             Id = Guid.NewGuid(),
+            AppUrl = a.Url,
             Name = a.Name
         }).ToList();
         _menuPermissionActive = _menuPermissions.Select(m => m.Id).Take(1).ToList();
@@ -78,20 +79,33 @@ public partial class Index
             AppId = a.Identity,
             AppTag = a.Tag,
             Id = Guid.NewGuid(),
+            AppUrl = a.Url,
             Name = a.Name
         }).ToList();
         _apiPermissionActive = _apiPermissions.Select(m => m.Id).Take(1).ToList();
         var applicationPermissions = await PermissionService.GetApplicationPermissionsAsync(_curProjectId);
 
+        var config = new TypeAdapterConfig();
+        config.NewConfig<AppPermissionDto, AppPermissionsViewModel>().Map(dest => dest.Id, src => src.PermissonId)
+            .Map(dest => dest.Name, src => src.PermissionName)
+            .Map(dest => dest.IsPermission, src => true)
+            .Map(dest => dest.AppUrl, src => MapContext.Current == null ? "" : MapContext.Current.Parameters["appUrl"]);
+
         _menuPermissions.ForEach(mp =>
         {
             var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Menu && p.AppId == mp.AppId);
-            mp.Children.AddRange(permissions.Adapt<List<AppPermissionsViewModel>>());
+            mp.Children.AddRange(permissions
+                .BuildAdapter(config)
+                .AddParameters("appUrl", mp.AppUrl)
+                .AdaptToType<List<AppPermissionsViewModel>>());
         });
         _apiPermissions.ForEach(mp =>
         {
             var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Api && p.AppId == mp.AppId);
-            mp.Children.AddRange(permissions.Adapt<List<AppPermissionsViewModel>>());
+            mp.Children.AddRange(permissions
+                .BuildAdapter(config)
+                .AddParameters("appUrl", mp.AppUrl)
+                .AdaptToType<List<AppPermissionsViewModel>>());
         });
     }
 
@@ -147,16 +161,6 @@ public partial class Index
         {
             _showApiInfo = false;
         }
-    }
-
-    private void AddMenuPermission(AppPermissionsViewModel appPermissionsViewModel)
-    {
-        _addMenuPermission.Show(appPermissionsViewModel.AppId, appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty);
-    }
-
-    private void AddApiPermission()
-    {
-        _addApiPermission.Show();
     }
 
     private async Task AddMenuPermissionAsync(MenuPermissionDetailDto dto)

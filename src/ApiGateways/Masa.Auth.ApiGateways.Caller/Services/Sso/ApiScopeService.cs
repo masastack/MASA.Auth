@@ -1,13 +1,15 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Service.Caller;
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Sso;
 
 public class ApiScopeService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal ApiScopeService(ICallerProvider callerProvider) : base(callerProvider)
+    internal ApiScopeService(ICaller callerProvider) : base(callerProvider)
     {
         BaseUrl = "api/sso/apiScope";
     }

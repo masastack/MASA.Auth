@@ -20,9 +20,7 @@ public class ProjectService : ServiceBase
         return query.Result;
     }
 
-    private async Task<List<ProjectDto>> GetNavigationListAsync(IEventBus eventBus,
-        [FromQuery] Guid userId,
-        [FromQuery] string environment)
+    private async Task<List<ProjectDto>> GetNavigationListAsync(IEventBus eventBus, [FromQuery] Guid userId)
     {
         var query = new NavigationListQuery(userId);
         await eventBus.PublishAsync(query);

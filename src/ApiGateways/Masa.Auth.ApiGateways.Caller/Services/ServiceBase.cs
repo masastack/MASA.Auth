@@ -1,15 +1,17 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Service.Caller;
+
 namespace Masa.Auth.ApiGateways.Caller.Services;
 
 public abstract class ServiceBase
 {
-    protected ICallerProvider CallerProvider { get; init; }
+    protected ICaller CallerProvider { get; init; }
 
     protected abstract string BaseUrl { get; set; }
 
-    protected ServiceBase(ICallerProvider callerProvider)
+    protected ServiceBase(ICaller callerProvider)
     {
         CallerProvider = callerProvider;
     }
