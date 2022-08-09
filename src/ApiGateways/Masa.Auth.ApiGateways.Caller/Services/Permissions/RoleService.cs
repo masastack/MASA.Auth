@@ -7,7 +7,7 @@ public class RoleService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal RoleService(ICaller callerProvider) : base(callerProvider)
+    internal RoleService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/role/";
     }

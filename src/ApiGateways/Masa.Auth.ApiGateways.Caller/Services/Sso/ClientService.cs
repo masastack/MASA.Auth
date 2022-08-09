@@ -7,7 +7,7 @@ public class ClientService : ServiceBase
 {
     protected override string BaseUrl { get; set; } = "";
 
-    public ClientService(ICaller callerProvider) : base(callerProvider)
+    public ClientService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/sso/client";
     }

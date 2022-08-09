@@ -7,7 +7,7 @@ public class ThirdPartyIdpService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal ThirdPartyIdpService(ICaller callerProvider) : base(callerProvider)
+    internal ThirdPartyIdpService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/thirdPartyIdp/";
     }

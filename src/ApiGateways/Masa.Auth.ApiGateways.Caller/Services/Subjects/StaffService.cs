@@ -7,7 +7,7 @@ public class StaffService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal StaffService(ICaller callerProvider) : base(callerProvider)
+    internal StaffService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/staff/";
     }

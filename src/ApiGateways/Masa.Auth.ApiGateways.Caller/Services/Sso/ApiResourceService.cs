@@ -7,7 +7,7 @@ public class ApiResourceService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal ApiResourceService(ICaller callerProvider) : base(callerProvider)
+    internal ApiResourceService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/sso/apiResource";
     }

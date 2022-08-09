@@ -7,7 +7,7 @@ public class ApiScopeService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal ApiScopeService(ICaller callerProvider) : base(callerProvider)
+    internal ApiScopeService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/sso/apiScope";
     }

@@ -7,7 +7,7 @@ public class DepartmentService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal DepartmentService(ICaller callerProvider) : base(callerProvider)
+    internal DepartmentService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/department";
     }
