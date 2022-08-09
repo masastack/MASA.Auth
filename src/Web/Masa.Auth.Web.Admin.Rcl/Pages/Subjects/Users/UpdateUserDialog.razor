@@ -65,7 +65,7 @@
                     <EnableSwitch @bind-Value="User.Enabled" />
                     <MSpacer></MSpacer>
                     <MButton Class="mr-6 btn" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete User")</MButton>
-                    <MButton Color="primary" Class="small-button" OnClick="async() => await UpdateUserAsync(context)">@T("Save")</MButton>
+                    <SButton Color="primary" Medium OnClick="async() => await UpdateUserAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

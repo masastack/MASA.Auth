@@ -14,6 +14,7 @@
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
 		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="0.6.0-preview.3" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.6.0-preview.3" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.6.0-preview.3" />

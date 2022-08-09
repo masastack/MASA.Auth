@@ -19,6 +19,7 @@ public class UserService : RestServiceBase
         MapPost(PostUserSystemData, "UserSystemData");
         MapPut(DisableAsync, "disable");
         MapPost(VerifyUserRepeatAsync);
+        MapPost(SyncUserAutoCompleteAsync);
     }
 
     //[Authorize]
@@ -219,10 +220,16 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
-    {
-        var query = new UserSystemBusinessDataQuery(userId, systemId);
-        await eventBus.PublishAsync(query);
-        return query.Result;
-    }
+        public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+        {
+            var query = new UserSystemBusinessDataQuery(userId, systemId);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        public async Task SyncUserAutoCompleteAsync(IEventBus eventBus,  [FromBody] SyncUserAutoCompleteDto dto)
+        {
+            var command = new SyncUserAutoCompleteCommand(dto);
+            await eventBus.PublishAsync(command);
+        }
 }

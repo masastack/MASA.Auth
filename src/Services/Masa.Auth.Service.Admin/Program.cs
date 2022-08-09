@@ -77,10 +77,11 @@ var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefau
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
     .GetValue<string>("AppSettings:PmClient:Url"));
+builder.Services.AddSchedulerClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+    .GetValue<string>("AppSettings:SchedulerClient:Url"));
+//await builder.Services.AddSyncUserAutoCompleteJobAsync();
 builder.Services.AddLadpContext();
-
 builder.Services.AddElasticsearchAutoComplete();
-
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();

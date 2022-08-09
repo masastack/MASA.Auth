@@ -6,6 +6,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 public class CommandHandler
 {
     readonly IUserRepository _userRepository;
+    readonly IAutoCompleteClient _autoCompleteClient;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly AuthDbContext _authDbContext;
@@ -23,6 +24,7 @@ public class CommandHandler
 
     public CommandHandler(
         IUserRepository userRepository,
+        IAutoCompleteClient autoCompleteClient,
         IStaffRepository staffRepository,
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         AuthDbContext authDbContext,
@@ -39,6 +41,7 @@ public class CommandHandler
         IMasaConfiguration masaConfiguration)
     {
         _userRepository = userRepository;
+        _autoCompleteClient = autoCompleteClient;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _authDbContext = authDbContext;
@@ -301,6 +304,21 @@ public class CommandHandler
         command.Result = true;
     }
 
+    [EventHandler]
+    public async Task SyncUserAutoCompleteAsync(SyncUserAutoCompleteCommand command)
+    {
+        var users = await _userRepository.GetAllAsync();
+        var syncCount = 0;
+        while (syncCount < users.Count)
+        {
+            var syncUsers = users.Skip(syncCount)
+                                .Take(command.Dto.OnceExecuteCount)
+                                .Adapt<List<UserSelectDto>>();
+            await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(syncUsers);
+            syncCount += command.Dto.OnceExecuteCount;
+        }
+    }
+
     private async Task<User> CheckUserExistAsync(Guid userId)
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
@@ -359,18 +377,6 @@ public class CommandHandler
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         await _staffDomainService.UpdateStaffAsync(command.Staff);
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateStaffPasswordAsync(UpdateStaffPasswordCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(u => u.Id == staffDto.Id);
-        if (staff is null)
-            throw new UserFriendlyException("The current user does not exist");
-
-        staff.UpdatePassword(staffDto.Password);
-        await _staffRepository.UpdateAsync(staff);
     }
 
     [EventHandler(1)]

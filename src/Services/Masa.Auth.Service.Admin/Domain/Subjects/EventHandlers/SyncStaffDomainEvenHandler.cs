@@ -108,7 +108,7 @@ public class SyncStaffDomainEvenHandler
         {
             var user = allUsers.First(u => u.Account == staff.Account);
             var position = allPositions.FirstOrDefault(p => p.Name == staff.Position);
-            var oldStaff = allStaffs.FirstOrDefault(s => s.Account == staff.Account);
+            var oldStaff = allStaffs.FirstOrDefault(s => s.JobNumber == staff.JobNumber);
             var existStaffs = allStaffs.Where(s =>
                 string.IsNullOrEmpty(s.JobNumber) is false && s.JobNumber == staff.JobNumber ||
                 string.IsNullOrEmpty(s.PhoneNumber) is false && s.PhoneNumber == staff.PhoneNumber ||
@@ -128,7 +128,7 @@ public class SyncStaffDomainEvenHandler
                 {
                     staffRange.Add(new Staff(
                         user.Id, staff.Name, staff.DisplayName ?? "", user.Avatar,
-                        staff.IdCard ?? "", staff.Account, staff.Password, user.CompanyName,
+                        staff.IdCard ?? "", user.CompanyName,
                         staff.Gender, staff.PhoneNumber, staff.Email, user.Address,
                         staff.JobNumber, position?.Id, staff.StaffType, true));
                 }
@@ -138,7 +138,6 @@ public class SyncStaffDomainEvenHandler
                         position?.Id, staff.StaffType, oldStaff.Enabled, staff.Name,
                         staff.DisplayName, oldStaff.Avatar, staff.IdCard, oldStaff.CompanyName,
                         staff.PhoneNumber, staff.Email, oldStaff.Address, staff.Gender);
-                    oldStaff.UpdatePassword(staff.Password);
                     staffRange.Add(oldStaff);
                 }
             }
