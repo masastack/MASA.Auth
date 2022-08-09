@@ -43,6 +43,12 @@ builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConf
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 
+builder.Services.AddAuthentication()
+                .AddWeixin("Weixin", option => 
+                {
+
+                });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
