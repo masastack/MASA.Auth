@@ -7,5 +7,7 @@ public class AddUserVisitedDto
 {
     public Guid UserId { get; set; }
 
+    public string AppId { get; set; } = string.Empty;
+
     public string Url { get; set; } = string.Empty;
 }

@@ -53,23 +53,23 @@ public partial class AddUserDialog
         var success = context.Validate();
         if (success)
         {
-            var isRepeat = await UserService.VerifyUserRepeatAsync(new()
+            var verifySuccess = await UserService.VerifyUserRepeatAsync(new()
             {
                 Account = User.Account,
                 Email = User.Email,
                 PhoneNumber = User.PhoneNumber,
                 IdCard = User.IdCard,
             });
-            if(isRepeat is false)
+            if (verifySuccess)
             {
                 Step = 3;
-            }          
+            }
         }
     }
 
     private void PermissionsChanged(Dictionary<Guid, bool> permissiionMap)
     {
-        User.Permissions = permissiionMap.Select(kv => new UserPermissionDto(kv.Key, kv.Value)).ToList();
+        User.Permissions = permissiionMap.Select(kv => new SubjectPermissionRelationDto(kv.Key, kv.Value)).ToList();
     }
 
     public async Task AddUserAsync(EditContext context)

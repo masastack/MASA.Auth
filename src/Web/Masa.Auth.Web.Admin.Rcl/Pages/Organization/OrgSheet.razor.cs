@@ -6,16 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 public partial class OrgSheet
 {
     [Parameter]
-    public bool Show { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> ShowChanged { get; set; }
-
-    [EditorRequired]
-    [Parameter]
-    public UpsertDepartmentDto Dto { get; set; } = new();
-
-    [Parameter]
     public EventCallback<UpsertDepartmentDto> OnSubmit { get; set; }
 
     [Parameter]
@@ -25,24 +15,52 @@ public partial class OrgSheet
     public List<DepartmentDto> Departments { get; set; } = new();
 
     MForm _form = default!;
+    bool _visible;
+    UpsertDepartmentDto _dto = new();
 
+    DepartmentService DepartmentService => AuthCaller.DepartmentService;
 
-    public async Task OnSubmitHandler()
+    private async Task OnSubmitHandler()
     {
         if (await _form.ValidateAsync())
         {
             if (OnSubmit.HasDelegate)
             {
-                await OnSubmit.InvokeAsync(Dto);
+                await OnSubmit.InvokeAsync(_dto);
             }
+            _visible = false;
         }
     }
 
-    public async Task OnDeleteHandler()
+    private async Task OnDeleteHandler()
     {
         if (OnDelete.HasDelegate)
         {
-            await OnDelete.InvokeAsync(Dto.Id);
+            await OnDelete.InvokeAsync(_dto.Id);
         }
+        _visible = false;
+    }
+
+    public void Add(Guid parentId)
+    {
+        _dto = new();
+        _dto.ParentId = parentId;
+        _visible = true;
+    }
+
+    public async Task Update(Guid id)
+    {
+        var department = await DepartmentService.GetAsync(id);
+        if (department == null)
+        {
+            throw new UserFriendlyException("department id not found");
+        }
+        _dto = new UpsertDepartmentDto();
+        _dto.Id = department.Id;
+        _dto.Name = department.Name;
+        _dto.Description = department.Description;
+        _dto.Enabled = department.Enabled;
+        _dto.ParentId = department.ParentId;
+        _visible = true;
     }
 }

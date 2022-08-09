@@ -42,11 +42,11 @@
                                                     <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
                                                 </MListItem>
                                             }
-                                            <MListItem OnClick="()=> Update(context.Item.Id)">
+                                            <MListItem OnClick="()=> _orgSheet.Update(context.Item.Id)">
                                                 <MIcon Small>@IconConstants.Update</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
                                             </MListItem>
-                                            <MListItem OnClick="()=>Add(context.Item.Id)">
+                                            <MListItem OnClick="()=>_orgSheet.Add(context.Item.Id)">
                                                 <MIcon Small>@IconConstants.Add</MIcon>
                                                 <MListItemTitle Class="ml-2"> @T("AddChild") </MListItemTitle>
                                             </MListItem>
@@ -118,7 +118,7 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <SDataTable
-                                FixedHeader
+                                Dense
                                 Height="@("calc(100vh - 420px)")"
                                 Headers="GetHeaders()" 
                                 Items="@_paginationStaffs.Items" 
@@ -163,7 +163,7 @@
     </MCol>
 </MRow>
 
-<OrgSheet @bind-Show=_showAdd Dto="@_upsertDepartmentDto" OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
+<OrgSheet @ref=_orgSheet OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
 <CopyOrgSheet @ref="_copyOrgSheet" Departments=_departments OnSubmit="SubmitAsync" />
 <Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync" />
 <Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.UpdateStaffDialog @bind-Visible=_updateStaff StaffId=_currentStaffId OnSubmitSuccess="LoadStaffsAsync" />

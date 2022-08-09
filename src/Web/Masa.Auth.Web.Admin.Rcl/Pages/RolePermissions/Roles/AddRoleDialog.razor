@@ -17,9 +17,9 @@
             </HeaderContent>
             <AutoHeightContent>
                 <div class="global-nav" style="display: flex;height: auto">
-                    <PermissionsConfigure 
-                                Roles=Role.ChildrenRoles 
-                                @bind-Value=Role.Permissions
+                    <PermissionExtensionConfigure 
+                                Roles=Role.ChildrenRoles
+                                @bind-ExtensionValue=Role.Permissions
                                 @bind-Preview=Preview
                                 Style="max-height:calc(100vh - 555px);" />
                 </div>

@@ -19,10 +19,10 @@ builder.Services.AddMasaBlazor(builder =>
 }).AddI18nForServer("wwwroot/i18n");
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-
 builder.Services.AddHealthChecks();
 
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
+builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthClient:Url"));
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
 

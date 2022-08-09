@@ -6,7 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 public partial class Team
 {
     string _search = string.Empty;
-    bool _showEdit;
     TeamDetailDto _editTeamDto = new();
     List<TeamDto> _teams = new();
     AddSheet _addSheet = null!;
@@ -40,7 +39,7 @@ public partial class Team
     private async Task EditTeamHandler(Guid id)
     {
         _editTeamDto = await TeamService.GetAsync(id);
-        await _updateSheet.Show(_editTeamDto);
+        _updateSheet.Show(_editTeamDto);
     }
 
     private async Task OnCreate(TeamDetailDto dto)

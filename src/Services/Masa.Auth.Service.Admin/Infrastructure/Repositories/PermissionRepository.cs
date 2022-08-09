@@ -9,6 +9,11 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
     {
     }
 
+    public bool Any(Expression<Func<Permission, bool>> predicate)
+    {
+        return Context.Set<Permission>().Where(d => !d.IsDeleted).Any(predicate);
+    }
+
     public async Task<Permission> GetByIdAsync(Guid id)
     {
         return await Context.Set<Permission>()

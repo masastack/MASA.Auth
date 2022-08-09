@@ -156,14 +156,14 @@ public class QueryHandler
                                           .Include(r => r.Permissions)
                                           .Select(r => new { r.Permissions, r.ChildrenRoles })
                                           .ToListAsync();
-            permissions.AddRange(roles.SelectMany(r => r.Permissions.Select(p => p.PermissionId)));
+            permissions.AddRange(roles.SelectMany(r => r.Permissions.Where(p => p.Effect == true).Select(p => p.PermissionId)));
             var childRoles = roles.SelectMany(r => r.ChildrenRoles.Select(cr => cr.RoleId)).ToList();
             if (childRoles.Count > 0)
             {
                 permissions.AddRange(await GetPermissions(childRoles));
             }
 
-            return permissions;
+            return permissions.Distinct().ToList();
         }
     }
 

@@ -19,7 +19,6 @@
         </HeaderContent>
         <AutoHeightContent>
             <SDataTable
-                FixedHeader
                 Height="@("calc(100vh - 285px)")"
                 Headers="GetHeaders()" 
                 Items="_paginationDto.Items" 
@@ -66,4 +65,4 @@
 </DefaultCard>
 
 <AddClientDialog @ref="_addClientDialog" OnSuccessed="LoadData" />
-<UpdateClientDialog @ref="_updateClientDialog" @bind-Visible=_updateDialog OnSuccessed="LoadData" OnDeleted="LoadData" />
+<UpdateClientDialog @ref="_updateClientDialog" OnSuccessed="LoadData" OnDeleted="LoadData" />

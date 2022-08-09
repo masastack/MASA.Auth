@@ -3,4 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UserVisitedCommand(Guid UserId, string Url) : Command;
+public record UserVisitedCommand(AddUserVisitedDto AddUserVisitedDto) : Command;

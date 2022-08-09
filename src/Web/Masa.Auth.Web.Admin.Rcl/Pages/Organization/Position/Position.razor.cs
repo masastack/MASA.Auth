@@ -42,6 +42,8 @@ public partial class Position
 
     public long Total { get; set; }
 
+    public int DataIndex { get; set; } = 1;
+
     public List<PositionDto> Positions { get; set; } = new();
 
     public Guid CurrentPositionId { get; set; }
@@ -60,6 +62,7 @@ public partial class Position
 
     public List<DataTableHeader<PositionDto>> GetHeaders() => new()
     {
+        new() { Text = T("Index"), Value = "Index", Sortable = false , Width="105px" },
         new() { Text = T("Name"), Value = nameof(PositionDto.Name), Sortable = false },
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
     };

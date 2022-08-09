@@ -57,7 +57,7 @@ public class AddStaffDomainEventHandler
     public async Task AddStaffAsync(AddStaffDomainEvent staffEvent)
     {
         var staffDto = staffEvent.Staff;
-        Expression<Func<Staff, bool>> condition = staff => staff.Account == staffDto.Account || staff.JobNumber == staffDto.JobNumber;
+        Expression<Func<Staff, bool>> condition = staff => staff.JobNumber == staffDto.JobNumber;
         if (!string.IsNullOrEmpty(staffDto.PhoneNumber))
             condition = condition.Or(staff => staff.PhoneNumber == staffDto.PhoneNumber);
         if (!string.IsNullOrEmpty(staffDto.Email))
@@ -70,8 +70,6 @@ public class AddStaffDomainEventHandler
         {
             if (string.IsNullOrEmpty(staffDto.PhoneNumber) is false && staffDto.PhoneNumber == staff.PhoneNumber)
                 throw new UserFriendlyException($"Staff with phone number {staffDto.PhoneNumber} already exists");
-            if (string.IsNullOrEmpty(staffDto.Account) is false && staffDto.Account == staff.Account)
-                throw new UserFriendlyException($"Staff with account {staffDto.Account} already exists");
             if (string.IsNullOrEmpty(staffDto.Email) is false && staffDto.Email == staff.Email)
                 throw new UserFriendlyException($"Staff with email {staffDto.Email} already exists");
             if (string.IsNullOrEmpty(staffDto.IdCard) is false && staffDto.IdCard == staff.IdCard)
@@ -82,7 +80,7 @@ public class AddStaffDomainEventHandler
 
         staff = new Staff(
             staffDto.UserId, staffDto.Name, staffDto.DisplayName, staffDto.Avatar,
-            staffDto.IdCard, staffDto.Account, staffDto.Password, staffDto.CompanyName,
+            staffDto.IdCard, staffDto.CompanyName,
             staffDto.Gender, staffDto.PhoneNumber, staffDto.Email, staffDto.Address,
             staffDto.JobNumber, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
         staff.SetDepartmentStaff(staffDto.DepartmentId);

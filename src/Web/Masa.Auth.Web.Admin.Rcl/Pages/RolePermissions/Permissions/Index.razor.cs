@@ -12,18 +12,16 @@ public partial class Index
     List<Guid> _menuPermissionActive = new List<Guid>();
     List<Guid> _apiPermissionActive = new List<Guid>();
     string _curProjectId = "";
-    bool _addApiPermission, _addMenuPermission;
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
-    List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
-    List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
     List<ProjectDto> _projectItems = new();
     List<AppDto> _curAppItems = new();
     List<SelectItemDto<Guid>> _childApiItems = new();
-    Guid _parentMenuId;
     MForm _formMenu = default!, _formApi = default!;
     List<string> _appTags = new();
     AppTagDetailDto _appTagDto = new();
+    AddMenuPermission _addMenuPermission = null!;
+    AddApiPermission _addApiPermission = null!;
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
@@ -34,9 +32,6 @@ public partial class Index
         if (firstRender)
         {
             _tab = T("Menu Permission");
-            var permissionTypes = await PermissionService.GetTypesAsync();
-            _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
-            _apiPermissionTypes = permissionTypes.Where(a => a.Value == PermissionTypes.Api).ToList();
 
             _projectItems = await ProjectService.GetListAsync();
             if (!_projectItems.Any())
@@ -74,6 +69,7 @@ public partial class Index
             AppId = a.Identity,
             AppTag = a.Tag,
             Id = Guid.NewGuid(),
+            AppUrl = a.Url,
             Name = a.Name
         }).ToList();
         _menuPermissionActive = _menuPermissions.Select(m => m.Id).Take(1).ToList();
@@ -83,20 +79,33 @@ public partial class Index
             AppId = a.Identity,
             AppTag = a.Tag,
             Id = Guid.NewGuid(),
+            AppUrl = a.Url,
             Name = a.Name
         }).ToList();
         _apiPermissionActive = _apiPermissions.Select(m => m.Id).Take(1).ToList();
         var applicationPermissions = await PermissionService.GetApplicationPermissionsAsync(_curProjectId);
 
+        var config = new TypeAdapterConfig();
+        config.NewConfig<AppPermissionDto, AppPermissionsViewModel>().Map(dest => dest.Id, src => src.PermissonId)
+            .Map(dest => dest.Name, src => src.PermissionName)
+            .Map(dest => dest.IsPermission, src => true)
+            .Map(dest => dest.AppUrl, src => MapContext.Current == null ? "" : MapContext.Current.Parameters["appUrl"]);
+
         _menuPermissions.ForEach(mp =>
         {
             var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Menu && p.AppId == mp.AppId);
-            mp.Children.AddRange(permissions.Adapt<List<AppPermissionsViewModel>>());
+            mp.Children.AddRange(permissions
+                .BuildAdapter(config)
+                .AddParameters("appUrl", mp.AppUrl)
+                .AdaptToType<List<AppPermissionsViewModel>>());
         });
         _apiPermissions.ForEach(mp =>
         {
             var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Api && p.AppId == mp.AppId);
-            mp.Children.AddRange(permissions.Adapt<List<AppPermissionsViewModel>>());
+            mp.Children.AddRange(permissions
+                .BuildAdapter(config)
+                .AddParameters("appUrl", mp.AppUrl)
+                .AdaptToType<List<AppPermissionsViewModel>>());
         });
     }
 
@@ -154,17 +163,6 @@ public partial class Index
         }
     }
 
-    private void AddMenuPermission(AppPermissionsViewModel appPermissionsViewModel)
-    {
-        _addMenuPermission = true;
-        _parentMenuId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
-    }
-
-    private void AddApiPermission()
-    {
-        _addApiPermission = true;
-    }
-
     private async Task AddMenuPermissionAsync(MenuPermissionDetailDto dto)
     {
         if (string.IsNullOrWhiteSpace(_curProjectId))
@@ -178,7 +176,6 @@ public partial class Index
         {
             await InitAppPermissions();
         }
-        _addMenuPermission = false;
         OpenSuccessMessage(T("Add menu permission data success"));
     }
 
@@ -195,7 +192,6 @@ public partial class Index
         {
             await InitAppPermissions();
         }
-        _addApiPermission = false;
         OpenSuccessMessage(T("Add api permission data success"));
     }
 
@@ -205,7 +201,6 @@ public partial class Index
         {
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
-            _addMenuPermission = false;
             OpenSuccessMessage(T("Edit menu permission data success"));
         }
     }
@@ -216,7 +211,6 @@ public partial class Index
         {
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
-            _addMenuPermission = false;
             OpenSuccessMessage(T("Edit api permission data success"));
         }
     }

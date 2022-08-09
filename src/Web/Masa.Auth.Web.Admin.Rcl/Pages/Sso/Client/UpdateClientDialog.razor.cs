@@ -6,12 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client;
 public partial class UpdateClientDialog
 {
     [Parameter]
-    public bool Visible { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> VisibleChanged { get; set; }
-
-    [Parameter]
     public EventCallback OnSuccessed { get; set; }
 
     [Parameter]
@@ -28,6 +22,7 @@ public partial class UpdateClientDialog
     ClientCredentialDto _clientCredentialDto = new();
     Type _otherType = null!;
     Dictionary<string, object> _componentMetadata = new();
+    bool _visible;
 
     ClientService ClientService => AuthCaller.ClientService;
 
@@ -44,7 +39,7 @@ public partial class UpdateClientDialog
 
         PrepareHeader();
 
-        await Toggle(true);
+        _visible = true;
 
         StateHasChanged();
     }
@@ -89,7 +84,7 @@ public partial class UpdateClientDialog
         _clientScopesDto.Adapt(_clientDetailDto);
 
         await ClientService.UpdateClientAsync(_clientDetailDto);
-        await CloseAsync();
+        _visible = false;
         if (OnSuccessed.HasDelegate)
         {
             await OnSuccessed.InvokeAsync();
@@ -102,28 +97,11 @@ public partial class UpdateClientDialog
         if (isConfirmed)
         {
             await ClientService.RemoveClientAsync(_clientDetailDto.Id);
-            await CloseAsync();
+            _visible = false;
             if (OnDeleted.HasDelegate)
             {
                 await OnDeleted.InvokeAsync();
             }
-        }
-    }
-
-    private async Task CloseAsync()
-    {
-        await Toggle(false);
-    }
-
-    private async Task Toggle(bool visible)
-    {
-        if (VisibleChanged.HasDelegate)
-        {
-            await VisibleChanged.InvokeAsync(visible);
-        }
-        else
-        {
-            Visible = visible;
         }
     }
 }

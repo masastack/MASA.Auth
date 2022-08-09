@@ -14,7 +14,8 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
-    readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
+    readonly IPmClient _pmClient;
+    readonly IEnvironmentContext _environmentContext;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -26,7 +27,9 @@ public class QueryHandler
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
         IMemoryCacheClient memoryCacheClient,
-        IUserSystemBusinessDataRepository userSystemBusinessDataRepository)
+        IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
+        IPmClient pmClient,
+        IEnvironmentContext environmentContext)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -37,7 +40,8 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
-        _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
+        _pmClient = pmClient;
+        _environmentContext = environmentContext;
     }
 
     #region User
@@ -88,7 +92,7 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Account == query.Account);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
@@ -99,7 +103,7 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.Email == query.Email);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
@@ -110,7 +114,7 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
     {
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
         if (user is null)
         {
             throw new UserFriendlyException("This user data does not exist");
@@ -214,14 +218,14 @@ public class QueryHandler
             condition = condition.And(s => s.DisplayName.Contains(query.Search) || s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetListAsync(condition);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.Account, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
     }
 
     [EventHandler]
     public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
     {
         var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
-        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.Account, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
     }
 
     [EventHandler]
@@ -415,14 +419,14 @@ public class QueryHandler
             {
                 var staffId = (await _authDbContext.Set<Staff>()
                                         .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
-                if (staffId != default)
+                if (staffId == default)
                 {
                     return;
                 }
                 condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
             }
         }
-        var teams = await _teamRepository.GetListInCludeAsync(condition,
+        var teams = await _authDbContext.GetListInCludeAsync(condition,
             tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
         foreach (var team in teams.ToList())
         {
@@ -460,13 +464,13 @@ public class QueryHandler
             {
                 Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin).Select(s => s.StaffId).ToList(),
                 Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Admin).Select(r => r.RoleId).ToList(),
-                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).ToDictionary(p => p.PermissionId, p => p.Effect)
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
             },
             TeamMember = new TeamPersonnelDto
             {
                 Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Member).Select(s => s.StaffId).ToList(),
                 Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Member).Select(r => r.RoleId).ToList(),
-                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).ToDictionary(p => p.PermissionId, p => p.Effect)
+                Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
             }
         };
     }
@@ -539,20 +543,24 @@ public class QueryHandler
     public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
     {
         var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
-        var visited = await _memoryCacheClient.GetAsync<List<string>>(key);
+        var visited = await _memoryCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var menus = _authDbContext.Set<Permission>().Where(p => visited.Contains(p.Url))
-                .Select(p => new
+            var apps = await _pmClient.AppService.GetListAsync();
+            //todo cache
+            var menus = _authDbContext.Set<Permission>().AsEnumerable()
+                .Where(p => visited.Any(v => v.AppId == p.AppId && v.Url.ToLower() == p.Url.ToLower()))
+                .Join(apps, p => p.AppId, a => a.Identity, (p, a) => new
                 {
+                    p.Id,
                     p.Name,
-                    p.Url
+                    Url = Path.Combine(a.Url, p.Url)
                 }).ToDictionary(p => p.Url, p => p.Name);
-            userVisitedListQuery.Result = visited.Select(v => new UserVisitedDto
+            userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
             {
-                Url = v,
-                Name = menus.ContainsKey(v) ? menus[v] : ""
-            }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
+                Url = v.Key,
+                Name = v.Value
+            }).ToList();
         }
     }
 

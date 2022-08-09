@@ -6,6 +6,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 public class CommandHandler
 {
     readonly IUserRepository _userRepository;
+    readonly IAutoCompleteClient _autoCompleteClient;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly AuthDbContext _authDbContext;
@@ -19,9 +20,11 @@ public class CommandHandler
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILogger<CommandHandler> _logger;
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
+    readonly IConfiguration _configuration;
 
     public CommandHandler(
         IUserRepository userRepository,
+        IAutoCompleteClient autoCompleteClient,
         IStaffRepository staffRepository,
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         AuthDbContext authDbContext,
@@ -34,9 +37,11 @@ public class CommandHandler
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
-        ThirdPartyUserDomainService thirdPartyUserDomainService)
+        ThirdPartyUserDomainService thirdPartyUserDomainService,
+        IMasaConfiguration masaConfiguration)
     {
         _userRepository = userRepository;
+        _autoCompleteClient = autoCompleteClient;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _authDbContext = authDbContext;
@@ -50,6 +55,7 @@ public class CommandHandler
         _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
+        _configuration = masaConfiguration.Local;
     }
 
     #region User
@@ -62,7 +68,7 @@ public class CommandHandler
 
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
         user.AddRoles(userDto.Roles.ToArray());
-        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        user.AddPermissions(userDto.Permissions);
         await _userRepository.AddAsync(user);
         command.NewUser = user;
         await _userDomainService.SetAsync(user);
@@ -118,7 +124,7 @@ public class CommandHandler
         var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles.ToArray());
 
-        user.AddPermissions(userDto.Permissions.Select(p => new UserPermission(p.PermissionId, p.Effect)).ToList());
+        user.AddPermissions(userDto.Permissions);
         await _userRepository.UpdateAsync(user);
 
         await _roleDomainService.UpdateRoleLimitAsync(roles);
@@ -183,7 +189,8 @@ public class CommandHandler
                         Enabled = true,
                         Email = ldapUser.EmailAddress,
                         Account = ldapUser.SamAccountName,
-                        Password = password
+                        Password = password,
+                        Avatar = _configuration.GetValue<string>("Subjects:Avatar")
                     });
             //phone number regular match
             if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
@@ -297,6 +304,21 @@ public class CommandHandler
         command.Result = true;
     }
 
+    [EventHandler]
+    public async Task SyncUserAutoCompleteAsync(SyncUserAutoCompleteCommand command)
+    {
+        var users = await _userRepository.GetAllAsync();
+        var syncCount = 0;
+        while (syncCount < users.Count)
+        {
+            var syncUsers = users.Skip(syncCount)
+                                .Take(command.Dto.OnceExecuteCount)
+                                .Adapt<List<UserSelectDto>>();
+            await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(syncUsers);
+            syncCount += command.Dto.OnceExecuteCount;
+        }
+    }
+
     private async Task<User> CheckUserExistAsync(Guid userId)
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
@@ -355,18 +377,6 @@ public class CommandHandler
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         await _staffDomainService.UpdateStaffAsync(command.Staff);
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateStaffPasswordAsync(UpdateStaffPasswordCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(u => u.Id == staffDto.Id);
-        if (staff is null)
-            throw new UserFriendlyException("The current user does not exist");
-
-        staff.UpdatePassword(staffDto.Password);
-        await _staffRepository.UpdateAsync(staff);
     }
 
     [EventHandler(1)]

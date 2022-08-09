@@ -69,7 +69,7 @@ public class TeamService : ServiceBase
 
     private async Task<List<TeamRoleSelectDto>> GetTeamRoleSelectAsync(IEventBus eventBus, [FromQuery] string name, [FromQuery] Guid UserId)
     {
-        var query = new TeamRoleSelectQuery(name,UserId);
+        var query = new TeamRoleSelectQuery(name, UserId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

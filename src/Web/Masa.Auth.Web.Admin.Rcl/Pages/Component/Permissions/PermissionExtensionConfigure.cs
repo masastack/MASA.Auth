@@ -6,30 +6,35 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 public class PermissionExtensionConfigure : PermissionsConfigure
 {
     [Parameter]
-    public List<UserPermissionDto> ExtensionValue { get; set; } = new();
+    public List<SubjectPermissionRelationDto> ExtensionValue { get; set; } = new();
 
     [Parameter]
-    public EventCallback<List<UserPermissionDto>> ExtensionValueChanged { get; set; }
+    public EventCallback<List<SubjectPermissionRelationDto>> ExtensionValueChanged { get; set; }
 
     protected override List<UniqueModel> ExpansionWrapperUniqueValue
     {
         get
         {
-            var reject = ExtensionValue.Where(value => value.Effect is false).Select(value => new UniqueModel(value.PermissionId.ToString()));
-
-            return ExtensionValue.Select(value => new UniqueModel(value.PermissionId.ToString()))
-                                .Concat(RolePermissions.Select(value => new UniqueModel(value.ToString())))
-                                .Except(reject)
-                                .ToList();
+            return ExtensionValue.Select(value =>
+            {
+                if (value.Effect is false)
+                {
+                    return new UniqueModel(value.PermissionId.ToString(), false, true, false);
+                }
+                else return new UniqueModel(value.PermissionId.ToString());
+            })
+            .Union(RolePermissions.Select(value => new UniqueModel(value.ToString())))
+            .ToList();
         }
     }
 
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
-        var value = permissions.Select(permission => new UserPermissionDto(Guid.Parse(permission.Code), true)).ToList();
+        var value = permissions.Select(permission => new SubjectPermissionRelationDto(Guid.Parse(permission.Code), true)).ToList();
+        value = value.Where(v => EmptyPermissionMap.Values.Contains(v.PermissionId) is false).ToList();
         foreach (var (code, parentCode) in EmptyPermissionMap)
         {
-            if (value.Any(v => v.PermissionId == code)) value.Add(new(code, true));
+            if (value.Any(v => v.PermissionId == code)) value.Add(new(parentCode, true));
         }
         foreach (var permission in RolePermissions)
         {
@@ -38,13 +43,21 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             {
                 value.Add(new(permission, false));
             }
-            else value.Remove(rolePermissionValue);
+            else
+            {
+                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && v.Effect is true);
+                if (existValue is null)
+                {
+                    value.Remove(rolePermissionValue);
+                    ExtensionValue.Remove(rolePermissionValue);
+                }
+            }
         }
         value.AddRange(ExtensionValue.Where(value => value.Effect is false));
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
 
-    private async Task UpdateExtensionValueAsync(List<UserPermissionDto> value)
+    private async Task UpdateExtensionValueAsync(List<SubjectPermissionRelationDto> value)
     {
         if (ExtensionValueChanged.HasDelegate) await ExtensionValueChanged.InvokeAsync(value);
         else ExtensionValue = value;

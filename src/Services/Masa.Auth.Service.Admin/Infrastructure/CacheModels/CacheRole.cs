@@ -13,7 +13,7 @@ public class CacheRole
 
     public int Limit { get; set; }
 
-    public List<Guid> Permissions { get; set; } = new();
+    public List<SubjectPermissionRelationDto> Permissions { get; set; } = new();
 
     public List<Guid> ChildrenRoles { get; set; } = new();
 }

@@ -20,12 +20,13 @@ public class DepartmenCascader : MCascader<DepartmentDto, Guid>
         ChangeOnSelect = true;
         Dense = true;
         Height = 48;
+        HideDetails = "auto";
         await base.SetParametersAsync(parameters);
     }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Items = await DepartmentService.GetListAsync();           
+        Items = await DepartmentService.GetListAsync();
     }
 }

@@ -77,10 +77,11 @@ var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefau
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
 builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
     .GetValue<string>("AppSettings:PmClient:Url"));
+builder.Services.AddSchedulerClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+    .GetValue<string>("AppSettings:SchedulerClient:Url"));
+//await builder.Services.AddSyncUserAutoCompleteJobAsync();
 builder.Services.AddLadpContext();
-
 builder.Services.AddElasticsearchAutoComplete();
-
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();
@@ -131,7 +132,7 @@ builder.Services
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseIsolationUoW<AuthDbContext>(
-        isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT_KEY),
+        isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
         dbOptions => dbOptions.UseSqlServer().UseFilter())
     .UseRepository<AuthDbContext>();
 });

@@ -5,38 +5,38 @@ namespace Masa.Auth.ApiGateways.Caller.Services;
 
 public abstract class ServiceBase
 {
-    protected ICallerProvider CallerProvider { get; init; }
+    protected ICaller Caller { get; init; }
 
     protected abstract string BaseUrl { get; set; }
 
-    protected ServiceBase(ICallerProvider callerProvider)
+    protected ServiceBase(ICaller caller)
     {
-        CallerProvider = callerProvider;
+        Caller = caller;
     }
 
     protected async Task<TResponse> GetAsync<TResponse>(string methodName, Dictionary<string, string>? paramters = null)
     {
-        return await CallerProvider.GetAsync<TResponse>(BuildAdress(methodName), paramters ?? new()) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
+        return await Caller.GetAsync<TResponse>(BuildAdress(methodName), paramters ?? new()) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
     }
 
     protected async Task<TResponse> GetAsync<TRequest, TResponse>(string methodName, TRequest data) where TRequest : class
     {
-        return await CallerProvider.GetAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
+        return await Caller.GetAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
     }
 
     protected async Task PutAsync<TRequest>(string methodName, TRequest data)
     {
-        var response = await CallerProvider.PutAsync(BuildAdress(methodName), data);
+        var response = await Caller.PutAsync(BuildAdress(methodName), data);
     }
 
     protected async Task PostAsync<TRequest>(string methodName, TRequest data)
     {
-        var response = await CallerProvider.PostAsync(BuildAdress(methodName), data);
+        var response = await Caller.PostAsync(BuildAdress(methodName), data);
     }
 
     protected async Task<TResponse> PostAsync<TResponse>(string methodName, HttpContent content)
     {
-        var response = await CallerProvider.PostAsync(BuildAdress(methodName), content);
+        var response = await Caller.PostAsync(BuildAdress(methodName), content);
         var json = await response.Content.ReadAsStringAsync();
         var serializeOptions = new JsonSerializerOptions
         {
@@ -47,17 +47,17 @@ public abstract class ServiceBase
 
     protected async Task<TResponse> PostAsync<TRequest, TResponse>(string methodName, TRequest data)
     {
-        return await CallerProvider.PostAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
+        return await Caller.PostAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new UserFriendlyException("The service is abnormal, please contact the administrator!");
     }
 
     protected async Task DeleteAsync<TRequest>(string methodName, TRequest? data = default)
     {
-        var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), data);
+        var response = await Caller.DeleteAsync(BuildAdress(methodName), data);
     }
 
     protected async Task DeleteAsync(string methodName)
     {
-        var response = await CallerProvider.DeleteAsync(BuildAdress(methodName), null);
+        var response = await Caller.DeleteAsync(BuildAdress(methodName), null);
     }
 
     protected async Task SendAsync<TRequest>(string methodName, TRequest? data = default)
@@ -69,7 +69,7 @@ public abstract class ServiceBase
 
     protected async Task<TResponse> SendAsync<TRequest, TResponse>(string methodName, TRequest data) where TRequest : class
     {
-        return await CallerProvider.GetAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new Exception("The service is abnormal, please contact the administrator!");
+        return await Caller.GetAsync<TRequest, TResponse>(BuildAdress(methodName), data) ?? throw new Exception("The service is abnormal, please contact the administrator!");
     }
 
     string BuildAdress(string methodName)

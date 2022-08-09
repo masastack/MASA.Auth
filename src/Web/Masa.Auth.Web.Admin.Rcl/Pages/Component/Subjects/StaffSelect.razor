@@ -1,17 +1,14 @@
 ﻿@inherits AdminCompontentBase
 
-<MAutocomplete Value="Value"
+<SAutoComplete Value="Value"
                ValueChanged="async value => await UpdateValueAsync(value)"
                TValue="List<Guid>"
                TItem="StaffSelectDto"
                TItemValue="Guid"
                Items="Staffs"
-               Outlined Height="48"
                Chips
-               Color="primary"
                Disabled=Readonly
                Label="@Label"
-               HideDetails="@("auto")"
                ItemText="t=>t.Name"
                ItemValue="t=>t.Id"
                Multiple
@@ -25,7 +22,7 @@
                 </MAvatar>
             }
             <span class="body2 regular--text">
-                @ReturnNotNullValue(data.Item.DisplayName,data.Item.Name,data.Item.Account)
+                @ReturnNotNullValue(data.Item.DisplayName,data.Item.Name)
             </span>
         </MChip>
     </SelectionContent>
@@ -49,4 +46,4 @@
             </MListItemSubtitle>
         </MListItemContent>
     </ItemContent>
-</MAutocomplete>
+</SAutoComplete>

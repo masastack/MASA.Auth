@@ -17,9 +17,9 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
             v => v.ToString(),
             v => (PermissionTypes)Enum.Parse(typeof(PermissionTypes), v)
         );
-        builder.HasMany(p => p.RolePermissions).WithOne(rp => rp.Permission);
-        builder.HasMany(p => p.UserPermissions).WithOne(up => up.Permission);
-        builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission);
+        builder.HasMany(p => p.UserPermissions).WithOne(up => up.Permission).HasForeignKey(up => up.PermissionId);
+        builder.HasMany(p => p.RolePermissions).WithOne(rp => rp.Permission).HasForeignKey(rp => rp.PermissionId);
+        builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission).HasForeignKey(tp => tp.PermissionId);
         builder.HasMany(p => p.ParentPermissions).WithMany(pi => pi.ChildPermissions)
             .UsingEntity<PermissionRelation>(
                     configureRight => configureRight

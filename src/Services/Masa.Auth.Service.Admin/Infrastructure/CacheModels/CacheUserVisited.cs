@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Contracts.Admin.Subjects;
+namespace Masa.Auth.Service.Admin.Infrastructure.CacheModels;
 
-public class UserVisitedDto
+public class CacheUserVisited
 {
-    public string Name { get; set; } = string.Empty;
+    public string AppId { get; set; } = string.Empty;
 
     public string Url { get; set; } = string.Empty;
 }

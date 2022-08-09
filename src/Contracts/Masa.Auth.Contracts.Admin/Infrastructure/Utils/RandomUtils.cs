@@ -12,7 +12,7 @@ public class RandomUtils
     {
         var sb = new StringBuilder(length);
         for (var i = 0; i < length; i++)
-        {          
+        {
             if (includeNumbers)
             {
                 var index = Random.Shared.Next(LETTERNUMBERS.Length);

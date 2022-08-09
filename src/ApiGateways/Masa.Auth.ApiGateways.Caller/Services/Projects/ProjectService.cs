@@ -7,7 +7,7 @@ public class ProjectService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal ProjectService(ICallerProvider callerProvider) : base(callerProvider)
+    internal ProjectService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/project";
     }

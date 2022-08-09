@@ -5,34 +5,26 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class AddMenuPermission
 {
-    [EditorRequired]
-    [Parameter]
-    public List<AppDto> AppItems { get; set; } = new();
-
-    [EditorRequired]
-    [Parameter]
-    public Guid ParentId { get; set; }
-
-    [Parameter]
-    public bool Show { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> ShowChanged { get; set; }
-
     [Parameter]
     public EventCallback<MenuPermissionDetailDto> OnSubmit { get; set; }
 
-    [EditorRequired]
-    [Parameter]
-    public List<SelectItemDto<PermissionTypes>> SelectPermissionTypes { get; set; } = new();
-
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     MForm _form = default!;
+    bool _visible { get; set; }
+    string _showUrlPrefix = "";
 
-    protected override void OnParametersSet()
+    List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
+
+    PermissionService PermissionService => AuthCaller.PermissionService;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _menuPermissionDetailDto.ParentId = ParentId;
-        base.OnParametersSet();
+        if (firstRender)
+        {
+            var permissionTypes = await PermissionService.GetTypesAsync();
+            _menuPermissionTypes = permissionTypes.Where(a => a.Value != PermissionTypes.Api).ToList();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task OnSubmitHandler()
@@ -43,6 +35,15 @@ public partial class AddMenuPermission
             {
                 await OnSubmit.InvokeAsync(_menuPermissionDetailDto);
             }
+            _visible = false;
         }
+    }
+    public void Show(AppPermissionsViewModel appPermissionsViewModel)
+    {
+        _menuPermissionDetailDto = new();
+        _menuPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
+        _menuPermissionDetailDto.ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
+        _showUrlPrefix = appPermissionsViewModel.AppUrl;
+        _visible = true;
     }
 }

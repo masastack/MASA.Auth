@@ -9,25 +9,24 @@
         <SNumberTextField @bind-Value="Dto.IdentityTokenLifetime" Label="IdentityTokenLifetime" />
     </MCol>
     <MCol Md=12>
-        <MSelect @bind-Value="@Dto.AllowTokenSigningAlgorithms"
+        <SSelect @bind-Value="@Dto.AllowTokenSigningAlgorithms"
                  Label="AllowedIdentityTokenSigningAlgorithms"
-                 Outlined Multiple
+                 Multiple
                  Items="@Dto.AllowedIdentityTokenSigningAlgorithmsItems"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
-        </MSelect>
+        </SSelect>
     </MCol>
     <MCol Md=6>
         <SNumberTextField @bind-Value="Dto.AccessTokenLifetime" Label="AccessTokenLifetime" />
     </MCol>
     <MCol Md=6>
-        <MSelect @bind-Value="@Dto.AccessTokenType"
+        <SSelect @bind-Value="@Dto.AccessTokenType"
                  Label="AccessTokenType"
-                 Outlined
                  Items="@_accessTokenType"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
-        </MSelect>
+        </SSelect>
     </MCol>
     <MCol Md=6>
         <SNumberTextField @bind-Value="Dto.AuthorizationCodeLifetime" Label="AuthorizationCodeLifetime" />
@@ -39,22 +38,20 @@
         <SNumberTextField @bind-Value="Dto.SlidingRefreshTokenLifetime" Label="SlidingRefreshTokenLifetime" />
     </MCol>
     <MCol Md=6>
-        <MSelect @bind-Value="@Dto.RefreshTokenUsage"
+        <SSelect @bind-Value="@Dto.RefreshTokenUsage"
                  Label="RefreshTokenUsage"
-                 Outlined
                  Items="@_refreshTokenUsage"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
-        </MSelect>
+        </SSelect>
     </MCol>
     <MCol Md=6>
-        <MSelect @bind-Value="@Dto.RefreshTokenExpiration"
+        <SSelect @bind-Value="@Dto.RefreshTokenExpiration"
                  Label="RefreshTokenExpiration"
-                 Outlined
                  Items="@_refreshTokenExpiration"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
-        </MSelect>
+        </SSelect>
     </MCol>
     <MCol Md=6>
         <STextField @bind-Value="Dto.PairWiseSubjectSalt" Label="PairWiseSubjectSalt" />

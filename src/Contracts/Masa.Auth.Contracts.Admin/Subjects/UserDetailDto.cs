@@ -21,7 +21,7 @@ public class UserDetailDto : UserDto
 
     public List<Guid> RoleIds { get; set; }
 
-    public List<UserPermissionDto> Permissions { get; set; }
+    public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
     public UserDetailDto() : base()
     {
@@ -35,7 +35,7 @@ public class UserDetailDto : UserDto
         Permissions = new();
     }
 
-    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType, List<Guid> roleIds, List<UserPermissionDto> permissions) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, address, creationTime, genderType)
+    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType, List<Guid> roleIds, List<SubjectPermissionRelationDto> permissions) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, address, creationTime, genderType)
     {
         Department = department;
         Position = position;

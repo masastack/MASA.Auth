@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record UserVisitedListQuery(Guid UserId) : Query<List<UserVisitedDto>>
+public record UserVisitedListQuery(Guid UserId) : Query<List<UserVisitedModel>>
 {
-    public override List<UserVisitedDto> Result { get; set; } = new();
+    public override List<UserVisitedModel> Result { get; set; } = new();
 }
