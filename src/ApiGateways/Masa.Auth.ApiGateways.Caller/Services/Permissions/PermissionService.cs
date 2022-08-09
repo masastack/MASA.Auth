@@ -7,7 +7,7 @@ public class PermissionService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal PermissionService(ICallerProvider callerProvider) : base(callerProvider)
+    internal PermissionService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/permission";
     }

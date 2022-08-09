@@ -8,6 +8,4 @@ public interface ITeamRepository : IRepository<Team, Guid>
     Task<Team> GetByIdAsync(Guid id);
 
     bool Any(Expression<Func<Team, bool>> predicate);
-
-    Task<IEnumerable<Team>> GetListInCludeAsync(Expression<Func<Team, bool>> predicate, Func<IQueryable<Team>, IOrderedQueryable<Team>>? orderBy = null, List<string>? includeProperties = null, CancellationToken cancellationToken = default(CancellationToken));
 }

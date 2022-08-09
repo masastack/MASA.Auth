@@ -9,6 +9,11 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
     {
     }
 
+    public bool Any(Expression<Func<Department, bool>> predicate)
+    {
+        return Context.Set<Department>().Where(d => !d.IsDeleted).Any(predicate);
+    }
+
     public async Task<Department> GetByIdAsync(Guid id)
     {
         return await Context.Set<Department>()

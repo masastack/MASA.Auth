@@ -5,16 +5,13 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class AddMenuPermission
 {
-    [EditorRequired]
-    [Parameter]
-    public List<AppDto> AppItems { get; set; } = new();
-
     [Parameter]
     public EventCallback<MenuPermissionDetailDto> OnSubmit { get; set; }
 
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     MForm _form = default!;
     bool _visible { get; set; }
+    string _showUrlPrefix = "";
 
     List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
 
@@ -41,10 +38,12 @@ public partial class AddMenuPermission
             _visible = false;
         }
     }
-    public void Show(Guid parentId)
+    public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
         _menuPermissionDetailDto = new();
-        _menuPermissionDetailDto.ParentId = parentId;
+        _menuPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
+        _menuPermissionDetailDto.ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
+        _showUrlPrefix = appPermissionsViewModel.AppUrl;
         _visible = true;
     }
 }

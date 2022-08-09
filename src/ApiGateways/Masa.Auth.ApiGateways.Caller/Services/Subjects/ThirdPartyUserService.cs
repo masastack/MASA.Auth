@@ -7,7 +7,7 @@ public class ThirdPartyUserService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal ThirdPartyUserService(ICallerProvider callerProvider) : base(callerProvider)
+    internal ThirdPartyUserService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/thirdPartyUser/";
     }

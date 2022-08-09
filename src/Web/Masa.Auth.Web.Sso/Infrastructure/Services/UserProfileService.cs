@@ -17,7 +17,7 @@ public class UserProfileService : IProfileService
     public Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var claims = context.Subject.Claims.ToList();
-        context.IssuedClaims = claims;
+        context.IssuedClaims.AddRange(claims);
         return Task.CompletedTask;
     }
 

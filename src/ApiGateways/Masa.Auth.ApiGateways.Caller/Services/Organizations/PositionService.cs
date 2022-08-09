@@ -7,7 +7,7 @@ public class PositionService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal PositionService(ICallerProvider callerProvider) : base(callerProvider)
+    internal PositionService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/position/";
     }

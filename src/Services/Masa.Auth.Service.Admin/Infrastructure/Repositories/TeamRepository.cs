@@ -11,7 +11,7 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
 
     public bool Any(Expression<Func<Team, bool>> predicate)
     {
-        return Context.Set<Team>().Any(predicate);
+        return Context.Set<Team>().Where(t => !t.IsDeleted).Any(predicate);
     }
 
     public async Task<Team> GetByIdAsync(Guid id)
@@ -23,24 +23,5 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
             .Include(t => t.TeamRoles)
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException("The current team does not exist");
-    }
-
-    public async Task<IEnumerable<Team>> GetListInCludeAsync(Expression<Func<Team, bool>> predicate, Func<IQueryable<Team>, IOrderedQueryable<Team>>? orderBy = null,
-            List<string>? includeProperties = null, CancellationToken cancellationToken = default)
-    {
-        var query = Context.Set<Team>().Where(predicate);
-        if (orderBy != null)
-        {
-            query = orderBy(query);
-        }
-        if (includeProperties != null)
-        {
-            foreach (var includeProperty in includeProperties)
-            {
-                query = query.Include(includeProperty);
-            }
-        }
-
-        return await query.ToListAsync(cancellationToken);
     }
 }

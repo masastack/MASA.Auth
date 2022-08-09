@@ -7,7 +7,7 @@ public class IdentityResourceService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal IdentityResourceService(ICallerProvider callerProvider) : base(callerProvider)
+    internal IdentityResourceService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/sso/identityResource";
     }

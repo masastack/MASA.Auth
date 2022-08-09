@@ -22,7 +22,7 @@
                                Items="_menuPermissions"
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
-                               TKey="Guid"
+                               TKey="Guid" MandatoryActive
                                Search="@_search"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
@@ -32,7 +32,7 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <SIcon Tooltip="@T("Add")" OnClick="()=>AddMenuPermission(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
+                                    <SIcon Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -52,7 +52,7 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <SIcon Tooltip="@T("Add")" OnClick="AddApiPermission" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
+                                    <SIcon Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -79,17 +79,8 @@
                             <MCardText>
                                 <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
                                     <MRow>
-                                        <MCol Md=6>
-                                            <SSelect @bind-Value="_menuPermissionDetailDto.AppId"
-                                                Label="@T("Pre Code Select")"
-                                                Outlined HideDetails="@("auto")"
-                                                Items="_curAppItems"
-                                                ItemText="u => u.Name"
-                                                ItemValue="u => u.Identity">
-                                            </SSelect>
-                                        </MCol>
-                                        <MCol Md=6>
-                                            <STextField Label="@T("Code")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                        <MCol Md=12>
+                                            <STextField Label="@T("Code")" Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
@@ -204,17 +195,8 @@
                             <MCardText>
                                 <MForm EnableValidation Model=_apiPermissionDetailDto @ref="_formApi">
                                     <MRow>
-                                        <MCol Md=6>
-                                            <SSelect @bind-Value="_apiPermissionDetailDto.AppId"
-                                                Label="@T("Pre Code Select")"
-                                                Outlined Dense HideDetails="@("auto")"
-                                                Items="_curAppItems"
-                                                ItemText="u => u.Name"
-                                                ItemValue="u => u.Identity">
-                                            </SSelect>
-                                        </MCol>
-                                        <MCol Md=6>
-                                            <STextField Label="@T("Code")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                        <MCol Md=12>
+                                            <STextField Label="@T("Code")"  Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
@@ -249,5 +231,5 @@
     </MCol>
 </MRow>
 
-<AddMenuPermission @ref="_addMenuPermission" OnSubmit="AddMenuPermissionAsync" AppItems=_curAppItems />
-<AddApiPermission @ref=_addApiPermission OnSubmit="AddApiPermissionAsync" AppItems=_curAppItems />
+<AddMenuPermission @ref="_addMenuPermission" OnSubmit="AddMenuPermissionAsync" />
+<AddApiPermission @ref=_addApiPermission OnSubmit="AddApiPermissionAsync"/>

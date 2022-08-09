@@ -7,7 +7,7 @@ public class UserService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal UserService(ICallerProvider callerProvider) : base(callerProvider)
+    internal UserService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/user/";
     }
