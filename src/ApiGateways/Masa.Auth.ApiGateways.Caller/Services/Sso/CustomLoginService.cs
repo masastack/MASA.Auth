@@ -7,7 +7,7 @@ public class CustomLoginService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal CustomLoginService(ICallerProvider callerProvider) : base(callerProvider)
+    internal CustomLoginService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/sso/customLogin";
     }

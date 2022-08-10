@@ -7,7 +7,7 @@ public class StaffService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal StaffService(ICallerProvider callerProvider) : base(callerProvider)
+    internal StaffService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/staff/";
     }
@@ -40,11 +40,6 @@ public class StaffService : ServiceBase
     public async Task UpdateAsync(UpdateStaffDto request)
     {
         await SendAsync(nameof(UpdateAsync), request);
-    }
-
-    public async Task UpdateStaffPasswordAsync(UpdateStaffPasswordDto request)
-    {
-        await SendAsync(nameof(UpdateStaffPasswordAsync), request);
     }
 
     public async Task RemoveAsync(Guid id)

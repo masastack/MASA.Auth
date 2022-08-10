@@ -20,6 +20,7 @@ public class DepartmenCascader : MCascader<DepartmentDto, Guid>
         ChangeOnSelect = true;
         Dense = true;
         Height = 48;
+        HideDetails = "auto";
         await base.SetParametersAsync(parameters);
     }
 

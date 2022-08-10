@@ -21,8 +21,6 @@ public partial class UpdateStaffDialog
 
     private UpdateStaffDto Staff { get; set; } = new();
 
-    private UpdateStaffPasswordDto StaffPassword = new();
-
     private StaffService StaffService => AuthCaller.StaffService;
 
     private async Task UpdateVisible(bool visible)
@@ -49,7 +47,6 @@ public partial class UpdateStaffDialog
     {
         StaffDetail = await StaffService.GetDetailAsync(StaffId);
         Staff = StaffDetail;
-        StaffPassword = new UpdateStaffPasswordDto(StaffDetail.Id, StaffDetail.Password);
     }
 
     public async Task UpdateStaffAsync(EditContext context)
@@ -64,13 +61,6 @@ public partial class UpdateStaffDialog
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
-    }
-
-    public async Task UpdateStaffPasswordAsync(string password)
-    {
-        StaffPassword.Password = password;
-        await StaffService.UpdateStaffPasswordAsync(StaffPassword);
-        OpenSuccessMessage(T("Password changed successfully"));
     }
 
     public async Task OpenRemoveStaffDialog()

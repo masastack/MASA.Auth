@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+namespace Masa.Auth.Web.Sso.Infrastructure.Environment;
 
-public static class IsolationConsts
+public interface ISsoEnvironmentProvider : IEnvironmentProvider
 {
-    public const string ENVIRONMENT_KEY = "env_key";
+    void SetEnvironment(string env);
 }

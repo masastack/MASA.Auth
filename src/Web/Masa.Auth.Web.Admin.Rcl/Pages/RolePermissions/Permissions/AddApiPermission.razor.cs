@@ -5,10 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class AddApiPermission
 {
-    [EditorRequired]
-    [Parameter]
-    public List<AppDto> AppItems { get; set; } = new();
-
     [Parameter]
     public EventCallback<ApiPermissionDetailDto> OnSubmit { get; set; }
 
@@ -16,6 +12,7 @@ public partial class AddApiPermission
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
     bool _visible { get; set; }
     List<SelectItemDto<PermissionTypes>> _apiPermissionTypes = new();
+    string _showUrlPrefix = "";
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
@@ -41,9 +38,11 @@ public partial class AddApiPermission
         }
     }
 
-    public void Show()
+    public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
         _apiPermissionDetailDto = new();
+        _apiPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
+        _showUrlPrefix = appPermissionsViewModel.AppUrl;
         _visible = true;
     }
 }

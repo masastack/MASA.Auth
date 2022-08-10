@@ -27,8 +27,6 @@ public class StaffDto
 
     public string IdCard { get; set; } = "";
 
-    public string Account { get; set; } = "";
-
     public string CompanyName { get; set; } = "";
 
     public string PhoneNumber { get; set; } = "";
@@ -45,7 +43,7 @@ public class StaffDto
     {
     }
 
-    public StaffDto(Guid id, Guid userId, string department, string position, string jobNumber, bool enabled, StaffTypes staffType, string name, string displayName, string avatar, string idCard, string account, string companyName, string phoneNumber, string email, AddressValueDto address, DateTime creationTime, GenderTypes gender)
+    public StaffDto(Guid id, Guid userId, string department, string position, string jobNumber, bool enabled, StaffTypes staffType, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, DateTime creationTime, GenderTypes gender)
     {
         Id = id;
         UserId = userId;
@@ -58,7 +56,6 @@ public class StaffDto
         DisplayName = displayName;
         Avatar = avatar;
         IdCard = idCard;
-        Account = account;
         CompanyName = companyName;
         PhoneNumber = phoneNumber;
         Email = email;

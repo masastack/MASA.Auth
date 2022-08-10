@@ -1,15 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<MAutocomplete Value="Value"
+<SAutoComplete Value="Value"
                ValueChanged="UpdateValueAsync"
                Items="Clients"
-               Color="primary"
                Label="@T("Client")"
                ItemText="client => client.ClientName"
                ItemValue="client => client.ClientId"
-               Outlined
                Disabled=Disabled
-               HideDetails="@("auto")"
                TItem="ClientSelectDto"
                TItemValue="string"
                TValue="string"
@@ -25,4 +22,4 @@
             </div>                      
         </div>
     </ItemContent>
-</MAutocomplete>
+</SAutoComplete>

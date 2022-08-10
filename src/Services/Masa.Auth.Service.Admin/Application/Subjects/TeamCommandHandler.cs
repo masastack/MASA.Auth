@@ -31,7 +31,6 @@ public class TeamCommandHandler
         _cdnEndpoint = masaConfiguration.Local.GetValue<string>("CdnEndpoint");
     }
 
-
     [EventHandler]
     public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
     {
@@ -61,6 +60,10 @@ public class TeamCommandHandler
     public async Task UpdateTeamBasicInfoAsync(UpdateTeamBasicInfoCommand updateTeamBasicInfoCommand)
     {
         var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
+        if (_teamRepository.Any(t => t.Name == dto.Name && t.Id != dto.Id))
+        {
+            throw new UserFriendlyException($"Team name {dto.Name} already exists");
+        }
         var team = await _teamRepository.GetByIdAsync(dto.Id);
         var avatarName = $"{team.Id}.png";
         if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||

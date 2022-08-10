@@ -8,5 +8,7 @@ public interface IDepartmentRepository : IRepository<Department, Guid>
     Task<Department> GetByIdAsync(Guid id);
 
     Task<List<Department>> QueryListAsync(Expression<Func<Department, bool>> predicate);
+
+    bool Any(Expression<Func<Department, bool>> predicate);
 }
 

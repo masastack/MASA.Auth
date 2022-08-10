@@ -5,11 +5,8 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class UserService : RestServiceBase
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
-
-    public UserService(IServiceCollection services, IMemoryCacheClient memoryCacheClient) : base(services, "api/user")
+    public UserService(IServiceCollection services) : base(services, "api/user")
     {
-        _memoryCacheClient = memoryCacheClient;
         MapGet(FindByAccountAsync);
         MapGet(FindByPhoneNumberAsync);
         MapGet(FindByEmailAsync);
@@ -22,6 +19,7 @@ public class UserService : RestServiceBase
         MapPost(PostUserSystemData, "UserSystemData");
         MapPut(DisableAsync, "disable");
         MapPost(VerifyUserRepeatAsync);
+        MapPost(SyncUserAutoCompleteAsync);
     }
 
     //[Authorize]
@@ -186,21 +184,17 @@ public class UserService : RestServiceBase
             {
                 Address = user.Address.Address
             },
-            Roles = user.RoleIds.Select(r => new RoleModel
-            {
-                Id = r,
-                Name = _memoryCacheClient.Get<CacheRole>(CacheKey.RoleKey(r))?.Name ?? "",
-            }).ToList(),
+            RoleIds = user.RoleIds,
         };
     }
 
     private async Task Visit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)
     {
-        var visitCommand = new UserVisitedCommand(addUserVisitedDto.UserId, addUserVisitedDto.Url);
+        var visitCommand = new UserVisitedCommand(addUserVisitedDto);
         await eventBus.PublishAsync(visitCommand);
     }
 
-    private async Task<List<UserVisitedDto>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
+    private async Task<List<UserVisitedModel>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
     {
         var visitListQuery = new UserVisitedListQuery(userId);
         await eventBus.PublishAsync(visitListQuery);
@@ -233,10 +227,16 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
-    {
-        var query = new UserSystemBusinessDataQuery(userId, systemId);
-        await eventBus.PublishAsync(query);
-        return query.Result;
-    }
+        public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+        {
+            var query = new UserSystemBusinessDataQuery(userId, systemId);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        public async Task SyncUserAutoCompleteAsync(IEventBus eventBus,  [FromBody] SyncUserAutoCompleteDto dto)
+        {
+            var command = new SyncUserAutoCompleteCommand(dto);
+            await eventBus.PublishAsync(command);
+        }
 }

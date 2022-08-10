@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Projects.Queries;
 
-public record NavigationListQuery(Guid UserId, string Environment = "development") : Query<List<ProjectDto>>
+public record NavigationListQuery(Guid UserId) : Query<List<ProjectDto>>
 {
     public override List<ProjectDto> Result { get; set; } = new();
 }

@@ -9,7 +9,7 @@ global using Masa.Auth.Web.Admin.Rcl.Global;
 global using Masa.Auth.Web.Admin.Rcl.Shared;
 global using Masa.Auth.Web.Admin.Server;
 global using Masa.Blazor;
-global using Masa.BuildingBlocks.Identity.IdentityModel;
+global using Masa.BuildingBlocks.Authentication.Identity;
 global using Masa.Stack.Components;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Hosting.StaticWebAssets;

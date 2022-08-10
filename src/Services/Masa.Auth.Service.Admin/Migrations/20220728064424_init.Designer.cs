@@ -1128,7 +1128,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("UserSystemBusinessData", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1192,7 +1192,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiResource", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1230,7 +1230,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiResourceClaim", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceProperty", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1256,7 +1256,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiResourceProperty", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceScope", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceScope", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1294,7 +1294,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiResourceScope", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceSecret", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceSecret", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1345,7 +1345,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiResourceSecret", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScope", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScope", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1403,7 +1403,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiScope", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScopeClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScopeClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1441,7 +1441,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiScopeClaim", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScopeProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScopeProperty", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1467,7 +1467,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ApiScopeProperty", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1649,7 +1649,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("Client", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1677,7 +1677,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientClaim", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientCorsOrigin", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientCorsOrigin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1700,7 +1700,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientCorsOrigin", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientGrantType", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientGrantType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1723,7 +1723,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientGrantType", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientIdPRestriction", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientIdPRestriction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1746,7 +1746,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientIdPRestriction", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientPostLogoutRedirectUri", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientPostLogoutRedirectUri", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1768,7 +1768,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientPostLogoutRedirectUri", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientProperty", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1794,7 +1794,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientProperty", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientRedirectUri", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientRedirectUri", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1817,7 +1817,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientRedirectUri", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientScope", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientScope", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1840,7 +1840,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientScope", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientSecret", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientSecret", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1891,7 +1891,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("ClientSecret", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.DeviceFlowCodes", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
                         .HasMaxLength(200)
@@ -1960,7 +1960,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("DeviceFlowCodes", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResource", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResource", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2022,7 +2022,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("IdentityResource", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResourceClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResourceClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2060,7 +2060,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("IdentityResourceClaim", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResourceProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResourceProperty", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2086,7 +2086,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("IdentityResourceProperty", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.PersistedGrant", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.PersistedGrant", b =>
                 {
                     b.Property<string>("Key")
                         .HasMaxLength(200)
@@ -2157,7 +2157,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("PersistedGrant", "auth");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.UserClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.UserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2701,15 +2701,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceClaim", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", "ApiResource")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", "ApiResource")
                         .WithMany("UserClaims")
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.UserClaim", "UserClaim")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.UserClaim", "UserClaim")
                         .WithMany()
                         .HasForeignKey("UserClaimId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2720,9 +2720,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("UserClaim");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceProperty", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", "ApiResource")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", "ApiResource")
                         .WithMany("Properties")
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2731,15 +2731,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("ApiResource");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceScope", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceScope", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", "ApiResource")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", "ApiResource")
                         .WithMany("ApiScopes")
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScope", "ApiScope")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScope", "ApiScope")
                         .WithMany()
                         .HasForeignKey("ApiScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2750,9 +2750,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("ApiScope");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResourceSecret", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceSecret", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", "ApiResource")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", "ApiResource")
                         .WithMany("Secrets")
                         .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2761,15 +2761,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("ApiResource");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScopeClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScopeClaim", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScope", "ApiScope")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScope", "ApiScope")
                         .WithMany("UserClaims")
                         .HasForeignKey("ApiScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.UserClaim", "UserClaim")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.UserClaim", "UserClaim")
                         .WithMany()
                         .HasForeignKey("UserClaimId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2780,9 +2780,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("UserClaim");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScopeProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScopeProperty", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScope", "Scope")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScope", "Scope")
                         .WithMany("Properties")
                         .HasForeignKey("ScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2791,9 +2791,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Scope");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientClaim", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("Claims")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2802,9 +2802,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientCorsOrigin", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientCorsOrigin", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("AllowedCorsOrigins")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2813,9 +2813,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientGrantType", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientGrantType", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("AllowedGrantTypes")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2824,9 +2824,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientIdPRestriction", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientIdPRestriction", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("IdentityProviderRestrictions")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2835,9 +2835,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientPostLogoutRedirectUri", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientPostLogoutRedirectUri", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("PostLogoutRedirectUris")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2846,9 +2846,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientProperty", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("Properties")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2857,9 +2857,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientRedirectUri", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientRedirectUri", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("RedirectUris")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2868,9 +2868,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientScope", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientScope", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("AllowedScopes")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2879,9 +2879,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ClientSecret", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientSecret", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", "Client")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", "Client")
                         .WithMany("ClientSecrets")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2890,15 +2890,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResourceClaim", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResourceClaim", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResource", "IdentityResource")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResource", "IdentityResource")
                         .WithMany("UserClaims")
                         .HasForeignKey("IdentityResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.UserClaim", "UserClaim")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.UserClaim", "UserClaim")
                         .WithMany()
                         .HasForeignKey("UserClaimId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2909,9 +2909,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("UserClaim");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResourceProperty", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResourceProperty", b =>
                 {
-                    b.HasOne("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResource", "IdentityResource")
+                    b.HasOne("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResource", "IdentityResource")
                         .WithMany("Properties")
                         .HasForeignKey("IdentityResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2988,7 +2988,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("ThirdPartyUsers");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiResource", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", b =>
                 {
                     b.Navigation("ApiScopes");
 
@@ -2999,14 +2999,14 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("UserClaims");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.ApiScope", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScope", b =>
                 {
                     b.Navigation("Properties");
 
                     b.Navigation("UserClaims");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.Client", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", b =>
                 {
                     b.Navigation("AllowedCorsOrigins");
 
@@ -3027,7 +3027,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("RedirectUris");
                 });
 
-            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.Oidc.Domain.Entities.IdentityResource", b =>
+            modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResource", b =>
                 {
                     b.Navigation("Properties");
 

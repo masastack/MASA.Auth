@@ -18,6 +18,15 @@ public class CommandHandler
     public async Task UpsertDepartmentAsync(AddDepartmentCommand addDepartmentCommand)
     {
         var dto = addDepartmentCommand.UpsertDepartmentDto;
+        Expression<Func<Department, bool>> predicate = d => d.Name.Equals(dto.Name);
+        if (dto.IsUpdate)
+        {
+            predicate = predicate.And(d => d.Id != dto.Id);
+        }
+        if (_departmentRepository.Any(predicate))
+        {
+            throw new UserFriendlyException($"The department name {dto.Name} already exists");
+        }
         var parent = await _departmentRepository.FindAsync(dto.ParentId);
         if (dto.IsUpdate)
         {
@@ -44,6 +53,10 @@ public class CommandHandler
     public async Task CopyDepartmentAsync(CopyDepartmentCommand copyDepartmentCommand)
     {
         var dto = copyDepartmentCommand.CopyDepartmentDto;
+        if (_departmentRepository.Any(d => d.Name.Equals(dto.Name)))
+        {
+            throw new UserFriendlyException($"the department name {dto.Name} already exists");
+        }
         var sourceDepartment = await _departmentRepository.GetByIdAsync(dto.SourceId);
         if (sourceDepartment != null)
         {

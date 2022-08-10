@@ -7,7 +7,7 @@ public class OperationLogService : ServiceBase
 {
     protected override string BaseUrl { get; set; }
 
-    internal OperationLogService(ICallerProvider callerProvider) : base(callerProvider)
+    internal OperationLogService(ICaller caller) : base(caller)
     {
         BaseUrl = "api/operationLog/";
     }

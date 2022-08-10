@@ -70,7 +70,6 @@ public class StaffService : RestServiceBase
             Position = staff.Position,
             StaffType = Enum.Parse<StaffTypes>(staff.StaffType.ToString()),
             UserId = staff.UserId,
-            Account = staff.Account,
             Name = staff.Name,
             DisplayName = staff.DisplayName,
             IdCard = staff.IdCard,
@@ -124,12 +123,6 @@ public class StaffService : RestServiceBase
         [FromBody] UpdateStaffDto staff)
     {
         await eventBus.PublishAsync(new UpdateStaffCommand(staff));
-    }
-
-    public async Task UpdateStaffPasswordAsync(IEventBus eventBus,
-    [FromBody] UpdateStaffPasswordDto staff)
-    {
-        await eventBus.PublishAsync(new UpdateStaffPasswordCommand(staff));
     }
 
     private async Task RemoveAsync(IEventBus eventBus,

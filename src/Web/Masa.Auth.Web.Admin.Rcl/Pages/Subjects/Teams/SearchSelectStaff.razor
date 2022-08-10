@@ -1,14 +1,15 @@
 ﻿@inherits AdminCompontentBase
 
-<MAutocomplete Value="Value" ValueChanged="ValueChanged"
+<SAutoComplete Value="Value" 
+               ValueChanged="ValueChanged"
                Items="_staffs"
                Loading="_staffLoading"
                OnSearchInputUpdate="QuerySelectionStaff"
                ItemText="r=>r.Name"
                ItemValue="r=>r.Id"
-               Outlined
-               Dense Class="@Class" Style="@Style"
-               Chips HideDetails="true"
+               Class="@Class" 
+               Style="@Style"
+               Chips
                SmallChips
                Label="@Label"
                Multiple>
@@ -39,7 +40,7 @@
             </MListItemSubtitle>
         </MListItemContent>
     </ItemContent>
-</MAutocomplete>
+</SAutoComplete>
 
 @code {
 

@@ -15,7 +15,16 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IClientCache _clientCache;
 
-    public QueryHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, OidcDbContext oidcDbContext, AuthDbContext authDbContext, IClientCache clientCache)
+    public QueryHandler(
+        IClientRepository clientRepository,
+        IIdentityResourceRepository identityResourceRepository,
+        IApiResourceRepository apiResourceRepository,
+        IApiScopeRepository apiScopeRepository,
+        IUserClaimRepository userClaimRepository,
+        ICustomLoginRepository customLoginRepository,
+        OidcDbContext oidcDbContext,
+        AuthDbContext authDbContext,
+        IClientCache clientCache)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;

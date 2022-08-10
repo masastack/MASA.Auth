@@ -1,14 +1,11 @@
 ﻿@inherits AdminCompontentBase
 
-<MAutocomplete Value="Value"
+<SAutoComplete Value="Value"
                ValueChanged="ValueChanged"
                Items="ThirdPartyIdps!.Where(e => e.Id==Value || Excludes.Contains(e.Id) is false).ToList()"
-               Color="primary"
                Label="@T(Label)"
                ItemText="e => e.Name"
                ItemValue="e => e.Id"
-               Outlined
-               HideDetails="@("auto")"
                Style="@($"{Style}")"
                Class="@($"{Class}")">
     <ItemContent Context="data">
@@ -21,4 +18,4 @@
             </div>                      
         </div>
     </ItemContent>
-</MAutocomplete>
+</SAutoComplete>
