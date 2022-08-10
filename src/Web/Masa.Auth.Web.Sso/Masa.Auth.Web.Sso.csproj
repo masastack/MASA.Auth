@@ -37,6 +37,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\AspNet.Security.OAuth.GitHub\AspNet.Security.OAuth.GitHub.csproj" />
+	  <ProjectReference Include="..\..\..\..\AspNet.Security.OAuth.Weixin\AspNet.Security.OAuth.Weixin.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Certificates\7348307__lonsid.cn.pfx">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
