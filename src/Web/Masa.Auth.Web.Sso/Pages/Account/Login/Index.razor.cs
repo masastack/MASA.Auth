@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-using BlazorComponent;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
@@ -9,20 +8,17 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 public partial class Index
 {
     ViewModel _viewModel = new();
-    InputModel _inputModel = new();
     StringNumber tab = "login";
+    string _loginHint = "";
 
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;
 
-    List<EnvironmentModel> _environments = new();
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _environments = await _pmClient.EnvironmentService.GetListAsync();
             await BuildModelAsync(ReturnUrl);
             if (_viewModel.IsExternalLoginOnly)
             {
@@ -41,11 +37,6 @@ public partial class Index
 
     private async Task BuildModelAsync(string returnUrl)
     {
-        _inputModel = new InputModel
-        {
-            ReturnUrl = returnUrl,
-            Environment = _environments.FirstOrDefault()?.Name ?? ""
-        };
 
         var context = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);
         if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
@@ -58,7 +49,7 @@ public partial class Index
                 EnableLocalLogin = local,
             };
 
-            _inputModel.UserName = context?.LoginHint ?? "";
+            _loginHint = context?.LoginHint ?? "";
 
             if (!local)
             {
@@ -98,19 +89,5 @@ public partial class Index
             EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
             ExternalProviders = providers.ToArray()
         };
-    }
-
-    private void ChangeLanguage()
-    {
-        string? changeLanguage;
-        if (GlobalConfig.Culture?.Name == "zh-CN")
-        {
-            changeLanguage = "en-US";
-        }
-        else
-        {
-            changeLanguage = "zh-CN";
-        }
-        GlobalConfig.Culture = new CultureInfo(changeLanguage);
     }
 }

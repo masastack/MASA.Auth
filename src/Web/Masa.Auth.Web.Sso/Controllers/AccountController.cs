@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
+using Masa.Utils.Caching.Core.Interfaces;
+
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
@@ -11,22 +14,25 @@ public class AccountController : Controller
     readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
+    readonly IDistributedCacheClient _distributedCacheClient;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
-        IEventService events, IAuthClient authClient)
+        IEventService events,
+        IAuthClient authClient,
+        IDistributedCacheClient distributedCacheClient)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
+        _distributedCacheClient = distributedCacheClient;
     }
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] InputModel inputModel)
+    public async Task<IActionResult> Login([FromBody] LoginInputModel inputModel)
     {
         var returnUrl = inputModel.ReturnUrl;
-        var userName = inputModel.UserName;
         // check if we are in the context of an authorization request
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
@@ -36,11 +42,36 @@ public class AccountController : Controller
             {
                 ssoEnvironmentProvider.SetEnvironment(inputModel.Environment);
             }
-            var success = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(userName, inputModel.Password, inputModel.LdapLogin);
+
+            var success = false;
+
+            if (inputModel.PhoneLogin)
+            {
+                var d = await _distributedCacheClient.GetAsync<int>(CacheKey.GetSmsCodeKey(inputModel.PhoneNumber));
+                success = d == inputModel.SmsCode;
+            }
+            else
+            {
+                success = await _authClient.UserService
+                                           .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
+            }
+
             if (success)
             {
-                var user = await _authClient.UserService.FindByAccountAsync(userName);
+                var user = new UserModel();
+                if (inputModel.PhoneLogin)
+                {
+                    user = await _authClient.UserService.FindByPhoneNumberAsync(inputModel.PhoneNumber);
+                    if (user is null)
+                    {
+                        //todo auto register user
+                        return Content("no corresponding user for this mobile phone number");
+                    }
+                }
+                else
+                {
+                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
+                }
                 // only set explicit expiration here if user chooses "remember me". 
                 // otherwise we rely upon expiration configured in cookie middleware.
                 AuthenticationProperties? props = null;
@@ -56,7 +87,7 @@ public class AccountController : Controller
                 {
                     DisplayName = user.DisplayName
                 };
-                isuser.AdditionalClaims.Add(new Claim("userName", userName));
+                isuser.AdditionalClaims.Add(new Claim("userName", user.Account));
                 isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
                 isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
                 //us duende sign in
@@ -82,7 +113,8 @@ public class AccountController : Controller
             else return Content("Unknown exception,Please contact the administrator");
         }
 
-        await _events.RaiseAsync(new UserLoginFailureEvent(userName, "invalid credentials", clientId: context?.Client.ClientId));
+        await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.UserName,
+                "invalid credentials", clientId: context?.Client.ClientId));
         return Content("username and password validate error");
     }
 

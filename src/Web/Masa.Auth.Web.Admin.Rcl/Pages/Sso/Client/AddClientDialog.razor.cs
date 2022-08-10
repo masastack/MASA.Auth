@@ -9,7 +9,7 @@ public partial class AddClientDialog
     public EventCallback OnSuccessed { get; set; }
 
     AddClientDto _addClientDto = new();
-    ClientAddBasicDto _addBasicDto = new();
+    AddClientBasicDto _addBasicDto = new();
     ClientScopesDto _clientScopesDto = new();
     bool _visible;
 

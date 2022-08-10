@@ -14,10 +14,10 @@ builder.Services.AddDaprStarter(opt =>
 #endif
 
 builder.Services.AddDaprClient();
-builder.Services.AddAliyunStorage(serviceProvider =>
+builder.Services.AddAliyunStorage(async serviceProvider =>
 {
     var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var aliyunOssConfig = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result;
+    var aliyunOssConfig = await daprClient.GetSecretAsync("localsecretstore", "aliyun-oss");
     var accessId = aliyunOssConfig["access_id"];
     var accessSecret = aliyunOssConfig["access_secret"];
     var endpoint = aliyunOssConfig["endpoint"];

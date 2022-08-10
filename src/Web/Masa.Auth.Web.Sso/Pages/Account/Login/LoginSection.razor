@@ -1,52 +1,71 @@
 ﻿@inherits SsoCompontentBase
 @inject IJSRuntime _js
+@inject IPmClient _pmClient
+@inject IMcClient _mcClient
+@inject IConfiguration _configuration
+@inject IDistributedCacheClient _distributedCacheClient
+@implements IDisposable
 
-<MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
-    <div style="height:60px;"></div>
-    <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;"> 
-        <MTextField @bind-Value="_inputModel.UserName" Label="@T("UserName")" Placeholder="@T("UserNamePlaceHolder")" Outlined Dense
-                    HideDetails="@("auto")">
+<MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-12 mx-12 text-center">
+    @if (_inputModel.PhoneLogin)
+    {
+        <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="_inputModel.PhoneNumber" Label="@T("PhoneNumber")"
+        Placeholder="@T("PhoneNumberPlaceHolder")" Outlined>
         </MTextField>
-        <MTextField @bind-Value="@_inputModel.Password" Class="mt-9" Label="@T("Password")" OnKeyDown="KeyDownHandler"
-                    Type="@(_show ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
-                    AppendIcon="@(_show ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_show = !_show" Outlined Dense
-                    HideDetails="@("auto")">
+        <MTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" Outlined Label="@T("SMSCode")"
+        Placeholder="@T("SMSCodePlaceHolder")">
+            <AppendContent>
+                <MButton Style="margin-top:-16px;margin-right:-12px;height:56px;min-width: 120px;"
+                Class="primary rounded-r-lg" Disabled=!_canSmsCode OnClick="GetSmsCode">
+                    @(_canSmsCode?@T("GetSmsCode"):_smsCodeTime)</MButton>
+            </AppendContent>
         </MTextField>
-        <MRow Class="mt-6">
-            <MCol Md="6" Class="d-flex justify-space-between">
-                <MIcon Size="16"
-                       Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
-                    mdi-record-circle
-                </MIcon>
-                <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
-                         Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
-                </MSelect>
-            </MCol>
-            <MCol Md="6" Class="d-flex justify-end">
-                <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
-                           Label="@T("RememberLogin")"></MCheckbox>
-            </MCol>
-        </MRow>
-    </MForm>
-    <MForm EnableValidation class="mt-2 mx-auto text-center" style="width: 420px;">
-        
-    </MForm>
-    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=PasswordLogin Height=46 Width=340 Color="primary">
-        @T("PasswordLogin")
+    }
+    else
+    {
+        <MTextField PrependInnerIcon="mdi-account" @bind-Value="_inputModel.UserName" Label="@T("UserName")"
+        Placeholder="@T("UserNamePlaceHolder")" Outlined>
+        </MTextField>
+        <MTextField PrependInnerIcon="mdi-lock" @bind-Value="@_inputModel.Password" Class="mt-3" Label="@T("Password")"
+        OnKeyDown="KeyDownHandler" Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
+        AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
+        </MTextField>
+    }
+    <MRow>
+        <MCol Md="6" Class="d-flex justify-space-between">
+            <MIcon Size="16"
+                Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
+                mdi-record-circle
+            </MIcon>
+            <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
+                Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+            </MSelect>
+        </MCol>
+        <MCol Md="6" Class="d-flex justify-end">
+            <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")">
+            </MCheckbox>
+            @* <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
+                Label="@T("RememberLogin")"></MCheckbox> *@
+        </MCol>
+    </MRow>
+</MForm>
+<div class="text-center mt-12">
+    <MButton Class="rounded-pill text-btn white--text" Disabled=string.IsNullOrEmpty(_inputModel.Environment)
+        OnClick="LoginHandler" Height=48 Width=340 Color="primary">
+        @T("Login")
     </MButton>
-    <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick=PhoneLogin Height=46 Width=340 Color="primary">
-        @T("PhoneLogin")
-    </MButton>
-    <MButton Class="mt-6 rounded-4 text-btn white--text" Block OnClick=Cancel Height=46 Width=340 Color="warning">
-        @T("Cancel")
-    </MButton>
-    <div class="d-flex justify-space-between align-center mt-4">
-        <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")"></MCheckbox>
-        <span class="hover-pointer" @onclick="ChangeLanguage">
-            <MIcon>mdi-swap-horizontal</MIcon>
-            <span class="text-body3">
-                @(LanguageProvider.Culture.Name == "zh-CN"?"EN": "中")
-            </span>
-        </span>
-    </div>
-</MCard>
+    @if (!_inputModel.PhoneLogin)
+    {
+        <MButton Class="mt-6 rounded-pill text-btn white--text" OnClick="()=>{ _inputModel.PhoneLogin=true; }" Height=48
+        Width=340 Color="primary" Outlined>
+            @T("PhoneLogin")
+        </MButton>
+    }
+    else
+    {
+        <MButton Class="mt-6 rounded-pill text-btn white--text" OnClick="()=>{ _inputModel.PhoneLogin=false; }" Height=48
+        Width=340 Color="primary" Outlined>
+            @T("PasswordLogin")
+        </MButton>
+    }
+</div>

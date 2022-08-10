@@ -1,33 +1,90 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Mc.Enum;
+using Masa.BuildingBlocks.StackSdks.Mc.Model;
+
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class LoginSection
 {
-    InputModel _inputModel = new();
-    MForm? _loginForm;
 
     [CascadingParameter(Name = "HttpContext")]
     public HttpContext? HttpContext { get; set; }
 
-    private async Task PasswordLogin()
+    [CascadingParameter]
+    public string ReturnUrl { get; set; } = string.Empty;
+
+    [Parameter]
+    public string LoginHint { get; set; } = string.Empty;
+
+    LoginInputModel _inputModel = new();
+    MForm _loginForm = null!;
+    bool _showPwd, _canSmsCode = true;
+    List<EnvironmentModel> _environments = new();
+    System.Timers.Timer? _timer;
+    int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+
+    protected override void OnInitialized()
     {
+        if (_timer == null)
+        {
+            _timer = new(1000 * 1);
+            _timer.Elapsed += Timer_Elapsed;
+        }
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _environments = await _pmClient.EnvironmentService.GetListAsync();
+            _inputModel = new LoginInputModel
+            {
+                ReturnUrl = ReturnUrl,
+                UserName = LoginHint,
+                Environment = _environments.FirstOrDefault()?.Name ?? ""
+            };
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        _ = InvokeAsync(() =>
+        {
+            _smsCodeTime--;
+            if (_smsCodeTime == 0)
+            {
+                _timer?.Stop();
+                _canSmsCode = true;
+                _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+            }
+            StateHasChanged();
+        });
+    }
+
+    private async Task LoginHandler()
+    {
+        var d = await _loginForm.ValidateAsync();
         //validate
-        if (_loginForm != null && await _loginForm.ValidateAsync())
+        if (await _loginForm.ValidateAsync())
         {
             if (HttpContext != null)
             {
                 await HttpContext.SignOutAsync();
             }
+
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
             if (!string.IsNullOrEmpty(msg))
             {
-                await PopupService.AlertAsync(msg, BlazorComponent.AlertTypes.Error);
+                await PopupService.AlertAsync(msg, AlertTypes.Error);
             }
             else
             {
-                if (UrlHelper.IsLocalUrl(_inputModel.ReturnUrl))
+                if (SsoUrlHelper.IsLocalUrl(_inputModel.ReturnUrl))
                 {
                     Navigation.NavigateTo(_inputModel.ReturnUrl, true);
                 }
@@ -37,15 +94,10 @@ public partial class LoginSection
                 }
                 else
                 {
-                    await PopupService.AlertAsync("invalid return URL", BlazorComponent.AlertTypes.Error);
+                    await PopupService.AlertAsync("invalid return URL", AlertTypes.Error);
                 }
             }
         }
-    }
-
-    private async Task PhoneLogin()
-    {
-
     }
 
     private async Task Cancel()
@@ -79,12 +131,57 @@ public partial class LoginSection
         }
     }
 
+    private async Task GetSmsCode()
+    {
+        var d = await _loginForm.ValidateAsync();
+        if (string.IsNullOrWhiteSpace(_inputModel.PhoneNumber) || !Regex.IsMatch(_inputModel.PhoneNumber,
+                LoginOptions.PhoneRegular))
+        {
+            await PopupService.AlertAsync(T("PhoneNumberPrompt"), AlertTypes.Error);
+            return;
+        }
+        var code = new Random().Next(100000, 999999);
+        await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
+        {
+            ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"), //todo dcc
+            ChannelType = ChannelTypes.Sms,
+            TemplateCode = _configuration.GetValue<string>("Sms:TemplateCode"),
+            ReceiverType = SendTargets.Assign,
+            Receivers = new List<MessageTaskReceiverModel>
+            {
+                new MessageTaskReceiverModel
+                {
+                    Type = MessageTaskReceiverTypes.User,
+                    PhoneNumber = _inputModel.PhoneNumber
+                }
+            },
+            Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
+            {
+                ["code"] = code,
+            })
+        });
+        await _distributedCacheClient.SetAsync(CacheKey.GetSmsCodeKey(_inputModel.PhoneNumber), code
+            , new Utils.Caching.Core.Models.CombinedCacheEntryOptions<int>
+            {
+                DistributedCacheEntryOptions = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = LoginOptions.SmsCodeExpire
+                }
+            });
+        _canSmsCode = false;
+        _timer?.Start();
+    }
+
     private async Task KeyDownHandler(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
-            //todo phone
-            await PasswordLogin();
+            await LoginHandler();
         }
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
     }
 }

@@ -5,24 +5,21 @@
 <MApp>
     <MErrorHandler>
         <MMain Class="fill-lighten-1">
-            <MRow Class="max-height ma-0">
-                <MCol Md=4 Sm=12 Class="neutral-lighten-5">
-                    <image class="ml-12 mt-12" style="height:40px;" src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200"></image>
-                    <div class="d-flex pb-12" style="height: calc(100% - 88px);">
-                        <div style="width:450px;" class="ma-auto">
-                            <h3 class="neutral-lighten-1--text">@T("Slogan")</h3>
-                            <div class="mt-12 neutral-lighten-1--text">
-                                @T("Poster")
-                            </div>
-                            <image class="mt-12" src="/img/login/left.svg"></image>
-                        </div>
-                    </div>
+            <MRow>
+                <MCol Offset="2" Md="3" Class="mt-12">
+                    <image style="height:40px;" src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200"></image>
                 </MCol>
-                <MCol Md=8 Sm=12 Class="fill-lighten-1 block-center">
+            </MRow>
+            <MRow Style="height:800px;">
+                <MCol Md=12 Sm=12 Class="d-flex justify-center align-center">
                     @Body
                 </MCol>
             </MRow>
-            <a href="https://beian.miit.gov.cn/" target="_blank" class="neutral-lighten-3--text" style="position:absolute;bottom:48px;margin-left:63%;text-decoration:none;font-size:14px;">浙ICP备2021013592号-1</a>
+            <MRow Justify="JustifyTypes.Center">
+                <MCol Class="text-center">
+                    <a href="https://beian.miit.gov.cn/" target="_blank" class="neutral-lighten-3--text" style="text-decoration:none;font-size:14px;">浙ICP备2021013592号-1</a>
+                </MCol>
+            </MRow>
         </MMain>
     </MErrorHandler>
 </MApp>

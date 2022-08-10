@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using BlazorComponent;
 global using BlazorComponent.I18n;
+global using FluentValidation;
 global using IdentityModel;
 global using IdentityServer4;
 global using IdentityServer4.EntityFramework.Services;
@@ -40,12 +42,13 @@ global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Caching.Distributed;
 global using Microsoft.JSInterop;
 global using System.Collections.Concurrent;
-global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics;
 global using System.Globalization;
 global using System.Security.Claims;
 global using System.Security.Cryptography.X509Certificates;
 global using System.Text;
 global using System.Text.Json;
+global using System.Text.RegularExpressions;
