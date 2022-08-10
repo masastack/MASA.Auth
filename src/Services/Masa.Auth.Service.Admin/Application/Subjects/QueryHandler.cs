@@ -555,7 +555,8 @@ public class QueryHandler
                     p.Id,
                     p.Name,
                     Url = Path.Combine(a.Url, p.Url)
-                }).ToDictionary(p => p.Url, p => p.Name);
+                })
+                .Select(p => new KeyValuePair<string, string>(p.Url, p.Name));
             userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
             {
                 Url = v.Key,
