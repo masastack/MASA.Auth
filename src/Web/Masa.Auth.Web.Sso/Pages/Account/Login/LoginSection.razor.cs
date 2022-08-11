@@ -128,7 +128,7 @@ public partial class LoginSection
             await PopupService.AlertAsync(T("PhoneNumberPrompt"), AlertTypes.Error);
             return;
         }
-        var code = new Random().Next(100000, 999999);
+        var code = Random.Shared.Next(100000, 999999);
         await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
         {
             //todo dcc
