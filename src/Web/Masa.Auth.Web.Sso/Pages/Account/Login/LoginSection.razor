@@ -26,7 +26,7 @@
     else
     {
         <MTextField PrependInnerIcon="mdi-account" @bind-Value="_inputModel.UserName" Label="@T("UserName")"
-                Placeholder="@T("UserNamePlaceHolder")" Outlined>
+                Placeholder="@T("UserNamePlaceHolder")" Outlined Autofocus>
         </MTextField>
         <MTextField PrependInnerIcon="mdi-lock" @bind-Value="@_inputModel.Password" Class="mt-3" Label="@T("Password")"
                 OnKeyDown="KeyDownHandler" Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
