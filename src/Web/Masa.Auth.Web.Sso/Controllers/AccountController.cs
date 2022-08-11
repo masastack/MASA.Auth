@@ -47,8 +47,10 @@ public class AccountController : Controller
 
             if (inputModel.PhoneLogin)
             {
-                var d = await _distributedCacheClient.GetAsync<int>(CacheKey.GetSmsCodeKey(inputModel.PhoneNumber));
-                success = d == inputModel.SmsCode;
+                var key = CacheKey.GetSmsCodeKey(inputModel.PhoneNumber);
+                var code = await _distributedCacheClient.GetAsync<int>(key);
+                success = code == inputModel.SmsCode;
+                await _distributedCacheClient.RemoveAsync<int>(key);
             }
             else
             {
@@ -90,7 +92,9 @@ public class AccountController : Controller
                 isuser.AdditionalClaims.Add(new Claim("userName", user.Account));
                 isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
                 isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
-                //us duende sign in
+
+                await HttpContext.SignOutAsync();
+                //us sign in
                 await HttpContext.SignInAsync(isuser, props);
 
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));

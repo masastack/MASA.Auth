@@ -11,7 +11,7 @@ public class LoginInputModel
 
     public string PhoneNumber { get; set; } = string.Empty;
 
-    public int SmsCode { get; set; }
+    public int? SmsCode { get; set; }
 
     public bool RememberLogin { get; set; }
 

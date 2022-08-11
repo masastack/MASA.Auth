@@ -4,19 +4,19 @@
 @inherits SsoCompontentBase
 @inject IClientStore _clientStore
 @inject IAuthenticationSchemeProvider _schemeProvider
-@layout SideLayout
+@layout SimpleLayout
 
 @if (_viewModel.EnableLocalLogin)
 {
     <MCard Width=510 Height=620>
-        <MTabs @bind-Value="tab" BackgroundColor="transparent" Color="basil" Grow>
+        <MTabs @bind-Value="tab" BackgroundColor="transparent" Color="primary" Grow>
             <MTab Value="@("login")">@T("Login")</MTab>
             <MTab Value="@("register")" Disabled>@T("Register")</MTab>
         </MTabs>
         <MTabsItems Value="@tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
-                <LoginSection LoginHint="@_loginHint"/>
+                    <LoginSection LoginHint="@_loginHint" />
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">

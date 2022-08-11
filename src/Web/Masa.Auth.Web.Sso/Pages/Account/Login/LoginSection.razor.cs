@@ -8,10 +8,6 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class LoginSection
 {
-
-    [CascadingParameter(Name = "HttpContext")]
-    public HttpContext? HttpContext { get; set; }
-
     [CascadingParameter]
     public string ReturnUrl { get; set; } = string.Empty;
 
@@ -72,11 +68,6 @@ public partial class LoginSection
         //validate
         if (await _loginForm.ValidateAsync())
         {
-            if (HttpContext != null)
-            {
-                await HttpContext.SignOutAsync();
-            }
-
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
             if (!string.IsNullOrEmpty(msg))
             {
@@ -143,7 +134,8 @@ public partial class LoginSection
         var code = new Random().Next(100000, 999999);
         await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
         {
-            ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"), //todo dcc
+            //todo dcc
+            ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"),
             ChannelType = ChannelTypes.Sms,
             TemplateCode = _configuration.GetValue<string>("Sms:TemplateCode"),
             ReceiverType = SendTargets.Assign,
