@@ -530,11 +530,14 @@ public class QueryHandler
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .ToListAsync();
-        teamRoleSelectQuery.Result = teams.Select(team => new TeamRoleSelectDto(
-            team.Id,
-            team.Name,
-            team.Avatar.Url,
-            team.TeamRoles.Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity)).ToList())).ToList();
+        foreach (var team in teams)
+        {
+            var roles = team.TeamRoles
+                            .Where(tr => team.TeamStaffs.Any(ts => ts.TeamMemberType == tr.TeamMemberType))
+                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity))
+                            .ToList();
+            teamRoleSelectQuery.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
+        }
     }
 
     [EventHandler]
@@ -544,7 +547,7 @@ public class QueryHandler
                                         .Where(ts => ts.UserId == query.UserId)
                                         .ToListAsync();
 
-        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId,team.TeamMemberType))
+        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType))
                             .ToList();
     }
 

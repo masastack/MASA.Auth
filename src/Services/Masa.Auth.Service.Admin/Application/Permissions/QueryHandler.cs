@@ -13,11 +13,11 @@ public class QueryHandler
     readonly IEventBus _eventBus;
 
     public QueryHandler(
-        IRoleRepository roleRepository, 
-        IPermissionRepository permissionRepository, 
-        AuthDbContext authDbContext, 
-        UserDomainService userDomainService, 
-        IMemoryCacheClient memoryCacheClient, 
+        IRoleRepository roleRepository,
+        IPermissionRepository permissionRepository,
+        AuthDbContext authDbContext,
+        UserDomainService userDomainService,
+        IMemoryCacheClient memoryCacheClient,
         IEventBus eventBus)
     {
         _roleRepository = roleRepository;
@@ -304,6 +304,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetPermissionsByRoleAsync(PermissionsByRoleQuery query)
     {
+        if (query.Roles.Count == 0) return;
         query.Result = await GetPermissions(query.Roles);
 
         async Task<List<Guid>> GetPermissions(IEnumerable<Guid> roleIds)
@@ -338,13 +339,15 @@ public class QueryHandler
     [EventHandler]
     public async Task GetPermissionsByTeamAsync(PermissionsByTeamQuery query)
     {
+        if (query.Teams.Count == 0) return;
+        var teamIds = query.Teams.Select(team => team.Id).ToList();
         var teamRoles = await _authDbContext.Set<TeamRole>()
-                                           .Where(tr => query.Teams.Any(team => team.Id == tr.TeamId && team.TeamMemberType == tr.TeamMemberType))
+                                           .Where(tr => teamIds.Contains(tr.TeamId))
                                            .ToListAsync();
         var teamPermissions = await _authDbContext.Set<TeamPermission>()
-                                                 .Where(tp => query.Teams.Any(team => team.Id == tp.TeamId && team.TeamMemberType == tp.TeamMemberType))
+                                                 .Where(tp => teamIds.Contains(tp.TeamId))
                                                  .ToListAsync();
-        foreach(var team in query.Teams)
+        foreach (var team in query.Teams)
         {
             var roles = teamRoles.Where(tr => tr.TeamId == team.Id && tr.TeamMemberType == team.TeamMemberType)
                                  .Select(tr => tr.RoleId)
@@ -366,6 +369,11 @@ public class QueryHandler
     {
         var teamQuery = new TeamByUserQuery(query.User);
         await _eventBus.PublishAsync(teamQuery);
+        if(query.Teams is not null)
+        {
+            teamQuery.Result = teamQuery.Result.Where(team => query.Teams.Contains(team.Id))
+                                               .ToList();
+        }       
         var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
         await _eventBus.PublishAsync(permissionByTeamQuery);
         var roles = await _authDbContext.Set<UserRole>()

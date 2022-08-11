@@ -124,6 +124,7 @@ public class PermissionService : ServiceBase
 
     private async Task<List<Guid>> GetPermissionsByRoleAsync([FromServices] IEventBus eventBus, [FromQuery] string ids)
     {
+        if (string.IsNullOrEmpty(ids)) return new();
         var roles = ids.Split(',').Select(id => Guid.Parse(id)).ToList();
         var query = new PermissionsByRoleQuery(roles);
         await eventBus.PublishAsync(query);

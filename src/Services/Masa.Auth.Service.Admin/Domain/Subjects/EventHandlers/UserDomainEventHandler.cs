@@ -68,10 +68,10 @@ public class UserDomainEventHandler
         }
         else
         {
-            var query = new PermissionsByUserQuery(userEvent.UserId);
+            var query = new PermissionsByUserQuery(userEvent.UserId, userEvent.Teams);
             await _eventBus.PublishAsync(query);
             userEvent.Permissions = query.Result;
-        }       
+        }
     }
 
     //[EventHandler(1)]

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
-public record PermissionsByUserQuery(Guid User) : Query<List<Guid>>
+public record PermissionsByUserQuery(Guid User, List<Guid>? Teams = null) : Query<List<Guid>>
 {
     public override List<Guid> Result { get; set; } = new();
 }

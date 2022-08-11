@@ -23,7 +23,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
                 }
                 else return new UniqueModel(value.PermissionId.ToString());
             })
-            .Union(RolePermissions.Select(value => new UniqueModel(value.ToString())))
+            .Union(RoleUnionTeamPermission.Select(value => new UniqueModel(value.ToString())))
             .ToList();
         }
     }
@@ -36,7 +36,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         {
             if (value.Any(v => v.PermissionId == code)) value.Add(new(parentCode, true));
         }
-        foreach (var permission in RolePermissions)
+        foreach (var permission in RoleUnionTeamPermission)
         {
             var rolePermissionValue = value.FirstOrDefault(v => v.PermissionId == permission);
             if (rolePermissionValue is null)

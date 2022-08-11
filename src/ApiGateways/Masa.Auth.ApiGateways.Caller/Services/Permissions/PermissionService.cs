@@ -62,7 +62,7 @@ public class PermissionService : ServiceBase
         return await SendAsync<object, List<Guid>>(nameof(GetPermissionsByRoleAsync), new { ids = string.Join(',', roles) });
     }
 
-    public async Task<List<Guid>> GetPermissionsByRoleAsync(List<TeamSampleDto> teams)
+    public async Task<List<Guid>> GetPermissionsByTeamAsync(List<TeamSampleDto> teams)
     {
         return await PostAsync<List<TeamSampleDto>, List<Guid>>(nameof(GetPermissionsByRoleAsync), teams);
     }
