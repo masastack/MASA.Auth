@@ -23,7 +23,7 @@ public partial class Index
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if (firstRender && !UrlHelper.IsLocalUrl(RedirectUri))
+        if (firstRender && !SsoUrlHelper.IsLocalUrl(RedirectUri))
         {
             Navigation.NavigateTo(GlobalVariables.ERROR_ROUTE, true);
         }

@@ -27,7 +27,7 @@ namespace Masa.Auth.Web.Sso.Shared
         public IEventService Events { get; set; } = null!;
 
         [Inject]
-        public IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
+        public AuthenticationStateProvider _authenticationStateProvider { get; set; } = null!;
 
         [Inject]
         public NavigationManager Navigation { get; set; } = null!;
@@ -42,7 +42,7 @@ namespace Masa.Auth.Web.Sso.Shared
         {
             get
             {
-                return HttpContextAccessor.HttpContext?.User ?? throw new UserFriendlyException("HttpContext user is null");
+                return _authenticationStateProvider.GetAuthenticationStateAsync().Result.User;
             }
         }
 
