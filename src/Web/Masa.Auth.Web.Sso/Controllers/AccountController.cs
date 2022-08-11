@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
-using Masa.Utils.Caching.Core.Interfaces;
-
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
