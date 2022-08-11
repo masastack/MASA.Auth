@@ -19,6 +19,11 @@ public partial class PermissionsConfigure
     private List<Guid> InternalRoles { get; set; } = new();
 
     [Parameter]
+    public List<Guid> Teams { get; set; } = new();
+
+    private List<Guid> InternalTeams { get; set; } = new();
+
+    [Parameter]
     public List<Guid> Value { get; set; } = new();
 
     [Parameter]
@@ -52,7 +57,7 @@ public partial class PermissionsConfigure
 
     private ProjectService ProjectService => AuthCaller.ProjectService;
 
-    private RoleService RoleService => AuthCaller.RoleService;
+    private PermissionService PermissionService => AuthCaller.PermissionService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,7 +89,7 @@ public partial class PermissionsConfigure
         }).ToList();
     }
 
-    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(Roles);
+    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await PermissionService.GetPermissionsByRoleAsync(Roles);
 
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {

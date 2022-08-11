@@ -56,4 +56,14 @@ public class PermissionService : ServiceBase
     {
         return await GetAsync<List<string>>($"element-permissions?userId={userId}&appId={appId}");
     }
+
+    public async Task<List<Guid>> GetPermissionsByRoleAsync(List<Guid> roles)
+    {
+        return await SendAsync<object, List<Guid>>(nameof(GetPermissionsByRoleAsync), new { ids = string.Join(',', roles) });
+    }
+
+    public async Task<List<Guid>> GetPermissionsByRoleAsync(List<TeamSampleDto> teams)
+    {
+        return await PostAsync<List<TeamSampleDto>, List<Guid>>(nameof(GetPermissionsByRoleAsync), teams);
+    }
 }

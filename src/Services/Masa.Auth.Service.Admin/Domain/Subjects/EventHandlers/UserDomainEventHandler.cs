@@ -52,40 +52,65 @@ public class UserDomainEventHandler
     }
 
     [EventHandler(1)]
-    public void UserRoles(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
+    public async Task GetPermissions(QueryUserPermissionDomainEvent userEvent)
     {
-        queryUserPermissionDomainEvent.Roles = _authDbContext.Set<UserRole>()
-                .Where(ur => ur.UserId == queryUserPermissionDomainEvent.UserId && !ur.IsDeleted)
-                .Select(ur => ur.RoleId).Distinct().ToList();
+        //todo query from cache
+        var user = await _authDbContext.Set<User>()
+                                       .FirstOrDefaultAsync(u => u.Id == userEvent.UserId);
+        if (user == null)
+        {
+            throw new UserFriendlyException("This user does not exist");
+        }
+        if (user.IsAdmin())
+        {
+            userEvent.Permissions = await _authDbContext.Set<Permission>()
+                    .Select(p => p.Id).ToListAsync();
+        }
+        else
+        {
+            var query = new PermissionsByUserQuery(userEvent.UserId);
+            await _eventBus.PublishAsync(query);
+            userEvent.Permissions = query.Result;
+        }       
     }
 
-    [EventHandler(2)]
-    public void UserPermissions(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
-    {
-        queryUserPermissionDomainEvent.Permissions = _authDbContext.Set<UserPermission>()
-            .Where(up => up.UserId == queryUserPermissionDomainEvent.UserId && up.Effect && !up.IsDeleted)
-            .Select(up => up.PermissionId).ToList();
-    }
+    //[EventHandler(1)]
+    //public async Task UserRoles(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
+    //{
+    //    queryUserPermissionDomainEvent.Roles = await _authDbContext.Set<UserRole>()
+    //            .Where(ur => ur.UserId == queryUserPermissionDomainEvent.UserId && !ur.IsDeleted)
+    //            .Select(ur => ur.RoleId)
+    //            .ToListAsync();
+    //}
 
-    [EventHandler(3)]
-    public void UserTeamPermission(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
-    {
-        var teamIdAndTypes = _authDbContext.Set<TeamStaff>()
-                    .Where(t => t.Staff.UserId == queryUserPermissionDomainEvent.UserId && !t.IsDeleted)
-                    .Select(t => new { t.TeamId, t.TeamMemberType });
+    //[EventHandler(2)]
+    //public async Task UserPermissions(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
+    //{
+    //    queryUserPermissionDomainEvent.Permissions = await _authDbContext.Set<UserPermission>()
+    //            .Where(up => up.UserId == queryUserPermissionDomainEvent.UserId && !up.IsDeleted)
+    //            .Select(up => up.PermissionId)
+    //            .ToListAsync();
+    //}
 
-        var teamPermissions = _authDbContext.Set<TeamPermission>()
-            .Where(t => teamIdAndTypes.Any(a => a.TeamId == t.Team.Id
-            && a.TeamMemberType == t.TeamMemberType) && t.Effect && !t.IsDeleted)
-            .Select(t => t.PermissionId).ToList();
+    //[EventHandler(3)]
+    //public void UserTeamPermission(QueryUserPermissionDomainEvent queryUserPermissionDomainEvent)
+    //{
+    //    var teamIdAndTypes = _authDbContext.Set<TeamStaff>()
+    //                .Where(t => t.Staff.UserId == queryUserPermissionDomainEvent.UserId && !t.IsDeleted)
+    //                .Select(t => new { t.TeamId, t.TeamMemberType });
 
-        queryUserPermissionDomainEvent.Permissions = queryUserPermissionDomainEvent.Permissions.Union(teamPermissions).ToList();
+    //    var teamPermissions = _authDbContext.Set<TeamPermission>()
+    //        .Where(t => teamIdAndTypes.Any(a => a.TeamId == t.Team.Id
+    //        && a.TeamMemberType == t.TeamMemberType) && t.Effect && !t.IsDeleted)
+    //        .Select(t => t.PermissionId).ToList();
 
-        var teamRoles = _authDbContext.Set<TeamRole>().Where(tr => teamIdAndTypes.Any(a => a.TeamId == tr.TeamId
-            && a.TeamMemberType == tr.TeamMemberType) && !tr.IsDeleted).Select(tr => tr.RoleId).ToList();
+    //    queryUserPermissionDomainEvent.Permissions = queryUserPermissionDomainEvent.Permissions.Union(teamPermissions).ToList();
 
-        queryUserPermissionDomainEvent.Roles = queryUserPermissionDomainEvent.Roles.Union(teamRoles).ToList();
-    }
+    //    var teamRoles = _authDbContext.Set<TeamRole>().Where(tr => teamIdAndTypes.Any(a => a.TeamId == tr.TeamId
+    //        && a.TeamMemberType == tr.TeamMemberType) && !tr.IsDeleted).Select(tr => tr.RoleId).ToList();
+
+    //    queryUserPermissionDomainEvent.Roles = queryUserPermissionDomainEvent.Roles.Union(teamRoles).ToList();
+    //}
 
     [EventHandler(2)]
     public void AuthorizedUserPermission(UserAuthorizedDomainEvent userAuthorizedDomainEvent)

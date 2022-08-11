@@ -537,6 +537,17 @@ public class QueryHandler
             team.TeamRoles.Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity)).ToList())).ToList();
     }
 
+    [EventHandler]
+    public async Task GetTeamByUserAsync(TeamByUserQuery query)
+    {
+        var teams = await _authDbContext.Set<TeamStaff>()
+                                        .Where(ts => ts.UserId == query.UserId)
+                                        .ToListAsync();
+
+        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId,team.TeamMemberType))
+                            .ToList();
+    }
+
     #endregion
 
     [EventHandler]

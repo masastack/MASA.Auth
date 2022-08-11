@@ -21,6 +21,8 @@ public class PermissionService : ServiceBase
         MapPut(AddFavoriteMenuAsync);
         MapPut(RemoveFavoriteMenuAsync);
         MapGet(GetFavoriteMenuListAsync, "menu-favorite-list");
+        MapGet(GetPermissionsByRoleAsync);
+        MapPost(GetPermissionsByTeamAsync);
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
@@ -116,6 +118,21 @@ public class PermissionService : ServiceBase
     private async Task<List<SelectItemDto<Guid>>> GetFavoriteMenuListAsync(IEventBus eventBus, [FromQuery] Guid userId)
     {
         var query = new FavoriteMenuListQuery(userId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<Guid>> GetPermissionsByRoleAsync([FromServices] IEventBus eventBus, [FromQuery] string ids)
+    {
+        var roles = ids.Split(',').Select(id => Guid.Parse(id)).ToList();
+        var query = new PermissionsByRoleQuery(roles);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<Guid>> GetPermissionsByTeamAsync([FromServices] IEventBus eventBus, List<TeamSampleDto> teams)
+    {
+        var query = new PermissionsByTeamQuery(teams);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

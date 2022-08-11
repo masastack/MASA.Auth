@@ -22,18 +22,6 @@ public class UserDomainService : DomainService
 
     public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId)
     {
-        //todo query from cache
-        var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == userId);
-        if (user == null)
-        {
-            return new List<Guid>();
-        }
-        if (user.IsAdmin())
-        {
-            var permissions = _authDbContext.Set<Permission>()
-                    .Select(a => a.Id).ToList();
-            return await Task.FromResult(permissions);
-        }
         var query = new QueryUserPermissionDomainEvent(userId);
         await EventBus.PublishAsync(query);
         return query.Permissions;
