@@ -23,8 +23,9 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthClient:Url"));
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
+builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthServiceUrl"));
+builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUrl"));
+builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUrl"));
 
 builder.Services.AddSameSiteCookiePolicy();
 builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
