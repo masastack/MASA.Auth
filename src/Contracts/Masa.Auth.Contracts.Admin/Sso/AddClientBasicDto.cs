@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Sso;
 
-public class ClientAddBasicDto
+public class AddClientBasicDto
 {
     public string ClientId { get; set; } = string.Empty;
 

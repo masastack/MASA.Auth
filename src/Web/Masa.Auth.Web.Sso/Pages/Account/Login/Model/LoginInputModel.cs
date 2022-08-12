@@ -3,15 +3,19 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
-public class InputModel
+public class LoginInputModel
 {
-    [Required]
     public string UserName { get; set; } = string.Empty;
 
-    [Required]
     public string Password { get; set; } = string.Empty;
 
+    public string PhoneNumber { get; set; } = string.Empty;
+
+    public int? SmsCode { get; set; }
+
     public bool RememberLogin { get; set; }
+
+    public bool PhoneLogin { get; set; }
 
     public string ReturnUrl { get; set; } = string.Empty;
 

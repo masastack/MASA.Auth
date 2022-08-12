@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure;
 
-public static class UrlHelper
+public static class SsoUrlHelper
 {
     public static bool IsLocalUrl(string? url) => CheckIsLocalUrl(url);
 
