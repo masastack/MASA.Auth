@@ -232,4 +232,10 @@ public class UserService : RestServiceBase
             var command = new SyncUserAutoCompleteCommand(dto);
             await eventBus.PublishAsync(command);
         }
+
+        public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
+        {
+            var command = new SyncUserRedisCommand(dto);
+            await eventBus.PublishAsync(command);
+        }
 }
