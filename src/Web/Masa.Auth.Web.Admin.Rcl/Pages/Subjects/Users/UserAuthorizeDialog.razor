@@ -5,7 +5,7 @@
         <HeaderContent>
             <div class="height:55px;">
                 <div class="mb-4 d-flex">
-                    <TeamSwitch Value=Team ValueChanged UserId="UserId" Style="width:100%;" />
+                    <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged="value => Teams=new List<Guid>(){value}" UserId="UserId" Style="width:100%;" />
                     <div class="d-flex" style="width:200px;">
                         <MSpacer />                        
                         <MAvatar Size=48 Class="mr-2">
@@ -24,7 +24,7 @@
             <div class="global-nav" style="display: flex;height: auto">
                 <PermissionExtensionConfigure
                                 User=UserId
-                                Teams=
+                                Teams=Teams
                                 Roles=Authorization.Roles
                                 @bind-ExtensionValue=Authorization.Permissions 
                                 @bind-Preview=Preview

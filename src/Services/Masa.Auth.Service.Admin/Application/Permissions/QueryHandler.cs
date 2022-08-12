@@ -354,10 +354,10 @@ public class QueryHandler
                                 .ToList();
             var permissionQuery = new PermissionsByRoleQuery(roles);
             await _eventBus.PublishAsync(permissionQuery);
-            var rejectPermisisons = teamPermissions.Where(tp => tp.TeamId == team.Id && team.TeamMemberType == team.TeamMemberType && tp.Effect == false)
+            var rejectPermisisons = teamPermissions.Where(tp => tp.TeamId == team.Id && tp.TeamMemberType == team.TeamMemberType && tp.Effect == false)
                                    .Select(tp => tp.PermissionId);
             var permissions = permissionQuery.Result.Union(
-                    teamPermissions.Where(tp => tp.TeamId == team.Id && team.TeamMemberType == team.TeamMemberType && tp.Effect == true)
+                    teamPermissions.Where(tp => tp.TeamId == team.Id && tp.TeamMemberType == team.TeamMemberType && tp.Effect == true)
                                    .Select(tp => tp.PermissionId)
                 ).Where(permission => rejectPermisisons.All(rp => rp != permission));
             query.Result.AddRange(permissions);

@@ -511,17 +511,17 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task GetTeamRoleSelectAsync(TeamRoleSelectQuery teamRoleSelectQuery)
+    public async Task GetTeamRoleSelectAsync(TeamRoleSelectQuery query)
     {
         Expression<Func<Team, bool>> condition = _ => true;
-        if (!string.IsNullOrEmpty(teamRoleSelectQuery.Name))
+        if (!string.IsNullOrEmpty(query.Name))
         {
-            condition = condition.And(team => team.Name.Contains(teamRoleSelectQuery.Name));
+            condition = condition.And(team => team.Name.Contains(query.Name));
         }
         Expression<Func<Team, bool>> teamStaffCondition = _ => true;
-        if (teamRoleSelectQuery.UserId != default)
+        if (query.UserId != default)
         {
-            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == teamRoleSelectQuery.UserId));
+            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == query.UserId));
         }
         var teams = await _authDbContext.Set<Team>()
                                         .Where(condition)
@@ -533,10 +533,10 @@ public class QueryHandler
         foreach (var team in teams)
         {
             var roles = team.TeamRoles
-                            .Where(tr => team.TeamStaffs.Any(ts => ts.TeamMemberType == tr.TeamMemberType))
+                            .Where(tr => team.TeamStaffs.Any(ts => ts.UserId==query.UserId && ts.TeamMemberType == tr.TeamMemberType))
                             .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit,tr.Role.AvailableQuantity))
                             .ToList();
-            teamRoleSelectQuery.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
+            query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
         }
     }
 
