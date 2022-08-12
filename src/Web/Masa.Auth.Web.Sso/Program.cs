@@ -62,7 +62,7 @@ else
 app.UseCookiePolicy();
 app.UseIdentityServer();
 // This cookie policy fixes login issues with Chrome 80+ using HHTP
-app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Unspecified });
 
 app.UseStaticFiles();
 

@@ -12,11 +12,12 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="6.0.0" />
-    <PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0-preview.3" />
+    <!--<PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0-preview.3" />-->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.7" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Security\Authentication\Masa.Utils.Security.Authentication.OpenIdConnect\Masa.Utils.Security.Authentication.OpenIdConnect.csproj" />
     <ProjectReference Include="..\Masa.Auth.Web.Admin.Rcl\Masa.Auth.Web.Admin.Rcl.csproj" />
   </ItemGroup>
 

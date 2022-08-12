@@ -24,6 +24,7 @@ public class AuthCaller : HttpClientCallerBase
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
+    ITokenProvider _tokenProvider;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(Caller));
@@ -66,15 +67,26 @@ public class AuthCaller : HttpClientCallerBase
 
     public override string Name { get; set; }
 
-    public AuthCaller(IServiceProvider serviceProvider, AuthApiOptions options) : base(serviceProvider)
+    public AuthCaller(
+        IServiceProvider serviceProvider,
+        ITokenProvider tokenProvider,
+        AuthApiOptions options) : base(serviceProvider)
     {
         Name = "AuthCaller";
+        _tokenProvider = tokenProvider;
         BaseAddress = options.AuthServiceBaseAddress;
     }
 
     protected override IHttpClientBuilder UseHttpClient()
     {
         return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+    }
+
+    protected override void ConfigureHttpClient(HttpClient httpClient)
+    {
+        //todo fix _tokenProvider null
+        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
+        base.ConfigureHttpClient(httpClient);
     }
 }
 
