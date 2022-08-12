@@ -5,7 +5,7 @@
         <HeaderContent>
             <div class="height:55px;">
                 <div class="mb-4 d-flex">
-                    <TeamSwitch UserId="UserId" RolesChanged="roles => TeamRoles = roles" Style="width:100%;" />
+                    <TeamSwitch Value=Team ValueChanged UserId="UserId" Style="width:100%;" />
                     <div class="d-flex" style="width:200px;">
                         <MSpacer />                        
                         <MAvatar Size=48 Class="mr-2">
@@ -22,8 +22,10 @@
         </HeaderContent>
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;height: auto">
-                <PermissionExtensionConfigure 
-                                Roles=Authorization.Roles.Union(TeamRoles).ToList()
+                <PermissionExtensionConfigure
+                                User=UserId
+                                Teams=
+                                Roles=Authorization.Roles
                                 @bind-ExtensionValue=Authorization.Permissions 
                                 @bind-Preview=Preview
                                 Style="max-height:calc(100vh - 406px);" />

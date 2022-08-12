@@ -66,4 +66,9 @@ public class PermissionService : ServiceBase
     {
         return await PostAsync<List<TeamSampleDto>, List<Guid>>(nameof(GetPermissionsByRoleAsync), teams);
     }
+
+    public async Task<List<Guid>> GetPermissionsByTeamWithUserAsync(GetPermissionsByTeamWithUserDto dto)
+    {
+        return await PostAsync<GetPermissionsByTeamWithUserDto, List<Guid>>(nameof(GetPermissionsByTeamWithUserAsync), dto);
+    }
 }

@@ -534,7 +534,7 @@ public class QueryHandler
         {
             var roles = team.TeamRoles
                             .Where(tr => team.TeamStaffs.Any(ts => ts.TeamMemberType == tr.TeamMemberType))
-                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity))
+                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit,tr.Role.AvailableQuantity))
                             .ToList();
             teamRoleSelectQuery.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
         }

@@ -19,9 +19,14 @@ public partial class PermissionsConfigure
     private List<Guid> InternalRoles { get; set; } = new();
 
     [Parameter]
-    public List<TeamSampleDto> Teams { get; set; } = new();
+    public List<Guid> Teams { get; set; } = new();
 
-    private List<TeamSampleDto> InternalTeams { get; set; } = new();
+    private List<Guid> InternalTeams { get; set; } = new();
+
+    [Parameter]
+    public Guid User { get; set; }
+
+    private Guid InternalUser { get; set; }
 
     [Parameter]
     public List<Guid> Value { get; set; } = new();
@@ -75,9 +80,14 @@ public partial class PermissionsConfigure
             InternalRoles = Roles;
             await GetRolePermissions();
         }
-        if(Teams.Count != InternalTeams.Count || Roles.Except(InternalRoles).Any())
+        if (Teams.Count != InternalTeams.Count || Roles.Except(InternalRoles).Any())
         {
             InternalTeams = Teams;
+            await GetTeamPermissions();
+        }
+        if (User != InternalUser)
+        {
+            InternalUser = User;
             await GetTeamPermissions();
         }
     }
@@ -106,7 +116,7 @@ public partial class PermissionsConfigure
 
     private async Task GetTeamPermissions()
     {
-        TeamPermission = await PermissionService.GetPermissionsByTeamAsync(Teams);
+        TeamPermission = await PermissionService.GetPermissionsByTeamWithUserAsync(new(User, Teams));
         RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
     }
 

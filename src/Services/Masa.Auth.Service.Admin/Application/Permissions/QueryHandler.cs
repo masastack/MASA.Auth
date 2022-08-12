@@ -365,15 +365,30 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetPermissionsByTeamWithUserAsync(PermissionsByTeamWithUserQuery query)
+    {
+        var teamQuery = new TeamByUserQuery(query.Dto.User);
+        await _eventBus.PublishAsync(teamQuery);
+        if (query.Dto.Teams.Count > 0)
+        {
+            teamQuery.Result = teamQuery.Result.Where(team => query.Dto.Teams.Contains(team.Id))
+                                           .ToList();
+        }
+        var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
+        await _eventBus.PublishAsync(permissionByTeamQuery);
+        query.Result.AddRange(permissionByTeamQuery.Result);
+    }
+
+    [EventHandler]
     public async Task GetPermissionsByUserAsync(PermissionsByUserQuery query)
     {
         var teamQuery = new TeamByUserQuery(query.User);
         await _eventBus.PublishAsync(teamQuery);
-        if(query.Teams is not null)
+        if (query.Teams is not null)
         {
             teamQuery.Result = teamQuery.Result.Where(team => query.Teams.Contains(team.Id))
                                                .ToList();
-        }       
+        }
         var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
         await _eventBus.PublishAsync(permissionByTeamQuery);
         var roles = await _authDbContext.Set<UserRole>()
