@@ -864,3 +864,7 @@ input::-webkit-input-placeholder {
         line-height: 20px;
         color: #4318FF;
     }
+
+.m-tab--active .tab-top-slider {
+    visibility:visible !important;
+}
