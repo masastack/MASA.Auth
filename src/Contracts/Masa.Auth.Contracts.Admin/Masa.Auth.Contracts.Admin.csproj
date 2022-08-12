@@ -13,8 +13,11 @@
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="0.6.0-preview.3" />
 	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="0.6.0-preview.3" />
     <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.6.0-preview.3" />
+    <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.6.0-preview.3" />
+    <PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.6.0-preview.3" />
     <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0-preview.3" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
     <PackageReference Include="Util.Reflection" Version="1.0.3" />

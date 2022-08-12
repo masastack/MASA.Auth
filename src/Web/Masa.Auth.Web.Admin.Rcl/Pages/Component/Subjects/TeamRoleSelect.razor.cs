@@ -34,6 +34,7 @@ public partial class TeamRoleSelect
         var newTeams = value.Except(Excludes).ToList();
         var minLimitRole = Teams.Where(team => newTeams.Contains(team.Id))
                                 .SelectMany(team => team.Roles)
+                                .Where(role => role.Limit !=0)
                                 .OrderBy(role => role.AvailableQuantity)
                                 .FirstOrDefault();
         if (minLimitRole is not null && minLimitRole.AvailableQuantity <= 0)

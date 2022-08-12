@@ -313,7 +313,7 @@ public class CommandHandler
         {
             var syncUsers = users.Skip(syncCount)
                                 .Take(command.Dto.OnceExecuteCount)
-                                .Adapt<List<UserSelectDto>>();
+                                .Select(user => new UserSelectDto(user.Id,user.Name,user.DisplayName,user.Account,user.PhoneNumber,user.Email,user.Avatar));
             await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(syncUsers);
             syncCount += command.Dto.OnceExecuteCount;
         }
