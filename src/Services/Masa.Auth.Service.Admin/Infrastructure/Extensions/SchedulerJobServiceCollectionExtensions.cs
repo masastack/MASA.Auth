@@ -24,7 +24,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = scope.ServiceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = "masa-auth",
+            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
             Name = "SyncUserAutoCompleteJob",
             IsAlertException = true,
             JobType = JobTypes.Http,
@@ -56,7 +56,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = scope.ServiceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = "masa-auth",
+            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
             Name = "SyncUserRedisJob",
             IsAlertException = true,
             JobType = JobTypes.Http,
