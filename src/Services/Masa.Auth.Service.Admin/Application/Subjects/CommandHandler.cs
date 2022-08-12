@@ -9,6 +9,7 @@ public class CommandHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IStaffRepository _staffRepository;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly AuthDbContext _authDbContext;
     readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
@@ -21,12 +22,14 @@ public class CommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
+    readonly IEventBus _eventBus;
 
     public CommandHandler(
         IUserRepository userRepository,
         IAutoCompleteClient autoCompleteClient,
         IStaffRepository staffRepository,
         IThirdPartyIdpRepository thirdPartyIdpRepository,
+        IThirdPartyUserRepository thirdPartyUserRepository,
         AuthDbContext authDbContext,
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
@@ -38,12 +41,14 @@ public class CommandHandler
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
         ThirdPartyUserDomainService thirdPartyUserDomainService,
-        IMasaConfiguration masaConfiguration)
+        IMasaConfiguration masaConfiguration,
+        IEventBus eventBus)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
         _staffRepository = staffRepository;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
+        _thirdPartyUserRepository = thirdPartyUserRepository;
         _authDbContext = authDbContext;
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
@@ -56,6 +61,7 @@ public class CommandHandler
         _logger = logger;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _configuration = masaConfiguration.Local;
+        _eventBus = eventBus;
     }
 
     #region User
@@ -443,6 +449,24 @@ public class CommandHandler
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
         await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
+    }
+
+    #endregion
+
+    #region ThirdPartyUser
+
+    [EventHandler(1)]
+    public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
+    {
+        var thirdPartyUserDto = command.ThirdPartyUser;
+        var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyUserDto.ThirdPartyIdpId && tpu.ThridPartyIdentity == thirdPartyUserDto.ThridPartyIdentity);
+        if(thirdPartyUser is not null)
+        {
+            throw new UserFriendlyException($"ThirdPartyUser with ThridPartyIdentity:{thirdPartyUserDto.ThridPartyIdentity} already exists");
+        }
+        thirdPartyUser = thirdPartyUserDto.Adapt<ThirdPartyUser>();
+        await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
+        await _eventBus.PublishAsync(new AddThirdPartyUserDomainEvent(thirdPartyUserDto));
     }
 
     #endregion

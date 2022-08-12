@@ -10,19 +10,22 @@ public class LdapCommandHandler
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<LdapCommandHandler> _logger;
+    readonly IEventBus _eventBus;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
         ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMasaConfiguration masaConfiguration,
-        ILogger<LdapCommandHandler> logger)
+        ILogger<LdapCommandHandler> logger,
+        IEventBus eventBus)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _configuration = masaConfiguration.Local;
         _logger = logger;
+        _eventBus = eventBus;
     }
 
     [EventHandler]
@@ -79,8 +82,8 @@ public class LdapCommandHandler
                         Enabled = true,
                         Email = ldapUser.EmailAddress,
                         Account = ldapUser.SamAccountName,
-                        Password = _configuration.GetValue<string>("Subjects:InitialPassword"),
-                        Avatar = _configuration.GetValue<string>("Subjects:Avatar")
+                        Password = DefaultUserAttributes.Password,
+                        Avatar = DefaultUserAttributes.MaleAvatar
                     });
                 //phone number regular match
                 if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
@@ -91,7 +94,9 @@ public class LdapCommandHandler
                 {
                     thirdPartyUserDtp.User.Landline = ldapUser.Phone;
                 }
-                await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
+                await _eventBus.PublishAsync(new AddThirdPartyUserCommand(thirdPartyUserDtp));
+                //await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
+                //to do add staff
             }
             catch (Exception e)
             {
