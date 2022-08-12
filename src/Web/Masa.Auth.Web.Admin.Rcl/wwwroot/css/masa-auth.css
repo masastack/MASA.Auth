@@ -914,7 +914,7 @@ input::-webkit-input-placeholder {
 
 .defaultTab .m-item-group.theme--light.m-btn-toggle.m-btn-toggle--borderless.m-btn-toggle--dense.labeled-radio-group {
     position: absolute;
-    z-index: 22;
+    z-index: 6;
 }
 
 .defaultTab .m-window.m-item-group.full-width.mx-1 {

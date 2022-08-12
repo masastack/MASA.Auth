@@ -19,3 +19,5 @@ global using Microsoft.Extensions.Caching.Memory;
 global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 global using System.Diagnostics;
 global using System.Security.Cryptography.X509Certificates;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Extensions;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
