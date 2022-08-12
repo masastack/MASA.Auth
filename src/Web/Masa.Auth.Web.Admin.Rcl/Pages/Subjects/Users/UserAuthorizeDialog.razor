@@ -5,7 +5,7 @@
         <HeaderContent>
             <div class="height:55px;">
                 <div class="mb-4 d-flex">
-                    <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged="value => Teams=new List<Guid>(){value}" UserId="UserId" Style="width:100%;" />
+                    <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged=TeamValueChanged UserId="UserId" Style="width:100%;" />
                     <div class="d-flex" style="width:200px;">
                         <MSpacer />                        
                         <MAvatar Size=48 Class="mr-2">

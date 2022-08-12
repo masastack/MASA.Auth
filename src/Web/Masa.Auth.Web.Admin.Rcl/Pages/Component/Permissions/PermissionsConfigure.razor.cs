@@ -80,7 +80,7 @@ public partial class PermissionsConfigure
             InternalRoles = Roles;
             await GetRolePermissions();
         }
-        if (Teams.Count != InternalTeams.Count || Roles.Except(InternalRoles).Any())
+        if (Teams.Count != InternalTeams.Count || Teams.Except(InternalTeams).Any())
         {
             InternalTeams = Teams;
             await GetTeamPermissions();
