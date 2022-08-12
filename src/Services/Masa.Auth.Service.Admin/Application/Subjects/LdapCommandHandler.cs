@@ -40,8 +40,16 @@ public class LdapCommandHandler
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
         var _thirdPartyIdpId = Guid.Empty;
-        var ldapIdp = new LdapIdp(ldapUpsertCommand.LdapDetailDto.ServerAddress, ldapUpsertCommand.LdapDetailDto.ServerPort, ldapUpsertCommand.LdapDetailDto.IsLdaps,
-                ldapUpsertCommand.LdapDetailDto.BaseDn, ldapUpsertCommand.LdapDetailDto.RootUserDn, ldapUpsertCommand.LdapDetailDto.RootUserPassword, ldapUpsertCommand.LdapDetailDto.UserSearchBaseDn, ldapUpsertCommand.LdapDetailDto.GroupSearchBaseDn);
+        var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
+        var ldapIdp = new LdapIdp(
+                ldapIdpDto.ServerAddress, 
+                ldapIdpDto.ServerPort, 
+                ldapIdpDto.IsLdaps,
+                ldapIdpDto.BaseDn, 
+                ldapIdpDto.RootUserDn, 
+                ldapIdpDto.RootUserPassword, 
+                ldapIdpDto.UserSearchBaseDn, 
+                ldapIdpDto.GroupSearchBaseDn);
         var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
         if (dbItem is null)
         {
@@ -55,7 +63,7 @@ public class LdapCommandHandler
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
-        var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
+        var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
