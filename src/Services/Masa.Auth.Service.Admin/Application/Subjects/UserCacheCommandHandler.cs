@@ -6,55 +6,76 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 public class UserCacheCommandHandler
 {
     readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IUserRepository _userRepository;
 
-    public UserCacheCommandHandler(IMemoryCacheClient memoryCacheClient)
+    public UserCacheCommandHandler(IMemoryCacheClient memoryCacheClient, IUserRepository userRepository)
     {
         _memoryCacheClient = memoryCacheClient;
+        _userRepository = userRepository;
+    }
+
+    async Task SetUserListCacheAsync(IEnumerable<User> users)
+    {
+        var map = users.ToDictionary(u => CacheKey.UserKey(u.Id), u => u.Adapt<CacheUser>());
+        await _memoryCacheClient.SetListAsync(map);
+    }
+
+    async Task SetUserCacheAsync(Guid userId)
+    {
+        var user = await _userRepository.GetDetailAsync(userId);
+        if (user is not null)
+        {
+            await _memoryCacheClient.SetAsync(CacheKey.UserKey(userId), user.Adapt<CacheUser>());
+        }
+    }
+
+    async Task RemoveUserCahceAsync(Guid userId)
+    {
+        await _memoryCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(userId));
     }
 
     [EventHandler(99)]
     public async Task AddUserAsync(AddUserCommand addUserCommand)
     {
-        await _memoryCacheClient.SetAsync(CacheKey.UserKey(addUserCommand.NewUser.Id), addUserCommand.User.Adapt<CacheUser>());
+        await SetUserCacheAsync(addUserCommand.NewUser.Id);
     }
 
     [EventHandler(99, IsCancel = true)]
     public async Task FailAddUserAsync(AddUserCommand addUserCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(addUserCommand.NewUser.Id));
+        await RemoveUserCahceAsync(addUserCommand.NewUser.Id);
     }
 
     [EventHandler(99)]
     public async Task UpdateUserAsync(UpdateUserCommand updateUserCommand)
     {
-        var key = CacheKey.UserKey(updateUserCommand.User.Id);
-        var cacheUser = updateUserCommand.User.Adapt<CacheUser>();
-        var oldCache = _memoryCacheClient.Get<CacheUser>(key);
-        if (oldCache != null)
-        {
-            cacheUser.Roles = oldCache.Roles;
-            cacheUser.Permissions = oldCache.Permissions;
-        }
-        await _memoryCacheClient.SetAsync(key, cacheUser);
+        await SetUserCacheAsync(updateUserCommand.User.Id);
     }
 
     [EventHandler(99)]
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand updateUserAuthorizationCommand)
     {
-        var key = CacheKey.UserKey(updateUserAuthorizationCommand.User.Id);
-        var oldCache = _memoryCacheClient.Get<CacheUser>(key);
-        if (oldCache != null)
-        {
-            oldCache.Roles = updateUserAuthorizationCommand.User.Roles;
-            oldCache.Permissions = updateUserAuthorizationCommand.User.Permissions;
-            await _memoryCacheClient.SetAsync(key, oldCache);
-        }
+        await SetUserCacheAsync(updateUserAuthorizationCommand.User.Id);
     }
 
     [EventHandler(99)]
     public async Task RemoveUserAsync(RemoveUserCommand removeUserCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(removeUserCommand.User.Id));
+        await RemoveUserCahceAsync(removeUserCommand.User.Id);
+    }
+
+    [EventHandler]
+    public async Task SyncUserRedisAsync(SyncUserRedisCommand command)
+    {
+        var users = await _userRepository.GetAllAsync();
+        var syncCount = 0;
+        while (syncCount < users.Count)
+        {
+            var syncUsers = users.Skip(syncCount)
+                                .Take(command.Dto.OnceExecuteCount);
+            await SetUserListCacheAsync(syncUsers);
+            syncCount += command.Dto.OnceExecuteCount;
+        }
     }
 
     [EventHandler]

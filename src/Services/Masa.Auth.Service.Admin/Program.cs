@@ -79,7 +79,7 @@ builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.Get
     .GetValue<string>("AppSettings:PmClient:Url"));
 builder.Services.AddSchedulerClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
     .GetValue<string>("AppSettings:SchedulerClient:Url"));
-//await builder.Services.AddSyncUserAutoCompleteJobAsync();
+await builder.Services.AddSchedulerJobAsync();
 builder.Services.AddLadpContext();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddHealthChecks()
