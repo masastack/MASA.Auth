@@ -17,7 +17,14 @@ public class ThirdPartyUserDomainEventHandler
     public async Task AddUser(AddThirdPartyUserDomainEvent thirdPartyUserDomainEvent)
     {
         var user = thirdPartyUserDomainEvent.ThirdPartyUser.User;
-        var addUserCommand = new AddUserCommand(user);
-        await _eventBus.PublishAsync(addUserCommand);
+        try
+        {
+            var addUserCommand = new AddUserCommand(user);
+            await _eventBus.PublishAsync(addUserCommand);
+        }
+        catch
+        {
+
+        }        
     }  
 }

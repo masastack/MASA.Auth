@@ -11,6 +11,7 @@ public class LdapCommandHandler
     readonly IConfiguration _configuration;
     readonly ILogger<LdapCommandHandler> _logger;
     readonly IEventBus _eventBus;
+    readonly AuthDbContext _authDbContext;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
@@ -18,7 +19,8 @@ public class LdapCommandHandler
         ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMasaConfiguration masaConfiguration,
         ILogger<LdapCommandHandler> logger,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        AuthDbContext authDbContext)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
@@ -26,6 +28,7 @@ public class LdapCommandHandler
         _configuration = masaConfiguration.Local;
         _logger = logger;
         _eventBus = eventBus;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler]
@@ -73,30 +76,33 @@ public class LdapCommandHandler
         {
             try
             {
-                //todo:change bulk
-                var thirdPartyUserDtp = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
-                    new AddUserDto
+                var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
+                                                         .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == ldapUser.ObjectGuid && tpu.ThirdPartyIdpId == _thirdPartyIdpId);
+                if (thirdPartyUser is null)
+                {
+                    //todo:change bulk
+                    var thirdPartyUserDto = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
+                        new AddUserDto
+                        {
+                            Name = ldapUser.Name,
+                            DisplayName = ldapUser.DisplayName,
+                            Enabled = true,
+                            Email = ldapUser.EmailAddress,
+                            Account = ldapUser.SamAccountName,
+                            Password = DefaultUserAttributes.Password,
+                            Avatar = DefaultUserAttributes.MaleAvatar
+                        });
+                    //phone number regular match
+                    if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
                     {
-                        Name = ldapUser.Name,
-                        DisplayName = ldapUser.DisplayName,
-                        Enabled = true,
-                        Email = ldapUser.EmailAddress,
-                        Account = ldapUser.SamAccountName,
-                        Password = DefaultUserAttributes.Password,
-                        Avatar = DefaultUserAttributes.MaleAvatar
-                    });
-                //phone number regular match
-                if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
-                {
-                    thirdPartyUserDtp.User.PhoneNumber = ldapUser.Phone;
+                        thirdPartyUserDto.User.PhoneNumber = ldapUser.Phone;
+                    }
+                    else
+                    {
+                        thirdPartyUserDto.User.Landline = ldapUser.Phone;
+                    }
+                    await _eventBus.PublishAsync(new AddThirdPartyUserCommand(thirdPartyUserDto));
                 }
-                else
-                {
-                    thirdPartyUserDtp.User.Landline = ldapUser.Phone;
-                }
-                await _eventBus.PublishAsync(new AddThirdPartyUserCommand(thirdPartyUserDtp));
-                //await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
-                //to do add staff
             }
             catch (Exception e)
             {
