@@ -132,6 +132,18 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Address = address ?? new();
     }
 
+    public void UpdateForLdap(bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
+    {
+        Enabled = enabled;
+        Name = name;
+        DisplayName = displayName;
+        Avatar = avatar;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        StaffType = StaffTypes.InternalStaff;
+        Gender = GenderTypes.Male;
+    }
+
     public void SetDepartmentStaff(Guid departmentId)
     {
         if (departmentId != default)

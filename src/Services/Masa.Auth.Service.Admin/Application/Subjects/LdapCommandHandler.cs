@@ -7,7 +7,6 @@ public class LdapCommandHandler
 {
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILdapFactory _ldapFactory;
-    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<LdapCommandHandler> _logger;
     readonly IEventBus _eventBus;
@@ -16,7 +15,6 @@ public class LdapCommandHandler
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
-        ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMasaConfiguration masaConfiguration,
         ILogger<LdapCommandHandler> logger,
         IEventBus eventBus,
@@ -24,7 +22,6 @@ public class LdapCommandHandler
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
-        _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _configuration = masaConfiguration.Local;
         _logger = logger;
         _eventBus = eventBus;
@@ -74,6 +71,7 @@ public class LdapCommandHandler
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
         {
+            if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
             try
             {
                 //todo:change bulk
@@ -86,19 +84,32 @@ public class LdapCommandHandler
                         Email = ldapUser.EmailAddress,
                         Account = ldapUser.SamAccountName,
                         Password = DefaultUserAttributes.Password,
-                        Avatar = DefaultUserAttributes.MaleAvatar
+                        Avatar = DefaultUserAttributes.MaleAvatar,
+                        PhoneNumber = ldapUser.Phone
                     });
                 //phone number regular match
-                if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
-                {
-                    thirdPartyUserDto.User.PhoneNumber = ldapUser.Phone;
-                }
-                else
-                {
-                    thirdPartyUserDto.User.Landline = ldapUser.Phone;
-                }
+                //if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
+                //{
+                //    thirdPartyUserDto.User.PhoneNumber = ldapUser.Phone;
+                //}
+                //else
+                //{
+                //    thirdPartyUserDto.User.Landline = ldapUser.Phone;
+                //}
                 await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDto));
-                await _eventBus.PublishAsync(new UpsertStaffCommand(new UpsertStaffDto()));
+
+                var staffDto = new UpsertStaffForLdapDto
+                {
+                    Name = ldapUser.Name,
+                    DisplayName = ldapUser.DisplayName,
+                    Enabled = true,
+                    Email = ldapUser.EmailAddress,
+                    Account = ldapUser.SamAccountName,
+                    Password = DefaultUserAttributes.Password,
+                    Avatar = DefaultUserAttributes.MaleAvatar,
+                    PhoneNumber = ldapUser.Phone,
+                };
+                await _eventBus.PublishAsync(new UpsertStaffForLdapCommand(staffDto));
             }
             catch (Exception e)
             {

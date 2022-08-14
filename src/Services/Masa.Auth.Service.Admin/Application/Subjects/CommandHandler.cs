@@ -385,7 +385,12 @@ public class CommandHandler
         var staffDto = command.Staff;
         var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
         if (staff is not null) return;
-        await _staffDomainService.AddStaffAsync(command.Staff);
+        await AddStaffAsync(command.Staff);
+    }
+
+    async Task AddStaffAsync(AddStaffDto staff)
+    {
+        await _staffDomainService.AddStaffAsync(staff);
     }
 
     [EventHandler]
@@ -393,21 +398,56 @@ public class CommandHandler
     {
         var staffDto = command.Staff;
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
-        await _staffDomainService.UpdateStaffAsync(command.Staff);
+        await UpdateStaffAsync(command.Staff);
+    }
+
+    async Task UpdateStaffAsync(UpdateStaffDto staff)
+    {
+        await _staffDomainService.UpdateStaffAsync(staff);
     }
 
     [EventHandler]
     public async Task UpsertStaffAsync(UpsertStaffCommand command)
     {
         var staffDto = command.Staff;
-        if (staffDto.Id == default)
+        var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, false);
+        if (staff is not null)
         {
-            await _eventBus.PublishAsync(new AddStaffCommand(staffDto));
+            var updateStaffDto = staffDto.Adapt<UpdateStaffDto>();
+            await UpdateStaffAsync(updateStaffDto);
         }
         else
         {
-            await _eventBus.PublishAsync(new UpdateStaffCommand(staffDto));
+            await AddStaffAsync(staffDto);
         }
+    }
+
+    [EventHandler]
+    public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
+    {
+        var staffDto = command.Staff;
+        var staff = await VerifyStaffRepeatAsync(default, default, staffDto.PhoneNumber, staffDto.Email, default, false);
+        if (staff is not null)
+        {
+            staff.UpdateForLdap(staffDto.Enabled, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.PhoneNumber, staffDto.Email);
+            await _staffRepository.UpdateAsync(staff);
+        }
+        else
+        {
+            var addStaffDto = new AddStaffDto
+            {
+                Name = staffDto.Name,
+                DisplayName = staffDto.DisplayName,
+                Enabled = staffDto.Enabled,
+                Email = staffDto.Email,
+                Account = staffDto.Account,
+                Password = staffDto.Password,
+                Avatar = staffDto.Avatar,
+                PhoneNumber = staffDto.PhoneNumber
+            };
+            await AddStaffAsync(addStaffDto);
+        }
+
     }
 
     [EventHandler(1)]
