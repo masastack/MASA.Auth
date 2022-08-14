@@ -76,33 +76,29 @@ public class LdapCommandHandler
         {
             try
             {
-                var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
-                                                         .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == ldapUser.ObjectGuid && tpu.ThirdPartyIdpId == _thirdPartyIdpId);
-                if (thirdPartyUser is null)
+                //todo:change bulk
+                var thirdPartyUserDto = new UpsertThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
+                    new AddUserDto
+                    {
+                        Name = ldapUser.Name,
+                        DisplayName = ldapUser.DisplayName,
+                        Enabled = true,
+                        Email = ldapUser.EmailAddress,
+                        Account = ldapUser.SamAccountName,
+                        Password = DefaultUserAttributes.Password,
+                        Avatar = DefaultUserAttributes.MaleAvatar
+                    });
+                //phone number regular match
+                if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
                 {
-                    //todo:change bulk
-                    var thirdPartyUserDto = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
-                        new AddUserDto
-                        {
-                            Name = ldapUser.Name,
-                            DisplayName = ldapUser.DisplayName,
-                            Enabled = true,
-                            Email = ldapUser.EmailAddress,
-                            Account = ldapUser.SamAccountName,
-                            Password = DefaultUserAttributes.Password,
-                            Avatar = DefaultUserAttributes.MaleAvatar
-                        });
-                    //phone number regular match
-                    if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
-                    {
-                        thirdPartyUserDto.User.PhoneNumber = ldapUser.Phone;
-                    }
-                    else
-                    {
-                        thirdPartyUserDto.User.Landline = ldapUser.Phone;
-                    }
-                    await _eventBus.PublishAsync(new AddThirdPartyUserCommand(thirdPartyUserDto));
+                    thirdPartyUserDto.User.PhoneNumber = ldapUser.Phone;
                 }
+                else
+                {
+                    thirdPartyUserDto.User.Landline = ldapUser.Phone;
+                }
+                await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDto));
+                await _eventBus.PublishAsync(new UpsertStaffCommand(new UpsertStaffDto()));
             }
             catch (Exception e)
             {

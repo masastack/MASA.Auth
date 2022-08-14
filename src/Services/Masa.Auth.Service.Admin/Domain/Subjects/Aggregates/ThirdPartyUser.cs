@@ -50,6 +50,13 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         ExtendedData = extendedData;
     }
 
+    public void Update(bool enabled, string thridPartyIdentity, string extendedData)
+    {
+        Enabled = enabled;
+        ThridPartyIdentity = thridPartyIdentity;
+        ExtendedData = extendedData;
+    }
+
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)
     {
         return new ThirdPartyUserDetailDto(tpu.Id, tpu.Enabled, tpu.IdentityProvider, tpu.User, tpu.CreationTime, tpu.ModificationTime, tpu.CreateUser?.Name ?? "", tpu.ModifyUser?.Name ?? "");

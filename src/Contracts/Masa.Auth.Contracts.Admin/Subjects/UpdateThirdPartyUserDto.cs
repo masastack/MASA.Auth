@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class AddThirdPartyUserDto
+public class UpdateThirdPartyUserDto
 {
-    public Guid ThirdPartyIdpId { get; set; }
+    public Guid Id { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -13,19 +13,11 @@ public class AddThirdPartyUserDto
 
     public string ExtendedData { get; private set; } = "";
 
-    public AddUserDto User { get; set; } = new();
-
-    public AddThirdPartyUserDto()
+    public UpdateThirdPartyUserDto(Guid id, bool enabled, string thridPartyIdentity, string extendedData)
     {
-
-    }
-
-    public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user)
-    {
-        ThirdPartyIdpId = thirdPartyIdpId;
+        Id = id;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
-        User = user;
     }
 }

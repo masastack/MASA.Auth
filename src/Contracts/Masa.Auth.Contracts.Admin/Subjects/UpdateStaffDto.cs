@@ -3,45 +3,9 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class UpdateStaffDto
+public class UpdateStaffDto : AddStaffDto
 {
     public Guid Id { get; set; }
-
-    public string JobNumber { get; set; } = "";
-
-    public StaffTypes StaffType { get; set; }
-
-    public bool Enabled { get; set; }
-
-    public Guid DepartmentId { get; set; }
-
-    public Guid PositionId { get; set; }
-
-    public string Position { get; set; } = "";
-
-    public List<Guid> Teams { get; set; } = new();
-
-    public string Name { get; set; } = "";
-
-    public string DisplayName { get; set; } = "";
-
-    public string Avatar { get; set; } = "";
-
-    public string IdCard { get; set; } = "";
-
-    public string CompanyName { get; set; } = "";
-
-    public string PhoneNumber { get; set; } = "";
-
-    public string Landline { get; set; } = "";
-
-    public string Email { get; set; } = "";
-
-    public AddressValueDto Address { get; set; } = new();
-
-    public GenderTypes Gender { get; set; }
-
-    public UpdateUserAuthorizationDto User { get; set; } = new();
 
     public UpdateStaffDto()
     {
