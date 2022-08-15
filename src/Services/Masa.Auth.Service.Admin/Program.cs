@@ -72,6 +72,7 @@ builder.AddMasaConfiguration(configurationBuilder =>
     configurationBuilder.UseDcc();
 });
 builder.Services.AddDccClient();
+
 var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
         .GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
