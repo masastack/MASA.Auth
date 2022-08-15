@@ -8,6 +8,7 @@ public class AddThirdPartyUserValidator : AbstractValidator<AddThirdPartyUserDto
     public AddThirdPartyUserValidator()
     {
         RuleFor(tpu => tpu.User).SetValidator(new AddUserValidator());
+        RuleFor(tpu => tpu.ThridPartyIdentity).Required();
     }
 }
 

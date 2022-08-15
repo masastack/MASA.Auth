@@ -3,51 +3,15 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class UpdateStaffDto
+public class UpdateStaffDto : AddStaffDto
 {
     public Guid Id { get; set; }
-
-    public string JobNumber { get; set; } = "";
-
-    public StaffTypes StaffType { get; set; }
-
-    public bool Enabled { get; set; }
-
-    public Guid DepartmentId { get; set; }
-
-    public Guid PositionId { get; set; }
-
-    public string Position { get; set; } = "";
-
-    public List<Guid> Teams { get; set; } = new();
-
-    public string Name { get; set; } = "";
-
-    public string DisplayName { get; set; } = "";
-
-    public string Avatar { get; set; } = "";
-
-    public string IdCard { get; set; } = "";
-
-    public string CompanyName { get; set; } = "";
-
-    public string PhoneNumber { get; set; } = "";
-
-    public string Landline { get; set; } = "";
-
-    public string Email { get; set; } = "";
-
-    public AddressValueDto Address { get; set; } = new();
-
-    public GenderTypes Gender { get; set; }
-
-    public UpdateUserAuthorizationDto User { get; set; } = new();
 
     public UpdateStaffDto()
     {
     }
 
-    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, GenderTypes gender, UpdateUserAuthorizationDto user)
+    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, GenderTypes gender)
     {
         Id = id;
         JobNumber = jobNumber;
@@ -66,11 +30,10 @@ public class UpdateStaffDto
         Email = email;
         Address = address;
         Gender = gender;
-        User = user;
     }
 
     public static implicit operator UpdateStaffDto(StaffDetailDto staff)
     {
-        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, new(staff.TeamIds), staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.Gender, new(staff.UserId, staff.RoleIds, staff.Permissions));
+        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, new(staff.TeamIds), staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.Gender);
     }
 }
