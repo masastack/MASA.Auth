@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record AddThirdPartyUserCommand(AddThirdPartyUserDto ThirdPartyUser, bool WhenExisReturn = false) : Command
+public record UpsertStaffForLdapCommand(UpsertStaffForLdapDto Staff) : Command
 {
-
 }
