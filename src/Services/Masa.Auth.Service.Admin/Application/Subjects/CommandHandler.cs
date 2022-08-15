@@ -20,7 +20,6 @@ public class CommandHandler
     readonly ILdapFactory _ldapFactory;
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILogger<CommandHandler> _logger;
-    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly IEventBus _eventBus;
 
@@ -40,7 +39,6 @@ public class CommandHandler
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
-        ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMasaConfiguration masaConfiguration,
         IEventBus eventBus)
     {
@@ -59,7 +57,6 @@ public class CommandHandler
         _ldapFactory = ldapFactory;
         _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
-        _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _configuration = masaConfiguration.Local;
         _eventBus = eventBus;
     }
@@ -191,7 +188,7 @@ public class CommandHandler
                 throw new UserFriendlyException("域账号验证失败");
             }
 
-            var thirdPartyUserDtp = new AddThirdPartyUserDto(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
+            var thirdPartyUserDtp = new UpsertThirdPartyUserDto(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
                     new AddUserDto
                     {
                         Name = ldapUser.Name,
@@ -211,7 +208,7 @@ public class CommandHandler
             {
                 thirdPartyUserDtp.User.Landline = ldapUser.Phone;
             }
-            await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
+            await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDtp));
         }
 
         var user = await _userRepository.FindAsync(u => u.Account == account);
@@ -401,9 +398,12 @@ public class CommandHandler
         await UpdateStaffAsync(command.Staff);
     }
 
-    async Task UpdateStaffAsync(UpdateStaffDto staff)
+    async Task UpdateStaffAsync(UpdateStaffDto staffDto)
     {
-        await _staffDomainService.UpdateStaffAsync(staff);
+        var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
+        if (staff is null)
+            throw new UserFriendlyException("This staff data does not exist");
+        await _staffDomainService.UpdateStaffAsync(staffDto);
     }
 
     [EventHandler]
@@ -479,10 +479,6 @@ public class CommandHandler
 
     private async Task<Staff?> VerifyStaffRepeatAsync(Guid? staffId, string? jobNumber, string? phoneNumber, string? email, string? idCard, bool throwException = true)
     {
-        var staff = await _staffRepository.FindAsync(s => s.Id == staffId);
-        if (staff is null)
-            throw new UserFriendlyException("This staff data does not exist");
-
         Expression<Func<Staff, bool>> condition = staff => false;
         if (!string.IsNullOrEmpty(jobNumber))
             condition = condition.Or(staff => staff.PhoneNumber == jobNumber);
@@ -605,7 +601,7 @@ public class CommandHandler
             {
                 return thirdPartyUser;
             }
-            throw new UserFriendlyException($"ThirdPartyUser with ThridPartyIdentity:{thirdPartyUserDto.ThridPartyIdentity} already exists");
+            throw new UserFriendlyException($"ThirdPartyUser with ThridPartyIdentity:{thridPartyIdentity} already exists");
         }
         return thirdPartyUser;
     }

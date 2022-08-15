@@ -11,7 +11,7 @@ public class UpdateStaffDto : AddStaffDto
     {
     }
 
-    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, GenderTypes gender, UpdateUserAuthorizationDto user)
+    public UpdateStaffDto(Guid id, string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string position, List<Guid> teams, string name, string displayName, string avatar, string idCard, string companyName, string phoneNumber, string email, AddressValueDto address, GenderTypes gender)
     {
         Id = id;
         JobNumber = jobNumber;
@@ -30,11 +30,10 @@ public class UpdateStaffDto : AddStaffDto
         Email = email;
         Address = address;
         Gender = gender;
-        User = user;
     }
 
     public static implicit operator UpdateStaffDto(StaffDetailDto staff)
     {
-        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, new(staff.TeamIds), staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.Gender, new(staff.UserId, staff.RoleIds, staff.Permissions));
+        return new UpdateStaffDto(staff.Id, staff.JobNumber, staff.StaffType, staff.Enabled, staff.DepartmentId, staff.PositionId, staff.Position, new(staff.TeamIds), staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.Gender);
     }
 }
