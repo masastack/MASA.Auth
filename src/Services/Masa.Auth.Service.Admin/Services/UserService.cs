@@ -150,13 +150,14 @@ public class UserService : RestServiceBase
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel?> FindByIdAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<UserModel> FindByIdAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new UserDetailQuery(id);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
+    [return: NotNullIfNotNull("user")]
     private UserModel? ConvertToModel(UserDetailDto? user)
     {
         if (user == null) return null;
@@ -221,22 +222,22 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(command);
     }
 
-        public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
-        {
-            var query = new UserSystemBusinessDataQuery(userId, systemId);
-            await eventBus.PublishAsync(query);
-            return query.Result;
-        }
+    public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+    {
+        var query = new UserSystemBusinessDataQuery(userId, systemId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 
-        public async Task SyncUserAutoCompleteAsync(IEventBus eventBus,  [FromBody] SyncUserAutoCompleteDto dto)
-        {
-            var command = new SyncUserAutoCompleteCommand(dto);
-            await eventBus.PublishAsync(command);
-        }
+    public async Task SyncUserAutoCompleteAsync(IEventBus eventBus, [FromBody] SyncUserAutoCompleteDto dto)
+    {
+        var command = new SyncUserAutoCompleteCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
 
-        public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
-        {
-            var command = new SyncUserRedisCommand(dto);
-            await eventBus.PublishAsync(command);
-        }
+    public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
+    {
+        var command = new SyncUserRedisCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
 }

@@ -92,34 +92,19 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
-        if (user is null)
-        {
-            throw new UserFriendlyException("This user data does not exist");
-        }
-        query.Result = user;
+        query.Result = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]
     public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
-        if (user is null)
-        {
-            throw new UserFriendlyException("This user data does not exist");
-        }
-        query.Result = user;
+        query.Result = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]
     public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
-        if (user is null)
-        {
-            throw new UserFriendlyException("This user data does not exist");
-        }
-        query.Result = user;
+        query.Result = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]

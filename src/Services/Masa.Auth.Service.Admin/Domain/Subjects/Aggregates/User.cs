@@ -132,8 +132,9 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     }
 
-    public static implicit operator UserDetailDto(User user)
+    public static implicit operator UserDetailDto?(User? user)
     {
+        if(user is null) return null;
         var roles = user.Roles.Select(r => r.RoleId).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
