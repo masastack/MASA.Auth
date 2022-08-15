@@ -13,4 +13,6 @@ public static class ColorGroupConstants
         { "blue", "#2196F3" },
         { "orange", "#ff9800" }
     };
+
+    public const string DEFAULT_COLOR = "#4318FF";
 }

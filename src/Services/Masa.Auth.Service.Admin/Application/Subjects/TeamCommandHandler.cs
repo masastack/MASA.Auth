@@ -44,7 +44,7 @@ public class TeamCommandHandler
         var avatarName = $"{teamId}.png";
         if (!ColorGroupConstants.ColorGroup.TryGetValue(dto.Avatar.Color, out var color))
         {
-            color = "#4318FF";
+            color = ColorGroupConstants.DEFAULT_COLOR;
         }
         var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
         await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
@@ -73,7 +73,7 @@ public class TeamCommandHandler
         {
             if (!ColorGroupConstants.ColorGroup.TryGetValue(dto.Avatar.Color, out var color))
             {
-                color = "#4318FF";
+                color = ColorGroupConstants.DEFAULT_COLOR;
             }
             var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
             await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
