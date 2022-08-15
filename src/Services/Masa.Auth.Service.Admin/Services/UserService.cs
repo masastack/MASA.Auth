@@ -129,36 +129,37 @@ public class UserService : RestServiceBase
         return validateCommand.Result;
     }
 
-    private async Task<UserModel> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
+    private async Task<UserModel?> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
     {
         var query = new FindUserByAccountQuery(account);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
+    private async Task<UserModel?> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
     {
         var query = new FindUserByEmailQuery(email);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
+    private async Task<UserModel?> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
     {
         var query = new FindUserByPhoneNumberQuery(phoneNumber);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel> FindByIdAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<UserModel?> FindByIdAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new UserDetailQuery(id);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private UserModel ConvertToModel(UserDetailDto user)
+    private UserModel? ConvertToModel(UserDetailDto? user)
     {
+        if (user == null) return null;
         return new UserModel()
         {
             Id = user.Id,

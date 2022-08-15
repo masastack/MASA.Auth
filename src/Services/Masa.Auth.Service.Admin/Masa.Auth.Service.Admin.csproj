@@ -13,49 +13,49 @@
 	
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Configuration" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Data.Contracts.EFCore" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Data.Contracts.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EFCore" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Isolation" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Isolation.UoW.EFCore" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Extensions.Expressions" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Isolation" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Isolation.UoW.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.ReadWriteSpliting.Cqrs" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Caching.Redis" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Extensions.Expressions" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
-		<PackageReference Include="Masa.Contrib.Data.UoW.EFCore" Version="0.6.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.Data.UoW.EFCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.7" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
