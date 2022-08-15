@@ -13,7 +13,7 @@ public class SyncStaffValidator : AbstractValidator<SyncStaffDto>
         RuleFor(staff => staff.Email).Email();
         RuleFor(staff => staff.IdCard).IdCard();
         RuleFor(staff => staff.Position).ChineseLetterNumber().MaxLength(20);
-        RuleFor(staff => staff.Account).Required().ChineseLetterNumber().MaxLength(50);
+        RuleFor(staff => staff.Account).Required().MaxLength(50);
         RuleFor(staff => staff.Password).Required()
                                       .Matches(@"^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
                                       .WithMessage("Password must contain numbers and letter, and not less than 8 digits")
