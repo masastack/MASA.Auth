@@ -87,15 +87,6 @@ public class LdapCommandHandler
                         Avatar = DefaultUserAttributes.MaleAvatar,
                         PhoneNumber = ldapUser.Phone
                     });
-                //phone number regular match
-                //if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
-                //{
-                //    thirdPartyUserDto.User.PhoneNumber = ldapUser.Phone;
-                //}
-                //else
-                //{
-                //    thirdPartyUserDto.User.Landline = ldapUser.Phone;
-                //}
                 await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDto));
 
                 var staffDto = new UpsertStaffForLdapDto

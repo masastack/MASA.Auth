@@ -67,13 +67,6 @@ public class StaffDomainEventHandler
         await _roleDomainService.UpdateRoleLimitAsync(roleIds);
     }
 
-    //[EventHandler(1)]
-    //public async Task UpdateUserAsync(UpdateStaffDomainEvent staffEvent)
-    //{
-    //    var command = new UpdateUserAuthorizationCommand(staffEvent.Staff.User);
-    //    await _eventBus.PublishAsync(command);
-    //}
-
     [EventHandler(2)]
     public async Task UpsertPositionAsync(UpdateStaffDomainEvent staffEvent)
     {
