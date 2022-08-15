@@ -132,6 +132,7 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     }
 
+    [return: NotNullIfNotNull("user")]
     public static implicit operator UserDetailDto?(User? user)
     {
         if(user is null) return null;
