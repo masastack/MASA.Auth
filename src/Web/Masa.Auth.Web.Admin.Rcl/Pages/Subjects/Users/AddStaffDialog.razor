@@ -42,7 +42,7 @@
                                     <STextField @bind-Value="Staff.Name" Label="@T("Name")" />
                                 </MCol>
                                 <MCol>
-                                    <STextField @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
+                                    <STextField Required @bind-Value="Staff.PhoneNumber" Label="@T("PhoneNumber")" />
                                 </MCol>
                             </MRow>
                             <MRow Class="mt-4">
@@ -79,10 +79,7 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <STextField @bind-Value="Staff.Account" Label="@T("Account")" />
-                                </MCol>
-                                <MCol>
-                                    <STextField @bind-Value="Staff.Password" Label="@T("Password")" />
+                                    <STextField Required @bind-Value="Staff.Password" Label="@T("Password")" />
                                 </MCol>
                             </MRow>
                         </AutoHeightContent>

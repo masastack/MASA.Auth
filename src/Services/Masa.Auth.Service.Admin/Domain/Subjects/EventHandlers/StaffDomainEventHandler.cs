@@ -29,10 +29,10 @@ public class StaffDomainEventHandler
     public async Task AddUserAsync(AddStaffDomainEvent staffEvent)
     {
         var staffDto = staffEvent.Staff;
-        var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Department, staffDto.Position ?? "", staffDto.Account, staffDto.Password, staffDto.Gender, new(), new());
+        var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position ?? "", default, staffDto.Password, staffDto.Gender, new(), new());
         var command = new AddUserCommand(addUserDto, true);
         await _eventBus.PublishAsync(command);
-        staffEvent.Staff.UserId = command.NewUser.Id;       
+        staffEvent.Staff.UserId = command.NewUser.Id;
     }
 
     [EventHandler(2)]
@@ -51,10 +51,21 @@ public class StaffDomainEventHandler
     {
         var staffDto = staffEvent.Staff;
         var staff = new Staff(
-            staffDto.UserId, staffDto.Name, staffDto.DisplayName, staffDto.Avatar,
-            staffDto.IdCard, staffDto.CompanyName,
-            staffDto.Gender, staffDto.PhoneNumber, staffDto.Email, staffDto.Address,
-            staffDto.JobNumber, staffDto.PositionId, staffDto.StaffType, staffDto.Enabled);
+                staffDto.UserId, 
+                staffDto.Name, 
+                staffDto.DisplayName, 
+                staffDto.Avatar,
+                staffDto.IdCard, 
+                staffDto.CompanyName,
+                staffDto.Gender, 
+                staffDto.PhoneNumber, 
+                staffDto.Email,
+                staffDto.JobNumber, 
+                staffDto.PositionId, 
+                staffDto.StaffType, 
+                staffDto.Enabled, 
+                staffDto.Address
+            );
         staff.SetDepartmentStaff(staffDto.DepartmentId);
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
@@ -85,7 +96,7 @@ public class StaffDomainEventHandler
         var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
         if (staff is null)
             throw new UserFriendlyException("This staff data does not exist");
-  
+
         staff.Update(
             staffDto.PositionId, staffDto.StaffType, staffDto.Enabled, staffDto.Name,
             staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName,

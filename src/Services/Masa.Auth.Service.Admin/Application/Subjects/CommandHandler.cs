@@ -73,7 +73,7 @@ public class CommandHandler
             command.NewUser = user;
             return;
         }
-        user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar ?? "", userDto.IdCard ?? "", userDto.Account ?? "", userDto.Password, userDto.CompanyName ?? "", userDto.Department ?? "", userDto.Position ?? "", userDto.Enabled, userDto.PhoneNumber ?? "", userDto.Landline, userDto.Email ?? "", userDto.Address, userDto.Gender);
+        user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
         user.AddRoles(userDto.Roles.ToArray());
         user.AddPermissions(userDto.Permissions);
         await _userRepository.AddAsync(user);
@@ -440,7 +440,6 @@ public class CommandHandler
                 DisplayName = staffDto.DisplayName,
                 Enabled = staffDto.Enabled,
                 Email = staffDto.Email,
-                Account = staffDto.Account,
                 Password = staffDto.Password,
                 Avatar = staffDto.Avatar,
                 PhoneNumber = staffDto.PhoneNumber

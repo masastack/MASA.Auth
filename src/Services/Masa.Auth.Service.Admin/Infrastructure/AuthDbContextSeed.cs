@@ -107,7 +107,7 @@ public class AuthDbContextSeed
 
         if (!context.Set<User>().Any(u => u.Account == "admin"))
         {
-            var adminUser = new User("admin", "Administrator", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "admin", "admin", "Masa");
+            var adminUser = new User("admin", "Administrator", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "admin", "admin", "Masa", "15185856868");
             context.Set<User>().Add(adminUser);
         }
 

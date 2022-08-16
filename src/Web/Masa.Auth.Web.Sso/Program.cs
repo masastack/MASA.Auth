@@ -28,7 +28,9 @@ builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUr
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUrl"));
 
 builder.Services.AddSameSiteCookiePolicy();
-builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+var redisOption = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMasaRedisCache(redisOption);
+builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";

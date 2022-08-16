@@ -9,19 +9,16 @@ public class SyncStaffDto
     public int Index { get; set; }
 
     [ImporterHeader(Name = "姓名")]
-    public string Name { get; set; } = "";
-
-    [ImporterHeader(Name = "账号")]
-    public string Account { get; set; } = "";
+    public string? Name { get; set; }
 
     [ImporterHeader(Name = "密码")]
-    public string Password { get; set; } = "";
+    public string? Password { get; set; }
 
     [ImporterHeader(Name = "工号")]
-    public string JobNumber { get; set; } = "";
+    public string JobNumber { get; set; }
 
     [ImporterHeader(Name = "手机号码")]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
     [ImporterHeader(Name = "邮箱")]
     public string? Email { get; set; }
@@ -30,7 +27,7 @@ public class SyncStaffDto
     public string? IdCard { get; set; }
 
     [ImporterHeader(Name = "昵称")]
-    public string? DisplayName { get; set; }
+    public string DisplayName { get; set; } = "";
 
     [ImporterHeader(Name = "岗位")]
     public string? Position { get; set; }
@@ -60,6 +57,12 @@ public class SyncStaffDto
 
     [ImporterHeader(Name = "员工类型")]
     public string StaffTypeLable { get; set; } = StaffTypes.InternalStaff.ToString();
+
+    public SyncStaffDto()
+    {
+        JobNumber = "";
+        PhoneNumber = "";
+    }
 }
 
 

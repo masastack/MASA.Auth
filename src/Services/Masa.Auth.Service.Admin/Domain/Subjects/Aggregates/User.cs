@@ -56,62 +56,62 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     }
 
-    public User(string name,
+    public User(string? name,
                 string displayName,
-                string avatar,
-                string account,
-                string password,
-                string companyName) :
-        this(name, displayName, avatar, "", account, password, companyName, "", "", true, "", "", "", GenderTypes.Male)
+                string? avatar,
+                string? account,
+                string? password,
+                string? companyName,
+                string phoneNumber) :
+        this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, default, GenderTypes.Male)
     {
     }
 
-    public User(string name,
+    public User(string? name,
                 string displayName,
-                string avatar,
-                string idCard,
-                string account,
-                string password,
-                string companyName,
-                string department,
-                string position,
+                string? avatar,
+                string? idCard,
+                string? account,
+                string? password,
+                string? companyName,
+                string? department,
+                string? position,
                 bool enabled,
-                string phoneNumber,
-                string landline,
-                string email,
+                string? phoneNumber,
+                string? landline,
+                string? email,
                 AddressValue address,
                 GenderTypes genderType)
     {
-        Name = name;
+        Name = name ?? "";
         DisplayName = displayName;
-        Avatar = avatar;
-        IdCard = idCard;
-        Account = account;
-        UpdatePassword(password);
-        CompanyName = companyName;
-        Department = department;
-        Position = position;
+        Avatar = avatar ?? "";
+        IdCard = idCard ?? "";
+        CompanyName = companyName ?? "";
+        Department = department ?? "";
+        Position = position ?? "";
         Enabled = enabled;
-        PhoneNumber = phoneNumber;
-        Email = email;
         Address = address;
         GenderType = genderType;
-        Landline = landline;
+        Landline = landline ?? "";
+        UpdatePassword(password);
+        var value = VerifyPhonNumberEmail(phoneNumber, email);
+        Account = string.IsNullOrEmpty(account) ? value : account;
     }
 
-    public User(string name,
+    public User(string? name,
                 string displayName,
-                string avatar,
-                string idCard,
-                string account,
-                string password,
-                string companyName,
-                string department,
-                string position,
+                string? avatar,
+                string? idCard,
+                string? account,
+                string? password,
+                string? companyName,
+                string? department,
+                string? position,
                 bool enabled,
                 string phoneNumber,
-                string landline,
-                string email,
+                string? landline,
+                string? email,
                 GenderTypes genderType)
         : this(name,
                displayName,
@@ -129,13 +129,12 @@ public class User : FullAggregateRoot<Guid, Guid>
                new(),
                genderType)
     {
-
     }
 
     [return: NotNullIfNotNull("user")]
     public static implicit operator UserDetailDto?(User? user)
     {
-        if(user is null) return null;
+        if (user is null) return null;
         var roles = user.Roles.Select(r => r.RoleId).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
@@ -150,23 +149,10 @@ public class User : FullAggregateRoot<Guid, Guid>
         IdCard = idCard;
         CompanyName = companyName;
         Enabled = enabled;
-        PhoneNumber = phoneNumber;
-        Email = email;
+        VerifyPhonNumberEmail(phoneNumber, email);
         Address = address;
         Department = department;
         Position = position;
-        GenderType = genderType;
-        Landline = landline;
-    }
-
-    public void Update(string name, string? displayName, string? idCard, string? phoneNumber, string landline, string? email, string? position, GenderTypes genderType)
-    {
-        Name = name;
-        DisplayName = displayName ?? "";
-        IdCard = idCard ?? "";
-        PhoneNumber = phoneNumber ?? "";
-        Email = email ?? "";
-        Position = position ?? "";
         GenderType = genderType;
         Landline = landline;
     }
@@ -176,8 +162,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Name = name;
         DisplayName = displayName ?? "";
         IdCard = idCard ?? "";
-        PhoneNumber = phoneNumber ?? "";
-        Email = email ?? "";
+        VerifyPhonNumberEmail(phoneNumber, email);
         GenderType = genderType;
         CompanyName = companyName ?? "";
     }
@@ -197,9 +182,9 @@ public class User : FullAggregateRoot<Guid, Guid>
     }
 
     [MemberNotNull(nameof(Password))]
-    public void UpdatePassword(string password)
+    public void UpdatePassword(string? password)
     {
-        if (password is null) throw new UserFriendlyException("Password cannot be null");
+        if (password is null) password = "";
 
         Password = MD5Utils.EncryptRepeat(password);
     }
@@ -216,11 +201,6 @@ public class User : FullAggregateRoot<Guid, Guid>
            item => item.RoleId);
     }
 
-    public bool IsAdmin()
-    {
-        return Account == "admin";
-    }
-
     public void AddPermissions(List<SubjectPermissionRelationDto> permissions)
     {
         _permissions = _permissions.MergeBy(
@@ -231,5 +211,23 @@ public class User : FullAggregateRoot<Guid, Guid>
                oldValue.Update(newValue.Effect);
                return oldValue;
            });
+    }
+
+    public bool IsAdmin()
+    {
+        return Account == "admin";
+    }
+
+    [MemberNotNull(nameof(PhoneNumber))]
+    [MemberNotNull(nameof(Email))]
+    string VerifyPhonNumberEmail(string? phoneNumber, string? email)
+    {
+        if (string.IsNullOrEmpty(phoneNumber) && string.IsNullOrEmpty(email))
+        {
+            throw new UserFriendlyException("One of the phone number and email must be assigned");
+        }
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        return string.IsNullOrEmpty(PhoneNumber) ? Email : PhoneNumber;
     }
 }

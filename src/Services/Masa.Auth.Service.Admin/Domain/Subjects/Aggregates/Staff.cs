@@ -65,7 +65,21 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string companyName, GenderTypes gender, string? phoneNumber, string? email, AddressValue address, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
+    public Staff(
+        Guid userId,
+        string? name,
+        string displayName,
+        string? avatar,
+        string? idCard,
+        string? companyName,
+        GenderTypes gender,
+        string? phoneNumber,
+        string? email,       
+        string jobNumber,
+        Guid? positionId,
+        StaffTypes staffType,
+        bool enabled,
+        AddressValue address)
     {
         UserId = userId;
         Name = name ?? "";
@@ -83,21 +97,21 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
     }
 
-    public Staff(Guid userId, string name, string displayName, string avatar, string idCard, string companyName, GenderTypes gender, string? phoneNumber, string? email, string jobNumber, Guid? positionId, StaffTypes staffType, bool enabled)
+    public Staff(
+        Guid userId,
+        string name,
+        string displayName,
+        string avatar,
+        string idCard,
+        string companyName,
+        GenderTypes gender,
+        string? phoneNumber,
+        string? email,
+        string jobNumber,
+        Guid? positionId,
+        StaffTypes staffType,
+        bool enabled) : this(userId, name, displayName, avatar, idCard, companyName, gender, phoneNumber, email, jobNumber, positionId, staffType, enabled, new())
     {
-        UserId = userId;
-        Name = name ?? "";
-        DisplayName = displayName ?? "";
-        Avatar = avatar ?? "";
-        IdCard = idCard ?? "";
-        CompanyName = companyName ?? "";
-        Gender = gender;
-        PhoneNumber = phoneNumber ?? "";
-        Email = email ?? "";
-        JobNumber = jobNumber ?? "";
-        PositionId = positionId;
-        StaffType = staffType;
-        Enabled = enabled;
     }
 
     public static implicit operator StaffDetailDto(Staff staff)
