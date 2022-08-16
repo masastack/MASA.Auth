@@ -68,13 +68,13 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     public Staff(
         Guid userId,
         string? name,
-        string displayName,
+        string? displayName,
         string? avatar,
         string? idCard,
         string? companyName,
         GenderTypes gender,
         string? phoneNumber,
-        string? email,       
+        string? email,
         string jobNumber,
         Guid? positionId,
         StaffTypes staffType,
@@ -83,27 +83,27 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     {
         UserId = userId;
         Name = name ?? "";
-        DisplayName = displayName ?? "";
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
         CompanyName = companyName ?? "";
-        Gender = gender;
-        PhoneNumber = phoneNumber ?? "";
-        Email = email ?? "";
         Address = address ?? new();
         JobNumber = jobNumber ?? "";
         PositionId = positionId;
-        StaffType = staffType;
         Enabled = enabled;
+        StaffType = staffType == default ? StaffTypes.ExternalStaff : staffType;
+        Gender = gender == default ? GenderTypes.Male : gender;
+        Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
+        var value = VerifyPhonNumberEmail(phoneNumber, email);
+        DisplayName = string.IsNullOrEmpty(displayName) ? value : displayName;
     }
 
     public Staff(
         Guid userId,
-        string name,
+        string? name,
         string displayName,
-        string avatar,
-        string idCard,
-        string companyName,
+        string? avatar,
+        string? idCard,
+        string? companyName,
         GenderTypes gender,
         string? phoneNumber,
         string? email,
@@ -128,22 +128,18 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         return new StaffDto(staff.Id, staff.UserId, department, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
-    public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string? displayName, string? avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValueDto? address, GenderTypes gender)
+    public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string displayName, string? avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValueDto? address, GenderTypes gender)
     {
         Name = name ?? "";
         PositionId = positionId;
-        StaffType = staffType;
         Enabled = enabled;
         Name = name ?? "";
-        DisplayName = displayName ?? "";
         IdCard = idCard ?? "";
-        PhoneNumber = phoneNumber ?? "";
-        Email = email ?? "";
-        Gender = gender;
         Avatar = avatar ?? "";
         CompanyName = companyName ?? "";
         Enabled = enabled;
         Address = address ?? new();
+        UpdateCore(displayName, phoneNumber, email, staffType, gender);
     }
 
     public void UpdateForLdap(bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
@@ -154,8 +150,20 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
         PhoneNumber = phoneNumber;
         Email = email;
-        StaffType = StaffTypes.InternalStaff;
-        Gender = GenderTypes.Male;
+        UpdateCore(displayName, phoneNumber, email);
+    }
+
+    void UpdateCore(string displayName, string? phoneNumber, string? email, StaffTypes staffType, GenderTypes gender)
+    {
+        UpdateCore(displayName, phoneNumber, email);
+        StaffType = ArgumentNullOrEmptyException.ThrowIfDefault(staffType);
+        Gender = ArgumentNullOrEmptyException.ThrowIfDefault(gender);
+    }
+
+    void UpdateCore(string displayName, string? phoneNumber, string? email)
+    {
+        VerifyPhonNumberEmail(phoneNumber, email);
+        DisplayName = ArgumentNullOrEmptyException.ThrowIfNullOrEmpty(displayName);
     }
 
     public void SetDepartmentStaff(Guid departmentId)
@@ -174,5 +182,18 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         _teamStaffs = _teamStaffs.MergeBy(
             teams.Select(teamId => new TeamStaff(teamId, default, TeamMemberTypes.Member, UserId)),
             team => team.TeamId);
+    }
+
+    [MemberNotNull(nameof(PhoneNumber))]
+    [MemberNotNull(nameof(Email))]
+    string VerifyPhonNumberEmail(string? phoneNumber, string? email)
+    {
+        if (string.IsNullOrEmpty(phoneNumber) && string.IsNullOrEmpty(email))
+        {
+            throw new UserFriendlyException("One of the phone number and email must be assigned");
+        }
+        PhoneNumber = phoneNumber ?? "";
+        Email = email ?? "";
+        return string.IsNullOrEmpty(PhoneNumber) ? Email : PhoneNumber;
     }
 }

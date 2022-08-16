@@ -7,23 +7,23 @@ public class UserDto
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public string DisplayName { get; set; }
 
     public string Avatar { get; set; }
 
-    public string IdCard { get; set; }
+    public string? IdCard { get; set; }
 
     public string Account { get; set; }
 
-    public string CompanyName { get; set; }
+    public string? CompanyName { get; set; }
 
     public bool Enabled { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     public AddressValueDto Address { get; set; }
 
@@ -31,20 +31,17 @@ public class UserDto
 
     public GenderTypes Gender { get; set; }
 
+    public string? Landline { get; set; }
+
     public UserDto()
     {
-        Name = "";
         DisplayName = "";
         Avatar = "";
-        IdCard = "";
         Account = "";
-        CompanyName = "";
-        PhoneNumber = "";
-        Email = "";
         Address = new();
     }
 
-    public UserDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, AddressValueDto address, DateTime creationTime, GenderTypes gender)
+    public UserDto(Guid id, string? name, string displayName, string avatar, string? idCard, string account, string? companyName, bool enabled, string? phoneNumber, string? email, AddressValueDto address, DateTime creationTime, GenderTypes gender, string? landline)
     {
         Id = id;
         Name = name;
@@ -59,6 +56,7 @@ public class UserDto
         Address = address;
         CreationTime = creationTime;
         Gender = gender;
+        Landline = landline;
     }
 }
 

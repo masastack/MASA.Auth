@@ -29,7 +29,7 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    public GenderTypes GenderType { get; private set; }
+    public GenderTypes Gender { get; private set; }
 
     #region Contact Property
 
@@ -68,7 +68,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     }
 
     public User(string? name,
-                string displayName,
+                string? displayName,
                 string? avatar,
                 string? idCard,
                 string? account,
@@ -81,26 +81,26 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? landline,
                 string? email,
                 AddressValue address,
-                GenderTypes genderType)
+                GenderTypes gender)
     {
         Name = name ?? "";
-        DisplayName = displayName;
-        Avatar = avatar ?? "";
         IdCard = idCard ?? "";
         CompanyName = companyName ?? "";
         Department = department ?? "";
         Position = position ?? "";
         Enabled = enabled;
         Address = address;
-        GenderType = genderType;
         Landline = landline ?? "";
+        Gender = gender == default ? GenderTypes.Male : gender;
+        Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
         UpdatePassword(password);
         var value = VerifyPhonNumberEmail(phoneNumber, email);
         Account = string.IsNullOrEmpty(account) ? value : account;
+        DisplayName = string.IsNullOrEmpty(displayName) ? value : displayName;
     }
 
     public User(string? name,
-                string displayName,
+                string? displayName,
                 string? avatar,
                 string? idCard,
                 string? account,
@@ -112,7 +112,7 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string phoneNumber,
                 string? landline,
                 string? email,
-                GenderTypes genderType)
+                GenderTypes gender)
         : this(name,
                displayName,
                avatar,
@@ -127,7 +127,7 @@ public class User : FullAggregateRoot<Guid, Guid>
                landline,
                email,
                new(),
-               genderType)
+               gender)
     {
     }
 
@@ -138,42 +138,48 @@ public class User : FullAggregateRoot<Guid, Guid>
         var roles = user.Roles.Select(r => r.RoleId).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
-        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions);
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline);
     }
 
-    public void Update(string name, string displayName, string avatar, string idCard, string companyName, bool enabled, string phoneNumber, string landline, string email, AddressValueDto address, string department, string position, GenderTypes genderType)
+    public void Update(string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, GenderTypes gender)
     {
-        Name = name;
-        DisplayName = displayName;
-        Avatar = avatar;
-        IdCard = idCard;
-        CompanyName = companyName;
-        Enabled = enabled;
-        VerifyPhonNumberEmail(phoneNumber, email);
-        Address = address;
-        Department = department;
-        Position = position;
-        GenderType = genderType;
-        Landline = landline;
-    }
-
-    public void Update(string name, string? displayName, string? idCard, string? companyName, string? phoneNumber, string? email, GenderTypes genderType)
-    {
-        Name = name;
-        DisplayName = displayName ?? "";
+        Name = name ?? "";
         IdCard = idCard ?? "";
-        VerifyPhonNumberEmail(phoneNumber, email);
-        GenderType = genderType;
         CompanyName = companyName ?? "";
+        Enabled = enabled;
+        Address = address;
+        Department = department ?? "";
+        Position = position ?? "";
+        Gender = gender;
+        Landline = landline ?? "";
+        UpdateCore(displayName, phoneNumber, email, avatar);
     }
 
-    public void UpdateBasicInfo(string? displayName, string? phoneNumber, string? email, string avatar, GenderTypes genderType)
+    public void Update(string name, string displayName, string? idCard, string? companyName, string? phoneNumber, string? email, GenderTypes gender)
     {
-        DisplayName = displayName ?? "";
-        PhoneNumber = phoneNumber ?? "";
-        Email = email ?? "";
-        GenderType = genderType;
-        Avatar = avatar;
+        Name = name;
+        IdCard = idCard ?? "";
+        Gender = gender;
+        CompanyName = companyName ?? "";
+        UpdateCore(displayName, phoneNumber, email);
+    }
+
+    public void UpdateBasicInfo(string displayName, string? phoneNumber, string? email, GenderTypes gender)
+    {
+        Gender = gender;
+        UpdateCore(displayName, phoneNumber, email);
+    }
+
+    void UpdateCore(string displayName, string? phoneNumber, string? email, string avatar)
+    {
+        Avatar = ArgumentNullOrEmptyException.ThrowIfNullOrEmpty(avatar);
+        VerifyPhonNumberEmail(phoneNumber, email);       
+    }
+
+    void UpdateCore(string displayName, string? phoneNumber, string? email)
+    {
+        VerifyPhonNumberEmail(phoneNumber, email);
+        DisplayName = ArgumentNullOrEmptyException.ThrowIfNullOrEmpty(displayName);
     }
 
     public void Disabled()
@@ -184,9 +190,8 @@ public class User : FullAggregateRoot<Guid, Guid>
     [MemberNotNull(nameof(Password))]
     public void UpdatePassword(string? password)
     {
-        if (password is null) password = "";
-
-        Password = MD5Utils.EncryptRepeat(password);
+        if (string.IsNullOrEmpty(password)) Password = "";
+        else Password = MD5Utils.EncryptRepeat(password);
     }
 
     public bool VerifyPassword(string password)

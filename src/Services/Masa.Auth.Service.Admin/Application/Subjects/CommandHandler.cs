@@ -90,11 +90,6 @@ public class CommandHandler
         await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, default);
 
         user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
-        if (!string.IsNullOrWhiteSpace(userDto.Password))
-        {
-            //add for update ldap password
-            user.UpdatePassword(userDto.Password);
-        }
         await _userRepository.UpdateAsync(user);
         await _userDomainService.SetAsync(user);
     }
@@ -480,7 +475,7 @@ public class CommandHandler
     {
         Expression<Func<Staff, bool>> condition = staff => false;
         if (!string.IsNullOrEmpty(jobNumber))
-            condition = condition.Or(staff => staff.PhoneNumber == jobNumber);
+            condition = condition.Or(staff => staff.JobNumber == jobNumber);
         if (!string.IsNullOrEmpty(phoneNumber))
             condition = condition.Or(staff => staff.PhoneNumber == phoneNumber);
         if (!string.IsNullOrEmpty(email))

@@ -35,3 +35,4 @@ global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Options;
+global using System.Runtime.CompilerServices;
