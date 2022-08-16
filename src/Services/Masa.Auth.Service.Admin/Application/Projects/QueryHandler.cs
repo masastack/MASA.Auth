@@ -66,10 +66,10 @@ public class QueryHandler
                 {
                     Name = p.Name,
                     Icon = p.Icon,
-                    Url = Path.Combine(a.Url, p.Url),
+                    Url = $"{a.Url.TrimEnd('/')}/{p.Url.TrimStart('/')}",
                     Code = p.Id.ToString(),
                     PermissionType = p.Type,
-                    Children = GetChildren(p.Id, menuPermissions)
+                    Children = GetChildren(p.Id, menuPermissions, a.Url)
                 }).ToList();
         });
     }
@@ -101,16 +101,16 @@ public class QueryHandler
         return result;
     }
 
-    private List<PermissionNavDto> GetChildren(Guid parentId, IEnumerable<Permission> all)
+    private List<PermissionNavDto> GetChildren(Guid parentId, IEnumerable<Permission> all, string domain = "")
     {
         return all.Where(p => p.ParentId == parentId).Select(p => new PermissionNavDto
         {
             Name = p.Name,
             Icon = p.Icon,
-            Url = p.Url,
+            Url = $"{domain.TrimEnd('/')}/{p.Url.TrimStart('/')}",
             Code = p.Id.ToString(),
             PermissionType = p.Type,
-            Children = GetChildren(p.Id, all)
+            Children = GetChildren(p.Id, all, domain)
         }).ToList();
     }
 

@@ -22,8 +22,8 @@
                 @Team.Description
             </span>
         </MCardText>
-        <MCardActions class="px-4 pb-4">
-            <img src="@Team.AdminAvatar.FirstOrDefault()" height=24 width=24 />
+        <MCardActions class="px-4">
+            <img src="@(Team.AdminAvatar.FirstOrDefault()??"/_content/Masa.Auth.Web.Admin.Rcl/img/avatar/user-default.png")" height=24 width=24 />
             <MSpacer />
             <span class="body2 masa-text-3-1">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:I18n.Culture)</span>
         </MCardActions>
