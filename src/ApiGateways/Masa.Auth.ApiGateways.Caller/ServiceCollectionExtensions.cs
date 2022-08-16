@@ -12,7 +12,6 @@ public static class ServiceCollectionExtensions
 
         configure?.Invoke(options);
         services.AddSingleton(options);
-        services.AddSingleton<TokenStateTemp>();
         services.AddCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
         return services;
     }

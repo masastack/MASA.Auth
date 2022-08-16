@@ -25,7 +25,6 @@ public class AuthCaller : HttpClientCallerBase
     OssService? _ossService;
     OperationLogService? _operationLogService;
     ITokenProvider _tokenProvider;
-    TokenStateTemp _tokenStateTemp;
     ILogger<AuthCaller> _logger;
     #endregion
 
@@ -72,24 +71,20 @@ public class AuthCaller : HttpClientCallerBase
     public AuthCaller(
         IServiceProvider serviceProvider,
         ITokenProvider tokenProvider,
-        TokenStateTemp tokenStateTemp,
         ILogger<AuthCaller> logger,
         AuthApiOptions options) : base(serviceProvider)
     {
         Name = "AuthCaller";
-        _tokenStateTemp = tokenStateTemp;
         _tokenProvider = tokenProvider;
         _logger = logger;
         BaseAddress = options.AuthServiceBaseAddress;
     }
 
-    protected override void ConfigureHttpClient(HttpClient httpClient)
+    protected override void ConfigHttpRequestMessage(HttpRequestMessage requestMessage)
     {
         _logger.LogDebug($"===============token===============:{_tokenProvider.AccessToken}");
-        //todo fix _tokenProvider null
-        //httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
-        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenStateTemp.Token);
-        base.ConfigureHttpClient(httpClient);
+        requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
+        base.ConfigHttpRequestMessage(requestMessage);
     }
 }
 

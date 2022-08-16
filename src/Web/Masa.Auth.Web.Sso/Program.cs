@@ -21,13 +21,14 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
+builder.Services.AddMasaIdentityModel();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthServiceUrl"));
 builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUrl"));
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUrl"));
 
 builder.Services.AddSameSiteCookiePolicy();
+builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
 builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
     .AddIdentityServer(options =>
     {

@@ -37,7 +37,6 @@ public partial class Index
 
     private async Task BuildModelAsync(string returnUrl)
     {
-
         var context = SsoAuthenticationStateCache.GetAuthorizationContext(returnUrl);
         if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
         {
@@ -55,7 +54,6 @@ public partial class Index
             {
                 _viewModel.ExternalProviders = new[] { new ViewModel.ExternalProvider { AuthenticationScheme = context?.IdP ?? "" } };
             }
-
             return;
         }
 
