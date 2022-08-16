@@ -533,8 +533,8 @@ public class QueryHandler
         foreach (var team in teams)
         {
             var roles = team.TeamRoles
-                            .Where(tr => team.TeamStaffs.Any(ts => ts.UserId==query.UserId && ts.TeamMemberType == tr.TeamMemberType))
-                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit,tr.Role.AvailableQuantity))
+                            .Where(tr => team.TeamStaffs.Any(ts => ts.UserId == query.UserId && ts.TeamMemberType == tr.TeamMemberType))
+                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity))
                             .ToList();
             query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
         }
@@ -568,7 +568,7 @@ public class QueryHandler
                 {
                     p.Id,
                     p.Name,
-                    Url = Path.Combine(a.Url, p.Url)
+                    Url = $"{a.Url.TrimEnd('/')}/{p.Url.TrimStart('/')}"
                 })
                 .Select(p => new KeyValuePair<string, string>(p.Url, p.Name));
             userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
