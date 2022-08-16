@@ -15,6 +15,11 @@ public class AddThirdPartyUserDto
 
     public AddUserDto User { get; set; } = new();
 
+    public AddThirdPartyUserDto()
+    {
+
+    }
+
     public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user)
     {
         ThirdPartyIdpId = thirdPartyIdpId;

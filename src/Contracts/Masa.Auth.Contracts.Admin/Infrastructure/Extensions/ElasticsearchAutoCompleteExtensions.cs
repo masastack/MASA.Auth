@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Infrastructure.Extensions;
+namespace Masa.Auth.Contracts.Admin.Infrastructure.Extensions;
 
 public static class ElasticsearchAutoCompleteExtensions
 {
@@ -14,7 +14,12 @@ public static class ElasticsearchAutoCompleteExtensions
                 .UseDefault());
         foreach (var doc in autoCompleteModel.Documents)
         {
-            esBuilder.AddAutoComplete<UserSelectDto, Guid>(option => option.UseIndexName(doc.Index).UseAlias(doc.Index));
+            esBuilder.AddAutoComplete<UserSelectDto, Guid>(option => 
+            {
+                option.UseIndexName(doc.Index);
+                if (string.IsNullOrEmpty(doc.Alias) is false) option.UseAlias(doc.Alias);
+                else option.UseAlias(doc.Index);
+            });
         }
     }
 }

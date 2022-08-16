@@ -31,3 +31,7 @@ global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using Util.Reflection.Expressions;
 global using Util.Reflection.Expressions.Abstractions;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Options;
