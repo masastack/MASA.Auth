@@ -28,8 +28,8 @@ public class UserDomainEventHandler
     [EventHandler(1)]
     public async Task SetUserAsync(SetUserDomainEvent userEvent)
     {
-        var list = userEvent.Users.Select(user => new UserSelectDto(user.Id, user.Name, user.DisplayName, user.Account, user.PhoneNumber, user.Email, user.Avatar));
-        var response = await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(list);
+        var list = userEvent.Users.Adapt<List<UserSelectDto>>();
+        var response = await _autoCompleteClient.SetBySpecifyDocumentAsync(list);
     }
 
     [EventHandler(1)]
@@ -72,7 +72,7 @@ public class UserDomainEventHandler
             await _eventBus.PublishAsync(query);
             userEvent.Permissions = query.Result;
         }
-    }  
+    }
 
     [EventHandler(2)]
     public void AuthorizedUserPermission(UserAuthorizedDomainEvent userAuthorizedDomainEvent)

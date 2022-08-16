@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class UserSelectDto : AutoCompleteDocument<Guid>
+public class UserSelectDto : AutoCompleteDocument
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -29,9 +29,9 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
         Avatar = "";
     }
 
-    public UserSelectDto(Guid userId, string name, string displayName, string account, string phoneNumber, string email, string avatar) : base(userId.ToString(), $"{name},{account},{displayName},{phoneNumber},{email}", userId)
+    public UserSelectDto(Guid id, string name, string displayName, string account, string phoneNumber, string email, string avatar) : base($"{name},{account},{displayName},{phoneNumber},{email}")
     {
-        UserId = userId;
+        Id = id;
         Name = name;
         DisplayName = displayName;
         Account = account;
@@ -39,4 +39,6 @@ public class UserSelectDto : AutoCompleteDocument<Guid>
         Email = email;
         Avatar = avatar;
     }
+
+    public override string GetDocumentId() => Id.ToString();
 }
