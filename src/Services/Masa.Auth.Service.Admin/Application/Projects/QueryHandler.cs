@@ -66,10 +66,10 @@ public class QueryHandler
                 {
                     Name = p.Name,
                     Icon = p.Icon,
-                    Url = $"{a.Url.TrimEnd('/')}/{p.Url.TrimStart('/')}",
+                    Url = $"{a.Url?.TrimEnd('/')}/{p.Url?.TrimStart('/')}",
                     Code = p.Id.ToString(),
                     PermissionType = p.Type,
-                    Children = GetChildren(p.Id, menuPermissions, a.Url)
+                    Children = GetChildren(p.Id, menuPermissions, a.Url ?? "")
                 }).ToList();
         });
     }
@@ -107,10 +107,10 @@ public class QueryHandler
         {
             Name = p.Name,
             Icon = p.Icon,
-            Url = $"{domain.TrimEnd('/')}/{p.Url.TrimStart('/')}",
+            Url = $"{domain?.TrimEnd('/')}/{p.Url?.TrimStart('/')}",
             Code = p.Id.ToString(),
             PermissionType = p.Type,
-            Children = GetChildren(p.Id, all, domain)
+            Children = GetChildren(p.Id, all, domain ?? "")
         }).ToList();
     }
 
