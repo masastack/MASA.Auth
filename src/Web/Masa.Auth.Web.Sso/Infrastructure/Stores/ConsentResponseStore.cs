@@ -3,15 +3,28 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Stores;
 
-public class ConsentResponseStore : IMessageStore<ConsentResponse>
+public class ConsentResponseStore : IConsentMessageStore
 {
-    public Task<Message<ConsentResponse>> ReadAsync(string id)
+    readonly IDistributedCacheClient _distributedCacheClient;
+
+    public ConsentResponseStore(IDistributedCacheClient distributedCacheClient)
     {
-        throw new NotImplementedException();
+        _distributedCacheClient = distributedCacheClient;
     }
 
-    public Task<string> WriteAsync(Message<ConsentResponse> message)
+    public async Task DeleteAsync(string id)
+    {
+        await _distributedCacheClient.RemoveAsync<Message<ConsentResponse>>(id);
+    }
+
+    public async Task<Message<ConsentResponse>> ReadAsync(string id)
     {
         throw new NotImplementedException();
+        //return await _distributedCacheClient.GetAsync<Message<ConsentResponse>>(id);
+    }
+
+    public async Task WriteAsync(string id, Message<ConsentResponse> message)
+    {
+        await _distributedCacheClient.SetAsync(id, message);
     }
 }
