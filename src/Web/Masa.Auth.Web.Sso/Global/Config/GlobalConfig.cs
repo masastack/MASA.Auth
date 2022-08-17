@@ -24,10 +24,9 @@ public class GlobalConfig
 
     #endregion
 
-    public GlobalConfig(I18n i18n, IHttpContextAccessor httpContextAccessor)
+    public GlobalConfig(I18n i18n)
     {
         I18n = i18n;
-        I18n.SetCulture(CultureInfo.CurrentCulture);
     }
 
     #region event
