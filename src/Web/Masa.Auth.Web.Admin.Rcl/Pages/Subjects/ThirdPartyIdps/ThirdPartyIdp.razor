@@ -46,9 +46,6 @@
                         case nameof(ThirdPartyIdpDto.VerifyType):
                             <span>@T(context.Item.VerifyType.ToString())</span>
                             break;
-                        case nameof(ThirdPartyIdpDto.CreationTime):
-                            <DateTimeTitle Value="@context.Item.CreationTime" />
-                            break;
                         case nameof(ThirdPartyIdpDto.Url):
                             <span class="description">@context.Item.Url</span>
                             break;
@@ -57,7 +54,7 @@
                             <SIcon Tooltip="@T("Delete")" Class="ml-6" OnClick="()=> OpenRemoveThirdPartyIdpDialog(context.Item)">@IconConstants.Remove</SIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <SItemCol Value="@context.Value"></SItemCol>
                             break;
                     }
                 </ItemColContent>

@@ -19,14 +19,13 @@
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="Masa.Blazor" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.6.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.6.0-preview.3" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="0.6.0-preview.5" />
 	</ItemGroup>
 
 	<ItemGroup>

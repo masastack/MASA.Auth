@@ -22,12 +22,9 @@
                     <MCol Md=6>
                         <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                     </MCol>
-                    @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
-                    {
-                        <MCol Md=12>
-                            <STextField Prefix="@_showUrlPrefix" Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url" />
-                        </MCol>
-                    }
+                    <MCol Md=12>
+                        <STextField Prefix="@_showUrlPrefix" Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url" />
+                    </MCol>
                     <MCol Md=12>
                         <STextField Label="@T("Icon Code")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
                             <PrependContent>

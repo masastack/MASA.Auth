@@ -31,7 +31,7 @@ builder.Services.AddAliyunStorage(async serviceProvider =>
     };
 });
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+builder.Services.AddMasaIdentityModel(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
@@ -72,6 +72,7 @@ builder.AddMasaConfiguration(configurationBuilder =>
     configurationBuilder.UseDcc();
 });
 builder.Services.AddDccClient();
+
 var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
         .GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
@@ -140,7 +141,7 @@ builder.Services
 builder.Services.AddOidcCache(redisConfigOption);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    await option.SeedStandardResourcesAsync();
+    //await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
         builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
