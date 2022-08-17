@@ -261,7 +261,7 @@ public class CommandHandler
             if (user is not null)
             {
                 await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
-                user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.CompanyName, userModel.Gender);
+                user.Update(userModel.Name, userModel.DisplayName ?? "", userModel.IdCard, userModel.CompanyName, userModel.Gender);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.SetAsync(user);
                 command.NewUser = user.Adapt<UserModel>();
@@ -362,12 +362,34 @@ public class CommandHandler
         var staffDto = command.Staff;
         var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
         if (staff is not null) return;
-        await AddStaffAsync(command.Staff);
+        await AddStaffAsync(staffDto);
     }
 
-    async Task AddStaffAsync(AddStaffDto staff)
+    async Task AddStaffAsync(AddStaffDto staffDto)
     {
-        await _staffDomainService.AddStaffAsync(staff);
+        var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
+        var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
+        await _staffDomainService.AddStaffBeforeAsync(addStaffBeforeEvent);
+        var staff = new Staff(
+                addStaffBeforeEvent.UserId,
+                staffDto.Name,
+                staffDto.DisplayName,
+                staffDto.Avatar,
+                staffDto.IdCard,
+                staffDto.CompanyName,
+                staffDto.Gender,
+                staffDto.PhoneNumber,
+                staffDto.Email,
+                staffDto.JobNumber,
+                addStaffBeforeEvent.PositionId,
+                staffDto.StaffType,
+                staffDto.Enabled,
+                staffDto.Address
+            );
+        staff.SetDepartmentStaff(staffDto.DepartmentId);
+        staff.SetTeamStaff(staffDto.Teams);
+        await _staffRepository.AddAsync(staff);
+        await _staffDomainService.AddStaffAfterAsync(new(staff));
     }
 
     [EventHandler]
@@ -379,12 +401,24 @@ public class CommandHandler
             throw new UserFriendlyException("This staff data does not exist");
 
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
-        await UpdateStaffAsync(command.Staff);
+        await UpdateStaffAsync(staff, staffDto);
     }
 
-    async Task UpdateStaffAsync(UpdateStaffDto staffDto)
+    async Task UpdateStaffAsync(Staff staff, UpdateStaffDto staffDto)
     {
-        await _staffDomainService.UpdateStaffAsync(staffDto);
+        var updateStaffEvent = new UpdateStaffBeforeDomainEvent(staffDto.Position);
+        await _staffDomainService.UpdateStaffBeforeAsync(updateStaffEvent);
+
+        staff.Update(
+            updateStaffEvent.PositionId, staffDto.StaffType, staffDto.Enabled, staffDto.Name,
+            staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName,
+            staffDto.PhoneNumber, staffDto.Email, staffDto.Address, staffDto.Gender);
+        staff.SetDepartmentStaff(staffDto.DepartmentId);
+        var teams = staff.TeamStaffs.Select(team => team.TeamId).Union(staffDto.Teams).Distinct().ToList();
+        staff.SetTeamStaff(staffDto.Teams);
+        await _staffRepository.UpdateAsync(staff);
+
+        await _staffDomainService.UpdateStaffAfterAsync(new(staff, teams));
     }
 
     [EventHandler]
@@ -395,7 +429,8 @@ public class CommandHandler
         if (staff is not null)
         {
             var updateStaffDto = staffDto.Adapt<UpdateStaffDto>();
-            await UpdateStaffAsync(updateStaffDto);
+            updateStaffDto.Id = staff.Id;
+            await UpdateStaffAsync(staff, updateStaffDto);
         }
         else
         {
@@ -410,8 +445,11 @@ public class CommandHandler
         var staff = await VerifyStaffRepeatAsync(default, default, staffDto.PhoneNumber, staffDto.Email, default, false);
         if (staff is not null)
         {
+            var updateStaffEvent = new UpdateStaffBeforeDomainEvent(default);
+            await _staffDomainService.UpdateStaffBeforeAsync(updateStaffEvent);
             staff.UpdateForLdap(staffDto.Enabled, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.PhoneNumber, staffDto.Email);
             await _staffRepository.UpdateAsync(staff);
+            await _staffDomainService.UpdateStaffAfterAsync(new(staff, default));
         }
         else
         {
@@ -427,7 +465,6 @@ public class CommandHandler
             };
             await AddStaffAsync(addStaffDto);
         }
-
     }
 
     [EventHandler(1)]
@@ -442,19 +479,99 @@ public class CommandHandler
             throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
-
-        var teams = staff.TeamStaffs.Select(ts => ts.TeamId);
-        var roles = await _authDbContext.Set<TeamRole>()
-                                .Where(tr => teams.Contains(tr.TeamId))
-                                .Select(tr => tr.RoleId)
-                                .ToListAsync();
-        await _roleDomainService.UpdateRoleLimitAsync(roles);
+        await _staffDomainService.RemoveStaffAsync(new(staff));
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task SyncAsync(SyncStaffCommand command)
     {
-        command.Result = await _staffDomainService.SyncStaffAsync(command.Staffs);
+        var syncResults = new SyncStaffResultsDto();
+        command.Result = syncResults;
+        var syncStaffs = command.Staffs;
+        //validation
+        var validator = new SyncStaffValidator();
+        foreach (var staff in syncStaffs)
+        {
+            var result = validator.Validate(staff);
+            if (result.IsValid is false)
+            {
+                syncResults[staff.Index] = new()
+                {
+                    JobNumber = staff.JobNumber,
+                    Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
+                };
+            }
+        }
+        //check duplicate
+        CheckDuplicate(Staff => Staff.PhoneNumber);
+        CheckDuplicate(Staff => Staff.JobNumber);
+        CheckDuplicate(Staff => Staff.Email);
+        CheckDuplicate(Staff => Staff.IdCard);
+        if (syncResults.IsValid) return;
+
+        //sync user
+        var query = new AllUsersQuery();
+        await _eventBus.PublishAsync(query);
+        var allUsers = query.Result;
+        var userRange = new List<User>();
+        foreach (var syncStaff in syncStaffs)
+        {
+            try
+            {
+                var staff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
+                if (staff is not null)
+                {
+                    var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
+                    await _staffDomainService.UpdateStaffBeforeAsync(updateStaffEvent);                    
+                    staff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
+                    await _staffRepository.UpdateAsync(staff);
+                    await _staffDomainService.UpdateStaffAfterAsync(new(staff, default));
+                }
+                else
+                {
+                    var addStaffDto = new AddStaffDto
+                    {
+                        Name = syncStaff.Name,
+                        DisplayName = syncStaff.DisplayName,
+                        Enabled = true,
+                        Email = syncStaff.Email,
+                        Password = syncStaff.Password,
+                        PhoneNumber = syncStaff.PhoneNumber,
+                        JobNumber = syncStaff.JobNumber,
+                        IdCard = syncStaff.IdCard,
+                        Position = syncStaff.Position,
+                        Gender = syncStaff.Gender,
+                        StaffType = syncStaff.StaffType,
+                    };
+                    await AddStaffAsync(addStaffDto);
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMsg = ex is UserFriendlyException ? ex.Message : "Unknown exception, please contact the administrator";
+                syncResults[syncStaff.Index] = new()
+                {
+                    JobNumber = syncStaff.JobNumber,
+                    Errors = new() { errorMsg }
+                };
+            }
+        }
+
+        void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
+        {
+            var func = selector.Compile();
+            if (syncStaffs.Where(staff => func(staff) is not null).IsDuplicate(func, out List<SyncStaffDto>? duplicate))
+            {
+                foreach (var staff in duplicate)
+                {
+                    syncResults[staff.Index] = new()
+                    {
+                        //Account = staff.Account,
+                        Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }
+                    };
+                }
+            }
+        }
     }
 
     private async Task<Staff?> VerifyStaffRepeatAsync(Guid? staffId, string? jobNumber, string? phoneNumber, string? email, string? idCard, bool throwException = true)

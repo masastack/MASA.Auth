@@ -34,14 +34,13 @@ public class User : FullAggregateRoot<Guid, Guid>
     public string DisplayName
     {
         get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_displayName);
-        private set => _displayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value);
+        private set => _displayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(DisplayName));
     }
 
-    [AllowNull]
     public string Avatar
     {
         get => _avatar ??= "";
-        private set => _avatar = value;
+        private set => _avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_avatar, nameof(Avatar));
     }
 
     [AllowNull]
@@ -54,7 +53,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     public string Account
     {
         get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_account);
-        private set => _account = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value);
+        private set => _account = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Account));
     }
 
     [AllowNull]
@@ -96,7 +95,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         get => _gender;
         private set
         {
-            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value);
+            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(GenderType));
         }
     }
 
@@ -129,7 +128,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         get => _address ??= new();
         private set
         {
-           _address = value;
+            _address = value;
         }
     }
 
@@ -233,7 +232,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions, user.Landline);
     }
 
-    public void Update(string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, GenderTypes gender)
+    public void Update(string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
     {
         Name = name;
         IdCard = idCard;
@@ -253,7 +252,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     {
         Name = name;
         DisplayName = displayName;
-        IdCard = idCard;      
+        IdCard = idCard;
         CompanyName = companyName;
         GenderType = gender;
     }

@@ -9,61 +9,137 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     private Position? _position;
     private List<DepartmentStaff> _departmentStaffs = new();
     private List<TeamStaff> _teamStaffs = new();
-    private Guid? _positionId;
     private User? _createUser;
     private User? _modifyUser;
 
-    public virtual User User => _user ?? throw new UserFriendlyException("Failed to get user data");
+    private Guid _userId;
+    private string? _name;
+    private string? _displayName;
+    private string? _avatar;
+    private string? _idCard;
+    private string? _companyName;
+    private Guid? _positionId;
+    private string? _phoneNumber;
+    private string? _email;
+    private GenderTypes _gender;
+    private AddressValue? _address;
+    private string? _jobNumber;
+    private StaffTypes _staffType;
 
-    public virtual Position? Position => _position;
+    public Guid UserId
+    {
+        get => ArgumentExceptionExtensions.ThrowIfDefault(_userId);
+        private set => _userId = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(UserId));
+    }
 
-    public virtual IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
+    [AllowNull]
+    public string Name
+    {
+        get => _name ??= "";
+        private set => _name = value;
+    }
 
-    public virtual IReadOnlyList<TeamStaff> TeamStaffs => _teamStaffs;
+    public string DisplayName
+    {
+        get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_displayName);
+        private set => _displayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(DisplayName));
+    }
+
+    public string Avatar
+    {
+        get => _avatar ??= "";
+        private set => _avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_avatar, nameof(Avatar));
+    }
+
+    [AllowNull]
+    public string IdCard
+    {
+        get => _idCard ??= "";
+        private set => _idCard = value;
+    }
+
+    [AllowNull]
+    public string CompanyName
+    {
+        get => _companyName ??= "";
+        private set => _companyName = value;
+    }
+
+    public GenderTypes Gender
+    {
+        get => _gender;
+        private set
+        {
+            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(Gender));
+        }
+    }
+
+    #region Contact Property
+
+    [AllowNull]
+    public string PhoneNumber
+    {
+        get => _phoneNumber ??= "";
+        private set => _phoneNumber = value;
+    }
+
+    [AllowNull]
+    public string Email
+    {
+        get => _email ??= "";
+        private set => _email = value;
+    }
+
+    [AllowNull]
+    public AddressValue Address
+    {
+        get => _address ??= new();
+        private set
+        {
+            _address = value;
+        }
+    }
+
+    #endregion
+
+    public string JobNumber
+    {
+        get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_jobNumber);
+        private set => _jobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(JobNumber));
+    }
+
+    [AllowNull]
+    public Guid? PositionId
+    {
+        get => _positionId == Guid.Empty ? null : _positionId;
+        set
+        {
+            _positionId = value;
+        }
+    }
+
+    public StaffTypes StaffType
+    {
+        get => _staffType;
+        private set
+        {
+            _staffType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(StaffType));
+        }
+    }
+
+    public bool Enabled { get; private set; }
+
+    public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
+
+    public Position? Position => _position;
+
+    public IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
+
+    public IReadOnlyList<TeamStaff> TeamStaffs => _teamStaffs;
 
     public User? CreateUser => _createUser;
 
     public User? ModifyUser => _modifyUser;
-
-    public Guid UserId { get; private set; }
-
-    public string Name { get; private set; } = "";
-
-    public string DisplayName { get; private set; } = "";
-
-    public string Avatar { get; private set; } = "";
-
-    public string IdCard { get; private set; } = "";
-
-    public string CompanyName { get; private set; } = "";
-
-    public GenderTypes Gender { get; private set; }
-
-    #region Contact Property
-
-    public string PhoneNumber { get; private set; } = "";
-
-    public string Email { get; private set; } = "";
-
-    public AddressValue Address { get; private set; } = new();
-
-    #endregion
-
-    public string JobNumber { get; private set; } = "";
-
-    public Guid? PositionId
-    {
-        get => _positionId;
-        set
-        {
-            if (value == Guid.Empty) _positionId = null;
-            else _positionId = value;
-        }
-    }
-
-    public StaffTypes StaffType { get; private set; }
-
-    public bool Enabled { get; private set; }
 
     public Staff(
         Guid userId,
@@ -79,17 +155,16 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Guid? positionId,
         StaffTypes staffType,
         bool enabled,
-        AddressValue address)
+        AddressValue? address)
     {
-        Name = name ?? "";
-        Avatar = avatar ?? "";
-        IdCard = idCard ?? "";
-        CompanyName = companyName ?? "";
-        Address = address ?? new();       
+        Name = name;
+        IdCard = idCard;
+        CompanyName = companyName;
+        Address = address;
         PositionId = positionId;
         Enabled = enabled;
-        UserId = ArgumentExceptionExtensions.ThrowIfDefault(userId);
-        JobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(jobNumber);
+        UserId = userId;
+        JobNumber = jobNumber;
         StaffType = staffType == default ? StaffTypes.ExternalStaff : staffType;
         Gender = gender == default ? GenderTypes.Male : gender;
         Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
@@ -128,18 +203,21 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         return new StaffDto(staff.Id, staff.UserId, department, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
-    public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string displayName, string? avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValueDto? address, GenderTypes gender)
+    public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string displayName, string avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValue? address, GenderTypes gender)
     {
-        Name = name ?? "";
+        Name = name;
         PositionId = positionId;
         Enabled = enabled;
-        Name = name ?? "";
-        IdCard = idCard ?? "";
-        Avatar = avatar ?? "";
-        CompanyName = companyName ?? "";
+        Name = name;
+        IdCard = idCard;
+        Avatar = avatar;
+        CompanyName = companyName;
         Enabled = enabled;
-        Address = address ?? new();
-        UpdateCore(displayName, phoneNumber, email, staffType, gender);
+        Address = address;
+        DisplayName = displayName;
+        StaffType = staffType;
+        Gender = gender;
+        VerifyPhonNumberEmail(phoneNumber, email);
     }
 
     public void UpdateForLdap(bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
@@ -150,20 +228,17 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
         PhoneNumber = phoneNumber;
         Email = email;
-        UpdateCore(displayName, phoneNumber, email);
-    }
-
-    void UpdateCore(string displayName, string? phoneNumber, string? email, StaffTypes staffType, GenderTypes gender)
-    {
-        UpdateCore(displayName, phoneNumber, email);
-        StaffType = ArgumentExceptionExtensions.ThrowIfDefault(staffType);
-        Gender = ArgumentExceptionExtensions.ThrowIfDefault(gender);
-    }
-
-    void UpdateCore(string displayName, string? phoneNumber, string? email)
-    {
         VerifyPhonNumberEmail(phoneNumber, email);
-        DisplayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(displayName);
+    }
+   
+    public void UpdateBasicInfo(string? name,string displayName, GenderTypes gender,Guid? positionId, StaffTypes staffType)
+    {
+        Name = name;
+        PositionId = positionId;
+        Name = name;
+        DisplayName = displayName;
+        StaffType = staffType;
+        Gender = gender;
     }
 
     public void SetDepartmentStaff(Guid departmentId)

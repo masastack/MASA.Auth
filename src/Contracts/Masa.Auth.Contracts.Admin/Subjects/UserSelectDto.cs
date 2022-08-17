@@ -29,7 +29,7 @@ public class UserSelectDto : AutoCompleteDocument
         Avatar = "";
     }
 
-    public UserSelectDto(Guid id, string name, string displayName, string account, string phoneNumber, string email, string avatar) : base($"{name},{account},{displayName},{phoneNumber},{email}")
+    public UserSelectDto(Guid id, string name, string displayName, string account, string phoneNumber, string email, string avatar)
     {
         Id = id;
         Name = name;
@@ -41,4 +41,9 @@ public class UserSelectDto : AutoCompleteDocument
     }
 
     public override string GetDocumentId() => Id.ToString();
+
+    protected override string GetText()
+    {
+        return $"{Name},{Account},{DisplayName},{PhoneNumber},{Email}";
+    }
 }

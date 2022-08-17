@@ -13,19 +13,15 @@ public class AddStaffDto
 
     public Guid DepartmentId { get; set; }
 
-    public Guid PositionId { get; set; }
-
     public string? Position { get; set; }
 
     public List<Guid> Teams { get; set; } = new();
-
-    public Guid UserId { get; set; }
 
     public string? Name { get; set; }
 
     public string DisplayName { get; set; }
 
-    public string? Avatar { get; set; }
+    public string Avatar { get; set; }
 
     public string? IdCard { get; set; }
 
@@ -39,7 +35,7 @@ public class AddStaffDto
 
     public AddressValueDto Address { get; set; }
 
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     public GenderTypes Gender { get; set; } = GenderTypes.Male;
 
@@ -48,20 +44,18 @@ public class AddStaffDto
         JobNumber = "";
         DisplayName = "";
         PhoneNumber = "";
-        Password = "";
         Address = new();
+        Avatar = "";
     }
 
-    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, Guid positionId, string? position, List<Guid> teams, Guid userId, string? name, string displayName, string? avatar, string? idCard, string? companyName, string phoneNumber, string? landline, string? email, AddressValueDto address, string password, GenderTypes gender)
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string? position, List<Guid> teams, string? name, string displayName, string avatar, string? idCard, string? companyName, string phoneNumber, string? landline, string? email, AddressValueDto address, string? password, GenderTypes gender)
     {
         JobNumber = jobNumber;
         StaffType = staffType;
         Enabled = enabled;
         DepartmentId = departmentId;
-        PositionId = positionId;
         Position = position;
         Teams = teams;
-        UserId = userId;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
