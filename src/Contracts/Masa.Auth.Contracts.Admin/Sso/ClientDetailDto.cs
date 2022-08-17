@@ -28,7 +28,7 @@ public class ClientDetailDto : AddClientDto
 
     public List<string> IdentityProviderRestrictions { get; set; } = new();
 
-    public int UserSsoLifetime { get; set; }
+    public int? UserSsoLifetime { get; set; }
     #endregion
 
     #region Token
