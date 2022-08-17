@@ -11,7 +11,7 @@ public class UpdateUserDto
 
     public string DisplayName { get; set; }
 
-    public string? Avatar { get; set; }
+    public string Avatar { get; set; }
 
     public string? IdCard { get; set; }
 
@@ -37,10 +37,11 @@ public class UpdateUserDto
     {
         DisplayName = "";
         PhoneNumber = "";
+        Avatar = "";
         Address = new();
     }
 
-    public UpdateUserDto(Guid id, string? name, string displayName, string? avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, GenderTypes gender)
+    public UpdateUserDto(Guid id, string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, GenderTypes gender)
     {
         Id = id;
         Name = name;

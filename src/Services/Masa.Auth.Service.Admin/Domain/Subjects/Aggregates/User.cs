@@ -155,31 +155,31 @@ public class User : FullAggregateRoot<Guid, Guid>
         UpdateCore(displayName, phoneNumber, email, avatar);
     }
 
-    public void Update(string name, string displayName, string? idCard, string? companyName, string? phoneNumber, string? email, GenderTypes gender)
+    public void Update(string? name, string displayName, string? idCard, string? companyName, string? phoneNumber, string? email, GenderTypes gender)
     {
-        Name = name;
+        Name = name ?? "";
         IdCard = idCard ?? "";
         Gender = gender;
         CompanyName = companyName ?? "";
         UpdateCore(displayName, phoneNumber, email);
     }
 
-    public void UpdateBasicInfo(string displayName, string? phoneNumber, string? email, GenderTypes gender)
+    public void UpdateBasicInfo(string displayName,  GenderTypes gender)
     {
         Gender = gender;
-        UpdateCore(displayName, phoneNumber, email);
+        DisplayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(displayName);
     }
 
     void UpdateCore(string displayName, string? phoneNumber, string? email, string avatar)
     {
-        Avatar = ArgumentNullOrEmptyException.ThrowIfNullOrEmpty(avatar);
+        Avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(avatar);
         VerifyPhonNumberEmail(phoneNumber, email);       
     }
 
     void UpdateCore(string displayName, string? phoneNumber, string? email)
     {
         VerifyPhonNumberEmail(phoneNumber, email);
-        DisplayName = ArgumentNullOrEmptyException.ThrowIfNullOrEmpty(displayName);
+        DisplayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(displayName);
     }
 
     public void Disabled()

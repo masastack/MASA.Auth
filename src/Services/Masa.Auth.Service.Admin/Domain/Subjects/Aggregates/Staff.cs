@@ -86,10 +86,10 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
         CompanyName = companyName ?? "";
-        Address = address ?? new();
-        JobNumber = jobNumber ?? "";
+        Address = address ?? new();       
         PositionId = positionId;
         Enabled = enabled;
+        JobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(jobNumber);
         StaffType = staffType == default ? StaffTypes.ExternalStaff : staffType;
         Gender = gender == default ? GenderTypes.Male : gender;
         Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
@@ -156,14 +156,14 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     void UpdateCore(string displayName, string? phoneNumber, string? email, StaffTypes staffType, GenderTypes gender)
     {
         UpdateCore(displayName, phoneNumber, email);
-        StaffType = ArgumentNullOrEmptyException.ThrowIfDefault(staffType);
-        Gender = ArgumentNullOrEmptyException.ThrowIfDefault(gender);
+        StaffType = ArgumentExceptionExtensions.ThrowIfDefault(staffType);
+        Gender = ArgumentExceptionExtensions.ThrowIfDefault(gender);
     }
 
     void UpdateCore(string displayName, string? phoneNumber, string? email)
     {
         VerifyPhonNumberEmail(phoneNumber, email);
-        DisplayName = ArgumentNullOrEmptyException.ThrowIfNullOrEmpty(displayName);
+        DisplayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(displayName);
     }
 
     public void SetDepartmentStaff(Guid departmentId)

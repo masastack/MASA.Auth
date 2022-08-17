@@ -11,7 +11,7 @@
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />
+	<!--<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />-->
     <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
@@ -21,6 +21,10 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
     <PackageReference Include="Util.Reflection" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth.Contracts\Masa.BuildingBlocks.StackSdks.Auth.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

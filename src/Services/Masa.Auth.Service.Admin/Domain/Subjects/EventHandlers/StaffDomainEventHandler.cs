@@ -29,7 +29,7 @@ public class StaffDomainEventHandler
     public async Task AddUserAsync(AddStaffDomainEvent staffEvent)
     {
         var staffDto = staffEvent.Staff;
-        var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position ?? "", default, staffDto.Password, staffDto.Gender, new(), new());
+        var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
         var command = new AddUserCommand(addUserDto, true);
         await _eventBus.PublishAsync(command);
         staffEvent.Staff.UserId = command.NewUser.Id;

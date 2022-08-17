@@ -71,6 +71,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth.Contracts\Masa.BuildingBlocks.StackSdks.Auth.Contracts.csproj" />
 	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\OpenIdConnect\Masa.Contrib.Authentication.OpenIdConnect.Cache\Masa.Contrib.Authentication.OpenIdConnect.Cache.csproj" />
 	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\OpenIdConnect\Masa.Contrib.Authentication.OpenIdConnect.EFCore\Masa.Contrib.Authentication.OpenIdConnect.EFCore.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />

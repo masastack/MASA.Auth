@@ -67,7 +67,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
+        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
         if (user is not null)
         {
             command.NewUser = user;
@@ -87,8 +87,7 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.IdCard, default);
-
+        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Email, userDto.IdCard, default);
         user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.SetAsync(user);
@@ -183,27 +182,18 @@ public class CommandHandler
                 throw new UserFriendlyException("域账号验证失败");
             }
 
-            var thirdPartyUserDtp = new UpsertThirdPartyUserDto(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
+            var thirdPartyUserDto = new UpsertThirdPartyUserDto(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
                     new AddUserDto
                     {
                         Name = ldapUser.Name,
                         DisplayName = ldapUser.DisplayName,
                         Enabled = true,
+                        PhoneNumber = ldapUser.Phone,
                         Email = ldapUser.EmailAddress,
                         Account = ldapUser.SamAccountName,
-                        Password = password,
-                        Avatar = _configuration.GetValue<string>("Subjects:Avatar")
+                        Password = password
                     });
-            //phone number regular match
-            if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
-            {
-                thirdPartyUserDtp.User.PhoneNumber = ldapUser.Phone;
-            }
-            else
-            {
-                thirdPartyUserDtp.User.Landline = ldapUser.Phone;
-            }
-            await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDtp));
+            await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDto));
         }
 
         var user = await _userRepository.FindAsync(u => u.Account == account);
@@ -255,8 +245,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, default, default);
-        user.UpdateBasicInfo(userModel.DisplayName, userModel.PhoneNumber, userModel.Email, userModel.Avatar, userModel.Gender);
+        user.UpdateBasicInfo(userModel.DisplayName, userModel.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.SetAsync(user);
     }
@@ -302,7 +291,7 @@ public class CommandHandler
     public async Task VerifyUserRepeatAsync(VerifyUserRepeatCommand command)
     {
         var user = command.User;
-        await VerifyUserRepeatAsync(user.Id, user.PhoneNumber, user.Landline, user.Email, user.IdCard, user.Account);
+        await VerifyUserRepeatAsync(user.Id, user.PhoneNumber, user.Email, user.IdCard, user.Account);
         command.Result = true;
     }
 
@@ -316,7 +305,7 @@ public class CommandHandler
             var syncUsers = users.Skip(syncCount)
                                 .Take(command.Dto.OnceExecuteCount)
                                 .Select(user => new UserSelectDto(user.Id, user.Name, user.DisplayName, user.Account, user.PhoneNumber, user.Email, user.Avatar));
-            await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(syncUsers);
+            await _autoCompleteClient.SetBySpecifyDocumentAsync(syncUsers);
             syncCount += command.Dto.OnceExecuteCount;
         }
     }
@@ -330,15 +319,13 @@ public class CommandHandler
         return user;
     }
 
-    private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? landline, string? email, string? idCard, string? account, bool throwException = true)
+    private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
         Expression<Func<User, bool>> condition = user => false;
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
         if (!string.IsNullOrEmpty(phoneNumber))
             condition = condition.Or(user => user.PhoneNumber == phoneNumber);
-        if (!string.IsNullOrEmpty(landline))
-            condition = condition.Or(user => user.Landline == landline);
         if (!string.IsNullOrEmpty(email))
             condition = condition.Or(user => user.Email == email);
         if (!string.IsNullOrEmpty(idCard))
@@ -355,8 +342,6 @@ public class CommandHandler
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
                 throw new UserFriendlyException($"User with phone number {phoneNumber} already exists");
-            if (string.IsNullOrEmpty(landline) is false && landline == exitUser.Landline)
-                throw new UserFriendlyException($"User with landline {landline} already exists");
             if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
                 throw new UserFriendlyException($"User with email {email} already exists");
             if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
@@ -389,15 +374,16 @@ public class CommandHandler
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         var staffDto = command.Staff;
+        var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
+        if (staff is null)
+            throw new UserFriendlyException("This staff data does not exist");
+
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
         await UpdateStaffAsync(command.Staff);
     }
 
     async Task UpdateStaffAsync(UpdateStaffDto staffDto)
-    {
-        var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
-        if (staff is null)
-            throw new UserFriendlyException("This staff data does not exist");
+    {      
         await _staffDomainService.UpdateStaffAsync(staffDto);
     }
 
@@ -552,9 +538,14 @@ public class CommandHandler
     {
         var thirdPartyUserDto = command.ThirdPartyUser;
         await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
-        var thirdPartyUser = thirdPartyUserDto.Adapt<ThirdPartyUser>();
+        await AddThirdPartyUserAsync(thirdPartyUserDto);
+    }
+
+    async Task AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
+    {
+        var thirdPartyUser = dto.Adapt<ThirdPartyUser>();
         await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
-        await _eventBus.PublishAsync(new AddThirdPartyUserDomainEvent(thirdPartyUserDto));
+        await _eventBus.PublishAsync(new AddThirdPartyUserDomainEvent(dto));
     }
 
     [EventHandler(1)]
@@ -565,7 +556,12 @@ public class CommandHandler
         if (thirdPartyUser is null)
             throw new UserFriendlyException("The current third party user does not exist");
         await VerifyUserRepeatAsync(thirdPartyUser.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
-        thirdPartyUser.Update(thirdPartyUser.Enabled, thirdPartyUser.ThridPartyIdentity, thirdPartyUser.ExtendedData);
+        await UpdateThirdPartyUserAsync(thirdPartyUser, thirdPartyUserDto);
+    }
+
+    async Task UpdateThirdPartyUserAsync(ThirdPartyUser thirdPartyUser, UpdateThirdPartyUserDto dto)
+    {
+        thirdPartyUser.Update(dto.Enabled, dto.ThridPartyIdentity, dto.ExtendedData);
         await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
     }
 
@@ -576,18 +572,18 @@ public class CommandHandler
         var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, false);
         if (thirdPartyUser is not null)
         {
-            var updateCommand = new UpdateThirdPartyUserCommand(new UpdateThirdPartyUserDto(thirdPartyUser.Id, thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity, thirdPartyUserDto.ExtendedData));
-            await _eventBus.PublishAsync(updateCommand);
+            var dto = new UpdateThirdPartyUserDto(thirdPartyUser.Id, thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity, thirdPartyUserDto.ExtendedData);
+            await UpdateThirdPartyUserAsync(thirdPartyUser, dto);
         }
         else
         {
-            var addCommand = new AddThirdPartyUserCommand(thirdPartyUserDto);
-            await _eventBus.PublishAsync(addCommand);
+            await AddThirdPartyUserAsync(thirdPartyUserDto);
         }
     }
 
     private async Task<ThirdPartyUser?> VerifyUserRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity, bool throwException = true)
     {
+
         var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
         if (thirdPartyUser is not null)
         {

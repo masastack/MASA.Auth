@@ -50,7 +50,7 @@ public class AddUserDto
         Permissions = new List<SubjectPermissionRelationDto>();
     }
 
-    public AddUserDto(string? name, string displayName, string? avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string password, GenderTypes gender, List<Guid> roles, List<SubjectPermissionRelationDto> permissions)
+    public AddUserDto(string? name, string displayName, string? avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions)
     {
         Name = name;
         DisplayName = displayName;
@@ -67,7 +67,7 @@ public class AddUserDto
         Account = account;
         Password = password;
         Gender = gender;
-        Roles = roles;
-        Permissions = permissions;
+        Roles = roles ?? new();
+        Permissions = permissions ?? new();
     }
 }

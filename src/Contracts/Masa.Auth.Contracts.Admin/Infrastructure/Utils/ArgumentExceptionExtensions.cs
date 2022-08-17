@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
-public static class ArgumentNullOrEmptyException
+public static class ArgumentExceptionExtensions
 {
     public static T ThrowIfDefault<T>([NotNull] T? argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
