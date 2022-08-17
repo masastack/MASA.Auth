@@ -8,6 +8,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(u => u.Id);
+        //mysql use ForMySQLHasCollation("utf8_bin") link https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core-charset.html
         builder.Property(c => c.Account).UseCollation("SQL_Latin1_General_CP1_CS_AS");
         builder.HasIndex(u => u.Account).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(u => u.Name);
