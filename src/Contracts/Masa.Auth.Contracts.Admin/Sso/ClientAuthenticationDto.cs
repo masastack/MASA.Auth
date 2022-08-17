@@ -29,5 +29,5 @@ public class ClientAuthenticationDto
 
     public List<string> IdentityProviderRestrictions { get; set; } = new();
 
-    public int UserSsoLifetime { get; set; }
+    public int? UserSsoLifetime { get; set; }
 }
