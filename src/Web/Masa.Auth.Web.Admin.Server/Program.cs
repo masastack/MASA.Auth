@@ -21,7 +21,6 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddSingleton<BlazorServerTokenCache>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();

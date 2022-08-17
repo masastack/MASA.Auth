@@ -38,6 +38,7 @@ public partial class Index
             { "rememberConsent", _viewModel.RememberConsent.ToString() },
             { "scopes", JsonSerializer.Serialize(_viewModel.ScopesConsented) }
         };
+
         var url = QueryHelpers.AddQueryString("consent/consent", queryArguments);
         Navigation.NavigateTo(url, true);
     }

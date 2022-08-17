@@ -21,7 +21,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
+builder.Services.AddMasaIdentityModel();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthServiceUrl"));
 builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUrl"));

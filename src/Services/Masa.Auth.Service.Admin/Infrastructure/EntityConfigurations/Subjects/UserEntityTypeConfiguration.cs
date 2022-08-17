@@ -8,6 +8,8 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(u => u.Id);
+        builder.Property(c => c.Account).UseCollation("SQL_Latin1_General_CP1_CS_AS");
+        builder.HasIndex(u => u.Account).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(u => u.Name);
         builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("[IsDeleted] = 0 and IdCard!=''");
         builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("[IsDeleted] = 0 and PhoneNumber!=''");

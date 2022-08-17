@@ -31,7 +31,7 @@ builder.Services.AddAliyunStorage(async serviceProvider =>
     };
 });
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+builder.Services.AddMasaIdentityModel(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";

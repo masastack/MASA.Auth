@@ -37,7 +37,8 @@ public partial class LoginSection
             {
                 ReturnUrl = ReturnUrl,
                 UserName = LoginHint,
-                Environment = _environments.FirstOrDefault()?.Name ?? ""
+                Environment = _environments.FirstOrDefault()?.Name ?? "",
+                RememberLogin = LoginOptions.AllowRememberLogin
             };
             StateHasChanged();
         }
@@ -61,7 +62,6 @@ public partial class LoginSection
 
     private async Task LoginHandler()
     {
-        var d = await _loginForm.ValidateAsync();
         //validate
         if (await _loginForm.ValidateAsync())
         {

@@ -21,5 +21,6 @@ global using Masa.BuildingBlocks.Service.Caller;
 global using Masa.Contrib.Service.Caller;
 global using Masa.Contrib.Service.Caller.HttpClient;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
 global using System.Reflection;
 global using System.Text.Json;
