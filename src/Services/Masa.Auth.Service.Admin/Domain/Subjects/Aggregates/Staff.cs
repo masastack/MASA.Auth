@@ -81,7 +81,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         bool enabled,
         AddressValue address)
     {
-        UserId = userId;
         Name = name ?? "";
         Avatar = avatar ?? "";
         IdCard = idCard ?? "";
@@ -89,6 +88,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Address = address ?? new();       
         PositionId = positionId;
         Enabled = enabled;
+        UserId = ArgumentExceptionExtensions.ThrowIfDefault(userId);
         JobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(jobNumber);
         StaffType = staffType == default ? StaffTypes.ExternalStaff : staffType;
         Gender = gender == default ? GenderTypes.Male : gender;

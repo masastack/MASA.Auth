@@ -261,7 +261,7 @@ public class CommandHandler
             if (user is not null)
             {
                 await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
-                user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.CompanyName, userModel.PhoneNumber, userModel.Email, userModel.Gender);
+                user.Update(userModel.Name, userModel.DisplayName, userModel.IdCard, userModel.CompanyName, userModel.Gender);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.SetAsync(user);
                 command.NewUser = user.Adapt<UserModel>();
@@ -383,7 +383,7 @@ public class CommandHandler
     }
 
     async Task UpdateStaffAsync(UpdateStaffDto staffDto)
-    {      
+    {
         await _staffDomainService.UpdateStaffAsync(staffDto);
     }
 
@@ -543,9 +543,10 @@ public class CommandHandler
 
     async Task AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
     {
-        var thirdPartyUser = dto.Adapt<ThirdPartyUser>();
+        var addUserCommand = new AddUserCommand(dto.User);
+        await _eventBus.PublishAsync(addUserCommand);
+        var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, addUserCommand.NewUser.Id, true, dto.ThridPartyIdentity, dto.ExtendedData);
         await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
-        await _eventBus.PublishAsync(new AddThirdPartyUserDomainEvent(dto));
     }
 
     [EventHandler(1)]

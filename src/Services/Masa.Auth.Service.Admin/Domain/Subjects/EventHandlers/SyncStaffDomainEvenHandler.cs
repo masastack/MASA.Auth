@@ -35,13 +35,12 @@ public class SyncStaffDomainEvenHandler
             {
                 syncResults[staff.Index] = new()
                 {
-                    //Account = staff.Account,
+                    JobNumber = staff.JobNumber,
                     Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
                 };
             }
         }
         //check duplicate
-        //CheckDuplicate(Staff => Staff.Account);
         CheckDuplicate(Staff => Staff.PhoneNumber);
         CheckDuplicate(Staff => Staff.JobNumber);
         CheckDuplicate(Staff => Staff.Email);
@@ -53,6 +52,12 @@ public class SyncStaffDomainEvenHandler
         await _eventBus.PublishAsync(query);
         var allUsers = query.Result;
         var userRange = new List<User>();
+        foreach(var staff in syncStaffs)
+        {
+            //var upsertStaffCommand = new UpsertStaffCommand(new UpsertStaffDto(
+            //        staff.JobNumber,
+            //    ));
+        }
         //foreach (var staff in syncStaffs)
         //{
         //    var existUsers = allUsers.Where(u =>

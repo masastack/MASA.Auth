@@ -43,18 +43,24 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
     {
-        ThirdPartyIdpId = thirdPartyIdpId;
-        UserId = userId;
+        ThirdPartyIdpId = ArgumentExceptionExtensions.ThrowIfDefault(thirdPartyIdpId);
+        UserId = ArgumentExceptionExtensions.ThrowIfDefault(userId);
         Enabled = enabled;
-        ThridPartyIdentity = thridPartyIdentity;
-        ExtendedData = extendedData;
+        UpdateCore(thridPartyIdentity, extendedData);
     }
 
     public void Update(bool enabled, string thridPartyIdentity, string extendedData)
     {
         Enabled = enabled;
-        ThridPartyIdentity = thridPartyIdentity;
-        ExtendedData = extendedData;
+        UpdateCore(thridPartyIdentity, extendedData);
+    }
+
+    [MemberNotNull(nameof(ThridPartyIdentity))]
+    [MemberNotNull(nameof(ExtendedData))]
+    void UpdateCore(string thridPartyIdentity, string extendedData)
+    {
+        ThridPartyIdentity = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(thridPartyIdentity);
+        ExtendedData = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(extendedData);
     }
 
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)
