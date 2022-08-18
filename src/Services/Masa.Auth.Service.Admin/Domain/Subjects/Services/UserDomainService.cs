@@ -10,15 +10,26 @@ public class UserDomainService : DomainService
         _authDbContext = authDbContext;
     }
 
-    public async Task SetAsync(params User[] users)
+    public async Task AddAsync(User user)
     {
-        await EventBus.PublishAsync(new SetUserDomainEvent(users.ToList()));
+        await EventBus.PublishAsync(new AddUserDomainEvent(user));
     }
 
-    public async Task RemoveAsync(params Guid[] userIds)
+    public async Task UpdateAsync(User user)
     {
-        await EventBus.PublishAsync(new RemoveUserDomainEvent(userIds.ToList()));
+        await EventBus.PublishAsync(new UpdateUserDomainEvent(user));
     }
+
+    public async Task RemoveAsync(User user)
+    {
+        await EventBus.PublishAsync(new RemoveUserDomainEvent(user));
+    }
+
+    public async Task UpdateAuthorizationAsync(IEnumerable<Guid> roles)
+    {
+        await EventBus.PublishAsync(new UpdateUserAuthorizationDomainEvent(roles));
+    }
+
 
     public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId, List<Guid>? teams = null)
     {

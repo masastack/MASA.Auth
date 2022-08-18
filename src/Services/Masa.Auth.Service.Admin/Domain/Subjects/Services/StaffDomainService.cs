@@ -7,27 +7,27 @@ public class StaffDomainService : DomainService
     {
     }
 
-    public async Task AddStaffBeforeAsync(AddStaffBeforeDomainEvent staffEvent)
+    public async Task AddBeforeAsync(AddStaffBeforeDomainEvent staffEvent)
     {
         await EventBus.PublishAsync(staffEvent);
     }
 
-    public async Task AddStaffAfterAsync(AddStaffAfterDomainEvent staffEvent)
+    public async Task AddAfterAsync(AddStaffAfterDomainEvent staffEvent)
     {
         await EventBus.PublishAsync(staffEvent);
     }
 
-    public async Task UpdateStaffBeforeAsync(UpdateStaffBeforeDomainEvent staffEvent)
+    public async Task UpdateBeforeAsync(UpdateStaffBeforeDomainEvent staffEvent)
     {
         await EventBus.PublishAsync(staffEvent);
     }
 
-    public async Task UpdateStaffAfterAsync(UpdateStaffAfterDomainEvent staffEvent)
+    public async Task UpdateAfterAsync(UpdateStaffAfterDomainEvent staffEvent)
     {
         await EventBus.PublishAsync(staffEvent);
     }
 
-    public async Task RemoveStaffAsync(RemoveStaffDomainEvent staffEvent)
+    public async Task RemoveAsync(RemoveStaffDomainEvent staffEvent)
     {
         await EventBus.PublishAsync(staffEvent);
     }

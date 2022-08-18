@@ -67,7 +67,7 @@
                         <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
                         break;
                     default:
-                        <SItemCol Value="@context.Value"></SItemCol>
+                        <SItemCol Value="@context.Value" />
                         break;
                 }
             </ItemColContent>

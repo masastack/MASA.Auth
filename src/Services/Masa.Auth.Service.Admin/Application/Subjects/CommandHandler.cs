@@ -13,14 +13,12 @@ public class CommandHandler
     readonly AuthDbContext _authDbContext;
     readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
-    readonly RoleDomainService _roleDomainService;
     readonly IUserContext _userContext;
     readonly IDistributedCacheClient _cache;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
     readonly ILdapFactory _ldapFactory;
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILogger<CommandHandler> _logger;
-    readonly IConfiguration _configuration;
     readonly IEventBus _eventBus;
 
     public CommandHandler(
@@ -32,14 +30,12 @@ public class CommandHandler
         AuthDbContext authDbContext,
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
-        RoleDomainService roleDomainService,
         IDistributedCacheClient cache,
         IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
-        IMasaConfiguration masaConfiguration,
         IEventBus eventBus)
     {
         _userRepository = userRepository;
@@ -50,14 +46,12 @@ public class CommandHandler
         _authDbContext = authDbContext;
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
-        _roleDomainService = roleDomainService;
         _cache = cache;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
         _ldapFactory = ldapFactory;
         _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
-        _configuration = masaConfiguration.Local;
         _eventBus = eventBus;
     }
 
@@ -76,10 +70,14 @@ public class CommandHandler
         user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
         user.AddRoles(userDto.Roles.ToArray());
         user.AddPermissions(userDto.Permissions);
-        await _userRepository.AddAsync(user);
+        await AddUserAsync(user);
         command.NewUser = user;
-        await _userDomainService.SetAsync(user);
-        await _roleDomainService.UpdateRoleLimitAsync(userDto.Roles);
+    }
+
+    async Task AddUserAsync(User user)
+    {
+        await _userRepository.AddAsync(user);      
+        await _userDomainService.AddAsync(user);
     }
 
     [EventHandler(1)]
@@ -90,7 +88,7 @@ public class CommandHandler
         await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Email, userDto.IdCard, default);
         user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
-        await _userDomainService.SetAsync(user);
+        await _userDomainService.UpdateAsync(user);
     }
 
     [EventHandler(1)]
@@ -100,7 +98,7 @@ public class CommandHandler
         if (user is null)
             throw new UserFriendlyException("The current user does not exist");
 
-        if (user.Account == "admin")
+        if (user.IsAdmin())
         {
             throw new UserFriendlyException("超级管理员 无法删除");
         }
@@ -110,8 +108,7 @@ public class CommandHandler
         }
 
         await _userRepository.RemoveAsync(user);
-        await _roleDomainService.UpdateRoleLimitAsync(user.Roles.Select(role => role.RoleId));
-        await _userDomainService.RemoveAsync(user.Id);
+        await _userDomainService.RemoveAsync(user);
     }
 
     [EventHandler(1)]
@@ -124,21 +121,77 @@ public class CommandHandler
 
         var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles.ToArray());
-
         user.AddPermissions(userDto.Permissions);
         await _userRepository.UpdateAsync(user);
-
-        await _roleDomainService.UpdateRoleLimitAsync(roles);
+        await _userDomainService.UpdateAuthorizationAsync(roles);
     }
 
     [EventHandler(1)]
-    public async Task UpdateUserPasswordAsync(ResetUserPasswordCommand command)
+    public async Task ResetUserPasswordAsync(ResetUserPasswordCommand command)
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-
         user.UpdatePassword(userDto.Password);
         await _userRepository.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
+    {
+        var userModel = command.User;
+        var user = await CheckUserExistAsync(userModel.Id);
+        if (user.VerifyPassword(userModel.OldPassword) is false)
+        {
+            throw new UserFriendlyException("password verification failed");
+        }
+        user.UpdatePassword(userModel.NewPassword);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    [EventHandler(1)]
+    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
+    {
+        var userModel = command.User;
+        var user = await CheckUserExistAsync(userModel.Id);
+        user.UpdateBasicInfo(userModel.DisplayName, userModel.Gender);
+        await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
+    }
+
+    [EventHandler(1)]
+    public async Task UpsertUserAsync(UpsertUserCommand command)
+    {
+        var userModel = command.User;
+        var user = default(User);
+        if (userModel.Id != default)
+        {
+            user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
+            if (user is not null)
+            {
+                await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
+                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Gender);
+                await _userRepository.UpdateAsync(user);
+                await _userDomainService.UpdateAsync(user);
+                command.NewUser = user.Adapt<UserModel>();
+                return;
+            }
+        }
+        user = new User(userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, default, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
+        await AddUserAsync(user);
+        command.NewUser = user.Adapt<UserModel>(); ;
+    }
+
+    [EventHandler(1)]
+    public async Task DisableUserAsync(DisableUserCommand command)
+    {
+        var userModel = command.User;
+        var user = await _userRepository.FindAsync(u => u.Account == userModel.Account);
+        if (user is null)
+            throw new UserFriendlyException($"User with account {userModel.Account} does not exist");
+
+        user.Disabled();
+        await _userRepository.UpdateAsync(user);
+        command.Result = true;
     }
 
     [EventHandler]
@@ -227,66 +280,6 @@ public class CommandHandler
         }
     }
 
-    [EventHandler]
-    public async Task UpdateUserPasswordAsync(UpdateUserPasswordCommand command)
-    {
-        var userModel = command.User;
-        var user = await CheckUserExistAsync(userModel.Id);
-        if (!user.VerifyPassword(userModel.OldPassword))
-        {
-            throw new UserFriendlyException("password verification failed");
-        }
-        user.UpdatePassword(userModel.NewPassword);
-        await _userRepository.UpdateAsync(user);
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
-    {
-        var userModel = command.User;
-        var user = await CheckUserExistAsync(userModel.Id);
-        user.UpdateBasicInfo(userModel.DisplayName, userModel.Gender);
-        await _userRepository.UpdateAsync(user);
-        await _userDomainService.SetAsync(user);
-    }
-
-    [EventHandler(1)]
-    public async Task UpsertUserAsync(UpsertUserCommand command)
-    {
-        var userModel = command.User;
-        var user = default(User);
-        if (userModel.Id != default)
-        {
-            user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
-            if (user is not null)
-            {
-                await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
-                user.Update(userModel.Name, userModel.DisplayName ?? "", userModel.IdCard, userModel.CompanyName, userModel.Gender);
-                await _userRepository.UpdateAsync(user);
-                await _userDomainService.SetAsync(user);
-                command.NewUser = user.Adapt<UserModel>();
-                return;
-            }
-        }
-        user = new User(userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, default, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
-        await _userRepository.AddAsync(user);
-        await _userDomainService.SetAsync(user);
-        command.NewUser = user.Adapt<UserModel>(); ;
-    }
-
-    [EventHandler(1)]
-    public async Task DisableUserAsync(DisableUserCommand command)
-    {
-        var userModel = command.User;
-        var user = await _userRepository.FindAsync(u => u.Account == userModel.Account);
-        if (user is null)
-            throw new UserFriendlyException($"User with account {userModel.Account} does not exist");
-
-        user.Disabled();
-        await _userRepository.UpdateAsync(user);
-        command.Result = true;
-    }
-
     [EventHandler(1)]
     public async Task VerifyUserRepeatAsync(VerifyUserRepeatCommand command)
     {
@@ -369,7 +362,7 @@ public class CommandHandler
     {
         var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
-        await _staffDomainService.AddStaffBeforeAsync(addStaffBeforeEvent);
+        await _staffDomainService.AddBeforeAsync(addStaffBeforeEvent);
         var staff = new Staff(
                 addStaffBeforeEvent.UserId,
                 staffDto.Name,
@@ -389,7 +382,7 @@ public class CommandHandler
         staff.SetDepartmentStaff(staffDto.DepartmentId);
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
-        await _staffDomainService.AddStaffAfterAsync(new(staff));
+        await _staffDomainService.AddAfterAsync(new(staff));
     }
 
     [EventHandler]
@@ -407,7 +400,7 @@ public class CommandHandler
     async Task UpdateStaffAsync(Staff staff, UpdateStaffDto staffDto)
     {
         var updateStaffEvent = new UpdateStaffBeforeDomainEvent(staffDto.Position);
-        await _staffDomainService.UpdateStaffBeforeAsync(updateStaffEvent);
+        await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
 
         staff.Update(
             updateStaffEvent.PositionId, staffDto.StaffType, staffDto.Enabled, staffDto.Name,
@@ -418,7 +411,7 @@ public class CommandHandler
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);
 
-        await _staffDomainService.UpdateStaffAfterAsync(new(staff, teams));
+        await _staffDomainService.UpdateAfterAsync(new(staff, teams));
     }
 
     [EventHandler]
@@ -446,10 +439,10 @@ public class CommandHandler
         if (staff is not null)
         {
             var updateStaffEvent = new UpdateStaffBeforeDomainEvent(default);
-            await _staffDomainService.UpdateStaffBeforeAsync(updateStaffEvent);
+            await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
             staff.UpdateForLdap(staffDto.Enabled, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.PhoneNumber, staffDto.Email);
             await _staffRepository.UpdateAsync(staff);
-            await _staffDomainService.UpdateStaffAfterAsync(new(staff, default));
+            await _staffDomainService.UpdateAfterAsync(new(staff, default));
         }
         else
         {
@@ -479,7 +472,7 @@ public class CommandHandler
             throw new UserFriendlyException("the current staff not found");
         }
         await _staffRepository.RemoveAsync(staff);
-        await _staffDomainService.RemoveStaffAsync(new(staff));
+        await _staffDomainService.RemoveAsync(new(staff));
     }
 
     [EventHandler(1)]
@@ -522,10 +515,10 @@ public class CommandHandler
                 if (staff is not null)
                 {
                     var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
-                    await _staffDomainService.UpdateStaffBeforeAsync(updateStaffEvent);                    
+                    await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
                     staff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
                     await _staffRepository.UpdateAsync(staff);
-                    await _staffDomainService.UpdateStaffAfterAsync(new(staff, default));
+                    await _staffDomainService.UpdateAfterAsync(new(staff, default));
                 }
                 else
                 {

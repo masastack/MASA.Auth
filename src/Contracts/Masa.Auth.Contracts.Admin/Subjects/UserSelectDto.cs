@@ -7,25 +7,22 @@ public class UserSelectDto : AutoCompleteDocument
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public string DisplayName { get; set; }
 
     public string Account { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     public string Avatar { get; set; }
 
     public UserSelectDto()
     {
-        Name = "";
         DisplayName = "";
         Account = "";
-        PhoneNumber = "";
-        Email = "";
         Avatar = "";
     }
 

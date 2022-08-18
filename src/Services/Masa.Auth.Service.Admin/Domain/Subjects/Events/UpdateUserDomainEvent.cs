@@ -3,4 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record SetUserDomainEvent(List<User> Users) : Event;
+public record UpdateUserDomainEvent(User User) : Event;
