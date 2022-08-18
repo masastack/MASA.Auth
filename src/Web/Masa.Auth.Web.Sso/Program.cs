@@ -27,6 +27,7 @@ builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthServi
 builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUrl"));
 builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUrl"));
 
+builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
 builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
 builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
