@@ -80,11 +80,11 @@
                                 <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
                                     <MRow>
                                         <MCol Md=12>
-                                            <STextField Label="@T("Code")" Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                            <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
                                         </MCol>
 
                                         <MCol Md=6>
@@ -193,11 +193,11 @@
                                 <MForm EnableValidation Model=_apiPermissionDetailDto @ref="_formApi">
                                     <MRow>
                                         <MCol Md=12>
-                                            <STextField Label="@T("Code")" Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                            <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
                                         </MCol>
                                         <MCol Md=6>
                                             <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>

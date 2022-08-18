@@ -6,13 +6,13 @@
             <MForm Model=_apiPermissionDetailDto EnableValidation @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <STextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name" />
+                        <STextField Label="@T("Permission Name")" Required @bind-Value="_apiPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
-                        <STextField Label="@T("Code")" Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
+                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
                     </MCol>
                     <MCol Md=12>
-                        <SSelect @bind-Value="_apiPermissionDetailDto.Type"
+                        <SSelect @bind-Value="_apiPermissionDetailDto.Type" Required
                                  Label="@T("Permission Type")"
                                  Items="@_apiPermissionTypes"
                                  ItemText="u => u.Text"
