@@ -36,7 +36,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     public string Name
     {
         get => _name;
-        private set => _name = value ??"";
+        private set => _name = value ?? "";
     }
 
     public string DisplayName
@@ -227,8 +227,8 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Email = email;
         VerifyPhonNumberEmail(phoneNumber, email);
     }
-   
-    public void UpdateBasicInfo(string? name,string displayName, GenderTypes gender,Guid? positionId, StaffTypes staffType)
+
+    public void UpdateBasicInfo(string? name, string displayName, GenderTypes gender, Guid? positionId, StaffTypes staffType)
     {
         Name = name;
         PositionId = positionId;

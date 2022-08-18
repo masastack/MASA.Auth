@@ -107,7 +107,7 @@ public class CommandHandler
         var position = await _positionRepository.FindAsync(p => p.Id == positionDto.Id);
         if (position is null) throw new UserFriendlyException($"Current position not found");
         var existPosition = await _positionRepository.FindAsync(p => p.Id != positionDto.Id && p.Name == positionDto.Name);
-        if(existPosition is not null)
+        if (existPosition is not null)
         {
             throw new UserFriendlyException($"Position with name {command.Position.Name} already exists");
         }

@@ -79,7 +79,7 @@ public class CommandHandler
 
     async Task AddUserAsync(User user)
     {
-        await _userRepository.AddAsync(user);      
+        await _userRepository.AddAsync(user);
         await _userDomainService.AddAsync(user);
     }
 
@@ -239,7 +239,7 @@ public class CommandHandler
             }
 
             var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
-            await _eventBus.PublishAsync(upsertThirdPartyUserCommand);                       
+            await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
         }
 
         var user = await _userRepository.FindAsync(u => u.Account == account);
@@ -672,7 +672,7 @@ public class CommandHandler
         {
             thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-            var resetUserPasswordCommand = new ResetUserPasswordCommand(new (thirdPartyUser.UserId, command.Password));
+            var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
             await _eventBus.PublishAsync(resetUserPasswordCommand);
         }
         else

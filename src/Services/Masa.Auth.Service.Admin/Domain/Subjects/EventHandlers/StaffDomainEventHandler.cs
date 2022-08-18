@@ -50,7 +50,7 @@ public class StaffDomainEventHandler
             await UpdateRoleLimitAsync(teams);
         }
     }
-   
+
     [EventHandler(1)]
     public async Task UpsertPositionAsync(UpdateStaffBeforeDomainEvent staffEvent)
     {

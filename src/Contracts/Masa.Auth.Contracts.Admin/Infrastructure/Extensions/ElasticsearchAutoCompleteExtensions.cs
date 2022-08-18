@@ -12,7 +12,7 @@ public static class ElasticsearchAutoCompleteExtensions
                               .Value;
 
         var esBuilder = services.AddElasticsearchClient(
-                options.Name, 
+                options.Name,
                 option => option.UseNodes(options.Nodes).UseDefault()
             );
 

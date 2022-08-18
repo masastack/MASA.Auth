@@ -42,7 +42,7 @@ public class AddressValue : ValueObject
         return new AddressValueDto(adress.Address, adress.ProvinceCode, adress.CityCode, adress.DistrictCode);
     }
 
-    [return:NotNullIfNotNull("address")]
+    [return: NotNullIfNotNull("address")]
     public static implicit operator AddressValue?(AddressValueDto? address)
     {
         if (address is null) return null;

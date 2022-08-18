@@ -7,7 +7,7 @@ public static class ArgumentExceptionExtensions
 {
     public static T ThrowIfDefault<T>([NotNull] T? argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
-        if(argument is null || argument.Equals(default(T)))
+        if (argument is null || argument.Equals(default(T)))
         {
             throw new ArgumentException($"Please provider {paramName},{paramName} is required");
         }

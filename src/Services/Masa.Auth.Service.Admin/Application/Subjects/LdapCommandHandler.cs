@@ -45,13 +45,13 @@ public class LdapCommandHandler
         var _thirdPartyIdpId = Guid.Empty;
         var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
         var ldapIdp = new LdapIdp(
-                ldapIdpDto.ServerAddress, 
-                ldapIdpDto.ServerPort, 
+                ldapIdpDto.ServerAddress,
+                ldapIdpDto.ServerPort,
                 ldapIdpDto.IsLdaps,
-                ldapIdpDto.BaseDn, 
-                ldapIdpDto.RootUserDn, 
-                ldapIdpDto.RootUserPassword, 
-                ldapIdpDto.UserSearchBaseDn, 
+                ldapIdpDto.BaseDn,
+                ldapIdpDto.RootUserDn,
+                ldapIdpDto.RootUserPassword,
+                ldapIdpDto.UserSearchBaseDn,
                 ldapIdpDto.GroupSearchBaseDn);
         var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
         if (dbItem is null)
