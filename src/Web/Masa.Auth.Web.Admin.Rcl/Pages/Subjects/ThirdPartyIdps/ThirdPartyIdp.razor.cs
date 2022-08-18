@@ -47,6 +47,7 @@ public partial class ThirdPartyIdp
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetThirdPartyIdpsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

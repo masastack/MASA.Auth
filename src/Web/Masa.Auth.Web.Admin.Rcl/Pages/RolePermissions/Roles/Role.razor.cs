@@ -47,6 +47,7 @@ public partial class Role
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

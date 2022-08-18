@@ -33,7 +33,7 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public string DisplayName
     {
-        get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_displayName);
+        get => _displayName;
         private set => _displayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(DisplayName));
     }
 
@@ -52,7 +52,7 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public string Account
     {
-        get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_account);
+        get => _account;
         private set => _account = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Account));
     }
 
@@ -273,7 +273,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     public void UpdatePassword(string? password)
     {
         if (string.IsNullOrEmpty(password)) Password = "";
-        else Password = MD5Utils.EncryptRepeat(password);
+        else Password = password;
     }
 
     public bool VerifyPassword(string password)

@@ -28,7 +28,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public Guid UserId
     {
-        get => ArgumentExceptionExtensions.ThrowIfDefault(_userId);
+        get => _userId;
         private set => _userId = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(UserId));
     }
 
@@ -41,7 +41,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public string DisplayName
     {
-        get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_displayName);
+        get => _displayName;
         private set => _displayName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(DisplayName));
     }
 
@@ -104,7 +104,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public string JobNumber
     {
-        get => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_jobNumber);
+        get => _jobNumber;
         private set => _jobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(JobNumber));
     }
 

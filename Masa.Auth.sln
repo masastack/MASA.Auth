@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Utils.Caching.Distribu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.BuildingBlocks.StackSdks.Auth.Contracts", "..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth.Contracts\Masa.BuildingBlocks.StackSdks.Auth.Contracts.csproj", "{8AEC454B-DB79-4723-A28B-CF80FB3246AC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Utils.Ldap.Novell", "..\MASA.Framework\src\Utils\Ldap\Masa.Utils.Ldap.Novell\Masa.Utils.Ldap.Novell.csproj", "{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,14 @@ Global
 		{8AEC454B-DB79-4723-A28B-CF80FB3246AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8AEC454B-DB79-4723-A28B-CF80FB3246AC}.Release|x86.ActiveCfg = Release|Any CPU
 		{8AEC454B-DB79-4723-A28B-CF80FB3246AC}.Release|x86.Build.0 = Release|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Debug|x86.Build.0 = Debug|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Release|x86.ActiveCfg = Release|Any CPU
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +197,7 @@ Global
 		{9F025CA1-77E3-4542-9293-0241A092C619} = {F3986DD3-0372-4929-B72A-09D93196541E}
 		{2D3FE7EA-A637-4499-AE84-9A878AABEA60} = {F3986DD3-0372-4929-B72A-09D93196541E}
 		{8AEC454B-DB79-4723-A28B-CF80FB3246AC} = {99DF0538-B88E-444B-AA99-D92641592F49}
+		{26EDAC31-3B24-47CA-82FF-39E27EE24D9B} = {4A1D2DFA-D091-4CD2-B9CB-D7AAA795ABD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B83BA2BA-19E5-41FB-A92A-16A03DA229E4}

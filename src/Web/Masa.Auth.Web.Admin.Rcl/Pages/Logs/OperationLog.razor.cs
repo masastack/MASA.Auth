@@ -85,6 +85,7 @@ public partial class OperationLog
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

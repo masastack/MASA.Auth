@@ -17,13 +17,16 @@ public class UpsertStaffForLdapDto
 
     public string? Account { get; set; }
 
+    public string JobNumber { get; set; }
+
     public UpsertStaffForLdapDto()
     {
         DisplayName = "";
         PhoneNumber = "";
+        JobNumber = "";
     }
 
-    public UpsertStaffForLdapDto(Guid? userId, string? name, string displayName, string phoneNumber, string? email, string? account)
+    public UpsertStaffForLdapDto(Guid? userId, string? name, string displayName, string phoneNumber, string? email, string? account, string jobNumber)
     {
         UserId = userId;
         Name = name;
@@ -31,5 +34,6 @@ public class UpsertStaffForLdapDto
         PhoneNumber = phoneNumber;
         Email = email;
         Account = account;
+        JobNumber = jobNumber;
     }
 }

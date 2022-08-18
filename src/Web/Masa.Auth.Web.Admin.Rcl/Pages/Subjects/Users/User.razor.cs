@@ -74,6 +74,7 @@ public partial class User
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

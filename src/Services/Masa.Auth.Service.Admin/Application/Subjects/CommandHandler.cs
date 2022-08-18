@@ -238,7 +238,7 @@ public class CommandHandler
                 throw new UserFriendlyException("域账号验证失败");
             }
 
-            var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password);
+            var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
             await _eventBus.PublishAsync(upsertThirdPartyUserCommand);                       
         }
 
@@ -445,7 +445,8 @@ public class CommandHandler
                 DisplayName = staffDto.DisplayName,
                 Enabled = true,
                 Email = staffDto.Email,
-                PhoneNumber = staffDto.PhoneNumber
+                PhoneNumber = staffDto.PhoneNumber,
+                JobNumber = staffDto.JobNumber
             };
             await AddStaffAsync(addStaffDto);
         }

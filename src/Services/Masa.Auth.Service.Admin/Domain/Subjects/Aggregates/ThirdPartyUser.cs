@@ -10,6 +10,37 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
     private User? _modifyUser;
     private IdentityProvider? _identityProvider;
 
+    private Guid _thirdPartyIdpId;
+    private Guid _userId;
+    private string _thridPartyIdentity = "";
+    private string _extendedData = "";
+
+    public Guid ThirdPartyIdpId
+    {
+        get => _thirdPartyIdpId;
+        set => _thirdPartyIdpId = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(ThirdPartyIdpId));
+    }
+
+    public Guid UserId
+    {
+        get => _userId;
+        private set => _userId = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(UserId));
+    }
+
+    public bool Enabled { get; private set; }
+
+    public string ThridPartyIdentity
+    {
+        get => _thridPartyIdentity;
+        private set => _thridPartyIdentity = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(ThridPartyIdentity));
+    }
+
+    public string ExtendedData
+    {
+        get => _extendedData;
+        private set => _extendedData = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(ExtendedData));
+    }
+
     public User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
 
     public User? CreateUser => _createUser;
@@ -23,50 +54,33 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public IdentityProvider IdentityProvider => (_identityProvider ?? LazyLoader?.Load(this, ref _identityProvider)) ?? throw new UserFriendlyException("Failed to get IdentityProvider data");
 
-    public Guid ThirdPartyIdpId { get; private set; }
-
-    public Guid UserId { get; private set; }
-
-    public bool Enabled { get; private set; }
-
-    public string ThridPartyIdentity { get; private set; }
-
-    public string ExtendedData { get; private set; } = "";
-
     private ILazyLoader? LazyLoader { get; set; }
 
     private ThirdPartyUser(ILazyLoader lazyLoader)
     {
         LazyLoader = lazyLoader;
-        ThridPartyIdentity = string.Empty;
     }
 
     public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
     {
-        ThirdPartyIdpId = ArgumentExceptionExtensions.ThrowIfDefault(thirdPartyIdpId);
-        UserId = ArgumentExceptionExtensions.ThrowIfDefault(userId);
+        ThirdPartyIdpId = thirdPartyIdpId;
+        UserId = userId;
         Enabled = enabled;
-        UpdateCore(thridPartyIdentity, extendedData);
+        ThridPartyIdentity = thridPartyIdentity;
+        ExtendedData = extendedData;
     }
 
     public void Update(bool enabled, string thridPartyIdentity, string extendedData)
     {
         Enabled = enabled;
-        UpdateCore(thridPartyIdentity, extendedData);
+        ThridPartyIdentity = thridPartyIdentity;
+        ExtendedData = extendedData;
     }
 
     public void Update(string thridPartyIdentity, string extendedData)
     {
-        UpdateCore(thridPartyIdentity, extendedData);
-    }
-
-
-    [MemberNotNull(nameof(ThridPartyIdentity))]
-    [MemberNotNull(nameof(ExtendedData))]
-    void UpdateCore(string thridPartyIdentity, string extendedData)
-    {
-        ThridPartyIdentity = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(thridPartyIdentity);
-        ExtendedData = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(extendedData);
+        ThridPartyIdentity = thridPartyIdentity;
+        ExtendedData = extendedData;
     }
 
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)

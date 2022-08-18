@@ -52,7 +52,7 @@
 		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
 		<!--<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Utils.Extensions.Expressions" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
 		<PackageReference Include="Masa.Contrib.Data.UoW.EFCore" Version="$(MasaFrameworkPackageVersion)" />
@@ -74,6 +74,7 @@
 	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth.Contracts\Masa.BuildingBlocks.StackSdks.Auth.Contracts.csproj" />
 	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\OpenIdConnect\Masa.Contrib.Authentication.OpenIdConnect.Cache\Masa.Contrib.Authentication.OpenIdConnect.Cache.csproj" />
 	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\OpenIdConnect\Masa.Contrib.Authentication.OpenIdConnect.EFCore\Masa.Contrib.Authentication.OpenIdConnect.EFCore.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Ldap\Masa.Utils.Ldap.Novell\Masa.Utils.Ldap.Novell.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

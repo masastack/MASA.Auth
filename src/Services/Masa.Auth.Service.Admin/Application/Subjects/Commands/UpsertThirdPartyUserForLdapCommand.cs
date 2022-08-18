@@ -23,13 +23,16 @@ public record UpsertThirdPartyUserForLdapCommand : Command
 
     public string Password { get; set; }
 
+    public string JobNumber { get; set; }
+
     public UpsertThirdPartyUserForLdapCommand()
     {
         PhoneNumber = "";
         Password = "";
+        JobNumber = "";
     }
 
-    public UpsertThirdPartyUserForLdapCommand(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password)
+    public UpsertThirdPartyUserForLdapCommand(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         ThridPartyIdentity = thridPartyIdentity;
@@ -40,5 +43,6 @@ public record UpsertThirdPartyUserForLdapCommand : Command
         Email = email;
         Account = account;
         Password = password;
+        JobNumber = jobNumber;
     }
 }
