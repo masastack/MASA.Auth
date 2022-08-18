@@ -408,6 +408,7 @@ public class QueryHandler
         {
             condition = condition.And(t => t.Name.Contains(teamListQuery.Name));
         }
+        var staffId = Guid.Empty;
         if (teamListQuery.UserId != Guid.Empty)
         {
             var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == teamListQuery.UserId);
@@ -417,8 +418,8 @@ public class QueryHandler
             }
             if (!user.IsAdmin())
             {
-                var staffId = (await _authDbContext.Set<Staff>()
-                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
+                staffId = (await _authDbContext.Set<Staff>()
+                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id ?? Guid.Empty;
                 if (staffId == default)
                 {
                     return;
@@ -435,9 +436,13 @@ public class QueryHandler
                     .Select(s => s.StaffId);
 
             var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
-
-            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, $"{team.Avatar.Url}?stamp={team.ModificationTime.Second}", team.Description, team.TeamStaffs.Count,
-                adminAvatar, modifierName, team.ModificationTime));
+            var teamDto = new TeamDto(team.Id, team.Name, $"{team.Avatar.Url}?stamp={team.ModificationTime.Second}", team.Description, team.TeamStaffs.Count,
+                adminAvatar, modifierName, team.ModificationTime);
+            if (staffId != Guid.Empty)
+            {
+                teamDto.Role = team.TeamStaffs.FirstOrDefault(ts => ts.StaffId == staffId)?.TeamMemberType.ToString() ?? "";
+            }
+            teamListQuery.Result.Add(teamDto);
         }
     }
 

@@ -22,7 +22,6 @@ public partial class Index
             else
             {
                 var context = await _interaction.GetLogoutContextAsync(LogoutId);
-                //var context = SsoAuthenticationStateCache.GetLogoutRequest(LogoutId);
                 showLogoutPrompt = context?.ShowSignoutPrompt == true;
             }
             if (!showLogoutPrompt)
@@ -41,9 +40,7 @@ public partial class Index
         }
         else
         {
-            Navigation.NavigateTo("/account/logout/loggedout", new Dictionary<string, object?> {
-                {"logoutId", LogoutId}
-            });
+            Navigation.NavigateTo($"/account/logout/loggedout?logoutId={LogoutId}", true);
         }
     }
 }

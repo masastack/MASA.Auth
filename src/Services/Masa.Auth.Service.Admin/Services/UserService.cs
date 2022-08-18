@@ -172,6 +172,7 @@ public class UserService : RestServiceBase
             Department = user.Department,
             Gender = user.Gender,
             Avatar = user.Avatar,
+            CreationTime = user.CreationTime,
             Position = user.Position,
             Address = new AddressValueModel
             {
@@ -220,22 +221,22 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(command);
     }
 
-        public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
-        {
-            var query = new UserSystemBusinessDataQuery(userId, systemId);
-            await eventBus.PublishAsync(query);
-            return query.Result;
-        }
+    public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+    {
+        var query = new UserSystemBusinessDataQuery(userId, systemId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 
-        public async Task SyncUserAutoCompleteAsync(IEventBus eventBus,  [FromBody] SyncUserAutoCompleteDto dto)
-        {
-            var command = new SyncUserAutoCompleteCommand(dto);
-            await eventBus.PublishAsync(command);
-        }
+    public async Task SyncUserAutoCompleteAsync(IEventBus eventBus, [FromBody] SyncUserAutoCompleteDto dto)
+    {
+        var command = new SyncUserAutoCompleteCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
 
-        public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
-        {
-            var command = new SyncUserRedisCommand(dto);
-            await eventBus.PublishAsync(command);
-        }
+    public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
+    {
+        var command = new SyncUserRedisCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
 }

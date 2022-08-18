@@ -14,17 +14,16 @@ public class ConsentResponseStore : IConsentMessageStore
 
     public async Task DeleteAsync(string id)
     {
-        await _distributedCacheClient.RemoveAsync<Message<ConsentResponse>>(id);
+        await _distributedCacheClient.RemoveAsync<Message<ConsentResponse>>(CacheKey.GetConsentResponseKey(id));
     }
 
-    public async Task<Message<ConsentResponse>> ReadAsync(string id)
+    public async Task<Message<ConsentResponse>?> ReadAsync(string id)
     {
-        throw new NotImplementedException();
-        //return await _distributedCacheClient.GetAsync<Message<ConsentResponse>>(id);
+        return await _distributedCacheClient.GetAsync<Message<ConsentResponse>>(CacheKey.GetConsentResponseKey(id));
     }
 
     public async Task WriteAsync(string id, Message<ConsentResponse> message)
     {
-        await _distributedCacheClient.SetAsync(id, message);
+        await _distributedCacheClient.SetAsync(CacheKey.GetConsentResponseKey(id), message);
     }
 }
