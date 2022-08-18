@@ -58,7 +58,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Bearer", options =>
 {
-    options.Authority = builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("AppSettings:IdentityServerUrl");
+    //todo dcc
+    options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
     options.RequireHttpsMetadata = false;
     //options.Audience = "";
     options.TokenValidationParameters.ValidateAudience = false;

@@ -82,7 +82,6 @@ public class AuthCaller : HttpClientCallerBase
 
     protected override void ConfigHttpRequestMessage(HttpRequestMessage requestMessage)
     {
-        _logger.LogDebug($"===============token===============:{_tokenProvider.AccessToken}");
         requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
         base.ConfigHttpRequestMessage(requestMessage);
     }

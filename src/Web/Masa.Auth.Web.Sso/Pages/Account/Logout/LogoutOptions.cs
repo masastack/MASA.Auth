@@ -5,6 +5,6 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Logout;
 
 public class LogoutOptions
 {
-    public static bool ShowLogoutPrompt = true;
+    public static bool ShowLogoutPrompt = false;
     public static bool AutomaticRedirectAfterSignOut = false;
 }

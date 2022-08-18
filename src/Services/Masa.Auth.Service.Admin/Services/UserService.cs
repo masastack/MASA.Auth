@@ -169,6 +169,7 @@ public class UserService : RestServiceBase
             Department = user.Department,
             Gender = user.Gender,
             Avatar = user.Avatar,
+            CreationTime = user.CreationTime,
             Position = user.Position,
             Address = new AddressValueModel
             {
