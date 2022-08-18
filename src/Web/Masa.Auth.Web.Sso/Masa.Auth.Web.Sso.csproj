@@ -48,6 +48,9 @@
 		<None Update="Certificates\7348307__lonsid.cn.pfx">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="tempkey.jwk">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ProjectExtensions>
