@@ -62,6 +62,7 @@ public partial class ThirdPartyUser
         get { return _page; }
         set
         {
+            _page = 1;
             _page = value;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

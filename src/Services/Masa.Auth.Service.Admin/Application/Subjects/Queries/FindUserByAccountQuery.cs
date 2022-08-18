@@ -3,8 +3,8 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record FindUserByAccountQuery(string Account) : Query<UserDetailDto>
+public record FindUserByAccountQuery(string Account) : Query<UserDetailDto?>
 {
-    public override UserDetailDto Result { get; set; } = new();
+    public override UserDetailDto? Result { get; set; }
 }
 

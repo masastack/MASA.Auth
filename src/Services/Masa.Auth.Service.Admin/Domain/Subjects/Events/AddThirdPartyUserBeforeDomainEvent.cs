@@ -3,4 +3,8 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record RemoveUserDomainEvent(User User) : Event;
+public record AddThirdPartyUserBeforeDomainEvent(AddUserDto User) : Event
+{
+    public Guid UserId { get; set; }
+}
+

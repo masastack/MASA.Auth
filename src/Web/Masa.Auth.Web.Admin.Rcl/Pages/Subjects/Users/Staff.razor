@@ -36,8 +36,9 @@
                             <MAvatar Size=40>
                                 <img src="@context.Item.Avatar" />
                             </MAvatar>
-                            <div class="ml-2 block-center">
+                            <div class="ml-2 my-auto">
                                 <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name)</div>
+                                <div class="regular2--text caption">@context.Item.PhoneNumber</div>
                             </div>
                         </div>
                         break;

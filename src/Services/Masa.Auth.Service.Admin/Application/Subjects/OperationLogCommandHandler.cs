@@ -87,7 +87,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task AddStaffOperationLogAsync(AddStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStaff, $"添加员工：{command.Staff.Account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStaff, $"添加员工：{command.Staff.DisplayName}");
         }
 
         [EventHandler]
@@ -116,7 +116,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task SyncOperationLogAsync(SyncStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.SyncStaff, $"同步员工：{string.Join(',', command.Staffs.Select(staff => staff.Account))}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.SyncStaff, $"同步员工：{string.Join(',', command.Staffs.Select(staff => staff.DisplayName))}");
         }
 
         #endregion

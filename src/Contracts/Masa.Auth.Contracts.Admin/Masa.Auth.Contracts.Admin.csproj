@@ -9,13 +9,12 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.0.3" />
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="0.6.0-preview.5" />
-	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="0.6.0-preview.5" />
-	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="0.6.0-preview.5" />
-	<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.6.0-preview.5" />
-	<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.6.0-preview.5" />
-    <PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="0.6.0-preview.5" />
-    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0-preview.5" />
+	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
+	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
+	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />

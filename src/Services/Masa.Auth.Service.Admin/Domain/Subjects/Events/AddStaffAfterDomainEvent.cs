@@ -3,4 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record RemoveUserDomainEvent(User User) : Event;
+public record AddStaffAfterDomainEvent(Staff Staff) : Event
+{
+}
+

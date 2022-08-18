@@ -3,5 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record AddThirdPartyUserDomainEvent(AddThirdPartyUserDto ThirdPartyUser) : Event;
-
+public record UpdateUserDomainEvent(User User) : Event;

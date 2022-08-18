@@ -7,19 +7,19 @@ public static class ElasticsearchAutoCompleteExtensions
 {
     public static void AddElasticsearchAutoComplete(this IServiceCollection services)
     {
-        var options = services.BuildServiceProvider().GetService<IOptions<AutoCompleteModel>>();
-        var autoCompleteModel = options!.Value;
+        var options = services.BuildServiceProvider()
+                              .GetRequiredService<IOptions<UserAutoCompleteOptions>>()
+                              .Value;
 
-        var esBuilder = services.AddElasticsearchClient(autoCompleteModel.Name, option => option.UseNodes(autoCompleteModel.Nodes.ToArray())
-                .UseDefault());
-        foreach (var doc in autoCompleteModel.Documents)
+        var esBuilder = services.AddElasticsearchClient(
+                options.Name,
+                option => option.UseNodes(options.Nodes).UseDefault()
+            );
+
+        esBuilder.AddAutoCompleteBySpecifyDocument<UserSelectDto>(option =>
         {
-            esBuilder.AddAutoComplete<UserSelectDto, Guid>(option => 
-            {
-                option.UseIndexName(doc.Index);
-                if (string.IsNullOrEmpty(doc.Alias) is false) option.UseAlias(doc.Alias);
-                else option.UseAlias(doc.Index);
-            });
-        }
+            option.UseIndexName(options.Index);
+            if (string.IsNullOrEmpty(options.Alias) is false) option.UseAlias(options.Alias);
+        });
     }
 }

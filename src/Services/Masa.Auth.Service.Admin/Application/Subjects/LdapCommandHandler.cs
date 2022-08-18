@@ -45,13 +45,13 @@ public class LdapCommandHandler
         var _thirdPartyIdpId = Guid.Empty;
         var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
         var ldapIdp = new LdapIdp(
-                ldapIdpDto.ServerAddress, 
-                ldapIdpDto.ServerPort, 
+                ldapIdpDto.ServerAddress,
+                ldapIdpDto.ServerPort,
                 ldapIdpDto.IsLdaps,
-                ldapIdpDto.BaseDn, 
-                ldapIdpDto.RootUserDn, 
-                ldapIdpDto.RootUserPassword, 
-                ldapIdpDto.UserSearchBaseDn, 
+                ldapIdpDto.BaseDn,
+                ldapIdpDto.RootUserDn,
+                ldapIdpDto.RootUserPassword,
+                ldapIdpDto.UserSearchBaseDn,
                 ldapIdpDto.GroupSearchBaseDn);
         var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
         if (dbItem is null)
@@ -75,32 +75,8 @@ public class LdapCommandHandler
             try
             {
                 //todo:change bulk
-                var thirdPartyUserDto = new UpsertThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
-                    new AddUserDto
-                    {
-                        Name = ldapUser.Name,
-                        DisplayName = ldapUser.DisplayName,
-                        Enabled = true,
-                        Email = ldapUser.EmailAddress,
-                        Account = ldapUser.SamAccountName,
-                        Password = DefaultUserAttributes.Password,
-                        Avatar = DefaultUserAttributes.MaleAvatar,
-                        PhoneNumber = ldapUser.Phone
-                    });
-                await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDto));
-
-                var staffDto = new UpsertStaffForLdapDto
-                {
-                    Name = ldapUser.Name,
-                    DisplayName = ldapUser.DisplayName,
-                    Enabled = true,
-                    Email = ldapUser.EmailAddress,
-                    Account = ldapUser.SamAccountName,
-                    Password = DefaultUserAttributes.Password,
-                    Avatar = DefaultUserAttributes.MaleAvatar,
-                    PhoneNumber = ldapUser.Phone,
-                };
-                await _eventBus.PublishAsync(new UpsertStaffForLdapCommand(staffDto));
+                var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(_thirdPartyIdpId, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
+                await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             }
             catch (Exception e)
             {

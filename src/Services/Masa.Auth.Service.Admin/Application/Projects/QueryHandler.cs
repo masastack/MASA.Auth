@@ -91,7 +91,7 @@ public class QueryHandler
                     {
                         Name = a.Name,
                         Id = a.Id,
-                        Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "",
+                        Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "Uncategorized",
                         Identity = a.Identity,
                         ProjectId = a.ProjectId,
                         Url = a.Url

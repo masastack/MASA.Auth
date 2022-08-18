@@ -73,14 +73,10 @@ builder.AddMasaConfiguration(configurationBuilder =>
     configurationBuilder.UseDcc();
 });
 builder.Services.AddDccClient();
-
-var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-        .GetSection("RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-    .GetValue<string>("AppSettings:PmClient:Url"));
-builder.Services.AddSchedulerClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-    .GetValue<string>("AppSettings:SchedulerClient:Url"));
+var configuration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+builder.Services.AddMasaRedisCache(configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+builder.Services.AddPmClient(configuration.GetValue<string>("AppSettings:PmClient:Url"));
+builder.Services.AddSchedulerClient(configuration.GetValue<string>("AppSettings:SchedulerClient:Url"));
 await builder.Services.AddSchedulerJobAsync();
 builder.Services.AddLadpContext();
 builder.Services.AddElasticsearchAutoComplete();
@@ -139,10 +135,10 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.Services.AddOidcCache(redisConfigOption);
+builder.Services.AddOidcCache(configuration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    //await option.SeedStandardResourcesAsync();
+    await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
         builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()

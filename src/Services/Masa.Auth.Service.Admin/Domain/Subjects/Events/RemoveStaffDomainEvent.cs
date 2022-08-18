@@ -3,8 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record SyncStaffDomainEvent(List<SyncStaffDto> Staffs) : Event
+public record RemoveStaffDomainEvent(Staff Staff) : Event
 {
-    public SyncStaffResultsDto Result { get; set; } = new();
 }
 

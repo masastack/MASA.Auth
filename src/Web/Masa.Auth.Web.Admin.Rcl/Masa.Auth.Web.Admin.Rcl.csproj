@@ -21,9 +21,9 @@
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Masa.Blazor" Version="0.6.0-preview.3" />
 		<PackageReference Include="Masa.Stack.Components" Version="0.0.108" />
-		<PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.7" />
-		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="0.6.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

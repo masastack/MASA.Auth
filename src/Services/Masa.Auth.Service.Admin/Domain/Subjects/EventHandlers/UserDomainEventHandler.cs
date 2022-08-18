@@ -7,48 +7,70 @@ public class UserDomainEventHandler
 {
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly AuthDbContext _authDbContext;
-    IStaffRepository _staffRepository;
     readonly RoleDomainService _roleDomainService;
     readonly IEventBus _eventBus;
 
     public UserDomainEventHandler(
         IAutoCompleteClient autoCompleteClient,
         AuthDbContext authDbContext,
-        IStaffRepository staffRepository,
         RoleDomainService roleDomainService,
         IEventBus eventBus)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
-        _staffRepository = staffRepository;
         _roleDomainService = roleDomainService;
         _eventBus = eventBus;
     }
 
     [EventHandler(1)]
-    public async Task SetUserAsync(SetUserDomainEvent userEvent)
+    public async Task SetAutoCompleteAsync(AddUserDomainEvent userEvent)
     {
-        var list = userEvent.Users.Select(user => new UserSelectDto(user.Id, user.Name, user.DisplayName, user.Account, user.PhoneNumber, user.Email, user.Avatar));
-        var response = await _autoCompleteClient.SetAsync<UserSelectDto, Guid>(list);
+        var user = userEvent.User.Adapt<UserSelectDto>();
+        await _autoCompleteClient.SetBySpecifyDocumentAsync(user);
+    }
+
+    [EventHandler(2)]
+    public async Task UpdateRoleLimitAsync(AddUserDomainEvent userEvent)
+    {
+        var roles = userEvent.User.Roles.Select(user => user.RoleId);
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
+    }
+
+    [EventHandler(1)]
+    public async Task UpdateUserAsync(UpdateUserDomainEvent userEvent)
+    {
+        var user = userEvent.User.Adapt<UserSelectDto>();
+        await _autoCompleteClient.SetBySpecifyDocumentAsync(user);
     }
 
     [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveUserDomainEvent userEvent)
     {
-        var staffs = await _authDbContext.Set<Staff>()
-                                        .Where(staff => userEvent.UserIds.Contains(staff.UserId))
-                                        .Select(staff => staff.Id)
-                                        .ToListAsync();
-        foreach (var staff in staffs)
+        var staff = await _authDbContext.Set<Staff>()
+                                        .FirstOrDefaultAsync(staff => userEvent.User.Id == staff.UserId);
+        if (staff is not null)
         {
-            await _eventBus.PublishAsync(new RemoveStaffCommand(new(staff)));
+            await _eventBus.PublishAsync(new RemoveStaffCommand(new(staff.Id)));
         }
+    }
+
+    [EventHandler(2)]
+    public async Task UpdateRoleLimitAsync(RemoveUserDomainEvent userEvent)
+    {
+        var roles = userEvent.User.Roles.Select(user => user.RoleId);
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
     }
 
     [EventHandler(99)]
     public async Task RemoveAutoCompleteUserAsync(RemoveUserDomainEvent userEvent)
     {
-        await _autoCompleteClient.DeleteAsync(userEvent.UserIds);
+        await _autoCompleteClient.DeleteAsync(userEvent.User.Id);
+    }
+
+    [EventHandler(1)]
+    public async Task UpdateRoleLimitAsync(UpdateUserAuthorizationDomainEvent userEvent)
+    {
+        await _roleDomainService.UpdateRoleLimitAsync(userEvent.Roles);
     }
 
     [EventHandler(1)]
@@ -72,7 +94,7 @@ public class UserDomainEventHandler
             await _eventBus.PublishAsync(query);
             userEvent.Permissions = query.Result;
         }
-    }  
+    }
 
     [EventHandler(2)]
     public void AuthorizedUserPermission(UserAuthorizedDomainEvent userAuthorizedDomainEvent)

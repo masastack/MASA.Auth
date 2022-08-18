@@ -7,7 +7,7 @@ public class GetPermissionsByTeamWithUserDto
 {
     public Guid User { get; set; }
 
-    public List<Guid> Teams { get; set; } = new ();
+    public List<Guid> Teams { get; set; } = new();
 
     public GetPermissionsByTeamWithUserDto(Guid user, List<Guid> teams)
     {

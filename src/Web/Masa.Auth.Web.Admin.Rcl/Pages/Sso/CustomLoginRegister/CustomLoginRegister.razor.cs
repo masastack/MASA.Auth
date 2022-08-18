@@ -35,6 +35,7 @@ public partial class CustomLoginRegister
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetCustomLoginsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

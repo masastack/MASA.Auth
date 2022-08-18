@@ -3,5 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record AddStaffDomainEvent(AddStaffDto Staff) : Event;
-
+public record UpdateUserAuthorizationDomainEvent(IEnumerable<Guid> Roles) : Event;

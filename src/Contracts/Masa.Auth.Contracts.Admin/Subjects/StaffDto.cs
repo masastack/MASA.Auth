@@ -9,6 +9,8 @@ public class StaffDto
 
     public Guid UserId { get; set; }
 
+    public string Account { get; set; } = "";
+
     public string Department { get; set; } = "";
 
     public string Position { get; set; } = "";

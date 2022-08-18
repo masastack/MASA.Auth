@@ -15,11 +15,7 @@ public class AddStaffValidator : AbstractValidator<AddStaffDto>
         RuleFor(staff => staff.IdCard).IdCard();
         RuleFor(staff => staff.CompanyName).ChineseLetter().MaxLength(50);
         RuleFor(staff => staff.Position).ChineseLetterNumber().MaxLength(20);
-        RuleFor(staff => staff.Account).Required().ChineseLetterNumber().MaxLength(50);
-        RuleFor(staff => staff.Password).Required()
-                                      .Matches(@"^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
-                                      .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                                      .MaxLength(30);
+        RuleFor(staff => staff.Password).Required().AuthPassword();
     }
 }
 

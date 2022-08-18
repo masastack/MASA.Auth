@@ -106,7 +106,6 @@ global using Masa.Contrib.StackSdks.Tsc;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
 global using Masa.Utils.Caching.Core.Interfaces;
 global using Masa.Utils.Caching.Core.Models;
-global using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
 global using Masa.Utils.Caching.DistributedMemory.Interfaces;
 global using Masa.Utils.Caching.Redis.Models;
 global using Masa.Utils.Ldap.Novell;

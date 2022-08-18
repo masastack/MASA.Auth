@@ -3,4 +3,8 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record RemoveUserDomainEvent(User User) : Event;
+public record UpdateStaffBeforeDomainEvent(string? Position) : Event
+{
+    public Guid PositionId { get; set; }
+}
+

@@ -29,8 +29,9 @@ builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUr
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-builder.Services.AddMasaRedisCache(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
-builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+var redisOption = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMasaRedisCache(redisOption);
+builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
