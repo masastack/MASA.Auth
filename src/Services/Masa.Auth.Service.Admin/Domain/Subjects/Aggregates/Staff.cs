@@ -219,12 +219,10 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         VerifyPhonNumberEmail(phoneNumber, email);
     }
 
-    public void UpdateForLdap(bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
+    public void UpdateForLdap(string? name, string displayName, string phoneNumber, string? email)
     {
-        Enabled = enabled;
         Name = name;
         DisplayName = displayName;
-        Avatar = avatar;
         PhoneNumber = phoneNumber;
         Email = email;
         VerifyPhonNumberEmail(phoneNumber, email);

@@ -55,6 +55,12 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         UpdateCore(thridPartyIdentity, extendedData);
     }
 
+    public void Update(string thridPartyIdentity, string extendedData)
+    {
+        UpdateCore(thridPartyIdentity, extendedData);
+    }
+
+
     [MemberNotNull(nameof(ThridPartyIdentity))]
     [MemberNotNull(nameof(ExtendedData))]
     void UpdateCore(string thridPartyIdentity, string extendedData)

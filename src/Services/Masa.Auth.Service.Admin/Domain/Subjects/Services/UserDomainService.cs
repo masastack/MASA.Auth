@@ -3,11 +3,8 @@
 
 public class UserDomainService : DomainService
 {
-    readonly AuthDbContext _authDbContext;
-
-    public UserDomainService(IDomainEventBus eventBus, AuthDbContext authDbContext) : base(eventBus)
+    public UserDomainService(IDomainEventBus eventBus) : base(eventBus)
     {
-        _authDbContext = authDbContext;
     }
 
     public async Task AddAsync(User user)

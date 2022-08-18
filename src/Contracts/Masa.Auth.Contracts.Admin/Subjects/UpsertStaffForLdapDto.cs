@@ -5,33 +5,31 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UpsertStaffForLdapDto
 {
-    public bool Enabled { get; set; } = true;
+    public Guid? UserId { get; set; }
 
-    public string Name { get; set; } = "";
+    public string? Name { get; set; }
 
-    public string DisplayName { get; set; } = "";
+    public string DisplayName { get; set; }
 
-    public string Avatar { get; set; } = "";
+    public string PhoneNumber { get; set; }
 
-    public string PhoneNumber { get; set; } = "";
+    public string? Email { get; set; }
 
-    public string Email { get; set; } = "";
-
-    public string Account { get; set; } = "";
-
-    public string Password { get; set; } = "";
+    public string? Account { get; set; }
 
     public UpsertStaffForLdapDto()
     {
+        DisplayName = "";
+        PhoneNumber = "";
     }
 
-    public UpsertStaffForLdapDto(bool enabled, string name, string displayName, string avatar, string phoneNumber, string email)
+    public UpsertStaffForLdapDto(Guid? userId, string? name, string displayName, string phoneNumber, string? email, string? account)
     {
-        Enabled = enabled;
+        UserId = userId;
         Name = name;
         DisplayName = displayName;
-        Avatar = avatar;
         PhoneNumber = phoneNumber;
         Email = email;
+        Account = account;
     }
 }

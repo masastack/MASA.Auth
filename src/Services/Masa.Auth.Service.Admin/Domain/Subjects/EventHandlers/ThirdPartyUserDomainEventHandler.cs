@@ -7,17 +7,17 @@ public class ThirdPartyUserDomainEventHandler
 {
     readonly IEventBus _eventBus;
 
-    public ThirdPartyUserDomainEventHandler(
-        IEventBus eventBus)
+    public ThirdPartyUserDomainEventHandler(IEventBus eventBus)
     {
         _eventBus = eventBus;
     }
 
     [EventHandler(1)]
-    public async Task AddUser(AddThirdPartyUserDomainEvent thirdPartyUserDomainEvent)
+    public async Task AddUser(AddThirdPartyUserBeforeDomainEvent thirdPartyUserDomainEvent)
     {
-        var user = thirdPartyUserDomainEvent.ThirdPartyUser.User;
+        var user = thirdPartyUserDomainEvent.User;
         var addUserCommand = new AddUserCommand(user, true);
         await _eventBus.PublishAsync(addUserCommand);
+        thirdPartyUserDomainEvent.UserId = addUserCommand.NewUser.Id;
     }
 }
