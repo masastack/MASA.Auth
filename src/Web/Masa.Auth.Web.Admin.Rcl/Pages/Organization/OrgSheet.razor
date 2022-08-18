@@ -8,7 +8,7 @@
                 @if (_dto.ParentId != Guid.Empty)
                 {
                     <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@_dto.ParentId"
-                           ItemText="u => u.Name" ChangeOnSelect
+                           ItemText="u => u.Name" ChangeOnSelect Label="@T("Department Location")"
                            ItemValue="u => u.Id"
                            ItemChildren="u => u.Children">
                     </MCascader>

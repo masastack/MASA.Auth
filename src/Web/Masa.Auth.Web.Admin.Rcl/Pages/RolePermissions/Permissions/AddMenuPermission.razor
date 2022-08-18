@@ -6,14 +6,14 @@
             <MForm Model=_menuPermissionDetailDto EnableValidation @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <STextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name" />
+                        <STextField Label="@T("Permission Name")" Required @bind-Value="_menuPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
-                        <STextField Label="@T("Code")" Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
+                        <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
                     </MCol>
                     <MCol Md=6>
                         <SSelect @bind-Value="_menuPermissionDetailDto.Type"
-                                 Label="@T("Permission Type")"
+                                 Label="@T("Permission Type")" Required
                                  Items="@_menuPermissionTypes.Where(p=> _menuPermissionDetailDto.ParentId!=Guid.Empty || p.Value == PermissionTypes.Menu).ToList()"
                                  ItemText="u => u.Text"
                                  ItemValue="u => u.Value">
