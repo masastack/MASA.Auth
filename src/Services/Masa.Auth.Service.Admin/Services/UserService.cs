@@ -51,20 +51,15 @@ public class UserService : RestServiceBase
         {
             Account = model.Account,
             Name = model.Name,
-            DisplayName = model.DisplayName ?? "",
-            IdCard = model.IdCard ?? "",
-            CompanyName = model.CompanyName ?? "",
-            PhoneNumber = model.PhoneNumber ?? "",
-            Email = model.Email ?? "",
-            Gender = model.Gender == default ? GenderTypes.Male : model.Gender,
-            Password = string.IsNullOrEmpty(model.Password) ? DefaultUserAttributes.Password : model.Password,
+            DisplayName = model.DisplayName,
+            IdCard = model.IdCard,
+            CompanyName = model.CompanyName,
+            PhoneNumber = model.PhoneNumber,
+            Email = model.Email,
+            Gender = model.Gender,
+            Password = model.Password,
             Enabled = true,
         };
-        if (string.IsNullOrEmpty(dto.Avatar))
-        {
-            dto.Avatar = DefaultUserAttributes.GetDefaultAvatar(dto.Gender);
-        }
-        if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
         var command = new AddUserCommand(dto);
         await eventBus.PublishAsync(command);
         return command.NewUser.Adapt<UserModel>();

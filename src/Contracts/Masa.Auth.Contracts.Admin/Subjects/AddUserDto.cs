@@ -7,7 +7,7 @@ public class AddUserDto
 {
     public string? Name { get; set; }
 
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
     public string? Avatar { get; set; }
 
@@ -17,7 +17,7 @@ public class AddUserDto
 
     public bool Enabled { get; set; } = true;
 
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
     public string? Landline { get; set; }
 
@@ -41,16 +41,13 @@ public class AddUserDto
 
     public AddUserDto()
     {
-        DisplayName = "";
-        PhoneNumber = "";
         Address = new();
-        Password = "";
         Gender = GenderTypes.Male;
-        Roles = new List<Guid>();
-        Permissions = new List<SubjectPermissionRelationDto>();
+        Roles = new();
+        Permissions = new();
     }
 
-    public AddUserDto(string? name, string displayName, string? avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions)
+    public AddUserDto(string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions)
     {
         Name = name;
         DisplayName = displayName;

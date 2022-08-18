@@ -13,17 +13,17 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     private User? _modifyUser;
 
     private Guid _userId;
-    private string? _name;
-    private string? _displayName;
-    private string? _avatar;
-    private string? _idCard;
-    private string? _companyName;
+    private string _name = "";
+    private string _displayName = "";
+    private string _avatar = "";
+    private string _idCard = "";
+    private string _companyName = "";
     private Guid? _positionId;
-    private string? _phoneNumber;
-    private string? _email;
+    private string _phoneNumber = "";
+    private string _email = "";
     private GenderTypes _gender;
-    private AddressValue? _address;
-    private string? _jobNumber;
+    private AddressValue _address = new();
+    private string _jobNumber = "";
     private StaffTypes _staffType;
 
     public Guid UserId
@@ -35,8 +35,8 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     [AllowNull]
     public string Name
     {
-        get => _name ??= "";
-        private set => _name = value;
+        get => _name;
+        private set => _name = value ??"";
     }
 
     public string DisplayName
@@ -47,22 +47,22 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public string Avatar
     {
-        get => _avatar ??= "";
-        private set => _avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_avatar, nameof(Avatar));
+        get => _avatar;
+        private set => _avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Avatar));
     }
 
     [AllowNull]
     public string IdCard
     {
-        get => _idCard ??= "";
-        private set => _idCard = value;
+        get => _idCard;
+        private set => _idCard = value ?? "";
     }
 
     [AllowNull]
     public string CompanyName
     {
-        get => _companyName ??= "";
-        private set => _companyName = value;
+        get => _companyName;
+        private set => _companyName = value ?? "";
     }
 
     public GenderTypes Gender
@@ -79,24 +79,24 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     [AllowNull]
     public string PhoneNumber
     {
-        get => _phoneNumber ??= "";
-        private set => _phoneNumber = value;
+        get => _phoneNumber;
+        private set => _phoneNumber = value ?? "";
     }
 
     [AllowNull]
     public string Email
     {
-        get => _email ??= "";
-        private set => _email = value;
+        get => _email;
+        private set => _email = value ?? "";
     }
 
     [AllowNull]
     public AddressValue Address
     {
-        get => _address ??= new();
+        get => _address;
         private set
         {
-            _address = value;
+            _address = value ?? new();
         }
     }
 
@@ -108,13 +108,12 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         private set => _jobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(JobNumber));
     }
 
-    [AllowNull]
     public Guid? PositionId
     {
-        get => _positionId == Guid.Empty ? null : _positionId;
+        get => _positionId;
         set
         {
-            _positionId = value;
+            _positionId = value == Guid.Empty ? null : value;
         }
     }
 

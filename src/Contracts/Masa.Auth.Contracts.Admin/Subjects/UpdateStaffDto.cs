@@ -18,7 +18,6 @@ public class UpdateStaffDto : AddStaffDto
         StaffType = staffType;
         Enabled = enabled;
         DepartmentId = departmentId;
-        PositionId = positionId;
         Position = position;
         Teams = teams;
         Name = name;

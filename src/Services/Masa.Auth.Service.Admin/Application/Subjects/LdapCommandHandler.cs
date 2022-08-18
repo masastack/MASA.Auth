@@ -83,8 +83,6 @@ public class LdapCommandHandler
                         Enabled = true,
                         Email = ldapUser.EmailAddress,
                         Account = ldapUser.SamAccountName,
-                        Password = DefaultUserAttributes.Password,
-                        Avatar = DefaultUserAttributes.MaleAvatar,
                         PhoneNumber = ldapUser.Phone
                     });
                 await _eventBus.PublishAsync(new UpsertThirdPartyUserCommand(thirdPartyUserDto));
@@ -96,8 +94,6 @@ public class LdapCommandHandler
                     Enabled = true,
                     Email = ldapUser.EmailAddress,
                     Account = ldapUser.SamAccountName,
-                    Password = DefaultUserAttributes.Password,
-                    Avatar = DefaultUserAttributes.MaleAvatar,
                     PhoneNumber = ldapUser.Phone,
                 };
                 await _eventBus.PublishAsync(new UpsertStaffForLdapCommand(staffDto));

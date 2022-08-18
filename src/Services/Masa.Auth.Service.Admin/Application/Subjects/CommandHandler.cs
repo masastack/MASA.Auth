@@ -268,7 +268,7 @@ public class CommandHandler
                 return;
             }
         }
-        user = new User(userModel.Name, userModel.DisplayName ?? "", DefaultUserAttributes.GetDefaultAvatar(userModel.Gender), userModel.IdCard ?? "", userModel.Account ?? "", DefaultUserAttributes.Password, userModel.CompanyName ?? "", "", "", true, userModel.PhoneNumber ?? "", "", userModel.Email ?? "", new(), userModel.Gender);
+        user = new User(userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, default, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
         await _userRepository.AddAsync(user);
         await _userDomainService.SetAsync(user);
         command.NewUser = user.Adapt<UserModel>(); ;

@@ -9,26 +9,26 @@ public class User : FullAggregateRoot<Guid, Guid>
     private List<UserPermission> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
 
-    private string? _name;
-    private string? _displayName;
-    private string? _avatar;
-    private string? _idCard;
-    private string? _account;
-    private string? _password;
-    private string? _companyName;
-    private string? _department;
-    private string? _position;
-    private string? _phoneNumber;
-    private string? _landline;
-    private string? _email;
+    private string _name = "";
+    private string _displayName = "";
+    private string _avatar = "";
+    private string _idCard = "";
+    private string _account = "";
+    private string _password = "";
+    private string _companyName = "";
+    private string _department = "";
+    private string _position = "";
+    private string _phoneNumber = "";
+    private string _landline = "";
+    private string _email = "";
     private GenderTypes _gender;
-    private AddressValue? _address;
+    private AddressValue _address = new();
 
     [AllowNull]
     public string Name
     {
-        get => _name ??= "";
-        private set => _name = value;
+        get => _name;
+        private set => _name = value ?? "";
     }
 
     public string DisplayName
@@ -39,15 +39,15 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public string Avatar
     {
-        get => _avatar ??= "";
-        private set => _avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(_avatar, nameof(Avatar));
+        get => _avatar;
+        private set => _avatar = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Avatar));
     }
 
     [AllowNull]
     public string IdCard
     {
-        get => _idCard ??= "";
-        private set => _idCard = value;
+        get => _idCard;
+        private set => _idCard = value ?? "";
     }
 
     public string Account
@@ -59,33 +59,34 @@ public class User : FullAggregateRoot<Guid, Guid>
     [AllowNull]
     public string Password
     {
-        get => _password ??= "";
+        get => _password;
         private set
         {
             if (string.IsNullOrEmpty(value) is false)
                 _password = MD5Utils.EncryptRepeat(value);
+            else _password = "";
         }
     }
 
     [AllowNull]
     public string CompanyName
     {
-        get => _companyName ??= "";
-        private set => _companyName = value;
+        get => _companyName;
+        private set => _companyName = value ?? "";
     }
 
     [AllowNull]
     public string Department
     {
-        get => _department ??= "";
-        private set => _department = value;
+        get => _department;
+        private set => _department = value ?? "";
     }
 
     [AllowNull]
     public string Position
     {
-        get => _position ??= "";
-        private set => _position = value;
+        get => _position;
+        private set => _position = value ?? "";
     }
 
     public bool Enabled { get; private set; }
@@ -104,31 +105,31 @@ public class User : FullAggregateRoot<Guid, Guid>
     [AllowNull]
     public string PhoneNumber
     {
-        get => _phoneNumber ??= "";
-        private set => _phoneNumber = value;
+        get => _phoneNumber;
+        private set => _phoneNumber = value ?? "";
     }
 
     [AllowNull]
     public string Landline
     {
-        get => _landline ??= "";
-        private set => _landline = value;
+        get => _landline;
+        private set => _landline = value ?? "";
     }
 
     [AllowNull]
     public string Email
     {
-        get => _email ??= "";
-        private set => _email = value;
+        get => _email;
+        private set => _email = value ?? "";
     }
 
     [AllowNull]
     public AddressValue Address
     {
-        get => _address ??= new();
+        get => _address;
         private set
         {
-            _address = value;
+            _address = value ?? new();
         }
     }
 
