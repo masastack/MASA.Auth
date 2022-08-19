@@ -9,25 +9,29 @@ public partial class Index
     [SupplyParameterFromQuery]
     public string LogoutId { get; set; } = string.Empty;
 
+    bool _showLogoutPrompt;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            // if user not authenticated, show logged out page
+            _showLogoutPrompt = false;
+        }
+        else
+        {
+            var context = await _interaction.GetLogoutContextAsync(LogoutId);
+            _showLogoutPrompt = context?.ShowSignoutPrompt == true;
+        }
+        await base.OnParametersSetAsync();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && !_showLogoutPrompt)
         {
-            var showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
-            if (User.Identity?.IsAuthenticated != true)
-            {
-                // if user not authenticated, show logged out page
-                showLogoutPrompt = false;
-            }
-            else
-            {
-                var context = await _interaction.GetLogoutContextAsync(LogoutId);
-                showLogoutPrompt = context?.ShowSignoutPrompt == true;
-            }
-            if (!showLogoutPrompt)
-            {
-                Logout();
-            }
+            Logout();
         }
         await base.OnAfterRenderAsync(firstRender);
     }
