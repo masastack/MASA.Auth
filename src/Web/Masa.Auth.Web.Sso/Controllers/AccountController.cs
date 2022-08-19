@@ -128,8 +128,14 @@ public class AccountController : Controller
             {
                 logoutId = await _interaction.CreateLogoutContextAsync();
             }
+
             // delete local authentication cookie
             await HttpContext.SignOutAsync();
+
+            foreach (var cookies in HttpContext.Request.Cookies)
+            {
+                HttpContext.Response.Cookies.Delete(cookies.Key);
+            }
 
             // raise the logout event
             await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
