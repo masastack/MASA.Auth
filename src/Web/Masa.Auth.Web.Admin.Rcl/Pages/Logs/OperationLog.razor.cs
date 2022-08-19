@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Masa.Auth.ApiGateways.Caller.Services.Logs;
+using JsInitVariables = Masa.Stack.Components.JsInitVariables;
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Logs;
 
@@ -122,6 +123,7 @@ public partial class OperationLog
         var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, OperationType, Search);
         var response = await OperationLogService.GetListAsync(reuquest);
         OperationLogs = response.Items;
+        OperationLogs.ForEach(operationLog => operationLog.OperationTime = operationLog.OperationTime.Add(JsInitVariables.TimezoneOffset));
         Total = response.Total;
     }
 }
