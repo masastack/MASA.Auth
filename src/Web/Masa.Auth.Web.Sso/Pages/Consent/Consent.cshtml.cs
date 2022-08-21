@@ -40,12 +40,10 @@ public class ConsentModel : PageModel
             // emit event
             await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
-
         if (grantedConsent != null)
         {
             // communicate outcome of consent back to identityserver
             await _interaction.GrantConsentAsync(request, grantedConsent);
-
             // redirect back to authorization endpoint
             if (request.IsNativeClient() == true)
             {

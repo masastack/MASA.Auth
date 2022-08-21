@@ -10,15 +10,11 @@ public class AddStaffCommandValidator : AbstractValidator<AddStaffCommand>
         RuleFor(command => command.Staff.JobNumber).Required().MaxLength(20);
         RuleFor(command => command.Staff.DisplayName).Required().MaxLength(50);
         RuleFor(command => command.Staff.Name).ChineseLetter().MaxLength(20);
-        RuleFor(command => command.Staff.PhoneNumber).Phone();
+        RuleFor(command => command.Staff.PhoneNumber).Required().Phone();
         RuleFor(command => command.Staff.Email).Email();
         RuleFor(command => command.Staff.IdCard).IdCard();
         RuleFor(command => command.Staff.CompanyName).ChineseLetter().MaxLength(50);
         RuleFor(command => command.Staff.Position).ChineseLetterNumber().MaxLength(20);
-        RuleFor(command => command.Staff.Account).Required().ChineseLetterNumber().MaxLength(50);
-        RuleFor(command => command.Staff.Password).Required()
-                                      .Matches(@"^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
-                                      .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                                      .MaxLength(30);
+        RuleFor(command => command.Staff.Password).AuthPassword();
     }
 }

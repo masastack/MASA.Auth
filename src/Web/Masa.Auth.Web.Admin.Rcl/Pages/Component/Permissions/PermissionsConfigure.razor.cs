@@ -19,6 +19,16 @@ public partial class PermissionsConfigure
     private List<Guid> InternalRoles { get; set; } = new();
 
     [Parameter]
+    public List<Guid> Teams { get; set; } = new();
+
+    private List<Guid> InternalTeams { get; set; } = new();
+
+    [Parameter]
+    public Guid User { get; set; }
+
+    private Guid InternalUser { get; set; }
+
+    [Parameter]
     public List<Guid> Value { get; set; } = new();
 
     [Parameter]
@@ -33,7 +43,11 @@ public partial class PermissionsConfigure
     [Parameter]
     public string TagIdPrefix { get; set; } = "";
 
-    public List<Guid> RolePermissions { get; set; } = new();
+    List<Guid> RolePermissions { get; set; } = new();
+
+    List<Guid> TeamPermission { get; set; } = new();
+
+    protected List<Guid> RoleUnionTeamPermission { get; set; } = new();
 
     protected Dictionary<Guid, Guid> EmptyPermissionMap { get; set; } = new();
 
@@ -41,9 +55,9 @@ public partial class PermissionsConfigure
     {
         get
         {
-            var value = Value.Except(RolePermissions).Except(EmptyPermissionMap.Values);
+            var value = Value.Except(RoleUnionTeamPermission).Except(EmptyPermissionMap.Values);
             return value.Select(value => new UniqueModel(value.ToString(), false))
-                        .Union(RolePermissions.Select(value => new UniqueModel(value.ToString(), true)))
+                        .Union(RoleUnionTeamPermission.Select(value => new UniqueModel(value.ToString(), true)))
                         .ToList();
         }
     }
@@ -52,7 +66,7 @@ public partial class PermissionsConfigure
 
     private ProjectService ProjectService => AuthCaller.ProjectService;
 
-    private RoleService RoleService => AuthCaller.RoleService;
+    private PermissionService PermissionService => AuthCaller.PermissionService;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,10 +75,20 @@ public partial class PermissionsConfigure
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Roles.Count != InternalRoles.Count || Roles.Except(InternalRoles).Count() > 0)
+        if (Roles.Count != InternalRoles.Count || Roles.Except(InternalRoles).Any())
         {
             InternalRoles = Roles;
             await GetRolePermissions();
+        }
+        if (Teams.Count != InternalTeams.Count || Teams.Except(InternalTeams).Any())
+        {
+            InternalTeams = Teams;
+            await GetTeamPermissions();
+        }
+        if (User != InternalUser)
+        {
+            InternalUser = User;
+            await GetTeamPermissions();
         }
     }
 
@@ -84,11 +108,21 @@ public partial class PermissionsConfigure
         }).ToList();
     }
 
-    private async Task<List<Guid>> GetRolePermissions() => RolePermissions = await RoleService.GetPermissionsByRoleAsync(Roles);
+    private async Task GetRolePermissions()
+    {
+        RolePermissions = await PermissionService.GetPermissionsByRoleAsync(Roles);
+        RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
+    }
+
+    private async Task GetTeamPermissions()
+    {
+        TeamPermission = await PermissionService.GetPermissionsByTeamWithUserAsync(new(User, Teams));
+        RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
+    }
 
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
-        var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RolePermissions).ToList();
+        var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RoleUnionTeamPermission).ToList();
         foreach (var (code, parentCode) in EmptyPermissionMap)
         {
             if (value.Contains(code)) value.Add(parentCode);

@@ -38,11 +38,11 @@
                         <AutoHeightContent>
                             <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
                             <STextField @bind-Value="User.Name" Class="mb-12" Label="@T("Name")" />
-                            <STextField @bind-Value="User.PhoneNumber" Class="mb-12" Label="@T("PhoneNumber")" />
+                            <STextField @bind-Value="User.PhoneNumber" Required Class="mb-12" Label="@T("PhoneNumber")" />
                             <STextField @bind-Value="User.Email" Class="mb-12" Label="@T("Email")" />
                             <STextField @bind-Value="User.IdCard" Class="mb-12" Label="@T("IdCard")" />
                             <STextField @bind-Value="User.Account" Class="mb-12" Label="@T("Account")" />
-                            <STextField @bind-Value="User.Password" Label="@T("Password")" />
+                            <STextField @bind-Value="User.Password" Required Label="@T("Password")" />
                             @if (Fill is false)
                             {
                                 <div @onclick="() => Fill = true" class="mt-12 hover-pointer d-flex" style="text-align:center;height:48px;">
@@ -79,7 +79,8 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="display: flex;height: auto">
-                                <PermissionExtensionConfigure Roles=User.Roles
+                                <PermissionExtensionConfigure                                                      
+                                                      Roles=User.Roles
                                                       @bind-ExtensionValue="User.Permissions"                                                    
                                                       @bind-Preview=Preview
                                                       Style="max-height:calc(100vh - 350px);" />

@@ -1,0 +1,43 @@
+﻿@inherits SsoLayoutComponentBase
+@inject GlobalConfig GlobalConfig
+@implements IDisposable
+
+<MApp>
+    <MErrorHandler>
+        @* <MMain Style="@($"background:url('{Path.Combine(NavigationManager.BaseUri,"img/login/login_bg.png")}')")"> *@
+        <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">
+            <div class="d-flex flex-column full-height">
+                <MRow>
+                    <MCol Offset="2" Md="3" Class="mt-12">
+                        <image style="height:40px;"
+                            src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200">
+                        </image>
+                    </MCol>
+                </MRow>
+                <MRow Class="flex-grow-1">
+                    <MCol Md=12 Sm=12 Class="d-flex justify-center align-center">
+                        @Body
+                    </MCol>
+                </MRow>
+                <MRow Justify="JustifyTypes.End" Class="mb-8">
+                    <MCol Class="text-center" Align="AlignTypes.End">
+                        <a href="https://beian.miit.gov.cn/" target="_blank" class="white--text"
+                            style="text-decoration:none;font-size:14px;">浙ICP备2021013592号-1</a>
+                    </MCol>
+                </MRow>
+            </div>
+        </MMain>
+    </MErrorHandler>
+</MApp>
+
+@code {
+    protected override void OnInitialized()
+    {
+        GlobalConfig.OnLanguageChanged += base.StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        GlobalConfig.OnLanguageChanged -= base.StateHasChanged;
+    }
+}

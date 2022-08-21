@@ -5,16 +5,9 @@ namespace Masa.Auth.Web.Admin.Server;
 
 public class TokenProvider : ITokenProvider
 {
-    readonly BlazorServerTokenData _blazorServerTokenData;
+    public string? AccessToken { get; set; }
 
-    public TokenProvider(IUserContext userContext, BlazorServerTokenCache blazorServerTokenCache)
-    {
-        _blazorServerTokenData = blazorServerTokenCache.Get(userContext.UserId ?? "") ?? new();
-    }
+    public string? RefreshToken { get; set; }
 
-    public string? AccessToken => _blazorServerTokenData.AccessToken;
-
-    public string? RefreshToken => _blazorServerTokenData.RefreshToken;
-
-    public string? IdToken => _blazorServerTokenData.RefreshToken;
+    public string? IdToken { get; set; }
 }

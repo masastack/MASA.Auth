@@ -35,13 +35,7 @@
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
                                 <span>@context.Item.Name</span>
                             </div>
-                            break;
-                        case (nameof(RoleDto.CreationTime)):
-                            <DateTimeTitle Value="@context.Item.CreationTime" />
-                            break;
-                        case nameof(RoleDto.ModificationTime):
-                            <DateTimeTitle Value="@context.Item.ModificationTime" />
-                            break;                        
+                            break;                      
                         case (nameof(RoleDto.Creator)):
                             <span>@context.Item.Creator</span>
                             break;
@@ -56,7 +50,7 @@
                             <SIcon Tooltip="@T("Delete")" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</SIcon>
                             break;
                         default:
-                            <span>@context.Value</span>
+                            <SItemCol Value="@context.Value"></SItemCol>
                             break;
                     }
                 </ItemColContent>

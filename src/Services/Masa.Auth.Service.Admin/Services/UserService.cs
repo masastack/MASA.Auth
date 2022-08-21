@@ -51,20 +51,15 @@ public class UserService : RestServiceBase
         {
             Account = model.Account,
             Name = model.Name,
-            DisplayName = model.DisplayName ?? "",
-            IdCard = model.IdCard ?? "",
-            CompanyName = model.CompanyName ?? "",
-            PhoneNumber = model.PhoneNumber ?? "",
-            Email = model.Email ?? "",
-            Gender = model.Gender == default ? GenderTypes.Male : model.Gender,
-            Password = string.IsNullOrEmpty(model.Password) ? DefaultUserAttributes.Password : model.Password,
+            DisplayName = model.DisplayName,
+            IdCard = model.IdCard,
+            CompanyName = model.CompanyName,
+            PhoneNumber = model.PhoneNumber,
+            Email = model.Email,
+            Gender = model.Gender,
+            Password = model.Password,
             Enabled = true,
         };
-        if (string.IsNullOrEmpty(dto.Avatar))
-        {
-            dto.Avatar = DefaultUserAttributes.GetDefaultAvatar(dto.Gender);
-        }
-        if (string.IsNullOrEmpty(dto.DisplayName)) dto.DisplayName = dto.Name;
         var command = new AddUserCommand(dto);
         await eventBus.PublishAsync(command);
         return command.NewUser.Adapt<UserModel>();
@@ -129,7 +124,7 @@ public class UserService : RestServiceBase
         return validateCommand.Result;
     }
 
-    private async Task<UserModel> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
+    private async Task<UserModel?> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
     {
         var query = new FindUserByAccountQuery(account);
         await eventBus.PublishAsync(query);
@@ -143,14 +138,14 @@ public class UserService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<UserModel> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
+    private async Task<UserModel?> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
     {
         var query = new FindUserByEmailQuery(email);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
+    private async Task<UserModel?> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
     {
         var query = new FindUserByPhoneNumberQuery(phoneNumber);
         await eventBus.PublishAsync(query);
@@ -164,8 +159,10 @@ public class UserService : RestServiceBase
         return ConvertToModel(query.Result);
     }
 
-    private UserModel ConvertToModel(UserDetailDto user)
+    [return: NotNullIfNotNull("user")]
+    private UserModel? ConvertToModel(UserDetailDto? user)
     {
+        if (user == null) return null;
         return new UserModel()
         {
             Id = user.Id,
@@ -179,6 +176,7 @@ public class UserService : RestServiceBase
             Department = user.Department,
             Gender = user.Gender,
             Avatar = user.Avatar,
+            CreationTime = user.CreationTime,
             Position = user.Position,
             Address = new AddressValueModel
             {
@@ -227,16 +225,22 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(command);
     }
 
-        public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
-        {
-            var query = new UserSystemBusinessDataQuery(userId, systemId);
-            await eventBus.PublishAsync(query);
-            return query.Result;
-        }
+    public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+    {
+        var query = new UserSystemBusinessDataQuery(userId, systemId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 
-        public async Task SyncUserAutoCompleteAsync(IEventBus eventBus,  [FromBody] SyncUserAutoCompleteDto dto)
-        {
-            var command = new SyncUserAutoCompleteCommand(dto);
-            await eventBus.PublishAsync(command);
-        }
+    public async Task SyncUserAutoCompleteAsync(IEventBus eventBus, [FromBody] SyncUserAutoCompleteDto dto)
+    {
+        var command = new SyncUserAutoCompleteCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
+
+    public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
+    {
+        var command = new SyncUserRedisCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
 }

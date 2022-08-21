@@ -9,17 +9,20 @@ public class CommandHandler
     readonly IPermissionRepository _permissionRepository;
     readonly AuthDbContext _authDbContext;
     readonly RoleDomainService _roleDomainService;
+    readonly PermissionDomainService _permissionDomainService;
 
     public CommandHandler(
         IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
         AuthDbContext authDbContext,
-        RoleDomainService roleDomainService)
+        RoleDomainService roleDomainService,
+        PermissionDomainService permissionDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
         _roleDomainService = roleDomainService;
+        _permissionDomainService = permissionDomainService;
     }
 
 
@@ -92,6 +95,23 @@ public class CommandHandler
     public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
     {
         var permissionBaseInfo = addPermissionCommand.PermissionDetail;
+
+        Expression<Func<Permission, bool>> predicate = d => d.Code.Equals(permissionBaseInfo.Code) &&
+            d.SystemId == permissionBaseInfo.SystemId && d.AppId == permissionBaseInfo.AppId;
+        if (permissionBaseInfo.IsUpdate)
+        {
+            predicate = predicate.And(d => d.Id != permissionBaseInfo.Id);
+        }
+        if (_permissionRepository.Any(predicate))
+        {
+            throw new UserFriendlyException($"The permission code {permissionBaseInfo.Code} already exists");
+        }
+
+        if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
+        {
+            throw new UserFriendlyException($"The current parent doesn't support add {permissionBaseInfo.Type} type permission, conflicts with other permission type");
+        }
+
         if (permissionBaseInfo.IsUpdate)
         {
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
@@ -103,6 +123,7 @@ public class CommandHandler
             await _permissionRepository.UpdateAsync(_permission);
             return;
         }
+
         if (permissionBaseInfo.Order == 0)
         {
             permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(permissionBaseInfo.AppId, addPermissionCommand.ParentId);

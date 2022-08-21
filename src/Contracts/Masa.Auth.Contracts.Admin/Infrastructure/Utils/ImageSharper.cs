@@ -10,7 +10,7 @@ public static class ImageSharper
         var ms = new MemoryStream();
         using var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(GetFontFamily(), size))
+        var textOptions = new TextOptions(new Font(GetFontFamily(), (int)(size * 0.6)))
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
@@ -26,7 +26,7 @@ public static class ImageSharper
     {
         using var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(GetFontFamily(), size))
+        var textOptions = new TextOptions(new Font(GetFontFamily(), (int)(size * 0.6)))
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,

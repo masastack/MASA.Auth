@@ -14,10 +14,10 @@ builder.Services.AddDaprStarter(opt =>
 #endif
 
 builder.Services.AddDaprClient();
-builder.Services.AddAliyunStorage(serviceProvider =>
+builder.Services.AddAliyunStorage(async serviceProvider =>
 {
     var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var aliyunOssConfig = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result;
+    var aliyunOssConfig = await daprClient.GetSecretAsync("localsecretstore", "aliyun-oss");
     var accessId = aliyunOssConfig["access_id"];
     var accessSecret = aliyunOssConfig["access_secret"];
     var endpoint = aliyunOssConfig["endpoint"];
@@ -31,7 +31,7 @@ builder.Services.AddAliyunStorage(serviceProvider =>
     };
 });
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+builder.Services.AddMasaIdentityModel(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
@@ -58,7 +58,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Bearer", options =>
 {
-    options.Authority = builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("AppSettings:IdentityServerUrl");
+    //todo dcc
+    options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
     options.RequireHttpsMetadata = false;
     //options.Audience = "";
     options.TokenValidationParameters.ValidateAudience = false;
@@ -72,14 +73,11 @@ builder.AddMasaConfiguration(configurationBuilder =>
     configurationBuilder.UseDcc();
 });
 builder.Services.AddDccClient();
-var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-        .GetSection("RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-    .GetValue<string>("AppSettings:PmClient:Url"));
-builder.Services.AddSchedulerClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-    .GetValue<string>("AppSettings:SchedulerClient:Url"));
-//await builder.Services.AddSyncUserAutoCompleteJobAsync();
+var configuration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+builder.Services.AddMasaRedisCache(configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+builder.Services.AddPmClient(configuration.GetValue<string>("AppSettings:PmClient:Url"));
+builder.Services.AddSchedulerClient(configuration.GetValue<string>("AppSettings:SchedulerClient:Url"));
+await builder.Services.AddSchedulerJobAsync();
 builder.Services.AddLadpContext();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddHealthChecks()
@@ -137,7 +135,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.Services.AddOidcCache(redisConfigOption);
+builder.Services.AddOidcCache(configuration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();

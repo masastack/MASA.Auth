@@ -59,9 +59,6 @@
                     case nameof(UserDto.PhoneNumber):
                         <span>@context.Item.PhoneNumber</span>
                         break;
-                    case (nameof(UserDto.CreationTime)):
-                       <DateTimeTitle Value="@context.Item.CreationTime" />
-                        break;
                     case nameof(UserDto.Enabled):
                         <EnableChip Value=context.Item.Enabled />
                         break;
@@ -70,7 +67,7 @@
                         <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
                         break;
                     default:
-                        <span>@context.Value</span>
+                        <SItemCol Value="@context.Value" />
                         break;
                 }
             </ItemColContent>

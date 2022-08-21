@@ -24,57 +24,66 @@ public class AuthCaller : HttpClientCallerBase
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
+    ITokenProvider _tokenProvider;
+    ILogger<AuthCaller> _logger;
     #endregion
 
-    public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(CallerProvider));
+    public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(Caller));
 
-    public UserService UserService => _userService ?? (_userService = new(CallerProvider));
+    public UserService UserService => _userService ?? (_userService = new(Caller));
 
-    public ThirdPartyUserService ThirdPartyUserService => _thirdPartyUserService ?? (_thirdPartyUserService = new(CallerProvider));
+    public ThirdPartyUserService ThirdPartyUserService => _thirdPartyUserService ?? (_thirdPartyUserService = new(Caller));
 
-    public StaffService StaffService => _staffService ?? (_staffService = new(CallerProvider));
+    public StaffService StaffService => _staffService ?? (_staffService = new(Caller));
 
-    public TeamService TeamService => _teamService ?? (_teamService = new(CallerProvider));
+    public TeamService TeamService => _teamService ?? (_teamService = new(Caller));
 
-    public RoleService RoleService => _roleService ?? (_roleService = new(CallerProvider));
+    public RoleService RoleService => _roleService ?? (_roleService = new(Caller));
 
-    public DepartmentService DepartmentService => _departmentService ?? (_departmentService = new(CallerProvider));
+    public DepartmentService DepartmentService => _departmentService ?? (_departmentService = new(Caller));
 
-    public PermissionService PermissionService => _permissionService ?? (_permissionService = new(CallerProvider));
+    public PermissionService PermissionService => _permissionService ?? (_permissionService = new(Caller));
 
-    public ProjectService ProjectService => _projectService ?? (_projectService = new(CallerProvider));
+    public ProjectService ProjectService => _projectService ?? (_projectService = new(Caller));
 
-    public ClientService ClientService => _clientService ?? (_clientService = new(CallerProvider));
+    public ClientService ClientService => _clientService ?? (_clientService = new(Caller));
 
-    public IdentityResourceService IdentityResourceService => _identityResourceService ?? (_identityResourceService = new(CallerProvider));
+    public IdentityResourceService IdentityResourceService => _identityResourceService ?? (_identityResourceService = new(Caller));
 
-    public ApiScopeService ApiScopeService => _apiScopeService ?? (_apiScopeService = new(CallerProvider));
+    public ApiScopeService ApiScopeService => _apiScopeService ?? (_apiScopeService = new(Caller));
 
-    public ApiResourceService ApiResourceService => _apiResourceService ?? (_apiResourceService = new(CallerProvider));
+    public ApiResourceService ApiResourceService => _apiResourceService ?? (_apiResourceService = new(Caller));
 
-    public UserClaimService UserClaimService => _userClaimService ?? (_userClaimService = new(CallerProvider));
+    public UserClaimService UserClaimService => _userClaimService ?? (_userClaimService = new(Caller));
 
-    public CustomLoginService CustomLoginService => _customLoginService ?? (_customLoginService = new(CallerProvider));
+    public CustomLoginService CustomLoginService => _customLoginService ?? (_customLoginService = new(Caller));
 
-    public PositionService PositionService => _positionService ?? (_positionService = new(CallerProvider));
+    public PositionService PositionService => _positionService ?? (_positionService = new(Caller));
 
-    public OssService OssService => _ossService ?? (_ossService = new OssService(CallerProvider));
+    public OssService OssService => _ossService ?? (_ossService = new OssService(Caller));
 
-    public OperationLogService OperationLogService => _operationLogService ?? (_operationLogService = new OperationLogService(CallerProvider));
+    public OperationLogService OperationLogService => _operationLogService ?? (_operationLogService = new OperationLogService(Caller));
 
     protected override string BaseAddress { get; set; }
 
     public override string Name { get; set; }
 
-    public AuthCaller(IServiceProvider serviceProvider, AuthApiOptions options) : base(serviceProvider)
+    public AuthCaller(
+        IServiceProvider serviceProvider,
+        ITokenProvider tokenProvider,
+        ILogger<AuthCaller> logger,
+        AuthApiOptions options) : base(serviceProvider)
     {
         Name = "AuthCaller";
+        _tokenProvider = tokenProvider;
+        _logger = logger;
         BaseAddress = options.AuthServiceBaseAddress;
     }
 
-    protected override IHttpClientBuilder UseHttpClient()
+    protected override void ConfigHttpRequestMessage(HttpRequestMessage requestMessage)
     {
-        return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+        requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
+        base.ConfigHttpRequestMessage(requestMessage);
     }
 }
 

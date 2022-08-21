@@ -21,13 +21,17 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
+builder.Services.AddMasaIdentityModel();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthClient:Url"));
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
+builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthServiceUrl"));
+builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUrl"));
+builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUrl"));
 
+builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+var redisOption = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMasaRedisCache(redisOption);
+builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";

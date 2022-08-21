@@ -3,38 +3,34 @@
 
 public class UserDomainService : DomainService
 {
-    readonly AuthDbContext _authDbContext;
-
-    public UserDomainService(IDomainEventBus eventBus, AuthDbContext authDbContext) : base(eventBus)
+    public UserDomainService(IDomainEventBus eventBus) : base(eventBus)
     {
-        _authDbContext = authDbContext;
     }
 
-    public async Task SetAsync(params User[] users)
+    public async Task AddAsync(User user)
     {
-        await EventBus.PublishAsync(new SetUserDomainEvent(users.ToList()));
+        await EventBus.PublishAsync(new AddUserDomainEvent(user));
     }
 
-    public async Task RemoveAsync(params Guid[] userIds)
+    public async Task UpdateAsync(User user)
     {
-        await EventBus.PublishAsync(new RemoveUserDomainEvent(userIds.ToList()));
+        await EventBus.PublishAsync(new UpdateUserDomainEvent(user));
     }
 
-    public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId)
+    public async Task RemoveAsync(User user)
     {
-        //todo query from cache
-        var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == userId);
-        if (user == null)
-        {
-            return new List<Guid>();
-        }
-        if (user.IsAdmin())
-        {
-            var permissions = _authDbContext.Set<Permission>()
-                    .Select(a => a.Id).ToList();
-            return await Task.FromResult(permissions);
-        }
-        var query = new QueryUserPermissionDomainEvent(userId);
+        await EventBus.PublishAsync(new RemoveUserDomainEvent(user));
+    }
+
+    public async Task UpdateAuthorizationAsync(IEnumerable<Guid> roles)
+    {
+        await EventBus.PublishAsync(new UpdateUserAuthorizationDomainEvent(roles));
+    }
+
+
+    public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId, List<Guid>? teams = null)
+    {
+        var query = new QueryUserPermissionDomainEvent(userId, teams);
         await EventBus.PublishAsync(query);
         return query.Permissions;
     }

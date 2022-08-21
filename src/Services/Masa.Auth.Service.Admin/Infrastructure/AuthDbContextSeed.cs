@@ -10,18 +10,18 @@ public class AuthDbContextSeed
         //todo change to eventbus add(can cache redis)
         #region Auth
         var rolePermission = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "RolePermission", "RolePermission", "", "mdi-shield-half-full", 2, PermissionTypes.Menu);
-        var role = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Role", "role", "role", "mdi-circle", 1, PermissionTypes.Menu);
-        var permission = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Permission", "permission", "permission/index", "mdi-circle", 2, PermissionTypes.Menu);
+        var role = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Role", "role", "role", "", 1, PermissionTypes.Menu);
+        var permission = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Permission", "permission", "permission/index", "", 2, PermissionTypes.Menu);
         role.SetParent(rolePermission.Id);
         permission.SetParent(rolePermission.Id);
 
         var sso = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "SSO", "sso", "", "mdi-login-variant", 5, PermissionTypes.Menu);
-        var userClaim = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "UserClaim", "userClaim", "sso/userClaim", "mdi-circle", 1, PermissionTypes.Menu);
-        var identityResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "IdentityResource", "IdentityResource", "sso/identityResource", "mdi-circle", 2, PermissionTypes.Menu);
-        var apiScope = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiScope", "ApiScope", "sso/apiScope", "mdi-circle", 3, PermissionTypes.Menu);
-        var apiResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiResource", "ApiResource", "sso/apiResource", "mdi-circle", 4, PermissionTypes.Menu);
-        var client = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Client", "Client", "sso/client", "mdi-circle", 5, PermissionTypes.Menu);
-        var customLogin = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "CustomLogin", "CustomLogin", "sso/customLogin", "mdi-circle", 6, PermissionTypes.Menu);
+        var userClaim = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "UserClaim", "userClaim", "sso/userClaim", "", 1, PermissionTypes.Menu);
+        var identityResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "IdentityResource", "IdentityResource", "sso/identityResource", "", 2, PermissionTypes.Menu);
+        var apiScope = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiScope", "ApiScope", "sso/apiScope", "", 3, PermissionTypes.Menu);
+        var apiResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiResource", "ApiResource", "sso/apiResource", "", 4, PermissionTypes.Menu);
+        var client = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Client", "Client", "sso/client", "", 5, PermissionTypes.Menu);
+        var customLogin = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "CustomLogin", "CustomLogin", "sso/customLogin", "", 6, PermissionTypes.Menu);
         userClaim.SetParent(sso.Id);
         identityResource.SetParent(sso.Id);
         apiScope.SetParent(sso.Id);
@@ -70,15 +70,15 @@ public class AuthDbContextSeed
 
         #region Mc
         var messageManagement = new Permission(Guid.NewGuid(), MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageManagement", "messageManagement", "", "fas fa-tasks", 2, PermissionTypes.Menu);
-        var sendMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "SendMessage", "sendMessage", "messageTasks/sendMessage", "mdi-circle", 1, PermissionTypes.Menu);
-        var messageRecord = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "mdi-circle", 2, PermissionTypes.Menu);
+        var sendMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "SendMessage", "sendMessage", "messageTasks/sendMessage", "", 1, PermissionTypes.Menu);
+        var messageRecord = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "", 2, PermissionTypes.Menu);
         sendMessage.SetParent(messageManagement.Id);
         messageRecord.SetParent(messageManagement.Id);
 
         var messageTemplate = new Permission(Guid.NewGuid(), MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageTemplate", "messageTemplate", "", "mdi-collage", 3, PermissionTypes.Menu);
-        var sms = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "Sms", "sms", "messageTemplates/smsTemplateManagement", "mdi-circle", 1, PermissionTypes.Menu);
-        var email = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "Email", "email", "messageTemplates/emailTemplateManagement", "mdi-circle", 2, PermissionTypes.Menu);
-        var websiteMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "WebsiteMessage", "websiteMessage", "messageTemplates/websiteMessageTemplateManagement", "mdi-circle", 3, PermissionTypes.Menu);
+        var sms = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "Sms", "sms", "messageTemplates/smsTemplateManagement", "", 1, PermissionTypes.Menu);
+        var email = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "Email", "email", "messageTemplates/emailTemplateManagement", "", 2, PermissionTypes.Menu);
+        var websiteMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "WebsiteMessage", "websiteMessage", "messageTemplates/websiteMessageTemplateManagement", "", 3, PermissionTypes.Menu);
         sms.SetParent(messageTemplate.Id);
         email.SetParent(messageTemplate.Id);
         websiteMessage.SetParent(messageTemplate.Id);
@@ -107,7 +107,7 @@ public class AuthDbContextSeed
 
         if (!context.Set<User>().Any(u => u.Account == "admin"))
         {
-            var adminUser = new User("admin", "Administrator", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "admin", "admin", "Masa");
+            var adminUser = new User("admin", "Administrator", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "admin", "admin", "Masa", "15185856868");
             context.Set<User>().Add(adminUser);
         }
 

@@ -35,6 +35,7 @@ public partial class IdentityResource
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetIdentityResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

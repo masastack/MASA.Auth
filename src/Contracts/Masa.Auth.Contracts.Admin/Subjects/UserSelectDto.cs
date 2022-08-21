@@ -3,40 +3,44 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class UserSelectDto : AutoCompleteDocument<Guid>
+public class UserSelectDto : AutoCompleteDocument
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public string DisplayName { get; set; }
 
     public string Account { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     public string Avatar { get; set; }
 
     public UserSelectDto()
     {
-        Name = "";
         DisplayName = "";
         Account = "";
-        PhoneNumber = "";
-        Email = "";
         Avatar = "";
     }
 
-    public UserSelectDto(Guid userId, string name, string displayName, string account, string phoneNumber, string email, string avatar) : base(userId.ToString(), $"{name},{account},{displayName},{phoneNumber},{email}", userId)
+    public UserSelectDto(Guid id, string name, string displayName, string account, string phoneNumber, string email, string avatar)
     {
-        UserId = userId;
+        Id = id;
         Name = name;
         DisplayName = displayName;
         Account = account;
         PhoneNumber = phoneNumber;
         Email = email;
         Avatar = avatar;
+    }
+
+    public override string GetDocumentId() => Id.ToString();
+
+    protected override string GetText()
+    {
+        return $"{Name},{Account},{DisplayName},{PhoneNumber},{Email}";
     }
 }

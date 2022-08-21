@@ -7,22 +7,25 @@ public class LdapCommandHandler
 {
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILdapFactory _ldapFactory;
-    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IConfiguration _configuration;
     readonly ILogger<LdapCommandHandler> _logger;
+    readonly IEventBus _eventBus;
+    readonly AuthDbContext _authDbContext;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
-        ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMasaConfiguration masaConfiguration,
-        ILogger<LdapCommandHandler> logger)
+        ILogger<LdapCommandHandler> logger,
+        IEventBus eventBus,
+        AuthDbContext authDbContext)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
-        _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _configuration = masaConfiguration.Local;
         _logger = logger;
+        _eventBus = eventBus;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler]
@@ -40,8 +43,16 @@ public class LdapCommandHandler
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
         var _thirdPartyIdpId = Guid.Empty;
-        var ldapIdp = new LdapIdp(ldapUpsertCommand.LdapDetailDto.ServerAddress, ldapUpsertCommand.LdapDetailDto.ServerPort, ldapUpsertCommand.LdapDetailDto.IsLdaps,
-                ldapUpsertCommand.LdapDetailDto.BaseDn, ldapUpsertCommand.LdapDetailDto.RootUserDn, ldapUpsertCommand.LdapDetailDto.RootUserPassword, ldapUpsertCommand.LdapDetailDto.UserSearchBaseDn, ldapUpsertCommand.LdapDetailDto.GroupSearchBaseDn);
+        var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
+        var ldapIdp = new LdapIdp(
+                ldapIdpDto.ServerAddress,
+                ldapIdpDto.ServerPort,
+                ldapIdpDto.IsLdaps,
+                ldapIdpDto.BaseDn,
+                ldapIdpDto.RootUserDn,
+                ldapIdpDto.RootUserPassword,
+                ldapIdpDto.UserSearchBaseDn,
+                ldapIdpDto.GroupSearchBaseDn);
         var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
         if (dbItem is null)
         {
@@ -55,35 +66,17 @@ public class LdapCommandHandler
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
-        var ldapOptions = ldapUpsertCommand.LdapDetailDto.Adapt<LdapOptions>();
+        var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
         await foreach (var ldapUser in ldapUsers)
         {
+            if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
             try
             {
                 //todo:change bulk
-                var thirdPartyUserDtp = new AddThirdPartyUserDto(_thirdPartyIdpId, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser),
-                    new AddUserDto
-                    {
-                        Name = ldapUser.Name,
-                        DisplayName = ldapUser.DisplayName,
-                        Enabled = true,
-                        Email = ldapUser.EmailAddress,
-                        Account = ldapUser.SamAccountName,
-                        Password = _configuration.GetValue<string>("Subjects:InitialPassword"),
-                        Avatar = _configuration.GetValue<string>("Subjects:Avatar")
-                    });
-                //phone number regular match
-                if (Regex.IsMatch(ldapUser.Phone, @"^1[3456789]\d{9}$"))
-                {
-                    thirdPartyUserDtp.User.PhoneNumber = ldapUser.Phone;
-                }
-                else
-                {
-                    thirdPartyUserDtp.User.Landline = ldapUser.Phone;
-                }
-                await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDtp);
+                var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(_thirdPartyIdpId, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
+                await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             }
             catch (Exception e)
             {

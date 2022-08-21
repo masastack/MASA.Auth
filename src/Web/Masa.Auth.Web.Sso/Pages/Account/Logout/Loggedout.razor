@@ -4,18 +4,21 @@
 @inherits SsoCompontentBase
 @inject IJSRuntime jsRuntime;
 @inject IIdentityServerInteractionService _interaction;
+@layout SimpleLayout
 
 <div>
-    <h5>
+    <h4 class="neutral-lighten-2--text text-center">
         @T("LogoutSuccessed")
-    </h5>
+    </h4>
 
     @if (_viewModel.PostLogoutRedirectUri != null)
     {
-        <div>
-            @T("Click") <a class="PostLogoutRedirectUri" href="@_viewModel.PostLogoutRedirectUri">@T("Here")</a> @T("Return")
-            <span>@_viewModel.ClientName</span> @T("Application")
-        </div>
+        <MButton Class="primary rounded-pill mt-12" Width="360" Height="56" Href="@_viewModel.PostLogoutRedirectUri">
+            <MIcon Left>
+                mdi-arrow-left
+            </MIcon>
+            @_viewModel.ClientName
+        </MButton>
     }
 
     @if (_viewModel.SignOutIframeUrl != null)

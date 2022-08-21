@@ -7,10 +7,7 @@ public class ResetUserPasswordValidator : AbstractValidator<ResetUserPasswordDto
 {
     public ResetUserPasswordValidator()
     {
-        RuleFor(staff => staff.Password).Required()
-                                      .Matches(@"^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$")
-                                      .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                                      .MaxLength(30);
+        RuleFor(staff => staff.Password).Required().AuthPassword();
     }
 }
 

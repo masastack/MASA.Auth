@@ -878,7 +878,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("Account")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)")
+                        .UseCollation("SQL_Latin1_General_CP1_CS_AS");
 
                     b.Property<string>("Avatar")
                         .IsRequired()
@@ -948,6 +949,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Account")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.HasIndex("Email")
                         .IsUnique()

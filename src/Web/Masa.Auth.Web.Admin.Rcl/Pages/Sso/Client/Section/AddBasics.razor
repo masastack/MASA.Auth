@@ -5,10 +5,10 @@
         <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
     </MCol>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
+        <STextField Required @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
     </MCol>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+        <STextField Required @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
     </MCol>
     <MCol Md=6>
         <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
@@ -43,10 +43,10 @@
 
 @code {
     [Parameter]
-    public ClientAddBasicDto Dto { get; set; } = new();
+    public AddClientBasicDto Dto { get; set; } = new();
 
     [Parameter]
-    public EventCallback<ClientAddBasicDto> DtoChanged { get; set; }
+    public EventCallback<AddClientBasicDto> DtoChanged { get; set; }
 
     readonly string redirectUriSuffix = "/signin-oidc";
     readonly string logoutRedirectUriSuffix = "/signout-callback-oidc";

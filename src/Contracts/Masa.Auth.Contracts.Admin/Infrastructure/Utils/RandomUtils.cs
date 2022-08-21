@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
-public class RandomUtils
+public static class RandomUtils
 {
     private const string LETTERS = "ABCDEFGHIJKMLNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz";
     private const string LETTERNUMBERS = "ABCDEFGHIJKMLNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz0123456789";

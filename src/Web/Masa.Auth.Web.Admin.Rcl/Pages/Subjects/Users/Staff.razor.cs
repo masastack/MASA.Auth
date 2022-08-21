@@ -47,6 +47,7 @@ public partial class Staff
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetStaffAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

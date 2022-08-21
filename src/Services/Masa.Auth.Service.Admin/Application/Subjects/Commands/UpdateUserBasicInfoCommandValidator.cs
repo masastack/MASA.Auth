@@ -7,8 +7,6 @@ public class UpdateUserBasicInfoCommandValidator : AbstractValidator<UpdateUserB
 {
     public UpdateUserBasicInfoCommandValidator()
     {
-        RuleFor(command => command.User.DisplayName).Required().ChineseLetterNumber().MaxLength(20);
-        RuleFor(command => command.User.PhoneNumber).Phone();
-        RuleFor(command => command.User.Email).Email();
+        RuleFor(command => command.User.DisplayName).Required().MaxLength(20);
     }
 }
