@@ -4,7 +4,7 @@
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
-[Authorize]
+[AllowAnonymous]
 [SecurityHeaders]
 public class AccountController : Controller
 {
@@ -12,21 +12,27 @@ public class AccountController : Controller
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly IDistributedCacheClient _distributedCacheClient;
+    readonly IUserSession _userSession;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
-        IEventService events,
+        IEventService events, IUserSession userSession,
         IAuthClient authClient,
         IDistributedCacheClient distributedCacheClient)
     {
         _interaction = interaction;
+        _userSession = userSession;
         _events = events;
         _authClient = authClient;
         _distributedCacheClient = distributedCacheClient;
     }
 
+    public async Task<List<string>> Test()
+    {
+        return (await _userSession.GetClientListAsync()).ToList();
+    }
+
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginInputModel inputModel)
     {
         var returnUrl = inputModel.ReturnUrl;
@@ -122,13 +128,14 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Logout(string logoutId = "")
     {
+        var redirectUrl = "/Account/Logout/Loggedout";
+        if (string.IsNullOrWhiteSpace(logoutId))
+        {
+            logoutId = await _interaction.CreateLogoutContextAsync();
+        }
+        redirectUrl = $"{redirectUrl}?logoutId={logoutId}";
         if (User.Identity != null && User.Identity.IsAuthenticated == true)
         {
-            if (string.IsNullOrEmpty(logoutId))
-            {
-                logoutId = await _interaction.CreateLogoutContextAsync();
-            }
-
             // delete local authentication cookie
             await HttpContext.SignOutAsync();
 
@@ -149,16 +156,11 @@ public class AccountController : Controller
                 // we need to see if the provider supports external logout
                 if (await HttpContext.GetSchemeSupportsSignOutAsync(idp))
                 {
-                    // build a return URL so the upstream provider will redirect back
-                    // to us after the user has logged out. this allows us to then
-                    // complete our single sign-out processing.
-                    string url = $"/Account/Logout/Loggedout?logoutId={logoutId}";
-
                     // this triggers a redirect to the external provider for sign-out
-                    return SignOut(new AuthenticationProperties { RedirectUri = url }, idp);
+                    return SignOut(new AuthenticationProperties { RedirectUri = redirectUrl }, idp);
                 }
             }
         }
-        return Redirect($"/Account/Logout/Loggedout?logoutId={logoutId}");
+        return Redirect(redirectUrl);
     }
 }

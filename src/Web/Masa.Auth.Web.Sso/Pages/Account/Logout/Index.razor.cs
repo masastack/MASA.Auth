@@ -9,29 +9,13 @@ public partial class Index
     [SupplyParameterFromQuery]
     public string LogoutId { get; set; } = string.Empty;
 
-    bool _showLogoutPrompt;
-
-    protected override async Task OnParametersSetAsync()
-    {
-        _showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
-        if (User.Identity?.IsAuthenticated != true)
-        {
-            // if user not authenticated, show logged out page
-            _showLogoutPrompt = false;
-        }
-        else
-        {
-            var context = await _interaction.GetLogoutContextAsync(LogoutId);
-            _showLogoutPrompt = context?.ShowSignoutPrompt == true;
-        }
-        await base.OnParametersSetAsync();
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && !_showLogoutPrompt)
+        var vm = await BuildLogoutViewModelAsync(LogoutId);
+        if (firstRender && vm.ShowLogoutPrompt == false)
         {
             Logout();
+            return;
         }
         await base.OnAfterRenderAsync(firstRender);
     }
@@ -46,5 +30,24 @@ public partial class Index
         {
             Navigation.NavigateTo($"/account/logout/loggedout?logoutId={LogoutId}", true);
         }
+    }
+
+    private async Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId)
+    {
+        var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = LogoutOptions.ShowLogoutPrompt };
+
+        if (User?.Identity?.IsAuthenticated != true)
+        {
+            // if the user is not authenticated, then just show logged out page
+            vm.ShowLogoutPrompt = false;
+            return vm;
+        }
+
+        var context = await _interaction.GetLogoutContextAsync(LogoutId);
+        vm.ShowLogoutPrompt = context?.ShowSignoutPrompt == true;
+
+        // show the logout prompt. this prevents attacks where the user
+        // is automatically signed out by another malicious web page.
+        return vm;
     }
 }
