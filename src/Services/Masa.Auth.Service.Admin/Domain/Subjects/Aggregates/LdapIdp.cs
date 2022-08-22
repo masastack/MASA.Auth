@@ -27,6 +27,7 @@ public class LdapIdp : IdentityProvider
         DisplayName = LdapConsts.LDAP_NAME;
         Icon = "mdi-laptop";
         IdentificationType = IdentificationTypes.PhoneNumber;
+        ThirdPartyIdpType = ThirdPartyIdpTypes.Ldap;
     }
 
     public LdapIdp(string serverAddress, int serverPort, bool isSSL, string baseDn, string rootUserDn, string rootUserPassword) : this()
@@ -36,7 +37,7 @@ public class LdapIdp : IdentityProvider
         IsSSL = isSSL;
         BaseDn = baseDn;
         RootUserDn = rootUserDn;
-        RootUserPassword = rootUserPassword;
+        RootUserPassword = rootUserPassword;      
     }
 
     public LdapIdp(string serverAddress, int serverPort, bool isSSL, string baseDn, string rootUserDn, string rootUserPassword, string userSearchBaseDn, string groupSearchBaseDn) : this(serverAddress, serverPort, isSSL, baseDn, rootUserDn, rootUserPassword)

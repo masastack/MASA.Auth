@@ -397,6 +397,16 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetIdentityProviderByTypeAsync(IdentityProviderByTypeQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>()
+                                                       .FirstOrDefaultAsync(ip => ip.ThirdPartyIdpType == query.ThirdPartyIdpType);
+
+        query.Result = identityProvider ?? throw new UserFriendlyException($"IdentityProvider {query.ThirdPartyIdpType} not exist");
+    }
+
+
+    [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
     {
         var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);

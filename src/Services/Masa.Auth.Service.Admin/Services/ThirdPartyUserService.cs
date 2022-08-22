@@ -23,4 +23,11 @@ public class ThirdPartyUserService : RestServiceBase
         await eventBus.PublishAsync(query);
         return query.Result;
     }
+
+    private async Task<UserModel> UpsertThirdPartyUserExternalAsync(IEventBus eventBus, UpsertThirdPartyUserModel model)
+    {
+        var query = new UpsertThirdPartyUserExternalCommand(model);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 }

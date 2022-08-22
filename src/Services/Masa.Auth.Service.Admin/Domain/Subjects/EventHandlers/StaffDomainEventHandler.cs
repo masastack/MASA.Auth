@@ -27,7 +27,7 @@ public class StaffDomainEventHandler
     {
         var command = new AddUserCommand(staffEvent.User, true);
         await _eventBus.PublishAsync(command);
-        staffEvent.UserId = command.NewUser.Id;
+        staffEvent.UserId = command.Result.Id;
     }
 
     [EventHandler(2)]

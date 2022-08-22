@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpsertUserCommand(UpsertUserModel User) : Command
+public record UpsertThirdPartyUserExternalCommand(UpsertThirdPartyUserModel ThirdPartyUser) : Command
 {
-    public UserModel Result { get; set; } = null!;
+    public UserModel Result { get; set; } = new();
 }

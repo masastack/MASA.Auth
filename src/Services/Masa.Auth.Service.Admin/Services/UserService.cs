@@ -62,14 +62,14 @@ public class UserService : RestServiceBase
         };
         var command = new AddUserCommand(dto);
         await eventBus.PublishAsync(command);
-        return command.NewUser.Adapt<UserModel>();
+        return command.Result.Adapt<UserModel>();
     }
 
     private async Task<UserModel> UpsertExternalAsync(IEventBus eventBus, [FromBody] UpsertUserModel model)
     {
         var command = new UpsertUserCommand(model);
         await eventBus.PublishAsync(command);
-        return command.NewUser;
+        return command.Result;
     }
 
     private async Task<bool> DisableAsync(IEventBus eventBus, [FromBody] DisableUserModel model)

@@ -5,8 +5,6 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record UpsertThirdPartyUserForLdapCommand : Command
 {
-    public Guid ThirdPartyIdpId { get; set; }
-
     public string ThridPartyIdentity { get; set; } = "";
 
     public string ExtendedData { get; set; } = "";
@@ -25,6 +23,8 @@ public record UpsertThirdPartyUserForLdapCommand : Command
 
     public string JobNumber { get; set; }
 
+    public UserModel Result { get; set; } = new UserModel();
+
     public UpsertThirdPartyUserForLdapCommand()
     {
         PhoneNumber = "";
@@ -32,9 +32,8 @@ public record UpsertThirdPartyUserForLdapCommand : Command
         JobNumber = "";
     }
 
-    public UpsertThirdPartyUserForLdapCommand(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber)
+    public UpsertThirdPartyUserForLdapCommand(string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber)
     {
-        ThirdPartyIdpId = thirdPartyIdpId;
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
         Name = name;
