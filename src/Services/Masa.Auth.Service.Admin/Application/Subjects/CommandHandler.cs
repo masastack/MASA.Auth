@@ -21,6 +21,7 @@ public class CommandHandler
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
+    readonly Sms _sms;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -38,7 +39,8 @@ public class CommandHandler
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        Sms sms)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -56,6 +58,7 @@ public class CommandHandler
         _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
         _eventBus = eventBus;
+        _sms = sms;
     }
 
     #region User
@@ -201,6 +204,41 @@ public class CommandHandler
                 command.Result = user.Adapt<UserModel>();
             }
         }
+    }
+
+    [EventHandler]
+    public async Task UpdateUserAvatarAsync(UpdateUserAvatarCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
+        if (user is null)
+            throw new UserFriendlyException("This user data does not exist");
+
+        user.UpdateAvatar(userDto.Avatar);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task UpdateUserPhoneNumberAsync(UpdateUserPhoneNumberCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
+        if (user is null)
+            throw new UserFriendlyException("This user data does not exist");
+
+        var verifiyKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+        var success = await _cache.GetAsync<bool>(verifiyKey);
+        if(success)
+        {
+            var key = CacheKey.UpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
+            if (await _sms.VerifyMsgCodeAsync(key, userDto.VerificationCode))
+            {
+                user.UpdateAvatar(userDto.PhoneNumber);
+                await _userRepository.UpdateAsync(user);
+                await _userDomainService.UpdateAsync(user);
+                await _cache.RemoveAsync<bool>(verifiyKey);
+            }
+        }       
     }
 
     [EventHandler(1)]
@@ -469,6 +507,18 @@ public class CommandHandler
             };
             await AddStaffAsync(addStaffDto);
         }
+    }
+
+    [EventHandler]
+    public async Task UpdateStaffAvatarAsync(UpdateStaffAvatarCommand command)
+    {
+        var staffDto = command.Staff;
+        var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
+        if (staff is null)
+            throw new UserFriendlyException("This staff data does not exist");
+
+        staff.UpdateAvatar(staffDto.Avatar);
+        await _staffRepository.UpdateAsync(staff);
     }
 
     [EventHandler(1)]

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
-public sealed class CacheKey
+public static class CacheKey
 {
     const string PERMISSION_CACHE_PRE = "permission:";
     const string ROLE_CACHE_PRE = "role:";
@@ -13,6 +13,9 @@ public sealed class CacheKey
     const string ACCOUNT_LOGIN_PRE = "account_login:";
     const string LDAP_OPTIONS_PRE = "ldap_options:";
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
+    const string UPDATE_USER_PHONENUMBER = "update_user_phoneNumber:";
+    const string VERIFIY_USER_PHONENUMBER = "verifiy_user_phoneNumber:";
+    const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_code_result:";
 
     public static string PermissionKey(Guid permissionId)
     {
@@ -47,5 +50,20 @@ public sealed class CacheKey
     public static string AccountLoginKey(string account)
     {
         return $"{ACCOUNT_LOGIN_PRE}{account}";
+    }
+
+    public static string UpdateUserPhoneNumberKey(string userId, string phoneNumber)
+    {
+        return $"{UPDATE_USER_PHONENUMBER}{userId}{phoneNumber}";
+    }
+
+    public static string VerifiyUserPhoneNumberKey(string userId, string phoneNumber)
+    {
+        return $"{VERIFIY_USER_PHONENUMBER}{userId}{phoneNumber}";
+    }
+
+    public static string VerifiyUserPhoneNumberResultKey(string userId, string phoneNumber)
+    {
+        return $"{VERIFIY_USER_PHONENUMBER_RESULT}{userId}{phoneNumber}";
     }
 }

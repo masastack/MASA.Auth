@@ -125,6 +125,12 @@ public class StaffService : RestServiceBase
         await eventBus.PublishAsync(new UpdateStaffCommand(staff));
     }
 
+    private async Task UpdateAvatarAsync(IEventBus eventBus,
+        [FromBody] UpdateStaffAvatarModel staff)
+    {
+        await eventBus.PublishAsync(new UpdateStaffAvatarCommand(staff));
+    }
+
     private async Task RemoveAsync(IEventBus eventBus,
         [FromBody] RemoveStaffDto staff)
     {

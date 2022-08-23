@@ -219,6 +219,12 @@ public class UserService : RestServiceBase
         return query.Result;
     }
 
+    private async Task UpdateAvatarAsync(IEventBus eventBus,
+    [FromBody] UpdateUserAvatarModel staff)
+    {
+        await eventBus.PublishAsync(new UpdateUserAvatarCommand(staff));
+    }
+
     public async Task PostUserSystemData(IEventBus eventBus, [FromBody] UserSystemDataDto data)
     {
         var command = new SaveUserSystemBusinessDataCommand(data);

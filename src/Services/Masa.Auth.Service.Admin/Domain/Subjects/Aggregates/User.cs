@@ -267,6 +267,16 @@ public class User : FullAggregateRoot<Guid, Guid>
         GenderType = gender;
     }
 
+    public void UpdateAvatar(string avatar)
+    {
+        Avatar = avatar;
+    }
+
+    public void UpdatePhoneNumber(string phoneNumber)
+    {
+        PhoneNumber = phoneNumber;
+    }
+
     public void Disabled()
     {
         Enabled = false;
