@@ -485,9 +485,9 @@ public class CommandHandler
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         var staffDto = command.Staff;
-        var staff = await VerifyStaffRepeatAsync(default, default, staffDto.PhoneNumber, staffDto.Email, default, false);
+        var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
         if (staff is not null)
-        {
+        {           
             var updateStaffEvent = new UpdateStaffBeforeDomainEvent(default);
             await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
             staff.UpdateForLdap(staffDto.Name, staffDto.DisplayName, staffDto.PhoneNumber, staffDto.Email);
@@ -732,6 +732,7 @@ public class CommandHandler
         else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
         {
             var upsertThirdPartyUserForLdapCommand = new UpsertThirdPartyUserForLdapCommand(
+                    model.Id,
                     model.ThridPartyIdentity,
                     JsonSerializer.Serialize(model.ExtendedData),
                     model.Name,
@@ -753,7 +754,7 @@ public class CommandHandler
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
             if (thirdPartyUser is not null)
             {
-                if (thirdPartyUser.UserId != model.Id) throw new UserFriendlyException("This user is not the user this third-party user is bound to");
+                if (model.Id !=default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException("This user is not the user this third-party user is bound to");
                 thirdPartyUser.Update(model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData));
                 await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
                 var upsertUserCommand = new UpsertUserCommand(model.Adapt<UpsertUserModel>());
@@ -790,10 +791,12 @@ public class CommandHandler
         var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyIdentity, false);
         if (thirdPartyUser is not null)
         {
+            if (command.Id !=default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException("Incorrect user identity information");
             thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
             await _eventBus.PublishAsync(resetUserPasswordCommand);
+            command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == command.Id)).Adapt<UserModel>();
         }
         else
         {
