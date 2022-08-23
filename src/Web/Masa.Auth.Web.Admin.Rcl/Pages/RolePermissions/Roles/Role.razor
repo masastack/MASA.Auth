@@ -18,13 +18,12 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable
-                Dense
-                Height="@("calc(100vh - 285px)")"
-                Headers="GetHeaders()" 
-                Items="Roles" 
-                TItem="RoleDto" 
-                ItemsPerPage="PageSize">
+            <SDataTable Dense
+                        Height="@("calc(100vh - 285px)")"
+                        Headers="GetHeaders()"
+                        Items="Roles"
+                        TItem="RoleDto"
+                        ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -35,7 +34,13 @@
                             <div class="hover-pointer" @onclick="()=> OpenUpdateRoleDialog(context.Item)">
                                 <span>@context.Item.Name</span>
                             </div>
-                            break;                      
+                            break;
+                        case nameof(RoleDto.CreationTime):
+                            <SDateTimeTitle Value=@context.Item.CreationTime />
+                            break;
+                        case nameof(RoleDto.ModificationTime):
+                            <SDateTimeTitle Value=@context.Item.ModificationTime />
+                            break;
                         case (nameof(RoleDto.Creator)):
                             <span>@context.Item.Creator</span>
                             break;
