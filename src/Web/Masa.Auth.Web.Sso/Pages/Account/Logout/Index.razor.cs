@@ -11,25 +11,25 @@ public partial class Index
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Simplify flow ignore judge ShowLogoutPrompt 
-        //var showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
+        var showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
 
-        //if (User?.Identity?.IsAuthenticated != true)
-        //{
-        //    // if the user is not authenticated, then just show logged out page
-        //    showLogoutPrompt = false;
-        //}
+        if (User?.Identity?.IsAuthenticated != true)
+        {
+            // if the user is not authenticated, then just show logged out page
+            showLogoutPrompt = false;
+        }
         //else
         //{
+        //    //Simplify flow ignore judge ShowLogoutPrompt
         //    var context = await _interaction.GetLogoutContextAsync(LogoutId);
         //    showLogoutPrompt = context?.ShowSignoutPrompt == true;
         //}
 
-        //if (firstRender && showLogoutPrompt == false)
-        //{
-        //    Logout();
-        //    return;
-        //}
+        if (firstRender && showLogoutPrompt == false)
+        {
+            Logout();
+            return;
+        }
         await base.OnAfterRenderAsync(firstRender);
     }
 
