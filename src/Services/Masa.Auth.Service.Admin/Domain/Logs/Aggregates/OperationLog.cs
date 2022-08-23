@@ -5,21 +5,55 @@ namespace Masa.Auth.Service.Admin.Domain.Logs.Aggregates
 {
     public class OperationLog : AggregateRoot<Guid>
     {
-        public Guid Operator { get; private set; }
+        Guid _operator;
+        string _operatorName = "";
+        OperationTypes _operationType;
+        DateTime _operationTime;
+        string _operationDescription = "";
 
-        public string OperatorName { get; private set; } = "";
+        public Guid Operator
+        {
+            get => _operator;
+            set => _operator = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(Operator));
+        }
 
-        public OperationTypes OperationType { get; private set; }
+        public string OperatorName
+        {
+            get => _operatorName;
+            set => _operatorName = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(OperatorName));
+        }
 
-        public DateTime OperationTime { get; private set; }
+        public OperationTypes OperationType
+        {
+            get => _operationType;
+            set => _operationType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(OperationType));
+        }
 
-        public string OperationDescription { get; private set; } = "";
+        public DateTime OperationTime
+        {
+            get => _operationTime;
+            set
+            {
+                if (value.Kind == DateTimeKind.Local)
+                    _operationTime = value.ToUniversalTime();
+                else
+                    _operationTime = value;
+            }
+        }
 
-        public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string operationDescription)
+        [AllowNull]
+        public string OperationDescription
+        {
+            get => _operationDescription;
+            set => _operationDescription = value ?? "";
+        }
+
+        public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string? operationDescription)
         {
             Operator = @operator;
             OperatorName = operatorName;
             OperationType = operationType;
+            if(operationTime == default) operationTime = DateTime.UtcNow;
             OperationTime = operationTime;
             OperationDescription = operationDescription;
         }

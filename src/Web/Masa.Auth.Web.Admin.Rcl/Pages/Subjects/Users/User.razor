@@ -56,6 +56,9 @@
                     case (nameof(UserDto.Account)):
                         <span>@context.Item.Account</span>
                         break;
+                    case (nameof(UserDto.CreationTime)):
+                        <SDateTimeTitle Value=context.Item.CreationTime />
+                        break;
                     case nameof(UserDto.PhoneNumber):
                         <span>@context.Item.PhoneNumber</span>
                         break;

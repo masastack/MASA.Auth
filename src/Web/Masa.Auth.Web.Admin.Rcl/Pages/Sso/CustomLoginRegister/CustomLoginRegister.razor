@@ -42,6 +42,12 @@
                         case (nameof(ClientDto.ClientName)):
                             <span>@context.Item.Client.ClientName</span>
                             break;
+                        case nameof(CustomLoginDto.CreationTime):
+                            <SDateTimeTitle Value=@context.Item.CreationTime />
+                            break;
+                        case nameof(CustomLoginDto.ModificationTime):
+                            <SDateTimeTitle Value=@context.Item.ModificationTime />
+                            break;
                         case (nameof(CustomLoginDto.Modifier)):
                             <span>@context.Item.Modifier</span>
                             break;
