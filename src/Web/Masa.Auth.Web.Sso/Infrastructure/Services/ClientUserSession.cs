@@ -48,4 +48,14 @@ public class ClientUserSession : DefaultUserSession
             await base.AddClientIdAsync(clientId);
         }
     }
+
+    public override async Task RemoveSessionIdCookieAsync()
+    {
+        var sessionId = await GetSessionIdAsync();
+        if (sessionId != null)
+        {
+            await _distributedCacheClient.RemoveAsync<List<string>>(sessionId);
+        }
+        await base.RemoveSessionIdCookieAsync();
+    }
 }

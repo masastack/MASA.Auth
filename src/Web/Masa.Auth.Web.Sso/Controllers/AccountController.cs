@@ -12,24 +12,17 @@ public class AccountController : Controller
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly IDistributedCacheClient _distributedCacheClient;
-    readonly IUserSession _userSession;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
-        IEventService events, IUserSession userSession,
+        IEventService events,
         IAuthClient authClient,
         IDistributedCacheClient distributedCacheClient)
     {
         _interaction = interaction;
-        _userSession = userSession;
         _events = events;
         _authClient = authClient;
         _distributedCacheClient = distributedCacheClient;
-    }
-
-    public async Task<List<string>> Test()
-    {
-        return (await _userSession.GetClientListAsync()).ToList();
     }
 
     [HttpPost]
