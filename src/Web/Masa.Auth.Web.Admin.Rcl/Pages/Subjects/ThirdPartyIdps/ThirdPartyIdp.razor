@@ -46,6 +46,9 @@
                         case nameof(ThirdPartyIdpDto.VerifyType):
                             <span>@T(context.Item.VerifyType.ToString())</span>
                             break;
+                        case nameof(ThirdPartyIdpDto.CreationTime):
+                            <SDateTimeTitle Value=context.Item.CreationTime />
+                            break;
                         case nameof(ThirdPartyIdpDto.Url):
                             <span class="description">@context.Item.Url</span>
                             break;
