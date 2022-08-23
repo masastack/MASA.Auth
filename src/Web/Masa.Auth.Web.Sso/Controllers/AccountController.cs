@@ -96,7 +96,6 @@ public class AccountController : Controller
                 isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
                 isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
 
-                await HttpContext.SignOutAsync();
                 //us sign in
                 await HttpContext.SignInAsync(isuser, props);
 
