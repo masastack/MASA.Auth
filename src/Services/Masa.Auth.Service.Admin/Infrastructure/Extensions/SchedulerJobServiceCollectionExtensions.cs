@@ -25,6 +25,7 @@ public static class SchedulerJobServiceCollectionExtensions
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            JobIdentity = "masa-auth-sync-userAutoComplete-job",
             Name = "SyncUserAutoCompleteJob",
             IsAlertException = true,
             JobType = JobTypes.Http,
