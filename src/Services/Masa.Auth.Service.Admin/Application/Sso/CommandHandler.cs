@@ -12,14 +12,9 @@ public class CommandHandler
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
     readonly IEventBus _eventBus;
+    readonly SyncCache _syncCache;
 
-    public CommandHandler(IClientRepository clientRepository,
-                          IIdentityResourceRepository identityResourceRepository,
-                          IApiResourceRepository apiResourceRepository,
-                          IApiScopeRepository apiScopeRepository,
-                          IUserClaimRepository userClaimRepository,
-                          ICustomLoginRepository customLoginRepository,
-                          IEventBus eventBus)
+    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, IEventBus eventBus, SyncCache syncCache)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -28,7 +23,10 @@ public class CommandHandler
         _userClaimRepository = userClaimRepository;
         _customLoginRepository = customLoginRepository;
         _eventBus = eventBus;
+        _syncCache = syncCache;
     }
+
+
 
     #region Client
     [EventHandler]
@@ -292,4 +290,10 @@ public class CommandHandler
     }
 
     #endregion
+
+    [EventHandler]
+    public async Task SyncOidcAsync(SyncOidcCommand command)
+    {
+        await _syncCache.ResetAsync();
+    }
 }

@@ -143,7 +143,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
+        configuration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });

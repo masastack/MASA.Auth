@@ -13,7 +13,7 @@ builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var masaConfiguration = builder.GetMasaConfiguration();
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -24,10 +24,10 @@ builder.Services.AddGlobalForServer();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
-builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", masaConfiguration.Local["AuthServiceBaseAddress"], masaConfiguration.Local["McServiceBaseAddress"]);
+builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", publicConfiguration.GetValue<string>("AppSettings:AuthClient:Url"), publicConfiguration.GetValue<string>("AppSettings:McClient:Url"));
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-builder.Services.AddMasaOpenIdConnect(masaConfiguration.Local);
+builder.Services.AddMasaOpenIdConnect(publicConfiguration);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 //builder.WebHost.UseStaticWebAssets();
