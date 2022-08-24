@@ -15,7 +15,7 @@ public static class CacheKey
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
     const string UPDATE_USER_PHONENUMBER_MSG_CODE = "update_user_phoneNumber_msg_code:";
     const string VERIFIY_USER_PHONENUMBER_MSG_CODE = "verifiy_user_phoneNumber_msg_code:";
-    const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_code_result:";
+    const string VERIFIY_USER_PHONENUMBER_MSG_CODE_RESULT = "verifiy_user_phoneNumber_msg_code_result:";
 
     public static string PermissionKey(Guid permissionId)
     {
@@ -64,6 +64,6 @@ public static class CacheKey
 
     public static string VerifiyUserPhoneNumberResultKey(string userId, string phoneNumber)
     {
-        return $"{VERIFIY_USER_PHONENUMBER_RESULT}{userId}{phoneNumber}";
+        return $"{VERIFIY_USER_PHONENUMBER_MSG_CODE_RESULT}{userId}{phoneNumber}";
     }
 }
