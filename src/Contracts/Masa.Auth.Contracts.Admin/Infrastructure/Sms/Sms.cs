@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Sms;
 
-public class Sms
+public class Sms: IScopedDependency
 {
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;

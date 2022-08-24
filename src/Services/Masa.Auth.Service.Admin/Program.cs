@@ -3,6 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoInject();
 builder.AddObservability();
 
 #if DEBUG
@@ -79,7 +80,6 @@ builder.Services.AddPmClient(configuration.GetValue<string>("AppSettings:PmClien
 builder.Services.AddSchedulerClient(configuration.GetValue<string>("AppSettings:SchedulerClient:Url"));
 await builder.Services.AddSchedulerJobAsync();
 builder.Services.AddMcClient(configuration.GetValue<string>("AppSettings:McClient:Url"));
-builder.Services.AddScoped<Sms>();
 builder.Services.AddLadpContext();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddHealthChecks()

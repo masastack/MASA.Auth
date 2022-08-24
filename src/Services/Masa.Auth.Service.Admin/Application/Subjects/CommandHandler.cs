@@ -174,6 +174,7 @@ public class CommandHandler
             user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
             if (user is not null)
             {
+                await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
@@ -228,17 +229,18 @@ public class CommandHandler
 
         var verifiyKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
         var success = await _cache.GetAsync<bool>(verifiyKey);
-        if(success)
+        if (success)
         {
             var key = CacheKey.UpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
             if (await _sms.VerifyMsgCodeAsync(key, userDto.VerificationCode))
             {
-                user.UpdateAvatar(userDto.PhoneNumber);
+                await VerifyUserRepeatAsync(user.Id, userDto.PhoneNumber, default, default, default);
+                user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
                 await _cache.RemoveAsync<bool>(verifiyKey);
             }
-        }       
+        }
     }
 
     [EventHandler(1)]
@@ -487,7 +489,7 @@ public class CommandHandler
         var staffDto = command.Staff;
         var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
         if (staff is not null)
-        {           
+        {
             var updateStaffEvent = new UpdateStaffBeforeDomainEvent(default);
             await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
             staff.UpdateForLdap(staffDto.Name, staffDto.DisplayName, staffDto.PhoneNumber, staffDto.Email);
@@ -754,7 +756,7 @@ public class CommandHandler
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
             if (thirdPartyUser is not null)
             {
-                if (model.Id !=default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException("This user is not the user this third-party user is bound to");
+                if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException("This user is not the user this third-party user is bound to");
                 thirdPartyUser.Update(model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData));
                 await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
                 var upsertUserCommand = new UpsertUserCommand(model.Adapt<UpsertUserModel>());
@@ -791,7 +793,7 @@ public class CommandHandler
         var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyIdentity, false);
         if (thirdPartyUser is not null)
         {
-            if (command.Id !=default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException("Incorrect user identity information");
+            if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException("Incorrect user identity information");
             thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
