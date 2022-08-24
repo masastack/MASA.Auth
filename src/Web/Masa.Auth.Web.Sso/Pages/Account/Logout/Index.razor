@@ -5,11 +5,9 @@
 @inject IIdentityServerInteractionService _interaction
 @layout SimpleLayout
 
-<div>
-    <div class="lead">
-        <h5>@T("Logout")</h5>
-        <p>@T("LogoutConfirm")</p>
-    </div>
-    <MButton class="primary" OnClick="Logout">@T("Yes")</MButton>
+<div class="d-flex align-center flex-column">
+    <h4 class="neutral-lighten-2--text">@T("Logout")</h4>
+    <h7 class="neutral-lighten-3--text mb-12 mt-3">@T("LogoutConfirm")</h7>
+    <MButton Class="primary rounded-pill" Width="162" Height="56" OnClick="Logout">@T("Yes")</MButton>
 </div>
 

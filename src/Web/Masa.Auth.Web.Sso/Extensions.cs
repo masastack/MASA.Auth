@@ -52,10 +52,10 @@ public static class Extensions
         return controller.RedirectToPage("/redirect/index", new { RedirectUri = redirectUri });
     }
 
-    public static void NavigateTo(this NavigationManager nav, string uri, Dictionary<string, object?> parameters)
+    public static void NavigateTo(this NavigationManager nav, string uri, Dictionary<string, object?> parameters, bool replace = false)
     {
         var url = nav.GetUriWithQueryParameters(uri, parameters);
-        nav.NavigateTo(url);
+        nav.NavigateTo(url, replace);
     }
 
     public static IServiceCollection AddSameSiteCookiePolicy(this IServiceCollection services)

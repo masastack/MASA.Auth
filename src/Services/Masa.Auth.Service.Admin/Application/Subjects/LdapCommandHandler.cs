@@ -75,7 +75,7 @@ public class LdapCommandHandler
             try
             {
                 //todo:change bulk
-                var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(_thirdPartyIdpId, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
+                var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
                 await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             }
             catch (Exception e)

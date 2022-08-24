@@ -44,6 +44,8 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
+builder.Services.AddScoped<IUserSession, ClientUserSession>();
+
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 
@@ -68,7 +70,6 @@ app.UseIdentityServer();
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();

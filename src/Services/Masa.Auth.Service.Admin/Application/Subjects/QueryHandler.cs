@@ -90,19 +90,26 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
         query.Result = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]
-    public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
+    public async Task GetUsersByAccountAsync(UsersByAccountQuery query)
+    {
+        var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account));
+        query.Result = users.Adapt<List<UserSimpleModel>>();
+    }
+
+    [EventHandler]
+    public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
         query.Result = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]
-    public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
+    public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
         query.Result = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
     }
@@ -124,7 +131,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task UserPortraitsQueryAsync(UserPortraitsQuery userPortraitsQuery)
+    public async Task UserPortraitsAsync(UserPortraitsQuery userPortraitsQuery)
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
@@ -193,6 +200,32 @@ public class QueryHandler
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
         query.Result = staff;
+    }
+
+    [EventHandler]
+    public async Task GetStaffDetailByUserIdAsync(StaffDetailByUserIdQuery query)
+    {
+        var staff = await _authDbContext.Set<Staff>()
+                                        .Include(s => s.User)
+                                        .ThenInclude(user => user.Roles)
+                                        .ThenInclude(ur => ur.Role)
+                                        .Include(s => s.DepartmentStaffs)
+                                        .ThenInclude(ds => ds.Department)
+                                        .Include(s => s.TeamStaffs)
+                                        .Include(s => s.Position)
+                                        .Include(s => s.CreateUser)
+                                        .Include(s => s.ModifyUser)
+                                        .AsSplitQuery()
+                                        .FirstOrDefaultAsync(s => s.UserId == query.UserId);
+        if (staff is not null)
+        {
+            var staffDetailModel = staff.Adapt<StaffDetailModel>();
+            staffDetailModel.Department = staff.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "";
+            staffDetailModel.Position = staff.Position?.Name ?? "";
+            staffDetailModel.Roles = staff.User.Roles.Select(ur => ur.Role).Adapt<List<RoleModel>>();
+            staffDetailModel.Teams = new();
+        }
+        else query.Result = null;
     }
 
     [EventHandler]
@@ -362,6 +395,16 @@ public class QueryHandler
 
         query.Result = thirdPartyIdp;
     }
+
+    [EventHandler]
+    public async Task GetIdentityProviderByTypeAsync(IdentityProviderByTypeQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>()
+                                                       .FirstOrDefaultAsync(ip => ip.ThirdPartyIdpType == query.ThirdPartyIdpType);
+
+        query.Result = identityProvider ?? throw new UserFriendlyException($"IdentityProvider {query.ThirdPartyIdpType} not exist");
+    }
+
 
     [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)

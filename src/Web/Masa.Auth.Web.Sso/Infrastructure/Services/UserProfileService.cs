@@ -5,15 +5,6 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Services;
 
 public class UserProfileService : IProfileService
 {
-    readonly IHttpClientFactory _httpClientFactory;
-    readonly IAuthClient _authClient;
-
-    public UserProfileService(IHttpClientFactory httpClientFactory, IAuthClient authClient)
-    {
-        _httpClientFactory = httpClientFactory;
-        _authClient = authClient;
-    }
-
     public Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var claims = context.Subject.Claims.ToList();

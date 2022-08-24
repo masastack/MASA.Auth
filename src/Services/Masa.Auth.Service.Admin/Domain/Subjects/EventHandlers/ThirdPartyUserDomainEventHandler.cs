@@ -13,11 +13,11 @@ public class ThirdPartyUserDomainEventHandler
     }
 
     [EventHandler(1)]
-    public async Task AddUser(AddThirdPartyUserBeforeDomainEvent thirdPartyUserDomainEvent)
+    public async Task UpsertUser(AddThirdPartyUserBeforeDomainEvent thirdPartyUserDomainEvent)
     {
         var user = thirdPartyUserDomainEvent.User;
-        var addUserCommand = new AddUserCommand(user, true);
-        await _eventBus.PublishAsync(addUserCommand);
-        thirdPartyUserDomainEvent.UserId = addUserCommand.NewUser.Id;
+        var upsertUserCommand = new UpsertUserCommand(user);
+        await _eventBus.PublishAsync(upsertUserCommand);
+        thirdPartyUserDomainEvent.Result = upsertUserCommand.Result;
     }
 }

@@ -3,7 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpsertUserCommand(UpsertUserModel User) : Command
+public class UpdateUserAvatarCommandValidator : AbstractValidator<UpdateUserAvatarCommand>
 {
-    public UserModel Result { get; set; } = null!;
+    public UpdateUserAvatarCommandValidator()
+    {
+        RuleFor(command => command.User.Avatar).Required().Url();
+    }
 }
