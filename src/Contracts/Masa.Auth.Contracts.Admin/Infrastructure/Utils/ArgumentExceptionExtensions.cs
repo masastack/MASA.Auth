@@ -9,7 +9,7 @@ public static class ArgumentExceptionExtensions
     {
         if (argument is null || argument.Equals(default(T)))
         {
-            throw new ArgumentException($"Please provider {paramName},{paramName} is required");
+            throw new UserFriendlyException($"Please provider {paramName},{paramName} is required");
         }
         return argument;
     }
@@ -18,7 +18,7 @@ public static class ArgumentExceptionExtensions
     {
         if (string.IsNullOrEmpty(argument))
         {
-            throw new ArgumentException($"Please provider {paramName},{paramName} is required");
+            throw new UserFriendlyException($"Please provider {paramName},{paramName} is required");
         }
         return argument;
     }

@@ -159,7 +159,8 @@ public class User : FullAggregateRoot<Guid, Guid>
     {
     }
 
-    public User(string? name,
+    public User(Guid id,
+                string? name,
                 string? displayName,
                 string? avatar,
                 string? idCard,
@@ -175,6 +176,7 @@ public class User : FullAggregateRoot<Guid, Guid>
                 AddressValue? address,
                 GenderTypes gender)
     {
+        Id = id;
         Name = name;
         IdCard = idCard;
         CompanyName = companyName;
@@ -205,7 +207,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? landline,
                 string? email,
                 GenderTypes gender)
-        : this(name,
+        : this(default,
+               name,
                displayName,
                avatar,
                idCard,
@@ -249,7 +252,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         VerifyPhonNumberEmail(phoneNumber, email);
     }
 
-    public void Update(string? name, string displayName, string? idCard, string? companyName, GenderTypes gender)
+    public void Update(string? name, string displayName, string? idCard, string? companyName, string? department, GenderTypes gender)
     {
         Name = name;
         DisplayName = displayName;
@@ -262,6 +265,16 @@ public class User : FullAggregateRoot<Guid, Guid>
     {
         DisplayName = displayName;
         GenderType = gender;
+    }
+
+    public void UpdateAvatar(string avatar)
+    {
+        Avatar = avatar;
+    }
+
+    public void UpdatePhoneNumber(string phoneNumber)
+    {
+        PhoneNumber = phoneNumber;
     }
 
     public void Disabled()

@@ -92,6 +92,13 @@ public class StaffService : RestServiceBase
         return query.Result;
     }
 
+    private async Task<StaffDetailModel?> GetDetailByUserIdAsync(IEventBus eventBus, [FromQuery] Guid userId)
+    {
+        var query = new StaffDetailByUserIdQuery(userId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task<List<StaffSelectDto>> GetSelectAsync(IEventBus eventBus, [FromQuery] string? name)
     {
         var query = new StaffSelectQuery(name);
@@ -116,6 +123,12 @@ public class StaffService : RestServiceBase
         [FromBody] UpdateStaffDto staff)
     {
         await eventBus.PublishAsync(new UpdateStaffCommand(staff));
+    }
+
+    private async Task UpdateAvatarAsync(IEventBus eventBus,
+        [FromBody] UpdateStaffAvatarModel staff)
+    {
+        await eventBus.PublishAsync(new UpdateStaffAvatarCommand(staff));
     }
 
     private async Task RemoveAsync(IEventBus eventBus,

@@ -136,3 +136,4 @@ global using System.Text.Json;
 global using System.Text.RegularExpressions;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Sms;

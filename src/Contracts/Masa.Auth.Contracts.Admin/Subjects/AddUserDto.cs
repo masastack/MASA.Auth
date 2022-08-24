@@ -5,6 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class AddUserDto
 {
+    public Guid Id { get; set; }
+
     public string? Name { get; set; }
 
     public string? DisplayName { get; set; }
@@ -47,8 +49,9 @@ public class AddUserDto
         Permissions = new();
     }
 
-    public AddUserDto(string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions)
+    public AddUserDto(Guid id,string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions)
     {
+        Id = id;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;

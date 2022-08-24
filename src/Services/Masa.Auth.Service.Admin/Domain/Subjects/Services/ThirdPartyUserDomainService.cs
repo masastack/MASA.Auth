@@ -12,4 +12,3 @@ public class ThirdPartyUserDomainService : DomainService
         await EventBus.PublishAsync(userEvent);
     }
 }
-

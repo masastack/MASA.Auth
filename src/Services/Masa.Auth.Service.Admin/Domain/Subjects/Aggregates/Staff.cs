@@ -238,6 +238,11 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Gender = gender;
     }
 
+    public void UpdateAvatar(string avatar)
+    {
+        Avatar = avatar;
+    }
+
     public void SetDepartmentStaff(Guid departmentId)
     {
         if (departmentId != default)
