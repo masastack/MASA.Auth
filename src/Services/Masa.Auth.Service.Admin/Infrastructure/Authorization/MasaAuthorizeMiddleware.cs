@@ -9,17 +9,13 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 public class MasaAuthorizeMiddleware : IMiddleware
 {
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
+    readonly EndpointRowDataProvider _endpointRowDataProvider;
 
-    List<string?> _endpoints = new();
-
-    public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider, IEnumerable<EndpointDataSource> endpointSources)
+    public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider,
+        EndpointRowDataProvider endpointRowDataProvider)
     {
-        //todo endpoint.DisplayName.Contains("=>") is bad code
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
-        _endpoints = endpointSources.SelectMany(source => source.Endpoints)
-            .Where(endpoint => endpoint is RouteEndpoint && endpoint.DisplayName != null
-            && endpoint.DisplayName.Contains("=>"))
-            .Select(endpoint => (endpoint as RouteEndpoint)!.RoutePattern.RawText).ToList();
+        _endpointRowDataProvider = endpointRowDataProvider;
     }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -30,7 +26,7 @@ public class MasaAuthorizeMiddleware : IMiddleware
         {
             return next(context);
         }
-        if (!_endpoints.Contains(routeEndpoint.RoutePattern.RawText))
+        if (!_endpointRowDataProvider.Endpoints.Contains(routeEndpoint.RoutePattern.RawText))
         {
             return next(context);
         }
@@ -42,7 +38,7 @@ public class MasaAuthorizeMiddleware : IMiddleware
             if (masaAuthorizeAttribute != null)
             {
                 if (!string.IsNullOrWhiteSpace(masaAuthorizeAttribute.Account)
-                    && !masaAuthorizeAttribute.Account.Equals(_masaAuthorizeDataProvider.GetAccount()))
+                    && !masaAuthorizeAttribute.Account.Equals(_masaAuthorizeDataProvider.GetAccountAsync().Result))
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return Task.CompletedTask;
@@ -57,7 +53,7 @@ public class MasaAuthorizeMiddleware : IMiddleware
                 //todo replace MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID
                 code = $"{MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID}.{code}";
             }
-            if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeList(), code))
+            if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeListAsync(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID).Result, code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 return Task.CompletedTask;

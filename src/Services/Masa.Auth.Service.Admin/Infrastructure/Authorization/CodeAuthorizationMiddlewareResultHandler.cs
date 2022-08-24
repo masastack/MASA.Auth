@@ -27,13 +27,14 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
             if (masaAuthorizeAttribute != null)
             {
                 if (!string.IsNullOrWhiteSpace(masaAuthorizeAttribute.Account)
-                    && !masaAuthorizeAttribute.Account.Equals(_masaAuthorizeDataProvider.GetAccount()))
+                    && !masaAuthorizeAttribute.Account.Equals(await _masaAuthorizeDataProvider.GetAccountAsync()))
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return;
                 }
             }
             var code = masaAuthorizeAttribute?.Code;
+            var appId = string.Empty;
             if (string.IsNullOrWhiteSpace(code))
             {
                 //dafault code rule
@@ -44,9 +45,10 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
                 if (requirement != null)
                 {
                     code = $"{requirement.AppId}.{code}";
+                    appId = requirement.AppId;
                 }
             }
-            if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeList(), code))
+            if (!WildCardContainsCode(await _masaAuthorizeDataProvider.GetAllowCodeListAsync(appId), code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 return;

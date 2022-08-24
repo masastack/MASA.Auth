@@ -38,6 +38,7 @@ builder.Services.AddMasaIdentityModel(options =>
     options.UserId = "sub";
 });
 
+builder.Services.AddSingleton<EndpointRowDataProvider>();
 builder.Services.AddScoped<EnvironmentMiddleware>();
 builder.Services.AddScoped<MasaAuthorizeMiddleware>();
 builder.Services.AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();

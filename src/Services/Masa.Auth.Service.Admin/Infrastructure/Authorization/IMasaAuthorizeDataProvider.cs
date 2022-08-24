@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
 public interface IMasaAuthorizeDataProvider
 {
-    string GetAccount();
+    Task<string> GetAccountAsync();
 
-    List<string> GetAllowCodeList();
+    Task<List<string>> GetAllowCodeListAsync(string appId);
 }

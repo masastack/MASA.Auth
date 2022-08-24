@@ -410,6 +410,16 @@ public class QueryHandler
         query.Result.AddRange(permissionByTeamQuery.Result);
     }
 
+    [EventHandler]
+    public async Task GetUserElementPermissionCodeQueryAsync(UserElementPermissionCodeQuery userElementPermissionCodeQuery)
+    {
+        //var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(userElementPermissionCodeQuery.UserId);
+        //userElementPermissionCodeQuery.Result = _permissionRepository.GetPermissionCodes(p => p.AppId == userElementPermissionCodeQuery.AppId
+        //                    && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled);
+        //temporary allow all api route
+        userElementPermissionCodeQuery.Result.Add("*");
+    }
+
     #endregion
 
     [EventHandler]
