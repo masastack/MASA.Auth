@@ -211,10 +211,7 @@ public class CommandHandler
     public async Task UpdateUserAvatarAsync(UpdateUserAvatarCommand command)
     {
         var userDto = command.User;
-        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
-        if (user is null)
-            throw new UserFriendlyException("This user data does not exist");
-
+        var user = await CheckUserExistAsync(userDto.Id);
         user.UpdateAvatar(userDto.Avatar);
         await _userRepository.UpdateAsync(user);
     }
@@ -223,10 +220,7 @@ public class CommandHandler
     public async Task UpdateUserPhoneNumberAsync(UpdateUserPhoneNumberCommand command)
     {
         var userDto = command.User;
-        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
-        if (user is null)
-            throw new UserFriendlyException("This user data does not exist");
-
+        var user = await CheckUserExistAsync(userDto.Id);
         var verifiyKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
         var success = await _cache.GetAsync<bool>(verifiyKey);
         if (success)
@@ -441,10 +435,7 @@ public class CommandHandler
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.Id == staffDto.Id);
-        if (staff is null)
-            throw new UserFriendlyException("This staff data does not exist");
-
+        var staff = await CheckStaffExistAsync(staffDto.Id);
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
         await UpdateStaffAsync(staff, staffDto);
     }
@@ -464,6 +455,18 @@ public class CommandHandler
         await _staffRepository.UpdateAsync(staff);
 
         await _staffDomainService.UpdateAfterAsync(new(staff, teams));
+    }
+
+    [EventHandler(1)]
+    public async Task UpdateStaffBasicInfoAsync(UpdateStaffBasicInfoCommand command)
+    {
+        var staffModel = command.Staff;
+        var staff = await _staffRepository.FindAsync(s => s.UserId == command.Staff.UserId);
+        if (staff is null)
+            throw new UserFriendlyException("This staff data does not exist");
+
+        staff.UpdateBasicInfo(staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
+        await _staffRepository.UpdateAsync(staff);
     }
 
     [EventHandler]
@@ -526,14 +529,7 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staff = await _authDbContext.Set<Staff>()
-                                            .Include(s => s.DepartmentStaffs)
-                                            .Include(s => s.TeamStaffs)
-                                            .FirstOrDefaultAsync(s => s.Id == command.Staff.Id);
-        if (staff == null)
-        {
-            throw new UserFriendlyException("the current staff not found");
-        }
+        var staff = await CheckStaffExistAsync(command.Staff.Id);
         await _staffRepository.RemoveAsync(staff);
         await _staffDomainService.RemoveAsync(new(staff));
     }
@@ -628,6 +624,15 @@ public class CommandHandler
                 }
             }
         }
+    }
+
+    private async Task<Staff> CheckStaffExistAsync(Guid staffId)
+    {
+        var staff = await _staffRepository.GetDetailById(staffId);
+        if (staff is null)
+            throw new UserFriendlyException("The staff user does not exist");
+
+        return staff;
     }
 
     private async Task<Staff?> VerifyStaffRepeatAsync(Guid? staffId, string? jobNumber, string? phoneNumber, string? email, string? idCard, bool throwException = true)
