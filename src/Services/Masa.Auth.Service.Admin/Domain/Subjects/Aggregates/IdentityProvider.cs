@@ -6,16 +6,43 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 public class IdentityProvider : FullAggregateRoot<Guid, Guid>
 {
     List<ThirdPartyUser> _thirdPartyUsers = new();
+    string _name = "";
+    string _displayName = "";
+    string _icon = "";
+    IdentificationTypes _identificationType;
+    ThirdPartyIdpTypes _thirdPartyIdpType;
 
-    public string Name { get; protected set; } = null!;
+    public string Name
+    {
+        get => _name;
+        protected set => _name = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Name));
+    }
 
-    public string DisplayName { get; protected set; } = null!;
+    public string DisplayName
+    {
+        get => _displayName;
+        protected set => _displayName = value ?? "";
+    }
 
-    public string Icon { get; protected set; } = null!;
+    public string Icon
+    {
+        get => _icon;
+        protected set => _icon = value ?? "";
+    }
 
     public bool Enabled { get; protected set; } = true;
 
-    public IdentificationTypes IdentificationType { get; protected set; }
+    public IdentificationTypes IdentificationType
+    {
+        get => _identificationType;
+        protected set => _identificationType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(IdentificationType));
+    }
+
+    public ThirdPartyIdpTypes ThirdPartyIdpType
+    {
+        get => _thirdPartyIdpType;
+        protected set => _thirdPartyIdpType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(ThirdPartyIdpType));
+    }
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 

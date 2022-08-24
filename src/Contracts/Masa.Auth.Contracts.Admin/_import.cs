@@ -36,3 +36,8 @@ global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using Util.Reflection.Expressions;
 global using Util.Reflection.Expressions.Abstractions;
+global using Masa.BuildingBlocks.StackSdks.Mc;
+global using Masa.Utils.Caching.Core.Interfaces;
+global using Masa.BuildingBlocks.StackSdks.Mc.Enum;
+global using Masa.BuildingBlocks.StackSdks.Mc.Model;
+global using Masa.Utils.Caching.Core.Models;

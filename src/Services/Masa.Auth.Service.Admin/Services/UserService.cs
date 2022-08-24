@@ -62,14 +62,14 @@ public class UserService : RestServiceBase
         };
         var command = new AddUserCommand(dto);
         await eventBus.PublishAsync(command);
-        return command.NewUser.Adapt<UserModel>();
+        return command.Result.Adapt<UserModel>();
     }
 
     private async Task<UserModel> UpsertExternalAsync(IEventBus eventBus, [FromBody] UpsertUserModel model)
     {
         var command = new UpsertUserCommand(model);
         await eventBus.PublishAsync(command);
-        return command.NewUser;
+        return command.Result;
     }
 
     private async Task<bool> DisableAsync(IEventBus eventBus, [FromBody] DisableUserModel model)
@@ -131,6 +131,13 @@ public class UserService : RestServiceBase
         var query = new FindUserByAccountQuery(account);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
+    }
+
+    private async Task<List<UserSimpleModel>> GetListByAccountAsync(IEventBus eventBus, [FromQuery] string accounts)
+    {
+        var query = new UsersByAccountQuery(accounts.Split(','));
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 
     private async Task<UserModel?> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
@@ -212,6 +219,12 @@ public class UserService : RestServiceBase
         var query = new UserPortraitsQuery(userIds);
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    private async Task UpdateAvatarAsync(IEventBus eventBus,
+    [FromBody] UpdateUserAvatarModel staff)
+    {
+        await eventBus.PublishAsync(new UpdateUserAvatarCommand(staff));
     }
 
     public async Task PostUserSystemData(IEventBus eventBus, [FromBody] UserSystemDataDto data)

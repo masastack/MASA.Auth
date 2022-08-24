@@ -3,6 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoInject();
 builder.AddObservability();
 
 #if DEBUG
@@ -79,6 +80,7 @@ builder.Services.AddMasaRedisCache(configuration.GetSection("RedisConfig").Get<R
 builder.Services.AddPmClient(configuration.GetValue<string>("AppSettings:PmClient:Url"));
 builder.Services.AddSchedulerClient(configuration.GetValue<string>("AppSettings:SchedulerClient:Url"));
 await builder.Services.AddSchedulerJobAsync();
+builder.Services.AddMcClient(configuration.GetValue<string>("AppSettings:McClient:Url"));
 builder.Services.AddLadpContext();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddHealthChecks()
@@ -146,7 +148,6 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     });
     await option.SyncCacheAsync();
 });
-
 builder.Services.RemoveAll(typeof(IProcessor));
 
 var app = builder.Services.AddServices(builder);

@@ -37,13 +37,13 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task AddUserAsync(AddUserCommand addUserCommand)
     {
-        await SetUserCacheAsync(addUserCommand.NewUser.Id);
+        await SetUserCacheAsync(addUserCommand.Result.Id);
     }
 
     [EventHandler(99, IsCancel = true)]
     public async Task FailAddUserAsync(AddUserCommand addUserCommand)
     {
-        await RemoveUserCahceAsync(addUserCommand.NewUser.Id);
+        await RemoveUserCahceAsync(addUserCommand.Result.Id);
     }
 
     [EventHandler(99)]

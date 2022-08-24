@@ -7,6 +7,8 @@ public class TeamStaff : FullEntity<Guid, Guid>
 {
     public Guid TeamId { get; private set; }
 
+    public Team Team { get; private set; } = default!;
+
     public Guid StaffId { get; private set; }
 
     public Staff Staff { get; private set; } = default!;

@@ -21,6 +21,7 @@ public class CommandHandler
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
+    readonly Sms _sms;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -38,7 +39,8 @@ public class CommandHandler
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        Sms sms)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -56,6 +58,7 @@ public class CommandHandler
         _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
         _eventBus = eventBus;
+        _sms = sms;
     }
 
     #region User
@@ -67,14 +70,14 @@ public class CommandHandler
         var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
         if (user is not null)
         {
-            command.NewUser = user;
+            command.Result = user;
             return;
         }
-        user = new User(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
+        user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
         user.AddRoles(userDto.Roles.ToArray());
         user.AddPermissions(userDto.Permissions);
         await AddUserAsync(user);
-        command.NewUser = user;
+        command.Result = user;
     }
 
     async Task AddUserAsync(User user)
@@ -171,17 +174,73 @@ public class CommandHandler
             user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
             if (user is not null)
             {
-                await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, default, userModel.Email, userModel.IdCard, default);
-                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Gender);
+                await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
+                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
-                command.NewUser = user.Adapt<UserModel>();
-                return;
+                command.Result = user.Adapt<UserModel>();
+
+            }
+            else
+            {
+                var addUserCommand = new AddUserCommand(userModel.Adapt<AddUserDto>());
+                await _eventBus.PublishAsync(addUserCommand);
+                command.Result = addUserCommand.Result.Adapt<UserModel>();
             }
         }
-        user = new User(userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, default, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
-        await AddUserAsync(user);
-        command.NewUser = user.Adapt<UserModel>(); ;
+        else
+        {
+            user = await VerifyUserRepeatAsync(default, userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account, false);
+            if (user is not null)
+            {
+                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
+                await _userRepository.UpdateAsync(user);
+                await _userDomainService.UpdateAsync(user);
+                command.Result = user.Adapt<UserModel>();
+            }
+            else
+            {
+                user = new User(userModel.Id, userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, default, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
+                await AddUserAsync(user);
+                command.Result = user.Adapt<UserModel>();
+            }
+        }
+    }
+
+    [EventHandler]
+    public async Task UpdateUserAvatarAsync(UpdateUserAvatarCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
+        if (user is null)
+            throw new UserFriendlyException("This user data does not exist");
+
+        user.UpdateAvatar(userDto.Avatar);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task UpdateUserPhoneNumberAsync(UpdateUserPhoneNumberCommand command)
+    {
+        var userDto = command.User;
+        var user = await _userRepository.FindAsync(u => u.Id == userDto.Id);
+        if (user is null)
+            throw new UserFriendlyException("This user data does not exist");
+
+        var verifiyKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+        var success = await _cache.GetAsync<bool>(verifiyKey);
+        if (success)
+        {
+            var key = CacheKey.UpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
+            if (await _sms.VerifyMsgCodeAsync(key, userDto.VerificationCode))
+            {
+                await VerifyUserRepeatAsync(user.Id, userDto.PhoneNumber, default, default, default);
+                user.UpdatePhoneNumber(userDto.PhoneNumber);
+                await _userRepository.UpdateAsync(user);
+                await _userDomainService.UpdateAsync(user);
+                await _cache.RemoveAsync<bool>(verifiyKey);
+            }
+        }
     }
 
     [EventHandler(1)]
@@ -238,7 +297,7 @@ public class CommandHandler
                 throw new UserFriendlyException("域账号验证失败");
             }
 
-            var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
+            var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
             await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
         }
 
@@ -353,7 +412,7 @@ public class CommandHandler
 
     async Task AddStaffAsync(AddStaffDto staffDto)
     {
-        var addUserDto = new AddUserDto(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
+        var addUserDto = new AddUserDto(default, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
         await _staffDomainService.AddBeforeAsync(addStaffBeforeEvent);
         var staff = new Staff(
@@ -428,7 +487,7 @@ public class CommandHandler
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         var staffDto = command.Staff;
-        var staff = await VerifyStaffRepeatAsync(default, default, staffDto.PhoneNumber, staffDto.Email, default, false);
+        var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
         if (staff is not null)
         {
             var updateStaffEvent = new UpdateStaffBeforeDomainEvent(default);
@@ -450,6 +509,18 @@ public class CommandHandler
             };
             await AddStaffAsync(addStaffDto);
         }
+    }
+
+    [EventHandler]
+    public async Task UpdateStaffAvatarAsync(UpdateStaffAvatarCommand command)
+    {
+        var staffDto = command.Staff;
+        var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
+        if (staff is null)
+            throw new UserFriendlyException("This staff data does not exist");
+
+        staff.UpdateAvatar(staffDto.Avatar);
+        await _staffRepository.UpdateAsync(staff);
     }
 
     [EventHandler(1)]
@@ -643,12 +714,61 @@ public class CommandHandler
         await AddThirdPartyUserAsync(thirdPartyUserDto);
     }
 
-    async Task AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
+    async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
     {
-        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User);
+        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User.Adapt<UpsertUserModel>());
         await _thirdPartyUserDomainService.AddBeforeAsync(thirdPartyUseEvent);
-        var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, thirdPartyUseEvent.UserId, true, dto.ThridPartyIdentity, dto.ExtendedData);
+        var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, thirdPartyUseEvent.Result.Id, true, dto.ThridPartyIdentity, dto.ExtendedData);
         await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
+        return thirdPartyUseEvent.Result;
+    }
+
+    [EventHandler(1)]
+    public async Task UpsertThirdPartyUserExternalAsync(UpsertThirdPartyUserExternalCommand command)
+    {
+        var model = command.ThirdPartyUser;
+        if (model.ThirdPartyIdpType == default)
+        {
+            throw new UserFriendlyException("ThirdPartyIdpType can not default");
+        }
+        else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        {
+            var upsertThirdPartyUserForLdapCommand = new UpsertThirdPartyUserForLdapCommand(
+                    model.Id,
+                    model.ThridPartyIdentity,
+                    JsonSerializer.Serialize(model.ExtendedData),
+                    model.Name,
+                    model.DisplayName,
+                    model.PhoneNumber!,
+                    model.Email,
+                    model.Account,
+                    model.Password!,
+                    model.PhoneNumber!
+                );
+            await _eventBus.PublishAsync(upsertThirdPartyUserForLdapCommand);
+            command.Result = upsertThirdPartyUserForLdapCommand.Result;
+        }
+        else
+        {
+            var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+            await _eventBus.PublishAsync(identityProviderQuery);
+            var identityProvider = identityProviderQuery.Result;
+            var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
+            if (thirdPartyUser is not null)
+            {
+                if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException("This user is not the user this third-party user is bound to");
+                thirdPartyUser.Update(model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData));
+                await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
+                var upsertUserCommand = new UpsertUserCommand(model.Adapt<UpsertUserModel>());
+                await _eventBus.PublishAsync(upsertUserCommand);
+                command.Result = upsertUserCommand.Result;
+            }
+            else
+            {
+                var addThirdPartyUserDto = new AddThirdPartyUserDto(identityProvider.Id, true, model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData), command.ThirdPartyUser.Adapt<AddUserDto>());
+                command.Result = await AddThirdPartyUserAsync(addThirdPartyUserDto);
+            }
+        }
     }
 
     [EventHandler(1)]
@@ -667,18 +787,23 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task UpsertThirdPartyUserForLdapAsync(UpsertThirdPartyUserForLdapCommand command)
     {
-        var thirdPartyUser = await VerifyUserRepeatAsync(command.ThirdPartyIdpId, command.ThridPartyIdentity, false);
+        var identityProviderQuery = new IdentityProviderByTypeQuery(ThirdPartyIdpTypes.Ldap);
+        await _eventBus.PublishAsync(identityProviderQuery);
+        var ldap = identityProviderQuery.Result;
+        var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyIdentity, false);
         if (thirdPartyUser is not null)
         {
+            if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException("Incorrect user identity information");
             thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
             await _eventBus.PublishAsync(resetUserPasswordCommand);
+            command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == command.Id)).Adapt<UserModel>();
         }
         else
         {
-            var addThirdPartyUserDto = new AddThirdPartyUserDto(command.ThirdPartyIdpId, true, command.ThridPartyIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
-            await AddThirdPartyUserAsync(addThirdPartyUserDto);
+            var addThirdPartyUserDto = new AddThirdPartyUserDto(ldap.Id, true, command.ThridPartyIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
+            command.Result = await AddThirdPartyUserAsync(addThirdPartyUserDto);
         }
         var upsertStaffDto = command.Adapt<UpsertStaffForLdapDto>();
         upsertStaffDto.UserId = thirdPartyUser?.UserId;
