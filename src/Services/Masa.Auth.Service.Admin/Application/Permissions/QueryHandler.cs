@@ -11,7 +11,6 @@ public class QueryHandler
     readonly UserDomainService _userDomainService;
     readonly IMemoryCacheClient _memoryCacheClient;
     readonly IEventBus _eventBus;
-    CallGroup _callGroup;
 
     public QueryHandler(
         IRoleRepository roleRepository,
@@ -19,8 +18,7 @@ public class QueryHandler
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
         IMemoryCacheClient memoryCacheClient,
-        IEventBus eventBus,
-        CallGroup callGroup)
+        IEventBus eventBus)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -28,7 +26,6 @@ public class QueryHandler
         _userDomainService = userDomainService;
         _memoryCacheClient = memoryCacheClient;
         _eventBus = eventBus;
-        _callGroup = callGroup;
     }
 
     #region Role
@@ -417,26 +414,25 @@ public class QueryHandler
         var userId = userElementPermissionCodeQuery.UserId;
         var appId = userElementPermissionCodeQuery.AppId;
         var cacheKey = CacheKey.UserElementPermissionCodeKey(userId, appId);
-        //todo use golang singleflight ideo replace lock fixed cache break
-        var codeList = await _memoryCacheClient.GetAsync<List<string>>(cacheKey);
-        if (codeList == null)
+
+        userElementPermissionCodeQuery.Result = (await _memoryCacheClient.GetOrSetAsync<List<string>>(cacheKey, () =>
         {
-            var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(userId);
-            codeList = _permissionRepository.GetPermissionCodes(p => p.AppId == appId
+            var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
+            return _permissionRepository.GetPermissionCodes(p => p.AppId == appId
                                 && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled);
-            _memoryCacheClient.Set(cacheKey, codeList, new CombinedCacheEntryOptions<List<string>>
+
+        }, new CombinedCacheEntryOptions<List<string>>
+        {
+            DistributedCacheEntryOptions = new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
             {
-                DistributedCacheEntryOptions = new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = TimeSpan.FromSeconds(5)
-                },
-                MemoryCacheEntryOptions = new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
-                }
-            });
-        };
-        userElementPermissionCodeQuery.Result = codeList;
+                SlidingExpiration = TimeSpan.FromSeconds(5)
+            },
+            MemoryCacheEntryOptions = new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
+            }
+        }))!;
+
         //temporary allow all api route
         userElementPermissionCodeQuery.Result.Add("*");
     }
