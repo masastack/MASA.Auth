@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
-public class EndpointRowDataProvider
+public class EndpointRowDataProvider : ISingletonDependency
 {
     List<string?> _endpoints = new();
 

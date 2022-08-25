@@ -3,7 +3,6 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoInject();
 builder.AddObservability();
 
 #if DEBUG
@@ -14,6 +13,7 @@ builder.Services.AddDaprStarter(opt =>
 });
 #endif
 
+builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
 builder.Services.AddAliyunStorage(async serviceProvider =>
 {
@@ -39,10 +39,6 @@ builder.Services.AddMasaIdentityModel(options =>
     options.UserId = "sub";
 });
 
-builder.Services.AddSingleton<EndpointRowDataProvider>();
-builder.Services.AddScoped<EnvironmentMiddleware>();
-builder.Services.AddScoped<MasaAuthorizeMiddleware>();
-builder.Services.AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
 builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
 builder.Services.AddAuthorization(options =>

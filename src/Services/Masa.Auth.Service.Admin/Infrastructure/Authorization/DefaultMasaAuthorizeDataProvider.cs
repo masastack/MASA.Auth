@@ -20,9 +20,14 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
         return Task.FromResult(account);
     }
 
-    public async Task<List<string>> GetAllowCodeListAsync(string appId)
+    public async Task<IEnumerable<string>> GetAllowCodeListAsync(string appId)
     {
         var userId = _userContext.GetUserId<Guid>();
+#warning update sdk cancel comment
+        //if (userId == Guid.Empty)
+        //{
+        //    return Enumerable.Empty<string>();
+        //}
         var permissionQuery = new UserElementPermissionCodeQuery(appId, userId);
         await _eventBus.PublishAsync(permissionQuery);
         return permissionQuery.Result;

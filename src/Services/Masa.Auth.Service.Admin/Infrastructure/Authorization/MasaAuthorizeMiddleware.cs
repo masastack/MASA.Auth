@@ -6,7 +6,7 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 /// <summary>
 /// all route into this,and all RequestDelegateFactory create route handler will Authorization code
 /// </summary>
-public class MasaAuthorizeMiddleware : IMiddleware
+public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
 {
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
     readonly EndpointRowDataProvider _endpointRowDataProvider;
@@ -18,19 +18,20 @@ public class MasaAuthorizeMiddleware : IMiddleware
         _endpointRowDataProvider = endpointRowDataProvider;
     }
 
-    public Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var endpoint = context.GetEndpoint();
         var routeEndpoint = endpoint as RouteEndpoint;
         if (routeEndpoint == null)
         {
-            return next(context);
+            await next(context);
+            return;
         }
         if (!_endpointRowDataProvider.Endpoints.Contains(routeEndpoint.RoutePattern.RawText))
         {
-            return next(context);
+            await next(context);
+            return;
         }
-        //todo repeat code from CodeAuthorizationMiddlewareResultHandler
         var allowAnonymousAttribute = endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>();
         if (endpoint != null && allowAnonymousAttribute == null)
         {
@@ -38,10 +39,10 @@ public class MasaAuthorizeMiddleware : IMiddleware
             if (masaAuthorizeAttribute != null)
             {
                 if (!string.IsNullOrWhiteSpace(masaAuthorizeAttribute.Account)
-                    && !masaAuthorizeAttribute.Account.Equals(_masaAuthorizeDataProvider.GetAccountAsync().Result))
+                    && !masaAuthorizeAttribute.Account.Equals(await _masaAuthorizeDataProvider.GetAccountAsync()))
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                    return Task.CompletedTask;
+                    return;
                 }
             }
             var code = masaAuthorizeAttribute?.Code;
@@ -53,18 +54,13 @@ public class MasaAuthorizeMiddleware : IMiddleware
                 //todo replace MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID
                 code = $"{MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID}.{code}";
             }
-            if (!WildCardContainsCode(_masaAuthorizeDataProvider.GetAllowCodeListAsync(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID).Result, code))
+
+            if (!(await _masaAuthorizeDataProvider.GetAllowCodeListAsync(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID)).WildCardContains(code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                return Task.CompletedTask;
+                return;
             }
         }
-        return next(context);
-
-        bool WildCardContainsCode(IEnumerable<string> data, string code)
-        {
-            return data.Any(item => Regex.IsMatch(code.ToLower(),
-                Regex.Escape(item.ToLower()).Replace(@"\*", ".*").Replace(@"\?", ".")));
-        }
+        await next(context);
     }
 }

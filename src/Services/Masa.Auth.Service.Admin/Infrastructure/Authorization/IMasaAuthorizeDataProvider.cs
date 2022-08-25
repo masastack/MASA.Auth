@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
-public interface IMasaAuthorizeDataProvider
+public interface IMasaAuthorizeDataProvider : IScopedDependency
 {
     Task<string> GetAccountAsync();
 
-    Task<List<string>> GetAllowCodeListAsync(string appId);
+    Task<IEnumerable<string>> GetAllowCodeListAsync(string appId);
 }
