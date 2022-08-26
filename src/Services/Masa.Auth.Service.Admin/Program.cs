@@ -6,30 +6,42 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoInject();
 builder.AddObservability();
 
-#if DEBUG
-builder.Services.AddDaprStarter(opt =>
+//#if DEBUG
+//builder.Services.AddDaprStarter(opt =>
+//{
+//    opt.DaprHttpPort = 3600;
+//    opt.DaprGrpcPort = 3601;
+//});
+//#endif
+//builder.Services.AddDaprClient();
+//builder.Services.AddAliyunStorage(async serviceProvider =>
+//{
+//    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
+//    var aliyunOssConfig = await daprClient.GetSecretAsync("localsecretstore", "aliyun-oss");
+//    var accessId = aliyunOssConfig["access_id"];
+//    var accessSecret = aliyunOssConfig["access_secret"];
+//    var endpoint = aliyunOssConfig["endpoint"];
+//    var roleArn = aliyunOssConfig["role_arn"];
+//    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
+//    {
+//        Sts = new AliyunStsOptions()
+//        {
+//            RegionId = "cn-hangzhou"
+//        }
+//    };
+//});
+builder.AddMasaConfiguration(configurationBuilder =>
 {
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
+    configurationBuilder.UseDcc();
 });
-#endif
-
-builder.Services.AddDaprClient();
-builder.Services.AddAliyunStorage(async serviceProvider =>
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
+builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName) 
 {
-    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var aliyunOssConfig = await daprClient.GetSecretAsync("localsecretstore", "aliyun-oss");
-    var accessId = aliyunOssConfig["access_id"];
-    var accessSecret = aliyunOssConfig["access_secret"];
-    var endpoint = aliyunOssConfig["endpoint"];
-    var roleArn = aliyunOssConfig["role_arn"];
-    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
+    Sts = new AliyunStsOptions()
     {
-        Sts = new AliyunStsOptions()
-        {
-            RegionId = "cn-hangzhou"
-        }
-    };
+        RegionId = ossOptions.RegionId
+    }
 });
 
 builder.Services.AddMasaIdentityModel(options =>
@@ -69,17 +81,13 @@ builder.Services.AddAuthentication(options =>
 
 MapsterAdapterConfig.TypeAdapter();
 
-builder.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
 builder.Services.AddDccClient();
-var configuration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
-builder.Services.AddMasaRedisCache(configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
-builder.Services.AddPmClient(configuration.GetValue<string>("AppSettings:PmClient:Url"));
-builder.Services.AddSchedulerClient(configuration.GetValue<string>("AppSettings:SchedulerClient:Url"));
+var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+builder.Services.AddMasaRedisCache(defaultConfiguration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
+builder.Services.AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"));
 await builder.Services.AddSchedulerJobAsync();
-builder.Services.AddMcClient(configuration.GetValue<string>("AppSettings:McClient:Url"));
+builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddLadpContext();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddHealthChecks()
@@ -137,13 +145,13 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.Services.AddOidcCache(configuration);
+builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        configuration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
+        defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
