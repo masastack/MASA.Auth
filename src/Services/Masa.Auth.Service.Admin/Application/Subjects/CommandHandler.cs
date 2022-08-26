@@ -217,22 +217,66 @@ public class CommandHandler
     }
 
     [EventHandler]
+    public async Task SendMsgCodeForVerifiyPhoneNumberAsync(SendMsgCodeForVerifiyPhoneNumberCommand command)
+    {
+        var model = command.Model;
+        var user = await CheckUserExistAsync(model.UserId);
+        ArgumentExceptionExtensions.ThrowIfNullOrEmpty(user.PhoneNumber);
+        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(user.Id.ToString(), user.PhoneNumber);
+        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
+        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
+        else
+        {
+            await _sms.SendMsgCodeAsync(msgCodeKey, user.PhoneNumber);
+        }
+    }
+
+    [EventHandler]
+    public async Task SendMsgCodeForUpdatePhoneNumberAsync(SendMsgCodeForUpdatePhoneNumberCommand command)
+    {
+        var model = command.Model;
+        await CheckUserExistAsync(model.UserId);
+        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
+        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
+        else
+        {
+            await _sms.SendMsgCodeAsync(msgCodeKey, model.PhoneNumber);
+        }
+    }
+
+    [EventHandler]
+    public async Task<bool> VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    {
+        var model = command.Model;
+        var user = await CheckUserExistAsync(model.UserId);
+        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
+        if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+        {
+            var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+            await _cache.SetAsync(resultKey, true);
+            return true;
+        }
+        return false;
+    }
+
+    [EventHandler]
     public async Task UpdateUserPhoneNumberAsync(UpdateUserPhoneNumberCommand command)
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        var verifiyKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-        var success = await _cache.GetAsync<bool>(verifiyKey);
+        var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+        var success = await _cache.GetAsync<bool>(resultKey);
         if (success)
         {
-            var key = CacheKey.UpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
+            var key = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
             if (await _sms.VerifyMsgCodeAsync(key, userDto.VerificationCode))
             {
                 await VerifyUserRepeatAsync(user.Id, userDto.PhoneNumber, default, default, default);
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
-                await _cache.RemoveAsync<bool>(verifiyKey);
+                await _cache.RemoveAsync<bool>(resultKey);
             }
         }
     }
