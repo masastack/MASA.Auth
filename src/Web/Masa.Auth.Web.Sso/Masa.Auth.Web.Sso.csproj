@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
+		<!--<PackageReference Include="IdentityServer4" Version="4.1.2" />-->
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="Masa.Blazor" Version="0.6.0-preview.4" />
@@ -43,6 +43,10 @@
 
 	<ItemGroup>
 		<Folder Include="wwwroot\js\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="C:\Users\mayue\Desktop\IdentityServer4\src\IdentityServer4\src\IdentityServer4.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

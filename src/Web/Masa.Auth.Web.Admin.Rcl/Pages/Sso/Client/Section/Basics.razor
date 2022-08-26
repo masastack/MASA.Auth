@@ -17,23 +17,27 @@
         <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="@T("RequireRequestObject")"></MCheckbox>
     </MCol>
     <MCol Md=12>
-        <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="AllowedCorsOrigins" AppendOuterIcon="@IconConstants.Add" />
+        <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="@T("AllowedCorsOrigins")" Tooltip="@T("AllowedCorsOriginsTips")"
+                    AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddAllowedCorsOrigin" />
     </MCol>
     @foreach (var origin in Dto.AllowedCorsOrigins)
     {
-        <MCol Md=12 Class="d-flex">
-            <STextField HideDetails="true" Value="origin" Disabled Class="flex-grow-1" />
+        <MCol Md=6 Class="d-flex">
+            <STextField HideDetails="true" Value="origin" Filled Disabled Class="flex-grow-1" />
             <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
         </MCol>
     }
     <MCol Md=12>
-        <h5 class="subtitle2 default--text mb-4">Properties</h5>
+        <h5 class="subtitle2 default--text mb-4">
+            @T("Properties")
+            <SIcon Small Tooltip="@T("ClientPropertiesTips")">mdi-help-circle-outline</SIcon>
+        </h5>
         <MRow>
             <MCol>
-                <STextField @bind-Value="@Dto.Property.Key" Label="Key" />
+                <STextField @bind-Value="@Dto.Property.Key" Label="@T("Key")" />
             </MCol>
             <MCol>
-                <STextField @bind-Value="@Dto.Property.Value" Label="Value" />
+                <STextField @bind-Value="@Dto.Property.Value" Label="@T("Value")" />
             </MCol>
             <MCol Md="@("auto")" Class="d-flex align-center">
                 <MIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
@@ -67,26 +71,58 @@
     [Parameter]
     public EventCallback<ClientBasicDto> DtoChanged { get; set; }
 
-    public List<DataTableHeader<ClientPropertyDto>> _headers { get; set; } = new()
+    List<DataTableHeader<ClientPropertyDto>> _headers = new();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
         {
-            new() { Text = "Key", Value = nameof(ClientPropertyDto.Key), Sortable = false },
-            new() { Text = "Value", Value = nameof(ClientPropertyDto.Value), Sortable = false },
-            new() { Text = "Action", Value = "Action", Sortable = false, Align = "center" },
-        };
+            _headers = new()
+            {
+                new() { Text = T("Key"), Value = nameof(ClientPropertyDto.Key), Sortable = false },
+                new() { Text = T("Value"), Value = nameof(ClientPropertyDto.Value), Sortable = false },
+                new() { Text = T("Action"), Value = "Action", Sortable = false, Align = "center" },
+            };
+        }
+        base.OnAfterRender(firstRender);
+    }
 
     private void RemoveAllowedCorsOrigin(string val)
     {
         Dto.AllowedCorsOrigins.Remove(val);
     }
 
+    private void AddAllowedCorsOrigin()
+    {
+        if (!Uri.TryCreate(Dto.AllowedCorsOrigin, UriKind.Absolute, out var uri))
+        {
+            PopupService.AlertAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(Dto.AllowedCorsOrigin))
+        {
+            PopupService.AlertAsync(T("Cannot be empty"), AlertTypes.Error);
+            return;
+        }
+        if (Dto.AllowedCorsOrigins.Contains(Dto.AllowedCorsOrigin.Trim()))
+        {
+            PopupService.AlertAsync(T("Duplicate item"), AlertTypes.Error);
+            return;
+        }
+        Dto.AllowedCorsOrigins.Add(Dto.AllowedCorsOrigin);
+        Dto.AllowedCorsOrigin = string.Empty;
+    }
+
     private void AddProperty()
     {
         if (string.IsNullOrWhiteSpace(Dto.Property.Key) || string.IsNullOrWhiteSpace(Dto.Property.Value))
         {
+            PopupService.AlertAsync(T("Cannot be empty"), AlertTypes.Error);
             return;
         }
         if (Dto.Properties.Any(p => p.Key == Dto.Property.Key.Trim()))
         {
+            PopupService.AlertAsync(T("Duplicate key"), AlertTypes.Error);
             return;
         }
         Dto.Properties.Add(Dto.Property);

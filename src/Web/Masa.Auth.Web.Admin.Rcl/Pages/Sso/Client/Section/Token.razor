@@ -1,16 +1,16 @@
 ﻿@using Masa.Auth.Contracts.Admin.Infrastructure.Constants
 @inherits AdminCompontentBase
 
-<MRow Class="pt-4">
+<MRow Class="pt-4 mr-2">
     <MCol Md=6>
-        <MCheckbox Dense @bind-Value="Dto.AllowOfflineAccess" Label="AllowOfflineAccess"></MCheckbox>
+        <SCheckbox Dense @bind-Value="Dto.AllowOfflineAccess" Label="@T("AllowOfflineAccess")" Tooltip="@T("AllowOfflineAccessTips")"></SCheckbox>
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.IdentityTokenLifetime" Label="IdentityTokenLifetime" />
+        <SNumberTextField @bind-Value="Dto.IdentityTokenLifetime" Label="@T("IdentityTokenLifetime")" Tooltip="@T("IdentityTokenLifetimeTips")" />
     </MCol>
     <MCol Md=12>
         <SSelect @bind-Value="@Dto.AllowTokenSigningAlgorithms"
-                 Label="AllowedIdentityTokenSigningAlgorithms"
+                 Label="@T("AllowedIdentityTokenSigningAlgorithms")" Tooltip="@T("AllowedIdentityTokenSigningAlgorithmsTips")"
                  Multiple
                  Items="@Dto.AllowedIdentityTokenSigningAlgorithmsItems"
                  ItemText="u => u.Text"
@@ -18,28 +18,28 @@
         </SSelect>
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.AccessTokenLifetime" Label="AccessTokenLifetime" />
+        <SNumberTextField @bind-Value="Dto.AccessTokenLifetime" Label="@T("AccessTokenLifetime")" Tooltip="@T("AccessTokenLifetimeTips")"/>
     </MCol>
     <MCol Md=6>
         <SSelect @bind-Value="@Dto.AccessTokenType"
-                 Label="AccessTokenType"
+                 Label="@T("AccessTokenType")" Tooltip="@T("AccessTokenTypeTips")"
                  Items="@_accessTokenType"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
         </SSelect>
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.AuthorizationCodeLifetime" Label="AuthorizationCodeLifetime" />
+        <SNumberTextField @bind-Value="Dto.AuthorizationCodeLifetime" Label="@T("AuthorizationCodeLifetime")" Tooltip="@T("AuthorizationCodeLifetimeTips")" />
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.AbsoluteRefreshTokenLifetime" Label="AbsoluteRefreshTokenLifetime" />
+        <SNumberTextField @bind-Value="Dto.AbsoluteRefreshTokenLifetime" Label="@T("AbsoluteRefreshTokenLifetime")" Tooltip="@T("AbsoluteRefreshTokenLifetimeTips")" />
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.SlidingRefreshTokenLifetime" Label="SlidingRefreshTokenLifetime" />
+        <SNumberTextField @bind-Value="Dto.SlidingRefreshTokenLifetime" Label="@T("SlidingRefreshTokenLifetime")" Tooltip="@T("SlidingRefreshTokenLifetimeTips")" />
     </MCol>
     <MCol Md=6>
         <SSelect @bind-Value="@Dto.RefreshTokenUsage"
-                 Label="RefreshTokenUsage"
+                 Label="@T("RefreshTokenUsage")" Tooltip="@T("RefreshTokenUsageTips")"
                  Items="@_refreshTokenUsage"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
@@ -47,38 +47,38 @@
     </MCol>
     <MCol Md=6>
         <SSelect @bind-Value="@Dto.RefreshTokenExpiration"
-                 Label="RefreshTokenExpiration"
+                 Label="@T("RefreshTokenExpiration")" Tooltip="@T("RefreshTokenExpirationTips")"
                  Items="@_refreshTokenExpiration"
                  ItemText="u => u.Text"
                  ItemValue="u => u.Value">
         </SSelect>
     </MCol>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.PairWiseSubjectSalt" Label="PairWiseSubjectSalt" />
+        <STextField @bind-Value="Dto.PairWiseSubjectSalt" Label="@T("PairWiseSubjectSalt")" Tooltip="@T("PairWiseSubjectSaltTips")" />
     </MCol>
     <MCol Md=6>
-        <MCheckbox Dense @bind-Value="Dto.IncludeJwtId" Label="IncludeJwtId"></MCheckbox>
+        <SCheckbox Dense @bind-Value="Dto.IncludeJwtId" Label="@T("IncludeJwtId")" Tooltip="@T("IncludeJwtIdTips")" />
     </MCol>
 
     <MCol Md=6>
-        <MCheckbox Dense @bind-Value="Dto.UpdateAccessTokenClaimsOnRefresh" Label="UpdateAccessTokenClaimsOnRefresh"></MCheckbox>
+        <SCheckbox Dense @bind-Value="Dto.UpdateAccessTokenClaimsOnRefresh" Label="@T("UpdateAccessTokenClaimsOnRefresh")" Tooltip="@T("UpdateAccessTokenClaimsOnRefreshTips")" />
     </MCol>
     <MCol Md=6>
-        <MCheckbox Dense @bind-Value="Dto.AlwaysIncludeUserClaimsInIdToken" Label="AlwaysIncludeUserClaimsInIdToken"></MCheckbox>
+        <SCheckbox Dense @bind-Value="Dto.AlwaysIncludeUserClaimsInIdToken" Label="@T("AlwaysIncludeUserClaimsInIdToken")" Tooltip="@T("AlwaysIncludeUserClaimsInIdTokenTips")" />
     </MCol>
     <MCol Md=6>
-        <MCheckbox Dense @bind-Value="Dto.AllowAccessTokensViaBrowser" Label="AllowAccessTokensViaBrowser"></MCheckbox>
+        <SCheckbox Dense @bind-Value="Dto.AllowAccessTokensViaBrowser" Label="@T("AllowAccessTokensViaBrowser")" Tooltip="@T("AllowAccessTokensViaBrowserTips")" />
     </MCol>
     <MCol Md=6>
-        <MCheckbox Dense @bind-Value="Dto.AlwaysSendClientClaims" Label="AlwaysSendClientClaims"></MCheckbox>
+        <SCheckbox Dense @bind-Value="Dto.AlwaysSendClientClaims" Label="@T("AlwaysSendClientClaims")" Tooltip="@T("AlwaysSendClientClaimsTips")" />
     </MCol>
 </MRow>
-<MRow>
+<MRow Class="mr-2">
     <MCol>
-        <STextField @bind-Value="Dto.ClientClaimDto.Type" Label="Type" />
+        <STextField @bind-Value="Dto.ClientClaimDto.Type" Label="@T("Type")" />
     </MCol>
     <MCol>
-        <STextField @bind-Value="Dto.ClientClaimDto.Value" Label="Value" />
+        <STextField @bind-Value="Dto.ClientClaimDto.Value" Label="@T("Value")" />
     </MCol>
     <MCol Md="@("auto")" Class="d-flex align-center">
         <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
