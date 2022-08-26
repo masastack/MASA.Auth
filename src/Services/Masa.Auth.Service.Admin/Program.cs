@@ -14,22 +14,6 @@ builder.AddObservability();
 //});
 //#endif
 //builder.Services.AddDaprClient();
-//builder.Services.AddAliyunStorage(async serviceProvider =>
-//{
-//    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-//    var aliyunOssConfig = await daprClient.GetSecretAsync("localsecretstore", "aliyun-oss");
-//    var accessId = aliyunOssConfig["access_id"];
-//    var accessSecret = aliyunOssConfig["access_secret"];
-//    var endpoint = aliyunOssConfig["endpoint"];
-//    var roleArn = aliyunOssConfig["role_arn"];
-//    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
-//    {
-//        Sts = new AliyunStsOptions()
-//        {
-//            RegionId = "cn-hangzhou"
-//        }
-//    };
-//});
 builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
