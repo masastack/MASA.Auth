@@ -222,9 +222,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     public void UpdateForLdap(string? name, string displayName, string phoneNumber, string? email)
     {
         Name = name;
-        DisplayName = displayName;
-        PhoneNumber = phoneNumber;
-        Email = email;
+        DisplayName = displayName;       
         VerifyPhonNumberEmail(phoneNumber, email);
     }
 
@@ -232,10 +230,16 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     {
         Name = name;
         PositionId = positionId;
-        Name = name;
         DisplayName = displayName;
         StaffType = staffType;
         Gender = gender;
+    }
+
+    public void UpdateBasicInfo(string displayName, GenderTypes gender, string? phoneNumber, string? email)
+    {
+        DisplayName = displayName;
+        Gender = gender;
+        VerifyPhonNumberEmail(phoneNumber, email);
     }
 
     public void UpdateAvatar(string avatar)

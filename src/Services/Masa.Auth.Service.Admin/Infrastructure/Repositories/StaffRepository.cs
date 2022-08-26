@@ -13,9 +13,17 @@ public class StaffRepository : Repository<AuthDbContext, Staff, Guid>, IStaffRep
     public async Task<Staff?> FindAsync(Expression<Func<Staff, bool>> predicate)
     {
         var staff = await Context.Set<Staff>()
+                                .FirstOrDefaultAsync(predicate);
+
+        return staff;
+    }
+
+    public async Task<Staff?> GetDetailById(Guid id)
+    {
+        var staff = await Context.Set<Staff>()
                                 .Include(s => s.DepartmentStaffs)
                                 .Include(s => s.TeamStaffs)
-                                .FirstOrDefaultAsync(predicate);
+                                .FirstOrDefaultAsync(s => s.Id == id);
 
         return staff;
     }
