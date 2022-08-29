@@ -106,7 +106,8 @@
     "Add Department": "新增部门",
     "Copy Department": "复制部门",
     "Enter department name": "输入部门名称",
-    "Relocate former department staff": "迁移原部门人员"
+    "Relocate former department staff": "迁移原部门人员",
+    "Department deleted successfully": "部门删除成功"
   },
 
   "ThirdPartyIdpBlock": {
