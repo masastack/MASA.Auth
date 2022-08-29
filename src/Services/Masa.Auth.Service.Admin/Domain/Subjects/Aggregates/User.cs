@@ -294,8 +294,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         return !string.IsNullOrWhiteSpace(password) && Password == MD5Utils.EncryptRepeat(password);
     }
 
-    public void AddRoles(params Guid[] roleIds)
+    public void AddRoles(IEnumerable<Guid> roleIds)
     {
+        roleIds = roleIds.Distinct();
         _roles = _roles.MergeBy(
            roleIds.Select(roleId => new UserRole(roleId)),
            item => item.RoleId);

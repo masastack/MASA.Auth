@@ -12,8 +12,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />		
 		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />

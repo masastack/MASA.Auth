@@ -117,7 +117,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
-        var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(
+        var response = await _autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectDto>(
             query.Search.TrimStart(' ').TrimEnd(' ')
         );
         query.Result = response.Data;
