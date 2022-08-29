@@ -367,7 +367,9 @@
   "Client": "客户端",
   "ClientBlock": {
     "ClientId": "客户端ID",
+    "ClientIdTips": "客户端唯一ID",
     "ClientName": "客户端名称",
+    "ClientNameTips": "客户端显示名称（授权页等）",
     "ClientUri": "客户端Uri",
     "ClientType": "类型",
     "PostLogoutRedirectUri": "注销跳转地址",
@@ -430,9 +432,9 @@
     "AlwaysSendClientClaims": "始终发送客户声明",
     "AlwaysSendClientClaimsTips": "是否将为每个流发送客户端声明。如果不是，仅用于客户端凭证流（默认为false）",
     "RefreshTokenUsage": "刷新令牌方式",
-    "RefreshTokenUsageTips": "ReUse 刷新令牌时，刷新令牌句柄将保持不变 \r\n OneTime 刷新令牌时将更新刷新令牌句柄。这是默认值。",
+    "RefreshTokenUsageTips": "ReUse 刷新令牌时，刷新令牌句柄将保持不变 \r\nOneTime 刷新令牌时将更新刷新令牌句柄。这是默认值。",
     "RefreshTokenExpiration": "刷新令牌过期类型",
-    "RefreshTokenExpirationTips": "Absolute 刷新令牌将在固定时间点到期（由AbsoluteRefreshTokenLifetime指定） \r\n Sliding刷新令牌时，将更新刷新令牌的生命周期（按SlidingRefreshTokenLifetime中指定的值）。生命周期不会超过AbsoluteRefreshTokenLifetime。",
+    "RefreshTokenExpirationTips": "Absolute 刷新令牌将在固定时间点到期（由AbsoluteRefreshTokenLifetime指定） \r\nSliding刷新令牌时，将更新刷新令牌的生命周期（按SlidingRefreshTokenLifetime中指定的值）。生命周期不会超过AbsoluteRefreshTokenLifetime。",
     "AllowedIdentityTokenSigningAlgorithms": "身份令牌允许的签名算法",
     "AllowedIdentityTokenSigningAlgorithmsTips": "身份令牌允许的签名算法列表。 如果为空，将使用服务器默认的签名算法。"
   },

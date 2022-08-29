@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Masa.Auth.ApiGateways.Caller": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:63413;http://localhost:63414"
+    }
+  }
+}

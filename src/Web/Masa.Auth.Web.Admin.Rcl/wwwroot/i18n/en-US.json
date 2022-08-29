@@ -6,6 +6,8 @@
   "ThirdPartyIdp": "ThirdParty identity provider",
   "BasicInformation": "Basic Information",
   "Support mdi and fas icon": "Support like mdi-* and fa-* icons",
+  "ClientIdTips": "Unique ID of the client",
+  "ClientNameTips": "Client display name (used for logging and consent screen)",
   "AllowedCorsOriginsTips": "CORS policy for JavaScript clients.",
   "ClientPropertiesTips": "Put client any extra data as needed.",
   "ConsentLifetimeTips": "Lifetime of a user consent in seconds. Defaults to null (no expiration).",
@@ -28,7 +30,7 @@
   "AlwaysIncludeUserClaimsInIdTokenTips": "When requesting both an id token and access token, should the user claims always be added to the id token instead of requiring the client to use the userinfo endpoint. Default is false.",
   "AllowAccessTokensViaBrowserTips": "Specifies whether this client is allowed to receive access tokens via the browser. This is useful to harden flows that allow multiple response types",
   "AlwaysSendClientClaimsTips": "If set, the client claims will be sent for every flow. If not, only for client credentials flow (default is false)",
-  "RefreshTokenUsageTips": "ReUse the refresh token handle will stay the same when refreshing tokens \r\n OneTime the refresh token handle will be updated when refreshing tokens. This is the default.",
-  "RefreshTokenExpirationTips": "Absolute the refresh token will expire on a fixed point in time (specified by the AbsoluteRefreshTokenLifetime). This is the default. \r\n Sliding when refreshing the token, the lifetime of the refresh token will be renewed (by the amount specified in SlidingRefreshTokenLifetime). The lifetime will not exceed AbsoluteRefreshTokenLifetime.",
+  "RefreshTokenUsageTips": "ReUse the refresh token handle will stay the same when refreshing tokens \r\nOneTime the refresh token handle will be updated when refreshing tokens. This is the default.",
+  "RefreshTokenExpirationTips": "Absolute the refresh token will expire on a fixed point in time (specified by the AbsoluteRefreshTokenLifetime). This is the default. \r\nSliding when refreshing the token, the lifetime of the refresh token will be renewed (by the amount specified in SlidingRefreshTokenLifetime). The lifetime will not exceed AbsoluteRefreshTokenLifetime.",
   "AllowedIdentityTokenSigningAlgorithmsTips": "List of allowed signing algorithms for identity token. If empty, will use the server default signing algorithm."
 }
