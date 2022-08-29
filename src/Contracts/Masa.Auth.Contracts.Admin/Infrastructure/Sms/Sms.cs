@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Sms;
 
-public class Sms: IScopedDependency
+public class Sms : IScopedDependency
 {
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
@@ -21,7 +21,6 @@ public class Sms: IScopedDependency
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
         {
-            //todo dcc
             ChannelCode = _smsOptions.Value.ChannelCode,
             ChannelType = ChannelTypes.Sms,
             TemplateCode = _smsOptions.Value.TemplateCode,
@@ -55,8 +54,13 @@ public class Sms: IScopedDependency
     public async Task<bool> VerifyMsgCodeAsync(string key, string code)
     {
         var codeCache = await _distributedCacheClient.GetAsync<string>(key);
-        if(codeCache != code) return false;
+        if (codeCache != code) return false;
         await _distributedCacheClient.RemoveAsync<string>(key);
         return true;
+    }
+
+    public async Task<bool> CheckAlreadySendAsync(string key)
+    {
+        return await _distributedCacheClient.ExistsAsync<string>(key);
     }
 }

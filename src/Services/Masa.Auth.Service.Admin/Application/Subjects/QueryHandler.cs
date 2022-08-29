@@ -173,17 +173,22 @@ public class QueryHandler
         }
         var staffQuery = _authDbContext.Set<Staff>().Where(condition);
         var total = await staffQuery.LongCountAsync();
-        var staffs = await staffQuery
-                                    .Include(s => s.DepartmentStaffs)
-                                    .ThenInclude(ds => ds.Department)
-                                    .Include(s => s.Position)
-                                    .OrderByDescending(s => s.ModificationTime)
-                                    .ThenByDescending(s => s.CreationTime)
-                                    .Skip((query.Page - 1) * query.PageSize)
-                                    .Take(query.PageSize)
-                                    .ToListAsync();
+        var staffs = await staffQuery.Include(s => s.User)
+                                     .Include(s => s.DepartmentStaffs)
+                                     .ThenInclude(ds => ds.Department)
+                                     .Include(s => s.Position)
+                                     .OrderByDescending(s => s.ModificationTime)
+                                     .ThenByDescending(s => s.CreationTime)
+                                     .Skip((query.Page - 1) * query.PageSize)
+                                     .Take(query.PageSize)
+                                     .ToListAsync();
 
-        query.Result = new(total, staffs.Select(staff => (StaffDto)staff).ToList());
+        query.Result = new(total, staffs.Select(staff => 
+        {
+            var staffDto = (StaffDto)staff;
+            staffDto.Account = staff.User.Account;
+            return staffDto;
+        }).ToList());
     }
 
     [EventHandler]

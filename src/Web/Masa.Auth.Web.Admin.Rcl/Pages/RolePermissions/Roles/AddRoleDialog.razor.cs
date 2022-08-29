@@ -22,6 +22,8 @@ public partial class AddRoleDialog
 
     public bool Preview { get; set; }
 
+    private int Step { get; set; } = 1;
+
     protected override string? PageName { get; set; } = "RoleBlock";
 
     private async Task UpdateVisible(bool visible)
@@ -42,6 +44,7 @@ public partial class AddRoleDialog
         {
             Role = new();
             if (RoleSelect is not null) await RoleSelect.ReloadAsync();
+            Step = 1;
         }
     }
 
@@ -56,6 +59,15 @@ public partial class AddRoleDialog
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
+        }
+    }
+
+    async Task NextStep(EditContext context)
+    {        
+        var success = context.Validate();
+        if(success)
+        {
+            Step = 2;
         }
     }
 }

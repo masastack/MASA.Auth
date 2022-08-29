@@ -15,5 +15,5 @@ public class ClientConsentDto
 
     public bool AllowRememberConsent { get; set; }
 
-    public int ConsentLifetime { get; set; }
+    public int? ConsentLifetime { get; set; }
 }

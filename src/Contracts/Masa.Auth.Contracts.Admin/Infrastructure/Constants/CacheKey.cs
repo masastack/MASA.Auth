@@ -13,9 +13,9 @@ public static class CacheKey
     const string ACCOUNT_LOGIN_PRE = "account_login:";
     const string LDAP_OPTIONS_PRE = "ldap_options:";
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
-    const string UPDATE_USER_PHONENUMBER_MSG_CODE = "update_user_phoneNumber_msg_code:";
-    const string VERIFIY_USER_PHONENUMBER_MSG_CODE = "verifiy_user_phoneNumber_msg_code:";
-    const string VERIFIY_USER_PHONENUMBER_MSG_CODE_RESULT = "verifiy_user_phoneNumber_msg_code_result:";
+    const string MSG_CODE_FOR_UPDATE_USER_PHONENUMBER = "msg_code_update_user_phoneNumber:";
+    const string MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER = "msg_code_verifiy_user_phoneNumber:";
+    const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_result:";
     const string USER_ELEMENT_PERMISSION_CODE_PRE = "user_element_permission_code:";
 
     public static string PermissionKey(Guid permissionId)
@@ -53,19 +53,19 @@ public static class CacheKey
         return $"{ACCOUNT_LOGIN_PRE}{account}";
     }
 
-    public static string UpdateUserPhoneNumberKey(string userId, string phoneNumber)
+    public static string MsgCodeForUpdateUserPhoneNumberKey(string userId, string phoneNumber)
     {
-        return $"{UPDATE_USER_PHONENUMBER_MSG_CODE}{userId}{phoneNumber}";
+        return $"{MSG_CODE_FOR_UPDATE_USER_PHONENUMBER}{userId}{phoneNumber}";
     }
 
-    public static string VerifiyUserPhoneNumberKey(string userId, string phoneNumber)
+    public static string MsgCodeForVerifiyUserPhoneNumberKey(string userId, string phoneNumber)
     {
-        return $"{VERIFIY_USER_PHONENUMBER_MSG_CODE}{userId}{phoneNumber}";
+        return $"{MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER}{userId}{phoneNumber}";
     }
 
     public static string VerifiyUserPhoneNumberResultKey(string userId, string phoneNumber)
     {
-        return $"{VERIFIY_USER_PHONENUMBER_MSG_CODE_RESULT}{userId}{phoneNumber}";
+        return $"{VERIFIY_USER_PHONENUMBER_RESULT}{userId}{phoneNumber}";
     }
 
     public static string UserElementPermissionCodeKey(Guid userId, string appId)
