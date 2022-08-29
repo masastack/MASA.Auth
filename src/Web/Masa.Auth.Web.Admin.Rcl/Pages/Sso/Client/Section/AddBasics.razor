@@ -5,10 +5,10 @@
         <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
     </MCol>
     <MCol Md=6>
-        <STextField Required @bind-Value="Dto.ClientId" Label="@T("ClientId")" />
+        <STextField Required @bind-Value="Dto.ClientId" Label="@T("ClientId")" Tooltip="@T("ClientIdTips")" />
     </MCol>
     <MCol Md=6>
-        <STextField Required @bind-Value="Dto.ClientName" Label="@T("ClientName")" />
+        <STextField Required @bind-Value="Dto.ClientName" Label="@T("ClientName")" Tooltip="@T("ClientNameTips")" />
     </MCol>
     <MCol Md=6>
         <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />

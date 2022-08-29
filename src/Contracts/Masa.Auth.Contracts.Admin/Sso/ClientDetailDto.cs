@@ -80,7 +80,7 @@ public class ClientDetailDto : AddClientDto
     #region Consent Screen
     public bool AllowRememberConsent { get; set; }
 
-    public int ConsentLifetime { get; set; }
+    public int? ConsentLifetime { get; set; }
     #endregion
 
     #region Properties
