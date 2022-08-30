@@ -19,14 +19,13 @@ public class TeamCommandHandler
                               RoleDomainService roleDomainService,
                               IMasaConfiguration masaConfiguration,
                               IClient aliyunClient,
-                              DaprClient daprClient)
+                              IOptions<OssOptions> ossOptions)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
         _roleDomainService = roleDomainService;
         _aliyunClient = aliyunClient;
-
-        _bucket = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result["bucket"];
+        _bucket = ossOptions.Value.Bucket;
         _cdnEndpoint = masaConfiguration.Local.GetValue<string>("CdnEndpoint");
     }
 

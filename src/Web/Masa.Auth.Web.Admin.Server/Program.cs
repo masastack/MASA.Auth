@@ -8,26 +8,24 @@ builder.WebHost.UseKestrel(option =>
     options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
 });
 
-builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = builder.Configuration["AuthServiceBaseAddress"]);
 builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var masaConfiguration = builder.GetMasaConfiguration();
-
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
-builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", masaConfiguration.Local["AuthServiceBaseAddress"], masaConfiguration.Local["McServiceBaseAddress"]);
+builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"), publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-builder.Services.AddMasaOpenIdConnect(masaConfiguration.Local);
+builder.Services.AddMasaOpenIdConnect(publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>());
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 //builder.WebHost.UseStaticWebAssets();

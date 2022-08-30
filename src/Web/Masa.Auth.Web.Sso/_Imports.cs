@@ -58,3 +58,5 @@ global using System.Security.Cryptography.X509Certificates;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.RegularExpressions;
+global using Masa.BuildingBlocks.Configuration;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
