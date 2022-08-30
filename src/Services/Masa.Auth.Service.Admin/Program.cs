@@ -6,14 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoInject();
 builder.AddObservability();
 
-//#if DEBUG
-//builder.Services.AddDaprStarter(opt =>
-//{
-//    opt.DaprHttpPort = 3600;
-//    opt.DaprGrpcPort = 3601;
-//});
-//#endif
-//builder.Services.AddDaprClient();
+#if DEBUG
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
+#endif
+builder.Services.AddDaprClient();
 builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
@@ -35,49 +35,52 @@ builder.Services.AddMasaIdentityModel(options =>
     options.UserId = "sub";
 });
 
-builder.Services.AddScoped<EnvironmentMiddleware>();
-builder.Services.AddScoped<MasaAuthorizeMiddleware>();
-builder.Services.AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
-builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
-builder.Services.AddAuthorization(options =>
-{
-    var unexpiredPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
-        .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
-        .Build();
-    options.DefaultPolicy = unexpiredPolicy;
-});
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer("Bearer", options =>
-{
-    //todo dcc
-    options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
-    options.RequireHttpsMetadata = false;
-    //options.Audience = "";
-    options.TokenValidationParameters.ValidateAudience = false;
-    options.MapInboundClaims = false;
-});
+builder.Services
+    .AddScoped<EnvironmentMiddleware>()
+    .AddScoped<MasaAuthorizeMiddleware>()
+    .AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>()
+    .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
+    .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
+    .AddAuthorization(options =>
+    {
+        var unexpiredPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
+            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+            .Build();
+        options.DefaultPolicy = unexpiredPolicy;
+    })
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer("Bearer", options =>
+    {
+        //todo dcc
+        options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.RequireHttpsMetadata = false;
+        //options.Audience = "";
+        options.TokenValidationParameters.ValidateAudience = false;
+        options.MapInboundClaims = false;
+    });
 
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
 var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddMasaRedisCache(defaultConfiguration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
-builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
-builder.Services.AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"));
-await builder.Services.AddSchedulerJobAsync();
-builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
-builder.Services.AddLadpContext();
-builder.Services.AddElasticsearchAutoComplete();
+
+await builder.Services
+            .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
+            .AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"))
+            .AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"))
+            .AddLadpContext()
+            .AddElasticsearchAutoComplete()
+            .AddSchedulerJobAsync();
+
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();
-
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 .AddEndpointsApiExplorer()
