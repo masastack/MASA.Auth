@@ -232,6 +232,29 @@ public class CommandHandler
     }
 
     [EventHandler]
+    public async Task SendMsgCodeAsync(SendMsgCodeCommand command)
+    {
+        var model = command.Model;
+        if (model.SendMsgCodeType is SendMsgCodeTypes.VerifiyPhoneNumber)
+        {
+            var sendCommand = new SendMsgCodeForVerifiyPhoneNumberCommand(new() 
+            {
+                UserId = model.UserId        
+            });
+            await _eventBus.PublishAsync(sendCommand);
+        }
+        else
+        {
+            var sendCommand = new SendMsgCodeForUpdatePhoneNumberCommand(new()
+            {
+                UserId = model.UserId,
+                PhoneNumber = model.PhoneNumber
+            });
+            await _eventBus.PublishAsync(sendCommand);
+        }
+    }
+
+    [EventHandler]
     public async Task SendMsgCodeForVerifiyPhoneNumberAsync(SendMsgCodeForVerifiyPhoneNumberCommand command)
     {
         var model = command.Model;
@@ -251,7 +274,7 @@ public class CommandHandler
     {
         var model = command.Model;
         await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+        var msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
         var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
         if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
         else
@@ -261,7 +284,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task<bool> VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
     {
         var model = command.Model;
         var user = await CheckUserExistAsync(model.UserId);
@@ -269,10 +292,16 @@ public class CommandHandler
         if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
         {
             var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _cache.SetAsync(resultKey, true);
-            return true;
+            var options = new CombinedCacheEntryOptions<bool>
+            {
+                DistributedCacheEntryOptions = new()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60 * 10)
+                }
+            };
+            await _cache.SetAsync(resultKey, true, options);
+            command.Result = true;
         }
-        return false;
     }
 
     [EventHandler]
@@ -280,9 +309,13 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
+        var checkCurrentPhoneNumber = string.IsNullOrEmpty(user.PhoneNumber);
         var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-        var success = await _cache.GetAsync<bool>(resultKey);
-        if (success)
+        if (checkCurrentPhoneNumber is false)
+        {            
+            checkCurrentPhoneNumber = await _cache.GetAsync<bool>(resultKey);
+        }
+        if (checkCurrentPhoneNumber)
         {
             var key = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
             if (await _sms.VerifyMsgCodeAsync(key, userDto.VerificationCode))
@@ -292,6 +325,7 @@ public class CommandHandler
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
                 await _cache.RemoveAsync<bool>(resultKey);
+                command.Result = true;
             }
         }
     }

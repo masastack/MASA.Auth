@@ -229,8 +229,8 @@ public class QueryHandler
             staffDetailModel.Position = staff.Position?.Name ?? "";
             staffDetailModel.Roles = staff.User.Roles.Select(ur => ur.Role).Adapt<List<RoleModel>>();
             staffDetailModel.Teams = new();
+            query.Result = staffDetailModel;
         }
-        else query.Result = null;
     }
 
     [EventHandler]

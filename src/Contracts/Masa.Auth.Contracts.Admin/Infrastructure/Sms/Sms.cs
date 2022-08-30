@@ -43,7 +43,7 @@ public class Sms : IScopedDependency
         {
             DistributedCacheEntryOptions = new()
             {
-                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromMinutes(1)
+                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromSeconds(62)
             }
         };
         await _distributedCacheClient.SetAsync(key, code, options);
