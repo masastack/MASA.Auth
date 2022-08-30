@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Extensions;
 
 public static class ElasticsearchAutoCompleteExtensions
 {
-    public static void AddElasticsearchAutoComplete(this IServiceCollection services)
+    public static IServiceCollection AddElasticsearchAutoComplete(this IServiceCollection services)
     {
         var options = services.BuildServiceProvider()
                               .GetRequiredService<IOptions<UserAutoCompleteOptions>>()
@@ -21,5 +21,7 @@ public static class ElasticsearchAutoCompleteExtensions
             option.UseIndexName(options.Index);
             if (string.IsNullOrEmpty(options.Alias) is false) option.UseAlias(options.Alias);
         });
+
+        return services;
     }
 }

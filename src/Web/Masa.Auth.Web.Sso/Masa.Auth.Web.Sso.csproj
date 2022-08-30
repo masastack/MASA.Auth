@@ -27,6 +27,8 @@
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+		<PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
