@@ -9,20 +9,21 @@ public static class SchedulerJobServiceCollectionExtensions
 {
     public static async Task AddSchedulerJobAsync(this IServiceCollection services)
     {
-        await SafeExcuteAsync(services.AddSyncUserAutoCompleteJobAsync());
-        await SafeExcuteAsync(services.AddSyncUserRedisJobAsync());
-        await SafeExcuteAsync(services.AddSyncOidcRedisJobAsync());
+        using IServiceScope scope = services.BuildServiceProvider().CreateScope();
+        var serviceProvider = scope.ServiceProvider;
+        await serviceProvider.SafeExcuteAsync(AddSyncUserAutoCompleteJobAsync);
+        await serviceProvider.SafeExcuteAsync(AddSyncUserRedisJobAsync);
+        await serviceProvider.SafeExcuteAsync(AddSyncOidcRedisJobAsync);
     }
 
-    public static async Task AddSyncUserAutoCompleteJobAsync(this IServiceCollection services)
+    public static async Task AddSyncUserAutoCompleteJobAsync(this IServiceProvider serviceProvider)
     {
-        using IServiceScope scope = services.BuildServiceProvider().CreateScope();
-        var authUrl = scope.ServiceProvider
+        var authUrl = serviceProvider
                           .GetRequiredService<IMasaConfiguration>()
                           .ConfigurationApi
                           .GetDefault()
                           .GetValue<string>("AppSettings:AuthClient:Url");
-        var schedulerClient = scope.ServiceProvider.GetRequiredService<ISchedulerClient>();
+        var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
@@ -47,15 +48,14 @@ public static class SchedulerJobServiceCollectionExtensions
         });
     }
 
-    public static async Task AddSyncUserRedisJobAsync(this IServiceCollection services)
+    public static async Task AddSyncUserRedisJobAsync(this IServiceProvider serviceProvider)
     {
-        using IServiceScope scope = services.BuildServiceProvider().CreateScope();
-        var authUrl = scope.ServiceProvider
+        var authUrl = serviceProvider
                           .GetRequiredService<IMasaConfiguration>()
                           .ConfigurationApi
                           .GetDefault()
                           .GetValue<string>("AppSettings:AuthClient:Url");
-        var schedulerClient = scope.ServiceProvider.GetRequiredService<ISchedulerClient>();
+        var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
@@ -80,15 +80,14 @@ public static class SchedulerJobServiceCollectionExtensions
         });
     }
 
-    public static async Task AddSyncOidcRedisJobAsync(this IServiceCollection services)
+    public static async Task AddSyncOidcRedisJobAsync(this IServiceProvider serviceProvider)
     {
-        using IServiceScope scope = services.BuildServiceProvider().CreateScope();
-        var authUrl = scope.ServiceProvider
+        var authUrl = serviceProvider
                           .GetRequiredService<IMasaConfiguration>()
                           .ConfigurationApi
                           .GetDefault()
                           .GetValue<string>("AppSettings:AuthClient:Url");
-        var schedulerClient = scope.ServiceProvider.GetRequiredService<ISchedulerClient>();
+        var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
@@ -112,14 +111,16 @@ public static class SchedulerJobServiceCollectionExtensions
         });
     }
 
-    async static Task SafeExcuteAsync(Task task)
+    async static Task SafeExcuteAsync(this IServiceProvider serviceProvider, Func<IServiceProvider, Task> job, [CallerArgumentExpression("job")] string? jobName = null)
     {
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
         try
         {
-            await task;
+            await job(serviceProvider);
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, $"sync scheduler {jobName} error");
         }
     }
 }

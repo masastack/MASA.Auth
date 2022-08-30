@@ -19,3 +19,4 @@ global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 global using System.Diagnostics;
 global using System.Security.Cryptography.X509Certificates;
 global using Masa.BuildingBlocks.Configuration;
+global using Masa.Utils.Security.Authentication.OpenIdConnect;

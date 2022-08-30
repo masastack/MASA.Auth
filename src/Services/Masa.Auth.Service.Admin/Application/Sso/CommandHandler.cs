@@ -26,8 +26,6 @@ public class CommandHandler
         _syncCache = syncCache;
     }
 
-
-
     #region Client
     [EventHandler]
     public async Task AddClientAsync(AddClientCommand addClientCommand)

@@ -139,3 +139,4 @@ global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Sms;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Caches;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
+global using System.Runtime.CompilerServices;
