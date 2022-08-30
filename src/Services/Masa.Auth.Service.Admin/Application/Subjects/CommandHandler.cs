@@ -170,7 +170,7 @@ public class CommandHandler
         var userModel = command.User;
         var user = default(User);
         var roles = new List<Guid>();
-        if(userModel.RoleNames.Any())
+        if (userModel.RoleNames.Any())
         {
             roles.AddRange(await _authDbContext.Set<Role>()
                                                 .Where(role => userModel.RoleNames.Contains(role.Name))
@@ -180,9 +180,9 @@ public class CommandHandler
         }
         if (userModel.Id != default)
         {
-            user = await _userRepository.FindAsync(u => u.Id == userModel.Id);           
+            user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
             if (user is not null)
-            {               
+            {
                 await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
                 roles.AddRange(user.Roles.Select(role => role.RoleId));
@@ -237,9 +237,9 @@ public class CommandHandler
         var model = command.Model;
         if (model.SendMsgCodeType is SendMsgCodeTypes.VerifiyPhoneNumber)
         {
-            var sendCommand = new SendMsgCodeForVerifiyPhoneNumberCommand(new() 
+            var sendCommand = new SendMsgCodeForVerifiyPhoneNumberCommand(new()
             {
-                UserId = model.UserId        
+                UserId = model.UserId
             });
             await _eventBus.PublishAsync(sendCommand);
         }
@@ -312,7 +312,7 @@ public class CommandHandler
         var checkCurrentPhoneNumber = string.IsNullOrEmpty(user.PhoneNumber);
         var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
         if (checkCurrentPhoneNumber is false)
-        {            
+        {
             checkCurrentPhoneNumber = await _cache.GetAsync<bool>(resultKey);
         }
         if (checkCurrentPhoneNumber)
@@ -603,6 +603,7 @@ public class CommandHandler
                 PhoneNumber = staffDto.PhoneNumber,
                 JobNumber = staffDto.JobNumber
             };
+            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
             await AddStaffAsync(addStaffDto);
         }
     }
@@ -904,7 +905,7 @@ public class CommandHandler
             command.Result = await AddThirdPartyUserAsync(addThirdPartyUserDto);
         }
         var upsertStaffDto = command.Adapt<UpsertStaffForLdapDto>();
-        upsertStaffDto.UserId = thirdPartyUser?.UserId;
+        upsertStaffDto.UserId = command.Result.Id;
         var upsertStaffCommand = new UpsertStaffForLdapCommand(upsertStaffDto);
         await _eventBus.PublishAsync(upsertStaffCommand);
     }

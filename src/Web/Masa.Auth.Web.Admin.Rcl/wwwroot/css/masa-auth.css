@@ -1065,3 +1065,7 @@ input::-webkit-input-placeholder {
     border-bottom-left-radius: 0 !important;
     border-left: 0 !important;
 }
+
+.m-input__append-inner .d-flex {
+    margin-top:0 !important;
+}

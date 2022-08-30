@@ -2,7 +2,7 @@
 
 <MRow>
     <MCol Md=12 Class="text-center">
-        <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
+        <UploadAvatar @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
     </MCol>
     <MCol Md=12>
         <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
