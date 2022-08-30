@@ -246,7 +246,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task<bool> VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
     {
         var model = command.Model;
         var user = await CheckUserExistAsync(model.UserId);
@@ -255,9 +255,7 @@ public class CommandHandler
         {
             var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
             await _cache.SetAsync(resultKey, true);
-            return true;
         }
-        return false;
     }
 
     [EventHandler]

@@ -15,6 +15,7 @@ public partial class Organization
     GetStaffsDto _getStaffsDto = new GetStaffsDto(1, 10, "", Guid.Empty);
     CopyOrgSheet _copyOrgSheet = null!;
     OrgSheet _orgSheet = null!;
+    string _searchName = string.Empty;
 
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
 
@@ -85,6 +86,7 @@ public partial class Organization
     {
         await DepartmentService.RemoveAsync(departmentId);
         await LoadDepartmentsAsync();
+        OpenSuccessMessage(T("Department deleted successfully"));
     }
 
     private async Task SubmitAsync(UpsertDepartmentDto dto)
