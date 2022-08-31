@@ -25,8 +25,6 @@ public class CommandHandler
         _permissionDomainService = permissionDomainService;
     }
 
-
-
     #region Role
 
     [EventHandler(1)]

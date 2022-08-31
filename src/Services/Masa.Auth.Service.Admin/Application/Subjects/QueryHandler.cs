@@ -117,7 +117,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
-        var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(
+        var response = await _autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectDto>(
             query.Search.TrimStart(' ').TrimEnd(' ')
         );
         query.Result = response.Data;
@@ -229,8 +229,8 @@ public class QueryHandler
             staffDetailModel.Position = staff.Position?.Name ?? "";
             staffDetailModel.Roles = staff.User.Roles.Select(ur => ur.Role).Adapt<List<RoleModel>>();
             staffDetailModel.Teams = new();
+            query.Result = staffDetailModel;
         }
-        else query.Result = null;
     }
 
     [EventHandler]

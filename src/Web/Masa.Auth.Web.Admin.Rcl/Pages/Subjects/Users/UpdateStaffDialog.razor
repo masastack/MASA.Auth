@@ -6,7 +6,7 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center">
-                        <DefaultUploadImage @bind-Value="Staff.Avatar" WhenFileChangeUpload />
+                        <UploadAvatar @bind-Value="Staff.Avatar" WhenFileChangeUpload />
                         <MTextField @bind-Value="Staff.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
                     </div>
                 </div>

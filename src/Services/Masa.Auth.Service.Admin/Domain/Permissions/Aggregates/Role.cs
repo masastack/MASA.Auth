@@ -12,11 +12,25 @@ public class Role : FullAggregateRoot<Guid, Guid>
     private List<TeamRole> _teams = new();
     private User? _createUser;
     private User? _modifyUser;
+    private string _name = "";
+    private string _description = "";
     private int _limit;
 
-    public string Name { get; private set; }
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            _name = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Name));
+        }
+    }
 
-    public string Description { get; private set; }
+    [AllowNull]
+    public string Description
+    {
+        get => _description;
+        set => _description = value ?? "";
+    }
 
     public bool Enabled { get; private set; }
 
@@ -48,17 +62,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public User? ModifyUser => _modifyUser;
 
-    public Role()
-    {
-        Name = "";
-        Description = "";
-    }
-
-    public Role(string name, string description) : this(name, description, true, 1)
-    {
-    }
-
-    public Role(string name, string description, bool enabled, int limit)
+    public Role(string name, string? description, bool enabled, int limit)
     {
         Name = name;
         Description = description;
@@ -97,7 +101,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
             });
     }
 
-    public void Update(string name, string description, bool enabled, int limit)
+    public void Update(string name, string? description, bool enabled, int limit)
     {
         Name = name;
         Description = description;

@@ -20,7 +20,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddElasticsearchAutoComplete();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"), publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddSingleton<AddStaffValidator>();
