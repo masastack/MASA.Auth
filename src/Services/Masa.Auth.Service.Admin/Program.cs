@@ -123,6 +123,7 @@ builder.Services
     .UseEventBus(eventBusBuilder =>
     {
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
+        eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
