@@ -21,13 +21,11 @@ public class SsoAuthenticationStateProvider : RevalidatingServerAuthenticationSt
             .Where(c => c.Type.Equals("sid"))
             .Select(c => c.Value)
             .FirstOrDefault();
-
         var name =
             authenticationState.User.Claims
             .Where(c => c.Type.Equals("name"))
             .Select(c => c.Value)
             .FirstOrDefault() ?? string.Empty;
-
         _logger.LogInformation($"\nValidate: {name} / {sid}");
 
         return Task.FromResult(true);

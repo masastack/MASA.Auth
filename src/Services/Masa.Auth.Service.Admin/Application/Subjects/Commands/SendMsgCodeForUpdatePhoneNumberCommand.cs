@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record SendMsgCodeForUpdatePhoneNumberCommand(SendMsgCodeForUpdatePhoneNumberModel Model) : Command
+public record SendMsgCodeForUpdatePhoneNumberCommand(SendMsgCodeModel Model) : Command
 {
 }
