@@ -12,10 +12,11 @@ public class SsoAuthenticationStateProvider : RevalidatingServerAuthenticationSt
         _logger = loggerFactory.CreateLogger<SsoAuthenticationStateProvider>();
     }
 
-    protected override TimeSpan RevalidationInterval => TimeSpan.FromSeconds(30);
+    protected override TimeSpan RevalidationInterval => TimeSpan.FromSeconds(10);
 
     protected override Task<bool> ValidateAuthenticationStateAsync(AuthenticationState authenticationState, CancellationToken cancellationToken)
     {
+        var d = authenticationState.User.IsAuthenticated();
         var sid =
             authenticationState.User.Claims
             .Where(c => c.Type.Equals("sid"))

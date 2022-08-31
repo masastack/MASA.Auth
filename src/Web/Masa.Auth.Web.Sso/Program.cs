@@ -10,6 +10,12 @@ builder.WebHost.UseKestrel(option =>
 });
 
 // Add services to the container.
+builder.AddMasaConfiguration(configurationBuilder =>
+{
+    configurationBuilder.UseDcc();
+});
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>
@@ -23,13 +29,13 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddMasaIdentityModel();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthServiceUrl"));
-builder.Services.AddMcClient(builder.Configuration.GetValue<string>("McServiceUrl"));
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmServiceUrl"));
+builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
+builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisOption);
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>

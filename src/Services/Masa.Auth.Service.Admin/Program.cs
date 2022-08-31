@@ -15,21 +15,18 @@ builder.Services.AddDaprStarter(opt =>
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-builder.Services.AddAliyunStorage(async serviceProvider =>
+builder.AddMasaConfiguration(configurationBuilder =>
 {
-    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var aliyunOssConfig = await daprClient.GetSecretAsync("localsecretstore", "aliyun-oss");
-    var accessId = aliyunOssConfig["access_id"];
-    var accessSecret = aliyunOssConfig["access_secret"];
-    var endpoint = aliyunOssConfig["endpoint"];
-    var roleArn = aliyunOssConfig["role_arn"];
-    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
+    configurationBuilder.UseDcc();
+});
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
+builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
+{
+    Sts = new AliyunStsOptions()
     {
-        Sts = new AliyunStsOptions()
-        {
-            RegionId = "cn-hangzhou"
-        }
-    };
+        RegionId = ossOptions.RegionId
+    }
 });
 
 builder.Services.AddMasaIdentityModel(options =>
@@ -39,50 +36,51 @@ builder.Services.AddMasaIdentityModel(options =>
     options.UserId = "sub";
 });
 
-builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
-builder.Services.AddAuthorization(options =>
-{
-    var unexpiredPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
-        .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
-        .Build();
-    options.DefaultPolicy = unexpiredPolicy;
-});
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer("Bearer", options =>
-{
-    //todo dcc
-    options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
-    options.RequireHttpsMetadata = false;
-    //options.Audience = "";
-    options.TokenValidationParameters.ValidateAudience = false;
-    options.MapInboundClaims = false;
-});
+builder.Services
+    .AddScoped<EnvironmentMiddleware>()
+    .AddScoped<MasaAuthorizeMiddleware>()
+    .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
+    .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
+    .AddAuthorization(options =>
+    {
+        var unexpiredPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
+            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+            .Build();
+        options.DefaultPolicy = unexpiredPolicy;
+    })
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer("Bearer", options =>
+    {
+        //todo dcc
+        options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.RequireHttpsMetadata = false;
+        //options.Audience = "";
+        options.TokenValidationParameters.ValidateAudience = false;
+        options.MapInboundClaims = false;
+    });
 
 MapsterAdapterConfig.TypeAdapter();
 
-builder.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
 builder.Services.AddDccClient();
-var configuration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
-builder.Services.AddMasaRedisCache(configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
-builder.Services.AddPmClient(configuration.GetValue<string>("AppSettings:PmClient:Url"));
-builder.Services.AddSchedulerClient(configuration.GetValue<string>("AppSettings:SchedulerClient:Url"));
-await builder.Services.AddSchedulerJobAsync();
-builder.Services.AddMcClient(configuration.GetValue<string>("AppSettings:McClient:Url"));
-builder.Services.AddLadpContext();
-builder.Services.AddElasticsearchAutoComplete();
+var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+builder.Services.AddMasaRedisCache(defaultConfiguration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+
+await builder.Services
+            .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
+            .AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"))
+            .AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"))
+            .AddLadpContext()
+            .AddElasticsearchAutoComplete()
+            .AddSchedulerJobAsync();
+
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();
-
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 .AddEndpointsApiExplorer()
@@ -134,13 +132,13 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.Services.AddOidcCache(configuration);
+builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
+        defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
