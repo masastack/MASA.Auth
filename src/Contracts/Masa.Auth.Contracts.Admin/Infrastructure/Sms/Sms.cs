@@ -43,6 +43,7 @@ public class Sms : IScopedDependency
         {
             DistributedCacheEntryOptions = new()
             {
+                // 62 ：Prevent users from failing to submit verification codes at the last second
                 AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromSeconds(62)
             }
         };
