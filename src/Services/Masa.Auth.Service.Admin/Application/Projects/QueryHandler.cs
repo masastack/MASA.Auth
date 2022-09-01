@@ -39,7 +39,8 @@ public class QueryHandler
                 || p.Type == PermissionTypes.Element);
             query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
             {
-                a.Navs = menuPermissions.Where(p => p.AppId == a.Identity).Where(p => p.ParentId == Guid.Empty).Select(p => new PermissionNavDto
+                a.Navs = menuPermissions.Where(p => p.AppId == a.Identity && p.ParentId == Guid.Empty)
+                .OrderBy(p => p.Order).Select(p => new PermissionNavDto
                 {
                     Name = p.Name,
                     Code = p.Id.ToString(),
@@ -103,15 +104,16 @@ public class QueryHandler
 
     private List<PermissionNavDto> GetChildren(Guid parentId, IEnumerable<Permission> all, string domain = "")
     {
-        return all.Where(p => p.ParentId == parentId).Select(p => new PermissionNavDto
-        {
-            Name = p.Name,
-            Icon = p.Icon,
-            Url = $"{domain?.TrimEnd('/')}/{p.Url?.TrimStart('/')}",
-            Code = p.Id.ToString(),
-            PermissionType = p.Type,
-            Children = GetChildren(p.Id, all, domain ?? "")
-        }).ToList();
+        return all.Where(p => p.ParentId == parentId)
+            .OrderBy(p => p.Order).Select(p => new PermissionNavDto
+            {
+                Name = p.Name,
+                Icon = p.Icon,
+                Url = $"{domain?.TrimEnd('/')}/{p.Url?.TrimStart('/')}",
+                Code = p.Id.ToString(),
+                PermissionType = p.Type,
+                Children = GetChildren(p.Id, all, domain ?? "")
+            }).ToList();
     }
 
     [EventHandler]
