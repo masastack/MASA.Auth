@@ -2,7 +2,7 @@
 
 <MRow>
     <MCol Md=12 Class="text-center">
-        <DefaultUploadImage @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
+        <UploadAvatar @bind-Value="Dto.LogoUri" Avatar Size="80" WhenFileChangeUpload />
     </MCol>
     <MCol Md=12>
         <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
@@ -14,7 +14,7 @@
         <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
     </MCol>
     <MCol Md=12>
-        <STextField @bind-Value="Dto.ConsentLifetime" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
+        <STextField @bind-Value="Dto.ConsentLifetime" Tooltip="@T("ConsentLifetimeTips")" Type="number" Label="@T("ConsentLifetime")" Clearable=false />
     </MCol>
 </MRow>
 

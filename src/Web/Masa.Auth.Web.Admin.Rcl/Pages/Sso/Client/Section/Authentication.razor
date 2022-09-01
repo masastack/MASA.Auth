@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<MRow Class="pt-4">
+<MRow Class="pt-4 mr-2">
     <MCol Md=12>
         <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
                           AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
@@ -24,22 +24,22 @@
         </MCol>
     }
     <MCol Md=6>
-        <STextField @bind-Value="Dto.FrontChannelLogoutUri" Label="FrontChannelLogoutUri" />
+        <STextField @bind-Value="Dto.FrontChannelLogoutUri" Label="@T("FrontChannelLogoutUri")" Tooltip="@T("FrontChannelLogoutUriTips")" />
     </MCol>
     <MCol Md=6>
-        <MCheckbox @bind-Value="Dto.FrontChannelLogoutSessionRequired" Label="FrontChannelLogoutSessionRequired"></MCheckbox>
+        <SCheckbox @bind-Value="Dto.FrontChannelLogoutSessionRequired" Label="@T("FrontChannelLogoutSessionRequired")" Tooltip="@T("FrontChannelLogoutSessionRequiredTips")" />
     </MCol>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.BackChannelLogoutUri" Label="BackChannelLogoutUri" />
+        <STextField @bind-Value="Dto.BackChannelLogoutUri" Label="@T("BackChannelLogoutUri")" Tooltip="@T("BackChannelLogoutUriTips")" />
     </MCol>
     <MCol Md=6>
-        <MCheckbox @bind-Value="Dto.BackChannelLogoutSessionRequired" Label="BackChannelLogoutSessionRequired"></MCheckbox>
+        <SCheckbox @bind-Value="Dto.BackChannelLogoutSessionRequired" Label="@T("BackChannelLogoutSessionRequired")" Tooltip="@T("FrontChannelLogoutSessionRequiredTips")" />
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.UserSsoLifetime" Label="UserSsoLifetime" />
+        <SNumberTextField @bind-Value="Dto.UserSsoLifetime" Label="@T("UserSsoLifetime")" Tooltip="@T("UserSsoLifetimeTips")"/>
     </MCol>
     <MCol Md=6>
-        <MCheckbox @bind-Value="Dto.EnableLocalLogin" Label="@T("EnableLocalLogin")" />
+        <SCheckbox @bind-Value="Dto.EnableLocalLogin" Label="@T("EnableLocalLogin")" Tooltip="@T("EnableLocalLoginTips")" />
     </MCol>
     @*        <MCol Md=12>
     <STextField TValue="string" Label="IdentityProviderRestriction" />
@@ -59,20 +59,36 @@
 
     private void AddCallBackRedirectUri()
     {
-        if (Dto.RedirectUris.IndexOf(Dto.RedirectUri) < 0)
+        if (!Uri.TryCreate(Dto.RedirectUri, UriKind.Absolute, out var uri))
         {
-            Dto.RedirectUris.Add($"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}");
-            Dto.RedirectUri = string.Empty;
+            PopupService.AlertAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            return;
         }
+        var redirectUri = $"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}".ToLower();
+        if (Dto.RedirectUris.Contains(redirectUri))
+        {
+            PopupService.AlertAsync(T("Duplicate item"), AlertTypes.Error);
+            return;
+        }
+        Dto.RedirectUris.Add(redirectUri);
+        Dto.RedirectUri = string.Empty;
     }
 
     private void AddLogoutRedirectUri()
     {
-        if (Dto.PostLogoutRedirectUris.IndexOf(Dto.PostLogoutRedirectUri) < 0)
+        if (!Uri.TryCreate(Dto.PostLogoutRedirectUri, UriKind.Absolute, out var uri))
         {
-            Dto.PostLogoutRedirectUris.Add($"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}");
-            Dto.PostLogoutRedirectUri = string.Empty;
+            PopupService.AlertAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            return;
         }
+        var postLogoutRedirectUri = $"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}";
+        if (Dto.PostLogoutRedirectUris.Contains(postLogoutRedirectUri))
+        {
+            PopupService.AlertAsync(T("Duplicate item"), AlertTypes.Error);
+            return;
+        }
+        Dto.PostLogoutRedirectUris.Add(postLogoutRedirectUri);
+        Dto.PostLogoutRedirectUri = string.Empty;
     }
 
     private void RemoveCallBackRedirectUri(string val)

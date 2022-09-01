@@ -9,7 +9,7 @@ public class UpdateRoleDto
 
     public string Name { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -22,12 +22,11 @@ public class UpdateRoleDto
     public UpdateRoleDto()
     {
         Name = "";
-        Description = "";
         Permissions = new();
         ChildrenRoles = new();
     }
 
-    public UpdateRoleDto(Guid id, string name, string description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles)
+    public UpdateRoleDto(Guid id, string name, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles)
     {
         Id = id;
         Name = name;

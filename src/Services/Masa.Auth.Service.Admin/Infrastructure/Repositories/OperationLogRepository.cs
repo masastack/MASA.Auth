@@ -5,22 +5,34 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Repositories;
 
 public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Guid>, IOperationLogRepository
 {
-    IUserContext _userContext;
+    readonly IUserContext _userContext;
+    readonly ILogger<OperationLogRepository> _logger;
 
     public OperationLogRepository(
         AuthDbContext context,
+        ILogger<OperationLogRepository> logger,
         IUnitOfWork unitOfWork,
         IUserContext userContext) : base(context, unitOfWork)
     {
         _userContext = userContext;
+        _logger = logger;
     }
 
     public async Task AddDefaultAsync(OperationTypes operationType, string operationDescription, Guid? @operator = null)
     {
-        @operator ??= _userContext.GetUserId<Guid>();
-        var operatorName = await Context.Set<User>().Where(user => user.Id == @operator).Select(user => user.Name).FirstOrDefaultAsync();
-        await AddAsync(new OperationLog(
-            @operator.Value, operatorName ?? "", operationType, DateTime.Now, operationDescription
-        ));
+        try
+        {
+            @operator ??= _userContext.GetUserId<Guid>();
+            var operatorName = await Context.Set<User>()
+                                            .Where(user => user.Id == @operator).Select(user => user.Name)
+                                            .FirstAsync();
+            await AddAsync(new OperationLog(
+                @operator.Value, operatorName, operationType, default, operationDescription
+            ));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Add operation log error");
+        }
     }
 }

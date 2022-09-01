@@ -28,7 +28,7 @@ public class ClientDetailDto : AddClientDto
 
     public List<string> IdentityProviderRestrictions { get; set; } = new();
 
-    public int UserSsoLifetime { get; set; }
+    public int? UserSsoLifetime { get; set; }
     #endregion
 
     #region Token
@@ -80,7 +80,7 @@ public class ClientDetailDto : AddClientDto
     #region Consent Screen
     public bool AllowRememberConsent { get; set; }
 
-    public int ConsentLifetime { get; set; }
+    public int? ConsentLifetime { get; set; }
     #endregion
 
     #region Properties

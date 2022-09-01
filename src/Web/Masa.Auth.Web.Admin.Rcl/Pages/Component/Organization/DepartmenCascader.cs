@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Organization;
 
-public class DepartmenCascader : MCascader<DepartmentDto, Guid>
+public class DepartmenCascader : SCascader<DepartmentDto, Guid>
 {
     [Inject]
     public AuthCaller AuthCaller { get; set; } = default!;
@@ -18,9 +18,7 @@ public class DepartmenCascader : MCascader<DepartmentDto, Guid>
         ItemValue = value => value.Id;
         ItemChildren = value => value.Children;
         ChangeOnSelect = true;
-        Dense = true;
-        Height = 48;
-        HideDetails = "auto";
+        Class ??= "";
         await base.SetParametersAsync(parameters);
     }
 
@@ -28,5 +26,12 @@ public class DepartmenCascader : MCascader<DepartmentDto, Guid>
     {
         await base.OnInitializedAsync();
         Items = await DepartmentService.GetListAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (string.IsNullOrEmpty(Label))
+            Label = I18n.T("Department");
+        base.OnParametersSet();
     }
 }

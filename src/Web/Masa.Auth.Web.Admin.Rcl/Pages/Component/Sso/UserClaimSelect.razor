@@ -2,7 +2,7 @@
 
 @foreach (var userClaimChunk in UserClaimChunks)
 {
-    <MRow Class="mb-2 mt-0">
+    <MRow Class="@($"mb-2 mt-0 {Class}")">
         @foreach (var userClaim in userClaimChunk)
         {
             <MCol Cols="12/Chunk" Class="py-0">

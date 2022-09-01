@@ -5,13 +5,9 @@ namespace Masa.Auth.Web.Sso.Global.Config;
 
 public class GlobalConfig
 {
-    #region Field
-    private CookieStorage? _cookieStorage;
-    #endregion
-
     #region Property
 
-    public I18n I18n { get; set; }
+    public I18n I18n { get; init; }
 
     public CultureInfo? Culture
     {
@@ -28,14 +24,9 @@ public class GlobalConfig
 
     #endregion
 
-    public GlobalConfig(CookieStorage cookieStorage, I18n i18n, IHttpContextAccessor httpContextAccessor)
+    public GlobalConfig(I18n i18n)
     {
-        _cookieStorage = cookieStorage;
         I18n = i18n;
-        if (httpContextAccessor.HttpContext is not null)
-        {
-            Initialization(httpContextAccessor.HttpContext.Request.Cookies);
-        }
     }
 
     #region event
@@ -43,12 +34,5 @@ public class GlobalConfig
     public delegate void GlobalConfigChanged();
     public event GlobalConfigChanged? OnLanguageChanged;
 
-    #endregion
-
-    #region Method
-
-    public void Initialization(IRequestCookieCollection cookies)
-    {
-    }
     #endregion
 }

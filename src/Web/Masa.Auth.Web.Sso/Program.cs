@@ -10,6 +10,12 @@ builder.WebHost.UseKestrel(option =>
 });
 
 // Add services to the container.
+builder.AddMasaConfiguration(configurationBuilder =>
+{
+    configurationBuilder.UseDcc();
+});
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>
@@ -21,13 +27,17 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment);
+builder.Services.AddMasaIdentityModel();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(builder.Configuration.GetValue<string>("AuthClient:Url"));
-builder.Services.AddPmClient(builder.Configuration.GetValue<string>("PmClient:Url"));
+builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
+builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
 
+builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConfig").Get<RedisConfigurationOptions>())
+var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMasaRedisCache(redisOption);
+builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
@@ -39,6 +49,8 @@ builder.Services.AddOidcCacheStorage(builder.Configuration.GetSection("RedisConf
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
+
+builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
@@ -72,7 +84,6 @@ app.UseIdentityServer();
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();

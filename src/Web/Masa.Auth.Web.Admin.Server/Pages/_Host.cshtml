@@ -5,6 +5,14 @@
 @{
     Layout = "_Layout";
 }
-@model _HostAuthModel
 
-<component type="typeof(Masa.Auth.Web.Admin.Rcl.App)" render-mode="ServerPrerendered" />
+@{
+    var tokens = new BlazorServerTokenData
+    {
+        AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),
+        RefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken),
+        IdToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.IdToken)
+    };
+}
+
+<component type="typeof(Masa.Auth.Web.Admin.Rcl.App)" render-mode="ServerPrerendered" param-TokenState="tokens" />

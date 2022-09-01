@@ -1,9 +1,12 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using BlazorComponent;
 global using BlazorComponent.I18n;
+global using FluentValidation;
 global using IdentityModel;
 global using IdentityServer4;
+global using IdentityServer4.Configuration;
 global using IdentityServer4.EntityFramework.Services;
 global using IdentityServer4.Events;
 global using IdentityServer4.Extensions;
@@ -22,11 +25,16 @@ global using Masa.Auth.Web.Sso.Infrastructure.Services;
 global using Masa.Auth.Web.Sso.Infrastructure.Stores;
 global using Masa.Auth.Web.Sso.Infrastructure.Validation;
 global using Masa.Auth.Web.Sso.Pages.Account.Login;
+global using Masa.Auth.Web.Sso.Pages.Account.Logout.Model;
 global using Masa.Blazor;
-global using Masa.BuildingBlocks.Authentication.Identity;
 global using Masa.BuildingBlocks.StackSdks.Auth;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
+global using Masa.BuildingBlocks.StackSdks.Mc.Enum;
+global using Masa.BuildingBlocks.StackSdks.Mc.Model;
 global using Masa.BuildingBlocks.StackSdks.Pm.Model;
 global using Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage;
+global using Masa.Utils.Caching.Core.Interfaces;
+global using Masa.Utils.Caching.Core.Models;
 global using Masa.Utils.Caching.Redis.Models;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authorization;
@@ -40,12 +48,15 @@ global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Caching.Distributed;
 global using Microsoft.JSInterop;
 global using System.Collections.Concurrent;
-global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics;
 global using System.Globalization;
 global using System.Security.Claims;
 global using System.Security.Cryptography.X509Certificates;
 global using System.Text;
 global using System.Text.Json;
+global using System.Text.RegularExpressions;
+global using Masa.BuildingBlocks.Configuration;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;

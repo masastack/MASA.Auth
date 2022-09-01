@@ -11,12 +11,4 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-
-    public static async Task<IServiceCollection> AddGlobalForWasmAsync(this IServiceCollection services, string baseUri)
-    {
-        using var httpclient = new HttpClient();
-        services.AddScoped<GlobalConfig>();
-
-        return services;
-    }
 }

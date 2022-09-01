@@ -8,6 +8,7 @@ public static class DefaultUserAttributes
     public const string Password = "default9527";
     public const string MaleAvatar = "https://cdn.masastack.com/stack/images/avatar/mr.chen.svg";
     public const string FemaleAvatar = "https://cdn.masastack.com/stack/images/avatar/ms.qu.svg";
+
     public static string GetDefaultAvatar(GenderTypes gender)
     {
         if (gender == GenderTypes.Male) return MaleAvatar;

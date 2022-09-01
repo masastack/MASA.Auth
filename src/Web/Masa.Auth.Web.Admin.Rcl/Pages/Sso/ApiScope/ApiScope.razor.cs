@@ -35,6 +35,7 @@ public partial class ApiScope
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetApiScopesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

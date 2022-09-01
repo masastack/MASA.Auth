@@ -43,7 +43,7 @@
                                Items="_apiPermissions"
                                OnActiveUpdate="ActiveApiPermission"
                                TItem="AppPermissionsViewModel"
-                               TKey="Guid"
+                               TKey="Guid" MandatoryActive
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"
@@ -80,11 +80,11 @@
                                 <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
                                     <MRow>
                                         <MCol Md=12>
-                                            <STextField Label="@T("Code")" Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                            <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" @bind-Value="_menuPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
                                         </MCol>
 
                                         <MCol Md=6>
@@ -113,12 +113,9 @@
                                         <MCol Md=6>
                                             <STextField Label="@T("Permission Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
                                         </MCol>
-                                        @if (_menuPermissionDetailDto.Type == PermissionTypes.Menu)
-                                        {
-                                            <MCol Md=6>
-                                                <STextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
-                                            </MCol>
-                                        }
+                                        <MCol Md=6>
+                                            <STextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
+                                        </MCol>
                                         <MCol Md=6>
                                             <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                                         </MCol>
@@ -196,11 +193,11 @@
                                 <MForm EnableValidation Model=_apiPermissionDetailDto @ref="_formApi">
                                     <MRow>
                                         <MCol Md=12>
-                                            <STextField Label="@T("Code")"  Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                            <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" @bind-Value="_apiPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
                                         </MCol>
                                         <MCol Md=6>
                                             <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
@@ -232,4 +229,4 @@
 </MRow>
 
 <AddMenuPermission @ref="_addMenuPermission" OnSubmit="AddMenuPermissionAsync" />
-<AddApiPermission @ref=_addApiPermission OnSubmit="AddApiPermissionAsync"/>
+<AddApiPermission @ref=_addApiPermission OnSubmit="AddApiPermissionAsync" />

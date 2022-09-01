@@ -26,7 +26,7 @@ public class SyncStaffResultsDto
     {
         public int Index { get; set; }
 
-        public string? Account { get; set; }
+        public string? JobNumber { get; set; }
 
         public List<string> Errors { get; set; } = new();
     }

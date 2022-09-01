@@ -90,42 +90,34 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task FindUserByAccountQueryAsync(FindUserByAccountQuery query)
+    public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
-        if (user is null)
-        {
-            throw new UserFriendlyException("This user data does not exist");
-        }
-        query.Result = user;
+        query.Result = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]
-    public async Task FindUserByEmailQueryAsync(FindUserByEmailQuery query)
+    public async Task GetUsersByAccountAsync(UsersByAccountQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
-        if (user is null)
-        {
-            throw new UserFriendlyException("This user data does not exist");
-        }
-        query.Result = user;
+        var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account));
+        query.Result = users.Adapt<List<UserSimpleModel>>();
     }
 
     [EventHandler]
-    public async Task FindUserByPhoneNumberQueryAsync(FindUserByPhoneNumberQuery query)
+    public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
-        if (user is null)
-        {
-            throw new UserFriendlyException("This user data does not exist");
-        }
-        query.Result = user;
+        query.Result = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
+    }
+
+    [EventHandler]
+    public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
+    {
+        query.Result = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
     }
 
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query)
     {
-        var response = await _autoCompleteClient.GetAsync<UserSelectDto, Guid>(
+        var response = await _autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectDto>(
             query.Search.TrimStart(' ').TrimEnd(' ')
         );
         query.Result = response.Data;
@@ -139,7 +131,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task UserPortraitsQueryAsync(UserPortraitsQuery userPortraitsQuery)
+    public async Task UserPortraitsAsync(UserPortraitsQuery userPortraitsQuery)
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
@@ -181,17 +173,22 @@ public class QueryHandler
         }
         var staffQuery = _authDbContext.Set<Staff>().Where(condition);
         var total = await staffQuery.LongCountAsync();
-        var staffs = await staffQuery
-                                    .Include(s => s.DepartmentStaffs)
-                                    .ThenInclude(ds => ds.Department)
-                                    .Include(s => s.Position)
-                                    .OrderByDescending(s => s.ModificationTime)
-                                    .ThenByDescending(s => s.CreationTime)
-                                    .Skip((query.Page - 1) * query.PageSize)
-                                    .Take(query.PageSize)
-                                    .ToListAsync();
+        var staffs = await staffQuery.Include(s => s.User)
+                                     .Include(s => s.DepartmentStaffs)
+                                     .ThenInclude(ds => ds.Department)
+                                     .Include(s => s.Position)
+                                     .OrderByDescending(s => s.ModificationTime)
+                                     .ThenByDescending(s => s.CreationTime)
+                                     .Skip((query.Page - 1) * query.PageSize)
+                                     .Take(query.PageSize)
+                                     .ToListAsync();
 
-        query.Result = new(total, staffs.Select(staff => (StaffDto)staff).ToList());
+        query.Result = new(total, staffs.Select(staff => 
+        {
+            var staffDto = (StaffDto)staff;
+            staffDto.Account = staff.User.Account;
+            return staffDto;
+        }).ToList());
     }
 
     [EventHandler]
@@ -208,6 +205,32 @@ public class QueryHandler
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
         query.Result = staff;
+    }
+
+    [EventHandler]
+    public async Task GetStaffDetailByUserIdAsync(StaffDetailByUserIdQuery query)
+    {
+        var staff = await _authDbContext.Set<Staff>()
+                                        .Include(s => s.User)
+                                        .ThenInclude(user => user.Roles)
+                                        .ThenInclude(ur => ur.Role)
+                                        .Include(s => s.DepartmentStaffs)
+                                        .ThenInclude(ds => ds.Department)
+                                        .Include(s => s.TeamStaffs)
+                                        .Include(s => s.Position)
+                                        .Include(s => s.CreateUser)
+                                        .Include(s => s.ModifyUser)
+                                        .AsSplitQuery()
+                                        .FirstOrDefaultAsync(s => s.UserId == query.UserId);
+        if (staff is not null)
+        {
+            var staffDetailModel = staff.Adapt<StaffDetailModel>();
+            staffDetailModel.Department = staff.DepartmentStaffs.FirstOrDefault()?.Department?.Name ?? "";
+            staffDetailModel.Position = staff.Position?.Name ?? "";
+            staffDetailModel.Roles = staff.User.Roles.Select(ur => ur.Role).Adapt<List<RoleModel>>();
+            staffDetailModel.Teams = new();
+            query.Result = staffDetailModel;
+        }
     }
 
     [EventHandler]
@@ -379,6 +402,16 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetIdentityProviderByTypeAsync(IdentityProviderByTypeQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>()
+                                                       .FirstOrDefaultAsync(ip => ip.ThirdPartyIdpType == query.ThirdPartyIdpType);
+
+        query.Result = identityProvider ?? throw new UserFriendlyException($"IdentityProvider {query.ThirdPartyIdpType} not exist");
+    }
+
+
+    [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
     {
         var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);
@@ -408,6 +441,7 @@ public class QueryHandler
         {
             condition = condition.And(t => t.Name.Contains(teamListQuery.Name));
         }
+        var staffId = Guid.Empty;
         if (teamListQuery.UserId != Guid.Empty)
         {
             var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(u => u.Id == teamListQuery.UserId);
@@ -417,8 +451,8 @@ public class QueryHandler
             }
             if (!user.IsAdmin())
             {
-                var staffId = (await _authDbContext.Set<Staff>()
-                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id;
+                staffId = (await _authDbContext.Set<Staff>()
+                                        .FirstOrDefaultAsync(staff => staff.UserId == teamListQuery.UserId))?.Id ?? Guid.Empty;
                 if (staffId == default)
                 {
                     return;
@@ -435,9 +469,13 @@ public class QueryHandler
                     .Select(s => s.StaffId);
 
             var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
-
-            teamListQuery.Result.Add(new TeamDto(team.Id, team.Name, $"{team.Avatar.Url}?stamp={team.ModificationTime.Second}", team.Description, team.TeamStaffs.Count,
-                adminAvatar, modifierName, team.ModificationTime));
+            var teamDto = new TeamDto(team.Id, team.Name, $"{team.Avatar.Url}?stamp={team.ModificationTime.Second}", team.Description, team.TeamStaffs.Count,
+                adminAvatar, modifierName, team.ModificationTime);
+            if (staffId != Guid.Empty)
+            {
+                teamDto.Role = team.TeamStaffs.FirstOrDefault(ts => ts.StaffId == staffId)?.TeamMemberType.ToString() ?? "";
+            }
+            teamListQuery.Result.Add(teamDto);
         }
     }
 
@@ -511,17 +549,17 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task GetTeamRoleSelectAsync(TeamRoleSelectQuery teamRoleSelectQuery)
+    public async Task GetTeamRoleSelectAsync(TeamRoleSelectQuery query)
     {
         Expression<Func<Team, bool>> condition = _ => true;
-        if (!string.IsNullOrEmpty(teamRoleSelectQuery.Name))
+        if (!string.IsNullOrEmpty(query.Name))
         {
-            condition = condition.And(team => team.Name.Contains(teamRoleSelectQuery.Name));
+            condition = condition.And(team => team.Name.Contains(query.Name));
         }
         Expression<Func<Team, bool>> teamStaffCondition = _ => true;
-        if (teamRoleSelectQuery.UserId != default)
+        if (query.UserId != default)
         {
-            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == teamRoleSelectQuery.UserId));
+            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == query.UserId));
         }
         var teams = await _authDbContext.Set<Team>()
                                         .Where(condition)
@@ -530,11 +568,25 @@ public class QueryHandler
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .ToListAsync();
-        teamRoleSelectQuery.Result = teams.Select(team => new TeamRoleSelectDto(
-            team.Id,
-            team.Name,
-            team.Avatar.Url,
-            team.TeamRoles.Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity)).ToList())).ToList();
+        foreach (var team in teams)
+        {
+            var roles = team.TeamRoles
+                            .Where(tr => team.TeamStaffs.Any(ts => ts.UserId == query.UserId && ts.TeamMemberType == tr.TeamMemberType))
+                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Limit, tr.Role.AvailableQuantity))
+                            .ToList();
+            query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
+        }
+    }
+
+    [EventHandler]
+    public async Task GetTeamByUserAsync(TeamByUserQuery query)
+    {
+        var teams = await _authDbContext.Set<TeamStaff>()
+                                        .Where(ts => ts.UserId == query.UserId)
+                                        .ToListAsync();
+
+        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType))
+                            .ToList();
     }
 
     #endregion
@@ -548,19 +600,27 @@ public class QueryHandler
         {
             var apps = await _pmClient.AppService.GetListAsync();
             //todo cache
-            var menus = _authDbContext.Set<Permission>().AsEnumerable()
-                .Where(p => visited.Any(v => v.AppId == p.AppId && v.Url.ToLower() == p.Url.ToLower()))
-                .Join(apps, p => p.AppId, a => a.Identity, (p, a) => new
+            var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
+                v => new { v.AppId, Url = v.Url.ToLower().Trim('/') }, p => new { p.AppId, Url = p.Url.ToLower().Trim('/') }, (v, p) => new
                 {
-                    p.Id,
-                    p.Name,
-                    Url = Path.Combine(a.Url, p.Url)
-                }).ToDictionary(p => p.Url, p => p.Name);
+                    UserVisited = v,
+                    Permissions = p
+                }).SelectMany(x => x.Permissions.DefaultIfEmpty(), (v, p) => new
+                {
+                    v.UserVisited,
+                    Permission = p
+                }).GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
+                {
+                    Permission = p.Permission,
+                    AppModels = a
+                }).SelectMany(x => x.AppModels.DefaultIfEmpty(), (p, a) =>
+                   new KeyValuePair<string, string>($"{a?.Url.TrimEnd('/')}/{p.Permission?.Url.TrimStart('/')}", p.Permission?.Name ?? "")
+                ).ToList();
             userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
             {
                 Url = v.Key,
                 Name = v.Value
-            }).ToList();
+            }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
         }
     }
 

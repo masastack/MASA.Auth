@@ -35,6 +35,7 @@ public partial class ApiResource
         get { return _pageSize; }
         set
         {
+            _page = 1;
             _pageSize = value;
             GetApiResourcesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }

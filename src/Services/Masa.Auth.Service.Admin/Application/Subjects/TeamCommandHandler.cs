@@ -7,7 +7,6 @@ public class TeamCommandHandler
 {
 
     readonly ITeamRepository _teamRepository;
-
     readonly TeamDomainService _teamDomainService;
     readonly RoleDomainService _roleDomainService;
     readonly IClient _aliyunClient;
@@ -20,14 +19,13 @@ public class TeamCommandHandler
                               RoleDomainService roleDomainService,
                               IMasaConfiguration masaConfiguration,
                               IClient aliyunClient,
-                              DaprClient daprClient)
+                              IOptions<OssOptions> ossOptions)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
         _roleDomainService = roleDomainService;
         _aliyunClient = aliyunClient;
-
-        _bucket = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result["bucket"];
+        _bucket = ossOptions.Value.Bucket;
         _cdnEndpoint = masaConfiguration.Local.GetValue<string>("CdnEndpoint");
     }
 
@@ -43,8 +41,11 @@ public class TeamCommandHandler
 
         var teamId = Guid.NewGuid();
         var avatarName = $"{teamId}.png";
-
-        var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
+        if (!ColorGroupConstants.ColorGroup.TryGetValue(dto.Avatar.Color, out var color))
+        {
+            color = ColorGroupConstants.DEFAULT_COLOR;
+        }
+        var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
         await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
 
         var team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
@@ -69,7 +70,11 @@ public class TeamCommandHandler
         if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||
                 string.IsNullOrWhiteSpace(team.Avatar.Url))
         {
-            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.Parse(dto.Avatar.Color), 200);
+            if (!ColorGroupConstants.ColorGroup.TryGetValue(dto.Avatar.Color, out var color))
+            {
+                color = ColorGroupConstants.DEFAULT_COLOR;
+            }
+            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
             await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
         }
         team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));

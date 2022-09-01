@@ -17,7 +17,7 @@
     </MListItem>
     <SSelect class="mt-12" @bind-Value="@Value.Type" Dense
              Label="@T("Team Type")"
-             Items="@_teamTypes"
+             Items="@_teamTypes" Required
              ItemText="u => u.Name"
              ItemValue="u => u.Id">
     </SSelect>

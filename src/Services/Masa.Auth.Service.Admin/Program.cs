@@ -3,6 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoInject();
 builder.AddObservability();
 
 #if DEBUG
@@ -12,80 +13,74 @@ builder.Services.AddDaprStarter(opt =>
     opt.DaprGrpcPort = 3601;
 });
 #endif
-
 builder.Services.AddDaprClient();
-builder.Services.AddAliyunStorage(serviceProvider =>
+builder.AddMasaConfiguration(configurationBuilder =>
 {
-    var daprClient = serviceProvider.GetRequiredService<DaprClient>();
-    var aliyunOssConfig = daprClient.GetSecretAsync("localsecretstore", "aliyun-oss").Result;
-    var accessId = aliyunOssConfig["access_id"];
-    var accessSecret = aliyunOssConfig["access_secret"];
-    var endpoint = aliyunOssConfig["endpoint"];
-    var roleArn = aliyunOssConfig["role_arn"];
-    return new AliyunStorageOptions(accessId, accessSecret, endpoint, roleArn, "SessionTest")
+    configurationBuilder.UseDcc();
+});
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
+builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName) 
+{
+    Sts = new AliyunStsOptions()
     {
-        Sts = new AliyunStsOptions()
-        {
-            RegionId = "cn-hangzhou"
-        }
-    };
+        RegionId = ossOptions.RegionId
+    }
 });
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+builder.Services.AddMasaIdentityModel(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
     options.UserId = "sub";
 });
 
-builder.Services.AddScoped<EnvironmentMiddleware>();
-builder.Services.AddScoped<MasaAuthorizeMiddleware>();
-builder.Services.AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>();
-builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>();
-builder.Services.AddAuthorization(options =>
-{
-    var unexpiredPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
-        .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
-        .Build();
-    options.DefaultPolicy = unexpiredPolicy;
-});
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer("Bearer", options =>
-{
-    options.Authority = builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("AppSettings:IdentityServerUrl");
-    options.RequireHttpsMetadata = false;
-    //options.Audience = "";
-    options.TokenValidationParameters.ValidateAudience = false;
-    options.MapInboundClaims = false;
-});
+builder.Services
+    .AddScoped<EnvironmentMiddleware>()
+    .AddScoped<MasaAuthorizeMiddleware>()
+    .AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>()
+    .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
+    .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
+    .AddAuthorization(options =>
+    {
+        var unexpiredPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
+            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+            .Build();
+        options.DefaultPolicy = unexpiredPolicy;
+    })
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer("Bearer", options =>
+    {
+        //todo dcc
+        options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.RequireHttpsMetadata = false;
+        //options.Audience = "";
+        options.TokenValidationParameters.ValidateAudience = false;
+        options.MapInboundClaims = false;
+    });
 
 MapsterAdapterConfig.TypeAdapter();
 
-builder.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
 builder.Services.AddDccClient();
-var redisConfigOption = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-        .GetSection("RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMasaRedisCache(redisConfigOption).AddMasaMemoryCache();
-builder.Services.AddPmClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-    .GetValue<string>("AppSettings:PmClient:Url"));
-builder.Services.AddSchedulerClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
-    .GetValue<string>("AppSettings:SchedulerClient:Url"));
-//await builder.Services.AddSyncUserAutoCompleteJobAsync();
-builder.Services.AddLadpContext();
-builder.Services.AddElasticsearchAutoComplete();
+var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+builder.Services.AddMasaRedisCache(defaultConfiguration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+
+await builder.Services
+            .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
+            .AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"))
+            .AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"))
+            .AddLadpContext()
+            .AddElasticsearchAutoComplete()
+            .AddSchedulerJobAsync();
+
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
     .AddDbContextCheck<AuthDbContext>();
-
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 .AddEndpointsApiExplorer()
@@ -137,17 +132,16 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.Services.AddOidcCache(redisConfigOption);
+builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
+        defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
-
 builder.Services.RemoveAll(typeof(IProcessor));
 
 var app = builder.Services.AddServices(builder);

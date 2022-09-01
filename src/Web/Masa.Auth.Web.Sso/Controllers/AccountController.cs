@@ -4,29 +4,31 @@
 namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
-[Authorize]
+[AllowAnonymous]
 [SecurityHeaders]
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
+    readonly IDistributedCacheClient _distributedCacheClient;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
-        IEventService events, IAuthClient authClient)
+        IEventService events,
+        IAuthClient authClient,
+        IDistributedCacheClient distributedCacheClient)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
+        _distributedCacheClient = distributedCacheClient;
     }
 
     [HttpPost]
-    [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] InputModel inputModel)
+    public async Task<IActionResult> Login([FromBody] LoginInputModel inputModel)
     {
         var returnUrl = inputModel.ReturnUrl;
-        var userName = inputModel.UserName;
         // check if we are in the context of an authorization request
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
@@ -36,11 +38,38 @@ public class AccountController : Controller
             {
                 ssoEnvironmentProvider.SetEnvironment(inputModel.Environment);
             }
-            var success = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(userName, inputModel.Password, inputModel.LdapLogin);
+
+            var success = false;
+
+            if (inputModel.PhoneLogin)
+            {
+                var key = CacheKey.GetSmsCodeKey(inputModel.PhoneNumber);
+                var code = await _distributedCacheClient.GetAsync<int>(key);
+                success = code == inputModel.SmsCode;
+                await _distributedCacheClient.RemoveAsync<int>(key);
+            }
+            else
+            {
+                success = await _authClient.UserService
+                                           .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
+            }
+
             if (success)
             {
-                var user = await _authClient.UserService.FindByAccountAsync(userName);
+                var user = new UserModel();
+                if (inputModel.PhoneLogin)
+                {
+                    user = await _authClient.UserService.FindByPhoneNumberAsync(inputModel.PhoneNumber);
+                    if (user is null)
+                    {
+                        //todo auto register user
+                        return Content("no corresponding user for this mobile phone number");
+                    }
+                }
+                else
+                {
+                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
+                }
                 // only set explicit expiration here if user chooses "remember me". 
                 // otherwise we rely upon expiration configured in cookie middleware.
                 AuthenticationProperties? props = null;
@@ -52,14 +81,15 @@ public class AccountController : Controller
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
                     };
                 };
-                var isuser = new IdentityServerUser(user.Id.ToString())
+                var isuser = new IdentityServerUser(user!.Id.ToString())
                 {
                     DisplayName = user.DisplayName
                 };
-                isuser.AdditionalClaims.Add(new Claim("userName", userName));
+                isuser.AdditionalClaims.Add(new Claim("userName", user.Account));
                 isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
                 isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
-                //us duende sign in
+
+                //us sign in
                 await HttpContext.SignInAsync(isuser, props);
 
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
@@ -82,21 +112,29 @@ public class AccountController : Controller
             else return Content("Unknown exception,Please contact the administrator");
         }
 
-        await _events.RaiseAsync(new UserLoginFailureEvent(userName, "invalid credentials", clientId: context?.Client.ClientId));
+        await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.UserName,
+                "invalid credentials", clientId: context?.Client.ClientId));
         return Content("username and password validate error");
     }
 
     [HttpGet]
     public async Task<IActionResult> Logout(string logoutId = "")
     {
+        var redirectUrl = "/Account/Logout/Loggedout";
+        if (string.IsNullOrWhiteSpace(logoutId))
+        {
+            logoutId = await _interaction.CreateLogoutContextAsync();
+        }
+        redirectUrl = $"{redirectUrl}?logoutId={logoutId}";
         if (User.Identity != null && User.Identity.IsAuthenticated == true)
         {
-            if (string.IsNullOrEmpty(logoutId))
-            {
-                logoutId = await _interaction.CreateLogoutContextAsync();
-            }
             // delete local authentication cookie
             await HttpContext.SignOutAsync();
+
+            foreach (var cookies in HttpContext.Request.Cookies)
+            {
+                HttpContext.Response.Cookies.Delete(cookies.Key);
+            }
 
             // raise the logout event
             await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
@@ -110,16 +148,11 @@ public class AccountController : Controller
                 // we need to see if the provider supports external logout
                 if (await HttpContext.GetSchemeSupportsSignOutAsync(idp))
                 {
-                    // build a return URL so the upstream provider will redirect back
-                    // to us after the user has logged out. this allows us to then
-                    // complete our single sign-out processing.
-                    string url = $"/Account/Logout/Loggedout?logoutId={logoutId}";
-
                     // this triggers a redirect to the external provider for sign-out
-                    return SignOut(new AuthenticationProperties { RedirectUri = url }, idp);
+                    return SignOut(new AuthenticationProperties { RedirectUri = redirectUrl }, idp);
                 }
             }
         }
-        return Redirect($"/Account/Logout/Loggedout?logoutId={logoutId}");
+        return Redirect(redirectUrl);
     }
 }

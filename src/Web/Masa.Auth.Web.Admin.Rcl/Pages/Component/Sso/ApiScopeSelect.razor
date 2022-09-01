@@ -2,7 +2,7 @@
 
 @foreach (var apiScopeChunk in ApiScopeChunks)
 {
-    <MRow Class="mb-2 mt-0">
+    <MRow Class="@($"mb-2 mt-0 {Class}")">
         @foreach (var apiScope in apiScopeChunk)
         {
             <MCol Cols="12/Chunk" Class="py-0">

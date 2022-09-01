@@ -9,13 +9,12 @@
     <MCol Md="@("auto")">
         <MCard style="width:300px;" Class="full-height">
             <MCardTitle>
-                <SearchableExtend>
-                    @T("Department Management")
-                </SearchableExtend>
+                <SearchTextField @bind-Value="@_searchName" PrependInnerIcon="@IconConstants.Search" Clearable/>
             </MCardTitle>
             <MCardText>
                 <MTreeview @bind-Active="_active"
                            Items="_departments"
+                           Search="@_searchName"
                            OnActiveUpdate="ActiveUpdated"
                            TItem="DepartmentDto"
                            TKey="Guid"

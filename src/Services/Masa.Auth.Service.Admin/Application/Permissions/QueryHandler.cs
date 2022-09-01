@@ -10,17 +10,25 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly UserDomainService _userDomainService;
     readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IEventBus _eventBus;
 
-    public QueryHandler(IRoleRepository roleRepository, IPermissionRepository permissionRepository,
-        AuthDbContext authDbContext, UserDomainService userDomainService,
-        IMemoryCacheClient memoryCacheClient)
+    public QueryHandler(
+        IRoleRepository roleRepository,
+        IPermissionRepository permissionRepository,
+        AuthDbContext authDbContext,
+        UserDomainService userDomainService,
+        IMemoryCacheClient memoryCacheClient,
+        IEventBus eventBus)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
         _memoryCacheClient = memoryCacheClient;
+        _eventBus = eventBus;
     }
+
+
 
     #region Role
 
@@ -142,31 +150,6 @@ public class QueryHandler
         return roleSelect;
     }
 
-    [EventHandler]
-    public async Task GetPermissionsByRoleAsync(PermissionsByRoleQuery query)
-    {
-        query.Result = await GetPermissions(query.Roles);
-
-        async Task<List<Guid>> GetPermissions(List<Guid> roleIds)
-        {
-            var permissions = new List<Guid>();
-            var roles = await _authDbContext.Set<Role>()
-                                          .Where(r => r.Enabled == true && roleIds.Contains(r.Id))
-                                          .Include(r => r.ChildrenRoles)
-                                          .Include(r => r.Permissions)
-                                          .Select(r => new { r.Permissions, r.ChildrenRoles })
-                                          .ToListAsync();
-            permissions.AddRange(roles.SelectMany(r => r.Permissions.Where(p => p.Effect == true).Select(p => p.PermissionId)));
-            var childRoles = roles.SelectMany(r => r.ChildrenRoles.Select(cr => cr.RoleId)).ToList();
-            if (childRoles.Count > 0)
-            {
-                permissions.AddRange(await GetPermissions(childRoles));
-            }
-
-            return permissions.Distinct().ToList();
-        }
-    }
-
     #endregion
 
     #region Permission
@@ -248,7 +231,7 @@ public class QueryHandler
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Select(up => new UserSelectDto
             {
-                UserId = up.User.Id,
+                Id = up.User.Id,
                 Name = up.User.Name,
                 Avatar = up.User.Avatar
             }).ToList()
@@ -316,6 +299,115 @@ public class QueryHandler
     {
         appPermissionAuthorizedQuery.Result = await _userDomainService.AuthorizedAsync(appPermissionAuthorizedQuery.AppId,
                     appPermissionAuthorizedQuery.Code, appPermissionAuthorizedQuery.UserId);
+    }
+
+    [EventHandler]
+    public async Task GetPermissionsByRoleAsync(PermissionsByRoleQuery query)
+    {
+        if (query.Roles.Count == 0) return;
+        query.Result = await GetPermissions(query.Roles);
+
+        async Task<List<Guid>> GetPermissions(IEnumerable<Guid> roleIds)
+        {
+            roleIds = roleIds.Distinct().ToList();
+            var permissions = new List<Guid>();
+            var rolePermissons = await _authDbContext.Set<Role>()
+                                          .Where(r => r.Enabled == true && roleIds.Contains(r.Id))
+                                          .Include(r => r.ChildrenRoles)
+                                          .Include(r => r.Permissions)
+                                          .Select(r => new { r.Permissions, r.ChildrenRoles })
+                                          .ToListAsync();
+            foreach (var rolePermisson in rolePermissons)
+            {
+                var childPermissions = new List<Guid>();
+                if (rolePermisson.ChildrenRoles.Any())
+                {
+                    childPermissions = await GetPermissions(rolePermisson.ChildrenRoles.Select(cr => cr.RoleId));
+                    var rejectPermisisons = rolePermisson.Permissions.Where(p => p.Effect is false).ToList();
+                    childPermissions = childPermissions.Where(p => rejectPermisisons.All(rp => rp.PermissionId != p)).ToList();
+                    childPermissions.AddRange(rolePermisson.Permissions.Where(p => p.Effect is true).Select(p => p.PermissionId));
+                    permissions.AddRange(childPermissions);
+                }
+                childPermissions.AddRange(rolePermisson.Permissions.Where(p => p.Effect is true).Select(p => p.PermissionId));
+                permissions.AddRange(childPermissions);
+            }
+
+            return permissions.Distinct().ToList();
+        }
+    }
+
+    [EventHandler]
+    public async Task GetPermissionsByTeamAsync(PermissionsByTeamQuery query)
+    {
+        if (query.Teams.Count == 0) return;
+        var teamIds = query.Teams.Select(team => team.Id).ToList();
+        var teamRoles = await _authDbContext.Set<TeamRole>()
+                                           .Where(tr => teamIds.Contains(tr.TeamId))
+                                           .ToListAsync();
+        var teamPermissions = await _authDbContext.Set<TeamPermission>()
+                                                 .Where(tp => teamIds.Contains(tp.TeamId))
+                                                 .ToListAsync();
+        foreach (var team in query.Teams)
+        {
+            var roles = teamRoles.Where(tr => tr.TeamId == team.Id && tr.TeamMemberType == team.TeamMemberType)
+                                 .Select(tr => tr.RoleId)
+                                .ToList();
+            var permissionQuery = new PermissionsByRoleQuery(roles);
+            await _eventBus.PublishAsync(permissionQuery);
+            var rejectPermisisons = teamPermissions.Where(tp => tp.TeamId == team.Id && tp.TeamMemberType == team.TeamMemberType && tp.Effect == false)
+                                   .Select(tp => tp.PermissionId);
+            var permissions = permissionQuery.Result.Union(
+                    teamPermissions.Where(tp => tp.TeamId == team.Id && tp.TeamMemberType == team.TeamMemberType && tp.Effect == true)
+                                   .Select(tp => tp.PermissionId)
+                ).Where(permission => rejectPermisisons.All(rp => rp != permission));
+            query.Result.AddRange(permissions);
+        }
+    }
+
+    [EventHandler]
+    public async Task GetPermissionsByTeamWithUserAsync(PermissionsByTeamWithUserQuery query)
+    {
+        var teamQuery = new TeamByUserQuery(query.Dto.User);
+        await _eventBus.PublishAsync(teamQuery);
+        if (query.Dto.Teams.Count > 0)
+        {
+            teamQuery.Result = teamQuery.Result.Where(team => query.Dto.Teams.Contains(team.Id))
+                                           .ToList();
+        }
+        var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
+        await _eventBus.PublishAsync(permissionByTeamQuery);
+        query.Result.AddRange(permissionByTeamQuery.Result);
+    }
+
+    [EventHandler]
+    public async Task GetPermissionsByUserAsync(PermissionsByUserQuery query)
+    {
+        var teamQuery = new TeamByUserQuery(query.User);
+        await _eventBus.PublishAsync(teamQuery);
+        if (query.Teams is not null)
+        {
+            teamQuery.Result = teamQuery.Result.Where(team => query.Teams.Contains(team.Id))
+                                               .ToList();
+        }
+        var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
+        await _eventBus.PublishAsync(permissionByTeamQuery);
+        var roles = await _authDbContext.Set<UserRole>()
+                                        .Where(ur => ur.UserId == query.User)
+                                        .Select(ur => ur.RoleId)
+                                        .ToListAsync();
+        var permissions = await _authDbContext.Set<UserPermission>()
+                                              .Where(up => up.UserId == query.User)
+                                              .ToListAsync();
+        var rejectPermisisons = permissions.Where(permission => permission.Effect == false)
+                                           .Select(tp => tp.PermissionId);
+        var permissionByRoleQuery = new PermissionsByRoleQuery(roles);
+        await _eventBus.PublishAsync(permissionByRoleQuery);
+        var userPermission = permissionByRoleQuery.Result.Union(
+                permissions.Where(permission => permission.Effect is true)
+                           .Select(permission => permission.PermissionId)
+            ).Where(permission => rejectPermisisons.All(rp => rp != permission));
+        query.Result.AddRange(userPermission);
+        query.Result.AddRange(permissionByTeamQuery.Result);
     }
 
     #endregion

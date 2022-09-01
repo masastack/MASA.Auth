@@ -11,7 +11,7 @@ public partial class TeamBasicInfo
     [Parameter]
     public EventCallback<TeamBasicInfoDto> ValueChanged { get; set; }
 
-    List<string> _colors = new List<string> { "purple", "green", "yellow", "red", "blue" };
+    List<string> _colors = new List<string> { "purple", "green", "red", "blue", "orange" };
     List<TeamTypeDto> _teamTypes = new()
     {
         new TeamTypeDto { Id = (int)TeamTypes.Normal, Name = TeamTypes.Normal.ToString() }

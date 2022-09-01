@@ -6,6 +6,7 @@ global using BlazorComponent.I18n;
 global using FluentValidation;
 global using Mapster;
 global using Masa.Auth.ApiGateways.Caller;
+global using Masa.Auth.ApiGateways.Caller.Services.Logs;
 global using Masa.Auth.ApiGateways.Caller.Services.Organizations;
 global using Masa.Auth.ApiGateways.Caller.Services.Oss;
 global using Masa.Auth.ApiGateways.Caller.Services.Permissions;

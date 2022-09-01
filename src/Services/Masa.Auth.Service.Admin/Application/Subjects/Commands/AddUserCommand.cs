@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record AddUserCommand(AddUserDto User) : Command
+public record AddUserCommand(AddUserDto User, bool WhenExisReturn = false) : Command
 {
-    public UserDto NewUser { get; set; } = null!;
+    public UserDto Result { get; set; } = null!;
 }

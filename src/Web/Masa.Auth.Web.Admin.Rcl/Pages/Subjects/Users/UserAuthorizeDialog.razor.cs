@@ -17,7 +17,7 @@ public partial class UserAuthorizeDialog
     [Parameter]
     public Guid UserId { get; set; }
 
-    public List<Guid> TeamRoles { get; set; } = new();
+    public List<Guid> Teams { get; set; } = new();
 
     public UpdateUserAuthorizationDto Authorization { get; set; } = new();
 
@@ -45,6 +45,7 @@ public partial class UserAuthorizeDialog
         {
             User = await UserService.GetDetailAsync(UserId);
             Authorization = new(User.Id, User.RoleIds, User.Permissions);
+            Teams = new();
         }
     }
 
@@ -62,6 +63,12 @@ public partial class UserAuthorizeDialog
         await UpdateVisible(false);
         await OnSubmitSuccess.InvokeAsync();
         Loading = false;
+    }
+
+    public void TeamValueChanged(Guid value)
+    {
+        if (value != default) Teams = new() { value };
+        else Teams = new();
     }
 }
 

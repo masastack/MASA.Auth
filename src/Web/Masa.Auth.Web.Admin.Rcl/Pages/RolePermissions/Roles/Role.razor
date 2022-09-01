@@ -18,13 +18,12 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable
-                Dense
-                Height="@("calc(100vh - 285px)")"
-                Headers="GetHeaders()" 
-                Items="Roles" 
-                TItem="RoleDto" 
-                ItemsPerPage="PageSize">
+            <SDataTable Dense
+                        Height="@("calc(100vh - 285px)")"
+                        Headers="GetHeaders()"
+                        Items="Roles"
+                        TItem="RoleDto"
+                        ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -36,12 +35,12 @@
                                 <span>@context.Item.Name</span>
                             </div>
                             break;
-                        case (nameof(RoleDto.CreationTime)):
-                            <DateTimeTitle Value="@context.Item.CreationTime" />
+                        case nameof(RoleDto.CreationTime):
+                            <SDateTimeTitle Value=@context.Item.CreationTime />
                             break;
                         case nameof(RoleDto.ModificationTime):
-                            <DateTimeTitle Value="@context.Item.ModificationTime" />
-                            break;                        
+                            <SDateTimeTitle Value=@context.Item.ModificationTime />
+                            break;
                         case (nameof(RoleDto.Creator)):
                             <span>@context.Item.Creator</span>
                             break;
@@ -56,7 +55,7 @@
                             <SIcon Tooltip="@T("Delete")" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</SIcon>
                             break;
                         default:
-                            <span>@context.Value</span>
+                            <SItemCol Value="@context.Value"></SItemCol>
                             break;
                     }
                 </ItemColContent>

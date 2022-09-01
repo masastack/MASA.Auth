@@ -17,6 +17,8 @@ public class TeamDto
 
     public List<string> AdminAvatar { get; set; }
 
+    public string Role { get; set; } = string.Empty;
+
     public string Modifier { get; set; }
 
     public DateTime? ModificationTime { get; set; }

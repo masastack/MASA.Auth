@@ -3,12 +3,15 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class DefaultChangeImage : DefaultUploadImage
+public class DefaultChangeImage : UploadAvatar
 {
     private GenderTypes _gender { get; set; }
 
+    [CascadingParameter]
+    public I18n I18n { get; set; } = default!;
+
     [Inject]
-    public I18n? I18n { get; set; }
+    public AuthCaller AuthCaller { get; set; } = default!;
 
     [Parameter]
     public GenderTypes Gender
@@ -32,7 +35,7 @@ public class DefaultChangeImage : DefaultUploadImage
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        DefaultImages = await OssService.GetDefaultImagesAsync();
+        DefaultImages = await AuthCaller.OssService.GetDefaultImagesAsync();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -59,7 +62,7 @@ public class DefaultChangeImage : DefaultUploadImage
 
         builder.OpenElement(8, "span");
         builder.AddAttribute(9, "class", "body ml-2");
-        builder.AddContent(10, I18n!.T("Another", true));
+        builder.AddContent(10, I18n.T("Another", true));
         builder.CloseElement();
 
         builder.CloseElement();

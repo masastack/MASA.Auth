@@ -6,25 +6,25 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center" style="width:212px;">
-                        <DefaultUploadImage @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
+                        <UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
                     </div>
                 </div>
             </HeaderContent>
             <AutoHeightContent>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdpDetail.Name" Readonly Label="@T("ThirdPartyIdp.Name")" />
+                        <STextField @bind-Value="ThirdPartyIdpDetail.Name" Required Readonly Label="@T("ThirdPartyIdp.Name")" />
                     </MCol>
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdp.DisplayName" Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
+                        <STextField @bind-Value="ThirdPartyIdp.DisplayName" Required Label="@T(nameof(ThirdPartyIdp.DisplayName))" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdp.ClientId" Label="@T(nameof(ThirdPartyIdp.ClientId))" />
+                        <STextField @bind-Value="ThirdPartyIdp.ClientId" Required Label="@T(nameof(ThirdPartyIdp.ClientId))" />
                     </MCol>
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdp.ClientSecret" Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
+                        <STextField @bind-Value="ThirdPartyIdp.ClientSecret" Required Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
@@ -35,12 +35,6 @@
                         <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
                     </MCol>
                 </MRow>
-@*                <MRow Class="mb-6">
-                    <MCol>
-                        <span>@T(nameof(ThirdPartyIdp.VerifyFile))</span>
-                        <MFileInput TValue="IBrowserFile" Outlined Dense Label="@T(nameof(ThirdPartyIdp.VerifyFile))" />
-                    </MCol>
-                </MRow>*@
                 <MRow Class="mb-6">
                     <MCol>
                         <div class="d-flex defaultRadio">

@@ -48,11 +48,6 @@ public class RoleService : ServiceBase
         return await SendAsync<object, RoleOwnerDto>(nameof(GetRoleOwnerAsync), new { id });
     }
 
-    public async Task<List<Guid>> GetPermissionsByRoleAsync(List<Guid> roles)
-    {
-        return await SendAsync<object, List<Guid>>(nameof(GetPermissionsByRoleAsync), new { ids = string.Join(',', roles) });
-    }
-
     public async Task AddAsync(AddRoleDto request)
     {
         await SendAsync(nameof(AddAsync), request);

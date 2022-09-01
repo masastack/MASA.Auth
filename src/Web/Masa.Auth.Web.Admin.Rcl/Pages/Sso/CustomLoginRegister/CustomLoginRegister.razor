@@ -42,11 +42,11 @@
                         case (nameof(ClientDto.ClientName)):
                             <span>@context.Item.Client.ClientName</span>
                             break;
-                        case (nameof(CustomLoginDto.CreationTime)):
-                            <DateTimeTitle Value="@context.Item.CreationTime" />
+                        case nameof(CustomLoginDto.CreationTime):
+                            <SDateTimeTitle Value=@context.Item.CreationTime />
                             break;
                         case nameof(CustomLoginDto.ModificationTime):
-                            <DateTimeTitle Value="@context.Item.ModificationTime" />
+                            <SDateTimeTitle Value=@context.Item.ModificationTime />
                             break;
                         case (nameof(CustomLoginDto.Modifier)):
                             <span>@context.Item.Modifier</span>
@@ -59,7 +59,7 @@
                             <SIcon Tooltip="@T("Delete")" Class="ml-6" OnClick="()=> OpenRemoveCustomLoginDialog(context.Item)">@IconConstants.Remove</SIcon>
                             break;
                         default:
-                            <span class="subtitle">@context.Value</span>
+                            <SItemCol Value="@context.Value"></SItemCol>
                             break;
                     }
                 </ItemColContent>

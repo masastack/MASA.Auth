@@ -17,19 +17,19 @@ public class SubjectService : RestServiceBase
         //user
         var userQuery = new UserSelectQuery(filter);
         await eventBus.PublishAsync(userQuery);
-        var users = userQuery.Result.Select(user => new SubjectModel(user.UserId, user.Name, user.DisplayName, user.Avatar, user.PhoneNumber, user.Email, SubjectTypes.User));
+        var users = userQuery.Result.Select(user => new SubjectModel(user.Id, user.Name, user.DisplayName, user.Avatar, user.PhoneNumber, user.Email, SubjectTypes.User));
         //department
         var departmentQuery = new DepartmentSelectQuery(filter);
         await eventBus.PublishAsync(departmentQuery);
-        var departments = departmentQuery.Result.Select(department => new SubjectModel(department.Id, department.Name, department.Name, "", "", "", SubjectTypes.Department));
+        var departments = departmentQuery.Result.Select(department => new SubjectModel(department.Id, department.Name, department.Name, default, default, default, SubjectTypes.Department));
         //team
         var teamQuery = new TeamSelectListQuery(filter);
         await eventBus.PublishAsync(teamQuery);
-        var teams = teamQuery.Result.Select(team => new SubjectModel(team.Id, team.Name, team.Name, team.Avatar, "", "", SubjectTypes.Team));
+        var teams = teamQuery.Result.Select(team => new SubjectModel(team.Id, team.Name, team.Name, team.Avatar, default, default, SubjectTypes.Team));
         //role
         var roleQuery = new RoleSelectQuery(filter);
         await eventBus.PublishAsync(roleQuery);
-        var roles = roleQuery.Result.Select(role => new SubjectModel(role.Id, role.Name, role.Name, "", "", "", SubjectTypes.Role));
+        var roles = roleQuery.Result.Select(role => new SubjectModel(role.Id, role.Name, role.Name, default, default, default, SubjectTypes.Role));
 
         result.AddRange(users);
         result.AddRange(departments);

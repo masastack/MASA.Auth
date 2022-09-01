@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
-public sealed class CacheKey
+public static class CacheKey
 {
     const string PERMISSION_CACHE_PRE = "permission:";
     const string ROLE_CACHE_PRE = "role:";
@@ -13,6 +13,9 @@ public sealed class CacheKey
     const string ACCOUNT_LOGIN_PRE = "account_login:";
     const string LDAP_OPTIONS_PRE = "ldap_options:";
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
+    const string MSG_CODE_FOR_UPDATE_USER_PHONENUMBER = "msg_code_update_user_phoneNumber:";
+    const string MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER = "msg_code_verifiy_user_phoneNumber:";
+    const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_result:";
 
     public static string PermissionKey(Guid permissionId)
     {
@@ -47,5 +50,20 @@ public sealed class CacheKey
     public static string AccountLoginKey(string account)
     {
         return $"{ACCOUNT_LOGIN_PRE}{account}";
+    }
+
+    public static string MsgCodeForUpdateUserPhoneNumberKey(string userId, string phoneNumber)
+    {
+        return $"{MSG_CODE_FOR_UPDATE_USER_PHONENUMBER}{userId}{phoneNumber}";
+    }
+
+    public static string MsgCodeForVerifiyUserPhoneNumberKey(string userId, string phoneNumber)
+    {
+        return $"{MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER}{userId}{phoneNumber}";
+    }
+
+    public static string VerifiyUserPhoneNumberResultKey(string userId, string phoneNumber)
+    {
+        return $"{VERIFIY_USER_PHONENUMBER_RESULT}{userId}{phoneNumber}";
     }
 }
