@@ -333,7 +333,7 @@ public class CommandHandler
                 throw new UserFriendlyException("域账号验证失败");
             }
 
-            var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
+            var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
             await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
         }
 
@@ -780,7 +780,7 @@ public class CommandHandler
         }
         else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
         {
-            var upsertThirdPartyUserForLdapCommand = new UpsertThirdPartyUserForLdapCommand(
+            var upsertThirdPartyUserForLdapCommand = new UpsertLdapUserCommand(
                     model.Id,
                     model.ThridPartyIdentity,
                     JsonSerializer.Serialize(model.ExtendedData),
@@ -832,7 +832,7 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UpsertThirdPartyUserForLdapAsync(UpsertThirdPartyUserForLdapCommand command)
+    public async Task UpsertLdapUserAsync(UpsertLdapUserCommand command)
     {
         var identityProviderQuery = new IdentityProviderByTypeQuery(ThirdPartyIdpTypes.Ldap);
         await _eventBus.PublishAsync(identityProviderQuery);
@@ -845,7 +845,7 @@ public class CommandHandler
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
             await _eventBus.PublishAsync(resetUserPasswordCommand);
-            command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == command.Id)).Adapt<UserModel>();
+            command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == thirdPartyUser.UserId)).Adapt<UserModel>();
         }
         else
         {

@@ -154,8 +154,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? account,
                 string? password,
                 string? companyName,
+                string? email,
                 string phoneNumber) :
-        this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, default, GenderTypes.Male)
+        this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, email, GenderTypes.Male)
     {
     }
 
