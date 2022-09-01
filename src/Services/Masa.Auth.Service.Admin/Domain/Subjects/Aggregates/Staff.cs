@@ -222,7 +222,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     public void UpdateForLdap(string? name, string displayName, string phoneNumber, string? email)
     {
         Name = name;
-        DisplayName = displayName;       
+        DisplayName = displayName;
         VerifyPhonNumberEmail(phoneNumber, email);
     }
 

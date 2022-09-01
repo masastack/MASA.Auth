@@ -7,25 +7,25 @@ public class LdapCommandHandler
 {
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILdapFactory _ldapFactory;
-    readonly IConfiguration _configuration;
+    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly ILogger<LdapCommandHandler> _logger;
+    readonly IConfiguration _configuration;
     readonly IEventBus _eventBus;
-    readonly AuthDbContext _authDbContext;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
-        IMasaConfiguration masaConfiguration,
         ILogger<LdapCommandHandler> logger,
-        IEventBus eventBus,
-        AuthDbContext authDbContext)
+        IThirdPartyUserRepository thirdPartyUserRepository,
+        IConfiguration configuration,
+        IEventBus eventBus)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
-        _configuration = masaConfiguration.Local;
         _logger = logger;
+        _thirdPartyUserRepository = thirdPartyUserRepository;
+        _configuration = configuration;
         _eventBus = eventBus;
-        _authDbContext = authDbContext;
     }
 
     [EventHandler]
@@ -69,13 +69,13 @@ public class LdapCommandHandler
         var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         var ldapUsers = ldapProvider.GetAllUserAsync();
+
         await foreach (var ldapUser in ldapUsers)
         {
             if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
             try
             {
-                //todo:change bulk
-                var upsertThirdPartyUserCommand = new UpsertThirdPartyUserForLdapCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
+                var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
                 await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             }
             catch (Exception e)
