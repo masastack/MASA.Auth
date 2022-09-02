@@ -6,6 +6,9 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 public partial class TeamAdmin
 {
     [Parameter]
+    public List<Guid> IgnoreStaffIds { get; set; } = null!;
+
+    [Parameter]
     public TeamPersonnelDto Value { get; set; } = null!;
 
     [Parameter]

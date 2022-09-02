@@ -9,6 +9,9 @@ public partial class StaffSelect
     public List<Guid> Value { get; set; } = new();
 
     [Parameter]
+    public List<Guid> IgnoreValue { get; set; } = new();
+
+    [Parameter]
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     [Parameter]
@@ -31,6 +34,15 @@ public partial class StaffSelect
     {
         Label = T("Staff");
         Staffs = await StaffService.GetSelectAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (IgnoreValue != null && IgnoreValue.Any())
+        {
+            Staffs.RemoveAll(s => IgnoreValue.Contains(s.Id));
+        }
+        base.OnParametersSet();
     }
 
     protected async Task RemoveStaff(StaffSelectDto staff)

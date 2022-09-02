@@ -18,7 +18,7 @@
             <MCard Class="d-flex flex-column full-height">
                 @if (_visible)
                 {
-                    <TeamAdmin @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
+                    <TeamAdmin IgnoreStaffIds="Dto.TeamMember.Staffs" @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
                 }
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
@@ -34,7 +34,7 @@
             <MCard Class="d-flex flex-column full-height">
                 @if (_visible)
                 {
-                    <TeamMember @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
+                    <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
                 }
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">

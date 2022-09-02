@@ -24,7 +24,7 @@ public class AuthCaller : HttpClientCallerBase
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
-    ITokenProvider _tokenProvider;
+    TokenProvider _tokenProvider;
     ILogger<AuthCaller> _logger;
     #endregion
 
@@ -70,7 +70,7 @@ public class AuthCaller : HttpClientCallerBase
 
     public AuthCaller(
         IServiceProvider serviceProvider,
-        ITokenProvider tokenProvider,
+        TokenProvider tokenProvider,
         ILogger<AuthCaller> logger,
         AuthApiOptions options) : base(serviceProvider)
     {
@@ -82,7 +82,7 @@ public class AuthCaller : HttpClientCallerBase
 
     protected override void ConfigHttpRequestMessage(HttpRequestMessage requestMessage)
     {
-        requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
+        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
         base.ConfigHttpRequestMessage(requestMessage);
     }
 }

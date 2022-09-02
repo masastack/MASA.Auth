@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Contracts.Admin.Infrastructure.Sms;
+namespace Masa.Auth.Service.Admin.Infrastructure.Sms;
 
 public class Sms : IScopedDependency
 {
@@ -26,13 +26,13 @@ public class Sms : IScopedDependency
             TemplateCode = _smsOptions.Value.TemplateCode,
             ReceiverType = SendTargets.Assign,
             Receivers = new List<MessageTaskReceiverModel>
+        {
+            new MessageTaskReceiverModel
             {
-                new MessageTaskReceiverModel
-                {
-                    Type = MessageTaskReceiverTypes.User,
-                    PhoneNumber = phoneNumber
-                }
-            },
+                Type = MessageTaskReceiverTypes.User,
+                PhoneNumber = phoneNumber
+            }
+        },
             Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
             {
                 ["code"] = code,

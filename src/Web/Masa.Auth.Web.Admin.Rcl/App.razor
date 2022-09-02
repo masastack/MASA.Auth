@@ -1,4 +1,4 @@
-﻿@inject ITokenProvider TokenProvider
+﻿@inject TokenProvider TokenProvider
 
 <CascadingAuthenticationState>
     <Microsoft.AspNetCore.Components.Routing.Router AppAssembly="@typeof(App).Assembly"
@@ -17,13 +17,13 @@
 
 @code {
     [Parameter]
-    public BlazorServerTokenData TokenState { get; set; } = null!;
+    public TokenProvider InitialState { get; set; } = null!;
 
     protected override Task OnInitializedAsync()
     {
-        TokenProvider.AccessToken = TokenState.AccessToken;
-        TokenProvider.RefreshToken = TokenState.RefreshToken;
-        TokenProvider.IdToken = TokenState.IdToken;
+        TokenProvider.AccessToken = InitialState.AccessToken;
+        TokenProvider.RefreshToken = InitialState.RefreshToken;
+        TokenProvider.IdToken = InitialState.IdToken;
         return base.OnInitializedAsync();
     }
 }

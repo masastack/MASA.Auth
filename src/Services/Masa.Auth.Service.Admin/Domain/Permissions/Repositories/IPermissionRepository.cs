@@ -12,4 +12,6 @@ public interface IPermissionRepository : IRepository<Permission, Guid>
     int GetIncrementOrder(string appId, Guid parentId);
 
     bool Any(Expression<Func<Permission, bool>> predicate);
+
+    List<string> GetPermissionCodes(Expression<Func<Permission, bool>> predicate);
 }

@@ -58,4 +58,9 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         result.AddRange(await GetParentAsync(item.ParentId, recursive));
         return result;
     }
+
+    public List<string> GetPermissionCodes(Expression<Func<Permission, bool>> predicate)
+    {
+        return Context.Set<Permission>().Where(predicate).Select(p => p.ReplenishCode).ToList();
+    }
 }
