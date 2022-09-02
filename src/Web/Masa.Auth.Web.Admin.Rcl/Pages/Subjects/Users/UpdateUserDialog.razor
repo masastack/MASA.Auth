@@ -6,7 +6,7 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center">
-                        <DefaultUploadImage Size="80" @bind-Value="User.Avatar" WhenFileChangeUpload />
+                        <UploadAvatar Size="80" @bind-Value="User.Avatar" WhenFileChangeUpload />
                         <PlaceholderTextFiled @bind-Value="User.DisplayName" Placeholder="@T("Give him a nickname!")" />
                     </div>
                 </div>

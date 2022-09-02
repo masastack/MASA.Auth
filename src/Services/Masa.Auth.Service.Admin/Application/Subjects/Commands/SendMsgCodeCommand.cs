@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record VerifyMsgCodeForVerifiyPhoneNumberCommand(VerifyMsgCodeModel Model) : Command
+public record SendMsgCodeCommand(SendMsgCodeModel Model) : Command
 {
-    public bool Result { get; set; }
 }

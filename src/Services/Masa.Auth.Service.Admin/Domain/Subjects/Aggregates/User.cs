@@ -154,8 +154,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? account,
                 string? password,
                 string? companyName,
+                string? email,
                 string phoneNumber) :
-        this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, default, GenderTypes.Male)
+        this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, email, GenderTypes.Male)
     {
     }
 
@@ -294,8 +295,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         return !string.IsNullOrWhiteSpace(password) && Password == MD5Utils.EncryptRepeat(password);
     }
 
-    public void AddRoles(params Guid[] roleIds)
+    public void AddRoles(IEnumerable<Guid> roleIds)
     {
+        roleIds = roleIds.Distinct();
         _roles = _roles.MergeBy(
            roleIds.Select(roleId => new UserRole(roleId)),
            item => item.RoleId);

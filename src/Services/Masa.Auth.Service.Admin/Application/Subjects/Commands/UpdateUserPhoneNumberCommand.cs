@@ -5,4 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record UpdateUserPhoneNumberCommand(UpdateUserPhoneNumberModel User) : Command
 {
+    public bool Result { get; set; }
 }

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpsertThirdPartyUserForLdapCommand : Command
+public record UpsertLdapUserCommand : Command
 {
     public Guid Id { get; set; }
 
@@ -27,14 +27,14 @@ public record UpsertThirdPartyUserForLdapCommand : Command
 
     public UserModel Result { get; set; } = new UserModel();
 
-    public UpsertThirdPartyUserForLdapCommand()
+    public UpsertLdapUserCommand()
     {
         PhoneNumber = "";
         Password = "";
         JobNumber = "";
     }
 
-    public UpsertThirdPartyUserForLdapCommand(string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber)
+    public UpsertLdapUserCommand(string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber)
     {
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
@@ -47,7 +47,7 @@ public record UpsertThirdPartyUserForLdapCommand : Command
         JobNumber = jobNumber;
     }
 
-    public UpsertThirdPartyUserForLdapCommand(Guid id, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber) : this(thridPartyIdentity, extendedData, name, displayName, phoneNumber, email, account, password, jobNumber)
+    public UpsertLdapUserCommand(Guid id, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber) : this(thridPartyIdentity, extendedData, name, displayName, phoneNumber, email, account, password, jobNumber)
     {
         Id = id;
     }

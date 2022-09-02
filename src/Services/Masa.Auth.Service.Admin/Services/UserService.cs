@@ -20,6 +20,8 @@ public class UserService : RestServiceBase
         MapPut(DisableAsync, "disable");
         MapPost(VerifyUserRepeatAsync);
         MapPost(SyncUserAutoCompleteAsync);
+        MapPost(SendMsgCodeAsync);
+        MapPost(VerifyMsgCodeAsync);
     }
 
     //[Authorize]
@@ -213,18 +215,40 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(new UpdateUserBasicInfoCommand(user));
     }
 
+    private async Task UpdateAvatarAsync(IEventBus eventBus,
+        [FromBody] UpdateUserAvatarModel staff)
+    {
+        await eventBus.PublishAsync(new UpdateUserAvatarCommand(staff));
+    }
+
+    private async Task<bool> UpdatePhoneNumberAsync(IEventBus eventBus,
+        [FromBody] UpdateUserPhoneNumberModel model)
+    {
+        var command = new UpdateUserPhoneNumberCommand(model);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
+
+    private async Task SendMsgCodeAsync(IEventBus eventBus, 
+        [FromBody] SendMsgCodeModel model)
+    {
+        await eventBus.PublishAsync(new SendMsgCodeCommand(model));
+    }
+
+    public async Task<bool> VerifyMsgCodeAsync(IEventBus eventBus, 
+        [FromBody] VerifyMsgCodeModel model)
+    {
+        var command = new VerifyMsgCodeForVerifiyPhoneNumberCommand(model);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
+
     public async Task<List<UserPortraitModel>> UserPortraitsAsync(IEventBus eventBus,
         [FromBody] List<Guid> userIds)
     {
         var query = new UserPortraitsQuery(userIds);
         await eventBus.PublishAsync(query);
         return query.Result;
-    }
-
-    private async Task UpdateAvatarAsync(IEventBus eventBus,
-    [FromBody] UpdateUserAvatarModel staff)
-    {
-        await eventBus.PublishAsync(new UpdateUserAvatarCommand(staff));
     }
 
     public async Task PostUserSystemData(IEventBus eventBus, [FromBody] UserSystemDataDto data)
