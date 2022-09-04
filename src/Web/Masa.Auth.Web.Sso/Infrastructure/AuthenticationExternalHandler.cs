@@ -39,7 +39,8 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
             IdentityProvider = provider,
             AdditionalClaims = additionalLocalClaims
         };
-        var environment = result.Properties?.Items?["environment"] ?? "development";
+        //result.Properties?.Items.TryGetValue("environment", out var environment);
+        var environment = "development";
         isuser.AdditionalClaims.Add(new Claim("userName", userModel.Account));
         isuser.AdditionalClaims.Add(new Claim("environment", environment));
         isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(userModel.RoleIds)));

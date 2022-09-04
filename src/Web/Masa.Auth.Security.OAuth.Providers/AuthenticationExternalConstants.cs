@@ -7,7 +7,7 @@ public static class AuthenticationExternalConstants
 {
     public static string ExternalCookieAuthenticationScheme { get; } = "oauth.external";
 
-    public static string ChallengeEndpoint { get; } = "external/challenge";
+    public static string ChallengeEndpoint { get; } = "/external/challenge";
 
-    public static string CallbackEndpoint { get; } = "external/callback";
+    public static string CallbackEndpoint { get; } = "/external/callback";
 }

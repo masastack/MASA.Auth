@@ -15,7 +15,7 @@ public class AuthenticationExternalMiddleware
     public async Task Invoke(HttpContext context, IAuthenticationExternalHandler handler)
     {
         var request = context.Request;
-        if(context.Request.Path.Equals(AuthenticationExternalConstants.ChallengeEndpoint, StringComparison.OrdinalIgnoreCase))
+        if (context.Request.Path.Equals(AuthenticationExternalConstants.ChallengeEndpoint, StringComparison.OrdinalIgnoreCase))
         {
             var returnUrl = request.Query["returnUrl"];
             var scheme = request.Query["scheme"];
