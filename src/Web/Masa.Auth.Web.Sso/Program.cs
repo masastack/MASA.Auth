@@ -50,18 +50,18 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
-builder.Services.AddScoped<IUserSession, ClientUserSession>();
-
-builder.Services.AddSingleton<SsoAuthenticationStateCache>();
-builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
-
-builder.Services.AddAuthentication()
+builder.Services.AddAuthenticationExternal<AuthenticationExternalHandler>()
                 .AddGitHub(options =>
                 {
                     options.ClientId = "49e302895d8b09ea5656";
                     options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
                     options.Scope.Add("user:email");
                 });
+
+builder.Services.AddScoped<IUserSession, ClientUserSession>();
+
+builder.Services.AddSingleton<SsoAuthenticationStateCache>();
+builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();              
 
 var app = builder.Build();
 
@@ -86,7 +86,8 @@ app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMo
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseAuthentication();
+app.UseAuthentication()
+   .UseAuthorizationExternal();
 app.UseAuthorization();
 
 app.MapRazorPages();

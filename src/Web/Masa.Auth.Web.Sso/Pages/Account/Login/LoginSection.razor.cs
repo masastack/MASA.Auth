@@ -169,6 +169,16 @@ public partial class LoginSection
         }
     }
 
+    private void NavigateToThirdParty()
+    {
+        var challenge = QueryHelpers.AddQueryString(AuthenticationExternalConstants.ChallengeEndpoint, new Dictionary<string, string?>
+        {
+            ["returnUrl"] = _inputModel.ReturnUrl,
+            ["scheme"] = "GitHub"
+        });
+        Navigation.NavigateTo(challenge, true);
+    }
+
     public void Dispose()
     {
         _timer?.Dispose();

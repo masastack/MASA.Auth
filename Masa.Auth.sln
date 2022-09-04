@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNet.Security.OAuth.GitHu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNet.Security.OAuth.Weixin", "..\AspNet.Security.OAuth.Weixin\AspNet.Security.OAuth.Weixin.csproj", "{7CF94729-479E-4C72-88F9-81021CCDFDA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masa.Auth.Security.OAuth.Providers", "src\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj", "{D58D018F-26B0-45D1-AD0B-E2777C59ED44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,14 @@ Global
 		{7CF94729-479E-4C72-88F9-81021CCDFDA2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CF94729-479E-4C72-88F9-81021CCDFDA2}.Release|x86.ActiveCfg = Release|Any CPU
 		{7CF94729-479E-4C72-88F9-81021CCDFDA2}.Release|x86.Build.0 = Release|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Debug|x86.Build.0 = Debug|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|x86.ActiveCfg = Release|Any CPU
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +164,7 @@ Global
 		{58F03BDE-6640-4231-A5FA-399BF2EF3773} = {32774681-0D67-48A6-A379-D57015094F85}
 		{C4783260-1767-4797-A1C6-702E355E7DB4} = {F3986DD3-0372-4929-B72A-09D93196541E}
 		{7CF94729-479E-4C72-88F9-81021CCDFDA2} = {F3986DD3-0372-4929-B72A-09D93196541E}
+		{D58D018F-26B0-45D1-AD0B-E2777C59ED44} = {F3986DD3-0372-4929-B72A-09D93196541E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B83BA2BA-19E5-41FB-A92A-16A03DA229E4}

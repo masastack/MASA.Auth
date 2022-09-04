@@ -40,7 +40,7 @@
     </MCard>
 }
 
-@if (_viewModel.VisibleExternalProviders.Any())
+@*@if (_viewModel.VisibleExternalProviders.Any())
 {
     <div class="col-sm-6">
         <div class="card">
@@ -63,7 +63,7 @@
             </div>
         </div>
     </div>
-}
+}*@
 
 @if (!_viewModel.EnableLocalLogin && !_viewModel.VisibleExternalProviders.Any())
 {

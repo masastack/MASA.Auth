@@ -4,6 +4,7 @@
 @inject IMcClient _mcClient
 @inject IConfiguration _configuration
 @inject IDistributedCacheClient _distributedCacheClient
+@inject IAuthenticationSchemeProvider _schemeProvider
 @implements IDisposable
 
 <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-12 mx-12 text-center">
@@ -76,4 +77,5 @@
             @T("PasswordLogin")
         </MButton>
     }
+    <MIcon Class="mt-4" @onclick="() => NavigateToThirdParty()">mid-github</MIcon>
 </div>

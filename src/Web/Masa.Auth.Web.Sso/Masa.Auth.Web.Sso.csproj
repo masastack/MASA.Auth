@@ -14,7 +14,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AspNet.Security.OAuth.Weixin" Version="6.0.6" />
 		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
@@ -49,8 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\AspNet.Security.OAuth.GitHub\AspNet.Security.OAuth.GitHub.csproj" />
-	  <ProjectReference Include="..\..\..\..\AspNet.Security.OAuth.Weixin\AspNet.Security.OAuth.Weixin.csproj" />
+	  <ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
