@@ -809,8 +809,14 @@ public class CommandHandler
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
     {
         var thirdPartyUserDto = command.ThirdPartyUser;
-        await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
-        await AddThirdPartyUserAsync(thirdPartyUserDto);
+        var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, command.WhenExisReturn); 
+        if(thirdPartyUser is not null)
+        {
+            command.Result = thirdPartyUser.User.Adapt<UserModel>();
+            command.Result.RoleIds = thirdPartyUser.User.Roles.Select(role => role.RoleId).ToList();
+            return;
+        }
+        command.Result = await AddThirdPartyUserAsync(thirdPartyUserDto);
     }
 
     async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
@@ -910,10 +916,26 @@ public class CommandHandler
         await _eventBus.PublishAsync(upsertStaffCommand);
     }
 
+    [EventHandler]
+    public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
+    {
+        var model = command.ThirdPartyUser;
+        var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+        await _eventBus.PublishAsync(identityProviderQuery);
+        var identityProvider = identityProviderQuery.Result;
+        var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
+        addThirdPartyUserDto.ThirdPartyIdpId = identityProvider.Id;
+        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn);
+        await _eventBus.PublishAsync(addThirdPartyUserCommand);
+        command.Result = addThirdPartyUserCommand.Result;
+    }
+
     private async Task<ThirdPartyUser?> VerifyUserRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity, bool throwException = true)
     {
-
-        var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
+        var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
+                                                 .Include(tpu => tpu.User)
+                                                 .ThenInclude(user => user.Roles)
+                                                 .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);                                
         if (thirdPartyUser is not null)
         {
             if (throwException is false)

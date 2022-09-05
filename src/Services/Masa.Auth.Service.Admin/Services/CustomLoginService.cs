@@ -23,6 +23,15 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
+        public async Task<CustomLoginModel?> GetCustomLoginByClientIdAsync(
+            [FromServices] IEventBus eventBus, 
+            [FromQuery] string clientId)
+        {
+            var query = new CustomLoginByClientIdQuery(clientId);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
         private async Task AddAsync(IEventBus eventBus, [FromBody] AddCustomLoginDto dto)
         {
             await eventBus.PublishAsync(new AddCustomLoginCommand(dto));

@@ -22,6 +22,9 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
     {
         var (provider, providerUserId, claims) = FindUserFromExternalProvider(result);
         // todo add third party user
+
+
+
         var userModel = new UserModel()
         {
             Id = Guid.Parse("9C9A17D6-0B0E-4697-6BD6-08DA706507F0"),
