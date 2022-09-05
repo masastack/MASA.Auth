@@ -10,6 +10,8 @@
   "SMSCodePlaceHolder": "请输入短信验证码",
   "Password": "密码",
   "PasswordPlaceHolder": "请输入密码",
+  "ConfirmPassword": "确认密码",
+  "ConfirmPasswordPlaceHolder": "请再次输入密码",
   "RememberLogin": "记住我",
   "LdapLogin": "域账号登录",
   "PasswordLogin": "密码登录",
@@ -32,5 +34,13 @@
   "Click": "点击",
   "Here": "此处",
   "Return": "返回",
-  "Application": "应用"
+  "Application": "应用",
+  "Email": "邮箱",
+  "EmailPlaceHolder": "请输入邮箱地址",
+  "EmailRegister": "邮箱注册",
+  "PhoneRegister": "手机注册",
+  "VerifyCode": "验证码",
+  "RegistrationSuccess": "注册成功",
+  "ReplenishInfo": "完善资料",
+  "Sure": "确定"
 }
