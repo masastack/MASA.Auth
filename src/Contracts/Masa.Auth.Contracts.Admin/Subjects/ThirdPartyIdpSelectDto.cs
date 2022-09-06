@@ -15,8 +15,6 @@ public class ThirdPartyIdpSelectDto
 
     public string ClientSecret { get; set; } = "";
 
-    public string Url { get; set; } = "";
-
     public string Icon { get; set; } = "";
 
     public AuthenticationTypes AuthenticationType { get; set; }
@@ -26,14 +24,13 @@ public class ThirdPartyIdpSelectDto
 
     }
 
-    public ThirdPartyIdpSelectDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, AuthenticationTypes authenticationType)
+    public ThirdPartyIdpSelectDto(Guid id, string name, string displayName, string clientId, string clientSecret, string icon, AuthenticationTypes authenticationType)
     {
         Id = id;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
-        Url = url;
         Icon = icon;
         AuthenticationType = authenticationType;
     }

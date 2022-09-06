@@ -19,8 +19,11 @@ public partial class ExternalThirdPartySelect
 
     public List<AuthenticationDefaults> ExternalThirdPartyIdps { get; set; } = new();
 
+    public List<AuthenticationDefaults[]> Chunks { get; set; } = new();
+
     protected override async Task OnInitializedAsync()
     {
         ExternalThirdPartyIdps = await AuthCaller.ThirdPartyIdpService.GetExternalThirdPartyIdpsAsync();
+        Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
     }
 }

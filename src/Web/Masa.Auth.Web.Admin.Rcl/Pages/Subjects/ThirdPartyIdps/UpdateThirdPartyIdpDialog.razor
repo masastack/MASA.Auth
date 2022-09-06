@@ -26,32 +26,7 @@
                     <MCol>
                         <STextField @bind-Value="ThirdPartyIdp.ClientSecret" Required Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
                     </MCol>
-                </MRow>
-                <MRow Class="mb-6">
-                    <MCol>
-                        <SUrlTextField @bind-Value="ThirdPartyIdp.Url" Label="@T(nameof(ThirdPartyIdp.Url))" />
-                    </MCol>
-                    <MCol>
-                        <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
-                    </MCol>
-                </MRow>
-                <MRow Class="mb-6">
-                    <MCol>
-                        <div class="d-flex defaultRadio">
-                            <div class="body regular--text my-auto">@T("Unique identification of third-party platforms")</div>
-                            <MRadioGroup @bind-Value="@ThirdPartyIdp.IdentificationType" Class="my-auto ml-6" Row>
-                                <MRadio Label="@T("PhoneNumber")"
-                                        Color="green"
-                                        Value="IdentificationTypes.PhoneNumber">
-                                </MRadio>
-                                <MRadio Label="@T("Email")"
-                                        Color="green"
-                                        Value="IdentificationTypes.Email">
-                                </MRadio>
-                            </MRadioGroup>
-                        </div>
-                    </MCol>
-                </MRow>
+                </MRow>              
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

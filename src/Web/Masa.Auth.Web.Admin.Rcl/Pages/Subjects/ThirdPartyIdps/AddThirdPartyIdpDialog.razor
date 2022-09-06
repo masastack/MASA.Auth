@@ -6,7 +6,8 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto text-center" style="width:212px;">
-                        <UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
+                        <ExternalThirdPartySelect />
+                        @*<UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />*@
                     </div>
                 </div>
             </HeaderContent>
@@ -37,7 +38,7 @@
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <SUrlTextField @bind-Value="ThirdPartyIdp.CallbackPath" Label="@T("CallbackPath")" />                      
+                        <STextField @bind-Value="ThirdPartyIdp.CallbackPath" Label="@T("CallbackPath")" />                      
                     </MCol>
                     <MCol>
                         <SUrlTextField @bind-Value="ThirdPartyIdp.AuthorizationEndpoint" Label="@T("AuthorizationEndpoint")" />                 

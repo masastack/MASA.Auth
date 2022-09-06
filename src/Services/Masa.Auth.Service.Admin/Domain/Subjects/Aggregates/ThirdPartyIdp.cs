@@ -71,7 +71,7 @@ public class ThirdPartyIdp : IdentityProvider
         AuthenticationType = verifyType;
     }
 
-    public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes verifyType)
+    public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint)
     {
         DisplayName = displayName;
         ClientId = clientId;
@@ -82,7 +82,6 @@ public class ThirdPartyIdp : IdentityProvider
         AuthorizationEndpoint = authorizationEndpoint;
         TokenEndpoint = tokenEndpoint;
         UserInformationEndpoint = userInformationEndpoint;
-        AuthenticationType = verifyType;
     }
 }
 

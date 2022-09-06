@@ -8,9 +8,5 @@ public class ThirdPartyIdpDetailDto : ThirdPartyIdpDto
     public ThirdPartyIdpDetailDto()
     {
     }
-
-    public ThirdPartyIdpDetailDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, string verifyFile, bool enabled, AuthenticationTypes authenticationType, IdentificationTypes identificationType, DateTime creationTime, DateTime? modificationTime) : base(id, name, displayName, clientId, clientSecret, url, icon, verifyFile, enabled, authenticationType, identificationType, creationTime, modificationTime)
-    {
-    }
 }
 

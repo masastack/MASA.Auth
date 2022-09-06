@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSelect Value="Value"
+@*<SSelect Value="Value"
                ValueChanged="ValueChanged"
                Items="ExternalThirdPartyIdps"
                Label="@T("Type")"
@@ -14,8 +14,31 @@
                 <img src="@data.Item.Icon" />
             </MAvatar>
             <div class="my-auto">
-                <span class="body2 emphasis2--text ml-2">@data.Item.DisplayName</span> 
-            </div>                      
+                <span class="body2 emphasis2--text ml-2">@data.Item.DisplayName</span>
+            </div>
         </div>
     </ItemContent>
-</SSelect>
+</SSelect>*@
+
+<div>
+    @foreach (var chunk in Chunks)
+    {
+        <div>
+            @foreach (var item in chunk)
+            {
+                if (item.Scheme == ThirdPartyIdpTypes.Customize.ToString())
+                {
+                    <UploadAvatar @bind-Value="@Value.Icon" WhenFileChangeUpload />
+                }
+                else
+                {
+                    <MAvatar>
+                        <img src="@item.Icon" />
+                    </MAvatar>
+                }
+            }
+        </div>
+    }
+</div>
+
+

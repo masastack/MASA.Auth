@@ -27,7 +27,7 @@ public class AddThirdPartyIdpDto
 
     public AuthenticationTypes AuthenticationType { get; set; } = AuthenticationTypes.OAuth;
 
-    public ThirdPartyIdpTypes ThirdPartyIdpType { get; set; }
+    public ThirdPartyIdpTypes ThirdPartyIdpType { get; set; } = ThirdPartyIdpTypes.Customize;
 
     public AddThirdPartyIdpDto()
     {

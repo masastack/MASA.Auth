@@ -127,7 +127,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         {
             var name = await _authDbContext.Set<IdentityProvider>()
                                               .Where(i => i.Id == id)
-                                              .Select<IdentityProvider,>(i => i.Name)
+                                              .Select(i => i.Name)
                                               .FirstAsync();
 
             return name;

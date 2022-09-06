@@ -774,7 +774,19 @@ public class CommandHandler
         if (exist)
             throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
 
-        var thirdPartyIdp = new ThirdPartyIdp(thirdPartyIdpDto.Name, thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, thirdPartyIdpDto.IdentificationType, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.AuthenticationType);
+        var thirdPartyIdp = new ThirdPartyIdp(
+            thirdPartyIdpDto.Name, 
+            thirdPartyIdpDto.DisplayName, 
+            thirdPartyIdpDto.Icon, 
+            thirdPartyIdpDto.Enabled, 
+            thirdPartyIdpDto.ThirdPartyIdpType, 
+            thirdPartyIdpDto.ClientId, 
+            thirdPartyIdpDto.ClientSecret, 
+            thirdPartyIdpDto.CallbackPath,
+            thirdPartyIdpDto.AuthorizationEndpoint,
+            thirdPartyIdpDto.TokenEndpoint,
+            thirdPartyIdpDto.UserInformationEndpoint,
+            thirdPartyIdpDto.AuthenticationType);
 
         await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
     }
@@ -787,7 +799,16 @@ public class CommandHandler
         if (thirdPartyIdp is null)
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
-        thirdPartyIdp.Update(thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, thirdPartyIdpDto.IdentificationType, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+        thirdPartyIdp.Update(
+            thirdPartyIdpDto.DisplayName, 
+            thirdPartyIdpDto.Icon, 
+            thirdPartyIdpDto.Enabled, 
+            thirdPartyIdpDto.ClientId, 
+            thirdPartyIdpDto.ClientSecret, 
+            thirdPartyIdpDto.CallbackPath, 
+            thirdPartyIdpDto.AuthorizationEndpoint, 
+            thirdPartyIdpDto.TokenEndpoint, 
+            thirdPartyIdpDto.UserInformationEndpoint);
         await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
     }
 
