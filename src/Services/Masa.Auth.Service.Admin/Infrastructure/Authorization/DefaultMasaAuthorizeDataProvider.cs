@@ -6,22 +6,30 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
 {
     readonly IUserContext _userContext;
+    readonly IEventBus _eventBus;
 
-    public DefaultMasaAuthorizeDataProvider(IUserContext userContext)
+    public DefaultMasaAuthorizeDataProvider(IUserContext userContext, IEventBus eventBus)
     {
         _userContext = userContext;
+        _eventBus = eventBus;
     }
 
-    public string GetAccount()
+    public Task<string> GetAccountAsync()
     {
-        return _userContext.UserName ?? "";
+        var account = _userContext.UserName ?? "";
+        return Task.FromResult(account);
     }
 
-    public List<string> GetAllowCodeList()
+    public async Task<IEnumerable<string>> GetAllowCodeListAsync(string appId)
     {
-        return new List<string>
-        {
-            "*"
-        };
+        var userId = _userContext.GetUserId<Guid>();
+        //todo wait dcc pm update stack component
+        //if (userId == Guid.Empty)
+        //{
+        //    return Enumerable.Empty<string>();
+        //}
+        var permissionQuery = new UserElementPermissionCodeQuery(appId, userId);
+        await _eventBus.PublishAsync(permissionQuery);
+        return permissionQuery.Result;
     }
 }

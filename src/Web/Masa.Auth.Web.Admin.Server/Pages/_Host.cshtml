@@ -7,7 +7,7 @@
 }
 
 @{
-    var tokens = new BlazorServerTokenData
+    var tokens = new TokenProvider
     {
         AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),
         RefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken),
@@ -15,4 +15,4 @@
     };
 }
 
-<component type="typeof(Masa.Auth.Web.Admin.Rcl.App)" render-mode="ServerPrerendered" param-TokenState="tokens" />
+<component type="typeof(Masa.Auth.Web.Admin.Rcl.App)" render-mode="ServerPrerendered" param-InitialState="tokens" />

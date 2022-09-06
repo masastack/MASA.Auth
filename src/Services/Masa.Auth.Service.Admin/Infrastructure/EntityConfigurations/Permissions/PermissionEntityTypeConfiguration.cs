@@ -36,6 +36,8 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
                         configureJoinEntityType.HasIndex(pr => new { pr.ParentPermissionId, pr.ChildPermissionId })
                             .IsUnique().HasFilter("[IsDeleted] = 0");
                     });
+
+        builder.Ignore(p => p.ReplenishCode);
     }
 }
 

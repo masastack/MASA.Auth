@@ -13,6 +13,8 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public string Code { get; private set; }
 
+    public string ReplenishCode => $"{AppId}.{Code}";
+
     public Guid ParentId { get; set; }
 
     public string Url { get; private set; } = "";

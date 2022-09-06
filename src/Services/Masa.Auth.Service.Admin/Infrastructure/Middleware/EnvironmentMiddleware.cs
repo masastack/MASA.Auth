@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
 
-public class EnvironmentMiddleware : IMiddleware
+public class EnvironmentMiddleware : IMiddleware, IScopedDependency
 {
     readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
 

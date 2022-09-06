@@ -22,7 +22,6 @@
     <PackageReference Include="Util.Reflection" Version="1.0.3" />
 	<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaFrameworkPackageVersion)" />
 	<PackageReference Include="Masa.Utils.Caching.Redis" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.Utils.Extensions.DependencyInjection" Version="$(MasaFrameworkPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

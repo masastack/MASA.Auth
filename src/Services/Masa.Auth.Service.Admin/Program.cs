@@ -3,7 +3,6 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoInject();
 builder.AddObservability();
 
 #if DEBUG
@@ -13,6 +12,8 @@ builder.Services.AddDaprStarter(opt =>
     opt.DaprGrpcPort = 3601;
 });
 #endif
+
+builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
 builder.AddMasaConfiguration(configurationBuilder =>
 {
@@ -20,7 +21,7 @@ builder.AddMasaConfiguration(configurationBuilder =>
 });
 var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
-builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName) 
+builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
     Sts = new AliyunStsOptions()
     {
@@ -38,7 +39,6 @@ builder.Services.AddMasaIdentityModel(options =>
 builder.Services
     .AddScoped<EnvironmentMiddleware>()
     .AddScoped<MasaAuthorizeMiddleware>()
-    .AddScoped<IMasaAuthorizeDataProvider, DefaultMasaAuthorizeDataProvider>()
     .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
     .AddAuthorization(options =>
@@ -123,6 +123,7 @@ builder.Services
     .UseEventBus(eventBusBuilder =>
     {
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
+        eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment

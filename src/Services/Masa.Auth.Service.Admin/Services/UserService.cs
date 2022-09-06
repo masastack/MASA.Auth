@@ -119,6 +119,7 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(new RemoveUserCommand(dto));
     }
 
+    [AllowAnonymous]
     private async Task<bool> ValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
     {
         var validateCommand = new ValidateByAccountCommand(accountValidateDto);
@@ -126,6 +127,7 @@ public class UserService : RestServiceBase
         return validateCommand.Result;
     }
 
+    [AllowAnonymous]
     private async Task<UserModel?> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
     {
         var query = new FindUserByAccountQuery(account);

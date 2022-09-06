@@ -26,7 +26,7 @@
             </MStepperContent>
             <MStepperContent class="full-height" Step="2">
                 <MCard Class="mx-auto d-flex flex-column full-height">
-                    <TeamAdmin @bind-Value="_teamDetailDto.TeamAdmin" />
+                    <TeamAdmin IgnoreStaffIds="_teamDetailDto.TeamMember.Staffs" @bind-Value="_teamDetailDto.TeamAdmin" />
                     <MCardActions class="d-flex justify-end align-center mb-6">
                         <SButton Medium Class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
                         <SButton Medium OnClick="()=> _step++ ">@T("Next step")</SButton>
@@ -35,7 +35,7 @@
             </MStepperContent>
             <MStepperContent class="full-height" Step="3">
                 <MCard Class="mx-auto d-flex flex-column full-height">
-                    <TeamMember @bind-Value="_teamDetailDto.TeamMember" />
+                    <TeamMember IgnoreStaffIds="_teamDetailDto.TeamAdmin.Staffs" @bind-Value="_teamDetailDto.TeamMember" />
                     <MCardActions class="d-flex justify-end align-center mb-6">
                         <SButton Medium class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
                         <SButton Medium OnClick="OnSubmitHandler">@T("Submit")</SButton>
