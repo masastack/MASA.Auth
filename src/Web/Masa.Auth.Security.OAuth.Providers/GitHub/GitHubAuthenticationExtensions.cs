@@ -11,7 +11,7 @@ public static class WeixinAuthenticationExtensions
     /// </summary>
     /// <param name="builder">The authentication builder.</param>
     /// <returns>The <see cref="AuthenticationBuilder"/>.</returns>
-    public static AuthenticationBuilder AddDefaulrWeixin(this AuthenticationBuilder builder, Action<WeixinAuthenticationOptions> configuration)
+    public static AuthenticationBuilder AddDefaultWeixin(this AuthenticationBuilder builder, Action<WeixinAuthenticationOptions> configuration)
     {
         configuration = options =>
         {

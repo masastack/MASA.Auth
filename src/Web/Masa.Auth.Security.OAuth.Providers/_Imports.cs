@@ -9,3 +9,4 @@ global using System.Security.Claims;
 global using AspNet.Security.OAuth.GitHub;
 global using Microsoft.Extensions.DependencyInjection;
 global using AspNet.Security.OAuth.Weixin;
+global using System.Reflection;

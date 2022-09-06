@@ -11,7 +11,7 @@ public static class GitHubAuthenticationExtensions
     /// </summary>
     /// <param name="builder">The authentication builder.</param>
     /// <returns>The <see cref="AuthenticationBuilder"/>.</returns>
-    public static AuthenticationBuilder AddDefaulrGitHub(this AuthenticationBuilder builder, Action<GitHubAuthenticationOptions> configuration)
+    public static AuthenticationBuilder AddDefaultGitHub(this AuthenticationBuilder builder, Action<GitHubAuthenticationOptions> configuration)
     {
         configuration = options =>
         {

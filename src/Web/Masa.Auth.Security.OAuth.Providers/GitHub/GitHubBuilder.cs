@@ -9,7 +9,7 @@ public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
 
-    public Identity BuilderIdentity(ClaimsPrincipal principal)
+    public Identity BuildIdentity(ClaimsPrincipal principal)
     {
         var identity = Identity.CreaterDefault(principal);
         identity.NickName = principal.FindFirstValue(Claims.Name);

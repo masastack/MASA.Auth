@@ -7,5 +7,5 @@ public interface IIdentityBuilder
 {
     public string Scheme { get; }
 
-    Identity BuilderIdentity(ClaimsPrincipal principal);
+    Identity BuildIdentity(ClaimsPrincipal principal);
 }

@@ -51,12 +51,12 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
 builder.Services.AddAuthenticationExternal<AuthenticationExternalHandler>()
-                .AddDefaulrGitHub(options =>
+                .AddDefaultGitHub(options =>
                 {
                     options.ClientId = "49e302895d8b09ea5656";
                     options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
                 })
-                .AddDefaulrWeixin(options =>
+                .AddDefaultWeixin(options =>
                 {
                 });
 
