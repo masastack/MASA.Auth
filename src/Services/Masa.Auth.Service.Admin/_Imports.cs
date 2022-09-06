@@ -140,3 +140,5 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Sms;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Caches;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
 global using System.Runtime.CompilerServices;
+global using Masa.Auth.Security.OAuth.Providers;
+global using IdentityProvider = Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider;

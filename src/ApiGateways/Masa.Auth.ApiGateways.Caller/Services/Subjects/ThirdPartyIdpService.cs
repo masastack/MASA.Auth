@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Security.OAuth.Providers;
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class ThirdPartyIdpService : ServiceBase
@@ -22,6 +24,11 @@ public class ThirdPartyIdpService : ServiceBase
     public async Task<List<ThirdPartyIdpSelectDto>> GetSelectAsync(string? search = null)
     {
         return await SendAsync<object, List<ThirdPartyIdpSelectDto>>(nameof(GetSelectAsync), new { search });
+    }
+
+    public async Task<List<AuthenticationDefaults>> GetExternalThirdPartyIdpsAsync()
+    {
+        return await GetAsync<List<AuthenticationDefaults>>(nameof(GetExternalThirdPartyIdpsAsync));
     }
 
     public async Task<ThirdPartyIdpDetailDto> GetDetailAsync(Guid id)

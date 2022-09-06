@@ -56,7 +56,7 @@ builder.Services.AddAuthenticationExternal<AuthenticationExternalHandler>()
                     options.ClientId = "49e302895d8b09ea5656";
                     options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
                 })
-                .AddDefaultWeixin(options =>
+                .AddDefaultWeChat(options =>
                 {
                 });
 

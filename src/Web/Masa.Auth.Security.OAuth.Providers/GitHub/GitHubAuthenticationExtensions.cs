@@ -3,7 +3,7 @@
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class WeixinAuthenticationExtensions
+public static class GitHubAuthenticationExtensions
 {
     /// <summary>
     /// Adds <see cref="GitHubAuthenticationHandler"/> to the specified
@@ -11,13 +11,17 @@ public static class WeixinAuthenticationExtensions
     /// </summary>
     /// <param name="builder">The authentication builder.</param>
     /// <returns>The <see cref="AuthenticationBuilder"/>.</returns>
-    public static AuthenticationBuilder AddDefaultWeixin(this AuthenticationBuilder builder, Action<WeixinAuthenticationOptions> configuration)
+    public static AuthenticationBuilder AddDefaultGitHub(this AuthenticationBuilder builder, Action<GitHubAuthenticationOptions> configuration)
     {
         configuration = options =>
         {
             configuration.Invoke(options);
             options.SignInScheme = AuthenticationExternalConstants.ExternalCookieAuthenticationScheme;
+            options.Scope.Add("user:email");
+            options.ClaimActions.MapJsonKey(UserClaims.WebSite, "html_url");
+            options.ClaimActions.MapJsonKey(UserClaims.Picture, "avatar_url");
+            options.ClaimActions.MapJsonKey(UserClaims.Account, "login");
         };
-        return builder.AddWeixin(configuration);
+        return builder.AddGitHub(configuration);
     }
 }

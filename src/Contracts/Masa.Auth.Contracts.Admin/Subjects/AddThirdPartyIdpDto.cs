@@ -13,33 +13,39 @@ public class AddThirdPartyIdpDto
 
     public string ClientSecret { get; set; } = "";
 
-    public string Url { get; set; } = "";
+    public string CallbackPath { get; set; } = "";
 
-    public bool Enabled { get; set; } = true;
+    public string AuthorizationEndpoint { get; set; } = "";
+
+    public string TokenEndpoint { get; set; } = "";
+
+    public string UserInformationEndpoint { get; set; } = "";
 
     public string Icon { get; set; } = "";
 
-    public string VerifyFile { get; set; } = "";
+    public bool Enabled { get; set; }
 
-    public AuthenticationTypes VerifyType { get; set; }
+    public AuthenticationTypes AuthenticationType { get; set; } = AuthenticationTypes.OAuth;
 
-    public IdentificationTypes IdentificationType { get; set; } = IdentificationTypes.PhoneNumber;
+    public ThirdPartyIdpTypes ThirdPartyIdpType { get; set; }
 
     public AddThirdPartyIdpDto()
     {
     }
 
-    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string url, bool enabled, string icon, string verifyFile, AuthenticationTypes verifyType, IdentificationTypes identificationType)
+    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, AuthenticationTypes authenticationType, ThirdPartyIdpTypes thirdPartyIdpType)
     {
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
-        Url = url;
-        Enabled = enabled;
+        CallbackPath = callbackPath;
+        AuthorizationEndpoint = authorizationEndpoint;
+        TokenEndpoint = tokenEndpoint;
+        UserInformationEndpoint = userInformationEndpoint;
         Icon = icon;
-        VerifyFile = verifyFile;
-        VerifyType = verifyType;
-        IdentificationType = identificationType;
+        Enabled = enabled;
+        AuthenticationType = authenticationType;
+        ThirdPartyIdpType = thirdPartyIdpType;
     }
 }

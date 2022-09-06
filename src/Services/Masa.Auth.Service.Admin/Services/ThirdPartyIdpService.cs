@@ -35,6 +35,13 @@ public class ThirdPartyIdpService : RestServiceBase
         return query.Result;
     }
 
+    private async Task<List<AuthenticationDefaults>> GetExternalThirdPartyIdpsAsync([FromServices] IEventBus eventBus)
+    {
+        var query = new ExternalThirdPartyIdpsQuery();
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task AddAsync(IEventBus eventBus, [FromBody] AddThirdPartyIdpDto dto)
     {
         await eventBus.PublishAsync(new AddThirdPartyIdpCommand(dto));

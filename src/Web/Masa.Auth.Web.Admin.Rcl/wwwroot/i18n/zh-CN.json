@@ -142,7 +142,10 @@
     "Group Search BaseDn": "组搜索域",
     "Connect Success": "连接成功",
     "Connect Error": "连接失败",
-    "Ldap Account Synchroniz Success": "域账户同步成功"
+    "Ldap Account Synchroniz Success": "域账户同步成功",
+    "AuthenticationType": "人证类型",
+    "PlatformType": "平台类型",
+    "Icon": "图标"
   },
 
   "PositionBlock": {

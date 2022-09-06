@@ -20,12 +20,12 @@ public static class AuthenticationDefaultsProvider
     public static AuthenticationDefaults GetAuthenticationDefaults(string scheme)
     {
         var builder = _builders.First(builder => builder.Scheme == scheme);
-        return builder.BuilderAuthenticationDefaults();
+        return builder.BuildAuthenticationDefaults();
     }
 
     public static List<AuthenticationDefaults> GetAllAuthenticationDefaults()
     {
-        return _builders.Select(builder => builder.BuilderAuthenticationDefaults())
+        return _builders.Select(builder => builder.BuildAuthenticationDefaults())
                         .ToList();
     }
 }

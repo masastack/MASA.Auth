@@ -18,12 +18,13 @@ public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
         return identity;
     }
 
-    public AuthenticationDefaults BuilderAuthenticationDefaults()
+    public AuthenticationDefaults BuildAuthenticationDefaults()
     {
         return new AuthenticationDefaults
         {
             Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
             DisplayName = GitHubAuthenticationDefaults.DisplayName,
+            Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/app.ico",
             CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
             Issuer = GitHubAuthenticationDefaults.Issuer,
             AuthorizationEndpoint = GitHubAuthenticationDefaults.AuthorizationEndpoint,

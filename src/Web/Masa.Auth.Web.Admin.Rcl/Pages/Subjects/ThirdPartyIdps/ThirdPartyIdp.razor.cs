@@ -75,12 +75,12 @@ public partial class ThirdPartyIdp
 
     public List<DataTableHeader<ThirdPartyIdpDto>> GetHeaders() => new()
     {
-        new() { Text = T("Platform"), Value = nameof(ThirdPartyIdpDto.Icon), Sortable = false },
-        new() { Text = T("Name"), Value = nameof(ThirdPartyIdpDto.Name), Sortable = false },
-        new() { Text = T("DisplayName"), Value = nameof(ThirdPartyIdpDto.DisplayName), Sortable = false },
-        new() { Text = T("Type"), Value = nameof(ThirdPartyIdpDto.VerifyType), Sortable = false },
-        new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },
-        new() { Text = T("URL"), Value = nameof(ThirdPartyIdpDto.Url), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyIdpDto.Icon)), Value = nameof(ThirdPartyIdpDto.Icon), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyIdpDto.Name)), Value = nameof(ThirdPartyIdpDto.Name), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyIdpDto.DisplayName)), Value = nameof(ThirdPartyIdpDto.DisplayName), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyIdpDto.AuthenticationType)), Value = nameof(ThirdPartyIdpDto.AuthenticationType), Sortable = false },
+        new() { Text = T("PlatformType"), Value = nameof(ThirdPartyIdpDto.ThirdPartyIdpType), Sortable = false },
+        new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },        
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
     };
 

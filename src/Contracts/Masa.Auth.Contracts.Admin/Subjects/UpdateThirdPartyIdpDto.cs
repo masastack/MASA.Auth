@@ -13,39 +13,39 @@ public class UpdateThirdPartyIdpDto
 
     public string ClientSecret { get; set; } = "";
 
-    public string Url { get; set; } = "";
+    public string CallbackPath { get; set; } = "";
+
+    public string AuthorizationEndpoint { get; set; } = "";
+
+    public string TokenEndpoint { get; set; } = "";
+
+    public string UserInformationEndpoint { get; set; } = "";
 
     public string Icon { get; set; } = "";
 
     public bool Enabled { get; set; } = true;
-
-    public string VerifyFile { get; set; } = "";
-
-    public AuthenticationTypes VerifyType { get; set; }
-
-    public IdentificationTypes IdentificationType { get; set; } = IdentificationTypes.PhoneNumber;
 
     public UpdateThirdPartyIdpDto()
     {
 
     }
 
-    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string url, string icon, bool enabled, string verifyFile, AuthenticationTypes verifyType, IdentificationTypes identificationType)
+    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled)
     {
         Id = id;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
-        Url = url;
+        CallbackPath = callbackPath;
+        AuthorizationEndpoint = authorizationEndpoint;
+        TokenEndpoint = tokenEndpoint;
+        UserInformationEndpoint = userInformationEndpoint;
         Icon = icon;
         Enabled = enabled;
-        VerifyFile = verifyFile;
-        VerifyType = verifyType;
-        IdentificationType = identificationType;
     }
 
     public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto thirdPartyIdp)
     {
-        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.Url, thirdPartyIdp.Icon, thirdPartyIdp.Enabled, thirdPartyIdp.VerifyFile, thirdPartyIdp.VerifyType, thirdPartyIdp.IdentificationType);
+        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.CallbackPath, thirdPartyIdp.AuthorizationEndpoint, thirdPartyIdp.TokenEndpoint, thirdPartyIdp.UserInformationEndpoint, thirdPartyIdp.Icon, thirdPartyIdp.Enabled);
     }
 }

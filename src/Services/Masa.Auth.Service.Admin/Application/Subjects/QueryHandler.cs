@@ -183,7 +183,7 @@ public class QueryHandler
                                      .Take(query.PageSize)
                                      .ToListAsync();
 
-        query.Result = new(total, staffs.Select(staff => 
+        query.Result = new(total, staffs.Select(staff =>
         {
             var staffDto = (StaffDto)staff;
             staffDto.Account = staff.User.Account;
@@ -389,7 +389,7 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(thirdPartyIdps.Total, thirdPartyIdps.Result.Select(thirdPartyIdp => (ThirdPartyIdpDto)thirdPartyIdp).ToList());
+        query.Result = new(thirdPartyIdps.Total, thirdPartyIdps.Result.Select(thirdPartyIdp => thirdPartyIdp.Adapt<ThirdPartyIdpDto>()).ToList());
     }
 
     [EventHandler]
@@ -398,7 +398,7 @@ public class QueryHandler
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == query.ThirdPartyIdpId);
         if (thirdPartyIdp is null) throw new UserFriendlyException("This thirdPartyIdp data does not exist");
 
-        query.Result = thirdPartyIdp;
+        query.Result = thirdPartyIdp.Adapt<ThirdPartyIdpDetailDto>();
     }
 
     [EventHandler]
@@ -409,7 +409,6 @@ public class QueryHandler
 
         query.Result = identityProvider ?? throw new UserFriendlyException($"IdentityProvider {query.ThirdPartyIdpType} not exist");
     }
-
 
     [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
@@ -426,7 +425,16 @@ public class QueryHandler
             condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
 
-        query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyType)).ToList();
+        query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.AuthenticationType)).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
+    {
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
+        query.Result = AuthenticationDefaultsProvider.GetAllAuthenticationDefaults()
+                                                     .Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme))
+                                                     .ToList();
     }
 
     #endregion

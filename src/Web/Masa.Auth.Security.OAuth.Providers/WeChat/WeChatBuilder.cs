@@ -3,9 +3,9 @@
 
 using static AspNet.Security.OAuth.Weixin.WeixinAuthenticationConstants;
 
-namespace Masa.Auth.Security.OAuth.Providers.Weixin;
+namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
-public class WeixinBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
+public class WeChatBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
 
@@ -20,12 +20,13 @@ public class WeixinBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
         return identity;
     }
 
-    public AuthenticationDefaults BuilderAuthenticationDefaults()
+    public AuthenticationDefaults BuildAuthenticationDefaults()
     {
         return new AuthenticationDefaults
         {
             Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
             DisplayName = GitHubAuthenticationDefaults.DisplayName,
+            Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/wechat.ico",
             CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
             Issuer = GitHubAuthenticationDefaults.Issuer,
             AuthorizationEndpoint = GitHubAuthenticationDefaults.AuthorizationEndpoint,

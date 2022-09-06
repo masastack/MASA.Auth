@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record IdentityProviderByTypeQuery(ThirdPartyIdpTypes ThirdPartyIdpType) : Query<IdentityProvider>
+public record IdentityProviderByTypeQuery(ThirdPartyIdpTypes ThirdPartyIdpType) : Query<Domain.Subjects.Aggregates.IdentityProvider>
 {
-    public override IdentityProvider Result { get; set; } = new();
+    public override Domain.Subjects.Aggregates.IdentityProvider Result { get; set; } = new();
 }

@@ -43,14 +43,14 @@
                         case (nameof(ThirdPartyIdpDto.DisplayName)):
                             <span>@context.Item.DisplayName</span>
                             break;
-                        case nameof(ThirdPartyIdpDto.VerifyType):
-                            <span>@T(context.Item.VerifyType.ToString())</span>
+                        case nameof(ThirdPartyIdpDto.AuthenticationType):
+                            <span>@T(context.Item.AuthenticationType.ToString())</span>
+                            break;
+                        case nameof(ThirdPartyIdpDto.ThirdPartyIdpType):
+                            <span>@T(context.Item.ThirdPartyIdpType.ToString())</span>
                             break;
                         case nameof(ThirdPartyIdpDto.CreationTime):
                             <SDateTimeTitle Value=context.Item.CreationTime />
-                            break;
-                        case nameof(ThirdPartyIdpDto.Url):
-                            <span class="description">@context.Item.Url</span>
                             break;
                         case "Action":
                             <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">@IconConstants.Update</SIcon>

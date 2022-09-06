@@ -7,5 +7,5 @@ public interface IAuthenticationDefaultBuilder
 {
     string Scheme { get; }
 
-    AuthenticationDefaults BuilderAuthenticationDefaults();
+    AuthenticationDefaults BuildAuthenticationDefaults();
 }

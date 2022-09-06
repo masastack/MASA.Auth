@@ -19,12 +19,14 @@ public class AuthenticationDefaults
 
     public string UserInformationEndpoint { get; set; } = "";
 
+    public string Icon { get; set; } = "";
+
     public AuthenticationDefaults()
     {
 
     }
 
-    public AuthenticationDefaults(string scheme, string displayName, string callbackPath, string issuer, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint)
+    public AuthenticationDefaults(string scheme, string displayName, string callbackPath, string issuer, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon)
     {
         Scheme = scheme;
         DisplayName = displayName;
@@ -33,5 +35,6 @@ public class AuthenticationDefaults
         AuthorizationEndpoint = authorizationEndpoint;
         TokenEndpoint = tokenEndpoint;
         UserInformationEndpoint = userInformationEndpoint;
+        Icon = icon;
     }
 }

@@ -15,8 +15,6 @@ public class IdentityProviderDetailDto
 
     public bool Enabled { get; set; } = true;
 
-    public IdentificationTypes IdentificationType { get; set; } = IdentificationTypes.PhoneNumber;
-
     public IdentityProviderDetailDto()
     {
 
