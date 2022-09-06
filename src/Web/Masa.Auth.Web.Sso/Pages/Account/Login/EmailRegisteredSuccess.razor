@@ -11,6 +11,7 @@
         <MDivider>
             <span class="regular3--text caption" style="line-height: 1px !important">@T("ReplenishInfo")</span>
         </MDivider>
+        <MTextField Style="width:200px;" @bind-Value="_displayName" Class="mx-auto mb-4"></MTextField>
         <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="@_phoneNumber" Label="@T("PhoneNumber")"
                     Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
         </MTextField>
@@ -34,6 +35,7 @@
 
 @code {
     string _phoneNumber=string.Empty;
+    string _displayName=string.Empty;
     int? _smsCode;
     bool _canSmsCode = true;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;

@@ -169,4 +169,10 @@ public class StaffService : RestServiceBase
         await eventBus.PublishAsync(syncCommand);
         return syncCommand.Result;
     }
+
+    private async Task UpdateCurrentTeamAsync(IEventBus eventBus, [FromBody] UpdateCurrentTeamDto updateCurrentTeamDto)
+    {
+        var updateCurrentTeamCommand = new UpdateStaffCurrentTeamCommand(updateCurrentTeamDto.UserId, updateCurrentTeamDto.TeamId);
+        await eventBus.PublishAsync(updateCurrentTeamCommand);
+    }
 }

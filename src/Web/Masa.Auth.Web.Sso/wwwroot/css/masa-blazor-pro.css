@@ -780,3 +780,34 @@ input::-webkit-input-placeholder {
 .m-tab--active .tab-top-slider {
     visibility:visible !important;
 }
+
+.m-input.mx-auto .m-text-field__slot {
+    padding-bottom: 2px;
+}
+
+
+.m-input.mx-auto .m-input__slot::before {
+    border-color: #E2E7F4 !important;
+}
+
+.m-input.mx-auto .m-text-field__slot input {
+    text-align: center;
+    color: #A3AED0 !important;
+    font-family: Roboto !important;
+    font-size: 1.5rem !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: normal !important;
+    letter-spacing: 0em !important;
+}
+
+    .m-input.mx-auto .m-text-field__slot input::placeholder {
+        text-align: center;
+        color: #A3AED0 !important;
+        font-family: Roboto !important;
+        font-size: 1.5rem !important;
+        font-style: normal !important;
+        font-weight: 700 !important;
+        line-height: normal !important;
+        letter-spacing: 0em !important;
+    }

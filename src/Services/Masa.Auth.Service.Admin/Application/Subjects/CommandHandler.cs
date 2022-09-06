@@ -550,6 +550,19 @@ public class CommandHandler
         await _staffDomainService.UpdateAfterAsync(new(staff, teams));
     }
 
+    [EventHandler]
+    public async Task ChangeStaffCurrentTeamAsync(UpdateStaffCurrentTeamCommand updateStaffCurrentTeamCommand)
+    {
+        var staff = await _staffRepository.FindAsync(s => s.UserId == updateStaffCurrentTeamCommand.UserId);
+        if (staff == null)
+        {
+            _logger.LogError($"can`t find staff by UserId = {updateStaffCurrentTeamCommand.UserId}");
+            throw new UserFriendlyException("This staff data does not exist");
+        }
+        staff.SetCurrentTeam(updateStaffCurrentTeamCommand.TeamId);
+        await _staffRepository.UpdateAsync(staff);
+    }
+
     [EventHandler(1)]
     public async Task UpdateStaffBasicInfoAsync(UpdateStaffBasicInfoCommand command)
     {

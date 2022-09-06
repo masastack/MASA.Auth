@@ -24,9 +24,10 @@
                 <MIcon>mdi-lock</MIcon>
             </PrependInnerContent>
         </MTextField>
-        <PImageCaptcha CaptchaWidth="100" Outlined Label="@T("VerifyCode")" OnRefresh="RefreshCode"></PImageCaptcha>
+        <PImageCaptcha @bind-Value="_codeValue" @ref="_imageCaptcha" CaptchaWidth="100" Outlined Label="@T("VerifyCode")" OnRefresh="RefreshCode"></PImageCaptcha>
     }
-    else{
+    else
+    {
         <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="_inputModel.PhoneNumber" Label="@T("PhoneNumber")"
                 Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
         </MTextField>
@@ -50,7 +51,7 @@
 </MForm>
 <div class="text-center mt-3">
     <MButton Class="rounded-pill text-btn white--text" Disabled=!_inputModel.Agreement
-             Height=48 Width=340 Color="primary">
+             OnClick="RegisterHandler" Height=48 Width=340 Color="primary">
         @T("Register")
     </MButton>
     @if (!_inputModel.EmailRegister)
