@@ -11,7 +11,7 @@ public static class AuthenticationDefaultsProvider
     {
         var builderTypes = Assembly.GetExecutingAssembly()
                              .GetTypes()
-                             .Where(type => type.BaseType == typeof(IAuthenticationDefaultBuilder));
+                             .Where(type => type.IsInterface is false && type.IsAssignableTo(typeof(IAuthenticationDefaultBuilder)));
 
         _builders = builderTypes.Select(type => (IAuthenticationDefaultBuilder)type.Assembly.CreateInstance(type.FullName!)!)
                                        .ToList();

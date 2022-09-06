@@ -23,7 +23,7 @@ public class AddThirdPartyIdpDto
 
     public string Icon { get; set; } = "";
 
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public AuthenticationTypes AuthenticationType { get; set; } = AuthenticationTypes.OAuth;
 

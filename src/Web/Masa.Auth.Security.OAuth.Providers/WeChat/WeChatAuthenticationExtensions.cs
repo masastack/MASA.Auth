@@ -13,11 +13,11 @@ public static class WeChatAuthenticationExtensions
     /// <returns>The <see cref="AuthenticationBuilder"/>.</returns>
     public static AuthenticationBuilder AddDefaultWeChat(this AuthenticationBuilder builder, Action<WeixinAuthenticationOptions> configuration)
     {
-        configuration = options =>
+        Action<WeixinAuthenticationOptions> defaultConfiguration = options =>
         {
             configuration.Invoke(options);
             options.SignInScheme = AuthenticationExternalConstants.ExternalCookieAuthenticationScheme;
         };
-        return builder.AddWeixin("WeChat", "WeChat", configuration);
+        return builder.AddWeixin("WeChat", "WeChat", defaultConfiguration);
     }
 }

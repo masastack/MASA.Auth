@@ -1,38 +1,18 @@
 ﻿@inherits AdminCompontentBase
 
-@*<SSelect Value="Value"
-               ValueChanged="ValueChanged"
-               Items="ExternalThirdPartyIdps"
-               Label="@T("Type")"
-               ItemText="e => e.DisplayName"
-               ItemValue="e => e.Scheme"
-               Style="@($"{Style}")"
-               Class="@($"{Class}")">
-    <ItemContent Context="data">
-        <div class="d-flex" style="height:48px;">
-            <MAvatar Size="30" >
-                <img src="@data.Item.Icon" />
-            </MAvatar>
-            <div class="my-auto">
-                <span class="body2 emphasis2--text ml-2">@data.Item.DisplayName</span>
-            </div>
-        </div>
-    </ItemContent>
-</SSelect>*@
-
-<div>
+<div class="d-flex">
     @foreach (var chunk in Chunks)
     {
-        <div>
+        <div class="d-flex ma-auto">
             @foreach (var item in chunk)
             {
                 if (item.Scheme == ThirdPartyIdpTypes.Customize.ToString())
                 {
-                    <UploadAvatar @bind-Value="@Value.Icon" WhenFileChangeUpload />
+                    <UploadAvatar Class="mx-2" Size="80" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
                 }
                 else
                 {
-                    <MAvatar>
+                    <MAvatar Size="80" Class="mx-2" @onclick="async() => await UpdateValueAsync(item)">
                         <img src="@item.Icon" />
                     </MAvatar>
                 }
@@ -40,5 +20,3 @@
         </div>
     }
 </div>
-
-

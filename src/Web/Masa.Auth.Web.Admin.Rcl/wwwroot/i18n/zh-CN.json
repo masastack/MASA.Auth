@@ -143,9 +143,13 @@
     "Connect Success": "连接成功",
     "Connect Error": "连接失败",
     "Ldap Account Synchroniz Success": "域账户同步成功",
-    "AuthenticationType": "人证类型",
+    "AuthenticationType": "认证类型",
     "PlatformType": "平台类型",
-    "Icon": "图标"
+    "Icon": "图标",
+    "CallBackPath": "回调地址",
+    "AuthorizationEndpoint": "身份认证地址",
+    "TokenEndpoint": "获取Token地址",
+    "UserInformationEndpoint": "获取用户信息地址"
   },
 
   "PositionBlock": {

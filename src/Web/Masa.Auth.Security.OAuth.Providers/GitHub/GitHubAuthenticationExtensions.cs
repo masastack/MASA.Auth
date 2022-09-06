@@ -13,7 +13,7 @@ public static class GitHubAuthenticationExtensions
     /// <returns>The <see cref="AuthenticationBuilder"/>.</returns>
     public static AuthenticationBuilder AddDefaultGitHub(this AuthenticationBuilder builder, Action<GitHubAuthenticationOptions> configuration)
     {
-        configuration = options =>
+        Action<GitHubAuthenticationOptions> defaultConfiguration = options =>
         {
             configuration.Invoke(options);
             options.SignInScheme = AuthenticationExternalConstants.ExternalCookieAuthenticationScheme;

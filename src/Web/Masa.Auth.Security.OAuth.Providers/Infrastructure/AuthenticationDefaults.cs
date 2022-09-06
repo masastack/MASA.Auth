@@ -37,4 +37,14 @@ public class AuthenticationDefaults
         UserInformationEndpoint = userInformationEndpoint;
         Icon = icon;
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is AuthenticationDefaults value && value.Scheme == Scheme;
+    }
+
+    public override int GetHashCode()
+    {
+        return 1;
+    }
 }

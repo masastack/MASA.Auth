@@ -4,12 +4,8 @@
     <MForm Model=ThirdPartyIdp EnableValidation EnableI18n>
         <AutoHeight Overflow>
             <HeaderContent>
-                <div class="d-flex">
-                    <div class="mx-auto text-center" style="width:212px;">
-                        <ExternalThirdPartySelect />
-                        @*<UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />*@
-                    </div>
-                </div>
+                <ExternalThirdPartySelect Value="@ThirdPartyIdp.ThirdPartyIdpType.ToString()" ValueChanged="ThirdPartyIdpValueChanged" />
+                @*<UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />*@
             </HeaderContent>
             <AutoHeightContent>
 @*                <MRow Class="mb-6 mt-12">

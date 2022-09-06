@@ -11,7 +11,7 @@ public static class IdentityProvider
     {
         var builderTypes = Assembly.GetExecutingAssembly()
                              .GetTypes()
-                             .Where(type => type.BaseType == typeof(IIdentityBuilder));
+                             .Where(type => type.IsInterface is false && type.IsAssignableTo(typeof(IIdentityBuilder)));
 
         identityBuilders = builderTypes.Select(type => (IIdentityBuilder)type.Assembly.CreateInstance(type.FullName!)!)
                                        .ToList();

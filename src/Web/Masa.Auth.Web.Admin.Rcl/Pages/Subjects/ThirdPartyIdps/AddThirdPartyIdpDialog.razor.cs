@@ -61,5 +61,15 @@ public partial class AddThirdPartyIdpDialog
             Loading = false;
         }
     }
+
+    void ThirdPartyIdpValueChanged(AuthenticationDefaults value)
+    {
+        ThirdPartyIdp.ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(value.Scheme);
+        ThirdPartyIdp.Icon = value.Icon;
+        ThirdPartyIdp.CallbackPath = value.CallbackPath;
+        ThirdPartyIdp.AuthorizationEndpoint = value.AuthorizationEndpoint;
+        ThirdPartyIdp.TokenEndpoint = value.TokenEndpoint;
+        ThirdPartyIdp.UserInformationEndpoint = value.UserInformationEndpoint;
+    }
 }
 

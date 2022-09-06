@@ -55,7 +55,7 @@ public class ThirdPartyIdp : IdentityProvider
         private set => _authenticationType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(AuthenticationType));
     }
 
-    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, ThirdPartyIdpTypes thirdPartyIdpType, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes verifyType)
+    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, ThirdPartyIdpTypes thirdPartyIdpType, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes authenticationType)
     {
         Name = name;
         DisplayName = displayName;
@@ -68,7 +68,7 @@ public class ThirdPartyIdp : IdentityProvider
         AuthorizationEndpoint = authorizationEndpoint;
         TokenEndpoint = tokenEndpoint;
         UserInformationEndpoint = userInformationEndpoint;
-        AuthenticationType = verifyType;
+        AuthenticationType = authenticationType;
     }
 
     public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint)

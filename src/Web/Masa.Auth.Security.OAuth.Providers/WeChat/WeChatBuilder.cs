@@ -7,7 +7,7 @@ namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
 public class WeChatBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
 {
-    public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
+    public string Scheme { get; } = WeixinAuthenticationDefaults.AuthenticationScheme;
 
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {
@@ -24,14 +24,14 @@ public class WeChatBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
     {
         return new AuthenticationDefaults
         {
-            Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
-            DisplayName = GitHubAuthenticationDefaults.DisplayName,
+            Scheme = "WeChat",
+            DisplayName = WeixinAuthenticationDefaults.DisplayName,
             Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/wechat.ico",
-            CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
-            Issuer = GitHubAuthenticationDefaults.Issuer,
-            AuthorizationEndpoint = GitHubAuthenticationDefaults.AuthorizationEndpoint,
-            TokenEndpoint = GitHubAuthenticationDefaults.TokenEndpoint,
-            UserInformationEndpoint = GitHubAuthenticationDefaults.UserInformationEndpoint
+            CallbackPath = WeixinAuthenticationDefaults.CallbackPath,
+            Issuer = WeixinAuthenticationDefaults.Issuer,
+            AuthorizationEndpoint = WeixinAuthenticationDefaults.AuthorizationEndpoint,
+            TokenEndpoint = WeixinAuthenticationDefaults.TokenEndpoint,
+            UserInformationEndpoint = WeixinAuthenticationDefaults.UserInformationEndpoint
         };
     }
 }
