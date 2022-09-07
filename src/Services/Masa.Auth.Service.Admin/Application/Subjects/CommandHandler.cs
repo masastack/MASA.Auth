@@ -354,7 +354,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task LoginForPhoneNumberAsync(LoginForPhoneNumberCommand command)
+    public async Task LoginByPhoneNumberAsync(LoginByPhoneNumberCommand command)
     {
         var model = command.Model;
         var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);

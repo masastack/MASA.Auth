@@ -18,12 +18,12 @@
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Data.Mapping.Mapster" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Data.Contracts.EFCore" Version="$(MasaFrameworkPackageVersion)" />
@@ -34,7 +34,7 @@
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EFCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
@@ -46,10 +46,10 @@
 		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Utils.Caching.Redis" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.Utils.Caching.Redis" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Utils.Extensions.Expressions" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Security.Cryptography" Version="$(MasaFrameworkPackageVersion)" />
@@ -70,6 +70,11 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\OpenIdConnect\Masa.Contrib.Authentication.OpenIdConnect.Cache\Masa.Contrib.Authentication.OpenIdConnect.Cache.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\Authentication\OpenIdConnect\Masa.Contrib.Authentication.OpenIdConnect.EFCore\Masa.Contrib.Authentication.OpenIdConnect.EFCore.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Caching\Distributed\Masa.Utils.Caching.Redis\Masa.Utils.Caching.Redis.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Caching\Masa.Utils.Caching.Core\Masa.Utils.Caching.Core.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Caching\Masa.Utils.Caching.DistributedMemory\Masa.Utils.Caching.DistributedMemory.csproj" />
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 	

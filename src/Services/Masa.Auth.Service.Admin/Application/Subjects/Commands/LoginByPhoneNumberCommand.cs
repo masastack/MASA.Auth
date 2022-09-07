@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record LoginForPhoneNumberCommand(LoginForPhoneNumberModel Model) : Command
+public record LoginByPhoneNumberCommand(LoginByPhoneNumberModel Model) : Command
 {
     public bool Result { get; set; }
 }

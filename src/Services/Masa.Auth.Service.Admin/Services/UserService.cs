@@ -22,6 +22,7 @@ public class UserService : RestServiceBase
         MapPost(SyncUserAutoCompleteAsync);
         MapPost(SendMsgCodeAsync);
         MapPost(VerifyMsgCodeAsync);
+        MapPost(LoginByPhoneNumberAsync);
     }
 
     //[Authorize]
@@ -241,6 +242,23 @@ public class UserService : RestServiceBase
         var command = new VerifyMsgCodeForVerifiyPhoneNumberCommand(model);
         await eventBus.PublishAsync(command);
         return command.Result;
+    }
+
+    public async Task<bool> LoginByPhoneNumberAsync(
+        IEventBus eventBus,
+        [FromBody] LoginByPhoneNumberModel model)
+    {
+        var command = new LoginByPhoneNumberCommand(model);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
+
+    public async Task RemoveUserRolesAsync(
+        IEventBus eventBus,
+        [FromBody] RemoveUserRolesModel model)
+    {
+        var command = new RemoveUserRolesCommand(model);
+        await eventBus.PublishAsync(command);
     }
 
     public async Task<List<UserPortraitModel>> UserPortraitsAsync(IEventBus eventBus,

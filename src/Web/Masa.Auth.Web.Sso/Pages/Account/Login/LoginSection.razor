@@ -15,10 +15,10 @@
         </MTextField>
         <MTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" Outlined Label="@T("SMSCode")"
         Placeholder="@T("SMSCodePlaceHolder")" Type="number"
-        NumberProps="@(prop=> { prop.Min = 100000; prop.Max = 999999; prop.HideControl = true; })">
+        NumberProps="@(prop=> { prop.Max = 999999; prop.HideControl = true; })">
             <AppendContent>
                 <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
-                Class="primary rounded-r-lg" Disabled=!_canSmsCode OnClick="GetSmsCode">
+                Class="primary rounded-r-lg" Loading=_loading Disabled=!_canSmsCode OnClick="GetSmsCode">
                     @(_canSmsCode?@T("GetSmsCode"):_smsCodeTime)
                 </MButton>
             </AppendContent>

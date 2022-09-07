@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
-
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class LoginSection
@@ -19,6 +17,7 @@ public partial class LoginSection
     List<EnvironmentModel> _environments = new();
     System.Timers.Timer? _timer;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+    bool _loading;
 
     protected override void OnInitialized()
     {
@@ -123,52 +122,22 @@ public partial class LoginSection
 
     private async Task GetSmsCode()
     {
-        var success = await _loginForm.ValidateAsync();
-        if(success)
+        var field = _loginForm.EditContext.Field(nameof(_inputModel.PhoneNumber));
+        _loginForm.EditContext.NotifyFieldChanged(field);
+        var result = _loginForm.EditContext.GetValidationMessages(field);
+        if (result.Any() is false)
         {
+            _loading = true;
             await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel 
             {
                 SendMsgCodeType = SendMsgCodeTypes.Login,
                 PhoneNumber = _inputModel.PhoneNumber
             });
+            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            _loading = false;
             _canSmsCode = false;
             _timer?.Start();
-        }
-        //if (string.IsNullOrWhiteSpace(_inputModel.PhoneNumber) || !Regex.IsMatch(_inputModel.PhoneNumber,
-        //        LoginOptions.PhoneRegular))
-        //{
-        //    await PopupService.AlertAsync(T("PhoneNumberPrompt"), AlertTypes.Error);
-        //    return;
-        //}
-        //var code = Random.Shared.Next(100000, 999999);
-        //await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
-        //{
-        //    //todo dcc
-        //    ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"),
-        //    ChannelType = ChannelTypes.Sms,
-        //    TemplateCode = _configuration.GetValue<string>("Sms:TemplateCode"),
-        //    ReceiverType = SendTargets.Assign,
-        //    Receivers = new List<MessageTaskReceiverModel>
-        //    {
-        //        new MessageTaskReceiverModel
-        //        {
-        //            Type = MessageTaskReceiverTypes.User,
-        //            PhoneNumber = _inputModel.PhoneNumber
-        //        }
-        //    },
-        //    Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
-        //    {
-        //        ["code"] = code,
-        //    })
-        //});
-        //await _distributedCacheClient.SetAsync(CacheKey.GetSmsCodeKey(_inputModel.PhoneNumber), code
-        //    , new Utils.Caching.Core.Models.CombinedCacheEntryOptions<int>
-        //    {
-        //        DistributedCacheEntryOptions = new DistributedCacheEntryOptions
-        //        {
-        //            AbsoluteExpirationRelativeToNow = LoginOptions.SmsCodeExpire
-        //        }
-        //    });      
+        }         
     }
 
     private async Task KeyDownHandler(KeyboardEventArgs args)

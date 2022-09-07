@@ -47,7 +47,7 @@ public class AccountController : Controller
                 //var code = await _distributedCacheClient.GetAsync<int>(key);
                 //success = code == inputModel.SmsCode;
                 //await _distributedCacheClient.RemoveAsync<int>(key);
-                success = await _authClient.UserService.LoginForPhoneNumberAsync(new LoginForPhoneNumber 
+                success = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
                 {
                     PhoneNumber = inputModel.PhoneNumber,
                     Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required")
