@@ -243,6 +243,14 @@ public class CommandHandler
             });
             await _eventBus.PublishAsync(sendCommand);
         }
+        if (model.SendMsgCodeType is SendMsgCodeTypes.Login)
+        {
+            var sendCommand = new SendMsgCodeForLoginCommand(new()
+            {
+                PhoneNumber = model.PhoneNumber
+            });
+            await _eventBus.PublishAsync(sendCommand);
+        }
         else
         {
             var sendCommand = new SendMsgCodeForUpdatePhoneNumberCommand(new()
@@ -275,6 +283,21 @@ public class CommandHandler
         var model = command.Model;
         await CheckUserExistAsync(model.UserId);
         var msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
+        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
+        else
+        {
+            await _sms.SendMsgCodeAsync(msgCodeKey, model.PhoneNumber);
+        }
+    }
+
+    [EventHandler]
+    public async Task SendMsgCodeForLoginAsync(SendMsgCodeForLoginCommand command)
+    {
+        var model = command.Model;
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
+        if (user is null) throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+        var msgCodeKey = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
         var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
         if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
         else
@@ -328,6 +351,34 @@ public class CommandHandler
                 command.Result = true;
             }
         }
+    }
+
+    [EventHandler]
+    public async Task LoginForPhoneNumberAsync(LoginForPhoneNumberCommand command)
+    {
+        var model = command.Model;
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
+        if (user is null) throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+        var key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
+        if (await _sms.VerifyMsgCodeAsync(key, model.Code))
+        {
+            command.Result = true;
+        }
+    }
+
+    [EventHandler]
+    public async Task RemoveUserRolesAsync(RemoveUserRolesCommand command)
+    {
+        var userModel = command.User;
+        var user = await _authDbContext.Set<User>()
+                                 .Include(u => u.Roles)
+                                 .FirstAsync(u => u.Id == userModel.Id);
+        var roleIds = await _authDbContext.Set<Role>()
+                                    .Where(role => userModel.RoleNames.Contains(role.Name))
+                                    .Select(role => role.Id)
+                                    .ToListAsync();
+        user.RemoveRoles(roleIds);
+        await _userRepository.UpdateAsync(user);
     }
 
     [EventHandler(1)]

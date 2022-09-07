@@ -303,6 +303,12 @@ public class User : FullAggregateRoot<Guid, Guid>
            item => item.RoleId);
     }
 
+    public void RemoveRoles(IEnumerable<Guid> roleIds)
+    {
+        _roles = _roles.Where(role => roleIds.Any(roleId => role.RoleId == roleId) is false)
+                       .ToList();
+    }
+
     public void AddPermissions(List<SubjectPermissionRelationDto> permissions)
     {
         _permissions = _permissions.MergeBy(

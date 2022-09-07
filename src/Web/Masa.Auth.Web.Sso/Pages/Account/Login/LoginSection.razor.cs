@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
+
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class LoginSection
@@ -121,44 +123,52 @@ public partial class LoginSection
 
     private async Task GetSmsCode()
     {
-        var d = await _loginForm.ValidateAsync();
-        if (string.IsNullOrWhiteSpace(_inputModel.PhoneNumber) || !Regex.IsMatch(_inputModel.PhoneNumber,
-                LoginOptions.PhoneRegular))
+        var success = await _loginForm.ValidateAsync();
+        if(success)
         {
-            await PopupService.AlertAsync(T("PhoneNumberPrompt"), AlertTypes.Error);
-            return;
-        }
-        var code = Random.Shared.Next(100000, 999999);
-        await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
-        {
-            //todo dcc
-            ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"),
-            ChannelType = ChannelTypes.Sms,
-            TemplateCode = _configuration.GetValue<string>("Sms:TemplateCode"),
-            ReceiverType = SendTargets.Assign,
-            Receivers = new List<MessageTaskReceiverModel>
+            await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel 
             {
-                new MessageTaskReceiverModel
-                {
-                    Type = MessageTaskReceiverTypes.User,
-                    PhoneNumber = _inputModel.PhoneNumber
-                }
-            },
-            Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
-            {
-                ["code"] = code,
-            })
-        });
-        await _distributedCacheClient.SetAsync(CacheKey.GetSmsCodeKey(_inputModel.PhoneNumber), code
-            , new Utils.Caching.Core.Models.CombinedCacheEntryOptions<int>
-            {
-                DistributedCacheEntryOptions = new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = LoginOptions.SmsCodeExpire
-                }
+                SendMsgCodeType = SendMsgCodeTypes.Login,
+                PhoneNumber = _inputModel.PhoneNumber
             });
-        _canSmsCode = false;
-        _timer?.Start();
+            _canSmsCode = false;
+            _timer?.Start();
+        }
+        //if (string.IsNullOrWhiteSpace(_inputModel.PhoneNumber) || !Regex.IsMatch(_inputModel.PhoneNumber,
+        //        LoginOptions.PhoneRegular))
+        //{
+        //    await PopupService.AlertAsync(T("PhoneNumberPrompt"), AlertTypes.Error);
+        //    return;
+        //}
+        //var code = Random.Shared.Next(100000, 999999);
+        //await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
+        //{
+        //    //todo dcc
+        //    ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"),
+        //    ChannelType = ChannelTypes.Sms,
+        //    TemplateCode = _configuration.GetValue<string>("Sms:TemplateCode"),
+        //    ReceiverType = SendTargets.Assign,
+        //    Receivers = new List<MessageTaskReceiverModel>
+        //    {
+        //        new MessageTaskReceiverModel
+        //        {
+        //            Type = MessageTaskReceiverTypes.User,
+        //            PhoneNumber = _inputModel.PhoneNumber
+        //        }
+        //    },
+        //    Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
+        //    {
+        //        ["code"] = code,
+        //    })
+        //});
+        //await _distributedCacheClient.SetAsync(CacheKey.GetSmsCodeKey(_inputModel.PhoneNumber), code
+        //    , new Utils.Caching.Core.Models.CombinedCacheEntryOptions<int>
+        //    {
+        //        DistributedCacheEntryOptions = new DistributedCacheEntryOptions
+        //        {
+        //            AbsoluteExpirationRelativeToNow = LoginOptions.SmsCodeExpire
+        //        }
+        //    });      
     }
 
     private async Task KeyDownHandler(KeyboardEventArgs args)
