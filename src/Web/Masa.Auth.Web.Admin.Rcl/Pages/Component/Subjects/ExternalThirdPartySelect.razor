@@ -8,7 +8,13 @@
             {
                 if (item.Scheme == ThirdPartyIdpTypes.Customize.ToString())
                 {
-                    <UploadAvatar Class="mx-2" Size="80" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
+                    <div>
+                        <UploadAvatar Class="mx-2" Size="80" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
+                        @if(string.IsNullOrEmpty(item.Icon) is false && item.Scheme !=Value)
+                        {
+                            <SButton Text Color="primary" Class="mt-2 ml-3" OnClick="async () => await UpdateValueAsync(item)">@T("Select")</SButton>
+                        }  
+                    </div>                  
                 }
                 else
                 {

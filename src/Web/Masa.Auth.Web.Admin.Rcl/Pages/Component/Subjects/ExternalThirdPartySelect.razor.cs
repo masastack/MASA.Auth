@@ -35,7 +35,7 @@ public partial class ExternalThirdPartySelect
 
     protected override void OnParametersSet()
     {
-        if(InternalValue != Value)
+        if(InternalValue != Value && ExternalThirdPartyIdps.Count >0)
         {
             InternalValue = Value;
             var value = ExternalThirdPartyIdps.FirstOrDefault(v => v.Scheme == InternalValue);
