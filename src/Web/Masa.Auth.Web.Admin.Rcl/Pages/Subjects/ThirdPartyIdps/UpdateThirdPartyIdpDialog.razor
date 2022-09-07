@@ -26,7 +26,23 @@
                     <MCol>
                         <STextField @bind-Value="ThirdPartyIdp.ClientSecret" Required Label="@T(nameof(ThirdPartyIdp.ClientSecret))" />
                     </MCol>
-                </MRow>              
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <STextField @bind-Value="ThirdPartyIdp.CallbackPath" Label="@T("CallbackPath")" />                      
+                    </MCol>
+                    <MCol>
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.AuthorizationEndpoint" Label="@T("AuthorizationEndpoint")" />                 
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.TokenEndpoint" Label="@T("TokenEndpoint")" /> 
+                    </MCol>
+                     <MCol>
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Label="@T("UserInformationEndpoint")" />                       
+                    </MCol>
+                </MRow>            
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

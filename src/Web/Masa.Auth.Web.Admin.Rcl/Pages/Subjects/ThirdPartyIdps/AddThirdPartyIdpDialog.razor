@@ -4,18 +4,9 @@
     <MForm Model=ThirdPartyIdp EnableValidation EnableI18n>
         <AutoHeight Overflow>
             <HeaderContent>
-                <ExternalThirdPartySelect Value="@ThirdPartyIdp.ThirdPartyIdpType.ToString()" ValueChanged="ThirdPartyIdpValueChanged" />
-                @*<UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />*@
+                <ExternalThirdPartySelect Value="@ThirdPartyIdp.ThirdPartyIdpType.ToString()" ValueChanged="ThirdPartyIdpValueChanged" />           
             </HeaderContent>
             <AutoHeightContent>
-@*                <MRow Class="mb-6 mt-12">
-                    <MCol>
-                        <EnumSelect @bind-Value="ThirdPartyIdp.AuthenticationType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
-                    </MCol>
-                    <MCol>
-                        <ExternalThirdPartySelect />
-                    </MCol>
-                </MRow>*@
                 <MRow Class="mb-6 mt-12">
                     <MCol>
                         <STextField @bind-Value="ThirdPartyIdp.Name" Required Label="@T("Name")" />

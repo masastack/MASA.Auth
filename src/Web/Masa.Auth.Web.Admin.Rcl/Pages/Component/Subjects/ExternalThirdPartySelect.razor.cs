@@ -23,6 +23,10 @@ public partial class ExternalThirdPartySelect
 
     public List<AuthenticationDefaults[]> Chunks { get; set; } = new();
 
+    public bool ShowOne { get; set; }
+
+    public bool Even { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         ExternalThirdPartyIdps = await AuthCaller.ThirdPartyIdpService.GetExternalThirdPartyIdpsAsync();
@@ -31,22 +35,24 @@ public partial class ExternalThirdPartySelect
             Scheme = ThirdPartyIdpTypes.Customize.ToString()
         });
         Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
+        Even = ExternalThirdPartyIdps.Count % 2 == 0;
     }
 
     protected override void OnParametersSet()
     {
-        if(InternalValue != Value && ExternalThirdPartyIdps.Count >0)
+        if (InternalValue != Value && ExternalThirdPartyIdps.Count > 0)
         {
             InternalValue = Value;
             var value = ExternalThirdPartyIdps.FirstOrDefault(v => v.Scheme == InternalValue);
-            if(value != null)
+            if (value != null)
             {
                 var middle = ((ExternalThirdPartyIdps.Count <= 11 ? ExternalThirdPartyIdps.Count : 11) + 1) / 2;
                 ExternalThirdPartyIdps.Remove(value);
-                ExternalThirdPartyIdps.Insert(middle -1, value);
+                ExternalThirdPartyIdps.Insert(middle - 1, value);
                 Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
             }
-        }      
+            ShowOne = true;
+        }     
     }
 
     public async Task UpdateValueAsync(AuthenticationDefaults value)
@@ -55,6 +61,6 @@ public partial class ExternalThirdPartySelect
         {
             await ValueChanged.InvokeAsync(value);
         }
-        else Value = value.Scheme;
+        else Value = value.Scheme;       
     }
 }

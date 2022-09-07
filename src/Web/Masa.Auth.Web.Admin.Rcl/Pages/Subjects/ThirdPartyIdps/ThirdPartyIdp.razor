@@ -31,12 +31,14 @@
                     @switch (context.Header.Value)
                     {
                         case nameof(ThirdPartyIdpDto.Icon):
-                            <MAvatar Size="20">
-                                <img src="@context.Item.Icon" />
-                            </MAvatar>
+                            <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
+                                 <MAvatar Size="20">
+                                    <img src="@context.Item.Icon" />
+                                </MAvatar>
+                            </div>                         
                             break;
                         case nameof(ThirdPartyIdpDto.Name):
-                            <div class="hover-pointer" @onclick="()=> OpenUpdateThirdPartyIdpDialog(context.Item)">
+                            <div>
                                 <span>@context.Item.Name</span>
                             </div>
                             break;
@@ -48,6 +50,9 @@
                             break;
                         case nameof(ThirdPartyIdpDto.ThirdPartyIdpType):
                             <span>@T(context.Item.ThirdPartyIdpType.ToString())</span>
+                            break;
+                        case nameof(UserDto.Enabled):
+                            <EnableChip Value=context.Item.Enabled />
                             break;
                         case nameof(ThirdPartyIdpDto.CreationTime):
                             <SDateTimeTitle Value=context.Item.CreationTime />
