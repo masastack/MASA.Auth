@@ -1,11 +1,10 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex">
-    <MHover>
+<div class="d-flex" >
+    <MHover @bind-Value="Expand">
         <div @attributes="context.Attrs" class="d-flex ma-auto">
-            @if (context.Hover is false || ShowOne == true)
+            @if (context.Hover is false)
             {
-                ShowOne = false;
                 <UploadAvatar Value="@ExternalThirdPartyIdps.FirstOrDefault(item => item.Scheme == Value)?.Icon" Class="mx-2 hover-pointer" Size="80" />
             }
             else
@@ -31,7 +30,7 @@
                                         }
                                         else
                                         {
-                                            <UploadAvatar Size="80" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
+                                            <UploadAvatar Size="80" OnChange="OnUploadChang" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
                                         }
                                     }
                                     else

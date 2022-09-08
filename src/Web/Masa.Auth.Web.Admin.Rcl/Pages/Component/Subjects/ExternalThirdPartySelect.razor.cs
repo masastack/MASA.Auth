@@ -5,6 +5,8 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Subjects;
 
 public partial class ExternalThirdPartySelect
 {
+    bool _expand;
+
     [Parameter]
     public string Class { get; set; } = "";
 
@@ -23,7 +25,16 @@ public partial class ExternalThirdPartySelect
 
     public List<AuthenticationDefaults[]> Chunks { get; set; } = new();
 
-    public bool ShowOne { get; set; }
+    public bool Expand
+    {
+        get => _expand || WaitUpload;
+        set 
+        {
+            _expand = value;
+        }
+    }
+
+    public bool WaitUpload { get; set; }
 
     public bool Even { get; set; }
 
@@ -51,8 +62,9 @@ public partial class ExternalThirdPartySelect
                 ExternalThirdPartyIdps.Insert(middle - 1, value);
                 Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
             }
-            ShowOne = true;
-        }     
+            Expand = false;            
+        }
+        WaitUpload = false;
     }
 
     public async Task UpdateValueAsync(AuthenticationDefaults value)
@@ -62,5 +74,10 @@ public partial class ExternalThirdPartySelect
             await ValueChanged.InvokeAsync(value);
         }
         else Value = value.Scheme;       
+    }
+
+    public void OnUploadChang()
+    {
+        WaitUpload = true;
     }
 }
