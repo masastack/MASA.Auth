@@ -66,7 +66,7 @@ public partial class AddThirdPartyIdpDialog
     {
         ThirdPartyIdp.ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(value.Scheme);
         ThirdPartyIdp.Icon = value.Icon;
-        ThirdPartyIdp.Name = value.DisplayName;
+        ThirdPartyIdp.Name = value.Scheme;
         ThirdPartyIdp.DisplayName = value.DisplayName;
         ThirdPartyIdp.CallbackPath = value.CallbackPath;
         ThirdPartyIdp.AuthorizationEndpoint = value.AuthorizationEndpoint;

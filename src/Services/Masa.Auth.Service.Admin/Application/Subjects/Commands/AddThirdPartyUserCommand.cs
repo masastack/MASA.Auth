@@ -5,11 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record AddThirdPartyUserCommand(AddThirdPartyUserDto ThirdPartyUser, bool WhenExisReturn = false) : Command
 {
-    private UserModel? _user;
-
-    public UserModel Result
-    {
-        get => _user ?? throw new UserFriendlyException("Failed to add third-party user");
-        set => _user = value;
-    }
+    public UserModel Result { get; set; } = new();
 }

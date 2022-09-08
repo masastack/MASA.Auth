@@ -30,4 +30,14 @@ public class ThirdPartyUserService : RestServiceBase
         await eventBus.PublishAsync(query);
         return query.Result;
     }
+
+    [AllowAnonymous]
+    private async Task<UserModel> AddThirdPartyUserAsync(
+        IEventBus eventBus,
+        AddThirdPartyUserModel model)
+    {
+        var query = new AddThirdPartyUserExternalCommand(model);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 }

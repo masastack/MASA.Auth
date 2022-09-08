@@ -12,6 +12,7 @@ public partial class LoginSection
     public string LoginHint { get; set; } = string.Empty;
 
     LoginInputModel _inputModel = new();
+    CustomLoginModel? _customLoginModel;
     MForm _loginForm = null!;
     bool _showPwd, _canSmsCode = true;
     List<EnvironmentModel> _environments = new();
@@ -40,6 +41,11 @@ public partial class LoginSection
                 Environment = _environments.FirstOrDefault()?.Name ?? "",
                 RememberLogin = LoginOptions.AllowRememberLogin
             };
+            var success = QueryHelpers.ParseQuery(ReturnUrl).TryGetValue("/connect/authorize/callback?client_id",out var clientId);
+            if(success)
+            {
+                _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);             
+            }         
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -169,12 +175,13 @@ public partial class LoginSection
         }
     }
 
-    private void NavigateToThirdParty()
+    private void NavigateToThirdParty(string scheme)
     {
         var challenge = QueryHelpers.AddQueryString(AuthenticationExternalConstants.ChallengeEndpoint, new Dictionary<string, string?>
         {
             ["returnUrl"] = _inputModel.ReturnUrl,
-            ["scheme"] = "GitHub"
+            ["scheme"] = scheme,
+            ["environment"] = _inputModel.Environment
         });
         Navigation.NavigateTo(challenge, true);
     }

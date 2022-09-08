@@ -393,6 +393,7 @@ public class QueryHandler
                 ThirdPartyIdps = customLogin.ThirdPartyIdps
                                             .OrderBy(thirdPartyIdp => thirdPartyIdp.Sort)
                                             .Select(thirdPartyIdp => thirdPartyIdp.ThirdPartyIdp)
+                                            .Where(thirdPartyIdp => thirdPartyIdp.Enabled)
                                             .Adapt<List<ThirdPartyIdpModel>>()
             };
         }

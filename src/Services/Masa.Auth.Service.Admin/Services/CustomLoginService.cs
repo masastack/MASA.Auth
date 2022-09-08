@@ -23,7 +23,8 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<CustomLoginModel?> GetCustomLoginByClientIdAsync(
+        [AllowAnonymous]
+        public async Task<CustomLoginModel?> GetByClientIdAsync(
             [FromServices] IEventBus eventBus, 
             [FromQuery] string clientId)
         {

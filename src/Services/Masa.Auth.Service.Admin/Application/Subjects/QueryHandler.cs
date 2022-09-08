@@ -393,6 +393,13 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetAllThirdPartyIdpAsync(AllThirdPartyIdpQuery query)
+    {       
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
+        query.Result = thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>();
+    }
+
+    [EventHandler]
     public async Task GetThirdPartyIdpDetailAsync(ThirdPartyIdpDetailQuery query)
     {
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == query.ThirdPartyIdpId);

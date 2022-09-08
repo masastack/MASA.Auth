@@ -22,6 +22,6 @@ public static class GitHubAuthenticationExtensions
             options.ClaimActions.MapJsonKey(UserClaims.Picture, "avatar_url");
             options.ClaimActions.MapJsonKey(UserClaims.Account, "login");
         };
-        return builder.AddGitHub(configuration);
+        return builder.AddGitHub(defaultConfiguration);
     }
 }

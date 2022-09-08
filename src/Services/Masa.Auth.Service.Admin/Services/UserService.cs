@@ -264,12 +264,14 @@ public class UserService : RestServiceBase
         return query.Result;
     }
 
+    [AllowAnonymous]
     public async Task SyncUserAutoCompleteAsync(IEventBus eventBus, [FromBody] SyncUserAutoCompleteDto dto)
     {
         var command = new SyncUserAutoCompleteCommand(dto);
         await eventBus.PublishAsync(command);
     }
 
+    [AllowAnonymous]
     public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
     {
         var command = new SyncUserRedisCommand(dto);

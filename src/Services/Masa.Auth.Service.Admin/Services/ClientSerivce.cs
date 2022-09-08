@@ -14,6 +14,7 @@ public class ClientSerivce : ServiceBase
         MapPost(AddClientAsync);
         MapPost(UpdateClientAsync);
         MapDelete(RemoveClientAsync);
+        MapPost(SyncOidcAsync);
     }
 
     private async Task<PaginationDto<ClientDto>> GetListAsync(IEventBus eventBus, GetClientPaginationDto clientPaginationDto)
@@ -59,6 +60,14 @@ public class ClientSerivce : ServiceBase
     private async Task RemoveClientAsync(IEventBus eventBus, [FromQuery] int id)
     {
         var removeCommand = new RemoveClientCommand(id);
+        await eventBus.PublishAsync(removeCommand);
+    }
+
+    [AllowAnonymous]
+    private async Task SyncOidcAsync(
+        IEventBus eventBus)
+    {
+        var removeCommand = new SyncOidcCommand();
         await eventBus.PublishAsync(removeCommand);
     }
 }

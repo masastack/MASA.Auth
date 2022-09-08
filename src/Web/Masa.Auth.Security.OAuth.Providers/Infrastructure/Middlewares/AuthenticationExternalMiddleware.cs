@@ -17,17 +17,15 @@ public class AuthenticationExternalMiddleware
         var request = context.Request;
         if (context.Request.Path.Equals(AuthenticationExternalConstants.ChallengeEndpoint, StringComparison.OrdinalIgnoreCase))
         {
-            var returnUrl = request.Query["returnUrl"];
             var scheme = request.Query["scheme"];
             var props = new AuthenticationProperties
             {
                 RedirectUri = AuthenticationExternalConstants.CallbackEndpoint,
-                Items =
-                {
-                    { "returnUrl", returnUrl },
-                    { "scheme", scheme },
-                }
             };
+            foreach(var (key,value) in request.Query)
+            {
+                props.Items.Add(key, value);
+            }
             await context.ChallengeAsync(scheme, props);
             return;
         }

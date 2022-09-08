@@ -21,6 +21,14 @@ public class ThirdPartyIdpService : RestServiceBase
         return query.Result;
     }
 
+    [AllowAnonymous]
+    private async Task<List<ThirdPartyIdpModel>> GetAllAsync(IEventBus eventBus)
+    {
+        var query = new AllThirdPartyIdpQuery();
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task<ThirdPartyIdpDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new ThirdPartyIdpDetailQuery(id);
