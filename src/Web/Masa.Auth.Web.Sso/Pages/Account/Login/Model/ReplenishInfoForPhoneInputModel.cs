@@ -7,7 +7,7 @@ public class ReplenishInfoForPhoneInputModel : ReplenishInfoInputModel
 {
     public string Email { get; set; } = string.Empty;
 
-    public string Passwrod { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
 
-    public string ConfirmPasswrod { get; set; } = string.Empty;
+    public string ConfirmPassword { get; set; } = string.Empty;
 }

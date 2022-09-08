@@ -28,6 +28,7 @@ global using Masa.Auth.Web.Sso.Pages.Account.Login;
 global using Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 global using Masa.Auth.Web.Sso.Pages.Account.Logout.Model;
 global using Masa.Blazor;
+global using Masa.Blazor.Presets;
 global using Masa.BuildingBlocks.Configuration;
 global using Masa.BuildingBlocks.StackSdks.Auth;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;

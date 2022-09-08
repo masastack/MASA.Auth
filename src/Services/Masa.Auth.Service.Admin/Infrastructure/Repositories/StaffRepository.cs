@@ -18,7 +18,13 @@ public class StaffRepository : Repository<AuthDbContext, Staff, Guid>, IStaffRep
         return staff;
     }
 
-    public async Task<Staff?> GetDetailById(Guid id)
+    public async Task<Staff?> GetByUserIdAsync(Guid id)
+    {
+        return await Context.Set<Staff>()
+                                .FirstOrDefaultAsync(s => s.UserId == id);
+    }
+
+    public async Task<Staff?> GetDetailByIdAsync(Guid id)
     {
         var staff = await Context.Set<Staff>()
                                 .Include(s => s.DepartmentStaffs)

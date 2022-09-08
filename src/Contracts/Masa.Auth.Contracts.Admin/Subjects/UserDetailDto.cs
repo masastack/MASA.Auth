@@ -23,6 +23,10 @@ public class UserDetailDto : UserDto
 
     public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
+    public Guid? StaffId { get; set; }
+
+    public Guid? CurrentTeamId { get; set; }
+
     public UserDetailDto() : base()
     {
         ThirdPartyIdpAvatars = new();

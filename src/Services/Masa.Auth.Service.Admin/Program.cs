@@ -136,12 +136,12 @@ builder.Services
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    await option.SeedStandardResourcesAsync();
-    await option.SeedClientDataAsync(new List<Client>
-    {
-        defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
-    });
-    await option.SyncCacheAsync();
+    //await option.SeedStandardResourcesAsync();
+    //await option.SeedClientDataAsync(new List<Client>
+    //{
+    //    defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
+    //});
+    //await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 

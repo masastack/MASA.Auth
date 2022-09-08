@@ -11,11 +11,11 @@
         <MDivider>
             <span class="regular3--text caption" style="line-height: 1px !important">@T("ReplenishInfo")</span>
         </MDivider>
-        <MTextField Style="width:200px;" @bind-Value="_displayName" Class="mx-auto mb-4"></MTextField>
-        <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="@_phoneNumber" Label="@T("PhoneNumber")"
+        <MTextField Style="width:200px;" @bind-Value="_replenishInfoForEmailInputModel.DisplayName" Class="mx-auto mb-4"></MTextField>
+        <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="@_replenishInfoForEmailInputModel.PhoneNumber" Label="@T("PhoneNumber")"
                     Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
         </MTextField>
-        <MTextField Class="mt-3" @bind-Value="@_smsCode" Outlined Label="@T("SMSCode")"
+        <MTextField Class="mt-3" @bind-Value="@_replenishInfoForEmailInputModel.SmsCode" Outlined Label="@T("SMSCode")"
                     Placeholder="@T("SMSCodePlaceHolder")" Type="number"
                     NumberProps="@(prop=> { prop.Min = 100000; prop.Max = 999999; prop.HideControl = true; })">
             <AppendContent>
@@ -34,9 +34,7 @@
 </MCard>
 
 @code {
-    string _phoneNumber=string.Empty;
-    string _displayName=string.Empty;
-    int? _smsCode;
     bool _canSmsCode = true;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+    ReplenishInfoForEmailInputModel _replenishInfoForEmailInputModel = new();
 }

@@ -11,15 +11,15 @@
         <MDivider>
             <span class="regular3--text caption" style="line-height: 1px !important">@T("ReplenishInfo")</span>
         </MDivider>
-        <MTextField Style="width:200px;" @bind-Value="_displayName" Class="mx-auto mb-4"></MTextField>
-        <MTextField @bind-Value="@password" Label="@T("Password")"
+        <MTextField Style="width:200px;" @bind-Value="@_replenishInfoForPhoneInputModel.DisplayName" Class="mx-auto mb-4"></MTextField>
+        <MTextField @bind-Value="@_replenishInfoForPhoneInputModel.Password" Label="@T("Password")"
                     Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
                     AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
             <PrependInnerContent>
                 <MIcon>mdi-lock</MIcon>
             </PrependInnerContent>
         </MTextField>
-        <MTextField @bind-Value="@password" Class="mt-3" Label="@T("ConfirmPassword")"
+        <MTextField @bind-Value="@_replenishInfoForPhoneInputModel.ConfirmPassword" Class="mt-3" Label="@T("ConfirmPassword")"
                     Type="@(_showPwd ? "text" : "password")" Placeholder="@T("ConfirmPasswordPlaceHolder")"
                     AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
             <PrependInnerContent>
@@ -36,6 +36,5 @@
 
 @code {
     bool _showPwd;
-    string password = "";
-    string _displayName = string.Empty;
+    ReplenishInfoForPhoneInputModel _replenishInfoForPhoneInputModel = new();
 }

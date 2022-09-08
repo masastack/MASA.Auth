@@ -172,6 +172,7 @@ public class StaffService : RestServiceBase
 
     private async Task UpdateCurrentTeamAsync(IEventBus eventBus, [FromBody] UpdateCurrentTeamDto updateCurrentTeamDto)
     {
+        //todo UpdateCurrentTeamModel
         var updateCurrentTeamCommand = new UpdateStaffCurrentTeamCommand(updateCurrentTeamDto.UserId, updateCurrentTeamDto.TeamId);
         await eventBus.PublishAsync(updateCurrentTeamCommand);
     }

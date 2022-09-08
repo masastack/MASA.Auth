@@ -37,7 +37,7 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         return new Claim[]
         {
-            new Claim("username", account)
+            new Claim("account", account)
         };
     }
 }
