@@ -11,7 +11,7 @@
             <FooterContent>
                 <div class="d-flex mt-6">
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await UpdatetUserClaimAsync(context)">@T("Save")</SButton>
+                    <SButton Medium OnClick="async () => await UpdatetUserClaimAsync(context.EditContext)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

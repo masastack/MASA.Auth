@@ -28,7 +28,7 @@ public partial class AddApiPermission
 
     private async Task OnSubmitHandler()
     {
-        if (await _form.ValidateAsync())
+        if (_form.Validate())
         {
             if (OnSubmit.HasDelegate)
             {

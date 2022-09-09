@@ -41,7 +41,7 @@ public partial class UpdateCustomLoginRegisterDialog
         }
         if (Form is not null)
         {
-            await Form.ResetValidationAsync();
+            Form.ResetValidation();
         }
     }
 

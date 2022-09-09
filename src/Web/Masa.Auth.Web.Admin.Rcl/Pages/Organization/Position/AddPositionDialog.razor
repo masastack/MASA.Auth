@@ -10,7 +10,7 @@
             <FooterContent>
                 <div class="d-flex mt-6">
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await AddPositionAsync(context)">@T("Submit")</SButton>
+                    <SButton Medium OnClick="async () => await AddPositionAsync(context.EditContext)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>
