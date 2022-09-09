@@ -14,6 +14,7 @@ builder.AddMasaConfiguration(configurationBuilder =>
 });
 var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -24,7 +25,17 @@ builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"), publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-builder.Services.AddMasaOpenIdConnect(publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>());
+
+var masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>();
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+builder.Services.AddJetTokenValidator(options =>
+{
+    options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
+}, refreshTokenOptions =>
+{
+    refreshTokenOptions.ClientId = masaOpenIdConnectOptions.ClientId;
+    refreshTokenOptions.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
+});
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 //builder.WebHost.UseStaticWebAssets();
