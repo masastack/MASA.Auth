@@ -214,7 +214,7 @@ public class CommandHandler
             }
             else
             {
-                user = new User(userModel.Id, userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, default, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
+                user = new User(userModel.Id, userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, userModel.Password, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
                 user.AddRoles(roles);
                 await AddUserAsync(user);
                 command.Result = user.Adapt<UserModel>();
