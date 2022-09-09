@@ -24,10 +24,10 @@ public class JwtTokenValidator
 
     public async Task<ClaimsPrincipal?> ValidateAccessTokenAsync(TokenProvider tokenProvider)
     {
-        var disco = await _httpClient.GetDiscoveryDocumentAsync(_jwtTokenValidatorOptions.AuthorityEndpoint).ConfigureAwait(false);
+        var discoveryDocument = await _httpClient.GetDiscoveryDocumentAsync(_jwtTokenValidatorOptions.AuthorityEndpoint).ConfigureAwait(false);
 
         var keys = new List<SecurityKey>();
-        foreach (var webKey in disco.KeySet.Keys)
+        foreach (var webKey in discoveryDocument.KeySet.Keys)
         {
             var e = Base64Url.Decode(webKey.E);
             var n = Base64Url.Decode(webKey.N);
@@ -37,16 +37,12 @@ public class JwtTokenValidator
             };
             keys.Add(key);
         }
-        //var authorityEndpoint = "https://demo.identityserver.io/";
-        //var openIdConfigurationEndpoint = $"{authorityEndpoint}.well-known/openid-configuration";
-        //IConfigurationManager<OpenIdConnectConfiguration> configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(openIdConfigurationEndpoint, new OpenIdConnectConfigurationRetriever());
-        //OpenIdConnectConfiguration openIdConfig = await configurationManager.GetConfigurationAsync(CancellationToken.None);
         TokenValidationParameters validationParameters = new TokenValidationParameters
         {
             ValidateLifetime = _jwtTokenValidatorOptions.ValidateLifetime,
             ValidateAudience = _jwtTokenValidatorOptions.ValidateAudience,
             ValidateIssuer = _jwtTokenValidatorOptions.ValidateIssuer,
-            ValidIssuer = disco.Issuer,
+            ValidIssuer = discoveryDocument.Issuer,
             ValidAudiences = _jwtTokenValidatorOptions.ValidAudiences,
             ValidateIssuerSigningKey = true,
             IssuerSigningKeys = keys
@@ -64,13 +60,9 @@ public class JwtTokenValidator
             {
                 var tokenClient = new TokenClient(_httpClient, new TokenClientOptions
                 {
-                    Address = disco.TokenEndpoint,
+                    Address = discoveryDocument.TokenEndpoint,
                     ClientId = _clientRefreshTokenOptions.ClientId,
-                    ClientSecret = _clientRefreshTokenOptions.ClientSecret,
-                    //Parameters =
-                    //{
-                    //    { "scope", "api1" }
-                    //}
+                    ClientSecret = _clientRefreshTokenOptions.ClientSecret
                 });
                 var tokenResult = await tokenClient.RequestRefreshTokenAsync(tokenProvider.RefreshToken).ConfigureAwait(false);
                 if (tokenResult.IsError)

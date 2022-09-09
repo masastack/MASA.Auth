@@ -28,7 +28,7 @@ builder.Services.AddTypeAdapter();
 
 var masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>();
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
-builder.Services.AddJetTokenValidator(options =>
+builder.Services.AddJwtTokenValidator(options =>
 {
     options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
 }, refreshTokenOptions =>

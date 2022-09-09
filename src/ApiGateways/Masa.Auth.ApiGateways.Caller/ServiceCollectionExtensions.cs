@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddJetTokenValidator(this IServiceCollection services,
+    public static IServiceCollection AddJwtTokenValidator(this IServiceCollection services,
         Action<JwtTokenValidatorOptions> jwtTokenValidatorOptions, Action<ClientRefreshTokenOptions> clientRefreshTokenOptions)
     {
         var options = new JwtTokenValidatorOptions();
