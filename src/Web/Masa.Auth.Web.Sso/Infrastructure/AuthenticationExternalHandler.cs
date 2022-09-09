@@ -25,12 +25,12 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         // todo add third party user
         var scheme = result.Properties?.Items?["scheme"] ?? throw new UserFriendlyException("Unknown third party");
         var identityUser = IdentityProvider.GetIdentity(scheme, result.Principal ?? throw new UserFriendlyException("Authenticate failed"));
-        var userModel = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel 
+        var userModel = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
         {
             ThridPartyIdentity = identityUser.Subject,
             ExtendedData = JsonSerializer.Serialize(identityUser),
             ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(scheme),
-            User=new AddUserModel
+            User = new AddUserModel
             {
                 //Name = identityUser.Name,
                 DisplayName = identityUser.NickName,
@@ -39,9 +39,9 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
                 Email = identityUser.Email,
                 PhoneNumber = identityUser.PhoneNumber,
                 CompanyName = identityUser.Company,
-            }               
+            }
         });
-     
+
         var additionalLocalClaims = new List<Claim>();
         var localSignInProps = new AuthenticationProperties();
         ProcessLoginCallback(result, additionalLocalClaims, localSignInProps);
@@ -55,7 +55,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         result.Properties.Items.TryGetValue("environment", out var environment);
         environment ??= "development";
         isuser.AdditionalClaims.Add(new Claim("environment", environment));
-        isuser.AdditionalClaims.Add(new Claim("userName", userModel.Account));      
+        isuser.AdditionalClaims.Add(new Claim("userName", userModel.Account));
         isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(userModel.RoleIds)));
 
         var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");

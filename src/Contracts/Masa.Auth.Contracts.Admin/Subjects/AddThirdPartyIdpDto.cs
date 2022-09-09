@@ -29,11 +29,15 @@ public class AddThirdPartyIdpDto
 
     public ThirdPartyIdpTypes ThirdPartyIdpType { get; set; } = ThirdPartyIdpTypes.Customize;
 
+    public bool MapAll { get; set; }
+
+    public string? JsonKeyMap { get; set; }
+
     public AddThirdPartyIdpDto()
     {
     }
 
-    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, AuthenticationTypes authenticationType, ThirdPartyIdpTypes thirdPartyIdpType)
+    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, AuthenticationTypes authenticationType, ThirdPartyIdpTypes thirdPartyIdpType, bool mapAll, string? jsonKeyMap)
     {
         Name = name;
         DisplayName = displayName;
@@ -47,5 +51,7 @@ public class AddThirdPartyIdpDto
         Enabled = enabled;
         AuthenticationType = authenticationType;
         ThirdPartyIdpType = thirdPartyIdpType;
+        MapAll = mapAll;
+        JsonKeyMap = jsonKeyMap;
     }
 }

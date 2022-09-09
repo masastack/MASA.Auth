@@ -5,7 +5,7 @@ using static AspNet.Security.OAuth.GitHub.GitHubAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.GitHub;
 
-public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
+public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder, IAuthenticationExternalInject
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
 
@@ -31,5 +31,14 @@ public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder
             TokenEndpoint = GitHubAuthenticationDefaults.TokenEndpoint,
             UserInformationEndpoint = GitHubAuthenticationDefaults.UserInformationEndpoint
         };
+    }
+
+    public void Inject(AuthenticationBuilder builder, AuthenticationDefaults authenticationDefault)
+    {
+        builder.AddGitHub(authenticationDefault.Scheme, authenticationDefault.DisplayName, options => 
+        {
+            authenticationDefault.BindOAuthOptions(options);           
+            options.Scope.Add("user:email");
+        });
     }
 }

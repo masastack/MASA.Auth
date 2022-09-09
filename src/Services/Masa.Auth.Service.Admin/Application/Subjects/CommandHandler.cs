@@ -786,7 +786,9 @@ public class CommandHandler
             thirdPartyIdpDto.AuthorizationEndpoint,
             thirdPartyIdpDto.TokenEndpoint,
             thirdPartyIdpDto.UserInformationEndpoint,
-            thirdPartyIdpDto.AuthenticationType);
+            thirdPartyIdpDto.AuthenticationType,
+            thirdPartyIdpDto.MapAll,
+            thirdPartyIdpDto.JsonKeyMap);
 
         await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
     }

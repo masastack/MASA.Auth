@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Authentication.OAuth;
+
 namespace Masa.Auth.Security.OAuth.Providers;
 
 public class AuthenticationDefaults
@@ -21,21 +23,23 @@ public class AuthenticationDefaults
 
     public string Icon { get; set; } = "";
 
-    public AuthenticationDefaults()
-    {
+    public Dictionary<string, string> JsonKeyMap = new();
 
-    }
+    public bool MapAll { get; set; }
 
-    public AuthenticationDefaults(string scheme, string displayName, string callbackPath, string issuer, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon)
+    public void BindOAuthOptions(OAuthOptions options)
     {
-        Scheme = scheme;
-        DisplayName = displayName;
-        CallbackPath = callbackPath;
-        Issuer = issuer;
-        AuthorizationEndpoint = authorizationEndpoint;
-        TokenEndpoint = tokenEndpoint;
-        UserInformationEndpoint = userInformationEndpoint;
-        Icon = icon;
+        options.SignInScheme = AuthenticationExternalConstants.ExternalCookieAuthenticationScheme;
+        options.ClaimsIssuer = Scheme;
+        options.CallbackPath = CallbackPath;
+        options.AuthorizationEndpoint = AuthorizationEndpoint;
+        options.TokenEndpoint = TokenEndpoint;
+        options.UserInformationEndpoint = UserInformationEndpoint;
+        if (MapAll) options.ClaimActions.MapAll();
+        foreach(var (key,value) in JsonKeyMap)
+        {
+            options.ClaimActions.MapJsonKey(key, value);
+        }
     }
 
     public override bool Equals(object? obj)

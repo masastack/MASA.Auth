@@ -12,6 +12,7 @@ public class ThirdPartyIdp : IdentityProvider
     string _tokenEndpoint = "";
     string _userInformationEndpoint = "";
     AuthenticationTypes _authenticationType;
+    string _jsonKeyMap = "";
 
     public string ClientId
     {
@@ -55,7 +56,16 @@ public class ThirdPartyIdp : IdentityProvider
         private set => _authenticationType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(AuthenticationType));
     }
 
-    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, ThirdPartyIdpTypes thirdPartyIdpType, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes authenticationType)
+    public bool MapAll { get; private set; }
+
+    [AllowNull]
+    public string JsonKeyMap
+    {
+        get => _jsonKeyMap;
+        set => _jsonKeyMap = value ?? "";
+    }
+
+    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, ThirdPartyIdpTypes thirdPartyIdpType, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes authenticationType, bool mapAll, string? jsonKeyMap)
     {
         Name = name;
         DisplayName = displayName;
@@ -69,6 +79,8 @@ public class ThirdPartyIdp : IdentityProvider
         TokenEndpoint = tokenEndpoint;
         UserInformationEndpoint = userInformationEndpoint;
         AuthenticationType = authenticationType;
+        MapAll = mapAll;
+        JsonKeyMap = jsonKeyMap;
     }
 
     public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint)
