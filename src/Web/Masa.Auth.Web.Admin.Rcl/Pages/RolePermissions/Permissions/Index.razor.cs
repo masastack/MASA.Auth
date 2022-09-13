@@ -197,7 +197,7 @@ public partial class Index
 
     private async Task UpdateMenuPermissionAsync()
     {
-        if (await _formMenu.ValidateAsync())
+        if (_formMenu.Validate())
         {
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
@@ -207,7 +207,7 @@ public partial class Index
 
     private async Task UpdateApiPermissionAsync()
     {
-        if (await _formApi.ValidateAsync())
+        if (_formApi.Validate())
         {
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);

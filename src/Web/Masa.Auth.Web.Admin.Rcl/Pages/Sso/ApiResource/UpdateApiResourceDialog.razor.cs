@@ -49,7 +49,7 @@ public partial class UpdateApiResourceDialog
         ApiResource = ApiResourceDetail;
     }
 
-    public async Task UpdatetApiResourceAsync(EditContext context)
+    public async Task UpdatetApiResourceAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

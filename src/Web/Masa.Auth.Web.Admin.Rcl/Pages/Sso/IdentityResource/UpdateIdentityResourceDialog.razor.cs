@@ -51,7 +51,7 @@ public partial class UpdateIdentityResourceDialog
         IdentityResource = IdentityResourceDetail;
     }
 
-    public async Task UpdatetIdentityResourceAsync(EditContext context)
+    public async Task UpdatetIdentityResourceAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

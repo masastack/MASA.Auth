@@ -49,7 +49,7 @@ public partial class UpdateApiScopeDialog
         ApiScope = ApiScopeDetail;
     }
 
-    public async Task UpdatetApiScopeAsync(EditContext context)
+    public async Task UpdatetApiScopeAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

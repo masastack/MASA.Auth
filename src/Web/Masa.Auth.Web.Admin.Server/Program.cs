@@ -21,7 +21,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
-builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"), publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
+builder.AddMasaStackComponentsForServer("wwwroot/i18n", publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"), publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 builder.Services.AddMasaOpenIdConnect(publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>());

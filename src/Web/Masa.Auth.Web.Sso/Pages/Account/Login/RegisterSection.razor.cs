@@ -26,7 +26,7 @@ public partial class RegisterSection
 
     private async Task RegisterHandler()
     {
-        if (await _registerForm.ValidateAsync())
+        if (_registerForm.Validate())
         {
         }
         if (_codeValue == _imageCaptcha.CaptchaCode)

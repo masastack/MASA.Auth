@@ -48,7 +48,7 @@ public partial class AddRoleDialog
         }
     }
 
-    public async Task AddRoleAsync(EditContext context)
+    public async Task AddRoleAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)
@@ -62,10 +62,10 @@ public partial class AddRoleDialog
         }
     }
 
-    async Task NextStep(EditContext context)
-    {        
+    void NextStep(FormContext context)
+    {
         var success = context.Validate();
-        if(success)
+        if (success)
         {
             Step = 2;
         }

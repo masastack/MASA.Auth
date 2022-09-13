@@ -63,7 +63,7 @@ public partial class LoginSection
     private async Task LoginHandler()
     {
         //validate
-        if (await _loginForm.ValidateAsync())
+        if (_loginForm.Validate())
         {
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
             if (!string.IsNullOrEmpty(msg))
@@ -121,7 +121,6 @@ public partial class LoginSection
 
     private async Task GetSmsCode()
     {
-        var d = await _loginForm.ValidateAsync();
         if (string.IsNullOrWhiteSpace(_inputModel.PhoneNumber) || !Regex.IsMatch(_inputModel.PhoneNumber,
                 LoginOptions.PhoneRegular))
         {

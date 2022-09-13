@@ -58,7 +58,7 @@ public partial class UpdateRoleDialog
         Role = RoleDetail;
     }
 
-    public async Task UpdateRoleAsync(EditContext context)
+    public async Task UpdateRoleAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

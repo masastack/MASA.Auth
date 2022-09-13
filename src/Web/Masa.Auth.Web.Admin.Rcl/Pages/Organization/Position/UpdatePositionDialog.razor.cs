@@ -51,7 +51,7 @@ public partial class UpdatePositionDialog
         Position = PositionDetail;
     }
 
-    public async Task UpdatetPositionAsync(EditContext context)
+    public async Task UpdatetPositionAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

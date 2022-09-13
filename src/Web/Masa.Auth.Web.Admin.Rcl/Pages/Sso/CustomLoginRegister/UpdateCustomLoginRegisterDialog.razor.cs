@@ -41,7 +41,7 @@ public partial class UpdateCustomLoginRegisterDialog
         }
         if (Form is not null)
         {
-            await Form.ResetValidationAsync();
+            Form.ResetValidation();
         }
     }
 
@@ -60,7 +60,7 @@ public partial class UpdateCustomLoginRegisterDialog
         CustomLogin = CustomLoginDetail;
     }
 
-    public async Task UpdateCustomLoginAsync(EditContext context)
+    public async Task UpdateCustomLoginAsync(FormContext context)
     {
         var success = context.Validate();
         if (success is false)

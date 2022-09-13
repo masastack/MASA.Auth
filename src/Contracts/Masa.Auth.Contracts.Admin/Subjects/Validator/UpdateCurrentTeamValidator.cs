@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-internal class UpdateCurrentTeamValidator : AbstractValidator<UpdateCurrentTeamDto>
+internal class UpdateCurrentTeamValidator : AbstractValidator<UpdateCurrentTeamModel>
 {
     public UpdateCurrentTeamValidator()
     {
