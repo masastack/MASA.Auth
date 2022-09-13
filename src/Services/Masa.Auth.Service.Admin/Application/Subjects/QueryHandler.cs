@@ -395,7 +395,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetAllThirdPartyIdpAsync(AllThirdPartyIdpQuery query)
     {       
-        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
         query.Result = thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>();
     }
 

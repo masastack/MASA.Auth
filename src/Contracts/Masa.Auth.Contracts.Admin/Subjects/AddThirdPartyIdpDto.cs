@@ -31,13 +31,13 @@ public class AddThirdPartyIdpDto
 
     public bool MapAll { get; set; }
 
-    public string? JsonKeyMap { get; set; }
+    public Dictionary<string, string> JsonKeyMap { get; set; } = new();
 
     public AddThirdPartyIdpDto()
     {
     }
 
-    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, AuthenticationTypes authenticationType, ThirdPartyIdpTypes thirdPartyIdpType, bool mapAll, string? jsonKeyMap)
+    public AddThirdPartyIdpDto(string name, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, AuthenticationTypes authenticationType, ThirdPartyIdpTypes thirdPartyIdpType, bool mapAll, Dictionary<string, string> jsonKeyMap)
     {
         Name = name;
         DisplayName = displayName;

@@ -788,7 +788,7 @@ public class CommandHandler
             thirdPartyIdpDto.UserInformationEndpoint,
             thirdPartyIdpDto.AuthenticationType,
             thirdPartyIdpDto.MapAll,
-            thirdPartyIdpDto.JsonKeyMap);
+            JsonSerializer.Serialize(thirdPartyIdpDto.JsonKeyMap));
 
         await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
     }
@@ -810,7 +810,9 @@ public class CommandHandler
             thirdPartyIdpDto.CallbackPath, 
             thirdPartyIdpDto.AuthorizationEndpoint, 
             thirdPartyIdpDto.TokenEndpoint, 
-            thirdPartyIdpDto.UserInformationEndpoint);
+            thirdPartyIdpDto.UserInformationEndpoint,
+            thirdPartyIdpDto.MapAll,
+            thirdPartyIdpDto.JsonKeyMap);
         await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
     }
 

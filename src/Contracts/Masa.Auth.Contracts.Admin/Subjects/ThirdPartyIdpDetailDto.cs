@@ -5,8 +5,12 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class ThirdPartyIdpDetailDto : ThirdPartyIdpDto
 {
+    public bool MapAll { get; private set; }
+
+    public Dictionary<string, string> JsonKeyMap { get; set; } = new();
+
     public ThirdPartyIdpDetailDto()
-    {
+    {          
     }
 }
 

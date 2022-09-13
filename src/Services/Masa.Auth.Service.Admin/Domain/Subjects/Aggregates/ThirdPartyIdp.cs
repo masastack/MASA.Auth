@@ -83,7 +83,7 @@ public class ThirdPartyIdp : IdentityProvider
         JsonKeyMap = jsonKeyMap;
     }
 
-    public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint)
+    public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, bool mapAll, Dictionary<string,string> jsonKyMap)
     {
         DisplayName = displayName;
         ClientId = clientId;
@@ -94,6 +94,8 @@ public class ThirdPartyIdp : IdentityProvider
         AuthorizationEndpoint = authorizationEndpoint;
         TokenEndpoint = tokenEndpoint;
         UserInformationEndpoint = userInformationEndpoint;
+        MapAll = mapAll;
+        JsonKeyMap = JsonSerializer.Serialize(jsonKyMap);
     }
 }
 

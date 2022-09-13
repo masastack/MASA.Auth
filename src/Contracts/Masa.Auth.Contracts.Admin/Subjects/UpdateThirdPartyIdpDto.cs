@@ -25,12 +25,16 @@ public class UpdateThirdPartyIdpDto
 
     public bool Enabled { get; set; } = true;
 
+    public bool MapAll { get; private set; }
+
+    public Dictionary<string, string> JsonKeyMap { get; set; } = new();
+
     public UpdateThirdPartyIdpDto()
     {
 
     }
 
-    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled)
+    public UpdateThirdPartyIdpDto(Guid id, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, bool mapAll, Dictionary<string, string> jsonKeyMap)
     {
         Id = id;
         DisplayName = displayName;
@@ -42,10 +46,12 @@ public class UpdateThirdPartyIdpDto
         UserInformationEndpoint = userInformationEndpoint;
         Icon = icon;
         Enabled = enabled;
+        MapAll = mapAll;
+        JsonKeyMap = jsonKeyMap;
     }
 
     public static implicit operator UpdateThirdPartyIdpDto(ThirdPartyIdpDetailDto thirdPartyIdp)
     {
-        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.CallbackPath, thirdPartyIdp.AuthorizationEndpoint, thirdPartyIdp.TokenEndpoint, thirdPartyIdp.UserInformationEndpoint, thirdPartyIdp.Icon, thirdPartyIdp.Enabled);
+        return new UpdateThirdPartyIdpDto(thirdPartyIdp.Id, thirdPartyIdp.DisplayName, thirdPartyIdp.ClientId, thirdPartyIdp.ClientSecret, thirdPartyIdp.CallbackPath, thirdPartyIdp.AuthorizationEndpoint, thirdPartyIdp.TokenEndpoint, thirdPartyIdp.UserInformationEndpoint, thirdPartyIdp.Icon, thirdPartyIdp.Enabled, thirdPartyIdp.MapAll, thirdPartyIdp.JsonKeyMap);
     }
 }
