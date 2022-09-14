@@ -65,7 +65,7 @@
                     <EnableSwitch @bind-Value="Staff.Enabled" />
                     <MSpacer></MSpacer>
                     <SButton Medium Class="mr-6" Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</SButton>
-                    <SButton Medium OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</SButton>
+                    <SButton Medium OnClick="async () => await UpdateStaffAsync(context.EditContext)">@T("Save")</SButton>
                 </div>
             </FooterContent>
             </AutoHeight>

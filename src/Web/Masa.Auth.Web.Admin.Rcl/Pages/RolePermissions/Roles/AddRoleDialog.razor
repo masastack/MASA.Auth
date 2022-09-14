@@ -22,7 +22,7 @@
                         <FooterContent>
                             <div class="d-flex">
                                 <MSpacer></MSpacer>
-                                <SButton Medium OnClick="() => NextStep(context)">@T("Next step")</SButton>
+                                <SButton Medium OnClick="() => NextStep(context.EditContext)">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
@@ -48,42 +48,12 @@
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
                                 <SButton Medium Outlined OnClick="() => Preview = true" Class="ml-6">@T("Preview")</SButton>
-                                <SButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context)">@T("Submit")</SButton>
+                                <SButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context.EditContext)">@T("Submit")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
                 </MStepperContent>
             </MStepperItems>
-        </MStepper>
-        @*<AutoHeight>
-            <HeaderContent>
-                <div class="d-flex mb-6">
-                    <div class="mx-auto">
-                        <PlaceholderTextFiled @bind-Value="Role.Name" Placeholder="@T("Name")" />
-                    </div>
-                </div>
-                <div>
-                    <STextField @bind-Value="Role.Limit" Class="mb-6" Label="@T("Limit the number of bindings")" />
-                    <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" Class="mb-6" />
-                    <STextField @bind-Value="Role.Description" Class="mb-6" Label="@T("Description")" />
-                </div>
-            </HeaderContent>
-            <AutoHeightContent>
-                <div class="global-nav" style="display: flex;height: auto">
-                    <PermissionExtensionConfigure Roles=Role.ChildrenRoles
-                                                  @bind-ExtensionValue=Role.Permissions
-                                                  @bind-Preview=Preview
-                                                  Style="max-height:calc(100vh - 555px);" />
-                </div>
-            </AutoHeightContent>
-            <FooterContent>
-                <div class="d-flex mt-6">
-                    <EnableSwitch @bind-Value="Role.Enabled" />
-                    <MSpacer></MSpacer>
-                    <SButton Medium Outlined OnClick="() => Preview = true">@T("Preview")</SButton>
-                    <SButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context)">@T("Submit")</SButton>
-                </div>
-            </FooterContent>
-        </AutoHeight>*@
+        </MStepper>      
     </MForm>
 </DefaultSheetDialog>

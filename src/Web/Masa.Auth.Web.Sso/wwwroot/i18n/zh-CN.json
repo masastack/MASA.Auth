@@ -32,5 +32,6 @@
   "Click": "点击",
   "Here": "此处",
   "Return": "返回",
-  "Application": "应用"
+  "Application": "应用",
+  "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码"
 }
