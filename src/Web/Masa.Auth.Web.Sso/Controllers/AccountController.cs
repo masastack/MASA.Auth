@@ -43,10 +43,11 @@ public class AccountController : Controller
 
             if (inputModel.PhoneLogin)
             {
-                var key = CacheKey.GetSmsCodeKey(inputModel.PhoneNumber);
-                var code = await _distributedCacheClient.GetAsync<int>(key);
-                success = code == inputModel.SmsCode;
-                await _distributedCacheClient.RemoveAsync<int>(key);
+                success = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
+                {
+                    PhoneNumber = inputModel.PhoneNumber,
+                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required")
+                });
             }
             else
             {
