@@ -36,6 +36,8 @@
   "Application": "application",
   "Email": "Email",
   "EmailPlaceHolder": "Please Enter Email",
+  "EmailCodePrompt": "Email Code Invalid",
+  "PhoneCodePrompt": "Phone Code Invalid",
   "EmailRegister": "Email Register",
   "PhoneRegister": "Phone Register",
   "VerifyCode": "Verify Code",

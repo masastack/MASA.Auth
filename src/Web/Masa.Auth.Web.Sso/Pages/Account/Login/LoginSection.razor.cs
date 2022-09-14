@@ -149,7 +149,7 @@ public partial class LoginSection
             })
         });
         await _distributedCacheClient.SetAsync(CacheKey.GetSmsCodeKey(_inputModel.PhoneNumber), code
-            , new Utils.Caching.Core.Models.CombinedCacheEntryOptions<int>
+            , new CombinedCacheEntryOptions<int>
             {
                 DistributedCacheEntryOptions = new DistributedCacheEntryOptions
                 {

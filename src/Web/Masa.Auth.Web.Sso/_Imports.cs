@@ -32,6 +32,7 @@ global using Masa.Blazor.Presets;
 global using Masa.BuildingBlocks.Configuration;
 global using Masa.BuildingBlocks.StackSdks.Auth;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Consts;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.BuildingBlocks.StackSdks.Mc.Enum;
 global using Masa.BuildingBlocks.StackSdks.Mc.Model;

@@ -556,7 +556,7 @@ public class CommandHandler
         var staff = await _staffRepository.FindAsync(s => s.UserId == updateStaffCurrentTeamCommand.UserId);
         if (staff == null)
         {
-            _logger.LogError($"can`t find staff by UserId = {updateStaffCurrentTeamCommand.UserId}");
+            _logger.LogError($"Can`t find staff by UserId = {updateStaffCurrentTeamCommand.UserId}");
             throw new UserFriendlyException("This staff data does not exist");
         }
         staff.SetCurrentTeam(updateStaffCurrentTeamCommand.TeamId);

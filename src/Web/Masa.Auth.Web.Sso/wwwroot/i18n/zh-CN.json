@@ -37,6 +37,8 @@
   "Application": "应用",
   "Email": "邮箱",
   "EmailPlaceHolder": "请输入邮箱地址",
+  "EmailCodePrompt": "邮箱验证码无效",
+  "PhoneCodePrompt": "短信验证码无效",
   "EmailRegister": "邮箱注册",
   "PhoneRegister": "手机注册",
   "VerifyCode": "验证码",
