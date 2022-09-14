@@ -43,6 +43,9 @@
   "VerifyCode": "Verify Code",
   "RegistrationSuccess": "Registration Success",
   "ReplenishInfo": "Replenish User Info",
-  "Sure": "Sure"
+  "Sure": "Sure",
+  "User": "User",
+  "RegistrationAgreement": "User Registration Agreement",
+  "RegistrationAgreementStatement": "Agree to register MASA product agreement"
 }
  

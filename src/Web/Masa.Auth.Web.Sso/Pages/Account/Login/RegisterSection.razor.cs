@@ -18,13 +18,12 @@ public partial class RegisterSection
 
     private Task<string> RefreshCode()
     {
-        var sb = new StringBuilder();
-        for (int i = 0; i < 5; i++)
+        var arrCode = new char[5];
+        for (var i = 0; i < 5; i++)
         {
-            sb.Append(LoginOptions.RandomCode[Random.Shared.Next(0, LoginOptions.RandomCode.Length)]);
+            arrCode[i] = LoginOptions.RandomCode[Random.Shared.Next(0, LoginOptions.RandomCode.Length)];
         }
-
-        return Task.FromResult(sb.ToString());
+        return Task.FromResult(new string(arrCode));
     }
 
     private async Task RegisterHandler()
@@ -63,7 +62,7 @@ public partial class RegisterSection
 
         string GenerateDisplayName(RegisterInputModel _inputModel)
         {
-            var _prefix = "用户";
+            var _prefix = T("User");
             var _suffix = "";
             if (_inputModel.EmailRegister)
             {
