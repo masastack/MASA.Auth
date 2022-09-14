@@ -48,7 +48,7 @@ public partial class AddUserDialog
         }
     }
 
-    private async Task NextStepAsync(EditContext context)
+    private async Task NextStepAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)
@@ -67,7 +67,7 @@ public partial class AddUserDialog
         }
     }
 
-    public async Task AddUserAsync(EditContext context)
+    public async Task AddUserAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

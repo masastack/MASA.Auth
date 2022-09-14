@@ -10,6 +10,8 @@
   "SMSCodePlaceHolder": "请输入短信验证码",
   "Password": "密码",
   "PasswordPlaceHolder": "请输入密码",
+  "ConfirmPassword": "确认密码",
+  "ConfirmPasswordPlaceHolder": "请再次输入密码",
   "RememberLogin": "记住我",
   "LdapLogin": "域账号登录",
   "PasswordLogin": "密码登录",
@@ -33,5 +35,18 @@
   "Here": "此处",
   "Return": "返回",
   "Application": "应用",
-  "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码"
+  "Email": "邮箱",
+  "EmailPlaceHolder": "请输入邮箱地址",
+  "EmailCodePrompt": "邮箱验证码无效",
+  "PhoneCodePrompt": "短信验证码无效",
+  "EmailRegister": "邮箱注册",
+  "PhoneRegister": "手机注册",
+  "VerifyCode": "验证码",
+  "RegistrationSuccess": "注册成功",
+  "ReplenishInfo": "完善资料",
+  "Sure": "确定",
+  "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码",
+  "User": "用户",
+  "RegistrationAgreement": "用户申请注册协议",
+  "RegistrationAgreementStatement": "同意注册MASA系列产品协议 "
 }

@@ -54,7 +54,7 @@ public partial class UpdateUserDialog
         UserPassword = new ResetUserPasswordDto(UserDetail.Id, UserDetail.Password);
     }
 
-    public async Task UpdateUserAsync(EditContext context)
+    public async Task UpdateUserAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

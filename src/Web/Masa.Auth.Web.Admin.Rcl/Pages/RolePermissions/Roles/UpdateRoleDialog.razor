@@ -39,7 +39,7 @@
                     <EnableSwitch @bind-Value="Role.Enabled" />
                     <MSpacer></MSpacer>
                     <SButton Medium Outlined Class="mr-6" OnClick="() => Preview = true">@T("Preview")</SButton>
-                    <SButton Medium OnClick="async () => await UpdateRoleAsync(context.EditContext)">@T("Save")</SButton>
+                    <SButton Medium OnClick="async () => await UpdateRoleAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

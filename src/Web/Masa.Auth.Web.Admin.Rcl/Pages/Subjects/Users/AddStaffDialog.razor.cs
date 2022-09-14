@@ -41,7 +41,7 @@ public partial class AddStaffDialog
         }
     }
 
-    public async Task AddStaffAsync(EditContext context)
+    public async Task AddStaffAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

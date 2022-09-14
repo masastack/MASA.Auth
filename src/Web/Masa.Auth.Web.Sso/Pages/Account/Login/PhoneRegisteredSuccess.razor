@@ -1,0 +1,40 @@
+﻿@page "/PhoneRegisteredSuccess"
+
+@inherits SsoLayoutComponentBase
+@layout SimpleLayout
+
+<MCard Width=510 Height=620>
+    <MCardTitle Class="d-flex justify-center h4 my-12">
+        @T("RegistrationSuccess") <MIcon Color="success">mdi-check-circle</MIcon>
+    </MCardTitle>
+    <MCardText>
+        <MDivider>
+            <span class="regular3--text caption" style="line-height: 1px !important">@T("ReplenishInfo")</span>
+        </MDivider>
+        <MTextField Style="width:200px;" @bind-Value="@_replenishInfoForPhoneInputModel.DisplayName" Class="mx-auto mb-4"></MTextField>
+        <MTextField @bind-Value="@_replenishInfoForPhoneInputModel.Password" Label="@T("Password")"
+                    Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
+                    AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
+            <PrependInnerContent>
+                <MIcon>mdi-lock</MIcon>
+            </PrependInnerContent>
+        </MTextField>
+        <MTextField @bind-Value="@_replenishInfoForPhoneInputModel.ConfirmPassword" Class="mt-3" Label="@T("ConfirmPassword")"
+                    Type="@(_showPwd ? "text" : "password")" Placeholder="@T("ConfirmPasswordPlaceHolder")"
+                    AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
+            <PrependInnerContent>
+                <MIcon>mdi-lock</MIcon>
+            </PrependInnerContent>
+        </MTextField>
+    </MCardText>
+    <MCardActions Class="d-flex justify-center">
+        <MButton Class="rounded-pill text-btn white--text" Height=48 Width=340 Color="primary">
+            @T("Sure")
+        </MButton>
+    </MCardActions>
+</MCard>
+
+@code {
+    bool _showPwd;
+    ReplenishInfoForPhoneInputModel _replenishInfoForPhoneInputModel = new();
+}

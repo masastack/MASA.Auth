@@ -43,7 +43,7 @@ public partial class AddThirdPartyIdpDialog
         }
     }
 
-    public async Task AddThirdPartyIdpAsync(EditContext context)
+    public async Task AddThirdPartyIdpAsync(FormContext context)
     {
         //if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
         //{

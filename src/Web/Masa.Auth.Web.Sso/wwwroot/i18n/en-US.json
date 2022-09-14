@@ -5,8 +5,10 @@
   "UserNamePlaceHolder": "Place Enter User Name",
   "Password": "Password",
   "PasswordPlaceHolder": "Place Enter Password",
+  "ConfirmPassword": "Confirm Password",
+  "ConfirmPasswordPlaceHolder": "请再次输入密码",
   "PhoneNumber": "Phone Number",
-  "PhoneNumberPlaceHolder": "Place Enter Phone Number",
+  "PhoneNumberPlaceHolder": "Please Enter Password Again",
   "SMSCode": "SMS Code",
   "SMSCodePlaceHolder": "Place Enter SMS Code",
   "RememberLogin": "Remember My Login",
@@ -31,5 +33,19 @@
   "Click": "Click",
   "Here": "here",
   "Return": "return the",
-  "Application": "application"
+  "Application": "application",
+  "Email": "Email",
+  "EmailPlaceHolder": "Please Enter Email",
+  "EmailCodePrompt": "Email Code Invalid",
+  "PhoneCodePrompt": "Phone Code Invalid",
+  "EmailRegister": "Email Register",
+  "PhoneRegister": "Phone Register",
+  "VerifyCode": "Verify Code",
+  "RegistrationSuccess": "Registration Success",
+  "ReplenishInfo": "Replenish User Info",
+  "Sure": "Sure",
+  "User": "User",
+  "RegistrationAgreement": "User Registration Agreement",
+  "RegistrationAgreementStatement": "Agree to register MASA product agreement"
 }
+ 

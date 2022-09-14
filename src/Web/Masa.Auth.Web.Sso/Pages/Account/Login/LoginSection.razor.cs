@@ -64,7 +64,7 @@ public partial class LoginSection
     private async Task LoginHandler()
     {
         //validate
-        if (await _loginForm.ValidateAsync())
+        if (_loginForm.Validate())
         {
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
             if (!string.IsNullOrEmpty(msg))

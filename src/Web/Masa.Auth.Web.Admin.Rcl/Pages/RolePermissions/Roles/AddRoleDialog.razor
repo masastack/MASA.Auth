@@ -22,7 +22,7 @@
                         <FooterContent>
                             <div class="d-flex">
                                 <MSpacer></MSpacer>
-                                <SButton Medium OnClick="() => NextStep(context.EditContext)">@T("Next step")</SButton>
+                                <SButton Medium OnClick="() => NextStep(context)">@T("Next step")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>
@@ -48,7 +48,7 @@
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
                                 <SButton Medium Outlined OnClick="() => Preview = true" Class="ml-6">@T("Preview")</SButton>
-                                <SButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context.EditContext)">@T("Submit")</SButton>
+                                <SButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context)">@T("Submit")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>

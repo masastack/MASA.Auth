@@ -49,7 +49,7 @@ public partial class UpdateStaffDialog
         Staff = StaffDetail;
     }
 
-    public async Task UpdateStaffAsync(EditContext context)
+    public async Task UpdateStaffAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

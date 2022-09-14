@@ -30,7 +30,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ApiScope.Enabled" />
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await AddApiScopeAsync(context.EditContext)">@T("Submit")</SButton>
+                    <SButton Medium OnClick="async () => await AddApiScopeAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

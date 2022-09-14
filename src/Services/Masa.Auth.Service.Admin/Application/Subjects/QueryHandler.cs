@@ -15,7 +15,6 @@ public class QueryHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMemoryCacheClient _memoryCacheClient;
     readonly IPmClient _pmClient;
-    readonly IEnvironmentContext _environmentContext;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -27,9 +26,7 @@ public class QueryHandler
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
         IMemoryCacheClient memoryCacheClient,
-        IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
-        IPmClient pmClient,
-        IEnvironmentContext environmentContext)
+        IPmClient pmClient)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -41,7 +38,6 @@ public class QueryHandler
         _autoCompleteClient = autoCompleteClient;
         _memoryCacheClient = memoryCacheClient;
         _pmClient = pmClient;
-        _environmentContext = environmentContext;
     }
 
     #region User
@@ -92,7 +88,8 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-        query.Result = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
+        query.Result = await UserSplicingDataAsync(user);
     }
 
     [EventHandler]
@@ -105,13 +102,28 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
-        query.Result = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
+        var user = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
+        query.Result = await UserSplicingDataAsync(user);
     }
 
     [EventHandler]
     public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
-        query.Result = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
+        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
+        query.Result = await UserSplicingDataAsync(user);
+    }
+
+    async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
+    {
+        UserDetailDto? userDetailDto = null;
+        if (user != null)
+        {
+            userDetailDto = user;
+            var staff = await _staffRepository.GetByUserIdAsync(user.Id);
+            userDetailDto.StaffId = staff?.Id;
+            userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
+        }
+        return userDetailDto;
     }
 
     [EventHandler]
@@ -183,7 +195,7 @@ public class QueryHandler
                                      .Take(query.PageSize)
                                      .ToListAsync();
 
-        query.Result = new(total, staffs.Select(staff => 
+        query.Result = new(total, staffs.Select(staff =>
         {
             var staffDto = (StaffDto)staff;
             staffDto.Account = staff.User.Account;

@@ -188,6 +188,8 @@ public class UserService : RestServiceBase
                 Address = user.Address.Address
             },
             RoleIds = user.RoleIds,
+            StaffId = user.StaffId,
+            CurrentTeamId = user.CurrentTeamId
         };
     }
 
@@ -230,13 +232,13 @@ public class UserService : RestServiceBase
         return command.Result;
     }
 
-    private async Task SendMsgCodeAsync(IEventBus eventBus, 
+    private async Task SendMsgCodeAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
         await eventBus.PublishAsync(new SendMsgCodeCommand(model));
     }
 
-    public async Task<bool> VerifyMsgCodeAsync(IEventBus eventBus, 
+    public async Task<bool> VerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
         var command = new VerifyMsgCodeForVerifiyPhoneNumberCommand(model);

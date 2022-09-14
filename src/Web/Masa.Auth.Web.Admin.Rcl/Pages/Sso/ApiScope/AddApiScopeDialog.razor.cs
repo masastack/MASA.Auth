@@ -38,7 +38,7 @@ public partial class AddApiScopeDialog
         }
     }
 
-    public async Task AddApiScopeAsync(EditContext context)
+    public async Task AddApiScopeAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

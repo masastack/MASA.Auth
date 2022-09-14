@@ -50,12 +50,15 @@
                 Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
             </MSelect>
         </MCol>
-        <MCol Md="6" Class="d-flex justify-end">
-            <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")">
-            </MCheckbox>
-            @* <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
-                Label="@T("RememberLogin")"></MCheckbox> *@
-        </MCol>
+        @if (!_inputModel.PhoneLogin)
+        {
+            <MCol Md="6" Class="d-flex justify-end">
+                <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")">
+                </MCheckbox>
+                @* <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
+            Label="@T("RememberLogin")"></MCheckbox> *@
+            </MCol>
+        }
     </MRow>
 </MForm>
 <div class="text-center mt-12">

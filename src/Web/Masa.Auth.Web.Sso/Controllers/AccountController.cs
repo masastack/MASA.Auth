@@ -86,9 +86,12 @@ public class AccountController : Controller
                 {
                     DisplayName = user.DisplayName
                 };
-                isuser.AdditionalClaims.Add(new Claim("userName", user.Account));
-                isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
-                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
+
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ACCOUNT, user.Account));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ENVIRONMENT, inputModel.Environment));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(user.RoleIds)));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.CURRENT_TEAM, (user.CurrentTeamId ?? Guid.Empty).ToString()));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.STAFF, (user.StaffId ?? Guid.Empty).ToString()));
 
                 //us sign in
                 await HttpContext.SignInAsync(isuser, props);

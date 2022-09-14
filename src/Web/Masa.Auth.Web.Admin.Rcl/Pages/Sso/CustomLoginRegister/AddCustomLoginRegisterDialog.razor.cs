@@ -65,7 +65,7 @@ public partial class AddCustomLoginRegisterDialog
         }
     }
 
-    public async Task AddCustomLoginAsync(EditContext context)
+    public async Task AddCustomLoginAsync(FormContext context)
     {
         var success = context.Validate();
         if (success is false)
