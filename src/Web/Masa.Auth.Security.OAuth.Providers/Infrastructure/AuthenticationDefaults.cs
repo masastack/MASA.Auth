@@ -33,6 +33,8 @@ public class AuthenticationDefaults
         options.AuthorizationEndpoint = AuthorizationEndpoint;
         options.TokenEndpoint = TokenEndpoint;
         options.UserInformationEndpoint = UserInformationEndpoint;
+        options.ClientId = "";
+        options.ClientSecret = "";
         if (MapAll) options.ClaimActions.MapAll();
         foreach(var (key,value) in JsonKeyMap)
         {

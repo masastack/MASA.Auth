@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
-public interface IAuthenticationSchemeInUseProvider
+public interface IAuthenticationInstanceBuilder
 {
-    Task<List<string>> GetAllSchemes();
+    public string Scheme { get; }
 
-    Task<List<AuthenticationDefaults>> GetAllAuthenticationDefaults();
+    IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults);
 }

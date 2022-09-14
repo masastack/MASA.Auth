@@ -439,7 +439,7 @@ public class QueryHandler
     public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
     {
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
-        query.Result = AuthenticationDefaultsProvider.GetAllAuthenticationDefaults()
+        query.Result = LocalAuthenticationDefaultsProvider.GetAllAuthenticationDefaults()
                                                      .Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme) is false)
                                                      .ToList();
     }

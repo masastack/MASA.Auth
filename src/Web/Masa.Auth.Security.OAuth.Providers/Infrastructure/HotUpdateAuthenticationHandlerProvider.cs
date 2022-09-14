@@ -5,13 +5,16 @@ namespace Microsoft.AspNetCore.Authentication;
 
 public class HotUpdateAuthenticationHandlerProvider : IAuthenticationHandlerProvider
 {
-    private readonly Dictionary<string, IAuthenticationHandler> _handlerMap = new(StringComparer.Ordinal);
+    readonly Dictionary<string, IAuthenticationHandler> _handlerMap = new(StringComparer.Ordinal);
+    readonly IAuthenticationSchemeProvider _schemeProvider;
+    readonly IRemoteAuthenticationDefaultsProvider _authenticationDefaultsProvider;
 
-    public IAuthenticationSchemeProvider Schemes { get; }
-
-    public HotUpdateAuthenticationHandlerProvider(IAuthenticationSchemeProvider schemes)
+    public HotUpdateAuthenticationHandlerProvider(
+        IAuthenticationSchemeProvider schemeProvider,
+        IRemoteAuthenticationDefaultsProvider authenticationDefaultsProvider)
     {
-        Schemes = schemes;
+        _schemeProvider = schemeProvider;
+        _authenticationDefaultsProvider = authenticationDefaultsProvider;
     }
 
     public async Task<IAuthenticationHandler?> GetHandlerAsync(HttpContext context, string authenticationScheme)
@@ -20,15 +23,22 @@ public class HotUpdateAuthenticationHandlerProvider : IAuthenticationHandlerProv
         {
             return value;
         }
-        var scheme = await Schemes.GetSchemeAsync(authenticationScheme);
+        var scheme = await _schemeProvider.GetSchemeAsync(authenticationScheme);
         if (scheme is null)
         {
             return null;
         }
-        var handler = (context.RequestServices.GetService(scheme.HandlerType) ??
-            ActivatorUtilities.CreateInstance(context.RequestServices, scheme.HandlerType))
-            as IAuthenticationHandler;
-        // todo support custom oauth handler createInstance
+
+        var handler = context.RequestServices.GetService(scheme.HandlerType) as IAuthenticationHandler;
+        if (handler is null)
+        {
+            var authenticationDefaults = await _authenticationDefaultsProvider.GetAsync(scheme.Name);
+            if(authenticationDefaults is not null)
+            {
+                handler = context.RequestServices.GetInstance(authenticationDefaults);
+            }          
+        }
+        
         if (handler != null)
         {
             await handler.InitializeAsync(scheme, context);

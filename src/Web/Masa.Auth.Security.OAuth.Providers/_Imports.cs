@@ -14,3 +14,5 @@ global using System.Security.Claims;
 global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Options;
 global using Microsoft.AspNetCore.Authentication.OAuth;
+global using Microsoft.Extensions.Logging;
+global using System.Text.Encodings.Web;

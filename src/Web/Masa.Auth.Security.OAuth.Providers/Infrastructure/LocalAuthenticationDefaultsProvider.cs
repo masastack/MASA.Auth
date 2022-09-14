@@ -3,17 +3,17 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
-public static class AuthenticationDefaultsProvider
+public static class LocalAuthenticationDefaultsProvider
 {
-    readonly static List<IAuthenticationDefaultBuilder> _builders;
+    readonly static List<ILocalAuthenticationDefaultBuilder> _builders;
 
-    static AuthenticationDefaultsProvider()
+    static LocalAuthenticationDefaultsProvider()
     {
         var builderTypes = Assembly.GetExecutingAssembly()
                              .GetTypes()
-                             .Where(type => type.IsInterface is false && type.IsAssignableTo(typeof(IAuthenticationDefaultBuilder)));
+                             .Where(type => type.IsInterface is false && type.IsAssignableTo(typeof(ILocalAuthenticationDefaultBuilder)));
 
-        _builders = builderTypes.Select(type => (IAuthenticationDefaultBuilder)type.Assembly.CreateInstance(type.FullName!)!)
+        _builders = builderTypes.Select(type => (ILocalAuthenticationDefaultBuilder)type.Assembly.CreateInstance(type.FullName!)!)
                                        .ToList();
     }
 

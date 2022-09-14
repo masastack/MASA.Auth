@@ -5,13 +5,13 @@ namespace Microsoft.AspNetCore.Authentication;
 
 public class HotUpdateAuthenticationSchemeProvider : AuthenticationSchemeProvider
 {
-    IAuthenticationSchemeInUseProvider _authenticationSchemeInUseProvider;
+    readonly IRemoteAuthenticationDefaultsProvider _remoteAuthenticationDefaultsProvider;
 
     public HotUpdateAuthenticationSchemeProvider(
         IOptions<AuthenticationOptions> options,
-        IAuthenticationSchemeInUseProvider authenticationSchemeInUseProvider) : base(options)
+        IRemoteAuthenticationDefaultsProvider remoteAuthenticationDefaultsProvider) : base(options)
     {
-        _authenticationSchemeInUseProvider = authenticationSchemeInUseProvider;
+        _remoteAuthenticationDefaultsProvider = remoteAuthenticationDefaultsProvider;
     }
 
     public override async Task<AuthenticationScheme?> GetSchemeAsync(string name)
@@ -19,12 +19,12 @@ public class HotUpdateAuthenticationSchemeProvider : AuthenticationSchemeProvide
         var authenticationScheme = await base.GetSchemeAsync(name);
         if(authenticationScheme is null)
         {
-            var scheme = _authenticationSchemeInUseProvider.GetAllSchemes().FirstOrDefault(scheme => scheme == name);
-            if (scheme is null)
+            var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(name);
+            if (authenticationDefaults is null)
             {
                 return null;
             }
-            else return LocalAuthenticationSchemeProvider.GetScheme(scheme);
+            else return LocalAuthenticationSchemeProvider.GetScheme(authenticationDefaults.Scheme);
         }
         else return authenticationScheme;
     }
@@ -32,16 +32,16 @@ public class HotUpdateAuthenticationSchemeProvider : AuthenticationSchemeProvide
     public override async Task<IEnumerable<AuthenticationScheme>> GetRequestHandlerSchemesAsync()
     {
         var authenticationSchemes = await base.GetRequestHandlerSchemesAsync();
-        var schemes = _authenticationSchemeInUseProvider.GetAllSchemes();
-        return LocalAuthenticationSchemeProvider.GetSchemes(schemes)
+        var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAllAsync();
+        return LocalAuthenticationSchemeProvider.GetSchemes(authenticationDefaults.Select(item => item.Scheme))
                                                 .Concat(authenticationSchemes);
     }
 
     public override async Task<IEnumerable<AuthenticationScheme>> GetAllSchemesAsync()
     {
         var authenticationSchemes = await base.GetAllSchemesAsync();
-        var schemes = _authenticationSchemeInUseProvider.GetAllSchemes();
-        return LocalAuthenticationSchemeProvider.GetSchemes(schemes)
+        var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAllAsync();
+        return LocalAuthenticationSchemeProvider.GetSchemes(authenticationDefaults.Select(item => item.Scheme))
                                                 .Concat(authenticationSchemes);
     }
 }

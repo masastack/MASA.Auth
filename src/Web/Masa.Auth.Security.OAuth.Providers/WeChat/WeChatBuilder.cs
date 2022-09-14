@@ -5,9 +5,15 @@ using static AspNet.Security.OAuth.Weixin.WeixinAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
-public class WeChatBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder, IAuthenticationExternalInject
+public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationExternalInject, IAuthenticationSchemeBuilder, IAuthenticationInstanceBuilder
 {
     public string Scheme { get; } = WeixinAuthenticationDefaults.AuthenticationScheme;
+
+    public AuthenticationScheme AuthenticationScheme { get; } = new AuthenticationScheme(
+        WeixinAuthenticationDefaults.AuthenticationScheme,
+        WeixinAuthenticationDefaults.DisplayName,
+        typeof(WeixinAuthenticationHandler)
+    );
 
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {
@@ -41,5 +47,12 @@ public class WeChatBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder, IA
         {
             authenticationDefault.BindOAuthOptions(options);
         });
+    }
+
+    public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)
+    {
+        var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<WeixinAuthenticationOptions>(provider);
+        authenticationDefaults.BindOAuthOptions(options.CurrentValue);
+        return new WeixinAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }
 }

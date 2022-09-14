@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure;
 
-public class AuthenticationInUseProvider : IAuthenticationSchemeInUseProvider
+public class AuthenticationInUseProvider : IRemoteAuthenticationDefaultsProvider
 {
     readonly IAuthClient _authClient;
 
@@ -12,18 +12,27 @@ public class AuthenticationInUseProvider : IAuthenticationSchemeInUseProvider
         _authClient = authClient;
     }
 
-    public async Task<List<string>> GetAllSchemes()
+    public async Task<List<string>> GetAllSchemesAsync()
     {
         var thirdPartyIdps = await _authClient.ThirdPartyIdpService.GetAllThirdPartyIdpAsync();
         return thirdPartyIdps.Select(tpIdp => tpIdp.Name).ToList();
     }
 
-    public async Task<List<AuthenticationDefaults>> GetAllAuthenticationDefaults()
+    public async Task<List<AuthenticationDefaults>> GetAllAuthenticationDefaultsAsync()
     {
         var thirdPartyIdps = await _authClient.ThirdPartyIdpService.GetAllThirdPartyIdpAsync();
         return thirdPartyIdps.Select(tpIdp => new AuthenticationDefaults 
         {
-            Scheme = tpIdp.Name
+            Scheme = tpIdp.Name,
+            DisplayName = tpIdp.DisplayName,
+            CallbackPath = tpIdp.CallbackPath,
+            Issuer = tpIdp.Name,
+            AuthorizationEndpoint = tpIdp.AuthorizationEndpoint,
+            TokenEndpoint = tpIdp.TokenEndpoint,
+            UserInformationEndpoint = tpIdp.UserInformationEndpoint,
+            Icon = tpIdp.Icon,
+            MapAll = tpIdp.MapAll,
+            JsonKeyMap = tpIdp.JsonKeyMap
         }).ToList();
     }
 }

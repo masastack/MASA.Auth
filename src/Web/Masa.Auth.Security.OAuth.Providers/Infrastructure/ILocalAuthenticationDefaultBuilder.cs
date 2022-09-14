@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
-public interface IAuthenticationDefaultBuilder
+public interface ILocalAuthenticationDefaultBuilder
 {
     string Scheme { get; }
 
