@@ -51,17 +51,17 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
-builder.Services.AddAuthenticationExternal<AuthenticationExternalHandler>()
-                .AddDefaultGitHub(options =>
-                {
-                    options.ClientId = "49e302895d8b09ea5656";
-                    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
-                })
-                .AddDefaultWeChat(options =>
-                {
-                    options.ClientId = "49e302895d8b09ea5656";
-                    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
-                });
+builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
+                //.AddDefaultGitHub(options =>
+                //{
+                //    options.ClientId = "49e302895d8b09ea5656";
+                //    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
+                //})
+                //.AddDefaultWeChat(options =>
+                //{
+                //    options.ClientId = "49e302895d8b09ea5656";
+                //    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
+                //});
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
