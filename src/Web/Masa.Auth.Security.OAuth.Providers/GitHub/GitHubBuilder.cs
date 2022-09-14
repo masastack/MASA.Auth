@@ -5,9 +5,15 @@ using static AspNet.Security.OAuth.GitHub.GitHubAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.GitHub;
 
-public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder, IAuthenticationExternalInject
+public class GitHubBuilder : IIdentityBuilder, IAuthenticationDefaultBuilder, IAuthenticationExternalInject, IAuthenticationSchemeBuilder
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
+
+    public AuthenticationScheme AuthenticationScheme { get; } = new AuthenticationScheme(
+        GitHubAuthenticationDefaults.AuthenticationScheme, 
+        GitHubAuthenticationDefaults.DisplayName, 
+        typeof(GitHubAuthenticationHandler)
+    );
 
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {

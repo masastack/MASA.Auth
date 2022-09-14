@@ -149,7 +149,8 @@
     "CallBackPath": "回调地址",
     "AuthorizationEndpoint": "身份认证地址",
     "TokenEndpoint": "获取Token地址",
-    "UserInformationEndpoint": "获取用户信息地址"
+    "UserInformationEndpoint": "获取用户信息地址",
+    "Map all json key": "映射所有 json 键"
   },
 
   "PositionBlock": {

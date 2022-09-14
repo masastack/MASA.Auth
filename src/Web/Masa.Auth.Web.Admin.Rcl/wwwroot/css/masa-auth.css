@@ -1069,3 +1069,11 @@ input::-webkit-input-placeholder {
 .m-input__append-inner .d-flex {
     margin-top:0 !important;
 }
+
+/*
+    mapJsonKey
+*/
+
+.dashed {
+    border: 1px dashed #000;
+}

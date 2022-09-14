@@ -7,8 +7,12 @@ public static class AuthenticationExternalServiceCollectionExtensions
 {
     public static AuthenticationBuilder AddAuthenticationExternal<TAuthenticationExternalHandler>(this IServiceCollection services) where TAuthenticationExternalHandler : class, IAuthenticationExternalHandler
     {
-        return services.AddScoped<IAuthenticationExternalHandler, TAuthenticationExternalHandler>()
-                       .AddAuthentication()
-                       .AddCookie(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
+        var builder = services.AddScoped<IAuthenticationExternalHandler, TAuthenticationExternalHandler>()
+                              .AddAuthentication()
+                              .AddCookie(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
+        services.Replace(ServiceDescriptor.Singleton<IAuthenticationSchemeProvider, HotUpdateAuthenticationSchemeProvider>());
+        services.Replace(ServiceDescriptor.Scoped<IAuthenticationHandlerProvider, HotUpdateAuthenticationHandlerProvider>());
+
+        return builder;
     }
 }

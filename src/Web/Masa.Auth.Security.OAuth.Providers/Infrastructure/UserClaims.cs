@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.ComponentModel;
-
 namespace Masa.Auth.Security.OAuth.Providers;
 
 public static class UserClaims
 {
-    [Description("subject 的缩写，唯一标识，一般为用户 ID")]
+    [Description("唯一标识，一般为用户 ID")]
     public static readonly string Subject = "sub";
 
     [Description("姓名")]
@@ -90,4 +88,22 @@ public static class UserClaims
 
     [Description("公司")]
     public static readonly string Company = "company";
+
+    static Dictionary<string, string>? _claims;
+
+    public static Dictionary<string, string> Claims => _claims ??= GetClaims();
+
+    static Dictionary<string, string> GetClaims()
+    {
+        var claims = new Dictionary<string, string>();
+        var fileds = typeof(UserClaims).GetFields(BindingFlags.Static | BindingFlags.Public);
+        foreach (var filed in fileds)
+        {
+            var value = filed.GetValue(null)?.ToString() ?? "";
+            var description = filed.GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
+            claims.Add(value, description);
+        }
+
+        return claims;
+    }
 }

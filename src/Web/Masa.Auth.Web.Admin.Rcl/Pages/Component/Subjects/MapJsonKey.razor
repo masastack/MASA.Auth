@@ -1,0 +1,21 @@
+﻿@inherits AdminCompontentBase
+
+<div>@T("Custom json key map")</div>
+@foreach(var item in InternalValue)
+{
+  <div class="d-flex">
+      <div>
+          <ClaimsSelect Excludes="Value.Select(value => value.Key).ToList()" @bind-Value="item.Key" />
+      </div>
+      <div>
+          <STextField Value="item.Value" />
+      </div>
+
+      <div style="width:40px;">
+          <SIcon Color="red" OnClick="async() => await RemoveAsync(item)">mdi-close</SIcon>
+      </div>
+  </div>  
+}
+<div class="mt-4 hover-pointer dashed" style="height:50px;" @onclick="AddAsync">
+    @T("Add")
+</div>

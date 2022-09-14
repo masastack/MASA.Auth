@@ -39,6 +39,16 @@
                         <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Label="@T("UserInformationEndpoint")" />                       
                     </MCol>
                 </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <MapJsonKey @bind-Value="ThirdPartyIdp.JsonKeyMap" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <MCheckbox @bind-Value="ThirdPartyIdp.MapAll" Label="@T("Map all json key")" />
+                    </MCol>
+                </MRow>
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

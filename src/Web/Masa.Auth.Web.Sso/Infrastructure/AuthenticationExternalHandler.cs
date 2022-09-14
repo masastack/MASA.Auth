@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
-
 namespace Masa.Auth.Web.Sso.Infrastructure;
 
 public class AuthenticationExternalHandler : IAuthenticationExternalHandler
@@ -22,7 +20,6 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
 
     public async Task<bool> OnHandleAuthenticateAfterAsync(AuthenticateResult result)
     {
-        // todo add third party user
         var scheme = result.Properties?.Items?["scheme"] ?? throw new UserFriendlyException("Unknown third party");
         var identityUser = IdentityProvider.GetIdentity(scheme, result.Principal ?? throw new UserFriendlyException("Authenticate failed"));
         var userModel = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
@@ -32,7 +29,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
             ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(scheme),
             User = new AddUserModel
             {
-                //Name = identityUser.Name,
+                //Name = identityUser.Name,// third party name may by Irregular format
                 DisplayName = identityUser.NickName,
                 Account = identityUser.Account,
                 Avatar = identityUser.Picture,
