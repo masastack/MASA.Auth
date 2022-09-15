@@ -14,7 +14,6 @@ builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -30,13 +29,21 @@ builder.Services.AddHealthChecks();
 builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
+#if DEBUG
+builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002/");
+#else
+builder.Services.AddAuthClient(publicConfiguration);
+#endif
+
 builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisOption);
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
@@ -52,18 +59,6 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
 builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
-
-//builder.Services.AddAuthenticationExternal<AuthenticationExternalHandler>()
-//.AddDefaultGitHub(options =>
-//{
-//    options.ClientId = "49e302895d8b09ea5656";
-//    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
-//})
-//.AddDefaultWeChat(options =>
-//{
-//    options.ClientId = "49e302895d8b09ea5656";
-//    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
-//});
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 

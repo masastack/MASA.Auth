@@ -7,7 +7,7 @@ namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
 public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
 {
-    public string Scheme { get; } = WeixinAuthenticationDefaults.AuthenticationScheme;
+    public string Scheme { get; } = "WeChat";
 
     public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
     {

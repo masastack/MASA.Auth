@@ -10,13 +10,19 @@ builder.WebHost.UseKestrel(option =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
 #if DEBUG
 builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
 #else
 builder.AddMasaStackComponentsForServer();
 #endif
 var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
-builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+#if DEBUG
+builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = "http://localhost:18002/");
+#else
+builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
+#endif
+
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();

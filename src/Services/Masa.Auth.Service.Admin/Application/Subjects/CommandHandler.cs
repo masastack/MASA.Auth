@@ -817,7 +817,7 @@ public class CommandHandler
 
     #region ThirdPartyIdp
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
@@ -844,7 +844,7 @@ public class CommandHandler
         await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateThirdPartyIdpAsync(UpdateThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
@@ -867,7 +867,7 @@ public class CommandHandler
         await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveThirdPartyIdpAsync(RemoveThirdPartyIdpCommand command)
     {
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == command.ThirdPartyIdp.Id);
