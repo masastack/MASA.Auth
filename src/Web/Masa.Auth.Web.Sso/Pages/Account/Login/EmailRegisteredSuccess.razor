@@ -1,6 +1,6 @@
 ﻿@page "/EmailRegisteredSuccess"
 
-@inherits SsoLayoutComponentBase
+@inherits SsoCompontentBase
 @layout SimpleLayout
 
 <MCard Width=510 Height=620>
@@ -27,14 +27,44 @@
         </MTextField>
     </MCardText>
     <MCardActions Class="d-flex justify-center">
-        <MButton Class="rounded-pill text-btn white--text" Height=48 Width=340 Color="primary">
+        <MButton Class="rounded-pill text-btn white--text" Height=48 Width=340 Color="primary" OnClick="UpdateUserInfo">
             @T("Sure")
         </MButton>
     </MCardActions>
 </MCard>
 
 @code {
+
+    [Inject]
+    public IAuthClient AuthClient { get; set; } = null!;
+
     bool _canSmsCode = true;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
     ReplenishInfoForEmailInputModel _replenishInfoForEmailInputModel = new();
+
+    protected override void OnInitialized()
+    {
+        _replenishInfoForEmailInputModel = new ReplenishInfoForEmailInputModel
+        {
+            Account = RegisterUserState.RegisterUser.Account,
+            PhoneNumber = RegisterUserState.RegisterUser.PhoneNumber,
+            DisplayName = RegisterUserState.RegisterUser.DisplayName,
+            Avatar = RegisterUserState.RegisterUser.Avatar
+        };
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && string.IsNullOrEmpty(_replenishInfoForEmailInputModel.Account))
+        {
+
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private async Task UpdateUserInfo()
+    {
+        //todo navigation
+    }
 }

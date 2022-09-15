@@ -1,6 +1,6 @@
 ﻿@page "/PhoneRegisteredSuccess"
 
-@inherits SsoLayoutComponentBase
+@inherits SsoCompontentBase
 @layout SimpleLayout
 
 <MCard Width=510 Height=620>
@@ -28,7 +28,7 @@
         </MTextField>
     </MCardText>
     <MCardActions Class="d-flex justify-center">
-        <MButton Class="rounded-pill text-btn white--text" Height=48 Width=340 Color="primary">
+        <MButton Class="rounded-pill text-btn white--text" Height=48 Width=340 Color="primary" OnClick="UpdateUserInfo">
             @T("Sure")
         </MButton>
     </MCardActions>
@@ -37,4 +37,29 @@
 @code {
     bool _showPwd;
     ReplenishInfoForPhoneInputModel _replenishInfoForPhoneInputModel = new();
+
+    protected override void OnInitialized()
+    {
+        _replenishInfoForPhoneInputModel = new ReplenishInfoForPhoneInputModel
+        {
+            Account = RegisterUserState.RegisterUser.Account,
+            Email = RegisterUserState.RegisterUser.Email,
+            DisplayName = RegisterUserState.RegisterUser.DisplayName,
+            Avatar = RegisterUserState.RegisterUser.Avatar
+        };
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && string.IsNullOrEmpty(_replenishInfoForPhoneInputModel.Account))
+        {
+            
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private async Task UpdateUserInfo(){
+
+    }
 }

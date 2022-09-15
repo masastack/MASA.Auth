@@ -5,6 +5,8 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
 public class ReplenishInfoInputModel
 {
+    public string Account { get; set; } = string.Empty;
+
     public string DisplayName { get; set; } = string.Empty;
 
     public string Avatar { get; set; } = string.Empty;

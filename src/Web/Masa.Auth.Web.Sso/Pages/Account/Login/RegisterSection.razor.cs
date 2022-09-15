@@ -40,25 +40,43 @@ public partial class RegisterSection
                 return;
             }
         }
+        //todo change register api
+        //var userModel = await AuthClient.UserService.AddAsync(new AddUserModel
+        //{
+        //    Email = _inputModel.Email,
+        //    Password = _inputModel.Password,
+        //    PhoneNumber = _inputModel.PhoneNumber,
+        //    Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber,
+        //    Avatar = "",
+        //    DisplayName = GenerateDisplayName(_inputModel)
+        //});
+        var userModel = new UserModel
+        {
+            Account = "123",
+            PhoneNumber = "123",
+            Email = "333333",
+            DisplayName = "222222222"
+        };
+        if (userModel == null)
+        {
+            return;
+        }
+        RegisterUserState.RegisterUser = new RegisterUserModel
+        {
+            Email = userModel.Email ?? "",
+            PhoneNumber = userModel.PhoneNumber ?? "",
+            Account = userModel.Account,
+            Avatar = userModel.Avatar,
+            DisplayName = userModel.DisplayName
+        };
+        if (_inputModel.EmailRegister)
+        {
+            Navigation.NavigateTo("/EmailRegisteredSuccess");
+        }
         else
         {
-            //phone code verify
-            if (true)
-            {
-                await PopupService.AlertAsync(T("PhoneCodePrompt"), AlertTypes.Error);
-                return;
-            }
+            Navigation.NavigateTo("/PhoneRegisteredSuccess");
         }
-        //todo change register api
-        var userModel = await AuthClient.UserService.AddAsync(new AddUserModel
-        {
-            Email = _inputModel.Email,
-            Password = _inputModel.Password,
-            PhoneNumber = _inputModel.PhoneNumber,
-            Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber,
-            Avatar = "",
-            DisplayName = GenerateDisplayName(_inputModel)
-        });
 
         string GenerateDisplayName(RegisterInputModel _inputModel)
         {

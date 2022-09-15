@@ -34,7 +34,6 @@ global using Masa.BuildingBlocks.StackSdks.Auth;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Consts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
-global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Provider;
 global using Masa.BuildingBlocks.StackSdks.Pm.Model;
 global using Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
