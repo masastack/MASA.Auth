@@ -17,14 +17,14 @@ public class HotUpdateAuthenticationSchemeProvider : AuthenticationSchemeProvide
     public override async Task<AuthenticationScheme?> GetSchemeAsync(string name)
     {
         var authenticationScheme = await base.GetSchemeAsync(name);
-        if(authenticationScheme is null)
+        if (authenticationScheme is null)
         {
             var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(name);
             if (authenticationDefaults is null)
             {
                 return null;
             }
-            else return LocalAuthenticationSchemeProvider.GetScheme(authenticationDefaults.Scheme);
+            else return LocalAuthenticationDefaultsProvider.Get(authenticationDefaults.Scheme);
         }
         else return authenticationScheme;
     }
@@ -33,15 +33,17 @@ public class HotUpdateAuthenticationSchemeProvider : AuthenticationSchemeProvide
     {
         var authenticationSchemes = await base.GetRequestHandlerSchemesAsync();
         var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAllAsync();
-        return LocalAuthenticationSchemeProvider.GetSchemes(authenticationDefaults.Select(item => item.Scheme))
-                                                .Concat(authenticationSchemes);
+        return LocalAuthenticationDefaultsProvider.GetList(authenticationDefaults.Select(item => item.Scheme))
+                                                  .Select(item => (AuthenticationScheme)item)
+                                                  .Concat(authenticationSchemes);
     }
 
     public override async Task<IEnumerable<AuthenticationScheme>> GetAllSchemesAsync()
     {
         var authenticationSchemes = await base.GetAllSchemesAsync();
         var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAllAsync();
-        return LocalAuthenticationSchemeProvider.GetSchemes(authenticationDefaults.Select(item => item.Scheme))
+        return LocalAuthenticationDefaultsProvider.GetList(authenticationDefaults.Select(item => item.Scheme))
+                                                .Select(item => (AuthenticationScheme)item)
                                                 .Concat(authenticationSchemes);
     }
 }

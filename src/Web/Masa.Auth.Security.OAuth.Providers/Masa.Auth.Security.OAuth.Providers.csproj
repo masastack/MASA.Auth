@@ -7,10 +7,14 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.10" />
+	  <!--<PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.10" />-->
 	  <PackageReference Include="AspNet.Security.OAuth.Weixin" Version="6.0.11" />
 	  <PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="0.6.0-preview.9" />
 	  <PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\AspNet.Security.OAuth.GitHub\AspNet.Security.OAuth.GitHub.csproj" />
 	</ItemGroup>
 	
 </Project>

@@ -5,15 +5,28 @@ using static AspNet.Security.OAuth.GitHub.GitHubAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.GitHub;
 
-public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationExternalInject, IAuthenticationSchemeBuilder, IAuthenticationInstanceBuilder
+public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
 
-    public AuthenticationScheme AuthenticationScheme { get; } = new AuthenticationScheme(
-        GitHubAuthenticationDefaults.AuthenticationScheme, 
-        GitHubAuthenticationDefaults.DisplayName, 
-        typeof(GitHubAuthenticationHandler)
-    );
+    public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
+    {
+        HandlerType = typeof(GitHubAuthenticationHandler),
+        Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
+        DisplayName = GitHubAuthenticationDefaults.DisplayName,
+        Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/app.ico",
+        CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
+        Issuer = GitHubAuthenticationDefaults.Issuer,
+        AuthorizationEndpoint = GitHubAuthenticationDefaults.AuthorizationEndpoint,
+        TokenEndpoint = GitHubAuthenticationDefaults.TokenEndpoint,
+        UserInformationEndpoint = GitHubAuthenticationDefaults.UserInformationEndpoint,
+        JsonKeyMap = new Dictionary<string, string>
+        {
+            [UserClaims.WebSite] = "html_url",
+            [UserClaims.Picture] = "avatar_url",
+            [UserClaims.Account] = "login"
+        }
+    };
 
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {
@@ -24,34 +37,26 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         return identity;
     }
 
-    public AuthenticationDefaults BuildAuthenticationDefaults()
-    {
-        return new AuthenticationDefaults
-        {
-            Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
-            DisplayName = GitHubAuthenticationDefaults.DisplayName,
-            Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/app.ico",
-            CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
-            Issuer = GitHubAuthenticationDefaults.Issuer,
-            AuthorizationEndpoint = GitHubAuthenticationDefaults.AuthorizationEndpoint,
-            TokenEndpoint = GitHubAuthenticationDefaults.TokenEndpoint,
-            UserInformationEndpoint = GitHubAuthenticationDefaults.UserInformationEndpoint
-        };
-    }
-
     public void Inject(AuthenticationBuilder builder, AuthenticationDefaults authenticationDefault)
     {
-        builder.AddGitHub(authenticationDefault.Scheme, authenticationDefault.DisplayName, options => 
+        builder.AddGitHub(authenticationDefault.Scheme, authenticationDefault.DisplayName, options =>
         {
-            authenticationDefault.BindOAuthOptions(options);           
+            authenticationDefault.BindOAuthOptions(options);
             options.Scope.Add("user:email");
         });
     }
 
-    public IAuthenticationHandler CreateInstance(IServiceProvider provider,AuthenticationDefaults authenticationDefaults)
+    public void InjectForHotUpdate(IServiceCollection serviceCollection)
     {
-        var(options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<GitHubAuthenticationOptions>(provider);
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<GitHubAuthenticationOptions>, GitHubPostConfigureOptions>());
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<GitHubAuthenticationOptions>, OAuthPostConfigureOptions<GitHubAuthenticationOptions, GitHubAuthenticationHandler>>());
+    }
+
+    public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)
+    {
+        var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<GitHubAuthenticationOptions>(provider);
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
+        options.CurrentValue.Scope.Add("user:email");
         return new GitHubAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }
 }

@@ -21,9 +21,15 @@ public class AuthenticationDefaults
 
     public string Icon { get; set; } = "";
 
+    public string ClientId { get; set; } = "";
+
+    public string ClientSecret { get; set; } = "";
+
     public Dictionary<string, string> JsonKeyMap = new();
 
     public bool MapAll { get; set; }
+
+    public Type HandlerType { get; set; } = typeof(OAuthHandler<OAuthOptions>);
 
     public void BindOAuthOptions(OAuthOptions options)
     {
@@ -33,13 +39,18 @@ public class AuthenticationDefaults
         options.AuthorizationEndpoint = AuthorizationEndpoint;
         options.TokenEndpoint = TokenEndpoint;
         options.UserInformationEndpoint = UserInformationEndpoint;
-        options.ClientId = "";
-        options.ClientSecret = "";
+        options.ClientId = ClientId;
+        options.ClientSecret = ClientSecret;
         if (MapAll) options.ClaimActions.MapAll();
         foreach(var (key,value) in JsonKeyMap)
         {
             options.ClaimActions.MapJsonKey(key, value);
         }
+    }
+
+    public static implicit operator AuthenticationScheme(AuthenticationDefaults authenticationDefaults)
+    {
+        return new AuthenticationScheme(authenticationDefaults.Scheme, authenticationDefaults.DisplayName, authenticationDefaults.HandlerType);
     }
 
     public override bool Equals(object? obj)

@@ -7,5 +7,5 @@ public interface ILocalAuthenticationDefaultBuilder
 {
     string Scheme { get; }
 
-    AuthenticationDefaults BuildAuthenticationDefaults();
+    AuthenticationDefaults AuthenticationDefaults { get; }
 }

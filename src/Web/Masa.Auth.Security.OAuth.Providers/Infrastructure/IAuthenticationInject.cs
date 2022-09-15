@@ -3,9 +3,11 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
-public interface IAuthenticationExternalInject
+public interface IAuthenticationInject
 {
     public string Scheme { get; }
 
     void Inject(AuthenticationBuilder builder, AuthenticationDefaults authenticationDefault);
+
+    void InjectForHotUpdate(IServiceCollection serviceCollection);
 }

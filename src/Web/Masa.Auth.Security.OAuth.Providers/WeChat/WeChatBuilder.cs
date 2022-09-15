@@ -5,15 +5,22 @@ using static AspNet.Security.OAuth.Weixin.WeixinAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
-public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationExternalInject, IAuthenticationSchemeBuilder, IAuthenticationInstanceBuilder
+public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
 {
     public string Scheme { get; } = WeixinAuthenticationDefaults.AuthenticationScheme;
 
-    public AuthenticationScheme AuthenticationScheme { get; } = new AuthenticationScheme(
-        WeixinAuthenticationDefaults.AuthenticationScheme,
-        WeixinAuthenticationDefaults.DisplayName,
-        typeof(WeixinAuthenticationHandler)
-    );
+    public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
+    {
+        HandlerType = typeof(WeixinAuthenticationHandler),
+        Scheme = "WeChat",
+        DisplayName = WeixinAuthenticationDefaults.DisplayName,
+        Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/wechat.ico",
+        CallbackPath = WeixinAuthenticationDefaults.CallbackPath,
+        Issuer = WeixinAuthenticationDefaults.Issuer,
+        AuthorizationEndpoint = WeixinAuthenticationDefaults.AuthorizationEndpoint,
+        TokenEndpoint = WeixinAuthenticationDefaults.TokenEndpoint,
+        UserInformationEndpoint = WeixinAuthenticationDefaults.UserInformationEndpoint
+    };
 
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {
@@ -26,27 +33,17 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         return identity;
     }
 
-    public AuthenticationDefaults BuildAuthenticationDefaults()
-    {
-        return new AuthenticationDefaults
-        {
-            Scheme = "WeChat",
-            DisplayName = WeixinAuthenticationDefaults.DisplayName,
-            Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/wechat.ico",
-            CallbackPath = WeixinAuthenticationDefaults.CallbackPath,
-            Issuer = WeixinAuthenticationDefaults.Issuer,
-            AuthorizationEndpoint = WeixinAuthenticationDefaults.AuthorizationEndpoint,
-            TokenEndpoint = WeixinAuthenticationDefaults.TokenEndpoint,
-            UserInformationEndpoint = WeixinAuthenticationDefaults.UserInformationEndpoint
-        };
-    }
-
     public void Inject(AuthenticationBuilder builder, AuthenticationDefaults authenticationDefault)
     {
         builder.AddWeixin(authenticationDefault.Scheme, authenticationDefault.DisplayName, options =>
         {
             authenticationDefault.BindOAuthOptions(options);
         });
+    }
+
+    public void InjectForHotUpdate(IServiceCollection serviceCollection)
+    {
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<WeixinAuthenticationOptions>, OAuthPostConfigureOptions<WeixinAuthenticationOptions, WeixinAuthenticationHandler>>());
     }
 
     public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)

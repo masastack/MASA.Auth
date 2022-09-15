@@ -19,6 +19,10 @@ public class HotUpdateAuthenticationHandlerProvider : IAuthenticationHandlerProv
 
     public async Task<IAuthenticationHandler?> GetHandlerAsync(HttpContext context, string authenticationScheme)
     {
+        if(authenticationScheme == "GitHub")
+        {
+
+        }
         if (_handlerMap.TryGetValue(authenticationScheme, out var value))
         {
             return value;

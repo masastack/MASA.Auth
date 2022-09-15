@@ -3,17 +3,17 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
-public static class AuthenticationExternalInjectHelper
+public static class AuthenticationInjectHelper
 {
-    readonly static List<IAuthenticationExternalInject> authenticationExternalInjects;
+    readonly static List<IAuthenticationInject> authenticationlInjects;
 
-    static AuthenticationExternalInjectHelper()
+    static AuthenticationInjectHelper()
     {
         var injectTypes = Assembly.GetExecutingAssembly()
                              .GetTypes()
-                             .Where(type => type.IsInterface is false && type.IsAssignableTo(typeof(IAuthenticationExternalInject)));
+                             .Where(type => type.IsInterface is false && type.IsAssignableTo(typeof(IAuthenticationInject)));
 
-        authenticationExternalInjects = injectTypes.Select(type => (IAuthenticationExternalInject)type.Assembly.CreateInstance(type.FullName!)!)
+        authenticationlInjects = injectTypes.Select(type => (IAuthenticationInject)type.Assembly.CreateInstance(type.FullName!)!)
                                        .ToList();
     }
 
@@ -21,7 +21,7 @@ public static class AuthenticationExternalInjectHelper
     {
         foreach (var item in authenticationDefaults)
         {
-            var inject = authenticationExternalInjects.FirstOrDefault(inject => inject.Scheme == item.Scheme);
+            var inject = authenticationlInjects.FirstOrDefault(inject => inject.Scheme == item.Scheme);
             if (inject is not null) inject.Inject(builder, item);
             else
             {
@@ -31,6 +31,15 @@ public static class AuthenticationExternalInjectHelper
                 });
             }
             //todo support builder.AddOpenIdConnect()
+        }
+    }
+
+    public static void InjectForHotUpdate(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddSingleton<IPostConfigureOptions<OAuthOptions>, OAuthPostConfigureOptions<OAuthOptions, OAuthHandler<OAuthOptions>>>();
+        foreach (var inject in authenticationlInjects)
+        {
+            inject.InjectForHotUpdate(serviceCollection);
         }
     }
 }

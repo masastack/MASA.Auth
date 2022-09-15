@@ -17,15 +17,24 @@ public static class LocalAuthenticationDefaultsProvider
                                        .ToList();
     }
 
-    public static AuthenticationDefaults GetAuthenticationDefaults(string scheme)
+    public static AuthenticationDefaults Get(string scheme)
     {
-        var builder = _builders.First(builder => builder.Scheme == scheme);
-        return builder.BuildAuthenticationDefaults();
+        var builder = _builders.FirstOrDefault(builder => builder.Scheme == scheme);
+        return builder?.AuthenticationDefaults ?? new AuthenticationDefaults 
+        {
+            Scheme = scheme,
+            DisplayName = scheme           
+        };
     }
 
-    public static List<AuthenticationDefaults> GetAllAuthenticationDefaults()
+    public static List<AuthenticationDefaults> GetList(IEnumerable<string> schemes)
     {
-        return _builders.Select(builder => builder.BuildAuthenticationDefaults())
+        return schemes.Select(scheme => Get(scheme)).ToList();
+    }
+
+    public static List<AuthenticationDefaults> GetAll()
+    {
+        return _builders.Select(builder => builder.AuthenticationDefaults)
                         .ToList();
     }
 }

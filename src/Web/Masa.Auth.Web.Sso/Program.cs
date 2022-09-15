@@ -28,7 +28,7 @@ builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<TokenProvider>();
-builder.Services.AddMasaIdentityModel();
+builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
 builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
@@ -52,16 +52,18 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
 
 builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
-                //.AddDefaultGitHub(options =>
-                //{
-                //    options.ClientId = "49e302895d8b09ea5656";
-                //    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
-                //})
-                //.AddDefaultWeChat(options =>
-                //{
-                //    options.ClientId = "49e302895d8b09ea5656";
-                //    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
-                //});
+
+//builder.Services.AddAuthenticationExternal<AuthenticationExternalHandler>()
+//.AddDefaultGitHub(options =>
+//{
+//    options.ClientId = "49e302895d8b09ea5656";
+//    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
+//})
+//.AddDefaultWeChat(options =>
+//{
+//    options.ClientId = "49e302895d8b09ea5656";
+//    options.ClientSecret = "98f1bf028608901e9df91d64ee61536fe562064b";
+//});
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
