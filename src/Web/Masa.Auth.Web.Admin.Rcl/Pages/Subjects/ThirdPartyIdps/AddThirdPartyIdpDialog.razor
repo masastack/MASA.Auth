@@ -7,6 +7,7 @@
                 <ExternalThirdPartySelect Value="@ThirdPartyIdp.ThirdPartyIdpType.ToString()" ValueChanged="ThirdPartyIdpValueChanged" />           
             </HeaderContent>
             <AutoHeightContent>
+                <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
                         <STextField @bind-Value="ThirdPartyIdp.Name" Required Label="@T("Name")" />
@@ -39,9 +40,10 @@
                         <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Label="@T("UserInformationEndpoint")" />                       
                     </MCol>
                 </MRow>
+                <DefaultTitle Class="mb-6">@T("Advanced configuration")</DefaultTitle>
                 <MRow Class="mb-6">
                     <MCol>
-                        <MapJsonKey @bind-Value="ThirdPartyIdp.JsonKeyMap" />
+                        <MapJsonKey @bind-Value="AdvancedConfig" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">

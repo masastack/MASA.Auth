@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth.Contracts\Masa.BuildingBlocks.StackSdks.Auth.Contracts.csproj" />
-    <ProjectReference Include="..\..\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
   </ItemGroup>
 
 </Project>

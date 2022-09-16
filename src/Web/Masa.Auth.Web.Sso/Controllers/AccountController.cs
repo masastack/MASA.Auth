@@ -40,37 +40,28 @@ public class AccountController : Controller
             }
 
             var success = false;
-
+            var user = new UserModel();
             if (inputModel.PhoneLogin)
             {
-                success = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
+                user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
                 {
                     PhoneNumber = inputModel.PhoneNumber,
                     Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required")
                 });
+                success = true;
             }
             else
             {
                 success = await _authClient.UserService
                                            .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
+                if(success)
+                {
+                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
+                }
             }
 
             if (success)
             {
-                var user = new UserModel();
-                if (inputModel.PhoneLogin)
-                {
-                    user = await _authClient.UserService.FindByPhoneNumberAsync(inputModel.PhoneNumber);
-                    if (user is null)
-                    {
-                        //todo auto register user
-                        return Content("no corresponding user for this mobile phone number");
-                    }
-                }
-                else
-                {
-                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
-                }
                 // only set explicit expiration here if user chooses "remember me". 
                 // otherwise we rely upon expiration configured in cookie middleware.
                 AuthenticationProperties? props = null;

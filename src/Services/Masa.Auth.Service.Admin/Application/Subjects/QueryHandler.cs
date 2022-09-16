@@ -441,6 +441,7 @@ public class QueryHandler
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
         query.Result = LocalAuthenticationDefaultsProvider.GetAll()
                                                      .Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme) is false)
+                                                     .Adapt<List<ThirdPartyIdpModel>>()
                                                      .ToList();
     }
 

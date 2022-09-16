@@ -35,6 +35,6 @@ public class ThirdPartyIdpCacheCommandHandler
     async Task SyncCacheAsync()
     {
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
-        await _memoryCacheClient.SetAsync(CacheKeyConsts.GETALLTHIRDPARTYIDP, thirdPartyIdps);
+        await _memoryCacheClient.SetAsync(CacheKeyConsts.GETALLTHIRDPARTYIDP, thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>());
     }
 }

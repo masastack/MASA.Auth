@@ -54,7 +54,7 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
     public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)
     {
-        var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<GitHubAuthenticationOptions>(provider);
+        var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<GitHubAuthenticationOptions>(provider, authenticationDefaults.Scheme);
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
         options.CurrentValue.Scope.Add("user:email");
         return new GitHubAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);

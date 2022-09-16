@@ -48,7 +48,7 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
     public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)
     {
-        var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<WeixinAuthenticationOptions>(provider);
+        var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<WeixinAuthenticationOptions>(provider, authenticationDefaults.Scheme);
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
         return new WeixinAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }

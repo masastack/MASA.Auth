@@ -25,7 +25,7 @@ public class UpdateThirdPartyIdpDto
 
     public bool Enabled { get; set; } = true;
 
-    public bool MapAll { get; private set; }
+    public bool MapAll { get; set; }
 
     public Dictionary<string, string> JsonKeyMap { get; set; } = new();
 

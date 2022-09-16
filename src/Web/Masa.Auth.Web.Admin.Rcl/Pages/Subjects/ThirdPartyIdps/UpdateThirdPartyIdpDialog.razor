@@ -11,6 +11,7 @@
                 </div>
             </HeaderContent>
             <AutoHeightContent>
+                <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
                         <STextField @bind-Value="ThirdPartyIdpDetail.Name" Required Readonly Label="@T("ThirdPartyIdp.Name")" />
@@ -42,7 +43,18 @@
                      <MCol>
                         <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Label="@T("UserInformationEndpoint")" />                       
                     </MCol>
-                </MRow>            
+                </MRow>
+                <DefaultTitle Class="mb-6">@T("Advanced configuration")</DefaultTitle>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <MapJsonKey @bind-Value="AdvancedConfig" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <MCheckbox @bind-Value="ThirdPartyIdp.MapAll" Label="@T("Map all json key")" />
+                    </MCol>
+                </MRow>             
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">

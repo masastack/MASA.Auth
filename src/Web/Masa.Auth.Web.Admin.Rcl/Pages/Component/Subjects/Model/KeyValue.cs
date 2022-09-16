@@ -9,6 +9,8 @@ public class KeyValue
 
     public string Value { get; set; } = "";
 
+    public bool IsDefault() => string.IsNullOrEmpty(Key) || string.IsNullOrEmpty(Value);
+
     public override bool Equals(object? obj)
     {
         return obj is KeyValue keyValue && keyValue.Key == Key;

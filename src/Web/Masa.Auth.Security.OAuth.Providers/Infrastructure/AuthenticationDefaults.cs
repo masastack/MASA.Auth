@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Text.Json.Serialization;
+
 namespace Masa.Auth.Security.OAuth.Providers;
 
 public class AuthenticationDefaults
@@ -29,6 +31,7 @@ public class AuthenticationDefaults
 
     public bool MapAll { get; set; }
 
+    [JsonIgnore]
     public Type HandlerType { get; set; } = typeof(OAuthHandler<OAuthOptions>);
 
     public void BindOAuthOptions(OAuthOptions options)

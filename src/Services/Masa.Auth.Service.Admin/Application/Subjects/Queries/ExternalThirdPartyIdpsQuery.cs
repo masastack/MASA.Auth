@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record ExternalThirdPartyIdpsQuery() : Query<List<AuthenticationDefaults>>
+public record ExternalThirdPartyIdpsQuery() : Query<List<ThirdPartyIdpModel>>
 {
-    public override List<AuthenticationDefaults> Result { get; set; } = new();
+    public override List<ThirdPartyIdpModel> Result { get; set; } = new();
 }

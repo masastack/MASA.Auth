@@ -5,7 +5,7 @@
         <div @attributes="context.Attrs" class="d-flex ma-auto">
             @if (context.Hover is false)
             {
-                <UploadAvatar Value="@ExternalThirdPartyIdps.FirstOrDefault(item => item.Scheme == Value)?.Icon" Class="mx-2 hover-pointer" Size="80" />
+                <UploadAvatar Value="@ExternalThirdPartyIdps.FirstOrDefault(item => item.Name == Value)?.Icon" Class="mx-2 hover-pointer" Size="80" />
             }
             else
             {
@@ -15,14 +15,14 @@
                     {
                         <MTooltip Bottom>
                             <ActivatorContent Context="TooltipContext">
-                                @if(Even && item.Scheme == Value)
+                                @if(Even && item.Name == Value)
                                 {
                                     <div style="width:100px;"></div>
                                 }
                                 <div @attributes="@TooltipContext.Attrs" class="mx-2 hover-pointer" >
-                                    @if (item.Scheme == ThirdPartyIdpTypes.Customize.ToString())
+                                    @if (item.Name == ThirdPartyIdpTypes.Customize.ToString())
                                     {
-                                        if (string.IsNullOrEmpty(item.Icon) is false && item.Scheme != Value)
+                                        if (string.IsNullOrEmpty(item.Icon) is false && item.Name != Value)
                                         {
                                             <MAvatar Size="80" @onclick="async() => await UpdateValueAsync(item)">
                                                 <img src="@item.Icon" />
@@ -42,7 +42,7 @@
                                 </div>
                             </ActivatorContent>
                             <ChildContent>
-                                <span>@item.Scheme</span>
+                                <span>@item.Name</span>
                             </ChildContent>
                         </MTooltip>
                     }

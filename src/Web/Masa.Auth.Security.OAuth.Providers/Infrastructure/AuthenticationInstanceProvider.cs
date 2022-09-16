@@ -26,7 +26,7 @@ public static class AuthenticationInstanceProvider
         }
         else
         {
-            var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<OAuthOptions>(provider);
+            var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<OAuthOptions>(provider, authenticationDefaults.Scheme);
             return new OAuthHandler<OAuthOptions>(options, loggerFactory, urlEncoder, systemClock);
         }
     }

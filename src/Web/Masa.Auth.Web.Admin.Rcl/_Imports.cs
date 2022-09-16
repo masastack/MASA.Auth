@@ -47,4 +47,5 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.JSInterop;
 global using System.Security.Claims;
 global using System.Text;
-global using Masa.Auth.Security.OAuth.Providers;
+global using Masa.Auth.Web.Admin.Rcl.Pages.Component.Subjects;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;

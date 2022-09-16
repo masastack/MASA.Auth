@@ -56,7 +56,8 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCorsPolicyService<CorsPolicyService>()
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
     .AddProfileService<UserProfileService>()
-    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
+    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
+    .AddExtensionGrantValidator<PhoneCodeGrantValidator>();
 
 builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
 

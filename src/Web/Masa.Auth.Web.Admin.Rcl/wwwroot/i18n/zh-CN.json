@@ -146,11 +146,14 @@
     "AuthenticationType": "认证类型",
     "PlatformType": "平台类型",
     "Icon": "图标",
-    "CallBackPath": "回调地址",
+    "CallbackPath": "回调地址",
     "AuthorizationEndpoint": "身份认证地址",
     "TokenEndpoint": "获取Token地址",
     "UserInformationEndpoint": "获取用户信息地址",
-    "Map all json key": "映射所有 json 键"
+    "Map all json key": "映射所有 json 键",
+    "Advanced configuration": "高级配置",
+    "Add custom json key map": "添加自定义json键映射",
+    "Please complete advanced configuration": "请完成高级配置"
   },
 
   "PositionBlock": {

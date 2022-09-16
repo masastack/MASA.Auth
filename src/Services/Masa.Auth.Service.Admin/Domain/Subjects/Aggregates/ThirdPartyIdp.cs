@@ -12,7 +12,7 @@ public class ThirdPartyIdp : IdentityProvider
     string _tokenEndpoint = "";
     string _userInformationEndpoint = "";
     AuthenticationTypes _authenticationType;
-    string _jsonKeyMap = "";
+    string _jsonKeyMap = "{}";
 
     public string ClientId
     {
@@ -62,7 +62,7 @@ public class ThirdPartyIdp : IdentityProvider
     public string JsonKeyMap
     {
         get => _jsonKeyMap;
-        set => _jsonKeyMap = value ?? "";
+        set => _jsonKeyMap = value ?? "{}";
     }
 
     public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, ThirdPartyIdpTypes thirdPartyIdpType, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes authenticationType, bool mapAll, string? jsonKeyMap)

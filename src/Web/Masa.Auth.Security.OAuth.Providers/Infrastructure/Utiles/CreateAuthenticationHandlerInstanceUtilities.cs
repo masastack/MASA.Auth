@@ -7,16 +7,16 @@ namespace Masa.Auth.Security.OAuth.Providers;
 
 public static class CreateAuthenticationHandlerInstanceUtilities
 {
-    readonly static ConcurrentDictionary<Type, object> _optionsCache;
+    readonly static ConcurrentDictionary<string, object> _optionsCache;
 
     static CreateAuthenticationHandlerInstanceUtilities()
     {
         _optionsCache = new();
     }
 
-    public static (IOptionsMonitor<Options> options, ILoggerFactory loggerFactory, UrlEncoder urlEncoder, ISystemClock systemClock) BuilderParamter<Options>(IServiceProvider provider) where Options : AuthenticationSchemeOptions, new()
+    public static (IOptionsMonitor<Options> options, ILoggerFactory loggerFactory, UrlEncoder urlEncoder, ISystemClock systemClock) BuilderParamter<Options>(IServiceProvider provider,string schem) where Options : AuthenticationSchemeOptions, new()
     {
-        var options = (CustomOptionsMonitor<Options>)_optionsCache.GetOrAdd(typeof(CustomOptionsMonitor<Options>), type => ActivatorUtilities.CreateInstance(provider, type));        
+        var options = (CustomOptionsMonitor<Options>)_optionsCache.GetOrAdd(schem, type => ActivatorUtilities.CreateInstance(provider, typeof(CustomOptionsMonitor<Options>)));        
         var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
         var urlEncoder = provider.GetRequiredService<UrlEncoder>();
         var systemClock = provider.GetRequiredService<ISystemClock>();

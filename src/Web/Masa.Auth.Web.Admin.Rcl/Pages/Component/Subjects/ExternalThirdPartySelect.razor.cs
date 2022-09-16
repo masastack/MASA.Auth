@@ -19,11 +19,11 @@ public partial class ExternalThirdPartySelect
     private string InternalValue { get; set; } = "";
 
     [Parameter]
-    public EventCallback<AuthenticationDefaults> ValueChanged { get; set; }
+    public EventCallback<ThirdPartyIdpModel> ValueChanged { get; set; }
 
-    public List<AuthenticationDefaults> ExternalThirdPartyIdps { get; set; } = new();
+    public List<ThirdPartyIdpModel> ExternalThirdPartyIdps { get; set; } = new();
 
-    public List<AuthenticationDefaults[]> Chunks { get; set; } = new();
+    public List<ThirdPartyIdpModel[]> Chunks { get; set; } = new();
 
     public bool Expand
     {
@@ -41,9 +41,9 @@ public partial class ExternalThirdPartySelect
     protected override async Task OnInitializedAsync()
     {
         ExternalThirdPartyIdps = await AuthCaller.ThirdPartyIdpService.GetExternalThirdPartyIdpsAsync();
-        ExternalThirdPartyIdps.Add(new AuthenticationDefaults
+        ExternalThirdPartyIdps.Add(new ThirdPartyIdpModel
         {
-            Scheme = ThirdPartyIdpTypes.Customize.ToString()
+            Name = ThirdPartyIdpTypes.Customize.ToString()
         });
         Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
         Even = ExternalThirdPartyIdps.Count % 2 == 0;
@@ -54,7 +54,7 @@ public partial class ExternalThirdPartySelect
         if (InternalValue != Value && ExternalThirdPartyIdps.Count > 0)
         {
             InternalValue = Value;
-            var value = ExternalThirdPartyIdps.FirstOrDefault(v => v.Scheme == InternalValue);
+            var value = ExternalThirdPartyIdps.FirstOrDefault(v => v.Name == InternalValue);
             if (value != null)
             {
                 var middle = ((ExternalThirdPartyIdps.Count <= 11 ? ExternalThirdPartyIdps.Count : 11) + 1) / 2;
@@ -67,13 +67,13 @@ public partial class ExternalThirdPartySelect
         WaitUpload = false;
     }
 
-    public async Task UpdateValueAsync(AuthenticationDefaults value)
+    public async Task UpdateValueAsync(ThirdPartyIdpModel value)
     {
         if (ValueChanged.HasDelegate)
         {
             await ValueChanged.InvokeAsync(value);
         }
-        else Value = value.Scheme;       
+        else Value = value.Name;       
     }
 
     public void OnUploadChang()

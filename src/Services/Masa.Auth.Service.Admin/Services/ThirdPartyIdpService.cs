@@ -10,6 +10,7 @@ public class ThirdPartyIdpService : RestServiceBase
         MapPost(LdapSaveAsync, "ldap/save");
         MapPost(LdapConnectTestAsync, "ldap/connect-test");
         MapGet(LdapDetailAsync, "ldap/detail");
+        MapGet(GetUserClaims);
     }
 
     #region ThirdPartyIdp
@@ -43,11 +44,17 @@ public class ThirdPartyIdpService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<AuthenticationDefaults>> GetExternalThirdPartyIdpsAsync([FromServices] IEventBus eventBus)
+    private async Task<List<ThirdPartyIdpModel>> GetExternalThirdPartyIdpsAsync([FromServices] IEventBus eventBus)
     {
         var query = new ExternalThirdPartyIdpsQuery();
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    [AllowAnonymous]
+    private Dictionary<string,string> GetUserClaims()
+    {
+        return UserClaims.Claims;
     }
 
     private async Task AddAsync(IEventBus eventBus, [FromBody] AddThirdPartyIdpDto dto)

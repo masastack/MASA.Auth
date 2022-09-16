@@ -230,6 +230,7 @@ public class UserService : RestServiceBase
         return command.Result;
     }
 
+    [AllowAnonymous]
     private async Task SendMsgCodeAsync(IEventBus eventBus, 
         [FromBody] SendMsgCodeModel model)
     {
@@ -244,7 +245,7 @@ public class UserService : RestServiceBase
         return command.Result;
     }
 
-    public async Task<bool> LoginByPhoneNumberAsync(
+    public async Task<UserModel> LoginByPhoneNumberAsync(
         IEventBus eventBus,
         [FromBody] LoginByPhoneNumberModel model)
     {
