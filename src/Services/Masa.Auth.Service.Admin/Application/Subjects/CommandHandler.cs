@@ -870,11 +870,14 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveThirdPartyIdpAsync(RemoveThirdPartyIdpCommand command)
     {
-        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == command.ThirdPartyIdp.Id);
+        var thirdPartyIdp = await _authDbContext.Set<ThirdPartyIdp>()
+                                                .FirstOrDefaultAsync(tpIdp => tpIdp.Id == command.ThirdPartyIdp.Id);
         if (thirdPartyIdp == null)
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
         await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
+        var removeThirdUserComman = new RemoveThirdPartyUserCommand(thirdPartyIdp.Id);
+        await _eventBus.PublishAsync(removeThirdUserComman);
     }
 
     #endregion
@@ -1006,6 +1009,12 @@ public class CommandHandler
         command.Result = addThirdPartyUserCommand.Result;
     }
 
+    [EventHandler]
+    public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyIdpCommand command)
+    {
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdp.Id);
+    }
+
     private async Task<ThirdPartyUser?> VerifyUserRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity, bool throwException = true)
     {
         var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
@@ -1022,7 +1031,7 @@ public class CommandHandler
         }
         return thirdPartyUser;
     }
-
+   
     #endregion
 
     #region UserSystemData

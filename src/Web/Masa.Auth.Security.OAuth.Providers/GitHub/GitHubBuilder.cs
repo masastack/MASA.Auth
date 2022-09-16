@@ -59,7 +59,9 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
     {
         var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<GitHubAuthenticationOptions>(provider, authenticationDefaults.Scheme);
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
-        options.CurrentValue.Scope.Add("user:email");
+        if(options.CurrentValue.Scope.Any(scope => scope == "user:email") is false)
+            options.CurrentValue.Scope.Add("user:email");
+
         return new GitHubAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }
 }

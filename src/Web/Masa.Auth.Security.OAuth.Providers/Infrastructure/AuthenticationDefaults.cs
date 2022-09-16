@@ -44,6 +44,7 @@ public class AuthenticationDefaults
         options.UserInformationEndpoint = UserInformationEndpoint;
         options.ClientId = ClientId;
         options.ClientSecret = ClientSecret;
+        options.ClaimActions.Clear();
         if (MapAll) options.ClaimActions.MapAll();
         foreach (var (key,value) in JsonKeyMap)
         {

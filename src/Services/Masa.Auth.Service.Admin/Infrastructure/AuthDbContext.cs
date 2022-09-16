@@ -19,7 +19,7 @@ public class AuthDbContext : IsolationDbContext
     {
         builder.HasDefaultSchema("auth");
 
-        builder.Entity<Domain.Subjects.Aggregates.IdentityProvider>()
+        builder.Entity<IdentityProvider>()
             .HasDiscriminator<string>("Discriminator")
             .HasValue<ThirdPartyIdp>("ThirdParty")
             .HasValue<LdapIdp>("LDAP");

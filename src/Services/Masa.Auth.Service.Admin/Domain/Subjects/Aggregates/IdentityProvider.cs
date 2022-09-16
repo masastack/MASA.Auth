@@ -38,4 +38,9 @@ public class IdentityProvider : FullAggregateRoot<Guid, Guid>
     }
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
+
+    public void ClearThirdPartyUser()
+    {
+        _thirdPartyUsers.Clear();
+    }
 }
