@@ -19,7 +19,18 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         Issuer = WeixinAuthenticationDefaults.Issuer,
         AuthorizationEndpoint = WeixinAuthenticationDefaults.AuthorizationEndpoint,
         TokenEndpoint = WeixinAuthenticationDefaults.TokenEndpoint,
-        UserInformationEndpoint = WeixinAuthenticationDefaults.UserInformationEndpoint
+        UserInformationEndpoint = WeixinAuthenticationDefaults.UserInformationEndpoint,
+        JsonKeyMap = new Dictionary<string, string>
+        {
+            [UserClaims.Subject] = "unionid",
+            [UserClaims.NickName] = "nickname",
+            [UserClaims.Gender] = "sex",
+            [UserClaims.Country] = "country",
+            [UserClaims.Profile] = "openid",
+            [UserClaims.Picture] = "headimgurl",
+            [UserClaims.Locale] = "city",
+            [UserClaims.Region] = "province",
+        }
     };
 
     public Identity BuildIdentity(ClaimsPrincipal principal)

@@ -821,7 +821,7 @@ public class CommandHandler
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
-        var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Enabled && thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
+        var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
         if (exist)
             throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
 
@@ -848,11 +848,7 @@ public class CommandHandler
     public async Task UpdateThirdPartyIdpAsync(UpdateThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
-        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Enabled && thirdPartyIdp.Id != thirdPartyIdpDto.Id && thirdPartyIdp.Name == thirdPartyIdpDto.DisplayName);
-        if(thirdPartyIdp is not null)
-            throw new UserFriendlyException($"Aleady include thirdPartyIdp {thirdPartyIdpDto.DisplayName} enabled exist");
-
-        thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == thirdPartyIdpDto.Id);
+        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == thirdPartyIdpDto.Id);
         if (thirdPartyIdp is null)
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
@@ -901,7 +897,7 @@ public class CommandHandler
 
     async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
     {
-        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User.Adapt<UpsertUserModel>());
+        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User);
         await _thirdPartyUserDomainService.AddBeforeAsync(thirdPartyUseEvent);
         var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, thirdPartyUseEvent.Result.Id, true, dto.ThridPartyIdentity, dto.ExtendedData);
         await _thirdPartyUserRepository.AddAsync(thirdPartyUser);

@@ -22,6 +22,9 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         UserInformationEndpoint = GitHubAuthenticationDefaults.UserInformationEndpoint,
         JsonKeyMap = new Dictionary<string, string>
         {
+            [UserClaims.Subject] = "id",
+            [UserClaims.Email] = "email",
+            [UserClaims.Name] = "name",
             [UserClaims.WebSite] = "html_url",
             [UserClaims.Picture] = "avatar_url",
             [UserClaims.Account] = "login"

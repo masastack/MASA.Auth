@@ -45,7 +45,7 @@ public class AuthenticationDefaults
         options.ClientId = ClientId;
         options.ClientSecret = ClientSecret;
         if (MapAll) options.ClaimActions.MapAll();
-        foreach(var (key,value) in JsonKeyMap)
+        foreach (var (key,value) in JsonKeyMap)
         {
             options.ClaimActions.MapJsonKey(key, value);
         }
