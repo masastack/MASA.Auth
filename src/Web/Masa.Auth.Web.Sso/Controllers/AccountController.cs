@@ -11,18 +11,15 @@ public class AccountController : Controller
     readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
-    readonly IDistributedCacheClient _distributedCacheClient;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
         IEventService events,
-        IAuthClient authClient,
-        IDistributedCacheClient distributedCacheClient)
+        IAuthClient authClient)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
-        _distributedCacheClient = distributedCacheClient;
     }
 
     [HttpPost]
@@ -46,7 +43,9 @@ public class AccountController : Controller
                 success = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
                 {
                     PhoneNumber = inputModel.PhoneNumber,
-                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required")
+                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required"),
+                    RegisterLogin = inputModel.RememberLogin
+
                 });
             }
             else
@@ -82,6 +81,7 @@ public class AccountController : Controller
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
                     };
                 };
+
                 var isuser = new IdentityServerUser(user!.Id.ToString())
                 {
                     DisplayName = user.DisplayName

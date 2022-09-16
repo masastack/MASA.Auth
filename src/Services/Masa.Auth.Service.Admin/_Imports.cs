@@ -36,6 +36,7 @@ global using Masa.Auth.Service.Admin.Application.Sso.Commands;
 global using Masa.Auth.Service.Admin.Application.Sso.Queries;
 global using Masa.Auth.Service.Admin.Application.Subjects.Commands;
 global using Masa.Auth.Service.Admin.Application.Subjects.Queries;
+global using Masa.Auth.Service.Admin.Application.Universals.Commands;
 global using Masa.Auth.Service.Admin.Domain.Logs.Aggregates;
 global using Masa.Auth.Service.Admin.Domain.Logs.Repositories;
 global using Masa.Auth.Service.Admin.Domain.Organizations.Aggregates;

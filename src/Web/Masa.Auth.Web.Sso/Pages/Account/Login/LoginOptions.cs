@@ -12,6 +12,5 @@ public class LoginOptions
     public static readonly string PhoneRegular = @"^\s{0}$|^((\+86)|(86))?(1[3-9][0-9])\d{8}$";
     public static readonly string EmailRegular = @"^\s{0}$|^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
     public static readonly int GetSmsCodeInterval = 60;
-    public static readonly TimeSpan SmsCodeExpire = TimeSpan.FromMinutes(5);
-    public static readonly string RandomCode = "123456789aAbBcCdDeEfFgGhHkKmMnNpPqQrRsStTuUvVwWxXyYzZ";
+    public static readonly int GetEmailCodeInterval = 60;
 }

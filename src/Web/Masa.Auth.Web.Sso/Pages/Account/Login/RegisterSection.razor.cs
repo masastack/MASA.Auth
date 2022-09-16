@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Web;
+
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class RegisterSection
@@ -8,22 +10,72 @@ public partial class RegisterSection
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
 
+    [CascadingParameter]
+    public string ReturnUrl { get; set; } = string.Empty;
+
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
-    PImageCaptcha _imageCaptcha = null!;
-    bool _showPwd, _canSmsCode = true;
-    string _codeValue = "";
-    System.Timers.Timer? _timer;
-    int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+    bool _showPwd, _canSmsCode = true, _canEmailCode = true, _registerLoading;
+    System.Timers.Timer? _smsTimer, _emailTimer;
+    int _smsCodeTime = LoginOptions.GetSmsCodeInterval, _emailCodeTime = LoginOptions.GetEmailCodeInterval;
 
-    private Task<string> RefreshCode()
+    protected override void OnInitialized()
     {
-        var arrCode = new char[5];
-        for (var i = 0; i < 5; i++)
+        if (_smsTimer == null)
         {
-            arrCode[i] = LoginOptions.RandomCode[Random.Shared.Next(0, LoginOptions.RandomCode.Length)];
+            _smsTimer = new(1000 * 1);
+            _smsTimer.Elapsed += SmsTimer_Elapsed;
         }
-        return Task.FromResult(new string(arrCode));
+        if (_emailTimer == null)
+        {
+            _emailTimer = new(1000 * 1);
+            _emailTimer.Elapsed += EmailTimer_Elapsed;
+        }
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && ReturnUrl?.Contains('?') == true)
+        {
+            var splitIndex = ReturnUrl.IndexOf('?');
+            var baseString = ReturnUrl[..splitIndex];
+            var paramString = ReturnUrl[splitIndex..];
+            var queryValues = HttpUtility.ParseQueryString(paramString);
+            queryValues["redirect_uri"] = $"{queryValues["redirect_uri"]}/user-center";
+            var d = $"{baseString}?{queryValues}";
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private void SmsTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        _ = InvokeAsync(() =>
+        {
+            _smsCodeTime--;
+            if (_smsCodeTime == 0)
+            {
+                _smsTimer?.Stop();
+                _canSmsCode = true;
+                _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+            }
+            StateHasChanged();
+        });
+    }
+
+    private void EmailTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        _ = InvokeAsync(() =>
+        {
+            _emailCodeTime--;
+            if (_emailCodeTime == 0)
+            {
+                _emailTimer?.Stop();
+                _canEmailCode = true;
+                _emailCodeTime = LoginOptions.GetEmailCodeInterval;
+            }
+            StateHasChanged();
+        });
     }
 
     private async Task RegisterHandler()
@@ -34,48 +86,56 @@ public partial class RegisterSection
         }
         if (_inputModel.EmailRegister)
         {
-            if (_codeValue.ToLower() != _imageCaptcha.CaptchaCode.ToLower())
-            {
-                await PopupService.AlertAsync(T("EmailCodePrompt"), AlertTypes.Error);
-                return;
-            }
-        }
-        //todo change register api
-        //var userModel = await AuthClient.UserService.AddAsync(new AddUserModel
-        //{
-        //    Email = _inputModel.Email,
-        //    Password = _inputModel.Password,
-        //    PhoneNumber = _inputModel.PhoneNumber,
-        //    Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber,
-        //    Avatar = "",
-        //    DisplayName = GenerateDisplayName(_inputModel)
-        //});
-        var userModel = new UserModel
-        {
-            Account = "123",
-            PhoneNumber = "123",
-            Email = "333333",
-            DisplayName = "222222222"
-        };
-        if (userModel == null)
-        {
+            await PopupService.AlertAsync("Developmenting...", AlertTypes.Warning);
             return;
         }
-        RegisterUserState.RegisterUser = new RegisterUserModel
+        _registerLoading = true;
+        StateHasChanged();
+        //todo change register api
+        var userModel = await AuthClient.UserService.AddAsync(new AddUserModel
         {
-            Email = userModel.Email ?? "",
-            PhoneNumber = userModel.PhoneNumber ?? "",
-            Account = userModel.Account,
-            Avatar = userModel.Avatar,
-            DisplayName = userModel.DisplayName
+            Email = _inputModel.Email,
+            Password = _inputModel.Password,
+            PhoneNumber = _inputModel.PhoneNumber,
+            Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber,
+            Avatar = "",
+            DisplayName = GenerateDisplayName(_inputModel)
+        });
+        if (userModel == null)
+        {
+            await PopupService.AlertAsync(T("RegisterError"), AlertTypes.Error);
+            return;
+        }
+
+        var loginInputModel = new LoginInputModel
+        {
+            PhoneLogin = true,
+            SmsCode = _inputModel.SmsCode,
+            Environment = RegisterUserState.RegisterUser.Environment,
+            PhoneNumber = _inputModel.PhoneNumber,
+            ReturnUrl = ReturnUrl,
+            RegisterLogin = true
         };
-        if (_inputModel.EmailRegister)
+        var msg = await _js.InvokeAsync<string>("login", loginInputModel);
+        _registerLoading = false;
+        if (!string.IsNullOrEmpty(msg))
         {
-            Navigation.NavigateTo("/EmailRegisteredSuccess");
+            await PopupService.AlertAsync(msg, AlertTypes.Error);
         }
         else
         {
-            Navigation.NavigateTo("/PhoneRegisteredSuccess");
+            if (SsoUrlHelper.IsLocalUrl(ReturnUrl))
+            {
+                Navigation.NavigateTo(ReturnUrl, true);
+            }
+            else if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                Navigation.NavigateTo("/", true);
+            }
+            else
+            {
+                await PopupService.AlertAsync("invalid return url", AlertTypes.Error);
+            }
         }
 
         string GenerateDisplayName(RegisterInputModel _inputModel)
@@ -108,12 +168,23 @@ public partial class RegisterSection
             });
             await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
             _canSmsCode = false;
-            _timer?.Start();
+            _smsTimer?.Start();
         }
     }
 
+    private async Task GetEmailCode()
+    {
+        var field = _registerForm.EditContext.Field(nameof(_inputModel.Email));
+        _registerForm.EditContext.NotifyFieldChanged(field);
+        var result = _registerForm.EditContext.GetValidationMessages(field);
+        if (!result.Any())
+        {
+
+        }
+    }
     public void Dispose()
     {
-        _timer?.Dispose();
+        _smsTimer?.Dispose();
+        _emailTimer?.Dispose();
     }
 }

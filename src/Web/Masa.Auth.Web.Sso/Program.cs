@@ -45,6 +45,7 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
+        options.Events.RaiseSuccessEvents = true;
     })
     .AddDeveloperSigningCredential()
     .AddClientStore<MasaClientStore>()

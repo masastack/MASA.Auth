@@ -50,13 +50,13 @@ public class SyncStaffDto
     {
         get
         {
-            if (StaffTypeLable is "内部员工" or "InternalStaff") return StaffTypes.InternalStaff;
-            else return StaffTypes.ExternalStaff;
+            if (StaffTypeLable is "内部员工" or "Internal") return StaffTypes.Internal;
+            else return StaffTypes.External;
         }
     }
 
     [ImporterHeader(Name = "员工类型")]
-    public string StaffTypeLable { get; set; } = StaffTypes.InternalStaff.ToString();
+    public string StaffTypeLable { get; set; } = StaffTypes.Internal.ToString();
 
     public SyncStaffDto()
     {

@@ -34,7 +34,9 @@
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">
-                <RegisterSection />
+                 <CascadingValue Value="@ReturnUrl">
+                    <RegisterSection />
+                </CascadingValue>
             </MTabItem>
         </MTabsItems>
     </MCard>

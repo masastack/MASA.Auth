@@ -14,4 +14,8 @@ public class RegisterUserModel
     public string DisplayName { get; set; } = string.Empty;
 
     public string Avatar { get; set; } = string.Empty;
+
+    public string ReturnUrl { get; set; } = string.Empty;
+
+    public string Environment { get; set; } = string.Empty;
 }

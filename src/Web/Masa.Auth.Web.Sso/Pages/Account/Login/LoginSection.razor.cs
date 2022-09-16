@@ -13,7 +13,7 @@ public partial class LoginSection
 
     LoginInputModel _inputModel = new();
     MForm _loginForm = null!;
-    bool _showPwd, _canSmsCode = true;
+    bool _showPwd, _canSmsCode = true, _loginLoading;
     List<EnvironmentModel> _environments = new();
     System.Timers.Timer? _timer;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
@@ -46,6 +46,12 @@ public partial class LoginSection
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    private void EnvironmentChanged(string environment)
+    {
+        _inputModel.Environment = environment;
+        RegisterUserState.RegisterUser.Environment = environment;
+    }
+
     private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         _ = InvokeAsync(() =>
@@ -66,7 +72,10 @@ public partial class LoginSection
         //validate
         if (_loginForm.Validate())
         {
+            _loginLoading = true;
+            StateHasChanged();
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
+            _loginLoading = false;
             if (!string.IsNullOrEmpty(msg))
             {
                 await PopupService.AlertAsync(msg, AlertTypes.Error);
@@ -128,7 +137,7 @@ public partial class LoginSection
         if (result.Any() is false)
         {
             _loading = true;
-            await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel 
+            await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
             {
                 SendMsgCodeType = SendMsgCodeTypes.Login,
                 PhoneNumber = _inputModel.PhoneNumber
@@ -137,7 +146,7 @@ public partial class LoginSection
             _loading = false;
             _canSmsCode = false;
             _timer?.Start();
-        }         
+        }
     }
 
     private async Task KeyDownHandler(KeyboardEventArgs args)

@@ -1,5 +1,6 @@
 ﻿@inherits SsoCompontentBase
 @implements IDisposable
+@inject IJSRuntime _js
 
 <MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-12 mx-12 text-center">
     @if (_inputModel.EmailRegister)
@@ -24,7 +25,16 @@
                 <MIcon>mdi-lock</MIcon>
             </PrependInnerContent>
         </MTextField>
-        <PImageCaptcha @bind-Value="_codeValue" @ref="_imageCaptcha" CaptchaWidth="100" Outlined Label="@T("VerifyCode")" OnRefresh="RefreshCode"></PImageCaptcha>
+        <MTextField Class="mt-3" @bind-Value="_inputModel.EmailCode" Outlined Label="@T("EmailCode")"
+                Placeholder="@T("EmailCodeCodePlaceHolder")" Type="number"
+                NumberProps="@(prop=> { prop.Min = 100000; prop.Max = 999999; prop.HideControl = true; })">
+            <AppendContent>
+                <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
+                     Class="primary rounded-r-lg" Disabled=!_canEmailCode OnClick="GetEmailCode">
+                    @(_canEmailCode ? @T("GetEmailCode") : _emailCodeTime)
+                </MButton>
+            </AppendContent>
+        </MTextField>
     }
     else
     {
@@ -50,8 +60,8 @@
     </MCheckbox>
 </MForm>
 <div class="text-center mt-3">
-    <MButton Class="rounded-pill text-btn white--text" Disabled=!_inputModel.Agreement
-             OnClick="RegisterHandler" Height=48 Width=340 Color="primary">
+    <MButton Class="rounded-pill text-btn white--text" Disabled=@(!_inputModel.Agreement || _registerLoading)
+             OnClick="RegisterHandler" Height=48 Width=340 Color="primary" Loading=_registerLoading >
         @T("Register")
     </MButton>
     @if (!_inputModel.EmailRegister)

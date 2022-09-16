@@ -13,6 +13,8 @@ public class RegisterInputModel
 
     public string Email { get; set; } = string.Empty;
 
+    public int? EmailCode { get; set; }
+
     public int? SmsCode { get; set; }
 
     public bool EmailRegister { get; set; }

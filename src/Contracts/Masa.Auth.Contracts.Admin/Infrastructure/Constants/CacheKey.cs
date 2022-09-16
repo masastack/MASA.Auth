@@ -15,9 +15,11 @@ public static class CacheKey
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
     const string MSG_CODE_FOR_UPDATE_USER_PHONENUMBER = "msg_code_update_user_phoneNumber:";
     const string MSG_CODE_FOR_LOGIN = "msg_code_login:";
+    const string MSG_CODE_FOR_REGISTER = "msg_code_register:";
     const string MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER = "msg_code_verifiy_user_phoneNumber:";
     const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_result:";
     const string USER_ELEMENT_PERMISSION_CODE_PRE = "user_element_permission_code:";
+    const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
 
     public static string PermissionKey(Guid permissionId)
     {
@@ -59,9 +61,19 @@ public static class CacheKey
         return $"{MSG_CODE_FOR_UPDATE_USER_PHONENUMBER}{userId}{phoneNumber}";
     }
 
-    public static string MsgCodeForLoginKey(string userId,string phoneNumber)
+    public static string MsgCodeForLoginKey(string userId, string phoneNumber)
     {
         return $"{MSG_CODE_FOR_LOGIN}{userId}{phoneNumber}";
+    }
+
+    public static string MsgCodeForRegisterKey(string phoneNumber)
+    {
+        return $"{MSG_CODE_FOR_REGISTER}{phoneNumber}";
+    }
+
+    public static string EmailCodeRegisterKey(string email)
+    {
+        return $"{EMAIL_REGISTER_CODE_PRE}{email}";
     }
 
     public static string MsgCodeForVerifiyUserPhoneNumberKey(string userId, string phoneNumber)

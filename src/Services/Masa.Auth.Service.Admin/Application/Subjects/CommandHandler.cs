@@ -232,81 +232,6 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task SendMsgCodeAsync(SendMsgCodeCommand command)
-    {
-        var model = command.Model;
-        if (model.SendMsgCodeType is SendMsgCodeTypes.VerifiyPhoneNumber)
-        {
-            var sendCommand = new SendMsgCodeForVerifiyPhoneNumberCommand(new()
-            {
-                UserId = model.UserId
-            });
-            await _eventBus.PublishAsync(sendCommand);
-        }
-        if (model.SendMsgCodeType is SendMsgCodeTypes.Login)
-        {
-            var sendCommand = new SendMsgCodeForLoginCommand(new()
-            {
-                PhoneNumber = model.PhoneNumber
-            });
-            await _eventBus.PublishAsync(sendCommand);
-        }
-        else
-        {
-            var sendCommand = new SendMsgCodeForUpdatePhoneNumberCommand(new()
-            {
-                UserId = model.UserId,
-                PhoneNumber = model.PhoneNumber
-            });
-            await _eventBus.PublishAsync(sendCommand);
-        }
-    }
-
-    [EventHandler]
-    public async Task SendMsgCodeForVerifiyPhoneNumberAsync(SendMsgCodeForVerifiyPhoneNumberCommand command)
-    {
-        var model = command.Model;
-        var user = await CheckUserExistAsync(model.UserId);
-        ArgumentExceptionExtensions.ThrowIfNullOrEmpty(user.PhoneNumber);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(user.Id.ToString(), user.PhoneNumber);
-        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
-        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
-        else
-        {
-            await _sms.SendMsgCodeAsync(msgCodeKey, user.PhoneNumber);
-        }
-    }
-
-    [EventHandler]
-    public async Task SendMsgCodeForUpdatePhoneNumberAsync(SendMsgCodeForUpdatePhoneNumberCommand command)
-    {
-        var model = command.Model;
-        await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
-        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
-        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
-        else
-        {
-            await _sms.SendMsgCodeAsync(msgCodeKey, model.PhoneNumber);
-        }
-    }
-
-    [EventHandler]
-    public async Task SendMsgCodeForLoginAsync(SendMsgCodeForLoginCommand command)
-    {
-        var model = command.Model;
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
-        if (user is null) throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
-        var msgCodeKey = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
-        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
-        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
-        else
-        {
-            await _sms.SendMsgCodeAsync(msgCodeKey, model.PhoneNumber);
-        }
-    }
-
-    [EventHandler]
     public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
     {
         var model = command.Model;
@@ -358,11 +283,19 @@ public class CommandHandler
     {
         var model = command.Model;
         var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
-        if (user is null) throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
-        var key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
-        if (await _sms.VerifyMsgCodeAsync(key, model.Code))
+        if (user is null)
         {
-            command.Result = true;
+            throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+        }
+        if (model.RegisterLogin)
+        {
+            var key = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+            command.Result = await _sms.VerifyMsgCodeAsync(key, model.Code);
+        }
+        else
+        {
+            var key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
+            command.Result = await _sms.VerifyMsgCodeAsync(key, model.Code);
         }
     }
 

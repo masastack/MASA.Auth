@@ -235,7 +235,7 @@ public class UserService : RestServiceBase
     private async Task SendMsgCodeAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
-        await eventBus.PublishAsync(new SendMsgCodeCommand(model));
+        await eventBus.PublishAsync(new SendSMSCommand(model));
     }
 
     public async Task<bool> VerifyMsgCodeAsync(IEventBus eventBus,

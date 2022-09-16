@@ -15,12 +15,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
+		<!--<PackageReference Include="IdentityServer4" Version="4.1.2" />-->
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="Masa.Blazor" Version="0.6.0-preview.6" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />
+		<!--<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
@@ -48,6 +48,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\StackSdks\Masa.Contrib.StackSdks.Auth\Masa.Contrib.StackSdks.Auth.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Utils\Masa.Utils.Exceptions\Masa.Utils.Exceptions.csproj" />
+	  <ProjectReference Include="C:\Users\mayue\Desktop\IdentityServer4\src\IdentityServer4\src\IdentityServer4.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Certificates\7348307__lonsid.cn.pfx">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -57,9 +63,7 @@
 	</ItemGroup>
 
 	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties appsettings_1json__JsonSchema="" />
-		</VisualStudio>
+		<VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio>
 	</ProjectExtensions>
 
 </Project>
