@@ -16,11 +16,11 @@ public class EmailAgent : IScopedDependency
         _emailOptions = emailOptions;
     }
 
-    public async Task<string> SendEmailAsync(SendEmailModel sendEmailModel, TimeSpan? expiration = null)
+    public async Task SendEmailAsync(SendEmailModel sendEmailModel, TimeSpan? expiration = null)
     {
         //todo Abstract Factory
-        var key = CacheKey.EmailCodeRegisterKey(sendEmailModel.Email);
-        if (await CheckAlreadySendAsync(key))
+        var sendKey = CacheKey.EmailCodeRegisterSendKey(sendEmailModel.Email);
+        if (await CheckAlreadySendAsync(sendKey))
         {
             throw new UserFriendlyException("Email has been sent, please try again later");
         }
@@ -45,17 +45,21 @@ public class EmailAgent : IScopedDependency
             })
         });
 
-        var options = new CombinedCacheEntryOptions<string>
+        await _distributedCacheClient.SetAsync(CacheKey.EmailCodeRegisterKey(sendEmailModel.Email),
+            code, new CombinedCacheEntryOptions<string>
+            {
+                DistributedCacheEntryOptions = new()
+                {
+                    AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromMinutes(5)
+                }
+            });
+        await _distributedCacheClient.SetAsync(sendKey, true, new CombinedCacheEntryOptions<bool>
         {
             DistributedCacheEntryOptions = new()
             {
-                // 62 ：Prevent users from failing to submit verification codes at the last second
-                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromSeconds(62)
+                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromSeconds(60)
             }
-        };
-        await _distributedCacheClient.SetAsync(key, code, options);
-
-        return code;
+        });
     }
 
     public async Task<bool> VerifyCodeAsync(string key, string code)

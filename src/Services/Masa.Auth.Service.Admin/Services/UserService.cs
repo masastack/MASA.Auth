@@ -23,6 +23,7 @@ public class UserService : RestServiceBase
         MapPost(SendMsgCodeAsync);
         MapPost(VerifyMsgCodeAsync);
         MapPost(LoginByPhoneNumberAsync);
+        MapPost(RegisterAsync, "register");
     }
 
     //[Authorize]
@@ -293,6 +294,12 @@ public class UserService : RestServiceBase
     public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
     {
         var command = new SyncUserRedisCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
+
+    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterModel registerModel)
+    {
+        var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);
     }
 }

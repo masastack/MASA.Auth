@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Web;
-
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class RegisterSection
@@ -18,6 +16,9 @@ public partial class RegisterSection
     bool _showPwd, _canSmsCode = true, _canEmailCode = true, _registerLoading;
     System.Timers.Timer? _smsTimer, _emailTimer;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval, _emailCodeTime = LoginOptions.GetEmailCodeInterval;
+
+    public bool CanRegister => _inputModel.Agreement && !_registerLoading
+            && (_inputModel.EmailRegister ? _inputModel.EmailCode.HasValue : _inputModel.SmsCode.HasValue);
 
     protected override void OnInitialized()
     {
@@ -84,33 +85,27 @@ public partial class RegisterSection
         {
             return;
         }
-        if (_inputModel.EmailRegister)
-        {
-            await PopupService.AlertAsync("Developmenting...", AlertTypes.Warning);
-            return;
-        }
         _registerLoading = true;
         StateHasChanged();
-        //todo change register api
-        var userModel = await AuthClient.UserService.AddAsync(new AddUserModel
+
+        await AuthClient.UserService.RegisterAsync(new RegisterModel
         {
+            UserRegisterType = _inputModel.EmailRegister ? UserRegisterTypes.Email : UserRegisterTypes.PhoneNumber,
             Email = _inputModel.Email,
+            Code = (_inputModel.EmailRegister ? _inputModel.EmailCode : _inputModel.SmsCode)?.ToString() ?? "",
             Password = _inputModel.Password,
             PhoneNumber = _inputModel.PhoneNumber,
             Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber,
             Avatar = "",
             DisplayName = GenerateDisplayName(_inputModel)
         });
-        if (userModel == null)
-        {
-            await PopupService.AlertAsync(T("RegisterError"), AlertTypes.Error);
-            return;
-        }
 
         var loginInputModel = new LoginInputModel
         {
-            PhoneLogin = true,
+            PhoneLogin = !_inputModel.EmailRegister,
             SmsCode = _inputModel.SmsCode,
+            Password = _inputModel.Password,
+            UserName = _inputModel.Email,
             Environment = RegisterUserState.RegisterUser.Environment,
             PhoneNumber = _inputModel.PhoneNumber,
             ReturnUrl = ReturnUrl,
@@ -179,9 +174,17 @@ public partial class RegisterSection
         var result = _registerForm.EditContext.GetValidationMessages(field);
         if (!result.Any())
         {
-
+            await AuthClient.UserService.SendEmailAsync(new SendEmailModel
+            {
+                Email = _inputModel.Email,
+                SendEmailType = SendEmailTypes.Register
+            });
+            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            _canEmailCode = false;
+            _emailTimer?.Start();
         }
     }
+
     public void Dispose()
     {
         _smsTimer?.Dispose();

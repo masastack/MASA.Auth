@@ -7,8 +7,8 @@ public class UniversalService : ServiceBase
 {
     public UniversalService(IServiceCollection services) : base(services, "api/universal")
     {
-        App.MapPost("send_sms", SendSMSAsync);
-        App.MapPost("send_email", SendEmailAsync);
+        MapPost(SendSMSAsync, "send_sms");
+        MapPost(SendEmailAsync, "send_email");
     }
 
     private async Task SendSMSAsync(IEventBus eventBus,

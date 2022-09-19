@@ -63,6 +63,45 @@ public class CommandHandler
 
     #region User
 
+    [EventHandler]
+    public async Task RegisterUserAsync(RegisterUserCommand command)
+    {
+        var model = command.RegisterModel;
+        switch (model.UserRegisterType)
+        {
+            case UserRegisterTypes.Account:
+                throw new NotImplementedException();
+            case UserRegisterTypes.PhoneNumber:
+                var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                var smsCode = _cache.Get<string>(smsCodeKey) ?? "";
+                if (!smsCode.Equals(model.Code))
+                {
+                    throw new UserFriendlyException("Invalid SMS verification code");
+                }
+                break;
+            case UserRegisterTypes.Email:
+                var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
+                var emailCode = _cache.Get<string>(emailCodeKey) ?? "";
+                if (!emailCode.Equals(model.Code))
+                {
+                    throw new UserFriendlyException("Invalid Email verification code");
+                }
+                break;
+            default:
+                throw new UserFriendlyException("Invalid UserRegisterType");
+        }
+        await _eventBus.PublishAsync(new AddUserCommand(new AddUserDto()
+        {
+            Account = model.Account,
+            DisplayName = model.DisplayName,
+            PhoneNumber = model.PhoneNumber,
+            Email = model.Email,
+            Password = model.Password,
+            Avatar = model.Avatar,
+            Enabled = true,
+        }));
+    }
+
     [EventHandler(1)]
     public async Task AddUserAsync(AddUserCommand command)
     {

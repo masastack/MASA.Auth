@@ -30,7 +30,7 @@ builder.Services.AddScoped<RegisterUserState>();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 #if DEBUG
-builder.Services.AddAuthClient("http://localhost:18002/");
+builder.Services.AddAuthClient("https://localhost:18102");
 #else
 builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
 #endif
