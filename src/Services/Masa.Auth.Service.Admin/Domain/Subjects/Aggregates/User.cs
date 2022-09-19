@@ -301,10 +301,9 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public void AddRoles(IEnumerable<Guid> roleIds)
     {
-        roleIds = roleIds.Distinct();
         _roles = _roles.MergeBy(
            roleIds.Select(roleId => new UserRole(roleId)),
-           item => item.RoleId);
+           item => item.RoleId).DistinctBy(ur => ur.RoleId).ToList();
     }
 
     public void RemoveRoles(IEnumerable<Guid> roleIds)

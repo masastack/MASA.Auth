@@ -170,11 +170,10 @@ public class CommandHandler
         var userModel = command.User;
         var user = default(User);
         var roles = new List<Guid>();
-        if (userModel.Roles.Any())
+        if (userModel.RoleCodes.Any())
         {
-            var roleCodes = userModel.Roles.Select(role => role.Code);
             roles.AddRange(await _authDbContext.Set<Role>()
-                                                .Where(role => roleCodes.Contains(role.Code))
+                                                .Where(role => userModel.RoleCodes.Contains(role.Code))
                                                 .Select(role => role.Id)
                                                 .ToListAsync()
                           );

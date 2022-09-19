@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220909085345_updateThirdPartyIdp")]
-    partial class updateThirdPartyIdp
+    [Migration("20220919054602_thirdPartyIdp_roleCode")]
+    partial class thirdPartyIdp_roleCode
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -311,6 +311,10 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
