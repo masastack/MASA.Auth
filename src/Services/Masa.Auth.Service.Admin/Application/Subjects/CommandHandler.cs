@@ -170,10 +170,11 @@ public class CommandHandler
         var userModel = command.User;
         var user = default(User);
         var roles = new List<Guid>();
-        if (userModel.RoleNames.Any())
+        if (userModel.Roles.Any())
         {
+            var roleCodes = userModel.Roles.Select(role => role.Code);
             roles.AddRange(await _authDbContext.Set<Role>()
-                                                .Where(role => userModel.RoleNames.Contains(role.Name))
+                                                .Where(role => roleCodes.Contains(role.Code))
                                                 .Select(role => role.Id)
                                                 .ToListAsync()
                           );
@@ -185,7 +186,6 @@ public class CommandHandler
             {
                 await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
                 user.AddRoles(roles);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
@@ -206,7 +206,6 @@ public class CommandHandler
             if (user is not null)
             {
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
                 user.AddRoles(roles);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
@@ -374,7 +373,7 @@ public class CommandHandler
                                  .Include(u => u.Roles)
                                  .FirstAsync(u => u.Id == userModel.Id);
         var roleIds = await _authDbContext.Set<Role>()
-                                    .Where(role => userModel.RoleNames.Contains(role.Name))
+                                    .Where(role => userModel.RoleCodes.Contains(role.Code))
                                     .Select(role => role.Id)
                                     .ToListAsync();
         user.RemoveRoles(roleIds);
@@ -891,8 +890,7 @@ public class CommandHandler
         var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, command.WhenExisReturn); 
         if(thirdPartyUser is not null)
         {
-            command.Result = thirdPartyUser.User.Adapt<UserModel>();
-            command.Result.RoleIds = thirdPartyUser.User.Roles.Select(role => role.RoleId).ToList();
+            command.Result = thirdPartyUser.User.Adapt<UserModel>();            
             return;
         }
         command.Result = await AddThirdPartyUserAsync(thirdPartyUserDto);

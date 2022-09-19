@@ -92,7 +92,10 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-        query.Result = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
+        query.Result = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .ThenInclude(ur => ur.Role)
+                                           .FirstOrDefaultAsync(user => user.Account == query.Account);
     }
 
     [EventHandler]
@@ -105,13 +108,19 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
-        query.Result = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
+        query.Result = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .ThenInclude(ur => ur.Role)
+                                           .FirstOrDefaultAsync(user => user.Email == query.Email);
     }
 
     [EventHandler]
     public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
-        query.Result = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
+        query.Result = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .ThenInclude(ur => ur.Role)
+                                           .FirstOrDefaultAsync(user => user.PhoneNumber == query.PhoneNumber);
     }
 
     [EventHandler]

@@ -29,9 +29,10 @@ public static class MapsterAdapterConfig
             .Map(dest => dest.ServerPortSsl, src => src.IsLdaps ? src.ServerPort : 0);
 
         TypeAdapterConfig<User, CacheUser>.NewConfig().Map(cache => cache.Roles, user => user.Roles.Select(role => role.RoleId).ToList());
-        
+        TypeAdapterConfig<UpsertThirdPartyUserModel, AddUserDto>.ForType().Map(item => item.Roles, item => item.Roles.Select(role => role.Id).ToList());
+
         TypeAdapterConfig<ThirdPartyIdp, ThirdPartyIdpModel>.ForType()
-            .Map(item => item.JsonKeyMap, item => JsonSerializer.Deserialize<Dictionary<string, string>>(string.IsNullOrEmpty(item.JsonKeyMap)?"{}": item.JsonKeyMap, new JsonSerializerOptions()));
+            .Map(item => item.JsonKeyMap, item => JsonSerializer.Deserialize<Dictionary<string, string>>(string.IsNullOrEmpty(item.JsonKeyMap) ? "{}" : item.JsonKeyMap, new JsonSerializerOptions()));
         TypeAdapterConfig<ThirdPartyIdp, ThirdPartyIdpDetailDto>.ForType()
             .Map(item => item.JsonKeyMap, item => JsonSerializer.Deserialize<Dictionary<string, string>>(string.IsNullOrEmpty(item.JsonKeyMap) ? "{}" : item.JsonKeyMap, new JsonSerializerOptions()));
 

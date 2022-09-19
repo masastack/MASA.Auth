@@ -13,6 +13,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     private User? _createUser;
     private User? _modifyUser;
     private string _name = "";
+    private string _code = "";
     private string _description = "";
     private int _limit;
 
@@ -22,6 +23,15 @@ public class Role : FullAggregateRoot<Guid, Guid>
         set
         {
             _name = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Name));
+        }
+    }
+
+    public string Code
+    {
+        get => _code;
+        set
+        {
+            _code = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Code));
         }
     }
 
