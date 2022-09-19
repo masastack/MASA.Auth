@@ -472,8 +472,13 @@ public class QueryHandler
                 condition = condition.And(t => t.TeamStaffs.Any(s => s.StaffId == staffId));
             }
         }
-        var teams = await _authDbContext.GetListInCludeAsync(condition,
-            tl => tl.OrderByDescending(t => t.ModificationTime), new List<string> { nameof(Team.TeamStaffs) });
+        var teams = await _authDbContext.Set<Team>()
+                                        .Include(team => team.TeamRoles)
+                                        .ThenInclude(tr => tr.Role)
+                                        .Where(condition)
+                                        .OrderByDescending(t => t.ModificationTime)
+                                        .ToListAsync();
+            
         foreach (var team in teams.ToList())
         {
             var modifierName = _memoryCacheClient.Get<CacheUser>(CacheKey.UserKey(team.Modifier))?.DisplayName ?? "";
