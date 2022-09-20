@@ -30,7 +30,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="IdentityResource.Enabled" />
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await UpdatetIdentityResourceAsync(context.EditContext)">@T("Save")</SButton>
+                    <SButton Medium OnClick="async () => await UpdatetIdentityResourceAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

@@ -58,7 +58,7 @@ public partial class UpdateThirdPartyIdpDialog
         }).ToList();
     }
 
-    public async Task UpdateThirdPartyIdpAsync(EditContext context)
+    public async Task UpdateThirdPartyIdpAsync(FormContext context)
     {
         if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
         {

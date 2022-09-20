@@ -36,7 +36,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ApiResource.Enabled" />
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await AddApiResourceAsync(context.EditContext)">@T("Submit")</SButton>
+                    <SButton Medium OnClick="async () => await AddApiResourceAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

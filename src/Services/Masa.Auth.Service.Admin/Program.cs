@@ -144,7 +144,12 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
-var app = builder.Services.AddServices(builder);
+var app = builder.AddServices(options => 
+{
+    options.DisableAutoMapRoute = true;
+    options.GetPrefixes = new string[] { "Get", "Select" , "Find" };
+    options.PostPrefixes = new string[] { "Post", "Add", "Create" };
+});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

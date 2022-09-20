@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class ClientSerivce : ServiceBase
 {
-    public ClientSerivce(IServiceCollection services) : base(services, "api/sso/client")
+    public ClientSerivce() : base("api/sso/client")
     {
         MapGet(GetListAsync);
         MapGet(GetDetailAsync);

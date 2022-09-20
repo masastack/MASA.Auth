@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class ThirdPartyUserService : RestServiceBase
 {
-    public ThirdPartyUserService(IServiceCollection services) : base(services, "api/thirdPartyUser")
+    public ThirdPartyUserService() : base("api/thirdPartyUser")
     {
 
     }

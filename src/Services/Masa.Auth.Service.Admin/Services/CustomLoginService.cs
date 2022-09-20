@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services
 {
     public class CustomLoginService : RestServiceBase
     {
-        public CustomLoginService(IServiceCollection services) : base(services, "api/sso/customLogin")
+        public CustomLoginService() : base("api/sso/customLogin")
         {
         }
 

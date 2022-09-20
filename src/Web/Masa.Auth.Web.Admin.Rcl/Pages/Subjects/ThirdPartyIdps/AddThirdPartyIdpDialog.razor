@@ -56,7 +56,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="ThirdPartyIdp.Enabled" />
                     <MSpacer></MSpacer>
-                    <SButton Medium OnClick="async () => await AddThirdPartyIdpAsync(context.EditContext)">@T("Submit")</SButton>
+                    <SButton Medium OnClick="async () => await AddThirdPartyIdpAsync(context)">@T("Submit")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>

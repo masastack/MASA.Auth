@@ -164,7 +164,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
         UserId = userId;
         JobNumber = jobNumber;
-        StaffType = staffType == default ? StaffTypes.ExternalStaff : staffType;
+        StaffType = staffType == default ? StaffTypes.External : staffType;
         Gender = gender == default ? GenderTypes.Male : gender;
         Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
         var value = VerifyPhonNumberEmail(phoneNumber, email);

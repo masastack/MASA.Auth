@@ -38,7 +38,7 @@ public partial class AddApiResourceDialog
         }
     }
 
-    public async Task AddApiResourceAsync(EditContext context)
+    public async Task AddApiResourceAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

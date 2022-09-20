@@ -40,7 +40,7 @@ public partial class AddPositionDialog
         }
     }
 
-    public async Task AddPositionAsync(EditContext context)
+    public async Task AddPositionAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

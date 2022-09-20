@@ -40,7 +40,7 @@ public partial class AddUserClaimDialog
         }
     }
 
-    public async Task AddUserClaimAsync(EditContext context)
+    public async Task AddUserClaimAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

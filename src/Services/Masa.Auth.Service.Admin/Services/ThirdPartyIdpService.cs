@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class ThirdPartyIdpService : RestServiceBase
 {
-    public ThirdPartyIdpService(IServiceCollection services) : base(services, "api/thirdPartyIdp")
+    public ThirdPartyIdpService() : base("api/thirdPartyIdp")
     {
         MapPost(LdapSaveAsync, "ldap/save");
         MapPost(LdapConnectTestAsync, "ldap/connect-test");

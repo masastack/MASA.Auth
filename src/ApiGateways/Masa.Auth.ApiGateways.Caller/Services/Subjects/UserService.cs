@@ -14,47 +14,47 @@ public class UserService : ServiceBase
 
     public async Task<PaginationDto<UserDto>> GetListAsync(GetUsersDto request)
     {
-        return await SendAsync<GetUsersDto, PaginationDto<UserDto>>(nameof(GetListAsync), request);
+        return await SendAsync<GetUsersDto, PaginationDto<UserDto>>("list", request);
     }
 
     public async Task<List<UserSelectDto>> GetSelectAsync(string search)
     {
-        return await SendAsync<object, List<UserSelectDto>>(nameof(GetSelectAsync), new { search });
+        return await SendAsync<object, List<UserSelectDto>>("select", new { search });
     }
 
     public async Task<UserDetailDto> GetDetailAsync(Guid id)
     {
-        return await SendAsync<object, UserDetailDto>(nameof(GetDetailAsync), new { id });
+        return await GetAsync<UserDetailDto>($"detail/{id}");
     }
 
     public async Task AddAsync(AddUserDto request)
     {
-        await SendAsync(nameof(AddAsync), request);
+        await SendAsync("", request);
     }
 
     public async Task UpdateAsync(UpdateUserDto request)
     {
-        await SendAsync(nameof(UpdateAsync), request);
+        await SendAsync("", request);
     }
 
     public async Task UpdateAuthorizationAsync(UpdateUserAuthorizationDto request)
     {
-        await SendAsync(nameof(UpdateAuthorizationAsync), request);
+        await SendAsync("authorization", request);
     }
 
-    public async Task ResetUserPasswordAsync(ResetUserPasswordDto request)
+    public async Task ResetPasswordAsync(ResetUserPasswordDto request)
     {
-        await PutAsync(nameof(ResetUserPasswordAsync), request);
+        await PutAsync(nameof(ResetPasswordAsync), request);
     }
 
     public async Task RemoveAsync(Guid id)
     {
-        await SendAsync(nameof(RemoveAsync), new RemoveUserDto(id));
+        await SendAsync("", new RemoveUserDto(id));
     }
 
-    public async Task<bool> VerifyUserRepeatAsync(VerifyUserRepeatDto user)
+    public async Task<bool> VerifyRepeatAsync(VerifyUserRepeatDto user)
     {
-        return await PostAsync<VerifyUserRepeatDto, bool>(nameof(VerifyUserRepeatAsync), user);
+        return await PostAsync<VerifyUserRepeatDto, bool>(nameof(VerifyRepeatAsync), user);
     }
 }
 

@@ -79,7 +79,7 @@ public class AccountController : Controller
                 };
                 isuser.AdditionalClaims.Add(new Claim("userName", user.Account));
                 isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
-                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
+                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.Roles.Select(role => role.Id))));
 
                 //us sign in
                 await HttpContext.SignInAsync(isuser, props);

@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
 {
-    public StaffService(IServiceCollection services) : base(services, "api/staff")
+    public StaffService() : base("api/staff")
     {
         MapPost(SyncAsync);
         MapPost(SelectByIdsAsync, "SelectByIds");

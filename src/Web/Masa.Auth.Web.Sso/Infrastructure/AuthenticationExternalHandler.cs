@@ -53,7 +53,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         environment ??= "development";
         isuser.AdditionalClaims.Add(new Claim("environment", environment));
         isuser.AdditionalClaims.Add(new Claim("userName", userModel.Account));
-        isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(userModel.RoleIds)));
+        isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(userModel.Roles.Select(role => role.Id))));
 
         var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
         await httpContext.SignInAsync(isuser, localSignInProps);
