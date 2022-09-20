@@ -13,12 +13,12 @@ public partial class RegisterSection
 
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
-    bool _showPwd, _canSmsCode = true, _canEmailCode = true, _registerLoading;
+    bool _showPwd, _canSmsCode = true, _canEmailCode = true;
     System.Timers.Timer? _smsTimer, _emailTimer;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval, _emailCodeTime = LoginOptions.GetEmailCodeInterval;
 
-    public bool CanRegister => _inputModel.Agreement && !_registerLoading
-            && (_inputModel.EmailRegister ? _inputModel.EmailCode.HasValue : _inputModel.SmsCode.HasValue);
+    public bool CanRegister => _inputModel.Agreement &&
+            (_inputModel.EmailRegister ? _inputModel.EmailCode.HasValue : _inputModel.SmsCode.HasValue);
 
     protected override void OnInitialized()
     {
@@ -85,53 +85,26 @@ public partial class RegisterSection
         {
             return;
         }
-        _registerLoading = true;
-        StateHasChanged();
+        RegisterUser.Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber;
+        RegisterUser.DisplayName = GenerateDisplayName(_inputModel);
+        RegisterUser.Email = _inputModel.Email;
+        RegisterUser.PhoneNumber = _inputModel.PhoneNumber;
+        RegisterUser.ReturnUrl = ReturnUrl;
+        RegisterUser.EmailRegister = _inputModel.EmailRegister;
 
-        await AuthClient.UserService.RegisterAsync(new RegisterModel
+        if (!_inputModel.EmailRegister)
         {
-            UserRegisterType = _inputModel.EmailRegister ? UserRegisterTypes.Email : UserRegisterTypes.PhoneNumber,
-            Email = _inputModel.Email,
-            Code = (_inputModel.EmailRegister ? _inputModel.EmailCode : _inputModel.SmsCode)?.ToString() ?? "",
-            Password = _inputModel.Password,
-            PhoneNumber = _inputModel.PhoneNumber,
-            Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber,
-            Avatar = "",
-            DisplayName = GenerateDisplayName(_inputModel)
-        });
+            //await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
+            //{
+            //    PhoneNumber = _inputModel.PhoneNumber,
+            //    SmsCode = _inputModel.SmsCode.ToString() ?? "",
+            //    Account = _inputModel.PhoneNumber,
+            //    Avatar = "",
+            //    DisplayName = RegisterUserState.RegisterUser.Account
+            //});
+        }
 
-        var loginInputModel = new LoginInputModel
-        {
-            PhoneLogin = !_inputModel.EmailRegister,
-            SmsCode = _inputModel.SmsCode,
-            Password = _inputModel.Password,
-            UserName = _inputModel.Email,
-            Environment = RegisterUserState.RegisterUser.Environment,
-            PhoneNumber = _inputModel.PhoneNumber,
-            ReturnUrl = ReturnUrl,
-            RegisterLogin = true
-        };
-        var msg = await _js.InvokeAsync<string>("login", loginInputModel);
-        _registerLoading = false;
-        if (!string.IsNullOrEmpty(msg))
-        {
-            await PopupService.AlertAsync(msg, AlertTypes.Error);
-        }
-        else
-        {
-            if (SsoUrlHelper.IsLocalUrl(ReturnUrl))
-            {
-                Navigation.NavigateTo(ReturnUrl, true);
-            }
-            else if (string.IsNullOrEmpty(ReturnUrl))
-            {
-                Navigation.NavigateTo("/", true);
-            }
-            else
-            {
-                await PopupService.AlertAsync("invalid return url", AlertTypes.Error);
-            }
-        }
+        Navigation.NavigateTo("/RegisteredSuccess");
 
         string GenerateDisplayName(RegisterInputModel _inputModel)
         {

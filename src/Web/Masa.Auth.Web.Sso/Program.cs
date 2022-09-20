@@ -26,20 +26,20 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
-builder.Services.AddScoped<RegisterUserState>();
+builder.Services.AddScoped<RegisterUserModel>();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
+var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 #if DEBUG
-builder.Services.AddAuthClient("https://localhost:18102");
+builder.Services.AddAuthClient("https://localhost:18102", redisOption);
 #else
-builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
+builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"), redisOption);
 #endif
 builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
-
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+
 builder.Services.AddMasaRedisCache(redisOption);
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>

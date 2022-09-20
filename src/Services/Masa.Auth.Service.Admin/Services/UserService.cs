@@ -188,7 +188,7 @@ public class UserService : RestServiceBase
             {
                 Address = user.Address.Address
             },
-            RoleIds = user.RoleIds,
+            Roles = new List<RoleModel>(),
             StaffId = user.StaffId,
             CurrentTeamId = user.CurrentTeamId
         };

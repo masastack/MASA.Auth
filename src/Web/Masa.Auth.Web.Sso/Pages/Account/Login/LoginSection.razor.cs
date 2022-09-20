@@ -49,7 +49,7 @@ public partial class LoginSection
     private void EnvironmentChanged(string environment)
     {
         _inputModel.Environment = environment;
-        RegisterUserState.RegisterUser.Environment = environment;
+        RegisterUser.Environment = environment;
     }
 
     private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)

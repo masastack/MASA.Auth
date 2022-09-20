@@ -3,9 +3,10 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
-public class ReplenishInfoForEmailInputModel : ReplenishInfoInputModel
+public class RegisterUserModelValidator : AbstractValidator<RegisterUserModel>
 {
-    public string PhoneNumber { get; set; } = string.Empty;
+    public RegisterUserModelValidator()
+    {
 
-    public int SmsCode { get; set; }
+    }
 }

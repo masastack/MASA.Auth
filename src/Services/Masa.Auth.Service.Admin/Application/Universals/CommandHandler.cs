@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Service.Admin.Application.Universals.Commands;
-using Masa.Auth.Service.Admin.Infrastructure.Email;
-
 namespace Masa.Auth.Service.Admin.Application.Universals;
 
 public class CommandHandler

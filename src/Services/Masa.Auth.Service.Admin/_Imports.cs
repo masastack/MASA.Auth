@@ -57,6 +57,7 @@ global using Masa.Auth.Service.Admin.Infrastructure.Attributes;
 global using Masa.Auth.Service.Admin.Infrastructure.Authorization;
 global using Masa.Auth.Service.Admin.Infrastructure.CacheModels;
 global using Masa.Auth.Service.Admin.Infrastructure.Constants;
+global using Masa.Auth.Service.Admin.Infrastructure.Email;
 global using Masa.Auth.Service.Admin.Infrastructure.Extensions;
 global using Masa.Auth.Service.Admin.Infrastructure.Middleware;
 global using Masa.Auth.Service.Admin.Infrastructure.Models;

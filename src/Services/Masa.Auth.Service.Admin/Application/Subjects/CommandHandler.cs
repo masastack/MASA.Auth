@@ -209,7 +209,7 @@ public class CommandHandler
         var userModel = command.User;
         var user = default(User);
         var roles = new List<Guid>();
-        if (userModel.RoleNames.Any())
+        if (userModel.RoleCodes.Any())
         {
             roles.AddRange(await _authDbContext.Set<Role>()
                                                 .Where(role => userModel.RoleNames.Contains(role.Name))

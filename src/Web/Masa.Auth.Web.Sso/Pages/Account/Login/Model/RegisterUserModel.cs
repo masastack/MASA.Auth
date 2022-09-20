@@ -7,9 +7,17 @@ public class RegisterUserModel
 {
     public string PhoneNumber { get; set; } = string.Empty;
 
+    public int? SmsCode { get; set; }
+
     public string Email { get; set; } = string.Empty;
 
+    public string EmailCode { get; set; } = string.Empty;
+
     public string Account { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+
+    public string ConfirmPassword { get; set; } = string.Empty;
 
     public string DisplayName { get; set; } = string.Empty;
 
@@ -18,4 +26,8 @@ public class RegisterUserModel
     public string ReturnUrl { get; set; } = string.Empty;
 
     public string Environment { get; set; } = string.Empty;
+
+    public bool EmailRegister { get; set; }
+
+    public bool Agreement { get; set; }
 }
