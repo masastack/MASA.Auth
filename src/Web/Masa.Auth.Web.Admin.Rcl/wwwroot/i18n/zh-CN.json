@@ -284,6 +284,7 @@
 
   "RoleBlock": {
     "Name": "角色名称",
+    "Code": "Code",
     "Add Role": "新增角色",
     "Update Role": "编辑角色",
     "Inherited Role": "继承角色",
