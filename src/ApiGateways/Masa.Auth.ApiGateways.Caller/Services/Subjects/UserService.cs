@@ -29,17 +29,17 @@ public class UserService : ServiceBase
 
     public async Task AddAsync(AddUserDto request)
     {
-        await SendAsync("", request);
+        await PostAsync("", request);
     }
 
     public async Task UpdateAsync(UpdateUserDto request)
     {
-        await SendAsync("", request);
+        await PutAsync("", request);
     }
 
     public async Task UpdateAuthorizationAsync(UpdateUserAuthorizationDto request)
     {
-        await SendAsync("authorization", request);
+        await PutAsync("authorization", request);
     }
 
     public async Task ResetPasswordAsync(ResetUserPasswordDto request)
@@ -49,7 +49,7 @@ public class UserService : ServiceBase
 
     public async Task RemoveAsync(Guid id)
     {
-        await SendAsync("", new RemoveUserDto(id));
+        await DeleteAsync("", new RemoveUserDto(id));
     }
 
     public async Task<bool> VerifyRepeatAsync(VerifyUserRepeatDto user)
