@@ -19,19 +19,12 @@ public class HotUpdateAuthenticationHandlerProvider : IAuthenticationHandlerProv
 
     public async Task<IAuthenticationHandler?> GetHandlerAsync(HttpContext context, string authenticationScheme)
     {
-        if(authenticationScheme == "GitHub")
-        {
-
-        }
         if (_handlerMap.TryGetValue(authenticationScheme, out var value))
-        {
             return value;
-        }
+
         var scheme = await _schemeProvider.GetSchemeAsync(authenticationScheme);
         if (scheme is null)
-        {
             return null;
-        }
 
         var handler = context.RequestServices.GetService(scheme.HandlerType) as IAuthenticationHandler;
         if (handler is null)
@@ -43,7 +36,7 @@ public class HotUpdateAuthenticationHandlerProvider : IAuthenticationHandlerProv
             }          
         }
         
-        if (handler != null)
+        if (handler is not null)
         {
             await handler.InitializeAsync(scheme, context);
             _handlerMap[authenticationScheme] = handler;

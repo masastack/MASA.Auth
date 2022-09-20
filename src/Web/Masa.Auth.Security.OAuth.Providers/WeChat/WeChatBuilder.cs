@@ -11,7 +11,7 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
     public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
     {
-        HandlerType = typeof(WeixinAuthenticationHandler),
+        HandlerType = typeof(WeChatAuthenticationHandler),
         Scheme = "WeChat",
         DisplayName = WeixinAuthenticationDefaults.DisplayName,
         Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/wechat.ico",
@@ -54,13 +54,23 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
     public void InjectForHotUpdate(IServiceCollection serviceCollection)
     {
-        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<WeixinAuthenticationOptions>, OAuthPostConfigureOptions<WeixinAuthenticationOptions, WeixinAuthenticationHandler>>());
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<WeixinAuthenticationOptions>, OAuthPostConfigureOptions<WeixinAuthenticationOptions, WeChatAuthenticationHandler>>());
     }
 
     public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)
     {
         var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<WeixinAuthenticationOptions>(provider, authenticationDefaults.Scheme);
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
-        return new WeixinAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
+        options.CurrentValue.ClaimActions.MapCustomJson(Claims.Privilege, user =>
+        {
+             if (!user.TryGetProperty("privilege", out var value) || value.ValueKind != System.Text.Json.JsonValueKind.Array)
+             {
+                 return null;
+             }
+
+             return string.Join(',', value.EnumerateArray().Select(element => element.GetString()));
+        });
+        
+        return new WeChatAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }
 }

@@ -3,12 +3,12 @@
 
 namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
-public class WeixinAuthenticationHandler : AspNet.Security.OAuth.Weixin.WeixinAuthenticationHandler
+public class WeChatAuthenticationHandler : WeixinAuthenticationHandler
 {
     private readonly string _oauthState = "_oauthstate";
     private readonly string _state = "state";
 
-    public WeixinAuthenticationHandler(
+    public WeChatAuthenticationHandler(
        IOptionsMonitor<WeixinAuthenticationOptions> options,
        ILoggerFactory logger,
        UrlEncoder encoder,
