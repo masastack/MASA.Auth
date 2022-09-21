@@ -128,6 +128,10 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
+    public Guid? CurrentTeamId { get; private set; }
+
+    public Team? CurrentTeam { get; private set; }
+
     public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
 
     public Position? Position => _position;
@@ -263,6 +267,11 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         _teamStaffs = _teamStaffs.MergeBy(
             teams.Select(teamId => new TeamStaff(teamId, default, TeamMemberTypes.Member, UserId)),
             team => team.TeamId);
+    }
+
+    public void SetCurrentTeam(Guid teamId)
+    {
+        CurrentTeamId = teamId;
     }
 
     [MemberNotNull(nameof(PhoneNumber))]

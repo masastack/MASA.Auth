@@ -26,7 +26,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 

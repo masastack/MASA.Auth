@@ -173,6 +173,8 @@ public class UserService : ServiceBase
                 Address = user.Address.Address
             },
             Roles = user.Roles,
+            StaffId = user.StaffId,
+            CurrentTeamId = user.CurrentTeamId
         };
     }
 

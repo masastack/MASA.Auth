@@ -62,10 +62,10 @@ public partial class AddRoleDialog
         }
     }
 
-    async Task NextStep(FormContext context)
-    {        
+    void NextStep(FormContext context)
+    {
         var success = context.Validate();
-        if(success)
+        if (success)
         {
             Step = 2;
         }
