@@ -379,7 +379,6 @@ public class QueryHandler
                                                 .Include(customLogin => customLogin.ThirdPartyIdps)
                                                 .ThenInclude(thirdPartyIdp => thirdPartyIdp.ThirdPartyIdp)
                                                 .Include(customLogin => customLogin.RegisterFields)
-                                                .AsSplitQuery()
                                                 .FirstOrDefaultAsync(customLogin => customLogin.ClientId == query.ClientId);
 
         if(customLogin is not null)

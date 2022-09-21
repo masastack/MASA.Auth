@@ -6,50 +6,35 @@ namespace Masa.Auth.Security.OAuth.Providers;
 public class Identity
 {
     /// <summary>
-    /// 唯一标识，一般为用户 ID
+    /// Unique identifier, usually the user ID
     /// </summary>
     public string Subject { get; set; }
 
     /// <summary>
-    /// 姓名
+    /// actual name
     /// </summary>
     public string? Name { get; set; }
 
-    /// <summary>
-    /// nickname
-    /// </summary>
     public string? NickName { get; set; }
 
-    /// <summary>
-    /// 中间名
-    /// </summary>
     public string? MiddleName { get; set; }
 
-    /// <summary>
-    /// 姓
-    /// </summary>
     public string? FamilyName { get; set; }
 
-    /// <summary>
-    /// 名字
-    /// </summary>
     public string? GivenName { get; set; }
 
-    /// <summary>
-    /// 希望被称呼的名字
-    /// </summary>
     public string? PreferredUserName { get; set; }
+
     /// <summary>
-    /// 基础资料
+    /// Basic information
     /// </summary>
     public string? Profile { get; set; }
+
     /// <summary>
-    /// 头像
+    /// avatar
     /// </summary>
     public string? Picture { get; set; }
-    /// <summary>
-    /// 网站链接
-    /// </summary>
+
     public string? WebSite { get; set; }
 
     public string? Email { get; set; }
@@ -61,25 +46,24 @@ public class Identity
     public string? PhoneNumber { get; set; }
 
     public string? Address { get; set; }
+
     /// <summary>
-    /// 详细地址
+    /// detailed address
     /// </summary>
     public string? Formatted { get; set; }
-    /// <summary>
-    /// 街道地址
-    /// </summary>
+
     public string? StreetAddress { get; set; }
+
     /// <summary>
-    /// 城市
+    /// city
     /// </summary>
     public string? Locality { get; set; }
+
     /// <summary>
-    /// 省
+    /// Province
     /// </summary>
     public string? Region { get; set; }
-    /// <summary>
-    /// 邮编
-    /// </summary>
+
     public string? PostalCode { get; set; }
 
     public string? Country { get; set; }
@@ -102,7 +86,7 @@ public class Identity
                       throw new UserFriendlyException("Unknown user");
 
         var identity = new Identity(subject);
-        identity.Name = principal.FindFirstValue(ClaimTypes.Name) ?? principal.FindFirstValue(UserClaims.Email);
+        identity.Name = principal.FindFirstValue(ClaimTypes.Name) ?? principal.FindFirstValue(UserClaims.Name);
         identity.Email = principal.FindFirstValue(ClaimTypes.Email) ?? principal.FindFirstValue(UserClaims.Email);
         identity.Gender = principal.FindFirstValue(ClaimTypes.Gender) ?? principal.FindFirstValue(UserClaims.Gender);
         identity.BirthDate = principal.FindFirstValue(ClaimTypes.DateOfBirth) ?? principal.FindFirstValue(UserClaims.BirthDate);

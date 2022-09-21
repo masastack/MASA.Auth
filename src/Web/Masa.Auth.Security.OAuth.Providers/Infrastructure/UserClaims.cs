@@ -3,6 +3,7 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
+// todo：support I18n in the future.
 public static class UserClaims
 {
     [Description("唯一标识，一般为用户 ID")]

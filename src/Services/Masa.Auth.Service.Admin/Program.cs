@@ -146,7 +146,7 @@ builder.Services.RemoveAll(typeof(IProcessor));
 
 var app = builder.AddServices(options => 
 {
-    options.DisableAutoMapRoute = true;
+    options.DisableAutoMapRoute = true; // todo :remove it before v1.0
     options.GetPrefixes = new string[] { "Get", "Select" , "Find" };
     options.PostPrefixes = new string[] { "Post", "Add", "Create" };
 });
