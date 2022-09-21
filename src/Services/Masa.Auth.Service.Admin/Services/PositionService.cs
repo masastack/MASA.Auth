@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class PositionService : RestServiceBase
 {
-    public PositionService(IServiceCollection services) : base(services, "api/position")
+    public PositionService() : base("api/position")
     {
 
     }

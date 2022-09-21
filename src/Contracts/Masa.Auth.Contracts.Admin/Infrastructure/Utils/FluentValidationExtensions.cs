@@ -98,6 +98,7 @@ public static class FluentValidationExtensions
     public static IRuleBuilderOptions<T, TProperty> Required<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder)
     {
         return ruleBuilder.NotNull()
+                        .WithMessage("{PropertyName} is required")
                         .NotEmpty()
                         .WithMessage("{PropertyName} is required");
     }

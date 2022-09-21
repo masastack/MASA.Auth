@@ -310,6 +310,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -575,9 +579,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdentificationType")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2250,6 +2251,17 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasBaseType("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider");
 
+                    b.Property<int>("AuthenticationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuthorizationEndpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CallbackPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ClientId")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -2260,16 +2272,20 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("JsonKeyMap")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VerifyFile")
+                    b.Property<bool>("MapAll")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TokenEndpoint")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VerifyType")
-                        .HasColumnType("int");
+                    b.Property<string>("UserInformationEndpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ThirdParty");
                 });

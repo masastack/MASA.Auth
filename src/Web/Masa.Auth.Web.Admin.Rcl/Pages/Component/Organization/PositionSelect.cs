@@ -23,6 +23,7 @@ public class PositionSelect : SComboBox<PositionSelectDto>
 
     protected override void OnInitialized()
     {
+        base.OnInitialized();
         PositionService.GetSelectAsync().ContinueWith(async task =>
         {
             Items = task.Result;

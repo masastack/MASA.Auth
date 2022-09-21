@@ -53,7 +53,7 @@ public partial class AddUserDialog
         var success = context.Validate();
         if (success)
         {
-            var verifySuccess = await UserService.VerifyUserRepeatAsync(new()
+            var verifySuccess = await UserService.VerifyRepeatAsync(new()
             {
                 Account = User.Account,
                 Email = User.Email,

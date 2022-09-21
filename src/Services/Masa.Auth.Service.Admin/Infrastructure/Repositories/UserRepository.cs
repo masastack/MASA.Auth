@@ -38,6 +38,7 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
     {
         var user = await Context.Set<User>()
                            .Include(u => u.Roles)
+                           .ThenInclude(ur => ur.Role)
                            .Include(u => u.Permissions)
                            .Include(u => u.ThirdPartyUsers)
                            .FirstOrDefaultAsync(u => u.Id == id);

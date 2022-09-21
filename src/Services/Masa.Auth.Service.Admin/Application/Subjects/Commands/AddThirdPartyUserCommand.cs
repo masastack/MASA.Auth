@@ -5,5 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record AddThirdPartyUserCommand(AddThirdPartyUserDto ThirdPartyUser, bool WhenExisReturn = false) : Command
 {
-
+    public UserModel Result { get; set; } = new();
 }

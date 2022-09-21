@@ -19,7 +19,7 @@ public class UserDetailDto : UserDto
 
     public DateTime? ModificationTime { get; set; }
 
-    public List<Guid> RoleIds { get; set; }
+    public List<RoleModel> Roles { get; set; }
 
     public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
@@ -35,11 +35,11 @@ public class UserDetailDto : UserDto
         Department = "";
         Position = "";
         Password = "";
-        RoleIds = new();
+        Roles = new();
         Permissions = new();
     }
 
-    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType, List<Guid> roleIds, List<SubjectPermissionRelationDto> permissions, string? landline) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, address, creationTime, genderType, landline)
+    public UserDetailDto(Guid id, string name, string displayName, string avatar, string idCard, string account, string companyName, bool enabled, string phoneNumber, string email, DateTime creationTime, AddressValueDto address, List<string> thirdPartyIdpAvatars, string creator, string modifier, DateTime? modificationTime, string department, string position, string password, GenderTypes genderType, List<RoleModel> roles, List<SubjectPermissionRelationDto> permissions, string? landline) : base(id, name, displayName, avatar, idCard, account, companyName, enabled, phoneNumber, email, address, creationTime, genderType, landline)
     {
         Department = department;
         Position = position;
@@ -48,7 +48,7 @@ public class UserDetailDto : UserDto
         Creator = creator;
         Modifier = modifier;
         ModificationTime = modificationTime;
-        RoleIds = roleIds;
+        Roles = roles;
         Permissions = permissions;
     }
 }

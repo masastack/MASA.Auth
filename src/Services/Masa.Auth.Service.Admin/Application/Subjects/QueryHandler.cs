@@ -88,7 +88,10 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == query.Account, new List<string> { nameof(User.Roles) });
+       var user = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .ThenInclude(ur => ur.Role)
+                                           .FirstOrDefaultAsync(user => user.Account == query.Account);
         query.Result = await UserSplicingDataAsync(user);
     }
 
@@ -102,14 +105,20 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.Email == query.Email, new List<string> { nameof(User.Roles) });
+        var user = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .ThenInclude(ur => ur.Role)
+                                           .FirstOrDefaultAsync(user => user.Email == query.Email);
         query.Result = await UserSplicingDataAsync(user);
     }
 
     [EventHandler]
     public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
-        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == query.PhoneNumber, new List<string> { nameof(User.Roles) });
+        var user = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .ThenInclude(ur => ur.Role)
+                                           .FirstOrDefaultAsync(user => user.PhoneNumber == query.PhoneNumber);
         query.Result = await UserSplicingDataAsync(user);
     }
 
@@ -401,7 +410,14 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(thirdPartyIdps.Total, thirdPartyIdps.Result.Select(thirdPartyIdp => (ThirdPartyIdpDto)thirdPartyIdp).ToList());
+        query.Result = new(thirdPartyIdps.Total, thirdPartyIdps.Result.Select(thirdPartyIdp => thirdPartyIdp.Adapt<ThirdPartyIdpDto>()).ToList());
+    }
+
+    [EventHandler]
+    public async Task GetAllThirdPartyIdpAsync(AllThirdPartyIdpQuery query)
+    {       
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
+        query.Result = thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>();
     }
 
     [EventHandler]
@@ -410,7 +426,7 @@ public class QueryHandler
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == query.ThirdPartyIdpId);
         if (thirdPartyIdp is null) throw new UserFriendlyException("This thirdPartyIdp data does not exist");
 
-        query.Result = thirdPartyIdp;
+        query.Result = thirdPartyIdp.Adapt<ThirdPartyIdpDetailDto>();
     }
 
     [EventHandler]
@@ -421,7 +437,6 @@ public class QueryHandler
 
         query.Result = identityProvider ?? throw new UserFriendlyException($"IdentityProvider {query.ThirdPartyIdpType} not exist");
     }
-
 
     [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
@@ -438,7 +453,17 @@ public class QueryHandler
             condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
 
-        query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyType)).ToList();
+        query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Icon, tpIdp.AuthenticationType)).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
+    {
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
+        query.Result = LocalAuthenticationDefaultsProvider.GetAll()
+                                                     .Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme) is false)
+                                                     .Adapt<List<ThirdPartyIdpModel>>()
+                                                     .ToList();
     }
 
     #endregion

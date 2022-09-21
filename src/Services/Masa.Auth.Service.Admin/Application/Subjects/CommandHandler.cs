@@ -212,7 +212,7 @@ public class CommandHandler
         if (userModel.RoleCodes.Any())
         {
             roles.AddRange(await _authDbContext.Set<Role>()
-                                                .Where(role => userModel.RoleNames.Contains(role.Name))
+                                                .Where(role => userModel.RoleCodes.Contains(role.Code))
                                                 .Select(role => role.Id)
                                                 .ToListAsync()
                           );
@@ -224,7 +224,6 @@ public class CommandHandler
             {
                 await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
                 user.AddRoles(roles);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
@@ -245,7 +244,6 @@ public class CommandHandler
             if (user is not null)
             {
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
                 user.AddRoles(roles);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
@@ -326,15 +324,18 @@ public class CommandHandler
         {
             throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
         }
+        var key = "";
         if (model.RegisterLogin)
         {
-            var key = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-            command.Result = await _sms.VerifyMsgCodeAsync(key, model.Code);
+            key = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
         }
         else
         {
-            var key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
-            command.Result = await _sms.VerifyMsgCodeAsync(key, model.Code);
+            key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
+        }
+        if (await _sms.VerifyMsgCodeAsync(key, model.Code))
+        {
+            command.Result = user.Adapt<UserModel>();
         }
     }
 
@@ -346,7 +347,7 @@ public class CommandHandler
                                  .Include(u => u.Roles)
                                  .FirstAsync(u => u.Id == userModel.Id);
         var roleIds = await _authDbContext.Set<Role>()
-                                    .Where(role => userModel.RoleNames.Contains(role.Name))
+                                    .Where(role => userModel.RoleCodes.Contains(role.Code))
                                     .Select(role => role.Id)
                                     .ToListAsync();
         user.RemoveRoles(roleIds);
@@ -802,7 +803,7 @@ public class CommandHandler
 
     #region ThirdPartyIdp
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
@@ -810,12 +811,26 @@ public class CommandHandler
         if (exist)
             throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
 
-        var thirdPartyIdp = new ThirdPartyIdp(thirdPartyIdpDto.Name, thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, thirdPartyIdpDto.IdentificationType, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+        var thirdPartyIdp = new ThirdPartyIdp(
+            thirdPartyIdpDto.Name,
+            thirdPartyIdpDto.DisplayName,
+            thirdPartyIdpDto.Icon,
+            thirdPartyIdpDto.Enabled,
+            thirdPartyIdpDto.ThirdPartyIdpType,
+            thirdPartyIdpDto.ClientId,
+            thirdPartyIdpDto.ClientSecret,
+            thirdPartyIdpDto.CallbackPath,
+            thirdPartyIdpDto.AuthorizationEndpoint,
+            thirdPartyIdpDto.TokenEndpoint,
+            thirdPartyIdpDto.UserInformationEndpoint,
+            thirdPartyIdpDto.AuthenticationType,
+            thirdPartyIdpDto.MapAll,
+            JsonSerializer.Serialize(thirdPartyIdpDto.JsonKeyMap));
 
         await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateThirdPartyIdpAsync(UpdateThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
@@ -823,18 +838,32 @@ public class CommandHandler
         if (thirdPartyIdp is null)
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
-        thirdPartyIdp.Update(thirdPartyIdpDto.DisplayName, thirdPartyIdpDto.Icon, thirdPartyIdpDto.Enabled, thirdPartyIdpDto.IdentificationType, thirdPartyIdpDto.ClientId, thirdPartyIdpDto.ClientSecret, thirdPartyIdpDto.Url, thirdPartyIdpDto.VerifyFile, thirdPartyIdpDto.VerifyType);
+        thirdPartyIdp.Update(
+            thirdPartyIdpDto.DisplayName,
+            thirdPartyIdpDto.Icon,
+            thirdPartyIdpDto.Enabled,
+            thirdPartyIdpDto.ClientId,
+            thirdPartyIdpDto.ClientSecret,
+            thirdPartyIdpDto.CallbackPath,
+            thirdPartyIdpDto.AuthorizationEndpoint,
+            thirdPartyIdpDto.TokenEndpoint,
+            thirdPartyIdpDto.UserInformationEndpoint,
+            thirdPartyIdpDto.MapAll,
+            thirdPartyIdpDto.JsonKeyMap);
         await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveThirdPartyIdpAsync(RemoveThirdPartyIdpCommand command)
     {
-        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == command.ThirdPartyIdp.Id);
+        var thirdPartyIdp = await _authDbContext.Set<ThirdPartyIdp>()
+                                                .FirstOrDefaultAsync(tpIdp => tpIdp.Id == command.ThirdPartyIdp.Id);
         if (thirdPartyIdp == null)
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
         await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
+        var removeThirdUserComman = new RemoveThirdPartyUserCommand(thirdPartyIdp.Id);
+        await _eventBus.PublishAsync(removeThirdUserComman);
     }
 
     #endregion
@@ -845,13 +874,18 @@ public class CommandHandler
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
     {
         var thirdPartyUserDto = command.ThirdPartyUser;
-        await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
-        await AddThirdPartyUserAsync(thirdPartyUserDto);
+        var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, command.WhenExisReturn);
+        if (thirdPartyUser is not null)
+        {
+            command.Result = thirdPartyUser.User.Adapt<UserModel>();
+            return;
+        }
+        command.Result = await AddThirdPartyUserAsync(thirdPartyUserDto);
     }
 
     async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
     {
-        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User.Adapt<UpsertUserModel>());
+        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User);
         await _thirdPartyUserDomainService.AddBeforeAsync(thirdPartyUseEvent);
         var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, thirdPartyUseEvent.Result.Id, true, dto.ThridPartyIdentity, dto.ExtendedData);
         await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
@@ -946,10 +980,32 @@ public class CommandHandler
         await _eventBus.PublishAsync(upsertStaffCommand);
     }
 
+    [EventHandler]
+    public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
+    {
+        var model = command.ThirdPartyUser;
+        var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+        await _eventBus.PublishAsync(identityProviderQuery);
+        var identityProvider = identityProviderQuery.Result;
+        var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
+        addThirdPartyUserDto.ThirdPartyIdpId = identityProvider.Id;
+        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn);
+        await _eventBus.PublishAsync(addThirdPartyUserCommand);
+        command.Result = addThirdPartyUserCommand.Result;
+    }
+
+    [EventHandler]
+    public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyIdpCommand command)
+    {
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdp.Id);
+    }
+
     private async Task<ThirdPartyUser?> VerifyUserRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity, bool throwException = true)
     {
-
-        var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
+        var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
+                                                 .Include(tpu => tpu.User)
+                                                 .ThenInclude(user => user.Roles)
+                                                 .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
         if (thirdPartyUser is not null)
         {
             if (throwException is false)

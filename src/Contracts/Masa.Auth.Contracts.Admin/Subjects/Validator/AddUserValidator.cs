@@ -15,7 +15,7 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
         RuleFor(user => user.CompanyName).ChineseLetter().MaxLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MaxLength(20);
         RuleFor(user => user.Account).MaxLength(50);
-        RuleFor(user => user.Password).Required().AuthPassword();
+        RuleFor(user => user.Password).AuthPassword();
     }
 }
 

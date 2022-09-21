@@ -16,4 +16,6 @@ public class ClientModel
     public List<string> RedirectUris { get; set; } = new();
 
     public List<string> PostLogoutRedirectUris { get; set; } = new();
+
+    public bool AllowOfflineAccess { get; set; }
 }

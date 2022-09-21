@@ -85,7 +85,7 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)
     {
-        return new ThirdPartyUserDetailDto(tpu.Id, tpu.Enabled, tpu.IdentityProvider, tpu.User, tpu.CreationTime, tpu.ModificationTime, tpu.CreateUser?.Name ?? "", tpu.ModifyUser?.Name ?? "");
+        return new ThirdPartyUserDetailDto(tpu.Id, tpu.Enabled, tpu.IdentityProvider.Adapt<IdentityProviderDetailDto>(), tpu.User, tpu.CreationTime, tpu.ModificationTime, tpu.CreateUser?.Name ?? "", tpu.ModifyUser?.Name ?? "");
     }
 }
 

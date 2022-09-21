@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services
 {
     public class ApiScopeService : RestServiceBase
     {
-        public ApiScopeService(IServiceCollection services) : base(services, "api/sso/apiScope")
+        public ApiScopeService() : base("api/sso/apiScope")
         {
         }
 

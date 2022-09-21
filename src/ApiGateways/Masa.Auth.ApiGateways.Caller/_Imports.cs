@@ -26,3 +26,4 @@ global using Microsoft.Extensions.Logging;
 global using System.Net.Http.Headers;
 global using System.Reflection;
 global using System.Text.Json;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;

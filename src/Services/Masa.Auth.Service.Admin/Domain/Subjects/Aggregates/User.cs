@@ -231,7 +231,11 @@ public class User : FullAggregateRoot<Guid, Guid>
     public static implicit operator UserDetailDto?(User? user)
     {
         if (user is null) return null;
-        var roles = user.Roles.Select(r => r.RoleId).ToList();
+        var roles = user.Roles.Select(ur => new RoleModel 
+        {
+           Id = ur.Role.Id,
+           Code = ur.Role.Code
+        }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
         return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions, user.Landline);
@@ -297,10 +301,9 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public void AddRoles(IEnumerable<Guid> roleIds)
     {
-        roleIds = roleIds.Distinct();
         _roles = _roles.MergeBy(
            roleIds.Select(roleId => new UserRole(roleId)),
-           item => item.RoleId);
+           item => item.RoleId).DistinctBy(ur => ur.RoleId).ToList();
     }
 
     public void RemoveRoles(IEnumerable<Guid> roleIds)

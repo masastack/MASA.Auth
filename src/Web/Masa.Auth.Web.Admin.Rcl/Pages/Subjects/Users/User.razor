@@ -59,9 +59,6 @@
                     case (nameof(UserDto.CreationTime)):
                         <SDateTimeTitle Value=context.Item.CreationTime />
                         break;
-                    case nameof(UserDto.PhoneNumber):
-                        <span>@context.Item.PhoneNumber</span>
-                        break;
                     case nameof(UserDto.Enabled):
                         <EnableChip Value=context.Item.Enabled />
                         break;

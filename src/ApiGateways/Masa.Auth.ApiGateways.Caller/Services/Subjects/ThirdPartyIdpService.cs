@@ -24,6 +24,16 @@ public class ThirdPartyIdpService : ServiceBase
         return await SendAsync<object, List<ThirdPartyIdpSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
+    public async Task<List<ThirdPartyIdpModel>> GetExternalThirdPartyIdpsAsync()
+    {
+        return await GetAsync<List<ThirdPartyIdpModel>>(nameof(GetExternalThirdPartyIdpsAsync));
+    }
+
+    public async Task<Dictionary<string, string>> GetUserClaims()
+    {
+        return await GetAsync<Dictionary<string, string>>(nameof(GetUserClaims));
+    }
+
     public async Task<ThirdPartyIdpDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, ThirdPartyIdpDetailDto>(nameof(GetDetailAsync), new { id });

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using RegisterModel = Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model.RegisterModel;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister;
 
 public partial class LoginRegisterTemplate

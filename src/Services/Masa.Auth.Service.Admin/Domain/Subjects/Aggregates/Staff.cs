@@ -197,7 +197,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         var teams = staff.TeamStaffs.Select(t => t.TeamId).ToList();
         var departmentStaff = staff.DepartmentStaffs.FirstOrDefault();
         UserDetailDto user = staff.User;
-        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
+        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.Roles, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
     public static implicit operator StaffDto(Staff staff)

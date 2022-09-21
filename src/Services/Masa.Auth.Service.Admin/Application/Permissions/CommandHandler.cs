@@ -31,15 +31,23 @@ public class CommandHandler
     public async Task AddRoleAsync(AddRoleCommand command)
     {
         var roleDto = command.Role;
-        if (await _roleRepository.GetCountAsync(u => u.Name == roleDto.Name) > 0)
-            throw new UserFriendlyException($"Role with Name {roleDto.Name} already exists");
+        var role = await _roleRepository.FindAsync(r => r.Name == roleDto.Name);
+        if (role is not null)
+        {
+            if (command.WhenExistReturn)
+            {
+                command.Result = role;
+                return;
+            }
+            else throw new UserFriendlyException($"Role with Name {roleDto.Name} already exists");
+        }
 
-        var role = new Role(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role = new Role(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.AddAsync(role);
         await _roleRepository.UnitOfWork.SaveChangesAsync();
-        command.RoleId = role.Id;
+        command.Result = role;
     }
 
     [EventHandler(1)]
@@ -54,7 +62,6 @@ public class CommandHandler
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
-        //await _roleRepository.UnitOfWork.SaveChangesAsync();
         // update and check role limit
         var influenceRoles = new List<Guid> { role.Id };
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
