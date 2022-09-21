@@ -159,7 +159,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        user.UpdateBasicInfo(userModel.DisplayName, userModel.Gender);
+        user.UpdateBasicInfo(userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }

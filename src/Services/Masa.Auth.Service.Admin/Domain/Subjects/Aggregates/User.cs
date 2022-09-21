@@ -259,13 +259,18 @@ public class User : FullAggregateRoot<Guid, Guid>
         DisplayName = displayName;
         IdCard = idCard;
         CompanyName = companyName;
+        Department = department;
         GenderType = gender;
     }
 
-    public void UpdateBasicInfo(string displayName, GenderTypes gender)
+    public void UpdateBasicInfo(string displayName, GenderTypes gender, string? companyName, string? department, string? position, AddressValue address)
     {
         DisplayName = displayName;
         GenderType = gender;
+        CompanyName = companyName;
+        Department = department;
+        Position = position;
+        Address = address;
     }
 
     public void UpdateAvatar(string avatar)
