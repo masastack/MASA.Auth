@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services
 {
     public class ApiResourceService : RestServiceBase
     {
-        public ApiResourceService(IServiceCollection services) : base(services, "api/sso/apiResource")
+        public ApiResourceService() : base("api/sso/apiResource")
         {
         }
 

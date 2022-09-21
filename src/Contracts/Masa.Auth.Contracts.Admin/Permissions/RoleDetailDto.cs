@@ -26,7 +26,7 @@ public class RoleDetailDto : RoleDto
         Teams = new();
     }
 
-    public RoleDetailDto(Guid id, string name, string code, int limit, string? description, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier，List<SubjectPermissionRelationDto> permissions, List<Guid> parentRoles, List<Guid> childrenRoles, List<UserSelectDto> users, List<Guid> teams, int availableQuantity) : base(id, name, code, limit, description, enabled, creationTime, modificationTime, creator, modifier)
+    public RoleDetailDto(Guid id, string name, string code, int limit, string? description, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier, List<SubjectPermissionRelationDto> permissions, List<Guid> parentRoles, List<Guid> childrenRoles, List<UserSelectDto> users, List<Guid> teams, int availableQuantity) : base(id, name, code, limit, description, enabled, creationTime, modificationTime, creator, modifier)
     {
         Permissions = permissions;
         ParentRoles = parentRoles;

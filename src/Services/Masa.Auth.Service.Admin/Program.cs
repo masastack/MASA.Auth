@@ -29,7 +29,7 @@ builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, 
     }
 });
 
-builder.Services.AddMasaIdentityModel(options =>
+builder.Services.AddMasaIdentity(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
@@ -67,8 +67,7 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
-var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
-builder.Services.AddMasaRedisCache(defaultConfiguration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+builder.Services.AddMasaRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>());
 
 await builder.Services
             .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
@@ -133,6 +132,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
+var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
@@ -144,7 +144,12 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
-var app = builder.Services.AddServices(builder);
+var app = builder.AddServices(options => 
+{
+    options.DisableAutoMapRoute = true; // todo :remove it before v1.0
+    options.GetPrefixes = new string[] { "Get", "Select" , "Find" };
+    options.PostPrefixes = new string[] { "Post", "Add", "Create" };
+});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {

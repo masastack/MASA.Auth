@@ -85,7 +85,7 @@ public class QueryHandler
         var roleSelect = await _authDbContext.Set<RoleRelation>()
                                     .Include(r => r.ParentRole)
                                     .Where(r => r.ParentRole.Enabled == true && r.RoleId == query.RoleId)
-                                    .Select(r => new RoleSelectDto(r.ParentRole.Id, r.ParentRole.Name, r.ParentRole.Limit, r.ParentRole.AvailableQuantity))
+                                    .Select(r => new RoleSelectDto(r.ParentRole.Id, r.ParentRole.Name, r.ParentRole.Code, r.ParentRole.Limit, r.ParentRole.AvailableQuantity))
                                     .ToListAsync();
 
         query.Result = roleSelect;
@@ -134,7 +134,7 @@ public class QueryHandler
     {
         var roleSelect = await _authDbContext.Set<Role>()
                                          .Where(r => r.Enabled == true && r.Name.Contains(query.Name))
-                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Limit, r.AvailableQuantity))
+                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Code,r.Limit, r.AvailableQuantity))
                                          .ToListAsync();
         query.Result = roleSelect;
     }
@@ -143,7 +143,7 @@ public class QueryHandler
     {
         var roleSelect = await _authDbContext.Set<Role>()
                                         .Where(r => r.Enabled == true)
-                                        .Select(r => new RoleSelectDto(r.Id, r.Name, r.Limit, r.AvailableQuantity))
+                                        .Select(r => new RoleSelectDto(r.Id, r.Name,r.Code, r.Limit, r.AvailableQuantity))
                                         .ToListAsync();
         return roleSelect;
     }
@@ -225,7 +225,7 @@ public class QueryHandler
             AppId = permission.AppId,
             Order = permission.Order,
             ApiPermissions = permission.ChildPermissionRelations.Select(pr => pr.ChildPermissionId).ToList(),
-            Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
+            Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Code, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
             Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Select(up => new UserSelectDto
             {

@@ -3,52 +3,36 @@
 
 namespace Masa.Auth.Service.Admin.Services;
 
-public class UserService : RestServiceBase
+public class UserService : ServiceBase
 {
-    public UserService(IServiceCollection services) : base(services, "api/user")
+    public UserService() : base("api/user")
     {
-        MapGet(FindByAccountAsync);
-        MapGet(FindByPhoneNumberAsync);
-        MapGet(FindByEmailAsync);
-        MapGet(FindByIdAsync);
-        MapPost(ValidateByAccountAsync);
-        MapPost(Visit);
-        MapGet(VisitedList);
-        MapPut(ResetUserPasswordAsync);
-        MapPost(UserPortraitsAsync, "portraits");
-        MapPost(PostUserSystemData, "UserSystemData");
-        MapPut(DisableAsync, "disable");
-        MapPost(VerifyUserRepeatAsync);
-        MapPost(SyncUserAutoCompleteAsync);
-        MapPost(SendMsgCodeAsync);
-        MapPost(VerifyMsgCodeAsync);
-        MapPost(LoginByPhoneNumberAsync);
+        RouteOptions.DisableAutoMapRoute = false;
     }
 
-    //[Authorize]
     [MasaAuthorize]
-    private async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
+    public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
     {
         var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled, user.StartTime, user.EndTime);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<UserDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
+    public async Task<UserDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, Guid id)
     {
         var query = new UserDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<List<UserSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
+    public async Task<List<UserSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
     {
         var query = new UserSelectQuery(search);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<UserModel> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserModel model)
+    public async Task<UserModel> AddExternalAsync(IEventBus eventBus, [FromBody] AddUserModel model)
     {
         var dto = new AddUserDto()
         {
@@ -68,33 +52,34 @@ public class UserService : RestServiceBase
         return command.Result.Adapt<UserModel>();
     }
 
-    private async Task<UserModel> UpsertExternalAsync(IEventBus eventBus, [FromBody] UpsertUserModel model)
+    [RoutePattern("upsertExternal", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<UserModel> UpsertExternalAsync(IEventBus eventBus, [FromBody] UpsertUserModel model)
     {
         var command = new UpsertUserCommand(model);
         await eventBus.PublishAsync(command);
         return command.Result;
     }
 
-    private async Task<bool> DisableAsync(IEventBus eventBus, [FromBody] DisableUserModel model)
+    public async Task<bool> PutDisableAsync(IEventBus eventBus, [FromBody] DisableUserModel model)
     {
         var command = new DisableUserCommand(model);
         await eventBus.PublishAsync(command);
         return command.Result;
     }
 
-    private async Task<bool> VerifyUserRepeatAsync(IEventBus eventBus, [FromBody] VerifyUserRepeatDto user)
+    public async Task<bool> PostVerifyRepeatAsync(IEventBus eventBus, [FromBody] VerifyUserRepeatDto user)
     {
         var command = new VerifyUserRepeatCommand(user);
         await eventBus.PublishAsync(command);
         return command.Result;
     }
 
-    private async Task AddAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
+    public async Task AddAsync(IEventBus eventBus, [FromBody] AddUserDto dto)
     {
         await eventBus.PublishAsync(new AddUserCommand(dto));
     }
 
-    private async Task UpdateAsync(
+    public async Task UpdateAsync(
         IEventBus eventBus,
         [FromBody] UpdateUserDto dto)
     {
@@ -107,13 +92,13 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(dto));
     }
 
-    public async Task ResetUserPasswordAsync(IEventBus eventBus,
+    public async Task PutResetPasswordAsync(IEventBus eventBus,
         [FromBody] ResetUserPasswordDto dto)
     {
         await eventBus.PublishAsync(new ResetUserPasswordCommand(dto));
     }
 
-    private async Task RemoveAsync(
+    public async Task RemoveAsync(
         IEventBus eventBus,
         [FromBody] RemoveUserDto dto)
     {
@@ -121,7 +106,7 @@ public class UserService : RestServiceBase
     }
 
     [AllowAnonymous]
-    private async Task<bool> ValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
+    public async Task<bool> PostValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
     {
         var validateCommand = new ValidateByAccountCommand(accountValidateDto);
         await eventBus.PublishAsync(validateCommand);
@@ -129,35 +114,35 @@ public class UserService : RestServiceBase
     }
 
     [AllowAnonymous]
-    private async Task<UserModel?> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
+    public async Task<UserModel?> FindByAccountAsync(IEventBus eventBus, [FromQuery] string account)
     {
         var query = new FindUserByAccountQuery(account);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<List<UserSimpleModel>> GetListByAccountAsync(IEventBus eventBus, [FromQuery] string accounts)
+    public async Task<List<UserSimpleModel>> GetListByAccountAsync(IEventBus eventBus, [FromQuery] string accounts)
     {
         var query = new UsersByAccountQuery(accounts.Split(','));
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    private async Task<UserModel?> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
+    public async Task<UserModel?> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
     {
         var query = new FindUserByEmailQuery(email);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel?> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
+    public async Task<UserModel?> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
     {
         var query = new FindUserByPhoneNumberQuery(phoneNumber);
         await eventBus.PublishAsync(query);
         return ConvertToModel(query.Result);
     }
 
-    private async Task<UserModel> FindByIdAsync(IEventBus eventBus, [FromQuery] Guid id)
+    public async Task<UserModel> FindByIdAsync(IEventBus eventBus, Guid id)
     {
         var query = new UserDetailQuery(id);
         await eventBus.PublishAsync(query);
@@ -187,19 +172,19 @@ public class UserService : RestServiceBase
             {
                 Address = user.Address.Address
             },
-            RoleIds = user.RoleIds,
+            Roles = user.Roles,
             StaffId = user.StaffId,
             CurrentTeamId = user.CurrentTeamId
         };
     }
 
-    private async Task Visit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)
+    public async Task PostVisit(IEventBus eventBus, [FromBody] AddUserVisitedDto addUserVisitedDto)
     {
         var visitCommand = new UserVisitedCommand(addUserVisitedDto);
         await eventBus.PublishAsync(visitCommand);
     }
 
-    private async Task<List<UserVisitedModel>> VisitedList(IEventBus eventBus, [FromQuery] Guid userId)
+    public async Task<List<UserVisitedModel>> GetVisitedList(IEventBus eventBus, [FromQuery] Guid userId)
     {
         var visitListQuery = new UserVisitedListQuery(userId);
         await eventBus.PublishAsync(visitListQuery);
@@ -218,13 +203,13 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(new UpdateUserBasicInfoCommand(user));
     }
 
-    private async Task UpdateAvatarAsync(IEventBus eventBus,
+    public async Task UpdateAvatarAsync(IEventBus eventBus,
         [FromBody] UpdateUserAvatarModel staff)
     {
         await eventBus.PublishAsync(new UpdateUserAvatarCommand(staff));
     }
 
-    private async Task<bool> UpdatePhoneNumberAsync(IEventBus eventBus,
+    public async Task<bool> UpdatePhoneNumberAsync(IEventBus eventBus,
         [FromBody] UpdateUserPhoneNumberModel model)
     {
         var command = new UpdateUserPhoneNumberCommand(model);
@@ -232,13 +217,14 @@ public class UserService : RestServiceBase
         return command.Result;
     }
 
-    private async Task SendMsgCodeAsync(IEventBus eventBus,
+    [AllowAnonymous]
+    public async Task PostSendMsgCodeAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
         await eventBus.PublishAsync(new SendMsgCodeCommand(model));
     }
 
-    public async Task<bool> VerifyMsgCodeAsync(IEventBus eventBus,
+    public async Task<bool> PostVerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
         var command = new VerifyMsgCodeForVerifiyPhoneNumberCommand(model);
@@ -246,7 +232,7 @@ public class UserService : RestServiceBase
         return command.Result;
     }
 
-    public async Task<bool> LoginByPhoneNumberAsync(
+    public async Task<UserModel> PostLoginByPhoneNumberAsync(
         IEventBus eventBus,
         [FromBody] LoginByPhoneNumberModel model)
     {
@@ -263,7 +249,7 @@ public class UserService : RestServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<List<UserPortraitModel>> UserPortraitsAsync(IEventBus eventBus,
+    public async Task<List<UserPortraitModel>> PostPortraitsAsync(IEventBus eventBus,
         [FromBody] List<Guid> userIds)
     {
         var query = new UserPortraitsQuery(userIds);
@@ -271,26 +257,28 @@ public class UserService : RestServiceBase
         return query.Result;
     }
 
-    public async Task PostUserSystemData(IEventBus eventBus, [FromBody] UserSystemDataDto data)
+    public async Task PostSystemData(IEventBus eventBus, [FromBody] UserSystemDataDto data)
     {
         var command = new SaveUserSystemBusinessDataCommand(data);
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<string> GetUserSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+    public async Task<string> GetSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
     {
         var query = new UserSystemBusinessDataQuery(userId, systemId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
 
-    public async Task SyncUserAutoCompleteAsync(IEventBus eventBus, [FromBody] SyncUserAutoCompleteDto dto)
+    [AllowAnonymous]
+    public async Task PostSyncAutoCompleteAsync(IEventBus eventBus, [FromBody] SyncUserAutoCompleteDto dto)
     {
         var command = new SyncUserAutoCompleteCommand(dto);
         await eventBus.PublishAsync(command);
     }
 
-    public async Task SyncUserRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
+    [AllowAnonymous]
+    public async Task SyncRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
     {
         var command = new SyncUserRedisCommand(dto);
         await eventBus.PublishAsync(command);

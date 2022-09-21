@@ -13,6 +13,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     private User? _createUser;
     private User? _modifyUser;
     private string _name = "";
+    private string _code = "";
     private string _description = "";
     private int _limit;
 
@@ -22,6 +23,15 @@ public class Role : FullAggregateRoot<Guid, Guid>
         set
         {
             _name = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Name));
+        }
+    }
+
+    public string Code
+    {
+        get => _code;
+        set
+        {
+            _code = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(Code));
         }
     }
 
@@ -73,13 +83,14 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public static implicit operator RoleDetailDto(Role role)
     {
-        return new(role.Id, role.Name, role.Description, role.Enabled, role.Limit,
+        return new(role.Id, role.Name,role.Code, role.Limit, role.Description, role.Enabled,
+            role.CreationTime, role.ModificationTime, role.CreateUser?.Name ?? "", role.ModifyUser?.Name ?? "",
             role.Permissions.Select(rp => (SubjectPermissionRelationDto)rp).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
             role.ChildrenRoles.Select(r => r.RoleId).ToList(),
             role.Users.Select(u => new UserSelectDto(u.Id, u.User.Name, u.User.Name, u.User.Account, u.User.PhoneNumber, u.User.Email, u.User.Avatar)).ToList(),
             role.Teams.Select(t => t.TeamId).ToList(),
-            role.CreationTime, role.ModificationTime, role.CreateUser?.Name ?? "", role.ModifyUser?.Name ?? "", role.AvailableQuantity);
+            role.AvailableQuantity);
     }
 
     public void BindChildrenRoles(List<Guid> childrenRoles)

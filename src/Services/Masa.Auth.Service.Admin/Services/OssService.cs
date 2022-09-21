@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class OssService : RestServiceBase
 {
-    public OssService(IServiceCollection services) : base(services, "api/oss")
+    public OssService() : base("api/oss")
     {
         MapGet(GetDefaultImages);
     }

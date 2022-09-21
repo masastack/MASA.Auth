@@ -106,7 +106,7 @@ public static class SchedulerJobServiceCollectionExtensions
             HttpConfig = new SchedulerJobHttpConfig()
             {
                 HttpMethod = HttpMethods.POST,
-                RequestUrl = Path.Combine(authUrl, "api/sso/SyncOidc/")
+                RequestUrl = Path.Combine(authUrl, "api/sso/client/SyncOidc/")
             }
         });
     }

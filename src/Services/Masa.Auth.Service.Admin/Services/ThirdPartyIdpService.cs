@@ -5,11 +5,12 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class ThirdPartyIdpService : RestServiceBase
 {
-    public ThirdPartyIdpService(IServiceCollection services) : base(services, "api/thirdPartyIdp")
+    public ThirdPartyIdpService() : base("api/thirdPartyIdp")
     {
         MapPost(LdapSaveAsync, "ldap/save");
         MapPost(LdapConnectTestAsync, "ldap/connect-test");
         MapGet(LdapDetailAsync, "ldap/detail");
+        MapGet(GetUserClaims);
     }
 
     #region ThirdPartyIdp
@@ -17,6 +18,14 @@ public class ThirdPartyIdpService : RestServiceBase
     private async Task<PaginationDto<ThirdPartyIdpDto>> GetListAsync(IEventBus eventBus, GetThirdPartyIdpsDto thirdPartyIdp)
     {
         var query = new ThirdPartyIdpsQuery(thirdPartyIdp.Page, thirdPartyIdp.PageSize, thirdPartyIdp.Search);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    [AllowAnonymous]
+    private async Task<List<ThirdPartyIdpModel>> GetAllAsync(IEventBus eventBus)
+    {
+        var query = new AllThirdPartyIdpQuery();
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -33,6 +42,19 @@ public class ThirdPartyIdpService : RestServiceBase
         var query = new ThirdPartyIdpSelectQuery(search);
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    private async Task<List<ThirdPartyIdpModel>> GetExternalThirdPartyIdpsAsync([FromServices] IEventBus eventBus)
+    {
+        var query = new ExternalThirdPartyIdpsQuery();
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    [AllowAnonymous]
+    private Dictionary<string,string> GetUserClaims()
+    {
+        return UserClaims.Claims;
     }
 
     private async Task AddAsync(IEventBus eventBus, [FromBody] AddThirdPartyIdpDto dto)
@@ -54,6 +76,15 @@ public class ThirdPartyIdpService : RestServiceBase
         await eventBus.PublishAsync(new RemoveThirdPartyIdpCommand(dto));
     }
 
+    private async Task<UserModel> AddThirdPartyUserAsync(
+        IEventBus eventBus,
+        [FromBody] AddThirdPartyUserModel user,
+        [FromQuery] bool whenExistReturn)
+    {
+        var command = new AddThirdPartyUserExternalCommand(user,whenExistReturn);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
     #endregion
 
     private async Task LdapSaveAsync(IEventBus eventBus, [FromBody] LdapDetailDto ldapDetailDto)

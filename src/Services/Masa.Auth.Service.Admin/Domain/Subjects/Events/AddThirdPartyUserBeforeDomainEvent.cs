@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record AddThirdPartyUserBeforeDomainEvent(UpsertUserModel User) : Event
+public record AddThirdPartyUserBeforeDomainEvent(AddUserDto User) : Event
 {
     public UserModel Result { get; set; } = new();
 }

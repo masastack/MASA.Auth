@@ -14,7 +14,6 @@ builder.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -29,13 +28,21 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+
+var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
+#if DEBUG
+builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002/");
+#else
+builder.Services.AddAuthClient(publicConfiguration);
+#endif
+
 builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
+var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMasaRedisCache(redisOption);
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
@@ -48,7 +55,10 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCorsPolicyService<CorsPolicyService>()
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
     .AddProfileService<UserProfileService>()
-    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
+    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
+    .AddExtensionGrantValidator<PhoneCodeGrantValidator>();
+
+builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
@@ -78,7 +88,8 @@ app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMo
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseAuthentication();
+app.UseAuthentication()
+   .UseAuthorizationExternal();
 app.UseAuthorization();
 
 app.MapRazorPages();

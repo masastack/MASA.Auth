@@ -7,7 +7,7 @@ public class AddThirdPartyUserDto
 {
     public Guid ThirdPartyIdpId { get; set; }
 
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     public string ThridPartyIdentity { get; set; } = "";
 

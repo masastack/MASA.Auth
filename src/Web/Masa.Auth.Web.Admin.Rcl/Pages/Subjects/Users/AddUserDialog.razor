@@ -42,7 +42,7 @@
                             <STextField @bind-Value="User.Email" Class="mb-12" Label="@T("Email")" />
                             <STextField @bind-Value="User.IdCard" Class="mb-12" Label="@T("IdCard")" />
                             <STextField @bind-Value="User.Account" Class="mb-12" Label="@T("Account")" />
-                            <STextField @bind-Value="User.Password" Required Label="@T("Password")" />
+                            <STextField @bind-Value="User.Password" Label="@T("Password")" />
                             @if (Fill is false)
                             {
                                 <div @onclick="() => Fill = true" class="mt-12 hover-pointer d-flex" style="text-align:center;height:48px;">

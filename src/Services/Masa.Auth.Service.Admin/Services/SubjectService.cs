@@ -7,7 +7,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class SubjectService : RestServiceBase
 {
-    public SubjectService(IServiceCollection services) : base(services, "api/subject")
+    public SubjectService() : base("api/subject")
     {
     }
 

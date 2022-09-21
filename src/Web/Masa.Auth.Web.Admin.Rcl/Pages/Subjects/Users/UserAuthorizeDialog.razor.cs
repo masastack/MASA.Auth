@@ -44,7 +44,7 @@ public partial class UserAuthorizeDialog
         if (Visible)
         {
             User = await UserService.GetDetailAsync(UserId);
-            Authorization = new(User.Id, User.RoleIds, User.Permissions);
+            Authorization = new(User.Id, User.Roles.Select(role => role.Id), User.Permissions);
             Teams = new();
         }
     }

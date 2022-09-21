@@ -48,5 +48,6 @@
   "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码",
   "User": "用户",
   "RegistrationAgreement": "用户申请注册协议",
-  "RegistrationAgreementStatement": "同意注册MASA系列产品协议 "
+  "RegistrationAgreementStatement": "同意注册MASA系列产品协议 ",
+  "or login with": "或使用以下登录"
 }
