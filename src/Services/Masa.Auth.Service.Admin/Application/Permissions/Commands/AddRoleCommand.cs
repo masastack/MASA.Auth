@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
-public record AddRoleCommand(AddRoleDto Role) : Command
+public record AddRoleCommand(AddRoleDto Role, bool WhenExistReturn = false) : Command
 {
-    public Guid RoleId { get; set; }
+    public Role Result { get; set; } = default!;
 }

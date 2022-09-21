@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class TeamService : ServiceBase
 {
-    public TeamService(IServiceCollection services) : base(services, "api/team")
+    public TeamService() : base("api/team")
     {
         MapGet(GetAsync);
         MapGet(GetDetailForExternalAsync, "detail");

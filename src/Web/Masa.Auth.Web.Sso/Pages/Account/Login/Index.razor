@@ -40,31 +40,6 @@
     </MCard>
 }
 
-@if (_viewModel.VisibleExternalProviders.Any())
-{
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-header">
-                <h2>External Account</h2>
-            </div>
-            <div class="card-body">
-                <ul class="list-inline">
-                    @foreach (var provider in _viewModel.VisibleExternalProviders)
-                    {
-                        //todo
-                        <li class="list-inline-item">
-                            <a class="btn btn-secondary" asp-page="/ExternalLogin/Challenge"
-                       asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@ReturnUrl">
-                                @provider.DisplayName
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-}
-
 @if (!_viewModel.EnableLocalLogin && !_viewModel.VisibleExternalProviders.Any())
 {
     <div class="alert alert-warning">

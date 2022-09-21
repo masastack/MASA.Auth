@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.EntityConfigurations.Subjects;
 
-public class IdentityProviderEntityTypeConfiguration : IEntityTypeConfiguration<IdentityProvider>
+public class IdentityProviderEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Subjects.Aggregates.IdentityProvider>
 {
-    public void Configure(EntityTypeBuilder<IdentityProvider> builder)
+    public void Configure(EntityTypeBuilder<Domain.Subjects.Aggregates.IdentityProvider> builder)
     {
         builder.HasKey(p => p.Id);
         builder.HasIndex(p => p.Name).HasFilter("[IsDeleted] = 0");

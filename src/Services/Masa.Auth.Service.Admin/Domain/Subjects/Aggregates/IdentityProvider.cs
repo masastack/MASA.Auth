@@ -9,7 +9,6 @@ public class IdentityProvider : FullAggregateRoot<Guid, Guid>
     string _name = "";
     string _displayName = "";
     string _icon = "";
-    IdentificationTypes _identificationType;
     ThirdPartyIdpTypes _thirdPartyIdpType;
 
     public string Name
@@ -32,12 +31,6 @@ public class IdentityProvider : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; protected set; } = true;
 
-    public IdentificationTypes IdentificationType
-    {
-        get => _identificationType;
-        protected set => _identificationType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(IdentificationType));
-    }
-
     public ThirdPartyIdpTypes ThirdPartyIdpType
     {
         get => _thirdPartyIdpType;
@@ -46,8 +39,8 @@ public class IdentityProvider : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
-    public static implicit operator IdentityProviderDetailDto(IdentityProvider tpIdp)
+    public void ClearThirdPartyUser()
     {
-        return new IdentityProviderDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.Icon, tpIdp.Enabled);
+        _thirdPartyUsers.Clear();
     }
 }

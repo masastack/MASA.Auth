@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services
 {
     public class CustomLoginService : RestServiceBase
     {
-        public CustomLoginService(IServiceCollection services) : base(services, "api/sso/customLogin")
+        public CustomLoginService() : base("api/sso/customLogin")
         {
         }
 
@@ -19,6 +19,16 @@ namespace Masa.Auth.Service.Admin.Services
         private async Task<CustomLoginDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] int id)
         {
             var query = new CustomLoginDetailQuery(id);
+            await eventBus.PublishAsync(query);
+            return query.Result;
+        }
+
+        [AllowAnonymous]
+        public async Task<CustomLoginModel?> GetByClientIdAsync(
+            [FromServices] IEventBus eventBus, 
+            [FromQuery] string clientId)
+        {
+            var query = new CustomLoginByClientIdQuery(clientId);
             await eventBus.PublishAsync(query);
             return query.Result;
         }

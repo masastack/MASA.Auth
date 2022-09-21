@@ -5,13 +5,14 @@
 @inject IAuthClient _authClient
 @inject IConfiguration _configuration
 @inject IDistributedCacheClient _distributedCacheClient
+@inject IAuthenticationSchemeProvider _schemeProvider
 @implements IDisposable
 
 <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-12 mx-12 text-center">
     @if (_inputModel.PhoneLogin)
     {
         <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="_inputModel.PhoneNumber" Label="@T("PhoneNumber")"
-        Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
+                Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
         </MTextField>
         <MTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" Outlined Label="@T("SMSCode")"
         Placeholder="@T("SMSCodePlaceHolder")" Type="number"
@@ -27,14 +28,14 @@
     else
     {
         <MTextField @bind-Value="_inputModel.UserName" Label="@T("UserName")" Placeholder="@T("UserNamePlaceHolder")"
-        Outlined Autofocus>
+                Outlined Autofocus>
             <PrependInnerContent>
                 <MIcon>mdi-account</MIcon>
             </PrependInnerContent>
         </MTextField>
         <MTextField @bind-Value="@_inputModel.Password" Class="mt-3" Label="@T("Password")" OnKeyDown="KeyDownHandler"
-        Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
-        AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
+                Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
+                AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
             <PrependInnerContent>
                 <MIcon>mdi-lock</MIcon>
             </PrependInnerContent>
@@ -43,11 +44,11 @@
     <MRow>
         <MCol Md="6" Class="d-flex justify-space-between">
             <MIcon Size="16"
-                Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
+                   Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                 mdi-record-circle
             </MIcon>
             <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
-                Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+                     Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
             </MSelect>
         </MCol>
         @if (!_inputModel.PhoneLogin)
@@ -63,21 +64,38 @@
 </MForm>
 <div class="text-center mt-12">
     <MButton Class="rounded-pill text-btn white--text" Disabled=string.IsNullOrEmpty(_inputModel.Environment)
-        OnClick="LoginHandler" Height=48 Width=340 Color="primary">
+             OnClick="LoginHandler" Height=48 Width=340 Color="primary">
         @T("Login")
     </MButton>
     @if (!_inputModel.PhoneLogin)
     {
         <MButton Class="mt-6 rounded-pill text-btn white--text" OnClick="()=>{ _inputModel.PhoneLogin=true; }" Height=48
-        Width=340 Color="primary" Outlined>
+             Width=340 Color="primary" Outlined>
             @T("PhoneLogin")
         </MButton>
     }
     else
     {
         <MButton Class="mt-6 rounded-pill text-btn white--text" OnClick="()=>{ _inputModel.PhoneLogin=false; }" Height=48
-        Width=340 Color="primary" Outlined>
+             Width=340 Color="primary" Outlined>
             @T("PasswordLogin")
         </MButton>
     }
 </div>
+
+@if (_customLoginModel?.ThirdPartyIdps?.Any() is true)
+{
+    <div class="d-flex block-center mt-8 mb-4">
+        <div style="background: #E9EDF7;height: 1px;width: 100%;" />
+        <div class="mx-4 text-center body2 regular3--text" style="@(LanguageProvider.Culture.ToString() == "zh-CN"?"min-width:120px":"min-width:80px")">@T("or login with")</div>
+        <div style="background: #E9EDF7;height: 1px;width: 100%;" />
+    </div>
+    <div class="text-center">
+        @foreach (var thirdPartyIdp in _customLoginModel.ThirdPartyIdps)
+        {
+            <MAvatar Size="30" Class="hover-pointer ml-4">
+                <img src="@thirdPartyIdp.Icon" @onclick="() => NavigateToThirdParty(thirdPartyIdp.Name)" />
+            </MAvatar>
+        }
+    </div>
+}

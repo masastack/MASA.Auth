@@ -7,6 +7,6 @@ public class AddThirdPartyUserCommandValidator : AbstractValidator<AddThirdParty
 {
     public AddThirdPartyUserCommandValidator()
     {
-        RuleFor(command => command.ThirdPartyUser).SetValidator(new AddThirdPartyUserValidator());
+        RuleFor(command => command.ThirdPartyUser.ThridPartyIdentity).Required();
     }
 }

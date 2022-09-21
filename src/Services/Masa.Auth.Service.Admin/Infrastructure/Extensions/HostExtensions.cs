@@ -13,7 +13,7 @@ public static class HostExtensions
             var context = services.GetRequiredService<TContext>();
             try
             {
-                context.Database.Migrate();
+                context.Database.EnsureCreated();
             }
             catch
             {

@@ -71,7 +71,7 @@ public partial class UpdateUserDialog
     public async Task ResetUserPasswordAsync(string password)
     {
         UserPassword.Password = password;
-        await UserService.ResetUserPasswordAsync(UserPassword);
+        await UserService.ResetPasswordAsync(UserPassword);
         OpenSuccessMessage(T("Password changed successfully"));
     }
 

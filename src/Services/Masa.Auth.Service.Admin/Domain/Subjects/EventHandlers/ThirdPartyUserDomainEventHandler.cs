@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Service.Admin.Application.Subjects.Commands;
+
 namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandlers;
 
 public class ThirdPartyUserDomainEventHandler
@@ -16,8 +18,8 @@ public class ThirdPartyUserDomainEventHandler
     public async Task UpsertUser(AddThirdPartyUserBeforeDomainEvent thirdPartyUserDomainEvent)
     {
         var user = thirdPartyUserDomainEvent.User;
-        var upsertUserCommand = new UpsertUserCommand(user);
-        await _eventBus.PublishAsync(upsertUserCommand);
-        thirdPartyUserDomainEvent.Result = upsertUserCommand.Result;
+        var addUserCommand = new AddUserCommand(user,true);
+        await _eventBus.PublishAsync(addUserCommand);
+        thirdPartyUserDomainEvent.Result = addUserCommand.Result.Adapt<UserModel>();
     }
 }

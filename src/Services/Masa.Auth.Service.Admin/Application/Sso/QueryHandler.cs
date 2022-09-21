@@ -371,5 +371,32 @@ public class QueryHandler
         query.Result = customLoginDetail;
     }
 
+    [EventHandler]
+    public async Task CustomLoginByClientIdQueryAsync(CustomLoginByClientIdQuery query)
+    {
+        var customLogin =  await _authDbContext.Set<CustomLogin>()
+                                                .Where(customLogin => customLogin.Enabled == true)
+                                                .Include(customLogin => customLogin.ThirdPartyIdps)
+                                                .ThenInclude(thirdPartyIdp => thirdPartyIdp.ThirdPartyIdp)
+                                                .Include(customLogin => customLogin.RegisterFields)
+                                                .FirstOrDefaultAsync(customLogin => customLogin.ClientId == query.ClientId);
+
+        if(customLogin is not null)
+        {
+            query.Result = new CustomLoginModel()
+            {
+                Name = customLogin.Name,
+                Title = customLogin.Title,
+                ClientId = customLogin.ClientId,
+                RegisterFields = customLogin.RegisterFields.Adapt<List<RegisterFieldModel>>(),
+                ThirdPartyIdps = customLogin.ThirdPartyIdps
+                                            .OrderBy(thirdPartyIdp => thirdPartyIdp.Sort)
+                                            .Select(thirdPartyIdp => thirdPartyIdp.ThirdPartyIdp)
+                                            .Where(thirdPartyIdp => thirdPartyIdp.Enabled)
+                                            .Adapt<List<ThirdPartyIdpModel>>()
+            };
+        }
+    }
+
     #endregion
 }

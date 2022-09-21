@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class UserClaimService : RestServiceBase
 {
-    public UserClaimService(IServiceCollection services) : base(services, "api/sso/userClaim")
+    public UserClaimService() : base("api/sso/userClaim")
     {
     }
 

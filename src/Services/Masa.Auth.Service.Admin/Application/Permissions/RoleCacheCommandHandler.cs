@@ -16,7 +16,7 @@ public class RoleCacheCommandHandler
     public async Task AddRoleAsync(AddRoleCommand addRoleCommand)
     {
         var cacheRole = addRoleCommand.Role.Adapt<CacheRole>();
-        await _memoryCacheClient.SetAsync(CacheKey.RoleKey(addRoleCommand.RoleId), cacheRole);
+        await _memoryCacheClient.SetAsync(CacheKey.RoleKey(addRoleCommand.Result.Id), cacheRole);
     }
 
     [EventHandler(99)]

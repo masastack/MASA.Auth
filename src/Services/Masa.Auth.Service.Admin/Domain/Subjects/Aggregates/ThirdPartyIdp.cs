@@ -5,46 +5,97 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class ThirdPartyIdp : IdentityProvider
 {
-    public string ClientId { get; private set; }
+    string _clientId = "";
+    string _clientSecret = "";
+    string _callbackPath = "";
+    string _authorizationEndpoint = "";
+    string _tokenEndpoint = "";
+    string _userInformationEndpoint = "";
+    AuthenticationTypes _authenticationType;
+    string _jsonKeyMap = "{}";
 
-    public string ClientSecret { get; private set; }
+    public string ClientId
+    {
+        get => _clientId;
+        private set => _clientId = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(ClientId));
+    }
 
-    public string Url { get; private set; }
+    public string ClientSecret
+    {
+        get => _clientSecret;
+        private set => _clientSecret = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(ClientSecret));
+    }
 
-    public string VerifyFile { get; private set; }
+    public string CallbackPath
+    {
+        get => _callbackPath;
+        private set => _callbackPath = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(CallbackPath));
+    }
 
-    public AuthenticationTypes VerifyType { get; private set; }
+    public string AuthorizationEndpoint
+    {
+        get => _authorizationEndpoint;
+        private set => _authorizationEndpoint = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(AuthorizationEndpoint));
+    }
 
-    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, IdentificationTypes identificationType, string clientId, string clientSecret, string url, string verifyFile, AuthenticationTypes verifyType)
+    public string TokenEndpoint
+    {
+        get => _tokenEndpoint;
+        private set => _tokenEndpoint = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(TokenEndpoint));
+    }
+
+    public string UserInformationEndpoint
+    {
+        get => _userInformationEndpoint;
+        private set => _userInformationEndpoint = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(UserInformationEndpoint));
+    }
+
+    public AuthenticationTypes AuthenticationType
+    {
+        get => _authenticationType;
+        private set => _authenticationType = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(AuthenticationType));
+    }
+
+    public bool MapAll { get; private set; }
+
+    [AllowNull]
+    public string JsonKeyMap
+    {
+        get => _jsonKeyMap;
+        set => _jsonKeyMap = value ?? "{}";
+    }
+
+    public ThirdPartyIdp(string name, string displayName, string icon, bool enabled, ThirdPartyIdpTypes thirdPartyIdpType, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, AuthenticationTypes authenticationType, bool mapAll, string? jsonKeyMap)
     {
         Name = name;
         DisplayName = displayName;
-        ClientId = clientId;
-        ClientSecret = clientSecret;
-        Url = url;
         Icon = icon;
         Enabled = enabled;
-        VerifyFile = verifyFile;
-        VerifyType = verifyType;
-        IdentificationType = identificationType;
+        ThirdPartyIdpType = thirdPartyIdpType;
+        ClientId = clientId;
+        ClientSecret = clientSecret;
+        CallbackPath = callbackPath;
+        AuthorizationEndpoint = authorizationEndpoint;
+        TokenEndpoint = tokenEndpoint;
+        UserInformationEndpoint = userInformationEndpoint;
+        AuthenticationType = authenticationType;
+        MapAll = mapAll;
+        JsonKeyMap = jsonKeyMap;
     }
 
-    public void Update(string displayName, string icon, bool enabled, IdentificationTypes identificationType, string clientId, string clientSecret, string url, string verifyFile, AuthenticationTypes verifyType)
+    public void Update(string displayName, string icon, bool enabled, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, bool mapAll, Dictionary<string,string> jsonKyMap)
     {
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
-        Url = url;
         Icon = icon;
         Enabled = enabled;
-        VerifyFile = verifyFile;
-        VerifyType = verifyType;
-        IdentificationType = identificationType;
-    }
-
-    public static implicit operator ThirdPartyIdpDetailDto(ThirdPartyIdp tpIdp)
-    {
-        return new ThirdPartyIdpDetailDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Url, tpIdp.Icon, tpIdp.VerifyFile, tpIdp.Enabled, tpIdp.VerifyType, tpIdp.IdentificationType, tpIdp.CreationTime, tpIdp.ModificationTime);
+        CallbackPath = callbackPath;
+        AuthorizationEndpoint = authorizationEndpoint;
+        TokenEndpoint = tokenEndpoint;
+        UserInformationEndpoint = userInformationEndpoint;
+        MapAll = mapAll;
+        JsonKeyMap = JsonSerializer.Serialize(jsonKyMap);
     }
 }
 

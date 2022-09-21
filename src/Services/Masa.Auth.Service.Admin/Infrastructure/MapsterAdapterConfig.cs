@@ -19,6 +19,8 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<DateTime?, DateOnly?>.NewConfig().MapWith(src => src.HasValue ? DateOnly.FromDateTime(src.Value) : null);
 
         TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
+
+        TypeAdapterConfig<string, ClientGrantType>.NewConfig().MapWith(item => new ClientGrantType(item));
         TypeAdapterConfig<ClientModel, Client>.NewConfig().MapToConstructor(true);
         TypeAdapterConfig<AddClientDto, Client>.NewConfig().MapToConstructor(true);
 
@@ -27,5 +29,13 @@ public static class MapsterAdapterConfig
             .Map(dest => dest.ServerPortSsl, src => src.IsLdaps ? src.ServerPort : 0);
 
         TypeAdapterConfig<User, CacheUser>.NewConfig().Map(cache => cache.Roles, user => user.Roles.Select(role => role.RoleId).ToList());
+
+        TypeAdapterConfig<ThirdPartyIdp, ThirdPartyIdpModel>.ForType()
+            .Map(item => item.JsonKeyMap, item => JsonSerializer.Deserialize<Dictionary<string, string>>(string.IsNullOrEmpty(item.JsonKeyMap) ? "{}" : item.JsonKeyMap, new JsonSerializerOptions()));
+        TypeAdapterConfig<ThirdPartyIdp, ThirdPartyIdpDetailDto>.ForType()
+            .Map(item => item.JsonKeyMap, item => JsonSerializer.Deserialize<Dictionary<string, string>>(string.IsNullOrEmpty(item.JsonKeyMap) ? "{}" : item.JsonKeyMap, new JsonSerializerOptions()));
+
+        TypeAdapterConfig<AuthenticationDefaults, ThirdPartyIdpModel>.ForType()
+            .Map(item => item.Name, item => item.Scheme);
     }
 }
