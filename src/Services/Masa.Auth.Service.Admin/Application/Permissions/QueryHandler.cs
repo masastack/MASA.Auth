@@ -411,27 +411,27 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserElementPermissionCodeQueryAsync(UserElementPermissionCodeQuery userElementPermissionCodeQuery)
     {
-        //var userId = userElementPermissionCodeQuery.UserId;
-        //var appId = userElementPermissionCodeQuery.AppId;
-        //var cacheKey = CacheKey.UserElementPermissionCodeKey(userId, appId);
+        var userId = userElementPermissionCodeQuery.UserId;
+        var appId = userElementPermissionCodeQuery.AppId;
+        var cacheKey = CacheKey.UserElementPermissionCodeKey(userId, appId);
 
-        //userElementPermissionCodeQuery.Result = (await _memoryCacheClient.GetOrSetAsync<List<string>>(cacheKey, () =>
-        //{
-        //    var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
-        //    return _permissionRepository.GetPermissionCodes(p => p.AppId == appId
-        //                        && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled);
+        userElementPermissionCodeQuery.Result = (await _memoryCacheClient.GetOrSetAsync<List<string>>(cacheKey, () =>
+        {
+            var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
+            return _permissionRepository.GetPermissionCodes(p => p.AppId == appId
+                                && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled);
 
-        //}, new CombinedCacheEntryOptions<List<string>>
-        //{
-        //    DistributedCacheEntryOptions = new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
-        //    {
-        //        SlidingExpiration = TimeSpan.FromSeconds(5)
-        //    },
-        //    MemoryCacheEntryOptions = new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
-        //    {
-        //        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
-        //    }
-        //}))!;
+        }, new CombinedCacheEntryOptions<List<string>>
+        {
+            DistributedCacheEntryOptions = new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
+            {
+                SlidingExpiration = TimeSpan.FromSeconds(5)
+            },
+            MemoryCacheEntryOptions = new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
+            }
+        }))!;
 
         //temporary allow all api route
         userElementPermissionCodeQuery.Result.Add("*");
