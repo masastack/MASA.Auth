@@ -70,5 +70,14 @@ public partial class AddRoleDialog
             Step = 2;
         }
     }
+
+    void NameChanged(string name)
+    {
+        if(Role.Code==Role.Name.ToSpellCode())
+        {
+            Role.Code = name.ToSpellCode();
+        }
+        Role.Name = name;
+    }
 }
 

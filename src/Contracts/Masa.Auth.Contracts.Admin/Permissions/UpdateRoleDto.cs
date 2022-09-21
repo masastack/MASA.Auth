@@ -9,6 +9,8 @@ public class UpdateRoleDto
 
     public string Name { get; set; }
 
+    public string Code { get; set; }
+
     public string? Description { get; set; }
 
     public bool Enabled { get; set; }
@@ -22,14 +24,16 @@ public class UpdateRoleDto
     public UpdateRoleDto()
     {
         Name = "";
+        Code = "";
         Permissions = new();
         ChildrenRoles = new();
     }
 
-    public UpdateRoleDto(Guid id, string name, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles)
+    public UpdateRoleDto(Guid id, string name,string code, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles)
     {
         Id = id;
         Name = name;
+        Code = code;
         Description = description;
         Enabled = enabled;
         Permissions = permissions;
@@ -39,7 +43,7 @@ public class UpdateRoleDto
 
     public static implicit operator UpdateRoleDto(RoleDetailDto role)
     {
-        return new UpdateRoleDto(role.Id, role.Name, role.Description, role.Enabled, role.Limit, role.Permissions, role.ChildrenRoles);
+        return new UpdateRoleDto(role.Id, role.Name, role.Code, role.Description, role.Enabled, role.Limit, role.Permissions, role.ChildrenRoles);
     }
 }
 

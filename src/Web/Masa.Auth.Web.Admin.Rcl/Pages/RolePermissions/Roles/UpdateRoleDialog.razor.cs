@@ -83,5 +83,14 @@ public partial class UpdateRoleDialog
             }
         }
     }
+
+    void NameChanged(string name)
+    {
+        if (Role.Code == Role.Name.ToSpellCode())
+        {
+            Role.Code = name.ToSpellCode();
+        }
+        Role.Name = name;
+    }
 }
 

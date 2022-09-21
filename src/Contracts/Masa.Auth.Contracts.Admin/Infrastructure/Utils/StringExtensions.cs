@@ -5,13 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class StringExtensions
 {
-    /// <summary>
-    /// 在指定的字符串列表CnStr中检索符合拼音索引字符串
-    /// </summary>
-    /// <param name="CnStr">汉字字符串</param>
-    /// <returns>相对应的汉语拼音首字母串</returns>
 
-    public static string GetSpellCode(this string cnStr)
+    public static string ToSpellCode(this string cnStr)
     {
         var pinyin = "";
         var cnChars = cnStr.ToArray();
@@ -23,19 +18,12 @@ public static class StringExtensions
         return pinyin;
     }
 
-    /// <summary>
-    /// 得到一个汉字的拼音第一个字母，如果是一个英文字母则直接返回大写字母
-    /// </summary>
-    /// <param name='CnChar'>单个汉字</param>
-    /// <returns>单个大写字母</returns>
-
     private static char GetCharSpellCode(char cnChar)
     {
 
         long iCnChar;
         byte[] cnBytes = Encoding.Default.GetBytes(new[] { cnChar });
 
-        //如果是字母，则直接返回
         if (cnBytes.Length == 1)
         {
             return Char.ToUpper(cnChar);
