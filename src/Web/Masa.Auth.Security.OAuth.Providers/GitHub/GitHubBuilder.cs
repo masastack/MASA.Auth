@@ -14,7 +14,7 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         HandlerType = typeof(GitHubAuthenticationHandler),
         Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
         DisplayName = GitHubAuthenticationDefaults.DisplayName,
-        Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/app.ico",
+        Icon = "https://cdn.masastack.com/stack/auth/ico/github.svg",
         CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
         Issuer = GitHubAuthenticationDefaults.Issuer,
         AuthorizationEndpoint = GitHubAuthenticationDefaults.AuthorizationEndpoint,

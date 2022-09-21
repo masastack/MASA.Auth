@@ -14,7 +14,7 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         HandlerType = typeof(WeChatAuthenticationHandler),
         Scheme = "WeChat",
         DisplayName = WeixinAuthenticationDefaults.DisplayName,
-        Icon = "https://masa-cdn-dev.oss-cn-hangzhou.aliyuncs.com/wechat.ico",
+        Icon = "https://cdn.masastack.com/stack/auth/ico/wechat.svg",
         CallbackPath = WeixinAuthenticationDefaults.CallbackPath,
         Issuer = WeixinAuthenticationDefaults.Issuer,
         AuthorizationEndpoint = WeixinAuthenticationDefaults.AuthorizationEndpoint,
