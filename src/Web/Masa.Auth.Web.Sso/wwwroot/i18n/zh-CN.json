@@ -52,5 +52,6 @@
   "User": "用户",
   "RegistrationAgreement": "用户申请注册协议",
   "RegistrationAgreementStatement": "同意注册MASA系列产品协议",
-  "RegisterError": "注册失败，请联系管理员"
+  "RegisterError": "注册失败，请联系管理员",
+  "NickNamePlaceHolder": "昵称"
 }

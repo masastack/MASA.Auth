@@ -29,7 +29,7 @@ builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, 
     }
 });
 
-builder.Services.AddMasaIdentityModel(options =>
+builder.Services.AddMasaIdentity(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";

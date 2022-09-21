@@ -13,70 +13,92 @@ public partial class RegisterSection
 
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
-    bool _showPwd, _canSmsCode = true, _canEmailCode = true;
-    System.Timers.Timer? _smsTimer, _emailTimer;
-    int _smsCodeTime = LoginOptions.GetSmsCodeInterval, _emailCodeTime = LoginOptions.GetEmailCodeInterval;
+    bool _registerLoading;
+    Dictionary<RegisterFieldTypes, ComponentMetadata> _registerComponents = new();
 
-    public bool CanRegister => _inputModel.Agreement &&
-            (_inputModel.EmailRegister ? _inputModel.EmailCode.HasValue : _inputModel.SmsCode.HasValue);
+    public bool CanRegister => _inputModel.Agreement && ValidateRegisterFields();
 
-    protected override void OnInitialized()
+    public List<RegisterFieldModel> RegisterFields { get; set; } = new();
+
+    private bool ValidateRegisterFields()
     {
-        if (_smsTimer == null)
-        {
-            _smsTimer = new(1000 * 1);
-            _smsTimer.Elapsed += SmsTimer_Elapsed;
-        }
-        if (_emailTimer == null)
-        {
-            _emailTimer = new(1000 * 1);
-            _emailTimer.Elapsed += EmailTimer_Elapsed;
-        }
-        base.OnInitialized();
+        //todo 
+        return true;
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && ReturnUrl?.Contains('?') == true)
+        if (firstRender)
         {
-            var splitIndex = ReturnUrl.IndexOf('?');
-            var baseString = ReturnUrl[..splitIndex];
-            var paramString = ReturnUrl[splitIndex..];
-            var queryValues = HttpUtility.ParseQueryString(paramString);
-            queryValues["redirect_uri"] = $"{queryValues["redirect_uri"]}/user-center";
-            var d = $"{baseString}?{queryValues}";
-        }
-        base.OnAfterRender(firstRender);
-    }
-
-    private void SmsTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-    {
-        _ = InvokeAsync(() =>
-        {
-            _smsCodeTime--;
-            if (_smsCodeTime == 0)
+            if (ReturnUrl?.Contains('?') == true)
             {
-                _smsTimer?.Stop();
-                _canSmsCode = true;
-                _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+                var splitIndex = ReturnUrl.IndexOf('?');
+                var paramString = ReturnUrl[splitIndex..];
+                var queryValues = HttpUtility.ParseQueryString(paramString);
+                var clientId = queryValues["client_id"];
+                if (!string.IsNullOrEmpty(clientId))
+                {
+                    var customLoginModel = await AuthClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+                    if (customLoginModel != null)
+                    {
+                        RegisterFields = customLoginModel.RegisterFields.OrderBy(r => r.Sort).ToList();
+                    }
+                }
             }
-            StateHasChanged();
-        });
-    }
-
-    private void EmailTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-    {
-        _ = InvokeAsync(() =>
-        {
-            _emailCodeTime--;
-            if (_emailCodeTime == 0)
+            if (!RegisterFields.Any())
             {
-                _emailTimer?.Stop();
-                _canEmailCode = true;
-                _emailCodeTime = LoginOptions.GetEmailCodeInterval;
+                RegisterFields = new List<RegisterFieldModel>
+                {
+                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.PhoneNumber },
+                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.Email },
+                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.DisplayName },
+                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.Password }
+                };
             }
+            foreach (var registerField in RegisterFields)
+            {
+                var componentParameters = new Dictionary<string, object>() {
+                    { "Required",registerField.Required },
+                    { "Value",_inputModel }
+                };
+                switch (registerField.RegisterFieldType)
+                {
+                    case RegisterFieldTypes.Email:
+                        _registerComponents[RegisterFieldTypes.Email] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(Email),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    case RegisterFieldTypes.PhoneNumber:
+                        _registerComponents[RegisterFieldTypes.PhoneNumber] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(PhoneNumber),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    case RegisterFieldTypes.Password:
+                        _registerComponents[RegisterFieldTypes.Password] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(Password),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    case RegisterFieldTypes.DisplayName:
+                        _registerComponents[RegisterFieldTypes.DisplayName] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(DisplayName),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    default:
+                        break;
+                }
+            }
+            _inputModel.EmailRegister = _registerComponents.ContainsKey(RegisterFieldTypes.Email);
             StateHasChanged();
-        });
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task RegisterHandler()
@@ -85,26 +107,65 @@ public partial class RegisterSection
         {
             return;
         }
-        RegisterUser.Account = _inputModel.EmailRegister ? _inputModel.Email : _inputModel.PhoneNumber;
-        RegisterUser.DisplayName = GenerateDisplayName(_inputModel);
-        RegisterUser.Email = _inputModel.Email;
-        RegisterUser.PhoneNumber = _inputModel.PhoneNumber;
-        RegisterUser.ReturnUrl = ReturnUrl;
-        RegisterUser.EmailRegister = _inputModel.EmailRegister;
 
-        if (!_inputModel.EmailRegister)
+        if (_inputModel.EmailRegister)
         {
-            //await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
-            //{
-            //    PhoneNumber = _inputModel.PhoneNumber,
-            //    SmsCode = _inputModel.SmsCode.ToString() ?? "",
-            //    Account = _inputModel.PhoneNumber,
-            //    Avatar = "",
-            //    DisplayName = RegisterUserState.RegisterUser.Account
-            //});
+            await AuthClient.UserService.RegisterByEmailAsync(new RegisterByEmailModel
+            {
+                PhoneNumber = _inputModel.PhoneNumber,
+                SmsCode = _inputModel.SmsCode.ToString() ?? "",
+                Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.Email : _inputModel.Account,
+                Email = _inputModel.Email,
+                EmailCode = _inputModel.EmailCode.ToString() ?? "",
+                Password = _inputModel.Password,
+                Avatar = "",
+                DisplayName = ""
+            });
+        }
+        else
+        {
+            await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
+            {
+                PhoneNumber = _inputModel.PhoneNumber,
+                SmsCode = _inputModel.SmsCode.ToString() ?? "",
+                Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
+                Avatar = "",
+                DisplayName = ""
+            });
         }
 
-        Navigation.NavigateTo("/RegisteredSuccess");
+        var loginInputModel = new LoginInputModel
+        {
+            PhoneLogin = !_inputModel.EmailRegister,
+            SmsCode = _inputModel.SmsCode,
+            Password = _inputModel.Password,
+            UserName = _inputModel.Email,
+            Environment = ScopedState.Environment,
+            PhoneNumber = _inputModel.PhoneNumber,
+            ReturnUrl = ReturnUrl,
+            RegisterLogin = true
+        };
+        var msg = await _js.InvokeAsync<string>("login", loginInputModel);
+        _registerLoading = false;
+        if (!string.IsNullOrEmpty(msg))
+        {
+            await PopupService.AlertAsync(msg, AlertTypes.Error);
+        }
+        else
+        {
+            if (SsoUrlHelper.IsLocalUrl(ReturnUrl))
+            {
+                Navigation.NavigateTo(ReturnUrl, true);
+            }
+            else if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                Navigation.NavigateTo("/", true);
+            }
+            else
+            {
+                await PopupService.AlertAsync("invalid return url", AlertTypes.Error);
+            }
+        }
 
         string GenerateDisplayName(RegisterInputModel _inputModel)
         {
@@ -120,47 +181,5 @@ public partial class RegisterSection
             }
             return _prefix + _suffix;
         }
-    }
-
-    private async Task GetSmsCode()
-    {
-        var field = _registerForm.EditContext.Field(nameof(_inputModel.PhoneNumber));
-        _registerForm.EditContext.NotifyFieldChanged(field);
-        var result = _registerForm.EditContext.GetValidationMessages(field);
-        if (!result.Any())
-        {
-            await AuthClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
-            {
-                SendMsgCodeType = SendMsgCodeTypes.Register,
-                PhoneNumber = _inputModel.PhoneNumber
-            });
-            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
-            _canSmsCode = false;
-            _smsTimer?.Start();
-        }
-    }
-
-    private async Task GetEmailCode()
-    {
-        var field = _registerForm.EditContext.Field(nameof(_inputModel.Email));
-        _registerForm.EditContext.NotifyFieldChanged(field);
-        var result = _registerForm.EditContext.GetValidationMessages(field);
-        if (!result.Any())
-        {
-            await AuthClient.UserService.SendEmailAsync(new SendEmailModel
-            {
-                Email = _inputModel.Email,
-                SendEmailType = SendEmailTypes.Register
-            });
-            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
-            _canEmailCode = false;
-            _emailTimer?.Start();
-        }
-    }
-
-    public void Dispose()
-    {
-        _smsTimer?.Dispose();
-        _emailTimer?.Dispose();
     }
 }

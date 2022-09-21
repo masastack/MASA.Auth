@@ -20,4 +20,8 @@ public class RegisterInputModel
     public bool EmailRegister { get; set; }
 
     public bool Agreement { get; set; }
+
+    public string DisplayName { get; set; } = string.Empty;
+
+    public string Account { get; set; } = string.Empty;
 }

@@ -1,57 +1,12 @@
-﻿@inherits SsoCompontentBase
-@implements IDisposable
+﻿@using Masa.Auth.Web.Sso.Pages.Account.Login.RegisterSections
+@inherits SsoCompontentBase
+@inject IJSRuntime _js
 
-<MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-12 mx-12 text-center">
-    @if (_inputModel.EmailRegister)
+<MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 mx-12 text-center" Style="height: 430px; overflow: auto;">
+    @foreach (var registerItem in _registerComponents.Values)
     {
-        <MTextField @bind-Value="_inputModel.Email" Label="@T("Email")" Placeholder="@T("EmailPlaceHolder")"
-                Outlined Autofocus>
-            <PrependInnerContent>
-                <MIcon>mdi-account</MIcon>
-            </PrependInnerContent>
-        </MTextField>
-        <MTextField @bind-Value="@_inputModel.Password" Class="mt-3" Label="@T("Password")"
-                Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
-                AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
-            <PrependInnerContent>
-                <MIcon>mdi-lock</MIcon>
-            </PrependInnerContent>
-        </MTextField>
-        <MTextField @bind-Value="@_inputModel.ConfirmPassword" Class="mt-3" Label="@T("ConfirmPassword")"
-                Type="@(_showPwd ? "text" : "password")" Placeholder="@T("ConfirmPasswordPlaceHolder")"
-                AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
-            <PrependInnerContent>
-                <MIcon>mdi-lock</MIcon>
-            </PrependInnerContent>
-        </MTextField>
-        <MTextField Class="mt-3" @bind-Value="_inputModel.EmailCode" Outlined Label="@T("EmailCode")"
-                Placeholder="@T("EmailCodeCodePlaceHolder")" Type="number"
-                NumberProps="@(prop=> { prop.Min = 100000; prop.Max = 999999; prop.HideControl = true; })">
-            <AppendContent>
-                <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
-                     Class="primary rounded-r-lg" Disabled=!_canEmailCode OnClick="GetEmailCode">
-                    @(_canEmailCode ? @T("GetEmailCode") : _emailCodeTime)
-                </MButton>
-            </AppendContent>
-        </MTextField>
+        <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
     }
-    else
-    {
-        <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="_inputModel.PhoneNumber" Label="@T("PhoneNumber")"
-                Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
-        </MTextField>
-        <MTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" Outlined Label="@T("SMSCode")"
-                Placeholder="@T("SMSCodePlaceHolder")" Type="number"
-                NumberProps="@(prop=> { prop.Min = 100000; prop.Max = 999999; prop.HideControl = true; })">
-            <AppendContent>
-                <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
-                     Class="primary rounded-r-lg" Disabled=!_canSmsCode OnClick="GetSmsCode">
-                    @(_canSmsCode ? @T("GetSmsCode") : _smsCodeTime)
-                </MButton>
-            </AppendContent>
-        </MTextField>
-    }
-
     <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
         <LabelContent>
             @T("RegistrationAgreementStatement") <a>《@T("RegistrationAgreement")》</a>
@@ -60,21 +15,7 @@
 </MForm>
 <div class="text-center mt-3">
     <MButton Class="rounded-pill text-btn white--text" Disabled=!CanRegister
-             OnClick="RegisterHandler" Height=48 Width=340 Color="primary">
+             OnClick="RegisterHandler" Height=48 Width=340 Color="primary" Loading="_registerLoading">
         @T("Register")
     </MButton>
-    @if (!_inputModel.EmailRegister)
-    {
-        <MButton Class="mt-6 rounded-pill text-btn white--text" OnClick="()=>{ _inputModel.EmailRegister=true; }" Height=48
-             Width=340 Color="primary" Outlined>
-            @T("EmailRegister")
-        </MButton>
-    }
-    else
-    {
-        <MButton Class="mt-6 rounded-pill text-btn white--text" OnClick="()=>{ _inputModel.EmailRegister=false; }" Height=48
-             Width=340 Color="primary" Outlined>
-            @T("PhoneRegister")
-        </MButton>
-    }
 </div>

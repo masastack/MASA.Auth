@@ -11,6 +11,7 @@ public class LoginOptions
     public static string InvalidCredentialsErrorMessage = "Invalid username or password";
     public static readonly string PhoneRegular = @"^\s{0}$|^((\+86)|(86))?(1[3-9][0-9])\d{8}$";
     public static readonly string EmailRegular = @"^\s{0}$|^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+    public static readonly string PasswordRegular = @"^\s{0}$|^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$";
     public static readonly int GetSmsCodeInterval = 60;
     public static readonly int GetEmailCodeInterval = 60;
 }

@@ -26,8 +26,8 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
-builder.Services.AddScoped<RegisterUserModel>();
 builder.Services.AddMasaIdentity();
+builder.Services.AddScoped<ScopedState>();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
 #if DEBUG

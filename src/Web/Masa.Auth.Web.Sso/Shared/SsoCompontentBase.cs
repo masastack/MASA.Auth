@@ -39,7 +39,7 @@ namespace Masa.Auth.Web.Sso.Shared
         public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
 
         [Inject]
-        public RegisterUserModel RegisterUser { get; set; } = new();
+        public ScopedState ScopedState { get; set; } = null!;
 
         protected ClaimsPrincipal User
         {

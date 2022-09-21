@@ -3,10 +3,7 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
-public class RegisterUserModelValidator : AbstractValidator<RegisterUserModel>
+public class ScopedState
 {
-    public RegisterUserModelValidator()
-    {
-
-    }
+    public string Environment { get; set; } = string.Empty;
 }
