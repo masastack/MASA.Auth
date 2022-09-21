@@ -20,11 +20,11 @@
 		<PackageReference Include="FluentValidation" Version="11.0.3" />
 		<PackageReference Include="Masa.Blazor" Version="0.6.0-preview.5" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="$(MasaFrameworkPackageVersion)" />
-		<!--<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />-->
+		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
-		<!--<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />-->
+		<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
@@ -47,9 +47,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth.Contracts\Masa.BuildingBlocks.StackSdks.Auth.Contracts.csproj" />
-	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\BuildingBlocks\StackSdks\Auth\Masa.BuildingBlocks.StackSdks.Auth\Masa.BuildingBlocks.StackSdks.Auth.csproj" />
-	  <ProjectReference Include="..\..\..\..\MASA.Framework\src\Contrib\StackSdks\Masa.Contrib.StackSdks.Auth\Masa.Contrib.StackSdks.Auth.csproj" />
 	  <ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
 
