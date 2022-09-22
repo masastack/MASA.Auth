@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220922035150_updateUser")]
-    partial class updateUser
+    [Migration("20220922100016_updateCustomLogin")]
+    partial class updateCustomLogin
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -28,7 +28,6 @@ public partial class ConfigRegister
 
     public async Task Up(RegisterFieldDto registerField)
     {
-        registerField.Sort--;
         var oldIndex = Value.IndexOf(registerField);
         Value.Swap(oldIndex, oldIndex - 1);
         await InitSort();
@@ -36,7 +35,6 @@ public partial class ConfigRegister
 
     public async Task Down(RegisterFieldDto registerField)
     {
-        registerField.Sort++;
         var oldIndex = Value.IndexOf(registerField);
         Value.Swap(oldIndex, oldIndex + 1);
         await InitSort();
@@ -55,7 +53,7 @@ public partial class ConfigRegister
         {
             registerField.Sort = ++sort;
         }
-        //await ValueChanged.InvokeAsync(Value);
+        await ValueChanged.InvokeAsync(Value);
     }
 }
 

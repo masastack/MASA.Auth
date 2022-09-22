@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Masa.Auth.Service.Admin.Migrations
 {
-    public partial class updateUser : Migration
+    public partial class updateCustomLogin : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 name: "GenderType",
                 schema: "auth",
                 table: "User",
-                newName: "Gender");         
+                newName: "Gender");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
