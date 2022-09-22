@@ -72,9 +72,10 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public User? ModifyUser => _modifyUser;
 
-    public Role(string name, string? description, bool enabled, int limit)
+    public Role(string name, string code, string? description, bool enabled, int limit)
     {
         Name = name;
+        Code = code;
         Description = description;
         Enabled = enabled;
         Limit = limit;
@@ -112,9 +113,10 @@ public class Role : FullAggregateRoot<Guid, Guid>
             });
     }
 
-    public void Update(string name, string? description, bool enabled, int limit)
+    public void Update(string name,string code, string? description, bool enabled, int limit)
     {
         Name = name;
+        Code = code;
         Description = description;
         Enabled = enabled;
         Limit = limit;

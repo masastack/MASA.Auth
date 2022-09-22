@@ -5,12 +5,12 @@
         <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <AutoHeight AutoClass="d-flex">
+                    <AutoHeight Overflow AutoClass="d-flex">
                         <AutoHeightContent>
                             <div style="width:100%;">
                                 <div class="d-flex mb-12">
                                     <div class="mx-auto">
-                                        <PlaceholderTextFiled Value="Role.Name" ValueChanged="NameChanged" Placeholder="@T("Name")" />
+                                        <PlaceholderTextFiled Value="@Role.Name" ValueChanged="NameChanged" Placeholder="@T("Name")" />
                                     </div>
                                 </div>
                                 <div>
@@ -21,7 +21,7 @@
                             </div>
                         </AutoHeightContent>
                         <FooterContent>
-                            <div class="d-flex">
+                            <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="() => NextStep(context)">@T("Next step")</SButton>
                             </div>
@@ -29,7 +29,7 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <AutoHeight>
+                    <AutoHeight Overflow>
                         <HeaderContent>
                             <div class="mb-6">
                                 <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" />

@@ -91,12 +91,12 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    public GenderTypes GenderType
+    public GenderTypes Gender
     {
         get => _gender;
         private set
         {
-            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(GenderType));
+            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(Gender));
         }
     }
 
@@ -186,8 +186,8 @@ public class User : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
         Address = address;
         Landline = landline;
-        GenderType = gender == default ? GenderTypes.Male : gender;
-        Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(GenderType) : avatar;
+        Gender = gender == default ? GenderTypes.Male : gender;
+        Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
         Password = password;
         var value = VerifyPhonNumberEmail(phoneNumber, email);
         Account = string.IsNullOrEmpty(account) ? value : account;
@@ -238,7 +238,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
-        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions, user.Landline);
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline);
     }
 
     public void Update(string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
@@ -250,7 +250,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Address = address;
         Department = department;
         Position = position;
-        GenderType = gender;
+        Gender = gender;
         Landline = landline;
         DisplayName = displayName;
         Avatar = avatar;
@@ -264,13 +264,13 @@ public class User : FullAggregateRoot<Guid, Guid>
         IdCard = idCard;
         CompanyName = companyName;
         Department = department;
-        GenderType = gender;
+        Gender = gender;
     }
 
     public void UpdateBasicInfo(string displayName, GenderTypes gender, string? companyName, string? department, string? position, AddressValue address)
     {
         DisplayName = displayName;
-        GenderType = gender;
+        Gender = gender;
         CompanyName = companyName;
         Department = department;
         Position = position;

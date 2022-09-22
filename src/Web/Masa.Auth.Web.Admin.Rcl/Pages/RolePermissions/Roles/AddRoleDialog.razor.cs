@@ -73,7 +73,7 @@ public partial class AddRoleDialog
 
     void NameChanged(string name)
     {
-        if(Role.Code==Role.Name.ToSpellCode())
+        if (string.IsNullOrEmpty(Role.Code) || Role.Code == Role.Name.ToSpellCode())
         {
             Role.Code = name.ToSpellCode();
         }

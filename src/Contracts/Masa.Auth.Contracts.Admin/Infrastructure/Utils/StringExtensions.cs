@@ -5,6 +5,10 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class StringExtensions
 {
+    static StringExtensions()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
 
     public static string ToSpellCode(this string cnStr)
     {
@@ -22,7 +26,7 @@ public static class StringExtensions
     {
 
         long iCnChar;
-        byte[] cnBytes = Encoding.Default.GetBytes(new[] { cnChar });
+        byte[] cnBytes = Encoding.GetEncoding("GB2312").GetBytes(new[] { cnChar });
 
         if (cnBytes.Length == 1)
         {
@@ -131,5 +135,5 @@ public static class StringExtensions
         }
         else
             return ('?');
-    }
+    }    
 }

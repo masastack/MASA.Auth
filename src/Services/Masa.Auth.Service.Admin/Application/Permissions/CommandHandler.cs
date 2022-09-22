@@ -31,7 +31,7 @@ public class CommandHandler
     public async Task AddRoleAsync(AddRoleCommand command)
     {
         var roleDto = command.Role;
-        var role = await _roleRepository.FindAsync(r => r.Name == roleDto.Name);
+        var role = await _roleRepository.FindAsync(r => r.Name == roleDto.Name || r.Code == roleDto.Code);
         if (role is not null)
         {
             if (command.WhenExistReturn)
@@ -39,10 +39,16 @@ public class CommandHandler
                 command.Result = role;
                 return;
             }
-            else throw new UserFriendlyException($"Role with Name {roleDto.Name} already exists");
+            else
+            {
+                var error = "";
+                if (role.Name == roleDto.Name) error += $"Role with Name {roleDto.Name} already exists;";
+                if (role.Code == roleDto.Code) error += $"Role with Code {roleDto.Code} already exists;";
+                throw new UserFriendlyException(error);
+            }
         }
 
-        role = new Role(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role = new Role(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.AddAsync(role);
@@ -54,11 +60,20 @@ public class CommandHandler
     public async Task UpdateRoleAsync(UpdateRoleCommand command)
     {
         var roleDto = command.Role;
-        var role = await _roleRepository.GetByIdAsync(roleDto.Id);
+        var role = await _roleRepository.FindAsync(r => r.Id != roleDto.Id && (r.Name == roleDto.Name || r.Code == roleDto.Code));
+        if (role is not null)
+        {
+            var error = "";
+            if (role.Name == roleDto.Name) error += $"Role with Name {roleDto.Name} already exists;";
+            if (role.Code == roleDto.Code) error += $"Role with Code {roleDto.Code} already exists;";
+            throw new UserFriendlyException(error);
+        }
+
+        role = await _roleRepository.GetByIdAsync(roleDto.Id);
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 
-        role.Update(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role.Update(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
