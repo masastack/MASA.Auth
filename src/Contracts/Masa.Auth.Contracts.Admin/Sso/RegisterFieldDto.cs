@@ -19,7 +19,7 @@ public class RegisterFieldDto
         RegisterFieldType = registerFieldType;
         Sort = sort;
         Required = required;
-        if (RegisterFieldType is RegisterFieldTypes.Account or RegisterFieldTypes.Password)
+        if (RegisterFieldType is RegisterFieldTypes.PhoneNumber)
         {
             CannotUpdate = true;
         }

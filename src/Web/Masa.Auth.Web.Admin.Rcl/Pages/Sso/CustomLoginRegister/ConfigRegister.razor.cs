@@ -22,8 +22,7 @@ public partial class ConfigRegister
         PageName = "CustomLoginBlock";
         if (Value.Count == 0)
         {
-            Value.Add(new RegisterFieldDto(RegisterFieldTypes.Account, 1, true));
-            Value.Add(new RegisterFieldDto(RegisterFieldTypes.Password, 2, true));
+            Value.Add(new RegisterFieldDto(RegisterFieldTypes.PhoneNumber, 1, true));
         }
     }
 
@@ -56,7 +55,7 @@ public partial class ConfigRegister
         {
             registerField.Sort = ++sort;
         }
-        await ValueChanged.InvokeAsync(Value);
+        //await ValueChanged.InvokeAsync(Value);
     }
 }
 
