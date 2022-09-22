@@ -271,13 +271,15 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
+    [RoutePattern("SyncRedis", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task SyncRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
     {
         var command = new SyncUserRedisCommand(dto);
         await eventBus.PublishAsync(command);
     }
 
-    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterModel registerModel)
+    [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
     {
         var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);

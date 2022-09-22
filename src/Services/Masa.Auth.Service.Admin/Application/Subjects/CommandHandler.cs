@@ -67,28 +67,20 @@ public class CommandHandler
     public async Task RegisterUserAsync(RegisterUserCommand command)
     {
         var model = command.RegisterModel;
-        switch (model.UserRegisterType)
+        if (model.UserRegisterType == UserRegisterTypes.Email)
         {
-            case UserRegisterTypes.Account:
-                throw new NotImplementedException();
-            case UserRegisterTypes.PhoneNumber:
-                var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-                var smsCode = _cache.Get<string>(smsCodeKey) ?? "";
-                if (!smsCode.Equals(model.Code))
-                {
-                    throw new UserFriendlyException("Invalid SMS verification code");
-                }
-                break;
-            case UserRegisterTypes.Email:
-                var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
-                var emailCode = _cache.Get<string>(emailCodeKey) ?? "";
-                if (!emailCode.Equals(model.Code))
-                {
-                    throw new UserFriendlyException("Invalid Email verification code");
-                }
-                break;
-            default:
-                throw new UserFriendlyException("Invalid UserRegisterType");
+            var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
+            var emailCode = _cache.Get<string>(emailCodeKey) ?? "";
+            if (!emailCode.Equals(model.EmailCode))
+            {
+                throw new UserFriendlyException("Invalid Email verification code");
+            }
+        }
+        var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+        var smsCode = _cache.Get<string>(smsCodeKey) ?? "";
+        if (!smsCode.Equals(model.SmsCode))
+        {
+            throw new UserFriendlyException("Invalid SMS verification code");
         }
         await _eventBus.PublishAsync(new AddUserCommand(new AddUserDto()
         {

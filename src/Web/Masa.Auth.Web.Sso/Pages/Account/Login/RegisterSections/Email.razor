@@ -74,7 +74,6 @@
 
     private async Task GetEmailCode()
     {
-        var d = Value.Email;
         if (_emailTextField.Validate())
         {
             await AuthClient.UserService.SendEmailAsync(new SendEmailModel

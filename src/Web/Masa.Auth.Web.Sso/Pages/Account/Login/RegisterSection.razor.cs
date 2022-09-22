@@ -18,8 +18,6 @@ public partial class RegisterSection
 
     public bool CanRegister => _inputModel.Agreement && ValidateRegisterFields();
 
-    public List<RegisterFieldModel> RegisterFields { get; set; } = new();
-
     private bool ValidateRegisterFields()
     {
         //todo 
@@ -41,58 +39,49 @@ public partial class RegisterSection
                     var customLoginModel = await AuthClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
                     if (customLoginModel != null)
                     {
-                        RegisterFields = customLoginModel.RegisterFields.OrderBy(r => r.Sort).ToList();
+                        var registerFields = customLoginModel.RegisterFields.OrderBy(r => r.Sort).ToList();
+
+                        foreach (var registerField in registerFields)
+                        {
+                            var componentParameters = new Dictionary<string, object>() {
+                                { "Required",registerField.Required },
+                                { "Value",_inputModel }
+                            };
+                            switch (registerField.RegisterFieldType)
+                            {
+                                case RegisterFieldTypes.Email:
+                                    _registerComponents[RegisterFieldTypes.Email] = new ComponentMetadata
+                                    {
+                                        ComponentType = typeof(Email),
+                                        ComponentParameters = componentParameters
+                                    };
+                                    break;
+                                case RegisterFieldTypes.PhoneNumber:
+                                    _registerComponents[RegisterFieldTypes.PhoneNumber] = new ComponentMetadata
+                                    {
+                                        ComponentType = typeof(PhoneNumber),
+                                        ComponentParameters = componentParameters
+                                    };
+                                    break;
+                                case RegisterFieldTypes.Password:
+                                    _registerComponents[RegisterFieldTypes.Password] = new ComponentMetadata
+                                    {
+                                        ComponentType = typeof(Password),
+                                        ComponentParameters = componentParameters
+                                    };
+                                    break;
+                                case RegisterFieldTypes.DisplayName:
+                                    _registerComponents[RegisterFieldTypes.DisplayName] = new ComponentMetadata
+                                    {
+                                        ComponentType = typeof(DisplayName),
+                                        ComponentParameters = componentParameters
+                                    };
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
-                }
-            }
-            if (!RegisterFields.Any())
-            {
-                RegisterFields = new List<RegisterFieldModel>
-                {
-                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.PhoneNumber },
-                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.Email },
-                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.DisplayName },
-                    new RegisterFieldModel{ RegisterFieldType= RegisterFieldTypes.Password }
-                };
-            }
-            foreach (var registerField in RegisterFields)
-            {
-                var componentParameters = new Dictionary<string, object>() {
-                    { "Required",registerField.Required },
-                    { "Value",_inputModel }
-                };
-                switch (registerField.RegisterFieldType)
-                {
-                    case RegisterFieldTypes.Email:
-                        _registerComponents[RegisterFieldTypes.Email] = new ComponentMetadata
-                        {
-                            ComponentType = typeof(Email),
-                            ComponentParameters = componentParameters
-                        };
-                        break;
-                    case RegisterFieldTypes.PhoneNumber:
-                        _registerComponents[RegisterFieldTypes.PhoneNumber] = new ComponentMetadata
-                        {
-                            ComponentType = typeof(PhoneNumber),
-                            ComponentParameters = componentParameters
-                        };
-                        break;
-                    case RegisterFieldTypes.Password:
-                        _registerComponents[RegisterFieldTypes.Password] = new ComponentMetadata
-                        {
-                            ComponentType = typeof(Password),
-                            ComponentParameters = componentParameters
-                        };
-                        break;
-                    case RegisterFieldTypes.DisplayName:
-                        _registerComponents[RegisterFieldTypes.DisplayName] = new ComponentMetadata
-                        {
-                            ComponentType = typeof(DisplayName),
-                            ComponentParameters = componentParameters
-                        };
-                        break;
-                    default:
-                        break;
                 }
             }
             _inputModel.EmailRegister = _registerComponents.ContainsKey(RegisterFieldTypes.Email);
@@ -107,7 +96,7 @@ public partial class RegisterSection
         {
             return;
         }
-
+        _registerLoading = true;
         if (_inputModel.EmailRegister)
         {
             await AuthClient.UserService.RegisterByEmailAsync(new RegisterByEmailModel
@@ -119,7 +108,7 @@ public partial class RegisterSection
                 EmailCode = _inputModel.EmailCode.ToString() ?? "",
                 Password = _inputModel.Password,
                 Avatar = "",
-                DisplayName = ""
+                DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
             });
         }
         else
@@ -130,13 +119,13 @@ public partial class RegisterSection
                 SmsCode = _inputModel.SmsCode.ToString() ?? "",
                 Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
                 Avatar = "",
-                DisplayName = ""
+                DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
             });
         }
 
         var loginInputModel = new LoginInputModel
         {
-            PhoneLogin = !_inputModel.EmailRegister,
+            PhoneLogin = true,
             SmsCode = _inputModel.SmsCode,
             Password = _inputModel.Password,
             UserName = _inputModel.Email,
@@ -170,7 +159,7 @@ public partial class RegisterSection
         string GenerateDisplayName(RegisterInputModel _inputModel)
         {
             var _prefix = T("User");
-            var _suffix = "";
+            string? _suffix;
             if (_inputModel.EmailRegister)
             {
                 _suffix = _inputModel.Email[.._inputModel.Email.IndexOf('@')];
