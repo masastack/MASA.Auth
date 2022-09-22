@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Application.Universals.Commands;
+namespace Masa.Auth.Service.Admin.Application.Messages.Commands;
 
-public record SendSMSCommand(SendMsgCodeModel Model) : Command
+public record SendEmailCommand(SendEmailModel SendEmailModel) : Command
 {
-
 }

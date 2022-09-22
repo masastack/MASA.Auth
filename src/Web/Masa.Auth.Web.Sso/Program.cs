@@ -10,7 +10,7 @@ builder.WebHost.UseKestrel(option =>
 });
 
 // Add services to the container.
-builder.AddMasaConfiguration(configurationBuilder =>
+builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
@@ -23,13 +23,12 @@ builder.Services.AddMasaBlazor(builder =>
     builder.Theme.Accent = "#4318FF";
 }).AddI18nForServer("wwwroot/i18n");
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<ScopedState>();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
 #if DEBUG
 builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002/");

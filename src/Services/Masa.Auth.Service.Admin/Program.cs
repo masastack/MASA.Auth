@@ -144,11 +144,11 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
-var app = builder.AddServices(options => 
+var app = builder.AddServices(options =>
 {
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
-    options.GetPrefixes = new string[] { "Get", "Select" , "Find" };
-    options.PostPrefixes = new string[] { "Post", "Add", "Create" };
+    options.GetPrefixes = new string[] { "Get", "Select", "Find" };
+    options.PostPrefixes = new string[] { "Post", "Add", "Create", "Send" };
 });
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>

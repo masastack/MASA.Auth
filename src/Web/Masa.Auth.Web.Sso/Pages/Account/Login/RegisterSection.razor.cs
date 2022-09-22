@@ -26,68 +26,76 @@ public partial class RegisterSection
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await base.OnAfterRenderAsync(firstRender);
+
         if (firstRender)
         {
-            if (ReturnUrl?.Contains('?') == true)
+            if (ReturnUrl == null || ReturnUrl.Contains('?') == false)
             {
-                var splitIndex = ReturnUrl.IndexOf('?');
-                var paramString = ReturnUrl[splitIndex..];
-                var queryValues = HttpUtility.ParseQueryString(paramString);
-                var clientId = queryValues["client_id"];
-                if (!string.IsNullOrEmpty(clientId))
-                {
-                    var customLoginModel = await AuthClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
-                    if (customLoginModel != null)
-                    {
-                        var registerFields = customLoginModel.RegisterFields.OrderBy(r => r.Sort).ToList();
+                return;
+            }
 
-                        foreach (var registerField in registerFields)
-                        {
-                            var componentParameters = new Dictionary<string, object>() {
+            var splitIndex = ReturnUrl.IndexOf('?');
+            var paramString = ReturnUrl[splitIndex..];
+            var queryValues = HttpUtility.ParseQueryString(paramString);
+            var clientId = queryValues["client_id"];
+            if (string.IsNullOrEmpty(clientId))
+            {
+                return;
+            }
+
+            var customLoginModel = await AuthClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+            if (customLoginModel == null || !customLoginModel.RegisterFields.Any())
+            {
+                return;
+            }
+
+            var registerFields = customLoginModel.RegisterFields.OrderBy(r => r.Sort).ToList();
+
+            foreach (var registerField in registerFields)
+            {
+                var componentParameters = new Dictionary<string, object>() {
                                 { "Required",registerField.Required },
                                 { "Value",_inputModel }
                             };
-                            switch (registerField.RegisterFieldType)
-                            {
-                                case RegisterFieldTypes.Email:
-                                    _registerComponents[RegisterFieldTypes.Email] = new ComponentMetadata
-                                    {
-                                        ComponentType = typeof(Email),
-                                        ComponentParameters = componentParameters
-                                    };
-                                    break;
-                                case RegisterFieldTypes.PhoneNumber:
-                                    _registerComponents[RegisterFieldTypes.PhoneNumber] = new ComponentMetadata
-                                    {
-                                        ComponentType = typeof(PhoneNumber),
-                                        ComponentParameters = componentParameters
-                                    };
-                                    break;
-                                case RegisterFieldTypes.Password:
-                                    _registerComponents[RegisterFieldTypes.Password] = new ComponentMetadata
-                                    {
-                                        ComponentType = typeof(Password),
-                                        ComponentParameters = componentParameters
-                                    };
-                                    break;
-                                case RegisterFieldTypes.DisplayName:
-                                    _registerComponents[RegisterFieldTypes.DisplayName] = new ComponentMetadata
-                                    {
-                                        ComponentType = typeof(DisplayName),
-                                        ComponentParameters = componentParameters
-                                    };
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
+                switch (registerField.RegisterFieldType)
+                {
+                    case RegisterFieldTypes.Email:
+                        _registerComponents[RegisterFieldTypes.Email] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(Email),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    case RegisterFieldTypes.PhoneNumber:
+                        _registerComponents[RegisterFieldTypes.PhoneNumber] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(PhoneNumber),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    case RegisterFieldTypes.Password:
+                        _registerComponents[RegisterFieldTypes.Password] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(Password),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    case RegisterFieldTypes.DisplayName:
+                        _registerComponents[RegisterFieldTypes.DisplayName] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(DisplayName),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
+                    default:
+                        break;
                 }
             }
+
             _inputModel.EmailRegister = _registerComponents.ContainsKey(RegisterFieldTypes.Email);
             StateHasChanged();
         }
-        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task RegisterHandler()

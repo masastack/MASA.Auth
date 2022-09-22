@@ -10,7 +10,7 @@ public class SsoSectionComponentBase : ComponentBase
     [Inject]
     public IPopupService PopupService { get; set; } = null!;
 
-    [Inject]
+    [CascadingParameter]
     public I18n LanguageProvider
     {
         get
