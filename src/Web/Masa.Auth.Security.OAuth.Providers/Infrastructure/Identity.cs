@@ -74,6 +74,8 @@ public class Identity
 
     public DateTime? UpdatedAt { get; set; }
 
+    public string Issuer { get; set; } = "";
+
     public Identity(string subject)
     {
         Subject = subject;

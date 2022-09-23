@@ -23,4 +23,12 @@ public static class AuthenticationExternalExtensions
     {
         await context.SignOutAsync(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
     }
+
+    public static async Task<Identity> GetExternalIdentityAsync(this HttpContext context)
+    {
+        var result = await context.AuthenticateAsync(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
+        var scheme = result.Properties?.Items?["scheme"] ?? throw new UserFriendlyException("Unknown third party");
+        var identity = IdentityProvider.GetIdentity(scheme, result.Principal ?? throw new UserFriendlyException("Authenticate failed"));
+        return identity;
+    }
 }

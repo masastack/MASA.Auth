@@ -36,9 +36,12 @@ public class AuthenticationExternalMiddleware
             {
                 throw new Exception("External authentication error");
             }
-            await handler.OnHandleAuthenticateAfterAsync(result);
-            var returnUrl = result.Properties?.Items?["returnUrl"] ?? "~/";
-            context.Response.Redirect(returnUrl);
+            var success = await handler.OnHandleAuthenticateAfterAsync(result);
+            if(success)
+            {
+                var returnUrl = result.Properties?.Items?["returnUrl"] ?? "~/";
+                context.Response.Redirect(returnUrl);
+            }          
             return;
         }
 
