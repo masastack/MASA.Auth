@@ -88,10 +88,10 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-       var user = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .ThenInclude(ur => ur.Role)
-                                           .FirstOrDefaultAsync(user => user.Account == query.Account);
+        var user = await _authDbContext.Set<User>()
+                                            .Include(u => u.Roles)
+                                            .ThenInclude(ur => ur.Role)
+                                            .FirstOrDefaultAsync(user => user.Account == query.Account);
         query.Result = await UserSplicingDataAsync(user);
     }
 
@@ -100,6 +100,13 @@ public class QueryHandler
     {
         var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account));
         query.Result = users.Adapt<List<UserSimpleModel>>();
+    }
+
+    [EventHandler]
+    public async Task GetUserByPhoneAsync(UserByPhoneQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        query.Result = user?.Adapt<UserSimpleModel>();
     }
 
     [EventHandler]
@@ -415,7 +422,7 @@ public class QueryHandler
 
     [EventHandler]
     public async Task GetAllThirdPartyIdpAsync(AllThirdPartyIdpQuery query)
-    {       
+    {
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
         query.Result = thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>();
     }

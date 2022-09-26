@@ -155,4 +155,11 @@ public class AccountController : Controller
         }
         return Redirect(redirectUrl);
     }
+
+    [Authorize]
+    public async Task<IActionResult> SwitchEnvironment(string environment)
+    {
+
+        return this.LoadingPage("");
+    }
 }

@@ -15,11 +15,11 @@ builder.Services.AddDaprStarter(opt =>
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-builder.AddMasaConfiguration(configurationBuilder =>
+builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
@@ -57,7 +57,7 @@ builder.Services
     .AddJwtBearer("Bearer", options =>
     {
         //todo dcc
-        options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.Authority = builder.Services.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
         options.TokenValidationParameters.ValidateAudience = false;
@@ -132,7 +132,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
