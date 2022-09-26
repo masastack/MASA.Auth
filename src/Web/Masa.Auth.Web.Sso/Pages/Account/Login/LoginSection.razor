@@ -47,8 +47,8 @@
                    Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                 mdi-record-circle
             </MIcon>
-            <MSelect @bind-Value="_inputModel.Environment" Solo Dense HideDetails="true" Class="elevation-0"
-                     Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+            <MSelect Value="_inputModel.Environment" ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0"
+                Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
             </MSelect>
         </MCol>
         @if (!_inputModel.PhoneLogin)
@@ -63,8 +63,8 @@
     </MRow>
 </MForm>
 <div class="text-center mt-12">
-    <MButton Class="rounded-pill text-btn white--text" Disabled=string.IsNullOrEmpty(_inputModel.Environment)
-             OnClick="LoginHandler" Height=48 Width=340 Color="primary">
+    <MButton Class="rounded-pill text-btn white--text" Disabled=@(string.IsNullOrEmpty(_inputModel.Environment) || _loginLoading)
+             OnClick="LoginHandler" Height=48 Width=340 Color="primary" Loading=_loginLoading>
         @T("Login")
     </MButton>
     @if (!_inputModel.PhoneLogin)

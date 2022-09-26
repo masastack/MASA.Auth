@@ -11,18 +11,15 @@ public class AccountController : Controller
     readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
-    readonly IDistributedCacheClient _distributedCacheClient;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
         IEventService events,
-        IAuthClient authClient,
-        IDistributedCacheClient distributedCacheClient)
+        IAuthClient authClient)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
-        _distributedCacheClient = distributedCacheClient;
     }
 
     [HttpPost]
@@ -40,21 +37,28 @@ public class AccountController : Controller
             }
 
             var success = false;
-            var user = new UserModel();
+            UserModel? user = new();
+
             if (inputModel.PhoneLogin)
             {
                 user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
                 {
                     PhoneNumber = inputModel.PhoneNumber,
-                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required")
+                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required"),
+                    RegisterLogin = inputModel.RememberLogin
                 });
+                if (user is null)
+                {
+                    //todo auto register user
+                    return Content("no corresponding user for this mobile phone number");
+                }
                 success = true;
             }
             else
             {
                 success = await _authClient.UserService
                                            .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
-                if(success)
+                if (success)
                 {
                     user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
                 }
@@ -73,6 +77,7 @@ public class AccountController : Controller
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
                     };
                 };
+
                 var isuser = new IdentityServerUser(user!.Id.ToString())
                 {
                     DisplayName = user.DisplayName
@@ -80,7 +85,7 @@ public class AccountController : Controller
 
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ACCOUNT, user.Account));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ENVIRONMENT, inputModel.Environment));
-                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(user.Roles.Select(role => role.Id))));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(user.Roles.Select(r => r.Code))));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.CURRENT_TEAM, (user.CurrentTeamId ?? Guid.Empty).ToString()));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.STAFF, (user.StaffId ?? Guid.Empty).ToString()));
 

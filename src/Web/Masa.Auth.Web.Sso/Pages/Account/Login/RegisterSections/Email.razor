@@ -1,0 +1,95 @@
+﻿@inherits SsoSectionComponentBase
+@implements IDisposable
+
+<MTextField @bind-Value="Value.Email" Label="@T("Email")" Placeholder="@T("EmailPlaceHolder")"
+            Outlined PrependInnerIcon="mdi-email" Rules="_emailRules" @ref="_emailTextField">
+</MTextField>
+<MTextField Class="mt-3" @bind-Value="Value.EmailCode" Outlined Label="@T("EmailCode")"
+            Placeholder="@T("EmailCodeCodePlaceHolder")" Type="number"
+            NumberProps="@(prop=> { prop.Min = 100000; prop.Max = 999999; prop.HideControl = true; })">
+    <AppendContent>
+        <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
+                 Class="primary rounded-r-lg" Disabled=!_canEmailCode OnClick="GetEmailCode">
+            @(_canEmailCode ? @T("GetEmailCode") : _emailCodeTime)
+        </MButton>
+    </AppendContent>
+</MTextField>
+
+@code {
+    [Parameter]
+    public RegisterInputModel Value { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<RegisterInputModel> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; } 
+
+    bool _canEmailCode = true;
+    int _emailCodeTime = LoginOptions.GetEmailCodeInterval;
+    System.Timers.Timer? _emailTimer;
+    MTextField<string> _emailTextField = null!;
+
+    [Inject]
+    public IAuthClient AuthClient { get; set; } = null!;
+
+    private IList<Func<string, StringBoolean>> _emailRules => new List<Func<string, StringBoolean>>
+    {
+        value => Regex.Match(value, LoginOptions.EmailRegular).Success ? true : "Invalid Email."
+    };
+
+    protected override void OnInitialized()
+    {
+        if (_emailTimer == null)
+        {
+            _emailTimer = new(1000 * 1);
+            _emailTimer.Elapsed += EmailTimer_Elapsed;
+        }
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Required)
+        {
+            _emailRules.Add(value => !string.IsNullOrEmpty(value) ? true : "Required.");
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private void EmailTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        _ = InvokeAsync(() =>
+        {
+            _emailCodeTime--;
+            if (_emailCodeTime == 0)
+            {
+                _emailTimer?.Stop();
+                _canEmailCode = true;
+                _emailCodeTime = LoginOptions.GetEmailCodeInterval;
+            }
+            StateHasChanged();
+        });
+    }
+
+    private async Task GetEmailCode()
+    {
+        if (_emailTextField.Validate())
+        {
+            await AuthClient.UserService.SendEmailAsync(new SendEmailModel
+                {
+                    Email = Value.Email,
+                    SendEmailType = SendEmailTypes.Register
+                });
+            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            _canEmailCode = false;
+            _emailTimer?.Start();
+        }
+    }
+
+    public void Dispose()
+    {
+        _emailTimer?.Dispose();
+    }
+}
+

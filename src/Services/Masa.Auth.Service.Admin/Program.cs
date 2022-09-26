@@ -15,11 +15,11 @@ builder.AddObservability();
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-builder.AddMasaConfiguration(configurationBuilder =>
+builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
@@ -57,7 +57,7 @@ builder.Services
     .AddJwtBearer("Bearer", options =>
     {
         //todo dcc
-        options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.Authority = builder.Services.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
         options.TokenValidationParameters.ValidateAudience = false;
@@ -144,11 +144,11 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
-var app = builder.AddServices(options => 
+var app = builder.AddServices(options =>
 {
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
-    options.GetPrefixes = new string[] { "Get", "Select" , "Find" };
-    options.PostPrefixes = new string[] { "Post", "Add", "Create" };
+    options.GetPrefixes = new() { "Get", "Select", "Find" };
+    options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
 });
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>

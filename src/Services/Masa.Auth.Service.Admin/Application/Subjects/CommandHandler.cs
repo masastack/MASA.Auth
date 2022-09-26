@@ -63,6 +63,37 @@ public class CommandHandler
 
     #region User
 
+    [EventHandler]
+    public async Task RegisterUserAsync(RegisterUserCommand command)
+    {
+        var model = command.RegisterModel;
+        if (model.UserRegisterType == UserRegisterTypes.Email)
+        {
+            var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
+            var emailCode = _cache.Get<string>(emailCodeKey) ?? "";
+            if (!emailCode.Equals(model.EmailCode))
+            {
+                throw new UserFriendlyException("Invalid Email verification code");
+            }
+        }
+        var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+        var smsCode = _cache.Get<string>(smsCodeKey) ?? "";
+        if (!smsCode.Equals(model.SmsCode))
+        {
+            throw new UserFriendlyException("Invalid SMS verification code");
+        }
+        await _eventBus.PublishAsync(new AddUserCommand(new AddUserDto()
+        {
+            Account = model.Account,
+            DisplayName = model.DisplayName,
+            PhoneNumber = model.PhoneNumber,
+            Email = model.Email,
+            Password = model.Password,
+            Avatar = model.Avatar,
+            Enabled = true,
+        }));
+    }
+
     [EventHandler(1)]
     public async Task AddUserAsync(AddUserCommand command)
     {
@@ -230,81 +261,6 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task SendMsgCodeAsync(SendMsgCodeCommand command)
-    {
-        var model = command.Model;
-        if (model.SendMsgCodeType is SendMsgCodeTypes.VerifiyPhoneNumber)
-        {
-            var sendCommand = new SendMsgCodeForVerifiyPhoneNumberCommand(new()
-            {
-                UserId = model.UserId
-            });
-            await _eventBus.PublishAsync(sendCommand);
-        }
-        if (model.SendMsgCodeType is SendMsgCodeTypes.Login)
-        {
-            var sendCommand = new SendMsgCodeForLoginCommand(new()
-            {
-                PhoneNumber = model.PhoneNumber
-            });
-            await _eventBus.PublishAsync(sendCommand);
-        }
-        else
-        {
-            var sendCommand = new SendMsgCodeForUpdatePhoneNumberCommand(new()
-            {
-                UserId = model.UserId,
-                PhoneNumber = model.PhoneNumber
-            });
-            await _eventBus.PublishAsync(sendCommand);
-        }
-    }
-
-    [EventHandler]
-    public async Task SendMsgCodeForVerifiyPhoneNumberAsync(SendMsgCodeForVerifiyPhoneNumberCommand command)
-    {
-        var model = command.Model;
-        var user = await CheckUserExistAsync(model.UserId);
-        ArgumentExceptionExtensions.ThrowIfNullOrEmpty(user.PhoneNumber);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(user.Id.ToString(), user.PhoneNumber);
-        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
-        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
-        else
-        {
-            await _sms.SendMsgCodeAsync(msgCodeKey, user.PhoneNumber);
-        }
-    }
-
-    [EventHandler]
-    public async Task SendMsgCodeForUpdatePhoneNumberAsync(SendMsgCodeForUpdatePhoneNumberCommand command)
-    {
-        var model = command.Model;
-        await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
-        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
-        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
-        else
-        {
-            await _sms.SendMsgCodeAsync(msgCodeKey, model.PhoneNumber);
-        }
-    }
-
-    [EventHandler]
-    public async Task SendMsgCodeForLoginAsync(SendMsgCodeForLoginCommand command)
-    {
-        var model = command.Model;
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
-        if (user is null) throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
-        var msgCodeKey = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
-        var alreadySend = await _sms.CheckAlreadySendAsync(msgCodeKey);
-        if (alreadySend) throw new UserFriendlyException("Verification code has been sent, please try again later");
-        else
-        {
-            await _sms.SendMsgCodeAsync(msgCodeKey, model.PhoneNumber);
-        }
-    }
-
-    [EventHandler]
     public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
     {
         var model = command.Model;
@@ -356,8 +312,19 @@ public class CommandHandler
     {
         var model = command.Model;
         var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
-        if (user is null) throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
-        var key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
+        if (user is null)
+        {
+            throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+        }
+        var key = "";
+        if (model.RegisterLogin)
+        {
+            key = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+        }
+        else
+        {
+            key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
+        }
         if (await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
             command.Result = user.Adapt<UserModel>();
@@ -837,13 +804,13 @@ public class CommandHandler
             throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
 
         var thirdPartyIdp = new ThirdPartyIdp(
-            thirdPartyIdpDto.Name, 
-            thirdPartyIdpDto.DisplayName, 
-            thirdPartyIdpDto.Icon, 
-            thirdPartyIdpDto.Enabled, 
-            thirdPartyIdpDto.ThirdPartyIdpType, 
-            thirdPartyIdpDto.ClientId, 
-            thirdPartyIdpDto.ClientSecret, 
+            thirdPartyIdpDto.Name,
+            thirdPartyIdpDto.DisplayName,
+            thirdPartyIdpDto.Icon,
+            thirdPartyIdpDto.Enabled,
+            thirdPartyIdpDto.ThirdPartyIdpType,
+            thirdPartyIdpDto.ClientId,
+            thirdPartyIdpDto.ClientSecret,
             thirdPartyIdpDto.CallbackPath,
             thirdPartyIdpDto.AuthorizationEndpoint,
             thirdPartyIdpDto.TokenEndpoint,
@@ -864,14 +831,14 @@ public class CommandHandler
             throw new UserFriendlyException("The current thirdPartyIdp does not exist");
 
         thirdPartyIdp.Update(
-            thirdPartyIdpDto.DisplayName, 
-            thirdPartyIdpDto.Icon, 
-            thirdPartyIdpDto.Enabled, 
-            thirdPartyIdpDto.ClientId, 
-            thirdPartyIdpDto.ClientSecret, 
-            thirdPartyIdpDto.CallbackPath, 
-            thirdPartyIdpDto.AuthorizationEndpoint, 
-            thirdPartyIdpDto.TokenEndpoint, 
+            thirdPartyIdpDto.DisplayName,
+            thirdPartyIdpDto.Icon,
+            thirdPartyIdpDto.Enabled,
+            thirdPartyIdpDto.ClientId,
+            thirdPartyIdpDto.ClientSecret,
+            thirdPartyIdpDto.CallbackPath,
+            thirdPartyIdpDto.AuthorizationEndpoint,
+            thirdPartyIdpDto.TokenEndpoint,
             thirdPartyIdpDto.UserInformationEndpoint,
             thirdPartyIdpDto.MapAll,
             thirdPartyIdpDto.JsonKeyMap);
@@ -899,10 +866,10 @@ public class CommandHandler
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
     {
         var thirdPartyUserDto = command.ThirdPartyUser;
-        var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, command.WhenExisReturn); 
-        if(thirdPartyUser is not null)
+        var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, command.WhenExisReturn);
+        if (thirdPartyUser is not null)
         {
-            command.Result = thirdPartyUser.User.Adapt<UserModel>();            
+            command.Result = thirdPartyUser.User.Adapt<UserModel>();
             return;
         }
         command.Result = await AddThirdPartyUserAsync(thirdPartyUserDto);
@@ -1030,7 +997,7 @@ public class CommandHandler
         var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
                                                  .Include(tpu => tpu.User)
                                                  .ThenInclude(user => user.Roles)
-                                                 .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);                                
+                                                 .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
         if (thirdPartyUser is not null)
         {
             if (throwException is false)
@@ -1041,7 +1008,7 @@ public class CommandHandler
         }
         return thirdPartyUser;
     }
-   
+
     #endregion
 
     #region UserSystemData

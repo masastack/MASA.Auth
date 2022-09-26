@@ -26,6 +26,8 @@ public partial class StaffSelect
     [Parameter]
     public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 
+    bool _staffLoading;
+
     protected List<StaffSelectDto> Staffs { get; set; } = new();
 
     protected StaffService StaffService => AuthCaller.StaffService;
@@ -68,6 +70,19 @@ public partial class StaffSelect
             if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value);
             else Value = value;
         }
+    }
+
+    private async Task QuerySelectionStaff(string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return;
+        }
+
+        _staffLoading = true;
+        Staffs = Staffs.Union(await StaffService.GetSelectAsync(search)).ToList();
+        _staffLoading = false;
+        StateHasChanged();
     }
 }
 
