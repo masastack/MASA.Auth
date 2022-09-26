@@ -5,6 +5,7 @@ using Identity = Masa.Auth.Security.OAuth.Providers.Identity;
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Bind;
 
+[AllowAnonymous]
 public partial class UserBind
 {
     [Inject]
@@ -23,6 +24,7 @@ public partial class UserBind
 
     protected override async Task OnInitializedAsync()
     {
+        var user = User;
         var httpContext = HttpContextAccessor.HttpContext!;
         Identity = await httpContext.GetExternalIdentityAsync();
         if (string.IsNullOrEmpty(Identity.PhoneNumber) is false)

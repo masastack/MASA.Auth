@@ -22,6 +22,7 @@ public static class AuthenticationExternalServiceCollectionExtensions
                              .AddCookie(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
         services.Replace(ServiceDescriptor.Singleton<IAuthenticationSchemeProvider, HotUpdateAuthenticationSchemeProvider>());
         services.Replace(ServiceDescriptor.Scoped<IAuthenticationHandlerProvider, HotUpdateAuthenticationHandlerProvider>());
+        services.Replace(ServiceDescriptor.Scoped<ICookieAuthenticationHandler, HotUpdateAuthenticationHandlerProvider>());
         services.InjectForHotUpdate();
 
         return builder;

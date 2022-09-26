@@ -387,6 +387,15 @@ public class QueryHandler
         query.Result = tpu;
     }
 
+    [EventHandler]
+    public async Task GetThirdPartyUserAsync(ThirdPartyUserQuery query)
+    {
+        var tpUser = await _authDbContext.Set<ThirdPartyUser>()
+                                         .Include(tpu => tpu.User)
+                                         .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
+        query.Result = tpUser?.User?.Adapt<UserModel>();
+    }
+
     #endregion
 
     #region ThirdPartyIdp

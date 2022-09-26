@@ -58,7 +58,7 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>();
 
-builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler3, RemoteAuthenticationDefaultsProvider>();
+builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 

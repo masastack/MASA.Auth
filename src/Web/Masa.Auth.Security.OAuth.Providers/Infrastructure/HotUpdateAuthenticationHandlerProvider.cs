@@ -35,10 +35,16 @@ public class HotUpdateAuthenticationHandlerProvider : IAuthenticationHandlerProv
                 handler = context.RequestServices.GetInstance(authenticationDefaults);
             }          
         }
-        
+
         if (handler is not null)
         {
-            await handler.InitializeAsync(scheme, context);
+            try
+            {
+                await handler.InitializeAsync(scheme, context);
+            }
+            catch 
+            { 
+            }          
             _handlerMap[authenticationScheme] = handler;
         }
         return handler;

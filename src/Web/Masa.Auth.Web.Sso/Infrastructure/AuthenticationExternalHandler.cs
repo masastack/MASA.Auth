@@ -60,7 +60,7 @@ namespace Masa.Auth.Web.Sso.Infrastructure
             else
             {
                 var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
-                httpContext.Response.Redirect($"/user-bind?scheme={scheme}");
+                httpContext.Response.Redirect($"/account/user/bind");
                 return false;
             }
         }
