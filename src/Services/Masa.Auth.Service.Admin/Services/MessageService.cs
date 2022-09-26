@@ -15,7 +15,7 @@ public class MessageService : ServiceBase
     public async Task SendSmsAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
-        await eventBus.PublishAsync(new SendSMSCommand(model));
+        await eventBus.PublishAsync(new SendSmsCommand(model));
     }
 
     public async Task SendEmailAsync(IEventBus eventBus,

@@ -20,7 +20,7 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task SendSMSAsync(SendSMSCommand command)
+    public async Task SendSmsAsync(SendSmsCommand command)
     {
         var model = command.Model;
         var cacheKey = "";

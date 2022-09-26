@@ -285,6 +285,13 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
+    [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
+    {
+        var command = new RegisterUserCommand(registerModel);
+        await eventBus.PublishAsync(command);
+    }
+
     public async Task<bool> GetInEnvironmentAsync(IEventBus eventBus, IEnvironmentSetter environmentSetter,
         [FromQuery] string env, [FromQuery] string phoneNumber)
     {
