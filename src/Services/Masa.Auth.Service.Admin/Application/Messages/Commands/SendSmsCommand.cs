@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Messages.Commands;
 
-public record SendSMSCommand(SendMsgCodeModel Model) : Command
+public record SendSmsCommand(SendMsgCodeModel Model) : Command
 {
 
 }
