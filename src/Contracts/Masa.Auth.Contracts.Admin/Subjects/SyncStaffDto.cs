@@ -50,7 +50,7 @@ public class SyncStaffDto
     {
         get
         {
-            if (StaffTypeLable is "内部员工" or "InternalStaff") return StaffTypes.Internal;
+            if (StaffTypeLable is "内部员工" or "Internal") return StaffTypes.Internal;
             else return StaffTypes.External;
         }
     }

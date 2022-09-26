@@ -8,6 +8,10 @@
   "PhoneNumberPlaceHolder": "请输入手机号",
   "SMSCode": "短信验证码",
   "SMSCodePlaceHolder": "请输入短信验证码",
+  "GetSmsCode": "获取短信验证码",
+  "EmailCode": "邮箱验证码",
+  "EmailCodePlaceHolder": "请输入邮箱验证码",
+  "GetEmailCode": "获取邮箱验证码",
   "Password": "密码",
   "PasswordPlaceHolder": "请输入密码",
   "ConfirmPassword": "确认密码",
@@ -16,7 +20,6 @@
   "LdapLogin": "域账号登录",
   "PasswordLogin": "密码登录",
   "PhoneLogin": "手机号登录",
-  "GetSmsCode": "获取验证码",
   "PhoneNumberPrompt": "请输入正确的手机号",
   "Login": "登录",
   "Register": "注册",
@@ -48,6 +51,8 @@
   "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码",
   "User": "用户",
   "RegistrationAgreement": "用户申请注册协议",
-  "RegistrationAgreementStatement": "同意注册MASA系列产品协议 ",
+  "RegistrationAgreementStatement": "同意注册MASA系列产品协议",
+  "RegisterError": "注册失败，请联系管理员",
+  "NickNamePlaceHolder": "昵称",
   "or login with": "或使用以下登录"
 }

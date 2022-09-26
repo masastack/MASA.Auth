@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record SendMsgCodeForLoginCommand(SendMsgCodeModel Model) : Command
+public record RegisterUserCommand(RegisterByEmailModel RegisterModel) : Command
 {
 }

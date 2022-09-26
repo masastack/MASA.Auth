@@ -7,7 +7,7 @@ namespace Masa.Auth.Web.Sso.Shared
     {
         private I18n? _languageProvider;
 
-        [Inject]
+        [CascadingParameter]
         public I18n LanguageProvider
         {
             get
@@ -37,6 +37,9 @@ namespace Masa.Auth.Web.Sso.Shared
 
         [Inject]
         public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
+
+        [Inject]
+        public ScopedState ScopedState { get; set; } = null!;
 
         protected ClaimsPrincipal User
         {

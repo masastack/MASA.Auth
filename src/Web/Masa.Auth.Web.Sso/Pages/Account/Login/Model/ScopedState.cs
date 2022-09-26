@@ -3,9 +3,7 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
-public class ReplenishInfoForEmailInputModel : ReplenishInfoInputModel
+public class ScopedState
 {
-    public string PhoneNumber { get; set; } = string.Empty;
-
-    public int SmsCode { get; set; }
+    public string Environment { get; set; } = string.Empty;
 }

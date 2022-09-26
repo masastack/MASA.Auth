@@ -217,13 +217,6 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
-    [AllowAnonymous]
-    public async Task PostSendMsgCodeAsync(IEventBus eventBus,
-        [FromBody] SendMsgCodeModel model)
-    {
-        await eventBus.PublishAsync(new SendMsgCodeCommand(model));
-    }
-
     public async Task<bool> PostVerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
@@ -278,9 +271,17 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
+    [RoutePattern("SyncRedis", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task SyncRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
     {
         var command = new SyncUserRedisCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
+
+    [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
+    {
+        var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);
     }
 }
