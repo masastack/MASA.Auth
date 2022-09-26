@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Identity = Masa.Auth.Security.OAuth.Providers.Identity;
+
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class RegisterSection
@@ -8,8 +10,17 @@ public partial class RegisterSection
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
 
+    [Inject]
+    public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
+
     [CascadingParameter]
     public string ReturnUrl { get; set; } = string.Empty;
+
+    [Parameter]
+    [MemberNotNullWhen(true, "Identity")]
+    public bool UserBind { get; set; }
+
+    Identity? Identity { get; set; }
 
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
@@ -18,10 +29,17 @@ public partial class RegisterSection
 
     public bool CanRegister => _inputModel.Agreement && ValidateRegisterFields();
 
-    private bool ValidateRegisterFields()
+    protected override async Task OnInitializedAsync()
     {
-        //todo 
-        return true;
+        if (UserBind)
+        {
+            var httpContext = HttpContextAccessor.HttpContext!;
+            Identity = await httpContext.GetExternalIdentityAsync();
+            _inputModel.DisplayName = Identity.NickName;
+            _inputModel.Account = Identity.Account;
+            _inputModel.PhoneNumber = Identity.PhoneNumber ?? "";
+            _inputModel.Email = Identity.Email;
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -30,6 +48,7 @@ public partial class RegisterSection
 
         if (firstRender)
         {
+            if (UserBind) ReturnUrl = Identity.Properties["returnUrl"] ?? "~/";
             if (ReturnUrl == null || ReturnUrl.Contains('?') == false)
             {
                 return;
@@ -98,24 +117,52 @@ public partial class RegisterSection
         }
     }
 
+    private bool ValidateRegisterFields()
+    {
+        //todo 
+        return true;
+    }
+
     private async Task RegisterHandler()
     {
         if (!_registerForm.Validate())
         {
             return;
         }
+
         _registerLoading = true;
+        if (UserBind)
+        {
+            // todo check sms code、emai code
+            await AuthClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
+            {
+                ThridPartyIdentity = Identity.Subject,
+                ExtendedData = JsonSerializer.Serialize(Identity),
+                ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(Identity.Issuer),
+                User = new AddUserModel
+                {
+                    Email = _inputModel.Email,
+                    PhoneNumber = _inputModel.PhoneNumber,
+                }
+            });
+            Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
+            _registerLoading = false;
+            await PopupService.ToastSuccessAsync("Register success");
+            return;
+        }
+
         if (_inputModel.EmailRegister)
         {
+            if (_inputModel.Email is null) throw new UserFriendlyException("Emai is required");
+
             await AuthClient.UserService.RegisterByEmailAsync(new RegisterByEmailModel
             {
                 PhoneNumber = _inputModel.PhoneNumber,
-                SmsCode = _inputModel.SmsCode.ToString() ?? "",
+                SmsCode = _inputModel.SmsCode.ToString(),
                 Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.Email : _inputModel.Account,
                 Email = _inputModel.Email,
-                EmailCode = _inputModel.EmailCode.ToString() ?? "",
+                EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
                 Password = _inputModel.Password,
-                Avatar = "",
                 DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
             });
         }
@@ -124,7 +171,7 @@ public partial class RegisterSection
             await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
             {
                 PhoneNumber = _inputModel.PhoneNumber,
-                SmsCode = _inputModel.SmsCode.ToString() ?? "",
+                SmsCode = _inputModel.SmsCode.ToString(),
                 Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
                 Avatar = "",
                 DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
@@ -136,7 +183,7 @@ public partial class RegisterSection
             PhoneLogin = true,
             SmsCode = _inputModel.SmsCode,
             Password = _inputModel.Password,
-            UserName = _inputModel.Email,
+            UserName = _inputModel.Email ?? "",
             Environment = ScopedState.Environment,
             PhoneNumber = _inputModel.PhoneNumber,
             ReturnUrl = ReturnUrl,

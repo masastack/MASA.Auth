@@ -24,7 +24,6 @@ public partial class UserBind
 
     protected override async Task OnInitializedAsync()
     {
-        var user = User;
         var httpContext = HttpContextAccessor.HttpContext!;
         Identity = await httpContext.GetExternalIdentityAsync();
         if (string.IsNullOrEmpty(Identity.PhoneNumber) is false)
@@ -45,7 +44,7 @@ public partial class UserBind
 
     public void NavigateToRegister()
     {
-        Navigation.NavigateTo("");
+        Navigation.NavigateTo("/account/register");
     }
 
     public async Task BindAsync()

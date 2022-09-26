@@ -1,5 +1,5 @@
-﻿@page "/account/login/index"
-@page "/account/login"
+﻿@page "/account/{tab}/index"
+@page "/account/{tab}"
 
 @inherits SsoCompontentBase
 @inject IClientStore _clientStore
@@ -9,7 +9,7 @@
 @if (_viewModel.EnableLocalLogin)
 {
     <MCard Width=510 Height=620 MaxHeight="620">
-        <MTabs @bind-Value="tab" BackgroundColor="transparent" Color="primary" HideSlider Grow>
+        <MTabs Value="Tab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow>
             <MTab Value="@("login")">
                 <div class="full-height d-flex flex-column">
                     <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
@@ -27,7 +27,7 @@
                 </div>
             </MTab>
         </MTabs>
-        <MTabsItems Value="@tab">
+        <MTabsItems Value="@Tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
                     <LoginSection LoginHint="@_loginHint" />
@@ -35,7 +35,7 @@
             </MTabItem>
             <MTabItem Value="@("register")">
                  <CascadingValue Value="@ReturnUrl">
-                    <RegisterSection />
+                    <RegisterSection UserBind="_userBind" />
                 </CascadingValue>
             </MTabItem>
         </MTabsItems>

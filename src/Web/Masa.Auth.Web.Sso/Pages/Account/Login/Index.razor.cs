@@ -8,12 +8,26 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 public partial class Index
 {
     ViewModel _viewModel = new();
-    StringNumber tab = "login";
     string _loginHint = "";
+    string _tab = "login";
+    bool _userBind;
+
+    [Parameter]
+    public string Tab
+    {
+        get => _tab.ToLower();
+        set => _tab = value;
+    }
 
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (Tab == "register") _userBind = true;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -87,5 +101,10 @@ public partial class Index
             EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
             ExternalProviders = providers.ToArray()
         };
+    }
+
+    void TabChanged(StringNumber tab)
+    {
+        Tab = tab.ToString();
     }
 }
