@@ -1,10 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.JSInterop;
-
-namespace Masa.Auth.Security.OAuth.Providers.Infrastructure;
+namespace Masa.Auth.Security.OAuth.Providers;
 
 public class CookieAuthenticationHandler : Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler
 {
@@ -15,8 +12,7 @@ public class CookieAuthenticationHandler : Microsoft.AspNetCore.Authentication.C
 
     protected override Task InitializeHandlerAsync()
     {
-        var jsRuntime = Context.RequestServices.GetService<IJSRuntime>();
-        if (jsRuntime is null)
+        if (Context.Response.HasStarted is false)
         {
             Context.Response.OnStarting(FinishResponseAsync);
         }
