@@ -67,22 +67,8 @@ public class CommandHandler
     public async Task RegisterUserAsync(RegisterUserCommand command)
     {
         var model = command.RegisterModel;
-        if (model.UserRegisterType == UserRegisterTypes.Email)
-        {
-            var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
-            var emailCode = _cache.Get<string>(emailCodeKey) ?? "";
-            if (!emailCode.Equals(model.EmailCode))
-            {
-                throw new UserFriendlyException("Invalid Email verification code");
-            }
-        }
-        var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-        var smsCode = _cache.Get<string>(smsCodeKey) ?? "";
-        if (!smsCode.Equals(model.SmsCode))
-        {
-            throw new UserFriendlyException("Invalid SMS verification code");
-        }
-        await _eventBus.PublishAsync(new AddUserCommand(new AddUserDto()
+        await RegisterVerifyAsync(model);
+        var addUserCommand = new AddUserCommand(new AddUserDto()
         {
             Account = model.Account,
             DisplayName = model.DisplayName,
@@ -91,7 +77,52 @@ public class CommandHandler
             Password = model.Password,
             Avatar = model.Avatar,
             Enabled = true,
-        }));
+        });
+        await _eventBus.PublishAsync(addUserCommand);
+        command.Result = addUserCommand.Result.Adapt<UserModel>();
+    }
+
+    [EventHandler]
+    public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
+    {
+        var model = command.Model;
+        await RegisterVerifyAsync(model);
+        var addThirdPartyUserExternalCommand = new AddThirdPartyUserExternalCommand(new AddThirdPartyUserModel
+        {
+            ThridPartyIdentity = model.ThridPartyIdentity,
+            ExtendedData = model.ExtendedData,
+            ThirdPartyIdpType = model.ThirdPartyIdpType,
+            User = new AddUserModel 
+            {
+                Account = model.Account,
+                DisplayName = model.DisplayName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Avatar = model.Avatar,
+                Password = model.Password
+            }
+        });
+        await _eventBus.PublishAsync(addThirdPartyUserExternalCommand);
+        command.Result = addThirdPartyUserExternalCommand.Result;
+    }
+
+    async Task RegisterVerifyAsync(RegisterByEmailModel model)
+    {
+        if (model.UserRegisterType == UserRegisterTypes.Email)
+        {
+            var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
+            var emailCode = await _cache.GetAsync<string>(emailCodeKey);
+            if (!model.EmailCode.Equals(emailCode))
+            {
+                throw new UserFriendlyException("Invalid Email verification code");
+            }
+        }
+        var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+        var smsCode = await _cache.GetAsync<string>(smsCodeKey);
+        if (!model.SmsCode.Equals(smsCode))
+        {
+            throw new UserFriendlyException("Invalid SMS verification code");
+        }
     }
 
     [EventHandler(1)]

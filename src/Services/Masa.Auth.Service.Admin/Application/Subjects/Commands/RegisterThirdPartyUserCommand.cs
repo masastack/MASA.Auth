@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record RegisterUserCommand(RegisterByEmailModel RegisterModel) : Command
+public record RegisterThirdPartyUserCommand(RegisterThirdPartyUserModel Model) : Command
 {
     public UserModel Result { get; set; } = new();
 }
