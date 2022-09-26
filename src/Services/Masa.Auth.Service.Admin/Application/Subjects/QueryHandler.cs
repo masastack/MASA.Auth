@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -79,8 +81,8 @@ public class QueryHandler
         if (user is null) throw new UserFriendlyException("This user data does not exist");
         var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
         var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
-
-        query.Result = user;
+        var userDetail = await UserSplicingDataAsync(user);
+        query.Result = userDetail!;
         query.Result.Creator = creator ?? "";
         query.Result.Modifier = modifier ?? "";
     }
@@ -88,10 +90,10 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-       var user = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .ThenInclude(ur => ur.Role)
-                                           .FirstOrDefaultAsync(user => user.Account == query.Account);
+        var user = await _authDbContext.Set<User>()
+                                            .Include(u => u.Roles)
+                                            .ThenInclude(ur => ur.Role)
+                                            .FirstOrDefaultAsync(user => user.Account == query.Account);
         query.Result = await UserSplicingDataAsync(user);
     }
 
@@ -424,7 +426,7 @@ public class QueryHandler
 
     [EventHandler]
     public async Task GetAllThirdPartyIdpAsync(AllThirdPartyIdpQuery query)
-    {       
+    {
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
         query.Result = thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>();
     }

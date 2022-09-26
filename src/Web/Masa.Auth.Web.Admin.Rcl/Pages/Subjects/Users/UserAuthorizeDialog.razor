@@ -5,7 +5,15 @@
         <HeaderContent>
             <div class="height:55px;">
                 <div class="mb-4 d-flex">
-                    <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged=TeamValueChanged UserId="UserId" Style="width:100%;" />
+                    @if(User.StaffId is not null)
+                    {
+                        <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged=TeamValueChanged UserId="UserId" Style="width:100%;" />
+                    }
+                    else
+                    {
+                        <MSpacer />
+                    }
+                    
                     <div class="d-flex" style="width:200px;">
                         <MSpacer />                        
                         <MAvatar Size=48 Class="mr-2">

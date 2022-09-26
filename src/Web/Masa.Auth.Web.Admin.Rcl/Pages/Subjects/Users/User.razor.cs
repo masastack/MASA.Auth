@@ -31,6 +31,7 @@ public partial class User
         get { return _enabled; }
         set
         {
+            Console.WriteLine(value);
             _enabled = value;
             _page = 1;
             GetUserAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
