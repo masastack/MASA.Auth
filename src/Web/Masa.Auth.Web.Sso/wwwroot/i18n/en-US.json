@@ -11,11 +11,14 @@
   "PhoneNumberPlaceHolder": "Please Enter Password Again",
   "SMSCode": "SMS Code",
   "SMSCodePlaceHolder": "Place Enter SMS Code",
+  "GetSmsCode": "Get SMS Code",
+  "EmailCode": "Email Code",
+  "EmailCodePlaceHolder": "Place Enter Email Code",
+  "GetEmailCode": "Get Email Code",
   "RememberLogin": "Remember My Login",
   "LdapLogin": "LDAP Login",
   "PasswordLogin": "Password Login",
   "PhoneLogin": "Phone Login",
-  "GetSmsCode": "Get SMS Code",
   "PhoneNumberPrompt": "Please enter the correct mobile phone number",
   "Login": "Login",
   "Register": "Register",
@@ -46,6 +49,8 @@
   "Sure": "Sure",
   "User": "User",
   "RegistrationAgreement": "User Registration Agreement",
-  "RegistrationAgreementStatement": "Agree to register MASA product agreement"
+  "RegistrationAgreementStatement": "Agree to register MASA product agreement",
+  "RegisterError": "Register error,please contact administrator",
+  "NickNamePlaceHolder": "Nick Name"
 }
  

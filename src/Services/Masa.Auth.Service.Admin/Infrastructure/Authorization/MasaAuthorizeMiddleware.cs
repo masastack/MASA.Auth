@@ -51,7 +51,6 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
                 //dafault code rule
                 code = Regex.Replace(context.Request.Path, @"\\", ".");
                 code = Regex.Replace(code, "/", ".").Trim('.');
-                //todo replace MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID
                 code = $"{MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID}.{code}";
             }
 

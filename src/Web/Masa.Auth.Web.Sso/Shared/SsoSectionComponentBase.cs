@@ -3,9 +3,12 @@
 
 namespace Masa.Auth.Web.Sso.Shared;
 
-public class SsoLayoutComponentBase : LayoutComponentBase
+public class SsoSectionComponentBase : ComponentBase
 {
-    private I18n? _languageProvider;
+    I18n? _languageProvider;
+
+    [Inject]
+    public IPopupService PopupService { get; set; } = null!;
 
     [CascadingParameter]
     public I18n LanguageProvider

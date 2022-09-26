@@ -10,6 +10,11 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
     {
     }
 
+    public bool Any(Expression<Func<User, bool>> predicate)
+    {
+        return Context.Set<User>().Where(d => !d.IsDeleted).Any(predicate);
+    }
+
     public Task<User?> FindWithIncludAsync(Expression<Func<User, bool>> predicate, List<string>? includeProperties = null,
         CancellationToken cancellationToken = default)
     {

@@ -1,7 +1,7 @@
 ﻿@inherits SsoLayoutComponentBase
-@inject GlobalConfig GlobalConfig
-@implements IDisposable
+@inject I18n I18n
 
+<CascadingValue Value="I18n">
 <MApp>
     <MErrorHandler>
         @* <MMain Style="@($"background:url('{Path.Combine(NavigationManager.BaseUri,"img/login/login_bg.png")}')")"> *@
@@ -28,16 +28,5 @@
             </div>
         </MMain>
     </MErrorHandler>
-</MApp>
-
-@code {
-    protected override void OnInitialized()
-    {
-        GlobalConfig.OnLanguageChanged += base.StateHasChanged;
-    }
-
-    public void Dispose()
-    {
-        GlobalConfig.OnLanguageChanged -= base.StateHasChanged;
-    }
-}
+    </MApp>
+</CascadingValue>
