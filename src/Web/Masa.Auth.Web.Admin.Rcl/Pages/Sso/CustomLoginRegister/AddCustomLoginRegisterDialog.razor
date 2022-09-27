@@ -23,9 +23,10 @@
                         @if (ClientSelectRef?.Client?.LogoUri is not null)
                         {
                             <div class="d-flex mb-12">
-                                <MAvatar Class="mx-auto" Size=80>
+                                @*<MAvatar Class="mx-auto" Size=80>
                                     <img src="@ClientSelectRef?.Client?.LogoUri" />
-                                </MAvatar>
+                                </MAvatar>*@
+                                <UploadAvatar />
                             </div>
                         }
                         <MRow Class="mb-6">

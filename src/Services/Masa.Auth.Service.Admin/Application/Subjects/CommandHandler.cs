@@ -82,30 +82,6 @@ public class CommandHandler
         command.Result = addUserCommand.Result.Adapt<UserModel>();
     }
 
-    [EventHandler]
-    public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
-    {
-        var model = command.Model;
-        await RegisterVerifyAsync(model);
-        var addThirdPartyUserExternalCommand = new AddThirdPartyUserExternalCommand(new AddThirdPartyUserModel
-        {
-            ThridPartyIdentity = model.ThridPartyIdentity,
-            ExtendedData = model.ExtendedData,
-            ThirdPartyIdpType = model.ThirdPartyIdpType,
-            User = new AddUserModel 
-            {
-                Account = model.Account,
-                DisplayName = model.DisplayName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                Avatar = model.Avatar,
-                Password = model.Password
-            }
-        });
-        await _eventBus.PublishAsync(addThirdPartyUserExternalCommand);
-        command.Result = addThirdPartyUserExternalCommand.Result;
-    }
-
     async Task RegisterVerifyAsync(RegisterByEmailModel model)
     {
         if (model.UserRegisterType == UserRegisterTypes.Email)
@@ -892,6 +868,30 @@ public class CommandHandler
     #endregion
 
     #region ThirdPartyUser
+
+    [EventHandler]
+    public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
+    {
+        var model = command.Model;
+        await RegisterVerifyAsync(model);
+        var addThirdPartyUserExternalCommand = new AddThirdPartyUserExternalCommand(new AddThirdPartyUserModel
+        {
+            ThridPartyIdentity = model.ThridPartyIdentity,
+            ExtendedData = model.ExtendedData,
+            ThirdPartyIdpType = model.ThirdPartyIdpType,
+            User = new AddUserModel
+            {
+                Account = model.Account,
+                DisplayName = model.DisplayName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Avatar = model.Avatar,
+                Password = model.Password
+            }
+        }, true);
+        await _eventBus.PublishAsync(addThirdPartyUserExternalCommand);
+        command.Result = addThirdPartyUserExternalCommand.Result;
+    }
 
     [EventHandler(1)]
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)

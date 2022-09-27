@@ -284,4 +284,11 @@ public class UserService : ServiceBase
         var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);
     }
+
+    public async Task<bool> GetHasPasswordAsync(IEventBus eventBus,Guid userId)
+    {
+        var command = new HasPasswordQuery(userId);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
 }

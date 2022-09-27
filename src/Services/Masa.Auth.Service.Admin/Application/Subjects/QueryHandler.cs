@@ -172,9 +172,9 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task<bool> HasPasswordAsync(HasPasswordQuery query)
+    public async Task HasPasswordAsync(HasPasswordQuery query)
     {
-        return await _authDbContext.Set<User>().AnyAsync(user => user.Id == query.UserId && user.Password != null && user.Password != "");
+        query.Result = await _authDbContext.Set<User>().AnyAsync(user => user.Id == query.UserId && user.Password != null && user.Password != "");
     }
 
     #endregion
