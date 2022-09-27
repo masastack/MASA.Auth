@@ -9,14 +9,23 @@ public class RoleSelectDto
 
     public string Name { get; set; }
 
+    public string Code { get; set; }
+
     public int Limit { get; set; }
 
     public int AvailableQuantity { get; set; }
 
-    public RoleSelectDto(Guid id, string name, int limit, int availableQuantity)
+    public RoleSelectDto()
+    {
+        Name = "";
+        Code = "";
+    }
+
+    public RoleSelectDto(Guid id, string name, string code, int limit, int availableQuantity)
     {
         Id = id;
         Name = name;
+        Code = code;
         Limit = limit;
         AvailableQuantity = availableQuantity;
     }

@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <div class="d-flex" style="height:685px;">
-    <LoginRegisterTemplate Tab=@CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="ThirdPartyIdps.Where(tp => Value.Any(v => tp.Id == v.Id)).ToList()" />
+    <LoginRegisterTemplate Tab=@CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="Value.Where(value => ThirdPartyIdps.Any(item => item.Id == value.Id)).Select(value => ThirdPartyIdps.First(item => item.Id == value.Id)).ToList()" />
     <div style="border: 1px solid #E2E7F4;" class="mx-12 full-height" />
     <div class="mt-5 full-height flex-column" style="width:100%">
         <div class="overflow-y">
@@ -25,7 +25,7 @@
             <div class="mt-5">
                 @foreach (var thirdPartyIdp in Value)
                 {
-                    <MRow Class="mb-6">
+                    <MRow Class="mb-6" @key="@(thirdPartyIdp.Id!=default?thirdPartyIdp.Id:thirdPartyIdp.Sort)">
                         <MCol Cols="6">
                             <ThirdPartyIdpSelect @bind-Value="thirdPartyIdp.Id" ThirdPartyIdps="ThirdPartyIdps" Excludes="Value.Select(v => v.Id).ToList()" />
                         </MCol>
