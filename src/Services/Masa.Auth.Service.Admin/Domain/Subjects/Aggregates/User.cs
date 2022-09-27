@@ -290,13 +290,12 @@ public class User : FullAggregateRoot<Guid, Guid>
     [MemberNotNull(nameof(Password))]
     public void UpdatePassword(string? password)
     {
-        if (string.IsNullOrEmpty(password)) Password = "";
-        else Password = password;
+        Password = password;
     }
 
     public bool VerifyPassword(string password)
     {
-        return !string.IsNullOrWhiteSpace(password) && Password == MD5Utils.EncryptRepeat(password);
+        return string.IsNullOrEmpty(Password) || Password == MD5Utils.EncryptRepeat(password);
     }
 
     public void AddRoles(IEnumerable<Guid> roleIds)
