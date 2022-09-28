@@ -37,6 +37,8 @@ public class QueryHandler
         _clientCache = clientCache;
     }
 
+    #region Client
+
     [EventHandler]
     public async Task ClientPaginationListAsync(ClientPaginationListQuery clientPaginationListQuery)
     {
@@ -90,6 +92,22 @@ public class QueryHandler
     {
         query.Result = await _oidcDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
     }
+
+    [EventHandler]
+    public async Task GetClientSelectForCustomLoginAsync(ClientSelectForCustomLoginQuery query)
+    {
+        var aleadyUseClientIds = await _authDbContext.Set<CustomLogin>()
+                                                     .Where(customLogin => customLogin.Enabled)
+                                                     .Select(customLogin => customLogin.ClientId)
+                                                     .ToListAsync();
+
+        query.Result = await _oidcDbContext.Set<Client>()
+                                           .Where(client => aleadyUseClientIds.Contains(client.ClientId) == false)
+                                           .Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType))
+                                           .ToListAsync();
+    }
+
+    #endregion
 
     #region IdentityResource
 
@@ -381,6 +399,17 @@ public class QueryHandler
                                                 .Include(customLogin => customLogin.RegisterFields)
                                                 .FirstOrDefaultAsync(customLogin => customLogin.ClientId == query.ClientId);
 
+        if(customLogin is null)
+        {
+            query.Result = new CustomLoginModel()
+            {
+                ClientId = query.ClientId,
+                RegisterFields = new List<RegisterFieldModel>()
+                {
+
+                }
+            };
+        }
         if(customLogin is not null)
         {
             query.Result = new CustomLoginModel()

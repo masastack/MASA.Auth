@@ -26,12 +26,16 @@ builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = pu
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-builder.Services.AddMasaOpenIdConnect(publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>());
-
+#if DEBUG
+var redisOptions = publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>();
+redisOptions.Authority = "http://localhost:18200";
+builder.Services.AddMasaOpenIdConnect(redisOptions);
+#else
+builder.Services.AddMasaOpenIdConnect();
+#endif
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 //builder.WebHost.UseStaticWebAssets();
 
