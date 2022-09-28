@@ -24,7 +24,7 @@
         <div class="mt-5">
             @foreach (var registerField in Value)
             {
-                <MRow Class="mb-6">
+                <MRow Class="mb-6" @key="@(registerField.RegisterFieldType!=default?registerField.RegisterFieldType:registerField.Sort)">
                     <MCol Cols="6">
                         <RegisterFieldSelect @bind-Value="registerField.RegisterFieldType" Disabled="registerField.CannotUpdate" Excludes="Value.Select(v => v.RegisterFieldType).ToList()" />
                     </MCol>
@@ -39,7 +39,7 @@
                         </div>
                     </MCol>
                 </MRow>
-            }
+            }           
         </div>
     </div>
 </div>

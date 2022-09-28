@@ -9,9 +9,11 @@ public class RoleDto
 
     public string Name { get; set; }
 
+    public string Code { get; set; }
+
     public int Limit { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -26,15 +28,16 @@ public class RoleDto
     public RoleDto()
     {
         Name = "";
-        Description = "";
+        Code = "";
         Creator = "";
         Modifier = "";
     }
 
-    public RoleDto(Guid id, string name, int limit, string description, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public RoleDto(Guid id, string name, string code, int limit, string? description, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
     {
         Id = id;
         Name = name;
+        Code = code;
         Limit = limit;
         Description = description;
         Enabled = enabled;

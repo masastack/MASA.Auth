@@ -28,7 +28,6 @@ public partial class ConfigLogin
 
     public async Task Up(CustomLoginThirdPartyIdpDto thirdPartyIdp)
     {
-        thirdPartyIdp.Sort--;
         var oldIndex = Value.IndexOf(thirdPartyIdp);
         Value.Swap(oldIndex, oldIndex - 1);
         await InitSort();
@@ -36,7 +35,6 @@ public partial class ConfigLogin
 
     public async Task Down(CustomLoginThirdPartyIdpDto thirdPartyIdp)
     {
-        thirdPartyIdp.Sort++;
         var oldIndex = Value.IndexOf(thirdPartyIdp);
         Value.Swap(oldIndex, oldIndex + 1);
         await InitSort();

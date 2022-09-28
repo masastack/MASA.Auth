@@ -7,10 +7,10 @@
             <div class="subtitle2">@T("Basic Information")</div>
                 <MRow Class="mt-4">
                     <MCol>
-                        <STextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
+                        <STextField @bind-Value="ApiResource.DisplayName" Required Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <STextField Readonly Value="ApiResource.Name" Label="@T("ApiResource.Name")" />
+                        <STextField Readonly Value="ApiResource.Name" Required Label="@T("ApiResource.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mt-1">

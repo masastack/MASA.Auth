@@ -18,13 +18,12 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <SDataTable
-                Dense
-                Height="@("calc(100vh - 285px)")"
-                Headers="GetHeaders()" 
-                Items="CustomLogins" 
-                TItem="CustomLoginDto" 
-                ItemsPerPage="PageSize">
+            <SDataTable Dense
+                        Height="@("calc(100vh - 285px)")"
+                        Headers="GetHeaders()"
+                        Items="CustomLogins"
+                        TItem="CustomLoginDto"
+                        ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>
@@ -32,9 +31,11 @@
                     @switch (context.Header.Value)
                     {
                         case nameof(ClientDto.LogoUri):
-                            <MAvatar Size=48>
-                                <img src="@context.Item.Client.LogoUri" />
-                            </MAvatar>
+                            <div class="hover-pointer" @onclick="()=> OpenUpdateCustomLoginDialog(context.Item)">
+                                <MAvatar Size=48>
+                                    <img src="@context.Item.Client.LogoUri" />
+                                </MAvatar>
+                            </div>
                             break;
                         case nameof(CustomLoginDto.Name):
                             <span>@context.Item.Name</span>
