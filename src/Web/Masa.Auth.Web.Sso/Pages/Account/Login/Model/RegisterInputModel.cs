@@ -15,13 +15,14 @@ public class RegisterInputModel
 
     public int? EmailCode { get; set; }
 
-    public int? SmsCode { get; set; }
+    public int SmsCode { get; set; }
 
+    [MemberNotNullWhen(true, "Email")]
     public bool EmailRegister { get; set; }
 
     public bool Agreement { get; set; }
 
     public string DisplayName { get; set; } = string.Empty;
 
-    public string Account { get; set; } = string.Empty;
+    public string? Account { get; set; }
 }

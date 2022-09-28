@@ -74,9 +74,15 @@ public class Identity
 
     public DateTime? UpdatedAt { get; set; }
 
+    public string Issuer { get; set; } = "";
+
+    [JsonIgnore]
+    public IDictionary<string,string?> Properties { get; set; }
+
     public Identity(string subject)
     {
         Subject = subject;
+        Properties = new Dictionary<string, string?>();
     }
 
     public static Identity CreaterDefault(ClaimsPrincipal principal)

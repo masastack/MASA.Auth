@@ -19,3 +19,6 @@ global using System.Text.Encodings.Web;
 global using Microsoft.AspNetCore.WebUtilities;
 global using System.Security.Cryptography;
 global using System.Text;
+global using System.Text.Json.Serialization;
+global using Microsoft.AspNetCore.Authentication.Cookies;
+global using System.Collections.Concurrent;
