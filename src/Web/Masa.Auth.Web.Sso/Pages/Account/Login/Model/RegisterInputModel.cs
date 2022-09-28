@@ -11,7 +11,7 @@ public class RegisterInputModel
 
     public string PhoneNumber { get; set; } = string.Empty;
 
-    public string? Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     public int? EmailCode { get; set; }
 
@@ -22,7 +22,7 @@ public class RegisterInputModel
 
     public bool Agreement { get; set; }
 
-    public string? DisplayName { get; set; }
+    public string DisplayName { get; set; } = string.Empty;
 
     public string? Account { get; set; }
 }

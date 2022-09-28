@@ -35,10 +35,10 @@ public partial class RegisterSection
         {
             var httpContext = HttpContextAccessor.HttpContext!;
             Identity = await httpContext.GetExternalIdentityAsync();
-            _inputModel.DisplayName = Identity.NickName;
+            _inputModel.DisplayName = Identity.NickName ?? "";
             _inputModel.Account = Identity.Account;
             _inputModel.PhoneNumber = Identity.PhoneNumber ?? "";
-            _inputModel.Email = Identity.Email;
+            _inputModel.Email = Identity.Email ?? "";
         }
     }
 
@@ -133,7 +133,7 @@ public partial class RegisterSection
         _registerLoading = true;
         if (UserBind)
         {
-            // todo check sms code、emai code
+            // todo check sms code、email code
             await AuthClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
             {
                 ThridPartyIdentity = Identity.Subject,
