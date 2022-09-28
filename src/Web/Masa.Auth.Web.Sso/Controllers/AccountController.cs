@@ -155,15 +155,4 @@ public class AccountController : Controller
         }
         return Redirect(redirectUrl);
     }
-
-    [Authorize]
-    public async Task<IActionResult> SwitchEnvironment(string environment)
-    {
-        if (User.Identity != null && User.Identity.IsAuthenticated == true)
-        {
-            await HttpContext.SignOutAsync();
-        }
-
-        return this.LoadingPage("");
-    }
 }

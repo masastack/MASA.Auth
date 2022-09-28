@@ -3,6 +3,7 @@
 
 global using BlazorComponent;
 global using BlazorComponent.I18n;
+global using Blazored.LocalStorage;
 global using FluentValidation;
 global using IdentityModel;
 global using IdentityServer4;
@@ -23,7 +24,7 @@ global using Masa.Auth.Web.Sso.Infrastructure;
 global using Masa.Auth.Web.Sso.Infrastructure.Environment;
 global using Masa.Auth.Web.Sso.Infrastructure.Services;
 global using Masa.Auth.Web.Sso.Infrastructure.Stores;
-global using Masa.Auth.Web.Sso.Infrastructure.Validation;
+global using Masa.Auth.Web.Sso.Infrastructure.Validations;
 global using Masa.Auth.Web.Sso.Pages.Account.Login;
 global using Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 global using Masa.Auth.Web.Sso.Pages.Account.Login.RegisterSections;

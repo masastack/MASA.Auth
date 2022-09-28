@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Web.Sso.Infrastructure.Validations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.UseKestrel(option =>
@@ -22,6 +24,7 @@ builder.Services.AddMasaBlazor(builder =>
     builder.Theme.Primary = "#4318FF";
     builder.Theme.Accent = "#4318FF";
 }).AddI18nForServer("wwwroot/i18n");
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();

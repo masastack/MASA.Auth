@@ -39,14 +39,15 @@ public partial class LoginSection
             {
                 ReturnUrl = ReturnUrl,
                 UserName = LoginHint,
-                Environment = _environments.FirstOrDefault()?.Name ?? "",
+                Environment = await _localStorage.GetItemAsStringAsync(nameof(_inputModel.Environment)) ??
+                    _environments.FirstOrDefault()?.Name ?? "",
                 RememberLogin = LoginOptions.AllowRememberLogin
             };
-            var success = QueryHelpers.ParseQuery(ReturnUrl).TryGetValue("/connect/authorize/callback?client_id",out var clientId);
-            if(success)
+            var success = QueryHelpers.ParseQuery(ReturnUrl).TryGetValue("/connect/authorize/callback?client_id", out var clientId);
+            if (success)
             {
-                _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);             
-            }         
+                _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+            }
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -88,6 +89,7 @@ public partial class LoginSection
             }
             else
             {
+                await _localStorage.SetItemAsStringAsync(nameof(_inputModel.Environment), _inputModel.Environment);
                 if (SsoUrlHelper.IsLocalUrl(_inputModel.ReturnUrl))
                 {
                     Navigation.NavigateTo(_inputModel.ReturnUrl, true);
