@@ -230,7 +230,7 @@ public class QueryHandler
             Users = permission.UserPermissions.Select(up => new UserSelectDto
             {
                 Id = up.User.Id,
-                Name = up.User.Name,
+                Name = up.User.DisplayName,
                 Avatar = up.User.Avatar
             }).ToList()
         };

@@ -23,7 +23,7 @@ public partial class Loggedout
                 var environment = logout.Parameters[IsolationConsts.ENVIRONMENT];
                 if (!string.IsNullOrWhiteSpace(environment))
                 {
-                    await _localStorage.SetItemAsStringAsync(nameof(LoginInputModel.Environment), environment);
+                    await _localStorage.SetAsync(nameof(LoginInputModel.Environment), environment);
                 }
                 _viewModel = new LoggedOutViewModel
                 {
