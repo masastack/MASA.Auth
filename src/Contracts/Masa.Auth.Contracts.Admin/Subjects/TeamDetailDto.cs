@@ -23,7 +23,7 @@ public class TeamBasicInfoDto
 
     public string Description { get; set; } = string.Empty;
 
-    public int Type { get; set; } = (int)TeamTypes.Normal;
+    public int Type { get; set; } = (int)TeamTypes.Ordinary;
 
 }
 

@@ -39,15 +39,8 @@ public class Sms : IScopedDependency
             })
         });
 
-        var options = new CombinedCacheEntryOptions<string>
-        {
-            DistributedCacheEntryOptions = new()
-            {
-                // 62 ：Prevent users from failing to submit verification codes at the last second
-                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromSeconds(62)
-            }
-        };
-        await _distributedCacheClient.SetAsync(key, code, options);
+        // 62 ：Prevent users from failing to submit verification codes at the last second
+        await _distributedCacheClient.SetAsync(key, code, expiration ?? TimeSpan.FromSeconds(62));
 
         return code;
     }
@@ -56,12 +49,12 @@ public class Sms : IScopedDependency
     {
         var codeCache = await _distributedCacheClient.GetAsync<string>(key);
         if (codeCache != code) return false;
-        await _distributedCacheClient.RemoveAsync<string>(key);
+        await _distributedCacheClient.RemoveAsync(key);
         return true;
     }
 
     public async Task<bool> CheckAlreadySendAsync(string key)
     {
-        return await _distributedCacheClient.ExistsAsync<string>(key);
+        return await _distributedCacheClient.ExistsAsync(key);
     }
 }

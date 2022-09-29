@@ -95,6 +95,7 @@
   "Duplicate key": "重复键",
   "Is not a valid URI address": "不是有效的Uri地址",
   "Due to the role [{0}] limit constraint, Team [{1}] cannot add members": "由于角色[{0}]约束限制,团队[{1}]] 无法添加成员",
+  "Ordinary": "普通团队",
 
   "OrganizationBlock": {
     "Department": "部门",

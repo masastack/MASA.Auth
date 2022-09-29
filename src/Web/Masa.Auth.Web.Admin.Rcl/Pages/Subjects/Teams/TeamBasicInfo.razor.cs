@@ -12,10 +12,7 @@ public partial class TeamBasicInfo
     public EventCallback<TeamBasicInfoDto> ValueChanged { get; set; }
 
     List<string> _colors = new List<string> { "purple", "green", "red", "blue", "orange" };
-    List<TeamTypeDto> _teamTypes = new()
-    {
-        new TeamTypeDto { Id = (int)TeamTypes.Normal, Name = TeamTypes.Normal.ToString() }
-    };
+    List<TeamTypeDto> _teamTypes = new();
 
     private async Task OnNameChanged(string name)
     {
@@ -26,5 +23,21 @@ public partial class TeamBasicInfo
         }
         Value.Name = name;
         await ValueChanged.InvokeAsync(Value);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _teamTypes = new()
+            {
+                new TeamTypeDto { Id = (int)TeamTypes.Ordinary, Name = T(TeamTypes.Ordinary.ToString()) }
+            };
+            if (string.IsNullOrEmpty(Value.Avatar.Color))
+            {
+                Value.Avatar.Color = _colors.First();
+            }
+        }
+        base.OnAfterRender(firstRender);
     }
 }
