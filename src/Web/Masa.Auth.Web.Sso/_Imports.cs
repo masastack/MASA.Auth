@@ -3,7 +3,6 @@
 
 global using BlazorComponent;
 global using BlazorComponent.I18n;
-global using Blazored.LocalStorage;
 global using FluentValidation;
 global using IdentityModel;
 global using IdentityServer4;
@@ -43,6 +42,7 @@ global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Server;
+global using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
