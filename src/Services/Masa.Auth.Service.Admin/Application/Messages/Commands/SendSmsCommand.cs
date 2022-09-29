@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Application.Messages.Commands;
+
 public record SendSmsCommand(SendMsgCodeModel Model) : Command
 {
 
