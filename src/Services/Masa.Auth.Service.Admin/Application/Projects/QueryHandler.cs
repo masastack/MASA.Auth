@@ -95,7 +95,8 @@ public class QueryHandler
                         Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "Uncategorized",
                         Identity = a.Identity,
                         ProjectId = a.ProjectId,
-                        Url = a.Url
+                        Url = a.Url,
+                        Type = a.Type
                     }).ToList()
             }).ToList();
         }

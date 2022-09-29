@@ -13,6 +13,8 @@ public class AppDto
 
     public string Tag { get; set; } = string.Empty;
 
+    public AppTypes Type { get; set; }
+
     public int ProjectId { get; set; }
 
     public string Url { get; set; } = string.Empty;
