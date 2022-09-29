@@ -5,10 +5,10 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class ThirdPartyIdpCacheCommandHandler
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _memoryCacheClient;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
 
-    public ThirdPartyIdpCacheCommandHandler(IMemoryCacheClient memoryCacheClient, IThirdPartyIdpRepository thirdPartyIdpRepository)
+    public ThirdPartyIdpCacheCommandHandler(IMultilevelCacheClient memoryCacheClient, IThirdPartyIdpRepository thirdPartyIdpRepository)
     {
         _memoryCacheClient = memoryCacheClient;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;

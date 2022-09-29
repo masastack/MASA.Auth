@@ -5,10 +5,10 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class UserCacheCommandHandler
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _memoryCacheClient;
     readonly IUserRepository _userRepository;
 
-    public UserCacheCommandHandler(IMemoryCacheClient memoryCacheClient, IUserRepository userRepository)
+    public UserCacheCommandHandler(IMultilevelCacheClient memoryCacheClient, IUserRepository userRepository)
     {
         _memoryCacheClient = memoryCacheClient;
         _userRepository = userRepository;

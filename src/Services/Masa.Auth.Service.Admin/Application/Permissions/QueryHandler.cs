@@ -9,7 +9,7 @@ public class QueryHandler
     readonly IPermissionRepository _permissionRepository;
     readonly AuthDbContext _authDbContext;
     readonly UserDomainService _userDomainService;
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _memoryCacheClient;
     readonly IEventBus _eventBus;
 
     public QueryHandler(
@@ -17,7 +17,7 @@ public class QueryHandler
         IPermissionRepository permissionRepository,
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
-        IMemoryCacheClient memoryCacheClient,
+        IMultilevelCacheClient memoryCacheClient,
         IEventBus eventBus)
     {
         _roleRepository = roleRepository;

@@ -5,9 +5,9 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class RoleCacheCommandHandler
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _memoryCacheClient;
 
-    public RoleCacheCommandHandler(IMemoryCacheClient memoryCacheClient)
+    public RoleCacheCommandHandler(IMultilevelCacheClient memoryCacheClient)
     {
         _memoryCacheClient = memoryCacheClient;
     }

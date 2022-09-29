@@ -26,9 +26,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\MASA.Stack.Components\src\Masa.Stack.Components\Masa.Stack.Components.csproj" />
-		<ProjectReference Include="..\..\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj" />
-		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
+	  <ProjectReference Include="..\..\..\..\MASA.Stack.Components\src\Masa.Stack.Components\Masa.Stack.Components.csproj" />
+	  <ProjectReference Include="..\..\ApiGateways\Masa.Auth.ApiGateways.Caller\Masa.Auth.ApiGateways.Caller.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

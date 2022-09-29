@@ -13,7 +13,7 @@ public class QueryHandler
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _memoryCacheClient;
     readonly IPmClient _pmClient;
 
     public QueryHandler(
@@ -25,7 +25,7 @@ public class QueryHandler
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
-        IMemoryCacheClient memoryCacheClient,
+        IMultilevelCacheClient memoryCacheClient,
         IPmClient pmClient)
     {
         _userRepository = userRepository;
