@@ -45,21 +45,8 @@ public class EmailAgent : IScopedDependency
             })
         });
 
-        await _distributedCacheClient.SetAsync(CacheKey.EmailCodeRegisterKey(sendEmailModel.Email),
-            code, new CombinedCacheEntryOptions<string>
-            {
-                DistributedCacheEntryOptions = new()
-                {
-                    AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromMinutes(5)
-                }
-            });
-        await _distributedCacheClient.SetAsync(sendKey, true, new CombinedCacheEntryOptions<bool>
-        {
-            DistributedCacheEntryOptions = new()
-            {
-                AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromSeconds(60)
-            }
-        });
+        await _distributedCacheClient.SetAsync(CacheKey.EmailCodeRegisterKey(sendEmailModel.Email), code, expiration ?? TimeSpan.FromMinutes(5));
+        await _distributedCacheClient.SetAsync(sendKey, true, expiration ?? TimeSpan.FromSeconds(60));
     }
 
     public async Task<bool> VerifyCodeAsync(string key, string code)
@@ -68,13 +55,13 @@ public class EmailAgent : IScopedDependency
         var result = codeCache != code;
         if (result)
         {
-            await _distributedCacheClient.RemoveAsync<string>(key);
+            await _distributedCacheClient.RemoveAsync(key);
         }
         return result;
     }
 
     async Task<bool> CheckAlreadySendAsync(string key)
     {
-        return await _distributedCacheClient.ExistsAsync<string>(key);
+        return await _distributedCacheClient.ExistsAsync(key);
     }
 }

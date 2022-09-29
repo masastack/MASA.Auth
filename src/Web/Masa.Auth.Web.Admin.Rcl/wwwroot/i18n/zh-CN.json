@@ -95,6 +95,7 @@
   "Duplicate key": "重复键",
   "Is not a valid URI address": "不是有效的Uri地址",
   "Due to the role [{0}] limit constraint, Team [{1}] cannot add members": "由于角色[{0}]约束限制,团队[{1}]] 无法添加成员",
+  "Ordinary": "普通团队",
 
   "OrganizationBlock": {
     "Department": "部门",
@@ -227,7 +228,7 @@
     "Add User": "添加用户",
     "Update User": "编辑用户",
     "UserState": "用户状态",
-    "Name": "姓名",
+    "Name": "真实姓名",
     "Avatr": "头像",
     "User.DisplayName": "用户昵称",
     "Position": "职位",
@@ -256,8 +257,8 @@
     "Update Staff": "编辑员工",
     "JobNumber": "工号",
     "StaffType": "员工类型",
-    "InternalStaff": "内部员工",
-    "ExternalStaff": "驻场员工",
+    "Internal": "内部员工",
+    "External": "驻场员工",
     "Sync": "同步",
     "Staff Sync": "员工同步",
     "StaffSyncTemplate.csv": "员工同步模板",
@@ -295,6 +296,7 @@
 
   "RoleBlock": {
     "Name": "角色名称",
+    "Code": "Code",
     "Add Role": "新增角色",
     "Update Role": "编辑角色",
     "Inherited Role": "继承角色",

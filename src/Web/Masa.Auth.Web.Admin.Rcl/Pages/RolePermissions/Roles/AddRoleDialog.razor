@@ -5,22 +5,23 @@
         <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
-                    <AutoHeight AutoClass="d-flex">
+                    <AutoHeight Overflow AutoClass="d-flex">
                         <AutoHeightContent>
                             <div style="width:100%;">
                                 <div class="d-flex mb-12">
                                     <div class="mx-auto">
-                                        <PlaceholderTextFiled @bind-Value="Role.Name" Placeholder="@T("Name")" />
+                                        <PlaceholderTextFiled Value="@Role.Name" ValueChanged="NameChanged" Placeholder="@T("Name")" />
                                     </div>
                                 </div>
                                 <div>
+                                    <STextField @bind-Value="Role.Code" Class="mb-6" Label="@T("Code")" />
                                     <STextField @bind-Value="Role.Limit" Class="mb-6" Label="@T("Limit the number of bindings")" />                                   
-                                    <MTextarea @bind-Value="Role.Description" Outlined Class="mb-6" Label="@T("Description")" />
+                                    <STextarea @bind-Value="Role.Description" Outlined Class="mb-6" Label="@T("Description")" />
                                 </div>
                             </div>
                         </AutoHeightContent>
                         <FooterContent>
-                            <div class="d-flex">
+                            <div class="d-flex mt-6">
                                 <MSpacer></MSpacer>
                                 <SButton Medium OnClick="() => NextStep(context)">@T("Next step")</SButton>
                             </div>
@@ -28,7 +29,7 @@
                     </AutoHeight>
                 </MStepperContent>
                 <MStepperContent Step="2">
-                    <AutoHeight>
+                    <AutoHeight Overflow>
                         <HeaderContent>
                             <div class="mb-6">
                                 <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" />

@@ -14,7 +14,7 @@ public class ConsentResponseStore : IConsentMessageStore
 
     public async Task DeleteAsync(string id)
     {
-        await _distributedCacheClient.RemoveAsync<Message<ConsentResponse>>(CacheKey.GetConsentResponseKey(id));
+        await _distributedCacheClient.RemoveAsync(CacheKey.GetConsentResponseKey(id));
     }
 
     public async Task<Message<ConsentResponse>?> ReadAsync(string id)

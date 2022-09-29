@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SAutoComplete Value="Value"
+<SSelect Value="Value"
                ValueChanged="ValueChanged"
                Items="RegisterFields.Where(e => e==Value || Excludes.Contains(e) is false).ToList()"
                ItemText="e => T(e==default?string.Empty:e.ToString())"
@@ -11,4 +11,4 @@
     <ItemContent Context="data">
         <span class="body2 emphasis2--text ml-2">@T(data.Item.ToString())</span> 
     </ItemContent>
-</SAutoComplete>
+</SSelect>
