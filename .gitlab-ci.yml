@@ -2,7 +2,6 @@
 #   - project: 'louzhijian/devops'
 #     ref: master
 #     file: 'devops/sonar-scanner.yml'
-
 stages:
 #   - sonarqube
   - docker-dev
