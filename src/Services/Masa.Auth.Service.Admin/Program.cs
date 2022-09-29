@@ -133,7 +133,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {

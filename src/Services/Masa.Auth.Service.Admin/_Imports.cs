@@ -108,6 +108,7 @@ global using Masa.Contrib.Dispatcher.IntegrationEvents.Dapr;
 global using Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore;
 global using Masa.Contrib.Isolation.MultiEnvironment;
 global using Masa.Contrib.Isolation.UoW.EFCore;
+global using Masa.Contrib.Service.MinimalAPIs;
 global using Masa.Contrib.StackSdks.Tsc;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
 global using Masa.Utils.Ldap.Novell;
