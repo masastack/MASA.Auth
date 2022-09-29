@@ -5,11 +5,11 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class PermissionCacheCommandHandler
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
 
-    public PermissionCacheCommandHandler(IMemoryCacheClient memoryCacheClient)
+    public PermissionCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient)
     {
-        _memoryCacheClient = memoryCacheClient;
+        _multilevelCacheClient = multilevelCacheClient;
     }
 
     [EventHandler(99)]
@@ -18,20 +18,20 @@ public class PermissionCacheCommandHandler
         var cachePermission = addPermissionCommand.PermissionDetail.Adapt<CachePermission>();
         cachePermission.ApiPermissions = addPermissionCommand.ApiPermissions;
         cachePermission.ParentId = addPermissionCommand.ParentId;
-        await _memoryCacheClient.SetAsync(CacheKey.PermissionKey(addPermissionCommand.PermissionDetail.Id), cachePermission);
+        await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(addPermissionCommand.PermissionDetail.Id), cachePermission);
     }
 
     [EventHandler(99)]
     public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CachePermission>(CacheKey.PermissionKey(removePermissionCommand.PermissionId));
+        await _multilevelCacheClient.RemoveAsync<CachePermission>(CacheKey.PermissionKey(removePermissionCommand.PermissionId));
     }
 
     [EventHandler]
     public async Task CollectMenuAsync(FavoriteMenuCommand favoriteMenuCommand)
     {
         var key = CacheKey.UserMenuCollectKey(favoriteMenuCommand.UserId);
-        var menus = (await _memoryCacheClient.GetAsync<HashSet<Guid>>(key)) ?? new HashSet<Guid>();
+        var menus = (await _multilevelCacheClient.GetAsync<HashSet<Guid>>(key)) ?? new HashSet<Guid>();
         if (favoriteMenuCommand.IsFavorite)
         {
             menus.Add(favoriteMenuCommand.PermissionId);
@@ -40,6 +40,6 @@ public class PermissionCacheCommandHandler
         {
             menus.Remove(favoriteMenuCommand.PermissionId);
         }
-        await _memoryCacheClient.SetAsync(key, menus);
+        await _multilevelCacheClient.SetAsync(key, menus);
     }
 }

@@ -11,7 +11,7 @@ public class AddTeamDto
 
     public string Description { get; set; } = string.Empty;
 
-    public TeamTypes Type { get; set; } = TeamTypes.Normal;
+    public TeamTypes Type { get; set; } = TeamTypes.Ordinary;
 
     public List<Guid> AdminStaffs { get; set; } = new();
 

@@ -177,7 +177,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        if (user.VerifyPassword(userModel.OldPassword) is false)
+        if (!user.VerifyPassword(userModel.OldPassword ?? ""))
         {
             throw new UserFriendlyException("password verification failed");
         }
@@ -269,14 +269,7 @@ public class CommandHandler
         if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
         {
             var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            var options = new CombinedCacheEntryOptions<bool>
-            {
-                DistributedCacheEntryOptions = new()
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60 * 10)
-                }
-            };
-            await _cache.SetAsync(resultKey, true, options);
+            await _cache.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
             command.Result = true;
         }
     }
@@ -301,7 +294,7 @@ public class CommandHandler
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
-                await _cache.RemoveAsync<bool>(resultKey);
+                await _cache.RemoveAsync(resultKey);
                 command.Result = true;
             }
         }
@@ -416,20 +409,13 @@ public class CommandHandler
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
-                var options = new CombinedCacheEntryOptions<CacheLogin>
-                {
-                    DistributedCacheEntryOptions = new()
-                    {
-                        AbsoluteExpiration = loginCache.FreezeTime
-                    }
-                };
-                await _cache.SetAsync(key, loginCache, options);
+                await _cache.SetAsync(key, loginCache, loginCache.FreezeTime);
                 throw new UserFriendlyException("账号或密码错误");
             }
 
             if (loginCache is not null)
             {
-                await _cache.RemoveAsync<CacheLogin>(key);
+                await _cache.RemoveAsync(key);
             }
             validateByAccountCommand.Result = success;
         }

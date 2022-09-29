@@ -77,7 +77,7 @@ public class Identity
     public string Issuer { get; set; } = "";
 
     [JsonIgnore]
-    public IDictionary<string,string?> Properties { get; set; }
+    public IDictionary<string, string?> Properties { get; set; }
 
     public Identity(string subject)
     {

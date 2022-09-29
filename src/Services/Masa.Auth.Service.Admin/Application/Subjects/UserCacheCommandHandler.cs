@@ -5,19 +5,21 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class UserCacheCommandHandler
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
+    private readonly IDistributedCacheClient _distributedCacheClient;
     readonly IUserRepository _userRepository;
 
-    public UserCacheCommandHandler(IMemoryCacheClient memoryCacheClient, IUserRepository userRepository)
+    public UserCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient, IDistributedCacheClient distributedCacheClient, IUserRepository userRepository)
     {
-        _memoryCacheClient = memoryCacheClient;
+        _multilevelCacheClient = multilevelCacheClient;
+        _distributedCacheClient = distributedCacheClient;
         _userRepository = userRepository;
     }
 
     async Task SetUserListCacheAsync(IEnumerable<User> users)
     {
         var map = users.ToDictionary(u => CacheKey.UserKey(u.Id), u => u.Adapt<CacheUser>());
-        await _memoryCacheClient.SetListAsync(map);
+        await _multilevelCacheClient.SetListAsync(map);
     }
 
     async Task SetUserCacheAsync(Guid userId)
@@ -25,13 +27,13 @@ public class UserCacheCommandHandler
         var user = await _userRepository.GetDetailAsync(userId);
         if (user is not null)
         {
-            await _memoryCacheClient.SetAsync(CacheKey.UserKey(userId), user.Adapt<CacheUser>());
+            await _multilevelCacheClient.SetAsync(CacheKey.UserKey(userId), user.Adapt<CacheUser>());
         }
     }
 
     async Task RemoveUserCahceAsync(Guid userId)
     {
-        await _memoryCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(userId));
+        await _multilevelCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(userId));
     }
 
     [EventHandler(99)]
@@ -84,10 +86,14 @@ public class UserCacheCommandHandler
         var dto = userVisitedCommand.AddUserVisitedDto;
         //todo zset
         var key = CacheKey.UserVisitKey(dto.UserId);
-        var visited = await _memoryCacheClient.GetOrSetAsync<List<CacheUserVisited>>(key, () =>
+        var visited = await _multilevelCacheClient.GetOrSetAsync(key, new CombinedCacheEntry<List<CacheUserVisited>>
         {
-            return new List<CacheUserVisited>();
+            DistributedCacheEntryFunc = () =>
+            {
+                return new CacheEntry<List<CacheUserVisited>>(new List<CacheUserVisited>());
+            }
         });
+        visited ??= new List<CacheUserVisited>();
         var item = new CacheUserVisited
         {
             AppId = dto.AppId,
@@ -99,14 +105,14 @@ public class UserCacheCommandHandler
         {
             visited = visited.GetRange(0, 10);
         }
-        await _memoryCacheClient.SetAsync(key, visited);
+        await _multilevelCacheClient.SetAsync(key, visited);
     }
 
     [EventHandler(99)]
     public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand saveUserSystemBusinessDataCommand)
     {
         var userSystemData = saveUserSystemBusinessDataCommand.UserSystemData;
-        await _memoryCacheClient.SetAsync(
+        await _multilevelCacheClient.SetAsync(
             CacheKey.UserSystemDataKey(userSystemData.UserId, userSystemData.SystemId),
             userSystemData.Data);
     }
