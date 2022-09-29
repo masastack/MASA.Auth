@@ -26,6 +26,7 @@ builder.Services.AddMasaBlazor(builder =>
         theme.Themes.Light.Accent = "#4318FF";
     });
 }).AddI18nForServer("wwwroot/i18n");
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();

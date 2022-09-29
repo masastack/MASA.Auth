@@ -6,6 +6,7 @@
 @inject IConfiguration _configuration
 @inject IDistributedCacheClient _distributedCacheClient
 @inject IAuthenticationSchemeProvider _schemeProvider
+@inject ILocalStorageService _localStorage
 @implements IDisposable
 
 <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-12 mx-12 text-center">
