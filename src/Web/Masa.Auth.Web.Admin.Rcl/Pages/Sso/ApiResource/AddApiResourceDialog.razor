@@ -7,10 +7,10 @@
                 <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="ApiResource.DisplayName" Label="@T("DisplayName")" />
+                        <STextField @bind-Value="ApiResource.DisplayName" Required Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <STextField @bind-Value="ApiResource.Name" Label="@T("ApiResource.Name")" />
+                        <STextField @bind-Value="ApiResource.Name" Required Label="@T("ApiResource.Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">

@@ -7,7 +7,7 @@ public class ThirdPartyUserService : RestServiceBase
 {
     public ThirdPartyUserService() : base("api/thirdPartyUser")
     {
-
+        MapGet(GetAsync, "");
     }
 
     private async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(IEventBus eventBus, GetThirdPartyUsersDto tpu)
@@ -24,6 +24,13 @@ public class ThirdPartyUserService : RestServiceBase
         return query.Result;
     }
 
+    private async Task<UserModel?> GetAsync(IEventBus eventBus, [FromQuery]string thridPartyIdentity )
+    {
+        var query = new ThirdPartyUserQuery(thridPartyIdentity);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     private async Task<UserModel> UpsertThirdPartyUserExternalAsync(IEventBus eventBus, UpsertThirdPartyUserModel model)
     {
         var query = new UpsertThirdPartyUserExternalCommand(model);
@@ -34,9 +41,10 @@ public class ThirdPartyUserService : RestServiceBase
     [AllowAnonymous]
     private async Task<UserModel> AddThirdPartyUserAsync(
         IEventBus eventBus,
+        [FromQuery] bool whenExistReturn,
         AddThirdPartyUserModel model)
     {
-        var query = new AddThirdPartyUserExternalCommand(model);
+        var query = new AddThirdPartyUserExternalCommand(model, whenExistReturn);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

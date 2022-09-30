@@ -19,7 +19,9 @@ public static class IdentityProvider
 
     public static Identity GetIdentity(string scheme, ClaimsPrincipal principal)
     {
-        var builder = identityBuilders.First(builder => builder.Scheme == scheme);
-        return builder.BuildIdentity(principal);
+        var builder = identityBuilders.FirstOrDefault(builder => builder.Scheme == scheme) ?? throw new UserFriendlyException("Get user info failed");
+        var identity = builder.BuildIdentity(principal);
+        identity.Issuer = scheme;
+        return identity;
     }
 }

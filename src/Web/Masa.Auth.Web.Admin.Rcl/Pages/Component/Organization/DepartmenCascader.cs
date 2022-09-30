@@ -19,6 +19,7 @@ public class DepartmenCascader : SCascader<DepartmentDto, Guid>
         ItemChildren = value => value.Children;
         ChangeOnSelect = true;
         Class ??= "";
+        Clearable = true;
         await base.SetParametersAsync(parameters);
     }
 

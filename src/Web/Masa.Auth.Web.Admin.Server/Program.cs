@@ -16,7 +16,7 @@ builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/
 #else
 builder.AddMasaStackComponentsForServer();
 #endif
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 #if DEBUG
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = "http://localhost:18002/");
 #else

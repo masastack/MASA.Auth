@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SAutoComplete Value="Value"
+<SSelect Value="Value"
                ValueChanged="ValueChanged"
                Items="ThirdPartyIdps!.Where(e => e.Id==Value || Excludes.Contains(e.Id) is false).ToList()"
                Label="@T(Label)"
@@ -18,4 +18,4 @@
             </div>                      
         </div>
     </ItemContent>
-</SAutoComplete>
+</SSelect>
