@@ -38,13 +38,7 @@ public class ClientUserSession : DefaultUserSession
         if (!clientIds.Contains(clientId))
         {
             clientIds.Add(clientId);
-            await _distributedCacheClient.SetAsync(await GetSessionIdAsync(), clientIds, new CombinedCacheEntryOptions<List<string>>
-            {
-                DistributedCacheEntryOptions = new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpiration = Properties.ExpiresUtc
-                }
-            });
+            await _distributedCacheClient.SetAsync(await GetSessionIdAsync(), clientIds, Properties.ExpiresUtc ?? DateTimeOffset.Now.AddDays(30));
             await base.AddClientIdAsync(clientId);
         }
     }
@@ -54,7 +48,7 @@ public class ClientUserSession : DefaultUserSession
         var sessionId = await GetSessionIdAsync();
         if (sessionId != null)
         {
-            await _distributedCacheClient.RemoveAsync<List<string>>(sessionId);
+            await _distributedCacheClient.RemoveAsync(sessionId);
         }
         await base.RemoveSessionIdCookieAsync();
     }

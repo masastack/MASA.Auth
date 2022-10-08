@@ -16,6 +16,7 @@ global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.Enums;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
+global using Masa.BuildingBlocks.StackSdks.Pm.Enum;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;

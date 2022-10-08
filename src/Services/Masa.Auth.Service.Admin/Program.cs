@@ -67,7 +67,8 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
-builder.Services.AddMasaRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>());
+builder.Services.AddStackExchangeRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>())
+    .AddMultilevelCache();
 
 await builder.Services
             .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
@@ -132,7 +133,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {

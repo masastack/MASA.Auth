@@ -19,8 +19,12 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>
 {
-    builder.Theme.Primary = "#4318FF";
-    builder.Theme.Accent = "#4318FF";
+    builder.ConfigureTheme(theme =>
+    {
+        theme.Dark = true;
+        theme.Themes.Light.Primary = "#4318FF";
+        theme.Themes.Light.Accent = "#4318FF";
+    });
 }).AddI18nForServer("wwwroot/i18n");
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
@@ -41,7 +45,7 @@ builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSe
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMasaRedisCache(redisOption);
+builder.Services.AddStackExchangeRedisCache(redisOption);
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {

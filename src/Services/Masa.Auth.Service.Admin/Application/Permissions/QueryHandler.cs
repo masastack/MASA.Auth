@@ -9,7 +9,7 @@ public class QueryHandler
     readonly IPermissionRepository _permissionRepository;
     readonly AuthDbContext _authDbContext;
     readonly UserDomainService _userDomainService;
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IEventBus _eventBus;
 
     public QueryHandler(
@@ -17,14 +17,14 @@ public class QueryHandler
         IPermissionRepository permissionRepository,
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
-        IMemoryCacheClient memoryCacheClient,
+        IMultilevelCacheClient multilevelCacheClient,
         IEventBus eventBus)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
-        _memoryCacheClient = memoryCacheClient;
+        _multilevelCacheClient = multilevelCacheClient;
         _eventBus = eventBus;
     }
 
@@ -134,7 +134,7 @@ public class QueryHandler
     {
         var roleSelect = await _authDbContext.Set<Role>()
                                          .Where(r => r.Enabled == true && r.Name.Contains(query.Name))
-                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Code,r.Limit, r.AvailableQuantity))
+                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Code, r.Limit, r.AvailableQuantity))
                                          .ToListAsync();
         query.Result = roleSelect;
     }
@@ -143,7 +143,7 @@ public class QueryHandler
     {
         var roleSelect = await _authDbContext.Set<Role>()
                                         .Where(r => r.Enabled == true)
-                                        .Select(r => new RoleSelectDto(r.Id, r.Name,r.Code, r.Limit, r.AvailableQuantity))
+                                        .Select(r => new RoleSelectDto(r.Id, r.Name, r.Code, r.Limit, r.AvailableQuantity))
                                         .ToListAsync();
         return roleSelect;
     }
@@ -230,7 +230,7 @@ public class QueryHandler
             Users = permission.UserPermissions.Select(up => new UserSelectDto
             {
                 Id = up.User.Id,
-                Name = up.User.Name,
+                Name = up.User.DisplayName,
                 Avatar = up.User.Avatar
             }).ToList()
         };
@@ -415,22 +415,18 @@ public class QueryHandler
         var appId = userElementPermissionCodeQuery.AppId;
         var cacheKey = CacheKey.UserElementPermissionCodeKey(userId, appId);
 
-        userElementPermissionCodeQuery.Result = (await _memoryCacheClient.GetOrSetAsync<List<string>>(cacheKey, () =>
+        userElementPermissionCodeQuery.Result = (await _multilevelCacheClient.GetOrSetAsync(cacheKey, new CombinedCacheEntry<List<string>>
         {
-            var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
-            return _permissionRepository.GetPermissionCodes(p => p.AppId == appId
-                                && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled);
-
-        }, new CombinedCacheEntryOptions<List<string>>
-        {
-            DistributedCacheEntryOptions = new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
+            DistributedCacheEntryFunc = () =>
             {
-                SlidingExpiration = TimeSpan.FromSeconds(5)
+                var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
+                return new CacheEntry<List<string>>(_permissionRepository.GetPermissionCodes(p => p.AppId == appId
+                                    && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled))
+                {
+                    SlidingExpiration = TimeSpan.FromSeconds(5)
+                };
             },
-            MemoryCacheEntryOptions = new Microsoft.Extensions.Caching.Memory.MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
-            }
+            MemoryCacheEntryOptions = new CacheEntryOptions(TimeSpan.FromSeconds(5))
         }))!;
 
         //temporary allow all api route
@@ -442,7 +438,7 @@ public class QueryHandler
     [EventHandler]
     public async Task CollectMenuListQueryAsync(FavoriteMenuListQuery favoriteMenuListQuery)
     {
-        var permissionIds = await _memoryCacheClient.GetAsync<HashSet<Guid>>(CacheKey.UserMenuCollectKey(favoriteMenuListQuery.UserId));
+        var permissionIds = await _multilevelCacheClient.GetAsync<HashSet<Guid>>(CacheKey.UserMenuCollectKey(favoriteMenuListQuery.UserId));
         if (permissionIds == null)
         {
             return;

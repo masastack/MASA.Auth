@@ -13,7 +13,7 @@ public class QueryHandler
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IPmClient _pmClient;
 
     public QueryHandler(
@@ -25,7 +25,7 @@ public class QueryHandler
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
-        IMemoryCacheClient memoryCacheClient,
+        IMultilevelCacheClient multilevelCacheClient,
         IPmClient pmClient)
     {
         _userRepository = userRepository;
@@ -36,7 +36,7 @@ public class QueryHandler
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
-        _memoryCacheClient = memoryCacheClient;
+        _multilevelCacheClient = multilevelCacheClient;
         _pmClient = pmClient;
     }
 
@@ -79,8 +79,8 @@ public class QueryHandler
         if (user is null) throw new UserFriendlyException("This user data does not exist");
         var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
         var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
-
-        query.Result = user;
+        var userDetail = await UserSplicingDataAsync(user);
+        query.Result = userDetail!;
         query.Result.Creator = creator ?? "";
         query.Result.Modifier = modifier ?? "";
     }
@@ -88,10 +88,10 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-       var user = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .ThenInclude(ur => ur.Role)
-                                           .FirstOrDefaultAsync(user => user.Account == query.Account);
+        var user = await _authDbContext.Set<User>()
+                                            .Include(u => u.Roles)
+                                            .ThenInclude(ur => ur.Role)
+                                            .FirstOrDefaultAsync(user => user.Account == query.Account);
         query.Result = await UserSplicingDataAsync(user);
     }
 
@@ -100,6 +100,13 @@ public class QueryHandler
     {
         var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account));
         query.Result = users.Adapt<List<UserSimpleModel>>();
+    }
+
+    [EventHandler]
+    public async Task GetUserByPhoneAsync(UserByPhoneQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        query.Result = user?.Adapt<UserSimpleModel>();
     }
 
     [EventHandler]
@@ -156,7 +163,7 @@ public class QueryHandler
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
-            var userCache = await _memoryCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(userId));
+            var userCache = await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(userId));
             if (userCache != null)
             {
                 userPortraitsQuery.Result.Add(new UserPortraitModel
@@ -387,6 +394,15 @@ public class QueryHandler
         query.Result = tpu;
     }
 
+    [EventHandler]
+    public async Task GetThirdPartyUserAsync(ThirdPartyUserQuery query)
+    {
+        var tpUser = await _authDbContext.Set<ThirdPartyUser>()
+                                         .Include(tpu => tpu.User)
+                                         .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
+        query.Result = tpUser?.User?.Adapt<UserModel>();
+    }
+
     #endregion
 
     #region ThirdPartyIdp
@@ -415,7 +431,7 @@ public class QueryHandler
 
     [EventHandler]
     public async Task GetAllThirdPartyIdpAsync(AllThirdPartyIdpQuery query)
-    {       
+    {
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
         query.Result = thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>();
     }
@@ -506,7 +522,7 @@ public class QueryHandler
             
         foreach (var team in teams.ToList())
         {
-            var modifierName = _memoryCacheClient.Get<CacheUser>(CacheKey.UserKey(team.Modifier))?.DisplayName ?? "";
+            var modifierName = _multilevelCacheClient.Get<CacheUser>(CacheKey.UserKey(team.Modifier))?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 
@@ -637,7 +653,7 @@ public class QueryHandler
     public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
     {
         var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
-        var visited = await _memoryCacheClient.GetAsync<List<CacheUserVisited>>(key);
+        var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
             var apps = await _pmClient.AppService.GetListAsync();
@@ -669,7 +685,7 @@ public class QueryHandler
     [EventHandler]
     public async Task UserSystemBizDataQueryAsync(UserSystemBusinessDataQuery userSystemBusinessData)
     {
-        userSystemBusinessData.Result = await _memoryCacheClient.GetAsync<string>(
+        userSystemBusinessData.Result = await _multilevelCacheClient.GetAsync<string>(
             CacheKey.UserSystemDataKey(userSystemBusinessData.UserId, userSystemBusinessData.SystemId)) ?? "";
     }
 }
