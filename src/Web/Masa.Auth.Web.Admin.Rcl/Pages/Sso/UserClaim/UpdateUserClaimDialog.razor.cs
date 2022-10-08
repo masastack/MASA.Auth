@@ -49,7 +49,7 @@ public partial class UpdateUserClaimDialog
         UserClaim = UserClaimDetail;
     }
 
-    public async Task UpdatetUserClaimAsync(EditContext context)
+    public async Task UpdatetUserClaimAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

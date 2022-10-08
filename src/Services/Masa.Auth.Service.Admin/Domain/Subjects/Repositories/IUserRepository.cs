@@ -10,4 +10,6 @@ public interface IUserRepository : IRepository<User>
     Task<User?> FindWithIncludAsync(Expression<Func<User, bool>> predicate, List<string>? includeProperties = null, CancellationToken cancellationToken = default(CancellationToken));
 
     Task<List<User>> GetAllAsync();
+
+    bool Any(Expression<Func<User, bool>> predicate);
 }

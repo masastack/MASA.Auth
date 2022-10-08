@@ -12,30 +12,31 @@
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <MWindow Value="Tab.ToString()" Class="full-height">
+                <MWindow Value="Tab.ToString()" Class="pb-1">
                     <MWindowItem Value="UpdateRoleTabs.BasicInformation.ToString()">
                         <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
-                        <STextField @bind-Value="Role.Name" Class="mb-6" Label="@T("Name")" />
+                        <STextField TValue="string" Value="Role.Name" ValueChanged="NameChanged" Class="mb-6" Label="@T("Name")" />
+                        <STextField @bind-Value="Role.Code" Class="mb-6" Label="@T("Code")" />
                         <STextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Class="mb-6" Label="@T("Limit the number of bindings")" />
-                        <RoleSelect Value="RoleDetail.ParentRoles" Class="mb-12" Readonly Label="@T("Superior Role")" />
-                        <RoleOwner RoleId=RoleId Class="mb-12" />
-                        <STextField @bind-Value="Role.Description" Class="mb-12" Label="@T("Description")" />
+                        <RoleSelect Value="RoleDetail.ParentRoles" Class="mb-6" Readonly Label="@T("Superior Role")" />
+                        <RoleOwner RoleId=RoleId Class="mb-6" />
+                        <STextarea @bind-Value="Role.Description" Outlined Class="mb-6" Label="@T("Description")" />
                         <Record Creator="@RoleDetail.Creator" CreationTime="@RoleDetail.CreationTime" Modifier="@RoleDetail.Modifier" ModificationTime="@RoleDetail.ModificationTime" />                      
                     </MWindowItem>
                     <MWindowItem Value="UpdateRoleTabs.Permission.ToString()">
                         <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mb-6 mt-1" />
-                        <div class="global-nav" style="display: flex;height: auto">
+                        <div class="global-nav" style="display: flex;max-height: calc(100vh - 370px);">
                             <PermissionExtensionConfigure 
                                 Roles=Role.ChildrenRoles 
                                 @bind-ExtensionValue=Role.Permissions
                                 @bind-Preview=Preview
-                                Style="max-height:calc(100vh - 345px);" />
+                                Style="max-height:calc(100vh - 365px);" />
                         </div>
                     </MWindowItem>
                 </MWindow>
             </AutoHeightContent>
             <FooterContent>
-                <div class="d-flex mt-6">
+                <div class="d-flex mt-6" style="height:40px;">
                     <EnableSwitch @bind-Value="Role.Enabled" />
                     <MSpacer></MSpacer>
                     <SButton Medium Outlined Class="mr-6" OnClick="() => Preview = true">@T("Preview")</SButton>

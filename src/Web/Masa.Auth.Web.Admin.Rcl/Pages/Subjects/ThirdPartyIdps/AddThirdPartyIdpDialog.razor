@@ -4,13 +4,10 @@
     <MForm Model=ThirdPartyIdp EnableValidation EnableI18n>
         <AutoHeight Overflow>
             <HeaderContent>
-                <div class="d-flex">
-                    <div class="mx-auto text-center" style="width:212px;">
-                        <UploadAvatar @bind-Value="ThirdPartyIdp.Icon" Avatar Size="80" WhenFileChangeUpload />
-                    </div>
-                </div>
+                <ExternalThirdPartySelect Value="@ThirdPartyIdp.ThirdPartyIdpType.ToString()" ValueChanged="ThirdPartyIdpValueChanged" />           
             </HeaderContent>
             <AutoHeightContent>
+                <DefaultTitle Class="mb-6">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6 mt-12">
                     <MCol>
                         <STextField @bind-Value="ThirdPartyIdp.Name" Required Label="@T("Name")" />
@@ -29,27 +26,29 @@
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <SUrlTextField @bind-Value="ThirdPartyIdp.Url" Label="@T("URL")" />                      
+                        <STextField @bind-Value="ThirdPartyIdp.CallbackPath" Label="@T("CallbackPath")" />                      
                     </MCol>
                     <MCol>
-                        <EnumSelect @bind-Value="ThirdPartyIdp.VerifyType" TValue="AuthenticationTypes" Label="@T(nameof(AuthenticationTypes))" />
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.AuthorizationEndpoint" Label="@T("AuthorizationEndpoint")" />                 
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <div class="d-flex defaultRadio">
-                            <div class="body regular--text my-auto">@T("Unique identification of third-party platforms")</div>
-                            <MRadioGroup @bind-Value="@ThirdPartyIdp.IdentificationType" Class="my-auto ml-6" Row>
-                                <MRadio Label="@T("PhoneNumber")"
-                                        Color="green"
-                                        Value="IdentificationTypes.PhoneNumber">
-                                </MRadio>
-                                <MRadio Label="@T("Email")"
-                                        Color="green"
-                                        Value="IdentificationTypes.Email">
-                                </MRadio>
-                            </MRadioGroup>
-                        </div>
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.TokenEndpoint" Label="@T("TokenEndpoint")" /> 
+                    </MCol>
+                     <MCol>
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Label="@T("UserInformationEndpoint")" />                       
+                    </MCol>
+                </MRow>
+                <DefaultTitle Class="mb-6">@T("Advanced configuration")</DefaultTitle>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <MapJsonKey @bind-Value="AdvancedConfig" />
+                    </MCol>
+                </MRow>
+                <MRow Class="mb-6">
+                    <MCol>
+                        <MCheckbox @bind-Value="ThirdPartyIdp.MapAll" Label="@T("Map all json key")" />
                     </MCol>
                 </MRow>
             </AutoHeightContent>

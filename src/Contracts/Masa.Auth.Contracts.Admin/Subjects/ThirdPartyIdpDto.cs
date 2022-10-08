@@ -15,17 +15,21 @@ public class ThirdPartyIdpDto
 
     public string ClientSecret { get; set; } = "";
 
-    public string Url { get; set; } = "";
+    public string CallbackPath { get; set; } = "";
+
+    public string AuthorizationEndpoint { get; set; } = "";
+
+    public string TokenEndpoint { get; set; } = "";
+
+    public string UserInformationEndpoint { get; set; } = "";
 
     public string Icon { get; set; } = "";
 
-    public string VerifyFile { get; set; } = "";
-
     public bool Enabled { get; set; }
 
-    public AuthenticationTypes VerifyType { get; set; }
+    public AuthenticationTypes AuthenticationType { get; set; }
 
-    public IdentificationTypes IdentificationType { get; set; }
+    public ThirdPartyIdpTypes ThirdPartyIdpType { get; set; }
 
     public DateTime CreationTime { get; set; }
 
@@ -36,19 +40,21 @@ public class ThirdPartyIdpDto
 
     }
 
-    public ThirdPartyIdpDto(Guid id, string name, string displayName, string clientId, string clientSecret, string url, string icon, string verifyFile, bool enabled, AuthenticationTypes verifyType, IdentificationTypes identificationType, DateTime creationTime, DateTime? modificationTime)
+    public ThirdPartyIdpDto(Guid id, string name, string displayName, string clientId, string clientSecret, string callbackPath, string authorizationEndpoint, string tokenEndpoint, string userInformationEndpoint, string icon, bool enabled, AuthenticationTypes authenticationType, ThirdPartyIdpTypes thirdPartyIdpType, DateTime creationTime, DateTime? modificationTime)
     {
         Id = id;
         Name = name;
         DisplayName = displayName;
         ClientId = clientId;
         ClientSecret = clientSecret;
-        Url = url;
+        CallbackPath = callbackPath;
+        AuthorizationEndpoint = authorizationEndpoint;
+        TokenEndpoint = tokenEndpoint;
+        UserInformationEndpoint = userInformationEndpoint;
         Icon = icon;
-        VerifyFile = verifyFile;
         Enabled = enabled;
-        VerifyType = verifyType;
-        IdentificationType = identificationType;
+        AuthenticationType = authenticationType;
+        ThirdPartyIdpType = thirdPartyIdpType;
         CreationTime = creationTime;
         ModificationTime = modificationTime;
     }

@@ -9,8 +9,7 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
     {
         RuleFor(user => user.DisplayName).Required().MaxLength(50);
         RuleFor(user => user.Name).ChineseLetter().MaxLength(20);
-        RuleFor(user => user.PhoneNumber).Required().Phone();
-        //RuleFor(user => user.Landline).NotEmpty().When(u => string.IsNullOrEmpty(u.PhoneNumber));
+        RuleFor(user => user.PhoneNumber).Required().Phone();      
         RuleFor(user => user.Email).Email();
         RuleFor(user => user.IdCard).IdCard();
         RuleFor(user => user.Position).ChineseLetterNumber().MaxLength(20);

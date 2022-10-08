@@ -40,7 +40,7 @@ public partial class AddIdentityResourceDialog
         }
     }
 
-    public async Task AddIdentityResourceAsync(EditContext context)
+    public async Task AddIdentityResourceAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)

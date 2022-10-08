@@ -13,7 +13,6 @@ public class AuthDbContextFactory : IDesignTimeDbContextFactory<AuthDbContext>
             .AddJsonFile("appsettings.json")
             .AddJsonFile("appsettings.Development.json")
             .Build();
-
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 
         return new AuthDbContext(optionsBuilder.MasaOptions);

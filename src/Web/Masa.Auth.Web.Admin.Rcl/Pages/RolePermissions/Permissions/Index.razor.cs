@@ -63,7 +63,7 @@ public partial class Index
 
     private async Task InitAppPermissions()
     {
-        _menuPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
+        _menuPermissions = _curAppItems.Where(a => a.Type == AppTypes.UI).Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
             AppId = a.Identity,
@@ -73,7 +73,7 @@ public partial class Index
             Name = a.Name
         }).ToList();
         _menuPermissionActive = _menuPermissions.Select(m => m.Id).Take(1).ToList();
-        _apiPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
+        _apiPermissions = _curAppItems.Where(a => a.Type == AppTypes.Service).Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
             AppId = a.Identity,
@@ -197,7 +197,7 @@ public partial class Index
 
     private async Task UpdateMenuPermissionAsync()
     {
-        if (await _formMenu.ValidateAsync())
+        if (_formMenu.Validate())
         {
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
@@ -207,7 +207,7 @@ public partial class Index
 
     private async Task UpdateApiPermissionAsync()
     {
-        if (await _formApi.ValidateAsync())
+        if (_formApi.Validate())
         {
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);

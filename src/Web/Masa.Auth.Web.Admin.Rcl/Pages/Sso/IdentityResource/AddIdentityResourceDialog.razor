@@ -7,10 +7,10 @@
                 <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="IdentityResource.DisplayName" Label="@T("DisplayName")" />
+                        <STextField @bind-Value="IdentityResource.DisplayName" Required Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <STextField @bind-Value="IdentityResource.Name" Label="@T("Name")" />
+                        <STextField @bind-Value="IdentityResource.Name" Required Label="@T("Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-7">

@@ -17,7 +17,7 @@
             <ChildContent>
                 <div class="mt-n3 ml-n7">
                     <div class="body2 regular--text" style="min-height:11px;">@Creator</div>
-                    <div class="body2 regular3--text">@CreationTime.ToString(T("$DateTimeFormat"))</div>
+                    <SDateTimeTitle Class="body2 regular3--text" Value="CreationTime" DateTime />                    
                 </div>
             </ChildContent>
         </MTimelineItem>
@@ -32,7 +32,7 @@
                 <ChildContent>
                     <div class="mt-n3 ml-n7">
                         <div class="body2 regular--text" style="min-height:11px;">@Modifier</div>
-                        <div class="body2 regular3--text">@ModificationTime?.ToString(T("$DateTimeFormat"))</div>
+                        <SDateTimeTitle Class="body2 regular3--text" Value="ModificationTime" DateTime />   
                     </div>
                 </ChildContent>
             </MTimelineItem>

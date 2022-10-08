@@ -128,6 +128,10 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
+    public Guid? CurrentTeamId { get; private set; }
+
+    public Team? CurrentTeam { get; private set; }
+
     public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
 
     public Position? Position => _position;
@@ -164,7 +168,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
         UserId = userId;
         JobNumber = jobNumber;
-        StaffType = staffType == default ? StaffTypes.ExternalStaff : staffType;
+        StaffType = staffType == default ? StaffTypes.External : staffType;
         Gender = gender == default ? GenderTypes.Male : gender;
         Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
         var value = VerifyPhonNumberEmail(phoneNumber, email);
@@ -193,7 +197,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         var teams = staff.TeamStaffs.Select(t => t.TeamId).ToList();
         var departmentStaff = staff.DepartmentStaffs.FirstOrDefault();
         UserDetailDto user = staff.User;
-        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.RoleIds, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
+        return new StaffDetailDto(departmentStaff?.DepartmentId ?? Guid.Empty, staff.PositionId ?? Guid.Empty, teams, user.ThirdPartyIdpAvatars, staff.CreateUser?.Name ?? "", staff.ModifyUser?.Name ?? "", staff.ModificationTime, user.Roles, user.Permissions, staff.Id, staff.UserId, "", staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
     public static implicit operator StaffDto(Staff staff)
@@ -263,6 +267,11 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         _teamStaffs = _teamStaffs.MergeBy(
             teams.Select(teamId => new TeamStaff(teamId, default, TeamMemberTypes.Member, UserId)),
             team => team.TeamId);
+    }
+
+    public void SetCurrentTeam(Guid teamId)
+    {
+        CurrentTeamId = teamId;
     }
 
     [MemberNotNull(nameof(PhoneNumber))]

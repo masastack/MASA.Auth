@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class PermissionService : ServiceBase
 {
-    public PermissionService(IServiceCollection services) : base(services, "api/permission")
+    public PermissionService() : base("api/permission")
     {
         MapGet(GetApplicationPermissionsAsync);
         MapGet(GetTypesAsync);

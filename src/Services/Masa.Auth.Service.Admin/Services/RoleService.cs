@@ -6,7 +6,7 @@ namespace Masa.Auth.Service.Admin.Services;
 public class RoleService : RestServiceBase
 {
     readonly ILogger<RoleService> _logger;
-    public RoleService(IServiceCollection services, ILogger<RoleService> logger) : base(services, "api/role")
+    public RoleService(ILogger<RoleService> logger) : base("api/role")
     {
         _logger = logger;
     }

@@ -23,6 +23,8 @@ public partial class AddThirdPartyIdpDialog
 
     protected override string? PageName { get; set; } = "ThirdPartyIdpBlock";
 
+    List<KeyValue> AdvancedConfig { get; set; } = new();
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -43,23 +45,47 @@ public partial class AddThirdPartyIdpDialog
         }
     }
 
-    public async Task AddThirdPartyIdpAsync(EditContext context)
+    public async Task AddThirdPartyIdpAsync(FormContext context)
     {
-        //if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
-        //{
-        //    OpenErrorMessage(T("Please upload ThirdPartyIdp icon"));
-        //    return;
-        //}
+        if (string.IsNullOrEmpty(ThirdPartyIdp.Icon))
+        {
+            OpenErrorMessage(T("Please upload ThirdPartyIdp icon"));
+            return;
+        }
+        if(AdvancedConfig.Any(config => config.IsDefault()))
+        {
+            OpenErrorMessage(T("Please complete advanced configuration"));
+            return;
+        }
         var success = context.Validate();
         if (success)
         {
             Loading = true;
+            ThirdPartyIdp.JsonKeyMap = AdvancedConfig.ToDictionary(config => config.Key,config => config.Value);
             await ThirdPartyIdpService.AddAsync(ThirdPartyIdp);
             OpenSuccessMessage(T("Add thirdPartyIdp success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
         }
+    }
+
+    void ThirdPartyIdpValueChanged(ThirdPartyIdpModel value)
+    {
+        ThirdPartyIdp.ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(value.Name);
+        ThirdPartyIdp.Icon = value.Icon;
+        ThirdPartyIdp.Name = value.Name;
+        ThirdPartyIdp.DisplayName = value.DisplayName;
+        ThirdPartyIdp.CallbackPath = value.CallbackPath;
+        ThirdPartyIdp.AuthorizationEndpoint = value.AuthorizationEndpoint;
+        ThirdPartyIdp.TokenEndpoint = value.TokenEndpoint;
+        ThirdPartyIdp.UserInformationEndpoint = value.UserInformationEndpoint;
+        ThirdPartyIdp.MapAll = value.MapAll;
+        AdvancedConfig = value.JsonKeyMap.Select(kv => new KeyValue 
+        {
+            Key = kv.Key,
+            Value = kv.Value
+        }).ToList();
     }
 }
 

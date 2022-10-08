@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class ProjectService : ServiceBase
 {
-    public ProjectService(IServiceCollection services) : base(services, "api/project")
+    public ProjectService() : base("api/project")
     {
         MapGet(GetListAsync);
         MapGet(GetNavigationListAsync, "navigations");

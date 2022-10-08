@@ -26,7 +26,6 @@ public class LdapIdp : IdentityProvider
         Name = LdapConsts.LDAP_NAME;
         DisplayName = LdapConsts.LDAP_NAME;
         Icon = "mdi-laptop";
-        IdentificationType = IdentificationTypes.PhoneNumber;
         ThirdPartyIdpType = ThirdPartyIdpTypes.Ldap;
     }
 

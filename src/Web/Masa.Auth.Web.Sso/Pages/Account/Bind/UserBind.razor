@@ -1,0 +1,29 @@
+﻿@page "/account/user/bind"
+@inherits SsoCompontentBase
+@layout SimpleLayout
+
+<MDialog Value=Visible>
+    <MCard>
+        <MCardTitle>
+            @T(Prompt)
+        </MCardTitle>
+
+        <MCardText>
+           <div @onclick="BindAsync" style="height:400px;cursor:hand;">
+                <MAvatar>
+                    <img src="@UserModel!.Avatar" />
+                </MAvatar>
+                <span>@T("Click to bind")</span>
+            </div>
+        </MCardText>
+
+        <MCardActions>
+            <MSpacer></MSpacer>
+            <MButton Color="primary"
+                     Text
+                     OnClick="NavigateToRegister">
+                @T("Register new user")
+            </MButton>
+        </MCardActions>
+    </MCard>
+</MDialog>

@@ -1,3 +1,21 @@
-﻿@inherits SsoCompontentBase
+﻿@using Masa.Auth.Web.Sso.Pages.Account.Login.RegisterSections
+@inherits SsoCompontentBase
+@inject IJSRuntime _js
 
-<h3>Register</h3>
+<MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 mx-12 text-center" Style="height: 430px; overflow: auto;">
+    @foreach (var registerItem in _registerComponents.Values)
+    {
+        <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
+    }
+    <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
+        <LabelContent>
+            @T("RegistrationAgreementStatement") <a>《@T("RegistrationAgreement")》</a>
+        </LabelContent>
+    </MCheckbox>
+</MForm>
+<div class="text-center mt-3">
+    <MButton Class="rounded-pill text-btn white--text" Disabled=!CanRegister
+             OnClick="RegisterHandler" Height=48 Width=340 Color="primary" Loading="_registerLoading">
+        @T("Register")
+    </MButton>
+</div>

@@ -12,11 +12,13 @@ public partial class LoginSection
     public string LoginHint { get; set; } = string.Empty;
 
     LoginInputModel _inputModel = new();
+    CustomLoginModel? _customLoginModel;
     MForm _loginForm = null!;
-    bool _showPwd, _canSmsCode = true;
+    bool _showPwd, _canSmsCode = true, _loginLoading;
     List<EnvironmentModel> _environments = new();
     System.Timers.Timer? _timer;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
+    bool _loading;
 
     protected override void OnInitialized()
     {
@@ -33,16 +35,29 @@ public partial class LoginSection
         if (firstRender)
         {
             _environments = await _pmClient.EnvironmentService.GetListAsync();
+            var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
             _inputModel = new LoginInputModel
             {
                 ReturnUrl = ReturnUrl,
                 UserName = LoginHint,
-                Environment = _environments.FirstOrDefault()?.Name ?? "",
+                Environment = localEnvironment.Value ?? _environments.FirstOrDefault()?.Name ?? "",
                 RememberLogin = LoginOptions.AllowRememberLogin
             };
+            var splitIndex = ReturnUrl.IndexOf('?');
+            var paramString = ReturnUrl[splitIndex..];
+            if (QueryHelpers.ParseQuery(paramString).TryGetValue("client_id", out var clientId))
+            {
+                _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+            }
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void EnvironmentChanged(string environment)
+    {
+        _inputModel.Environment = environment;
+        ScopedState.Environment = environment;
     }
 
     private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -65,13 +80,17 @@ public partial class LoginSection
         //validate
         if (_loginForm.Validate())
         {
+            _loginLoading = true;
+            StateHasChanged();
             var msg = await _js.InvokeAsync<string>("login", _inputModel);
+            _loginLoading = false;
             if (!string.IsNullOrEmpty(msg))
             {
                 await PopupService.AlertAsync(msg, AlertTypes.Error);
             }
             else
             {
+                await _localStorage.SetAsync(nameof(_inputModel.Environment), _inputModel.Environment);
                 if (SsoUrlHelper.IsLocalUrl(_inputModel.ReturnUrl))
                 {
                     Navigation.NavigateTo(_inputModel.ReturnUrl, true);
@@ -121,44 +140,22 @@ public partial class LoginSection
 
     private async Task GetSmsCode()
     {
-        var d = _loginForm.Validate();
-        if (string.IsNullOrWhiteSpace(_inputModel.PhoneNumber) || !Regex.IsMatch(_inputModel.PhoneNumber,
-                LoginOptions.PhoneRegular))
+        var field = _loginForm.EditContext.Field(nameof(_inputModel.PhoneNumber));
+        _loginForm.EditContext.NotifyFieldChanged(field);
+        var result = _loginForm.EditContext.GetValidationMessages(field);
+        if (result.Any() is false)
         {
-            await PopupService.AlertAsync(T("PhoneNumberPrompt"), AlertTypes.Error);
-            return;
-        }
-        var code = Random.Shared.Next(100000, 999999);
-        await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
-        {
-            //todo dcc
-            ChannelCode = _configuration.GetValue<string>("Sms:ChannelCode"),
-            ChannelType = ChannelTypes.Sms,
-            TemplateCode = _configuration.GetValue<string>("Sms:TemplateCode"),
-            ReceiverType = SendTargets.Assign,
-            Receivers = new List<MessageTaskReceiverModel>
+            _loading = true;
+            await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
             {
-                new MessageTaskReceiverModel
-                {
-                    Type = MessageTaskReceiverTypes.User,
-                    PhoneNumber = _inputModel.PhoneNumber
-                }
-            },
-            Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
-            {
-                ["code"] = code,
-            })
-        });
-        await _distributedCacheClient.SetAsync(CacheKey.GetSmsCodeKey(_inputModel.PhoneNumber), code
-            , new Utils.Caching.Core.Models.CombinedCacheEntryOptions<int>
-            {
-                DistributedCacheEntryOptions = new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = LoginOptions.SmsCodeExpire
-                }
+                SendMsgCodeType = SendMsgCodeTypes.Login,
+                PhoneNumber = _inputModel.PhoneNumber
             });
-        _canSmsCode = false;
-        _timer?.Start();
+            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            _loading = false;
+            _canSmsCode = false;
+            _timer?.Start();
+        }
     }
 
     private async Task KeyDownHandler(KeyboardEventArgs args)
@@ -167,6 +164,17 @@ public partial class LoginSection
         {
             await LoginHandler();
         }
+    }
+
+    private void NavigateToThirdParty(string scheme)
+    {
+        var challenge = QueryHelpers.AddQueryString(AuthenticationExternalConstants.ChallengeEndpoint, new Dictionary<string, string?>
+        {
+            ["returnUrl"] = _inputModel.ReturnUrl,
+            ["scheme"] = scheme,
+            ["environment"] = _inputModel.Environment
+        });
+        Navigation.NavigateTo(challenge, true);
     }
 
     public void Dispose()

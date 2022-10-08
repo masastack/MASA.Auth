@@ -10,38 +10,47 @@ builder.WebHost.UseKestrel(option =>
 });
 
 // Add services to the container.
-builder.AddMasaConfiguration(configurationBuilder =>
+builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>
 {
-    builder.Theme.Primary = "#4318FF";
-    builder.Theme.Accent = "#4318FF";
+    builder.ConfigureTheme(theme =>
+    {
+        theme.Dark = true;
+        theme.Themes.Light.Primary = "#4318FF";
+        theme.Themes.Light.Accent = "#4318FF";
+    });
 }).AddI18nForServer("wwwroot/i18n");
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddGlobalForServer();
 builder.Services.AddHealthChecks();
-
-builder.Services.AddScoped<TokenProvider>();
-builder.Services.AddMasaIdentityModel();
+builder.Services.AddMasaIdentity();
+builder.Services.AddScoped<ScopedState>();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
-builder.Services.AddAuthClient(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:LocalUrl"));
+
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
+#if DEBUG
+builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002/");
+#else
+builder.Services.AddAuthClient(publicConfiguration);
+#endif
+
 builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
-
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = builder.GetMasaConfiguration().Local.GetSection("RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMasaRedisCache(redisOption);
+var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddStackExchangeRedisCache(redisOption);
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
+        options.Events.RaiseSuccessEvents = true;
     })
     .AddDeveloperSigningCredential()
     .AddClientStore<MasaClientStore>()
@@ -49,7 +58,10 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCorsPolicyService<CorsPolicyService>()
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
     .AddProfileService<UserProfileService>()
-    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>();
+    .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
+    .AddExtensionGrantValidator<PhoneCodeGrantValidator>();
+
+builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
@@ -79,7 +91,8 @@ app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMo
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseAuthentication();
+app.UseAuthentication()
+   .UseAuthorizationExternal();
 app.UseAuthorization();
 
 app.MapRazorPages();

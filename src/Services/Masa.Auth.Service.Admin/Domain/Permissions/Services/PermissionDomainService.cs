@@ -18,11 +18,11 @@ public class PermissionDomainService : DomainService
     {
         if (permissionType == PermissionTypes.Menu || permissionType == PermissionTypes.Api)
         {
-            return _permissionRepository.Any(p => p.ParentId == parentId && p.Type != PermissionTypes.Element);
+            return !_permissionRepository.Any(p => p.ParentId == parentId && p.Type != PermissionTypes.Element);
         }
         if (permissionType == PermissionTypes.Element)
         {
-            return _permissionRepository.Any(p => p.ParentId == parentId && p.Type != PermissionTypes.Menu);
+            return !_permissionRepository.Any(p => p.ParentId == parentId && p.Type != PermissionTypes.Menu);
         }
         if (permissionType == PermissionTypes.Data)
         {

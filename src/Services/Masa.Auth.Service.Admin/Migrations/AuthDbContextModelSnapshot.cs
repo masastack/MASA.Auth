@@ -310,6 +310,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -576,9 +580,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdentificationType")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -624,6 +625,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CurrentTeamId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DisplayName")
@@ -678,6 +682,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Creator");
+
+                    b.HasIndex("CurrentTeamId");
 
                     b.HasIndex("JobNumber")
                         .IsUnique()
@@ -913,7 +919,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("GenderType")
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("IdCard")
@@ -2245,6 +2251,17 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasBaseType("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider");
 
+                    b.Property<int>("AuthenticationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuthorizationEndpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CallbackPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ClientId")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -2255,16 +2272,20 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("JsonKeyMap")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VerifyFile")
+                    b.Property<bool>("MapAll")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TokenEndpoint")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VerifyType")
-                        .HasColumnType("int");
+                    b.Property<string>("UserInformationEndpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ThirdParty");
                 });
@@ -2401,6 +2422,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .WithMany()
                         .HasForeignKey("Creator");
 
+                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "CurrentTeam")
+                        .WithMany()
+                        .HasForeignKey("CurrentTeamId");
+
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
                         .WithMany()
                         .HasForeignKey("Modifier");
@@ -2448,6 +2473,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired();
 
                     b.Navigation("CreateUser");
+
+                    b.Navigation("CurrentTeam");
 
                     b.Navigation("ModifyUser");
 

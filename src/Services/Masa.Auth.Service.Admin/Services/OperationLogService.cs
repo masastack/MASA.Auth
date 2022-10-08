@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class OperationLogService : RestServiceBase
 {
-    public OperationLogService(IServiceCollection services) : base(services, "api/operationLog")
+    public OperationLogService() : base("api/operationLog")
     {
 
     }

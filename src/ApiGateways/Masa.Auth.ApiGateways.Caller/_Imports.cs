@@ -32,3 +32,4 @@ global using System.Reflection;
 global using System.Security.Claims;
 global using System.Security.Cryptography;
 global using System.Text.Json;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;

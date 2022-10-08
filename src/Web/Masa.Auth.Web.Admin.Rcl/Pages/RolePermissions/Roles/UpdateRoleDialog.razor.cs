@@ -58,7 +58,7 @@ public partial class UpdateRoleDialog
         Role = RoleDetail;
     }
 
-    public async Task UpdateRoleAsync(EditContext context)
+    public async Task UpdateRoleAsync(FormContext context)
     {
         var success = context.Validate();
         if (success)
@@ -82,6 +82,15 @@ public partial class UpdateRoleDialog
                 OpenWarningMessage(T("The number of bindings cannot be less than ") + (RoleDetail.Limit - RoleDetail.AvailableQuantity));
             }
         }
+    }
+
+    void NameChanged(string name)
+    {
+        if (string.IsNullOrEmpty(Role.Code) || Role.Code == Role.Name.ToSpellCode())
+        {
+            Role.Code = name.ToSpellCode();
+        }
+        Role.Name = name;
     }
 }
 

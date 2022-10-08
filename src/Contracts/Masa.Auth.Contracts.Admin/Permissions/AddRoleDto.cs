@@ -7,6 +7,8 @@ public class AddRoleDto
 {
     public string Name { get; set; }
 
+    public string Code { get; set; }
+
     public string? Description { get; set; }
 
     public bool Enabled { get; set; }
@@ -20,14 +22,16 @@ public class AddRoleDto
     public AddRoleDto()
     {
         Name = "";
+        Code = "";
         Enabled = true;
         Permissions = new();
         ChildrenRoles = new();
     }
 
-    public AddRoleDto(string name, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childrenRoles)
+    public AddRoleDto(string name, string code, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childrenRoles)
     {
         Name = name;
+        Code = code;
         Description = description;
         Enabled = enabled;
         Limit = limit;

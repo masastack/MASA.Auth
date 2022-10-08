@@ -11,18 +11,15 @@ public class AccountController : Controller
     readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
-    readonly IDistributedCacheClient _distributedCacheClient;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
         IEventService events,
-        IAuthClient authClient,
-        IDistributedCacheClient distributedCacheClient)
+        IAuthClient authClient)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
-        _distributedCacheClient = distributedCacheClient;
     }
 
     [HttpPost]
@@ -40,36 +37,35 @@ public class AccountController : Controller
             }
 
             var success = false;
+            UserModel? user = new();
 
             if (inputModel.PhoneLogin)
             {
-                var key = CacheKey.GetSmsCodeKey(inputModel.PhoneNumber);
-                var code = await _distributedCacheClient.GetAsync<int>(key);
-                success = code == inputModel.SmsCode;
-                await _distributedCacheClient.RemoveAsync<int>(key);
+                user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
+                {
+                    PhoneNumber = inputModel.PhoneNumber,
+                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required"),
+                    RegisterLogin = inputModel.RememberLogin
+                });
+                if (user is null)
+                {
+                    //todo auto register user
+                    return Content("no corresponding user for this mobile phone number");
+                }
+                success = true;
             }
             else
             {
                 success = await _authClient.UserService
                                            .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
+                if (success)
+                {
+                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
+                }
             }
 
             if (success)
             {
-                var user = new UserModel();
-                if (inputModel.PhoneLogin)
-                {
-                    user = await _authClient.UserService.FindByPhoneNumberAsync(inputModel.PhoneNumber);
-                    if (user is null)
-                    {
-                        //todo auto register user
-                        return Content("no corresponding user for this mobile phone number");
-                    }
-                }
-                else
-                {
-                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
-                }
                 // only set explicit expiration here if user chooses "remember me". 
                 // otherwise we rely upon expiration configured in cookie middleware.
                 AuthenticationProperties? props = null;
@@ -81,13 +77,17 @@ public class AccountController : Controller
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
                     };
                 };
+
                 var isuser = new IdentityServerUser(user!.Id.ToString())
                 {
                     DisplayName = user.DisplayName
                 };
-                isuser.AdditionalClaims.Add(new Claim("userName", user.Account));
-                isuser.AdditionalClaims.Add(new Claim("environment", inputModel.Environment));
-                isuser.AdditionalClaims.Add(new Claim("role", JsonSerializer.Serialize(user.RoleIds)));
+
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ACCOUNT, user.Account));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ENVIRONMENT, inputModel.Environment));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(user.Roles.Select(r => r.Code))));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.CURRENT_TEAM, (user.CurrentTeamId ?? Guid.Empty).ToString()));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.STAFF, (user.StaffId ?? Guid.Empty).ToString()));
 
                 //us sign in
                 await HttpContext.SignInAsync(isuser, props);

@@ -31,30 +31,52 @@ public class CommandHandler
     public async Task AddRoleAsync(AddRoleCommand command)
     {
         var roleDto = command.Role;
-        if (await _roleRepository.GetCountAsync(u => u.Name == roleDto.Name) > 0)
-            throw new UserFriendlyException($"Role with Name {roleDto.Name} already exists");
+        var role = await _roleRepository.FindAsync(r => r.Name == roleDto.Name || r.Code == roleDto.Code);
+        if (role is not null)
+        {
+            if (command.WhenExistReturn)
+            {
+                command.Result = role;
+                return;
+            }
+            else
+            {
+                var error = "";
+                if (role.Name == roleDto.Name) error += $"Role with Name {roleDto.Name} already exists;";
+                if (role.Code == roleDto.Code) error += $"Role with Code {roleDto.Code} already exists;";
+                throw new UserFriendlyException(error);
+            }
+        }
 
-        var role = new Role(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role = new Role(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.AddAsync(role);
         await _roleRepository.UnitOfWork.SaveChangesAsync();
-        command.RoleId = role.Id;
+        command.Result = role;
     }
 
     [EventHandler(1)]
     public async Task UpdateRoleAsync(UpdateRoleCommand command)
     {
         var roleDto = command.Role;
-        var role = await _roleRepository.GetByIdAsync(roleDto.Id);
+        var role = await _roleRepository.FindAsync(r => r.Id != roleDto.Id && (r.Name == roleDto.Name || r.Code == roleDto.Code));
+        if (role is not null)
+        {
+            var error = "";
+            if (role.Name == roleDto.Name) error += $"Role with Name {roleDto.Name} already exists;";
+            if (role.Code == roleDto.Code) error += $"Role with Code {roleDto.Code} already exists;";
+            throw new UserFriendlyException(error);
+        }
+
+        role = await _roleRepository.GetByIdAsync(roleDto.Id);
         if (role is null)
             throw new UserFriendlyException($"The current role does not exist");
 
-        role.Update(roleDto.Name, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role.Update(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.UpdateAsync(role);
-        //await _roleRepository.UnitOfWork.SaveChangesAsync();
         // update and check role limit
         var influenceRoles = new List<Guid> { role.Id };
         await _roleDomainService.UpdateRoleLimitAsync(influenceRoles);
@@ -105,11 +127,6 @@ public class CommandHandler
             throw new UserFriendlyException($"The permission code {permissionBaseInfo.Code} already exists");
         }
 
-        if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
-        {
-            throw new UserFriendlyException($"The current parent doesn't support add {permissionBaseInfo.Type} type permission, conflicts with other permission type");
-        }
-
         if (permissionBaseInfo.IsUpdate)
         {
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
@@ -120,6 +137,11 @@ public class CommandHandler
             _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
             await _permissionRepository.UpdateAsync(_permission);
             return;
+        }
+
+        if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
+        {
+            throw new UserFriendlyException($"The current parent doesn't support add {permissionBaseInfo.Type} type permission, conflicts with other permission type");
         }
 
         if (permissionBaseInfo.Order == 0)

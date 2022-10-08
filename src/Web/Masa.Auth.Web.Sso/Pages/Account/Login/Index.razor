@@ -1,5 +1,5 @@
-﻿@page "/account/login/index"
-@page "/account/login"
+﻿@page "/account/{tab}/index"
+@page "/account/{tab}"
 
 @inherits SsoCompontentBase
 @inject IClientStore _clientStore
@@ -8,8 +8,8 @@
 
 @if (_viewModel.EnableLocalLogin)
 {
-    <MCard Width=510 Height=620>
-        <MTabs @bind-Value="tab" BackgroundColor="transparent" Color="primary" HideSlider Grow>
+    <MCard Width=510 Height=620 MaxHeight="620">
+        <MTabs Value="Tab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow>
             <MTab Value="@("login")">
                 <div class="full-height d-flex flex-column">
                     <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
@@ -18,7 +18,7 @@
                     </span>
                 </div>
             </MTab>
-            <MTab Value="@("register")" Disabled>
+            <MTab Value="@("register")">
                 <div class="full-height d-flex flex-column">
                     <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
                     <span class="flex-grow-1 d-flex align-center mt-n1">
@@ -27,42 +27,19 @@
                 </div>
             </MTab>
         </MTabs>
-        <MTabsItems Value="@tab">
+        <MTabsItems Value="@Tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
                     <LoginSection LoginHint="@_loginHint" />
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">
-                <RegisterSection />
+                 <CascadingValue Value="@ReturnUrl">
+                    <RegisterSection UserBind="_userBind" />
+                </CascadingValue>
             </MTabItem>
         </MTabsItems>
     </MCard>
-}
-
-@if (_viewModel.VisibleExternalProviders.Any())
-{
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-header">
-                <h2>External Account</h2>
-            </div>
-            <div class="card-body">
-                <ul class="list-inline">
-                    @foreach (var provider in _viewModel.VisibleExternalProviders)
-                    {
-                        //todo
-                        <li class="list-inline-item">
-                            <a class="btn btn-secondary" asp-page="/ExternalLogin/Challenge"
-                       asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@ReturnUrl">
-                                @provider.DisplayName
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
 }
 
 @if (!_viewModel.EnableLocalLogin && !_viewModel.VisibleExternalProviders.Any())

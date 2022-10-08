@@ -17,11 +17,11 @@ public class UpdateUserAuthorizationDto
         Permissions = new();
     }
 
-    public UpdateUserAuthorizationDto(Guid id, List<Guid> roles, List<SubjectPermissionRelationDto> permissions)
+    public UpdateUserAuthorizationDto(Guid id, IEnumerable<Guid> roles, IEnumerable<SubjectPermissionRelationDto> permissions)
     {
         Id = id;
-        Roles = roles;
-        Permissions = permissions;
+        Roles = roles.ToList();
+        Permissions = permissions.ToList();
     }
 }
 

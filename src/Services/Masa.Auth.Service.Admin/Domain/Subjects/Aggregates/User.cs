@@ -91,12 +91,12 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    public GenderTypes GenderType
+    public GenderTypes Gender
     {
         get => _gender;
         private set
         {
-            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(GenderType));
+            _gender = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(Gender));
         }
     }
 
@@ -186,8 +186,8 @@ public class User : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
         Address = address;
         Landline = landline;
-        GenderType = gender == default ? GenderTypes.Male : gender;
-        Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(GenderType) : avatar;
+        Gender = gender == default ? GenderTypes.Male : gender;
+        Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
         Password = password;
         var value = VerifyPhonNumberEmail(phoneNumber, email);
         Account = string.IsNullOrEmpty(account) ? value : account;
@@ -231,10 +231,14 @@ public class User : FullAggregateRoot<Guid, Guid>
     public static implicit operator UserDetailDto?(User? user)
     {
         if (user is null) return null;
-        var roles = user.Roles.Select(r => r.RoleId).ToList();
+        var roles = user.Roles.Select(ur => new RoleModel 
+        {
+           Id = ur.Role.Id,
+           Code = ur.Role.Code
+        }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
-        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.GenderType, roles, permissions, user.Landline);
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline);
     }
 
     public void Update(string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
@@ -246,7 +250,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Address = address;
         Department = department;
         Position = position;
-        GenderType = gender;
+        Gender = gender;
         Landline = landline;
         DisplayName = displayName;
         Avatar = avatar;
@@ -259,13 +263,18 @@ public class User : FullAggregateRoot<Guid, Guid>
         DisplayName = displayName;
         IdCard = idCard;
         CompanyName = companyName;
-        GenderType = gender;
+        Department = department;
+        Gender = gender;
     }
 
-    public void UpdateBasicInfo(string displayName, GenderTypes gender)
+    public void UpdateBasicInfo(string displayName, GenderTypes gender, string? companyName, string? department, string? position, AddressValue address)
     {
         DisplayName = displayName;
-        GenderType = gender;
+        Gender = gender;
+        CompanyName = companyName;
+        Department = department;
+        Position = position;
+        Address = address;
     }
 
     public void UpdateAvatar(string avatar)
@@ -286,21 +295,25 @@ public class User : FullAggregateRoot<Guid, Guid>
     [MemberNotNull(nameof(Password))]
     public void UpdatePassword(string? password)
     {
-        if (string.IsNullOrEmpty(password)) Password = "";
-        else Password = password;
+        Password = password;
     }
 
     public bool VerifyPassword(string password)
     {
-        return !string.IsNullOrWhiteSpace(password) && Password == MD5Utils.EncryptRepeat(password);
+        return string.IsNullOrEmpty(Password) || Password == MD5Utils.EncryptRepeat(password);
     }
 
     public void AddRoles(IEnumerable<Guid> roleIds)
     {
-        roleIds = roleIds.Distinct();
         _roles = _roles.MergeBy(
            roleIds.Select(roleId => new UserRole(roleId)),
-           item => item.RoleId);
+           item => item.RoleId).DistinctBy(ur => ur.RoleId).ToList();
+    }
+
+    public void RemoveRoles(IEnumerable<Guid> roleIds)
+    {
+        _roles = _roles.Where(role => roleIds.Any(roleId => role.RoleId == roleId) is false)
+                       .ToList();
     }
 
     public void AddPermissions(List<SubjectPermissionRelationDto> permissions)

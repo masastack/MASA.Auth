@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class StaffService : RestServiceBase
 {
-    public StaffService(IServiceCollection services) : base(services, "api/staff")
+    public StaffService() : base("api/staff")
     {
         MapPost(SyncAsync);
         MapPost(SelectByIdsAsync, "SelectByIds");
@@ -168,5 +168,11 @@ public class StaffService : RestServiceBase
         var syncCommand = new SyncStaffCommand(import.Data.ToList());
         await eventBus.PublishAsync(syncCommand);
         return syncCommand.Result;
+    }
+
+    private async Task UpdateCurrentTeamAsync(IEventBus eventBus, [FromBody] UpdateCurrentTeamModel updateCurrentTeam)
+    {
+        var updateCurrentTeamCommand = new UpdateStaffCurrentTeamCommand(updateCurrentTeam.UserId, updateCurrentTeam.TeamId);
+        await eventBus.PublishAsync(updateCurrentTeamCommand);
     }
 }

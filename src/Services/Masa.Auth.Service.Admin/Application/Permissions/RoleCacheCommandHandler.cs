@@ -5,30 +5,30 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class RoleCacheCommandHandler
 {
-    readonly IMemoryCacheClient _memoryCacheClient;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
 
-    public RoleCacheCommandHandler(IMemoryCacheClient memoryCacheClient)
+    public RoleCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient)
     {
-        _memoryCacheClient = memoryCacheClient;
+        _multilevelCacheClient = multilevelCacheClient;
     }
 
     [EventHandler(99)]
     public async Task AddRoleAsync(AddRoleCommand addRoleCommand)
     {
         var cacheRole = addRoleCommand.Role.Adapt<CacheRole>();
-        await _memoryCacheClient.SetAsync(CacheKey.RoleKey(addRoleCommand.RoleId), cacheRole);
+        await _multilevelCacheClient.SetAsync(CacheKey.RoleKey(addRoleCommand.Result.Id), cacheRole);
     }
 
     [EventHandler(99)]
     public async Task UpdateRoleAsync(UpdateRoleCommand updateRoleCommand)
     {
         var cacheRole = updateRoleCommand.Role.Adapt<CacheRole>();
-        await _memoryCacheClient.SetAsync(CacheKey.RoleKey(updateRoleCommand.Role.Id), cacheRole);
+        await _multilevelCacheClient.SetAsync(CacheKey.RoleKey(updateRoleCommand.Role.Id), cacheRole);
     }
 
     [EventHandler(99)]
     public async Task RemoveRoleAsync(RemoveRoleCommand removeRoleCommand)
     {
-        await _memoryCacheClient.RemoveAsync<CachePermission>(CacheKey.RoleKey(removeRoleCommand.Role.Id));
+        await _multilevelCacheClient.RemoveAsync<CachePermission>(CacheKey.RoleKey(removeRoleCommand.Role.Id));
     }
 }

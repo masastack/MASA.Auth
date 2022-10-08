@@ -13,5 +13,5 @@ public class UpdateTeamBasicInfoDto
 
     public string Description { get; set; } = string.Empty;
 
-    public TeamTypes Type { get; set; } = TeamTypes.Normal;
+    public TeamTypes Type { get; set; } = TeamTypes.Ordinary;
 }

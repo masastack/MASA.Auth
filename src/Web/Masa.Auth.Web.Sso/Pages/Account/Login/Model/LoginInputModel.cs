@@ -1,7 +1,7 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Web.Sso.Pages.Account.Login;
+namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
 public class LoginInputModel
 {
@@ -13,7 +13,7 @@ public class LoginInputModel
 
     public int? SmsCode { get; set; }
 
-    public bool RememberLogin { get; set; }
+    public bool RememberLogin { get; set; } = true;
 
     public bool PhoneLogin { get; set; }
 
@@ -23,4 +23,6 @@ public class LoginInputModel
 
     //todo remove this and ldap account auto login
     public bool LdapLogin { get; set; }
+
+    public bool RegisterLogin { get; set; }
 }

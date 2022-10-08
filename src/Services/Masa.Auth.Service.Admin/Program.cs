@@ -15,11 +15,11 @@ builder.Services.AddDaprStarter(opt =>
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-builder.AddMasaConfiguration(configurationBuilder =>
+builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-var publicConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
@@ -29,7 +29,7 @@ builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, 
     }
 });
 
-builder.Services.AddMasaIdentityModel(options =>
+builder.Services.AddMasaIdentity(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
@@ -57,7 +57,7 @@ builder.Services
     .AddJwtBearer("Bearer", options =>
     {
         //todo dcc
-        options.Authority = builder.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.Authority = builder.Services.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
         options.TokenValidationParameters.ValidateAudience = false;
@@ -67,8 +67,8 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
-var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
-builder.Services.AddMasaRedisCache(defaultConfiguration.GetSection("RedisConfig").Get<RedisConfigurationOptions>());
+builder.Services.AddStackExchangeRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>())
+    .AddMultilevelCache();
 
 await builder.Services
             .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
@@ -133,6 +133,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
+var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
@@ -141,11 +142,15 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
         defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
-    await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
-var app = builder.Services.AddServices(builder);
+var app = builder.AddServices(options =>
+{
+    options.DisableAutoMapRoute = true; // todo :remove it before v1.0
+    options.GetPrefixes = new() { "Get", "Select", "Find" };
+    options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
+});
 
 app.MigrateDbContext<AuthDbContext>((context, services) =>
 {
