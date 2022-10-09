@@ -24,6 +24,9 @@
                 @foreach (var team in Role.Teams)
                 {
                     <MChip Class="mr-3" Style="height:28px;">
+                        <MAvatar Left Size=24>
+                            <img src="@team.Avatar" />
+                        </MAvatar>
                         <span class="body2 regular--text">@team.Name</span>
                     </MChip>
                 }

@@ -629,7 +629,7 @@ public class QueryHandler
         foreach (var team in teams)
         {
             var roles = team.TeamRoles
-                            .Where(tr => team.TeamStaffs.Any(ts => ts.UserId == query.UserId && ts.TeamMemberType == tr.TeamMemberType))
+                            .Where(tr => tr.TeamMemberType == TeamMemberTypes.Member)
                             .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Code, tr.Role.Limit, tr.Role.AvailableQuantity))
                             .ToList();
             query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
