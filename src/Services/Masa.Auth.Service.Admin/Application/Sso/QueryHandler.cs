@@ -96,13 +96,13 @@ public class QueryHandler
     [EventHandler]
     public async Task GetClientSelectForCustomLoginAsync(ClientSelectForCustomLoginQuery query)
     {
-        var aleadyUseClientIds = await _authDbContext.Set<CustomLogin>()
+        var alreadyUseClientIds = await _authDbContext.Set<CustomLogin>()
                                                      .Where(customLogin => customLogin.Enabled)
                                                      .Select(customLogin => customLogin.ClientId)
                                                      .ToListAsync();
 
         query.Result = await _oidcDbContext.Set<Client>()
-                                           .Where(client => aleadyUseClientIds.Contains(client.ClientId) == false)
+                                           .Where(client => alreadyUseClientIds.Contains(client.ClientId) == false)
                                            .Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType))
                                            .ToListAsync();
     }
