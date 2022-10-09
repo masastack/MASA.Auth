@@ -519,7 +519,7 @@ public class QueryHandler
                                         .Where(condition)
                                         .OrderByDescending(t => t.ModificationTime)
                                         .ToListAsync();
-            
+
         foreach (var team in teams.ToList())
         {
             var modifierName = _multilevelCacheClient.Get<CacheUser>(CacheKey.UserKey(team.Modifier))?.DisplayName ?? "";
