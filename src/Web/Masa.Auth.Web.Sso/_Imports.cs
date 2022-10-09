@@ -37,6 +37,8 @@ global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.BuildingBlocks.StackSdks.Pm.Model;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
+global using Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;

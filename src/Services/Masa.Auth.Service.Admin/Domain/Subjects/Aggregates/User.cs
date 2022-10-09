@@ -231,10 +231,10 @@ public class User : FullAggregateRoot<Guid, Guid>
     public static implicit operator UserDetailDto?(User? user)
     {
         if (user is null) return null;
-        var roles = user.Roles.Select(ur => new RoleModel 
+        var roles = user.Roles.Select(ur => new RoleModel
         {
-           Id = ur.Role.Id,
-           Code = ur.Role.Code
+            Id = ur.Role.Id,
+            Code = ur.Role.Code
         }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
@@ -298,9 +298,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         Password = password;
     }
 
-    public bool VerifyPassword(string password)
+    public bool VerifyPassword(string? password)
     {
-        return string.IsNullOrEmpty(Password) || Password == MD5Utils.EncryptRepeat(password);
+        return string.IsNullOrEmpty(Password) || Password == MD5Utils.EncryptRepeat(password ?? "");
     }
 
     public void AddRoles(IEnumerable<Guid> roleIds)
