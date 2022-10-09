@@ -406,7 +406,10 @@ public class QueryHandler
                 ClientId = query.ClientId,
                 RegisterFields = new List<RegisterFieldModel>()
                 {
-
+                    new RegisterFieldModel
+                    {
+                        RegisterFieldType = RegisterFieldTypes.PhoneNumber
+                    }
                 }
             };
         }
