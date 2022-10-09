@@ -285,6 +285,15 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
+    public async Task<bool> GetHasPhoneNumberInEnvAsync(IEventBus eventBus, IEnvironmentSetter environmentSetter,
+        [FromQuery] string env, [FromQuery] string phoneNumber)
+    {
+        environmentSetter.SetEnvironment(env);
+        var query = new UserByPhoneQuery(phoneNumber);
+        await eventBus.PublishAsync(query);
+        return query.Result is not null;
+    }
+
     public async Task<bool> GetHasPasswordAsync(IEventBus eventBus,Guid userId)
     {
         var command = new HasPasswordQuery(userId);

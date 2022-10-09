@@ -2,8 +2,9 @@
 @using Microsoft.JSInterop
 
 @inherits SsoCompontentBase
-@inject IJSRuntime jsRuntime;
-@inject IIdentityServerInteractionService _interaction;
+@inject IJSRuntime jsRuntime
+@inject IIdentityServerInteractionService _interaction
+@inject ProtectedLocalStorage _localStorage
 @layout SimpleLayout
 
 <div>

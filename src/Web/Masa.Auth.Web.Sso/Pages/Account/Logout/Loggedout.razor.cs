@@ -20,6 +20,11 @@ public partial class Loggedout
             _viewModel.AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut;
             if (logout is not null)
             {
+                var environment = logout.Parameters[IsolationConsts.ENVIRONMENT];
+                if (!string.IsNullOrWhiteSpace(environment))
+                {
+                    await _localStorage.SetAsync(nameof(LoginInputModel.Environment), environment);
+                }
                 _viewModel = new LoggedOutViewModel
                 {
                     AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut,

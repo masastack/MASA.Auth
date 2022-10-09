@@ -18,14 +18,18 @@ public partial class Index
             // if the user is not authenticated, then just show logged out page
             showLogoutPrompt = false;
         }
-        //else
-        //{
-        //    //Simplify flow ignore judge ShowLogoutPrompt
-        //    var context = await _interaction.GetLogoutContextAsync(LogoutId);
-        //    showLogoutPrompt = context?.ShowSignoutPrompt == true;
-        //}
+        else
+        {
+            //Simplify flow ignore judge ShowLogoutPrompt
+            var context = await _interaction.GetLogoutContextAsync(LogoutId);
+            if (context != null)
+            {
+                showLogoutPrompt = context.ShowSignoutPrompt == true ||
+                    !context.Parameters.AllKeys.Contains(IsolationConsts.ENVIRONMENT);
+            }
+        }
 
-        if (firstRender && showLogoutPrompt == false)
+        if (firstRender && !showLogoutPrompt)
         {
             Logout();
             return;

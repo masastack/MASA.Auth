@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Web.Sso.Infrastructure.Validation;
+namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
 public class PhoneCodeGrantValidator : IExtensionGrantValidator
 {
@@ -16,12 +16,12 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
-        string? phoneNumber = context.Request.Raw["PhoneNumber"];
-        string? code = context.Request.Raw["Code"];
+        var phoneNumber = context.Request.Raw["PhoneNumber"];
+        var code = context.Request.Raw["Code"];
         if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(code))
             throw new UserFriendlyException("must provider phone number and msg code");
 
-        var user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel 
+        var user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
         {
             PhoneNumber = phoneNumber,
             Code = code

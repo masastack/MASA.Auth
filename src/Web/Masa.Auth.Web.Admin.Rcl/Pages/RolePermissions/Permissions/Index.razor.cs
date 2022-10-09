@@ -63,7 +63,7 @@ public partial class Index
 
     private async Task InitAppPermissions()
     {
-        _menuPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
+        _menuPermissions = _curAppItems.Where(a => a.Type == AppTypes.UI).Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
             AppId = a.Identity,
@@ -73,7 +73,7 @@ public partial class Index
             Name = a.Name
         }).ToList();
         _menuPermissionActive = _menuPermissions.Select(m => m.Id).Take(1).ToList();
-        _apiPermissions = _curAppItems.Select(a => new AppPermissionsViewModel
+        _apiPermissions = _curAppItems.Where(a => a.Type == AppTypes.Service).Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
             AppId = a.Identity,

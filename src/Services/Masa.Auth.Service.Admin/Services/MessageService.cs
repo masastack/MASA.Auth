@@ -21,4 +21,9 @@ public class MessageService : ServiceBase
     {
         await eventBus.PublishAsync(new SendEmailCommand(sendEmailModel));
     }
+
+    protected override string GetMethodName(MethodInfo methodInfo, string prefix, ServiceRouteOptions globalOptions)
+    {
+        return Regex.Replace(methodInfo.Name.TrimStart(prefix).TrimEnd("Async"), @"(\B[A-Z])", "_$1").ToLower();
+    }
 }

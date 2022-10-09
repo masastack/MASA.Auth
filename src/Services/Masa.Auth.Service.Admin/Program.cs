@@ -6,11 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddObservability();
 
 #if DEBUG
-//builder.Services.AddDaprStarter(opt =>
-//{
-//    opt.DaprHttpPort = 3600;
-//    opt.DaprGrpcPort = 3601;
-//});
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
 #endif
 
 builder.Services.AddAutoInject();
@@ -133,7 +133,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-var defaultConfiguration = builder.GetMasaConfiguration().ConfigurationApi.GetDefault();
+var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {

@@ -127,11 +127,6 @@ public class CommandHandler
             throw new UserFriendlyException($"The permission code {permissionBaseInfo.Code} already exists");
         }
 
-        if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
-        {
-            throw new UserFriendlyException($"The current parent doesn't support add {permissionBaseInfo.Type} type permission, conflicts with other permission type");
-        }
-
         if (permissionBaseInfo.IsUpdate)
         {
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
@@ -142,6 +137,11 @@ public class CommandHandler
             _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
             await _permissionRepository.UpdateAsync(_permission);
             return;
+        }
+
+        if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
+        {
+            throw new UserFriendlyException($"The current parent doesn't support add {permissionBaseInfo.Type} type permission, conflicts with other permission type");
         }
 
         if (permissionBaseInfo.Order == 0)

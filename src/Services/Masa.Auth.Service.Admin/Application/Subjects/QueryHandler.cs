@@ -103,6 +103,13 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetUserByPhoneAsync(UserByPhoneQuery query)
+    {
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == query.PhoneNumber);
+        query.Result = user?.Adapt<UserSimpleModel>();
+    }
+
+    [EventHandler]
     public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
         var user = await _authDbContext.Set<User>()
