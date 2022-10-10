@@ -3,13 +3,13 @@
 
 namespace Masa.Auth.Contracts.Admin.Sso.Validator;
 
-public class AddClientValidator : AbstractValidator<AddClientDto>
+public class AddClientBasicValidator : AbstractValidator<AddClientBasicDto>
 {
-    public AddClientValidator()
+    public AddClientBasicValidator()
     {
         RuleFor(client => client.ClientId).Required();
         RuleFor(client => client.ClientName).Required().MaxLength(50);
-        RuleFor(client => client.Description).MaxLength(100);
+        RuleFor(client => client.Description).MaxLength(200);
         RuleFor(client => client.ClientUri).Url().When(client => !string.IsNullOrEmpty(client.ClientUri));
     }
 }
