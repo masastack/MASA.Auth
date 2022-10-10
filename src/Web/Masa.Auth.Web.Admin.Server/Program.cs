@@ -30,7 +30,17 @@ builder.Services.AddScoped<TokenProvider>();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-builder.Services.AddMasaOpenIdConnect(publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>());
+
+var masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>();
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+builder.Services.AddJwtTokenValidator(options =>
+{
+    options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
+}, refreshTokenOptions =>
+{
+    refreshTokenOptions.ClientId = masaOpenIdConnectOptions.ClientId;
+    refreshTokenOptions.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
+});
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 //builder.WebHost.UseStaticWebAssets();

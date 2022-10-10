@@ -293,4 +293,11 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(query);
         return query.Result is not null;
     }
+
+    public async Task<bool> GetHasPasswordAsync(IEventBus eventBus,Guid userId)
+    {
+        var command = new HasPasswordQuery(userId);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
 }

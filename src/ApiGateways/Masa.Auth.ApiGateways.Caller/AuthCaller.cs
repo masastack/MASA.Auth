@@ -26,6 +26,7 @@ public class AuthCaller : HttpClientCallerBase
     OperationLogService? _operationLogService;
     TokenProvider _tokenProvider;
     ILogger<AuthCaller> _logger;
+    JwtTokenValidator _jwtTokenValidator;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(Caller));
@@ -72,17 +73,28 @@ public class AuthCaller : HttpClientCallerBase
         IServiceProvider serviceProvider,
         TokenProvider tokenProvider,
         ILogger<AuthCaller> logger,
-        AuthApiOptions options) : base(serviceProvider)
+        AuthApiOptions options,
+        JwtTokenValidator jwtTokenValidator) : base(serviceProvider)
     {
         Name = "AuthCaller";
         _tokenProvider = tokenProvider;
         _logger = logger;
         BaseAddress = options.AuthServiceBaseAddress;
+        _jwtTokenValidator = jwtTokenValidator;
     }
 
     protected override void ConfigHttpRequestMessage(HttpRequestMessage requestMessage)
     {
-        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
+        if (!string.IsNullOrWhiteSpace(_tokenProvider.AccessToken))
+        {
+            _jwtTokenValidator.ValidateAccessTokenAsync(_tokenProvider).Wait();
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
+        }
+        else
+        {
+            _logger.LogWarning("AccessToken is empty");
+        }
+
         base.ConfigHttpRequestMessage(requestMessage);
     }
 }

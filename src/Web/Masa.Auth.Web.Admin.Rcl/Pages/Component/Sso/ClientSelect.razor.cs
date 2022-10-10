@@ -22,9 +22,9 @@ public partial class ClientSelect
 
     public ClientSelectDto? Client { get; set; }
 
-    List<ClientSelectDto> Clients { get; set; } = new();
+    protected List<ClientSelectDto> Clients { get; set; } = new();
 
-    ClientService ClientService => AuthCaller.ClientService;
+    protected ClientService ClientService => AuthCaller.ClientService;
 
     protected override async Task OnInitializedAsync()
     {

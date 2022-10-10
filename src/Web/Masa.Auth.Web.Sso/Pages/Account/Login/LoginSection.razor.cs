@@ -43,11 +43,15 @@ public partial class LoginSection
                 Environment = localEnvironment.Value ?? _environments.FirstOrDefault()?.Name ?? "",
                 RememberLogin = LoginOptions.AllowRememberLogin
             };
-            var splitIndex = ReturnUrl.IndexOf('?');
-            var paramString = ReturnUrl[splitIndex..];
-            if (QueryHelpers.ParseQuery(paramString).TryGetValue("client_id", out var clientId))
+
+            if (ReturnUrl != null && ReturnUrl.Contains('?'))
             {
-                _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+                var splitIndex = ReturnUrl.IndexOf('?');
+                var paramString = ReturnUrl[splitIndex..];
+                if (QueryHelpers.ParseQuery(paramString).TryGetValue("client_id", out var clientId))
+                {
+                    _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+                }
             }
             StateHasChanged();
         }
