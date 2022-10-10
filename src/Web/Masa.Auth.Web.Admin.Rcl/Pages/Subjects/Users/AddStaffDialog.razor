@@ -87,7 +87,8 @@
                             <div class="d-flex mt-6">
                                 <EnableSwitch Class="ml-1" @bind-Value="Staff.Enabled" />
                                 <MSpacer></MSpacer>
-                                <SButton Medium OnClick="async() => await AddStaffAsync(context)">@T("Submit")</SButton>
+                                <SButton Medium Outlined OnClick="()=>Step=1">@T("Previous step")</SButton>
+                                <SButton Medium Class="ml-6" OnClick="async() => await AddStaffAsync(context)">@T("Submit")</SButton>
                             </div>
                         </FooterContent>
                     </AutoHeight>

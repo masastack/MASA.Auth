@@ -300,6 +300,7 @@
     "Add Role": "新增角色",
     "Update Role": "编辑角色",
     "Inherited Role": "继承角色",
+    "Bind Role": "绑定角色",
     "Superior Role": "上级角色",
     "RoleOwner": "角色使用者",
     "BasicInformation": "基础信息",

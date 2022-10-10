@@ -32,6 +32,8 @@ public partial class StaffSelect
 
     protected StaffService StaffService => AuthCaller.StaffService;
 
+    public string Search { get; set; } = "";
+
     protected override async Task OnInitializedAsync()
     {
         Label = T("Staff");
@@ -74,15 +76,18 @@ public partial class StaffSelect
 
     private async Task QuerySelectionStaff(string search)
     {
-        if (string.IsNullOrWhiteSpace(search))
+        search = search.TrimStart(' ').TrimEnd(' ');
+        Search = search;
+        await Task.Delay(300);
+        if (search != Search)
         {
             return;
         }
 
         _staffLoading = true;
-        Staffs = Staffs.Union(await StaffService.GetSelectAsync(search)).ToList();
-        _staffLoading = false;
-        StateHasChanged();
+        var staffs = await StaffService.GetSelectAsync(search);
+        Staffs = Staffs.UnionBy(staffs,staff => staff.Id).ToList();
+       _staffLoading = false;
     }
 }
 
