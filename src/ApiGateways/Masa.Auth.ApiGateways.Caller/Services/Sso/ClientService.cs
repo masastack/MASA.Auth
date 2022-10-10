@@ -32,6 +32,11 @@ public class ClientService : ServiceBase
         return await GetAsync<List<ClientSelectDto>>(nameof(GetClientSelectAsync));
     }
 
+    public async Task<List<ClientSelectDto>> GetClientSelectForCustomLoginAsync()
+    {
+        return await GetAsync<List<ClientSelectDto>>(nameof(GetClientSelectForCustomLoginAsync));
+    }
+
     public async Task AddClientAsync(AddClientDto addClientDto)
     {
         await PostAsync(nameof(AddClientAsync), addClientDto);

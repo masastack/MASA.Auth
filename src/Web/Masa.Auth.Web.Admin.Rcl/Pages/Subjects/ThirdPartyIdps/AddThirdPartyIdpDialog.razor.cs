@@ -42,6 +42,7 @@ public partial class AddThirdPartyIdpDialog
         if (Visible)
         {
             ThirdPartyIdp = new();
+            AdvancedConfig = new();
         }
     }
 
