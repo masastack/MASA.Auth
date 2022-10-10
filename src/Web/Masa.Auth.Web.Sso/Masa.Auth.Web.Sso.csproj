@@ -25,6 +25,7 @@
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
 		<PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />

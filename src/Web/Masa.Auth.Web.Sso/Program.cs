@@ -61,6 +61,9 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>();
 
+builder.Services.AddDataProtection()
+    .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
+
 builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
