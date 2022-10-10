@@ -49,7 +49,7 @@ public partial class RegisterSection
         if (firstRender)
         {
             if (UserBind) ReturnUrl = Identity.Properties["returnUrl"] ?? "~/";
-            if (ReturnUrl == null || ReturnUrl.Contains('?') == false)
+            if (ReturnUrl == null || !ReturnUrl.Contains('?'))
             {
                 return;
             }
