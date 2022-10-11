@@ -35,19 +35,36 @@ public partial class LoginSection
         if (firstRender)
         {
             _environments = await _pmClient.EnvironmentService.GetListAsync();
-            var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
-            _inputModel = new LoginInputModel
+            var currentEnvironment = _environments.FirstOrDefault()?.Name ?? "";
+            try
             {
-                ReturnUrl = ReturnUrl,
-                UserName = LoginHint,
-                Environment = localEnvironment.Value ?? _environments.FirstOrDefault()?.Name ?? "",
-                RememberLogin = LoginOptions.AllowRememberLogin
-            };
-            var splitIndex = ReturnUrl.IndexOf('?');
-            var paramString = ReturnUrl[splitIndex..];
-            if (QueryHelpers.ParseQuery(paramString).TryGetValue("client_id", out var clientId))
+                var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
+                currentEnvironment = localEnvironment.Value ?? currentEnvironment;
+            }
+            catch (Exception e)
             {
-                _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+                await _js.InvokeVoidAsync("console.log", $"ProtectedLocalStorage Get error: {e.Message}");
+                await _localStorage.DeleteAsync(nameof(_inputModel.Environment));
+            }
+            finally
+            {
+                _inputModel = new LoginInputModel
+                {
+                    ReturnUrl = ReturnUrl,
+                    UserName = LoginHint,
+                    Environment = currentEnvironment,
+                    RememberLogin = LoginOptions.AllowRememberLogin
+                };
+            }
+
+            if (ReturnUrl != null && ReturnUrl.Contains('?'))
+            {
+                var splitIndex = ReturnUrl.IndexOf('?');
+                var paramString = ReturnUrl[splitIndex..];
+                if (QueryHelpers.ParseQuery(paramString).TryGetValue("client_id", out var clientId))
+                {
+                    _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
+                }
             }
             StateHasChanged();
         }

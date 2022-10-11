@@ -12,6 +12,7 @@ public partial class AddClientDialog
     AddClientBasicDto _addBasicDto = new();
     ClientScopesDto _clientScopesDto = new();
     bool _visible;
+    MForm _form = null!;
 
     ClientService ClientService => AuthCaller.ClientService;
 
@@ -25,6 +26,10 @@ public partial class AddClientDialog
 
     private async Task SaveAsync()
     {
+        if (!_form.Validate())
+        {
+            return;
+        }
         _addBasicDto.Adapt(_addClientDto);
         _clientScopesDto.Adapt(_addClientDto);
 
