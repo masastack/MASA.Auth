@@ -18,7 +18,7 @@ public class DepartmentService : ServiceBase
     private async Task SaveAsync([FromServices] IEventBus eventBus,
         [FromBody] UpsertDepartmentDto upsertDepartmentDto)
     {
-        await eventBus.PublishAsync(new AddDepartmentCommand(upsertDepartmentDto));
+        await eventBus.PublishAsync(new UpsertDepartmentCommand(upsertDepartmentDto));
     }
 
     private async Task CopyAsync(IEventBus eventBus, [FromBody] CopyDepartmentDto copyDepartmentDto)

@@ -15,7 +15,7 @@ public class OperationLogCommandHandler
     }
 
     [EventHandler]
-    public async Task UpsertDepartmentOperationLogAsync(AddDepartmentCommand command)
+    public async Task UpsertDepartmentOperationLogAsync(UpsertDepartmentCommand command)
     {
         if (command.UpsertDepartmentDto.Id == Guid.Empty)
             await _operationLogRepository.AddDefaultAsync(OperationTypes.AddDepartment, $"添加部门：{command.UpsertDepartmentDto.Name}");

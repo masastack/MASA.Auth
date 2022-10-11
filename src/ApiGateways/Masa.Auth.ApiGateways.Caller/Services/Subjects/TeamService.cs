@@ -37,19 +37,9 @@ public class TeamService : ServiceBase
         await PostAsync($"Create", addTeamDto);
     }
 
-    public async Task UpdateBasicInfo(UpdateTeamBasicInfoDto updateTeamBasicInfoDto)
+    public async Task Update(UpdateTeamDto updateTeamDto)
     {
-        await PostAsync($"UpdateBasicInfo", updateTeamBasicInfoDto);
-    }
-
-    public async Task UpdateAdminPersonnel(UpdateTeamPersonnelDto updateTeamPersonnelDto)
-    {
-        await PostAsync($"UpdateAdminPersonnel", updateTeamPersonnelDto);
-    }
-
-    public async Task UpdateMemberPersonnel(UpdateTeamPersonnelDto updateTeamPersonnelDto)
-    {
-        await PostAsync($"UpdateMemberPersonnel", updateTeamPersonnelDto);
+        await PostAsync($"Update", updateTeamDto);
     }
 
     public async Task DeleteAsync(Guid id)

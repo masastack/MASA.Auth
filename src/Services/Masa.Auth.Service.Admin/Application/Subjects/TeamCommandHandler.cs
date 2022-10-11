@@ -58,9 +58,9 @@ public class TeamCommandHandler
     }
 
     [EventHandler]
-    public async Task UpdateTeamBasicInfoAsync(UpdateTeamBasicInfoCommand updateTeamBasicInfoCommand)
+    public async Task UpdateTeamAsync(UpdateTeamCommand updateTeamCommand)
     {
-        var dto = updateTeamBasicInfoCommand.UpdateTeamBasicInfoDto;
+        var dto = updateTeamCommand.UpdateTeamDto;
         if (_teamRepository.Any(t => t.Name == dto.Name && t.Id != dto.Id))
         {
             throw new UserFriendlyException($"Team name {dto.Name} already exists");
@@ -79,29 +79,13 @@ public class TeamCommandHandler
         }
         team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.UpdateAsync(team);
-    }
 
-    [EventHandler]
-    public async Task UpdateTeamAdminAsync(UpdateTeamPersonnelCommand updateTeamPersonnelCommand)
-    {
-        var dto = updateTeamPersonnelCommand.UpdateTeamPersonnelDto;
-        var team = await _teamRepository.GetByIdAsync(dto.Id);
-        var roles = new List<Guid>();
-        if (updateTeamPersonnelCommand.MemberType == TeamMemberTypes.Admin)
-        {
-            roles = dto.Roles.Union(team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Admin)
-                                                    .Select(tr => tr.RoleId)).ToList();
-            await _teamDomainService.SetTeamAdminAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
-        }
-        else
-        {
-            roles = dto.Roles.Union(team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Member)
-                                        .Select(tr => tr.RoleId)).ToList();
-            await _teamDomainService.SetTeamMemberAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
-        }
-        await _roleDomainService.UpdateRoleLimitAsync(dto.Roles);
-    }
+        //todo Add update judgment
+        await _teamDomainService.SetTeamAdminAsync(team, dto.AdminStaffs, dto.AdminRoles, dto.AdminPermissions);
+        await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
 
+        await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles));
+    }
 
     [EventHandler]
     public async Task RemoveTeamAsync(RemoveTeamCommand removeTeamCommand)

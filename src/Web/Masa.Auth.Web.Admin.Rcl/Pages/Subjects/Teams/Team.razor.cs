@@ -49,23 +49,9 @@ public partial class Team
         OpenSuccessMessage(T("Add team data success"));
     }
 
-    private async Task OnUpdateBasicInfo(UpdateTeamBasicInfoDto dto)
+    private async Task OnUpdate(UpdateTeamDto dto)
     {
-        await TeamService.UpdateBasicInfo(dto);
-        OpenSuccessMessage(T("Edit team data success"));
-        await LoadTeams();
-    }
-
-    private async Task OnUpdateAdminPersonnel(UpdateTeamPersonnelDto dto)
-    {
-        await TeamService.UpdateAdminPersonnel(dto);
-        OpenSuccessMessage(T("Edit team data success"));
-        await LoadTeams();
-    }
-
-    private async Task OnUpdateMemberPersonnel(UpdateTeamPersonnelDto dto)
-    {
-        await TeamService.UpdateMemberPersonnel(dto);
+        await TeamService.Update(dto);
         OpenSuccessMessage(T("Edit team data success"));
         await LoadTeams();
     }

@@ -16,6 +16,7 @@ public partial class OrgSheet
 
     MForm _form = default!;
     bool _visible;
+    string _title = "", _saveTitle = "";
     UpsertDepartmentDto _dto = new();
 
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
@@ -45,6 +46,8 @@ public partial class OrgSheet
     {
         _dto = new();
         _dto.ParentId = parentId;
+        _title = T("Add Department");
+        _saveTitle = T("Submit");
         _visible = true;
     }
 
@@ -61,6 +64,9 @@ public partial class OrgSheet
         _dto.Description = department.Description;
         _dto.Enabled = department.Enabled;
         _dto.ParentId = department.ParentId;
+
+        _title = T("Edit Department");
+        _saveTitle = T("Save");
         _visible = true;
     }
 }

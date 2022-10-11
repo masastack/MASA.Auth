@@ -1,52 +1,33 @@
 ﻿@inherits AdminCompontentBase
 
 <SSheetDialog @bind-Value=_visible Title="@T("Update Team")" ContentClass="px-sheet-dialog">
-    <SElevationTab Dense Class="pt-12 full-height" Tabs='new List<string>{T("Basic Information"),T("Setup team admins"),T("Setup team members")}' ItemsClass="mt-8 full-height">
+    <SElevationTab Dense Style="height: calc(100% - 80px);" Class="pt-12" @bind-Tab="@_tab" Tabs='_tabs' ItemsClass="mt-8 full-height">
         <SElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
-                <MCardActions class="d-flex align-center mb-10 px-6">
-                    <MButton Text Color="error" OnClick="OnDeleteHandler">
-                        @T("Delete")
-                    </MButton>
-                    <MSpacer />
-                    <SButton Medium OnClick="OnUpdateBaseHandler" Disabled="@string.IsNullOrWhiteSpace(Dto.TeamBasicInfo.Name)">@T("Save")</SButton>
-                </MCardActions>
-            </MCard>
+            @*<MCard Class="d-flex flex-column full-height">*@
+            <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
+            @*</MCard>*@
         </SElevationTabItem>
         <SElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                @if (_visible)
-                {
-                    <TeamAdmin IgnoreStaffIds="Dto.TeamMember.Staffs" @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
-                }
-                <MCardActions class="d-flex align-center mb-10 px-6">
-                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                        @T("Delete")
-                    </MButton>
-                    <MSpacer />
-                    <SButton Medium Class="mr-4"  OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>
-                    <SButton Medium MinWidth="100" OnClick="OnUpdateAdminHandler">@T("Save")</SButton>
-                </MCardActions>
-            </MCard>
+            @if (_visible)
+            {
+                <TeamAdmin IgnoreStaffIds="Dto.TeamMember.Staffs" @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
+            }
         </SElevationTabItem>
         <SElevationTabItem>
-            <MCard Class="d-flex flex-column full-height">
-                @if (_visible)
-                {
-                    <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
-                }
-                <MCardActions class="d-flex align-center mb-10 px-6">
-                    <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
-                        @T("Delete")
-                    </MButton>
-                    <MSpacer />
-                    <SButton Medium Class="mr-4" OnClick="()=>{_memberPreview = true;}">@T("Preview")</SButton>
-                    <SButton Medium OnClick="OnUpdateMemberHandler">@T("Save")</SButton>
-                </MCardActions>
-            </MCard>
+            @if (_visible)
+            {
+                <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
+            }
         </SElevationTabItem>
     </SElevationTab>
+    <MCardActions class="d-flex align-center mb-10 px-6">
+        <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+            @T("Delete")
+        </MButton>
+        <MSpacer />
+        @*<SButton Medium Class="mr-4" OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>*@
+        <SButton Medium MinWidth="100" OnClick="OnUpdateHandler">@T("Save")</SButton>
+    </MCardActions>
 </SSheetDialog>
 
 @*<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />

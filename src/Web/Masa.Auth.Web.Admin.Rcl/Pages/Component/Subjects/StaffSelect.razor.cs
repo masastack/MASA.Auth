@@ -81,6 +81,7 @@ public partial class StaffSelect
 
         _staffLoading = true;
         Staffs = Staffs.Union(await StaffService.GetSelectAsync(search)).ToList();
+        Staffs.RemoveAll(s => IgnoreValue.Contains(s.Id));
         _staffLoading = false;
         StateHasChanged();
     }
