@@ -521,9 +521,11 @@ public class QueryHandler
             }
         }
         var teams = await _authDbContext.Set<Team>()
+                                        .Include(t => t.TeamStaffs)
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .Where(condition)
+                                        .AsSplitQuery()
                                         .OrderByDescending(t => t.ModificationTime)
                                         .ToListAsync();
 

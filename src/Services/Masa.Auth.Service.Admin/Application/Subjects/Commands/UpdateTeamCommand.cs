@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpdateTeamPersonnelCommand(UpdateTeamPersonnelDto UpdateTeamPersonnelDto, TeamMemberTypes MemberType) : Command
+public record UpdateTeamCommand(UpdateTeamDto UpdateTeamDto) : Command
 {
 }

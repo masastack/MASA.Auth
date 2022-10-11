@@ -61,9 +61,9 @@ public class QueryHandler
     {
         departmentCountQuery.Result = new DepartmentChildrenCountDto
         {
-            SecondLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 2)),
-            ThirdLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 3)),
-            FourthLevel = (int)(await _departmentRepository.GetCountAsync(d => d.Level == 4)),
+            SecondLevel = (int)await _departmentRepository.GetCountAsync(d => d.Level == 2),
+            ThirdLevel = (int)await _departmentRepository.GetCountAsync(d => d.Level == 3),
+            FourthLevel = (int)await _departmentRepository.GetCountAsync(d => d.Level == 4),
         };
     }
 

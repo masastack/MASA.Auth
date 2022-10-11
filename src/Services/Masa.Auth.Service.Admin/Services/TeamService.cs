@@ -13,9 +13,7 @@ public class TeamService : ServiceBase
         MapGet(SelectAsync);
         MapGet(GetTeamRoleSelectAsync);
         MapPost(CreateAsync);
-        MapPost(UpdateBasicInfoAsync);
-        MapPost(UpdateAdminPersonnelAsync);
-        MapPost(UpdateMemberPersonnelAsync);
+        MapPost(UpdateAsync);
         MapDelete(RemoveAsync);
     }
 
@@ -24,19 +22,9 @@ public class TeamService : ServiceBase
         await eventBus.PublishAsync(new AddTeamCommand(addTeamDto));
     }
 
-    private async Task UpdateBasicInfoAsync(IEventBus eventBus, [FromBody] UpdateTeamBasicInfoDto updateTeamBasicInfoDto)
+    private async Task UpdateAsync(IEventBus eventBus, [FromBody] UpdateTeamDto updateTeamDto)
     {
-        await eventBus.PublishAsync(new UpdateTeamBasicInfoCommand(updateTeamBasicInfoDto));
-    }
-
-    private async Task UpdateAdminPersonnelAsync(IEventBus eventBus, [FromBody] UpdateTeamPersonnelDto updateTeamPersonnelDto)
-    {
-        await eventBus.PublishAsync(new UpdateTeamPersonnelCommand(updateTeamPersonnelDto, TeamMemberTypes.Admin));
-    }
-
-    private async Task UpdateMemberPersonnelAsync(IEventBus eventBus, [FromBody] UpdateTeamPersonnelDto updateTeamPersonnelDto)
-    {
-        await eventBus.PublishAsync(new UpdateTeamPersonnelCommand(updateTeamPersonnelDto, TeamMemberTypes.Member));
+        await eventBus.PublishAsync(new UpdateTeamCommand(updateTeamDto));
     }
 
     private async Task<TeamDetailDto> GetAsync(IEventBus eventBus, [FromQuery] Guid id)
