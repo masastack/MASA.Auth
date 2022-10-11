@@ -99,7 +99,7 @@ public class TeamCommandHandler
                                         .Select(tr => tr.RoleId)).ToList();
             await _teamDomainService.SetTeamMemberAsync(team, dto.Staffs, dto.Roles, dto.Permissions);
         }
-        await _roleDomainService.UpdateRoleLimitAsync(dto.Roles);
+        await _roleDomainService.UpdateRoleLimitAsync(roles);
     }
 
 

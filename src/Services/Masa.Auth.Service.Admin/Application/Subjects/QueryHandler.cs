@@ -196,7 +196,7 @@ public class QueryHandler
             condition = condition.And(s => s.Enabled == query.Enabled);
 
         if (!string.IsNullOrEmpty(query.Search))
-            condition = condition.And(s => s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
+            condition = condition.And(staff => staff.Name.Contains(query.Search) || staff.JobNumber.Contains(query.Search) || staff.Position!.Name.Contains(query.Search));
 
         if (query.DepartmentId != Guid.Empty)
         {
@@ -205,13 +205,14 @@ public class QueryHandler
                 .Select(ds => ds.StaffId);
             condition = condition.And(s => staffIds.Contains(s.Id));
         }
-        var staffQuery = _authDbContext.Set<Staff>().Where(condition);
+        var staffQuery = _authDbContext.Set<Staff>()
+                                       .Include(s => s.User)
+                                       .Include(s => s.DepartmentStaffs)
+                                       .ThenInclude(ds => ds.Department)
+                                       .Include(s => s.Position)
+                                       .Where(condition);
         var total = await staffQuery.LongCountAsync();
-        var staffs = await staffQuery.Include(s => s.User)
-                                     .Include(s => s.DepartmentStaffs)
-                                     .ThenInclude(ds => ds.Department)
-                                     .Include(s => s.Position)
-                                     .OrderByDescending(s => s.ModificationTime)
+        var staffs = await staffQuery.OrderByDescending(s => s.ModificationTime)
                                      .ThenByDescending(s => s.CreationTime)
                                      .Skip((query.Page - 1) * query.PageSize)
                                      .Take(query.PageSize)
@@ -635,7 +636,7 @@ public class QueryHandler
         foreach (var team in teams)
         {
             var roles = team.TeamRoles
-                            .Where(tr => team.TeamStaffs.Any(ts => ts.UserId == query.UserId && ts.TeamMemberType == tr.TeamMemberType))
+                            .Where(tr => tr.TeamMemberType == TeamMemberTypes.Member)
                             .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Code, tr.Role.Limit, tr.Role.AvailableQuantity))
                             .ToList();
             query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));

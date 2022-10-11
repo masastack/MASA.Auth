@@ -10,7 +10,7 @@
             </div>     
             <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
-                    @(Filter is true ? IconConstants.Filter : IconConstants.FilterOff)
+                    @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
                 </MIcon>
             </div>
             <SButton Small Class="ml-4" OnClick=OpenAddUserDialog BorderRadiusClass="rounded-lg">
