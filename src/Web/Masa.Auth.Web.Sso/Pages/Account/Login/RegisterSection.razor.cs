@@ -133,18 +133,21 @@ public partial class RegisterSection
         _registerLoading = true;
         if (UserBind)
         {
-            // todo check sms code、email code
-            await AuthClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
+            var model = new RegisterThirdPartyUserModel
             {
-                ThridPartyIdentity = Identity.Subject,
-                ExtendedData = JsonSerializer.Serialize(Identity),
                 ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(Identity.Issuer),
-                User = new AddUserModel
-                {
-                    Email = _inputModel.Email,
-                    PhoneNumber = _inputModel.PhoneNumber,
-                }
-            });
+                ExtendedData = JsonSerializer.Serialize(Identity),
+                ThridPartyIdentity = Identity.Subject,
+                UserRegisterType = UserRegisterTypes.PhoneNumber,
+                PhoneNumber = _inputModel.PhoneNumber,
+                Email = _inputModel.Email,
+                SmsCode = _inputModel.SmsCode.ToString(),
+                Account = _inputModel.Account,
+                Password = _inputModel.Password,
+                DisplayName = _inputModel.DisplayName,
+                Avatar = Identity.Picture
+            };
+            await AuthClient.UserService.RegisterThirdPartyUserAsync(model);
             Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
             _registerLoading = false;
             await PopupService.ToastSuccessAsync("Register success");

@@ -46,7 +46,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
                 {
                     foreach (var teamRole in role.Teams)
                     {
-                        availableQuantity -= teamRole.Team.TeamStaffs.Where(ts => ts.IsDeleted == false && ts.TeamMemberType == teamRole.TeamMemberType).Count();
+                        availableQuantity -= teamRole?.Team?.TeamStaffs?.Where(ts => ts.IsDeleted == false && ts.TeamMemberType == teamRole.TeamMemberType)?.Count() ?? 0;
                     }
                 }
 

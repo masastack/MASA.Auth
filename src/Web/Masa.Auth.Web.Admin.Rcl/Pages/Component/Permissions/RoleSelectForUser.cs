@@ -11,7 +11,7 @@ public partial class RoleSelectForUser : RoleSelect
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
-        Label = T("Inherited Role");
+        Label = T("Bind Role");
     }
 
     protected override async Task OnInitializedAsync()
