@@ -11,15 +11,18 @@ public class AccountController : Controller
     readonly IAuthClient _authClient;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
+    readonly I18n _i18n;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
         IEventService events,
-        IAuthClient authClient)
+        IAuthClient authClient,
+        I18n i18n)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
+        _i18n = i18n;
     }
 
     [HttpPost]
@@ -40,7 +43,7 @@ public class AccountController : Controller
                 user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
                 {
                     PhoneNumber = inputModel.PhoneNumber,
-                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException("sms code is required"),
+                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException(_i18n.T("SmsRequired")),
                     RegisterLogin = inputModel.RememberLogin
                 });
                 if (user is null)
@@ -105,12 +108,12 @@ public class AccountController : Controller
             {
                 return Content(ex.Message);
             }
-            else return Content("Unknown exception,Please contact the administrator");
+            else return Content(_i18n.T("UnknownException"));
         }
 
         await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.UserName,
                 "invalid credentials", clientId: context?.Client.ClientId));
-        return Content("username and password validate error");
+        return Content(_i18n.T("LoginValidateError"));
     }
 
     [HttpGet]

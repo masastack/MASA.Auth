@@ -1,32 +1,58 @@
-﻿@inherits SsoLayoutComponentBase
+﻿@using System.Globalization
+@inherits SsoLayoutComponentBase
 @inject I18n I18n
 
 <CascadingValue Value="I18n">
-<MApp>
-    <MErrorHandler>
-        @* <MMain Style="@($"background:url('{Path.Combine(NavigationManager.BaseUri,"img/login/login_bg.png")}')")"> *@
-        <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">
-            <div class="d-flex flex-column full-height">
-                <MRow>
-                    <MCol Offset="2" Md="3" Class="mt-12">
-                        <image style="height:40px;"
-                            src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200">
-                        </image>
-                    </MCol>
-                </MRow>
-                <MRow Class="flex-grow-1">
-                    <MCol Md=12 Sm=12 Class="d-flex justify-center align-center">
-                        @Body
-                    </MCol>
-                </MRow>
-                <MRow Justify="JustifyTypes.End" Class="mb-8">
-                    <MCol Class="text-center" Align="AlignTypes.End">
-                        <a href="https://beian.miit.gov.cn/" target="_blank" class="white--text"
-                            style="text-decoration:none;font-size:14px;">浙ICP备2021013592号-1</a>
-                    </MCol>
-                </MRow>
-            </div>
-        </MMain>
-    </MErrorHandler>
+    <MApp>
+        <MErrorHandler>
+            @* <MMain Style="@($"background:url('{Path.Combine(NavigationManager.BaseUri,"img/login/login_bg.png")}')")"> *@
+            <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">
+                <div class="d-flex flex-column full-height">
+                    <MRow>
+                        <MCol Offset="2" Md="2" Class="mt-12">
+                            <image style="height:40px;"
+                                   src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200">
+                            </image>
+                        </MCol>
+                        <MCol Offset="6" Align="AlignTypes.Center">
+                            <MButton Class="rounded-pill" Color="white" OnClick="ChangeLanguage">
+                                <MIcon Left Dark>
+                                    mdi-swap-horizontal
+                                </MIcon>
+                                @(I18n.Culture.Name == "en-US"?"中文":"EN")
+                            </MButton>
+                        </MCol>
+                    </MRow>
+                    <MRow Class="flex-grow-1">
+                        <MCol Md=12 Sm=12 Class="d-flex justify-center align-center">
+                            @Body
+                        </MCol>
+                    </MRow>
+                    <MRow Justify="JustifyTypes.End" Class="mb-8">
+                        <MCol Class="text-center" Align="AlignTypes.End">
+                            <a href="https://beian.miit.gov.cn/" target="_blank" class="white--text"
+                               style="text-decoration:none;font-size:14px;">浙ICP备2021013592号-1</a>
+                        </MCol>
+                    </MRow>
+                </div>
+            </MMain>
+        </MErrorHandler>
     </MApp>
 </CascadingValue>
+
+@code {
+
+    void ChangeLanguage(){
+        string _targetCulture = "";
+        if (I18n.Culture.Name == "en-US")
+        {
+            _targetCulture = "zh-CN";
+        }
+        else
+        {
+            _targetCulture = "en-US";
+        }
+        I18n.SetCulture(new CultureInfo(_targetCulture));
+    }
+
+}

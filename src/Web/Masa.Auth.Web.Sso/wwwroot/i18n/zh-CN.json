@@ -55,5 +55,8 @@
   "RegisterError": "注册失败，请联系管理员",
   "NickNamePlaceHolder": "昵称",
   "or login with": "或使用以下登录",
-  "Register success": "注册成功"
+  "Register success": "注册成功",
+  "LoginValidateError": "用户名或密码错误",
+  "SmsRequired": "短信验证码不能为空",
+  "UnknownException": "未知异常，请联系管理员"
 }
