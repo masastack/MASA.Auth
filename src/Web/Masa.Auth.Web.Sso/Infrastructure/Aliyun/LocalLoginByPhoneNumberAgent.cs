@@ -15,7 +15,7 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
         _options = options.Value;
     }
 
-    public GetAuthTokenResponseBodyTokenInfo? GetAuthTokenResponseBodyTokenInfo(GetAuthTokenRequest? request)
+    public async Task<GetAuthTokenResponseBodyTokenInfo?> GetAuthTokenAsync(GetAuthTokenRequest? request = null)
     {
         var client = CreateClient();
         request ??= new GetAuthTokenRequest
@@ -23,7 +23,7 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
             Url = "https://0.0.0.0",
             Origin = "https://0.0.0.0",
         };
-        var describePhoneNumberResaleResp = client.GetAuthToken(request);
+        var describePhoneNumberResaleResp = await client.GetAuthTokenAsync(request);
         string code = describePhoneNumberResaleResp.Body.Code;
         if (code == "OK")
         {
@@ -32,7 +32,7 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
         return null;
     }
 
-    public bool VerifyPhoneWithToken(string phoneNumber, string spToken, out string errorMsg)
+    public async Task<(bool success,string errorMsg)> VerifyPhoneWithTokenAsync(string phoneNumber, string spToken)
     {
         var client = CreateClient();
         var verifyPhoneWithTokenRequest = new VerifyPhoneWithTokenRequest
@@ -41,28 +41,29 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
             SpToken = spToken,
         };
         var runtime = new RuntimeOptions();
-        var verifyPhoneWithTokenResponse = client.VerifyPhoneWithTokenWithOptions(verifyPhoneWithTokenRequest, runtime);        
-        if (verifyPhoneWithTokenResponse.Body.Code == "OK")
+        try
         {
-            var verifyResult = verifyPhoneWithTokenResponse.Body.GateVerify.VerifyResult;
-            switch (verifyResult)
+            var verifyPhoneWithTokenResponse = await client.VerifyPhoneWithTokenWithOptionsAsync(verifyPhoneWithTokenRequest, runtime);
+            if (verifyPhoneWithTokenResponse.Body.Code == "OK")
             {
-                case "PASS":
-                    errorMsg = "";
-                    return true;
-                case "REJECT":
-                    errorMsg = "号码验证不一致，请通过短信方式登录";
-                    return false;
-                case "UNKNOWN":
-                    errorMsg = "无法判断号码，请通过短信方式登录";
-                    return false;
-                default:
-                    errorMsg = "未知异常";
-                    return false;
-            };
+                var verifyResult = verifyPhoneWithTokenResponse.Body.GateVerify.VerifyResult;
+                switch (verifyResult)
+                {
+                    case "PASS":
+                        return (true, "");
+                    case "REJECT":
+                        return (false, "号码验证不一致，请通过短信方式登录");
+                    case "UNKNOWN":
+                        return (false, "无法判断号码，请通过短信方式登录");
+                    default:
+                        return (false, "未知异常");
+                };
+            }
         }
-        errorMsg = "运营商接口异常";
-        return false;  
+        catch
+        {
+        }
+        return (false, "运营商接口异常");
     }
 
     private AliyunClient CreateClient()

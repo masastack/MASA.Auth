@@ -49,7 +49,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\..\..\MASA.Framework\src\BuildingBlocks\Authentication\OpenIdConnect\Masa.BuildingBlocks.Authentication.OpenIdConnect.Models\Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.csproj" />
 	  <ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
 

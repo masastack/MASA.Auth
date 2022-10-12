@@ -8,7 +8,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
     IAuthClient _authClient;
     LocalLoginByPhoneNumberAgent _localLoginByPhoneNumber;
 
-    public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LOCAL_PHONE;
+    public string GrantType { get; } = "local_phone";
 
     public LoclaPhoneNumberGrantValidator(IAuthClient authClient, LocalLoginByPhoneNumberAgent localLoginByPhoneNumber)
     {
@@ -31,11 +31,11 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
             return;
         }
 
-        var success = _localLoginByPhoneNumber.VerifyPhoneWithToken(phoneNumber, spToken,out var errorMsg);
-        if(success)
+        var (success, errorMsg) = await _localLoginByPhoneNumber.VerifyPhoneWithTokenAsync(phoneNumber, spToken);
+        if (success)
         {
             var user = await _authClient.UserService.FindByPhoneNumberAsync(phoneNumber);
-            if(user is null)
+            if (user is null)
             {
                 context.Result = new GrantValidationResult
                 {
@@ -50,7 +50,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
             }
         }
         else
-            context.Result = new GrantValidationResult 
+            context.Result = new GrantValidationResult
             {
                 IsError = true,
                 Error = errorMsg,
