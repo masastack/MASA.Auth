@@ -30,11 +30,7 @@ public class AccountController : Controller
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
         {
-            var ssoEnvironmentProvider = HttpContext.RequestServices.GetService<IEnvironmentProvider>() as ISsoEnvironmentProvider;
-            if (ssoEnvironmentProvider != null)
-            {
-                ssoEnvironmentProvider.SetEnvironment(inputModel.Environment);
-            }
+            HttpContext.UseEnvironmentIsolation(inputModel.Environment);
 
             var success = false;
             UserModel? user = new();

@@ -25,6 +25,9 @@
     [Parameter]
     public bool Required { get; set; } = true;
 
+    [CascadingParameter]
+    public ScopedState ScopedState { get; set; } = new();
+
     bool _canSmsCode = true;
     int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
     System.Timers.Timer? _smsTimer;
@@ -68,6 +71,7 @@
     {
         if (_phoneTextField.Validate())
         {
+            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
             await AuthClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
                 {
                     SendMsgCodeType = SendMsgCodeTypes.Register,

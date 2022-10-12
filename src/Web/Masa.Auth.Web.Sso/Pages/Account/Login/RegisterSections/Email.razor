@@ -25,6 +25,9 @@
     [Parameter]
     public bool Required { get; set; } 
 
+    [CascadingParameter]
+    public ScopedState ScopedState { get; set; } = new();
+
     bool _canEmailCode = true;
     int _emailCodeTime = LoginOptions.GetEmailCodeInterval;
     System.Timers.Timer? _emailTimer;
@@ -76,11 +79,13 @@
     {
         if (_emailTextField.Validate())
         {
+            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
             await AuthClient.UserService.SendEmailAsync(new SendEmailModel
                 {
                     Email = Value.Email,
                     SendEmailType = SendEmailTypes.Register
                 });
+
             await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
             _canEmailCode = false;
             _emailTimer?.Start();

@@ -48,6 +48,8 @@ public partial class RegisterSection
 
         if (firstRender)
         {
+            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
+
             if (UserBind) ReturnUrl = Identity.Properties["returnUrl"] ?? "~/";
             if (ReturnUrl == null || !ReturnUrl.Contains('?'))
             {
@@ -129,6 +131,8 @@ public partial class RegisterSection
         {
             return;
         }
+
+        HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
 
         _registerLoading = true;
         if (UserBind)
