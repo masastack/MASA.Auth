@@ -26,6 +26,11 @@ public partial class CopyOrgSheet
             _removeStaffs.AddRange(Dto.Staffs);
             Dto.Staffs.Clear();
         }
+        else
+        {
+            Dto.Staffs.AddRange(_removeStaffs);
+            _removeStaffs.Clear();
+        }
     }
 
     private async Task OnSubmitHandler()

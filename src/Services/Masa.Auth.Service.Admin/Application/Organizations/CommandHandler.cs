@@ -7,18 +7,23 @@ public class CommandHandler
 {
     readonly IDepartmentRepository _departmentRepository;
     readonly IPositionRepository _positionRepository;
+    readonly ILogger<CommandHandler> _logger;
 
-    public CommandHandler(IDepartmentRepository departmentRepository, IPositionRepository positionRepository)
+    public CommandHandler(
+        IDepartmentRepository departmentRepository,
+        IPositionRepository positionRepository,
+        ILogger<CommandHandler> logger)
     {
         _departmentRepository = departmentRepository;
         _positionRepository = positionRepository;
+        _logger = logger;
     }
 
     [EventHandler]
-    public async Task UpsertDepartmentAsync(AddDepartmentCommand addDepartmentCommand)
+    public async Task UpsertDepartmentAsync(UpsertDepartmentCommand command)
     {
-        var dto = addDepartmentCommand.UpsertDepartmentDto;
-        Expression<Func<Department, bool>> predicate = d => d.Name.Equals(dto.Name);
+        var dto = command.UpsertDepartmentDto;
+        Expression<Func<Department, bool>> predicate = d => d.Name.Equals(dto.Name) && d.ParentId == dto.ParentId;
         if (dto.IsUpdate)
         {
             predicate = predicate.And(d => d.Id != dto.Id);

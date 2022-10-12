@@ -27,6 +27,7 @@ public partial class Organization
     public List<DataTableHeader<StaffDto>> GetHeaders() => new()
     {
         new() { Text = T(nameof(Staff)), Value = nameof(StaffDto.Name), CellClass = "body-medium emphasis2--text" },
+        new() { Text = T(nameof(StaffDto.Account)), Value = nameof(StaffDto.Account), CellClass = "subtitle" },
         new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), CellClass = "subtitle" },
         new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="80px" }

@@ -9,18 +9,24 @@ public partial class UpdateSheet
     public TeamDetailDto Dto { get; set; } = new();
 
     [Parameter]
-    public EventCallback<UpdateTeamBasicInfoDto> OnUpdateBase { get; set; }
-
-    [Parameter]
-    public EventCallback<UpdateTeamPersonnelDto> OnUpdateAdmin { get; set; }
-
-    [Parameter]
-    public EventCallback<UpdateTeamPersonnelDto> OnUpdateMember { get; set; }
+    public EventCallback<UpdateTeamDto> OnUpdate { get; set; }
 
     [Parameter]
     public EventCallback<Guid> OnDelete { get; set; }
 
     bool _adminPreview, _memberPreview, _visible;
+    string _tab = "";
+    List<string> _tabs = new();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _tabs = new List<string> { T("Basic Information"), T("Setup team admins"), T("Setup team members") };
+        }
+        _tab = T("Basic Information");
+        base.OnAfterRender(firstRender);
+    }
 
     public void Show(TeamDetailDto model)
     {
@@ -28,47 +34,23 @@ public partial class UpdateSheet
         _visible = true;
     }
 
-    private async Task OnUpdateBaseHandler()
+    private async Task OnUpdateHandler()
     {
-        if (OnUpdateBase.HasDelegate)
+        if (OnUpdate.HasDelegate)
         {
-            await OnUpdateBase.InvokeAsync(new UpdateTeamBasicInfoDto
+            await OnUpdate.InvokeAsync(new UpdateTeamDto
             {
                 Id = Dto.Id,
                 Name = Dto.TeamBasicInfo.Name,
                 Description = Dto.TeamBasicInfo.Description,
                 Type = (TeamTypes)Dto.TeamBasicInfo.Type,
-                Avatar = Dto.TeamBasicInfo.Avatar
-            });
-        }
-        _visible = false;
-    }
-
-    private async Task OnUpdateAdminHandler()
-    {
-        if (OnUpdateAdmin.HasDelegate)
-        {
-            await OnUpdateAdmin.InvokeAsync(new UpdateTeamPersonnelDto
-            {
-                Id = Dto.Id,
-                Staffs = Dto.TeamAdmin.Staffs,
-                Roles = Dto.TeamAdmin.Roles,
-                Permissions = Dto.TeamAdmin.Permissions
-            });
-        }
-        _visible = false;
-    }
-
-    private async Task OnUpdateMemberHandler()
-    {
-        if (OnUpdateMember.HasDelegate)
-        {
-            await OnUpdateMember.InvokeAsync(new UpdateTeamPersonnelDto
-            {
-                Id = Dto.Id,
-                Staffs = Dto.TeamMember.Staffs,
-                Roles = Dto.TeamMember.Roles,
-                Permissions = Dto.TeamMember.Permissions
+                Avatar = Dto.TeamBasicInfo.Avatar,
+                AdminStaffs = Dto.TeamAdmin.Staffs,
+                AdminRoles = Dto.TeamAdmin.Roles,
+                AdminPermissions = Dto.TeamAdmin.Permissions,
+                MemberStaffs = Dto.TeamMember.Staffs,
+                MemberRoles = Dto.TeamMember.Roles,
+                MemberPermissions = Dto.TeamMember.Permissions
             });
         }
         _visible = false;
