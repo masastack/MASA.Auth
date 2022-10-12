@@ -25,8 +25,8 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
             context.Result = new GrantValidationResult
             {
                 IsError = true,
-                Error = $"must provider phone number and spToken",
-                ErrorDescription = "must provider phone number and spToken"
+                Error = "Must provide phone number and spToken",
+                ErrorDescription = "Must provide phone number and spToken"
             };
             return;
         }
