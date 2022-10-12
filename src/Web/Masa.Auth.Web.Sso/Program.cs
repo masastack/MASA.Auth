@@ -3,6 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoInject();
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
@@ -59,7 +60,8 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
-    .AddExtensionGrantValidator<PhoneCodeGrantValidator>();
+    .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
+    .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>();
 
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
