@@ -6,7 +6,7 @@
     @foreach (var registerItem in _registerComponents.Values)
     {
         <CascadingValue Value="ScopedState">
-        <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
+            <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
         </CascadingValue>
     }
     <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
