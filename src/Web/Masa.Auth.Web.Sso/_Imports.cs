@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using AlibabaCloud.SDK.Dypnsapi20170525.Models;
+global using AlibabaCloud.TeaUtil.Models;
 global using BlazorComponent;
 global using BlazorComponent.I18n;
 global using FluentValidation;
@@ -37,6 +39,7 @@ global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.BuildingBlocks.StackSdks.Pm.Model;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
@@ -60,4 +63,9 @@ global using System.Security.Claims;
 global using System.Security.Cryptography.X509Certificates;
 global using System.Text;
 global using System.Text.Json;
+global using System.Text.Json.Serialization;
 global using System.Web;
+global using static AlibabaCloud.SDK.Dypnsapi20170525.Models.GetAuthTokenResponseBody;
+global using Masa.Auth.Web.Sso.Infrastructure.Options;
+global using Microsoft.Extensions.Options;
+global using Masa.Auth.Web.Sso.Infrastructure.Aliyun;
