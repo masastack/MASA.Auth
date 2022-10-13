@@ -16,6 +16,7 @@ builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/
 #else
 builder.AddMasaStackComponentsForServer();
 #endif
+
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 #if DEBUG
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = "http://localhost:18002/");
@@ -31,8 +32,11 @@ builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
-var masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>();
-builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+var masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC").Get<MasaOpenIdConnectOptions>();
+#if DEBUG
+masaOpenIdConnectOptions.Authority = "http://localhost:18200";
+#endif
+builder.Services.AddMasaOpenIdConnect(publicConfiguration);
 builder.Services.AddJwtTokenValidator(options =>
 {
     options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
