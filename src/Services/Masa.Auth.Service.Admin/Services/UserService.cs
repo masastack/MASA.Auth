@@ -225,7 +225,7 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
-    public async Task<UserModel> PostLoginByPhoneNumberAsync(
+    public async Task<UserModel?> PostLoginByPhoneNumberAsync(
         IEventBus eventBus,
         [FromBody] LoginByPhoneNumberModel model)
     {
@@ -294,7 +294,7 @@ public class UserService : ServiceBase
         return query.Result is not null;
     }
 
-    public async Task<bool> GetHasPasswordAsync(IEventBus eventBus,Guid userId)
+    public async Task<bool> GetHasPasswordAsync(IEventBus eventBus, Guid userId)
     {
         var command = new HasPasswordQuery(userId);
         await eventBus.PublishAsync(command);

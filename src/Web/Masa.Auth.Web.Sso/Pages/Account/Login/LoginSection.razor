@@ -17,7 +17,7 @@
         </MTextField>
         <MTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" Outlined Label="@T("SMSCode")"
         Placeholder="@T("SMSCodePlaceHolder")" Type="number"
-        NumberProps="@(prop=> { prop.Max = 999999; prop.HideControl = true; })">
+        NumberProps="@(prop=> { prop.HideControl = true; })">
             <AppendContent>
                 <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
                 Class="primary rounded-r-lg" Loading=_loading Disabled=!_canSmsCode OnClick="GetSmsCode">
@@ -88,7 +88,7 @@
 {
     <div class="d-flex block-center mt-8 mb-4">
         <div style="background: #E9EDF7;height: 1px;width: 100%;" />
-        <div class="mx-4 text-center body2 regular3--text" style="@(LanguageProvider.Culture.ToString() == "zh-CN"?"min-width:120px":"min-width:80px")">@T("or login with")</div>
+        <div class="mx-4 text-center body2 regular3--text" style="@(LanguageProvider.Culture.ToString() == "zh-CN"?"min-width:120px":"min-width:100px")">@T("or login with")</div>
         <div style="background: #E9EDF7;height: 1px;width: 100%;" />
     </div>
     <div class="text-center">

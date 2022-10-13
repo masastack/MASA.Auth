@@ -10,11 +10,11 @@ public class RegisterInputModelValidator : AbstractValidator<RegisterInputModel>
         When(login => login.EmailRegister, () =>
         {
             RuleFor(x => x.Email).NotEmpty().Matches(LoginOptions.EmailRegular);
-            RuleFor(x => x.EmailCode).NotEmpty().Must(x => x >= 100000 && x <= 999999);
+            RuleFor(x => x.EmailCode).NotEmpty().Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
         }).Otherwise(() =>
         {
             RuleFor(x => x.PhoneNumber).NotEmpty().Matches(LoginOptions.PhoneRegular);
-            RuleFor(x => x.SmsCode).NotEmpty().Must(x => x >= 100000 && x <= 999999);
+            RuleFor(x => x.SmsCode).NotEmpty().Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
         });
         When(login => !string.IsNullOrEmpty(login.Password), () =>
         {

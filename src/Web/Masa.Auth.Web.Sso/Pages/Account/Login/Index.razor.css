@@ -1,0 +1,7 @@
+﻿::deep.tab-header .m-tabs .m-tab:first-child::before {
+    border-top-left-radius: 20px !important;
+}
+
+::deep.tab-header .m-tabs .m-tab:last-child::before {
+    border-top-right-radius: 20px !important;
+}

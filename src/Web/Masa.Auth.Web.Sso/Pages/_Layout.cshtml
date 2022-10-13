@@ -6,44 +6,45 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Masa.Auth.Web.Sso</title>
-  <link rel="shortcut icon" href="https://cdn.masastack.com/stack/images/logo/MASAStack/logo16_16.png">
-  <base href="~/" />
-  <link href="_content/Masa.Blazor/css/masa-blazor.min.css" rel="stylesheet">
-  <link href="https://cdn.masastack.com/npm/@("@mdi")/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.masastack.com/npm/materialicons/materialicons.css" rel="stylesheet">
-  <link href="https://cdn.masastack.com/npm/fontawesome/v5.0.13/css/all.css" rel="stylesheet">
-  <link href="css/masa-blazor-pro.css" rel="stylesheet" />
-  <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MASA SSO</title>
+    <link rel="shortcut icon" href="https://cdn.masastack.com/stack/images/logo/MASAStack/logo16_16.png">
+    <base href="~/" />
+    <link href="_content/Masa.Blazor/css/masa-blazor.min.css" rel="stylesheet">
+    <link href="https://cdn.masastack.com/npm/@("@mdi")/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.masastack.com/npm/materialicons/materialicons.css" rel="stylesheet">
+    <link href="https://cdn.masastack.com/npm/fontawesome/v5.0.13/css/all.css" rel="stylesheet">
+    <link href="css/masa-blazor-pro.css" rel="stylesheet" />
+    <link href="Masa.Auth.Web.Sso.styles.css" rel="stylesheet">
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 
 <body>
-  @RenderBody()
-  <script src="_framework/blazor.server.js"></script>
-  <script src="_content/BlazorComponent/js/blazor-component.js"></script>
+    @RenderBody()
+    <script src="_framework/blazor.server.js"></script>
+    <script src="_content/BlazorComponent/js/blazor-component.js"></script>
 
-  <script>
-    window.login = (data) => {
-      const Http = new XMLHttpRequest();
-      const url = 'login';
-      Http.open("post", url, false);
-      //sent header
-      Http.setRequestHeader("Content-type", "application/json");
-      Http.send(JSON.stringify(data));
-      return Http.responseText;
-    };
-    window.ajax = (url, method) => {
-      const Http = new XMLHttpRequest();
-      Http.open(method, url);
-      Http.send();
+    <script>
+        window.login = (data) => {
+            const Http = new XMLHttpRequest();
+            const url = 'login';
+            Http.open("post", url, false);
+            //sent header
+            Http.setRequestHeader("Content-type", "application/json");
+            Http.send(JSON.stringify(data));
+            return Http.responseText;
+        };
+        window.ajax = (url, method) => {
+            const Http = new XMLHttpRequest();
+            Http.open(method, url);
+            Http.send();
 
-      Http.onreadystatechange = (e) => {
-        console.log(Http.responseText)
-      }
-    };
-  </script>
+            Http.onreadystatechange = (e) => {
+                console.log(Http.responseText)
+            }
+        };
+    </script>
 </body>
 
 </html>

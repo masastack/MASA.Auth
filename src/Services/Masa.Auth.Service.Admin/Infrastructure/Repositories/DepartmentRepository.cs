@@ -29,4 +29,13 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
         var query = Context.Set<Department>().Where(predicate).Include(d => d.DepartmentStaffs);
         return await query.ToListAsync();
     }
+
+    public Dictionary<int, int> LevelQuantity()
+    {
+        return Context.Set<Department>().GroupBy(d => d.Level).Select(g => new
+        {
+            g.Key,
+            Count = g.Count()
+        }).ToDictionary(d => d.Key, d => d.Count);
+    }
 }

@@ -10,7 +10,7 @@ public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
         When(login => login.PhoneLogin, () =>
         {
             RuleFor(x => x.PhoneNumber).NotEmpty().Matches(LoginOptions.PhoneRegular);
-            RuleFor(x => x.SmsCode).NotEmpty().Must(x => x >= 100000 && x <= 999999);
+            RuleFor(x => x.SmsCode).NotEmpty().Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
         }).Otherwise(() =>
         {
             RuleFor(x => x.UserName).NotEmpty();

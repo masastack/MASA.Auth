@@ -51,6 +51,9 @@
   "RegistrationAgreement": "User Registration Agreement",
   "RegistrationAgreementStatement": "Agree to register MASA product agreement",
   "RegisterError": "Register error,please contact administrator",
-  "NickNamePlaceHolder": "Nick Name"
+  "NickNamePlaceHolder": "Nick Name",
+  "LoginValidateError": "username or password error",
+  "SmsRequired": "SMS verification code cannot be empty",
+  "UnknownException": "Unknown exception,Please contact the administrator"
 }
  

@@ -57,13 +57,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task DepartmentCountAsync(DepartmentCountQuery departmentCountQuery)
+    public void DepartmentCount(DepartmentCountQuery departmentCountQuery)
     {
+        var quantity = _departmentRepository.LevelQuantity();
         departmentCountQuery.Result = new DepartmentChildrenCountDto
         {
-            SecondLevel = (int)await _departmentRepository.GetCountAsync(d => d.Level == 2),
-            ThirdLevel = (int)await _departmentRepository.GetCountAsync(d => d.Level == 3),
-            FourthLevel = (int)await _departmentRepository.GetCountAsync(d => d.Level == 4),
+            SecondLevel = quantity.TryGetValue(2, out var val2) ? val2 : 0,
+            ThirdLevel = quantity.TryGetValue(3, out var val3) ? val3 : 0,
+            FourthLevel = quantity.TryGetValue(4, out var val4) ? val4 : 0,
         };
     }
 
