@@ -10,5 +10,7 @@ public interface IDepartmentRepository : IRepository<Department, Guid>
     Task<List<Department>> QueryListAsync(Expression<Func<Department, bool>> predicate);
 
     bool Any(Expression<Func<Department, bool>> predicate);
+
+    Dictionary<int, int> LevelQuantity();
 }
 

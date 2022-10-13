@@ -163,15 +163,26 @@ public partial class LoginSection
         if (result.Any() is false)
         {
             _loading = true;
-            await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
+            try
             {
-                SendMsgCodeType = SendMsgCodeTypes.Login,
-                PhoneNumber = _inputModel.PhoneNumber
-            });
-            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
-            _loading = false;
-            _canSmsCode = false;
-            _timer?.Start();
+                await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
+                {
+                    SendMsgCodeType = SendMsgCodeTypes.Login,
+                    PhoneNumber = _inputModel.PhoneNumber
+                });
+                await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+                _canSmsCode = false;
+                _timer?.Start();
+            }
+            catch (Exception e)
+            {
+                await _js.InvokeVoidAsync("console.log", $"GetSmsCode error: {e.Message}");
+                await PopupService.ToastErrorAsync(e.Message);
+            }
+            finally
+            {
+                _loading = false;
+            }
         }
     }
 

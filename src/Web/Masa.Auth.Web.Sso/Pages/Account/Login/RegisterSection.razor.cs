@@ -48,6 +48,8 @@ public partial class RegisterSection
 
         if (firstRender)
         {
+            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
+
             if (UserBind) ReturnUrl = Identity.Properties["returnUrl"] ?? "~/";
             if (ReturnUrl == null || !ReturnUrl.Contains('?'))
             {
@@ -130,6 +132,8 @@ public partial class RegisterSection
             return;
         }
 
+        HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
+
         _registerLoading = true;
         if (UserBind)
         {
@@ -141,7 +145,7 @@ public partial class RegisterSection
                 UserRegisterType = UserRegisterTypes.PhoneNumber,
                 PhoneNumber = _inputModel.PhoneNumber,
                 Email = _inputModel.Email,
-                SmsCode = _inputModel.SmsCode.ToString(),
+                SmsCode = _inputModel.SmsCode?.ToString() ?? "",
                 Account = _inputModel.Account,
                 Password = _inputModel.Password,
                 DisplayName = _inputModel.DisplayName,
@@ -161,7 +165,7 @@ public partial class RegisterSection
             await AuthClient.UserService.RegisterByEmailAsync(new RegisterByEmailModel
             {
                 PhoneNumber = _inputModel.PhoneNumber,
-                SmsCode = _inputModel.SmsCode.ToString(),
+                SmsCode = _inputModel.SmsCode?.ToString() ?? "",
                 Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.Email : _inputModel.Account,
                 Email = _inputModel.Email,
                 EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
@@ -174,7 +178,7 @@ public partial class RegisterSection
             await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
             {
                 PhoneNumber = _inputModel.PhoneNumber,
-                SmsCode = _inputModel.SmsCode.ToString(),
+                SmsCode = _inputModel.SmsCode?.ToString() ?? "",
                 Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
                 Avatar = "",
                 DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName

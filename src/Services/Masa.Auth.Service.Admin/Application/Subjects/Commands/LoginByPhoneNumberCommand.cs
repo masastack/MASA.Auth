@@ -5,5 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record LoginByPhoneNumberCommand(LoginByPhoneNumberModel Model) : Command
 {
-    public UserModel Result { get; set; } = new();
+    public UserModel? Result { get; set; }
 }

@@ -14,4 +14,6 @@ public class LoginOptions
     public static readonly string PasswordRegular = @"^\s{0}$|^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$";
     public static readonly int GetSmsCodeInterval = 60;
     public static readonly int GetEmailCodeInterval = 60;
+    public static readonly int CodeMaximum = 999999;
+    public static readonly int CodeMinimum = 100000;
 }
