@@ -11,7 +11,7 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
     public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
     {
-        HandlerType = typeof(WeChatAuthenticationHandler),
+        HandlerType = typeof(WeixinAuthenticationHandler),
         Scheme = "WeChat",
         DisplayName = WeixinAuthenticationDefaults.DisplayName,
         Icon = "https://cdn.masastack.com/stack/auth/ico/wechat.svg",
@@ -70,7 +70,8 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
              return string.Join(',', value.EnumerateArray().Select(element => element.GetString()));
         });
-        
+        options.CurrentValue.StateDataFormat = provider.GetRequiredService<PropertiesDataFormatCache>();
+
         return new WeChatAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }
 }
