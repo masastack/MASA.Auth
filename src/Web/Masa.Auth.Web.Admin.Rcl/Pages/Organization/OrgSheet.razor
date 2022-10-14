@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@_title">
-    <MCard Class="mx-auto d-flex flex-column full-height" Style="padding-right:228px;padding-left:228px;">
+<DefaultSheetDialog @bind-Value=_visible Title="@_title">
+    <MCard Class="mx-auto d-flex flex-column full-height">
         <MCardText Class="d-flex align-center full-height">
             <MForm Model="_dto" EnableValidation Class="full-width" @ref="_form">
                 <PlaceholderTextFiled @bind-Value="@_dto.Name" style="width:323px;" Placeholder="@T("Enter department name")" />
@@ -16,7 +16,7 @@
                 <MTextarea @bind-Value="@_dto.Description" class="mt-6" Label="@T("Description")" Outlined Height="120" NoResize />
             </MForm>
         </MCardText>
-        <MCardActions class="d-flex align-center mb-10 px-6">
+        <MCardActions class="d-flex align-center px-6">
             <EnableSwitch @bind-Value="_dto.Enabled" />
             <MSpacer />
             @if (_dto.Id != Guid.Empty)
@@ -28,4 +28,4 @@
             <SButton Medium Disabled="@string.IsNullOrEmpty(_dto.Name.Trim())" OnClick="OnSubmitHandler">@_saveTitle</SButton>
         </MCardActions>
     </MCard>
-</SSheetDialog>
+</DefaultSheetDialog>

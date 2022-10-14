@@ -5,7 +5,8 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Organization;
 
 public partial class Organization
 {
-    List<Guid> _active = new List<Guid>();
+    List<Guid> _departmentActive = new List<Guid>();
+    List<Guid> _openNode = new List<Guid>();
     Guid _currentStaffId = Guid.Empty;
     List<DepartmentDto> _departments = new();
     bool _addStaff, _updateStaff;
@@ -46,6 +47,7 @@ public partial class Organization
     private async Task LoadDepartmentsAsync()
     {
         _departments = await DepartmentService.GetListAsync();
+        _openNode = _departments.Select(c => c.Id).ToList();
         _departmentChildrenCountDto = await DepartmentService.GetCountAsync();
     }
 

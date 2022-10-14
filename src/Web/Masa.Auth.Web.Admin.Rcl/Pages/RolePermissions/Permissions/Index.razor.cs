@@ -45,6 +45,26 @@ public partial class Index
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    private List<AppPermissionsViewModel> MenuTreeParent(Guid permissionId, PermissionTypes permissionType)
+    {
+        var menus = _menuPermissions.Select(m => (AppPermissionsViewModel)m.Clone()).ToList();
+        RemoveAll(menus, x => x.Id == permissionId);
+        if (permissionType == PermissionTypes.Menu)
+        {
+            RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);
+        }
+        return menus;
+
+        void RemoveAll(List<AppPermissionsViewModel> menus, Predicate<AppPermissionsViewModel> match)
+        {
+            menus.RemoveAll(match);
+            foreach (var menu in menus)
+            {
+                RemoveAll(menu.Children, match);
+            }
+        }
+    }
+
     private async Task GetAppTags()
     {
         if (!_appTags.Any())
@@ -99,6 +119,7 @@ public partial class Index
                 .AddParameters("appUrl", mp.AppUrl)
                 .AdaptToType<List<AppPermissionsViewModel>>());
         });
+
         _apiPermissions.ForEach(mp =>
         {
             var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Api && p.AppId == mp.AppId);

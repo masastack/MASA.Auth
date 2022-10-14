@@ -1085,3 +1085,10 @@ input::-webkit-input-placeholder {
 .hover-border-primary:hover .subtitle {
     color: #4318FF !important;
 }
+
+.avatar-list-stacked .m-avatar {
+    box-shadow: 0 0 0 1px #f0f3fa;
+    margin-left: -0.5em !important;
+    user-select: none;
+    display: inline-grid;
+}

@@ -14,11 +14,27 @@ public partial class AddStaffDialog
     [Parameter]
     public EventCallback OnSubmitSuccess { get; set; }
 
+    [Parameter]
+    public Guid? DepartmentId { get; set; }
+
     private int Step { get; set; } = 1;
 
     private AddStaffDto Staff { get; set; } = new();
 
     private StaffService StaffService => AuthCaller.StaffService;
+
+    protected override void OnParametersSet()
+    {
+        if (Visible)
+        {
+            Staff = new();
+            if (DepartmentId.HasValue)
+            {
+                Staff.DepartmentId = DepartmentId.Value;
+            }
+            Step = 1;
+        }
+    }
 
     private async Task UpdateVisible(bool visible)
     {
@@ -29,15 +45,6 @@ public partial class AddStaffDialog
         else
         {
             Visible = visible;
-        }
-    }
-
-    protected override void OnParametersSet()
-    {
-        if (Visible)
-        {
-            Staff = new();
-            Step = 1;
         }
     }
 

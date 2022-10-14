@@ -7,15 +7,16 @@
 
 <MRow Class="full-height" NoGutters>
     <MCol Md="@("auto")">
-        <MCard style="width:300px;" Class="full-height">
+        <MCard style="width:300px;max-height: calc(100vh - 120px);" Class="full-height">
             <MCardTitle>
                 <SearchTextField @bind-Value="@_searchName" PrependInnerIcon="@IconConstants.Search" Clearable/>
             </MCardTitle>
-            <MCardText>
-                <MTreeview @bind-Active="_active"
+            <MCardText Style="overflow-y: scroll;height: calc(100% - 72px);">
+                <MTreeview @bind-Active="_departmentActive"
                            Items="_departments"
                            Search="@_searchName"
                            OnActiveUpdate="ActiveUpdated"
+                           MandatoryActive Open="_openNode"
                            TItem="DepartmentDto"
                            TKey="Guid"
                            Activatable Hoverable
@@ -164,5 +165,5 @@
 
 <OrgSheet @ref=_orgSheet OnDelete="DeleteAsync" OnSubmit="SubmitAsync" Departments=_departments />
 <CopyOrgSheet @ref="_copyOrgSheet" Departments=_departments OnSubmit="SubmitAsync" />
-<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync" />
+<Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.AddStaffDialog @bind-Visible=_addStaff OnSubmitSuccess="LoadStaffsAsync" DepartmentId="_departmentActive.FirstOrDefault()" />
 <Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.UpdateStaffDialog @bind-Visible=_updateStaff StaffId=_currentStaffId OnSubmitSuccess="LoadStaffsAsync" />
