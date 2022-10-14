@@ -36,10 +36,6 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {
         var identity = Identity.CreaterDefault(principal);
-        identity.Subject = principal.FindFirstValue(Claims.UnionId);
-        identity.Picture = principal.FindFirstValue(Claims.HeadImgUrl);
-        identity.Region = principal.FindFirstValue(Claims.Province);
-        identity.Locality = principal.FindFirstValue(Claims.City);
 
         return identity;
     }

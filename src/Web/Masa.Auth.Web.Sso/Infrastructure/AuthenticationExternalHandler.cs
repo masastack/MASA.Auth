@@ -50,8 +50,6 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             await _events.RaiseAsync(new UserLoginSuccessEvent(userModel.Name, userModel.Id.ToString(), userModel.DisplayName, clientId: context?.Client.ClientId));
 
-            httpContext.UseEnvironmentIsolation(environment);
-
             return true;
         }
         else
