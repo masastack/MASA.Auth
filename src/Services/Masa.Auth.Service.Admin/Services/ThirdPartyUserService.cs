@@ -8,6 +8,7 @@ public class ThirdPartyUserService : RestServiceBase
     public ThirdPartyUserService() : base("api/thirdPartyUser")
     {
         MapGet(GetAsync, "");
+        MapPost(RegisterAsync, "register");
     }
 
     private async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(IEventBus eventBus, GetThirdPartyUsersDto tpu)
@@ -49,6 +50,7 @@ public class ThirdPartyUserService : RestServiceBase
         return query.Result;
     }
 
+    [AllowAnonymous]
     private async Task<UserModel> RegisterAsync(IEventBus eventBus, RegisterThirdPartyUserModel model)
     {
         var query = new RegisterThirdPartyUserCommand(model);
