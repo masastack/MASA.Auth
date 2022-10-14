@@ -54,7 +54,7 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
 
     public void InjectForHotUpdate(IServiceCollection serviceCollection)
     {
-        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<WeixinAuthenticationOptions>, OAuthPostConfigureOptions<WeixinAuthenticationOptions, WeChatAuthenticationHandler>>());
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<WeixinAuthenticationOptions>, OAuthPostConfigureOptions<WeixinAuthenticationOptions, WeixinAuthenticationHandler>>());
     }
 
     public IAuthenticationHandler CreateInstance(IServiceProvider provider, AuthenticationDefaults authenticationDefaults)
@@ -72,6 +72,6 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         });
         options.CurrentValue.StateDataFormat = provider.GetRequiredService<PropertiesDataFormatCache>();
 
-        return new WeChatAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
+        return new WeixinAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
     }
 }
