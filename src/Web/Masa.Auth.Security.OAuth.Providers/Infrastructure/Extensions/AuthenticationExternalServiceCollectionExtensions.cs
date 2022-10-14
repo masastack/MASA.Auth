@@ -10,6 +10,7 @@ public static class AuthenticationExternalServiceCollectionExtensions
         var builder = services.AddScoped<IAuthenticationExternalHandler, TAuthenticationExternalHandler>()
                               .AddAuthentication()
                               .AddCookieExternal(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
+        services.AddSingleton<PropertiesDataFormatCache>();
 
         return builder;
     }
@@ -20,6 +21,7 @@ public static class AuthenticationExternalServiceCollectionExtensions
                              .AddSingleton<IRemoteAuthenticationDefaultsProvider, RemoteAuthenticationDefaultsProvider>()
                              .AddAuthentication()
                              .AddCookieExternal(AuthenticationExternalConstants.ExternalCookieAuthenticationScheme);
+        services.AddSingleton<PropertiesDataFormatCache>();
         services.Replace(ServiceDescriptor.Singleton<IAuthenticationSchemeProvider, HotUpdateAuthenticationSchemeProvider>());
         services.Replace(ServiceDescriptor.Scoped<IAuthenticationHandlerProvider, HotUpdateAuthenticationHandlerProvider>());
         services.InjectForHotUpdate();
