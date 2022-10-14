@@ -24,18 +24,16 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
         {
             [UserClaims.Subject] = "id",
             [UserClaims.Email] = "email",
-            [UserClaims.Name] = "name",
             [UserClaims.WebSite] = "html_url",
             [UserClaims.Picture] = "avatar_url",
-            [UserClaims.Account] = "login"
+            [UserClaims.Account] = "login",
+            [UserClaims.NickName] = "name",
         }
     };
 
     public Identity BuildIdentity(ClaimsPrincipal principal)
     {
         var identity = Identity.CreaterDefault(principal);
-        identity.NickName = principal.FindFirstValue(Claims.Name);
-        identity.WebSite = principal.FindFirstValue(Claims.Url);
 
         return identity;
     }
