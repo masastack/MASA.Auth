@@ -16,6 +16,10 @@ public class PermissionDomainService : DomainService
 
     public bool CanAdd(Guid parentId, PermissionTypes permissionType)
     {
+        if (parentId == Guid.Empty)
+        {
+            return true;
+        }
         if (permissionType == PermissionTypes.Menu || permissionType == PermissionTypes.Api)
         {
             return !_permissionRepository.Any(p => p.ParentId == parentId && p.Type != PermissionTypes.Element);

@@ -33,10 +33,10 @@ public partial class TeamBasicInfo
             {
                 new TeamTypeDto { Id = (int)TeamTypes.Ordinary, Name = T(TeamTypes.Ordinary.ToString()) }
             };
-            if (string.IsNullOrEmpty(Value.Avatar.Color))
-            {
-                Value.Avatar.Color = _colors.First();
-            }
+        }
+        if (string.IsNullOrEmpty(Value.Avatar.Color))
+        {
+            Value.Avatar.Color = _colors.First();
         }
         base.OnAfterRender(firstRender);
     }

@@ -53,7 +53,10 @@
   "RegisterError": "Register error,please contact administrator",
   "NickNamePlaceHolder": "Nick Name",
   "LoginValidateError": "username or password error",
+  "PhoneRequired": "PhoneNumber cannot be empty",
   "SmsRequired": "SMS verification code cannot be empty",
+  "PwdRequired": "Password cannot be empty",
+  "UserNameRequired": "UserName cannot be empty",
   "UnknownException": "Unknown exception,Please contact the administrator"
 }
  

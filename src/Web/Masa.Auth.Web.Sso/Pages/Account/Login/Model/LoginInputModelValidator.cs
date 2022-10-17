@@ -5,16 +5,18 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
 public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
 {
-    public LoginInputModelValidator()
+    public LoginInputModelValidator(I18n i18n)
     {
         When(login => login.PhoneLogin, () =>
         {
-            RuleFor(x => x.PhoneNumber).NotEmpty().Matches(LoginOptions.PhoneRegular);
-            RuleFor(x => x.SmsCode).NotEmpty().Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
+            RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage(i18n.T("PhoneRequired"))
+            .Matches(LoginOptions.PhoneRegular);
+            RuleFor(x => x.SmsCode).NotEmpty().WithMessage(i18n.T("SmsRequired"))
+            .Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
         }).Otherwise(() =>
         {
-            RuleFor(x => x.UserName).NotEmpty();
-            RuleFor(x => x.Password).NotEmpty().MinimumLength(4);
+            RuleFor(x => x.UserName).NotEmpty().WithMessage(i18n.T("UserNameRequired"));
+            RuleFor(x => x.Password).NotEmpty().WithMessage(i18n.T("PwdRequired"));
         });
         RuleFor(x => x.Environment).NotEmpty();
     }

@@ -8,9 +8,7 @@ public class DepartmenCascader : SCascader<DepartmentDto, Guid>
     [Inject]
     public AuthCaller AuthCaller { get; set; } = default!;
 
-    public List<DepartmentDto> Departments { get; set; } = new();
-
-    private DepartmentService DepartmentService => AuthCaller.DepartmentService;
+    DepartmentService DepartmentService => AuthCaller.DepartmentService;
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {

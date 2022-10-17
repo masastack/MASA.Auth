@@ -19,7 +19,7 @@ public class CommandHandler
         _logger = logger;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpsertDepartmentAsync(UpsertDepartmentCommand command)
     {
         var dto = command.UpsertDepartmentDto;
@@ -41,17 +41,37 @@ public class CommandHandler
                 throw new UserFriendlyException($"current department id {dto.Id} not found");
             }
             department.SetStaffs(dto.StaffIds.ToArray());
+            department.Move(parent);
             department.Update(dto.Name, dto.Description, dto.Enabled);
-            if (parent != null)
-            {
-                department.Move(parent);
-            }
             await _departmentRepository.UpdateAsync(department);
             return;
         }
         var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
         addDepartment.SetStaffs(dto.StaffIds.ToArray());
         await _departmentRepository.AddAsync(addDepartment);
+    }
+
+    [EventHandler(2)]
+    public async Task UpdateChildLevelAsync(UpsertDepartmentCommand command)
+    {
+        var dto = command.UpsertDepartmentDto;
+        if (dto.IsUpdate)
+        {
+            await UpdateLevel(dto.Id);
+        }
+
+        async Task UpdateLevel(Guid parentId)
+        {
+            //todo optimization
+            var department = await _departmentRepository.FindAsync(parentId);
+            var children = await _departmentRepository.GetListAsync(d => d.ParentId == parentId);
+            foreach (var child in children)
+            {
+                child.Move(department);
+                await UpdateLevel(child.Id);
+            }
+            await _departmentRepository.UpdateRangeAsync(children);
+        }
     }
 
     [EventHandler]

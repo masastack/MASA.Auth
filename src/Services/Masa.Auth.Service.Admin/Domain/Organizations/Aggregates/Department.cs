@@ -57,8 +57,12 @@ public class Department : FullAggregateRoot<Guid, Guid>
         _departmentStaffs.RemoveAll(ds => staffIds.Contains(ds.StaffId));
     }
 
-    public void Move(Department parent)
+    public void Move(Department? parent)
     {
+        if (parent is null)
+        {
+            return;
+        }
         ParentId = parent.Id;
         Level = parent.Level + 1;
     }

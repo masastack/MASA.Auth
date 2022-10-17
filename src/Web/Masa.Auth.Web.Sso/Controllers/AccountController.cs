@@ -44,7 +44,7 @@ public class AccountController : Controller
                 {
                     PhoneNumber = inputModel.PhoneNumber,
                     Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException(_i18n.T("SmsRequired")),
-                    RegisterLogin = inputModel.RememberLogin
+                    RegisterLogin = inputModel.RegisterLogin
                 });
                 if (user is null)
                 {

@@ -91,10 +91,9 @@
                                             @if (_menuPermissionDetailDto.ParentId != Guid.Empty)
                                             {
                                                 <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                               Items="_menuPermissions" Dense HideDetails="true" Outlined
-                                               ItemText="u => u.Name"
-                                               ItemValue="u => u.Id"
-                                               ItemChildren="u => u.Children">
+                                               Items="MenuTreeParent(_menuPermissionDetailDto.Id,_menuPermissionDetailDto.Type)" HideDetails="true"
+                                               Dense Outlined ChangeOnSelect
+                                               ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children">
                                                 </MCascader>
                                             }
                                         </MCol>
@@ -104,7 +103,7 @@
                                                 <PrependContent>
                                                     <div class="d-flex align-center mt-n1">
                                                         <MIcon Size=30 Style="max-height:30px;max-width:30px;">
-                                                            @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon)?"mdi-image":_menuPermissionDetailDto.Icon)
+                                                            @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon) ? "mdi-image" : _menuPermissionDetailDto.Icon)
                                                         </MIcon>
                                                     </div>
                                                 </PrependContent>
@@ -133,7 +132,7 @@
                                             <SGroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
                                                 @foreach (var role in _menuPermissionDetailDto.Roles)
                                                 {
-                                                    <MChip Small>
+                                                    <MChip Small Class="mx-1">
                                                         @role.Name
                                                     </MChip>
                                                 }
@@ -144,7 +143,7 @@
                                                 <div>
                                                     @foreach (var item in _menuPermissionDetailDto.Users)
                                                     {
-                                                        <MChip Small>
+                                                        <MChip Small Class="mx-1">
                                                             @item.Name
                                                         </MChip>
                                                     }
@@ -152,7 +151,7 @@
                                                 <div class="mt-2">
                                                     @foreach (var item in _menuPermissionDetailDto.Teams)
                                                     {
-                                                        <MChip Small Style="background: #EBF6FF !important;color: #37A7FF;">
+                                                        <MChip Small Style="background: #EBF6FF !important;color: #37A7FF;" Class="mx-1">
                                                             @item.Name
                                                         </MChip>
                                                     }
