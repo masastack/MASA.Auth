@@ -38,19 +38,25 @@ public static class FluentValidationExtensions
     public static IRuleBuilderOptions<T, string> LetterNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder.Matches(RegularHelper.LETTER_NUMBER)
-                          .WithMessage("Can only input upper letter and number of {PropertyName}");
+                          .WithMessage("Can only input letter and number of {PropertyName}");
+    }
+
+    public static IRuleBuilderOptions<T, string> Identity<T>(this IRuleBuilder<T, string> ruleBuilder)
+    {
+        return ruleBuilder.Matches(RegularHelper.IDENTIFY)
+                          .WithMessage("Can only input letter、number and . - of {PropertyName}");
     }
 
     public static IRuleBuilderOptions<T, string> ChineseLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder.Matches(RegularHelper.CHINESE_LETTER)
-                          .WithMessage("Can only input upper chinese and letter of {PropertyName}");
+                          .WithMessage("Can only input chinese and letter of {PropertyName}");
     }
 
     public static IRuleBuilderOptions<T, string> ChineseLetterNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder.Matches(RegularHelper.CHINESE_LETTER_NUMBER)
-                          .WithMessage("Can only input upper chinese and letter and number of {PropertyName}");
+                          .WithMessage("Can only input chinese and letter and number of {PropertyName}");
     }
 
     public static IRuleBuilderOptions<T, string> Phone<T>(this IRuleBuilder<T, string> ruleBuilder)
