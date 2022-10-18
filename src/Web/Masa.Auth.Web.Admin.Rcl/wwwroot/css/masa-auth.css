@@ -135,29 +135,8 @@
         border-radius: 10px !important;
     }
 
-/*.m-card__text {
-    padding: 16px 24px;
-    height: 100%;
-}*/
-
-.m-input fieldset {
-    border-radius: 10px !important;
-    border: 1px solid #E9EDF7 !important;
-    box-sizing: border-box !important;
-}
-
 .m-input .m-input__icon .mdi-menu-down {
     color: #A3AED0;
-}
-
-.m-input .m-label {
-    font-family: 'Roboto' !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 14px !important;
-    line-height: 21px !important;
-    color: #7681AB !important;
-    letter-spacing: 0.25px !important;
 }
 
 .m-input--checkbox .mdi-checkbox-blank-outline {
