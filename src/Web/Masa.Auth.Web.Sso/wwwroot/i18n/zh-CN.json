@@ -12,6 +12,7 @@
   "EmailCode": "邮箱验证码",
   "EmailCodePlaceHolder": "请输入邮箱验证码",
   "GetEmailCode": "获取邮箱验证码",
+  "Captcha": "验证码",
   "Password": "密码",
   "PasswordPlaceHolder": "请输入密码",
   "ConfirmPassword": "确认密码",
