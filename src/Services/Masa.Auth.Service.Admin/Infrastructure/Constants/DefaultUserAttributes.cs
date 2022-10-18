@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Constants;
 
 public static class DefaultUserAttributes
 {
-    public const string Password = "default9527";
+    public const string Password = "auth123";
     public const string MaleAvatar = "https://cdn.masastack.com/stack/images/avatar/mr.chen.svg";
     public const string FemaleAvatar = "https://cdn.masastack.com/stack/images/avatar/ms.qu.svg";
 

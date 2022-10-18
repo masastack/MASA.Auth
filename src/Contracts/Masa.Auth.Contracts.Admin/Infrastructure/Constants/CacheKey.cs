@@ -22,6 +22,7 @@ public static class CacheKey
     const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
     const string EMAIL_REGISTER_SEND_PRE = "email_register_send:";
     const string SMS_REGISTER_SEND_PRE = "sms_register_send:";
+    public const string STAFF = "staff";
 
     public static string PermissionKey(Guid permissionId)
     {

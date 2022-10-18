@@ -21,7 +21,15 @@ public partial class AddStaffDialog
 
     private AddStaffDto Staff { get; set; } = new();
 
+    private string DefaultPassword { get; set; } = "";
+
     private StaffService StaffService => AuthCaller.StaffService;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DefaultPassword = await StaffService.GetDefaultPasswordAsync();
+        Staff.Password = DefaultPassword;
+    }
 
     protected override void OnParametersSet()
     {

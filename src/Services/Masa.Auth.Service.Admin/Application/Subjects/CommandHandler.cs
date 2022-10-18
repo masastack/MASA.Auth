@@ -496,16 +496,17 @@ public class CommandHandler
 
     #region Staff
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddStaffAsync(AddStaffCommand command)
     {
         var staffDto = command.Staff;
         var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
         if (staff is not null) return;
-        await AddStaffAsync(staffDto);
+        
+        command.Result = await AddStaffAsync(staffDto);
     }
 
-    async Task AddStaffAsync(AddStaffDto staffDto)
+    async Task<Staff> AddStaffAsync(AddStaffDto staffDto)
     {
         var addUserDto = new AddUserDto(default, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
@@ -530,15 +531,17 @@ public class CommandHandler
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
         await _staffDomainService.AddAfterAsync(new(staff));
+        return staff;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         var staffDto = command.Staff;
         var staff = await CheckStaffExistAsync(staffDto.Id);
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
         await UpdateStaffAsync(staff, staffDto);
+        command.Result = staff;
     }
 
     async Task UpdateStaffAsync(Staff staff, UpdateStaffDto staffDto)
@@ -554,7 +557,6 @@ public class CommandHandler
         var teams = staff.TeamStaffs.Select(team => team.TeamId).Union(staffDto.Teams).Distinct().ToList();
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);
-
         await _staffDomainService.UpdateAfterAsync(new(staff, teams));
     }
 
@@ -581,9 +583,10 @@ public class CommandHandler
 
         staff.UpdateBasicInfo(staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
         await _staffRepository.UpdateAsync(staff);
+        command.Result = staff;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpsertStaffAsync(UpsertStaffCommand command)
     {
         var staffDto = command.Staff;
@@ -593,14 +596,15 @@ public class CommandHandler
             var updateStaffDto = staffDto.Adapt<UpdateStaffDto>();
             updateStaffDto.Id = staff.Id;
             await UpdateStaffAsync(staff, updateStaffDto);
+            command.Result = staff;
         }
         else
         {
-            await AddStaffAsync(staffDto);
-        }
+            command.Result = await AddStaffAsync(staffDto);
+        }      
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         var staffDto = command.Staff;
@@ -612,6 +616,7 @@ public class CommandHandler
             staff.UpdateForLdap(staffDto.Name, staffDto.DisplayName, staffDto.PhoneNumber, staffDto.Email);
             await _staffRepository.UpdateAsync(staff);
             await _staffDomainService.UpdateAfterAsync(new(staff, default));
+            command.Result = staff;
         }
         else
         {
@@ -624,12 +629,12 @@ public class CommandHandler
                 PhoneNumber = staffDto.PhoneNumber,
                 JobNumber = staffDto.JobNumber
             };
-            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
-            await AddStaffAsync(addStaffDto);
+            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);          
+            command.Result = await AddStaffAsync(addStaffDto);
         }
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateStaffAvatarAsync(UpdateStaffAvatarCommand command)
     {
         var staffDto = command.Staff;
@@ -639,6 +644,7 @@ public class CommandHandler
 
         staff.UpdateAvatar(staffDto.Avatar);
         await _staffRepository.UpdateAsync(staff);
+        command.Result = staff;
     }
 
     [EventHandler(1)]

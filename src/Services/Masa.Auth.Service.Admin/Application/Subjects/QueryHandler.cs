@@ -359,6 +359,18 @@ public class QueryHandler
         query.Result = total;
     }
 
+    [EventHandler]
+    public async Task GetDefaultPasswordAsync(StaffDefaultPasswordQuery query)
+    {
+        var defauptPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF);
+        if (defauptPasswordDto is null || defauptPasswordDto.Enabled is false)
+        {
+            query.Result = "";
+        }
+        else query.Result = defauptPasswordDto.DefaultPassword;
+
+    }
+
     #endregion
 
     #region ThirdPartyUser
