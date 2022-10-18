@@ -84,7 +84,7 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
                                         </MCol>
 
                                         <MCol Md=6>
@@ -110,13 +110,13 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
+                                            <STextField Label="@T("Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
+                                            <STextField Label="@T("Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
+                                            <SNumberTextField Label="@T("Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=12>
                                             <SAutoComplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
@@ -196,16 +196,16 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
+                                            <STextField Label="@T("Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <SNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
+                                            <SNumberTextField Label="@T("Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
+                                            <STextField Label="@T("Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
                                         </MCol>
                                         <MCol Md=12>
                                             <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>

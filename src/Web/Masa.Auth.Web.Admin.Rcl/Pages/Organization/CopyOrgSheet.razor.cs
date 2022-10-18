@@ -15,21 +15,28 @@ public partial class CopyOrgSheet
     public EventCallback<CopyDepartmentDto> OnSubmit { get; set; }
 
     StringNumber _step = 1;
-    List<StaffDto> _removeStaffs = new();
-    bool _visible;
+    bool _visible, _staffLoading;
+    string _search = "";
+    List<StaffSelectDto> _staffs = new();
+    List<StaffDto> _sourceStaffs = new();
+
+    protected StaffService StaffService => AuthCaller.StaffService;
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue(nameof(Dto), out CopyDepartmentDto? dto) && dto != Dto)
+        {
+            _sourceStaffs.AddRange(dto!.Staffs);
+        }
+        return base.SetParametersAsync(parameters);
+    }
 
     private void NextStep()
     {
         _step = 2;
         if (!Dto.MigrateStaff)
         {
-            _removeStaffs.AddRange(Dto.Staffs);
             Dto.Staffs.Clear();
-        }
-        else
-        {
-            Dto.Staffs.AddRange(_removeStaffs);
-            _removeStaffs.Clear();
         }
     }
 
@@ -42,24 +49,56 @@ public partial class CopyOrgSheet
         _visible = false;
     }
 
+    private void Return()
+    {
+        _step = 1;
+        Dto.Staffs.Clear();
+        Dto.Staffs.AddRange(_sourceStaffs);
+    }
+
     private void RemoveStaff(StaffDto staffDto)
     {
         Dto.Staffs.Remove(staffDto);
-        _removeStaffs.Add(staffDto);
+        _staffs.Add(new StaffSelectDto(staffDto.Id, staffDto.JobNumber, staffDto.Name, staffDto.DisplayName, staffDto.Avatar));
     }
 
-    private void AddStaff(StaffDto staffDto)
+    private void AddStaff(StaffSelectDto staffDto)
     {
-        _removeStaffs.Remove(staffDto);
-        Dto.Staffs.Add(staffDto);
+        _staffs.Remove(staffDto);
+        Dto.Staffs.Add(new StaffDto
+        {
+            Id = staffDto.Id,
+            Name = staffDto.Name,
+            Avatar = staffDto.Avatar,
+            JobNumber = staffDto.JobNumber,
+            DisplayName = staffDto.DisplayName
+        });
     }
 
     public void Show(CopyDepartmentDto model)
     {
         Dto = model;
+        _sourceStaffs.AddRange(Dto.Staffs);
         Dto.Name = model.Name + "副本";
         _step = 1;
-        _removeStaffs = new();
+        _staffs = new();
         _visible = true;
+    }
+
+    private async Task QueryStaff(string search)
+    {
+        search = search.Trim(' ');
+        _search = search;
+        await Task.Delay(300);
+        if (search != _search)
+        {
+            return;
+        }
+
+        _staffLoading = true;
+        var staffs = await StaffService.GetSelectAsync(search);
+        _staffs = _staffs.UnionBy(staffs, staff => staff.Id).ToList();
+        _staffs.RemoveAll(s => Dto.Staffs.Any(ss => ss.Id == s.Id));
+        _staffLoading = false;
     }
 }
