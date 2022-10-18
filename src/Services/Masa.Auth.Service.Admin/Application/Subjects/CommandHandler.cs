@@ -129,8 +129,8 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Email, userDto.IdCard, default);
-        user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
+        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account);
+        user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
@@ -487,7 +487,7 @@ public class CommandHandler
             if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
                 throw new UserFriendlyException($"User with idCard {idCard} already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
-                throw new UserFriendlyException($"User with account {account} already exists");
+                throw new UserFriendlyException($"User with account {account} already exists,please contact the administrator");
         }
         return exitUser;
     }
