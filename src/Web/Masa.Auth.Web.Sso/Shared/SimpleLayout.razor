@@ -1,10 +1,11 @@
 ﻿@using System.Globalization
 @inherits SsoLayoutComponentBase
 @inject I18n I18n
+@inject IJSRuntime JS
 
 <CascadingValue Value="I18n">
     <MApp>
-        <MErrorHandler>
+        <MErrorHandler OnErrorHandleAsync=OnErrorAsync>
             <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">
                 <div class="d-flex flex-column full-height">
                     <MRow>
@@ -54,4 +55,8 @@
         I18n.SetCulture(new CultureInfo(_targetCulture));
     }
 
+    async Task OnErrorAsync(Exception e){
+        await PopupService.AlertAsync(e.Message, AlertTypes.Error);
+        await JS.InvokeVoidAsync("console.log", $"error: {e.ToString()}");
+    }
 }
