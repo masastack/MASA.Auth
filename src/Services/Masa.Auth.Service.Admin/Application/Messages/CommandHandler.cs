@@ -27,10 +27,10 @@ public class CommandHandler
         switch (model.SendMsgCodeType)
         {
             case SendMsgCodeTypes.Register:
-                if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber))
-                {
-                    throw new UserFriendlyException($"This mobile phone number {model.PhoneNumber} already exists as a user");
-                }
+                //if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber))
+                //{
+                //    throw new UserFriendlyException($"This mobile phone number {model.PhoneNumber} already exists as a user");
+                //}
                 cacheKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
                 break;
             case SendMsgCodeTypes.Login:

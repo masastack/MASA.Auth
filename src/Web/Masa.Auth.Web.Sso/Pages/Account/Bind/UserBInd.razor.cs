@@ -1,65 +1,99 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Identity = Masa.Auth.Security.OAuth.Providers.Identity;
-
 namespace Masa.Auth.Web.Sso.Pages.Account.Bind;
 
 [AllowAnonymous]
 public partial class UserBind
 {
+    private string? _captchaText;
+    bool _smsloading;
+    bool _loginLoading;
+
     [Inject]
     public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
 
     [Inject]
     public IAuthClient AuthClient { get; set; } = default!;
 
-    public Identity Identity { get; set; } = default!;
+    public RegisterThirdPartyUserModel UserModel { get; set; } = new();
 
-    public UserModel? UserModel { get; set; }
-
-    public bool Visible { get; set; }
-
-    public string Prompt { get; set; } = "";
+    [NotNull]
+    private string? CaptchaText
+    {
+        get => (_captchaText == "0" || _captchaText == null) ? T("Captcha") : _captchaText;
+        set => _captchaText = value;
+    }
 
     protected override async Task OnInitializedAsync()
     {
         var httpContext = HttpContextAccessor.HttpContext!;
-        Identity = await httpContext.GetExternalIdentityAsync();
-        if (string.IsNullOrEmpty(Identity.PhoneNumber) is false)
+        var identity = await httpContext.GetExternalIdentityAsync();
+        UserModel = new RegisterThirdPartyUserModel
         {
-            UserModel = await AuthClient.UserService.FindByPhoneNumberAsync(Identity.PhoneNumber);
-            Prompt = $"It is found that there is a user whose mobile phone number is {Identity.PhoneNumber}, click to bind";
+            ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(identity.Issuer),
+            ExtendedData = JsonSerializer.Serialize(identity),
+            ThridPartyIdentity = identity.Subject,
+            UserRegisterType = UserRegisterTypes.PhoneNumber,
+            PhoneNumber = identity.PhoneNumber ?? "",
+            Email = identity.Email ?? "",
+            Account = identity.Account,
+            DisplayName = identity.NickName ?? identity.Name,
+            Avatar = identity.Picture
+        };
+        UserModel? user = default;
+        if (string.IsNullOrEmpty(identity.PhoneNumber) is false)
+        {
+            user = await AuthClient.UserService.FindByPhoneNumberAsync(identity.PhoneNumber);
         }
-        if (UserModel is null && string.IsNullOrEmpty(Identity.Email) is false)
+        if (user is null && string.IsNullOrEmpty(identity.Email) is false)
         {
-            UserModel = await AuthClient.UserService.FindByEmailAsync(Identity.Email);
-            Prompt = $"It is found that there is a user whose mobile emai is {Identity.Email}, click to bind";
+            user = await AuthClient.UserService.FindByEmailAsync(identity.Email);
         }
-        if (UserModel is null)
+        if (user is not null)
         {
-            NavigateToRegister();
+            UserModel.Avatar = user.Avatar;
+            UserModel.DisplayName = user.DisplayName;
+            UserModel.Account = user.Account;
+            UserModel.PhoneNumber = user.PhoneNumber ?? "";
+            UserModel.Email = user.Email ?? "";
         }
     }
 
-    public void NavigateToRegister()
+    private async Task SendCaptcha(FormContext context)
     {
-        Navigation.NavigateTo("/account/register");
-    }
-
-    public async Task BindAsync()
-    {
-        await AuthClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
+        if (CaptchaText != T("Captcha")) return;
+        var field = context.EditContext.Field(nameof(UserModel.PhoneNumber));
+        context.EditContext.NotifyFieldChanged(field);
+        var result = context.EditContext.GetValidationMessages(field);
+        if (result.Any() is false)
         {
-            ThridPartyIdentity = Identity.Subject,
-            ExtendedData = JsonSerializer.Serialize(Identity),
-            ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(Identity.Issuer),
-            User = new AddUserModel
+            await AuthClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel()
             {
-                Email = Identity.Email,
-                PhoneNumber = Identity.PhoneNumber,
+                PhoneNumber = UserModel.PhoneNumber,
+                SendMsgCodeType = SendMsgCodeTypes.Register  //todo SendMsgCodeTypes.Bind
+            });
+            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            int second = 60;
+            while (second >= 0)
+            {
+                CaptchaText = second.ToString();
+                StateHasChanged();
+                second--;
+                await Task.Delay(1000);
             }
-        });
-        Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
+        }
+    }
+
+    public async Task BindAsync(FormContext context)
+    {
+        if (context.Validate())
+        {
+            _loginLoading = true;
+            await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
+            Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
+            _loginLoading = false;
+            await PopupService.ToastSuccessAsync("Login success");
+        }
     }
 }
