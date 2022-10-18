@@ -34,13 +34,15 @@
                         <span class="h5 emphasis2--text">@T("Member")</span>
                         <MSpacer />
                         <SAutoComplete 
-                            Items="_removeStaffs" 
-                            TItem="StaffDto" TValue="Guid" 
-                            TItemValue="StaffDto"                                     
+                            Items="_staffs" 
+                            TItem="StaffSelectDto" TValue="Guid"
+                            TItemValue="StaffSelectDto"
                             ItemText="r=>r.Name"
                             PrependInnerIcon="@IconConstants.Search"                                      
-                            ItemValue="r=>r" 
-                            HideDetails="true" 
+                            ItemValue="r=>r"
+                            Loading="_staffLoading"
+                            OnSearchInputUpdate="QueryStaff"
+                            HideDetails="true" HideSelected
                             OnSelectedItemUpdate="AddStaff"
                             Clearable 
                             Style="max-width:340px;" 
@@ -88,7 +90,7 @@
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <EnableSwitch @bind-Value="Dto.Enabled" />
                     <MSpacer />
-                    <SButton Medium Outlined OnClick="()=> _step = 1 ">@T("Previous step")</SButton>
+                    <SButton Medium Outlined OnClick="Return">@T("Previous step")</SButton>
                     <SButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</SButton>
                 </MCardActions>
             </MCard>
