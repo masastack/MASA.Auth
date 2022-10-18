@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record StaffDefaultPasswordQuery() : Query<string>
+public record StaffDefaultPasswordQuery() : Query<StaffDefaultPasswordDto>
 {
-    public override string Result { get; set; } = "";
+    public override StaffDefaultPasswordDto Result { get; set; } = new();
 }

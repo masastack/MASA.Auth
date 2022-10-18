@@ -57,9 +57,9 @@ public class StaffService : ServiceBase
         return await PostAsync<UploadFileDto, SyncStaffResultsDto>("sync", file);
     }
 
-    public async Task<string> GetDefaultPasswordAsync()
+    public async Task<StaffDefaultPasswordDto> GetDefaultPasswordAsync()
     {
-        return await GetAsync<string>(nameof(GetDefaultPasswordAsync));
+        return await GetAsync<StaffDefaultPasswordDto>(nameof(GetDefaultPasswordAsync));
     }
 
     public async Task UpdateDefaultPasswordAsync(StaffDefaultPasswordDto dto)

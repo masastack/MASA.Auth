@@ -176,7 +176,7 @@ public class StaffService : RestServiceBase
         await eventBus.PublishAsync(updateCurrentTeamCommand);
     }
     
-    private async Task<string> GetDefaultPasswordAsync(IEventBus eventBus)
+    private async Task<StaffDefaultPasswordDto> GetDefaultPasswordAsync(IEventBus eventBus)
     {
         var query = new StaffDefaultPasswordQuery();
         await eventBus.PublishAsync(query);
