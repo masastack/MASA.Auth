@@ -49,7 +49,6 @@
   "RegistrationSuccess": "注册成功",
   "ReplenishInfo": "完善资料",
   "Sure": "确定",
-  "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码",
   "User": "用户",
   "RegistrationAgreement": "用户申请注册协议",
   "RegistrationAgreementStatement": "同意注册MASA系列产品协议",
@@ -58,6 +57,13 @@
   "or login with": "或使用以下登录",
   "Register success": "注册成功",
   "LoginValidateError": "用户名或密码错误",
+  "PhoneRequired": "手机号不能为空",
   "SmsRequired": "短信验证码不能为空",
-  "UnknownException": "未知异常，请联系管理员"
+  "PwdRequired": "密码不能为空",
+  "UserNameRequired": "用户名不能为空",
+  "UnknownException": "未知异常，请联系管理员",
+
+
+  "Password not equal ConfirmPassword": "两次输入密码不相同",
+  "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码"
 }

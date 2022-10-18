@@ -213,8 +213,7 @@ public class CommandHandler
             roles.AddRange(await _authDbContext.Set<Role>()
                                                 .Where(role => userModel.RoleCodes.Contains(role.Code))
                                                 .Select(role => role.Id)
-                                                .ToListAsync()
-                          );
+                                                .ToListAsync());
         }
         if (userModel.Id != default)
         {

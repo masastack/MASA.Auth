@@ -23,10 +23,14 @@
             </span>
         </MCardText>
         <MCardActions class="px-4">
-            @if (Team.AdminAvatar.Any())
-            {
-                <img src="@(Team.AdminAvatar.FirstOrDefault())" height=24 width=24 />
-            }
+            <div class="avatar-list-stacked">
+                @foreach (var adminAvatar in Team.AdminAvatar)
+                {
+                    <MAvatar Size="24">
+                        <MImage Width="24" Height="24" Src="@adminAvatar"></MImage>
+                    </MAvatar>
+                }
+            </div>
             <MSpacer />
             <span class="body2 masa-text-3-1">@Team.Modifier @T("Edit In") @Team.ModificationTime.Humanize(culture:I18n.Culture)</span>
         </MCardActions>

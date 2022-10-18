@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
 public class RegisterInputModelValidator : AbstractValidator<RegisterInputModel>
 {
-    public RegisterInputModelValidator()
+    public RegisterInputModelValidator(I18n i18n)
     {
         When(login => login.EmailRegister, () =>
         {
@@ -18,7 +18,8 @@ public class RegisterInputModelValidator : AbstractValidator<RegisterInputModel>
         });
         When(login => !string.IsNullOrEmpty(login.Password), () =>
         {
-            RuleFor(x => x.Password).MinimumLength(6).Equal(x => x.ConfirmPassword).WithMessage("Password not equal ConfirmPassword");
+            RuleFor(x => x.Password).MinimumLength(8).Equal(x => x.ConfirmPassword)
+            .WithMessage(i18n.T("Password not equal ConfirmPassword"));
         });
     }
 }

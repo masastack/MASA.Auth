@@ -25,10 +25,10 @@
             @T("Delete")
         </MButton>
         <MSpacer />
-        @*<SButton Medium Class="mr-4" OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>*@
+        @if (_tabs.IndexOf(_tab)>0)
+        {
+            <SButton Medium Class="mr-4" OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>
+        }
         <SButton Medium MinWidth="100" OnClick="OnUpdateHandler">@T("Save")</SButton>
     </MCardActions>
 </SSheetDialog>
-
-@*<PermissionsPreview @bind-Show="_adminPreview" Value="Dto.TeamAdmin.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />
-<PermissionsPreview @bind-Show="_memberPreview" Value="Dto.TeamMember.Permissions.Where(a=>a.Value).Select(a=>a.Key.ToString()).ToList()" />*@
