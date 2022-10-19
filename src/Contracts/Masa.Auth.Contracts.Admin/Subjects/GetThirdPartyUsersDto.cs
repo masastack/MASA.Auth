@@ -5,7 +5,9 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class GetThirdPartyUsersDto : Pagination<GetThirdPartyUsersDto>
 {
-    public Guid UserId { get; set; }
+    public string Search { get; set; }
+
+    public Guid? ThirdPartyId { get; set; }
 
     public bool? Enabled { get; set; }
 
@@ -13,11 +15,16 @@ public class GetThirdPartyUsersDto : Pagination<GetThirdPartyUsersDto>
 
     public DateTime? EndTime { get; set; }
 
-    public GetThirdPartyUsersDto(int page, int pageSize, Guid userId, bool? enabled, DateTime? startTime, DateTime? endTime)
+    public GetThirdPartyUsersDto(int page, int pageSize, string search, Guid? thirdPartyId, bool? enabled, DateTime? startTime, DateTime? endTime)
     {
         Page = page;
         PageSize = pageSize;
-        UserId = userId;
+        Search = search;
+        if(thirdPartyId == Guid.Empty)
+        {
+            ThirdPartyId = null;
+        }
+        else ThirdPartyId = thirdPartyId;
         Enabled = enabled;
         StartTime = startTime;
         EndTime = endTime;

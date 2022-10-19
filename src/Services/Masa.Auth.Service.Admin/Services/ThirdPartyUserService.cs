@@ -13,7 +13,7 @@ public class ThirdPartyUserService : RestServiceBase
 
     private async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(IEventBus eventBus, GetThirdPartyUsersDto tpu)
     {
-        var query = new ThirdPartyUsersQuery(tpu.Page, tpu.PageSize, tpu.UserId, tpu.Enabled, tpu.StartTime, tpu.EndTime);
+        var query = new ThirdPartyUsersQuery(tpu.Page, tpu.PageSize, tpu.Search, tpu.ThirdPartyId, tpu.Enabled, tpu.StartTime, tpu.EndTime);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

@@ -8,17 +8,29 @@ public partial class ThirdPartyUser
     private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
-    private Guid _userId;
+    private string? _search;
+    private Guid _thirdPartyId;
     private DateOnly? _startTime;
     private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
     private LdapDialog ldapDialog = null!;
 
-    public Guid UserId
+    public string Search
     {
-        get { return _userId; }
+        get { return _search ?? ""; }
         set
         {
-            _userId = value;
+            _search = value;
+            _page = 1;
+            GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public Guid ThirdPartyId
+    {
+        get => _thirdPartyId;
+        set
+        {
+            _thirdPartyId = value;
             _page = 1;
             GetThirdPartyUsersAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
@@ -104,13 +116,12 @@ public partial class ThirdPartyUser
         new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
         new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
         new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align="center", Width="105px" },
-        //new() { Text = T("Action"), Value = "Action", Sortable = false },
     };
 
     public async Task GetThirdPartyUsersAsync()
     {
         Loading = true;
-        var request = new GetThirdPartyUsersDto(Page, PageSize, UserId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
+        var request = new GetThirdPartyUsersDto(Page, PageSize, Search, ThirdPartyId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
         var response = await ThirdPartyUserService.GetListAsync(request);
         ThirdPartyUsers = response.Items;
         Total = response.Total;

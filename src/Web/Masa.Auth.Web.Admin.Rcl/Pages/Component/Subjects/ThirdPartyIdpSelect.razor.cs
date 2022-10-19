@@ -23,7 +23,11 @@ public partial class ThirdPartyIdpSelect
     [Parameter]
     public List<Guid> Excludes { get; set; } = new();
 
-    string Label { get; set; } = "";
+    [Parameter]
+    public bool Small { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
 
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
@@ -33,7 +37,7 @@ public partial class ThirdPartyIdpSelect
         {
             await InitThirdPartyIdps();
         }
-        else Label = "ThirdPartyIdp";
+        else Label ??= "ThirdPartyIdp";
     }
 
     public async Task InitThirdPartyIdps()

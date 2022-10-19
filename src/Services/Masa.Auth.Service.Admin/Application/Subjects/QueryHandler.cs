@@ -376,12 +376,16 @@ public class QueryHandler
         if (query.EndTime is not null)
             condition = condition.And(tpu => tpu.CreationTime <= query.EndTime);
 
-        if (query.UserId != Guid.Empty)
-            condition = condition.And(tpu => tpu.Id == query.UserId);
+        if (query.ThirdPartyId is not null)
+            condition = condition.And(tpu => tpu.ThirdPartyIdpId == query.ThirdPartyId);
+
+        if (string.IsNullOrEmpty(query.Search) is false)
+            condition = condition.And(tpu => tpu.User.DisplayName.Contains(query.Search));
 
         var tpuQuery = _authDbContext.Set<ThirdPartyUser>().Where(condition);
         var total = await tpuQuery.LongCountAsync();
-        var tpus = await tpuQuery.Include(tpu => tpu.CreateUser)
+        var tpus = await tpuQuery.Include(tpu => tpu.User)
+                                 .Include(tpu => tpu.CreateUser)
                                  .Include(tpu => tpu.ModifyUser)
                                  .OrderByDescending(s => s.ModificationTime)
                                  .ThenByDescending(s => s.CreationTime)
