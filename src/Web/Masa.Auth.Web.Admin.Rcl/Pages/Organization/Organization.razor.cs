@@ -102,6 +102,7 @@ public partial class Organization
     {
         await DepartmentService.CopyAsync(dto);
         await LoadDepartmentsAsync();
+        await LoadStaffsAsync(dto.Id);
     }
 
     private async Task Copy(Guid sourceId)
@@ -114,9 +115,9 @@ public partial class Organization
         _copyDepartmentDto = new CopyDepartmentDto();
         _copyDepartmentDto.Name = department.Name;
         _copyDepartmentDto.SourceId = sourceId;
-        _copyDepartmentDto.Description = department.Description;
         _copyDepartmentDto.Enabled = department.Enabled;
         _copyDepartmentDto.ParentId = department.ParentId;
+        _copyDepartmentDto.Id = department.Id;
         _copyDepartmentDto.Staffs = department.StaffList;
         _copyOrgSheet.Show(_copyDepartmentDto);
     }
