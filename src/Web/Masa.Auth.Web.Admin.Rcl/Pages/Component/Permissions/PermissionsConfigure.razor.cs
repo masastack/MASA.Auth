@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
-using System.Linq;
 using StackApp = Stack.Components.Models.App;
 
 public partial class PermissionsConfigure
