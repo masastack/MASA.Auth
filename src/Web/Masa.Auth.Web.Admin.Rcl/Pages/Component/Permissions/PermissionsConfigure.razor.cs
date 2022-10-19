@@ -3,6 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
+using System.Linq;
 using StackApp = Stack.Components.Models.App;
 
 public partial class PermissionsConfigure
@@ -16,23 +17,20 @@ public partial class PermissionsConfigure
     [Parameter]
     public List<Guid> Roles { get; set; } = new();
 
-    private List<Guid> InternalRoles { get; set; } = new();
-
     [Parameter]
     public List<Guid> Teams { get; set; } = new();
 
-    private List<Guid> InternalTeams { get; set; } = new();
-
     [Parameter]
     public Guid User { get; set; }
-
-    private Guid InternalUser { get; set; }
 
     [Parameter]
     public List<Guid> Value { get; set; } = new();
 
     [Parameter]
     public EventCallback<List<Guid>> ValueChanged { get; set; }
+
+    [Parameter]
+    public List<string> ScopeItems { get; set; } = new();
 
     [Parameter]
     public bool Preview { get; set; }
@@ -42,6 +40,10 @@ public partial class PermissionsConfigure
 
     [Parameter]
     public string TagIdPrefix { get; set; } = "";
+
+    List<Guid> _internalRoles = new();
+    List<Guid> _internalTeams = new();
+    Guid _internalUser { get; set; }
 
     List<Guid> RolePermissions { get; set; } = new();
 
@@ -75,26 +77,36 @@ public partial class PermissionsConfigure
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Roles.Count != InternalRoles.Count || Roles.Except(InternalRoles).Any())
+        if (Roles.Count != _internalRoles.Count || Roles.Except(_internalRoles).Any())
         {
-            InternalRoles = Roles;
+            _internalRoles = Roles;
             await GetRolePermissions();
         }
-        if (Teams.Count != InternalTeams.Count || Teams.Except(InternalTeams).Any())
+        if (Teams.Count != _internalTeams.Count || Teams.Except(_internalTeams).Any())
         {
-            InternalTeams = Teams;
+            _internalTeams = Teams;
             await GetTeamPermissions();
         }
-        if (User != InternalUser)
+        if (User != _internalUser)
         {
-            InternalUser = User;
+            _internalUser = User;
             await GetTeamPermissions();
         }
     }
 
     private async Task GetCategoriesAsync()
     {
-        var apps = (await ProjectService.GetListAsync(true)).SelectMany(p => p.Apps).ToList();
+        var apps = (await ProjectService.GetUIAndMenusAsync()).SelectMany(p => p.Apps).ToList();
+
+        if (ScopeItems?.Any() == true)
+        {
+            foreach (var app in apps)
+            {
+                app.Navs = FilterScopePermission(app.Navs);
+            }
+            apps.RemoveAll(a => !a.Navs.Any());
+        }
+
         EmptyPermissionMap = apps.SelectMany(app => app.Navs)
                             .Where(nav => nav.PermissionType == default && nav.Children.Any(child => child.PermissionType == PermissionTypes.Menu))
                             .SelectMany(nav => nav.Children.Select(item => (Code: item.Code, ParentCode: nav.Code)))
@@ -106,6 +118,19 @@ public partial class PermissionsConfigure
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
+
+        List<PermissionNavDto> FilterScopePermission(List<PermissionNavDto> navs)
+        {
+            foreach (var nav in navs)
+            {
+                if (nav.Children.Any())
+                {
+                    nav.Children = FilterScopePermission(nav.Children);
+                }
+            }
+            navs.RemoveAll(n => !ScopeItems.Contains(n.Code) && !n.Children.Any());
+            return navs;
+        }
     }
 
     private async Task GetRolePermissions()

@@ -401,6 +401,8 @@ public class CommandHandler
 
             var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
             await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
+            //get real user account
+            account = upsertThirdPartyUserCommand.Result.Account;
         }
 
         var user = await _userRepository.FindAsync(u => u.Account == account);

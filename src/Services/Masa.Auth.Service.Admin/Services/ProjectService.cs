@@ -8,14 +8,22 @@ public class ProjectService : ServiceBase
     public ProjectService() : base("api/project")
     {
         MapGet(GetListAsync);
+        MapGet(GetUIAndMenusAsync);
         MapGet(GetNavigationListAsync, "navigations");
         MapGet(GetTagsAsync);
         MapPost(SaveAppTagAsync);
     }
 
-    private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus, [FromQuery] bool hasMenu = false)
+    private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus)
     {
-        var query = new ProjectListQuery(hasMenu);
+        var query = new ProjectListQuery();
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<ProjectDto>> GetUIAndMenusAsync(IEventBus eventBus)
+    {
+        var query = new ProjectUIAppListQuery();
         await eventBus.PublishAsync(query);
         return query.Result;
     }

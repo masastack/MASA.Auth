@@ -35,7 +35,8 @@
             </MStepperContent>
             <MStepperContent class="full-height" Step="3">
                 <MCard Class="mx-auto d-flex flex-column full-height">
-                    <TeamMember IgnoreStaffIds="_teamDetailDto.TeamAdmin.Staffs" @bind-Value="_teamDetailDto.TeamMember" />
+                    <TeamMember ScopePermissions="_teamDetailDto.TeamAdmin.Permissions.Select(p=>p.PermissionId).ToList()" 
+                        IgnoreStaffIds="_teamDetailDto.TeamAdmin.Staffs" @bind-Value="_teamDetailDto.TeamMember" />
                     <MCardActions class="d-flex justify-end align-center mb-6">
                         <SButton Medium class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
                         <SButton Medium OnClick="OnSubmitHandler">@T("Submit")</SButton>
