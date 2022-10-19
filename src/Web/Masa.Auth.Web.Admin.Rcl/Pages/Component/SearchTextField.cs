@@ -11,6 +11,8 @@ public class SearchTextField : STextField<string>
     [Parameter]
     public bool FillBackground { get; set; } = true;
 
+    string Search { get; set; } = "";
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         Flat = true;
@@ -31,6 +33,18 @@ public class SearchTextField : STextField<string>
         };
 
         await base.SetParametersAsync(parameters);
+
+        var oldValueChanged = ValueChanged;
+        ValueChanged = EventCallback.Factory.Create<string>(this,async value => 
+        {
+            Search = value;
+            await Task.Delay(300);
+            if (Search != value) return;
+            else
+            {
+                await oldValueChanged.InvokeAsync(value);
+            }
+        });
     }
 
     protected override void OnParametersSet()

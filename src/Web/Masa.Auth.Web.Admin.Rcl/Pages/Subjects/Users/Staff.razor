@@ -55,7 +55,7 @@
                         <span>@context.Item.Position</span>
                         break;
                     case nameof(StaffDto.Enabled):
-                        <EnableChip Value="context.Item.Enabled" />
+                        <EnableChip Value="context.Item.Enabled" DisabledLabel="@T("Freeze")" />
                         break;
                     case "Action":
                         <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateStaffDialog(context.Item)">@IconConstants.Update</SIcon>
