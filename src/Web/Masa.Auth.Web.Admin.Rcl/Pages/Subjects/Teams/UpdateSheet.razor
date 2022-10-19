@@ -16,7 +16,8 @@
         <SElevationTabItem>
             @if (_visible)
             {
-                <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
+                <TeamMember ScopePermissions="Dto.TeamAdmin.Permissions.Select(p=>p.PermissionId).ToList()" 
+                    IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
             }
         </SElevationTabItem>
     </SElevationTab>

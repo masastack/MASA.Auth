@@ -7,10 +7,9 @@ public partial class Index
 {
     string _tab = "", _search = "";
     bool _showMenuInfo, _showApiInfo;
-    List<AppPermissionsViewModel> _menuPermissions = new();
-    List<AppPermissionsViewModel> _apiPermissions = new();
-    List<Guid> _menuPermissionActive = new List<Guid>();
-    List<Guid> _apiPermissionActive = new List<Guid>();
+    List<AppPermissionsViewModel> _menuPermissions = new(), _apiPermissions = new();
+    List<Guid> _menuPermissionActive = new List<Guid>(), _apiPermissionActive = new List<Guid>()
+        , _menuOpenNode = new List<Guid>(), _apiOpenNode = new List<Guid>();
     string _curProjectId = "";
     MenuPermissionDetailDto _menuPermissionDetailDto = new();
     ApiPermissionDetailDto _apiPermissionDetailDto = new();
@@ -45,11 +44,16 @@ public partial class Index
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private List<AppPermissionsViewModel> MenuTreeParent(Guid permissionId, PermissionTypes permissionType)
+    private List<AppPermissionsViewModel> MenuTreeParent(MenuPermissionDetailDto menuPermissionDetailDto)
     {
-        var menus = _menuPermissions.Select(m => (AppPermissionsViewModel)m.Clone()).ToList();
-        RemoveAll(menus, x => x.Id == permissionId);
-        if (permissionType == PermissionTypes.Menu)
+        var menus = _menuPermissions.Where(m => m.AppId == menuPermissionDetailDto.AppId)
+            .Select(m => (AppPermissionsViewModel)m.Clone()).ToList();
+        menus.ForEach(item =>
+        {
+            item.Id = Guid.Empty;
+        });
+        RemoveAll(menus, x => x.Id == menuPermissionDetailDto.Id);
+        if (menuPermissionDetailDto.Type == PermissionTypes.Menu)
         {
             RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);
         }
@@ -92,7 +96,8 @@ public partial class Index
             AppUrl = a.Url,
             Name = a.Name
         }).ToList();
-        _menuPermissionActive = _menuPermissions.Select(m => m.Id).Take(1).ToList();
+        _menuOpenNode = _menuPermissions.Select(m => m.Id).ToList();
+        _menuPermissionActive = _menuOpenNode.Take(1).ToList();
         _apiPermissions = _curAppItems.Where(a => a.Type == AppTypes.Service).Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
@@ -102,7 +107,8 @@ public partial class Index
             AppUrl = a.Url,
             Name = a.Name
         }).ToList();
-        _apiPermissionActive = _apiPermissions.Select(m => m.Id).Take(1).ToList();
+        _apiOpenNode = _apiPermissions.Select(m => m.Id).ToList();
+        _apiPermissionActive = _apiOpenNode.Take(1).ToList();
         var applicationPermissions = await PermissionService.GetApplicationPermissionsAsync(_curProjectId);
 
         var config = new TypeAdapterConfig();
