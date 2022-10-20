@@ -77,12 +77,12 @@ public class QueryHandler
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
-        var creator = await _authDbContext.Set<User>().Where(u => u.Id == user.Creator).Select(u => u.Name).FirstOrDefaultAsync();
-        var modifier = await _authDbContext.Set<User>().Where(u => u.Id == user.Modifier).Select(u => u.Name).FirstOrDefaultAsync();
+        var creator = await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(user.Creator));
+        var modifier = await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(user.Modifier));
         var userDetail = await UserSplicingDataAsync(user);
         query.Result = userDetail!;
-        query.Result.Creator = creator ?? "";
-        query.Result.Modifier = modifier ?? "";
+        query.Result.Creator = creator?.DisplayName;
+        query.Result.Modifier = modifier?.DisplayName;
     }
 
     [EventHandler]

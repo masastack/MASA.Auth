@@ -13,9 +13,9 @@ public class UserDetailDto : UserDto
 
     public List<string> ThirdPartyIdpAvatars { get; set; }
 
-    public string Creator { get; set; }
+    public string? Creator { get; set; }
 
-    public string Modifier { get; set; }
+    public string? Modifier { get; set; }
 
     public DateTime? ModificationTime { get; set; }
 
