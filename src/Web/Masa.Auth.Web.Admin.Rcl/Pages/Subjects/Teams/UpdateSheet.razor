@@ -1,11 +1,9 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@T("Update Team")" ContentClass="px-sheet-dialog">
-    <SElevationTab Dense Style="height: calc(100% - 80px);" Class="pt-12" @bind-Tab="@_tab" Tabs='_tabs' ItemsClass="mt-8 full-height">
+<DefaultSheetDialog @bind-Value=_visible Title="@T("Update Team")">
+    <SElevationTab Dense Style="height: calc(100% - 40px);" @bind-Tab="@_tab" Tabs='_tabs' ItemsClass="mt-8 full-height">
         <SElevationTabItem>
-            @*<MCard Class="d-flex flex-column full-height">*@
             <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
-            @*</MCard>*@
         </SElevationTabItem>
         <SElevationTabItem>
             @if (_visible)
@@ -21,15 +19,15 @@
             }
         </SElevationTabItem>
     </SElevationTab>
-    <MCardActions class="d-flex align-center mb-10 px-6">
+    <MCardActions class="d-flex align-center px-6">
         <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
             @T("Delete")
         </MButton>
         <MSpacer />
-        @if (_tabs.IndexOf(_tab)>0)
+        @if (_tabs.IndexOf(_tab)>0)  
         {
             <SButton Medium Class="mr-4" OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>
         }
         <SButton Medium MinWidth="100" OnClick="OnUpdateHandler">@T("Save")</SButton>
     </MCardActions>
-</SSheetDialog>
+</DefaultSheetDialog>

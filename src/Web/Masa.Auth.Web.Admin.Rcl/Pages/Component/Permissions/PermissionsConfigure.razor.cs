@@ -29,7 +29,7 @@ public partial class PermissionsConfigure
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     [Parameter]
-    public List<string> ScopeItems { get; set; } = new();
+    public List<string>? ScopeItems { get; set; }
 
     [Parameter]
     public bool Preview { get; set; }
@@ -43,6 +43,7 @@ public partial class PermissionsConfigure
     List<Guid> _internalRoles = new();
     List<Guid> _internalTeams = new();
     Guid _internalUser { get; set; }
+    List<Category> _categories = new(), _sourceCategories = new();
 
     List<Guid> RolePermissions { get; set; } = new();
 
@@ -62,8 +63,6 @@ public partial class PermissionsConfigure
                         .ToList();
         }
     }
-
-    private List<Category> Categories { get; set; } = new();
 
     private ProjectService ProjectService => AuthCaller.ProjectService;
 
@@ -93,32 +92,54 @@ public partial class PermissionsConfigure
         }
     }
 
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<List<string>>(nameof(ScopeItems), out var scopeItems) && scopeItems != ScopeItems)
+        {
+            FilterCategories();
+        }
+        return base.SetParametersAsync(parameters);
+    }
+
     private async Task GetCategoriesAsync()
     {
         var apps = (await ProjectService.GetUIAndMenusAsync()).SelectMany(p => p.Apps).ToList();
 
-        if (ScopeItems?.Any() == true)
-        {
-            foreach (var app in apps)
-            {
-                app.Navs = FilterScopePermission(app.Navs);
-            }
-            apps.RemoveAll(a => !a.Navs.Any());
-        }
+        apps.RemoveAll(a => !a.Navs.Any());
 
         EmptyPermissionMap = apps.SelectMany(app => app.Navs)
                             .Where(nav => nav.PermissionType == default && nav.Children.Any(child => child.PermissionType == PermissionTypes.Menu))
                             .SelectMany(nav => nav.Children.Select(item => (Code: item.Code, ParentCode: nav.Code)))
                             .ToDictionary(item => Guid.Parse(item.Code), item => Guid.Parse(item.ParentCode));
 
-        Categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
+        _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
         {
             Code = ag.Key.Replace(" ", ""),
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
+        _sourceCategories = _categories;
 
-        List<PermissionNavDto> FilterScopePermission(List<PermissionNavDto> navs)
+        FilterCategories();
+    }
+
+    void FilterCategories()
+    {
+        _categories = _sourceCategories;
+        if (ScopeItems?.Any() == true)
+        {
+            foreach (var category in _categories)
+            {
+                foreach (var app in category.Apps)
+                {
+                    app.Navs = FilterScopePermission(app.Navs);
+                }
+                category.Apps.RemoveAll(a => !a.Navs.Any());
+            }
+        }
+        _categories.RemoveAll(c => !c.Apps.Any());
+
+        List<Nav> FilterScopePermission(List<Nav> navs)
         {
             foreach (var nav in navs)
             {
