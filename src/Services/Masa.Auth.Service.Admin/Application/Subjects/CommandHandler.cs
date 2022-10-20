@@ -483,13 +483,13 @@ public class CommandHandler
         {
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
-                throw new UserFriendlyException($"User with phone number {phoneNumber} already exists");
+                throw new UserFriendlyException($"User with phone number [{phoneNumber}] already exists");
             if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
-                throw new UserFriendlyException($"User with email {email} already exists");
+                throw new UserFriendlyException($"User with email [{email}] already exists");
             if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
-                throw new UserFriendlyException($"User with idCard {idCard} already exists");
+                throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
-                throw new UserFriendlyException($"User with account {account} already exists,please contact the administrator");
+                throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
         }
         return exitUser;
     }
