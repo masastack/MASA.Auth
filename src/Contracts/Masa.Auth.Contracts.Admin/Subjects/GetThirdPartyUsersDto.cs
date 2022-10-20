@@ -20,11 +20,7 @@ public class GetThirdPartyUsersDto : Pagination<GetThirdPartyUsersDto>
         Page = page;
         PageSize = pageSize;
         Search = search;
-        if(thirdPartyId == Guid.Empty)
-        {
-            ThirdPartyId = null;
-        }
-        else ThirdPartyId = thirdPartyId;
+        ThirdPartyId = thirdPartyId == Guid.Empty ? null : thirdPartyId;
         Enabled = enabled;
         StartTime = startTime;
         EndTime = endTime;
