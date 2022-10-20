@@ -53,29 +53,31 @@ public class StaffCacheCommandHandler
     [EventHandler(99)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(CacheKey.STAFF) ?? new();
-        staffs.Remove(s => s.Id == command.Staff.Id);
-        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, staffs);
+        await _multilevelCacheClient.RemoveAsync<Staff>(CacheKey.StaffKey(command.Staff.Id));
     }
 
     [EventHandler(99)]
-    public async Task SyncAsync(SyncStaffCommand command)
+    public async Task SyncStaffAsync(SyncStaffCommand command)
     {
-        var staffs = await _staffRepository.GetListAsync();
-        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, staffs);
+        await SyncStaffCacheAsync(new());
+    }
+
+    [EventHandler(1)]
+    public async Task SyncStaffCacheAsync(SyncStaffCacheCommand command)
+    {
+        var staffs = await _staffRepository.GetListAsync() ?? new List<Staff>();
+        await _multilevelCacheClient.SetListAsync(staffs.ToDictionary(staff => CacheKey.StaffKey(staff.Id), staff => staff));
     }
 
     [EventHandler(1)]
     public async Task UpdateStaffDefaultPasswordAsync(UpdateStaffDefaultPasswordCommand command)
     {
-        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, command.DefaultPassword);
+        await _multilevelCacheClient.SetAsync(CacheKey.STAFF_DEFAULT_PASSWORD, command.DefaultPassword);
     }
-    
+
     async Task SetStaffCacheAsync(Staff? staff)
     {
         if (staff is null) return;
-        var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(CacheKey.STAFF) ?? new();
-        staffs.Set(staff, s => s.Id == staff.Id);
-        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, staffs);
+        await _multilevelCacheClient.SetAsync(CacheKey.StaffKey(staff.Id), staff);
     }
 }

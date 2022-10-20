@@ -5,10 +5,10 @@
     <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count RoleLimitChanged="value => RoleLimit=value" Class="mb-6" Label="@T("Role")" />
     <div class="global-nav" style="height:auto">
         <PermissionExtensionConfigure Roles=Value.Roles
-                              @bind-ExtensionValue="Value.Permissions"
-                              Preview=Preview
-                              PreviewChanged=PreviewChanged
-                              TagIdPrefix="Member"
+                                      @bind-ExtensionValue="Value.Permissions"
+                                      Preview=Preview ScopeItems="ScopePermissions.Select(p=>p.ToString()).ToList()"
+                                      PreviewChanged=PreviewChanged
+                                      TagIdPrefix="Member"
                                       Style="max-height:calc(100vh - 450px);" />
     </div>
 </MCardText>

@@ -6,7 +6,10 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 public partial class TeamMember
 {
     [Parameter]
-    public List<Guid> IgnoreStaffIds { get; set; } = null!;
+    public List<Guid> IgnoreStaffIds { get; set; } = new();
+
+    [Parameter]
+    public List<Guid> ScopePermissions { get; set; } = new();
 
     [EditorRequired]
     [Parameter]

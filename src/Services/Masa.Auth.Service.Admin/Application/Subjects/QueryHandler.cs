@@ -197,7 +197,12 @@ public class QueryHandler
             condition = condition.And(s => s.Enabled == query.Enabled);
 
         if (!string.IsNullOrEmpty(query.Search))
-            condition = condition.And(staff => staff.Name.Contains(query.Search) || staff.JobNumber.Contains(query.Search) || staff.Position!.Name.Contains(query.Search));
+            condition = condition.And(staff =>
+                staff.DisplayName.Contains(query.Search) ||
+                staff.PhoneNumber.Contains(query.Search) ||
+                staff.JobNumber.Contains(query.Search) ||
+                staff.Position!.Name.Contains(query.Search) ||
+                staff.User.Account.Contains(query.Search));
 
         if (query.DepartmentId != Guid.Empty)
         {
@@ -363,7 +368,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetDefaultPasswordAsync(StaffDefaultPasswordQuery query)
     {
-        var defauptPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF);
+        var defauptPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF_DEFAULT_PASSWORD);
         query.Result = defauptPasswordDto ?? new();
     }
 

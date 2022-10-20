@@ -135,87 +135,98 @@ public partial class RegisterSection
         HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
 
         _registerLoading = true;
-        if (UserBind)
-        {
-            var model = new RegisterThirdPartyUserModel
-            {
-                ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(Identity.Issuer),
-                ExtendedData = JsonSerializer.Serialize(Identity),
-                ThridPartyIdentity = Identity.Subject,
-                UserRegisterType = UserRegisterTypes.PhoneNumber,
-                PhoneNumber = _inputModel.PhoneNumber,
-                Email = _inputModel.Email,
-                SmsCode = _inputModel.SmsCode?.ToString() ?? "",
-                Account = _inputModel.Account,
-                Password = _inputModel.Password,
-                DisplayName = _inputModel.DisplayName,
-                Avatar = Identity.Picture
-            };
-            await AuthClient.UserService.RegisterThirdPartyUserAsync(model);
-            Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-            _registerLoading = false;
-            await PopupService.ToastSuccessAsync("Register success");
-            return;
-        }
 
-        if (_inputModel.EmailRegister)
+        try
         {
-            if (_inputModel.Email is null) throw new UserFriendlyException("Emai is required");
-
-            await AuthClient.UserService.RegisterByEmailAsync(new RegisterByEmailModel
+            if (UserBind)
             {
-                PhoneNumber = _inputModel.PhoneNumber,
-                SmsCode = _inputModel.SmsCode?.ToString() ?? "",
-                Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.Email : _inputModel.Account,
-                Email = _inputModel.Email,
-                EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
-                Password = _inputModel.Password,
-                DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
-            });
-        }
-        else
-        {
-            await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
-            {
-                PhoneNumber = _inputModel.PhoneNumber,
-                SmsCode = _inputModel.SmsCode?.ToString() ?? "",
-                Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
-                Avatar = "",
-                DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
-            });
-        }
-
-        var loginInputModel = new LoginInputModel
-        {
-            PhoneLogin = true,
-            SmsCode = _inputModel.SmsCode,
-            Password = _inputModel.Password,
-            UserName = _inputModel.Email ?? "",
-            Environment = ScopedState.Environment,
-            PhoneNumber = _inputModel.PhoneNumber,
-            ReturnUrl = ReturnUrl,
-            RegisterLogin = true
-        };
-        var msg = await _js.InvokeAsync<string>("login", loginInputModel);
-        _registerLoading = false;
-        if (!string.IsNullOrEmpty(msg))
-        {
-            await PopupService.AlertAsync(msg, AlertTypes.Error);
-        }
-        else
-        {
-            if (SsoUrlHelper.IsLocalUrl(ReturnUrl))
-            {
-                Navigation.NavigateTo(ReturnUrl, true);
+                var model = new RegisterThirdPartyUserModel
+                {
+                    ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(Identity.Issuer),
+                    ExtendedData = JsonSerializer.Serialize(Identity),
+                    ThridPartyIdentity = Identity.Subject,
+                    UserRegisterType = UserRegisterTypes.PhoneNumber,
+                    PhoneNumber = _inputModel.PhoneNumber,
+                    Email = _inputModel.Email,
+                    SmsCode = _inputModel.SmsCode?.ToString() ?? "",
+                    Account = _inputModel.Account,
+                    Password = _inputModel.Password,
+                    DisplayName = _inputModel.DisplayName,
+                    Avatar = Identity.Picture
+                };
+                await AuthClient.UserService.RegisterThirdPartyUserAsync(model);
+                Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
+                await PopupService.AlertAsync("Register success", AlertTypes.Success);
+                return;
             }
-            else if (string.IsNullOrEmpty(ReturnUrl))
+
+            if (_inputModel.EmailRegister)
             {
-                Navigation.NavigateTo("/", true);
+                if (_inputModel.Email is null) throw new UserFriendlyException("Emai is required");
+
+                await AuthClient.UserService.RegisterByEmailAsync(new RegisterByEmailModel
+                {
+                    PhoneNumber = _inputModel.PhoneNumber,
+                    SmsCode = _inputModel.SmsCode?.ToString() ?? "",
+                    Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.Email : _inputModel.Account,
+                    Email = _inputModel.Email,
+                    EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
+                    Password = _inputModel.Password,
+                    DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
+                });
             }
             else
             {
-                await PopupService.AlertAsync("invalid return url", AlertTypes.Error);
+                await AuthClient.UserService.RegisterByPhoneAsync(new RegisterByPhoneModel
+                {
+                    PhoneNumber = _inputModel.PhoneNumber,
+                    SmsCode = _inputModel.SmsCode?.ToString() ?? "",
+                    Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
+                    Avatar = "",
+                    DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
+                });
             }
+
+            var loginInputModel = new LoginInputModel
+            {
+                PhoneLogin = true,
+                SmsCode = _inputModel.SmsCode,
+                Password = _inputModel.Password,
+                UserName = _inputModel.Email ?? "",
+                Environment = ScopedState.Environment,
+                PhoneNumber = _inputModel.PhoneNumber,
+                ReturnUrl = ReturnUrl,
+                RegisterLogin = true
+            };
+
+            var msg = await _js.InvokeAsync<string>("login", loginInputModel);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                await PopupService.AlertAsync(msg, AlertTypes.Error);
+            }
+            else
+            {
+                if (SsoUrlHelper.IsLocalUrl(ReturnUrl))
+                {
+                    Navigation.NavigateTo(ReturnUrl, true);
+                }
+                else if (string.IsNullOrEmpty(ReturnUrl))
+                {
+                    Navigation.NavigateTo("/", true);
+                }
+                else
+                {
+                    await PopupService.AlertAsync("invalid return url", AlertTypes.Error);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            await PopupService.AlertAsync(e.Message, AlertTypes.Error);
+        }
+        finally
+        {
+            _registerLoading = false;
         }
 
         string GenerateDisplayName(RegisterInputModel _inputModel)
