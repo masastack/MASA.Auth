@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record UpsertStaffCommand(UpsertStaffDto Staff) : Command
+public record SyncStaffCacheCommand() : Command
 {
-    public Staff? Result { get; set; }
+    public SyncStaffResultsDto Result { get; set; } = new();
 }
