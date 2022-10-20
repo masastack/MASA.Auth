@@ -7,6 +7,8 @@ public class UpdateUserDto
 {
     public Guid Id { get; set; }
 
+    public string Account { get; set; }
+
     public string? Name { get; set; }
 
     public string DisplayName { get; set; }
@@ -38,12 +40,14 @@ public class UpdateUserDto
         DisplayName = "";
         PhoneNumber = "";
         Avatar = "";
+        Account = "";
         Address = new();
     }
 
-    public UpdateUserDto(Guid id, string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, GenderTypes gender)
+    public UpdateUserDto(Guid id, string account, string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, GenderTypes gender)
     {
         Id = id;
+        Account = account;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
@@ -61,6 +65,6 @@ public class UpdateUserDto
 
     public static implicit operator UpdateUserDto(UserDetailDto user)
     {
-        return new UpdateUserDto(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.CompanyName, user.Enabled, user.PhoneNumber ?? "", user.Landline, user.Email, user.Address, user.Department, user.Position, user.Gender);
+        return new UpdateUserDto(user.Id, user.Account, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.CompanyName, user.Enabled, user.PhoneNumber ?? "", user.Landline, user.Email, user.Address, user.Department, user.Position, user.Gender);
     }
 }

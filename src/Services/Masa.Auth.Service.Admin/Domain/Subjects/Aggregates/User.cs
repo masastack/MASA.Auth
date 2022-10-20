@@ -241,8 +241,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline);
     }
 
-    public void Update(string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
+    public void Update(string account, string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
     {
+        Account = account;
         Name = name;
         IdCard = idCard;
         CompanyName = companyName;
@@ -258,7 +259,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     }
 
     public void Update(string? name, string displayName, string? idCard, string? companyName, string? department, GenderTypes gender)
-    {
+    {       
         Name = name;
         DisplayName = displayName;
         IdCard = idCard;
