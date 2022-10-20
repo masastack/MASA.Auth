@@ -14,8 +14,16 @@ public partial class EnableChip
     [Parameter]
     public bool Value { get; set; }
 
+    [Parameter]
+    public string? DisabledLabel { get; set; }
+
+    [Parameter]
+    public string? EnabledLabel { get; set; }
+
     public string TextColor => Value ? "green" : "error";
 
     public string Color => Value ? "green-lighten" : "warning-lighten";
+
+    string Label => Value ? EnabledLabel ?? T("Enabled") : DisabledLabel ?? T("Disabled");
 }
 

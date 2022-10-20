@@ -5,4 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record UpdateStaffAvatarCommand(UpdateStaffAvatarModel Staff) : Command
 {
+    public Staff? Result { get; set; }
 }

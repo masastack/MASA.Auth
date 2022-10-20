@@ -19,7 +19,7 @@
             <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-Tab="_tab">
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
-                               Items="_menuPermissions"
+                               Items="_menuPermissions" Open="_menuOpenNode"
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid" MandatoryActive
@@ -32,7 +32,10 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <SIcon Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
+                                    @if (hoverComtext.Hover)
+                                    {
+                                        <SIcon Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                    }
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -40,7 +43,7 @@
                 </SElevationTabItem>
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_apiPermissionActive"
-                               Items="_apiPermissions"
+                               Items="_apiPermissions" Open="_apiOpenNode"
                                OnActiveUpdate="ActiveApiPermission"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid" MandatoryActive
@@ -52,7 +55,10 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <SIcon Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
+                                    @if (hoverComtext.Hover && !context.Item.IsPermission)
+                                    {
+                                        <SIcon Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                    }
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -88,14 +94,11 @@
                                         </MCol>
 
                                         <MCol Md=6>
-                                            @if (_menuPermissionDetailDto.ParentId != Guid.Empty)
-                                            {
-                                                <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                               Items="MenuTreeParent(_menuPermissionDetailDto.Id,_menuPermissionDetailDto.Type)" HideDetails="true"
+                                            <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
+                                               Items="MenuTreeParent(_menuPermissionDetailDto)" HideDetails="true"
                                                Dense Outlined ChangeOnSelect
                                                ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children">
-                                                </MCascader>
-                                            }
+                                            </MCascader>
                                         </MCol>
 
                                         <MCol Md=6>
