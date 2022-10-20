@@ -279,7 +279,8 @@
     "Delete staff data success": "删除员工数据成功",
     "Delete staff data failed:": "删除员工数据失败:",
     "Are you sure delete user data": "确定删除员工数据",
-    "Please upload the UTF-8 encoded CSV file": "请上传UTF-8编码的csv文件"
+    "Please upload the UTF-8 encoded CSV file": "请上传UTF-8编码的csv文件",
+    "default password": "默认密码"
   },
 
   "ThirdPartyUserBlock": {
