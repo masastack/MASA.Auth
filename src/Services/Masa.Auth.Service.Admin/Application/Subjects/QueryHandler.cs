@@ -367,8 +367,8 @@ public class QueryHandler
     [EventHandler]
     public async Task GetDefaultPasswordAsync(StaffDefaultPasswordQuery query)
     {
-        var defauptPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF_DEFAULT_PASSWORD);
-        query.Result = defauptPasswordDto ?? new();
+        var defaultPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF_DEFAULT_PASSWORD);
+        query.Result = defaultPasswordDto ?? new();
     }
 
     #endregion
