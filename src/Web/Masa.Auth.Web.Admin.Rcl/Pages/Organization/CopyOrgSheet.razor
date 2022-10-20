@@ -6,7 +6,7 @@
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center full-height">
                     <div class="full-width">
-                        <PlaceholderTextFiled @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
+                        <PlaceholderTextFiled @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")"></PlaceholderTextFiled>
                         <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">
@@ -24,8 +24,8 @@
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column full-height">
-                    <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter department name")"></PlaceholderTextFiled>
-                    <MCascader Items="Departments" Dense Label="@T("Department Location")"
+                    <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")"></PlaceholderTextFiled>
+                    <MCascader Items="Departments" Dense Label="@T("Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId" Class="mt-6"
                                ItemValue="u => u.Id" HideDetails="@("auto")" ChangeOnSelect
                                ItemChildren="u => u.Children">
@@ -34,13 +34,15 @@
                         <span class="h5 emphasis2--text">@T("Member")</span>
                         <MSpacer />
                         <SAutoComplete 
-                            Items="_removeStaffs" 
-                            TItem="StaffDto" TValue="Guid" 
-                            TItemValue="StaffDto"                                     
-                            ItemText="r=>r.Name" 
+                            Items="_staffs" 
+                            TItem="StaffSelectDto" TValue="Guid"
+                            TItemValue="StaffSelectDto"
+                            ItemText="r=>r.Name"
                             PrependInnerIcon="@IconConstants.Search"                                      
-                            ItemValue="r=>r" 
-                            HideDetails="true" 
+                            ItemValue="r=>r"
+                            Loading="_staffLoading"
+                            OnSearchInputUpdate="QueryStaff"
+                            HideDetails="true" HideSelected
                             OnSelectedItemUpdate="AddStaff"
                             Clearable 
                             Style="max-width:340px;" 
@@ -88,7 +90,7 @@
                 <MCardActions class="d-flex align-center mb-10 px-6">
                     <EnableSwitch @bind-Value="Dto.Enabled" />
                     <MSpacer />
-                    <SButton Medium Outlined OnClick="()=> _step = 1 ">@T("Previous step")</SButton>
+                    <SButton Medium Outlined OnClick="Return">@T("Previous step")</SButton>
                     <SButton Medium Disabled="@string.IsNullOrEmpty(Dto.Name.Trim())" OnClick="OnSubmitHandler">@T("Submit")</SButton>
                 </MCardActions>
             </MCard>

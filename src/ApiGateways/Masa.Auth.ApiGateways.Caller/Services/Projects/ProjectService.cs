@@ -12,9 +12,14 @@ public class ProjectService : ServiceBase
         BaseUrl = "api/project";
     }
 
-    public async Task<List<ProjectDto>> GetListAsync(bool hasMenu = false)
+    public async Task<List<ProjectDto>> GetListAsync()
     {
-        return await GetAsync<List<ProjectDto>>($"GetList?hasMenu={hasMenu}");
+        return await GetAsync<List<ProjectDto>>($"GetList");
+    }
+
+    public async Task<List<ProjectDto>> GetUIAndMenusAsync()
+    {
+        return await GetAsync<List<ProjectDto>>($"GetUIAndMenus");
     }
 
     public async Task<List<string>> GetAppTagsAsync()

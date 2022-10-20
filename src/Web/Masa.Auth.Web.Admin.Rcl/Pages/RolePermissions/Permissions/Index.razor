@@ -19,7 +19,7 @@
             <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' Dense @bind-Tab="_tab">
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
-                               Items="_menuPermissions"
+                               Items="_menuPermissions" Open="_menuOpenNode"
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid" MandatoryActive
@@ -32,7 +32,10 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <SIcon Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
+                                    @if (hoverComtext.Hover)
+                                    {
+                                        <SIcon Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                    }
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -40,7 +43,7 @@
                 </SElevationTabItem>
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_apiPermissionActive"
-                               Items="_apiPermissions"
+                               Items="_apiPermissions" Open="_apiOpenNode"
                                OnActiveUpdate="ActiveApiPermission"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid" MandatoryActive
@@ -52,7 +55,10 @@
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
                                     <span>@context.Item.Name</span>
-                                    <SIcon Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)" Style="@(hoverComtext.Hover?"display:flex":"display:none")">@IconConstants.Add</SIcon>
+                                    @if (hoverComtext.Hover && !context.Item.IsPermission)
+                                    {
+                                        <SIcon Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                    }
                                 </div>
                             </MHover>
                         </LabelContent>
@@ -84,18 +90,15 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
                                         </MCol>
 
                                         <MCol Md=6>
-                                            @if (_menuPermissionDetailDto.ParentId != Guid.Empty)
-                                            {
-                                                <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                               Items="MenuTreeParent(_menuPermissionDetailDto.Id,_menuPermissionDetailDto.Type)" HideDetails="true"
+                                            <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
+                                               Items="MenuTreeParent(_menuPermissionDetailDto)" HideDetails="true"
                                                Dense Outlined ChangeOnSelect
                                                ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children">
-                                                </MCascader>
-                                            }
+                                            </MCascader>
                                         </MCol>
 
                                         <MCol Md=6>
@@ -110,13 +113,13 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
+                                            <STextField Label="@T("Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
+                                            <STextField Label="@T("Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <SNumberTextField Label="@T("Permission Order")" @bind-Value="_menuPermissionDetailDto.Order" />
+                                            <SNumberTextField Label="@T("Order")" @bind-Value="_menuPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=12>
                                             <SAutoComplete @bind-Value="_menuPermissionDetailDto.ApiPermissions"
@@ -196,16 +199,16 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
+                                            <STextField Label="@T("Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
+                                            <STextField Label="@T("Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <SNumberTextField Label="@T("Permission Order")" @bind-Value="_apiPermissionDetailDto.Order" />
+                                            <SNumberTextField Label="@T("Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Permission Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
+                                            <STextField Label="@T("Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
                                         </MCol>
                                         <MCol Md=12>
                                             <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
