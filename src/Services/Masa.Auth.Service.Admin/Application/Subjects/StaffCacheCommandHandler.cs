@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.Authentication.OpenIdConnect.Cache.Utils;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class StaffCacheCommandHandler
@@ -55,16 +53,16 @@ public class StaffCacheCommandHandler
     [EventHandler(99)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(FormatKey()) ?? new();
+        var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(CacheKey.STAFF) ?? new();
         staffs.Remove(s => s.Id == command.Staff.Id);
-        await _multilevelCacheClient.SetAsync(FormatKey(), staffs);
+        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, staffs);
     }
 
     [EventHandler(99)]
     public async Task SyncAsync(SyncStaffCommand command)
     {
         var staffs = await _staffRepository.GetListAsync();
-        await _multilevelCacheClient.SetAsync(FormatKey(), staffs);
+        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, staffs);
     }
 
     [EventHandler(1)]
@@ -76,13 +74,8 @@ public class StaffCacheCommandHandler
     async Task SetStaffCacheAsync(Staff? staff)
     {
         if (staff is null) return;
-        var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(FormatKey()) ?? new();
+        var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(CacheKey.STAFF) ?? new();
         staffs.Set(staff, s => s.Id == staff.Id);
-        await _multilevelCacheClient.SetAsync(FormatKey(), staffs);
-    }
-
-    string FormatKey()
-    {
-        return "all_staff";
+        await _multilevelCacheClient.SetAsync(CacheKey.STAFF, staffs);
     }
 }

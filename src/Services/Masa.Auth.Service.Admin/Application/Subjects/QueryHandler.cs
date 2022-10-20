@@ -135,6 +135,7 @@ public class QueryHandler
         if (user != null)
         {
             userDetailDto = user;
+            var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(CacheKey.STAFF) ?? new();
             var staff = await _staffRepository.GetByUserIdAsync(user.Id);
             userDetailDto.StaffId = staff?.Id;
             userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
