@@ -13,5 +13,13 @@ public partial class EnableSwitch
 
     [Parameter]
     public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter]
+    public string? DisabledLabel { get; set; }
+
+    [Parameter]
+    public string? EnabledLabel { get; set; }
+
+    string Label => Value ? EnabledLabel ?? T("Enabled") : DisabledLabel ?? T("Disabled");
 }
 
