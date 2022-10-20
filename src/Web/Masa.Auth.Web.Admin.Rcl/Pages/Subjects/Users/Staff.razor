@@ -17,7 +17,7 @@
             </SButton>
             <div>
                 <MForm Class="d-flex ml-4">
-                    <MCheckbox Value="DefaultPasswordDto.Enabled" ValueChanged="EnabledChanged" Label="@(T(DefaultPasswordDto.Enabled ?"Enabled":"Disabled")+T("default password"))" />
+                    <MCheckbox Value="DefaultPasswordDto.Enabled" ValueChanged="EnabledChanged" Label="@T(DefaultPasswordDto.Enabled ?"Enabled default password":"Disabled default password")" />
                     <div style="width:200px;" class="ml-4">
                         <STextField Small Value="@DefaultPasswordDto.DefaultPassword" TValue="string" ValueChanged="async value => await DefaultPasswordChanged(value,context)" />
                     </div>
