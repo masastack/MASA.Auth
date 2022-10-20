@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
+		<PackageReference Include="Masa.Contrib.Service.Caller.Authentication.OpenIdConnect" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Masa.Contrib.Service.Caller" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Service.Caller.HttpClient" Version="$(MasaFrameworkPackageVersion)" />

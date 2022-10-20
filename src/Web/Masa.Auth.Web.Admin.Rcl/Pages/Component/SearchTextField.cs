@@ -31,6 +31,7 @@ public class SearchTextField : STextField<string>
         };
 
         await base.SetParametersAsync(parameters);
+        DebounceInterval = 500;
     }
 
     protected override void OnParametersSet()

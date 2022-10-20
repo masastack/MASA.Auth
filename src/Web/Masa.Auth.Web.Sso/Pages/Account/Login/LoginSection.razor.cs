@@ -177,7 +177,7 @@ public partial class LoginSection
             catch (Exception e)
             {
                 await _js.InvokeVoidAsync("console.log", $"GetSmsCode error: {e.Message}");
-                await PopupService.ToastErrorAsync(e.Message);
+                await PopupService.AlertAsync(e.Message, AlertTypes.Error);
             }
             finally
             {

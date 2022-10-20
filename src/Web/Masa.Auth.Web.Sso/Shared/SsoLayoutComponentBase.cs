@@ -20,6 +20,9 @@ public class SsoLayoutComponentBase : LayoutComponentBase
         }
     }
 
+    [Inject]
+    public IPopupService PopupService { get; set; } = null!;
+
     public string T(string key)
     {
         return LanguageProvider.T(key) ?? key;
