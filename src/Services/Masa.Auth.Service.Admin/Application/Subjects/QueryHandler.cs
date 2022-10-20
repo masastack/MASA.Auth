@@ -245,21 +245,9 @@ public class QueryHandler
 
         query.Result = staff;
 
-        var (creator, modifier) = await GetActionInfoAsync(staff.Creator, staff.Modifier);
+        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(staff.Creator, staff.Modifier);
         query.Result.Creator = creator;
         query.Result.Modifier = modifier;
-    }
-
-    async Task<(string? creator, string? modifier)> GetActionInfoAsync(Guid creator, Guid modifier)
-    {
-        var creatorName = (await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(creator)).ConfigureAwait(false))?.DisplayName;
-        var modifierName = (await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(modifier)).ConfigureAwait(false))?.DisplayName;
-        if (creatorName is null)
-            creatorName = (await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(creator)).ConfigureAwait(false))?.DisplayName;
-        if (modifierName is null)
-            modifierName = (await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(modifier)).ConfigureAwait(false))?.DisplayName;
-
-        return (creatorName, modifierName);
     }
 
     [EventHandler]
@@ -415,7 +403,7 @@ public class QueryHandler
         query.Result = new(total, tpus.Select(tpu =>
         {
             var dto = (ThirdPartyUserDto)tpu;
-            var (creator, modifier) = GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
+            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
             dto.Creator = creator;
             dto.Modifier = modifier;
             return dto;
@@ -430,7 +418,7 @@ public class QueryHandler
 
         query.Result = tpu;
 
-        var (creator, modifier) = await GetActionInfoAsync(tpu.Creator, tpu.Modifier);
+        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(tpu.Creator, tpu.Modifier);
         query.Result.User.Creator = creator;
         query.Result.User.Modifier = modifier;
     }
