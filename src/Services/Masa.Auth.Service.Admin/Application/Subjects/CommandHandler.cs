@@ -655,6 +655,7 @@ public class CommandHandler
         var staff = await CheckStaffExistAsync(command.Staff.Id);
         await _staffRepository.RemoveAsync(staff);
         await _staffDomainService.RemoveAsync(new(staff));
+        command.Result = staff;
     }
 
     [EventHandler(1)]

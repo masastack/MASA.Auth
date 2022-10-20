@@ -27,6 +27,8 @@ public class UserDetailDto : UserDto
 
     public Guid? CurrentTeamId { get; set; }
 
+    public string? StaffDisplayName { get; set; }
+
     public UserDetailDto() : base()
     {
         ThirdPartyIdpAvatars = new();

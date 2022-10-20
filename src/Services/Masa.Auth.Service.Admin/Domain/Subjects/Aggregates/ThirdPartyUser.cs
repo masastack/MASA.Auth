@@ -45,12 +45,7 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public User? CreateUser => _createUser;
 
-    //todo It will be deleted later
-    public new Guid? Creator { get; private set; }
-
     public User? ModifyUser => _modifyUser;
-
-    public new Guid? Modifier { get; private set; }
 
     public IdentityProvider IdentityProvider => (_identityProvider ?? LazyLoader?.Load(this, ref _identityProvider)) ?? throw new UserFriendlyException("Failed to get IdentityProvider data");
 

@@ -135,9 +135,9 @@ public class QueryHandler
         if (user != null)
         {
             userDetailDto = user;
-            var staffs = await _multilevelCacheClient.GetAsync<List<Staff>>(CacheKey.STAFF) ?? new();
-            var staff = await _staffRepository.GetByUserIdAsync(user.Id);
+            var staff = await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(user.Id));
             userDetailDto.StaffId = staff?.Id;
+            userDetailDto.StaffDisplayName = staff?.DisplayName;
             userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
         }
         return userDetailDto;
@@ -240,12 +240,26 @@ public class QueryHandler
                                         .Include(s => s.DepartmentStaffs)
                                         .Include(s => s.TeamStaffs)
                                         .Include(s => s.Position)
-                                        .Include(s => s.CreateUser)
-                                        .Include(s => s.ModifyUser)
                                         .FirstOrDefaultAsync(s => s.Id == query.StaffId);
         if (staff is null) throw new UserFriendlyException("This staff data does not exist");
 
         query.Result = staff;
+
+        var (creator, modifier) = await GetActionInfoAsync(staff.Creator, staff.Modifier);
+        query.Result.Creator = creator;
+        query.Result.Modifier = modifier;
+    }
+
+    async Task<(string? creator, string? modifier)> GetActionInfoAsync(Guid creator, Guid modifier)
+    {
+        var creatorName = (await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(creator)).ConfigureAwait(false))?.DisplayName;
+        var modifierName = (await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(modifier)).ConfigureAwait(false))?.DisplayName;
+        if (creatorName is null)
+            creatorName = (await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(creator)).ConfigureAwait(false))?.DisplayName;
+        if (modifierName is null)
+            modifierName = (await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(modifier)).ConfigureAwait(false))?.DisplayName;
+
+        return (creatorName, modifierName);
     }
 
     [EventHandler]
@@ -259,8 +273,6 @@ public class QueryHandler
                                         .ThenInclude(ds => ds.Department)
                                         .Include(s => s.TeamStaffs)
                                         .Include(s => s.Position)
-                                        .Include(s => s.CreateUser)
-                                        .Include(s => s.ModifyUser)
                                         .AsSplitQuery()
                                         .FirstOrDefaultAsync(s => s.UserId == query.UserId);
         if (staff is not null)
@@ -394,15 +406,20 @@ public class QueryHandler
 
         var tpuQuery = _authDbContext.Set<ThirdPartyUser>().Where(condition);
         var total = await tpuQuery.LongCountAsync();
-        var tpus = await tpuQuery.Include(tpu => tpu.CreateUser)
-                                 .Include(tpu => tpu.ModifyUser)
-                                 .OrderByDescending(s => s.ModificationTime)
+        var tpus = await tpuQuery.OrderByDescending(s => s.ModificationTime)
                                  .ThenByDescending(s => s.CreationTime)
                                  .Skip((query.Page - 1) * query.PageSize)
                                  .Take(query.PageSize)
                                  .ToListAsync();
 
-        query.Result = new(total, tpus.Select(tpu => (ThirdPartyUserDto)tpu).ToList());
+        query.Result = new(total, tpus.Select(tpu =>
+        {
+            var dto = (ThirdPartyUserDto)tpu;
+            var (creator, modifier) = GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
+            dto.Creator = creator;
+            dto.Modifier = modifier;
+            return dto;
+        }).ToList());
     }
 
     [EventHandler]
@@ -412,6 +429,10 @@ public class QueryHandler
         if (tpu is null) throw new UserFriendlyException("This thirdPartyUser data does not exist");
 
         query.Result = tpu;
+
+        var (creator, modifier) = await GetActionInfoAsync(tpu.Creator, tpu.Modifier);
+        query.Result.User.Creator = creator;
+        query.Result.User.Modifier = modifier;
     }
 
     [EventHandler]

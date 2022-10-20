@@ -17,16 +17,16 @@ public class ThirdPartyUserDto
 
     public DateTime? ModificationTime { get; set; }
 
-    public string Creator { get; set; } = "";
+    public string? Creator { get; set; }
 
-    public string Modifier { get; set; } = "";
+    public string? Modifier { get; set; }
 
     public ThirdPartyUserDto()
     {
 
     }
 
-    public ThirdPartyUserDto(Guid id, bool enabled, IdentityProviderDetailDto idpDetailDto, UserDto user, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public ThirdPartyUserDto(Guid id, bool enabled, IdentityProviderDetailDto idpDetailDto, UserDto user, DateTime creationTime, DateTime? modificationTime, string? creator, string? modifier)
     {
         Id = id;
         Enabled = enabled;
