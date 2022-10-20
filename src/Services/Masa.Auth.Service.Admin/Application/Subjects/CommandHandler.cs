@@ -656,7 +656,7 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task SyncAsync(SyncStaffCommand command)
+    public async Task SyncStaffAsync(SyncStaffCommand command)
     {
         var syncResults = new SyncStaffResultsDto();
         command.Result = syncResults;

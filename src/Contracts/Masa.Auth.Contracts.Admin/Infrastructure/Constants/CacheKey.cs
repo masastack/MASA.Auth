@@ -22,7 +22,8 @@ public static class CacheKey
     const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
     const string EMAIL_REGISTER_SEND_PRE = "email_register_send:";
     const string SMS_REGISTER_SEND_PRE = "sms_register_send:";
-    public const string STAFF = "staff";
+    const string STAFF = "staff";
+    public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
 
     public static string PermissionKey(Guid permissionId)
     {
@@ -37,6 +38,11 @@ public static class CacheKey
     public static string UserKey(Guid userId)
     {
         return $"{USER_CACHE_PRE}{userId}";
+    }
+
+    public static string StaffKey(Guid staffId)
+    {
+        return $"{STAFF}{staffId}";
     }
 
     public static string UserMenuCollectKey(Guid userId)
