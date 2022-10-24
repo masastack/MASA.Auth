@@ -61,8 +61,6 @@ public partial class Staff
 
     public StaffDto CurrentStaff { get; set; } = new();
 
-    public StaffDefaultPasswordDto DefaultPasswordDto { get; set; } = new();
-
     public bool AddStaffDialogVisible { get; set; }
 
     public bool UpdateStaffDialogVisible { get; set; }
@@ -77,7 +75,6 @@ public partial class Staff
     {
         PageName = "StaffBlock";
         await GetStaffAsync();
-        DefaultPasswordDto = await StaffService.GetDefaultPasswordAsync();
     }
 
     public List<DataTableHeader<StaffDto>> GetHeaders() => new()
@@ -116,25 +113,6 @@ public partial class Staff
     {
         CurrentStaff = staff;
         AuthorizeDialogVisible = true;
-    }
-
-    public async Task DefaultPasswordChanged(string password, FormContext context)
-    {
-        DefaultPasswordDto.DefaultPassword = password;
-        await Task.Delay(300);
-        if(DefaultPasswordDto.DefaultPassword == password)
-        {
-            if (context.Validate())
-            {
-                await StaffService.UpdateDefaultPasswordAsync(DefaultPasswordDto);
-            }
-        }    
-    }
-
-    public async Task EnabledChanged(bool enabled)
-    {
-        DefaultPasswordDto.Enabled = enabled;
-        await StaffService.UpdateDefaultPasswordAsync(DefaultPasswordDto);
     }
 }
 

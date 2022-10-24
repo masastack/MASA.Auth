@@ -21,6 +21,8 @@ public partial class AddStaffDialog
 
     private AddStaffDto Staff { get; set; } = new();
 
+    private StaffDefaultPasswordDto DefaultPasswordDto { get; set; } = new();
+
     private StaffService StaffService => AuthCaller.StaffService;
 
     protected override async Task OnParametersSetAsync()
@@ -61,6 +63,20 @@ public partial class AddStaffDialog
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;
+        }
+    }
+
+    public async Task SetDefaultPassword(FormContext context)
+    {
+        var field = context.EditContext.Field(nameof(Staff.Password));
+        context.EditContext.NotifyFieldChanged(field);
+        var result = context.EditContext.GetValidationMessages(field);
+        if (result.Any() is false)
+        {
+            DefaultPasswordDto.DefaultPassword = Staff.Password!;
+            DefaultPasswordDto.Enabled = true;
+            await StaffService.UpdateDefaultPasswordAsync(DefaultPasswordDto);
+            OpenSuccessMessage("Succeeded in setting the password");
         }
     }
 }
