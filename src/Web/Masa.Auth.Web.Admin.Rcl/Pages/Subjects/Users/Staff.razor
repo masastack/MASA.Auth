@@ -15,14 +15,6 @@
                 <MIcon Size=18>@IconConstants.Add</MIcon>
                 <span class="ml-2 btn">@T("Add")</span>
             </SButton>
-            <div>
-                <MForm Class="d-flex ml-4">
-                    <MCheckbox Value="DefaultPasswordDto.Enabled" ValueChanged="EnabledChanged" Label="@T(DefaultPasswordDto.Enabled ?"Enabled default password":"Disabled default password")" />
-                    <div style="width:200px;" class="ml-4">
-                        <STextField Small Value="@DefaultPasswordDto.DefaultPassword" TValue="string" ValueChanged="async value => await DefaultPasswordChanged(value,context)" />
-                    </div>
-                </MForm>
-            </div>
         </div>
     </HeaderContent>
     <AutoHeightContent>
