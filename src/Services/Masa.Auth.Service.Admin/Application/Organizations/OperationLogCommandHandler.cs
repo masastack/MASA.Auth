@@ -20,7 +20,7 @@ public class OperationLogCommandHandler
         if (command.UpsertDepartmentDto.Id == Guid.Empty)
             await _operationLogRepository.AddDefaultAsync(OperationTypes.AddDepartment, $"添加部门：{command.UpsertDepartmentDto.Name}");
         else
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateDepartment, $"编辑部门：{command.UpsertDepartmentDto.Name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditDepartment, $"编辑部门：{command.UpsertDepartmentDto.Name}");
     }
 
     [EventHandler(0)]
@@ -43,7 +43,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task UpdatePositionOperationLogAsync(UpdatePositionCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdatePosition, $"编辑职位：{command.Position.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditPosition, $"编辑职位：{command.Position.Name}");
     }
 
     [EventHandler(0)]

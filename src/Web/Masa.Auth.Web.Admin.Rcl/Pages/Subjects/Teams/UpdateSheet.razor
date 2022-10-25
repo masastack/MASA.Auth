@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog @bind-Value=_visible Title="@T("Update Team")">
+<DefaultSheetDialog @bind-Value=_visible Title="@T("Edit Team")">
     <SElevationTab Dense Style="height: calc(100% - 40px);" @bind-Tab="@_tab" Tabs='_tabs' ItemsClass="mt-8 full-height">
         <SElevationTabItem>
             <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
