@@ -25,7 +25,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task UpdateUserOperationLogAsync(UpdateUserCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUser, $"编辑用户：{command.User.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{command.User.DisplayName}");
         }
 
         async Task<string> GetUserAccountByIdAsync(Guid id)
@@ -49,14 +49,14 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         public async Task UpdateUserAuthorizationOperationLogAsync(UpdateUserAuthorizationCommand command)
         {
             var account = await GetUserAccountByIdAsync(command.User.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUserAuthorization, $"编辑用户权限：{account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUserAuthorization, $"编辑用户权限：{account}");
         }
 
         [EventHandler]
         public async Task UpdateUserPasswordOperationLogAsync(ResetUserPasswordCommand command)
         {
             var account = await GetUserAccountByIdAsync(command.User.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUserPassword, $"编辑用户密码：{account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUserPassword, $"编辑用户密码：{account}");
         }
 
         [EventHandler]
@@ -71,13 +71,13 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         public async Task UpdateUserPasswordOperationLogAsync(UpdateUserPasswordCommand command)
         {
             var account = await GetUserAccountByIdAsync(command.User.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUserPassword, $"编辑用户密码：{account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUserPassword, $"编辑用户密码：{account}");
         }
 
         [EventHandler]
         public async Task UpdateUserBasicInfoOperationLogAsync(UpdateUserBasicInfoCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUser, $"编辑用户：{command.User.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{command.User.DisplayName}");
         }
 
         #endregion
