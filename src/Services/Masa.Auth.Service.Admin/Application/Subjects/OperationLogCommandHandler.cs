@@ -106,7 +106,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             return displayName;
         }
 
-        [EventHandler(0)]
+        [EventHandler]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
             var account = await GetStaffDisplayNameByIdAsync(command.Staff.Id);
@@ -160,6 +160,28 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         public async Task LdapUpsertOperationLogAsync(LdapUpsertCommand command)
         {
             await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateThirdPartyIdp, $"编辑用户：{LdapConsts.LDAP_NAME}");
+        }
+        #endregion
+
+        #region Team
+
+        [EventHandler]
+        public async Task AddTeamLogAsync(AddTeamCommand addTeamCommand)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddTeam, $"添加团队：{addTeamCommand.AddTeamDto.Name}");
+        }
+
+        [EventHandler]
+        public async Task UpdateTeamLogAsync(UpdateTeamCommand updateTeamCommand)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateTeam, $"编辑团队：{updateTeamCommand.UpdateTeamDto.Name}");
+        }
+
+        [EventHandler]
+        public async Task RemoveTeamLogAsync(RemoveTeamCommand removeTeamCommand)
+        {
+            if(removeTeamCommand.Result is not null)
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveTeam, $"删除团队：{removeTeamCommand.Result.Name}");
         }
         #endregion
     }

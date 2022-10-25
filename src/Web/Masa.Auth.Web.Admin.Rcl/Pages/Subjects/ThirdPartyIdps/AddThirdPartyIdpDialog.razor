@@ -26,18 +26,18 @@
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="ThirdPartyIdp.CallbackPath" Label="@T("CallbackPath")" />                      
+                        <STextField @bind-Value="ThirdPartyIdp.CallbackPath" Required Label="@T("CallbackPath")" />                      
                     </MCol>
                     <MCol>
-                        <SUrlTextField @bind-Value="ThirdPartyIdp.AuthorizationEndpoint" Label="@T("AuthorizationEndpoint")" />                 
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.AuthorizationEndpoint" Required Label="@T("AuthorizationEndpoint")" />                 
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <SUrlTextField @bind-Value="ThirdPartyIdp.TokenEndpoint" Label="@T("TokenEndpoint")" /> 
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.TokenEndpoint" Required Label="@T("TokenEndpoint")" /> 
                     </MCol>
                      <MCol>
-                        <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Label="@T("UserInformationEndpoint")" />                       
+                        <SUrlTextField @bind-Value="ThirdPartyIdp.UserInformationEndpoint" Required Label="@T("UserInformationEndpoint")" />                       
                     </MCol>
                 </MRow>
                 <DefaultTitle Class="mb-6">@T("Advanced configuration")</DefaultTitle>

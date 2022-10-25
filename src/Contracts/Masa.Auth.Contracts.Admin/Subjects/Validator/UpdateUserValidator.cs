@@ -14,7 +14,7 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
         RuleFor(user => user.IdCard).IdCard();
         RuleFor(user => user.CompanyName).ChineseLetter().MinLength(2).MaxLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MinLength(2).MaxLength(16);
-        RuleFor(user => user.Account).ChineseLetterNumber().MinLength(8).MaxLength(50);
+        RuleFor(user => user.Account).Required().ChineseLetterNumber().MinLength(8).MaxLength(50);
         RuleFor(user => user.Department).ChineseLetterNumber().MinLength(2).MaxLength(16);
         RuleFor(user => user.Avatar).Url().Required();
     }
