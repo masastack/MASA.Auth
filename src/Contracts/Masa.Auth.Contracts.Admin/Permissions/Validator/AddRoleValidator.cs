@@ -7,8 +7,8 @@ public class AddRoleValidator : AbstractValidator<AddRoleDto>
 {
     public AddRoleValidator()
     {
-        RuleFor(role => role.Name).Required().ChineseLetterNumber().MaxLength(20);
-        RuleFor(role => role.Code).Required().ChineseLetterNumber().MaxLength(20);
+        RuleFor(role => role.Name).Required().ChineseLetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(role => role.Code).Required().MinLength(2).MaxLength(150);
         RuleFor(role => role.Description).MaxLength(50);
         RuleFor(role => role.Limit).GreaterThanOrEqualTo(0);
     }

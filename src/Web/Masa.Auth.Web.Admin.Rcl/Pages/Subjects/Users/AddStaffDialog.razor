@@ -79,14 +79,20 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <STextField Required @bind-Value="Staff.Password" Label="@T("Password")" />
+                                    <STextField @bind-Value="@Staff.Password" DebounceInterval=500 >
+                                        <AppendContent>
+                                            <MButton Color="primary" OnClick="async () => await SetDefaultPassword(context)" Style="margin-top:0px;margin-right:-12px;height:48px;min-width: 120px;border-radius: 0px 7px 7px 0px;">
+                                                @T("Set it to the default password")
+                                            </MButton>
+                                        </AppendContent>
+                                    </STextField>
                                 </MCol>
                             </MRow>
                         </AutoHeightContent>
                         <FooterContent>
                             <div class="d-flex mt-6">
                                 <EnableSwitch Class="ml-1" @bind-Value="Staff.Enabled" />
-                                <MSpacer></MSpacer>
+                                <MSpacer />
                                 <SButton Medium Outlined OnClick="()=>Step=1">@T("Previous step")</SButton>
                                 <SButton Medium Class="ml-6" OnClick="async() => await AddStaffAsync(context)">@T("Submit")</SButton>
                             </div>

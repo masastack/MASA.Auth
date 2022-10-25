@@ -7,10 +7,14 @@ public class UpdateThirdPartyIdpValidator : AbstractValidator<UpdateThirdPartyId
 {
     public UpdateThirdPartyIdpValidator()
     {
-        RuleFor(thirdPartyIdp => thirdPartyIdp.DisplayName).ChineseLetterNumber().MinLength(4).MaxLength(50);
-        RuleFor(staff => staff.ClientId).Required().LetterNumber().MinLength(4).MaxLength(50);
-        RuleFor(staff => staff.ClientSecret).Required().MaxLength(255);
-        RuleFor(staff => staff.Icon).Required();
+        RuleFor(thirdPartyIdp => thirdPartyIdp.DisplayName).Required().ChineseLetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(thirdPartyIdp => thirdPartyIdp.ClientId).Required().LetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(thirdPartyIdp => thirdPartyIdp.ClientSecret).Required().MinLength(2).MaxLength(255);
+        RuleFor(thirdPartyIdp => thirdPartyIdp.Icon).Required().Url();
+        RuleFor(thirdPartyIdp => thirdPartyIdp.AuthorizationEndpoint).Required().Url();
+        RuleFor(thirdPartyIdp => thirdPartyIdp.TokenEndpoint).Required().Url();
+        RuleFor(thirdPartyIdp => thirdPartyIdp.UserInformationEndpoint).Required().Url();
+        RuleFor(thirdPartyIdp => thirdPartyIdp.CallbackPath).Required();
     }
 }
 
