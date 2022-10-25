@@ -166,7 +166,7 @@
     "Add Position": "新建职位",
     "Update Position": "编辑职位",
     "Add position success": "新建职位成功",
-    "Edit position data success": "编辑职位数据成功",
+    "Update position data success": "编辑职位数据成功",
     "Delete position data success": "删除职位数据成功",
     "Are you sure delete position data": "确定删除职位数据"
   },
