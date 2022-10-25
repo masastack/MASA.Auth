@@ -21,9 +21,9 @@ public class RoleDto
 
     public DateTime? ModificationTime { get; set; }
 
-    public string Creator { get; set; }
+    public string? Creator { get; set; }
 
-    public string Modifier { get; set; }
+    public string? Modifier { get; set; }
 
     public RoleDto()
     {

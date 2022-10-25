@@ -159,6 +159,7 @@ public class UserService : ServiceBase
             Name = user.Name,
             Account = user.Account,
             DisplayName = user.DisplayName,
+            StaffDislpayName = user.StaffDisplayName,
             IdCard = user.IdCard,
             CompanyName = user.CompanyName,
             PhoneNumber = user.PhoneNumber,

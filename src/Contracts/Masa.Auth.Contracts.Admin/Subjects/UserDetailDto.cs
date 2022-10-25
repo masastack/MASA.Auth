@@ -13,9 +13,9 @@ public class UserDetailDto : UserDto
 
     public List<string> ThirdPartyIdpAvatars { get; set; }
 
-    public string Creator { get; set; }
+    public string? Creator { get; set; }
 
-    public string Modifier { get; set; }
+    public string? Modifier { get; set; }
 
     public DateTime? ModificationTime { get; set; }
 
@@ -26,6 +26,8 @@ public class UserDetailDto : UserDto
     public Guid? StaffId { get; set; }
 
     public Guid? CurrentTeamId { get; set; }
+
+    public string? StaffDisplayName { get; set; }
 
     public UserDetailDto() : base()
     {

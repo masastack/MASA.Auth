@@ -938,3 +938,15 @@ input::-webkit-input-placeholder {
 .hover-border-primary:hover .subtitle {
     color: #4318FF !important;
 }
+
+/*
+    stepper
+*/
+
+.m-stepper__items {
+    height: 100%;
+}
+
+.m-stepper__content {
+    height: 100%;
+}
