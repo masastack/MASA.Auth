@@ -41,7 +41,7 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         private set => _extendedData = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(ExtendedData));
     }
 
-    public User User => _user ?? LazyLoader?.Load(this, ref _user) ?? throw new UserFriendlyException("Failed to get user data");
+    public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
 
     public User? CreateUser => _createUser;
 

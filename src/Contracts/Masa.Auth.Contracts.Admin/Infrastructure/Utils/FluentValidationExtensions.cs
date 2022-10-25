@@ -127,6 +127,6 @@ public static class FluentValidationExtensions
     {
         return ruleBuilder.Matches(BusinessConsts.PASSWORD_REGULAR)
                           .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                          .MaxLength(30);
+                          .MaxLength(50);
     }
 }

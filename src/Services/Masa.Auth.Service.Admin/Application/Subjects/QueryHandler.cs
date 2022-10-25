@@ -361,6 +361,13 @@ public class QueryHandler
         query.Result = total;
     }
 
+    [EventHandler]
+    public async Task GetDefaultPasswordAsync(StaffDefaultPasswordQuery query)
+    {
+        var defaultPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF_DEFAULT_PASSWORD);
+        query.Result = defaultPasswordDto ?? new();
+    }
+
     #endregion
 
     #region ThirdPartyUser
@@ -369,21 +376,16 @@ public class QueryHandler
     public async Task GetThirdPartyUsersAsync(ThirdPartyUsersQuery query)
     {
         Expression<Func<ThirdPartyUser, bool>> condition = tpu => true;
-        if (query.Enabled is not null)
-            condition = condition.And(tpu => tpu.Enabled == query.Enabled);
-
-        if (query.StartTime is not null)
-            condition = condition.And(tpu => tpu.CreationTime >= query.StartTime);
-
-        if (query.EndTime is not null)
-            condition = condition.And(tpu => tpu.CreationTime <= query.EndTime);
-
-        if (query.UserId != Guid.Empty)
-            condition = condition.And(tpu => tpu.Id == query.UserId);
+        condition = condition.And(query.Enabled is not null, tpu => tpu.Enabled == query.Enabled)
+                             .And(query.StartTime is not null, tpu => tpu.CreationTime >= query.StartTime)
+                             .And(query.EndTime is not null, tpu => tpu.CreationTime <= query.EndTime)
+                             .And(query.ThirdPartyId is not null, tpu => tpu.ThirdPartyIdpId == query.ThirdPartyId)
+                             .And(string.IsNullOrEmpty(query.Search) is false, tpu => tpu.User.DisplayName.Contains(query.Search!));
 
         var tpuQuery = _authDbContext.Set<ThirdPartyUser>().Where(condition);
         var total = await tpuQuery.LongCountAsync();
-        var tpus = await tpuQuery.Include(tpu => tpu.CreateUser)
+        var tpus = await tpuQuery.Include(tpu => tpu.User)
+                                 .Include(tpu => tpu.CreateUser)
                                  .Include(tpu => tpu.ModifyUser)
                                  .OrderByDescending(s => s.ModificationTime)
                                  .ThenByDescending(s => s.CreationTime)

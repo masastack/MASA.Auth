@@ -84,7 +84,7 @@ public class QueryHandler
     {
         var roleSelect = await _authDbContext.Set<RoleRelation>()
                                     .Include(r => r.ParentRole)
-                                    .Where(r => r.ParentRole.Enabled == true && r.RoleId == query.RoleId)
+                                    .Where(r => r.RoleId == query.RoleId)
                                     .Select(r => new RoleSelectDto(r.ParentRole.Id, r.ParentRole.Name, r.ParentRole.Code, r.ParentRole.Limit, r.ParentRole.AvailableQuantity))
                                     .ToListAsync();
 
@@ -133,7 +133,7 @@ public class QueryHandler
     public async Task GetRoleSelectAsync(RoleSelectQuery query)
     {
         var roleSelect = await _authDbContext.Set<Role>()
-                                         .Where(r => r.Enabled == true && r.Name.Contains(query.Name))
+                                         .Where(r => r.Name.Contains(query.Name))
                                          .Select(r => new RoleSelectDto(r.Id, r.Name, r.Code, r.Limit, r.AvailableQuantity))
                                          .ToListAsync();
         query.Result = roleSelect;
@@ -142,7 +142,6 @@ public class QueryHandler
     private async Task<List<RoleSelectDto>> GetRoleSelectAsync()
     {
         var roleSelect = await _authDbContext.Set<Role>()
-                                        .Where(r => r.Enabled == true)
                                         .Select(r => new RoleSelectDto(r.Id, r.Name, r.Code, r.Limit, r.AvailableQuantity))
                                         .ToListAsync();
         return roleSelect;

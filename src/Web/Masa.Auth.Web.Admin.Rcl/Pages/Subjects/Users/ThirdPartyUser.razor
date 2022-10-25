@@ -5,7 +5,7 @@
         <div class="d-flex">
             <MSpacer />
             <div>
-                <SUserAutoComplete @bind-Value="UserId" />
+                <SearchTextField @bind-Value="Search" />
             </div>           
             <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
@@ -23,9 +23,13 @@
                 <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
                 <MRow class="ml-6">
                     <MCol Md=4>
-                        <BooleanSelect @bind-Value="Enabled" Placeholder="@T("UserState")" />
+                        <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
+                    </MCol>
+                    <MCol Md=4>
+                        <ThirdPartyIdpSelect @bind-Value="ThirdPartyId" Small Label="@T("ThirdPartyIdp")" />
                     </MCol>
                 </MRow>
+
             </div>
         }
     </HeaderContent>
@@ -57,7 +61,7 @@
                     case (nameof(ThirdPartyUserDto.IdpDetailDto)):
                         if (context.Item.IdpDetailDto.Name == LdapConsts.LDAP_NAME)
                         {
-                            <MIcon>@context.Item.IdpDetailDto.Icon</MIcon>
+                            <MIcon Size="40">@context.Item.IdpDetailDto.Icon</MIcon>
                         }
                         else
                         {

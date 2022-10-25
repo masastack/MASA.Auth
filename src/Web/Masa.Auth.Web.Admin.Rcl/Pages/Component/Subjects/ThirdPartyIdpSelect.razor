@@ -3,9 +3,10 @@
 <SSelect Value="Value"
                ValueChanged="ValueChanged"
                Items="ThirdPartyIdps!.Where(e => e.Id==Value || Excludes.Contains(e.Id) is false).ToList()"
-               Label="@T(Label)"
+               Label="@T(Label??"")"
                ItemText="e => e.Name"
                ItemValue="e => e.Id"
+               Small=Small
                Style="@($"{Style}")"
                Class="@($"{Class}")">
     <ItemContent Context="data">

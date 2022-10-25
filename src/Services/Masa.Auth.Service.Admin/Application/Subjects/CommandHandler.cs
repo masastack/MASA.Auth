@@ -129,8 +129,8 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Email, userDto.IdCard, default);
-        user.Update(userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
+        await VerifyUserRepeatAsync(userDto.Id, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account);
+        user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
@@ -487,13 +487,13 @@ public class CommandHandler
         {
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
-                throw new UserFriendlyException($"User with phone number {phoneNumber} already exists");
+                throw new UserFriendlyException($"User with phone number [{phoneNumber}] already exists");
             if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
-                throw new UserFriendlyException($"User with email {email} already exists");
+                throw new UserFriendlyException($"User with email [{email}] already exists");
             if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
-                throw new UserFriendlyException($"User with idCard {idCard} already exists");
+                throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
-                throw new UserFriendlyException($"User with account {account} already exists");
+                throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
         }
         return exitUser;
     }
@@ -529,16 +529,17 @@ public class CommandHandler
 
     #region Staff
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddStaffAsync(AddStaffCommand command)
     {
         var staffDto = command.Staff;
         var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
         if (staff is not null) return;
-        await AddStaffAsync(staffDto);
+        
+        command.Result = await AddStaffAsync(staffDto);
     }
 
-    async Task AddStaffAsync(AddStaffDto staffDto)
+    async Task<Staff> AddStaffAsync(AddStaffDto staffDto)
     {
         var addUserDto = new AddUserDto(default, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
@@ -563,15 +564,17 @@ public class CommandHandler
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
         await _staffDomainService.AddAfterAsync(new(staff));
+        return staff;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateStaffAsync(UpdateStaffCommand command)
     {
         var staffDto = command.Staff;
         var staff = await CheckStaffExistAsync(staffDto.Id);
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
         await UpdateStaffAsync(staff, staffDto);
+        command.Result = staff;
     }
 
     async Task UpdateStaffAsync(Staff staff, UpdateStaffDto staffDto)
@@ -587,7 +590,6 @@ public class CommandHandler
         var teams = staff.TeamStaffs.Select(team => team.TeamId).Union(staffDto.Teams).Distinct().ToList();
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);
-
         await _staffDomainService.UpdateAfterAsync(new(staff, teams));
     }
 
@@ -614,9 +616,10 @@ public class CommandHandler
 
         staff.UpdateBasicInfo(staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
         await _staffRepository.UpdateAsync(staff);
+        command.Result = staff;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpsertStaffAsync(UpsertStaffCommand command)
     {
         var staffDto = command.Staff;
@@ -626,14 +629,15 @@ public class CommandHandler
             var updateStaffDto = staffDto.Adapt<UpdateStaffDto>();
             updateStaffDto.Id = staff.Id;
             await UpdateStaffAsync(staff, updateStaffDto);
+            command.Result = staff;
         }
         else
         {
-            await AddStaffAsync(staffDto);
-        }
+            command.Result = await AddStaffAsync(staffDto);
+        }      
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         var staffDto = command.Staff;
@@ -645,6 +649,7 @@ public class CommandHandler
             staff.UpdateForLdap(staffDto.Name, staffDto.DisplayName, staffDto.PhoneNumber, staffDto.Email);
             await _staffRepository.UpdateAsync(staff);
             await _staffDomainService.UpdateAfterAsync(new(staff, default));
+            command.Result = staff;
         }
         else
         {
@@ -657,12 +662,12 @@ public class CommandHandler
                 PhoneNumber = staffDto.PhoneNumber,
                 JobNumber = staffDto.JobNumber
             };
-            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
-            await AddStaffAsync(addStaffDto);
+            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);          
+            command.Result = await AddStaffAsync(addStaffDto);
         }
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateStaffAvatarAsync(UpdateStaffAvatarCommand command)
     {
         var staffDto = command.Staff;
@@ -672,6 +677,7 @@ public class CommandHandler
 
         staff.UpdateAvatar(staffDto.Avatar);
         await _staffRepository.UpdateAsync(staff);
+        command.Result = staff;
     }
 
     [EventHandler(1)]
@@ -683,7 +689,7 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task SyncAsync(SyncStaffCommand command)
+    public async Task SyncStaffAsync(SyncStaffCommand command)
     {
         var syncResults = new SyncStaffResultsDto();
         command.Result = syncResults;
