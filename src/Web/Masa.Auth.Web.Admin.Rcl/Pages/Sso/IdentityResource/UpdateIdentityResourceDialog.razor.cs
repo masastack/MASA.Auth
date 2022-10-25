@@ -15,7 +15,7 @@ public partial class UpdateIdentityResourceDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public int IdentityResourceId { get; set; }
+    public Guid IdentityResourceId { get; set; }
 
     private IdentityResourceDetailDto IdentityResourceDetail { get; set; } = new();
 

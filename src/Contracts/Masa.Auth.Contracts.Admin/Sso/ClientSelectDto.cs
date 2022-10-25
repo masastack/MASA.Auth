@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class ClientSelectDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string ClientName { get; set; } = string.Empty;
 
@@ -21,7 +21,7 @@ public class ClientSelectDto
     {
     }
 
-    public ClientSelectDto(int id, string clientName, string logoUri, string description, string clientId, ClientTypes clientType)
+    public ClientSelectDto(Guid id, string clientName, string logoUri, string description, string clientId, ClientTypes clientType)
     {
         Id = id;
         ClientName = clientName;

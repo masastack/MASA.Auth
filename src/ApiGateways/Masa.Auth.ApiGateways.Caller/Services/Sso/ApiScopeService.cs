@@ -22,7 +22,7 @@ public class ApiScopeService : ServiceBase
         return await SendAsync<object, List<ApiScopeSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
-    public async Task<ApiScopeDetailDto> GetDetailAsync(int id)
+    public async Task<ApiScopeDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, ApiScopeDetailDto>(nameof(GetDetailAsync), new { id });
     }
@@ -37,7 +37,7 @@ public class ApiScopeService : ServiceBase
         await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveApiScopeDto(id));
     }

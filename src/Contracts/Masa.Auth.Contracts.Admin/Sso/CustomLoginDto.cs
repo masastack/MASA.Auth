@@ -19,13 +19,13 @@ public class CustomLoginDto
 
     public DateTime? ModificationTime { get; set; }
 
-    public string Creator { get; set; } = "";
+    public string? Creator { get; set; }
 
-    public string Modifier { get; set; } = "";
+    public string? Modifier { get; set; }
 
     public CustomLoginDto() { }
 
-    public CustomLoginDto(int id, string name, string title, ClientDto client, bool enabled, DateTime creationTime, DateTime? modificationTime, string creator, string modifier)
+    public CustomLoginDto(int id, string name, string title, ClientDto client, bool enabled, DateTime creationTime, DateTime? modificationTime, string? creator, string? modifier)
     {
         Id = id;
         Name = name;

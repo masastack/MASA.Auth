@@ -45,7 +45,7 @@ public partial class IdentityResource
 
     public List<IdentityResourceDto> IdentityResources { get; set; } = new();
 
-    public int CurrentIdentityResourceId { get; set; }
+    public Guid CurrentIdentityResourceId { get; set; }
 
     public bool AddIdentityResourceDialogVisible { get; set; }
 
@@ -109,7 +109,7 @@ public partial class IdentityResource
         if (confirm) await RemoveIdentityResourceAsync(identityResource.Id);
     }
 
-    public async Task RemoveIdentityResourceAsync(int identityResourceId)
+    public async Task RemoveIdentityResourceAsync(Guid identityResourceId)
     {
         Loading = true;
         await IdentityResourceService.RemoveAsync(identityResourceId);

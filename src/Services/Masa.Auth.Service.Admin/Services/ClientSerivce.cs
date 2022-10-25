@@ -25,7 +25,7 @@ public class ClientSerivce : ServiceBase
         return query.Result;
     }
 
-    private async Task<ClientDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] int id)
+    private async Task<ClientDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new ClientDetailQuery(id);
         await eventBus.PublishAsync(query);
@@ -65,7 +65,7 @@ public class ClientSerivce : ServiceBase
         await eventBus.PublishAsync(updateCommand);
     }
 
-    private async Task RemoveClientAsync(IEventBus eventBus, [FromQuery] int id)
+    private async Task RemoveClientAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var removeCommand = new RemoveClientCommand(id);
         await eventBus.PublishAsync(removeCommand);

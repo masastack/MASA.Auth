@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Sso.Queries;
 
-public record ApiResourceDetailQuery(int ApiResourceId) : Query<ApiResourceDetailDto>
+public record ApiResourceDetailQuery(Guid ApiResourceId) : Query<ApiResourceDetailDto>
 {
     public override ApiResourceDetailDto Result { get; set; } = new();
 }

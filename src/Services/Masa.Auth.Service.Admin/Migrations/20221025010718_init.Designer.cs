@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220906035115_AddStaffTeamId")]
-    partial class AddStaffTeamId
+    [Migration("20221025010718_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -112,7 +112,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsUnique()
                         .HasFilter("Level = 1");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name", "ParentId")
                         .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
@@ -311,6 +311,10 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -577,9 +581,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdentificationType")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -920,7 +921,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("GenderType")
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("IdCard")
@@ -1060,11 +1061,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResource", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AllowedAccessTokenSigningAlgorithms")
                         .IsRequired()
@@ -1124,14 +1123,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceClaim", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ApiResourceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApiResourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1148,8 +1145,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UserClaimId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserClaimId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1166,8 +1163,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ApiResourceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApiResourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -1188,17 +1185,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceScope", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid>("ApiResourceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ApiResourceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ApiScopeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApiScopeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1226,14 +1221,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiResourceSecret", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ApiResourceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApiResourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1277,11 +1270,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScope", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1335,14 +1326,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ApiScopeClaim", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ApiScopeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ApiScopeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1359,8 +1348,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UserClaimId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserClaimId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1382,8 +1371,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("ScopeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ScopeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -1399,11 +1388,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AbsoluteRefreshTokenLifetime")
                         .HasColumnType("int");
@@ -1581,14 +1568,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientClaim", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -1609,14 +1594,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientCorsOrigin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Origin")
                         .IsRequired()
@@ -1632,14 +1615,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientGrantType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("GrantType")
                         .IsRequired()
@@ -1655,14 +1636,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientIdPRestriction", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Provider")
                         .IsRequired()
@@ -1678,14 +1657,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientPostLogoutRedirectUri", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostLogoutRedirectUri")
                         .IsRequired()
@@ -1704,8 +1681,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -1726,14 +1703,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientRedirectUri", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RedirectUri")
                         .IsRequired()
@@ -1749,14 +1724,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientScope", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Scope")
                         .IsRequired()
@@ -1772,14 +1745,12 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.ClientSecret", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1857,8 +1828,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1892,11 +1863,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResource", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1954,11 +1923,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.IdentityResourceClaim", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -1966,8 +1933,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Creator")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IdentityResourceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("IdentityResourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1978,8 +1945,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<Guid>("Modifier")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("UserClaimId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserClaimId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1996,8 +1963,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IdentityResourceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("IdentityResourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -2049,8 +2016,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2089,11 +2056,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.UserClaim", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -2166,11 +2131,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "EventId", "RowVersion" }, "index_eventid_version");
+                    b.HasIndex(new[] { "EventId", "RowVersion" }, "IX_EventId_Version");
 
-                    b.HasIndex(new[] { "State", "ModificationTime" }, "index_state_modificationtime");
+                    b.HasIndex(new[] { "State", "ModificationTime" }, "IX_State_MTime");
 
-                    b.HasIndex(new[] { "State", "TimesSent", "ModificationTime" }, "index_state_timessent_modificationtime");
+                    b.HasIndex(new[] { "State", "TimesSent", "ModificationTime" }, "IX_State_TimesSent_MTime");
 
                     b.ToTable("IntegrationEventLog", "auth");
                 });
@@ -2252,6 +2217,17 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     b.HasBaseType("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider");
 
+                    b.Property<int>("AuthenticationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AuthorizationEndpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CallbackPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ClientId")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -2262,16 +2238,20 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Url")
+                    b.Property<string>("JsonKeyMap")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VerifyFile")
+                    b.Property<bool>("MapAll")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TokenEndpoint")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VerifyType")
-                        .HasColumnType("int");
+                    b.Property<string>("UserInformationEndpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ThirdParty");
                 });

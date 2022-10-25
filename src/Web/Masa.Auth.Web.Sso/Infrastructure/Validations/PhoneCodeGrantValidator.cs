@@ -26,7 +26,17 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
             PhoneNumber = phoneNumber,
             Code = code
         });
-        context.Result = new GrantValidationResult(user.Id.ToString(), "sms", GetUserClaims(user.DisplayName));
+        if (user != null)
+        {
+            context.Result = new GrantValidationResult(user.Id.ToString(), "sms", GetUserClaims(user.DisplayName));
+        }
+        else
+        {
+            context.Result = new GrantValidationResult(
+                TokenRequestErrors.InvalidGrant,
+                "invalid custom credential");
+        }
+
     }
 
     private Claim[] GetUserClaims(string name)

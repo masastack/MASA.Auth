@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class ApiScopeDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -26,7 +26,7 @@ public class ApiScopeDto
 
     }
 
-    public ApiScopeDto(int id, bool enabled, string name, string displayName, string description, bool required, bool emphasize, bool showInDiscoveryDocument)
+    public ApiScopeDto(Guid id, bool enabled, string name, string displayName, string description, bool required, bool emphasize, bool showInDiscoveryDocument)
     {
         Id = id;
         Enabled = enabled;

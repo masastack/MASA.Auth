@@ -14,6 +14,7 @@ public static class SchedulerJobServiceCollectionExtensions
         await serviceProvider.SafeExcuteAsync(AddSyncUserAutoCompleteJobAsync);
         await serviceProvider.SafeExcuteAsync(AddSyncUserRedisJobAsync);
         await serviceProvider.SafeExcuteAsync(AddSyncOidcRedisJobAsync);
+        await serviceProvider.SafeExcuteAsync(AddSyncStaffRedisJobAsync);
     }
 
     public static async Task AddSyncUserAutoCompleteJobAsync(this IServiceProvider serviceProvider)
@@ -107,6 +108,37 @@ public static class SchedulerJobServiceCollectionExtensions
             {
                 HttpMethod = HttpMethods.POST,
                 RequestUrl = Path.Combine(authUrl, "api/sso/client/SyncOidc/")
+            }
+        });
+    }
+
+    public static async Task AddSyncStaffRedisJobAsync(this IServiceProvider serviceProvider)
+    {
+        var authUrl = serviceProvider
+                          .GetRequiredService<IMasaConfiguration>()
+                          .ConfigurationApi
+                          .GetDefault()
+                          .GetValue<string>("AppSettings:AuthClient:Url");
+        var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
+        await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
+        {
+            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            JobIdentity = "masa-auth-sync-syncStaffRedis-job",
+            Name = "SyncStaffRedisJob",
+            IsAlertException = true,
+            JobType = JobTypes.Http,
+            CronExpression = "0 0 0 * * ? *",
+            Description = "SyncStaffRedisJob",
+            ScheduleExpiredStrategy = ScheduleExpiredStrategyTypes.ExecuteImmediately,
+            ScheduleBlockStrategy = ScheduleBlockStrategyTypes.Cover,
+            RunTimeoutStrategy = RunTimeoutStrategyTypes.RunFailedStrategy,
+            RunTimeoutSecond = 12 * 60 * 60,
+            FailedRetryInterval = 10,
+            FailedRetryCount = 3,
+            HttpConfig = new SchedulerJobHttpConfig()
+            {
+                HttpMethod = HttpMethods.POST,
+                RequestUrl = Path.Combine(authUrl, "api/staff/SyncCache/")
             }
         });
     }

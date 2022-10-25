@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class ApiResourceDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public bool Enabled { get; set; } = true;
 
@@ -25,7 +25,7 @@ public class ApiResourceDto
 
     public ApiResourceDto() { }
 
-    public ApiResourceDto(int id, bool enabled, string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable)
+    public ApiResourceDto(Guid id, bool enabled, string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable)
     {
         Id = id;
         Enabled = enabled;

@@ -96,6 +96,7 @@ global using Masa.BuildingBlocks.StackSdks.Scheduler.Enum;
 global using Masa.BuildingBlocks.StackSdks.Scheduler.Model;
 global using Masa.BuildingBlocks.StackSdks.Scheduler.Request;
 global using Masa.BuildingBlocks.Storage.ObjectStorage;
+global using Masa.Contrib.Authentication.OpenIdConnect.Cache.Utils;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Caches;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.DbContexts;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Repositories;

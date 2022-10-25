@@ -34,6 +34,12 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
         return await Context.Set<User>().ToListAsync();
     }
 
+    public async Task<User> GetByVoucherAsync(string voucher)
+    {
+        return await Context.Set<User>().FirstOrDefaultAsync(u => u.Account == voucher
+            || u.PhoneNumber == voucher || u.Email == voucher) ?? throw new UserFriendlyException("No user found");
+    }
+
     public async Task<User?> GetDetailAsync(Guid id)
     {
         var user = await Context.Set<User>()

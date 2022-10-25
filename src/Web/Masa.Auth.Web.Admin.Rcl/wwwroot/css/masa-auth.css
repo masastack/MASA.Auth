@@ -126,15 +126,6 @@
     margin-top: 4px;
 }
 
-.m-card {
-    box-shadow: 0px 0px 0px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 14%), 0px 0px 0px 0px rgb(0 0 0 / 12%) !important;
-    border-radius: 20px !important;
-}
-
-    .m-card.line {
-        border-radius: 10px !important;
-    }
-
 .m-input .m-input__icon .mdi-menu-down {
     color: #A3AED0;
 }
@@ -171,123 +162,6 @@
 
 .table-header-fill .m-data-table-header tr {
     background: #F6F8FD;
-}
-
-/*
-    temp
-*/
-
-.masa .h1 {
-    font-size: 6rem !important;
-    font-weight: 300 !important;
-    line-height: 7rem !important;
-    letter-spacing: -0.0946875em !important;
-}
-
-.masa .h2 {
-    font-size: 3.75rem !important;
-    font-weight: 300 !important;
-    line-height: 4.75rem !important;
-    letter-spacing: -0.03125em !important;
-}
-
-.masa .h3 {
-    font-size: 3rem !important;
-    font-weight: 900 !important;
-    line-height: 3.5rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .h4 {
-    font-size: 2.125rem !important;
-    font-weight: 700 !important;
-    line-height: 3.1875rem !important;
-    letter-spacing: 0.02em !important;
-}
-
-.masa .h5 {
-    font-size: 1.5rem !important;
-    font-weight: 700 !important;
-    line-height: 2.25rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .h6 {
-    font-size: 1.25rem !important;
-    font-weight: 700 !important;
-    line-height: 1.875rem !important;
-    letter-spacing: 0.01em !important;
-}
-
-.masa .h7 {
-    font-size: 1.125rem !important;
-    font-weight: 500 !important;
-    line-height: 1.6875rem !important;
-    letter-spacing: 0.01em !important;
-}
-
-.masa .h8 {
-    font-size: 1rem !important;
-    font-weight: 700 !important;
-    line-height: 1.5rem !important;
-    letter-spacing: 0.03125em !important;
-}
-
-.masa .subtitle {
-    font-size: 1rem !important;
-    font-weight: 500 !important;
-    line-height: 1.5rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .subtitle2 {
-    font-size: 0.875rem !important;
-    font-weight: 700 !important;
-    line-height: 1.3125rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .subtitle3 {
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    line-height: 1.125rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .body {
-    font-size: 1rem !important;
-    font-weight: 400 !important;
-    line-height: 1.5rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .body2 {
-    font-size: 0.875rem !important;
-    font-weight: 400 !important;
-    line-height: 1.3125rem !important;
-    letter-spacing: 0.015625em !important;
-}
-
-.masa .btn {
-    font-size: 0.875rem !important;
-    font-weight: 500 !important;
-    line-height: 1.3125rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .caption {
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
-    line-height: 1.125rem !important;
-    letter-spacing: 0em !important;
-}
-
-.masa .caption {
-    font-size: 0.625rem !important;
-    font-weight: 400 !important;
-    line-height: 0.9375rem !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
 }
 
 .table-border-solid td, th {
@@ -360,7 +234,7 @@
     background: #ECE8FF !important;
 }
 
-.m-stepper__items {
+/*.m-stepper__items {
     height: 100%;
 }
 
@@ -374,7 +248,7 @@
 
 .m-stepper__content {
     height: 100%;
-}
+}*/
 
 .m-text-field--outlined input {
     font-family: 'Roboto' !important;
@@ -1065,9 +939,14 @@ input::-webkit-input-placeholder {
     color: #4318FF !important;
 }
 
-.avatar-list-stacked .m-avatar {
-    box-shadow: 0 0 0 1px #f0f3fa;
-    margin-left: -0.5em !important;
-    user-select: none;
-    display: inline-grid;
+/*
+    stepper
+*/
+
+.m-stepper__items {
+    height: 100%;
+}
+
+.m-stepper__content {
+    height: 100%;
 }

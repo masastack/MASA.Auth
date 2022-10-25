@@ -97,7 +97,11 @@ public partial class Index
             Name = a.Name
         }).ToList();
         _menuOpenNode = _menuPermissions.Select(m => m.Id).ToList();
-        _menuPermissionActive = _menuOpenNode.Take(1).ToList();
+        if (!_menuPermissionActive.Any())
+        {
+            _menuPermissionActive = _menuOpenNode.Take(1).ToList();
+        }
+
         _apiPermissions = _curAppItems.Where(a => a.Type == AppTypes.Service).Select(a => new AppPermissionsViewModel
         {
             IsPermission = false,
@@ -108,7 +112,11 @@ public partial class Index
             Name = a.Name
         }).ToList();
         _apiOpenNode = _apiPermissions.Select(m => m.Id).ToList();
-        _apiPermissionActive = _apiOpenNode.Take(1).ToList();
+        if (!_apiPermissionActive.Any())
+        {
+            _apiPermissionActive = _apiOpenNode.Take(1).ToList();
+        }
+
         var applicationPermissions = await PermissionService.GetApplicationPermissionsAsync(_curProjectId);
 
         var config = new TypeAdapterConfig();
@@ -229,6 +237,7 @@ public partial class Index
             _menuPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertMenuPermissionAsync(_menuPermissionDetailDto);
             OpenSuccessMessage(T("Edit menu permission data success"));
+            await InitAppPermissions();
         }
     }
 
@@ -239,6 +248,7 @@ public partial class Index
             _apiPermissionDetailDto.SystemId = _curProjectId;
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
             OpenSuccessMessage(T("Edit api permission data success"));
+            await InitAppPermissions();
         }
     }
 

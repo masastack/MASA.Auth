@@ -5,9 +5,9 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class RemoveApiScopeDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public RemoveApiScopeDto(int id)
+    public RemoveApiScopeDto(Guid id)
     {
         Id = id;
     }
