@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class ClientSecretDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string Description { get; set; } = string.Empty;
 

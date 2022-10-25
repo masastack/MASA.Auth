@@ -8,10 +8,8 @@
             </MCol>
             @foreach (var identityScope in Dto.IdentityScopes)
             {
-                var mandatoryResource = _mandatoryResource.Contains(identityScope.Id);
-                identityScope.Selected = mandatoryResource||identityScope.Selected;
                 <MCol Md=6 Class="py-0">
-                    <MCheckbox Disabled="mandatoryResource" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
+                    <MCheckbox Disabled="ClientOptions.MandatoryResource.Contains(identityScope.Id)" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
                 </MCol>
             }
         </MRow>
@@ -39,8 +37,6 @@
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
     
-    string[] _mandatoryResource = new string[]{ "openid","profile" };
-
     ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
     IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
@@ -62,7 +58,7 @@
         Dto.IdentityScopes = identityResources.Select(ir => new CheckItemDto<string>
             {
                 DisplayValue = $"{ir.DisplayName} ({ir.Name})",
-                Selected = Dto._AllowedScopes.Contains(ir.Name),
+                Selected = Dto._AllowedScopes.Contains(ir.Name) || ClientOptions.MandatoryResource.Contains(ir.Name),
                 Id = ir.Name
             }).ToList();
     }
