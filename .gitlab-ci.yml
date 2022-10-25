@@ -21,9 +21,9 @@ variables:
   DOCKER_AUTH_ADMIN_SERVER_PATH: ./src/Services/Masa.Auth.Service.Admin/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_PATH: ./src/Web/Masa.Auth.Web.Admin.Server/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_SSO_PATH: ./src/Web/Masa.Auth.Web.Sso/Dockerfile
-  NAMESPACE_DEV: masa-auth-dev-new
-  NAMESPACE_TEST: masa-auth-test-new
-  NAMESPACE_STAGING: masa-auth-staging-new
+  NAMESPACE_DEV: auth-dev
+  NAMESPACE_TEST: auth-test
+  NAMESPACE_STAGING: auth-staging
   NAMESPACE_PRO: masa-auth-new
 
 docker-build-dev:
