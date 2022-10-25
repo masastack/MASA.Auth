@@ -43,7 +43,7 @@ public partial class PermissionsConfigure
     List<Guid> _internalRoles = new();
     List<Guid> _internalTeams = new();
     Guid _internalUser { get; set; }
-    List<Category> _categories = new(), _sourceCategories = new();
+    List<Category> _categories = new();
 
     List<Guid> RolePermissions { get; set; } = new();
 
@@ -94,8 +94,10 @@ public partial class PermissionsConfigure
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        if (parameters.TryGetValue<List<string>>(nameof(ScopeItems), out var scopeItems) && scopeItems != ScopeItems)
+        if (parameters.TryGetValue(nameof(ScopeItems), out List<string>? scopeItems)
+                && scopeItems != null && ScopeItems?.SequenceEqual(scopeItems) == false)
         {
+            ScopeItems = scopeItems;
             FilterCategories();
         }
         return base.SetParametersAsync(parameters);
@@ -118,15 +120,13 @@ public partial class PermissionsConfigure
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
-        _sourceCategories = _categories;
 
         FilterCategories();
     }
 
     void FilterCategories()
     {
-        _categories = _sourceCategories;
-        if (ScopeItems?.Any() == true)
+        if (ScopeItems != null)
         {
             foreach (var category in _categories)
             {
@@ -134,10 +134,10 @@ public partial class PermissionsConfigure
                 {
                     app.Navs = FilterScopePermission(app.Navs);
                 }
-                category.Apps.RemoveAll(a => !a.Navs.Any());
+                category.Apps.ForEach(a => a.Hiden = a.Navs.All(n => n.Hiden));
             }
         }
-        _categories.RemoveAll(c => !c.Apps.Any());
+        _categories.ForEach(c => c.Hiden = c.Apps.All(a => a.Hiden));
 
         List<Nav> FilterScopePermission(List<Nav> navs)
         {
@@ -148,7 +148,7 @@ public partial class PermissionsConfigure
                     nav.Children = FilterScopePermission(nav.Children);
                 }
             }
-            navs.RemoveAll(n => !ScopeItems.Contains(n.Code) && !n.Children.Any());
+            navs.ForEach(n => n.Hiden = !ScopeItems.Contains(n.Code) && n.Children.All(c => c.Hiden));
             return navs;
         }
     }

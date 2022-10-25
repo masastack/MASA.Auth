@@ -45,7 +45,7 @@ public partial class ApiScope
 
     public List<ApiScopeDto> ApiScopes { get; set; } = new();
 
-    public int CurrentApiScopeId { get; set; }
+    public Guid CurrentApiScopeId { get; set; }
 
     public bool AddApiScopeDialogVisible { get; set; }
 
@@ -95,7 +95,7 @@ public partial class ApiScope
         if (confirm) await RemoveApiScopeAsync(ApiScope.Id);
     }
 
-    public async Task RemoveApiScopeAsync(int ApiScopeId)
+    public async Task RemoveApiScopeAsync(Guid ApiScopeId)
     {
         Loading = true;
         await ApiScopeService.RemoveAsync(ApiScopeId);

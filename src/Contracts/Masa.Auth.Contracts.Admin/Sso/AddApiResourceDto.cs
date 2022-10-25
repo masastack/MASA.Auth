@@ -21,9 +21,9 @@ public class AddApiResourceDto
 
     public bool NonEditable { get; set; }
 
-    public List<int> ApiScopes { get; set; } = new();
+    public List<Guid> ApiScopes { get; set; } = new();
 
-    public List<int> UserClaims { get; set; } = new();
+    public List<Guid> UserClaims { get; set; } = new();
 
     public Dictionary<string, string> Properties { get; set; } = new();
 
@@ -33,7 +33,7 @@ public class AddApiResourceDto
     {
     }
 
-    public AddApiResourceDto(bool enabled, string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable, List<int> apiScopes, List<int> userClaims, Dictionary<string, string> properties, List<string> secrets)
+    public AddApiResourceDto(bool enabled, string name, string displayName, string description, string allowedAccessTokenSigningAlgorithms, bool showInDiscoveryDocument, DateTime? lastAccessed, bool nonEditable, List<Guid> apiScopes, List<Guid> userClaims, Dictionary<string, string> properties, List<string> secrets)
     {
         Enabled = enabled;
         Name = name;

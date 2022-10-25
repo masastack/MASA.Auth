@@ -22,7 +22,7 @@ public class IdentityResourceService : ServiceBase
         return await SendAsync<object, List<IdentityResourceSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
-    public async Task<IdentityResourceDetailDto> GetDetailAsync(int id)
+    public async Task<IdentityResourceDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, IdentityResourceDetailDto>(nameof(GetDetailAsync), new { id });
     }
@@ -42,7 +42,7 @@ public class IdentityResourceService : ServiceBase
         await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveIdentityResourceDto(id));
     }

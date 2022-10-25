@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class UpdateIdentityResourceDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string DisplayName { get; set; } = "";
 
@@ -21,7 +21,7 @@ public class UpdateIdentityResourceDto
 
     public bool NonEditable { get; set; }
 
-    public List<int> UserClaims { get; set; }
+    public List<Guid> UserClaims { get; set; }
 
     public Dictionary<string, string> Properties { get; set; }
 
@@ -31,7 +31,7 @@ public class UpdateIdentityResourceDto
         Properties = new();
     }
 
-    public UpdateIdentityResourceDto(int id, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<int> userClaims, Dictionary<string, string> properties)
+    public UpdateIdentityResourceDto(Guid id, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<Guid> userClaims, Dictionary<string, string> properties)
     {
         Id = id;
         DisplayName = displayName;

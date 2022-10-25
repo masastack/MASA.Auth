@@ -15,7 +15,7 @@ public partial class UpdateUserClaimDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public int UserClaimId { get; set; }
+    public Guid UserClaimId { get; set; }
 
     private UserClaimDetailDto UserClaimDetail { get; set; } = new();
 

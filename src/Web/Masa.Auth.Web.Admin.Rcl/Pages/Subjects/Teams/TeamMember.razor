@@ -4,7 +4,6 @@
     <StaffSelect IgnoreValue="IgnoreStaffIds" @bind-Value="Value.Staffs" RoleLimit=RoleLimit Class="mb-6" Label="@T("Team Member")" />
     <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count RoleLimitChanged="value => RoleLimit=value" Class="mb-6" Label="@T("Role")" />
     <div class="global-nav" style="height:auto">
-        <span>scope items:@ScopePermissions.Count</span>
         <PermissionExtensionConfigure Roles=Value.Roles
                                       @bind-ExtensionValue="Value.Permissions"
                                       Preview=Preview ScopeItems="ScopePermissions.Select(p=>p.ToString()).ToList()"

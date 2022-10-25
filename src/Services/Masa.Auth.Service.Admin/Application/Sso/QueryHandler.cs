@@ -392,14 +392,14 @@ public class QueryHandler
     [EventHandler]
     public async Task CustomLoginByClientIdQueryAsync(CustomLoginByClientIdQuery query)
     {
-        var customLogin =  await _authDbContext.Set<CustomLogin>()
+        var customLogin = await _authDbContext.Set<CustomLogin>()
                                                 .Where(customLogin => customLogin.Enabled == true)
                                                 .Include(customLogin => customLogin.ThirdPartyIdps)
                                                 .ThenInclude(thirdPartyIdp => thirdPartyIdp.ThirdPartyIdp)
                                                 .Include(customLogin => customLogin.RegisterFields)
                                                 .FirstOrDefaultAsync(customLogin => customLogin.ClientId == query.ClientId);
 
-        if(customLogin is null)
+        if (customLogin is null)
         {
             query.Result = new CustomLoginModel()
             {
@@ -413,7 +413,7 @@ public class QueryHandler
                 }
             };
         }
-        if(customLogin is not null)
+        if (customLogin is not null)
         {
             query.Result = new CustomLoginModel()
             {

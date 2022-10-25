@@ -50,6 +50,9 @@ public class CommandHandler
                 await CheckUserExistAsync(model.UserId);
                 cacheKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
                 break;
+            case SendMsgCodeTypes.ForgotPassword:
+                cacheKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
+                break;
             default:
                 throw new UserFriendlyException("Invalid SendMsgCodeType");
         }
@@ -78,7 +81,11 @@ public class CommandHandler
                 break;
             case SendEmailTypes.Verifiy:
             case SendEmailTypes.ForgotPassword:
-                throw new NotImplementedException();
+                if (!_userRepository.Any(u => u.Email == model.Email))
+                {
+                    throw new UserFriendlyException($"This email {model.Email} does not exist");
+                }
+                break;
             default:
                 throw new UserFriendlyException("Invalid SendEmailType");
         }

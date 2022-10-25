@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class IdentityResourceSelectDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -13,7 +13,7 @@ public class IdentityResourceSelectDto
 
     public string Description { get; set; }
 
-    public IdentityResourceSelectDto(int id, string name, string displayName, string description)
+    public IdentityResourceSelectDto(Guid id, string name, string displayName, string description)
     {
         Id = id;
         Name = name;

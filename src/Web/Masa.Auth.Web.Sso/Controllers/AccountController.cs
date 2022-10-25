@@ -35,7 +35,6 @@ public class AccountController : Controller
         {
             HttpContext.UseEnvironmentIsolation(inputModel.Environment);
 
-            var success = false;
             UserModel? user = new();
 
             if (inputModel.PhoneLogin)
@@ -51,19 +50,14 @@ public class AccountController : Controller
                     //todo auto register user
                     return Content("no corresponding user for this mobile phone number");
                 }
-                success = true;
             }
             else
             {
-                success = await _authClient.UserService
+                user = await _authClient.UserService
                                            .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
-                if (success)
-                {
-                    user = await _authClient.UserService.FindByAccountAsync(inputModel.UserName);
-                }
             }
 
-            if (success)
+            if (user != null)
             {
                 // only set explicit expiration here if user chooses "remember me". 
                 // otherwise we rely upon expiration configured in cookie middleware.

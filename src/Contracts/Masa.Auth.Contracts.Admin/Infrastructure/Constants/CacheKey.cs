@@ -11,7 +11,6 @@ public static class CacheKey
     const string USER_MENU_COLLECT_PRE = "menu_collect:";
     const string USER_VISIT_PRE = "user_visit:";
     const string ACCOUNT_LOGIN_PRE = "account_login:";
-    const string LDAP_OPTIONS_PRE = "ldap_options:";
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
     const string MSG_CODE_FOR_UPDATE_USER_PHONENUMBER = "msg_code_update_user_phoneNumber:";
     const string MSG_CODE_FOR_LOGIN = "msg_code_login:";
@@ -22,6 +21,12 @@ public static class CacheKey
     const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
     const string EMAIL_REGISTER_SEND_PRE = "email_register_send:";
     const string SMS_REGISTER_SEND_PRE = "sms_register_send:";
+    const string EMAIL_VERIFIY_CODE_PRE = "email_verifiy_code:";
+    const string EMAIL_VERIFIY_SEND_PRE = "email_verifiy_send:";
+    const string EMAIL_FORGOT_PASSWORD_CODE_PRE = "email_forgot_password_code:";
+    const string EMAIL_FORGOT_PASSWORD_SEND_PRE = "email_forgot_password_send:";
+    const string MSG_CODE_FORGOT_PASSWORD_CODE_PRE = "msg_forgot_password_code:";
+    const string MSG_CODE_FORGOT_PASSWORD_SEND_PRE = "msg_forgot_password_send:";
 
     public static string PermissionKey(Guid permissionId)
     {
@@ -73,19 +78,49 @@ public static class CacheKey
         return $"{MSG_CODE_FOR_REGISTER}{phoneNumber}";
     }
 
+    public static string MsgCodeForRegisterSendKey(string phoneNumber)
+    {
+        return $"{SMS_REGISTER_SEND_PRE}{phoneNumber}";
+    }
+
+    public static string EmailCodeRegisterSendKey(string email)
+    {
+        return $"{EMAIL_REGISTER_SEND_PRE}{email}";
+    }
+
     public static string EmailCodeRegisterKey(string email)
     {
         return $"{EMAIL_REGISTER_CODE_PRE}{email}";
     }
 
-    public static string MsgCodeForRegisterSendKey(string phoneNumber)
+    public static string EmailCodeVerifiySendKey(string email)
     {
-        return $"{EMAIL_REGISTER_SEND_PRE}{phoneNumber}";
+        return $"{EMAIL_VERIFIY_SEND_PRE}{email}";
     }
 
-    public static string EmailCodeRegisterSendKey(string email)
+    public static string EmailCodeVerifiyKey(string email)
     {
-        return $"{SMS_REGISTER_SEND_PRE}{email}";
+        return $"{EMAIL_VERIFIY_CODE_PRE}{email}";
+    }
+
+    public static string EmailCodeForgotPasswordSendKey(string email)
+    {
+        return $"{EMAIL_FORGOT_PASSWORD_SEND_PRE}{email}";
+    }
+
+    public static string EmailCodeForgotPasswordKey(string email)
+    {
+        return $"{EMAIL_FORGOT_PASSWORD_CODE_PRE}{email}";
+    }
+
+    public static string MsgCodeForgotPasswordSendKey(string phoneNumber)
+    {
+        return $"{MSG_CODE_FORGOT_PASSWORD_SEND_PRE}{phoneNumber}";
+    }
+
+    public static string MsgCodeForgotPasswordKey(string phoneNumber)
+    {
+        return $"{MSG_CODE_FORGOT_PASSWORD_CODE_PRE}{phoneNumber}";
     }
 
     public static string MsgCodeForVerifiyUserPhoneNumberKey(string userId, string phoneNumber)

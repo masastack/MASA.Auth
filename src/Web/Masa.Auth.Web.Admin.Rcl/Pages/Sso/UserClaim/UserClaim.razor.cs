@@ -45,7 +45,7 @@ public partial class UserClaim
 
     public List<UserClaimDto> UserClaims { get; set; } = new();
 
-    public int CurrentUserClaimId { get; set; }
+    public Guid CurrentUserClaimId { get; set; }
 
     public bool AddUserClaimDialogVisible { get; set; }
 
@@ -107,7 +107,7 @@ public partial class UserClaim
         if (confirm) await RemoveUserClaimAsync(UserClaim.Id);
     }
 
-    public async Task RemoveUserClaimAsync(int UserClaimId)
+    public async Task RemoveUserClaimAsync(Guid UserClaimId)
     {
         Loading = true;
         await UserClaimService.RemoveAsync(UserClaimId);

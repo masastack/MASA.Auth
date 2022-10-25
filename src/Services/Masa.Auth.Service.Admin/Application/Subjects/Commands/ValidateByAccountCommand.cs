@@ -5,5 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record ValidateByAccountCommand(UserAccountValidateDto UserAccountValidateDto) : Command
 {
-    public bool Result { get; set; }
+    public UserDetailDto? Result { get; set; }
 }

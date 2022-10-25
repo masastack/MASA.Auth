@@ -15,7 +15,7 @@ public partial class UpdateApiScopeDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public int ApiScopeId { get; set; }
+    public Guid ApiScopeId { get; set; }
 
     private ApiScopeDetailDto ApiScopeDetail { get; set; } = new();
 

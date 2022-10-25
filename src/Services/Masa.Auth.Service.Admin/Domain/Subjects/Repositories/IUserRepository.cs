@@ -12,4 +12,6 @@ public interface IUserRepository : IRepository<User>
     Task<List<User>> GetAllAsync();
 
     bool Any(Expression<Func<User, bool>> predicate);
+
+    Task<User> GetByVoucherAsync(string voucher);
 }

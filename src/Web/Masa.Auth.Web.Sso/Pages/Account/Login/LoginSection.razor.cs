@@ -14,21 +14,8 @@ public partial class LoginSection
     LoginInputModel _inputModel = new();
     CustomLoginModel? _customLoginModel;
     MForm _loginForm = null!;
-    bool _showPwd, _canSmsCode = true, _loginLoading;
+    bool _showPwd, _loginLoading;
     List<EnvironmentModel> _environments = new();
-    System.Timers.Timer? _timer;
-    int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
-    bool _loading;
-
-    protected override void OnInitialized()
-    {
-        if (_timer == null)
-        {
-            _timer = new(1000 * 1);
-            _timer.Elapsed += Timer_Elapsed;
-        }
-        base.OnInitialized();
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -75,21 +62,6 @@ public partial class LoginSection
     {
         _inputModel.Environment = environment;
         ScopedState.Environment = environment;
-    }
-
-    private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-    {
-        _ = InvokeAsync(() =>
-        {
-            _smsCodeTime--;
-            if (_smsCodeTime == 0)
-            {
-                _timer?.Stop();
-                _canSmsCode = true;
-                _smsCodeTime = LoginOptions.GetSmsCodeInterval;
-            }
-            StateHasChanged();
-        });
     }
 
     private async Task LoginHandler()
@@ -155,35 +127,20 @@ public partial class LoginSection
         }
     }
 
-    private async Task GetSmsCode()
+    private async Task<bool> GetSmsCode()
     {
         var field = _loginForm.EditContext.Field(nameof(_inputModel.PhoneNumber));
         _loginForm.EditContext.NotifyFieldChanged(field);
         var result = _loginForm.EditContext.GetValidationMessages(field);
-        if (result.Any() is false)
+        if (!result.Any())
         {
-            _loading = true;
-            try
+            await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
             {
-                await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
-                {
-                    SendMsgCodeType = SendMsgCodeTypes.Login,
-                    PhoneNumber = _inputModel.PhoneNumber
-                });
-                await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
-                _canSmsCode = false;
-                _timer?.Start();
-            }
-            catch (Exception e)
-            {
-                await _js.InvokeVoidAsync("console.log", $"GetSmsCode error: {e.Message}");
-                await PopupService.AlertAsync(e.Message, AlertTypes.Error);
-            }
-            finally
-            {
-                _loading = false;
-            }
+                SendMsgCodeType = SendMsgCodeTypes.Login,
+                PhoneNumber = _inputModel.PhoneNumber
+            });
         }
+        return !result.Any();
     }
 
     private async Task KeyDownHandler(KeyboardEventArgs args)
@@ -203,10 +160,5 @@ public partial class LoginSection
             ["environment"] = _inputModel.Environment
         });
         Navigation.NavigateTo(challenge, true);
-    }
-
-    public void Dispose()
-    {
-        _timer?.Dispose();
     }
 }

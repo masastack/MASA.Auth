@@ -15,10 +15,10 @@ public partial class IdentityResourceSelect
     public int Chunk { get; set; } = 5;
 
     [Parameter]
-    public List<int> Value { get; set; } = new();
+    public List<Guid> Value { get; set; } = new();
 
     [Parameter]
-    public EventCallback<List<int>> ValueChanged { get; set; }
+    public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     IEnumerable<IdentityResourceSelectDto[]> IdentityResourceChunks { get; set; } = new List<IdentityResourceSelectDto[]>();
 
@@ -30,7 +30,7 @@ public partial class IdentityResourceSelect
         IdentityResourceChunks = identityResources.Chunk(Chunk);
     }
 
-    void OnValueChanged(bool value, int id)
+    void OnValueChanged(bool value, Guid id)
     {
         if (value)
             Value.Add(id);

@@ -43,13 +43,13 @@
   "PhoneCodePrompt": "Phone Code Invalid",
   "EmailRegister": "Email Register",
   "PhoneRegister": "Phone Register",
-  "VerifyCode": "Verify Code",
+  "Captcha": "Captcha",
   "RegistrationSuccess": "Registration Success",
   "ReplenishInfo": "Replenish User Info",
   "Sure": "Sure",
   "User": "User",
-  "RegistrationAgreement": "User Registration Agreement",
-  "RegistrationAgreementStatement": "Agree to register MASA product agreement",
+  "RegistrationAgreement": "User Agreement",
+  "RegistrationAgreementStatement": "Agree to MASA product agreement",
   "RegisterError": "Register error,please contact administrator",
   "NickNamePlaceHolder": "Nick Name",
   "LoginValidateError": "username or password error",
@@ -57,6 +57,7 @@
   "SmsRequired": "SMS verification code cannot be empty",
   "PwdRequired": "Password cannot be empty",
   "UserNameRequired": "UserName cannot be empty",
-  "UnknownException": "Unknown exception,Please contact the administrator"
+  "UnknownException": "Unknown exception,Please contact the administrator",
+  "SmsSendTime": "second after resend"
 }
  

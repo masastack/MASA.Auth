@@ -19,13 +19,13 @@ public class AddApiScopeDto
 
     public bool ShowInDiscoveryDocument { get; set; } = true;
 
-    public List<int> UserClaims { get; set; } = new();
+    public List<Guid> UserClaims { get; set; } = new();
 
     public Dictionary<string, string> Properties { get; set; } = new();
 
     public AddApiScopeDto() { }
 
-    public AddApiScopeDto(bool enabled, string name, string displayName, string description, bool required, bool emphasize, bool showInDiscoveryDocument, List<int> userClaims, Dictionary<string, string> properties)
+    public AddApiScopeDto(bool enabled, string name, string displayName, string description, bool required, bool emphasize, bool showInDiscoveryDocument, List<Guid> userClaims, Dictionary<string, string> properties)
     {
         Enabled = enabled;
         Name = name;
