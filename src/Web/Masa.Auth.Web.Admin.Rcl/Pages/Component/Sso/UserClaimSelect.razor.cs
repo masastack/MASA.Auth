@@ -15,10 +15,10 @@ public partial class UserClaimSelect
     public int Chunk { get; set; } = 4;
 
     [Parameter]
-    public List<int> Value { get; set; } = new();
+    public List<Guid> Value { get; set; } = new();
 
     [Parameter]
-    public EventCallback<List<int>> ValueChanged { get; set; }
+    public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     IEnumerable<UserClaimSelectDto[]> UserClaimChunks { get; set; } = new List<UserClaimSelectDto[]>();
 
@@ -30,7 +30,7 @@ public partial class UserClaimSelect
         UserClaimChunks = userClaims.Chunk(Chunk);
     }
 
-    void OnValueChanged(bool value, int id)
+    void OnValueChanged(bool value, Guid id)
     {
         if (value) Value.Add(id);
         else Value.Remove(id);

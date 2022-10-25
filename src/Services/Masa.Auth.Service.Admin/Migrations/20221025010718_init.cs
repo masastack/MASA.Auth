@@ -1,6 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
-// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -19,8 +17,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -45,8 +42,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -84,8 +80,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClientType = table.Column<int>(type: "int", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -175,7 +170,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -197,7 +192,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     DisplayName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    IdentificationType = table.Column<int>(type: "int", nullable: false),
+                    ThirdPartyIdpType = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ServerAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ServerPort = table.Column<int>(type: "int", nullable: true),
@@ -209,9 +204,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                     RootUserPassword = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ClientId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ClientSecret = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VerifyFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VerifyType = table.Column<int>(type: "int", nullable: true),
+                    CallbackPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthorizationEndpoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TokenEndpoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserInformationEndpoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthenticationType = table.Column<int>(type: "int", nullable: true),
+                    MapAll = table.Column<bool>(type: "bit", nullable: true),
+                    JsonKeyMap = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -228,8 +227,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
@@ -329,7 +327,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -392,13 +390,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdCard = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
-                    Account = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Account = table.Column<string>(type: "nvarchar(450)", nullable: false, collation: "SQL_Latin1_General_CP1_CS_AS"),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Department = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    GenderType = table.Column<int>(type: "int", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Landline = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -422,8 +420,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -463,7 +460,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
@@ -484,9 +481,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -514,10 +510,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApiScopeId = table.Column<int>(type: "int", nullable: false),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiScopeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -549,7 +544,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ScopeId = table.Column<int>(type: "int", nullable: false),
+                    ScopeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
@@ -570,11 +565,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -593,10 +587,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Origin = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -615,10 +608,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GrantType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -637,10 +629,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Provider = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -659,10 +650,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostLogoutRedirectUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -682,7 +672,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
@@ -703,10 +693,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RedirectUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -725,10 +714,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -747,9 +735,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -778,7 +765,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdentityResourceId = table.Column<int>(type: "int", nullable: false),
+                    IdentityResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
@@ -827,41 +814,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamPermission",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Effect = table.Column<bool>(type: "bit", nullable: false),
-                    TeamMemberType = table.Column<int>(type: "int", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamPermission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TeamPermission_Permission_PermissionId",
-                        column: x => x.PermissionId,
-                        principalSchema: "auth",
-                        principalTable: "Permission",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TeamPermission_Team_TeamId",
-                        column: x => x.TeamId,
-                        principalSchema: "auth",
-                        principalTable: "Team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CustomLogin",
                 schema: "auth",
                 columns: table => new
@@ -902,6 +854,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     Limit = table.Column<int>(type: "int", nullable: false),
@@ -940,8 +893,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Account = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -954,6 +905,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StaffType = table.Column<int>(type: "int", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    CurrentTeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -968,6 +920,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                         column: x => x.PositionId,
                         principalSchema: "auth",
                         principalTable: "Position",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Staff_Team_CurrentTeamId",
+                        column: x => x.CurrentTeamId,
+                        principalSchema: "auth",
+                        principalTable: "Team",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Staff_User_Creator",
@@ -996,13 +954,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ThirdPartyIdpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Enabled = table.Column<bool>(type: "bit", nullable: false),
                     ThridPartyIdentity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExtendedData = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdentityProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -1046,48 +1004,13 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserPermission",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Effect = table.Column<bool>(type: "bit", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserPermission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserPermission_Permission_PermissionId",
-                        column: x => x.PermissionId,
-                        principalSchema: "auth",
-                        principalTable: "Permission",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserPermission_User_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "auth",
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ApiResourceClaim",
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserClaimId = table.Column<int>(type: "int", nullable: false),
-                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserClaimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1118,10 +1041,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserClaimId = table.Column<int>(type: "int", nullable: false),
-                    ApiScopeId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserClaimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiScopeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1152,10 +1074,9 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserClaimId = table.Column<int>(type: "int", nullable: false),
-                    IdentityResourceId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserClaimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1236,39 +1157,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePermission",
-                schema: "auth",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolePermission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RolePermission_Permission_PermissionId",
-                        column: x => x.PermissionId,
-                        principalSchema: "auth",
-                        principalTable: "Permission",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RolePermission_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "auth",
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RoleRelation",
                 schema: "auth",
                 columns: table => new
@@ -1298,6 +1186,58 @@ namespace Masa.Auth.Service.Admin.Migrations
                         principalSchema: "auth",
                         principalTable: "Role",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubjectPermissionRelation",
+                schema: "auth",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PermissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Effect = table.Column<bool>(type: "bit", nullable: false),
+                    _businessType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TeamMemberType = table.Column<int>(type: "int", nullable: true),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubjectPermissionRelation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubjectPermissionRelation_Permission_PermissionId",
+                        column: x => x.PermissionId,
+                        principalSchema: "auth",
+                        principalTable: "Permission",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubjectPermissionRelation_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "auth",
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubjectPermissionRelation_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalSchema: "auth",
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubjectPermissionRelation_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "auth",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1409,6 +1349,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamMemberType = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -1606,10 +1547,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                 filter: "Level = 1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Department_Name",
+                name: "IX_Department_Name_ParentId",
                 schema: "auth",
                 table: "Department",
-                column: "Name",
+                columns: new[] { "Name", "ParentId" },
                 unique: true,
                 filter: "[IsDeleted] = 0");
 
@@ -1673,19 +1614,19 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "IdentityResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "index_eventid_version",
+                name: "IX_EventId_Version",
                 schema: "auth",
                 table: "IntegrationEventLog",
                 columns: new[] { "EventId", "RowVersion" });
 
             migrationBuilder.CreateIndex(
-                name: "index_state_modificationtime",
+                name: "IX_State_MTime",
                 schema: "auth",
                 table: "IntegrationEventLog",
                 columns: new[] { "State", "ModificationTime" });
 
             migrationBuilder.CreateIndex(
-                name: "index_state_timessent_modificationtime",
+                name: "IX_State_TimesSent_MTime",
                 schema: "auth",
                 table: "IntegrationEventLog",
                 columns: new[] { "State", "TimesSent", "ModificationTime" });
@@ -1759,7 +1700,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 table: "Position",
                 column: "Name",
-                unique: true);
+                unique: true,
+                filter: "[IsDeleted] = 0");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegisterField_CustomLoginId",
@@ -1780,18 +1722,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "Modifier");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermission_PermissionId",
-                schema: "auth",
-                table: "RolePermission",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermission_RoleId",
-                schema: "auth",
-                table: "RolePermission",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RoleRelation_ParentId",
                 schema: "auth",
                 table: "RoleRelation",
@@ -1808,6 +1738,12 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth",
                 table: "Staff",
                 column: "Creator");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Staff_CurrentTeamId",
+                schema: "auth",
+                table: "Staff",
+                column: "CurrentTeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Staff_JobNumber",
@@ -1837,24 +1773,36 @@ namespace Masa.Auth.Service.Admin.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubjectPermissionRelation_PermissionId",
+                schema: "auth",
+                table: "SubjectPermissionRelation",
+                column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubjectPermissionRelation_RoleId",
+                schema: "auth",
+                table: "SubjectPermissionRelation",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubjectPermissionRelation_TeamId",
+                schema: "auth",
+                table: "SubjectPermissionRelation",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubjectPermissionRelation_UserId",
+                schema: "auth",
+                table: "SubjectPermissionRelation",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Team_Name",
                 schema: "auth",
                 table: "Team",
                 column: "Name",
                 unique: true,
                 filter: "[IsDeleted] = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamPermission_PermissionId",
-                schema: "auth",
-                table: "TeamPermission",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamPermission_TeamId",
-                schema: "auth",
-                table: "TeamPermission",
-                column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamRole_RoleId",
@@ -1911,6 +1859,14 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_Account",
+                schema: "auth",
+                table: "User",
+                column: "Account",
+                unique: true,
+                filter: "[IsDeleted] = 0");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_Email",
                 schema: "auth",
                 table: "User",
@@ -1939,18 +1895,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                 column: "PhoneNumber",
                 unique: true,
                 filter: "[IsDeleted] = 0 and PhoneNumber!=''");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserPermission_PermissionId",
-                schema: "auth",
-                table: "UserPermission",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserPermission_UserId",
-                schema: "auth",
-                table: "UserPermission",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
@@ -2080,15 +2024,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "RolePermission",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
                 name: "RoleRelation",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "TeamPermission",
+                name: "SubjectPermissionRelation",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -2101,10 +2041,6 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "ThirdPartyUser",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "UserPermission",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -2144,19 +2080,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
+                name: "Permission",
+                schema: "auth");
+
+            migrationBuilder.DropTable(
                 name: "Staff",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "Team",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
                 name: "IdentityProvider",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "Permission",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -2165,6 +2097,10 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "Position",
+                schema: "auth");
+
+            migrationBuilder.DropTable(
+                name: "Team",
                 schema: "auth");
 
             migrationBuilder.DropTable(

@@ -71,7 +71,7 @@
 	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	  <ProjectReference Include="..\..\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 	  <None Update="Assets\Fonts\SourceHanSansCN-Normal.ttf">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>

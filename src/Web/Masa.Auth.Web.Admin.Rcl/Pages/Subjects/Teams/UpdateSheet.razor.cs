@@ -23,7 +23,6 @@ public partial class UpdateSheet
         if (firstRender)
         {
             _tabs = new List<string> { T("Basic Information"), T("Setup team admins"), T("Setup team members") };
-            _tab = T("Basic Information");
         }
 
         base.OnAfterRender(firstRender);
@@ -32,6 +31,7 @@ public partial class UpdateSheet
     public void Show(TeamDetailDto model)
     {
         Dto = model;
+        _tab = T("Basic Information");
         _visible = true;
     }
 

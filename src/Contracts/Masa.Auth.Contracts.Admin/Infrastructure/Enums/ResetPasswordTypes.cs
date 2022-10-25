@@ -1,8 +1,10 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Application.Sso.Commands;
+namespace Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 
-public record RemoveClientCommand(Guid ClientId) : Command
+public enum ResetPasswordTypes
 {
+    PhoneNumber = 1,
+    Email
 }

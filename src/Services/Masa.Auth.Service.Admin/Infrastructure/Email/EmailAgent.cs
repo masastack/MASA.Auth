@@ -19,11 +19,32 @@ public class EmailAgent : IScopedDependency
     public async Task SendEmailAsync(SendEmailModel sendEmailModel, TimeSpan? expiration = null)
     {
         //todo Abstract Factory
-        var sendKey = CacheKey.EmailCodeRegisterSendKey(sendEmailModel.Email);
+        var sendKey = string.Empty;
+        var sendValueKey = string.Empty;
+
+        switch (sendEmailModel.SendEmailType)
+        {
+            case SendEmailTypes.Verifiy:
+                sendKey = CacheKey.EmailCodeVerifiySendKey(sendEmailModel.Email);
+                sendValueKey = CacheKey.EmailCodeVerifiyKey(sendEmailModel.Email);
+                break;
+            case SendEmailTypes.Register:
+                sendKey = CacheKey.EmailCodeRegisterSendKey(sendEmailModel.Email);
+                sendValueKey = CacheKey.EmailCodeRegisterKey(sendEmailModel.Email);
+                break;
+            case SendEmailTypes.ForgotPassword:
+                sendKey = CacheKey.EmailCodeForgotPasswordSendKey(sendEmailModel.Email);
+                sendValueKey = CacheKey.EmailCodeForgotPasswordKey(sendEmailModel.Email);
+                break;
+            default:
+                break;
+        }
+
         if (await CheckAlreadySendAsync(sendKey))
         {
             throw new UserFriendlyException("Email has been sent, please try again later");
         }
+
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
         {
@@ -45,7 +66,7 @@ public class EmailAgent : IScopedDependency
             })
         });
 
-        await _distributedCacheClient.SetAsync(CacheKey.EmailCodeRegisterKey(sendEmailModel.Email), code, expiration ?? TimeSpan.FromMinutes(5));
+        await _distributedCacheClient.SetAsync(sendValueKey, code, expiration ?? TimeSpan.FromMinutes(5));
         await _distributedCacheClient.SetAsync(sendKey, true, expiration ?? TimeSpan.FromSeconds(60));
     }
 

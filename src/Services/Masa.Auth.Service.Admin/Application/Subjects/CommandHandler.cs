@@ -310,7 +310,9 @@ public class CommandHandler
     public async Task LoginByPhoneNumberAsync(LoginByPhoneNumberCommand command)
     {
         var model = command.Model;
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
+        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == model.PhoneNumber, new List<string> {
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+        });
         if (user is null)
         {
             throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
@@ -405,15 +407,17 @@ public class CommandHandler
             account = upsertThirdPartyUserCommand.Result.Account;
         }
 
-        var user = await _userRepository.FindAsync(u => u.Account == account);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account, new List<string> {
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+        });
         if (user != null)
         {
             if (!user.Enabled)
             {
                 throw new UserFriendlyException("账号已禁用");
             }
-            var success = user.VerifyPassword(password);
-            if (!success)
+
+            if (!user.VerifyPassword(password))
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
@@ -425,7 +429,7 @@ public class CommandHandler
             {
                 await _cache.RemoveAsync(key);
             }
-            validateByAccountCommand.Result = success;
+            validateByAccountCommand.Result = user;
         }
     }
 
@@ -492,6 +496,33 @@ public class CommandHandler
                 throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
         }
         return exitUser;
+    }
+
+    [EventHandler]
+    public async Task ResetPasswordAsync(ResetPasswordCommand command)
+    {
+        var resetType = command.ResetPasswordType;
+        string? key;
+        switch (resetType)
+        {
+            case ResetPasswordTypes.PhoneNumber:
+                key = CacheKey.MsgCodeForgotPasswordKey(command.Voucher);
+                break;
+            case ResetPasswordTypes.Email:
+                key = CacheKey.EmailCodeForgotPasswordKey(command.Voucher);
+                break;
+            default:
+                throw new UserFriendlyException("Invalid ResetPasswordType");
+        }
+        var captcha = _cache.GetAsync<string>(key);
+        if (!command.Captcha.Equals(captcha))
+        {
+            throw new UserFriendlyException("Validation failed");
+        }
+        //reset password
+        var user = await _userRepository.GetByVoucherAsync(command.Voucher);
+        user.UpdatePassword(command.Password);
+        await _userRepository.UpdateAsync(user);
     }
 
     #endregion

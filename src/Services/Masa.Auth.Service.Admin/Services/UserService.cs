@@ -106,11 +106,11 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
-    public async Task<bool> PostValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
+    public async Task<UserModel?> PostValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
     {
         var validateCommand = new ValidateByAccountCommand(accountValidateDto);
         await eventBus.PublishAsync(validateCommand);
-        return validateCommand.Result;
+        return ConvertToModel(validateCommand.Result);
     }
 
     [AllowAnonymous]
@@ -300,5 +300,43 @@ public class UserService : ServiceBase
         var command = new HasPasswordQuery(userId);
         await eventBus.PublishAsync(command);
         return command.Result;
+    }
+
+    [RoutePattern("reset_password_by_phone", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<bool> ResetPasswordByPhoneAsync(IEventBus eventBus, [FromBody] ResetPasswordByPhoneModel model)
+    {
+        try
+        {
+            var command = new ResetPasswordCommand(ResetPasswordTypes.PhoneNumber, model.PhoneNumber, model.Code)
+            {
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword
+            };
+            await eventBus.PublishAsync(command);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    [RoutePattern("reset_password_by_email", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<bool> ResetPasswordByEmailAsync(IEventBus eventBus, [FromBody] ResetPasswordByEmailModel model)
+    {
+        try
+        {
+            var command = new ResetPasswordCommand(ResetPasswordTypes.Email, model.Email, model.Code)
+            {
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword
+            };
+            await eventBus.PublishAsync(command);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

@@ -7,7 +7,7 @@ public class UserClaimDetailDto : UserClaimDto
 {
     public UserClaimDetailDto() { }
 
-    public UserClaimDetailDto(int id, string name, string description, UserClaimType userClaimType) : base(id, name, description, userClaimType)
+    public UserClaimDetailDto(Guid id, string name, string description, UserClaimType userClaimType) : base(id, name, description, userClaimType)
     {
     }
 

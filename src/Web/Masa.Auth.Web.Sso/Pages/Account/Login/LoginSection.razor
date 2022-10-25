@@ -7,7 +7,6 @@
 @inject IDistributedCacheClient _distributedCacheClient
 @inject IAuthenticationSchemeProvider _schemeProvider
 @inject ProtectedLocalStorage _localStorage
-@implements IDisposable
 
 <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-12 mx-12 text-center">
     @if (_inputModel.PhoneLogin)
@@ -15,16 +14,7 @@
         <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="_inputModel.PhoneNumber" Label="@T("PhoneNumber")"
                 Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
         </MTextField>
-        <MTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" Outlined Label="@T("SMSCode")"
-        Placeholder="@T("SMSCodePlaceHolder")" Type="number"
-        NumberProps="@(prop=> { prop.HideControl = true; })">
-            <AppendContent>
-                <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
-                Class="primary rounded-r-lg" Loading=_loading Disabled=!_canSmsCode OnClick="GetSmsCode">
-                    @(_canSmsCode?@T("GetSmsCode"):_smsCodeTime)
-                </MButton>
-            </AppendContent>
-        </MTextField>
+        <CaptchaSendTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" OnClick="GetSmsCode" />
     }
     else
     {

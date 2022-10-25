@@ -14,16 +14,14 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
     {
-        var success = await _authClient.UserService
+        var user = await _authClient.UserService
                                            .ValidateCredentialsByAccountAsync(context.UserName, context.Password);
-        if (success)
+        if (user != null)
         {
-            var user = await _authClient.UserService.FindByAccountAsync(context.UserName);
             context.Result = new GrantValidationResult(
                  subject: user!.Id.ToString(),
                  authenticationMethod: OidcConstants.AuthenticationMethods.Password,
                  claims: GetUserClaims(context.UserName));
-
         }
         else
         {

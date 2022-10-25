@@ -22,7 +22,7 @@ public class ApiResourceService : ServiceBase
         return await SendAsync<object, List<ApiResourceSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
-    public async Task<ApiResourceDetailDto> GetDetailAsync(int id)
+    public async Task<ApiResourceDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, ApiResourceDetailDto>(nameof(GetDetailAsync), new { id });
     }
@@ -37,7 +37,7 @@ public class ApiResourceService : ServiceBase
         await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveApiResourceDto(id));
     }

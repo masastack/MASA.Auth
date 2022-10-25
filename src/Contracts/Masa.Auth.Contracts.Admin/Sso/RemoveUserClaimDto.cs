@@ -5,9 +5,9 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class RemoveUserClaimDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public RemoveUserClaimDto(int id)
+    public RemoveUserClaimDto(Guid id)
     {
         Id = id;
     }

@@ -5,17 +5,17 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class IdentityResourceDetailDto : IdentityResourceDto
 {
-    public List<int> UserClaims { get; set; }
+    public List<Guid> UserClaims { get; set; }
 
     public Dictionary<string, string> Properties { get; set; }
 
     public IdentityResourceDetailDto()
     {
-        UserClaims = new List<int>();
-        Properties = new Dictionary<string, string>();
+        UserClaims = new();
+        Properties = new();
     }
 
-    public IdentityResourceDetailDto(int id, string name, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<int> userClaims, Dictionary<string, string> properties) : base(id, name, displayName, description, enabled, required, emphasize, showInDiscoveryDocument, nonEditable)
+    public IdentityResourceDetailDto(Guid id, string name, string displayName, string description, bool enabled, bool required, bool emphasize, bool showInDiscoveryDocument, bool nonEditable, List<Guid> userClaims, Dictionary<string, string> properties) : base(id, name, displayName, description, enabled, required, emphasize, showInDiscoveryDocument, nonEditable)
     {
         UserClaims = userClaims;
         Properties = properties;

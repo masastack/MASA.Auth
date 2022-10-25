@@ -22,7 +22,7 @@ public class UserClaimService : ServiceBase
         return await SendAsync<object, List<UserClaimSelectDto>>(nameof(GetSelectAsync), new { search });
     }
 
-    public async Task<UserClaimDetailDto> GetDetailAsync(int id)
+    public async Task<UserClaimDetailDto> GetDetailAsync(Guid id)
     {
         return await SendAsync<object, UserClaimDetailDto>(nameof(GetDetailAsync), new { id });
     }
@@ -42,7 +42,7 @@ public class UserClaimService : ServiceBase
         await SendAsync(nameof(UpdateAsync), request);
     }
 
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveUserClaimDto(id));
     }

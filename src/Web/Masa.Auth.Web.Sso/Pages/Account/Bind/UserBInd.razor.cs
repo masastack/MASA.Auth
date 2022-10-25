@@ -73,7 +73,7 @@ public partial class UserBind
                 PhoneNumber = UserModel.PhoneNumber,
                 SendMsgCodeType = SendMsgCodeTypes.Register  //todo SendMsgCodeTypes.Bind
             });
-            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
             int second = 60;
             while (second >= 0)
             {
