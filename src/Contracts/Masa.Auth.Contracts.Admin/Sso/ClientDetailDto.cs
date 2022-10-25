@@ -6,7 +6,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 public class ClientDetailDto : AddClientDto
 {
     #region Basic
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public bool Enabled { get; set; }
 

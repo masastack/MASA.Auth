@@ -86,7 +86,7 @@
                     SendEmailType = SendEmailTypes.Register
                 });
 
-            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
+            await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
             _canEmailCode = false;
             _emailTimer?.Start();
         }

@@ -45,12 +45,12 @@
   "PhoneCodePrompt": "短信验证码无效",
   "EmailRegister": "邮箱注册",
   "PhoneRegister": "手机注册",
-  "VerifyCode": "验证码",
+  "Captcha": "验证码",
   "RegistrationSuccess": "注册成功",
   "ReplenishInfo": "完善资料",
   "Sure": "确定",
   "User": "用户",
-  "RegistrationAgreement": "用户申请注册协议",
+  "RegistrationAgreement": "用户协议",
   "RegistrationAgreementStatement": "同意注册MASA系列产品协议",
   "RegisterError": "注册失败，请联系管理员",
   "NickNamePlaceHolder": "昵称",
@@ -62,8 +62,8 @@
   "PwdRequired": "密码不能为空",
   "UserNameRequired": "用户名不能为空",
   "UnknownException": "未知异常，请联系管理员",
-
+  "SmsSendTime": "秒后可重发",
 
   "Password not equal ConfirmPassword": "两次输入密码不相同",
-  "The verification code is sent successfully, please enter the verification code within 60 seconds": "发送验证码成功，请在60秒内输入验证码"
+  "The verification code is sent successfully": "发送验证码成功"
 }

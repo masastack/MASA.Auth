@@ -67,8 +67,7 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
-builder.Services.AddStackExchangeRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>())
-    .AddMultilevelCache();
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>()));
 
 await builder.Services
             .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
@@ -142,6 +141,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
         defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
     });
+    await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 

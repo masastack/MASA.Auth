@@ -3,7 +3,7 @@
 <ExpansionWrapperUnique ValueChanged="ValueChangedAsync"
                         Value="ExpansionWrapperUniqueValue"
                         Checkable
-                        Categories=Categories
+                        Categories=_categories
                         FavoriteNavs=new()
                         TagIdPrefix="@($"{TagIdPrefix}Configure")"
                         Class="@Class"
@@ -14,7 +14,7 @@
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;height: auto;">
                 <ExpansionWrapperUnique Value="ExpansionWrapperUniqueValue"
-                                        Categories=Categories
+                                        Categories=_categories
                                         InPreview=Preview
                                         TagIdPrefix="@($"{TagIdPrefix}Preview")"
                                         Style="max-height:calc(100vh - 250px);" />

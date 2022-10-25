@@ -88,10 +88,9 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
-        var user = await _authDbContext.Set<User>()
-                                            .Include(u => u.Roles)
-                                            .ThenInclude(ur => ur.Role)
-                                            .FirstOrDefaultAsync(user => user.Account == query.Account);
+        var user = await _userRepository.FindWithIncludAsync(user => user.Account == query.Account, new List<string> {
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+        });
         query.Result = await UserSplicingDataAsync(user);
     }
 
@@ -112,20 +111,18 @@ public class QueryHandler
     [EventHandler]
     public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
-        var user = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .ThenInclude(ur => ur.Role)
-                                           .FirstOrDefaultAsync(user => user.Email == query.Email);
+        var user = await _userRepository.FindWithIncludAsync(user => user.Email == query.Email, new List<string> {
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+        });
         query.Result = await UserSplicingDataAsync(user);
     }
 
     [EventHandler]
     public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
-        var user = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .ThenInclude(ur => ur.Role)
-                                           .FirstOrDefaultAsync(user => user.PhoneNumber == query.PhoneNumber);
+        var user = await _userRepository.FindWithIncludAsync(user => user.PhoneNumber == query.PhoneNumber, new List<string> {
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+        });
         query.Result = await UserSplicingDataAsync(user);
     }
 

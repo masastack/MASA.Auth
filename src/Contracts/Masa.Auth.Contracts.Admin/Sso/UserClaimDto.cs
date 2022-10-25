@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class UserClaimDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; } = "";
 
@@ -17,7 +17,7 @@ public class UserClaimDto
     {
     }
 
-    public UserClaimDto(int id, string name, string description, UserClaimType userClaimType)
+    public UserClaimDto(Guid id, string name, string description, UserClaimType userClaimType)
     {
         Id = id;
         Name = name;

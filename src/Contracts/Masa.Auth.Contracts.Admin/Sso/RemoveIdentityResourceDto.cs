@@ -5,9 +5,9 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class RemoveIdentityResourceDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public RemoveIdentityResourceDto(int id)
+    public RemoveIdentityResourceDto(Guid id)
     {
         Id = id;
     }

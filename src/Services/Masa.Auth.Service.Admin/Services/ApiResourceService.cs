@@ -16,7 +16,7 @@ namespace Masa.Auth.Service.Admin.Services
             return query.Result;
         }
 
-        private async Task<ApiResourceDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] int id)
+        private async Task<ApiResourceDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
         {
             var query = new ApiResourceDetailQuery(id);
             await eventBus.PublishAsync(query);

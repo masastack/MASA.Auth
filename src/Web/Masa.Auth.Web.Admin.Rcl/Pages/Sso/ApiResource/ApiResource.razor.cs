@@ -45,7 +45,7 @@ public partial class ApiResource
 
     public List<ApiResourceDto> ApiResources { get; set; } = new();
 
-    public int CurrentApiResourceId { get; set; }
+    public Guid CurrentApiResourceId { get; set; }
 
     public bool AddApiResourceDialogVisible { get; set; }
 
@@ -94,7 +94,7 @@ public partial class ApiResource
         if (confirm) await RemoveApiResourceAsync(ApiResource.Id);
     }
 
-    public async Task RemoveApiResourceAsync(int ApiResourceId)
+    public async Task RemoveApiResourceAsync(Guid ApiResourceId)
     {
         Loading = true;
         await ApiResourceService.RemoveAsync(ApiResourceId);

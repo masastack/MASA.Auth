@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@T("Create Team")" ContentClass="px-sheet-dialog">
-    <MStepper Value="_step" Elevation=0 Class="d-flex flex-column full-height pt-6">
+<DefaultSheetDialog @bind-Value=_visible Title="@T("Create Team")">
+    <MStepper Value="_step" Elevation=0 Class="d-flex flex-column full-height">
         <MStepperHeader Class="mx-6" Style="box-shadow:none !important">
             <MStepperStep Step="1" Complete="_step>1">
                 @T("Fill the basic team information")
@@ -19,7 +19,7 @@
             <MStepperContent class="full-height" Step="1">
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamBasicInfo @bind-Value="_teamDetailDto.TeamBasicInfo" />
-                    <MCardActions class="d-flex justify-end align-center mb-6">
+                    <MCardActions class="d-flex justify-end align-center">
                         <SButton Medium Disabled="@string.IsNullOrWhiteSpace(_teamDetailDto.TeamBasicInfo.Name)" OnClick="()=>{ _step++; }">@T("Next step")</SButton>
                     </MCardActions>
                 </MCard>
@@ -27,7 +27,7 @@
             <MStepperContent class="full-height" Step="2">
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamAdmin IgnoreStaffIds="_teamDetailDto.TeamMember.Staffs" @bind-Value="_teamDetailDto.TeamAdmin" />
-                    <MCardActions class="d-flex justify-end align-center mb-6">
+                    <MCardActions class="d-flex justify-end align-center">
                         <SButton Medium Class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
                         <SButton Medium OnClick="()=> _step++ ">@T("Next step")</SButton>
                     </MCardActions>
@@ -37,7 +37,7 @@
                 <MCard Class="mx-auto d-flex flex-column full-height">
                     <TeamMember ScopePermissions="_teamDetailDto.TeamAdmin.Permissions.Select(p=>p.PermissionId).ToList()" 
                         IgnoreStaffIds="_teamDetailDto.TeamAdmin.Staffs" @bind-Value="_teamDetailDto.TeamMember" />
-                    <MCardActions class="d-flex justify-end align-center mb-6">
+                    <MCardActions class="d-flex justify-end align-center">
                         <SButton Medium class="mr-4" OnClick="()=> _step-- ">@T("Previous step")</SButton>
                         <SButton Medium OnClick="OnSubmitHandler">@T("Submit")</SButton>
                     </MCardActions>
@@ -45,4 +45,4 @@
             </MStepperContent>
         </MStepperItems>
     </MStepper>
-</SSheetDialog>
+</DefaultSheetDialog>

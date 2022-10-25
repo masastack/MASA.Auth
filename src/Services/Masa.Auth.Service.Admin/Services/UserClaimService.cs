@@ -16,7 +16,7 @@ public class UserClaimService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<UserClaimDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] int id)
+    private async Task<UserClaimDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new UserClaimDetailQuery(id);
         await eventBus.PublishAsync(query);

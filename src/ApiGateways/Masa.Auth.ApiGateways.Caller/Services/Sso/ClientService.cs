@@ -47,7 +47,7 @@ public class ClientService : ServiceBase
         await PostAsync(nameof(UpdateClientAsync), clientDetailDto);
     }
 
-    public async Task RemoveClientAsync(int id)
+    public async Task RemoveClientAsync(Guid id)
     {
         await DeleteAsync($"{nameof(RemoveClientAsync)}?id={id}");
     }

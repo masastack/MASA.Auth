@@ -66,7 +66,7 @@ public class OperationLogCommandHandler
             await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveIdentityResource, $"删除身份资源：{name}");
     }
 
-    async Task<string?> GetIdentityResourceNameByIdAsync(int id)
+    async Task<string?> GetIdentityResourceNameByIdAsync(Guid id)
     {
         var name = await _authDbContext.Set<IdentityResource>()
                                              .Where(identityResource => identityResource.Id == id)
@@ -101,7 +101,7 @@ public class OperationLogCommandHandler
             await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveApiResource, $"删除Api资源：{name}");
     }
 
-    async Task<string?> GetApiResourceNameByIdAsync(int id)
+    async Task<string?> GetApiResourceNameByIdAsync(Guid id)
     {
         var name = await _authDbContext.Set<ApiResource>()
                                              .Where(apiResource => apiResource.Id == id)

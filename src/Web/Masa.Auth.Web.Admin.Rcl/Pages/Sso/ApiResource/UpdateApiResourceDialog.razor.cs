@@ -15,7 +15,7 @@ public partial class UpdateApiResourceDialog
     public EventCallback OnSubmitSuccess { get; set; }
 
     [Parameter]
-    public int ApiResourceId { get; set; }
+    public Guid ApiResourceId { get; set; }
 
     private ApiResourceDetailDto ApiResourceDetail { get; set; } = new();
 

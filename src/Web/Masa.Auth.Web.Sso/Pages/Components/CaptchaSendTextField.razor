@@ -1,0 +1,89 @@
+﻿@using System.Timers
+@inherits SsoCompontentBase
+@implements IDisposable
+
+<MTextField Class="@Class" @bind-Value="Value" Outlined Label="@T("SMSCode")"
+            Placeholder="@T("SMSCodePlaceHolder")" Type="number"
+            NumberProps="@(prop=> { prop.HideControl = true; })">
+    <AppendContent>
+        <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
+                 Class="primary rounded-r-lg" Disabled=ActionDisabled OnClick="ClickHandler">
+            @ActionContent
+        </MButton>
+    </AppendContent>
+</MTextField>
+
+@code {
+    [Parameter]
+    public int? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<int?> ValueChanged { get; set; }
+
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Style { get; set; } = string.Empty;
+
+    [Parameter]
+    public Func<Task<bool>> OnClick { get; set; } = null!;
+
+    int _counter = 0;
+    bool ActionDisabled => _counter > 0;
+    string ActionContent => _counter > 0 ? $"{_counter}{T("SmsSendTime")}" : T("GetSmsCode");
+    private System.Timers.Timer? _timer;
+
+    private async Task ClickHandler()
+    { 
+        try
+        {
+            if (OnClick==null)
+            {
+                return;
+            }
+            var result = await (OnClick.Invoke()).ConfigureAwait(false);
+            if (result)
+            {
+                await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
+                StartCountdownTimer();
+            }
+        }
+        catch (Exception e)
+        {
+            await PopupService.AlertAsync(e.Message,AlertTypes.Error);
+        }
+    }
+
+    private void StartCountdownTimer()
+    {
+        _counter = 60;
+        if (_timer is null)
+        {
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += CountdownTimer;
+        }
+
+        _timer.Enabled = true;
+    }
+
+    private void CountdownTimer(object? sender, ElapsedEventArgs e)
+    {
+        if (_counter > 0)
+        {
+            _counter -= 1;
+        }
+        else
+        {
+            _timer!.Enabled = false;
+        }
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+        _timer = null;
+    }
+}

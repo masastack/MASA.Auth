@@ -1,19 +1,9 @@
 ﻿@inherits SsoSectionComponentBase
-@implements IDisposable
 
 <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="Value.PhoneNumber" Label="@T("PhoneNumber")"
             Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus Rules="_phoneNumberRules" @ref="_phoneTextField">
 </MTextField>
-<MTextField Class="mt-3" @bind-Value="Value.SmsCode" Outlined Label="@T("SMSCode")"
-            Placeholder="@T("SMSCodePlaceHolder")" Type="number"
-            NumberProps="@(prop=> { prop.HideControl = true; })">
-    <AppendContent>
-        <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
-                 Class="primary rounded-r-lg" Disabled=!_canSmsCode OnClick="GetSmsCode">
-            @(_canSmsCode ? @T("GetSmsCode") : _smsCodeTime)
-        </MButton>
-    </AppendContent>
-</MTextField>
+<CaptchaSendTextField Class="mt-3" @bind-Value="Value.SmsCode" OnClick="GetSmsCode" />
 
 @code {
     [Parameter]
@@ -28,9 +18,6 @@
     [CascadingParameter]
     public ScopedState ScopedState { get; set; } = new();
 
-    bool _canSmsCode = true;
-    int _smsCodeTime = LoginOptions.GetSmsCodeInterval;
-    System.Timers.Timer? _smsTimer;
     MTextField<string> _phoneTextField = null!;
 
     [Inject]
@@ -42,32 +29,7 @@
         value => Regex.Match(value, LoginOptions.PhoneRegular).Success ? true : "Invalid PhoneNumber."
     };
 
-    protected override void OnInitialized()
-    {
-        if (_smsTimer == null)
-        {
-            _smsTimer = new(1000 * 1);
-            _smsTimer.Elapsed += SmsTimer_Elapsed;
-        }
-        base.OnInitialized();
-    }
-
-    private void SmsTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-    {
-        _ = InvokeAsync(() =>
-        {
-            _smsCodeTime--;
-            if (_smsCodeTime == 0)
-            {
-                _smsTimer?.Stop();
-                _canSmsCode = true;
-                _smsCodeTime = LoginOptions.GetSmsCodeInterval;
-            }
-            StateHasChanged();
-        });
-    }
-
-    private async Task GetSmsCode()
+    private async Task<bool> GetSmsCode()
     {
         if (_phoneTextField.Validate())
         {
@@ -77,14 +39,7 @@
                     SendMsgCodeType = SendMsgCodeTypes.Register,
                     PhoneNumber = Value.PhoneNumber
                 });
-            await PopupService.AlertAsync(T("The verification code is sent successfully, please enter the verification code within 60 seconds"), AlertTypes.Success);
-            _canSmsCode = false;
-            _smsTimer?.Start();
         }
-    }
-
-    public void Dispose()
-    {
-        _smsTimer?.Dispose();
+        return _phoneTextField.Validate();
     }
 }
