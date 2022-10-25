@@ -24,7 +24,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task UpdateClientOperationLogAsync(UpdateClientCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateClient, $"编辑客户端：{command.ClientDetailDto.ClientName}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditClient, $"编辑客户端：{command.ClientDetailDto.ClientName}");
     }
 
     [EventHandler(0)]
@@ -55,7 +55,7 @@ public class OperationLogCommandHandler
     {
         var name = await GetIdentityResourceNameByIdAsync(command.IdentityResource.Id);
         if (name is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateIdentityResource, $"编辑身份资源：{name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditIdentityResource, $"编辑身份资源：{name}");
     }
 
     [EventHandler(0)]
@@ -90,7 +90,7 @@ public class OperationLogCommandHandler
     {
         var name = await GetApiResourceNameByIdAsync(command.ApiResource.Id);
         if (name is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateApiResource, $"编辑Api资源：{name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditApiResource, $"编辑Api资源：{name}");
     }
 
     [EventHandler(0)]
@@ -123,7 +123,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task UpdateApiScopeOperationLogAsync(UpdateApiScopeCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateApiScope, $"编辑Api范围：{command.ApiScope.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditApiScope, $"编辑Api范围：{command.ApiScope.Name}");
     }
 
     [EventHandler(0)]
@@ -156,7 +156,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task UpdateUserClaimOperationLogAsync(UpdateUserClaimCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUserClaim, $"编辑用户申明：{command.UserClaim.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUserClaim, $"编辑用户申明：{command.UserClaim.Name}");
     }
 
     [EventHandler(0)]
@@ -183,7 +183,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task UpdateCustomLoginOperationLogAsync(UpdateCustomLoginCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateCustomLogin, $"编辑自定义登录注册：{command.CustomLogin.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditCustomLogin, $"编辑自定义登录注册：{command.CustomLogin.Name}");
     }
 
     [EventHandler(0)]

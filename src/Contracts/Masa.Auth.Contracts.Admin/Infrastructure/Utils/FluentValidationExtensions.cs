@@ -85,8 +85,8 @@ public static class FluentValidationExtensions
 
     public static IRuleBuilderOptions<T, string> MinLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength)
     {
-        return ruleBuilder.MinimumLength(minimumLength)
-                    .WithMessage("Please enter a number greater than {MinLength} of {PropertyName}");
+        return ruleBuilder.Must(value => string.IsNullOrEmpty(value) || value.Length>=2)
+                    .WithMessage($"Please enter a number greater than {minimumLength} of "+ "{PropertyName}");
     }
 
     public static IRuleBuilderOptions<T, string> MaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength)

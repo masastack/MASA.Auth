@@ -93,7 +93,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task UpdateStaffOperationLogAsync(UpdateStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateStaff, $"编辑员工：{command.Staff.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditStaff, $"编辑员工：{command.Staff.DisplayName}");
         }
 
         async Task<string> GetStaffDisplayNameByIdAsync(Guid id)
@@ -106,11 +106,11 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             return displayName;
         }
 
-        [EventHandler(0)]
+        [EventHandler]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
             var account = await GetStaffDisplayNameByIdAsync(command.Staff.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateUser, $"编辑用户：{account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{account}");
         }
 
         [EventHandler]
@@ -142,7 +142,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task UpdateThirdPartyIdpOperationLogAsync(UpdateThirdPartyIdpCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateThirdPartyIdp, $"编辑第三方平台：{command.ThirdPartyIdp.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditThirdPartyIdp, $"编辑第三方平台：{command.ThirdPartyIdp.DisplayName}");
         }
 
         [EventHandler(0)]
@@ -159,7 +159,29 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task LdapUpsertOperationLogAsync(LdapUpsertCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateThirdPartyIdp, $"编辑用户：{LdapConsts.LDAP_NAME}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditThirdPartyIdp, $"编辑用户：{LdapConsts.LDAP_NAME}");
+        }
+        #endregion
+
+        #region Team
+
+        [EventHandler]
+        public async Task AddTeamLogAsync(AddTeamCommand addTeamCommand)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddTeam, $"添加团队：{addTeamCommand.AddTeamDto.Name}");
+        }
+
+        [EventHandler]
+        public async Task UpdateTeamLogAsync(UpdateTeamCommand updateTeamCommand)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditTeam, $"编辑团队：{updateTeamCommand.UpdateTeamDto.Name}");
+        }
+
+        [EventHandler]
+        public async Task RemoveTeamLogAsync(RemoveTeamCommand removeTeamCommand)
+        {
+            if(removeTeamCommand.Result is not null)
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveTeam, $"删除团队：{removeTeamCommand.Result.Name}");
         }
         #endregion
     }
