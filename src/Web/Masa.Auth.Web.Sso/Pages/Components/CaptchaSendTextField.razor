@@ -1,9 +1,13 @@
-﻿@using System.Timers
-@inherits SsoCompontentBase
+﻿@inherits SsoCompontentBase
 @implements IDisposable
 
-<MTextField Class="@Class" @bind-Value="Value" Outlined Label="@T("SMSCode")"
-            Placeholder="@T("SMSCodePlaceHolder")" Type="number"
+<MTextField Class="@Class"
+            Value="Value"
+            ValueChanged="ValueChanged"
+            ValueExpression="ValueExpression" 
+            Outlined Label="@T("SMSCode")"
+            Placeholder="@T("SMSCodePlaceHolder")" 
+            Type="number"
             NumberProps="@(prop=> { prop.HideControl = true; })">
     <AppendContent>
         <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
@@ -21,6 +25,9 @@
     public EventCallback<int?> ValueChanged { get; set; }
 
     [Parameter]
+    public Expression<Func<int?>>? ValueExpression { get; set; }
+
+    [Parameter]
     public string Class { get; set; } = string.Empty;
 
     [Parameter]
@@ -31,7 +38,7 @@
 
     int _counter = 0;
     bool ActionDisabled => _counter > 0;
-    string ActionContent => _counter > 0 ? $"{_counter}{T("SmsSendTime")}" : T("GetSmsCode");
+    string ActionContent => _counter > 0 ? string.Format(T("SmsSendTime"), _counter) : T("GetSmsCode");
     private System.Timers.Timer? _timer;
 
     private async Task ClickHandler()

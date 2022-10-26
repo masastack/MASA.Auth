@@ -33,11 +33,30 @@ public partial class RoleSelectForTeam : RoleSelect
     public int TeamUserCount { get; set; }
 
     [Parameter]
+    public List<Guid>? ScopeItems { get; set; }
+
+    [Parameter]
     public EventCallback<RoleLimitModel> RoleLimitChanged { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    List<Guid> _scopeItems = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await ReloadAsync();
+        if (firstRender)
+        {
+            await ReloadAsync();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (ScopeItems?.SequenceEqual(_scopeItems) == false)
+        {
+            _scopeItems = ScopeItems;
+            Roles = Roles.Where(r => ScopeItems.Contains(r.Id)).ToList();
+        }
+        return base.OnParametersSetAsync();
     }
 
     protected override bool RoleDisabled(RoleSelectDto role) => role.Limit != 0 && role.AvailableQuantity < TeamUserCount;

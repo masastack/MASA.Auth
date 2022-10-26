@@ -9,7 +9,10 @@ public partial class TeamMember
     public List<Guid> IgnoreStaffIds { get; set; } = new();
 
     [Parameter]
-    public List<Guid> ScopePermissions { get; set; } = new();
+    public List<SubjectPermissionRelationDto> ScopePermissions { get; set; } = new();
+
+    [Parameter]
+    public List<Guid> ScopeRoles { get; set; } = new();
 
     [EditorRequired]
     [Parameter]
@@ -25,4 +28,6 @@ public partial class TeamMember
     public EventCallback<bool> PreviewChanged { get; set; }
 
     public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
+
+    private PermissionService PermissionService => AuthCaller.PermissionService;
 }

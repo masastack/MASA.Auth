@@ -8,7 +8,7 @@
   "ConfirmPassword": "Confirm Password",
   "ConfirmPasswordPlaceHolder": "请再次输入密码",
   "PhoneNumber": "Phone Number",
-  "PhoneNumberPlaceHolder": "Please Enter Password Again",
+  "PhoneNumberPlaceHolder": "Please Enter Phone Number",
   "SMSCode": "SMS Code",
   "SMSCodePlaceHolder": "Place Enter SMS Code",
   "GetSmsCode": "Get SMS Code",
@@ -58,6 +58,6 @@
   "PwdRequired": "Password cannot be empty",
   "UserNameRequired": "UserName cannot be empty",
   "UnknownException": "Unknown exception,Please contact the administrator",
-  "SmsSendTime": "second after resend"
+  "SmsSendTime": "Replays in {0} seconds"
 }
  

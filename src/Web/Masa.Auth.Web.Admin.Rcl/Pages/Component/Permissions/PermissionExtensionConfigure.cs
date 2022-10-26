@@ -11,6 +11,30 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     [Parameter]
     public EventCallback<List<SubjectPermissionRelationDto>> ExtensionValueChanged { get; set; }
 
+    //keep Nullable discriminate null and empty
+    [Parameter]
+    public List<SubjectPermissionRelationDto>? ScopeItems { get; set; }
+
+    [Parameter]
+    public List<Guid>? ScopeRoleItems { get; set; }
+
+    List<SubjectPermissionRelationDto> _scopeItems = new();
+    List<Guid> _scopeRoleItems = new();
+
+    protected override void OnParametersSet()
+    {
+        if (ScopeItems?.SequenceEqual(_scopeItems) == false)
+        {
+            _scopeItems = ScopeItems;
+            FilterCategories();
+        }
+        if (ScopeRoleItems?.SequenceEqual(_scopeRoleItems) == false)
+        {
+            _scopeRoleItems = ScopeRoleItems;
+            FilterCategories();
+        }
+    }
+
     protected override List<UniqueModel> ExpansionWrapperUniqueValue
     {
         get
@@ -62,4 +86,49 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         if (ExtensionValueChanged.HasDelegate) await ExtensionValueChanged.InvokeAsync(value);
         else ExtensionValue = value;
     }
+
+    void FilterCategories()
+    {
+        if (ScopeItems != null)
+        {
+            foreach (var category in _categories)
+            {
+                foreach (var app in category.Apps)
+                {
+                    app.Navs = FilterScopePermission(app.Navs);
+                }
+                category.Apps.ForEach(a => a.Hiden = a.Navs.All(n => n.Hiden));
+            }
+        }
+        _categories.ForEach(c => c.Hiden = c.Apps.All(a => a.Hiden));
+
+        List<Nav> FilterScopePermission(List<Nav> navs)
+        {
+            foreach (var nav in navs)
+            {
+                if (nav.Children.Any())
+                {
+                    nav.Children = FilterScopePermission(nav.Children);
+                    nav.Hiden = nav.Children.All(c => c.Hiden);
+                    continue;
+                }
+
+                if (ScopeItems.Where(p => !p.Effect).Select(p => p.PermissionId.ToString()).Contains(nav.Code))
+                {
+                    nav.IsDisabled = true;
+                    nav.Hiden = false;
+                    continue;
+                }
+
+                if (!ScopeItems.Where(p => p.Effect).Select(p => p.PermissionId.ToString()).Contains(nav.Code))
+                {
+                    nav.Hiden = true;
+                    continue;
+                }
+                nav.Hiden = false;
+            }
+            return navs;
+        }
+    }
+
 }
