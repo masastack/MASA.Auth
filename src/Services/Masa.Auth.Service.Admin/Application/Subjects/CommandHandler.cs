@@ -328,7 +328,7 @@ public class CommandHandler
         }
         if (await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
-            command.Result = user.Adapt<UserModel>();
+            command.Result = await UserSplicingDataAsync(user);
         }
     }
 
@@ -431,20 +431,20 @@ public class CommandHandler
             }
             validateByAccountCommand.Result = await UserSplicingDataAsync(user);
         }
+    }
 
-        async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
+    async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
+    {
+        UserDetailDto? userDetailDto = null;
+        if (user != null)
         {
-            UserDetailDto? userDetailDto = null;
-            if (user != null)
-            {
-                userDetailDto = user;
-                var staff = await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(user.Id));
-                userDetailDto.StaffId = staff?.Id;
-                userDetailDto.StaffDisplayName = staff?.DisplayName;
-                userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
-            }
-            return userDetailDto;
+            userDetailDto = user;
+            var staff = await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(user.Id));
+            userDetailDto.StaffId = staff?.Id;
+            userDetailDto.StaffDisplayName = staff?.DisplayName;
+            userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
         }
+        return userDetailDto;
     }
 
     [EventHandler(1)]

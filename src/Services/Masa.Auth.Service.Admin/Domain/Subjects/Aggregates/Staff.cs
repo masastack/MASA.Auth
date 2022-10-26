@@ -147,6 +147,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public User? ModifyUser => _modifyUser;
 
+    [JsonConstructor]
     public Staff(
         Guid userId,
         string? name,

@@ -232,7 +232,7 @@ public class UserService : ServiceBase
     {
         var command = new LoginByPhoneNumberCommand(model);
         await eventBus.PublishAsync(command);
-        return command.Result;
+        return ConvertToModel(command.Result); ;
     }
 
     public async Task RemoveUserRolesAsync(
