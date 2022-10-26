@@ -5,7 +5,7 @@
         <AutoHeight Overflow>
             <AutoHeightContent>
                 <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
-                <STextField Readonly Value="UserClaim.Name" Required Label="@T("Name")" Class="mb-12" />
+                <STextField Disabled Value="UserClaim.Name" Required Label="@T("Name")" Class="mb-12" />
                 <STextarea @bind-Value="UserClaim.Description" Required Outlined Label="@T("Description")" Class="mb-12" />
             </AutoHeightContent>
             <FooterContent>

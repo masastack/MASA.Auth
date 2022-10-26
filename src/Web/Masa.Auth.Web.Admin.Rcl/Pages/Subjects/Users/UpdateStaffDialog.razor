@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update Staff")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Edit Staff")">
     <MForm Model="Staff" EnableValidation EnableI18n>
         <AutoHeight Overflow AutoClass="mt-6">
             <HeaderContent>
@@ -50,7 +50,7 @@
                 </MRow>
                 <MRow Class="mt-1">
                     <MCol>
-                        <STextField @bind-Value="Staff.JobNumber" Required Readonly Label="@T("JobNumber")" />
+                        <STextField @bind-Value="Staff.JobNumber" Required Disabled Label="@T("JobNumber")" />
                     </MCol>
                     <MCol>
                         <PositionSelect @bind-Value="Staff.Position" />

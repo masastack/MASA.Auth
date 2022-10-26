@@ -407,12 +407,11 @@ public class QueryHandler
                                            .Select(tp => tp.PermissionId);
         var permissionByRoleQuery = new PermissionsByRoleQuery(roles);
         await _eventBus.PublishAsync(permissionByRoleQuery);
-        var userPermission = permissionByRoleQuery.Result.Union(
-                permissions.Where(permission => permission.Effect is true)
-                           .Select(permission => permission.PermissionId)
-            ).Where(permission => rejectPermisisons.All(rp => rp != permission));
+        var userPermission = permissionByRoleQuery.Result
+                                .Union(permissions.Select(permission => permission.PermissionId))
+                                .Union(permissionByTeamQuery.Result)
+                                .Where(permission => rejectPermisisons.All(rp => rp != permission));
         query.Result.AddRange(userPermission);
-        query.Result.AddRange(permissionByTeamQuery.Result);
     }
 
     [EventHandler]

@@ -25,7 +25,7 @@ public class OperationLogCommandHandler
     [EventHandler(1)]
     public async Task UpdateRoleOperationLogAsync(UpdateRoleCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.UpdateRole, $"编辑职位：{command.Role.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditRole, $"编辑职位：{command.Role.Name}");
     }
 
     [EventHandler(0)]

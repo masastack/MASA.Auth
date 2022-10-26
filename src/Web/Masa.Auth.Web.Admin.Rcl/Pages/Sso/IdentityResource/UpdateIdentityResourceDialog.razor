@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Update IdentityResource")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Edit IdentityResource")">
     <MForm Model=IdentityResource EnableValidation EnableI18n>
         <AutoHeight Overflow>
             <AutoHeightContent>
@@ -10,7 +10,7 @@
                         <STextField @bind-Value="IdentityResource.DisplayName" Required Label="@T("DisplayName")" />
                     </MCol>
                     <MCol>
-                        <STextField Readonly Value="IdentityResourceDetail.Name" Required Label="@T("IdentityResource.Name")" />
+                        <STextField Disabled Value="IdentityResourceDetail.Name" Required Label="@T("Name")" />
                     </MCol>
                 </MRow>
                 <MRow Class="mb-7">

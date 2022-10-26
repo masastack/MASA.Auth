@@ -29,7 +29,7 @@ public class TeamCommandHandler
         _cdnEndpoint = masaConfiguration.Local.GetValue<string>("CdnEndpoint");
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddTeamAsync(AddTeamCommand addTeamCommand)
     {
         var dto = addTeamCommand.AddTeamDto;
@@ -57,7 +57,7 @@ public class TeamCommandHandler
         await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles));
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateTeamAsync(UpdateTeamCommand updateTeamCommand)
     {
         var dto = updateTeamCommand.UpdateTeamDto;
@@ -87,7 +87,7 @@ public class TeamCommandHandler
         await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles).Union(team.TeamRoles.Select(tr => tr.RoleId)));
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveTeamAsync(RemoveTeamCommand removeTeamCommand)
     {
         var team = await _teamRepository.GetByIdAsync(removeTeamCommand.TeamId);
@@ -98,5 +98,6 @@ public class TeamCommandHandler
         await _teamRepository.RemoveAsync(team);
 
         await _roleDomainService.UpdateRoleLimitAsync(team.TeamRoles.Select(tr => tr.RoleId));
+        removeTeamCommand.Result = team;
     }
 }
