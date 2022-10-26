@@ -15,7 +15,7 @@ public class CommandHandler
     readonly UserDomainService _userDomainService;
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IUserContext _userContext;
-    readonly IDistributedCacheClient _cache;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
     readonly ILdapFactory _ldapFactory;
     readonly ILdapIdpRepository _ldapIdpRepository;
@@ -33,7 +33,7 @@ public class CommandHandler
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
         ThirdPartyUserDomainService thirdPartyUserDomainService,
-        IDistributedCacheClient cache,
+        IMultilevelCacheClient multilevelCacheClient,
         IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
         ILdapFactory ldapFactory,
@@ -51,7 +51,7 @@ public class CommandHandler
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
-        _cache = cache;
+        _multilevelCacheClient = multilevelCacheClient;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
         _ldapFactory = ldapFactory;
@@ -87,14 +87,14 @@ public class CommandHandler
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
-            var emailCode = await _cache.GetAsync<string>(emailCodeKey);
+            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
             if (!model.EmailCode.Equals(emailCode))
             {
                 throw new UserFriendlyException("Invalid Email verification code");
             }
         }
         var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-        var smsCode = await _cache.GetAsync<string>(smsCodeKey);
+        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException("Invalid SMS verification code");
@@ -275,7 +275,7 @@ public class CommandHandler
         if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
         {
             var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _cache.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+            await _multilevelCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
             command.Result = true;
         }
     }
@@ -289,7 +289,7 @@ public class CommandHandler
         var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
         if (checkCurrentPhoneNumber is false)
         {
-            checkCurrentPhoneNumber = await _cache.GetAsync<bool>(resultKey);
+            checkCurrentPhoneNumber = await _multilevelCacheClient.GetAsync<bool>(resultKey);
         }
         if (checkCurrentPhoneNumber)
         {
@@ -300,7 +300,7 @@ public class CommandHandler
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
-                await _cache.RemoveAsync(resultKey);
+                await _multilevelCacheClient.RemoveAsync<bool>(resultKey);
                 command.Result = true;
             }
         }
@@ -367,7 +367,7 @@ public class CommandHandler
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
         var key = CacheKey.AccountLoginKey(account);
-        var loginCache = await _cache.GetAsync<CacheLogin>(key);
+        var loginCache = await _multilevelCacheClient.GetAsync<CacheLogin>(key);
         if (loginCache is not null && loginCache.LoginErrorCount >= 5)
         {
             throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
@@ -421,15 +421,29 @@ public class CommandHandler
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
-                await _cache.SetAsync(key, loginCache, loginCache.FreezeTime);
+                await _multilevelCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
                 throw new UserFriendlyException("账号或密码错误");
             }
 
             if (loginCache is not null)
             {
-                await _cache.RemoveAsync(key);
+                await _multilevelCacheClient.RemoveAsync<CacheLogin>(key);
             }
-            validateByAccountCommand.Result = user;
+            validateByAccountCommand.Result = await UserSplicingDataAsync(user);
+        }
+
+        async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
+        {
+            UserDetailDto? userDetailDto = null;
+            if (user != null)
+            {
+                userDetailDto = user;
+                var staff = await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(user.Id));
+                userDetailDto.StaffId = staff?.Id;
+                userDetailDto.StaffDisplayName = staff?.DisplayName;
+                userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
+            }
+            return userDetailDto;
         }
     }
 
@@ -514,7 +528,7 @@ public class CommandHandler
             default:
                 throw new UserFriendlyException("Invalid ResetPasswordType");
         }
-        var captcha = _cache.GetAsync<string>(key);
+        var captcha = _multilevelCacheClient.GetAsync<string>(key);
         if (!command.Captcha.Equals(captcha))
         {
             throw new UserFriendlyException("Validation failed");
@@ -535,7 +549,7 @@ public class CommandHandler
         var staffDto = command.Staff;
         var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
         if (staff is not null) return;
-        
+
         command.Result = await AddStaffAsync(staffDto);
     }
 
@@ -634,7 +648,7 @@ public class CommandHandler
         else
         {
             command.Result = await AddStaffAsync(staffDto);
-        }      
+        }
     }
 
     [EventHandler(1)]
@@ -662,7 +676,7 @@ public class CommandHandler
                 PhoneNumber = staffDto.PhoneNumber,
                 JobNumber = staffDto.JobNumber
             };
-            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);          
+            await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
             command.Result = await AddStaffAsync(addStaffDto);
         }
     }

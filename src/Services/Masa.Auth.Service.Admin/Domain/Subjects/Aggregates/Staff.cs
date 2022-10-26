@@ -137,8 +137,10 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public Position? Position => _position;
 
+    [JsonIgnore]
     public IReadOnlyList<DepartmentStaff> DepartmentStaffs => _departmentStaffs;
 
+    [JsonIgnore]
     public IReadOnlyList<TeamStaff> TeamStaffs => _teamStaffs;
 
     public User? CreateUser => _createUser;

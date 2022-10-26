@@ -16,7 +16,6 @@ public class UpdateStaffValidator : AbstractValidator<UpdateStaffDto>
         RuleFor(staff => staff.Address.Address).MinLength(8).MaxLength(100);
         RuleFor(staff => staff.CompanyName).ChineseLetter().MaxLength(50);
         RuleFor(staff => staff.Position).ChineseLetterNumber().MinLength(2).MaxLength(50);
-        RuleFor(staff => staff.Password).Required().AuthPassword();
         RuleFor(staff => staff.Avatar).Required().Url();
     }
 }
