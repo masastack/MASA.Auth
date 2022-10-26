@@ -81,6 +81,11 @@ public abstract class AdminCompontentBase : ComponentBase
         else return I18n.T(key, true);
     }
 
+    public string T(string formatkey,params string[] args)
+    {
+        return string.Format(T(formatkey), args);
+    }
+
     public async Task<bool> OpenConfirmDialog(string content)
     {
         return await PopupService.ConfirmAsync(T("Operation confirmation"), content, AlertTypes.Error);
@@ -88,7 +93,7 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public async Task<bool> OpenConfirmDialog(string title, string content)
     {
-        return await PopupService.ConfirmAsync(title, content);
+        return await PopupService.ConfirmAsync(title, content, AlertTypes.Error);
     }
 
     public async Task<bool> OpenConfirmDialog(string title, string content, AlertTypes type)

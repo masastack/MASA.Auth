@@ -105,7 +105,7 @@ public partial class IdentityResource
 
     public async Task OpenRemoveIdentityResourceDialog(IdentityResourceDto identityResource)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete identityResource data"));
+        var confirm = await OpenConfirmDialog(T("Delete IdentityResource"), T("Are you sure delete identityResource \"{0}\"?", identityResource.Name));
         if (confirm) await RemoveIdentityResourceAsync(identityResource.Id);
     }
 
