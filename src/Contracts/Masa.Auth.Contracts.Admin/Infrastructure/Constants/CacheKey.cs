@@ -21,6 +21,7 @@ public static class CacheKey
     const string USER_ELEMENT_PERMISSION_CODE_PRE = "user_element_permission_code:";
     const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
     const string EMAIL_BIND_CODE_PRE = "email_bind_code:";
+    const string EMAIL_BIND_SEND_CODE_PRE = "email_bind_send_code:";
     const string EMAIL_REGISTER_SEND_PRE = "email_register_send:";
     const string SMS_REGISTER_SEND_PRE = "sms_register_send:";
     const string EMAIL_VERIFIY_CODE_PRE = "email_verifiy_code:";
@@ -110,6 +111,11 @@ public static class CacheKey
     public static string EmailCodeBindKey(string email)
     {
         return $"{EMAIL_BIND_CODE_PRE}{email}";
+    }
+
+    public static string EmailCodeBindSendKey(string email)
+    {
+        return $"{EMAIL_BIND_SEND_CODE_PRE}{email}";
     }
 
     public static string EmailCodeVerifiySendKey(string email)

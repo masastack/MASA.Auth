@@ -89,6 +89,8 @@ public class CommandHandler
                     throw new UserFriendlyException($"This email {model.Email} does not exist");
                 }
                 break;
+            case SendEmailTypes.Bind:
+                break;
             default:
                 throw new UserFriendlyException("Invalid SendEmailType");
         }
