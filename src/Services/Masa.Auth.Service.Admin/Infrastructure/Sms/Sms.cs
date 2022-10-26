@@ -55,6 +55,6 @@ public class Sms : IScopedDependency
 
     public async Task<bool> CheckAlreadySendAsync(string key)
     {
-        return await _distributedCacheClient.ExistsAsync(key);
+        return await _distributedCacheClient.ExistsAsync<string>(key);
     }
 }

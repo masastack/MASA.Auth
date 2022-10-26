@@ -20,9 +20,15 @@ public class PermissionDomainService : DomainService
         {
             return true;
         }
-        if (permissionType == PermissionTypes.Menu || permissionType == PermissionTypes.Api)
+        if (permissionType == PermissionTypes.Menu)
         {
-            return !_permissionRepository.Any(p => p.ParentId == parentId && p.Type == PermissionTypes.Element);
+            //menu and element can`t sibling node,element can`t menu parent
+            return !_permissionRepository.Any(p => (p.ParentId == parentId && p.Type == PermissionTypes.Element)
+                || (p.Id == parentId && p.Type == PermissionTypes.Element));
+        }
+        if (permissionType == PermissionTypes.Api)
+        {
+            return !_permissionRepository.Any(p => p.ParentId == parentId && p.Type != PermissionTypes.Api);
         }
         if (permissionType == PermissionTypes.Element)
         {

@@ -23,11 +23,10 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
     public async Task<IEnumerable<string>> GetAllowCodeListAsync(string appId)
     {
         var userId = _userContext.GetUserId<Guid>();
-        //todo wait dcc pm update stack component
-        //if (userId == Guid.Empty)
-        //{
-        //    return Enumerable.Empty<string>();
-        //}
+        if (userId == Guid.Empty)
+        {
+            return Enumerable.Empty<string>();
+        }
         var permissionQuery = new UserElementPermissionCodeQuery(appId, userId);
         await _eventBus.PublishAsync(permissionQuery);
         return permissionQuery.Result;

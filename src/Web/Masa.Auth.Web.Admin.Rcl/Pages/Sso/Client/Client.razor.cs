@@ -39,7 +39,7 @@ public partial class Client
         _paginationDto = await _clientService.GetListAsync(_clientPaginationDto);
     }
 
-    private async Task OpenUpdateDialog(int clientId)
+    private async Task OpenUpdateDialog(Guid clientId)
     {
         await _updateClientDialog.ShowAsync(clientId);
     }

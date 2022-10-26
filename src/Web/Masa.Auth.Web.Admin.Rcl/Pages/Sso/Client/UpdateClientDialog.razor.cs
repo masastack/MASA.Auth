@@ -12,6 +12,7 @@ public partial class UpdateClientDialog
     public EventCallback OnDeleted { get; set; }
 
     List<string> _tabHeader = new();
+    string _tab = "";
     ClientDetailDto _clientDetailDto = new();
     ClientBasicDto _basicDto = new();
     ClientConsentDto _consentDto = new();
@@ -26,7 +27,7 @@ public partial class UpdateClientDialog
 
     ClientService ClientService => AuthCaller.ClientService;
 
-    public async Task ShowAsync(int clientId)
+    public async Task ShowAsync(Guid clientId)
     {
         _clientDetailDto = await ClientService.GetDetailAsync(clientId);
         _clientDetailDto.Adapt(_basicDto);
@@ -38,7 +39,7 @@ public partial class UpdateClientDialog
         _clientDetailDto.Adapt(_clientScopesDto);
 
         PrepareHeader();
-
+        _tab = T("Basic Information");
         _visible = true;
 
         StateHasChanged();

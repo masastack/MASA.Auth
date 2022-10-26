@@ -12,6 +12,7 @@ public partial class AddMenuPermission
     MForm _form = default!;
     bool _visible { get; set; }
     string _showUrlPrefix = "";
+    PermissionTypes _parentType;
 
     List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
 
@@ -38,12 +39,27 @@ public partial class AddMenuPermission
             _visible = false;
         }
     }
+
     public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
         _menuPermissionDetailDto = new();
         _menuPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
         _menuPermissionDetailDto.ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
         _showUrlPrefix = appPermissionsViewModel.AppUrl;
+        _parentType = appPermissionsViewModel.Type ?? PermissionTypes.Menu;
         _visible = true;
+    }
+
+    List<SelectItemDto<PermissionTypes>> TypeList()
+    {
+        if (_menuPermissionDetailDto.ParentId == Guid.Empty)
+        {
+            return _menuPermissionTypes.Where(p => p.Value == PermissionTypes.Menu).ToList();
+        }
+        if (_parentType == PermissionTypes.Element)
+        {
+            return _menuPermissionTypes.Where(p => p.Value != PermissionTypes.Menu).ToList();
+        }
+        return _menuPermissionTypes;
     }
 }

@@ -50,9 +50,9 @@ public class CommandHandler
         await _clientRepository.UpdateAsync(client);
         void HashClientSharedSecret(ClientSecretDto clientSecret)
         {
-            if (clientSecret.Id != 0)
+            if (clientSecret.Id != Guid.Empty)
             {
-                clientSecret.Id = 0;
+                clientSecret.Id = Guid.Empty;
             }
             else
             {
