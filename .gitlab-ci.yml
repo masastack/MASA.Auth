@@ -60,6 +60,21 @@ deploy-dev:
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_DEV
   retry: 2
+  
+deploy-dev-ali:
+  stage: deploy-dev
+  tags:
+    - linux-shell
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  only:
+    - main  
+  script:
+    - echo $KUBE_CONFIG_DEV | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN_DEV -n masa-auth-dev-new
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n masa-auth-dev-new
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n masa-auth-dev-new
+  retry: 2
 
 deploy-test:
   stage: deploy-test
@@ -74,6 +89,22 @@ deploy-test:
     - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_STAGING
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_STAGING
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_STAGING
+  retry: 2
+  when: manual
+
+deploy-test:
+  stage: deploy-test
+  tags:
+    - linux-shell
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  only:
+    - main  
+  script:
+    - echo $KUBE_CONFIG_DEV | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN_DEV -n masa-auth-test-new
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n masa-auth-test-new
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n masa-auth-test-new
   retry: 2
   when: manual
 
