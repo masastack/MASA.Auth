@@ -53,7 +53,8 @@ public class StaffCacheCommandHandler
     [EventHandler(99)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        await _multilevelCacheClient.RemoveAsync<Staff>(CacheKey.StaffKey(command.Staff.Id));
+        if(command.Result is not null)
+            await _multilevelCacheClient.RemoveAsync<Staff>(CacheKey.StaffKey(command.Result.Id));
     }
 
     [EventHandler(99)]
@@ -66,7 +67,7 @@ public class StaffCacheCommandHandler
     public async Task SyncStaffCacheAsync(SyncStaffCacheCommand command)
     {
         var staffs = await _staffRepository.GetListAsync() ?? new List<Staff>();
-        await _multilevelCacheClient.SetListAsync(staffs.ToDictionary(staff => CacheKey.StaffKey(staff.Id), staff => staff));
+        await _multilevelCacheClient.SetListAsync(staffs.ToDictionary(staff => CacheKey.StaffKey(staff.UserId), staff => staff));
     }
 
     [EventHandler(1)]
@@ -78,6 +79,6 @@ public class StaffCacheCommandHandler
     async Task SetStaffCacheAsync(Staff? staff)
     {
         if (staff is null) return;
-        await _multilevelCacheClient.SetAsync(CacheKey.StaffKey(staff.Id), staff);
+        await _multilevelCacheClient.SetAsync(CacheKey.StaffKey(staff.UserId), staff);
     }
 }

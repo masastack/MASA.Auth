@@ -686,6 +686,7 @@ public class CommandHandler
         var staff = await CheckStaffExistAsync(command.Staff.Id);
         await _staffRepository.RemoveAsync(staff);
         await _staffDomainService.RemoveAsync(new(staff));
+        command.Result = staff;
     }
 
     [EventHandler(1)]
@@ -1042,9 +1043,9 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyIdpCommand command)
+    public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyUserCommand command)
     {
-        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdp.Id);
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId);
     }
 
     private async Task<ThirdPartyUser?> VerifyUserRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity, bool throwException = true)

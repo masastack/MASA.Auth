@@ -113,10 +113,10 @@
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
+                                            <STextField Label="@T("Type")" Value="_menuPermissionDetailDto.Type.GetDescription().Description" Disabled />
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Url")" @bind-Value="_menuPermissionDetailDto.Url"></STextField>
+                                            <STextField Label="@T("Url")" @bind-Value="_menuPermissionDetailDto.Url" />
                                         </MCol>
                                         <MCol Md=6>
                                             <SNumberTextField Label="@T("Order")" @bind-Value="_menuPermissionDetailDto.Order" />
@@ -208,7 +208,7 @@
                                             <SNumberTextField Label="@T("Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Readonly Disabled></STextField>
+                                            <STextField Label="@T("Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Disabled />
                                         </MCol>
                                         <MCol Md=12>
                                             <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>

@@ -14,6 +14,7 @@ public class QueryHandler
     readonly DbContext _oidcDbContext;
     readonly AuthDbContext _authDbContext;
     readonly IClientCache _clientCache;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
 
     public QueryHandler(
         IClientRepository clientRepository,
@@ -24,7 +25,8 @@ public class QueryHandler
         ICustomLoginRepository customLoginRepository,
         OidcDbContext oidcDbContext,
         AuthDbContext authDbContext,
-        IClientCache clientCache)
+        IClientCache clientCache,
+        IMultilevelCacheClient multilevelCacheClient)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -35,6 +37,7 @@ public class QueryHandler
         _oidcDbContext = oidcDbContext;
         _authDbContext = authDbContext;
         _clientCache = clientCache;
+        _multilevelCacheClient = multilevelCacheClient;
     }
 
     #region Client
@@ -334,9 +337,7 @@ public class QueryHandler
 
         var customLoginQuery = _authDbContext.Set<CustomLogin>().Where(condition);
         var total = await customLoginQuery.LongCountAsync();
-        var customLogins = await customLoginQuery.Include(customLogin => customLogin.CreateUser)
-                                           .Include(customLogin => customLogin.ModifyUser)
-                                           .OrderByDescending(s => s.ModificationTime)
+        var customLogins = await customLoginQuery.OrderByDescending(s => s.ModificationTime)
                                            .ThenByDescending(s => s.CreationTime)
                                            .Skip((query.Page - 1) * query.PageSize)
                                            .Take(query.PageSize)
@@ -345,7 +346,8 @@ public class QueryHandler
         var clients = await _clientCache.GetListAsync(customLogins.Select(customLogin => customLogin.ClientId));
         var customLoginDtos = customLogins.Select(customLogin =>
         {
-            var customLoginDto = new CustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "");
+            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
+            var customLoginDto = new CustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, creator, modifier);
             var client = clients.FirstOrDefault(client => client.ClientId == customLogin.ClientId);
             if (client is not null)
             {

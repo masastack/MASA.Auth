@@ -13,9 +13,9 @@ public class StaffDetailDto : StaffDto
 
     public List<string> ThirdPartyIdpAvatars { get; set; } = new();
 
-    public string Creator { get; set; } = "";
+    public string? Creator { get; set; }
 
-    public string Modifier { get; set; } = "";
+    public string? Modifier { get; set; }
 
     public DateTime? ModificationTime { get; set; }
 

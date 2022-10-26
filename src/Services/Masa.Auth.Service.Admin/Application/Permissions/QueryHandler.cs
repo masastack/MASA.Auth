@@ -41,15 +41,20 @@ public class QueryHandler
 
         var roleQuery = _authDbContext.Set<Role>().Where(condition);
         var total = await roleQuery.LongCountAsync();
-        var roles = await roleQuery.Include(s => s.CreateUser)
-                                   .Include(s => s.ModifyUser)
-                                   .OrderByDescending(s => s.ModificationTime)
+        var roles = await roleQuery.OrderByDescending(s => s.ModificationTime)
                                    .ThenByDescending(s => s.CreationTime)
                                    .Skip((query.Page - 1) * query.PageSize)
                                    .Take(query.PageSize)
                                    .ToListAsync();
 
-        query.Result = new(total, roles.Select(role => (RoleDto)role).ToList());
+        query.Result = new(total, roles.Select(role => 
+        {
+            var dto = (RoleDto)role;
+            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier).Result;
+            dto.Creator = creator;
+            dto.Modifier = modifier;
+            return dto;
+        }).ToList());
     }
 
     [EventHandler]
@@ -59,6 +64,9 @@ public class QueryHandler
         if (role is null) throw new UserFriendlyException("This role data does not exist");
 
         query.Result = role;
+        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier);
+        query.Result.Creator = creator;
+        query.Result.Modifier = modifier;
     }
 
     [EventHandler]
@@ -399,12 +407,11 @@ public class QueryHandler
                                            .Select(tp => tp.PermissionId);
         var permissionByRoleQuery = new PermissionsByRoleQuery(roles);
         await _eventBus.PublishAsync(permissionByRoleQuery);
-        var userPermission = permissionByRoleQuery.Result.Union(
-                permissions.Where(permission => permission.Effect is true)
-                           .Select(permission => permission.PermissionId)
-            ).Where(permission => rejectPermisisons.All(rp => rp != permission));
+        var userPermission = permissionByRoleQuery.Result
+                                .Union(permissions.Select(permission => permission.PermissionId))
+                                .Union(permissionByTeamQuery.Result)
+                                .Where(permission => rejectPermisisons.All(rp => rp != permission));
         query.Result.AddRange(userPermission);
-        query.Result.AddRange(permissionByTeamQuery.Result);
     }
 
     [EventHandler]
