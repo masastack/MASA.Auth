@@ -89,7 +89,7 @@ public partial class StaffSelect
         _staffLoading = true;
         var staffs = await StaffService.GetSelectAsync(search);
         Staffs = Staffs.UnionBy(staffs, staff => staff.Id).ToList();
-        Staffs.RemoveAll(s => IgnoreValue.Contains(s.Id));
+        Staffs.RemoveAll(s => IgnoreValue?.Contains(s.Id) == true);
         _staffLoading = false;
     }
 }
