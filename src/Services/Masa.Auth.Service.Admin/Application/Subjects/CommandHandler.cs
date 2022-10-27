@@ -439,7 +439,7 @@ public class CommandHandler
         if (user != null)
         {
             userDetailDto = user;
-            var staff = await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(user.Id));
+            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
             userDetailDto.StaffId = staff?.Id;
             userDetailDto.StaffDisplayName = staff?.DisplayName;
             userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
@@ -528,7 +528,7 @@ public class CommandHandler
             default:
                 throw new UserFriendlyException("Invalid ResetPasswordType");
         }
-        var captcha = _multilevelCacheClient.GetAsync<string>(key);
+        var captcha = await _multilevelCacheClient.GetAsync<string>(key);
         if (!command.Captcha.Equals(captcha))
         {
             throw new UserFriendlyException("Validation failed");

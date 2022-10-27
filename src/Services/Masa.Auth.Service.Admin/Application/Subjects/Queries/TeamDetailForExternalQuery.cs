@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record TeamDetailForExternalQuery(Guid TeamId) : Query<TeamDetailModel>
+public record TeamDetailForExternalQuery(Guid TeamId) : Query<TeamDetailModel?>
 {
-    public override TeamDetailModel Result { get; set; } = new();
+    public override TeamDetailModel? Result { get; set; }
 }
