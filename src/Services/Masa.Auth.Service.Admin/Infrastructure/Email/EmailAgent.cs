@@ -36,6 +36,10 @@ public class EmailAgent : IScopedDependency
                 sendKey = CacheKey.EmailCodeForgotPasswordSendKey(sendEmailModel.Email);
                 sendValueKey = CacheKey.EmailCodeForgotPasswordKey(sendEmailModel.Email);
                 break;
+            case SendEmailTypes.Bind:
+                sendKey = CacheKey.EmailCodeBindSendKey(sendEmailModel.Email);
+                sendValueKey = CacheKey.EmailCodeBindKey(sendEmailModel.Email);
+                break;
             default:
                 break;
         }

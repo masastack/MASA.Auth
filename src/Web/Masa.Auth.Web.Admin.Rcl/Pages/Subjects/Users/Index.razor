@@ -8,13 +8,13 @@
 <DefaultCard>
     <SElevationTab Class="defaultTab full-height" TabMinWidth="120" Left Tabs="Tas" Dense>
         <SElevationTabItem>
-            <User />
+            <User @ref=UserRef />          
         </SElevationTabItem>
         <SElevationTabItem>
-            <ThirdPartyUser />
+            <ThirdPartyUser />          
         </SElevationTabItem>
         <SElevationTabItem>
-            <Staff />
+            <Staff UserCompontent=UserRef />         
         </SElevationTabItem>
     </SElevationTab>
 </DefaultCard>
@@ -23,4 +23,6 @@
     public string Title { get; set; } = PageTab.User;
 
     List<string> Tas => new() { T(PageTab.User), T(PageTab.ThirdPartyUser), T(PageTab.Staff) };
+
+    User? UserRef { get; set; }
 }

@@ -134,6 +134,12 @@ public partial class User
         Loading = false;
     }
 
+    public async Task ReloadAsync()
+    {
+        await GetUserAsync();
+        await base.InvokeAsync(StateHasChanged);
+    }
+
     public void OpenAddUserDialog()
     {
         AddUserDialogVisible = true;

@@ -128,6 +128,7 @@ public class UserService : ServiceBase
         return query.Result;
     }
 
+    [AllowAnonymous]
     public async Task<UserModel?> FindByEmailAsync(IEventBus eventBus, [FromQuery] string email)
     {
         var query = new FindUserByEmailQuery(email);
@@ -135,6 +136,7 @@ public class UserService : ServiceBase
         return ConvertToModel(query.Result);
     }
 
+    [AllowAnonymous]
     public async Task<UserModel?> FindByPhoneNumberAsync(IEventBus eventBus, [FromQuery] string phoneNumber)
     {
         var query = new FindUserByPhoneNumberQuery(phoneNumber);

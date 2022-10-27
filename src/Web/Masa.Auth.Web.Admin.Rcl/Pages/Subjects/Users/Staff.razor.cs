@@ -10,6 +10,9 @@ public partial class Staff
     private int _page = 1;
     private int _pageSize = 10;
 
+    [Parameter]
+    public User? UserCompontent { get; set; }
+
     public string Search
     {
         get { return _search ?? ""; }
@@ -113,6 +116,15 @@ public partial class Staff
     {
         CurrentStaff = staff;
         AuthorizeDialogVisible = true;
+    }
+
+    async Task UpdateUserAsync()
+    {
+        await GetStaffAsync();
+        if(UserCompontent is not null)
+        {
+            await UserCompontent.ReloadAsync();
+        }       
     }
 }
 

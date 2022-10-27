@@ -71,7 +71,7 @@ public partial class UserBind
             await AuthClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel()
             {
                 PhoneNumber = UserModel.PhoneNumber,
-                SendMsgCodeType = SendMsgCodeTypes.Register  //todo SendMsgCodeTypes.Bind
+                SendMsgCodeType = SendMsgCodeTypes.Bind
             });
             await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
             int second = 60;
