@@ -9,10 +9,10 @@ public partial class StaffSelect
     public List<Guid> Value { get; set; } = new();
 
     [Parameter]
-    public List<Guid> IgnoreValue { get; set; } = new();
+    public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     [Parameter]
-    public EventCallback<List<Guid>> ValueChanged { get; set; }
+    public List<Guid>? IgnoreValue { get; set; }
 
     [Parameter]
     public string Label { get; set; } = "";
@@ -27,6 +27,7 @@ public partial class StaffSelect
     public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 
     bool _staffLoading;
+    List<Guid> _ignoreValue = new();
 
     protected List<StaffSelectDto> Staffs { get; set; } = new();
 
@@ -42,8 +43,9 @@ public partial class StaffSelect
 
     protected override void OnParametersSet()
     {
-        if (IgnoreValue != null && IgnoreValue.Any())
+        if (IgnoreValue?.SequenceEqual(_ignoreValue) == false)
         {
+            _ignoreValue = IgnoreValue;
             Staffs.RemoveAll(s => IgnoreValue.Contains(s.Id));
         }
         base.OnParametersSet();
@@ -87,7 +89,7 @@ public partial class StaffSelect
         _staffLoading = true;
         var staffs = await StaffService.GetSelectAsync(search);
         Staffs = Staffs.UnionBy(staffs, staff => staff.Id).ToList();
-        Staffs.RemoveAll(s => IgnoreValue.Contains(s.Id));
+        Staffs.RemoveAll(s => IgnoreValue?.Contains(s.Id) == true);
         _staffLoading = false;
     }
 }

@@ -35,7 +35,6 @@ builder.Services.AddMasaIdentity(options =>
     options.UserName = "name";
     options.UserId = "sub";
 });
-
 builder.Services
     .AddScoped<EnvironmentMiddleware>()
     .AddScoped<MasaAuthorizeMiddleware>()

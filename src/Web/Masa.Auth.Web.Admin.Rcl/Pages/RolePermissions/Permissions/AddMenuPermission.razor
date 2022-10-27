@@ -14,7 +14,7 @@
                     <MCol Md=6>
                         <SSelect @bind-Value="_menuPermissionDetailDto.Type"
                                  Label="@T("Type")" Required
-                                 Items="@_menuPermissionTypes.Where(p=> _menuPermissionDetailDto.ParentId!=Guid.Empty || p.Value == PermissionTypes.Menu).ToList()"
+                                 Items="TypeList()"
                                  ItemText="u => u.Text"
                                  ItemValue="u => u.Value">
                         </SSelect>

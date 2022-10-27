@@ -234,7 +234,7 @@ public class UserService : ServiceBase
     {
         var command = new LoginByPhoneNumberCommand(model);
         await eventBus.PublishAsync(command);
-        return command.Result;
+        return ConvertToModel(command.Result); ;
     }
 
     public async Task RemoveUserRolesAsync(
@@ -281,6 +281,7 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
+    [AllowAnonymous]
     [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
     {
@@ -304,6 +305,7 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
+    [AllowAnonymous]
     [RoutePattern("reset_password_by_phone", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<bool> ResetPasswordByPhoneAsync(IEventBus eventBus, [FromBody] ResetPasswordByPhoneModel model)
     {
@@ -323,6 +325,7 @@ public class UserService : ServiceBase
         }
     }
 
+    [AllowAnonymous]
     [RoutePattern("reset_password_by_email", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<bool> ResetPasswordByEmailAsync(IEventBus eventBus, [FromBody] ResetPasswordByEmailModel model)
     {

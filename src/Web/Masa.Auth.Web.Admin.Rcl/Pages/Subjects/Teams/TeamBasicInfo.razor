@@ -2,25 +2,25 @@
 
 <MCardText Class="py-0 full-height">
     <PlaceholderTextFiled Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Name")" />
-    <MListItem class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
+    <MListItem Class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Height=80 Width=80>
             <span class="white--text" style="font-size:48px;">@Value.Avatar.Name?.FirstOrDefault()</span>
         </MListItemAvatar>
-        <MListItemContent class="py-0">
+        <MListItemContent Class="py-0">
             <MListItemTitle>
-                <STextField @bind-Value="@Value.Avatar.Name" Placeholder="Michael Harmen"></STextField>
+                <STextField @bind-Value="@Value.Avatar.Name" Placeholder="@T("TeamAvatarText")"></STextField>
             </MListItemTitle>
-            <MListItemSubtitle class="mt-2">
+            <MListItemSubtitle Class="mt-2">
                 <SColorGroup @bind-Value="@Value.Avatar.Color" Colors='_colors' />
             </MListItemSubtitle>
         </MListItemContent>
     </MListItem>
-    <SSelect class="mt-12" @bind-Value="@Value.Type" Dense
+    <SSelect Class="mt-12" @bind-Value="@Value.Type" Dense
              Label="@T("Type")"
              Items="@_teamTypes" Required
              ItemText="u => u.Name"
              ItemValue="u => u.Id">
     </SSelect>
-    <MTextarea class="mt-12" Label="@T("Description")" HideDetails="true" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
+    <MTextarea Class="mt-12" Label="@T("Description")" HideDetails="true" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
     </MTextarea>
 </MCardText>

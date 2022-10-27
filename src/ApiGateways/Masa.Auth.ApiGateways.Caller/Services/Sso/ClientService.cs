@@ -17,7 +17,7 @@ public class ClientService : ServiceBase
         return await GetAsync<GetClientPaginationDto, PaginationDto<ClientDto>>("GetList", clientPaginationDto);
     }
 
-    public async Task<ClientDetailDto> GetDetailAsync(int id)
+    public async Task<ClientDetailDto> GetDetailAsync(Guid id)
     {
         return await GetAsync<ClientDetailDto>($"{nameof(GetDetailAsync)}?id={id}");
     }

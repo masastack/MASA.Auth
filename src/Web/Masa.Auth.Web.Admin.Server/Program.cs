@@ -10,6 +10,7 @@ builder.WebHost.UseKestrel(option =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<TokenProvider>();
 
 #if DEBUG
 builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
@@ -26,7 +27,7 @@ builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = pu
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
-builder.Services.AddScoped<TokenProvider>();
+
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();

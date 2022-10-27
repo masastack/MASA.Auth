@@ -29,9 +29,6 @@ public partial class PermissionsConfigure
     public EventCallback<List<Guid>> ValueChanged { get; set; }
 
     [Parameter]
-    public List<string>? ScopeItems { get; set; }
-
-    [Parameter]
     public bool Preview { get; set; }
 
     [Parameter]
@@ -42,8 +39,8 @@ public partial class PermissionsConfigure
 
     List<Guid> _internalRoles = new();
     List<Guid> _internalTeams = new();
-    Guid _internalUser { get; set; }
-    List<Category> _categories = new();
+    Guid _internalUser;
+    protected List<Category> _categories = new();
 
     List<Guid> RolePermissions { get; set; } = new();
 
@@ -75,12 +72,12 @@ public partial class PermissionsConfigure
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Roles.Count != _internalRoles.Count || Roles.Except(_internalRoles).Any())
+        if (!_internalRoles.SequenceEqual(Roles))
         {
             _internalRoles = Roles;
             await GetRolePermissions();
         }
-        if (Teams.Count != _internalTeams.Count || Teams.Except(_internalTeams).Any())
+        if (!_internalTeams.SequenceEqual(Teams))
         {
             _internalTeams = Teams;
             await GetTeamPermissions();
@@ -90,17 +87,6 @@ public partial class PermissionsConfigure
             _internalUser = User;
             await GetTeamPermissions();
         }
-    }
-
-    public override Task SetParametersAsync(ParameterView parameters)
-    {
-        if (parameters.TryGetValue(nameof(ScopeItems), out List<string>? scopeItems)
-                && scopeItems != null && ScopeItems?.SequenceEqual(scopeItems) == false)
-        {
-            ScopeItems = scopeItems;
-            FilterCategories();
-        }
-        return base.SetParametersAsync(parameters);
     }
 
     private async Task GetCategoriesAsync()
@@ -120,37 +106,6 @@ public partial class PermissionsConfigure
             Name = ag.Key,
             Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
         }).ToList();
-
-        FilterCategories();
-    }
-
-    void FilterCategories()
-    {
-        if (ScopeItems != null)
-        {
-            foreach (var category in _categories)
-            {
-                foreach (var app in category.Apps)
-                {
-                    app.Navs = FilterScopePermission(app.Navs);
-                }
-                category.Apps.ForEach(a => a.Hiden = a.Navs.All(n => n.Hiden));
-            }
-        }
-        _categories.ForEach(c => c.Hiden = c.Apps.All(a => a.Hiden));
-
-        List<Nav> FilterScopePermission(List<Nav> navs)
-        {
-            foreach (var nav in navs)
-            {
-                if (nav.Children.Any())
-                {
-                    nav.Children = FilterScopePermission(nav.Children);
-                }
-            }
-            navs.ForEach(n => n.Hiden = !ScopeItems.Contains(n.Code) && n.Children.All(c => c.Hiden));
-            return navs;
-        }
     }
 
     private async Task GetRolePermissions()
