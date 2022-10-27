@@ -34,7 +34,7 @@ public class TeamService : ServiceBase
         return query.Result;
     }
 
-    private async Task<TeamDetailModel> GetDetailForExternalAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<TeamDetailModel?> GetDetailForExternalAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new TeamDetailForExternalQuery(id);
         await eventBus.PublishAsync(query);
