@@ -602,18 +602,19 @@ public class QueryHandler
                                        .ThenInclude(ts => ts.Staff)
                                        .AsSplitQuery()
                                        .FirstOrDefaultAsync(t => t.Id == query.TeamId);
-
-        if (team is null) throw new UserFriendlyException("This team data does not exist");
-        query.Result = new TeamDetailModel
+        if (team != null)
         {
-            Id = team.Id,
-            Name = team.Name,
-            Description = team.Description,
-            TeamType = team.TeamType,
-            Avatar = team.Avatar.Url,
-            Admins = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(ts => ts.Staff.Adapt<StaffModel>()).ToList(),
-            Members = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(ts => ts.Staff.Adapt<StaffModel>()).ToList(),
-        };
+            query.Result = new TeamDetailModel
+            {
+                Id = team.Id,
+                Name = team.Name,
+                Description = team.Description,
+                TeamType = team.TeamType,
+                Avatar = team.Avatar.Url,
+                Admins = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(ts => ts.Staff.Adapt<StaffModel>()).ToList(),
+                Members = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(ts => ts.Staff.Adapt<StaffModel>()).ToList(),
+            };
+        }
     }
 
     [EventHandler]

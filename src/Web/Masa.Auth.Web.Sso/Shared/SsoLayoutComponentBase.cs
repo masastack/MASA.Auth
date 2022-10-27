@@ -7,7 +7,7 @@ public class SsoLayoutComponentBase : LayoutComponentBase
 {
     private I18n? _languageProvider;
 
-    [CascadingParameter]
+    [Inject]
     public I18n LanguageProvider
     {
         get

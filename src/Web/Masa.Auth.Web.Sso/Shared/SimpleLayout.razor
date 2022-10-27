@@ -1,9 +1,8 @@
 ﻿@using System.Globalization
 @inherits SsoLayoutComponentBase
-@inject I18n I18n
 @inject IJSRuntime JS
 
-<CascadingValue Value="I18n">
+<CascadingValue Value="LanguageProvider">
     <MApp>
         <MErrorHandler OnErrorHandleAsync=OnErrorAsync>
             <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">
@@ -19,7 +18,7 @@
                                 <MIcon Left Dark>
                                     mdi-swap-horizontal
                                 </MIcon>
-                                @(I18n.Culture.Name == "en-US"?"中文":"EN")
+                                @(LanguageProvider.Culture.Name == "en-US" ? "中文" : "EN")
                             </MButton>
                         </MCol>
                     </MRow>
@@ -44,7 +43,7 @@
 
     void ChangeLanguage(){
         string _targetCulture = "";
-        if (I18n.Culture.Name == "en-US")
+        if (LanguageProvider.Culture.Name == "en-US")
         {
             _targetCulture = "zh-CN";
         }
@@ -52,7 +51,7 @@
         {
             _targetCulture = "en-US";
         }
-        I18n.SetCulture(new CultureInfo(_targetCulture));
+        LanguageProvider.SetCulture(new CultureInfo(_targetCulture));
     }
 
     async Task OnErrorAsync(Exception e){
