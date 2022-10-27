@@ -228,6 +228,7 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
+    [AllowAnonymous]
     public async Task<UserModel?> PostLoginByPhoneNumberAsync(
         IEventBus eventBus,
         [FromBody] LoginByPhoneNumberModel model)
@@ -289,6 +290,7 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
+    [AllowAnonymous]
     public async Task<bool> GetHasPhoneNumberInEnvAsync(IEventBus eventBus, IEnvironmentSetter environmentSetter,
         [FromQuery] string env, [FromQuery] string phoneNumber)
     {

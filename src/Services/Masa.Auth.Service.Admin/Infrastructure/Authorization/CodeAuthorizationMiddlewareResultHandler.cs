@@ -45,7 +45,15 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
                 appId = requirement.AppId;
             }
         }
-        if (!(await _masaAuthorizeDataProvider.GetAllowCodeListAsync(appId)).WildCardContains(code))
+
+        var userId = Guid.Empty;
+
+        if (context.Request.Query.ContainsKey("userId"))
+        {
+            Guid.TryParse(context.Request.Query["userId"], out userId);
+        }
+
+        if (!(await _masaAuthorizeDataProvider.GetAllowCodeListAsync(appId, userId)).WildCardContains(code))
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;
