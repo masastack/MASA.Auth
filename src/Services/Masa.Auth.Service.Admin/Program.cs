@@ -6,10 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddObservability();
 
 #if DEBUG
-builder.services.adddaprstarter(opt =>
+builder.Services.AddDaprStarter(opt =>
 {
-    opt.daprhttpport = 3600;
-    opt.daprgrpcport = 3601;
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
 });
 #endif
 

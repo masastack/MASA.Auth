@@ -937,14 +937,14 @@ public class CommandHandler
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeBindKey(model.Email);
-            var emailCode = await _cache.GetAsync<string>(emailCodeKey);
+            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
             if (!model.EmailCode.Equals(emailCode))
             {
                 throw new UserFriendlyException("Invalid Email verification code");
             }
         }
         var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
-        var smsCode = await _cache.GetAsync<string>(smsCodeKey);
+        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException("Invalid SMS verification code");
