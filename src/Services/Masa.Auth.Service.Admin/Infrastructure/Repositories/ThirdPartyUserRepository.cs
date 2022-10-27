@@ -12,6 +12,7 @@ public class ThirdPartyUserRepository : Repository<AuthDbContext, ThirdPartyUser
     public async Task<ThirdPartyUser?> GetDetail(Guid id)
     {
         return await Context.Set<ThirdPartyUser>()
+                           .Include(s => s.User)
                            .Where(s => s.Id == id)
                            .FirstOrDefaultAsync();
     }

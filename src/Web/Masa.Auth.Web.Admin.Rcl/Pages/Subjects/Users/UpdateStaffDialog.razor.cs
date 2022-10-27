@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Newtonsoft.Json;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class UpdateStaffDialog

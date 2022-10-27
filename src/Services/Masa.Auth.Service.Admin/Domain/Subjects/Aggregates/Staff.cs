@@ -132,7 +132,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public Team? CurrentTeam { get; private set; }
 
-    [JsonIgnore]
     public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
 
     public Position? Position => _position;
@@ -145,7 +144,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public User? ModifyUser => _modifyUser;
 
-    [JsonConstructor]
     public Staff(
         Guid userId,
         string? name,
