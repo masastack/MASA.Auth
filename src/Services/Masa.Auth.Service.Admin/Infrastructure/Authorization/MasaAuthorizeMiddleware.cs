@@ -54,7 +54,14 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
                 code = $"{MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID}.{code}";
             }
 
-            if (!(await _masaAuthorizeDataProvider.GetAllowCodeListAsync(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID)).WildCardContains(code))
+            var userId = Guid.Empty;
+
+            if (context.Request.Query.ContainsKey("userId"))
+            {
+                Guid.TryParse(context.Request.Query["userId"], out userId);
+            }
+
+            if (!(await _masaAuthorizeDataProvider.GetAllowCodeListAsync(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID, userId)).WildCardContains(code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 return;

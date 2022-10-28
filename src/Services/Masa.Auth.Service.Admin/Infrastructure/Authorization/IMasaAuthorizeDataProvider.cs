@@ -7,5 +7,5 @@ public interface IMasaAuthorizeDataProvider : IScopedDependency
 {
     Task<string> GetAccountAsync();
 
-    Task<IEnumerable<string>> GetAllowCodeListAsync(string appId);
+    Task<IEnumerable<string>> GetAllowCodeListAsync(string appId, Guid userId);
 }
