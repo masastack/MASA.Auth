@@ -27,11 +27,14 @@ public class CommandHandler
         switch (model.SendMsgCodeType)
         {
             case SendMsgCodeTypes.Register:
-                //if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber))
-                //{
-                //    throw new UserFriendlyException($"This mobile phone number {model.PhoneNumber} already exists as a user");
-                //}
+                if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber))
+                {
+                    throw new UserFriendlyException($"This mobile phone number {model.PhoneNumber} already exists as a user");
+                }
                 cacheKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                break;
+            case SendMsgCodeTypes.Bind:
+                cacheKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
                 break;
             case SendMsgCodeTypes.Login:
                 var loginUser = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
@@ -85,6 +88,8 @@ public class CommandHandler
                 {
                     throw new UserFriendlyException($"This email {model.Email} does not exist");
                 }
+                break;
+            case SendEmailTypes.Bind:
                 break;
             default:
                 throw new UserFriendlyException("Invalid SendEmailType");

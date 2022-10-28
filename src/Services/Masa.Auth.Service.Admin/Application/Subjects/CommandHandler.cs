@@ -442,7 +442,7 @@ public class CommandHandler
         if (user != null)
         {
             userDetailDto = user;
-            var staff = await _multilevelCacheClient.GetAsync<Staff>(CacheKey.StaffKey(user.Id));
+            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
             userDetailDto.StaffId = staff?.Id;
             userDetailDto.StaffDisplayName = staff?.DisplayName;
             userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
@@ -531,7 +531,7 @@ public class CommandHandler
             default:
                 throw new UserFriendlyException("Invalid ResetPasswordType");
         }
-        var captcha = _multilevelCacheClient.GetAsync<string>(key);
+        var captcha = await _multilevelCacheClient.GetAsync<string>(key);
         if (!command.Captcha.Equals(captcha))
         {
             throw new UserFriendlyException("Validation failed");
@@ -915,7 +915,7 @@ public class CommandHandler
     public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
     {
         var model = command.Model;
-        await RegisterVerifyAsync(model);
+        await BindVerifyAsync(model);
         var addThirdPartyUserExternalCommand = new AddThirdPartyUserExternalCommand(new AddThirdPartyUserModel
         {
             ThridPartyIdentity = model.ThridPartyIdentity,
@@ -933,6 +933,25 @@ public class CommandHandler
         }, true);
         await _eventBus.PublishAsync(addThirdPartyUserExternalCommand);
         command.Result = addThirdPartyUserExternalCommand.Result;
+    }
+
+    async Task BindVerifyAsync(RegisterByEmailModel model)
+    {
+        if (model.UserRegisterType == UserRegisterTypes.Email)
+        {
+            var emailCodeKey = CacheKey.EmailCodeBindKey(model.Email);
+            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
+            if (!model.EmailCode.Equals(emailCode))
+            {
+                throw new UserFriendlyException("Invalid Email verification code");
+            }
+        }
+        var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
+        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
+        if (!model.SmsCode.Equals(smsCode))
+        {
+            throw new UserFriendlyException("Invalid SMS verification code");
+        }
     }
 
     [EventHandler(1)]

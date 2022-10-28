@@ -103,7 +103,7 @@ public partial class UserClaim
 
     public async Task OpenRemoveUserClaimDialog(UserClaimDto UserClaim)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete userClaim data"));
+        var confirm = await OpenConfirmDialog(T("Delete UserClaim"), T("Are you sure delete userClaim \"{0}\"?", UserClaim.Name));
         if (confirm) await RemoveUserClaimAsync(UserClaim.Id);
     }
 
