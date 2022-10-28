@@ -74,6 +74,7 @@ public partial class UpdateThirdPartyIdpDialog
         if (success)
         {
             Loading = true;
+            ThirdPartyIdp.JsonKeyMap = AdvancedConfig.ToDictionary(config => config.Key, config => config.Value);
             await ThirdPartyIdpService.UpdateAsync(ThirdPartyIdp);
             OpenSuccessMessage(T("Edit thirdPartyIdp data success"));
             await UpdateVisible(false);

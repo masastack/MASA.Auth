@@ -16,6 +16,7 @@ public class CommandHandler
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IUserContext _userContext;
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _distributedCacheClient;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
     readonly ILdapFactory _ldapFactory;
     readonly ILdapIdpRepository _ldapIdpRepository;
@@ -34,6 +35,7 @@ public class CommandHandler
         UserDomainService userDomainService,
         ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMultilevelCacheClient multilevelCacheClient,
+        IDistributedCacheClient distributedCacheClient,
         IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
         ILdapFactory ldapFactory,
@@ -52,6 +54,7 @@ public class CommandHandler
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _multilevelCacheClient = multilevelCacheClient;
+        _distributedCacheClient = distributedCacheClient;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
         _ldapFactory = ldapFactory;
@@ -367,7 +370,7 @@ public class CommandHandler
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
         var key = CacheKey.AccountLoginKey(account);
-        var loginCache = await _multilevelCacheClient.GetAsync<CacheLogin>(key);
+        var loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
         if (loginCache is not null && loginCache.LoginErrorCount >= 5)
         {
             throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
@@ -421,13 +424,13 @@ public class CommandHandler
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
-                await _multilevelCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
                 throw new UserFriendlyException("账号或密码错误");
             }
 
             if (loginCache is not null)
             {
-                await _multilevelCacheClient.RemoveAsync<CacheLogin>(key);
+                await _distributedCacheClient.RemoveAsync<CacheLogin>(key);
             }
             validateByAccountCommand.Result = await UserSplicingDataAsync(user);
         }
