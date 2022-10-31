@@ -9,7 +9,7 @@
             @foreach (var identityScope in Dto.IdentityScopes)
             {
                 <MCol Md=6 Class="py-0">
-                    <MCheckbox Disabled="ClientOptions.MandatoryResource.Contains(identityScope.Id)" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
+                    <MCheckbox Disabled="ClientConsts.MandatoryResource.Contains(identityScope.Id)" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
                 </MCol>
             }
         </MRow>
@@ -36,20 +36,16 @@
 
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
-    
+
     ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
     IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
-        {
-            await LoadIdentityResources();
-            await LoadApiResources();
-            StateHasChanged();
-        }
-        await base.OnAfterRenderAsync(firstRender);
+        await LoadIdentityResources();
+        await LoadApiResources();
+        await base.OnInitializedAsync();
     }
 
     private async Task LoadIdentityResources()
@@ -58,7 +54,7 @@
         Dto.IdentityScopes = identityResources.Select(ir => new CheckItemDto<string>
             {
                 DisplayValue = $"{ir.DisplayName} ({ir.Name})",
-                Selected = Dto._AllowedScopes.Contains(ir.Name) || ClientOptions.MandatoryResource.Contains(ir.Name),
+                Selected = Dto._AllowedScopes.Contains(ir.Name) || ClientConsts.MandatoryResource.Contains(ir.Name),
                 Id = ir.Name
             }).ToList();
     }

@@ -37,7 +37,7 @@
 
             @if (_viewModel.ApiScopes.Any())
             {
-                <ul class="list-group list-group-flush">
+                <ul class="pl-0">
                     @for (var i = 0; i < _viewModel.ApiScopes.Count(); i++)
                     {
                         var scope = _viewModel.ApiScopes.ElementAt(i);
