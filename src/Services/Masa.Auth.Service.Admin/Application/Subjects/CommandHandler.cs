@@ -108,7 +108,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
+        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account.WhenNullOrEmptyReplace(userDto.PhoneNumber), !command.WhenExisReturn);
         if (user is not null)
         {
             command.Result = user;

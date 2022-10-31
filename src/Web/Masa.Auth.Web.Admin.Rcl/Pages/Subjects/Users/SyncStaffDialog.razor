@@ -3,7 +3,11 @@
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Staff Sync")">
     <AutoHeight Overflow>
         <AutoHeightContent>
-            <MFileInput TValue="IBrowserFile" OnChange="OnFileChange" />
+            <label class="uploadImage" for="upload">
+                 <InputFile accept="text/csv" OnChange="OnFileChange" id="upload" />
+                 <STextField Disabled Value="File?.Name" />               
+            </label>
+            @*<MFileInput Outlined Accept="text/csv" TValue="IBrowserFile" OnBlur="OnFileSelect" OnChange="OnFileChange" />*@
             <div class="mt-6">
                 <div>@T("Explanation")</div>
                 <div>@T("File size limit")：@MaxFileSize Kb</div>

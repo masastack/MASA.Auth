@@ -569,5 +569,6 @@
   "Email format is incorrect": "邮箱格式错误",
   "Id Card format is incorrect": "身份证号格式错误",
   "Password must contain numbers and letter, and not less than 6 digits": "密码必须包含数字和字母，且长度不小于6位数",
-  "The password is inconsistent with the confirm password": "密码和确认密码不一致"
+  "The password is inconsistent with the confirm password": "密码和确认密码不一致",
+  "When file update,need select file again": "当文件更新时，需要重新选择文件"
 }
