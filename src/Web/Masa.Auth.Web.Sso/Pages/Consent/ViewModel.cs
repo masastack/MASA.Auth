@@ -16,7 +16,8 @@ public class ViewModel
     {
         get
         {
-            return IdentityScopes.Where(i => i.Checked).Select(i => i.Name).Union(ApiScopes.Where(a => a.Checked).Select(a => a.Name));
+            return IdentityScopes.Where(i => i.Checked).Select(i => i.Name)
+                .Union(ApiScopes.Where(a => a.Checked).Select(a => a.Name));
         }
     }
 }

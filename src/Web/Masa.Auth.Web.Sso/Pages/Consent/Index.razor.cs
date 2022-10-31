@@ -127,6 +127,7 @@ public partial class Index
         return new ScopeViewModel
         {
             Value = IdentityServerConstants.StandardScopes.OfflineAccess,
+            Name = IdentityServerConstants.StandardScopes.OfflineAccess,
             DisplayName = ConsentOptions.OfflineAccessDisplayName,
             Description = ConsentOptions.OfflineAccessDescription,
             Emphasize = true,

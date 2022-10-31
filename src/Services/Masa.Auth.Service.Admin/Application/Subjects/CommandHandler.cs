@@ -607,7 +607,7 @@ public class CommandHandler
         await _staffDomainService.UpdateAfterAsync(new(staff, teams));
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task ChangeStaffCurrentTeamAsync(UpdateStaffCurrentTeamCommand updateStaffCurrentTeamCommand)
     {
         var staff = await _staffRepository.FindAsync(s => s.UserId == updateStaffCurrentTeamCommand.UserId);
@@ -618,6 +618,7 @@ public class CommandHandler
         }
         staff.SetCurrentTeam(updateStaffCurrentTeamCommand.TeamId);
         await _staffRepository.UpdateAsync(staff);
+        updateStaffCurrentTeamCommand.Result = staff;
     }
 
     [EventHandler(1)]

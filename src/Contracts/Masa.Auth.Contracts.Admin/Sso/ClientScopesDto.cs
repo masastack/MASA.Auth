@@ -9,7 +9,7 @@ public class ClientScopesDto
 
     public List<CheckItemDto<string>> ApiScopes { get; set; } = new();
 
-    public List<string> _AllowedScopes { get; private set; } = new();
+    public List<string> _AllowedScopes { get; private set; } = ClientConsts.MandatoryResource.ToList();
 
     public List<string> AllowedScopes
     {

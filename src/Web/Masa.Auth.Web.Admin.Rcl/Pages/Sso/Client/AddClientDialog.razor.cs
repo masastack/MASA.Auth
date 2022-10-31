@@ -13,11 +13,23 @@ public partial class AddClientDialog
     ClientScopesDto _clientScopesDto = new();
     bool _visible;
     MForm _form = null!;
+    List<string> _tabs = new();
+    string _tab = "";
 
     ClientService ClientService => AuthCaller.ClientService;
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _tabs = new List<string> { T("Basic Information"), T("Resource Information") };
+        }
+        base.OnAfterRender(firstRender);
+    }
+
     public void Show()
     {
+        _tab = T("Basic Information");
         _visible = true;
         _addClientDto = new();
         _addBasicDto = new();
