@@ -6,7 +6,7 @@
             <SElevationTab Dense Class="pt-8 full-height" Tabs='new List<string>{ T("Basic Information"),T("Resource Information")}' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
                 <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType" />
-                    <MForm Model=_addBasicDto EnableValidation Class="full-width" @ref="_form">
+                    <MForm Model=_addBasicDto EnableValidation Class="full-width" EnableI18n @ref="_form">
                         <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.AddBasics @bind-Dto="_addBasicDto" />
                     </MForm>
                 </SElevationTabItem>

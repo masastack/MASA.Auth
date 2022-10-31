@@ -82,22 +82,22 @@ public partial class ApiResource
         AddApiResourceDialogVisible = true;
     }
 
-    public void OpenUpdateApiResourceDialog(ApiResourceDto ApiResource)
+    public void OpenUpdateApiResourceDialog(ApiResourceDto apiResource)
     {
-        CurrentApiResourceId = ApiResource.Id;
+        CurrentApiResourceId = apiResource.Id;
         UpdateApiResourceDialogVisible = true;
     }
 
-    public async Task OpenRemoveApiResourceDialog(ApiResourceDto ApiResource)
+    public async Task OpenRemoveApiResourceDialog(ApiResourceDto apiResource)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete apiResource data"));
-        if (confirm) await RemoveApiResourceAsync(ApiResource.Id);
+        var confirm = await OpenConfirmDialog(T("Delete ApiResource"), T("Are you sure delete apiResource \"{0}\"?", apiResource.Name));
+        if (confirm) await RemoveApiResourceAsync(apiResource.Id);
     }
 
-    public async Task RemoveApiResourceAsync(Guid ApiResourceId)
+    public async Task RemoveApiResourceAsync(Guid apiResourceId)
     {
         Loading = true;
-        await ApiResourceService.RemoveAsync(ApiResourceId);
+        await ApiResourceService.RemoveAsync(apiResourceId);
         OpenSuccessMessage(T("Delete apiResource data success"));
         await GetApiResourcesAsync();
         Loading = false;

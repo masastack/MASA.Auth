@@ -83,22 +83,22 @@ public partial class ApiScope
         AddApiScopeDialogVisible = true;
     }
 
-    public void OpenUpdateApiResourceDialog(ApiScopeDto ApiScope)
+    public void OpenUpdateApiResourceDialog(ApiScopeDto apiScope)
     {
-        CurrentApiScopeId = ApiScope.Id;
+        CurrentApiScopeId = apiScope.Id;
         UpdateApiScopeDialogVisible = true;
     }
 
-    public async Task OpenRemoveApiScopeDialog(ApiScopeDto ApiScope)
+    public async Task OpenRemoveApiScopeDialog(ApiScopeDto apiScope)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete apiScope data"));
-        if (confirm) await RemoveApiScopeAsync(ApiScope.Id);
+        var confirm = await OpenConfirmDialog(T("Delete ApiScope"), T("Are you sure delete apiScope \"{0}\"?", apiScope.Name));
+        if (confirm) await RemoveApiScopeAsync(apiScope.Id);
     }
 
-    public async Task RemoveApiScopeAsync(Guid ApiScopeId)
+    public async Task RemoveApiScopeAsync(Guid apiScopeId)
     {
         Loading = true;
-        await ApiScopeService.RemoveAsync(ApiScopeId);
+        await ApiScopeService.RemoveAsync(apiScopeId);
         OpenSuccessMessage(T("Delete apiScope data success"));
         await GetApiScopesAsync();
         Loading = false;

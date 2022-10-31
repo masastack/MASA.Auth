@@ -734,10 +734,6 @@ public class CommandHandler
         if (syncResults.IsValid) return;
 
         //sync user
-        var query = new AllUsersQuery();
-        await _eventBus.PublishAsync(query);
-        var allUsers = query.Result;
-        var userRange = new List<User>();
         foreach (var syncStaff in syncStaffs)
         {
             try
@@ -745,11 +741,25 @@ public class CommandHandler
                 var staff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (staff is not null)
                 {
-                    var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
-                    await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
-                    staff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
-                    await _staffRepository.UpdateAsync(staff);
-                    await _staffDomainService.UpdateAfterAsync(new(staff, default));
+                    if ((staff.JobNumber, staff.PhoneNumber, staff.Email, staff.IdCard) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(staff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(staff.PhoneNumber), syncStaff.Email.WhenNullOrEmptyReplace(staff.Email), syncStaff.IdCard.WhenNullOrEmptyReplace(staff.IdCard)))
+                    {
+                        syncResults[syncStaff.Index] = new()
+                        {
+                            JobNumber = syncStaff.JobNumber,
+                            Errors = new()
+                            {
+                               $"The mobile phone number of this employee is: {Convert(staff.PhoneNumber)}, the email is: {Convert(staff.Email)}, the idCard is: {Convert(staff.IdCard)}, and the job number is: {Convert(staff.JobNumber)}. Does not exactly match imported employee data!"
+                            }
+                        };
+                    }
+                    else
+                    {
+                        var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
+                        await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
+                        staff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
+                        await _staffRepository.UpdateAsync(staff);
+                        await _staffDomainService.UpdateAfterAsync(new(staff, default));
+                    }
                 }
                 else
                 {
@@ -795,6 +805,11 @@ public class CommandHandler
                     };
                 }
             }
+        }
+
+        string Convert(string? str)
+        {
+            return string.IsNullOrEmpty(str) ? "empty" : str;
         }
     }
 
