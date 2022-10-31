@@ -233,8 +233,8 @@ public class User : FullAggregateRoot<Guid, Guid>
         if (user is null) return null;
         var roles = user.Roles.Select(ur => new RoleModel
         {
-            Id = ur.Role.Id,
-            Code = ur.Role.Code
+            Id = ur.RoleId,
+            Code = ur.Role?.Code ?? ""
         }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
@@ -259,7 +259,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     }
 
     public void Update(string? name, string displayName, string? idCard, string? companyName, string? department, GenderTypes gender)
-    {       
+    {
         Name = name;
         DisplayName = displayName;
         IdCard = idCard;

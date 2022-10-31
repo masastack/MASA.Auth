@@ -15,10 +15,10 @@ public class SyncStaffDto
     public string? Password { get; set; }
 
     [ImporterHeader(Name = "工号")]
-    public string JobNumber { get; set; }
+    public string JobNumber { get; set; } = "";
 
     [ImporterHeader(Name = "手机号码")]
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = "";
 
     [ImporterHeader(Name = "邮箱")]
     public string? Email { get; set; }
@@ -57,12 +57,6 @@ public class SyncStaffDto
 
     [ImporterHeader(Name = "员工类型")]
     public string StaffTypeLable { get; set; } = StaffTypes.Internal.ToString();
-
-    public SyncStaffDto()
-    {
-        JobNumber = "";
-        PhoneNumber = "";
-    }
 }
 
 

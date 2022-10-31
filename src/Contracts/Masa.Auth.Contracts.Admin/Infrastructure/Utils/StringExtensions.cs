@@ -14,11 +14,11 @@ public static class StringExtensions
     {
         var pinyin = "";
         var cnChars = cnStr.ToArray();
-        foreach(var cnChar in cnChars)
+        foreach (var cnChar in cnChars)
         {
             pinyin += GetCharSpellCode(cnChar);
         }
-        
+
         return pinyin;
     }
 
@@ -135,5 +135,11 @@ public static class StringExtensions
         }
         else
             return ('?');
-    }    
+    }
+
+    [return: NotNullIfNotNull("replace")]
+    public static string? WhenNullOrEmptyReplace(this string? target, string? replace)
+    {
+        return string.IsNullOrEmpty(target) ? replace : target;
+    }
 }
