@@ -5,4 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record UpdateStaffCurrentTeamCommand(Guid UserId, Guid TeamId) : Command
 {
+    public Staff? Result { get; set; }
 }

@@ -5,6 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class ClientConsts
 {
+    public static readonly string[] MandatoryResource = new string[] { "openid", "profile" };
+
     public static List<SelectItemDto<string>> GetSecretTypes()
     {
         var secretTypes = (new List<string>

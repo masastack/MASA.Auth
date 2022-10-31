@@ -14,22 +14,22 @@ public class ConsentModel : PageModel
         _events = events;
     }
 
-    public async Task<IActionResult> OnGet(bool consent, string returnUrl, bool rememberConsent, List<string> scopes)
+    public async Task<IActionResult> OnGet(bool consent, string returnUrl, bool rememberConsent, string scopes)
     {
         var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
 
         ConsentResponse? grantedConsent = null;
-
+        var _scopes = JsonSerializer.Deserialize<List<string>>(scopes) ?? new();
         if (consent)
         {
             if (ConsentOptions.EnableOfflineAccess == false)
             {
-                scopes = scopes.Where(x => x != IdentityServerConstants.StandardScopes.OfflineAccess).ToList();
+                _scopes = _scopes.Where(x => x != IdentityServerConstants.StandardScopes.OfflineAccess).ToList();
             }
             grantedConsent = new ConsentResponse
             {
                 RememberConsent = rememberConsent,
-                ScopesValuesConsented = scopes.ToArray()
+                ScopesValuesConsented = _scopes.ToArray()
             };
             // emit event
             await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));

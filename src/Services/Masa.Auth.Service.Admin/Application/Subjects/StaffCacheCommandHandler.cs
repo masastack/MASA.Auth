@@ -27,6 +27,12 @@ public class StaffCacheCommandHandler
     }
 
     [EventHandler(99)]
+    public async Task ChangeStaffCurrentTeamAsync(UpdateStaffCurrentTeamCommand updateStaffCurrentTeamCommand)
+    {
+        await SetStaffCacheAsync(updateStaffCurrentTeamCommand.Result);
+    }
+
+    [EventHandler(99)]
     public async Task UpdateStaffBasicInfoAsync(UpdateStaffBasicInfoCommand command)
     {
         await SetStaffCacheAsync(command.Result);
@@ -53,7 +59,7 @@ public class StaffCacheCommandHandler
     [EventHandler(99)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        if(command.Result is not null)
+        if (command.Result is not null)
             await _multilevelCacheClient.RemoveAsync<CacheStaff>(CacheKey.StaffKey(command.Result.Id));
     }
 
