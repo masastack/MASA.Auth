@@ -96,21 +96,10 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             await _operationLogRepository.AddDefaultAsync(OperationTypes.EditStaff, $"编辑员工：{command.Staff.DisplayName}");
         }
 
-        async Task<string> GetStaffDisplayNameByIdAsync(Guid id)
-        {
-            var displayName = await _authDbContext.Set<Staff>()
-                                              .Where(staff => staff.Id == id)
-                                              .Select(staff => staff.DisplayName)
-                                              .FirstAsync();
-
-            return displayName;
-        }
-
         [EventHandler]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
-            var account = await GetStaffDisplayNameByIdAsync(command.Staff.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"删除员工：{command.Result?.DisplayName}");
         }
 
         [EventHandler]
