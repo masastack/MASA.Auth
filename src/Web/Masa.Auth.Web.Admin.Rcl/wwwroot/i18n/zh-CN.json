@@ -334,7 +334,8 @@
     "Add userClaim success": "新建用户声明成功",
     "Delete userClaim data success": "删除用户声明数据成功",
     "Edit userClaim data success": "编辑用户声明数据成功",
-    "Are you sure delete userClaim \"{0}\"?": "确定删除用户声明\"{0}\"吗"
+    "Are you sure delete userClaim \"{0}\"?": "确定删除用户声明\"{0}\"吗",
+    "Name is required": "名称必须填写"
   },
 
   "IdentityResource": "身份资源",
@@ -346,7 +347,7 @@
     "Are you sure create standard identityResources": "新建标准的身份资源",
     "Add standard identityResource data success": "新建标准的身份资源成功",
     "Edit IdentityResource": "编辑身份资源",
-    "Name": "配置名称",
+    "Name": "名称",
     "Required": "是否必须",
     "User Claims": "用户声明",
     "Delete IdentityResource": "删除身份资源",
@@ -354,36 +355,37 @@
     "Delete identityResource data success": "删除身份资源数据成功",
     "Edit identityResource data success": "编辑身份资源数据成功",
     "Are you sure delete identityResource data": "确定删除身份资源吗",
-    "Display Name is required": "显示昵称必须填写",
-    "Name is required": "配置名称必须填写",
+    "Display Name is required": "显示名称必须填写",
+    "Name is required": "名称必须填写",
     "Are you sure delete identityResource \"{0}\"?": "确定删除身份资源\"{0}\"吗"
   },
 
   "ApiScope": "Api范围",
   "ApiScopeBlock": {
-    "Api Scopes": "Api范围",
+    "Api Scope": "Api范围",
     "Add ApiScope": "新建Api范围",
     "Edit ApiScope": "编辑Api范围",
-    "ApiScope.Name": "配置名称",
+    "Name": "名称",
     "ApiScope.Required": "是否必须",
     "Delete ApiScope": "删除Api范围",
     "Are you sure delete apiScope data": "确定删除Api范围吗",
     "Add apiScope success": "新建Api范围成功",
     "Delete apiScope data success": "删除Api范围数据成功",
-    "Edit apiScope data success": "编辑Api范围数据成功"
+    "Edit apiScope data success": "编辑Api范围数据成功",
+    "Are you sure delete apiScope \"{0}\"?": "确定删除Api范围\"{0}\"吗"
   },
 
   "ApiResource": "Api资源",
   "ApiResourceBlock": {
     "Add ApiResource": "新建Api资源",
     "Edit ApiResource": "编辑Api资源",
-    "ApiResource.Name": "配置名称",
+    "Name": "名称",
     "ApiResource.Required": "是否必须",
     "Delete ApiResource": "删除Api资源",
-    "Are you sure delete apiResource data": "确定删除Api资源吗",
     "Add apiResource success": "新建Api资源成功",
     "Delete apiResource data success": "删除Api资源数据成功",
-    "Edit apiResource data success": "编辑Api资源数据成功"
+    "Edit apiResource data success": "编辑Api资源数据成功",
+    "Are you sure delete apiResource \"{0}\"?": "确定删除Api资源\"{0}\"吗"
   },
 
   "Client": "客户端",
@@ -482,7 +484,9 @@
     "Register configuration items are required": "注册配置项必填",
     "Add Custom Login success": "新建自定义登录成功",
     "Delete Custom Login data success": "删除自定义登录数据成功",
-    "Edit Custom Login data success": "编辑自定义登录数据成功"
+    "Edit Custom Login data success": "编辑自定义登录数据成功",
+    "Name is required": "名称必须填写",
+    "Title is required": "标题必须填写"
   },
 
   "OperationLog": "操作日志",
@@ -551,7 +555,7 @@
   "Job Number is required": "工号必须填写",
   "Display Name is required": "昵称必须填写",
   "Phone Number is required": "手机号必须填写",
-  "Name is required": "名称必须填写",
+  "Client Name is required": "名称必须填写",
   "Client Id is required": "客户端ID必须填写",
   "Client Secret is required": "客户端密钥必须填写",
   "Url is required": "Url地址必须填写",
