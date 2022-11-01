@@ -79,5 +79,5 @@
 </AutoHeight>
 
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
-<UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=GetUserAsync />
+<UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=UpdateStaffAndThirdPartyUserAsync />
 <UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />

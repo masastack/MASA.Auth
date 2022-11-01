@@ -5,19 +5,13 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class SyncStaffDto
 {
-    [ImporterHeader(Name = "序号")]
-    public int Index { get; set; }
-
     [ImporterHeader(Name = "姓名")]
     public string? Name { get; set; }
 
-    [ImporterHeader(Name = "密码")]
-    public string? Password { get; set; }
-
-    [ImporterHeader(Name = "工号")]
+    [ImporterHeader(Name = "工号(必填)")]
     public string JobNumber { get; set; } = "";
 
-    [ImporterHeader(Name = "手机号码")]
+    [ImporterHeader(Name = "手机号码(必填)")]
     public string PhoneNumber { get; set; } = "";
 
     [ImporterHeader(Name = "邮箱")]
@@ -26,7 +20,7 @@ public class SyncStaffDto
     [ImporterHeader(Name = "身份证号码")]
     public string? IdCard { get; set; }
 
-    [ImporterHeader(Name = "昵称")]
+    [ImporterHeader(Name = "昵称(必填)")]
     public string DisplayName { get; set; } = "";
 
     [ImporterHeader(Name = "岗位")]

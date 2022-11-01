@@ -286,7 +286,8 @@
     "Enabled default password": "启用默认密码",
     "Disabled default password": "禁用默认密码",
     "Set it to the default password": "设为默认密码",
-    "Succeeded in setting the password": "设置密码成功"
+    "Succeeded in setting the password": "设置密码成功",
+    "New employee: the password is the default password, editing employee: the password remains the same as the original password.": "新建员工：密码为默认密码，编辑员工：密码维持原密码不变。"
   },
 
   "ThirdPartyUserBlock": {
@@ -549,7 +550,7 @@
     "RemovePosition": "删除职位",
     "UpsertAppTag": "编辑应用标签"
   },
-
+  "Line": "行号",
   "Account is required": "账号必须填写",
   "Password is required": "密码必须填写",
   "Job Number is required": "工号必须填写",

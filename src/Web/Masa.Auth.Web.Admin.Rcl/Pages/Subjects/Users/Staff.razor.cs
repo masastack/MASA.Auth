@@ -101,6 +101,12 @@ public partial class Staff
         Loading = false;
     }
 
+    public async Task ReloadAsync()
+    {
+        await GetStaffAsync();
+        await base.InvokeAsync(StateHasChanged);
+    }
+
     public void OpenAddStaffDialog()
     {
         AddStaffDialogVisible = true;
