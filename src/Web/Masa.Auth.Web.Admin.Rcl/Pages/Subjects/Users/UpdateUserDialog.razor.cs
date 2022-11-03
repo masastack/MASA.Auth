@@ -77,7 +77,7 @@ public partial class UpdateUserDialog
 
     public async Task OpenRemoveUserDialog()
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete user data"));
+        var confirm = await OpenConfirmDialog(T("Delete User"), T("Are you sure delete user \"{0}\"?", User.DisplayName));
         if (confirm) await RemoveUserAsync();
     }
 

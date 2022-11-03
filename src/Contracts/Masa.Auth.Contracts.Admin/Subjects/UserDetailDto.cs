@@ -5,6 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UserDetailDto : UserDto
 {
+    private string? _staffDisplayName;
+
     public string Department { get; set; }
 
     public string Position { get; set; }
@@ -27,7 +29,12 @@ public class UserDetailDto : UserDto
 
     public Guid? CurrentTeamId { get; set; }
 
-    public string? StaffDisplayName { get; set; }
+    [AllowNull]
+    public string StaffDisplayName
+    {
+        get => _staffDisplayName.WhenNullOrEmptyReplace(DisplayName);
+        set => _staffDisplayName = value;
+    }
 
     public UserDetailDto() : base()
     {

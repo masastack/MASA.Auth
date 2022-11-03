@@ -100,6 +100,12 @@ public partial class User
 
     private UserService UserService => AuthCaller.UserService;
 
+    [Parameter]
+    public Staff? StaffCompontent { get; set; }
+
+    [Parameter]
+    public ThirdPartyUser? ThirdPartyUserCompontent { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         PageName = "UserBlock";
@@ -160,6 +166,19 @@ public partial class User
     public void SwitchFilter()
     {
         Filter = !(Filter ?? false);
+    }
+
+    async Task UpdateStaffAndThirdPartyUserAsync()
+    {
+        await GetUserAsync();
+        if (StaffCompontent is not null)
+        {
+            await StaffCompontent.ReloadAsync();
+        }
+        if (ThirdPartyUserCompontent is not null)
+        {
+            await ThirdPartyUserCompontent.ReloadAsync();
+        }
     }
 }
 

@@ -13,7 +13,6 @@ public class SyncStaffValidator : AbstractValidator<SyncStaffDto>
         RuleFor(staff => staff.Email).Email();
         RuleFor(staff => staff.IdCard).IdCard();
         RuleFor(staff => staff.Position).ChineseLetterNumber().MinLength(2).MaxLength(50);
-        RuleFor(staff => staff.Password).Required().AuthPassword();
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinLength(4).MaxLength(12);         
     }
 }

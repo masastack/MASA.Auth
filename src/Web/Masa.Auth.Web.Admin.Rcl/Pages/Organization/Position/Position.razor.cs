@@ -82,22 +82,22 @@ public partial class Position
         AddPositionDialogVisible = true;
     }
 
-    public void OpenUpdateApiResourceDialog(PositionDto Position)
+    public void OpenUpdateApiResourceDialog(PositionDto position)
     {
-        CurrentPositionId = Position.Id;
+        CurrentPositionId = position.Id;
         UpdatePositionDialogVisible = true;
     }
 
-    public async Task OpenRemovePositionDialog(PositionDto Position)
+    public async Task OpenRemovePositionDialog(PositionDto position)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete position data"));
-        if (confirm) await RemovePositionAsync(Position.Id);
+        var confirm = await OpenConfirmDialog(T("Delete Position"), T("Are you sure delete position \"{0}\"?", position.Name));
+        if (confirm) await RemovePositionAsync(position.Id);
     }
 
-    public async Task RemovePositionAsync(Guid PositionId)
+    public async Task RemovePositionAsync(Guid positionId)
     {
         Loading = true;
-        await PositionService.RemoveAsync(PositionId);
+        await PositionService.RemoveAsync(positionId);
         OpenSuccessMessage(T("Delete position data success"));
         await GetPositionsAsync();
         Loading = false;

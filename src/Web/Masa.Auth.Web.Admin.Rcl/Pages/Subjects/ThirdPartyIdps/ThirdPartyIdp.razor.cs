@@ -108,7 +108,7 @@ public partial class ThirdPartyIdp
 
     public async Task OpenRemoveThirdPartyIdpDialog(ThirdPartyIdpDto thirdPartyIdp)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete current data?"));
+        var confirm = await OpenConfirmDialog(T("Delete ThirdPartyIdp"), T("Are you sure delete thirdPartyIdp \"{0}\"?", thirdPartyIdp.Name));
         if (confirm)
         {
             Loading = true;

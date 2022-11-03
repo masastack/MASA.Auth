@@ -108,7 +108,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
+        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account.WhenNullOrEmptyReplace(userDto.PhoneNumber), !command.WhenExisReturn);
         if (user is not null)
         {
             command.Result = user;
@@ -715,12 +715,13 @@ public class CommandHandler
         var syncStaffs = command.Staffs;
         //validation
         var validator = new SyncStaffValidator();
-        foreach (var staff in syncStaffs)
+        for (var i = 0; i < syncStaffs.Count; i++)
         {
+            var staff = syncStaffs[i];
             var result = validator.Validate(staff);
             if (result.IsValid is false)
             {
-                syncResults[staff.Index] = new()
+                syncResults[i] = new()
                 {
                     JobNumber = staff.JobNumber,
                     Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
@@ -734,22 +735,26 @@ public class CommandHandler
         CheckDuplicate(Staff => Staff.IdCard);
         if (syncResults.IsValid) return;
 
+        var defaultPasswordQuery = new StaffDefaultPasswordQuery();
+        await _eventBus.PublishAsync(defaultPasswordQuery);
+        string defaultPassword = defaultPasswordQuery.Result.DefaultPassword.WhenNullOrEmptyReplace(DefaultUserAttributes.Password);
         //sync user
-        foreach (var syncStaff in syncStaffs)
+        for (var i = 0; i < syncStaffs.Count; i++)
         {
+            var syncStaff = syncStaffs[i];
             try
             {
-                var staff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
-                if (staff is not null)
+                var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
+                if (existStaff is not null)
                 {
-                    if ((staff.JobNumber, staff.PhoneNumber, staff.Email, staff.IdCard) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(staff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(staff.PhoneNumber), syncStaff.Email.WhenNullOrEmptyReplace(staff.Email), syncStaff.IdCard.WhenNullOrEmptyReplace(staff.IdCard)))
+                    if ((existStaff.JobNumber, existStaff.PhoneNumber) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber)))
                     {
-                        syncResults[syncStaff.Index] = new()
+                        syncResults[i] = new()
                         {
                             JobNumber = syncStaff.JobNumber,
                             Errors = new()
                             {
-                               $"The mobile phone number of this employee is: {Convert(staff.PhoneNumber)}, the email is: {Convert(staff.Email)}, the idCard is: {Convert(staff.IdCard)}, and the job number is: {Convert(staff.JobNumber)}. Does not exactly match imported employee data!"
+                               $"The mobile phone number of this employee is: {Convert(existStaff.PhoneNumber)}, and the job number is: {Convert(existStaff.JobNumber)}. Does not exactly match imported employee data!"
                             }
                         };
                     }
@@ -757,9 +762,9 @@ public class CommandHandler
                     {
                         var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
                         await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
-                        staff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
-                        await _staffRepository.UpdateAsync(staff);
-                        await _staffDomainService.UpdateAfterAsync(new(staff, default));
+                        existStaff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Email, syncStaff.IdCard, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
+                        await _staffRepository.UpdateAsync(existStaff);
+                        await _staffDomainService.UpdateAfterAsync(new(existStaff, default));
                     }
                 }
                 else
@@ -770,7 +775,7 @@ public class CommandHandler
                         DisplayName = syncStaff.DisplayName,
                         Enabled = true,
                         Email = syncStaff.Email,
-                        Password = syncStaff.Password,
+                        Password = defaultPassword,
                         PhoneNumber = syncStaff.PhoneNumber,
                         JobNumber = syncStaff.JobNumber,
                         IdCard = syncStaff.IdCard,
@@ -784,24 +789,25 @@ public class CommandHandler
             catch (Exception ex)
             {
                 var errorMsg = ex is UserFriendlyException ? ex.Message : "Unknown exception, please contact the administrator";
-                syncResults[syncStaff.Index] = new()
+                syncResults[i] = new()
                 {
                     JobNumber = syncStaff.JobNumber,
                     Errors = new() { errorMsg }
                 };
             }
-        }
+        }     
 
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
             var func = selector.Compile();
             if (syncStaffs.Where(staff => func(staff) is not null).IsDuplicate(func, out List<SyncStaffDto>? duplicate))
             {
-                foreach (var staff in duplicate)
+                for (var i = 0; i < syncStaffs.Count; i++)
                 {
-                    syncResults[staff.Index] = new()
+                    var staff = syncStaffs[i];
+                    syncResults[i] = new()
                     {
-                        //Account = staff.Account,
+                        JobNumber = staff.JobNumber,
                         Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }
                     };
                 }
