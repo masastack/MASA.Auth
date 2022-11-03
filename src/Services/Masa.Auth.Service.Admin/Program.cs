@@ -66,7 +66,9 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>()));
+var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption));
+builder.Services.AddAuthClientMultilevelCache(redisOption);
 
 await builder.Services
             .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
