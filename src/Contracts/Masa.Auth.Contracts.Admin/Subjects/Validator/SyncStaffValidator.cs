@@ -7,15 +7,13 @@ public class SyncStaffValidator : AbstractValidator<SyncStaffDto>
 {
     public SyncStaffValidator()
     {
-        RuleFor(staff => staff.DisplayName).Required().MaxLength(50);
-        RuleFor(staff => staff.Name).Required().ChineseLetter().MaxLength(20);
-        RuleFor(staff => staff.PhoneNumber).Phone();
+        RuleFor(staff => staff.DisplayName).Required().ChineseLetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(staff => staff.Name).ChineseLetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(staff => staff.PhoneNumber).Required().Phone();
         RuleFor(staff => staff.Email).Email();
         RuleFor(staff => staff.IdCard).IdCard();
-        RuleFor(staff => staff.Position).ChineseLetterNumber().MaxLength(20);
-        RuleFor(staff => staff.Password).AuthPassword();
-        RuleFor(staff => staff.JobNumber).Required();
-        RuleFor(staff => staff.Position).MaxLength(50);
+        RuleFor(staff => staff.Position).ChineseLetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinLength(4).MaxLength(12);         
     }
 }
 

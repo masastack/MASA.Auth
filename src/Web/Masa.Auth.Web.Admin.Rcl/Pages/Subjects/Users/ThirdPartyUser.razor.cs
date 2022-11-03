@@ -128,6 +128,12 @@ public partial class ThirdPartyUser
         Loading = false;
     }
 
+    public async Task ReloadAsync()
+    {
+        await GetThirdPartyUsersAsync();
+        await base.InvokeAsync(StateHasChanged);
+    }
+
     public void OpenViewThirdPartyUserDialog(ThirdPartyUserDto thirdPartyUser)
     {
         CurrentThirdPartyUserId = thirdPartyUser.Id;

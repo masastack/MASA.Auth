@@ -125,6 +125,7 @@
     "VerifyFile": "校验文件",
     "Add ThirdPartyIdp": "新建第三方平台",
     "Edit ThirdPartyIdp": "编辑第三方平台",
+    "Delete ThirdPartyIdp": "删除第三方平台",
     "Please upload ThirdPartyIdp icon": "请上传第三方平台图标",
     "Unique identification of third-party platforms": "第三方平台唯一识别",
     "Failed to query thirdPartyIdpList data:": "查询第三方平台详情列表失败:",
@@ -157,17 +158,19 @@
     "Map all json key": "映射所有 json 键",
     "Advanced configuration": "高级配置",
     "Add custom json key map": "添加自定义json键映射",
-    "Please complete advanced configuration": "请完成高级配置"
+    "Please complete advanced configuration": "请完成高级配置",
+    "Are you sure delete thirdPartyIdp \"{0}\"?": "确定删除第三方平台\"{0}\"吗"
   },
 
   "PositionBlock": {
     "Name": "名称",
     "Add Position": "新建职位",
     "Edit Position": "编辑职位",
+    "Delete Position": "删除职位",
     "Add position success": "新建职位成功",
     "Edit position data success": "编辑职位数据成功",
     "Delete position data success": "删除职位数据成功",
-    "Are you sure delete position data": "确定删除职位数据"
+    "Are you sure delete position \"{0}\"?": "确定删除职位\"{0}\"吗"
   },
 
   "TeamBlock": {
@@ -226,6 +229,7 @@
   "UserBlock": {
     "Add User": "新建用户",
     "Edit User": "编辑用户",
+    "Delete User": "删除用户",
     "UserState": "用户状态",
     "Name": "真实姓名",
     "Avatr": "头像",
@@ -234,7 +238,6 @@
     "Department": "部门",
     "CompanyName": "公司名称",
     "Address": "地区",
-    "Delete User": "删除用户",
     "Failed to query userList data:": "查询用户列表数据失败:",
     "Failed to query userDetail data:": "查询用户详情数据失败:",
     "Add user data success": "新建用户数据成功",
@@ -248,7 +251,7 @@
     "Give him a nickname!": "给Ta取个昵称吧!",
     "Successfully set user permissions": "设置用户权限成功",
     "User roles and permissions settings": "用户角色和权限设置",
-    "Are you sure delete user data": "确认删除用户数据"
+    "Are you sure delete user \"{0}\"?": "确定删除用户\"{0}\"吗"
   },
 
   "StaffBlock": {
@@ -286,7 +289,8 @@
     "Enabled default password": "启用默认密码",
     "Disabled default password": "禁用默认密码",
     "Set it to the default password": "设为默认密码",
-    "Succeeded in setting the password": "设置密码成功"
+    "Succeeded in setting the password": "设置密码成功",
+    "New employee: the password is the default password, editing employee: the password remains the same as the original password.": "新建员工：密码为默认密码，编辑员工：密码维持原密码不变。"
   },
 
   "ThirdPartyUserBlock": {
@@ -334,7 +338,8 @@
     "Add userClaim success": "新建用户声明成功",
     "Delete userClaim data success": "删除用户声明数据成功",
     "Edit userClaim data success": "编辑用户声明数据成功",
-    "Are you sure delete userClaim \"{0}\"?": "确定删除用户声明\"{0}\"吗"
+    "Are you sure delete userClaim \"{0}\"?": "确定删除用户声明\"{0}\"吗",
+    "Name is required": "名称必须填写"
   },
 
   "IdentityResource": "身份资源",
@@ -346,7 +351,7 @@
     "Are you sure create standard identityResources": "新建标准的身份资源",
     "Add standard identityResource data success": "新建标准的身份资源成功",
     "Edit IdentityResource": "编辑身份资源",
-    "Name": "配置名称",
+    "Name": "名称",
     "Required": "是否必须",
     "User Claims": "用户声明",
     "Delete IdentityResource": "删除身份资源",
@@ -354,36 +359,37 @@
     "Delete identityResource data success": "删除身份资源数据成功",
     "Edit identityResource data success": "编辑身份资源数据成功",
     "Are you sure delete identityResource data": "确定删除身份资源吗",
-    "Display Name is required": "显示昵称必须填写",
-    "Name is required": "配置名称必须填写",
+    "Display Name is required": "显示名称必须填写",
+    "Name is required": "名称必须填写",
     "Are you sure delete identityResource \"{0}\"?": "确定删除身份资源\"{0}\"吗"
   },
 
   "ApiScope": "Api范围",
   "ApiScopeBlock": {
-    "Api Scopes": "Api范围",
+    "Api Scope": "Api范围",
     "Add ApiScope": "新建Api范围",
     "Edit ApiScope": "编辑Api范围",
-    "ApiScope.Name": "配置名称",
+    "Name": "名称",
     "ApiScope.Required": "是否必须",
     "Delete ApiScope": "删除Api范围",
     "Are you sure delete apiScope data": "确定删除Api范围吗",
     "Add apiScope success": "新建Api范围成功",
     "Delete apiScope data success": "删除Api范围数据成功",
-    "Edit apiScope data success": "编辑Api范围数据成功"
+    "Edit apiScope data success": "编辑Api范围数据成功",
+    "Are you sure delete apiScope \"{0}\"?": "确定删除Api范围\"{0}\"吗"
   },
 
   "ApiResource": "Api资源",
   "ApiResourceBlock": {
     "Add ApiResource": "新建Api资源",
     "Edit ApiResource": "编辑Api资源",
-    "ApiResource.Name": "配置名称",
+    "Name": "名称",
     "ApiResource.Required": "是否必须",
     "Delete ApiResource": "删除Api资源",
-    "Are you sure delete apiResource data": "确定删除Api资源吗",
     "Add apiResource success": "新建Api资源成功",
     "Delete apiResource data success": "删除Api资源数据成功",
-    "Edit apiResource data success": "编辑Api资源数据成功"
+    "Edit apiResource data success": "编辑Api资源数据成功",
+    "Are you sure delete apiResource \"{0}\"?": "确定删除Api资源\"{0}\"吗"
   },
 
   "Client": "客户端",
@@ -482,7 +488,9 @@
     "Register configuration items are required": "注册配置项必填",
     "Add Custom Login success": "新建自定义登录成功",
     "Delete Custom Login data success": "删除自定义登录数据成功",
-    "Edit Custom Login data success": "编辑自定义登录数据成功"
+    "Edit Custom Login data success": "编辑自定义登录数据成功",
+    "Name is required": "名称必须填写",
+    "Title is required": "标题必须填写"
   },
 
   "OperationLog": "操作日志",
@@ -545,13 +553,13 @@
     "RemovePosition": "删除职位",
     "UpsertAppTag": "编辑应用标签"
   },
-
+  "Line": "行号",
   "Account is required": "账号必须填写",
   "Password is required": "密码必须填写",
   "Job Number is required": "工号必须填写",
   "Display Name is required": "昵称必须填写",
   "Phone Number is required": "手机号必须填写",
-  "Name is required": "名称必须填写",
+  "Client Name is required": "名称必须填写",
   "Client Id is required": "客户端ID必须填写",
   "Client Secret is required": "客户端密钥必须填写",
   "Url is required": "Url地址必须填写",
@@ -565,5 +573,6 @@
   "Email format is incorrect": "邮箱格式错误",
   "Id Card format is incorrect": "身份证号格式错误",
   "Password must contain numbers and letter, and not less than 6 digits": "密码必须包含数字和字母，且长度不小于6位数",
-  "The password is inconsistent with the confirm password": "密码和确认密码不一致"
+  "The password is inconsistent with the confirm password": "密码和确认密码不一致",
+  "When file update,need select file again": "当文件更新时，需要重新选择文件"
 }

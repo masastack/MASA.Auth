@@ -34,7 +34,17 @@ public partial class SyncStaffDialog
         }
     }
 
-    private void OnFileChange(IBrowserFile file)
+    private void OnFileChange(InputFileChangeEventArgs e)
+    {
+        File = e.File;
+    }
+
+    private void OnFileSelect()
+    {
+        File = null;
+    }
+
+    private void OnFileChange(IBrowserFile? file)
     {
         File = file;
     }
@@ -93,19 +103,29 @@ public partial class SyncStaffDialog
 
     private async Task<byte[]> ReadFile(IBrowserFile file)
     {
-        await using var memoryStream = new MemoryStream();
-        using var readStream = file.OpenReadStream(MaxFileSize);
-        var bytesRead = 0;
-        var totalRead = 0;
-        var buffer = new byte[2048];
-
-        while ((bytesRead = await readStream.ReadAsync(buffer)) != 0)
+        try
         {
-            totalRead += bytesRead;
+            await using var memoryStream = new MemoryStream();
+            using var readStream = file.OpenReadStream(MaxFileSize);
+            var bytesRead = 0;
+            var totalRead = 0;
+            var buffer = new byte[2048];
 
-            await memoryStream.WriteAsync(buffer, 0, bytesRead);
+            while ((bytesRead = await readStream.ReadAsync(buffer)) != 0)
+            {
+                totalRead += bytesRead;
+
+                await memoryStream.WriteAsync(buffer, 0, bytesRead);
+            }
+            return memoryStream.ToArray();
         }
-        return memoryStream.ToArray();
+        catch(Exception ex)
+        {
+            if(ex.Message.Contains("The requested file could not be read"))
+                throw new Exception(T("When file update,need select file again"));
+            else
+                throw ex;
+        }       
     }
 }
 

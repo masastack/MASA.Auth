@@ -16,6 +16,7 @@ public class CommandHandler
     readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IUserContext _userContext;
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _distributedCacheClient;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
     readonly ILdapFactory _ldapFactory;
     readonly ILdapIdpRepository _ldapIdpRepository;
@@ -34,6 +35,7 @@ public class CommandHandler
         UserDomainService userDomainService,
         ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMultilevelCacheClient multilevelCacheClient,
+        IDistributedCacheClient distributedCacheClient,
         IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
         ILdapFactory ldapFactory,
@@ -52,6 +54,7 @@ public class CommandHandler
         _userDomainService = userDomainService;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _multilevelCacheClient = multilevelCacheClient;
+        _distributedCacheClient = distributedCacheClient;
         _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
         _ldapFactory = ldapFactory;
@@ -105,7 +108,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
+        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account.WhenNullOrEmptyReplace(userDto.PhoneNumber), !command.WhenExisReturn);
         if (user is not null)
         {
             command.Result = user;
@@ -367,7 +370,7 @@ public class CommandHandler
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
         var key = CacheKey.AccountLoginKey(account);
-        var loginCache = await _multilevelCacheClient.GetAsync<CacheLogin>(key);
+        var loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
         if (loginCache is not null && loginCache.LoginErrorCount >= 5)
         {
             throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
@@ -421,13 +424,13 @@ public class CommandHandler
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
-                await _multilevelCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
                 throw new UserFriendlyException("账号或密码错误");
             }
 
             if (loginCache is not null)
             {
-                await _multilevelCacheClient.RemoveAsync<CacheLogin>(key);
+                await _distributedCacheClient.RemoveAsync<CacheLogin>(key);
             }
             validateByAccountCommand.Result = await UserSplicingDataAsync(user);
         }
@@ -712,12 +715,13 @@ public class CommandHandler
         var syncStaffs = command.Staffs;
         //validation
         var validator = new SyncStaffValidator();
-        foreach (var staff in syncStaffs)
+        for (var i = 0; i < syncStaffs.Count; i++)
         {
+            var staff = syncStaffs[i];
             var result = validator.Validate(staff);
             if (result.IsValid is false)
             {
-                syncResults[staff.Index] = new()
+                syncResults[i] = new()
                 {
                     JobNumber = staff.JobNumber,
                     Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
@@ -731,23 +735,37 @@ public class CommandHandler
         CheckDuplicate(Staff => Staff.IdCard);
         if (syncResults.IsValid) return;
 
+        var defaultPasswordQuery = new StaffDefaultPasswordQuery();
+        await _eventBus.PublishAsync(defaultPasswordQuery);
+        string defaultPassword = defaultPasswordQuery.Result.DefaultPassword.WhenNullOrEmptyReplace(DefaultUserAttributes.Password);
         //sync user
-        var query = new AllUsersQuery();
-        await _eventBus.PublishAsync(query);
-        var allUsers = query.Result;
-        var userRange = new List<User>();
-        foreach (var syncStaff in syncStaffs)
+        for (var i = 0; i < syncStaffs.Count; i++)
         {
+            var syncStaff = syncStaffs[i];
             try
             {
-                var staff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
-                if (staff is not null)
+                var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
+                if (existStaff is not null)
                 {
-                    var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
-                    await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
-                    staff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
-                    await _staffRepository.UpdateAsync(staff);
-                    await _staffDomainService.UpdateAfterAsync(new(staff, default));
+                    if ((existStaff.JobNumber, existStaff.PhoneNumber) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber)))
+                    {
+                        syncResults[i] = new()
+                        {
+                            JobNumber = syncStaff.JobNumber,
+                            Errors = new()
+                            {
+                               $"The mobile phone number of this employee is: {Convert(existStaff.PhoneNumber)}, and the job number is: {Convert(existStaff.JobNumber)}. Does not exactly match imported employee data!"
+                            }
+                        };
+                    }
+                    else
+                    {
+                        var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
+                        await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
+                        existStaff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Email, syncStaff.IdCard, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
+                        await _staffRepository.UpdateAsync(existStaff);
+                        await _staffDomainService.UpdateAfterAsync(new(existStaff, default));
+                    }
                 }
                 else
                 {
@@ -757,7 +775,7 @@ public class CommandHandler
                         DisplayName = syncStaff.DisplayName,
                         Enabled = true,
                         Email = syncStaff.Email,
-                        Password = syncStaff.Password,
+                        Password = defaultPassword,
                         PhoneNumber = syncStaff.PhoneNumber,
                         JobNumber = syncStaff.JobNumber,
                         IdCard = syncStaff.IdCard,
@@ -771,28 +789,34 @@ public class CommandHandler
             catch (Exception ex)
             {
                 var errorMsg = ex is UserFriendlyException ? ex.Message : "Unknown exception, please contact the administrator";
-                syncResults[syncStaff.Index] = new()
+                syncResults[i] = new()
                 {
                     JobNumber = syncStaff.JobNumber,
                     Errors = new() { errorMsg }
                 };
             }
-        }
+        }     
 
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
             var func = selector.Compile();
             if (syncStaffs.Where(staff => func(staff) is not null).IsDuplicate(func, out List<SyncStaffDto>? duplicate))
             {
-                foreach (var staff in duplicate)
+                for (var i = 0; i < syncStaffs.Count; i++)
                 {
-                    syncResults[staff.Index] = new()
+                    var staff = syncStaffs[i];
+                    syncResults[i] = new()
                     {
-                        //Account = staff.Account,
+                        JobNumber = staff.JobNumber,
                         Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }
                     };
                 }
             }
+        }
+
+        string Convert(string? str)
+        {
+            return string.IsNullOrEmpty(str) ? "empty" : str;
         }
     }
 

@@ -233,11 +233,13 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         VerifyPhonNumberEmail(phoneNumber, email);
     }
 
-    public void UpdateBasicInfo(string? name, string displayName, GenderTypes gender, Guid? positionId, StaffTypes staffType)
+    public void UpdateBasicInfo(string? name, string displayName, string? email, string? idCard, GenderTypes gender, Guid? positionId, StaffTypes staffType)
     {
         Name = name;
         PositionId = positionId;
         DisplayName = displayName;
+        Email = email;
+        IdCard = idCard;
         StaffType = staffType;
         Gender = gender;
     }
