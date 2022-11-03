@@ -8,12 +8,9 @@
 {
     <MCard Width=510 Height=680 Class="mx-auto my-auto px-12">
         <MCardTitle>
-            <div style="height:40px;"></div>
-            <span class="h5">
+            <p class="h5 mt-4">
                 @T("Authorize")
-            </span>
-            <p>
-                <span>@_viewModel.ClientName</span>
+                &ensp;<span>@_viewModel.ClientName</span>&ensp;
                 @T("FollowingPermissions")
             </p>
         </MCardTitle>
@@ -55,13 +52,13 @@
         <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">@T("Agree")</MButton>
         <MButton Class="mt-6 rounded-4 text-btn primary--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>@T("Reject")</MButton>
 
-        <div class="col-sm-4 col-lg-auto">
+        <div class="full-width text-center mt-4">
             @if (_viewModel.ClientUrl != null)
             {
-                <a class="btn btn-outline-info" href="@_viewModel.ClientUrl">
-                    <span class="glyphicon glyphicon-info-sign"></span>
-                    <strong>@_viewModel.ClientName</strong>
-                </a>
+                <MButton class="ma-2" Href="@_viewModel.ClientUrl" Outlined Color="indigo">
+                    <MIcon>mdi-keyboard-return</MIcon>
+                    @_viewModel.ClientName
+                </MButton>
             }
         </div>
     </MCard>

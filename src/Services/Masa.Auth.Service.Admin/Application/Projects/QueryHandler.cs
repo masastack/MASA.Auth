@@ -7,14 +7,12 @@ public class QueryHandler
 {
     readonly IPmClient _pmClient;
     readonly IDccClient _dccClient;
-    readonly IAppNavigationTagRepository _appNavigationTagRepository;
     readonly IPermissionRepository _permissionRepository;
     readonly UserDomainService _userDomainService;
     readonly IEnvironmentContext _environmentContext;
 
     public QueryHandler(
         IPmClient pmClient,
-        IAppNavigationTagRepository appNavigationTagRepository,
         IPermissionRepository permissionRepository,
         UserDomainService userDomainService,
         IDccClient dccClient,
@@ -22,7 +20,6 @@ public class QueryHandler
     {
         _pmClient = pmClient;
         _permissionRepository = permissionRepository;
-        _appNavigationTagRepository = appNavigationTagRepository;
         _userDomainService = userDomainService;
         _dccClient = dccClient;
         _environmentContext = environmentContext;
@@ -82,9 +79,9 @@ public class QueryHandler
     {
         var result = new List<ProjectDto>();
         var projects = await _pmClient.ProjectService.GetProjectAppsAsync(env);
+        var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
         if (projects.Any())
         {
-            var appTags = await _appNavigationTagRepository.GetListAsync();
             result = projects.Select(p => new ProjectDto
             {
                 Name = p.Name,
@@ -95,7 +92,7 @@ public class QueryHandler
                     {
                         Name = a.Name,
                         Id = a.Id,
-                        Tag = appTags.FirstOrDefault(at => at.AppIdentity == a.Identity)?.Tag ?? "Uncategorized",
+                        Tag = tags.FirstOrDefault(tag => tag.Code == p.LabelCode)?.Name ?? "Uncategorized",
                         Identity = a.Identity,
                         ProjectId = a.ProjectId,
                         Url = a.Url,
@@ -118,13 +115,5 @@ public class QueryHandler
                 PermissionType = p.Type,
                 Children = GetChildren(p.Id, all, domain ?? "")
             }).ToList();
-    }
-
-    [EventHandler]
-    public async Task AppTagsAsync(AppTagsQuery query)
-    {
-        var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
-        query.Result = tags.Select(t => t.Name).ToList();
-        await Task.CompletedTask;
     }
 }

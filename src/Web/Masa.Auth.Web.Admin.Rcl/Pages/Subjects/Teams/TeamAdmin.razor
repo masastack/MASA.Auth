@@ -3,12 +3,11 @@
 <MCardText>
     <StaffSelect IgnoreValue="IgnoreStaffIds" @bind-Value="Value.Staffs" RoleLimit=RoleLimit Class="mb-6" Label="@T("Team Admin")" />
     <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count RoleLimitChanged="value => RoleLimit=value" Class="mb-6" Label="@T("Role")" />
-    <div class="global-nav" style="height:auto">
+    <div class="global-nav" style="max-height:calc(100vh - 450px);">
         <PermissionExtensionConfigure Roles=Value.Roles
                                       @bind-ExtensionValue="Value.Permissions"
                                       Preview=Preview
                                       PreviewChanged=PreviewChanged
-                                      TagIdPrefix="Admin"
-                                      Style="max-height:calc(100vh - 480px);" />
+                                      TagIdPrefix="Admin"/>
     </div>
 </MCardText>
