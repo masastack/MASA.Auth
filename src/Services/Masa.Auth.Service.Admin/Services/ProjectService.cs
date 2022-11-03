@@ -10,8 +10,6 @@ public class ProjectService : ServiceBase
         MapGet(GetListAsync);
         MapGet(GetUIAndMenusAsync);
         MapGet(GetNavigationListAsync, "navigations");
-        MapGet(GetTagsAsync);
-        MapPost(SaveAppTagAsync);
     }
 
     private async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus)
@@ -33,18 +31,5 @@ public class ProjectService : ServiceBase
         var query = new NavigationListQuery(userId);
         await eventBus.PublishAsync(query);
         return query.Result;
-    }
-
-    private async Task<List<string>> GetTagsAsync(IEventBus eventBus)
-    {
-        var query = new AppTagsQuery();
-        await eventBus.PublishAsync(query);
-        return query.Result;
-    }
-
-    private async Task SaveAppTagAsync(IEventBus eventBus, [FromBody] AppTagDetailDto dto)
-    {
-        var upsertCommand = new UpsertAppTagCommand(dto);
-        await eventBus.PublishAsync(upsertCommand);
     }
 }

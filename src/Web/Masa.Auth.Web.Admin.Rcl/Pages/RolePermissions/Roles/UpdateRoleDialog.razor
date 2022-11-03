@@ -25,12 +25,11 @@
                     </MWindowItem>
                     <MWindowItem Value="UpdateRoleTabs.Permission.ToString()">
                         <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mb-6 mt-1" />
-                        <div class="global-nav" style="display: flex;max-height: calc(100vh - 370px);">
+                        <div class="global-nav" style="display: flex;max-height:calc(100vh - 370px);">
                             <PermissionExtensionConfigure 
                                 Roles=Role.ChildrenRoles 
                                 @bind-ExtensionValue=Role.Permissions
-                                @bind-Preview=Preview
-                                Style="max-height:calc(100vh - 365px);" />
+                                @bind-Preview=Preview/>
                         </div>
                     </MWindowItem>
                 </MWindow>

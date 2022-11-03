@@ -21,14 +21,4 @@ public class ProjectService : ServiceBase
     {
         return await GetAsync<List<ProjectDto>>($"GetUIAndMenus");
     }
-
-    public async Task<List<string>> GetAppTagsAsync()
-    {
-        return await GetAsync<List<string>>($"GetTags");
-    }
-
-    public async Task SaveAppTagAsync(AppTagDetailDto dto)
-    {
-        await PostAsync("SaveAppTag", dto);
-    }
 }

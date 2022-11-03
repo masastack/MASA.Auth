@@ -58,6 +58,8 @@
   "PwdRequired": "Password cannot be empty",
   "UserNameRequired": "UserName cannot be empty",
   "UnknownException": "Unknown exception,Please contact the administrator",
-  "SmsSendTime": "Replays in {0} seconds"
+  "SmsSendTime": "Replays in {0} seconds",
+  "IdCard": "IdCard",
+  "IdCardPlaceHolder": "Place Enter IdCard"
 }
  

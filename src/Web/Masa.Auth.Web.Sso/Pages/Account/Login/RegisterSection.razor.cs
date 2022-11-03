@@ -109,6 +109,13 @@ public partial class RegisterSection
                             ComponentParameters = componentParameters
                         };
                         break;
+                    case RegisterFieldTypes.IdCard:
+                        _registerComponents[RegisterFieldTypes.IdCard] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(IdCard),
+                            ComponentParameters = componentParameters
+                        };
+                        break;
                     default:
                         break;
                 }

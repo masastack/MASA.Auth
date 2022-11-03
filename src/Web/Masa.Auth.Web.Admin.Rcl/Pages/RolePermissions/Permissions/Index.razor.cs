@@ -17,8 +17,6 @@ public partial class Index
     List<AppDto> _curAppItems = new();
     List<SelectItemDto<Guid>> _childApiItems = new();
     MForm _formMenu = default!, _formApi = default!;
-    List<string> _appTags = new();
-    AppTagDetailDto _appTagDto = new();
     AddMenuPermission _addMenuPermission = null!;
     AddApiPermission _addApiPermission = null!;
 
@@ -38,7 +36,6 @@ public partial class Index
                 return;
             }
             await SelectProjectItem(_projectItems.First());
-            await GetAppTags();
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -66,14 +63,6 @@ public partial class Index
             {
                 RemoveAll(menu.Children, match);
             }
-        }
-    }
-
-    private async Task GetAppTags()
-    {
-        if (!_appTags.Any())
-        {
-            _appTags = await ProjectService.GetAppTagsAsync();
         }
     }
 
@@ -152,16 +141,10 @@ public partial class Index
             var curItem = activeItems.First();
             if (curItem.IsPermission)
             {
-                _appTagDto = new AppTagDetailDto();
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
             }
             else
             {
-                _appTagDto = new AppTagDetailDto
-                {
-                    AppIdentity = curItem.AppId,
-                    Tag = curItem.AppTag
-                };
                 _menuPermissionDetailDto = new();
             }
         }
@@ -179,16 +162,10 @@ public partial class Index
             _showApiInfo = true;
             if (curItem.IsPermission)
             {
-                _appTagDto = new();
                 _apiPermissionDetailDto = await PermissionService.GetApiPermissionDetailAsync(curItem.Id);
             }
             else
             {
-                _appTagDto = new AppTagDetailDto
-                {
-                    AppIdentity = curItem.AppId,
-                    Tag = curItem.AppTag
-                };
                 _apiPermissionDetailDto = new();
             }
         }
@@ -260,15 +237,5 @@ public partial class Index
             await PermissionService.RemoveAsync(id);
             await InitAppPermissions();
         }
-    }
-
-    private async Task SaveAppTag(AppTagDetailDto appTagDto)
-    {
-        if (string.IsNullOrEmpty(appTagDto.Tag) || string.IsNullOrEmpty(appTagDto.AppIdentity))
-        {
-            OpenWarningMessage(T("Tag or appid is empty"));
-            return;
-        }
-        await ProjectService.SaveAppTagAsync(appTagDto);
     }
 }

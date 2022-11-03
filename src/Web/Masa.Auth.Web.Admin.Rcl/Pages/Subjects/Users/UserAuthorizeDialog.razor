@@ -29,14 +29,13 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <div class="global-nav" style="display: flex;height: auto">
+            <div class="global-nav" style="display: flex;max-height:calc(100vh - 406px);">
                 <PermissionExtensionConfigure
                                 User=UserId
                                 Teams=Teams
                                 Roles=Authorization.Roles
                                 @bind-ExtensionValue=Authorization.Permissions 
-                                @bind-Preview=Preview
-                                Style="max-height:calc(100vh - 406px);" />
+                                @bind-Preview=Preview/>
             </div>
         </AutoHeightContent>
         <FooterContent>

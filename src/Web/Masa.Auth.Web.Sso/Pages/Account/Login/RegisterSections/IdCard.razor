@@ -1,0 +1,30 @@
+﻿@inherits SsoSectionComponentBase
+
+<MTextField @bind-Value="Value.IdCard" Label="@T("IdCard")"
+            Placeholder="@T("IdCardPlaceHolder")" Outlined Rules="_idCardRules">
+</MTextField>
+
+@code {
+    [Parameter]
+    public RegisterInputModel Value { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<RegisterInputModel> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; }
+
+    private IList<Func<string, StringBoolean>> _idCardRules => new List<Func<string, StringBoolean>>
+    {
+        value => Regex.Match(value, LoginOptions.IdCard).Success ? true : "Invalid IdCard."
+    };
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Required)
+        {
+            _idCardRules.Add(value => !string.IsNullOrEmpty(value) ? true : "Required.");
+        }
+        base.OnAfterRender(firstRender);
+    }
+}

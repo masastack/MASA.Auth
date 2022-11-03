@@ -37,15 +37,21 @@
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
 
+    ClientScopesDto _dto = new();
+
     ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
     IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        await LoadIdentityResources();
-        await LoadApiResources();
-        await base.OnInitializedAsync();
+        if (_dto.GetHashCode()!=Dto.GetHashCode())
+        {
+            _dto = Dto;
+            await LoadIdentityResources();
+            await LoadApiResources();
+        }
+        await base.OnParametersSetAsync();
     }
 
     private async Task LoadIdentityResources()
