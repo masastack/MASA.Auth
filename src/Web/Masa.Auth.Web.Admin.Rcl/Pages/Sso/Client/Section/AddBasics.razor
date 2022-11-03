@@ -11,7 +11,7 @@
         <STextField Required @bind-Value="Dto.ClientName" Label="@T("ClientName")" Tooltip="@T("ClientNameTips")" />
     </MCol>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+        <SUrlTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
     </MCol>
     <MCol Md=6>
         <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
