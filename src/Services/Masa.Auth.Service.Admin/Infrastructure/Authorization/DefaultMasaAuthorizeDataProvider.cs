@@ -14,13 +14,13 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
         _eventBus = eventBus;
     }
 
-    public Task<string> GetAccountAsync()
+    public Task<IEnumerable<string>> GetRolesAsync()
     {
-        var account = _userContext.UserName ?? "";
-        return Task.FromResult(account);
+        var roles = _userContext.GetUserRoles<string>();
+        return Task.FromResult(roles);
     }
 
-    public async Task<IEnumerable<string>> GetAllowCodeListAsync(string appId, Guid userId)
+    public async Task<IEnumerable<string>> GetAllowCodesAsync(string appId, Guid userId)
     {
         if (userId == Guid.Empty)
         {
@@ -30,7 +30,7 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
         {
             return Enumerable.Empty<string>();
         }
-        var permissionQuery = new UserElementPermissionCodeQuery(appId, userId);
+        var permissionQuery = new UserApiPermissionCodeQuery(appId, userId);
         await _eventBus.PublishAsync(permissionQuery);
         return permissionQuery.Result;
     }

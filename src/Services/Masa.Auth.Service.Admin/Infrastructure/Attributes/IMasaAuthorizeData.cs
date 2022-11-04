@@ -6,6 +6,4 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Attributes;
 public interface IMasaAuthorizeData
 {
     public string Code { get; set; }
-
-    public string Account { get; set; }
 }
