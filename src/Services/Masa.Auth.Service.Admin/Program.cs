@@ -34,6 +34,9 @@ builder.Services.AddMasaIdentity(options =>
     options.Environment = "environment";
     options.UserName = "name";
     options.UserId = "sub";
+    options.Mapping(nameof(MasaUser.CurrentTeamId), IdentityClaimConsts.CURRENT_TEAM);
+    options.Mapping(nameof(MasaUser.StaffId), IdentityClaimConsts.STAFF);
+    options.Mapping(nameof(MasaUser.Account), IdentityClaimConsts.ACCOUNT);
 });
 builder.Services
     .AddScoped<EnvironmentMiddleware>()
