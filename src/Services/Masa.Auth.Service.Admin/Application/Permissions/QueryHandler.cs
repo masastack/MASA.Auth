@@ -47,7 +47,7 @@ public class QueryHandler
                                    .Take(query.PageSize)
                                    .ToListAsync();
 
-        query.Result = new(total, roles.Select(role => 
+        query.Result = new(total, roles.Select(role =>
         {
             var dto = (RoleDto)role;
             var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier).Result;
@@ -396,11 +396,11 @@ public class QueryHandler
         }
         var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
         await _eventBus.PublishAsync(permissionByTeamQuery);
-        var roles = await _authDbContext.Set<UserRole>()
+        var roles = await _authDbContext.Set<UserRole>().AsNoTracking()
                                         .Where(ur => ur.UserId == query.User)
                                         .Select(ur => ur.RoleId)
                                         .ToListAsync();
-        var permissions = await _authDbContext.Set<UserPermission>()
+        var permissions = await _authDbContext.Set<UserPermission>().AsNoTracking()
                                               .Where(up => up.UserId == query.User)
                                               .ToListAsync();
         var rejectPermisisons = permissions.Where(permission => permission.Effect == false)
@@ -411,32 +411,32 @@ public class QueryHandler
                                 .Union(permissions.Select(permission => permission.PermissionId))
                                 .Union(permissionByTeamQuery.Result)
                                 .Where(permission => rejectPermisisons.All(rp => rp != permission));
-        query.Result.AddRange(userPermission);
+        var apiPermissions = await _authDbContext.Set<PermissionRelation>().AsNoTracking()
+                .Where(pr => userPermission.Contains(pr.ParentPermissionId))
+                .Select(pr => pr.ChildPermissionId).ToListAsync();
+        query.Result.AddRange(userPermission.Union(apiPermissions));
     }
 
     [EventHandler]
-    public async Task GetUserElementPermissionCodeQueryAsync(UserElementPermissionCodeQuery userElementPermissionCodeQuery)
+    public async Task GetUserApiPermissionCodeQueryAsync(UserApiPermissionCodeQuery userApiPermissionCodeQuery)
     {
-        var userId = userElementPermissionCodeQuery.UserId;
-        var appId = userElementPermissionCodeQuery.AppId;
-        var cacheKey = CacheKey.UserElementPermissionCodeKey(userId, appId);
+        var userId = userApiPermissionCodeQuery.UserId;
+        var appId = userApiPermissionCodeQuery.AppId;
+        var cacheKey = CacheKey.UserApiPermissionCodeKey(userId, appId);
 
-        userElementPermissionCodeQuery.Result = (await _multilevelCacheClient.GetOrSetAsync(cacheKey, new CombinedCacheEntry<List<string>>
+        userApiPermissionCodeQuery.Result = (await _multilevelCacheClient.GetOrSetAsync(cacheKey, new CombinedCacheEntry<List<string>>
         {
             DistributedCacheEntryFunc = () =>
             {
                 var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
                 return new CacheEntry<List<string>>(_permissionRepository.GetPermissionCodes(p => p.AppId == appId
-                                    && p.Type == PermissionTypes.Element && userPermissionIds.Contains(p.Id) && p.Enabled))
+                                    && p.Type == PermissionTypes.Api && userPermissionIds.Contains(p.Id) && p.Enabled))
                 {
                     SlidingExpiration = TimeSpan.FromSeconds(5)
                 };
             },
             MemoryCacheEntryOptions = new CacheEntryOptions(TimeSpan.FromSeconds(5))
         }))!;
-
-        //temporary allow all api route
-        userElementPermissionCodeQuery.Result.Add("*");
     }
 
     #endregion

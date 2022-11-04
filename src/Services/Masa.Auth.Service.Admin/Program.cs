@@ -37,13 +37,14 @@ builder.Services.AddMasaIdentity(options =>
 });
 builder.Services
     .AddScoped<EnvironmentMiddleware>()
-    .AddScoped<MasaAuthorizeMiddleware>()
     .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
+    .AddSingleton<IAuthorizationHandler, DefaultRuleCodeAuthorizationHandler>()
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
     .AddAuthorization(options =>
     {
         var unexpiredPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
+            // Remove if you don't need the user to be authenticated
+            .RequireAuthenticatedUser()
             .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
             .Build();
         options.DefaultPolicy = unexpiredPolicy;
@@ -182,7 +183,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<EnvironmentMiddleware>();
-app.UseMiddleware<MasaAuthorizeMiddleware>();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>

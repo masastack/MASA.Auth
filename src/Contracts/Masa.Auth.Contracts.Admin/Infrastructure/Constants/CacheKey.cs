@@ -18,7 +18,7 @@ public static class CacheKey
     const string MSG_CODE_FOR_BIND = "msg_code_bind:";
     const string MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER = "msg_code_verifiy_user_phoneNumber:";
     const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_result:";
-    const string USER_ELEMENT_PERMISSION_CODE_PRE = "user_element_permission_code:";
+    const string USER_API_PERMISSION_CODE_PRE = "user_api_permission_code:";
     const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
     const string EMAIL_BIND_CODE_PRE = "email_bind_code:";
     const string EMAIL_BIND_SEND_CODE_PRE = "email_bind_send_code:";
@@ -158,8 +158,8 @@ public static class CacheKey
         return $"{VERIFIY_USER_PHONENUMBER_RESULT}{userId}{phoneNumber}";
     }
 
-    public static string UserElementPermissionCodeKey(Guid userId, string appId)
+    public static string UserApiPermissionCodeKey(Guid userId, string appId)
     {
-        return $"{USER_ELEMENT_PERMISSION_CODE_PRE}{userId}:{appId}";
+        return $"{USER_API_PERMISSION_CODE_PRE}{userId}:{appId}";
     }
 }

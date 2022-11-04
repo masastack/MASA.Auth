@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
-public record UserElementPermissionCodeQuery(string AppId, Guid UserId) : Query<List<string>>
+public record UserApiPermissionCodeQuery(string AppId, Guid UserId) : Query<List<string>>
 {
     public override List<string> Result { get; set; } = new();
 }
