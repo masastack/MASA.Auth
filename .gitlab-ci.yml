@@ -60,7 +60,8 @@ deploy-dev:
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_DEV
   retry: 2
-  
+  when: manual
+   
 deploy-dev-ali:
   stage: deploy-dev
   tags:
@@ -75,6 +76,7 @@ deploy-dev-ali:
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n masa-auth-dev-new
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n masa-auth-dev-new
   retry: 2
+  when: manual
   
 deploy-test-ali:
   stage: deploy-test
