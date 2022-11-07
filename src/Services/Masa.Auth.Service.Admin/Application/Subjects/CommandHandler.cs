@@ -515,6 +515,8 @@ public class CommandHandler
                 throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
                 throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
+            if (string.IsNullOrEmpty(account) && phoneNumber == exitUser.Account)
+                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
         }
         return exitUser;
     }

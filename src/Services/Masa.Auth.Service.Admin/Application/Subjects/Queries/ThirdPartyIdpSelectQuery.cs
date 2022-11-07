@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record ThirdPartyIdpSelectQuery(string? Search) : Query<List<ThirdPartyIdpSelectDto>>
+public record ThirdPartyIdpSelectQuery(string? Search,bool IncludeLdap = false) : Query<List<ThirdPartyIdpSelectDto>>
 {
     public override List<ThirdPartyIdpSelectDto> Result { get; set; } = new();
 }
