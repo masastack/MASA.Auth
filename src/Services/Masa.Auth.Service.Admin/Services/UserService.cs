@@ -52,6 +52,7 @@ public class UserService : ServiceBase
         return command.Result.Adapt<UserModel>();
     }
 
+    [AllowAnonymous]
     [RoutePattern("upsertExternal", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<UserModel> UpsertExternalAsync(IEventBus eventBus, [FromBody] UpsertUserModel model)
     {

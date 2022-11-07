@@ -9,19 +9,25 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly IHttpContextAccessor _contextAccessor;
+    readonly ISsoEnvironmentProvider _ssoEnvironmentProvider;
 
-    public AuthenticationExternalHandler(IAuthClient authClient, IIdentityServerInteractionService interaction, IEventService events, IHttpContextAccessor contextAccessor)
+    public AuthenticationExternalHandler(IAuthClient authClient, IIdentityServerInteractionService interaction, IEventService events, IHttpContextAccessor contextAccessor, IEnvironmentProvider environmentProvider)
     {
         _authClient = authClient;
         _interaction = interaction;
         _events = events;
         _contextAccessor = contextAccessor;
+        _ssoEnvironmentProvider = (ISsoEnvironmentProvider)environmentProvider;
     }
 
     public async Task<bool> OnHandleAuthenticateAfterAsync(AuthenticateResult result)
     {
         var scheme = result.Properties?.Items?["scheme"] ?? throw new UserFriendlyException("Unknown third party");
         var identity = IdentityProvider.GetIdentity(scheme, result.Principal ?? throw new UserFriendlyException("Authenticate failed"));
+        result.Properties.Items.TryGetValue("environment", out var environment);
+        environment ??= "development";
+        _ssoEnvironmentProvider.SetEnvironment(environment);
+        var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
         var userModel = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
         {
             ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(scheme),
@@ -30,8 +36,6 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         if (userModel is not null)
         {
             ProcessLoginCallback(result, out var additionalLocalClaims, out var localSignInProps);
-            result.Properties.Items.TryGetValue("environment", out var environment);
-            environment ??= "development";
             additionalLocalClaims.Add(new Claim("environment", environment));
             additionalLocalClaims.Add(new Claim("userName", userModel.Account));
             additionalLocalClaims.Add(new Claim("role", JsonSerializer.Serialize(userModel.Roles.Select(role => role.Code))));
@@ -40,8 +44,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
                 DisplayName = userModel.DisplayName,
                 IdentityProvider = scheme,
                 AdditionalClaims = additionalLocalClaims
-            };
-            var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
+            };           
             await httpContext.SignInAsync(isuser, localSignInProps);
             await httpContext.SingOutExternalAsync();
 
@@ -54,7 +57,6 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         }
         else
         {
-            var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
             httpContext.Response.Redirect($"/account/user/bind");
             return false;
         }

@@ -7,7 +7,9 @@ public class AddStaffValidator : AbstractValidator<AddStaffDto>
 {
     public AddStaffValidator()
     {
-        RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinLength(4).MaxLength(12);
+        RuleFor(staff => staff.JobNumber)
+            .NotEmpty().WithMessage("NickName is required")
+            .LetterNumber().MinLength(4).MaxLength(12);
         RuleFor(staff => staff.DisplayName).Required().ChineseLetterNumber().MinLength(2).MaxLength(50);
         RuleFor(staff => staff.Name).ChineseLetterNumber().MinLength(2).MaxLength(50);
         RuleFor(staff => staff.PhoneNumber).Required().Phone();

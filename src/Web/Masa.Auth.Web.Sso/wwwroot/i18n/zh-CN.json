@@ -45,7 +45,6 @@
   "PhoneCodePrompt": "短信验证码无效",
   "EmailRegister": "邮箱注册",
   "PhoneRegister": "手机注册",
-  "Captcha": "验证码",
   "RegistrationSuccess": "注册成功",
   "ReplenishInfo": "完善资料",
   "Sure": "确定",
@@ -63,7 +62,7 @@
   "UserNameRequired": "用户名不能为空",
   "UnknownException": "未知异常，请联系管理员",
   "SmsSendTime": "{0}秒后可重发",
-
   "Password not equal ConfirmPassword": "两次输入密码不相同",
-  "The verification code is sent successfully": "发送验证码成功"
+  "The verification code is sent successfully": "发送验证码成功",
+  "Bind": "绑定"
 }

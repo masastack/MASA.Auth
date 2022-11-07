@@ -19,6 +19,11 @@ public partial class RoleSelectForUser : RoleSelect
         Roles = await RoleService.GetSelectForUserAsync(UserId);
     }
 
-    protected override bool RoleDisabled(RoleSelectDto role) => role.Limit != 0 && role.AvailableQuantity <= 0;
+    protected override bool RoleDisabled(RoleSelectDto role)
+    {
+        if (role is not null)
+            return role.Limit != 0 && role.AvailableQuantity <= 0;
+        else return false;
+    }
 }
 

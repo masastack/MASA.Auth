@@ -7,15 +7,9 @@ public class UpdateUserPasswordCommandValidator : AbstractValidator<UpdateUserPa
 {
     public UpdateUserPasswordCommandValidator()
     {
-        RuleFor(command => command.User.OldPassword).Required()
-                              .Matches(BusinessConsts.PASSWORD_REGULAR)
-                              .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                              .MaxLength(30);
+        RuleFor(command => command.User.OldPassword).AuthPassword();
 
-        RuleFor(command => command.User.NewPassword).Required()
-                      .Matches(BusinessConsts.PASSWORD_REGULAR)
-                      .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                      .MaxLength(30);
+        RuleFor(command => command.User.NewPassword).Required().AuthPassword();
 
         RuleFor(command => command.User.NewPassword)
                 .NotEmpty()
