@@ -691,7 +691,8 @@ public class QueryHandler
                 {
                     v.UserVisited,
                     Permission = p
-                }).GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
+                })
+                .GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
                 {
                     Permission = p.Permission,
                     AppModels = a
