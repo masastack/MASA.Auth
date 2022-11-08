@@ -30,37 +30,37 @@ public class DccSeed
 
     private string GetRedisConfig(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "$public.RedisConfig.txt", environment);
+        var filePath = CombineFilePath(contentRootPath, "$public.RedisConfig.json", environment);
         return File.ReadAllText(filePath);
     }
 
     private string GetAppSettings(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "$public.AppSettings.txt", environment);
+        var filePath = CombineFilePath(contentRootPath, "$public.AppSettings.json", environment);
         return File.ReadAllText(filePath);
     }
 
     private string GetOidc(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "$public.Oidc.txt", environment);
+        var filePath = CombineFilePath(contentRootPath, "$public.Oidc.json", environment);
         return File.ReadAllText(filePath);
     }
 
     private string GetOss(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "$public.Oss.txt", environment);
+        var filePath = CombineFilePath(contentRootPath, "$public.Oss.json", environment);
         return File.ReadAllText(filePath);
     }
 
     private string GetClient(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "ClientSeed.txt", environment);
+        var filePath = CombineFilePath(contentRootPath, "ClientSeed.json", environment);
         return File.ReadAllText(filePath);
     }
 
     private string GetESUserAutoComplete(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "$public.ES.UserAutoComplete.txt", environment);
+        var filePath = CombineFilePath(contentRootPath, "$public.ES.UserAutoComplete.json", environment);
         return File.ReadAllText(filePath);
     }
 
