@@ -20,6 +20,9 @@ public class DccSeed
             { "$public.Oidc",GetOidc(contentRootPath,environment) },
             { "$public.Oss",GetOss(contentRootPath,environment) },
             { "$public.ES.UserAutoComplete",GetESUserAutoComplete(contentRootPath,environment) },
+            { "$public.AliyunPhoneNumberLogin",GetAliyunPhoneNumberLogin(contentRootPath,environment) },
+            { "$public.Email",GetEmail(contentRootPath,environment) },
+            { "$public.Sms",GetSms(contentRootPath,environment) },
         });
 
         await configurationApiManage.AddAsync(environment, "default", "masa-auth-service-admin", new Dictionary<string, string>
@@ -61,6 +64,24 @@ public class DccSeed
     private string GetESUserAutoComplete(string contentRootPath, string environment)
     {
         var filePath = CombineFilePath(contentRootPath, "$public.ES.UserAutoComplete.json", environment);
+        return File.ReadAllText(filePath);
+    }
+
+    private string GetAliyunPhoneNumberLogin(string contentRootPath, string environment)
+    {
+        var filePath = CombineFilePath(contentRootPath, "$public.AliyunPhoneNumberLogin.json", environment);
+        return File.ReadAllText(filePath);
+    }
+
+    private string GetEmail(string contentRootPath, string environment)
+    {
+        var filePath = CombineFilePath(contentRootPath, "$public.Email.json", environment);
+        return File.ReadAllText(filePath);
+    }
+
+    private string GetSms(string contentRootPath, string environment)
+    {
+        var filePath = CombineFilePath(contentRootPath, "$public.Sms.json", environment);
         return File.ReadAllText(filePath);
     }
 
