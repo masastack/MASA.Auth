@@ -676,34 +676,34 @@ public class QueryHandler
     [EventHandler]
     public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
     {
-        //var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
-        //var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
-        //if (visited != null)
-        //{
-        //    var apps = await _pmClient.AppService.GetListAsync();
-        //    //todo cache
-        //    var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
-        //        v => new { v.AppId, Url = v.Url.ToLower().Trim('/') }, p => new { p.AppId, Url = p.Url.ToLower().Trim('/') }, (v, p) => new
-        //        {
-        //            UserVisited = v,
-        //            Permissions = p
-        //        }).SelectMany(x => x.Permissions.DefaultIfEmpty(), (v, p) => new
-        //        {
-        //            v.UserVisited,
-        //            Permission = p
-        //        }).GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
-        //        {
-        //            Permission = p.Permission,
-        //            AppModels = a
-        //        }).SelectMany(x => x.AppModels.DefaultIfEmpty(), (p, a) =>
-        //           new KeyValuePair<string, string>($"{a?.Url.TrimEnd('/')}/{p.Permission?.Url.TrimStart('/')}", p.Permission?.Name ?? "")
-        //        ).ToList();
-        //    userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
-        //    {
-        //        Url = v.Key,
-        //        Name = v.Value
-        //    }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
-        //}
+        var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
+        var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
+        if (visited != null)
+        {
+            var apps = await _pmClient.AppService.GetListAsync();
+            //todo cache
+            var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
+                v => new { v.AppId, Url = v.Url.ToLower().Trim('/') }, p => new { p.AppId, Url = p.Url.ToLower().Trim('/') }, (v, p) => new
+                {
+                    UserVisited = v,
+                    Permissions = p
+                }).SelectMany(x => x.Permissions.DefaultIfEmpty(), (v, p) => new
+                {
+                    v.UserVisited,
+                    Permission = p
+                }).GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
+                {
+                    Permission = p.Permission,
+                    AppModels = a
+                }).SelectMany(x => x.AppModels.DefaultIfEmpty(), (p, a) =>
+                   new KeyValuePair<string, string>($"{a?.Url.TrimEnd('/')}/{p.Permission?.Url.TrimStart('/')}", p.Permission?.Name ?? "")
+                ).ToList();
+            userVisitedListQuery.Result = menus.Select(v => new UserVisitedModel
+            {
+                Url = v.Key,
+                Name = v.Value
+            }).Where(v => !string.IsNullOrEmpty(v.Name)).ToList();
+        }
     }
 
     [EventHandler]

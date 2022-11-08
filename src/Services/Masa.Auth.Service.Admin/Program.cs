@@ -2,8 +2,13 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.AddObservability();
+
+builder.Services.AddMasaConfiguration(configurationBuilder =>
+{
+    configurationBuilder.UseDcc();
+});
+await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
 builder.Services.AddDaprStarter(opt =>
@@ -15,10 +20,7 @@ builder.Services.AddDaprStarter(opt =>
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
+
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
@@ -70,6 +72,7 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
+
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption));
 builder.Services.AddAuthClientMultilevelCache(redisOption);

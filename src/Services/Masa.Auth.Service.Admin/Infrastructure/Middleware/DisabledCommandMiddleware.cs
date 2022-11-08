@@ -18,7 +18,7 @@ public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
     public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
     {
         var user = _userContext.GetUser<MasaUser>();
-        if (user?.Account == "Guest" && @event is ICommand)
+        if (user?.Account == "admin" && @event is ICommand)
         {
             _logger.LogWarning("Guest operation");
             throw new UserFriendlyException("演示账号禁止操作");

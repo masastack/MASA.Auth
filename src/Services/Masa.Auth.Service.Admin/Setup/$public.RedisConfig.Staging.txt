@@ -1,0 +1,11 @@
+{
+  "Servers": [
+    {
+      "Host": "redis-test-svc.stack",
+      "Port": "6379"
+    }
+  ],
+  "DefaultDatabase": 0,
+  "Password": "p@ssw0rd",
+  "SyncTimeout": 60000
+}

@@ -1,0 +1,8 @@
+{
+  "Name": "auth",
+  "Nodes": [
+    "http://es-dev.lonsid.cn:31100"
+  ],
+  "Alias": "",
+  "Index": "auth_user_staging"
+}
