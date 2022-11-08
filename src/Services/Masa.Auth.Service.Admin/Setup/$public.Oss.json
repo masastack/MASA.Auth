@@ -1,0 +1,9 @@
+{
+  "AccessId": "xxxxxxxxxxxxxxx",
+  "AccessSecret": "XXXXXXXXXXXXXXXXX",
+  "Bucket": "masa-cdn-dev",
+  "Endpoint": "oss-cn-hangzhou.aliyuncs.com",
+  "RoleArn": "xxxxxxxxxxxxxxxxxxxxx",
+  "RoleSessionName": "SessionTest",
+  "RegionId": "cn-hangzhou"
+}

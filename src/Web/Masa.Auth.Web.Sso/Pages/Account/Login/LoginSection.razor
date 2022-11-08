@@ -84,7 +84,7 @@
     <div class="text-center">
         @foreach (var thirdPartyIdp in _customLoginModel.ThirdPartyIdps)
         {
-            <MAvatar Size="30" Class="hover-pointer ml-4">
+            <MAvatar Size="30" Class="hover-pointer mx-1">
                 <img src="@thirdPartyIdp.Icon" @onclick="() => NavigateToThirdParty(thirdPartyIdp.Name)" />
             </MAvatar>
         }

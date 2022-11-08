@@ -62,6 +62,9 @@
   "UserNameRequired": "用户名不能为空",
   "UnknownException": "未知异常，请联系管理员",
   "SmsSendTime": "{0}秒后可重发",
+  "IdCard": "身份证",
+  "IdCardPlaceHolder": "请输入身份证号",
+
   "Password not equal ConfirmPassword": "两次输入密码不相同",
   "The verification code is sent successfully": "发送验证码成功",
   "Bind": "绑定"

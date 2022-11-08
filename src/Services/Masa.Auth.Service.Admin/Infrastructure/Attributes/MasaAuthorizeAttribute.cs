@@ -4,21 +4,23 @@
 namespace Masa.Auth.Service.Admin.Infrastructure.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class MasaAuthorizeAttribute : Attribute, IMasaAuthorizeData
+public sealed class MasaAuthorizeAttribute : AuthorizeAttribute, IMasaAuthorizeData
 {
     public string Code { get; set; }
-
-    public string Account { get; set; }
 
     public MasaAuthorizeAttribute()
     {
         Code = string.Empty;
-        Account = string.Empty;
     }
 
     public MasaAuthorizeAttribute(string code)
     {
         Code = code;
-        Account = string.Empty;
+    }
+
+    public MasaAuthorizeAttribute(params string[] roles)
+    {
+        Code = string.Empty;
+        Roles = string.Join(',', roles);
     }
 }

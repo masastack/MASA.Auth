@@ -6,7 +6,7 @@
             <MCol Md=12 Class="emphasis2--text">
                 @T("IdentityResource")
             </MCol>
-            @foreach (var identityScope in Dto.IdentityScopes)
+            @foreach (var identityScope in Dto.IdentityResources)
             {
                 <MCol Md=6 Class="py-0">
                     <MCheckbox Disabled="ClientConsts.MandatoryResource.Contains(identityScope.Id)" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
@@ -37,21 +37,27 @@
     [Parameter]
     public EventCallback<ClientScopesDto> DtoChanged { get; set; }
 
-    ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
+    ClientScopesDto _dto = new();
+
+    ApiScopeService ApiScopeService => AuthCaller.ApiScopeService;
 
     IdentityResourceService IdentityResourceService => AuthCaller.IdentityResourceService;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        await LoadIdentityResources();
-        await LoadApiResources();
-        await base.OnInitializedAsync();
+        if (_dto.GetHashCode()!=Dto.GetHashCode())
+        {
+            _dto = Dto;
+            await LoadIdentityResources();
+            await LoadApiScopes();
+        }
+        await base.OnParametersSetAsync();
     }
 
     private async Task LoadIdentityResources()
     {
         var identityResources = await IdentityResourceService.GetSelectAsync();
-        Dto.IdentityScopes = identityResources.Select(ir => new CheckItemDto<string>
+        Dto.IdentityResources = identityResources.Select(ir => new CheckItemDto<string>
             {
                 DisplayValue = $"{ir.DisplayName} ({ir.Name})",
                 Selected = Dto._AllowedScopes.Contains(ir.Name) || ClientConsts.MandatoryResource.Contains(ir.Name),
@@ -59,10 +65,10 @@
             }).ToList();
     }
 
-    private async Task LoadApiResources()
+    private async Task LoadApiScopes()
     {
-        var apiResources = await ApiResourceService.GetSelectAsync();
-        Dto.ApiScopes = apiResources.Select(ar => new CheckItemDto<string>
+        var apiScopes = await ApiScopeService.GetSelectAsync();
+        Dto.ApiScopes = apiScopes.Select(ar => new CheckItemDto<string>
             {
                 DisplayValue = $"{ar.DisplayName} ({ar.Name})",
                 Selected = Dto._AllowedScopes.Contains(ar.Name),

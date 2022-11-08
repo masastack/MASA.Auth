@@ -36,6 +36,8 @@ public partial class UpdateClientDialog
         _clientDetailDto.Adapt(_deviceFlowDto);
         _clientDetailDto.Adapt(_tokenDto);
         _clientDetailDto.Adapt(_clientCredentialDto);
+        //new object trigger to OnParametersSetAsync
+        _clientScopesDto = new();
         _clientDetailDto.Adapt(_clientScopesDto);
 
         PrepareHeader();

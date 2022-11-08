@@ -26,7 +26,6 @@ public class _HostAuthModel : PageModel
                 if (HttpContext.Request.Query.ContainsKey("ReturnUrl"))
                 {
                     var returnUrl = HttpContext.Request.Query["ReturnUrl"];
-                    var d = await _identityServerInteractionService.GetAuthorizationContextAsync(returnUrl);
                     if (!_ssoAuthenticationStateCache.HasAuthorizationRequest(returnUrl))
                     {
                         _ssoAuthenticationStateCache.AddAuthorizationContext(returnUrl, await _identityServerInteractionService.GetAuthorizationContextAsync(returnUrl));

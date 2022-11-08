@@ -96,9 +96,9 @@ public class PermissionExtensionConfigure : PermissionsConfigure
                 foreach (var app in category.Apps)
                 {
                     app.Navs = FilterScopePermission(app.Navs);
-                }                
+                }
             }
-        }        
+        }
 
         List<Nav> FilterScopePermission(List<Nav> navs)
         {

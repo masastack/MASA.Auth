@@ -2,8 +2,13 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.AddObservability();
+
+builder.Services.AddMasaConfiguration(configurationBuilder =>
+{
+    configurationBuilder.UseDcc();
+});
+await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
 //builder.Services.AddDaprStarter(opt =>
@@ -15,10 +20,7 @@ builder.AddObservability();
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
+
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
@@ -34,16 +36,20 @@ builder.Services.AddMasaIdentity(options =>
     options.Environment = "environment";
     options.UserName = "name";
     options.UserId = "sub";
+    options.Mapping(nameof(MasaUser.CurrentTeamId), IdentityClaimConsts.CURRENT_TEAM);
+    options.Mapping(nameof(MasaUser.StaffId), IdentityClaimConsts.STAFF);
+    options.Mapping(nameof(MasaUser.Account), IdentityClaimConsts.ACCOUNT);
 });
 builder.Services
     .AddScoped<EnvironmentMiddleware>()
-    .AddScoped<MasaAuthorizeMiddleware>()
     .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
+    .AddSingleton<IAuthorizationHandler, DefaultRuleCodeAuthorizationHandler>()
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
     .AddAuthorization(options =>
     {
         var unexpiredPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser() // Remove if you don't need the user to be authenticated
+            // Remove if you don't need the user to be authenticated
+            .RequireAuthenticatedUser()
             .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
             .Build();
         options.DefaultPolicy = unexpiredPolicy;
@@ -66,6 +72,7 @@ builder.Services
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
+
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption));
 builder.Services.AddAuthClientMultilevelCache(redisOption);
@@ -182,7 +189,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<EnvironmentMiddleware>();
-app.UseMiddleware<MasaAuthorizeMiddleware>();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>

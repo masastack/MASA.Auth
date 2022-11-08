@@ -1,0 +1,6 @@
+{
+  "Authority": "https://sso-develop.masastack.com",
+  "ClientId": "masa.stack.web-development",
+  "ClientSecret": "",
+  "Scopes": []
+}

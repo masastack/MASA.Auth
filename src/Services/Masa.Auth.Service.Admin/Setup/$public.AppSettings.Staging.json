@@ -1,0 +1,15 @@
+{
+  "PmClient": {
+    "Url": "https://pm-service-staging.masastack.com"
+  },
+  "SchedulerClient": {
+    "Url": "https://scheduler-service-server-staging.masastack.com/"
+  },
+  "AuthClient": {
+    "Url": "https://auth-service-staging.masastack.com/"
+  },
+  "McClient": {
+    "Url": "https://mc-service-staging.masastack.com"
+  },
+  "IdentityServerUrl": "https://sso-staging.masastack.com"
+}

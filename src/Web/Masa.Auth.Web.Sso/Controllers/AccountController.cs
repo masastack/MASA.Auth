@@ -81,6 +81,8 @@ public class AccountController : Controller
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(user.Roles.Select(r => r.Code))));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.CURRENT_TEAM, (user.CurrentTeamId ?? Guid.Empty).ToString()));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.STAFF, (user.StaffId ?? Guid.Empty).ToString()));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber ?? ""));
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.EMAIL, user.Email ?? ""));
 
                 //us sign in
                 await HttpContext.SignInAsync(isuser, props);

@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class ClientScopesDto
 {
-    public List<CheckItemDto<string>> IdentityScopes { get; set; } = new();
+    public List<CheckItemDto<string>> IdentityResources { get; set; } = new();
 
     public List<CheckItemDto<string>> ApiScopes { get; set; } = new();
 
@@ -15,8 +15,13 @@ public class ClientScopesDto
     {
         get
         {
-            return IdentityScopes.Union(ApiScopes).Where(s => s.Selected)
-                .Select(s => s.Id).Union(_AllowedScopes).ToList();
+            var allScopes = IdentityResources.Union(ApiScopes);
+            var allowedScopes = _AllowedScopes.Where(x => allScopes.Any(s => s.Selected && s.Id == x)).ToList();
+            if (allowedScopes.Any())
+            {
+                return allScopes.Where(s => s.Selected).Select(s => s.Id).Union(allowedScopes).ToList();
+            }
+            return _AllowedScopes;
         }
         set
         {

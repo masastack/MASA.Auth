@@ -10,7 +10,6 @@ public class UserService : ServiceBase
         RouteOptions.DisableAutoMapRoute = false;
     }
 
-    [MasaAuthorize]
     public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
     {
         var query = new UsersQuery(user.Page, user.PageSize, user.UserId, user.Enabled, user.StartTime, user.EndTime);

@@ -83,6 +83,7 @@ public class CommandHandler
                 }
                 break;
             case SendEmailTypes.Verifiy:
+            case SendEmailTypes.UpdateEmail:
             case SendEmailTypes.ForgotPassword:
                 if (!_userRepository.Any(u => u.Email == model.Email))
                 {

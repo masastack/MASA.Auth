@@ -17,6 +17,7 @@ public class TeamService : ServiceBase
         MapDelete(RemoveAsync);
     }
 
+    [Authorize]
     private async Task CreateAsync(IEventBus eventBus, [FromBody] AddTeamDto addTeamDto)
     {
         await eventBus.PublishAsync(new AddTeamCommand(addTeamDto));

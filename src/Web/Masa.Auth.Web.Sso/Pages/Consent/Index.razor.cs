@@ -13,6 +13,9 @@ public partial class Index
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;
 
+    [Inject]
+    public IResourceStore ResourceStore { get; set; } = null!;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

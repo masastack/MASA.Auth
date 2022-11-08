@@ -1,25 +1,28 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
+namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
+
+public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
+    where TEvent : notnull, IEvent
 {
-    public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
-        where TEvent : notnull, IEvent
+    readonly ILogger<DisabledCommandMiddleware<TEvent>> _logger;
+    readonly IUserContext _userContext;
+
+    public DisabledCommandMiddleware(ILogger<DisabledCommandMiddleware<TEvent>> logger, IUserContext userContext)
     {
-        readonly IUserContext _userContext;
+        _logger = logger;
+        _userContext = userContext;
+    }
 
-        public DisabledCommandMiddleware(IUserContext userContext)
+    public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
+    {
+        var user = _userContext.GetUser<MasaUser>();
+        if (user?.Account == "Guest" && @event is ICommand)
         {
-            _userContext = userContext;
+            _logger.LogWarning("Guest operation");
+            throw new UserFriendlyException("演示账号禁止操作");
         }
-
-        public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
-        {
-            if (_userContext.UserName == "Guest" && @event is ICommand)
-            {
-                throw new UserFriendlyException("演示账号禁止操作");
-            }
-            await next();
-        }
+        await next();
     }
 }
