@@ -97,10 +97,8 @@ public class PermissionExtensionConfigure : PermissionsConfigure
                 {
                     app.Navs = FilterScopePermission(app.Navs);
                 }
-                category.Apps.ForEach(a => a.Hiden = a.Navs.All(n => n.Hiden));
             }
         }
-        _categories.ForEach(c => c.Hiden = c.Apps.All(a => a.Hiden));
 
         List<Nav> FilterScopePermission(List<Nav> navs)
         {

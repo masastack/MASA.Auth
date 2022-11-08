@@ -1,0 +1,11 @@
+{
+  "Servers": [
+    {
+      "Host": "10.175.207.202",
+      "Port": "30260"
+    }
+  ],
+  "DefaultDatabase": 0,
+  "Password": "Hzss@123redis",
+  "SyncTimeout": 6000
+}
