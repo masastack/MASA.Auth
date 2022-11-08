@@ -683,7 +683,7 @@ public class QueryHandler
             var apps = await _pmClient.AppService.GetListAsync();
             //todo cache
             var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
-                v => new { v.AppId, Url = v.Url.ToLower().Trim('/') }, p => new { p.AppId, Url = p.Url?.ToLower().Trim('/') ?? "" }, (v, p) => new
+                v => new { v.AppId, Url = v.Url.ToLower().Trim('/') }, p => new { p.AppId, Url = p.Url.ToLower().Trim('/') }, (v, p) => new
                 {
                     UserVisited = v,
                     Permissions = p
@@ -691,7 +691,8 @@ public class QueryHandler
                 {
                     v.UserVisited,
                     Permission = p
-                }).GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
+                })
+                .GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
                 {
                     Permission = p.Permission,
                     AppModels = a
