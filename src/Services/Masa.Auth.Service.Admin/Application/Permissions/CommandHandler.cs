@@ -44,7 +44,7 @@ public class CommandHandler
                 var error = "";
                 if (role.Name == roleDto.Name) error += $"Role with Name {roleDto.Name} already exists;";
                 if (role.Code == roleDto.Code) error += $"Role with Code {roleDto.Code} already exists;";
-                throw new UserFriendlyException(error);
+                if (error != "") throw new UserFriendlyException(error);
             }
         }
 
