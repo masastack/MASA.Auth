@@ -97,9 +97,9 @@ public class UserCacheCommandHandler
             AppId = dto.AppId,
             Url = dto.Url.Trim('/').ToLower()
         };
-        visited?.RemoveAll(v => v.AppId == item.AppId && v.Url == item.Url);
-        visited?.Insert(0, item);
-        if (visited?.Count > 10)
+        visited.RemoveAll(v => v.AppId == item.AppId && v.Url == item.Url);
+        visited.Insert(0, item);
+        if (visited.Count > 10)
         {
             visited = visited.GetRange(0, 10);
         }

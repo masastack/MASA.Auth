@@ -87,8 +87,8 @@ public class DccSeed
 
     private string CombineFilePath(string contentRootPath, string fileName, string environment)
     {
-        string extension = Path.GetExtension(fileName);
-        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+        var extension = Path.GetExtension(fileName);
+        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
         var environmentFileName = $"{fileNameWithoutExtension}.{environment}{extension}";
         var environmentFilePath = Path.Combine(contentRootPath, "Setup", environmentFileName);
         if (File.Exists(environmentFilePath))
