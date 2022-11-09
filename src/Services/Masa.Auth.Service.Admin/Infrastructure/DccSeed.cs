@@ -23,11 +23,7 @@ public class DccSeed
             { "$public.AliyunPhoneNumberLogin",GetAliyunPhoneNumberLogin(contentRootPath,environment) },
             { "$public.Email",GetEmail(contentRootPath,environment) },
             { "$public.Sms",GetSms(contentRootPath,environment) },
-        });
-
-        await configurationApiManage.AddAsync(environment, "default", "masa-auth-service-admin", new Dictionary<string, string>
-        {
-            {"ClientSeed",GetClient(contentRootPath,environment)  }
+            { "$public.Clients",GetClient(contentRootPath,environment) }
         });
     }
 
