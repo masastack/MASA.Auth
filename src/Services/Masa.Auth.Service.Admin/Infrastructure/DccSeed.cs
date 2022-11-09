@@ -25,6 +25,7 @@ public class DccSeed
             { "$public.Sms",GetSms(contentRootPath,environment) },
             { "$public.Clients",GetClient(contentRootPath,environment) }
         });
+        Console.WriteLine("==========Dcc Seed Completed==========");
     }
 
     private string GetRedisConfig(string contentRootPath, string environment)
@@ -53,7 +54,7 @@ public class DccSeed
 
     private string GetClient(string contentRootPath, string environment)
     {
-        var filePath = CombineFilePath(contentRootPath, "ClientSeed.json", environment);
+        var filePath = CombineFilePath(contentRootPath, "$public.Clients.json", environment);
         return File.ReadAllText(filePath);
     }
 
