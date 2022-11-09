@@ -19,9 +19,9 @@ public class ThirdPartyIdpService : ServiceBase
         return await SendAsync<GetThirdPartyIdpsDto, PaginationDto<ThirdPartyIdpDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<List<ThirdPartyIdpSelectDto>> GetSelectAsync(string? search = null)
+    public async Task<List<ThirdPartyIdpSelectDto>> GetSelectAsync(string? search = null, bool includeLdap = false)
     {
-        return await SendAsync<object, List<ThirdPartyIdpSelectDto>>(nameof(GetSelectAsync), new { search });
+        return await SendAsync<object, List<ThirdPartyIdpSelectDto>>(nameof(GetSelectAsync), new { search, includeLdap });
     }
 
     public async Task<List<ThirdPartyIdpModel>> GetExternalThirdPartyIdpsAsync()

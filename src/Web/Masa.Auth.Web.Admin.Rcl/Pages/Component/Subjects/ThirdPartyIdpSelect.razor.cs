@@ -43,7 +43,7 @@ public partial class ThirdPartyIdpSelect
     public async Task InitThirdPartyIdps()
     {
         ThirdPartyIdps = new();
-        ThirdPartyIdps.AddRange(await ThirdPartyIdpService.GetSelectAsync());
+        ThirdPartyIdps.AddRange(await ThirdPartyIdpService.GetSelectAsync(default, true));
     }
 }
 

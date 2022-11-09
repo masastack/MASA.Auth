@@ -5,12 +5,14 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Environment;
 
 public class SsoEnvironmentProvider : ISsoEnvironmentProvider
 {
-    AsyncLocal<string> _environment = new AsyncLocal<string>();
+    string? _environment;
 
-    public string GetEnvironment() => _environment.Value ?? "";
-
-    public void SetEnvironment(string env)
+    public SsoEnvironmentProvider()
     {
-        _environment.Value = env;
+
     }
+
+    public string GetEnvironment() => _environment ?? "";
+
+    public void SetEnvironment(string env) => _environment = env;
 }

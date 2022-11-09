@@ -108,7 +108,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account.WhenNullOrEmptyReplace(userDto.PhoneNumber), !command.WhenExisReturn);
+        var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
         if (user is not null)
         {
             command.Result = user;
@@ -187,7 +187,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        if (!user.VerifyPassword(userModel.OldPassword ?? ""))
+        if (string.IsNullOrEmpty(userModel.OldPassword) is false && !user.VerifyPassword(userModel.OldPassword ?? ""))
         {
             throw new UserFriendlyException("password verification failed");
         }
@@ -434,6 +434,8 @@ public class CommandHandler
             }
             validateByAccountCommand.Result = await UserSplicingDataAsync(user);
         }
+        else
+            throw new UserFriendlyException($"不存在账号为[{account}]的用户");
     }
 
     async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
@@ -499,7 +501,9 @@ public class CommandHandler
             condition = condition2.And(condition);
         }
 
-        var exitUser = await _userRepository.FindAsync(condition);
+        var exitUser = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .FirstOrDefaultAsync(condition);
         if (exitUser is not null)
         {
             if (throwException is false) return exitUser;
@@ -511,6 +515,8 @@ public class CommandHandler
                 throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
                 throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
+            if (string.IsNullOrEmpty(account) && phoneNumber == exitUser.Account)
+                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
         }
         return exitUser;
     }

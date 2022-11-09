@@ -299,9 +299,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         Password = password;
     }
 
-    public bool VerifyPassword(string? password)
+    public bool VerifyPassword(string password)
     {
-        return string.IsNullOrEmpty(Password) || Password == MD5Utils.EncryptRepeat(password ?? "");
+        return string.IsNullOrEmpty(password) is false && Password == MD5Utils.EncryptRepeat(password ?? "");
     }
 
     public void AddRoles(IEnumerable<Guid> roleIds)

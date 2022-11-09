@@ -3,10 +3,17 @@
 @if (Avatars.Count > 0)
 {
     <DefaultTitle>@T("Authorization certification")</DefaultTitle>
-    <div>
+    <div class="d-flex">
         @foreach (var avatar in Avatars)
         {
-            <img height=24 width=24 src="@avatar" class="ml-7" />
+            if(avatar.StartsWith("mdi"))
+            {
+                <MIcon Size="24" Class="my-auto">@avatar</MIcon>
+            }
+            else
+            {
+                <img height=24 width=24 src="@avatar" class="ml-4 my-auto" />
+            }         
         }
     </div>
 }

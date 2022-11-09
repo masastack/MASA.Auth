@@ -37,9 +37,9 @@ public class ThirdPartyIdpService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<List<ThirdPartyIdpSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string? search)
+    private async Task<List<ThirdPartyIdpSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string? search, [FromQuery] bool includeLdap)
     {
-        var query = new ThirdPartyIdpSelectQuery(search);
+        var query = new ThirdPartyIdpSelectQuery(search, includeLdap);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
