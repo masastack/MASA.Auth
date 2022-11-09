@@ -66,5 +66,6 @@
   "IdCardPlaceHolder": "请输入身份证号",
 
   "Password not equal ConfirmPassword": "两次输入密码不相同",
-  "The verification code is sent successfully": "发送验证码成功"
+  "The verification code is sent successfully": "发送验证码成功",
+  "Bind": "绑定"
 }

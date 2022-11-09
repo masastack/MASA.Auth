@@ -18,4 +18,10 @@ public class AliyunController : Controller
     {
         return _localLoginByPhoneNumberAgent.GetAuthTokenAsync();
     }
+
+    [HttpGet("aliyun/phoneWithToken")]
+    public GetPhoneWithTokenResponse? GetPhoneWithToken([FromQuery] string token)
+    {
+        return _localLoginByPhoneNumberAgent.GetPhoneWithToken(token);
+    }
 }

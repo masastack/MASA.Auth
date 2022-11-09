@@ -8,15 +8,15 @@ public class UserCacheCommandHandler
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IUserRepository _userRepository;
 
-    public UserCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient, IUserRepository userRepository)
+    public UserCacheCommandHandler(AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider, IUserRepository userRepository)
     {
-        _multilevelCacheClient = multilevelCacheClient;
+        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _userRepository = userRepository;
     }
 
     async Task SetUserListCacheAsync(IEnumerable<User> users)
     {
-        var map = users.ToDictionary(u => CacheKey.UserKey(u.Id), u => u.Adapt<CacheUser>());
+        var map = users.ToDictionary(u => CacheKeyConsts.UserKey(u.Id), u => u.Adapt<UserModel>());
         await _multilevelCacheClient.SetListAsync(map);
     }
 
@@ -25,13 +25,13 @@ public class UserCacheCommandHandler
         var user = await _userRepository.GetDetailAsync(userId);
         if (user is not null)
         {
-            await _multilevelCacheClient.SetAsync(CacheKey.UserKey(userId), user.Adapt<CacheUser>());
+            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), user.Adapt<UserModel>());
         }
     }
 
     async Task RemoveUserCahceAsync(Guid userId)
     {
-        await _multilevelCacheClient.RemoveAsync<CacheUser>(CacheKey.UserKey(userId));
+        await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKeyConsts.UserKey(userId));
     }
 
     [EventHandler(99)]

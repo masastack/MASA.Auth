@@ -9,12 +9,18 @@ public partial class UserBind
     private string? _captchaText;
     bool _smsloading;
     bool _loginLoading;
+    string? _environment;
 
     [Inject]
     public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
 
+    public HttpContext HttpContext => HttpContextAccessor.HttpContext!;
+
     [Inject]
     public IAuthClient AuthClient { get; set; } = default!;
+
+    [Inject]
+    public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
 
     public RegisterThirdPartyUserModel UserModel { get; set; } = new();
 
@@ -27,8 +33,9 @@ public partial class UserBind
 
     protected override async Task OnInitializedAsync()
     {
-        var httpContext = HttpContextAccessor.HttpContext!;
-        var identity = await httpContext.GetExternalIdentityAsync();
+        var identity = await HttpContext.GetExternalIdentityAsync();
+        identity.Properties.TryGetValue("environment", out _environment);
+        (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(_environment ?? "development");
         UserModel = new RegisterThirdPartyUserModel
         {
             ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(identity.Issuer),
@@ -90,10 +97,20 @@ public partial class UserBind
         if (context.Validate())
         {
             _loginLoading = true;
-            await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
-            Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-            _loginLoading = false;
-            await PopupService.ToastSuccessAsync("Login success");
+            try
+            {
+                await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
+                Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
+                await PopupService.AlertAsync("Login success", AlertTypes.Success);
+            }
+            catch(Exception ex)
+            {
+                await PopupService.AlertAsync(ex.Message, AlertTypes.Success);
+            }
+            finally
+            {
+                _loginLoading = false;
+            }
         }
     }
 }

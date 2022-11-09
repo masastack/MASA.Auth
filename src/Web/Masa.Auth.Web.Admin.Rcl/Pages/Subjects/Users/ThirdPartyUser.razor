@@ -7,9 +7,9 @@
             <div>
                 <SearchTextField @bind-Value="Search" />
             </div>           
-            <div @onclick="() => Filter = !Filter" class="ml-4 d-flex button">
+            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
-                    @(Filter ? "mdi-filter" : "mdi-filter-off")
+                    @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
                 </MIcon>
             </div>
             <SButton Small Class="ml-4" OnClick=OpenLdapDialog BorderRadiusClass="rounded-lg">
@@ -17,26 +17,22 @@
                 <span class="ml-2 btn">@T("Ldap")</span>
             </SButton>
         </div>
-        @if (Filter)
-        {
-            <div class="d-flex mt-6">
-                <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <MRow class="ml-6">
-                    <MCol Md=4>
-                        <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
-                    </MCol>
-                    <MCol Md=4>
-                        <ThirdPartyIdpSelect @bind-Value="ThirdPartyId" Small Label="@T("Source")" />
-                    </MCol>
-                </MRow>
-
-            </div>
-        }
+        <div id="userFilter" class="@FilterClass">
+            <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+            <MRow class="ml-6">
+                <MCol Md=4>
+                    <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
+                </MCol>
+                <MCol Md=4>
+                    <ThirdPartyIdpSelect @bind-Value="ThirdPartyId" Small Label="@T("Source")" />
+                </MCol>
+            </MRow>
+        </div>
     </HeaderContent>
     <AutoHeightContent>
         <SDataTable
             Dense
-            Height="@("calc(100vh - 285px)")"
+            Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
             Headers="GetHeaders()" 
             Items="ThirdPartyUsers" 
             TItem="ThirdPartyUserDto" 

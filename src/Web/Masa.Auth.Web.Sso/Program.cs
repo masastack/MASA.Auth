@@ -10,6 +10,9 @@ builder.WebHost.UseKestrel(option =>
     options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
 });
 
+Console.WriteLine("================");
+Console.WriteLine(builder.Environment.EnvironmentName);
+
 // Add services to the container.
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
@@ -43,6 +46,7 @@ builder.Services.AddAuthClient(publicConfiguration);
 
 builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
+
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();

@@ -78,6 +78,6 @@
     </FooterContent>
 </AutoHeight>
 
-<AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=GetUserAsync />
+<AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=OnAddUserSuccessAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=UpdateStaffAndThirdPartyUserAsync />
 <UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />

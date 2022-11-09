@@ -14,6 +14,7 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IMultilevelCacheClient _authClientMultilevelCacheClient;
     readonly IPmClient _pmClient;
 
     public QueryHandler(
@@ -26,6 +27,7 @@ public class QueryHandler
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
         IMultilevelCacheClient multilevelCacheClient,
+        AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient)
     {
         _userRepository = userRepository;
@@ -37,6 +39,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
         _multilevelCacheClient = multilevelCacheClient;
+        _authClientMultilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
     }
 
@@ -77,8 +80,8 @@ public class QueryHandler
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
-        var creator = await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(user.Creator));
-        var modifier = await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(user.Modifier));
+        var creator = await _authClientMultilevelCacheClient.GetUserAsync(user.Creator);
+        var modifier = await _authClientMultilevelCacheClient.GetUserAsync(user.Modifier);
         var userDetail = await UserSplicingDataAsync(user);
         query.Result = userDetail!;
         query.Result.Creator = creator?.DisplayName;
@@ -161,13 +164,13 @@ public class QueryHandler
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
-            var userCache = await _multilevelCacheClient.GetAsync<CacheUser>(CacheKey.UserKey(userId));
+            var userCache = await _authClientMultilevelCacheClient.GetUserAsync(userId);
             if (userCache != null)
             {
                 userPortraitsQuery.Result.Add(new UserPortraitModel
                 {
                     Id = userId,
-                    Name = userCache.Name,
+                    Name = userCache.Name ?? "",
                     DisplayName = userCache.DisplayName,
                     Avatar = userCache.Avatar,
                     Account = userCache.Account
@@ -489,8 +492,13 @@ public class QueryHandler
         if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
-
         query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Icon, tpIdp.AuthenticationType)).ToList();
+        if (query.IncludeLdap)
+        {
+            var ldap = (await _ldapIdpRepository.GetListAsync()).FirstOrDefault();
+            if (ldap is not null)
+                query.Result.Add(new ThirdPartyIdpSelectDto(ldap.Id, ldap.Name, ldap.DisplayName, "", "", ldap.Icon, default));
+        }
     }
 
     [EventHandler]
@@ -545,7 +553,7 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            var modifierName = _multilevelCacheClient.Get<CacheUser>(CacheKey.UserKey(team.Modifier))?.DisplayName ?? "";
+            var modifierName = _authClientMultilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier))?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 
@@ -691,7 +699,8 @@ public class QueryHandler
                 {
                     v.UserVisited,
                     Permission = p
-                }).GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
+                })
+                .GroupJoin(apps, p => p.Permission?.AppId, a => a.Identity, (p, a) => new
                 {
                     Permission = p.Permission,
                     AppModels = a

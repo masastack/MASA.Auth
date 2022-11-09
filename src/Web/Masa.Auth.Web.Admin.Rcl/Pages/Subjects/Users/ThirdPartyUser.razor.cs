@@ -90,7 +90,7 @@ public partial class ThirdPartyUser
         }
     }
 
-    public bool Filter { get; set; }
+    public bool? Filter { get; set; }
 
     public long Total { get; set; }
 
@@ -101,6 +101,8 @@ public partial class ThirdPartyUser
     public bool ViewThirdPartyUserDialog { get; set; }
 
     private ThirdPartyUserService ThirdPartyUserService => AuthCaller.ThirdPartyUserService;
+
+    public string FilterClass => Filter is true ? "d-flex show showAnimation" : (Filter is false ? "d-flex close closeAnimation" : "hide");
 
     protected override async Task OnInitializedAsync()
     {
