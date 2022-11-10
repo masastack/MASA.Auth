@@ -105,7 +105,7 @@ public partial class UserBind
             }
             catch (Exception ex)
             {
-                await PopupService.AlertAsync(ex.Message, AlertTypes.Success);
+                await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
             }
             finally
             {
