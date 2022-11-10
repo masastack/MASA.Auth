@@ -64,6 +64,7 @@
   "SmsSendTime": "{0}秒后可重发",
   "IdCard": "身份证",
   "IdCardPlaceHolder": "请输入身份证号",
+  "Bind success": "绑定用户成功",
 
   "Password not equal ConfirmPassword": "两次输入密码不相同",
   "The verification code is sent successfully": "发送验证码成功",

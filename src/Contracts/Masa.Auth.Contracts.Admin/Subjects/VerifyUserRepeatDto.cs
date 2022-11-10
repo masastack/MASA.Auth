@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class VerifyUserRepeatDto
+public class VerifyUserRepeatDto : FromUri<VerifyUserRepeatDto>
 {
     public Guid? Id { get; set; }
 

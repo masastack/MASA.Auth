@@ -7,7 +7,9 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
 {
     public AddUserValidator()
     {
-        RuleFor(user => user.DisplayName).Required().ChineseLetterNumber().MaxLength(50);
+        RuleFor(user => user.DisplayName)
+           .NotEmpty().WithMessage("NickName is required")
+           .Required().ChineseLetterNumber().MaxLength(50);
         RuleFor(user => user.Name).ChineseLetterNumber().MaxLength(50);
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();

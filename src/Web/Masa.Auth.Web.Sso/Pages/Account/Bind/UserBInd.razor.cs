@@ -27,7 +27,7 @@ public partial class UserBind
     [NotNull]
     private string? CaptchaText
     {
-        get => (_captchaText == "0" || _captchaText == null) ? T("Captcha") : _captchaText;
+        get => (_captchaText == "0" || _captchaText == null) ? T("GetSmsCode") : string.Format(T("SmsSendTime"), _captchaText);
         set => _captchaText = value;
     }
 
@@ -69,7 +69,7 @@ public partial class UserBind
 
     private async Task SendCaptcha(FormContext context)
     {
-        if (CaptchaText != T("Captcha")) return;
+        if (CaptchaText != T("GetSmsCode")) return;
         var field = context.EditContext.Field(nameof(UserModel.PhoneNumber));
         context.EditContext.NotifyFieldChanged(field);
         var result = context.EditContext.GetValidationMessages(field);
@@ -101,9 +101,9 @@ public partial class UserBind
             {
                 await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
                 Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-                await PopupService.AlertAsync("Login success", AlertTypes.Success);
+                await PopupService.AlertAsync("Bind success", AlertTypes.Success);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await PopupService.AlertAsync(ex.Message, AlertTypes.Success);
             }
