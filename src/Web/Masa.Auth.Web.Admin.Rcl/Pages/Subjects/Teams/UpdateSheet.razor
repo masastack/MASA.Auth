@@ -25,7 +25,7 @@
         <MSpacer />
         @if (_tabs.IndexOf(_tab)>0)  
         {
-            <SButton Medium Class="mr-4" OnClick="()=>{_adminPreview = true;}">@T("Preview")</SButton>
+            <SButton Outlined Medium Class="mr-4" OnClick="OnPreview">@T("Preview")</SButton>
         }
         <SButton Medium MinWidth="100" OnClick="OnUpdateHandler">@T("Save")</SButton>
     </MCardActions>
