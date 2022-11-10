@@ -8,7 +8,7 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-//await new DccSeed().SeedAsync(builder);
+await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
 //builder.Services.AddDaprStarter(opt =>
@@ -147,7 +147,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        defaultConfiguration.GetSection("ClientSeed").Get<ClientModel>().Adapt<Client>()
+        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
