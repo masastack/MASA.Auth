@@ -11,11 +11,11 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
-//builder.Services.AddDaprStarter(opt =>
-//{
-//    opt.DaprHttpPort = 3600;
-//    opt.DaprGrpcPort = 3601;
-//});
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
 #endif
 
 builder.Services.AddAutoInject();
