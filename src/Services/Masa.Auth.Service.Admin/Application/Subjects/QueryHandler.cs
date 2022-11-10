@@ -185,6 +185,51 @@ public class QueryHandler
         query.Result = await _authDbContext.Set<User>().AnyAsync(user => user.Id == query.UserId && user.Password != null && user.Password != "");
     }
 
+    [EventHandler(1)]
+    public async Task VerifyUserRepeatAsync(VerifyUserRepeatQuery command)
+    {
+        var user = command.User;
+        await VerifyUserRepeatAsync(user.Id, user.PhoneNumber, user.Email, user.IdCard, user.Account);
+        command.Result = true;
+    }
+
+    private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
+    {
+        Expression<Func<User, bool>> condition = user => false;
+        if (!string.IsNullOrEmpty(account))
+            condition = condition.Or(user => user.Account == account);
+        if (!string.IsNullOrEmpty(phoneNumber))
+            condition = condition.Or(user => user.PhoneNumber == phoneNumber);
+        if (!string.IsNullOrEmpty(email))
+            condition = condition.Or(user => user.Email == email);
+        if (!string.IsNullOrEmpty(idCard))
+            condition = condition.Or(user => user.IdCard == idCard);
+        if (userId is not null)
+        {
+            Expression<Func<User, bool>> condition2 = user => user.Id != userId;
+            condition = condition2.And(condition);
+        }
+
+        var exitUser = await _authDbContext.Set<User>()
+                                           .Include(u => u.Roles)
+                                           .FirstOrDefaultAsync(condition);
+        if (exitUser is not null)
+        {
+            if (throwException is false) return exitUser;
+            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
+                throw new UserFriendlyException($"User with phone number [{phoneNumber}] already exists");
+            if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
+                throw new UserFriendlyException($"User with email [{email}] already exists");
+            if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
+                throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
+            if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
+                throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
+            if (string.IsNullOrEmpty(account) && phoneNumber == exitUser.Account)
+                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
+        }
+        return exitUser;
+    }
+
     #endregion
 
     #region Staff

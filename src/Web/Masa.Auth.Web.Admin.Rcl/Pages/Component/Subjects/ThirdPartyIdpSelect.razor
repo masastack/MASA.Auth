@@ -11,9 +11,16 @@
                Class="@($"{Class}")">
     <ItemContent Context="data">
         <div class="d-flex" style="height:48px;">
-            <MAvatar Size="30" >
-                <img src="@data.Item.Icon" />
-            </MAvatar>
+            @if (data.Item.Name == LdapConsts.LDAP_NAME)
+            {
+                <MIcon Size="30">@data.Item.Icon</MIcon>
+            }
+            else
+            {
+                <MAvatar Size=30>
+                    <img src="@data.Item.Icon" />
+                </MAvatar>
+            }
             <div class="my-auto">
                 <span class="body2 emphasis2--text ml-2">@data.Item.Name</span> 
             </div>                      

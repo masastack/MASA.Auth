@@ -54,7 +54,7 @@ public class UserService : ServiceBase
 
     public async Task<bool> VerifyRepeatAsync(VerifyUserRepeatDto user)
     {
-        return await PostAsync<VerifyUserRepeatDto, bool>(nameof(VerifyRepeatAsync), user);
+        return await GetAsync<VerifyUserRepeatDto, bool>(nameof(VerifyRepeatAsync), user);
     }
 }
 

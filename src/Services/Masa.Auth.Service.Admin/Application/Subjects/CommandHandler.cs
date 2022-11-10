@@ -452,14 +452,6 @@ public class CommandHandler
         return userDetailDto;
     }
 
-    [EventHandler(1)]
-    public async Task VerifyUserRepeatAsync(VerifyUserRepeatCommand command)
-    {
-        var user = command.User;
-        await VerifyUserRepeatAsync(user.Id, user.PhoneNumber, user.Email, user.IdCard, user.Account);
-        command.Result = true;
-    }
-
     [EventHandler]
     public async Task SyncUserAutoCompleteAsync(SyncUserAutoCompleteCommand command)
     {
