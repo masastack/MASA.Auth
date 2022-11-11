@@ -16,13 +16,14 @@ public class PermissionValidator : IPermissionValidator
 
     public bool Validate(string code, ClaimsPrincipal user)
     {
-        var userId = _userContext.GetUserId<Guid>();
-        var codes = new List<string>();
-        //todo change Async and use redis
-        Task.Run(async () =>
-        {
-            codes = await _permissionService.GetElementPermissionsAsync(userId, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID);
-        }).Wait();
-        return codes.Contains(code);
+        //var userId = _userContext.GetUserId<Guid>();
+        //var codes = new List<string>();
+        ////todo change Async and use redis
+        //Task.Run(async () =>
+        //{
+        //    codes = await _permissionService.GetElementPermissionsAsync(userId, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID);
+        //}).Wait();
+        //return codes.Contains(code);
+        return true;
     }
 }
