@@ -68,6 +68,17 @@ builder.Services
         options.MapInboundClaims = false;
     });
 
+// needed to load configuration from appsettings.json
+builder.Services.AddOptions();
+// needed to store rate limit counters and ip rules
+builder.Services.AddMemoryCache();
+//load general configuration from appsettings.json
+builder.Services.Configure<ClientRateLimitOptions>(builder.Services.GetMasaConfiguration().Local.GetSection("ClientRateLimiting"));
+// inject counter and rules stores
+builder.Services.AddInMemoryRateLimiting();
+// configuration (resolvers, counter key builders)
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
@@ -146,7 +157,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
+        //publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
@@ -181,13 +192,13 @@ if (!app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<EnvironmentMiddleware>();
+app.UseClientRateLimiting();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
