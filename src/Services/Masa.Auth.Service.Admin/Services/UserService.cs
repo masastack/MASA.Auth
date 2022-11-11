@@ -67,11 +67,11 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
-    public async Task<bool> PostVerifyRepeatAsync(IEventBus eventBus, [FromBody] VerifyUserRepeatDto user)
+    public async Task<bool> GetVerifyRepeatAsync(IEventBus eventBus, VerifyUserRepeatDto user)
     {
-        var command = new VerifyUserRepeatCommand(user);
-        await eventBus.PublishAsync(command);
-        return command.Result;
+        var query = new VerifyUserRepeatQuery(user);
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 
     public async Task AddAsync(IEventBus eventBus, [FromBody] AddUserDto dto)

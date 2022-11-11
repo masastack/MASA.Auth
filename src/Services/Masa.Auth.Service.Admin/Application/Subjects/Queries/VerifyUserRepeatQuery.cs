@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record VerifyUserRepeatCommand(VerifyUserRepeatDto User) : Command
+public record VerifyUserRepeatQuery(VerifyUserRepeatDto User) : Query<bool>
 {
-    public bool Result { get; set; }
+    public override bool Result { get; set; }
 }
