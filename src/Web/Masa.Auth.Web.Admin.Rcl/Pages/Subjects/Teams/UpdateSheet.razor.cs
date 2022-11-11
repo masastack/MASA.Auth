@@ -28,6 +28,18 @@ public partial class UpdateSheet
         base.OnAfterRender(firstRender);
     }
 
+    private void OnPreview()
+    {
+        if (_tab == T("Setup team admins"))
+        {
+            _adminPreview = true;
+        }
+        else
+        {
+            _memberPreview = true;
+        }
+    }
+
     public void Show(TeamDetailDto model)
     {
         Dto = model;

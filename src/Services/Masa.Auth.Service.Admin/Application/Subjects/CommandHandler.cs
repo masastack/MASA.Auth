@@ -329,10 +329,11 @@ public class CommandHandler
         {
             key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
         }
-        if (await _sms.VerifyMsgCodeAsync(key, model.Code))
+        if (!await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
-            command.Result = await UserSplicingDataAsync(user);
+            throw new UserFriendlyException($"Verification code error");
         }
+        command.Result = await UserSplicingDataAsync(user);
     }
 
     [EventHandler]
@@ -413,13 +414,19 @@ public class CommandHandler
         var user = await _userRepository.FindWithIncludAsync(u => u.Account == account, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
         });
-        if (user != null)
-        {
-            if (!user.Enabled)
-            {
-                throw new UserFriendlyException("账号已禁用");
-            }
 
+        if (user == null)
+        {
+            throw new UserFriendlyException($"不存在账号为[{account}]的用户");
+        }
+
+        if (!user.Enabled)
+        {
+            throw new UserFriendlyException("账号已禁用");
+        }
+
+        if (!isLdap)
+        {
             if (!user.VerifyPassword(password))
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
@@ -432,23 +439,18 @@ public class CommandHandler
             {
                 await _distributedCacheClient.RemoveAsync<CacheLogin>(key);
             }
-            validateByAccountCommand.Result = await UserSplicingDataAsync(user);
         }
-        else
-            throw new UserFriendlyException($"不存在账号为[{account}]的用户");
+
+        validateByAccountCommand.Result = await UserSplicingDataAsync(user);
     }
 
-    async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
+    async Task<UserDetailDto> UserSplicingDataAsync(User user)
     {
-        UserDetailDto? userDetailDto = null;
-        if (user != null)
-        {
-            userDetailDto = user;
-            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
-            userDetailDto.StaffId = staff?.Id;
-            userDetailDto.StaffDisplayName = staff?.DisplayName;
-            userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
-        }
+        UserDetailDto userDetailDto = user;
+        var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
+        userDetailDto.StaffId = staff?.Id;
+        userDetailDto.StaffDisplayName = staff?.DisplayName;
+        userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
         return userDetailDto;
     }
 
@@ -793,7 +795,7 @@ public class CommandHandler
                     Errors = new() { errorMsg }
                 };
             }
-        }     
+        }
 
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
@@ -1128,7 +1130,8 @@ public class CommandHandler
     public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand command)
     {
         var data = command.UserSystemData;
-        var item = await _userSystemBusinessDataRepository.FindAsync(userSystemBusinessData => userSystemBusinessData.UserId == data.UserId && userSystemBusinessData.SystemId == data.SystemId);
+        var item = await _userSystemBusinessDataRepository.FindAsync(userSystemBusinessData => userSystemBusinessData.UserId == data.UserId
+        && userSystemBusinessData.SystemId == data.SystemId);
         if (item is null)
         {
             await _userSystemBusinessDataRepository.AddAsync(new UserSystemBusinessData(data.UserId, data.SystemId, data.Data));

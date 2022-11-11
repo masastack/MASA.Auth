@@ -8,7 +8,6 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
 builder.Services.AddDaprStarter(opt =>
