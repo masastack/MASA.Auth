@@ -32,9 +32,19 @@ builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
-var masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC:AuthClient").Get<MasaOpenIdConnectOptions>();
-builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+MasaOpenIdConnectOptions masaOpenIdConnectOptions;
 
+#if DEBUG
+masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+{
+    Authority = "http://localhost:18200",
+    ClientId = "masa.stack.web-development"
+};
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+#else
+masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC").Get<MasaOpenIdConnectOptions>();
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+#endif
 builder.Services.AddJwtTokenValidator(options =>
 {
     options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;

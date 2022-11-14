@@ -20,12 +20,9 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
         return Task.FromResult(roles);
     }
 
-    public async Task<IEnumerable<string>> GetAllowCodesAsync(string appId, Guid userId)
+    public async Task<IEnumerable<string>> GetAllowCodesAsync(string appId)
     {
-        if (userId == Guid.Empty)
-        {
-            userId = _userContext.GetUserId<Guid>();
-        }
+        var userId = _userContext.GetUserId<Guid>();
         if (userId == Guid.Empty)
         {
             return Enumerable.Empty<string>();
