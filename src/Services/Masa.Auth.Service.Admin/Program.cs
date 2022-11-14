@@ -157,7 +157,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SeedStandardResourcesAsync();
     await option.SeedClientDataAsync(new List<Client>
     {
-        //publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
+        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
     await option.SyncCacheAsync();
 });
@@ -198,6 +198,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<EnvironmentMiddleware>();
+//app.UseMiddleware<MasaAuthorizeMiddleware>();
 app.UseClientRateLimiting();
 
 app.UseCloudEvents();

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Masa.Auth.Security.OAuth.Providers": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:57570;http://localhost:57572"
+    }
+  }
+}
