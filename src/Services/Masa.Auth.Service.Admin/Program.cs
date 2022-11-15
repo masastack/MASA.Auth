@@ -190,8 +190,15 @@ app.UseMasaExceptionHandler(opt =>
 if (!app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        string path = Path.Combine(app.Environment.WebRootPath, "swagger/ui/index.html");
+        if (File.Exists(path)) options.IndexStream = () => new MemoryStream(File.ReadAllBytes(path));
+    });
+    app.UseMiddleware<SwaggerAuthentication>();
 }
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();

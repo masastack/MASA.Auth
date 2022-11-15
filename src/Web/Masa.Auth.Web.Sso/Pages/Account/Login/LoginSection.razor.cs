@@ -11,6 +11,9 @@ public partial class LoginSection
     [Parameter]
     public string LoginHint { get; set; } = string.Empty;
 
+    [Inject]
+    public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
+
     LoginInputModel _inputModel = new();
     CustomLoginModel? _customLoginModel;
     MForm _loginForm = null!;
@@ -53,6 +56,7 @@ public partial class LoginSection
                     _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
                 }
             }
+            (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(currentEnvironment);
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -62,6 +66,7 @@ public partial class LoginSection
     {
         _inputModel.Environment = environment;
         ScopedState.Environment = environment;
+        (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(environment);
     }
 
     private async Task LoginHandler()
