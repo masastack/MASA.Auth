@@ -46,12 +46,12 @@ builder.Services
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
     .AddAuthorization(options =>
     {
-        var unexpiredPolicy = new AuthorizationPolicyBuilder()
+        var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
             .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
             .Build();
-        options.DefaultPolicy = unexpiredPolicy;
+        options.DefaultPolicy = defaultPolicy;
     })
     .AddAuthentication(options =>
     {
