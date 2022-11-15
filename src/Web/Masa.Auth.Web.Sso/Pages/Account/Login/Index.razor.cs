@@ -10,7 +10,6 @@ public partial class Index
     ViewModel _viewModel = new();
     string _loginHint = "";
     string _tab = "login";
-    bool _userBind;
 
     [Parameter]
     public string Tab
@@ -22,12 +21,6 @@ public partial class Index
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;
-
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        await base.SetParametersAsync(parameters);
-        if (Tab == "register") _userBind = true;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
