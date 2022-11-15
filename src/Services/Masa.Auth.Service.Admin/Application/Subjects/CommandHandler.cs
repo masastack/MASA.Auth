@@ -337,10 +337,11 @@ public class CommandHandler
         {
             key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
         }
-        if (await _sms.VerifyMsgCodeAsync(key, model.Code))
+        if (!await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
-            command.Result = await UserSplicingDataAsync(user);
+            throw new UserFriendlyException($"Verification code error");
         }
+        command.Result = await UserSplicingDataAsync(user);
     }
 
     [EventHandler]
@@ -421,13 +422,19 @@ public class CommandHandler
         var user = await _userRepository.FindWithIncludAsync(u => u.Account == account, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
         });
-        if (user != null)
-        {
-            if (!user.Enabled)
-            {
-                throw new UserFriendlyException("账号已禁用");
-            }
 
+        if (user == null)
+        {
+            throw new UserFriendlyException($"不存在账号为[{account}]的用户");
+        }
+
+        if (!user.Enabled)
+        {
+            throw new UserFriendlyException("账号已禁用");
+        }
+
+        if (!isLdap)
+        {
             if (!user.VerifyPassword(password))
             {
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
@@ -440,23 +447,18 @@ public class CommandHandler
             {
                 await _distributedCacheClient.RemoveAsync<CacheLogin>(key);
             }
-            validateByAccountCommand.Result = await UserSplicingDataAsync(user);
         }
-        else
-            throw new UserFriendlyException($"不存在账号为[{account}]的用户");
+
+        validateByAccountCommand.Result = await UserSplicingDataAsync(user);
     }
 
-    async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
+    async Task<UserDetailDto> UserSplicingDataAsync(User user)
     {
-        UserDetailDto? userDetailDto = null;
-        if (user != null)
-        {
-            userDetailDto = user;
-            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
-            userDetailDto.StaffId = staff?.Id;
-            userDetailDto.StaffDisplayName = staff?.DisplayName;
-            userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
-        }
+        UserDetailDto userDetailDto = user;
+        var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
+        userDetailDto.StaffId = staff?.Id;
+        userDetailDto.StaffDisplayName = staff?.DisplayName;
+        userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
         return userDetailDto;
     }
 
@@ -558,26 +560,26 @@ public class CommandHandler
         var docUrl = _oidcOptions.Value.Authority;
 #endif
         var disco = await httpClient.GetDiscoveryDocumentAsync(docUrl);
-        var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest 
+        var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
         {
             Address = disco.TokenEndpoint,
             ClientId = _oidcOptions.Value.ClientId,
-            Scope ="openid profile offline_access",
+            Scope = "openid profile offline_access",
             UserName = command.Account,
             Password = command.Password
         });
         if (loginResult.IsError)
             throw new UserFriendlyException(loginResult.Error);
 
-        _httpContextAccessor.HttpContext!.Response.Cookies.Append(BusinessConsts.SWAGGER_TOKEN, loginResult.AccessToken,new CookieOptions 
+        _httpContextAccessor.HttpContext!.Response.Cookies.Append(BusinessConsts.SWAGGER_TOKEN, loginResult.AccessToken, new CookieOptions
         {
             Expires = DateTime.Now.AddDays(7)
         });
     }
 
-#endregion
+    #endregion
 
-#region Staff
+    #region Staff
 
     [EventHandler(1)]
     public async Task AddStaffAsync(AddStaffCommand command)
@@ -828,7 +830,7 @@ public class CommandHandler
                     Errors = new() { errorMsg }
                 };
             }
-        }     
+        }
 
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
@@ -895,9 +897,9 @@ public class CommandHandler
         return existStaff;
     }
 
-#endregion
+    #endregion
 
-#region ThirdPartyIdp
+    #region ThirdPartyIdp
 
     [EventHandler(1)]
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
@@ -962,9 +964,9 @@ public class CommandHandler
         await _eventBus.PublishAsync(removeThirdUserComman);
     }
 
-#endregion
+    #endregion
 
-#region ThirdPartyUser
+    #region ThirdPartyUser
 
     [EventHandler]
     public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
@@ -1156,14 +1158,15 @@ public class CommandHandler
         return thirdPartyUser;
     }
 
-#endregion
+    #endregion
 
-#region UserSystemData
+    #region UserSystemData
     [EventHandler(1)]
     public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand command)
     {
         var data = command.UserSystemData;
-        var item = await _userSystemBusinessDataRepository.FindAsync(userSystemBusinessData => userSystemBusinessData.UserId == data.UserId && userSystemBusinessData.SystemId == data.SystemId);
+        var item = await _userSystemBusinessDataRepository.FindAsync(userSystemBusinessData => userSystemBusinessData.UserId == data.UserId
+        && userSystemBusinessData.SystemId == data.SystemId);
         if (item is null)
         {
             await _userSystemBusinessDataRepository.AddAsync(new UserSystemBusinessData(data.UserId, data.SystemId, data.Data));
@@ -1174,5 +1177,5 @@ public class CommandHandler
             await _userSystemBusinessDataRepository.UpdateAsync(item);
         }
     }
-#endregion
+    #endregion
 }

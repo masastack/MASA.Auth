@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using AspNetCoreRateLimit;
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using HealthChecks.UI.Client;

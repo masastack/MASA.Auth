@@ -49,14 +49,7 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
             }
         }
 
-        var userId = Guid.Empty;
-
-        if (context.Request.Query.ContainsKey("userId"))
-        {
-            Guid.TryParse(context.Request.Query["userId"], out userId);
-        }
-
-        if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(appId, userId)).WildCardContains(code))
+        if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(appId)).WildCardContains(code))
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             _logger.LogError("authentication failed code {0}", code);

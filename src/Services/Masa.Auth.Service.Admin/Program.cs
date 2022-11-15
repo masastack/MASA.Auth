@@ -8,13 +8,12 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
-await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
-builder.services.adddaprstarter(opt =>
+builder.Services.AddDaprStarter(opt =>
 {
-    opt.daprhttpport = 3600;
-    opt.daprgrpcport = 3601;
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
 });
 #endif
 
@@ -68,6 +67,17 @@ builder.Services
         options.TokenValidationParameters.ValidateAudience = false;
         options.MapInboundClaims = false;
     });
+
+// needed to load configuration from appsettings.json
+builder.Services.AddOptions();
+// needed to store rate limit counters and ip rules
+builder.Services.AddMemoryCache();
+//load general configuration from appsettings.json
+builder.Services.Configure<ClientRateLimitOptions>(builder.Services.GetMasaConfiguration().Local.GetSection("ClientRateLimiting"));
+// inject counter and rules stores
+builder.Services.AddInMemoryRateLimiting();
+// configuration (resolvers, counter key builders)
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
 MapsterAdapterConfig.TypeAdapter();
 
@@ -195,6 +205,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<EnvironmentMiddleware>();
+//app.UseMiddleware<MasaAuthorizeMiddleware>();
+app.UseClientRateLimiting();
+
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
 {

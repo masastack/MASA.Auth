@@ -14,7 +14,6 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IMultilevelCacheClient _authClientMultilevelCacheClient;
     readonly IPmClient _pmClient;
 
     public QueryHandler(
@@ -26,7 +25,6 @@ public class QueryHandler
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
-        IMultilevelCacheClient multilevelCacheClient,
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient)
     {
@@ -38,8 +36,7 @@ public class QueryHandler
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
         _autoCompleteClient = autoCompleteClient;
-        _multilevelCacheClient = multilevelCacheClient;
-        _authClientMultilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
+        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
     }
 
@@ -80,8 +77,8 @@ public class QueryHandler
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException("This user data does not exist");
-        var creator = await _authClientMultilevelCacheClient.GetUserAsync(user.Creator);
-        var modifier = await _authClientMultilevelCacheClient.GetUserAsync(user.Modifier);
+        var creator = await _multilevelCacheClient.GetUserAsync(user.Creator);
+        var modifier = await _multilevelCacheClient.GetUserAsync(user.Modifier);
         var userDetail = await UserSplicingDataAsync(user);
         query.Result = userDetail!;
         query.Result.Creator = creator?.DisplayName;
@@ -164,7 +161,7 @@ public class QueryHandler
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
-            var userCache = await _authClientMultilevelCacheClient.GetUserAsync(userId);
+            var userCache = await _multilevelCacheClient.GetUserAsync(userId);
             if (userCache != null)
             {
                 userPortraitsQuery.Result.Add(new UserPortraitModel
@@ -598,7 +595,7 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            var modifierName = _authClientMultilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier))?.DisplayName ?? "";
+            var modifierName = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier))?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 
