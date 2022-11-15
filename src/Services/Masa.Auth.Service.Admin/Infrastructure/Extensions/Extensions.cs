@@ -17,12 +17,10 @@ public static class Extensions
         {
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<TContext>();
-            try
+            //context.Database.EnsureCreated();
+            if (context.Database.GetPendingMigrations().Any())
             {
-                context.Database.EnsureCreated();
-            }
-            catch
-            {
+                context.Database.Migrate();
             }
             seeder(context, services);
         }
