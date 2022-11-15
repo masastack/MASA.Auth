@@ -150,6 +150,12 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
+builder.MigrateDbContext<AuthDbContext>((context, services) =>
+{
+    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
+    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
+});
+
 var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
@@ -170,11 +176,6 @@ var app = builder.AddServices(options =>
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
 });
 
-app.MigrateDbContext<AuthDbContext>((context, services) =>
-{
-    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
-});
 app.UseMasaExceptionHandler(opt =>
 {
     opt.ExceptionHandler = context =>
