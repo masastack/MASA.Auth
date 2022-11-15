@@ -5,6 +5,7 @@ global using AspNetCoreRateLimit;
 global using FluentValidation;
 global using FluentValidation.AspNetCore;
 global using HealthChecks.UI.Client;
+global using IdentityModel.Client;
 global using Magicodes.ExporterAndImporter.Core.Extension;
 global using Magicodes.ExporterAndImporter.Csv;
 global using Mapster;

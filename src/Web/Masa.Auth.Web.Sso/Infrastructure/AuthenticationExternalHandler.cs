@@ -30,7 +30,6 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
         var userModel = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
         {
-            //ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(scheme),
             ThridPartyIdentity = identity.Subject
         });
         if (userModel is not null)
