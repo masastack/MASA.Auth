@@ -346,4 +346,9 @@ public class UserService : ServiceBase
             return false;
         }
     }
+
+    public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)
+    {
+        await eventBus.PublishAsync(command);
+    }
 }

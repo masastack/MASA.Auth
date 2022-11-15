@@ -26,7 +26,7 @@ public class ThirdPartyUserService : RestServiceBase
     }
 
     [AllowAnonymous]
-    private async Task<UserModel?> GetAsync(IEventBus eventBus, [FromQuery]string thridPartyIdentity )
+    private async Task<UserModel?> GetAsync(IEventBus eventBus, [FromQuery]string thridPartyIdentity)
     {
         var query = new ThirdPartyUserQuery(thridPartyIdentity);
         await eventBus.PublishAsync(query);

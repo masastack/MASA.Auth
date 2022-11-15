@@ -23,6 +23,8 @@ public class CommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
     readonly Sms _sms;
+    readonly IOptions<OidcOptions> _oidcOptions;
+    readonly IHttpContextAccessor _httpContextAccessor;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -42,7 +44,9 @@ public class CommandHandler
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
-        Sms sms)
+        Sms sms,
+        IOptions<OidcOptions> oidcOptions,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -62,6 +66,8 @@ public class CommandHandler
         _logger = logger;
         _eventBus = eventBus;
         _sms = sms;
+        _oidcOptions = oidcOptions;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     #region User
@@ -540,6 +546,33 @@ public class CommandHandler
         var user = await _userRepository.GetByVoucherAsync(command.Voucher);
         user.UpdatePassword(command.Password);
         await _userRepository.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task LoginByAccountAsync(LoginByAccountCommand command)
+    {
+        var httpClient = new HttpClient();
+#if DEBUG
+        var docUrl = "http://localhost:18200";
+#else
+        var docUrl = _oidcOptions.Value.Authority;
+#endif
+        var disco = await httpClient.GetDiscoveryDocumentAsync(docUrl);
+        var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
+        {
+            Address = disco.TokenEndpoint,
+            ClientId = _oidcOptions.Value.ClientId,
+            Scope = "openid profile offline_access",
+            UserName = command.Account,
+            Password = command.Password
+        });
+        if (loginResult.IsError)
+            throw new UserFriendlyException(loginResult.Error);
+
+        _httpContextAccessor.HttpContext!.Response.Cookies.Append(BusinessConsts.SWAGGER_TOKEN, loginResult.AccessToken, new CookieOptions
+        {
+            Expires = DateTime.Now.AddDays(7)
+        });
     }
 
     #endregion

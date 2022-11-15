@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>%(DocumentTitle)</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            background: #fafafa;
+        }
+    </style>
+    %(HeadContent)
+</head>
+
+<body>
+    <div id="swagger-ui"></div>
+    <script src="swagger-ui-bundle.js"></script>
+    <script src="swagger-ui-standalone-preset.js"></script>
+    <script src="ui/auth.js"></script>
+    <script>
+        window.onload = function () {
+            var configObject = JSON.parse('%(ConfigObject)');
+            // Apply mandatory parameters
+            configObject.dom_id = "#swagger-ui";
+            configObject.presets = [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset];
+            configObject.layout = "StandaloneLayout";
+            configObject.requestInterceptor = function (request) {
+                //do something
+                return request;
+            };
+            if (!configObject.hasOwnProperty("oauth2RedirectUrl")) {
+                configObject.oauth2RedirectUrl = window.location + "oauth2-redirect.html"; // use the built-in default
+            }
+            function getAuthorizeButtonText() {
+                return auth.hasLogin() ? 'Logout' : 'Authorize';
+            }
+            function getAuthorizeButtonCssClass() {
+                return auth.hasLogin() ? 'cancel' : 'authorize';
+            }
+            configObject.plugins = [
+                function (system) {
+                    return {
+                        components: {
+                            authorizeBtn: function () {
+                                return system.React.createElement("button",
+                                    {
+                                        id: "authorize",
+                                        className: "btn " + getAuthorizeButtonCssClass(),
+                                        style: {
+                                            lineHeight: "normal"
+                                        },
+                                        onClick: function () {
+                                            var authorizeButton = document.getElementById('authorize');
+                                            auth.logout(function () {
+                                                authorizeButton.innerText = getAuthorizeButtonText();
+                                                authorizeButton.className = 'btn ' + getAuthorizeButtonCssClass();
+                                            });
+                                            if (!auth.hasLogin()) {
+                                                auth.openAuthDialog(function () {
+                                                    authorizeButton.innerText = getAuthorizeButtonText();
+                                                    authorizeButton.className = 'btn ' + getAuthorizeButtonCssClass();
+                                                    auth.closeAuthDialog();
+                                                });
+                                            }                                                                                 
+                                        }
+                                    }, getAuthorizeButtonText());
+                            }
+                        }
+                    }
+                }
+            ];
+            // Build a system
+            SwaggerUIBundle(configObject);
+        }
+    </script>
+</body>
+
+</html>

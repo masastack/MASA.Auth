@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Identity = Masa.Auth.Security.OAuth.Providers.Identity;
-
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
 public partial class RegisterSection
@@ -10,17 +8,8 @@ public partial class RegisterSection
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
 
-    [Inject]
-    public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
-
     [CascadingParameter]
     public string ReturnUrl { get; set; } = string.Empty;
-
-    [Parameter]
-    [MemberNotNullWhen(true, "Identity")]
-    public bool UserBind { get; set; }
-
-    Identity? Identity { get; set; }
 
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
@@ -29,28 +18,12 @@ public partial class RegisterSection
 
     public bool CanRegister => _inputModel.Agreement && ValidateRegisterFields();
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (UserBind)
-        {
-            var httpContext = HttpContextAccessor.HttpContext!;
-            Identity = await httpContext.GetExternalIdentityAsync();
-            _inputModel.DisplayName = Identity.NickName ?? "";
-            _inputModel.Account = Identity.Account;
-            _inputModel.PhoneNumber = Identity.PhoneNumber ?? "";
-            _inputModel.Email = Identity.Email ?? "";
-        }
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
 
         if (firstRender)
         {
-            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
-
-            if (UserBind) ReturnUrl = Identity.Properties["returnUrl"] ?? "~/";
             if (ReturnUrl == null || !ReturnUrl.Contains('?'))
             {
                 return;
@@ -139,34 +112,10 @@ public partial class RegisterSection
             return;
         }
 
-        HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
-
         _registerLoading = true;
 
         try
         {
-            if (UserBind)
-            {
-                var model = new RegisterThirdPartyUserModel
-                {
-                    ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(Identity.Issuer),
-                    ExtendedData = JsonSerializer.Serialize(Identity),
-                    ThridPartyIdentity = Identity.Subject,
-                    UserRegisterType = UserRegisterTypes.PhoneNumber,
-                    PhoneNumber = _inputModel.PhoneNumber,
-                    Email = _inputModel.Email,
-                    SmsCode = _inputModel.SmsCode?.ToString() ?? "",
-                    Account = _inputModel.Account,
-                    Password = _inputModel.Password,
-                    DisplayName = _inputModel.DisplayName,
-                    Avatar = Identity.Picture
-                };
-                await AuthClient.UserService.RegisterThirdPartyUserAsync(model);
-                Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-                await PopupService.AlertAsync("Register success", AlertTypes.Success);
-                return;
-            }
-
             if (_inputModel.EmailRegister)
             {
                 if (_inputModel.Email is null) throw new UserFriendlyException("Emai is required");

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using static AspNet.Security.OAuth.GitHub.GitHubAuthenticationConstants;
-
 namespace Masa.Auth.Security.OAuth.Providers.GitHub;
 
 public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
@@ -57,7 +55,7 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
     {
         var (options, loggerFactory, urlEncoder, systemClock) = CreateAuthenticationHandlerInstanceUtilities.BuilderParamter<GitHubAuthenticationOptions>(provider, authenticationDefaults.Scheme);
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
-        if(options.CurrentValue.Scope.Any(scope => scope == "user:email") is false)
+        if (options.CurrentValue.Scope.Any(scope => scope == "user:email") is false)
             options.CurrentValue.Scope.Add("user:email");
 
         return new GitHubAuthenticationHandler(options, loggerFactory, urlEncoder, systemClock);
