@@ -11,10 +11,10 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 await new DccSeed().SeedAsync(builder);
 
 #if DEBUG
-builder.Services.AddDaprStarter(opt =>
+builder.services.adddaprstarter(opt =>
 {
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
+    opt.daprhttpport = 3600;
+    opt.daprgrpcport = 3601;
 });
 #endif
 
@@ -104,7 +104,7 @@ builder.Services
         In = ParameterLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer xxxxxxxxxxxxxxx\"",
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
         {
             new OpenApiSecurityScheme
@@ -180,16 +180,21 @@ app.UseMasaExceptionHandler(opt =>
 if (!app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        string path = Path.Combine(app.Environment.WebRootPath, "swagger/ui/index.html");
+        if (File.Exists(path)) options.IndexStream = () => new MemoryStream(File.ReadAllBytes(path));
+    });
+    app.UseMiddleware<SwaggerAuthentication>();
 }
-
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<EnvironmentMiddleware>();
-
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
 {

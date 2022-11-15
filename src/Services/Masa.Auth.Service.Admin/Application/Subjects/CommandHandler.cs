@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using IdentityModel.Client;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -23,6 +25,8 @@ public class CommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
     readonly Sms _sms;
+    readonly IOptions<OidcOptions> _oidcOptions;
+    readonly IHttpContextAccessor _httpContextAccessor;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -42,7 +46,9 @@ public class CommandHandler
         ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
-        Sms sms)
+        Sms sms,
+        IOptions<OidcOptions> oidcOptions,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -62,6 +68,8 @@ public class CommandHandler
         _logger = logger;
         _eventBus = eventBus;
         _sms = sms;
+        _oidcOptions = oidcOptions;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     #region User
@@ -540,9 +548,36 @@ public class CommandHandler
         await _userRepository.UpdateAsync(user);
     }
 
-    #endregion
+    [EventHandler]
+    public async Task LoginByAccountAsync(LoginByAccountCommand command)
+    {
+        var httpClient = new HttpClient();
+#if DEBUG
+        var docUrl = "http://localhost:18200";
+#else
+        var docUrl = _oidcOptions.Value.Authority;
+#endif
+        var disco = await httpClient.GetDiscoveryDocumentAsync(docUrl);
+        var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest 
+        {
+            Address = disco.TokenEndpoint,
+            ClientId = _oidcOptions.Value.ClientId,
+            Scope ="openid profile offline_access",
+            UserName = command.Account,
+            Password = command.Password
+        });
+        if (loginResult.IsError)
+            throw new UserFriendlyException(loginResult.Error);
 
-    #region Staff
+        _httpContextAccessor.HttpContext!.Response.Cookies.Append(BusinessConsts.SWAGGER_TOKEN, loginResult.AccessToken,new CookieOptions 
+        {
+            Expires = DateTime.Now.AddDays(7)
+        });
+    }
+
+#endregion
+
+#region Staff
 
     [EventHandler(1)]
     public async Task AddStaffAsync(AddStaffCommand command)
@@ -860,9 +895,9 @@ public class CommandHandler
         return existStaff;
     }
 
-    #endregion
+#endregion
 
-    #region ThirdPartyIdp
+#region ThirdPartyIdp
 
     [EventHandler(1)]
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
@@ -927,9 +962,9 @@ public class CommandHandler
         await _eventBus.PublishAsync(removeThirdUserComman);
     }
 
-    #endregion
+#endregion
 
-    #region ThirdPartyUser
+#region ThirdPartyUser
 
     [EventHandler]
     public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
@@ -1121,9 +1156,9 @@ public class CommandHandler
         return thirdPartyUser;
     }
 
-    #endregion
+#endregion
 
-    #region UserSystemData
+#region UserSystemData
     [EventHandler(1)]
     public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand command)
     {
@@ -1139,5 +1174,5 @@ public class CommandHandler
             await _userSystemBusinessDataRepository.UpdateAsync(item);
         }
     }
-    #endregion
+#endregion
 }
