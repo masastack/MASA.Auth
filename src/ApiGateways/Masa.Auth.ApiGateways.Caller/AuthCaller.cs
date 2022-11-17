@@ -87,7 +87,12 @@ public class AuthCaller : HttpClientCallerBase
     {
         if (!string.IsNullOrWhiteSpace(_tokenProvider.AccessToken))
         {
-            _jwtTokenValidator.ValidateAccessTokenAsync(_tokenProvider).Wait();
+#warning this code high concurrency is hidden danger
+            //https://zhuanlan.zhihu.com/p/463951534
+            Task.Run(async () =>
+            {
+                await _jwtTokenValidator.ValidateAccessTokenAsync(_tokenProvider);
+            }).Wait();
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
         }
         else

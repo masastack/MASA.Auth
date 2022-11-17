@@ -38,7 +38,8 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions;
 masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {
     Authority = "http://localhost:18200",
-    ClientId = "masa.stack.web-development"
+    ClientId = "masa.stack.web-development",
+    Scopes = new List<string> { "offline_access" }
 };
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
 #else
