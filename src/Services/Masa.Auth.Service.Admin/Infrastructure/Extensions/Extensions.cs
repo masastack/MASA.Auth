@@ -16,7 +16,6 @@ public static class Extensions
     {
         var services = builder.Services.BuildServiceProvider();
         var context = services.GetRequiredService<TContext>();
-        context.Database.EnsureCreated();
         if (context.Database.GetPendingMigrations().Any())
         {
             context.Database.Migrate();

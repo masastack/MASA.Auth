@@ -22,12 +22,18 @@ public class JwtTokenValidator
         _clientRefreshTokenOptions = clientRefreshTokenOptions;
     }
 
+    public DiscoveryDocumentResponse DiscoveryDocument
+    {
+        get
+        {
+            return _httpClient.GetDiscoveryDocumentAsync(_jwtTokenValidatorOptions.AuthorityEndpoint).Result;
+        }
+    }
+
     public async Task<ClaimsPrincipal?> ValidateAccessTokenAsync(TokenProvider tokenProvider)
     {
-        var discoveryDocument = await _httpClient.GetDiscoveryDocumentAsync(_jwtTokenValidatorOptions.AuthorityEndpoint).ConfigureAwait(false);
-
         var keys = new List<SecurityKey>();
-        foreach (var webKey in discoveryDocument.KeySet.Keys)
+        foreach (var webKey in DiscoveryDocument.KeySet.Keys)
         {
             var e = Base64Url.Decode(webKey.E);
             var n = Base64Url.Decode(webKey.N);
@@ -42,7 +48,7 @@ public class JwtTokenValidator
             ValidateLifetime = _jwtTokenValidatorOptions.ValidateLifetime,
             ValidateAudience = _jwtTokenValidatorOptions.ValidateAudience,
             ValidateIssuer = _jwtTokenValidatorOptions.ValidateIssuer,
-            ValidIssuer = discoveryDocument.Issuer,
+            ValidIssuer = DiscoveryDocument.Issuer,
             ValidAudiences = _jwtTokenValidatorOptions.ValidAudiences,
             ValidateIssuerSigningKey = true,
             IssuerSigningKeys = keys
@@ -56,15 +62,9 @@ public class JwtTokenValidator
         }
         catch (SecurityTokenExpiredException)
         {
-            if (!string.IsNullOrEmpty(tokenProvider.RefreshToken))
+            var tokenResult = await RefreshTokenAsync(tokenProvider.RefreshToken);
+            if (tokenResult != null)
             {
-                var tokenClient = new TokenClient(_httpClient, new TokenClientOptions
-                {
-                    Address = discoveryDocument.TokenEndpoint,
-                    ClientId = _clientRefreshTokenOptions.ClientId,
-                    ClientSecret = _clientRefreshTokenOptions.ClientSecret
-                });
-                var tokenResult = await tokenClient.RequestRefreshTokenAsync(tokenProvider.RefreshToken).ConfigureAwait(false);
                 if (tokenResult.IsError)
                 {
                     _logger.LogError(tokenResult.Error);
@@ -75,15 +75,32 @@ public class JwtTokenValidator
                     return handler.ValidateToken(tokenProvider.AccessToken, validationParameters, out SecurityToken _);
                 }
             }
-            else
-            {
-                _logger.LogWarning("RefreshToken is null,please AllowOfflineAccess value(true) and RequestedScopes should contains offline_access");
-            }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "JwtTokenValidator failed");
         }
         return claimsPrincipal;
+    }
+
+    public async Task<TokenResponse?> RefreshTokenAsync(string? refreshToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            _logger.LogWarning("RefreshToken is null,please AllowOfflineAccess value(true) and RequestedScopes should contains offline_access");
+            throw new ArgumentNullException(nameof(refreshToken));
+        }
+        var tokenClient = new TokenClient(_httpClient, new TokenClientOptions
+        {
+            Address = DiscoveryDocument.TokenEndpoint,
+            ClientId = _clientRefreshTokenOptions.ClientId,
+            ClientSecret = _clientRefreshTokenOptions.ClientSecret
+        });
+        var tokenResult = await tokenClient.RequestRefreshTokenAsync(refreshToken);
+        if (tokenResult.IsError)
+        {
+            _logger.LogError(tokenResult.Error);
+        }
+        return tokenResult;
     }
 }

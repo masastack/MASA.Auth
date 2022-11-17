@@ -100,6 +100,7 @@ global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Caches;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.DbContexts;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Repositories;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 global using Masa.Contrib.Ddd.Domain;
 global using Masa.Contrib.Ddd.Domain.Repository.EFCore;
 global using Masa.Contrib.Dispatcher.Events;
