@@ -27,9 +27,18 @@
     <ItemContent Context="data">
         <MListItemContent>
             <MListItemTitle>
-                <span class="body2 regular--text">
-                    @data.Item.Name
-                </span>
+                @if (RoleDisabled(data.Item))
+                {
+                    <span class="body2 error--text">
+                        @($"{data.Item.Name}-(由于绑定次数限制，无法选择此角色)")
+                    </span>
+                }
+                else
+                {
+                    <span class="body2 regular--text">
+                        @data.Item.Name
+                    </span>
+                }
             </MListItemTitle>
         </MListItemContent>
     </ItemContent>

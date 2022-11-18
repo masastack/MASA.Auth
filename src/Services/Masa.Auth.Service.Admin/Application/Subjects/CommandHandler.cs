@@ -389,7 +389,7 @@ public class CommandHandler
             var ldaps = await _ldapIdpRepository.GetListAsync();
             if (!ldaps.Any())
             {
-                throw new UserFriendlyException("没有配置LDAP认证");
+                throw new UserFriendlyException("没有配置Ldap认证");
             }
             if (ldaps.Count() > 1)
             {

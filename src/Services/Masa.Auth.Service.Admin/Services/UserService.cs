@@ -24,6 +24,7 @@ public class UserService : ServiceBase
         return query.Result;
     }
 
+    [Authorize]
     public async Task<List<UserSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
     {
         var query = new UserSelectQuery(search);
