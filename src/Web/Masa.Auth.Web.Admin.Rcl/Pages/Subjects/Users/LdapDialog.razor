@@ -59,8 +59,13 @@
 
         try
         {
+            //todo remove try catch
             await ThirdPartyIdpService.LdapConnectTestAsync(_ldapDetailDto);
             OpenSuccessMessage(T("Connect Success"));
+        }
+        catch (UserFriendlyException e)
+        {
+            OpenErrorMessage(e.Message);
         }
         catch
         {
