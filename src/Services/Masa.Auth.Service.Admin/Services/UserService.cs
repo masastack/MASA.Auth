@@ -311,40 +311,26 @@ public class UserService : ServiceBase
     [RoutePattern("reset_password_by_phone", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<bool> ResetPasswordByPhoneAsync(IEventBus eventBus, [FromBody] ResetPasswordByPhoneModel model)
     {
-        try
+        var command = new ResetPasswordCommand(ResetPasswordTypes.PhoneNumber, model.PhoneNumber, model.Code)
         {
-            var command = new ResetPasswordCommand(ResetPasswordTypes.PhoneNumber, model.PhoneNumber, model.Code)
-            {
-                Password = model.Password,
-                ConfirmPassword = model.ConfirmPassword
-            };
-            await eventBus.PublishAsync(command);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
+            Password = model.Password,
+            ConfirmPassword = model.ConfirmPassword
+        };
+        await eventBus.PublishAsync(command);
+        return true;
     }
 
     [AllowAnonymous]
     [RoutePattern("reset_password_by_email", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<bool> ResetPasswordByEmailAsync(IEventBus eventBus, [FromBody] ResetPasswordByEmailModel model)
     {
-        try
+        var command = new ResetPasswordCommand(ResetPasswordTypes.Email, model.Email, model.Code)
         {
-            var command = new ResetPasswordCommand(ResetPasswordTypes.Email, model.Email, model.Code)
-            {
-                Password = model.Password,
-                ConfirmPassword = model.ConfirmPassword
-            };
-            await eventBus.PublishAsync(command);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
+            Password = model.Password,
+            ConfirmPassword = model.ConfirmPassword
+        };
+        await eventBus.PublishAsync(command);
+        return true;
     }
 
     public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)
