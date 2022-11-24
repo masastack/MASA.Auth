@@ -12,7 +12,7 @@
     @*https://github.com/BlazorComponent/MASA.Blazor/issues/811*@
     <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
         <LabelContent>
-            @T("RegistrationAgreementStatement") <a @onclick:stopPropagation="true">《@T("RegistrationAgreement")》</a>
+            @T("RegistrationAgreementStatement") <a href="/protocol" target="_blank" @onclick:stopPropagation="true">《@T("RegistrationAgreement")》</a>
         </LabelContent>
     </MCheckbox>
 </MForm>

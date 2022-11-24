@@ -11,11 +11,13 @@ public partial class LoginSection
     [Parameter]
     public string LoginHint { get; set; } = string.Empty;
 
+    [Parameter]
+    public IEnumerable<ViewModel.ExternalProvider> ExternalProviderList { get; set; } = Enumerable.Empty<ViewModel.ExternalProvider>();
+
     [Inject]
     public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
 
     LoginInputModel _inputModel = new();
-    CustomLoginModel? _customLoginModel;
     MForm _loginForm = null!;
     bool _showPwd, _loginLoading;
     List<EnvironmentModel> _environments = new();
@@ -41,20 +43,10 @@ public partial class LoginSection
                 _inputModel = new LoginInputModel
                 {
                     ReturnUrl = ReturnUrl,
-                    UserName = LoginHint,
+                    Account = LoginHint,
                     Environment = currentEnvironment,
                     RememberLogin = LoginOptions.AllowRememberLogin
                 };
-            }
-
-            if (ReturnUrl != null && ReturnUrl.Contains('?'))
-            {
-                var splitIndex = ReturnUrl.IndexOf('?');
-                var paramString = ReturnUrl[splitIndex..];
-                if (QueryHelpers.ParseQuery(paramString).TryGetValue("client_id", out var clientId))
-                {
-                    _customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
-                }
             }
             (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(currentEnvironment);
             StateHasChanged();
@@ -154,16 +146,5 @@ public partial class LoginSection
         {
             await LoginHandler();
         }
-    }
-
-    private void NavigateToThirdParty(string scheme)
-    {
-        var challenge = QueryHelpers.AddQueryString(AuthenticationExternalConstants.ChallengeEndpoint, new Dictionary<string, string?>
-        {
-            ["returnUrl"] = _inputModel.ReturnUrl,
-            ["scheme"] = scheme,
-            ["environment"] = _inputModel.Environment
-        });
-        Navigation.NavigateTo(challenge, true);
     }
 }

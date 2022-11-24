@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Masa.Auth.Contracts.Admin": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:52759;http://localhost:52760"
+    }
+  }
+}

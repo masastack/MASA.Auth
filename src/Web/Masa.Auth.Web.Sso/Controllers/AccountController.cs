@@ -54,7 +54,7 @@ public class AccountController : Controller
             else
             {
                 user = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
+                                           .ValidateCredentialsByAccountAsync(inputModel.Account, inputModel.Password, inputModel.LdapLogin);
             }
 
             if (user != null)
@@ -107,7 +107,7 @@ public class AccountController : Controller
             else return Content(_i18n.T("UnknownException"));
         }
 
-        await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.UserName,
+        await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.Account,
                 "invalid credentials", clientId: context?.Client.ClientId));
         return Content(_i18n.T("LoginValidateError"));
     }

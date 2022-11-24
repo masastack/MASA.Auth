@@ -4,13 +4,11 @@
 
 <MForm Model="UserModel" EnableValidation EnableI18n>
     <MCard Width=510 Height=620 MaxHeight="620" Class="pa-12">
-        <div class="d-flex mb-12">
-            <div style="width:100px;" class="mx-auto text-center">
-                <MAvatar>
-                    <img src="@UserModel.Avatar" />
-                </MAvatar>
-                <span class="mt-3">@UserModel.DisplayName</span>
-            </div>
+        <div class="mb-12 d-flex flex-column align-center">
+            <MAvatar>
+                <img src="@UserModel.Avatar" />
+            </MAvatar>
+            <span class="mt-3">@UserModel.DisplayName</span>
         </div>
         <MTextField @bind-Value="UserModel.PhoneNumber" Class="mt-3" Outlined Label="@T("PhoneNumber")" />
         <MTextField @bind-Value="UserModel.SmsCode" Class="mt-3" Outlined Label="@T("Captcha")">

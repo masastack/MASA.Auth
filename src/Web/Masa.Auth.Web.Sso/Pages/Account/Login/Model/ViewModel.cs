@@ -17,9 +17,12 @@ public class ViewModel
 
     public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
+    public IEnumerable<RegisterFieldModel> RegisterFields { get; set; } = Enumerable.Empty<RegisterFieldModel>();
+
     public class ExternalProvider
     {
         public string DisplayName { get; set; } = string.Empty;
         public string AuthenticationScheme { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
     }
 }

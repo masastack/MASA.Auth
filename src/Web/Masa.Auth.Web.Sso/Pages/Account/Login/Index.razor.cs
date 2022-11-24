@@ -73,6 +73,7 @@ public partial class Index
                 DisplayName = x.DisplayName ?? x.Name,
                 AuthenticationScheme = x.Name
             }).ToList();
+        List<RegisterFieldModel> registerFields = new();
 
         var allowLocal = true;
         if (context?.Client.ClientId != null)
@@ -81,10 +82,24 @@ public partial class Index
             if (client != null)
             {
                 allowLocal = client.EnableLocalLogin;
+                //todo IdentityProviderRestrictions linkage auth ThirdPartyIdps
                 if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
                 {
                     providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
                 }
+            }
+
+            var customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(context.Client.ClientId);
+            if (customLoginModel != null)
+            {
+                providers = customLoginModel.ThirdPartyIdps.Select(idp => new ViewModel.ExternalProvider
+                {
+                    DisplayName = idp.DisplayName ?? idp.Name,
+                    AuthenticationScheme = idp.Name,
+                    Icon = idp.Icon
+                }).ToList();
+
+                registerFields = customLoginModel.RegisterFields;
             }
         }
 
@@ -92,7 +107,8 @@ public partial class Index
         {
             AllowRememberLogin = LoginOptions.AllowRememberLogin,
             EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
-            ExternalProviders = providers.ToArray()
+            ExternalProviders = providers.ToArray(),
+            RegisterFields = registerFields
         };
     }
 

@@ -73,6 +73,7 @@ builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
+//builder.Services.AddTransientDecorator<IAuthenticationSchemeProvider, DynamicAuthenticationSchemeProvider>();
 
 var app = builder.Build();
 

@@ -11,6 +11,9 @@ public partial class RegisterSection
     [CascadingParameter]
     public string ReturnUrl { get; set; } = string.Empty;
 
+    [Parameter]
+    public List<RegisterFieldModel> RegisterFields { get; set; } = new();
+
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
     bool _registerLoading;
@@ -24,27 +27,7 @@ public partial class RegisterSection
 
         if (firstRender)
         {
-            if (ReturnUrl == null || !ReturnUrl.Contains('?'))
-            {
-                return;
-            }
-
-            var splitIndex = ReturnUrl.IndexOf('?');
-            var paramString = ReturnUrl[splitIndex..];
-            var queryValues = HttpUtility.ParseQueryString(paramString);
-            var clientId = queryValues["client_id"];
-            if (string.IsNullOrEmpty(clientId))
-            {
-                return;
-            }
-
-            var customLoginModel = await AuthClient.CustomLoginService.GetCustomLoginByClientIdAsync(clientId);
-            if (customLoginModel == null || !customLoginModel.RegisterFields.Any())
-            {
-                return;
-            }
-
-            var registerFields = customLoginModel.RegisterFields.OrderBy(r => r.Sort).ToList();
+            var registerFields = RegisterFields.OrderBy(r => r.Sort).ToList();
 
             foreach (var registerField in registerFields)
             {
@@ -148,7 +131,7 @@ public partial class RegisterSection
                 PhoneLogin = true,
                 SmsCode = _inputModel.SmsCode,
                 Password = _inputModel.Password,
-                UserName = _inputModel.Email ?? "",
+                Account = _inputModel.Email ?? "",
                 Environment = ScopedState.Environment,
                 PhoneNumber = _inputModel.PhoneNumber,
                 ReturnUrl = ReturnUrl,

@@ -18,7 +18,7 @@
     }
     else
     {
-        <MTextField @bind-Value="_inputModel.UserName" Label="@T("UserName")" Placeholder="@T("UserNamePlaceHolder")"
+        <MTextField @bind-Value="_inputModel.Account" Label="@T("Account")" Placeholder="@T("AccountPlaceHolder")"
                 Outlined Autofocus>
             <PrependInnerContent>
                 <MIcon>mdi-account</MIcon>
@@ -74,19 +74,7 @@
     }
 </div>
 
-@if (_customLoginModel?.ThirdPartyIdps?.Any() is true)
+@if (ExternalProviderList.Any())
 {
-    <div class="d-flex block-center mt-8 mb-4">
-        <div style="background: #E9EDF7;height: 1px;width: 100%;" />
-        <div class="mx-4 text-center body2 regular3--text" style="@(LanguageProvider.Culture.ToString() == "zh-CN"?"min-width:120px":"min-width:100px")">@T("or login with")</div>
-        <div style="background: #E9EDF7;height: 1px;width: 100%;" />
-    </div>
-    <div class="text-center">
-        @foreach (var thirdPartyIdp in _customLoginModel.ThirdPartyIdps)
-        {
-            <MAvatar Size="30" Class="hover-pointer mx-1">
-                <img src="@thirdPartyIdp.Icon" @onclick="() => NavigateToThirdParty(thirdPartyIdp.Name)" />
-            </MAvatar>
-        }
-    </div>
+    <ExternalProviders ExternalProviderList="@ExternalProviderList" Environment="@_inputModel.Environment" ReturnUrl="@_inputModel.ReturnUrl" />
 }
