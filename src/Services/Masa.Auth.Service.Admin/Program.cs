@@ -2,7 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-builder.AddObservability();
+builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
 
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
@@ -46,12 +46,12 @@ builder.Services
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
     .AddAuthorization(options =>
     {
-        var unexpiredPolicy = new AuthorizationPolicyBuilder()
+        var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
             .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
             .Build();
-        options.DefaultPolicy = unexpiredPolicy;
+        options.DefaultPolicy = defaultPolicy;
     })
     .AddAuthentication(options =>
     {
@@ -150,6 +150,12 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
+builder.MigrateDbContext<AuthDbContext>((context, services) =>
+{
+    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
+    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
+});
+
 var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
 builder.Services.AddOidcCache(defaultConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
@@ -170,11 +176,6 @@ var app = builder.AddServices(options =>
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
 });
 
-app.MigrateDbContext<AuthDbContext>((context, services) =>
-{
-    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
-});
 app.UseMasaExceptionHandler(opt =>
 {
     opt.ExceptionHandler = context =>
@@ -204,6 +205,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
 app.UseClientRateLimiting();

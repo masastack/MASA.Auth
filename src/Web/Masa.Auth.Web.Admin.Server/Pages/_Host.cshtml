@@ -1,5 +1,8 @@
 ﻿@page "/"
 @namespace Masa.Auth.Web.Admin.Server.Pages
+@using Microsoft.IdentityModel.Tokens;
+@using System.Globalization;
+@inject JwtTokenValidator JwtTokenValidator;
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -7,12 +10,62 @@
 }
 
 @{
+    // Plan B 
+    // https://stackoverflow.com/questions/72868249/how-to-handle-user-oidc-tokens-in-blazor-server-when-the-browser-is-refreshed-an 
+
+    var tokenExpiry = await HttpContext.GetTokenAsync("expires_at");
+    DateTimeOffset.TryParse(tokenExpiry, out var expiresAt);
+
+    var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+    var refreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+
+    var tokenShouldBeRefreshed = accessToken != null && expiresAt < DateTime.UtcNow.AddSeconds(5);//5 Seconds is set ClockSkew,default 5 Minutes
+    if (tokenShouldBeRefreshed)
+    {
+        await RefreshAccessTokenAsync();
+    }
+
     var tokens = new TokenProvider
     {
         AccessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken),
-        RefreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken),
+        RefreshToken = refreshToken,
         IdToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.IdToken)
     };
+
+    async Task RefreshAccessTokenAsync()
+    {
+        var auth = await HttpContext.AuthenticateAsync();
+
+        if (!auth.Succeeded)
+        {
+            await HttpContext.SignOutAsync();
+            return;
+        }
+
+        if (refreshToken == null)
+        {
+            await HttpContext.SignOutAsync();
+            return;
+        }
+
+        var tokenResponse = await JwtTokenValidator.RefreshTokenAsync(refreshToken);
+        if (tokenResponse == null)
+        {
+            await HttpContext.SignOutAsync();
+            return;
+        }
+        var newAccessToken = tokenResponse.AccessToken;
+        var expiresInSeconds = tokenResponse.ExpiresIn;
+        var newExpiryTime = DateTime.UtcNow.AddSeconds(expiresInSeconds).ToString(CultureInfo.InvariantCulture);
+
+        var expiresAtTokenUpdated = auth.Properties!.UpdateTokenValue("expires_at", newExpiryTime);
+        var accessTokenUpdated = auth.Properties!.UpdateTokenValue(OpenIdConnectParameterNames.AccessToken, newAccessToken);
+        var tokensUpdatedCorrectly = expiresAtTokenUpdated && accessTokenUpdated;
+        if (tokensUpdatedCorrectly)
+        {
+            await HttpContext.SignInAsync(auth.Principal, auth.Properties);
+        }
+    }
 }
 
 <component type="typeof(Masa.Auth.Web.Admin.Rcl.App)" render-mode="ServerPrerendered" param-InitialState="tokens" />

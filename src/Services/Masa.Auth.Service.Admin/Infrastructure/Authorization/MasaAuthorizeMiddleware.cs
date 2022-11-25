@@ -30,6 +30,7 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
             await next(context);
             return;
         }
+        //exclude unprogrammed route such as dapr 
         if (!_endpointRowDataProvider.Endpoints.Contains(routeEndpoint.RoutePattern.RawText))
         {
             await next(context);

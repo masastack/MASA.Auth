@@ -78,12 +78,11 @@
                             </div>                           
                         </HeaderContent>
                         <AutoHeightContent>
-                            <div class="global-nav" style="display: flex;height: auto">
+                            <div class="global-nav" style="display: flex;max-height:calc(100vh - 330px);">
                                 <PermissionExtensionConfigure                                                      
                                                       Roles=User.Roles
                                                       @bind-ExtensionValue="User.Permissions"                                                    
-                                                      @bind-Preview=Preview
-                                                      Style="max-height:calc(100vh - 350px);" />
+                                                      @bind-Preview=Preview />
                             </div>
                         </AutoHeightContent>
                         <FooterContent>
