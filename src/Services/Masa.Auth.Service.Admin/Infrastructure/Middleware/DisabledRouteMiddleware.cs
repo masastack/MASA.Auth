@@ -5,19 +5,24 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
 
 public class DisabledRouteMiddleware : IMiddleware, IScopedDependency
 {
-    List<string?> _disabledRoute = new List<string?>()
+    readonly IHostEnvironment _hostEnvironment;
+
+    public DisabledRouteMiddleware(IHostEnvironment hostEnvironment)
     {
-        "/api/message/sms",
-        "/api/message/email"
-    };
+        _hostEnvironment = hostEnvironment;
+    }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var account = context.User.Claims.FirstOrDefault(c => c.Type == "account");
-        //todo add demo environment judge
-        if (_disabledRoute.Contains(context.Request.Path.Value))
+        if (_hostEnvironment.IsProduction())
         {
-            throw new UserFriendlyException("演示环境禁止操作");
+            var endpoint = context.GetEndpoint();
+            var disabledRouteAttribute = (endpoint as RouteEndpoint)?.Metadata
+                .GetMetadata<ProductionDisabledRouteAttribute>();
+            if (disabledRouteAttribute != null)
+            {
+                throw new UserFriendlyException("演示环境禁止该操作");
+            }
         }
         return next(context);
     }

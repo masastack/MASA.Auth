@@ -1,0 +1,77 @@
+﻿@inherits AdminCompontentBase
+@inject IConfigurationApiManage ConfigurationApiManage
+@inject IConfigurationApi ConfigurationApi
+
+<STextField @bind-Value="Name"
+            Required
+            Label="@Label"
+            Action="@(props => { props.Content = DT("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
+            Type="text">
+    <PrependContent>
+        <span class="d-flex align-center justify-center" style="min-width:100px;height: 34px;">
+            @DT(Name)
+        </span>
+    </PrependContent>
+</STextField>
+
+<MDialog @bind-Value="_dialog" Width="400">
+    <MCard Class="pa-4">
+        <MCardTitle Class="justify-center">
+            @($"{Name}{T("DisplayName")}")
+        </MCardTitle>
+        <MCardText>
+            <STextField Label="Label" TValue="string"/>
+        </MCardText>
+        <MCardActions>
+            <SButton Color="primary" Outlined Width="140"
+                     OnClick="() => _dialog = false">
+                @T("Cancel")
+            </SButton>
+            <MSpacer></MSpacer>
+            <SButton Color="primary" Width="140"
+                     OnClick="() => _dialog  = false">
+                @T("Ok")
+            </SButton>
+        </MCardActions>
+    </MCard>
+</MDialog>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public EventCallback<string> NameChanged { get; set; }
+
+    bool _dialog;
+
+    private Task OpenConfigDialog()
+    {
+        var publicSection = ConfigurationApi.GetPublic();
+        publicSection.GetChildren();
+        //todo
+        foreach (var item in publicSection.GetChildren())
+        {
+            //if (item.Key.StartsWith(TranslateProvider.I18N_KEY))
+            //{
+                
+            //}
+            Console.WriteLine(item);
+        }
+        foreach (var publicKv in publicSection.AsEnumerable())
+        {
+            Console.WriteLine("{0}: {1}", publicKv.Key, publicKv.Value);
+        }
+        _dialog = true;
+        return Task.CompletedTask;
+    }
+
+    private Task Save()
+    {
+        //ConfigurationApiManage.UpdateAsync();
+        return Task.CompletedTask;
+    }
+}

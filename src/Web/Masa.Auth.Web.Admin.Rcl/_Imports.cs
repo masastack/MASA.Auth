@@ -40,6 +40,7 @@ global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.BuildingBlocks.StackSdks.Pm.Enum;
 global using Masa.Stack.Components;
+global using Masa.Stack.Components.Infrastructure;
 global using Masa.Stack.Components.Models;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Forms;

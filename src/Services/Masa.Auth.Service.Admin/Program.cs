@@ -205,6 +205,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
