@@ -14,9 +14,6 @@ public partial class LoginSection
     [Parameter]
     public IEnumerable<ViewModel.ExternalProvider> ExternalProviderList { get; set; } = Enumerable.Empty<ViewModel.ExternalProvider>();
 
-    [Inject]
-    public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
-
     LoginInputModel _inputModel = new();
     MForm _loginForm = null!;
     bool _showPwd, _loginLoading;
@@ -57,7 +54,6 @@ public partial class LoginSection
     private void EnvironmentChanged(string environment)
     {
         _inputModel.Environment = environment;
-        ScopedState.Environment = environment;
         (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(environment);
     }
 

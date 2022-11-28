@@ -36,10 +36,10 @@ public abstract class SsoCompontentBase : ComponentBase
     public IPopupService PopupService { get; set; } = null!;
 
     [Inject]
-    public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
+    public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
 
     [Inject]
-    public ScopedState ScopedState { get; set; } = null!;
+    public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
 
     protected ClaimsPrincipal User
     {

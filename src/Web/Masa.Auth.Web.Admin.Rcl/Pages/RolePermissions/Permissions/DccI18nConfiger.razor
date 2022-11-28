@@ -20,7 +20,10 @@
             @($"{Name}{T("DisplayName")}")
         </MCardTitle>
         <MCardText>
-            <STextField Label="Label" TValue="string"/>
+            @foreach (var _displayName in _displayNames)
+            {
+                <STextField Class="my-1" Label="@_displayName.Key" @bind-Value=_displayName.Value />
+            }
         </MCardText>
         <MCardActions>
             <SButton Color="primary" Outlined Width="140"
@@ -38,32 +41,29 @@
 
 @code {
     [Parameter]
-    public string Label { get; set; }
+    public string Label { get; set; } = string.Empty;
 
     [Parameter]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Parameter]
     public EventCallback<string> NameChanged { get; set; }
 
     bool _dialog;
+    List<KeyValue<string, string>> _displayNames = new();
 
     private Task OpenConfigDialog()
     {
+        _displayNames = new();
         var publicSection = ConfigurationApi.GetPublic();
-        publicSection.GetChildren();
-        //todo
         foreach (var item in publicSection.GetChildren())
         {
-            //if (item.Key.StartsWith(TranslateProvider.I18N_KEY))
-            //{
-                
-            //}
-            Console.WriteLine(item);
-        }
-        foreach (var publicKv in publicSection.AsEnumerable())
-        {
-            Console.WriteLine("{0}: {1}", publicKv.Key, publicKv.Value);
+            if (item.Key.StartsWith(DynamicTranslateProvider.I18N_KEY))
+            {
+                var key = item.Key.TrimStart(DynamicTranslateProvider.I18N_KEY);
+                var value = item.GetValue<string>(Name);
+                _displayNames.Add(new KeyValue<string, string>(key, value));
+            }
         }
         _dialog = true;
         return Task.CompletedTask;
@@ -71,7 +71,20 @@
 
     private Task Save()
     {
+        //todo upsert dcc
         //ConfigurationApiManage.UpdateAsync();
         return Task.CompletedTask;
+    }
+
+    public class KeyValue<TKey, TVal>
+    {
+        public TKey Key { get; set; }
+        public TVal Value { get; set; }
+
+        public KeyValue(TKey key, TVal value)
+        {
+            this.Key = key;
+            this.Value = value;
+        }
     }
 }

@@ -5,9 +5,7 @@
 <MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 mx-12 text-center" Style="height: 430px; overflow: auto;">
     @foreach (var registerItem in _registerComponents.Values)
     {
-        <CascadingValue Value="ScopedState">
-            <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
-        </CascadingValue>
+        <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
     }
     @*https://github.com/BlazorComponent/MASA.Blazor/issues/811*@
     <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">

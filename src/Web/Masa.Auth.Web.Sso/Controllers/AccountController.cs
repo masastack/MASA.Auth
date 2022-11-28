@@ -36,7 +36,7 @@ public class AccountController : Controller
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
         {
-            HttpContext.UseEnvironmentIsolation(inputModel.Environment);
+            (_environmentProvider as ISsoEnvironmentProvider)?.SetEnvironment(inputModel.Environment);
 
             UserModel? user = new();
 

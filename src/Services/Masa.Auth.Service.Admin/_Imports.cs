@@ -78,7 +78,7 @@ global using Masa.BuildingBlocks.Ddd.Domain.Events;
 global using Masa.BuildingBlocks.Ddd.Domain.Repositories;
 global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
-global using Masa.BuildingBlocks.Isolation.Environment;
+global using Masa.BuildingBlocks.Isolation;
 global using Masa.BuildingBlocks.ReadWriteSplitting.Cqrs.Commands;
 global using Masa.BuildingBlocks.ReadWriteSplitting.Cqrs.Queries;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;

@@ -30,7 +30,6 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
-builder.Services.AddScoped<ScopedState>();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
@@ -73,7 +72,6 @@ builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
-//builder.Services.AddTransientDecorator<IAuthenticationSchemeProvider, DynamicAuthenticationSchemeProvider>();
 
 var app = builder.Build();
 

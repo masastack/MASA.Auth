@@ -205,6 +205,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseIsolation();
 app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();

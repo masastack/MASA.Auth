@@ -16,17 +16,6 @@ public static class Extensions
     }
 
     /// <summary>
-    /// set environment for auth sdk
-    /// </summary>
-    /// <param name="context"></param>
-    /// <param name="environment"></param>
-    public static void UseEnvironmentIsolation(this HttpContext context, string environment)
-    {
-        var ssoEnvironmentProvider = context.RequestServices.GetService<IEnvironmentProvider>() as ISsoEnvironmentProvider;
-        ssoEnvironmentProvider?.SetEnvironment(environment);
-    }
-
-    /// <summary>
     /// Checks if the redirect URI is for a native client.
     /// </summary>
     public static bool IsNativeClient(this AuthorizationRequest context)

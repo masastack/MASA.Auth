@@ -132,7 +132,7 @@ public partial class RegisterSection
                 SmsCode = _inputModel.SmsCode,
                 Password = _inputModel.Password,
                 Account = _inputModel.Email ?? "",
-                Environment = ScopedState.Environment,
+                Environment = EnvironmentProvider.GetEnvironment(),
                 PhoneNumber = _inputModel.PhoneNumber,
                 ReturnUrl = ReturnUrl,
                 RegisterLogin = true
