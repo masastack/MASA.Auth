@@ -9,6 +9,7 @@ namespace Masa.Auth.Web.Sso.Controllers;
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
+    readonly IEnvironmentProvider _environmentProvider;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly I18n _i18n;
@@ -17,12 +18,14 @@ public class AccountController : Controller
         IIdentityServerInteractionService interaction,
         IEventService events,
         IAuthClient authClient,
-        I18n i18n)
+        I18n i18n,
+        IEnvironmentProvider environmentProvider)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
         _i18n = i18n;
+        _environmentProvider = environmentProvider;
     }
 
     [HttpPost]
