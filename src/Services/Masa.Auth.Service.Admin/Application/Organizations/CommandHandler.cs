@@ -74,7 +74,7 @@ public class CommandHandler
         }
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task CopyDepartmentAsync(CopyDepartmentCommand copyDepartmentCommand)
     {
         var dto = copyDepartmentCommand.CopyDepartmentDto;
@@ -94,7 +94,7 @@ public class CommandHandler
         await _departmentRepository.AddAsync(addDepartment);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemoveDepartmentAsync(RemoveDepartmentCommand removeDepartmentCommand)
     {
         var department = await _departmentRepository.GetByIdAsync(removeDepartmentCommand.DepartmentId);
@@ -112,7 +112,7 @@ public class CommandHandler
         await _departmentRepository.RemoveAsync(department);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task AddPositionAsync(AddPositionCommand command)
     {
         var position = await _positionRepository.FindAsync(p => p.Name == command.Position.Name);
@@ -125,7 +125,7 @@ public class CommandHandler
         command.Result = position.Id;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdatePositionAsync(UpdatePositionCommand command)
     {
         var positionDto = command.Position;
@@ -140,7 +140,7 @@ public class CommandHandler
         await _positionRepository.UpdateAsync(position);
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpsertPositionAsync(UpsertPositionCommand command)
     {
         var position = await _positionRepository.FindAsync(p => p.Name == command.Position.Name);
@@ -152,7 +152,7 @@ public class CommandHandler
         command.Result = position.Id;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RemovePositionAsync(RemovePositionCommand command)
     {
         var position = await _positionRepository.FindAsync(position => position.Id == command.Position.Id);

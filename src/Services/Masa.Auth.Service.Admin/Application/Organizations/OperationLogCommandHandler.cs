@@ -23,6 +23,16 @@ public class OperationLogCommandHandler
             await _operationLogRepository.AddDefaultAsync(OperationTypes.EditDepartment, $"编辑部门：{command.UpsertDepartmentDto.Name}");
     }
 
+    [EventHandler]
+    public async Task CopyDepartmentOperationLogAsync(CopyDepartmentCommand command)
+    {
+        var name = await _authDbContext.Set<Department>()
+                                              .Where(department => department.Id == command.CopyDepartmentDto.SourceId)
+                                              .Select(department => department.Name)
+                                              .FirstAsync();
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.CopyDepartment, $"复制部门：{name}为{command.CopyDepartmentDto.Name}");
+    }
+
     [EventHandler(0)]
     public async Task RemoveDepartmentOperationLogAsync(RemoveDepartmentCommand command)
     {

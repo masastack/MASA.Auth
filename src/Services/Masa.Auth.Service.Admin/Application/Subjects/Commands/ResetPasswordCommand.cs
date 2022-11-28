@@ -8,4 +8,6 @@ public record ResetPasswordCommand(ResetPasswordTypes ResetPasswordType, string 
     public string Password { get; set; } = string.Empty;
 
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    public User? Result { get; set; }
 }

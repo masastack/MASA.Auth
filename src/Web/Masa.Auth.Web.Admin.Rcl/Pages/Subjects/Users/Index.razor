@@ -22,7 +22,7 @@
 @code {
     public string Title { get; set; } = PageTab.User;
 
-    List<string> Tas => new() { T(PageTab.User), T(PageTab.ThirdPartyUser), T(PageTab.Staff) };
+    List<string> Tas = new() { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff };
 
     User? UserRef { get; set; }
 

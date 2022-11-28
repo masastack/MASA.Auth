@@ -7,16 +7,26 @@ public class UserCacheCommandHandler
 {
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IUserRepository _userRepository;
+    readonly IStaffRepository _staffRepository;
 
-    public UserCacheCommandHandler(AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider, IUserRepository userRepository)
+    public UserCacheCommandHandler(AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider, IUserRepository userRepository, IStaffRepository staffRepository)
     {
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _userRepository = userRepository;
+        _staffRepository = staffRepository;
     }
 
     async Task SetUserListCacheAsync(IEnumerable<User> users)
     {
-        var map = users.ToDictionary(u => CacheKeyConsts.UserKey(u.Id), u => u.Adapt<UserModel>());
+        var userIds = users.Select(u => u.Id).ToList();
+        var staffs = await _staffRepository.GetListAsync(staff => userIds.Contains(staff.UserId));
+        var map = new Dictionary<string, UserModel>();
+        foreach (var user in users)
+        {
+            var userModel = user.Adapt<UserModel>();
+            userModel.StaffDislpayName = staffs.FirstOrDefault(staff => staff.UserId == user.Id)?.DisplayName ?? user.DisplayName;
+            map.Add(CacheKeyConsts.UserKey(user.Id), userModel);
+        }
         await _multilevelCacheClient.SetListAsync(map);
     }
 
@@ -25,7 +35,10 @@ public class UserCacheCommandHandler
         var user = await _userRepository.GetDetailAsync(userId);
         if (user is not null)
         {
-            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), user.Adapt<UserModel>());
+            var userModel = user.Adapt<UserModel>();
+            var staff = await _staffRepository.FindAsync(staff => staff.UserId == user.Id);
+            userModel.StaffDislpayName = staff?.DisplayName ?? user.DisplayName;
+            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
         }
     }
 

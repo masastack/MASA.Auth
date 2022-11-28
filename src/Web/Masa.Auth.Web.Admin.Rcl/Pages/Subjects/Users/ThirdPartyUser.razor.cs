@@ -14,6 +14,9 @@ public partial class ThirdPartyUser
     private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
     private LdapDialog ldapDialog = null!;
 
+    [Inject]
+    public IJSRuntime? Js { get; set; }
+
     public string Search
     {
         get { return _search ?? ""; }
@@ -108,6 +111,15 @@ public partial class ThirdPartyUser
     {
         PageName = "ThirdPartyUser";
         await GetThirdPartyUsersAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await using var businessJs = await Js!.InvokeAsync<IJSObjectReference>("import", "./_content/Masa.Auth.Web.Admin.Rcl/js/business.js");
+            await businessJs.InvokeVoidAsync("onUserFileterAnimationEnd");
+        }
     }
 
     public List<DataTableHeader<ThirdPartyUserDto>> GetHeaders() => new()

@@ -5,6 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Enums;
 
 public enum OperationTypes
 {
+    RegisterUser = 53,
     AddUser = 1,
     EditUser = 2,
     EditUserAuthorization = 3,
