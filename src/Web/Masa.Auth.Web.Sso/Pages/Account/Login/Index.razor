@@ -4,6 +4,7 @@
 @inherits SsoCompontentBase
 @inject IClientStore _clientStore
 @inject IAuthenticationSchemeProvider _schemeProvider
+@inject IAuthClient _authClient
 @layout SimpleLayout
 
 @if (_viewModel.EnableLocalLogin)
@@ -32,22 +33,28 @@
         <MTabsItems Value="@Tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
-                    <LoginSection LoginHint="@_loginHint" />
+                    <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders" />
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">
                 <CascadingValue Value="@ReturnUrl">
-                    <RegisterSection />
+                    <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()" />
                 </CascadingValue>
             </MTabItem>
         </MTabsItems>
     </MCard>
 }
-
-@if (!_viewModel.EnableLocalLogin && !_viewModel.VisibleExternalProviders.Any())
+else
 {
-    <div class="alert alert-warning">
-        <strong>Invalid login request</strong>
-        There are no login schemes configured for this request.
-    </div>
+    @if (_viewModel.VisibleExternalProviders.Any())
+    {
+        <ExternalProviders ExternalProviderList="@_viewModel.VisibleExternalProviders" Environment="" ReturnUrl="@ReturnUrl" />
+    }
+    else
+    {
+        <MAlert Type="AlertTypes.Warning">
+            <strong>Invalid login request</strong>
+            There are no login schemes configured for this request.
+        </MAlert>
+    }
 }

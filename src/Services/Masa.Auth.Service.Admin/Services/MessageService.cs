@@ -10,14 +10,14 @@ public class MessageService : ServiceBase
         RouteOptions.DisableAutoMapRoute = false;
     }
 
-    [AllowAnonymous]
+    [DemoDisabledRoute]
     public async Task SendSmsAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
         await eventBus.PublishAsync(new SendSmsCommand(model));
     }
 
-    [AllowAnonymous]
+    [DemoDisabledRoute]
     public async Task SendEmailAsync(IEventBus eventBus,
         [FromBody] SendEmailModel sendEmailModel)
     {

@@ -10,7 +10,7 @@ public partial class User
     private int _pageSize = 10;
     private Guid _userId;
     private DateOnly? _startTime;
-    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly? _endTime;
 
     [Inject]
     public IJSRuntime? Js { get; set; }
@@ -182,7 +182,7 @@ public partial class User
         _page = 1;
         _userId = default;
         _startTime = default;
-        _endTime = DateOnly.FromDateTime(DateTime.Now);
+        _endTime = default;
         await GetUserAsync();
     }
 }

@@ -237,7 +237,7 @@
     "Position": "职位",
     "Department": "部门",
     "CompanyName": "公司名称",
-    "Address": "地区",
+    "Address": "地址",
     "Failed to query userList data:": "查询用户列表数据失败:",
     "Failed to query userDetail data:": "查询用户详情数据失败:",
     "Add user data success": "新建用户数据成功",

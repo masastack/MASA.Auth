@@ -25,9 +25,6 @@
     [Parameter]
     public bool Required { get; set; } 
 
-    [CascadingParameter]
-    public ScopedState ScopedState { get; set; } = new();
-
     bool _canEmailCode = true;
     int _emailCodeTime = LoginOptions.GetEmailCodeInterval;
     System.Timers.Timer? _emailTimer;
@@ -79,7 +76,6 @@
     {
         if (_emailTextField.Validate())
         {
-            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
             await AuthClient.UserService.SendEmailAsync(new SendEmailModel
                 {
                     Email = Value.Email,

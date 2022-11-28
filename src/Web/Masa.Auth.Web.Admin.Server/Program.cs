@@ -10,7 +10,6 @@ builder.WebHost.UseKestrel(option =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<TokenProvider>();
 
 #if DEBUG
 builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");

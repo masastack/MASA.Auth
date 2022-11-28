@@ -31,6 +31,13 @@ public class SsoAuthenticationStateCache
     public void AddAuthorizationContext(string url, AuthorizationRequest data)
     {
         Debug.WriteLine($"Adding url: {url}");
-        AuthorizationRequestCache.TryAdd(url, data);
+        if (HasAuthorizationRequest(url))
+        {
+            AuthorizationRequestCache[url] = data;
+        }
+        else
+        {
+            AuthorizationRequestCache.TryAdd(url, data);
+        }
     }
 }

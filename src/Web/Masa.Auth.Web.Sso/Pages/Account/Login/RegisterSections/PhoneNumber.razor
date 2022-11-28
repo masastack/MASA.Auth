@@ -15,9 +15,6 @@
     [Parameter]
     public bool Required { get; set; } = true;
 
-    [CascadingParameter]
-    public ScopedState ScopedState { get; set; } = new();
-
     MTextField<string> _phoneTextField = null!;
 
     [Inject]
@@ -33,7 +30,6 @@
     {
         if (_phoneTextField.Validate())
         {
-            HttpContextAccessor.HttpContext?.UseEnvironmentIsolation(ScopedState.Environment);
             await AuthClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
                 {
                     SendMsgCodeType = SendMsgCodeTypes.Register,

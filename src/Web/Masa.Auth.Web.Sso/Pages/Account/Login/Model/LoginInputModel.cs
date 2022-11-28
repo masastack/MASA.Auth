@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login.Model;
 
 public class LoginInputModel
 {
-    public string UserName { get; set; } = string.Empty;
+    public string Account { get; set; } = string.Empty;
 
     public string Password { get; set; } = string.Empty;
 
