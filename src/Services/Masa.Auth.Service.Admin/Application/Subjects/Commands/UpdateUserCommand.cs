@@ -5,4 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record UpdateUserCommand(UpdateUserDto User) : Command
 {
+    public User Result { get; set; } = null!;
 }

@@ -163,11 +163,6 @@ public partial class User
         AuthorizeDialogVisible = true;
     }
 
-    public void SwitchFilter()
-    {
-        Filter = !(Filter ?? false);
-    }
-
     async Task UpdateStaffAndThirdPartyUserAsync()
     {
         await GetUserAsync();

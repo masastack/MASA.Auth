@@ -7,5 +7,13 @@ export function onUserFileterAnimationEnd() {
                 filterDocument.className = filterDocument.className.replace('showAnimation', '').replace('closeAnimation', '');
             }
         };
-    }   
+    }
+    var filterDocument2 = document.getElementById('thirdPartyUserFilter');
+    if (filterDocument2) {
+        filterDocument2.onanimationend = () => {
+            if (filterDocument2.className.includes('showAnimation') || filterDocument2.className.includes('closeAnimation')) {
+                filterDocument2.className = filterDocument2.className.replace('showAnimation', '').replace('closeAnimation', '');
+            }
+        };
+    }
 }

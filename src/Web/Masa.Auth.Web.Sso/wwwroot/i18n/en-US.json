@@ -16,7 +16,7 @@
   "EmailCodePlaceHolder": "Place Enter Email Code",
   "GetEmailCode": "Get Email Code",
   "RememberLogin": "Remember My Login",
-  "LdapLogin": "LDAP Login",
+  "LdapLogin": "Ldap Login",
   "PasswordLogin": "Password Login",
   "PhoneLogin": "Phone Login",
   "PhoneNumberPrompt": "Please enter the correct mobile phone number",
