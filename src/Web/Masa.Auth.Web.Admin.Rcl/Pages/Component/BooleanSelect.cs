@@ -14,7 +14,6 @@ public class BooleanSelect : SSelect<KeyValuePair<string, bool?>, bool?, bool?>
         Clearable = true;
         Items = new List<KeyValuePair<string, bool?>>()
         {
-            // new(I18N.T("All"), null),
             new(I18N.T("Enable"), true),
             new(I18N.T("Disabled"), false)
         };

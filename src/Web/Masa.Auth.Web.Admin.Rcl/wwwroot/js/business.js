@@ -8,7 +8,7 @@ export function onUserFileterAnimationEnd() {
             }
         };
     }
-    var filterDocument2 = document.getElementById('userFilter2');
+    var filterDocument2 = document.getElementById('thirdPartyUserFilter');
     if (filterDocument2) {
         filterDocument2.onanimationend = () => {
             if (filterDocument2.className.includes('showAnimation') || filterDocument2.className.includes('closeAnimation')) {
