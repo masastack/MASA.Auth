@@ -4,6 +4,6 @@
 namespace Masa.Auth.Service.Admin.Infrastructure.Attributes;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-public class ProductionDisabledRouteAttribute : Attribute
+public class DemoDisabledRouteAttribute : Attribute
 {
 }

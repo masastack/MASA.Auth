@@ -139,8 +139,8 @@ builder.Services
     .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
-        eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
         eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
+        eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment

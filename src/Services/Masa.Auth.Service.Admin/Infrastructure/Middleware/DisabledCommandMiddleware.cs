@@ -23,7 +23,7 @@ public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
     public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
     {
         var user = _userContext.GetUser<MasaUser>();
-        //todo IsProduction
+        //todo IsDemo
         if (_hostEnvironment.IsStaging() && user?.Account == "Guest" && @event is ICommand)
         {
             _logger.LogWarning("Guest operation");

@@ -14,11 +14,12 @@ public class DisabledRouteMiddleware : IMiddleware, IScopedDependency
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        //todo IsDemo
         if (_hostEnvironment.IsProduction())
         {
             var endpoint = context.GetEndpoint();
             var disabledRouteAttribute = (endpoint as RouteEndpoint)?.Metadata
-                .GetMetadata<ProductionDisabledRouteAttribute>();
+                .GetMetadata<DemoDisabledRouteAttribute>();
             if (disabledRouteAttribute != null)
             {
                 throw new UserFriendlyException("演示环境禁止该操作");
