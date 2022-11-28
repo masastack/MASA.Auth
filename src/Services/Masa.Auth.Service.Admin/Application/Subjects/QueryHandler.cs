@@ -196,7 +196,7 @@ public class QueryHandler
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
         if (!string.IsNullOrEmpty(phoneNumber))
-            condition = condition.Or(user => user.PhoneNumber == phoneNumber);
+            condition = condition.Or(user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
         if (!string.IsNullOrEmpty(email))
             condition = condition.Or(user => user.Email == email);
         if (!string.IsNullOrEmpty(idCard))
@@ -221,7 +221,7 @@ public class QueryHandler
                 throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
                 throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
-            if (string.IsNullOrEmpty(account) && phoneNumber == exitUser.Account)
+            if (phoneNumber == exitUser.Account)
                 throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
         }
         return exitUser;

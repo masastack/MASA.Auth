@@ -17,15 +17,21 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         #region User
 
         [EventHandler]
+        public async Task RegisterUserOperationLogAsync(RegisterUserCommand command)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RegisterUser, $"注册用户：{command.Result.Account}", command.Result.Id);
+        }
+
+        [EventHandler]
         public async Task AddUserOperationLogAsync(AddUserCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUser, $"添加用户：{command.User.Account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUser, $"添加用户：{command.Result.Account}");
         }
 
         [EventHandler]
         public async Task UpdateUserOperationLogAsync(UpdateUserCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{command.User.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{command.Result.Account}");
         }
 
         async Task<string> GetUserAccountByIdAsync(Guid id)
@@ -62,9 +68,45 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task ValidateByAccountOperationLogAsync(ValidateByAccountCommand command)
         {
-            var user = await _authDbContext.Set<User>().FirstOrDefaultAsync(user => user.Account == command.UserAccountValidateDto.Account);
-            if (user is null) return;
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.Login, $"用户：{command.UserAccountValidateDto.Account}登录", user.Id);
+            if (command.Result is not null)
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.Login, $"用户登录：使用账号{command.Result.Account}登录", command.Result.Id);
+        }
+
+        [EventHandler]
+        public async Task UpdateUserPhoneNumberOperationLogAsync(UpdateUserPhoneNumberCommand command)
+        {
+            if (command.Result is true)
+            {
+                var account = await GetUserAccountByIdAsync(command.User.Id);
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户:将{account}手机号改为{command.User.PhoneNumber}");
+            }
+        }
+
+        [EventHandler]
+        public async Task LoginByPhoneNumberOperationLogAsync(LoginByPhoneNumberCommand command)
+        {
+            if (command.Result is not null)
+            {
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.Login, $"用户登录:使用手机号{command.Result.PhoneNumber}登录", command.Result.Id);
+            }
+        }
+
+        [EventHandler(1)]
+        public async Task DisableUserOperationLogAsync(DisableUserCommand command)
+        {
+            if (command.Result is true)
+            {
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户:将用户{command.User.Account}禁用");
+            }
+        }
+
+        [EventHandler]
+        public async Task ResetPasswordOperationLogAsync(ResetPasswordCommand command)
+        {
+            if (command.Result is not null)
+            {
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUserPassword, $"编辑用户{command.Result.Account}密码");
+            }
         }
 
         [EventHandler]
@@ -97,6 +139,12 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         }
 
         [EventHandler]
+        public async Task UpdateStaffBasicInfoAsync(UpdateStaffBasicInfoCommand command)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditStaff, $"编辑员工：{command.Staff.DisplayName}");
+        }
+
+        [EventHandler(0)]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
             await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"删除员工：{command.Result?.DisplayName}");
@@ -169,8 +217,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task RemoveTeamLogAsync(RemoveTeamCommand removeTeamCommand)
         {
-            if(removeTeamCommand.Result is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveTeam, $"删除团队：{removeTeamCommand.Result.Name}");
+            if (removeTeamCommand.Result is not null)
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveTeam, $"删除团队：{removeTeamCommand.Result.Name}");
         }
         #endregion
     }

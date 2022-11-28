@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Components.Authorization;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class UpdateUserDialog
@@ -16,6 +18,14 @@ public partial class UpdateUserDialog
 
     [Parameter]
     public Guid UserId { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    [Inject]
+    public IPermissionValidator Validator { get; set; } = default!;
+
+    private bool CanUpdateAccount { get; set; }
 
     private UserDetailDto UserDetail { get; set; } = new();
 
@@ -37,6 +47,12 @@ public partial class UpdateUserDialog
         {
             Visible = false;
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateTask;
+        CanUpdateAccount = !Validator.Validate("user.account.update", state.User);
     }
 
     protected override async Task OnParametersSetAsync()

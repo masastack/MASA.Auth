@@ -34,7 +34,7 @@
                 </MRow>
                 <MRow>
                     <MCol>
-                        <STextField Required @bind-Value="User.Account" Label="@T("Account")" />
+                        <STextField Required Readonly=CanUpdateAccount @bind-Value="User.Account" Label="@T("Account")" />
                     </MCol>
                     <MCol>
                         <SCopyPassword Value="@UserPassword.Password" ValueChanged="ResetUserPasswordAsync" />

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Security.AccessControl;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -72,7 +74,7 @@ public class CommandHandler
 
     #region User
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task RegisterUserAsync(RegisterUserCommand command)
     {
         var model = command.RegisterModel;
@@ -142,6 +144,7 @@ public class CommandHandler
         user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
+        command.Result = user;
     }
 
     [EventHandler(1)]
@@ -289,7 +292,7 @@ public class CommandHandler
         }
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task UpdateUserPhoneNumberAsync(UpdateUserPhoneNumberCommand command)
     {
         var userDto = command.User;
@@ -315,7 +318,7 @@ public class CommandHandler
         }
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task LoginByPhoneNumberAsync(LoginByPhoneNumberCommand command)
     {
         var model = command.Model;
@@ -370,7 +373,7 @@ public class CommandHandler
         command.Result = true;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
         //todo UserDomainService
@@ -490,7 +493,7 @@ public class CommandHandler
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
         if (!string.IsNullOrEmpty(phoneNumber))
-            condition = condition.Or(user => user.PhoneNumber == phoneNumber);
+            condition = condition.Or(user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
         if (!string.IsNullOrEmpty(email))
             condition = condition.Or(user => user.Email == email);
         if (!string.IsNullOrEmpty(idCard))
@@ -515,13 +518,13 @@ public class CommandHandler
                 throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
                 throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
-            if (string.IsNullOrEmpty(account) && phoneNumber == exitUser.Account)
+            if (phoneNumber == exitUser.Account)
                 throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
         }
         return exitUser;
     }
 
-    [EventHandler]
+    [EventHandler(1)]
     public async Task ResetPasswordAsync(ResetPasswordCommand command)
     {
         var resetType = command.ResetPasswordType;
@@ -540,12 +543,13 @@ public class CommandHandler
         var captcha = await _multilevelCacheClient.GetAsync<string>(key);
         if (!command.Captcha.Equals(captcha))
         {
-            throw new UserFriendlyException("Validation failed");
+            throw new UserFriendlyException("Validation captcha");
         }
         //reset password
         var user = await _userRepository.GetByVoucherAsync(command.Voucher);
         user.UpdatePassword(command.Password);
         await _userRepository.UpdateAsync(user);
+        command.Result = user;
     }
 
     [EventHandler]

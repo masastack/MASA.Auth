@@ -8,7 +8,8 @@ public class DisabledRouteMiddleware : IMiddleware, IScopedDependency
     List<string?> _disabledRoute = new List<string?>()
     {
         "/api/message/sms",
-        "/api/message/email"
+        "/api/message/email",
+        "/api/staff/sync"
     };
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
