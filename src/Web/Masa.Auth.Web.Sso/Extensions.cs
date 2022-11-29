@@ -159,9 +159,12 @@ public static class Extensions
         else
         {
             var type = registration.ImplementationType;
-            var innerType = typeof(Decorator<,>).MakeGenericType(typeof(TService), registration.ImplementationType);
-            services.Add(new ServiceDescriptor(typeof(Decorator<TService>), innerType, ServiceLifetime.Transient));
-            services.Add(new ServiceDescriptor(type, type, registration.Lifetime));
+            if (type != null)
+            {
+                var innerType = typeof(Decorator<,>).MakeGenericType(typeof(TService), type);
+                services.Add(new ServiceDescriptor(typeof(Decorator<TService>), innerType, ServiceLifetime.Transient));
+                services.Add(new ServiceDescriptor(type, type, registration.Lifetime));
+            }
         }
     }
 }

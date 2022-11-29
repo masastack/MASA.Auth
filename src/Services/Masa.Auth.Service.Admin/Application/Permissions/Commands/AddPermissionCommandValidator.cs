@@ -7,6 +7,6 @@ public class AddPermissionCommandValidator : AbstractValidator<AddPermissionComm
 {
     public AddPermissionCommandValidator()
     {
-        RuleFor(command => command.PermissionDetail).SetValidator(new PermissionDetailDtoValidator<PermissionDetailDto>());
+        RuleFor(command => command.PermissionDetail).SetValidator(new PermissionDetailValidator<PermissionDetailDto>());
     }
 }
