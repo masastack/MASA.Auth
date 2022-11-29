@@ -46,6 +46,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.ApiGateways.Calle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Security.OAuth.Providers", "src\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj", "{D58D018F-26B0-45D1-AD0B-E2777C59ED44}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorComponent", "..\wuweilai\project\MASA.Blazor\src\BlazorComponent\src\Component\BlazorComponent\BlazorComponent.csproj", "{A4684D71-D660-46EE-8CE6-EDC83A35527C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Blazor", "..\wuweilai\project\MASA.Blazor\src\Masa.Blazor\Masa.Blazor.csproj", "{55AD612B-D4DD-4D3C-879C-249A15F023DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +130,22 @@ Global
 		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|x86.ActiveCfg = Release|Any CPU
 		{D58D018F-26B0-45D1-AD0B-E2777C59ED44}.Release|x86.Build.0 = Release|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Debug|x86.Build.0 = Debug|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Release|x86.ActiveCfg = Release|Any CPU
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C}.Release|x86.Build.0 = Release|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +165,8 @@ Global
 		{23B71507-6474-4AE0-878E-1BA7113EBE0E} = {F3986DD3-0372-4929-B72A-09D93196541E}
 		{58F03BDE-6640-4231-A5FA-399BF2EF3773} = {32774681-0D67-48A6-A379-D57015094F85}
 		{D58D018F-26B0-45D1-AD0B-E2777C59ED44} = {F3986DD3-0372-4929-B72A-09D93196541E}
+		{A4684D71-D660-46EE-8CE6-EDC83A35527C} = {F3986DD3-0372-4929-B72A-09D93196541E}
+		{55AD612B-D4DD-4D3C-879C-249A15F023DA} = {F3986DD3-0372-4929-B72A-09D93196541E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B83BA2BA-19E5-41FB-A92A-16A03DA229E4}

@@ -99,6 +99,7 @@ public partial class SyncStaffDialog
             }
             Loading = false;
         }
+        else OpenWarningMessage(T("Please upload CSV file"));
     }
 
     private async Task<byte[]> ReadFile(IBrowserFile file)

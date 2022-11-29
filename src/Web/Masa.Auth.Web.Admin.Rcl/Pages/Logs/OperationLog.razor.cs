@@ -113,7 +113,7 @@ public partial class OperationLog
         new() { Text = T(nameof(OperationLogDto.OperatorName)), Value = nameof(OperationLogDto.OperatorName), Sortable = false },
         new() { Text = T(nameof(OperationLogDto.OperationType)), Value = nameof(OperationLogDto.OperationType), Sortable = false },
         new() { Text = T(nameof(OperationLogDto.OperationDescription)), Value = nameof(OperationLogDto.OperationDescription), Sortable = false },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetOperationLogsAsync()

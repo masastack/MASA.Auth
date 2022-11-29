@@ -64,7 +64,7 @@ public partial class UserClaim
         new() { Text = T("Name"), Value = nameof(UserClaimDto.Name), Sortable = false, Width="250px" },
         new() { Text = T(nameof(UserClaimDto.Description)), Value = nameof(UserClaimDto.Description), Sortable = false },
         new() { Text = T("Type"), Value = nameof(UserClaimDto.UserClaimType), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetUserClaimsAsync()

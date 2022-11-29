@@ -82,7 +82,7 @@ public partial class ThirdPartyIdp
         new() { Text = T("PlatformType"), Value = nameof(ThirdPartyIdpDto.ThirdPartyIdpType), Sortable = false },      
         new() { Text = T(nameof(ThirdPartyIdpDto.CreationTime)), Value = nameof(ThirdPartyIdpDto.CreationTime), Sortable = false },
         new() { Text = T("State"), Value = nameof(ThirdPartyIdpDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetThirdPartyIdpsAsync()

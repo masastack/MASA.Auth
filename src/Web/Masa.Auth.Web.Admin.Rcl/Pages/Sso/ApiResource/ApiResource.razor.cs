@@ -64,7 +64,7 @@ public partial class ApiResource
         new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false, Width="250px" },
         new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
         new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false , Width="105px"},
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetApiResourcesAsync()

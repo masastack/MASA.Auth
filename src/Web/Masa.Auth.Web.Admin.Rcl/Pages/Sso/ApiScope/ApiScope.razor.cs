@@ -65,7 +65,7 @@ public partial class ApiScope
         new() { Text = T("ApiScope.Required"), Value = nameof(ApiScopeDto.Required), Sortable = false, Width="105px" },
         new() { Text = T(nameof(ApiScopeDto.Description)), Value = nameof(ApiScopeDto.Description), Sortable = false },
         new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetApiScopesAsync()

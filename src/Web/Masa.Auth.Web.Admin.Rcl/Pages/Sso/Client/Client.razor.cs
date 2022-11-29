@@ -21,7 +21,7 @@ public partial class Client
         new() { Text = T(nameof(ClientDto.ClientType)), Value = nameof(ClientDto.ClientType), Sortable = false, Width="105px" },
         new() { Text = T(nameof(ClientDto.Description)), Value = nameof(ClientDto.Description), Sortable = false },
         new() { Text = T(nameof(ClientDto.Enabled)), Value = nameof(ClientDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

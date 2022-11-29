@@ -81,7 +81,7 @@ public partial class Role
         new() { Text = T(nameof(RoleDto.Creator)), Value = nameof(RoleDto.Creator), Sortable = false },
         new() { Text = T(nameof(RoleDto.Modifier)), Value = nameof(RoleDto.Modifier), Sortable = false },
         new() { Text = T("State"), Value = nameof(RoleDto.Enabled), Sortable = false , Width="105px"},
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px"},
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px"},
     };
 
     public async Task GetRolesAsync()
