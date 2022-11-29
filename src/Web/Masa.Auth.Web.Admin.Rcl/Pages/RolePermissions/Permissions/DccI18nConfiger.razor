@@ -2,10 +2,10 @@
 @inject IConfigurationApiManage ConfigurationApiManage
 @inject IConfigurationApi ConfigurationApi
 
-<STextField @bind-Value="Name"
+<STextField Value="Name" ValueChanged="NameChanged"
             Required
             Label="@Label"
-            Action="@(props => { props.Content = DT("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
+            Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
             Type="text">
     <PrependContent>
         <span class="d-flex align-center justify-center" style="min-width:100px;height: 34px;">
