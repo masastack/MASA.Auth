@@ -35,7 +35,7 @@ public class LdapCommandHandler
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
         {
-            throw new UserFriendlyException("connect error");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
         }
     }
 

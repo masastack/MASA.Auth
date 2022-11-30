@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {
-    Task<User?> GetDetailAsync(Guid id);
+    Task<User> GetDetailAsync(Guid id);
 
     Task<User?> FindWithIncludAsync(Expression<Func<User, bool>> predicate, List<string>? includeProperties = null, CancellationToken cancellationToken = default(CancellationToken));
 

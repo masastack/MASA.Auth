@@ -71,7 +71,7 @@ public class CommandHandler
 
         role = await _roleRepository.GetByIdAsync(roleDto.Id);
         if (role is null)
-            throw new UserFriendlyException($"The current role does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         role.Update(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
@@ -94,7 +94,7 @@ public class CommandHandler
                                     .AsSplitQuery()
                                     .FirstOrDefaultAsync();
         if (role is null)
-            throw new UserFriendlyException($"The current role does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         await _roleRepository.RemoveAsync(role);
     }

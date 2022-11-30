@@ -27,7 +27,7 @@ public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
         if (_hostEnvironment.IsStaging() && user?.Account == "Guest" && @event is ICommand)
         {
             _logger.LogWarning("Guest operation");
-            throw new UserFriendlyException("演示账号禁止操作");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.GUEST_ACCOUNT_OPERATE);
         }
         await next();
     }

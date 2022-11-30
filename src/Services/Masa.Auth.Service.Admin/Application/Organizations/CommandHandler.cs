@@ -157,7 +157,7 @@ public class CommandHandler
     {
         var position = await _positionRepository.FindAsync(position => position.Id == command.Position.Id);
         if (position == null)
-            throw new UserFriendlyException("The current position does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.POSITION_NOT_EXIST);
 
         await _positionRepository.RemoveAsync(position);
     }

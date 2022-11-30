@@ -57,12 +57,12 @@ public class CommandHandler
                 cacheKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
                 break;
             default:
-                throw new UserFriendlyException("Invalid SendMsgCodeType");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SEND_MSG_CODE_TYPE);
         }
         var alreadySend = await _sms.CheckAlreadySendAsync(cacheKey);
         if (alreadySend)
         {
-            throw new UserFriendlyException("Verification code has been sent, please try again later");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CAPTCHA_SENDED);
         }
         else
         {
@@ -93,7 +93,7 @@ public class CommandHandler
             case SendEmailTypes.Bind:
                 break;
             default:
-                throw new UserFriendlyException("Invalid SendEmailType");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SEND_EMAIL_TYPE);
         }
         await _emailAgent.SendEmailAsync(model);
     }
@@ -101,6 +101,6 @@ public class CommandHandler
     async Task<User> CheckUserExistAsync(Guid userId)
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
-        return user ?? throw new UserFriendlyException("The current user does not exist");
+        return user ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
     }
 }

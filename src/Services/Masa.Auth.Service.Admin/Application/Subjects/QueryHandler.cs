@@ -76,7 +76,7 @@ public class QueryHandler
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
-        if (user is null) throw new UserFriendlyException("This user data does not exist");
+        if (user is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         var creator = await _multilevelCacheClient.GetUserAsync(user.Creator);
         var modifier = await _multilevelCacheClient.GetUserAsync(user.Modifier);
         var userDetail = await UserSplicingDataAsync(user);
@@ -283,7 +283,7 @@ public class QueryHandler
                                         .Include(s => s.TeamStaffs)
                                         .Include(s => s.Position)
                                         .FirstOrDefaultAsync(s => s.Id == query.StaffId);
-        if (staff is null) throw new UserFriendlyException("This staff data does not exist");
+        if (staff is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
 
         query.Result = staff;
 
@@ -451,7 +451,7 @@ public class QueryHandler
     public async Task GetThirdPartyUserDetailAsync(ThirdPartyUserDetailQuery query)
     {
         var tpu = await _thirdPartyUserRepository.GetDetail(query.ThirdPartyUserId);
-        if (tpu is null) throw new UserFriendlyException("This thirdPartyUser data does not exist");
+        if (tpu is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_USER_NOT_FOUND);
 
         query.Result = tpu;
 
@@ -506,7 +506,7 @@ public class QueryHandler
     public async Task GetThirdPartyIdpDetailAsync(ThirdPartyIdpDetailQuery query)
     {
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == query.ThirdPartyIdpId);
-        if (thirdPartyIdp is null) throw new UserFriendlyException("This thirdPartyIdp data does not exist");
+        if (thirdPartyIdp is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_FOUND);
 
         query.Result = thirdPartyIdp.Adapt<ThirdPartyIdpDetailDto>();
     }

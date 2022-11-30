@@ -87,15 +87,15 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     {
         if (RolePermissions.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,some role used!");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETE_ROLE_USED_ERROR);
         }
         if (UserPermissions.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,some user used!");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETE_USER_USED_ERROR);
         }
         if (parentPermissionRelations.Any())
         {
-            throw new UserFriendlyException("current permission can`t delete,because relation by other permisson!");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETERELATION_ERROR);
         }
     }
 
@@ -103,7 +103,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     {
         if (Type == PermissionTypes.Api && childrenIds.Any())
         {
-            throw new UserFriendlyException("the permission of api type can`t bind api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_API_BIND_ERROR);
         }
         _childPermissionRelations = _childPermissionRelations.MergeBy(
             childrenIds.Select(childrenId => new PermissionRelation(Id, childrenId)),
@@ -114,7 +114,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     {
         if (Type == PermissionTypes.Api && parentId != Guid.Empty)
         {
-            throw new UserFriendlyException("the permission of api type can`t set parent");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_API_PARENT_ERROR);
         }
         ParentId = parentId;
     }

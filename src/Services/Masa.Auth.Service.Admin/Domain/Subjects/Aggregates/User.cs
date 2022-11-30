@@ -340,7 +340,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     {
         if (string.IsNullOrEmpty(phoneNumber) && string.IsNullOrEmpty(email))
         {
-            throw new UserFriendlyException("One of the phone number and email must be assigned");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PHONE_NUMBER_AND_EMAIL_EMPTY_ERROR);
         }
         PhoneNumber = phoneNumber;
         Email = email;

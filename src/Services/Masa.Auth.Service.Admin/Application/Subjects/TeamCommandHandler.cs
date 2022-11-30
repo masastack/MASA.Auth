@@ -93,7 +93,7 @@ public class TeamCommandHandler
         var team = await _teamRepository.GetByIdAsync(removeTeamCommand.TeamId);
         if (team.TeamStaffs.Any())
         {
-            throw new UserFriendlyException("the team has staffs can`t delete");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.TEAM_HAS_STAFF_DELETE);
         }
         await _teamRepository.RemoveAsync(team);
 

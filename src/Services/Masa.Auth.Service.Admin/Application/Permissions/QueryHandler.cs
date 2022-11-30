@@ -61,7 +61,7 @@ public class QueryHandler
     public async Task GetRoleDetailAsync(RoleDetailQuery query)
     {
         var role = await _roleRepository.GetDetailAsync(query.RoleId);
-        if (role is null) throw new UserFriendlyException("This role data does not exist");
+        if (role is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         query.Result = role;
         var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier);
@@ -79,7 +79,7 @@ public class QueryHandler
                             .ThenInclude(tr => tr.Team)
                             .AsSplitQuery()
                             .FirstOrDefaultAsync(r => r.Id == query.RoleId);
-        if (role is null) throw new UserFriendlyException("This role data does not exist");
+        if (role is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         query.Result = new(
             role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.DisplayName, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),

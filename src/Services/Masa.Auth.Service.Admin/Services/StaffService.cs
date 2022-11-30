@@ -164,7 +164,7 @@ public class StaffService : RestServiceBase
         ICsvImporter importer = new CsvImporter();
         using var stream = new MemoryStream(file.FileContent);
         var import = await importer.Import<SyncStaffDto>(stream);
-        if (import.HasError) throw new UserFriendlyException("Read file data failed");
+        if (import.HasError) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.FILE_READ_FAILED);
         var syncCommand = new SyncStaffCommand(import.Data.ToList());
         await eventBus.PublishAsync(syncCommand);
         return syncCommand.Result;
@@ -175,7 +175,7 @@ public class StaffService : RestServiceBase
         var updateCurrentTeamCommand = new UpdateStaffCurrentTeamCommand(updateCurrentTeam.UserId, updateCurrentTeam.TeamId);
         await eventBus.PublishAsync(updateCurrentTeamCommand);
     }
-    
+
     private async Task<StaffDefaultPasswordDto> GetDefaultPasswordAsync(IEventBus eventBus)
     {
         var query = new StaffDefaultPasswordQuery();

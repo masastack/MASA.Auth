@@ -22,6 +22,6 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
             .Include(t => t.TeamStaffs)
             .Include(t => t.TeamRoles)
             .FirstOrDefaultAsync()
-            ?? throw new UserFriendlyException("The current team does not exist");
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.TEAM_NOT_EXIST);
     }
 }
