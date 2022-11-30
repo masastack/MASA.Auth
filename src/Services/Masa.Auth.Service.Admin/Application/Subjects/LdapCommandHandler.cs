@@ -75,7 +75,7 @@ public class LdapCommandHandler
             if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
             try
             {
-                var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
+                var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
                 await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             }
             catch (Exception e)
