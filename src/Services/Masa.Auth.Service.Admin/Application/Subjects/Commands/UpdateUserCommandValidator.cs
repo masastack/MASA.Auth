@@ -12,7 +12,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
         RuleFor(command => command.User.PhoneNumber).Phone();
         RuleFor(command => command.User.Email).Email();
         RuleFor(command => command.User.IdCard).IdCard();
-        RuleFor(command => command.User.CompanyName).ChineseLetter().MaxLength(50);
+        RuleFor(command => command.User.CompanyName).ChineseLetterNumber().MaxLength(50);
         RuleFor(command => command.User.Position).ChineseLetterNumber().MaxLength(20);
     }
 }

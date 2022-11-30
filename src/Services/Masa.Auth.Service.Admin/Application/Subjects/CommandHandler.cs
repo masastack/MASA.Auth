@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Security.AccessControl;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -509,6 +507,8 @@ public class CommandHandler
                                            .FirstOrDefaultAsync(condition);
         if (exitUser is not null)
         {
+            if (account != exitUser.Account && phoneNumber != exitUser.PhoneNumber && phoneNumber == exitUser.Account)
+                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
                 throw new UserFriendlyException($"User with phone number [{phoneNumber}] already exists");
@@ -518,8 +518,6 @@ public class CommandHandler
                 throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
                 throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
-            if (phoneNumber == exitUser.Account)
-                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
         }
         return exitUser;
     }

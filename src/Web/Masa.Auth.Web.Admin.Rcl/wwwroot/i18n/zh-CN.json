@@ -580,11 +580,12 @@
   "Please enter a number less than 50 of Account": "账号请输入小于等于50个字符",
   "Please enter a number greater than 2 of Name": "名称请输入大于等于2个字符",
   "Please enter a number less than 50 of Name": "名称请输入小于等于50个字符",
+  "Please enter a number less than 20 of Name": "名称请输入小于等于20个字符",
   "Please enter a number greater than 2 of NickName": "昵称请输入大于等于2个字符",
   "Please enter a number less than 50 of NickName": "昵称请输入小于等于50个字符",
   "Please enter a number less than 16 of Position": "职位请输入小于等于16个字符",
   "Please enter a number greater than 2 of Position": "职位请输入大于等于2个字符",
-  "Can only input chinese and letter of Company Name": "公司名称只可以输入中文字母",
+  "Can only input chinese and letter and number of Company Name": "公司名称只可以输入中文字母数字",
   "Please enter a number less than 50 of Company Name": "公司名称请输入小于等于50个字符",
   "Please enter a number greater than 2 of Company Name": "公司名称请输入大于等于2个字符",
   "Please enter a number less than 16 of Department": "部门请输入小于等于16个字符",
@@ -610,5 +611,9 @@
   "Please enter a number greater than 2 of Client Id": "客户端Id请输入大于等于两个字符",
   "Please enter a number less than 50 of Client Id": "客户端Id请输入小于等于50个字符",
   "Please enter a number greater than 2 of Client Secret": "客户端密钥请输入大于等于两个字符",
-  "Please enter a number less than 255 of Client Secret": "客户端密钥请输入小于等于255个字符"
+  "Please enter a number less than 255 of Client Secret": "客户端密钥请输入小于等于255个字符",
+  "Callback Path is required": "回调地址必须填写",
+  "Authorization Endpoint is required": "身份认证地址必须填写",
+  "Token Endpoint is required": "获取Token地址必须填写",
+  "User Information Endpoint is required": "获取用户地址必须填写"
 }

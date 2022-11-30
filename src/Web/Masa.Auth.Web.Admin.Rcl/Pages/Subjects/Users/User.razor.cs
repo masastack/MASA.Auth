@@ -10,7 +10,7 @@ public partial class User
     private int _pageSize = 10;
     private Guid _userId;
     private DateOnly? _startTime;
-    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly? _endTime;
 
     [Inject]
     public IJSRuntime? Js { get; set; }

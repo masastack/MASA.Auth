@@ -24,7 +24,7 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
         {
             @operator ??= _userContext.GetUserId<Guid>();
             var operatorName = await Context.Set<User>()
-                                            .Where(user => user.Id == @operator).Select(user => user.Name)
+                                            .Where(user => user.Id == @operator).Select(user => user.DisplayName)
                                             .FirstAsync();
             await AddAsync(new OperationLog(
                 @operator.Value, operatorName, operationType, default, operationDescription

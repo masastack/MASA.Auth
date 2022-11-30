@@ -12,7 +12,7 @@ public partial class OperationLog
     private int _pageSize = 10;
     private Guid _userId;
     private DateTime? _startTime;
-    private DateTime? _endTime = DateTime.UtcNow;
+    private DateTime? _endTime;
     private OperationTypes _operationType;
 
     public Guid UserId

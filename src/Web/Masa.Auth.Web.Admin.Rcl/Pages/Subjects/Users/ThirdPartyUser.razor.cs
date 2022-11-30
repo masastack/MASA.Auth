@@ -11,7 +11,7 @@ public partial class ThirdPartyUser
     private string? _search;
     private Guid _thirdPartyId;
     private DateOnly? _startTime;
-    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly? _endTime;
     private LdapDialog ldapDialog = null!;
 
     [Inject]
