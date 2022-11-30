@@ -21,8 +21,6 @@ public record UpsertLdapUserCommand : Command
 
     public string? Account { get; set; }
 
-    public string Password { get; set; }
-
     public string JobNumber { get; set; }
 
     public UserModel Result { get; set; } = new UserModel();
@@ -30,11 +28,10 @@ public record UpsertLdapUserCommand : Command
     public UpsertLdapUserCommand()
     {
         PhoneNumber = "";
-        Password = "";
         JobNumber = "";
     }
 
-    public UpsertLdapUserCommand(string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber)
+    public UpsertLdapUserCommand(string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string jobNumber)
     {
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
@@ -43,11 +40,10 @@ public record UpsertLdapUserCommand : Command
         PhoneNumber = phoneNumber;
         Email = email;
         Account = account;
-        Password = password;
         JobNumber = jobNumber;
     }
 
-    public UpsertLdapUserCommand(Guid id, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string password, string jobNumber) : this(thridPartyIdentity, extendedData, name, displayName, phoneNumber, email, account, password, jobNumber)
+    public UpsertLdapUserCommand(Guid id, string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string jobNumber) : this(thridPartyIdentity, extendedData, name, displayName, phoneNumber, email, account, jobNumber)
     {
         Id = id;
     }

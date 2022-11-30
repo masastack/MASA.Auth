@@ -406,7 +406,7 @@ public class CommandHandler
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_VALIDATION_FAILED, account);
             }
 
-            var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
+            var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
             await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             //get real user account
             account = upsertThirdPartyUserCommand.Result.Account;
@@ -1050,7 +1050,6 @@ public class CommandHandler
                     model.PhoneNumber!,
                     model.Email,
                     model.Account,
-                    model.Password!,
                     model.PhoneNumber!
                 );
             await _eventBus.PublishAsync(upsertThirdPartyUserForLdapCommand);
@@ -1104,8 +1103,6 @@ public class CommandHandler
             if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
             thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-            var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
-            await _eventBus.PublishAsync(resetUserPasswordCommand);
             command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == thirdPartyUser.UserId)).Adapt<UserModel>();
         }
         else
