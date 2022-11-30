@@ -46,6 +46,7 @@ public class QueryHandler
     public async Task GetUsersAsync(UsersQuery query)
     {
         Expression<Func<User, bool>> condition = user => true;
+        //todo And overload method
         if (query.Enabled is not null)
             condition = condition.And(user => user.Enabled == query.Enabled);
 
@@ -193,6 +194,7 @@ public class QueryHandler
     private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
         Expression<Func<User, bool>> condition = user => false;
+        //todo And overload method
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
         if (!string.IsNullOrEmpty(phoneNumber))

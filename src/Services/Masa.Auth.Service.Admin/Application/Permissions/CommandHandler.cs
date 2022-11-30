@@ -118,10 +118,8 @@ public class CommandHandler
 
         Expression<Func<Permission, bool>> predicate = d => d.Code.Equals(permissionBaseInfo.Code) &&
             d.SystemId == permissionBaseInfo.SystemId && d.AppId == permissionBaseInfo.AppId;
-        if (permissionBaseInfo.IsUpdate)
-        {
-            predicate = predicate.And(d => d.Id != permissionBaseInfo.Id);
-        }
+        predicate = predicate.And(permissionBaseInfo.IsUpdate, d => d.Id != permissionBaseInfo.Id);
+
         if (_permissionRepository.Any(predicate))
         {
             throw new UserFriendlyException($"The permission code {permissionBaseInfo.Code} already exists");

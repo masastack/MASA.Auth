@@ -195,10 +195,7 @@ public class QueryHandler
     public async Task ApiPermissionSelectQueryAsync(ApiPermissionSelectQuery apiPermissionSelectQuery)
     {
         Expression<Func<Permission, bool>> condition = permission => permission.Type == PermissionTypes.Api;
-        if (!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId))
-        {
-            condition = condition.And(permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
-        }
+        condition = condition.And(!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId), permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
 
         var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount);
         apiPermissionSelectQuery.Result = permissions

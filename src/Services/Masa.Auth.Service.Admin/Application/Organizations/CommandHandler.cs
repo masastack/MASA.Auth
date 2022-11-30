@@ -24,10 +24,7 @@ public class CommandHandler
     {
         var dto = command.UpsertDepartmentDto;
         Expression<Func<Department, bool>> predicate = d => d.Name.Equals(dto.Name) && d.ParentId == dto.ParentId;
-        if (dto.IsUpdate)
-        {
-            predicate = predicate.And(d => d.Id != dto.Id);
-        }
+        predicate = predicate.And(dto.IsUpdate, d => d.Id != dto.Id);
         if (_departmentRepository.Any(predicate))
         {
             throw new UserFriendlyException($"The department name {dto.Name} already exists");

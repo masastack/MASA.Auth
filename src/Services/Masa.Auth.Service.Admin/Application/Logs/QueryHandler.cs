@@ -16,6 +16,7 @@ public class QueryHandler
     public async Task GetOperationLogAsync(OperationLogsQuery query)
     {
         Expression<Func<OperationLog, bool>> condition = operationLog => true;
+        //todo And overload method
         if (query.Operator != default)
             condition = condition.And(operationLog => operationLog.Operator == query.Operator);
         if (query.OperationType != default)

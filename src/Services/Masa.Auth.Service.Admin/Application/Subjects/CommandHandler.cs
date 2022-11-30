@@ -481,6 +481,7 @@ public class CommandHandler
 
     private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
+        //todo And overload method
         Expression<Func<User, bool>> condition = user => false;
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
@@ -501,10 +502,6 @@ public class CommandHandler
                                            .FirstOrDefaultAsync(condition);
         if (exitUser is not null)
         {
-            //        public const string USER_PHONE_NUMBER_EXIST = "UserPhoneNumberExist";
-            //public const string USER_EMAIL_EXIST = "UserEmailExist";
-            //public const string USER_ID_CARD_EXIST = "UserIdCardExist";
-            //public const string USER_ACCOUNT_EXIST = "UserAccountExist";
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
@@ -864,6 +861,7 @@ public class CommandHandler
 
     private async Task<Staff?> VerifyStaffRepeatAsync(Guid? staffId, string? jobNumber, string? phoneNumber, string? email, string? idCard, bool throwException = true)
     {
+        //todo And overload method
         Expression<Func<Staff, bool>> condition = staff => false;
         if (!string.IsNullOrEmpty(jobNumber))
             condition = condition.Or(staff => staff.JobNumber == jobNumber);
