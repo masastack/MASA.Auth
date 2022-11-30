@@ -93,7 +93,7 @@ public class QueryHandler
     public async Task GetPositionDetailAsync(PositionDetailQuery query)
     {
         var position = await _positionRepository.FindAsync(query.PositionId);
-        if (position is null) throw new UserFriendlyException("This position data does not exist");
+        if (position is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.POSITION_NOT_EXIST);
 
         query.Result = new PositionDetailDto(position.Id, position.Name);
     }

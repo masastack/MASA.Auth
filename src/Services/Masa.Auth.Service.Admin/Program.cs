@@ -68,6 +68,8 @@ builder.Services
         options.MapInboundClaims = false;
     });
 
+builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
+
 // needed to load configuration from appsettings.json
 builder.Services.AddOptions();
 // needed to store rate limit counters and ip rules
@@ -175,6 +177,8 @@ var app = builder.AddServices(options =>
     options.GetPrefixes = new() { "Get", "Select", "Find" };
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
 });
+
+app.UseI18n();
 
 app.UseMasaExceptionHandler(opt =>
 {

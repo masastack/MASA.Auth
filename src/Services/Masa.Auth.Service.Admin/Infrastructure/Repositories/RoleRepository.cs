@@ -17,7 +17,7 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
             .Include(r => r.Permissions)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
-            ?? throw new UserFriendlyException("The current role does not exist");
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
     }
 
     public async Task<Role> GetDetailAsync(Guid id)
@@ -32,6 +32,6 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
             .Include(r => r.Teams)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
-            ?? throw new UserFriendlyException("The current role does not exist");
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
     }
 }

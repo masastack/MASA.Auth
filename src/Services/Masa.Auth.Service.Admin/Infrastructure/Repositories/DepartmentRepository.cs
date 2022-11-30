@@ -21,7 +21,7 @@ public class DepartmentRepository : Repository<AuthDbContext, Department, Guid>,
             .Include(d => d.DepartmentStaffs)
             .ThenInclude(ds => ds.Staff)
             .FirstOrDefaultAsync()
-            ?? throw new UserFriendlyException("The current department does not exist");
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.DEPARTMENT_NOT_EXIST);
     }
 
     public async Task<List<Department>> QueryListAsync(Expression<Func<Department, bool>> predicate)

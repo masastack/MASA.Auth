@@ -50,7 +50,7 @@ public class EmailAgent : IScopedDependency
 
         if (await CheckAlreadySendAsync(sendKey))
         {
-            throw new UserFriendlyException("Email has been sent, please try again later");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.EMAIL_SENDED);
         }
 
         var code = Random.Shared.Next(100000, 999999).ToString();

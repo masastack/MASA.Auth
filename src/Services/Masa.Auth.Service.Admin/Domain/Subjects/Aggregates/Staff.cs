@@ -132,7 +132,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public Team? CurrentTeam { get; private set; }
 
-    public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
+    public User User => _user ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
 
     public Position? Position => _position;
 
@@ -285,7 +285,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     {
         if (string.IsNullOrEmpty(phoneNumber) && string.IsNullOrEmpty(email))
         {
-            throw new UserFriendlyException("One of the phone number and email must be assigned");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PHONE_NUMBER_AND_EMAIL_EMPTY_ERROR);
         }
         PhoneNumber = phoneNumber ?? "";
         Email = email ?? "";

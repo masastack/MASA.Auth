@@ -37,10 +37,10 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
     public async Task<User> GetByVoucherAsync(string voucher)
     {
         return await Context.Set<User>().FirstOrDefaultAsync(u => u.Account == voucher
-            || u.PhoneNumber == voucher || u.Email == voucher) ?? throw new UserFriendlyException("No user found");
+            || u.PhoneNumber == voucher || u.Email == voucher) ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
     }
 
-    public async Task<User?> GetDetailAsync(Guid id)
+    public async Task<User> GetDetailAsync(Guid id)
     {
         var user = await Context.Set<User>()
                            .Include(u => u.Roles)
@@ -49,6 +49,6 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
                            .Include(u => u.ThirdPartyUsers)
                            .FirstOrDefaultAsync(u => u.Id == id);
 
-        return user;
+        return user ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
     }
 }

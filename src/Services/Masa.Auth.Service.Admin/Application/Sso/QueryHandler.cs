@@ -132,7 +132,7 @@ public class QueryHandler
     public async Task GetIdentityResourceDetailAsync(IdentityResourceDetailQuery query)
     {
         var idrs = await _identityResourceRepository.GetDetailAsync(query.IdentityResourceId);
-        if (idrs is null) throw new UserFriendlyException("This identityResource data does not exist");
+        if (idrs is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_RESOURCE_NOT_EXIST);
 
         query.Result = new(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable, idrs.UserClaims.Select(u => u.UserClaimId).ToList(), idrs.Properties.ToDictionary(p => p.Key, p => p.Value));
     }
@@ -178,7 +178,7 @@ public class QueryHandler
     public async Task GetApiResourceDetailAsync(ApiResourceDetailQuery query)
     {
         var apiResource = await _apiResourceRepository.GetDetailAsync(query.ApiResourceId);
-        if (apiResource is null) throw new UserFriendlyException("This apiResource data does not exist");
+        if (apiResource is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_RESOURCE_NOT_EXIST);
 
         query.Result = new ApiResourceDetailDto()
         {
@@ -241,7 +241,7 @@ public class QueryHandler
     public async Task GetApiScopeDetailAsync(ApiScopeDetailQuery query)
     {
         var apiScope = await _apiScopeRepository.GetDetailAsync(query.ApiScopeId);
-        if (apiScope is null) throw new UserFriendlyException("This apiScope data does not exist");
+        if (apiScope is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_SCOPE_NOT_EXIST);
 
         query.Result = new ApiScopeDetailDto()
         {
@@ -297,7 +297,7 @@ public class QueryHandler
     public async Task GetUserClaimDetailAsync(UserClaimDetailQuery query)
     {
         var userClaim = await _userClaimRepository.GetDetailAsync(query.UserClaimId);
-        if (userClaim is null) throw new UserFriendlyException("This userClaim data does not exist");
+        if (userClaim is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_CLAIM_NOT_EXIST);
 
         query.Result = new UserClaimDetailDto()
         {
@@ -370,7 +370,7 @@ public class QueryHandler
     public async Task GetCustomLoginDetailAsync(CustomLoginDetailQuery query)
     {
         var customLogin = await _customLoginRepository.GetDetailAsync(query.CustomLoginId);
-        if (customLogin is null) throw new UserFriendlyException("This customLogin data does not exist");
+        if (customLogin is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_NOT_EXIST);
 
         var thirdPartyIdps = customLogin.ThirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdpDto(tp.ThirdPartyIdpId, tp.Sort)).ToList();
         var registerFields = customLogin.RegisterFields.Select(rf => new RegisterFieldDto(rf.RegisterFieldType, rf.Sort, rf.Required)).ToList();

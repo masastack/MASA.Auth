@@ -78,11 +78,11 @@ public class Department : FullAggregateRoot<Guid, Guid>
     {
         if (Level == 1)
         {
-            throw new UserFriendlyException("The root department can`t delete");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.DEPARTMENT_ROOT_DELETE);
         }
         if (_departmentStaffs.Any())
         {
-            throw new UserFriendlyException("The current department has staff,delete failed");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.DEPARTMENT_HAS_STAFF_DELETE);
         }
     }
 }

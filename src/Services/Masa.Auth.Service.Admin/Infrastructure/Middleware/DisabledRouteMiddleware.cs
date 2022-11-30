@@ -22,7 +22,7 @@ public class DisabledRouteMiddleware : IMiddleware, IScopedDependency
                 .GetMetadata<DemoDisabledRouteAttribute>();
             if (disabledRouteAttribute != null)
             {
-                throw new UserFriendlyException("演示环境禁止该操作");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.DEMO_ENVIRONMENT_FORBIDDEN);
             }
         }
         return next(context);
