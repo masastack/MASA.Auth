@@ -213,7 +213,7 @@ public class QueryHandler
         var permission = await _permissionRepository.GetByIdAsync(menuPermissionDetailQuery.PermissionId);
         if (permission.Type == PermissionTypes.Api)
         {
-            throw new UserFriendlyException($"this permission by id={menuPermissionDetailQuery.PermissionId} is api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_API_TYPE);
         }
         menuPermissionDetailQuery.Result = new MenuPermissionDetailDto
         {
@@ -244,10 +244,10 @@ public class QueryHandler
     public async Task PerimissionDetailQueryAsync(ApiPermissionDetailQuery apiPermissionDetailQuery)
     {
         var permission = await _permissionRepository.FindAsync(apiPermissionDetailQuery.PermissionId)
-                ?? throw new UserFriendlyException($"the permission id={apiPermissionDetailQuery.PermissionId} not found");
+                ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         if (permission.Type != PermissionTypes.Api)
         {
-            throw new UserFriendlyException($"this permission by id={apiPermissionDetailQuery.PermissionId} is not api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_API_TYPE);
         }
         apiPermissionDetailQuery.Result = new ApiPermissionDetailDto
         {

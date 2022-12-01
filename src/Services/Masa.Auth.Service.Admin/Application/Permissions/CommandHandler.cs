@@ -122,7 +122,7 @@ public class CommandHandler
 
         if (_permissionRepository.Any(predicate))
         {
-            throw new UserFriendlyException($"The permission code {permissionBaseInfo.Code} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSION_CODE_EXIST, permissionBaseInfo.Code);
         }
 
         if (permissionBaseInfo.IsUpdate)
@@ -139,7 +139,7 @@ public class CommandHandler
 
         if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
         {
-            throw new UserFriendlyException($"The current parent doesn't support add {permissionBaseInfo.Type} type permission, conflicts with other permission type");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSION_PARENT_ADD_ERROR, permissionBaseInfo.Type);
         }
 
         if (permissionBaseInfo.Order == 0)

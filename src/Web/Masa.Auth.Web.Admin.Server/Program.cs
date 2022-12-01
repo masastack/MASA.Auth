@@ -8,6 +8,8 @@ builder.WebHost.UseKestrel(option =>
     options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
 });
 
+builder.Services.AddObservable(builder.Logging, builder.Configuration, true);
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 

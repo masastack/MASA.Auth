@@ -9,7 +9,7 @@ public static class UserFriendlyExceptionExtensions
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new UserFriendlyException($"the value of {nameof(value)} can not be empty");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.VALUE_IS_EMPTY, nameof(value));
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
                 if (availableQuantity >= 0)
                     role.UpdateAvailableQuantity(availableQuantity);
                 else
-                    throw new UserFriendlyException($"角色：{role.Name} 超出绑定限制，最多只能绑定{role.Limit}人,当前已绑定{role.Limit - availableQuantity}人!");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.ROLE_BIND_LIMIT_ERROR, role.Name, role.Limit, role.Limit - availableQuantity);
             }
 
             await _roleRepository.UpdateRangeAsync(roles);
@@ -46,7 +46,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
                 {
                     foreach (var teamRole in role.Teams)
                     {
-                        availableQuantity -= teamRole?.Team?.TeamStaffs?.Where(ts => ts.IsDeleted == false && role.Users.Any(user => user.UserId == ts.UserId)==false && ts.TeamMemberType == teamRole.TeamMemberType)?.Count() ?? 0;
+                        availableQuantity -= teamRole?.Team?.TeamStaffs?.Where(ts => ts.IsDeleted == false && role.Users.Any(user => user.UserId == ts.UserId) == false && ts.TeamMemberType == teamRole.TeamMemberType)?.Count() ?? 0;
                     }
                 }
 

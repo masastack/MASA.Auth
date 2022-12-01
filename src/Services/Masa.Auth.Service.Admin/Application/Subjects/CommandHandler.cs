@@ -96,14 +96,14 @@ public class CommandHandler
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
-            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
+            var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
             if (!model.EmailCode.Equals(emailCode))
             {
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
         }
         var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
+        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
@@ -279,7 +279,7 @@ public class CommandHandler
         if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
         {
             var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _multilevelCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+            await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
             command.Result = true;
         }
     }
@@ -293,7 +293,7 @@ public class CommandHandler
         var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
         if (checkCurrentPhoneNumber is false)
         {
-            checkCurrentPhoneNumber = await _multilevelCacheClient.GetAsync<bool>(resultKey);
+            checkCurrentPhoneNumber = await _distributedCacheClient.GetAsync<bool>(resultKey);
         }
         if (checkCurrentPhoneNumber)
         {
@@ -304,7 +304,7 @@ public class CommandHandler
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
-                await _multilevelCacheClient.RemoveAsync<bool>(resultKey);
+                await _distributedCacheClient.RemoveAsync<bool>(resultKey);
                 command.Result = true;
             }
         }
@@ -319,7 +319,7 @@ public class CommandHandler
         });
         if (user is null)
         {
-            throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
         }
         var key = "";
         if (model.RegisterLogin)
@@ -332,7 +332,7 @@ public class CommandHandler
         }
         if (!await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
-            throw new UserFriendlyException($"Verification code error");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
         }
         command.Result = await UserSplicingDataAsync(user);
     }
@@ -412,7 +412,7 @@ public class CommandHandler
             account = upsertThirdPartyUserCommand.Result.Account;
         }
 
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account, new List<string> {
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account || u.PhoneNumber == account, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
         });
 
@@ -512,7 +512,7 @@ public class CommandHandler
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
             if (phoneNumber == exitUser.Account)
-                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
         }
         return exitUser;
     }
@@ -533,7 +533,7 @@ public class CommandHandler
             default:
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_RESET_PASSWORD_TYPE);
         }
-        var captcha = await _multilevelCacheClient.GetAsync<string>(key);
+        var captcha = await _distributedCacheClient.GetAsync<string>(key);
         if (!command.Captcha.Equals(captcha))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
@@ -882,13 +882,13 @@ public class CommandHandler
         {
             if (throwException is false) return existStaff;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existStaff.PhoneNumber)
-                throw new UserFriendlyException($"Staff with phone number {phoneNumber} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == existStaff.Email)
-                throw new UserFriendlyException($"Staff with email {email} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_EMAIL_EXIST, email);
             if (string.IsNullOrEmpty(idCard) is false && idCard == existStaff.IdCard)
-                throw new UserFriendlyException($"Staff with idCard {idCard} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_ID_CARD_EXIST, idCard);
             if (string.IsNullOrEmpty(jobNumber) is false && jobNumber == existStaff.JobNumber)
-                throw new UserFriendlyException($"Staff with jobNumber number {jobNumber} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_JOB_NUMBER_EXIST, jobNumber);
         }
         return existStaff;
     }
@@ -903,7 +903,7 @@ public class CommandHandler
         var thirdPartyIdpDto = command.ThirdPartyIdp;
         var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
         if (exist)
-            throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NAME_EXIST, thirdPartyIdpDto.Name);
 
         var thirdPartyIdp = new ThirdPartyIdp(
             thirdPartyIdpDto.Name,
@@ -993,14 +993,14 @@ public class CommandHandler
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeBindKey(model.Email);
-            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
+            var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
             if (!model.EmailCode.Equals(emailCode))
             {
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
         }
         var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
-        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
+        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
@@ -1140,13 +1140,9 @@ public class CommandHandler
                                                  .Include(tpu => tpu.User)
                                                  .ThenInclude(user => user.Roles)
                                                  .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
-        if (thirdPartyUser is not null)
+        if (thirdPartyUser != null && throwException)
         {
-            if (throwException is false)
-            {
-                return thirdPartyUser;
-            }
-            throw new UserFriendlyException($"ThirdPartyUser with ThridPartyIdentity:{thridPartyIdentity} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_USER_EXIST, thridPartyIdentity);
         }
         return thirdPartyUser;
     }
