@@ -60,7 +60,6 @@ public abstract class AdminCompontentBase : ComponentBase
         {
             _navigationManager = value;
         }
-
     }
 
     [Inject]
