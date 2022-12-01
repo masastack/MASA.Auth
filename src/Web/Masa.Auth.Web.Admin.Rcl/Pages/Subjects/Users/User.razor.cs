@@ -182,7 +182,7 @@ public partial class User
         _page = 1;
         _userId = default;
         _startTime = default;
-        _endTime = DateOnly.FromDateTime(DateTime.Now);
+        _endTime = default;
         await GetUserAsync();
     }
 }

@@ -49,6 +49,7 @@ public class AuthDbContextSeed
         #region Pm
         var pmMenus = new List<Permission>() {
             new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Team","Team","Team","mdi-account-group-outline",2,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.PM_SYSTEM_ID))
         {
@@ -61,6 +62,7 @@ public class AuthDbContextSeed
             new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
             new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"PublicConfig","PublicConfig","Public","mdi-earth",2,PermissionTypes.Menu),
             new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"LabelManagement","Label","Label","mdi-label",3,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Team","Team","Team","mdi-account-group-outline",4,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.DCC_SYSTEM_ID))
         {
@@ -98,6 +100,7 @@ public class AuthDbContextSeed
         #region scheduler
         var schedulerMenus = new List<Permission>() {
             new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"ResourceFiles","scheduler.resource","pages/resource","mdi-file-document-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"Team","Team","pages/team","mdi-account-group-outline",2,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.SCHEDULER_SYSTEM_ID))
         {

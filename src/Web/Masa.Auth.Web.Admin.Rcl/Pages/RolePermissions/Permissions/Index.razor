@@ -31,7 +31,7 @@
                         <LabelContent>
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
-                                    <span>@context.Item.Name</span>
+                                    <span>@DT(context.Item.Name)</span>
                                     <SIcon Style="@(hoverComtext.Hover?"display:flex":"display:none")" Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                 </div>
                             </MHover>
@@ -51,7 +51,7 @@
                         <LabelContent>
                             <MHover Context="hoverComtext">
                                 <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
-                                    <span>@context.Item.Name</span>
+                                    <span>@DT(context.Item.Name)</span>
                                     <SIcon Style="@((hoverComtext.Hover && !context.Item.IsPermission)?"display:flex":"display:none")" Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                 </div>
                             </MHover>
@@ -78,7 +78,7 @@
                                         </STextField>
                                     </MCol>
                                     <MCol Md=6>
-                                        <STextField Label="@T("Name")" Required @bind-Value="_menuPermissionDetailDto.Name"></STextField>
+                                        <DccI18nConfiger Label="@T("Name")" @bind-Name="_menuPermissionDetailDto.Name" />
                                     </MCol>
 
                                     <MCol Md=6>
@@ -180,7 +180,7 @@
                                         </STextField>
                                     </MCol>
                                     <MCol Md=6>
-                                        <STextField Label="@T("Name")" Required @bind-Value="_apiPermissionDetailDto.Name"></STextField>
+                                        <DccI18nConfiger Label="@T("Name")" @bind-Name="_apiPermissionDetailDto.Name" />
                                     </MCol>
                                     <MCol Md=6>
                                         <STextField Label="@T("Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>

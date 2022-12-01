@@ -1,0 +1,12 @@
+[
+  {
+    "Culture": "zh-CN",
+    "DisplayName": "中文简体",
+    "Icon": "{Replace-Your-Icon}"
+  },
+  {
+    "Culture": "en-US",
+    "DisplayName": "English (United States)",
+    "Icon": "{Replace-Your-Icon}"
+  }
+]

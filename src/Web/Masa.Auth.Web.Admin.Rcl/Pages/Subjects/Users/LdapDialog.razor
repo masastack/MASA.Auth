@@ -31,7 +31,7 @@
         <MCardActions class="d-flex align-center mb-12 px-6">
             <MSpacer />
             <MButton class="rounded-pill mr-6" MinWidth="100" OnClick="ConnectTest">@T("Test")</MButton>
-            <MButton class="rounded-pill primary" MinWidth="100" OnClick="LdapSubmit">@T("Submit")</MButton>
+            <MButton class="rounded-pill primary" MinWidth="100" Loading=_loading OnClick="LdapSubmit">@T("Submit")</MButton>
         </MCardActions>
     </MCard>
 </SSheetDialog>
@@ -40,6 +40,7 @@
     MForm _form = null!;
     LdapDetailDto _ldapDetailDto = new();
     bool _visible;
+    bool _loading;
 
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
@@ -79,7 +80,19 @@
         {
             return;
         }
-        await ThirdPartyIdpService.LdapUpsertAsync(_ldapDetailDto);
-        OpenSuccessMessage(T("Ldap Account Synchroniz Success"));
+        _loading = true;
+        try
+        {
+            await ThirdPartyIdpService.LdapUpsertAsync(_ldapDetailDto);
+            OpenSuccessMessage(T("Ldap Account Synchroniz Success"));
+        }
+        catch (Exception e)
+        {
+            OpenErrorMessage(e.Message);
+        }
+        finally
+        {
+            _loading = false;
+        }
     }
 }

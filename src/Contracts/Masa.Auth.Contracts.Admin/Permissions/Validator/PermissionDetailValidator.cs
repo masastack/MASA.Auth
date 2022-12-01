@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Contracts.Admin.Permissions.Validator;
 
-public class PermissionDetailDtoValidator<T> : AbstractValidator<T> where T : PermissionDetailDto
+public class PermissionDetailValidator<T> : AbstractValidator<T> where T : PermissionDetailDto
 {
-    public PermissionDetailDtoValidator()
+    public PermissionDetailValidator()
     {
         RuleFor(p => p).NotNull().WithMessage($"Parameter error");
         RuleFor(p => p.Name).ChineseLetterNumber().Must(name => !string.IsNullOrWhiteSpace(name) && name.Length <= 20)

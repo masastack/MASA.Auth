@@ -72,8 +72,7 @@ public class QueryHandler
     public async Task GetPositionsAsync(PositionsQuery query)
     {
         Expression<Func<Position, bool>> condition = position => true;
-        if (string.IsNullOrEmpty(query.Search) is false)
-            condition = condition.And(position => position.Name.Contains(query.Search));
+        condition = condition.And(!string.IsNullOrEmpty(query.Search), position => position.Name.Contains(query.Search));
 
         var positions = await _positionRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
@@ -93,7 +92,7 @@ public class QueryHandler
     public async Task GetPositionDetailAsync(PositionDetailQuery query)
     {
         var position = await _positionRepository.FindAsync(query.PositionId);
-        if (position is null) throw new UserFriendlyException("This position data does not exist");
+        if (position is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.POSITION_NOT_EXIST);
 
         query.Result = new PositionDetailDto(position.Id, position.Name);
     }

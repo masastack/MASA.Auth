@@ -40,7 +40,6 @@ builder.Services.AddMasaIdentity(options =>
     options.Mapping(nameof(MasaUser.Account), IdentityClaimConsts.ACCOUNT);
 });
 builder.Services
-    .AddScoped<EnvironmentMiddleware>()
     .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
     .AddSingleton<IAuthorizationHandler, DefaultRuleCodeAuthorizationHandler>()
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
@@ -67,6 +66,8 @@ builder.Services
         options.TokenValidationParameters.ValidateAudience = false;
         options.MapInboundClaims = false;
     });
+
+builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 // needed to load configuration from appsettings.json
 builder.Services.AddOptions();
@@ -129,18 +130,15 @@ builder.Services
         }
     });
 })
-.AddFluentValidation(options =>
-{
-    options.RegisterValidatorsFromAssemblyContaining<Program>();
-})
+.AddValidatorsFromAssembly(Assembly.GetEntryAssembly())
 .AddDomainEventBus(dispatcherOptions =>
 {
     dispatcherOptions
     .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
-        eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
         eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
+        eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
@@ -150,10 +148,10 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.MigrateDbContext<AuthDbContext>((context, services) =>
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
 {
     var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
+    await new AuthDbContextSeed().SeedAsync(context, logger);
 });
 
 var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
@@ -175,6 +173,8 @@ var app = builder.AddServices(options =>
     options.GetPrefixes = new() { "Get", "Select", "Find" };
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
 });
+
+app.UseI18n();
 
 app.UseMasaExceptionHandler(opt =>
 {
@@ -205,6 +205,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseIsolation();
+app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();

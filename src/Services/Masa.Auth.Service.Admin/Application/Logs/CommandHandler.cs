@@ -24,7 +24,7 @@ public class CommandHandler
         var operationLog = await _operationLogRepository.FindAsync(command.Id);
         if (operationLog == null)
         {
-            throw new UserFriendlyException("the current operationLog not found");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.OPERATION_LOG_NOT_EXIST);
         }
         await _operationLogRepository.RemoveAsync(operationLog);
     }

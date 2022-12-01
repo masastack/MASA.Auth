@@ -16,6 +16,7 @@ public class QueryHandler
     public async Task GetOperationLogAsync(OperationLogsQuery query)
     {
         Expression<Func<OperationLog, bool>> condition = operationLog => true;
+        //todo And overload method
         if (query.Operator != default)
             condition = condition.And(operationLog => operationLog.Operator == query.Operator);
         if (query.OperationType != default)
@@ -49,7 +50,7 @@ public class QueryHandler
     public async Task GetOperationLogDetailAsync(OperationLogDetailQuery query)
     {
         var operationLog = await _operationLogRepository.FindAsync(query.OperationLogId);
-        if (operationLog is null) throw new UserFriendlyException("This operationLog data does not exist");
+        if (operationLog is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.OPERATION_LOG_NOT_EXIST);
 
         query.Result = operationLog.Adapt<OperationLogDetailDto>();
     }

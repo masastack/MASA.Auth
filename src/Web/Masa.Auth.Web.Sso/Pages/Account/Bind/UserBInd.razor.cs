@@ -19,9 +19,6 @@ public partial class UserBind
     [Inject]
     public IAuthClient AuthClient { get; set; } = default!;
 
-    [Inject]
-    public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
-
     public RegisterThirdPartyUserModel UserModel { get; set; } = new();
 
     [NotNull]

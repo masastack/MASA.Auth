@@ -26,7 +26,7 @@ public class UserAuthorizedDomainEventHandler
                             && p.Code == userAuthorizedDomainEvent.Code);
         if (permission is null)
         {
-            throw new UserFriendlyException("AppId combination Code is not found.");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_APP_ID_CODE_NOT_FOUND);
         }
         userAuthorizedDomainEvent.PermissionId = permission.Id;
         userAuthorizedDomainEvent.Roles = _authDbContext.Set<UserRole>()

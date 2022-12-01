@@ -50,7 +50,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
         set
         {
             if (value < 0)
-                throw new UserFriendlyException("This operation cannot be completed due to role Limit restrictions");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_LIMIT_ERROR);
 
             _limit = value;
         }
@@ -84,7 +84,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
 
     public static implicit operator RoleDetailDto(Role role)
     {
-        return new(role.Id, role.Name,role.Code, role.Limit, role.Description, role.Enabled,
+        return new(role.Id, role.Name, role.Code, role.Limit, role.Description, role.Enabled,
             role.CreationTime, role.ModificationTime, role.CreateUser?.DisplayName ?? "", role.ModifyUser?.DisplayName ?? "",
             role.Permissions.Select(rp => (SubjectPermissionRelationDto)rp).ToList(),
             role.ParentRoles.Select(r => r.ParentId).ToList(),
@@ -113,7 +113,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
             });
     }
 
-    public void Update(string name,string code, string? description, bool enabled, int limit)
+    public void Update(string name, string code, string? description, bool enabled, int limit)
     {
         Name = name;
         Code = code;

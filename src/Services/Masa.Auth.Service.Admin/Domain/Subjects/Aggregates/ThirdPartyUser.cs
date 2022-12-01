@@ -41,13 +41,14 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         private set => _extendedData = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(ExtendedData));
     }
 
-    public User User => _user ?? throw new UserFriendlyException("Failed to get user data");
+    public User User => _user ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
 
     public User? CreateUser => _createUser;
 
     public User? ModifyUser => _modifyUser;
 
-    public IdentityProvider IdentityProvider => (_identityProvider ?? LazyLoader?.Load(this, ref _identityProvider)) ?? throw new UserFriendlyException("Failed to get IdentityProvider data");
+    public IdentityProvider IdentityProvider => (_identityProvider ?? LazyLoader?.Load(this, ref _identityProvider))
+        ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_PROVIDER_NOT_FOUND);
 
     private ILazyLoader? LazyLoader { get; set; }
 

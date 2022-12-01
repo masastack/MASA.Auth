@@ -63,6 +63,9 @@ public abstract class AdminCompontentBase : ComponentBase
     }
 
     [Inject]
+    public DynamicTranslateProvider TranslateProvider { get; set; } = default!;
+
+    [Inject]
     public IPopupService PopupService { get; set; } = default!;
 
     public bool Loading
@@ -80,9 +83,14 @@ public abstract class AdminCompontentBase : ComponentBase
         else return I18n.T(key, true);
     }
 
-    public string T(string formatkey,params string[] args)
+    public string T(string formatkey, params string[] args)
     {
         return string.Format(T(formatkey), args);
+    }
+
+    protected string DT(string key)
+    {
+        return TranslateProvider.DT(key);
     }
 
     public async Task<bool> OpenConfirmDialog(string content)

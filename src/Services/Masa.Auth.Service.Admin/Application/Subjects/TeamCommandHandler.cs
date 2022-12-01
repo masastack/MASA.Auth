@@ -36,7 +36,7 @@ public class TeamCommandHandler
 
         if (_teamRepository.Any(t => t.Name == dto.Name))
         {
-            throw new UserFriendlyException($"Team name {dto.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.TEAM_NAME_EXIST, dto.Name);
         }
 
         var teamId = Guid.NewGuid();
@@ -63,7 +63,7 @@ public class TeamCommandHandler
         var dto = updateTeamCommand.UpdateTeamDto;
         if (_teamRepository.Any(t => t.Name == dto.Name && t.Id != dto.Id))
         {
-            throw new UserFriendlyException($"Team name {dto.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.TEAM_NAME_EXIST, dto.Name);
         }
         var team = await _teamRepository.GetByIdAsync(dto.Id);
         var avatarName = $"{team.Id}.png";
@@ -93,7 +93,7 @@ public class TeamCommandHandler
         var team = await _teamRepository.GetByIdAsync(removeTeamCommand.TeamId);
         if (team.TeamStaffs.Any())
         {
-            throw new UserFriendlyException("the team has staffs can`t delete");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.TEAM_HAS_STAFF_DELETE);
         }
         await _teamRepository.RemoveAsync(team);
 

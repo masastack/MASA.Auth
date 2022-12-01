@@ -15,7 +15,7 @@ public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
             .Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
         }).Otherwise(() =>
         {
-            RuleFor(x => x.UserName).NotEmpty().WithMessage(i18n.T("UserNameRequired"));
+            RuleFor(x => x.Account).NotEmpty().WithMessage(i18n.T("AccountRequired"));
             RuleFor(x => x.Password).NotEmpty().WithMessage(i18n.T("PwdRequired"));
         });
         RuleFor(x => x.Environment).NotEmpty();

@@ -67,21 +67,6 @@
     position: initial !important;
 }
 
-/*.m-window__container {
-    position: initial !important;
-}*/
-
-.small .m-input__control .m-input__slot fieldset {
-    height: 40px !important;
-}
-
-.small .m-input__slot {
-    height: 30px !important;
-}
-
-.small .m-select__slot {
-    height: 35px !important;
-}
 
 .theme--light.m-timeline .m-timeline-item__dot {
     background: none !important;
@@ -94,11 +79,6 @@
 .m-timeline-item__inner-dot {
     background: white !important;
     margin-top: 0px !important;
-}
-
-.m-input__append-inner {
-    margin-top: auto !important;
-    margin-bottom: auto !important;
 }
 
 .button-group {
@@ -117,17 +97,9 @@
     font-size: 21px !important;
 }
 
-.m-input__slot {
-    margin-bottom: 0px !important;
-}
-
 .m-messages {
     min-height: 0px !important;
     margin-top: 4px;
-}
-
-.m-input .m-input__icon .mdi-menu-down {
-    color: #A3AED0;
 }
 
 .m-input--checkbox .mdi-checkbox-blank-outline {
@@ -211,10 +183,6 @@
     width: 340px;
 }
 
-/*.search.m-text-field.m-text-field--solo.m-input--dense > .m-input__control {
-    min-height: 40px;
-}*/
-
 /* pagetabs */
 .m-page-tabs .m-slide-group__prev.m-slide-group__prev--disabled {
     flex: none !important;
@@ -232,6 +200,10 @@
 
 .button-group-active {
     background: #ECE8FF !important;
+}
+
+.m-text-field.m-input--dense:not(.m-text-field--outlined) .m-text-field__prefix, .m-text-field.m-input--dense:not(.m-text-field--outlined) .m-text-field__suffix, .m-text-field.m-input--dense:not(.m-text-field--outlined) input {
+    padding-top: 0;
 }
 
 /*.m-stepper__items {

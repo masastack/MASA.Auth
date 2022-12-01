@@ -20,7 +20,6 @@
             {
                 <div class="text-center mt-4"><img style="max-height:120px;max-width:120px;" src="@_viewModel.ClientLogoUrl"></div>
             }
-
             @if (_viewModel.IdentityScopes.Any())
             {
                 <ul class="pl-0">
@@ -31,7 +30,6 @@
                     }
                 </ul>
             }
-
             @if (_viewModel.ApiScopes.Any())
             {
                 <ul class="pl-0">
@@ -50,7 +48,7 @@
         }
 
         <MButton Class="mt-12 rounded-4 text-btn white--text" Block OnClick="()=>OnConsent(true)" Height=46 Width=340 Color="primary">@T("Agree")</MButton>
-        <MButton Class="mt-6 rounded-4 text-btn primary--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>@T("Reject")</MButton>
+        @*<MButton Class="mt-6 rounded-4 text-btn primary--text" Block OnClick="()=>OnConsent(false)" Height=46 Width=340>@T("Reject")</MButton>*@
 
         <div class="full-width text-center mt-4">
             @if (_viewModel.ClientUrl != null)

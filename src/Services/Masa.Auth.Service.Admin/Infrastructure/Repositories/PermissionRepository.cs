@@ -25,7 +25,7 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
             .Include(p => p.TeamPermissions).ThenInclude(tp => tp.Team)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
-            ?? throw new UserFriendlyException("The current permission does not exist");
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_NOT_EXIST);
     }
 
     public int GetIncrementOrder(string appId, Guid parentId)
@@ -44,7 +44,7 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         var item = await Context.Set<Permission>().FindAsync(Id);
         if (item is null)
         {
-            throw new UserFriendlyException($"The permission {Id} does not exist");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         }
         if (item.ParentId == Guid.Empty)
         {

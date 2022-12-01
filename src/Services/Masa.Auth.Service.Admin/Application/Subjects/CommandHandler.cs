@@ -96,17 +96,17 @@ public class CommandHandler
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
-            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
+            var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
             if (!model.EmailCode.Equals(emailCode))
             {
-                throw new UserFriendlyException("Invalid Email verification code");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
         }
         var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
+        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
         if (!model.SmsCode.Equals(smsCode))
         {
-            throw new UserFriendlyException("Invalid SMS verification code");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
         }
     }
 
@@ -149,16 +149,13 @@ public class CommandHandler
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
         var user = await _userRepository.GetDetailAsync(command.User.Id);
-        if (user is null)
-            throw new UserFriendlyException("The current user does not exist");
-
         if (user.IsAdmin())
         {
-            throw new UserFriendlyException("超级管理员 无法删除");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ADMINISTRATOR_DELETE_ERROR);
         }
         if (user.Id == _userContext.GetUserId<Guid>())
         {
-            throw new UserFriendlyException("当前用户不能删除自己");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CURRENT_USER_DELETE_ERROR);
         }
 
         await _userRepository.RemoveAsync(user);
@@ -170,9 +167,6 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await _userRepository.GetDetailAsync(userDto.Id);
-        if (user is null)
-            throw new UserFriendlyException("The current user does not exist");
-
         var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
         user.AddRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
@@ -196,7 +190,7 @@ public class CommandHandler
         var user = await CheckUserExistAsync(userModel.Id);
         if (string.IsNullOrEmpty(userModel.OldPassword) is false && !user.VerifyPassword(userModel.OldPassword ?? ""))
         {
-            throw new UserFriendlyException("password verification failed");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
         }
         user.UpdatePassword(userModel.NewPassword);
         await _userRepository.UpdateAsync(user);
@@ -285,7 +279,7 @@ public class CommandHandler
         if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
         {
             var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _multilevelCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+            await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
             command.Result = true;
         }
     }
@@ -299,7 +293,7 @@ public class CommandHandler
         var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
         if (checkCurrentPhoneNumber is false)
         {
-            checkCurrentPhoneNumber = await _multilevelCacheClient.GetAsync<bool>(resultKey);
+            checkCurrentPhoneNumber = await _distributedCacheClient.GetAsync<bool>(resultKey);
         }
         if (checkCurrentPhoneNumber)
         {
@@ -310,7 +304,7 @@ public class CommandHandler
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
-                await _multilevelCacheClient.RemoveAsync<bool>(resultKey);
+                await _distributedCacheClient.RemoveAsync<bool>(resultKey);
                 command.Result = true;
             }
         }
@@ -325,7 +319,7 @@ public class CommandHandler
         });
         if (user is null)
         {
-            throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
         }
         var key = "";
         if (model.RegisterLogin)
@@ -338,7 +332,7 @@ public class CommandHandler
         }
         if (!await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
-            throw new UserFriendlyException($"Verification code error");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
         }
         command.Result = await UserSplicingDataAsync(user);
     }
@@ -364,7 +358,7 @@ public class CommandHandler
         var userModel = command.User;
         var user = await _userRepository.FindAsync(u => u.Account == userModel.Account);
         if (user is null)
-            throw new UserFriendlyException($"User with account {userModel.Account} does not exist");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.ACCOUNT_NOT_EXIST, userModel.Account);
 
         user.Disabled();
         await _userRepository.UpdateAsync(user);
@@ -381,7 +375,7 @@ public class CommandHandler
         var loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
         if (loginCache is not null && loginCache.LoginErrorCount >= 5)
         {
-            throw new UserFriendlyException("您连续输错密码5次,登录已冻结，请三十分钟后再次尝试");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
         }
 
         var isLdap = validateByAccountCommand.UserAccountValidateDto.IsLdap;
@@ -390,11 +384,11 @@ public class CommandHandler
             var ldaps = await _ldapIdpRepository.GetListAsync();
             if (!ldaps.Any())
             {
-                throw new UserFriendlyException("没有配置Ldap认证");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LDAP_NOT_CONFIGURED);
             }
             if (ldaps.Count() > 1)
             {
-                _logger.LogWarning("存在多个Ldap配置,域账号登录时只使用第一个配置");
+                _logger.LogWarning("There are multiple Ldap configurations, and the first configuration is used when logging in with a domain account");
             }
             var ldap = ldaps.First();
             var ldapOptions = ldap.Adapt<LdapOptions>();
@@ -403,33 +397,33 @@ public class CommandHandler
             var ldapUser = await ldapProvider.GetUserByUserNameAsync(account);
             if (ldapUser == null)
             {
-                throw new UserFriendlyException("域账号不存在");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_NOTEXIST, account);
             }
 
             var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
             if (!await ldapProvider.AuthenticateAsync($"{dc}\\{account}", password))
             {
-                throw new UserFriendlyException("域账号验证失败");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_VALIDATION_FAILED, account);
             }
 
-            var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, password, ldapUser.Phone);
+            var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
             await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             //get real user account
             account = upsertThirdPartyUserCommand.Result.Account;
         }
 
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account, new List<string> {
+        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account || u.PhoneNumber == account, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
         });
 
         if (user == null)
         {
-            throw new UserFriendlyException($"不存在账号为[{account}]的用户");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.ACCOUNT_NOT_EXIST, account);
         }
 
         if (!user.Enabled)
         {
-            throw new UserFriendlyException("账号已禁用");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ACCOUNT_DISABLED);
         }
 
         if (!isLdap)
@@ -439,7 +433,7 @@ public class CommandHandler
                 loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
                 loginCache.LoginErrorCount++;
                 await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
-                throw new UserFriendlyException("账号或密码错误");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
             }
 
             if (loginCache is not null)
@@ -480,13 +474,14 @@ public class CommandHandler
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
         if (user is null)
-            throw new UserFriendlyException("The current user does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
 
         return user;
     }
 
     private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
+        //todo And overload method
         Expression<Func<User, bool>> condition = user => false;
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
@@ -508,16 +503,16 @@ public class CommandHandler
         if (exitUser is not null)
         {
             if (account != exitUser.Account && phoneNumber != exitUser.PhoneNumber && phoneNumber == exitUser.Account)
-                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
-                throw new UserFriendlyException($"User with phone number [{phoneNumber}] already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
-                throw new UserFriendlyException($"User with email [{email}] already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
             if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
-                throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
-                throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
         }
         return exitUser;
     }
@@ -536,12 +531,12 @@ public class CommandHandler
                 key = CacheKey.EmailCodeForgotPasswordKey(command.Voucher);
                 break;
             default:
-                throw new UserFriendlyException("Invalid ResetPasswordType");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_RESET_PASSWORD_TYPE);
         }
-        var captcha = await _multilevelCacheClient.GetAsync<string>(key);
+        var captcha = await _distributedCacheClient.GetAsync<string>(key);
         if (!command.Captcha.Equals(captcha))
         {
-            throw new UserFriendlyException("Validation captcha");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
         }
         //reset password
         var user = await _userRepository.GetByVoucherAsync(command.Voucher);
@@ -652,7 +647,7 @@ public class CommandHandler
         if (staff == null)
         {
             _logger.LogError($"Can`t find staff by UserId = {updateStaffCurrentTeamCommand.UserId}");
-            throw new UserFriendlyException("This staff data does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
         }
         staff.SetCurrentTeam(updateStaffCurrentTeamCommand.TeamId);
         await _staffRepository.UpdateAsync(staff);
@@ -665,7 +660,7 @@ public class CommandHandler
         var staffModel = command.Staff;
         var staff = await _staffRepository.FindAsync(s => s.UserId == command.Staff.UserId);
         if (staff is null)
-            throw new UserFriendlyException("This staff data does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
 
         staff.UpdateBasicInfo(staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
         await _staffRepository.UpdateAsync(staff);
@@ -726,7 +721,7 @@ public class CommandHandler
         var staffDto = command.Staff;
         var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
         if (staff is null)
-            throw new UserFriendlyException("This staff data does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
 
         staff.UpdateAvatar(staffDto.Avatar);
         await _staffRepository.UpdateAsync(staff);
@@ -859,13 +854,14 @@ public class CommandHandler
     {
         var staff = await _staffRepository.GetDetailByIdAsync(staffId);
         if (staff is null)
-            throw new UserFriendlyException("The staff user does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_FOUND);
 
         return staff;
     }
 
     private async Task<Staff?> VerifyStaffRepeatAsync(Guid? staffId, string? jobNumber, string? phoneNumber, string? email, string? idCard, bool throwException = true)
     {
+        //todo And overload method
         Expression<Func<Staff, bool>> condition = staff => false;
         if (!string.IsNullOrEmpty(jobNumber))
             condition = condition.Or(staff => staff.JobNumber == jobNumber);
@@ -886,13 +882,13 @@ public class CommandHandler
         {
             if (throwException is false) return existStaff;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existStaff.PhoneNumber)
-                throw new UserFriendlyException($"Staff with phone number {phoneNumber} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == existStaff.Email)
-                throw new UserFriendlyException($"Staff with email {email} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_EMAIL_EXIST, email);
             if (string.IsNullOrEmpty(idCard) is false && idCard == existStaff.IdCard)
-                throw new UserFriendlyException($"Staff with idCard {idCard} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_ID_CARD_EXIST, idCard);
             if (string.IsNullOrEmpty(jobNumber) is false && jobNumber == existStaff.JobNumber)
-                throw new UserFriendlyException($"Staff with jobNumber number {jobNumber} already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_JOB_NUMBER_EXIST, jobNumber);
         }
         return existStaff;
     }
@@ -907,7 +903,7 @@ public class CommandHandler
         var thirdPartyIdpDto = command.ThirdPartyIdp;
         var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
         if (exist)
-            throw new UserFriendlyException($"ThirdPartyIdp with name {thirdPartyIdpDto.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NAME_EXIST, thirdPartyIdpDto.Name);
 
         var thirdPartyIdp = new ThirdPartyIdp(
             thirdPartyIdpDto.Name,
@@ -934,7 +930,7 @@ public class CommandHandler
         var thirdPartyIdpDto = command.ThirdPartyIdp;
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == thirdPartyIdpDto.Id);
         if (thirdPartyIdp is null)
-            throw new UserFriendlyException("The current thirdPartyIdp does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
 
         thirdPartyIdp.Update(
             thirdPartyIdpDto.DisplayName,
@@ -957,7 +953,7 @@ public class CommandHandler
         var thirdPartyIdp = await _authDbContext.Set<ThirdPartyIdp>()
                                                 .FirstOrDefaultAsync(tpIdp => tpIdp.Id == command.ThirdPartyIdp.Id);
         if (thirdPartyIdp == null)
-            throw new UserFriendlyException("The current thirdPartyIdp does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
 
         await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
         var removeThirdUserComman = new RemoveThirdPartyUserCommand(thirdPartyIdp.Id);
@@ -997,17 +993,17 @@ public class CommandHandler
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeBindKey(model.Email);
-            var emailCode = await _multilevelCacheClient.GetAsync<string>(emailCodeKey);
+            var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
             if (!model.EmailCode.Equals(emailCode))
             {
-                throw new UserFriendlyException("Invalid Email verification code");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
         }
         var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
-        var smsCode = await _multilevelCacheClient.GetAsync<string>(smsCodeKey);
+        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
         if (!model.SmsCode.Equals(smsCode))
         {
-            throw new UserFriendlyException("Invalid SMS verification code");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
         }
     }
 
@@ -1039,7 +1035,7 @@ public class CommandHandler
         var model = command.ThirdPartyUser;
         if (model.ThirdPartyIdpType == default)
         {
-            throw new UserFriendlyException("ThirdPartyIdpType can not default");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
         }
         else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
         {
@@ -1052,7 +1048,6 @@ public class CommandHandler
                     model.PhoneNumber!,
                     model.Email,
                     model.Account,
-                    model.Password!,
                     model.PhoneNumber!
                 );
             await _eventBus.PublishAsync(upsertThirdPartyUserForLdapCommand);
@@ -1066,7 +1061,7 @@ public class CommandHandler
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
             if (thirdPartyUser is not null)
             {
-                if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException("This user is not the user this third-party user is bound to");
+                if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
                 thirdPartyUser.Update(model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData));
                 await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
                 var upsertUserCommand = new UpsertUserCommand(model.Adapt<UpsertUserModel>());
@@ -1087,7 +1082,7 @@ public class CommandHandler
         var thirdPartyUserDto = command.ThirdPartyUser;
         var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.Id == thirdPartyUserDto.Id);
         if (thirdPartyUser is null)
-            throw new UserFriendlyException("The current third party user does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
 
         await VerifyUserRepeatAsync(thirdPartyUser.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
         thirdPartyUser.Update(thirdPartyUserDto.Enabled, thirdPartyUserDto.ThridPartyIdentity, thirdPartyUserDto.ExtendedData);
@@ -1103,11 +1098,9 @@ public class CommandHandler
         var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyIdentity, false);
         if (thirdPartyUser is not null)
         {
-            if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException("Incorrect user identity information");
+            if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
             thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-            var resetUserPasswordCommand = new ResetUserPasswordCommand(new(thirdPartyUser.UserId, command.Password));
-            await _eventBus.PublishAsync(resetUserPasswordCommand);
             command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == thirdPartyUser.UserId)).Adapt<UserModel>();
         }
         else
@@ -1147,13 +1140,9 @@ public class CommandHandler
                                                  .Include(tpu => tpu.User)
                                                  .ThenInclude(user => user.Roles)
                                                  .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
-        if (thirdPartyUser is not null)
+        if (thirdPartyUser != null && throwException)
         {
-            if (throwException is false)
-            {
-                return thirdPartyUser;
-            }
-            throw new UserFriendlyException($"ThirdPartyUser with ThridPartyIdentity:{thridPartyIdentity} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_USER_EXIST, thridPartyIdentity);
         }
         return thirdPartyUser;
     }

@@ -46,6 +46,7 @@ public class QueryHandler
     public async Task GetUsersAsync(UsersQuery query)
     {
         Expression<Func<User, bool>> condition = user => true;
+        //todo And overload method
         if (query.Enabled is not null)
             condition = condition.And(user => user.Enabled == query.Enabled);
 
@@ -76,7 +77,7 @@ public class QueryHandler
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
-        if (user is null) throw new UserFriendlyException("This user data does not exist");
+        if (user is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         var creator = await _multilevelCacheClient.GetUserAsync(user.Creator);
         var modifier = await _multilevelCacheClient.GetUserAsync(user.Modifier);
         var userDetail = await UserSplicingDataAsync(user);
@@ -193,6 +194,7 @@ public class QueryHandler
     private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
         Expression<Func<User, bool>> condition = user => false;
+        //todo And overload method
         if (!string.IsNullOrEmpty(account))
             condition = condition.Or(user => user.Account == account);
         if (!string.IsNullOrEmpty(phoneNumber))
@@ -214,15 +216,15 @@ public class QueryHandler
         {
             if (throwException is false) return exitUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
-                throw new UserFriendlyException($"User with phone number [{phoneNumber}] already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
-                throw new UserFriendlyException($"User with email [{email}] already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
             if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
-                throw new UserFriendlyException($"User with idCard [{idCard}] already exists");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
             if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
-                throw new UserFriendlyException($"User with account [{account}] already exists, please contact the administrator");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
             if (phoneNumber == exitUser.Account)
-                throw new UserFriendlyException($"An account with the same phone number as {phoneNumber} already exists, please provide a custom account");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
         }
         return exitUser;
     }
@@ -283,7 +285,7 @@ public class QueryHandler
                                         .Include(s => s.TeamStaffs)
                                         .Include(s => s.Position)
                                         .FirstOrDefaultAsync(s => s.Id == query.StaffId);
-        if (staff is null) throw new UserFriendlyException("This staff data does not exist");
+        if (staff is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
 
         query.Result = staff;
 
@@ -451,7 +453,7 @@ public class QueryHandler
     public async Task GetThirdPartyUserDetailAsync(ThirdPartyUserDetailQuery query)
     {
         var tpu = await _thirdPartyUserRepository.GetDetail(query.ThirdPartyUserId);
-        if (tpu is null) throw new UserFriendlyException("This thirdPartyUser data does not exist");
+        if (tpu is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_USER_NOT_FOUND);
 
         query.Result = tpu;
 
@@ -506,7 +508,7 @@ public class QueryHandler
     public async Task GetThirdPartyIdpDetailAsync(ThirdPartyIdpDetailQuery query)
     {
         var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == query.ThirdPartyIdpId);
-        if (thirdPartyIdp is null) throw new UserFriendlyException("This thirdPartyIdp data does not exist");
+        if (thirdPartyIdp is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_FOUND);
 
         query.Result = thirdPartyIdp.Adapt<ThirdPartyIdpDetailDto>();
     }
@@ -517,7 +519,7 @@ public class QueryHandler
         var identityProvider = await _authDbContext.Set<IdentityProvider>()
                                                        .FirstOrDefaultAsync(ip => ip.ThirdPartyIdpType == query.ThirdPartyIdpType);
 
-        query.Result = identityProvider ?? throw new UserFriendlyException($"IdentityProvider {query.ThirdPartyIdpType} not exist");
+        query.Result = identityProvider ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_PROVIDER_NOT_FOUND);
     }
 
     [EventHandler]

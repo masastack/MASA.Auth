@@ -127,10 +127,10 @@ public partial class Staff
     async Task UpdateUserAsync()
     {
         await GetStaffAsync();
-        if(UserCompontent is not null)
+        if (UserCompontent is not null)
         {
             await UserCompontent.ReloadAsync();
-        }       
+        }
     }
 }
 

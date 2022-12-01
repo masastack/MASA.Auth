@@ -35,7 +35,7 @@ public class LdapCommandHandler
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
         {
-            throw new UserFriendlyException("connect error");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
         }
     }
 
@@ -75,7 +75,7 @@ public class LdapCommandHandler
             if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
             try
             {
-                var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, "", ldapUser.Phone);
+                var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
                 await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
             }
             catch (Exception e)

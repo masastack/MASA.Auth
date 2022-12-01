@@ -29,7 +29,7 @@ public class CommandHandler
             case SendMsgCodeTypes.Register:
                 if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber))
                 {
-                    throw new UserFriendlyException($"This mobile phone number {model.PhoneNumber} already exists as a user");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, model.PhoneNumber);
                 }
                 cacheKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
                 break;
@@ -40,7 +40,7 @@ public class CommandHandler
                 var loginUser = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
                 if (loginUser == null)
                 {
-                    throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
                 }
                 cacheKey = CacheKey.MsgCodeForLoginKey(loginUser.Id.ToString(), model.PhoneNumber);
                 break;
@@ -57,12 +57,12 @@ public class CommandHandler
                 cacheKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
                 break;
             default:
-                throw new UserFriendlyException("Invalid SendMsgCodeType");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SEND_MSG_CODE_TYPE);
         }
         var alreadySend = await _sms.CheckAlreadySendAsync(cacheKey);
         if (alreadySend)
         {
-            throw new UserFriendlyException("Verification code has been sent, please try again later");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CAPTCHA_SENDED);
         }
         else
         {
@@ -79,7 +79,7 @@ public class CommandHandler
             case SendEmailTypes.Register:
                 if (_userRepository.Any(u => u.Email == model.Email))
                 {
-                    throw new UserFriendlyException($"This email {model.Email} already exists as a user");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, model.Email);
                 }
                 break;
             case SendEmailTypes.Verifiy:
@@ -87,13 +87,13 @@ public class CommandHandler
             case SendEmailTypes.ForgotPassword:
                 if (!_userRepository.Any(u => u.Email == model.Email))
                 {
-                    throw new UserFriendlyException($"This email {model.Email} does not exist");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_NOT_EXIST, model.Email);
                 }
                 break;
             case SendEmailTypes.Bind:
                 break;
             default:
-                throw new UserFriendlyException("Invalid SendEmailType");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SEND_EMAIL_TYPE);
         }
         await _emailAgent.SendEmailAsync(model);
     }
@@ -101,6 +101,6 @@ public class CommandHandler
     async Task<User> CheckUserExistAsync(Guid userId)
     {
         var user = await _userRepository.FindAsync(u => u.Id == userId);
-        return user ?? throw new UserFriendlyException("The current user does not exist");
+        return user ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
     }
 }

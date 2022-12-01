@@ -43,7 +43,8 @@ public class CommandHandler
         {
             HashClientSharedSecret(secret);
         });
-        var client = await _clientRepository.GetDetailAsync(id) ?? throw new UserFriendlyException("Get client data failed!");
+        var client = await _clientRepository.GetDetailAsync(id)
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CLIENT_NOT_EXIST);
         //Contrary to DDD
         updateClientCommand.ClientDetailDto.Adapt(client);
 
@@ -65,7 +66,7 @@ public class CommandHandler
     public async Task RemoveClientAsync(RemoveClientCommand removeClientCommand)
     {
         var client = await _clientRepository.GetDetailAsync(removeClientCommand.ClientId)
-            ?? throw new UserFriendlyException($"Client id = {removeClientCommand.ClientId} not found");
+            ?? throw new UserFriendlyException(UserFriendlyExceptionCodes.CLIENT_ID_NOT_FOUND, removeClientCommand.ClientId);
         await _clientRepository.RemoveAsync(client);
     }
     #endregion
@@ -96,7 +97,7 @@ public class CommandHandler
         var idrsDto = command.IdentityResource;
         var idrs = await _identityResourceRepository.GetDetailAsync(idrsDto.Id);
         if (idrs is null)
-            throw new UserFriendlyException("The current identityResource does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_RESOURCE_NOT_EXIST);
 
         idrs.BindUserClaims(idrsDto.UserClaims);
         idrs.BindProperties(idrsDto.Properties);
@@ -109,7 +110,7 @@ public class CommandHandler
     {
         var idrs = await _identityResourceRepository.GetDetailAsync(command.IdentityResource.Id);
         if (idrs == null)
-            throw new UserFriendlyException("The current identityResource does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_RESOURCE_NOT_EXIST);
 
         await _identityResourceRepository.RemoveAsync(idrs);
     }
@@ -136,7 +137,7 @@ public class CommandHandler
         var apiResourceDto = command.ApiResource;
         var apiResource = await _apiResourceRepository.GetDetailAsync(apiResourceDto.Id);
         if (apiResource is null)
-            throw new UserFriendlyException("The current apiResource does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_RESOURCE_NOT_EXIST);
 
         apiResource.BindUserClaims(apiResourceDto.UserClaims);
         apiResource.BindProperties(apiResourceDto.Properties);
@@ -150,7 +151,7 @@ public class CommandHandler
     {
         var apiResource = await _apiResourceRepository.GetDetailAsync(command.ApiResource.Id);
         if (apiResource == null)
-            throw new UserFriendlyException("The current apiResource does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_RESOURCE_NOT_EXIST);
 
         await _apiResourceRepository.RemoveAsync(apiResource);
     }
@@ -176,7 +177,7 @@ public class CommandHandler
         var apiScopeDto = command.ApiScope;
         var apiScope = await _apiScopeRepository.GetDetailAsync(apiScopeDto.Id);
         if (apiScope is null)
-            throw new UserFriendlyException("The current apiScope does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_SCOPE_NOT_EXIST);
 
         apiScope.BindUserClaims(apiScopeDto.UserClaims);
         apiScope.BindProperties(apiScopeDto.Properties);
@@ -189,7 +190,7 @@ public class CommandHandler
     {
         var apiScope = await _apiScopeRepository.GetDetailAsync(command.ApiScope.Id);
         if (apiScope == null)
-            throw new UserFriendlyException("The current apiScope does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_SCOPE_NOT_EXIST);
 
         await _apiScopeRepository.RemoveAsync(apiScope);
     }
@@ -219,7 +220,7 @@ public class CommandHandler
         var userClaimDto = command.UserClaim;
         var userClaim = await _userClaimRepository.FindAsync(userClaim => userClaim.Id == userClaimDto.Id);
         if (userClaim is null)
-            throw new UserFriendlyException("The current userClaim does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_CLAIM_NOT_EXIST);
 
         userClaim.Update(userClaimDto.Description);
         await _userClaimRepository.UpdateAsync(userClaim);
@@ -230,7 +231,7 @@ public class CommandHandler
     {
         var userClaim = await _userClaimRepository.FindAsync(userClaim => userClaim.Id == command.UserClaim.Id);
         if (userClaim == null)
-            throw new UserFriendlyException("The current userClaim does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_CLAIM_NOT_EXIST);
 
         //Todo remove check
         await _userClaimRepository.RemoveAsync(userClaim);
@@ -248,7 +249,7 @@ public class CommandHandler
         {
             var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.ClientId == customLoginDto.ClientId && customLogin.Enabled == true) > 0;
             if (exist)
-                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_ENABLE_MULTIPLE);
         }
 
         var customLogin = new CustomLogin(customLoginDto.Name, customLoginDto.Title, customLoginDto.ClientId, customLoginDto.Enabled);
@@ -263,13 +264,13 @@ public class CommandHandler
         var customLoginDto = command.CustomLogin;
         var customLogin = await _customLoginRepository.GetDetailAsync(customLoginDto.Id);
         if (customLogin is null)
-            throw new UserFriendlyException("The current customLogin does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_NOT_EXIST);
 
         if (customLoginDto.Enabled is true)
         {
             var exist = await _customLoginRepository.GetCountAsync(cl => cl.Id != customLoginDto.Id && cl.ClientId == customLogin.ClientId && cl.Enabled == true) > 0;
             if (exist)
-                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_ENABLE_MULTIPLE);
         }
         customLogin.Update(customLoginDto.Name, customLoginDto.Title, customLoginDto.Enabled);
         customLogin.BindRegisterFields(customLoginDto.RegisterFields);
@@ -282,7 +283,7 @@ public class CommandHandler
     {
         var customLogin = await _customLoginRepository.GetDetailAsync(command.CustomLogin.Id);
         if (customLogin == null)
-            throw new UserFriendlyException("The current customLogin does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_NOT_EXIST);
 
         await _customLoginRepository.RemoveAsync(customLogin);
     }

@@ -61,7 +61,7 @@ public class QueryHandler
     public async Task GetRoleDetailAsync(RoleDetailQuery query)
     {
         var role = await _roleRepository.GetDetailAsync(query.RoleId);
-        if (role is null) throw new UserFriendlyException("This role data does not exist");
+        if (role is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         query.Result = role;
         var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier);
@@ -79,7 +79,7 @@ public class QueryHandler
                             .ThenInclude(tr => tr.Team)
                             .AsSplitQuery()
                             .FirstOrDefaultAsync(r => r.Id == query.RoleId);
-        if (role is null) throw new UserFriendlyException("This role data does not exist");
+        if (role is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         query.Result = new(
             role.Users.Select(ur => new UserSelectDto(ur.User.Id, ur.User.Name, ur.User.DisplayName, ur.User.Account, ur.User.PhoneNumber, ur.User.Email, ur.User.Avatar)).ToList(),
@@ -195,10 +195,7 @@ public class QueryHandler
     public async Task ApiPermissionSelectQueryAsync(ApiPermissionSelectQuery apiPermissionSelectQuery)
     {
         Expression<Func<Permission, bool>> condition = permission => permission.Type == PermissionTypes.Api;
-        if (!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId))
-        {
-            condition = condition.And(permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
-        }
+        condition = condition.And(!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId), permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
 
         var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount);
         apiPermissionSelectQuery.Result = permissions
@@ -216,7 +213,7 @@ public class QueryHandler
         var permission = await _permissionRepository.GetByIdAsync(menuPermissionDetailQuery.PermissionId);
         if (permission.Type == PermissionTypes.Api)
         {
-            throw new UserFriendlyException($"this permission by id={menuPermissionDetailQuery.PermissionId} is api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_API_TYPE);
         }
         menuPermissionDetailQuery.Result = new MenuPermissionDetailDto
         {
@@ -247,10 +244,10 @@ public class QueryHandler
     public async Task PerimissionDetailQueryAsync(ApiPermissionDetailQuery apiPermissionDetailQuery)
     {
         var permission = await _permissionRepository.FindAsync(apiPermissionDetailQuery.PermissionId)
-                ?? throw new UserFriendlyException($"the permission id={apiPermissionDetailQuery.PermissionId} not found");
+                ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         if (permission.Type != PermissionTypes.Api)
         {
-            throw new UserFriendlyException($"this permission by id={apiPermissionDetailQuery.PermissionId} is not api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_API_TYPE);
         }
         apiPermissionDetailQuery.Result = new ApiPermissionDetailDto
         {

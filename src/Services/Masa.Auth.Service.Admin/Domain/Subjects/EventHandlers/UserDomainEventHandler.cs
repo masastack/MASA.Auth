@@ -81,7 +81,7 @@ public class UserDomainEventHandler
                                        .FirstOrDefaultAsync(u => u.Id == userEvent.UserId);
         if (user == null)
         {
-            throw new UserFriendlyException("This user does not exist");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }
         if (user.IsAdmin())
         {

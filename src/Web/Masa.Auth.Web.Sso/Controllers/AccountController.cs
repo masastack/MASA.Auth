@@ -9,6 +9,7 @@ namespace Masa.Auth.Web.Sso.Controllers;
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
+    readonly IEnvironmentProvider _environmentProvider;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly I18n _i18n;
@@ -17,12 +18,14 @@ public class AccountController : Controller
         IIdentityServerInteractionService interaction,
         IEventService events,
         IAuthClient authClient,
-        I18n i18n)
+        I18n i18n,
+        IEnvironmentProvider environmentProvider)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
         _i18n = i18n;
+        _environmentProvider = environmentProvider;
     }
 
     [HttpPost]
@@ -33,7 +36,7 @@ public class AccountController : Controller
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
         {
-            HttpContext.UseEnvironmentIsolation(inputModel.Environment);
+            (_environmentProvider as ISsoEnvironmentProvider)?.SetEnvironment(inputModel.Environment);
 
             UserModel? user = new();
 
@@ -54,7 +57,7 @@ public class AccountController : Controller
             else
             {
                 user = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(inputModel.UserName, inputModel.Password, inputModel.LdapLogin);
+                                           .ValidateCredentialsByAccountAsync(inputModel.Account, inputModel.Password, inputModel.LdapLogin);
             }
 
             if (user != null)
@@ -107,7 +110,7 @@ public class AccountController : Controller
             else return Content(_i18n.T("UnknownException"));
         }
 
-        await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.UserName,
+        await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.Account,
                 "invalid credentials", clientId: context?.Client.ClientId));
         return Content(_i18n.T("LoginValidateError"));
     }

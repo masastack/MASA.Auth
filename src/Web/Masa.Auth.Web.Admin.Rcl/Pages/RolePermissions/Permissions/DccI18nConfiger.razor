@@ -1,0 +1,90 @@
+﻿@inherits AdminCompontentBase
+@inject IConfigurationApiManage ConfigurationApiManage
+@inject IConfigurationApi ConfigurationApi
+
+<STextField Value="Name" ValueChanged="NameChanged"
+            Required
+            Label="@Label"
+            Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
+            Type="text">
+    <PrependContent>
+        <span class="d-flex align-center justify-center" style="min-width:100px;height: 34px;">
+            @DT(Name)
+        </span>
+    </PrependContent>
+</STextField>
+
+<MDialog @bind-Value="_dialog" Width="400">
+    <MCard Class="pa-4">
+        <MCardTitle Class="justify-center">
+            @($"{Name}{T("DisplayName")}")
+        </MCardTitle>
+        <MCardText>
+            @foreach (var _displayName in _displayNames)
+            {
+                <STextField Class="my-1" Label="@_displayName.Key" @bind-Value=_displayName.Value />
+            }
+        </MCardText>
+        <MCardActions>
+            <SButton Color="primary" Outlined Width="140"
+                     OnClick="() => _dialog = false">
+                @T("Cancel")
+            </SButton>
+            <MSpacer></MSpacer>
+            <SButton Color="primary" Width="140"
+                     OnClick="() => _dialog  = false">
+                @T("Ok")
+            </SButton>
+        </MCardActions>
+    </MCard>
+</MDialog>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> NameChanged { get; set; }
+
+    bool _dialog;
+    List<KeyValue<string, string>> _displayNames = new();
+
+    private Task OpenConfigDialog()
+    {
+        _displayNames = new();
+        var publicSection = ConfigurationApi.GetPublic();
+        foreach (var item in publicSection.GetChildren())
+        {
+            if (item.Key.StartsWith(DynamicTranslateProvider.I18N_KEY))
+            {
+                var key = item.Key.TrimStart(DynamicTranslateProvider.I18N_KEY);
+                var value = item.GetValue<string>(Name);
+                _displayNames.Add(new KeyValue<string, string>(key, value));
+            }
+        }
+        _dialog = true;
+        return Task.CompletedTask;
+    }
+
+    private Task Save()
+    {
+        //todo upsert dcc
+        //ConfigurationApiManage.UpdateAsync();
+        return Task.CompletedTask;
+    }
+
+    public class KeyValue<TKey, TVal>
+    {
+        public TKey Key { get; set; }
+        public TVal Value { get; set; }
+
+        public KeyValue(TKey key, TVal value)
+        {
+            this.Key = key;
+            this.Value = value;
+        }
+    }
+}
