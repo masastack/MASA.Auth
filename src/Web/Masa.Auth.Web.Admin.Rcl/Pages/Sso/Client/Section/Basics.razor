@@ -81,7 +81,7 @@
             {
                 new() { Text = T("Key"), Value = nameof(ClientPropertyDto.Key), Sortable = false },
                 new() { Text = T("Value"), Value = nameof(ClientPropertyDto.Value), Sortable = false },
-                new() { Text = T("Action"), Value = "Action", Sortable = false, Align = "center" },
+                new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center },
             };
         }
         base.OnAfterRender(firstRender);

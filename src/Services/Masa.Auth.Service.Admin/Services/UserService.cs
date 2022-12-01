@@ -292,7 +292,7 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
-    public async Task<bool> GetHasPhoneNumberInEnvAsync(IEventBus eventBus, IEnvironmentSetter environmentSetter,
+    public async Task<bool> GetHasPhoneNumberInEnvAsync(IEventBus eventBus, IMultiEnvironmentSetter environmentSetter,
         [FromQuery] string env, [FromQuery] string phoneNumber)
     {
         environmentSetter.SetEnvironment(env);
