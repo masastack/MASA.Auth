@@ -141,6 +141,9 @@ public class QueryHandler
     public async Task GetIdentityResourceSelectAsync(IdentityResourceSelectQuery query)
     {
         var idrs = await _oidcDbContext.Set<IdentityResource>()
+                                .Where(idrs => idrs.Enabled)
+                                .OrderByDescending(idrs => idrs.ModificationTime)
+                                .ThenByDescending(idrs => idrs.CreationTime)
                                 .Select(idrs => new IdentityResourceSelectDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description))
                                 .ToListAsync();
 
@@ -262,7 +265,7 @@ public class QueryHandler
     public async Task GetApiScopeSelectAsync(ApiScopeSelectQuery query)
     {
         var apiScopeSelect = await _oidcDbContext.Set<ApiScope>()
-                                .Where(apiScope => apiScope.Enabled == true)
+                                .Where(apiScope => apiScope.Enabled)
                                 .OrderByDescending(apiScope => apiScope.ModificationTime)
                                 .ThenByDescending(apiScope => apiScope.CreationTime)
                                 .Select(apiScope => new ApiScopeSelectDto(apiScope.Id, apiScope.Name, apiScope.DisplayName, apiScope.Description))

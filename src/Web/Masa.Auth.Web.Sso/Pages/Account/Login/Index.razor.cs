@@ -30,7 +30,7 @@ public partial class Index
             if (_viewModel.IsExternalLoginOnly)
             {
                 // we only have one option for logging in and it's an external provider
-                Navigation.NavigateTo("externalLogin/challenge", new Dictionary<string, object?> {
+                Navigation.NavigateTo(AuthenticationExternalConstants.ChallengeEndpoint, new Dictionary<string, object?> {
                     {"scheme", _viewModel.ExternalLoginScheme},
                     {"returnUrl", ReturnUrl}
                 });

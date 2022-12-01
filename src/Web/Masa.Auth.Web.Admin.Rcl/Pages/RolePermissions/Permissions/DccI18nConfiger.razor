@@ -2,7 +2,7 @@
 @inject IConfigurationApiManage ConfigurationApiManage
 @inject IConfigurationApi ConfigurationApi
 
-<STextField Value="Name" ValueChanged="NameChanged"
+<STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
             Required
             Label="@Label"
             Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
@@ -48,6 +48,9 @@
 
     [Parameter]
     public EventCallback<string> NameChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<string>>? NameExpression { get; set; }
 
     bool _dialog;
     List<KeyValue<string, string>> _displayNames = new();

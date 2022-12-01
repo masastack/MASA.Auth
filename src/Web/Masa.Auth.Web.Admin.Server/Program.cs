@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.IdentityModel.Logging;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseKestrel(option =>
 {
@@ -34,6 +36,8 @@ builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
 MasaOpenIdConnectOptions masaOpenIdConnectOptions;
+
+IdentityModelEventSource.ShowPII = true;
 
 #if DEBUG
 masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
