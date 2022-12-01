@@ -11,15 +11,15 @@ public static class Extensions
             Regex.Escape(item.ToLower()).Replace(@"\*", ".*").Replace(@"\?", ".")));
     }
 
-    public static void MigrateDbContext<TContext>(this WebApplicationBuilder builder,
-        Action<TContext, IServiceProvider> seeder) where TContext : DbContext
+    public static async Task MigrateDbContextAsync<TContext>(this WebApplicationBuilder builder,
+        Func<TContext, IServiceProvider, Task> seeder) where TContext : DbContext
     {
         var services = builder.Services.BuildServiceProvider();
         var context = services.GetRequiredService<TContext>();
-        if (context.Database.GetPendingMigrations().Any())
+        if ((await context.Database.GetPendingMigrationsAsync()).Any())
         {
-            context.Database.Migrate();
+            await context.Database.MigrateAsync();
         }
-        seeder(context, services);
+        await seeder(context, services);
     }
 }

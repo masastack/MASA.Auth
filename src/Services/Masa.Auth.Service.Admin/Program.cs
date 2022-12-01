@@ -40,7 +40,6 @@ builder.Services.AddMasaIdentity(options =>
     options.Mapping(nameof(MasaUser.Account), IdentityClaimConsts.ACCOUNT);
 });
 builder.Services
-    .AddScoped<EnvironmentMiddleware>()
     .AddScoped<IAuthorizationMiddlewareResultHandler, CodeAuthorizationMiddlewareResultHandler>()
     .AddSingleton<IAuthorizationHandler, DefaultRuleCodeAuthorizationHandler>()
     .AddSingleton<IAuthorizationPolicyProvider, DefaultRuleCodePolicyProvider>()
@@ -131,10 +130,7 @@ builder.Services
         }
     });
 })
-.AddFluentValidation(options =>
-{
-    options.RegisterValidatorsFromAssemblyContaining<Program>();
-})
+.AddValidatorsFromAssembly(Assembly.GetEntryAssembly())
 .AddDomainEventBus(dispatcherOptions =>
 {
     dispatcherOptions
@@ -152,10 +148,10 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-builder.MigrateDbContext<AuthDbContext>((context, services) =>
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
 {
     var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    new AuthDbContextSeed().SeedAsync(context, logger).Wait();
+    await new AuthDbContextSeed().SeedAsync(context, logger);
 });
 
 var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
