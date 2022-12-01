@@ -68,7 +68,7 @@ public partial class CustomLoginRegister
         new() { Text = T(nameof(CustomLoginDto.ModificationTime)), Value = nameof(CustomLoginDto.ModificationTime), Sortable = false, Width="250px"  },
         new() { Text = T(nameof(CustomLoginDto.Modifier)), Value = nameof(CustomLoginDto.Modifier), Sortable = false, Width="105px" },
         new() { Text = T("State"), Value = nameof(CustomLoginDto.Enabled), Sortable = false , Width="105px"},
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align=DataTableHeaderAlign.Center, Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetCustomLoginsAsync()

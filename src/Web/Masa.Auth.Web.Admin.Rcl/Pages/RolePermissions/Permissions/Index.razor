@@ -71,7 +71,7 @@
                             <h6>@T("Permission Info")</h6>
                         </MCardTitle>
                         <MCardText>
-                            <MForm EnableValidation Model=_menuPermissionDetailDto @ref="_formMenu">
+                            <MForm EnableValidation Model=_menuPermissionDetailDto EnableI18n @ref="_formMenu">
                                 <MRow>
                                     <MCol Md=12>
                                         <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
@@ -173,7 +173,7 @@
                             <h6>@T("Permission Info")</h6>
                         </MCardTitle>
                         <MCardText>
-                            <MForm EnableValidation Model=_apiPermissionDetailDto @ref="_formApi">
+                            <MForm EnableValidation Model=_apiPermissionDetailDto EnableI18n @ref="_formApi">
                                 <MRow>
                                     <MCol Md=12>
                                         <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
