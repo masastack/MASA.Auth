@@ -83,16 +83,16 @@ public static class FluentValidationExtensions
                           .WithMessage("{PropertyName} format is incorrect");
     }
 
-    public static IRuleBuilderOptions<T, string> MinLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength)
+    public static IRuleBuilderOptions<T, string> MinLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength, string propertyName = "{PropertyName}")
     {
-        return ruleBuilder.Must(value => string.IsNullOrEmpty(value) || value.Length>=2)
-                    .WithMessage($"Please enter a number greater than {minimumLength} of "+ "{PropertyName}");
+        return ruleBuilder.Must(value => string.IsNullOrEmpty(value) || value.Length>= minimumLength)
+                    .WithMessage($"Please enter a number greater than {minimumLength} of "+ propertyName);
     }
-
-    public static IRuleBuilderOptions<T, string> MaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength)
+    
+    public static IRuleBuilderOptions<T, string> MaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength,string propertyName = "{PropertyName}")
     {
         return ruleBuilder.MaximumLength(maximumLength)
-                    .WithMessage("Please enter a number less than {MaxLength} of {PropertyName}");
+                    .WithMessage("Please enter a number less than {MaxLength} of "+ propertyName);
     }
 
     public static IRuleBuilderOptions<T, string> Port<T>(this IRuleBuilder<T, string> ruleBuilder)

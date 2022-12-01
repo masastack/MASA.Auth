@@ -11,7 +11,7 @@ public partial class ThirdPartyUser
     private string? _search;
     private Guid _thirdPartyId;
     private DateOnly? _startTime;
-    private DateOnly? _endTime = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly? _endTime;
     private LdapDialog ldapDialog = null!;
 
     [Inject]
@@ -129,7 +129,7 @@ public partial class ThirdPartyUser
         new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
         new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
         new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
-        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align=DataTableHeaderAlign.Center, Width="105px" },
+        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetThirdPartyUsersAsync()

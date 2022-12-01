@@ -29,6 +29,9 @@ public partial class ThirdPartyIdpSelect
     [Parameter]
     public string? Label { get; set; }
 
+    [Parameter]
+    public bool Clearable { get; set; }
+
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
     protected override async Task OnInitializedAsync()
