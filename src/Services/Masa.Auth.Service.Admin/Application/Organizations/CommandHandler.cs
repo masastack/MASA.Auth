@@ -24,13 +24,10 @@ public class CommandHandler
     {
         var dto = command.UpsertDepartmentDto;
         Expression<Func<Department, bool>> predicate = d => d.Name.Equals(dto.Name) && d.ParentId == dto.ParentId;
-        if (dto.IsUpdate)
-        {
-            predicate = predicate.And(d => d.Id != dto.Id);
-        }
+        predicate = predicate.And(dto.IsUpdate, d => d.Id != dto.Id);
         if (_departmentRepository.Any(predicate))
         {
-            throw new UserFriendlyException($"The department name {dto.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.DAPARTMENT_NAME_EXIST, dto.Name);
         }
         var parent = await _departmentRepository.FindAsync(dto.ParentId);
         if (dto.IsUpdate)
@@ -38,7 +35,7 @@ public class CommandHandler
             var department = await _departmentRepository.FindAsync(dto.Id);
             if (department is null)
             {
-                throw new UserFriendlyException($"current department id {dto.Id} not found");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.DAPARTMENT_NOT_FOUND);
             }
             department.SetStaffs(dto.StaffIds.ToArray());
             department.Move(parent);
@@ -80,7 +77,7 @@ public class CommandHandler
         var dto = copyDepartmentCommand.CopyDepartmentDto;
         if (_departmentRepository.Any(d => d.Name.Equals(dto.Name)))
         {
-            throw new UserFriendlyException($"the department name {dto.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.DAPARTMENT_NAME_EXIST, dto.Name);
         }
         var sourceDepartment = await _departmentRepository.GetByIdAsync(dto.SourceId);
         if (sourceDepartment != null)
@@ -121,7 +118,7 @@ public class CommandHandler
             position = new(command.Position.Name);
             await _positionRepository.AddAsync(position);
         }
-        else throw new UserFriendlyException($"Position with name {command.Position.Name} already exists");
+        else throw new UserFriendlyException(UserFriendlyExceptionCodes.POSITION_NAMME_EXIST, command.Position.Name);
         command.Result = position.Id;
     }
 
@@ -130,11 +127,11 @@ public class CommandHandler
     {
         var positionDto = command.Position;
         var position = await _positionRepository.FindAsync(p => p.Id == positionDto.Id);
-        if (position is null) throw new UserFriendlyException($"Current position not found");
+        if (position is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.POSITION_NOT_EXIST);
         var existPosition = await _positionRepository.FindAsync(p => p.Id != positionDto.Id && p.Name == positionDto.Name);
         if (existPosition is not null)
         {
-            throw new UserFriendlyException($"Position with name {command.Position.Name} already exists");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.POSITION_NAMME_EXIST, command.Position.Name);
         }
         position.Update(positionDto.Name);
         await _positionRepository.UpdateAsync(position);

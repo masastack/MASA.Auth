@@ -192,7 +192,8 @@
     "Team Admin": "团队管理员",
     "Team Member": "团队成员",
     "Due to the role [{0}] limit constraint, a maximum of {1} members can be selected": "由于角色:[{0}]约束限制,当前最多只能选择{1}人",
-    "TeamAvatarText": "默认会根据团队首字自动生成"
+    "TeamAvatarText": "默认会根据团队首字自动生成",
+    "Team name cannot be empty": "团队名不能为空"
   },
 
   "PermissionBlock": {

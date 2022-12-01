@@ -195,10 +195,7 @@ public class QueryHandler
     public async Task ApiPermissionSelectQueryAsync(ApiPermissionSelectQuery apiPermissionSelectQuery)
     {
         Expression<Func<Permission, bool>> condition = permission => permission.Type == PermissionTypes.Api;
-        if (!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId))
-        {
-            condition = condition.And(permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
-        }
+        condition = condition.And(!string.IsNullOrEmpty(apiPermissionSelectQuery.SystemId), permission => permission.SystemId == apiPermissionSelectQuery.SystemId);
 
         var permissions = await _permissionRepository.GetPaginatedListAsync(condition, 0, apiPermissionSelectQuery.MaxCount);
         apiPermissionSelectQuery.Result = permissions
@@ -216,7 +213,7 @@ public class QueryHandler
         var permission = await _permissionRepository.GetByIdAsync(menuPermissionDetailQuery.PermissionId);
         if (permission.Type == PermissionTypes.Api)
         {
-            throw new UserFriendlyException($"this permission by id={menuPermissionDetailQuery.PermissionId} is api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_API_TYPE);
         }
         menuPermissionDetailQuery.Result = new MenuPermissionDetailDto
         {
@@ -247,10 +244,10 @@ public class QueryHandler
     public async Task PerimissionDetailQueryAsync(ApiPermissionDetailQuery apiPermissionDetailQuery)
     {
         var permission = await _permissionRepository.FindAsync(apiPermissionDetailQuery.PermissionId)
-                ?? throw new UserFriendlyException($"the permission id={apiPermissionDetailQuery.PermissionId} not found");
+                ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         if (permission.Type != PermissionTypes.Api)
         {
-            throw new UserFriendlyException($"this permission by id={apiPermissionDetailQuery.PermissionId} is not api permission");
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_API_TYPE);
         }
         apiPermissionDetailQuery.Result = new ApiPermissionDetailDto
         {

@@ -64,7 +64,7 @@ public partial class Position
     {
         new() { Text = T("Index"), Value = "Index", Sortable = false , Width="105px" },
         new() { Text = T("Name"), Value = nameof(PositionDto.Name), Sortable = false },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align=DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetPositionsAsync()

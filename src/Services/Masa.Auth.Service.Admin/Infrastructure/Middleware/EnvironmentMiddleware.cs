@@ -5,20 +5,20 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
 
 public class EnvironmentMiddleware : IMiddleware, IScopedDependency
 {
-    readonly IEnvironmentContext _environmentContext;
+    readonly IMultiEnvironmentContext _multiEnvironmentContext;
     readonly ILogger<EnvironmentMiddleware> _logger;
 
-    public EnvironmentMiddleware(IEnvironmentContext environmentContext,
+    public EnvironmentMiddleware(IMultiEnvironmentContext multiEnvironmentContext,
         ILogger<EnvironmentMiddleware> logger)
     {
-        _environmentContext = environmentContext;
+        _multiEnvironmentContext = multiEnvironmentContext;
         _logger = logger;
     }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        _logger.LogInformation("----- Current Environment Is [{0}]", _environmentContext.CurrentEnvironment);
-        context.Items.Add(IsolationConsts.ENVIRONMENT, _environmentContext.CurrentEnvironment);
+        _logger.LogInformation("----- Current Environment Is [{0}]", _multiEnvironmentContext.CurrentEnvironment);
+        context.Items.Add(IsolationConsts.ENVIRONMENT, _multiEnvironmentContext.CurrentEnvironment);
         return next(context);
     }
 }

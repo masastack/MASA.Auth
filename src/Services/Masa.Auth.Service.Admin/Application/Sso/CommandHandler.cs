@@ -249,7 +249,7 @@ public class CommandHandler
         {
             var exist = await _customLoginRepository.GetCountAsync(customLogin => customLogin.ClientId == customLoginDto.ClientId && customLogin.Enabled == true) > 0;
             if (exist)
-                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_ENABLE_MULTIPLE);
         }
 
         var customLogin = new CustomLogin(customLoginDto.Name, customLoginDto.Title, customLoginDto.ClientId, customLoginDto.Enabled);
@@ -270,7 +270,7 @@ public class CommandHandler
         {
             var exist = await _customLoginRepository.GetCountAsync(cl => cl.Id != customLoginDto.Id && cl.ClientId == customLogin.ClientId && cl.Enabled == true) > 0;
             if (exist)
-                throw new UserFriendlyException($"CustomLogin already exists enable,multiple cannot be enabled");
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CUSTOM_LOGIN_ENABLE_MULTIPLE);
         }
         customLogin.Update(customLoginDto.Name, customLoginDto.Title, customLoginDto.Enabled);
         customLogin.BindRegisterFields(customLoginDto.RegisterFields);

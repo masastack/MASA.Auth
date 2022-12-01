@@ -31,7 +31,7 @@ public partial class Organization
         new() { Text = T(nameof(StaffDto.Account)), Value = nameof(StaffDto.Account), CellClass = "subtitle" },
         new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), CellClass = "subtitle" },
         new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="80px" }
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align=DataTableHeaderAlign.Center, Width="80px" }
     };
 
     protected async override Task OnAfterRenderAsync(bool firstRender)

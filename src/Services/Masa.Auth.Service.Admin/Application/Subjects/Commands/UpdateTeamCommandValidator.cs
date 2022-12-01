@@ -5,4 +5,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class UpdateTeamCommandValidator : AbstractValidator<UpdateTeamCommand>
 {
+    public UpdateTeamCommandValidator()
+    {
+        RuleFor(command => command.UpdateTeamDto).SetValidator(new UpdateTeamValidator());
+    }
 }

@@ -3,7 +3,7 @@
   "$Text": "中文简体",
   "Cancel": "取消",
   "Account": "账号",
-  "AccountPlaceHolder": "请输入账号/手机号/邮箱",
+  "AccountPlaceHolder": "请输入账号/手机号",
   "PhoneNumber": "手机号",
   "PhoneNumberPlaceHolder": "请输入手机号",
   "SMSCode": "短信验证码",

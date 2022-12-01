@@ -66,7 +66,7 @@ public partial class IdentityResource
         new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false, Width="105px" },
         new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
         new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align="center", Width="105px" },
+        new() { Text = T("Action"), Value = "Action", Sortable = false, Align=DataTableHeaderAlign.Center, Width="105px" },
     };
 
     public async Task GetIdentityResourcesAsync()

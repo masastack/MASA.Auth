@@ -44,7 +44,7 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         var item = await Context.Set<Permission>().FindAsync(Id);
         if (item is null)
         {
-            throw new UserFriendlyException($"The permission {Id} does not exist");
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         }
         if (item.ParentId == Guid.Empty)
         {

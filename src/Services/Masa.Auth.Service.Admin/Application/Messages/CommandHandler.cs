@@ -29,7 +29,7 @@ public class CommandHandler
             case SendMsgCodeTypes.Register:
                 if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber))
                 {
-                    throw new UserFriendlyException($"This mobile phone number {model.PhoneNumber} already exists as a user");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, model.PhoneNumber);
                 }
                 cacheKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
                 break;
@@ -40,7 +40,7 @@ public class CommandHandler
                 var loginUser = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
                 if (loginUser == null)
                 {
-                    throw new UserFriendlyException($"User with mobile phone number {model.PhoneNumber} does not exist");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
                 }
                 cacheKey = CacheKey.MsgCodeForLoginKey(loginUser.Id.ToString(), model.PhoneNumber);
                 break;
@@ -79,7 +79,7 @@ public class CommandHandler
             case SendEmailTypes.Register:
                 if (_userRepository.Any(u => u.Email == model.Email))
                 {
-                    throw new UserFriendlyException($"This email {model.Email} already exists as a user");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, model.Email);
                 }
                 break;
             case SendEmailTypes.Verifiy:
@@ -87,7 +87,7 @@ public class CommandHandler
             case SendEmailTypes.ForgotPassword:
                 if (!_userRepository.Any(u => u.Email == model.Email))
                 {
-                    throw new UserFriendlyException($"This email {model.Email} does not exist");
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_NOT_EXIST, model.Email);
                 }
                 break;
             case SendEmailTypes.Bind:
