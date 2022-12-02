@@ -9,7 +9,7 @@ public class PermissionDetailDto : BaseUpsertDto<Guid>
 
     public string Name { get; set; } = string.Empty;
 
-    public PermissionTypes Type { get; set; } = PermissionTypes.Api;
+    public PermissionTypes Type { get; set; }
 
     public string Description { get; set; } = string.Empty;
 

@@ -93,12 +93,12 @@ public partial class UpdateCustomLoginRegisterDialog
     {
         if (Tab == CustomLoginTab.Login)
         {
-            var maxSort = CustomLogin.ThirdPartyIdps.Count == 0 ? 0 : CustomLogin.ThirdPartyIdps.Max(tp => tp.Sort);
+            var maxSort = CustomLogin.ThirdPartyIdps.Select(tp => tp.Sort).DefaultIfEmpty().Max();
             CustomLogin.ThirdPartyIdps.Add(new(default, maxSort + 1));
         }
         else if (Tab == CustomLoginTab.Register)
         {
-            var maxSort = CustomLogin.RegisterFields.Count == 0 ? 0 : CustomLogin.RegisterFields.Max(r => r.Sort);
+            var maxSort = CustomLogin.RegisterFields.Select(r => r.Sort).DefaultIfEmpty().Max();
             CustomLogin.RegisterFields.Add(new(default, maxSort + 1, default));
         }
     }
