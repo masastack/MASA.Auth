@@ -46,7 +46,10 @@ builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSe
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddStackExchangeRedisCache(redisOption);
+builder.Services.AddMultilevelCache(distributedCacheOptions =>
+{
+    distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
+});
 builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {

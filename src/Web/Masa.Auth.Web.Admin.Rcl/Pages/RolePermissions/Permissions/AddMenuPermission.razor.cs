@@ -42,11 +42,10 @@ public partial class AddMenuPermission
 
     public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
-        _menuPermissionDetailDto = new();
+        _form?.Reset();
         _menuPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
         _menuPermissionDetailDto.ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
         _showUrlPrefix = appPermissionsViewModel.AppUrl;
-        _parentType = appPermissionsViewModel.Type ?? PermissionTypes.Menu;
         _visible = true;
     }
 

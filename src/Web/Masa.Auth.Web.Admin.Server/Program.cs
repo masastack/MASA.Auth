@@ -35,6 +35,8 @@ builder.Services.AddTypeAdapter();
 
 MasaOpenIdConnectOptions masaOpenIdConnectOptions;
 
+IdentityModelEventSource.ShowPII = true;
+
 #if DEBUG
 masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {

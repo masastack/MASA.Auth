@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Linq.Expressions;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Sso;
 
 public partial class ClientSelect
@@ -19,6 +21,9 @@ public partial class ClientSelect
 
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<string>>? ValueExpression { get; set; }
 
     public ClientSelectDto? Client { get; set; }
 

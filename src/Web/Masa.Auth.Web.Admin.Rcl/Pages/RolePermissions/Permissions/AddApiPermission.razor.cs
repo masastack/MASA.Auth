@@ -40,7 +40,7 @@ public partial class AddApiPermission
 
     public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
-        _apiPermissionDetailDto = new();
+        _form?.Reset();
         _apiPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
         _showUrlPrefix = appPermissionsViewModel.AppUrl;
         _visible = true;
