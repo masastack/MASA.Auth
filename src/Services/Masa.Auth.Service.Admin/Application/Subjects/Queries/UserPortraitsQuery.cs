@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record UserPortraitsQuery(List<Guid> UserIds) : Query<List<UserPortraitModel>>
+public record UserPortraitsQuery(List<Guid> UserIds) : Query<List<UserModel>>
 {
-    public override List<UserPortraitModel> Result { get; set; } = new();
+    public override List<UserModel> Result { get; set; } = new();
 }

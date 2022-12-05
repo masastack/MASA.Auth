@@ -247,7 +247,7 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<List<UserPortraitModel>> PostPortraitsAsync(IEventBus eventBus,
+    public async Task<List<UserModel>> PostPortraitsAsync(IEventBus eventBus,
         [FromBody] List<Guid> userIds)
     {
         var query = new UserPortraitsQuery(userIds);
