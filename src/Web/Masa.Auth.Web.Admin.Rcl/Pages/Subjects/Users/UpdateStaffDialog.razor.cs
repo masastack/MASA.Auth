@@ -65,7 +65,7 @@ public partial class UpdateStaffDialog
 
     public async Task OpenRemoveStaffDialog()
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete staff data"));
+        var confirm = await OpenConfirmDialog(T("Delete Staff"), T("Are you sure delete staff \"{0}\"?", StaffDetail.Name));
         if (confirm) await RemoveStaffAsync();
     }
 

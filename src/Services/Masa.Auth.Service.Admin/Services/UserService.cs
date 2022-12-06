@@ -247,6 +247,7 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
+    [RoutePattern("byIds", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<List<UserModel>> PostPortraitsAsync(IEventBus eventBus,
         [FromBody] List<Guid> userIds)
     {

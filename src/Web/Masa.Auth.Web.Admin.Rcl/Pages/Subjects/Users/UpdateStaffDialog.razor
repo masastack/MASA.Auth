@@ -64,7 +64,7 @@
                 <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="Staff.Enabled" DisabledLabel="@T("Freeze")" />
                     <MSpacer></MSpacer>
-                    <SButton Medium Class="mr-6" Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</SButton>
+                    <SButton Medium Class="mr-6" Text Color="error" OnClick=OpenRemoveStaffDialog>@T("Delete Staff")</SButton>
                     <SButton Medium OnClick="async () => await UpdateStaffAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>
