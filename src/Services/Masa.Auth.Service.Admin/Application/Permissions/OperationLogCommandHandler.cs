@@ -19,7 +19,7 @@ public class OperationLogCommandHandler
     [EventHandler(1)]
     public async Task AddRoleOperationLogAsync(AddRoleCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddRole, $"添加角色：{command.Role.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddRole, $"新建角色：{command.Role.Name}");
     }
 
     [EventHandler(1)]
@@ -63,7 +63,7 @@ public class OperationLogCommandHandler
         }
         else
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddPermission, $"添加权限：{command.PermissionDetail.Name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddPermission, $"新建权限：{command.PermissionDetail.Name}");
         }
     }
 
