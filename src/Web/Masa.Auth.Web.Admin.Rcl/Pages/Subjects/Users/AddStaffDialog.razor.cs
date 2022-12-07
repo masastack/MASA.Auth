@@ -76,7 +76,7 @@ public partial class AddStaffDialog
             DefaultPasswordDto.DefaultPassword = Staff.Password!;
             DefaultPasswordDto.Enabled = true;
             await StaffService.UpdateDefaultPasswordAsync(DefaultPasswordDto);
-            OpenSuccessMessage("Succeeded in setting the password");
+            OpenSuccessMessage(T("Set the default password successfully"));
         }
     }
 }

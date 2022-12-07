@@ -14,7 +14,7 @@ public partial class OrgSheet
     [Parameter]
     public List<DepartmentDto> Departments { get; set; } = new();
 
-    MForm _form = default!;
+    MForm? _form;
     bool _visible;
     string _title = "", _saveTitle = "";
     UpsertDepartmentDto _dto = new();
@@ -23,7 +23,7 @@ public partial class OrgSheet
 
     private async Task OnSubmitHandler()
     {
-        if (_form.Validate())
+        if (_form?.Validate() is true)
         {
             if (OnSubmit.HasDelegate)
             {

@@ -19,13 +19,13 @@ public class OperationLogCommandHandler
     [EventHandler(1)]
     public async Task AddRoleOperationLogAsync(AddRoleCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddRole, $"添加职位：{command.Role.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddRole, $"新建角色：{command.Role.Name}");
     }
 
     [EventHandler(1)]
     public async Task UpdateRoleOperationLogAsync(UpdateRoleCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditRole, $"编辑职位：{command.Role.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.EditRole, $"编辑角色：{command.Role.Name}");
     }
 
     [EventHandler(0)]
@@ -36,7 +36,7 @@ public class OperationLogCommandHandler
                                               .Select(role => role.Name)
                                               .FirstAsync();
         if (name is not null)
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddPosition, $"删除职位：{name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveRole, $"删除角色：{name}");
     }
 
     #endregion
@@ -57,7 +57,14 @@ public class OperationLogCommandHandler
     [EventHandler(1)]
     public async Task AddPermissionOperationLogAsync(AddPermissionCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddPermission, $"添加权限：{command.PermissionDetail.Name}");
+        if(command.PermissionDetail.IsUpdate)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditPermission, $"编辑权限：{command.PermissionDetail.Name}");
+        }
+        else
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddPermission, $"新建权限：{command.PermissionDetail.Name}");
+        }
     }
 
     #endregion

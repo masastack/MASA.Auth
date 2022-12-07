@@ -54,18 +54,17 @@ public class EmailAgent : IScopedDependency
         }
 
         var code = Random.Shared.Next(100000, 999999).ToString();
-        await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
+        await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {
             ChannelCode = _emailOptions.Value.ChannelCode,
             ChannelType = ChannelTypes.Email,
             TemplateCode = _emailOptions.Value.TemplateCode,
             ReceiverType = SendTargets.Assign,
-            Receivers = new List<MessageTaskReceiverModel>
+            Receivers = new List<ExternalReceiverModel>
             {
-                new MessageTaskReceiverModel
+                new ExternalReceiverModel
                 {
-                    Type = MessageTaskReceiverTypes.User,
-                    Email = sendEmailModel.Email
+                    ChannelUserIdentity = sendEmailModel.Email
                 }
             },
             Variables = new ExtraPropertyDictionary(new Dictionary<string, object>

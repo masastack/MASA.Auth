@@ -9,7 +9,6 @@ global using FluentValidation;
 global using IdentityModel;
 global using IdentityServer4;
 global using IdentityServer4.Configuration;
-global using IdentityServer4.EntityFramework.Services;
 global using IdentityServer4.Events;
 global using IdentityServer4.Extensions;
 global using IdentityServer4.Models;

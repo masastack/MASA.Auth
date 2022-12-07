@@ -25,7 +25,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task AddUserOperationLogAsync(AddUserCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUser, $"添加用户：{command.Result.Account}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUser, $"新建用户：{command.Result.Account}");
         }
 
         [EventHandler]
@@ -129,7 +129,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task AddStaffOperationLogAsync(AddStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStaff, $"添加员工：{command.Staff.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStaff, $"新建员工：{command.Staff.DisplayName}");
         }
 
         [EventHandler]
@@ -147,13 +147,19 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler(0)]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"删除员工：{command.Result?.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveStaff, $"删除员工：{command.Result?.DisplayName}");
         }
 
         [EventHandler]
         public async Task SyncOperationLogAsync(SyncStaffCommand command)
         {
             await _operationLogRepository.AddDefaultAsync(OperationTypes.SyncStaff, $"同步员工：{string.Join(',', command.Staffs.Select(staff => staff.DisplayName))}");
+        }
+
+        [EventHandler]
+        public async Task UpdateStaffDefaultPasswordAsync(UpdateStaffDefaultPasswordCommand command)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditDefaultPassword, $"修改默认密码：将默认密码改为{command.DefaultPassword.DefaultPassword}");
         }
 
         #endregion
@@ -173,7 +179,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task AddThirdPartyIdpOperationLogAsync(AddThirdPartyIdpCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddThirdPartyIdp, $"添加第三方平台：{command.ThirdPartyIdp.Name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddThirdPartyIdp, $"新建第三方平台：{command.ThirdPartyIdp.Name}");
         }
 
         [EventHandler]
@@ -205,7 +211,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task AddTeamLogAsync(AddTeamCommand addTeamCommand)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddTeam, $"添加团队：{addTeamCommand.AddTeamDto.Name}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.AddTeam, $"新建团队：{addTeamCommand.AddTeamDto.Name}");
         }
 
         [EventHandler]
