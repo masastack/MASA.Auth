@@ -275,7 +275,8 @@
     "Male/Female": "男/女",
     "Delete Staff": "删除员工",
     "Freeze": "冻结",
-    "InternalStaff/ExternalStaff": "内部员工/驻场员工",
+    "InternalStaff/ExternalStaff": "内部员工/外部员工",
+    "Default to internal staff": "默认为内部员工",
     "Failed to query staffList data:": "获取员工列表数据失败:",
     "Failed to query staffDetail data:": "获取员工详情数据失败",
     "Add staff data success": "新建员工数据成功",
@@ -557,7 +558,8 @@
     "AddPosition": "新建职位",
     "EditPosition": "编辑职位",
     "RemovePosition": "删除职位",
-    "UpsertAppTag": "编辑应用标签"
+    "UpsertAppTag": "编辑应用标签",
+    "EditDefaultPassword": "编辑默认密码"
   },
   "Line": "行号",
   "Account is required": "账号必须填写",

@@ -147,13 +147,19 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler(0)]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"删除员工：{command.Result?.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveStaff, $"删除员工：{command.Result?.DisplayName}");
         }
 
         [EventHandler]
         public async Task SyncOperationLogAsync(SyncStaffCommand command)
         {
             await _operationLogRepository.AddDefaultAsync(OperationTypes.SyncStaff, $"同步员工：{string.Join(',', command.Staffs.Select(staff => staff.DisplayName))}");
+        }
+
+        [EventHandler]
+        public async Task UpdateStaffDefaultPasswordAsync(UpdateStaffDefaultPasswordCommand command)
+        {
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditDefaultPassword, $"修改默认密码：将默认密码改为{command.DefaultPassword.DefaultPassword}");
         }
 
         #endregion

@@ -15,7 +15,7 @@ public enum OperationTypes
     EditStaff = 7,
     RemoveStaff = 8,
     SyncStaff = 9,
-    EditStaffPassword = 10,
+    EditDefaultPassword = 10,
     AddRole = 11,
     EditRole = 12,
     RemoveRole = 13,

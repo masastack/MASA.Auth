@@ -19,20 +19,19 @@ public class Sms : IScopedDependency
     public async Task<string> SendMsgCodeAsync(string key, string phoneNumber, TimeSpan? expiration = null)
     {
         var code = Random.Shared.Next(100000, 999999).ToString();
-        await _mcClient.MessageTaskService.SendTemplateMessageAsync(new SendTemplateMessageModel
+        await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {
             ChannelCode = _smsOptions.Value.ChannelCode,
             ChannelType = ChannelTypes.Sms,
             TemplateCode = _smsOptions.Value.TemplateCode,
             ReceiverType = SendTargets.Assign,
-            Receivers = new List<MessageTaskReceiverModel>
-        {
-            new MessageTaskReceiverModel
+            Receivers = new List<ExternalReceiverModel>
             {
-                Type = MessageTaskReceiverTypes.User,
-                PhoneNumber = phoneNumber
-            }
-        },
+                new ExternalReceiverModel
+                {
+                    ChannelUserIdentity = phoneNumber
+                }
+            },
             Variables = new ExtraPropertyDictionary(new Dictionary<string, object>
             {
                 ["code"] = code,

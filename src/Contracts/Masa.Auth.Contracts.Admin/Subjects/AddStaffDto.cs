@@ -7,7 +7,7 @@ public class AddStaffDto
 {
     public string JobNumber { get; set; }
 
-    public StaffTypes StaffType { get; set; }
+    public StaffTypes StaffType { get; set; } = StaffTypes.Internal;
 
     public bool Enabled { get; set; } = true;
 

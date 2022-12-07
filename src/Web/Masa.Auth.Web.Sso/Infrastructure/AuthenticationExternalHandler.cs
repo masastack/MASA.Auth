@@ -41,6 +41,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
             var isuser = new IdentityServerUser(userModel.Id.ToString())
             {
                 DisplayName = userModel.DisplayName,
+
                 IdentityProvider = scheme,
                 AdditionalClaims = additionalLocalClaims
             };           
