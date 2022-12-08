@@ -18,7 +18,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddClientOperationLogAsync(AddClientCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddClient, $"添加客户端：{command.AddClientDto.ClientName}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddClient, $"新建客户端：{command.AddClientDto.ClientName}");
     }
 
     [EventHandler]
@@ -41,13 +41,13 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddIdentityResourceOperationLogAsync(AddIdentityResourceCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddIdentityResource, $"添加身份资源：{command.IdentityResource.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddIdentityResource, $"新建身份资源：{command.IdentityResource.Name}");
     }
 
     [EventHandler]
     public async Task AddStandardIdentityResourcesOperationLogAsync(AddStandardIdentityResourcesCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStandardIdentityResources, $"添加标准身份资源");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStandardIdentityResources, $"新建标准身份资源");
     }
 
     [EventHandler]
@@ -82,7 +82,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddApiResourceOperationLogAsync(AddApiResourceCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiResource, $"添加Api资源：{command.ApiResource.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiResource, $"新建Api资源：{command.ApiResource.Name}");
     }
 
     [EventHandler]
@@ -117,7 +117,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddApiScopeOperationLogAsync(AddApiScopeCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiScope, $"添加Api范围：{command.ApiScope.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddApiScope, $"新建Api范围：{command.ApiScope.Name}");
     }
 
     [EventHandler]
@@ -144,13 +144,13 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddUserClaimOperationLogAsync(AddUserClaimCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUserClaim, $"添加用户申明：{command.UserClaim.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddUserClaim, $"新建用户申明：{command.UserClaim.Name}");
     }
 
     [EventHandler]
     public async Task AddStandardUserClaimsOperationLogAsync(AddStandardUserClaimsCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStandardUserClaims, $"添加标准的用户申明");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddStandardUserClaims, $"新建标准的用户申明");
     }
 
     [EventHandler]
@@ -177,7 +177,7 @@ public class OperationLogCommandHandler
     [EventHandler]
     public async Task AddCustomLoginOperationLogAsync(AddCustomLoginCommand command)
     {
-        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddCustomLogin, $"添加自定义登录注册：{command.CustomLogin.Name}");
+        await _operationLogRepository.AddDefaultAsync(OperationTypes.AddCustomLogin, $"新建自定义登录注册：{command.CustomLogin.Name}");
     }
 
     [EventHandler]

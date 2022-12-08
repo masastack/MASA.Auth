@@ -708,7 +708,8 @@ public class CommandHandler
                 Enabled = true,
                 Email = staffDto.Email,
                 PhoneNumber = staffDto.PhoneNumber,
-                JobNumber = staffDto.JobNumber
+                JobNumber = staffDto.JobNumber,
+                StaffType = StaffTypes.Internal
             };
             await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
             command.Result = await AddStaffAsync(addStaffDto);

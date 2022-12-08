@@ -11,7 +11,7 @@
                 <div>@T("Explanation")</div>
                 <div>@T("File size limit")：@MaxFileSize Kb</div>
                 <div>@T("Gender")：@T("Male/Female")</div>
-                <div>@T("StaffType")：@T("InternalStaff/ExternalStaff")</div>
+                <div>@T("StaffType")：@($"{T("InternalStaff/ExternalStaff")}({T("Default to internal staff")})")</div>
                 <div>@T("Password")：@T("New employee: the password is the default password, editing employee: the password remains the same as the original password.")</div>
             </div>
             <div class="d-flex mt-12">
@@ -31,7 +31,7 @@
                         <div>
                             @foreach (var error in result.Errors)
                             {
-                                <div class="error--text">@error</div>
+                                <div class="error--text">@T(error)</div>
                             }
                         </div>
                     </div>

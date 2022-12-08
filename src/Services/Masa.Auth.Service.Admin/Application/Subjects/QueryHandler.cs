@@ -165,14 +165,7 @@ public class QueryHandler
             var userCache = await _multilevelCacheClient.GetUserAsync(userId);
             if (userCache != null)
             {
-                userPortraitsQuery.Result.Add(new UserPortraitModel
-                {
-                    Id = userId,
-                    Name = userCache.Name ?? "",
-                    DisplayName = userCache.DisplayName,
-                    Avatar = userCache.Avatar,
-                    Account = userCache.Account
-                });
+                userPortraitsQuery.Result.Add(userCache);
             }
         }
     }

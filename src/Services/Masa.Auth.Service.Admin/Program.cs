@@ -154,8 +154,7 @@ await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
     await new AuthDbContextSeed().SeedAsync(context, logger);
 });
 
-var defaultConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault();
-builder.Services.AddOidcCache(defaultConfiguration);
+builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();

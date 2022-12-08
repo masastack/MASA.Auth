@@ -107,7 +107,7 @@ public partial class Role
 
     public async Task OpenRemoveRoleDialog(RoleDto role)
     {
-        var confirm = await OpenConfirmDialog(T("Are you sure delete role data"));
+        var confirm = await OpenConfirmDialog(T("Delete Role"), T("Are you sure delete role \"{0}\"?", role.Name));
         if (confirm) await RemoveRoleAsync(role.Id);
     }
 
