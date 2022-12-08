@@ -1,14 +1,14 @@
 ﻿@using Masa.Stack.Components
 @inherits AdminCompontentBase
 
-<AutoHeight>
+<AutoHeight Card>
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
             <div>
-                <SUserAutoComplete @bind-Value="UserId" />
+                <SUserAutoComplete FillBackground=false @bind-Value="UserId" />
             </div>     
-            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button">
+            <div @onclick="() => Filter = !(Filter ?? false)" style="background-color: white;" class="ml-4 d-flex button">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
                 </MIcon>
@@ -22,14 +22,13 @@
             <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
             <MRow class="ml-6">
                 <MCol Md=4>
-                    <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
+                    <BooleanSelect @bind-Value="Enabled" FillBackground=false Small Placeholder="@T("UserState")" />
                 </MCol>
             </MRow>
         </div>
     </HeaderContent>
     <AutoHeightContent>
         <SDataTable 
-            Class="mt-6"
             Dense
             Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
             Headers="GetHeaders()"

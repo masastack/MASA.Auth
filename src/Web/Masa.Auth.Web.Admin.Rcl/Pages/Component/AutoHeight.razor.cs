@@ -22,4 +22,10 @@ public partial class AutoHeight
 
     [Parameter]
     public bool Overflow { get; set; }
+
+    [Parameter]
+    public bool Card { get; set; }
+
+    [Parameter]
+    public string CardClass { get; set; } = "";
 }

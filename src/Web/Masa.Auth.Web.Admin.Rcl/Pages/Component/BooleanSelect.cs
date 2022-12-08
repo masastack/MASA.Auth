@@ -8,6 +8,9 @@ public class BooleanSelect : SSelect<KeyValuePair<string, bool?>, bool?, bool?>
     [CascadingParameter]
     public I18n I18N { get; set; } = default!;
 
+    [Parameter]
+    public bool FillBackground { get; set; } = true;
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
@@ -19,6 +22,7 @@ public class BooleanSelect : SSelect<KeyValuePair<string, bool?>, bool?, bool?>
         };
         ItemText = kv => kv.Key;
         ItemValue = kv => kv.Value;
+        BackgroundColor = FillBackground ? "fill-background" : "white";
     }
 }
 
