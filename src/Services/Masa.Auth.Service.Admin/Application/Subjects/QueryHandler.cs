@@ -46,18 +46,10 @@ public class QueryHandler
     public async Task GetUsersAsync(UsersQuery query)
     {
         Expression<Func<User, bool>> condition = user => true;
-        //todo And overload method
-        if (query.Enabled is not null)
-            condition = condition.And(user => user.Enabled == query.Enabled);
-
-        if (query.StartTime is not null)
-            condition = condition.And(user => user.CreationTime >= query.StartTime);
-
-        if (query.EndTime is not null)
-            condition = condition.And(user => user.CreationTime <= query.EndTime);
-
-        if (query.UserId != Guid.Empty)
-            condition = condition.And(user => user.Id == query.UserId);
+        condition = condition.And(query.Enabled is not null, user => user.Enabled == query.Enabled);
+        condition = condition.And(query.StartTime is not null, user => user.CreationTime >= query.StartTime);
+        condition = condition.And(query.EndTime is not null, user => user.CreationTime <= query.EndTime);
+        condition = condition.And(query.UserId != Guid.Empty, user => user.Id == query.UserId);
 
         var users = await _userRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
@@ -187,20 +179,11 @@ public class QueryHandler
     private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
         Expression<Func<User, bool>> condition = user => false;
-        //todo And overload method
-        if (!string.IsNullOrEmpty(account))
-            condition = condition.Or(user => user.Account == account);
-        if (!string.IsNullOrEmpty(phoneNumber))
-            condition = condition.Or(user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
-        if (!string.IsNullOrEmpty(email))
-            condition = condition.Or(user => user.Email == email);
-        if (!string.IsNullOrEmpty(idCard))
-            condition = condition.Or(user => user.IdCard == idCard);
-        if (userId is not null)
-        {
-            Expression<Func<User, bool>> condition2 = user => user.Id != userId;
-            condition = condition2.And(condition);
-        }
+        condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);
+        condition = condition.Or(!string.IsNullOrEmpty(phoneNumber), user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
+        condition = condition.Or(!string.IsNullOrEmpty(email), user => user.Email == email);
+        condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
+        condition = condition.And(userId is not null, user => user.Id != userId);
 
         var exitUser = await _authDbContext.Set<User>()
                                            .Include(u => u.Roles)
@@ -319,14 +302,14 @@ public class QueryHandler
             condition = condition.And(s => s.DisplayName.Contains(query.Search) || s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetListAsync(condition);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar, s.Email, s.PhoneNumber)).ToList();
     }
 
     [EventHandler]
     public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
     {
         var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
-        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar, s.Email, s.PhoneNumber)).ToList();
     }
 
     [EventHandler]
@@ -590,7 +573,10 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            var modifierName = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier))?.DisplayName ?? "";
+            //todo remove CacheKey
+            var staffModel = _multilevelCacheClient.Get<CacheStaff>(CacheKey.StaffKey(team.Modifier));
+            var userModel = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier));
+            var modifierName = staffModel?.DisplayName ?? userModel?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 

@@ -12,7 +12,7 @@ public partial class UpdateSheet
     public EventCallback<UpdateTeamDto> OnUpdate { get; set; }
 
     [Parameter]
-    public EventCallback<Guid> OnDelete { get; set; }
+    public Func<Guid, string, Task<bool>>? OnDelete { get; set; }
 
     bool _adminPreview, _memberPreview, _visible;
     string _tab = "";
@@ -71,10 +71,13 @@ public partial class UpdateSheet
 
     private async Task OnDeleteHandler()
     {
-        if (OnDelete.HasDelegate)
+        if (OnDelete != null)
         {
-            await OnDelete.InvokeAsync(Dto.Id);
+            var result = await OnDelete.Invoke(Dto.Id, Dto.TeamBasicInfo.Name);
+            if (result)
+            {
+                _visible = false;
+            }
         }
-        _visible = false;
     }
 }

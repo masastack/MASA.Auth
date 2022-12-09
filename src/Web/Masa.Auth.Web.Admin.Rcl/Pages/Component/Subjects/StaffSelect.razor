@@ -37,13 +37,21 @@
         }
         <MListItemContent>
             <MListItemTitle>
-                <span class="body2 regular--text">
+                <span class="subtitle2 emphasis2--text">
                     @data.Item.DisplayName
+                </span>
+                <MDivider Vertical Class="mx-1" Style="@((!string.IsNullOrEmpty(data.Item.DisplayName) && !string.IsNullOrEmpty(data.Item.JobNumber))?"height:12px;":"height:0px;")" />
+                <span class="caption regular2--text">
+                    @data.Item.JobNumber
                 </span>
             </MListItemTitle>
             <MListItemSubtitle>
-                <span class="body2 regular--text">
-                    @data.Item.JobNumber
+                <span class="body2 regular2--text">
+                    @data.Item.PhoneNumber
+                </span>
+                <MDivider Vertical Class="mx-1" Style="@((!string.IsNullOrEmpty(data.Item.PhoneNumber) && !string.IsNullOrEmpty(data.Item.Email))?"height:12px;":"height:0px;")" />
+                <span class="body2 regular2--text">
+                    @data.Item.Email
                 </span>
             </MListItemSubtitle>
         </MListItemContent>

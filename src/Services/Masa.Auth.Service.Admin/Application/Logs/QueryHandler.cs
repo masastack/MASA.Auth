@@ -16,20 +16,13 @@ public class QueryHandler
     public async Task GetOperationLogAsync(OperationLogsQuery query)
     {
         Expression<Func<OperationLog, bool>> condition = operationLog => true;
-        //todo And overload method
-        if (query.Operator != default)
-            condition = condition.And(operationLog => operationLog.Operator == query.Operator);
-        if (query.OperationType != default)
-            condition = condition.And(operationLog => operationLog.OperationType == query.OperationType);
-        if (query.StartTime is not null)
-            condition = condition.And(operationLog => operationLog.OperationTime >= query.StartTime);
-        if (query.EndTime is not null)
-            condition = condition.And(operationLog => operationLog.OperationTime <= query.EndTime);
-        if (string.IsNullOrEmpty(query.Search) is false)
-            condition = condition.And(operationLog =>
-                            operationLog.OperationDescription.Contains(query.Search) ||
-                            operationLog.OperatorName.Contains(query.Search)
-                        );
+        condition = condition.And(query.Operator != default, operationLog => operationLog.Operator == query.Operator);
+        condition = condition.And(query.OperationType != default, operationLog => operationLog.OperationType == query.OperationType);
+        condition = condition.And(query.StartTime is not null, operationLog => operationLog.OperationTime >= query.StartTime);
+        condition = condition.And(query.EndTime is not null, operationLog => operationLog.OperationTime <= query.EndTime);
+        condition = condition.And(!string.IsNullOrEmpty(query.Search), operationLog =>
+                        operationLog.OperationDescription.Contains(query.Search) ||
+                        operationLog.OperatorName.Contains(query.Search));
 
         var operationLogs = await _operationLogRepository.GetPaginatedListAsync(condition, new PaginatedOptions
         {

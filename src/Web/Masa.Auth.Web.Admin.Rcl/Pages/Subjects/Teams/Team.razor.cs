@@ -56,14 +56,15 @@ public partial class Team
         await LoadTeams();
     }
 
-    private async Task OnDelete(Guid id)
+    private async Task<bool> OnDelete(Guid id, string name)
     {
-        var isConfirmed = await OpenConfirmDialog(T("Delete Team"), T("Are you sure you want to delete this team"), AlertTypes.Warning);
+        var isConfirmed = await OpenConfirmDialog(T("Delete Team"), T("Are you sure to delete team {0}", name));
         if (isConfirmed)
         {
             await TeamService.DeleteAsync(id);
             await LoadTeams();
         }
+        return isConfirmed;
     }
 }
 

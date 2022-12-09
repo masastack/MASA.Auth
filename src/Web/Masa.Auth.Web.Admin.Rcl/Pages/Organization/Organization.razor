@@ -9,7 +9,7 @@
     <MCol Md="@("auto")">
         <MCard style="width:300px;max-height: calc(100vh - 120px);" Class="full-height">
             <MCardTitle>
-                <SearchTextField @bind-Value="@_searchName" PrependInnerIcon="@IconConstants.Search" Clearable/>
+                <SSearch @bind-Value="@_searchName"/>
             </MCardTitle>
             <MCardText Style="overflow-y: scroll;height: calc(100% - 72px);">
                 <MTreeview @bind-Active="_departmentActive"

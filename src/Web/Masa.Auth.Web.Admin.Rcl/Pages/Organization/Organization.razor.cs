@@ -48,6 +48,7 @@ public partial class Organization
     {
         _departments = await DepartmentService.GetListAsync();
         _openNode = _departments.Select(c => c.Id).ToList();
+        _departmentActive = _departments.Select(d => d.Id).ToList();
         _departmentChildrenCountDto = await DepartmentService.GetCountAsync();
     }
 
@@ -85,11 +86,16 @@ public partial class Organization
         }
     }
 
-    private async Task DeleteAsync(Guid departmentId)
+    private async Task<bool> DeleteAsync(Guid id, string name)
     {
-        await DepartmentService.RemoveAsync(departmentId);
-        await LoadDepartmentsAsync();
-        OpenSuccessMessage(T("Department deleted successfully"));
+        var confirm = await OpenConfirmDialog(T("Delete Department"), T("Are you sure to delete department {0}", name));
+        if (confirm)
+        {
+            await DepartmentService.RemoveAsync(id);
+            await LoadDepartmentsAsync();
+            OpenSuccessMessage(T("Department deleted successfully"));
+        }
+        return confirm;
     }
 
     private async Task SubmitAsync(UpsertDepartmentDto dto)

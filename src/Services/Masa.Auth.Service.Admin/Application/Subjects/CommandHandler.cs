@@ -481,21 +481,12 @@ public class CommandHandler
 
     private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
     {
-        //todo And overload method
         Expression<Func<User, bool>> condition = user => false;
-        if (!string.IsNullOrEmpty(account))
-            condition = condition.Or(user => user.Account == account);
-        if (!string.IsNullOrEmpty(phoneNumber))
-            condition = condition.Or(user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
-        if (!string.IsNullOrEmpty(email))
-            condition = condition.Or(user => user.Email == email);
-        if (!string.IsNullOrEmpty(idCard))
-            condition = condition.Or(user => user.IdCard == idCard);
-        if (userId is not null)
-        {
-            Expression<Func<User, bool>> condition2 = user => user.Id != userId;
-            condition = condition2.And(condition);
-        }
+        condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);
+        condition = condition.Or(!string.IsNullOrEmpty(phoneNumber), user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
+        condition = condition.Or(!string.IsNullOrEmpty(email), user => user.Email == email);
+        condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
+        condition = condition.And(userId is not null, user => user.Id != userId);
 
         var exitUser = await _authDbContext.Set<User>()
                                            .Include(u => u.Roles)
@@ -862,21 +853,12 @@ public class CommandHandler
 
     private async Task<Staff?> VerifyStaffRepeatAsync(Guid? staffId, string? jobNumber, string? phoneNumber, string? email, string? idCard, bool throwException = true)
     {
-        //todo And overload method
         Expression<Func<Staff, bool>> condition = staff => false;
-        if (!string.IsNullOrEmpty(jobNumber))
-            condition = condition.Or(staff => staff.JobNumber == jobNumber);
-        if (!string.IsNullOrEmpty(phoneNumber))
-            condition = condition.Or(staff => staff.PhoneNumber == phoneNumber);
-        if (!string.IsNullOrEmpty(email))
-            condition = condition.Or(staff => staff.Email == email);
-        if (!string.IsNullOrEmpty(idCard))
-            condition = condition.Or(staff => staff.IdCard == idCard);
-        if (staffId is not null)
-        {
-            Expression<Func<Staff, bool>> condition2 = staff => staff.Id != staffId;
-            condition = condition2.And(condition);
-        }
+        condition = condition.Or(!string.IsNullOrEmpty(jobNumber), staff => staff.JobNumber == jobNumber);
+        condition = condition.Or(!string.IsNullOrEmpty(phoneNumber), staff => staff.PhoneNumber == phoneNumber);
+        condition = condition.Or(!string.IsNullOrEmpty(email), staff => staff.Email == email);
+        condition = condition.Or(!string.IsNullOrEmpty(idCard), staff => staff.IdCard == idCard);
+        condition = condition.And(staffId is not null, staff => staff.Id != staffId);
 
         var existStaff = await _staffRepository.FindAsync(condition);
         if (existStaff is not null)

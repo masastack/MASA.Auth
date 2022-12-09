@@ -96,7 +96,7 @@ public partial class UpdateClientDialog
 
     private async Task DeleteAsync()
     {
-        var isConfirmed = await OpenConfirmDialog(T("Delete Client"), T("Are you sure you want to delete this client"), AlertTypes.Warning);
+        var isConfirmed = await OpenConfirmDialog(T("Delete Client"), T("Are you sure to delete client {0}", _clientDetailDto.ClientName));
         if (isConfirmed)
         {
             await ClientService.RemoveClientAsync(_clientDetailDto.Id);
