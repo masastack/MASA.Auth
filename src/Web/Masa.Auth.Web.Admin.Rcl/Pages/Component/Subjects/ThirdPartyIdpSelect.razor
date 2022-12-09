@@ -7,7 +7,8 @@
                ItemText="e => e.Name"
                ItemValue="e => e.Id"
                Small=Small
-         Clearable=Clearable
+               Clearable=Clearable
+               BackgroundColor="@(FillBackground?"fill-background":"white")"
                Style="@($"{Style}")"
                Class="@($"{Class}")">
     <ItemContent Context="data">

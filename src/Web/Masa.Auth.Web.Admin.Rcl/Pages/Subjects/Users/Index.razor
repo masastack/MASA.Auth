@@ -5,19 +5,17 @@
     @T(Title)
 </PageTitle>
 
-<DefaultCard>
-    <SElevationTab Class="defaultTab full-height" TabMinWidth="120" Left Tabs="Tas" Dense>
-        <SElevationTabItem>
-            <User @ref=UserRef StaffCompontent=StaffRef ThirdPartyUserCompontent=ThirdPartyUserRef />          
-        </SElevationTabItem>
-        <SElevationTabItem>
-            <ThirdPartyUser @ref=ThirdPartyUserRef />          
-        </SElevationTabItem>
-        <SElevationTabItem>
-            <Staff @ref=StaffRef UserCompontent=UserRef />         
-        </SElevationTabItem>
-    </SElevationTab>
-</DefaultCard>
+<SElevationTab Class="defaultTab full-height" ActiveClass="fill-background" TabsClass="white" TabMinWidth="120" Left Tabs="Tas" Dense>
+    <SElevationTabItem>
+        <User @ref=UserRef StaffCompontent=StaffRef ThirdPartyUserCompontent=ThirdPartyUserRef />          
+    </SElevationTabItem>
+    <SElevationTabItem>
+        <ThirdPartyUser @ref=ThirdPartyUserRef />          
+    </SElevationTabItem>
+    <SElevationTabItem>
+        <Staff @ref=StaffRef UserCompontent=UserRef />         
+    </SElevationTabItem>
+</SElevationTab>
 
 @code {
     public string Title { get; set; } = PageTab.User;

@@ -1,7 +1,19 @@
 ﻿<div class="full-height flex-column @Class">
     @HeaderContent
-    <div class="flex-height-auto @AutoClass @(Overflow?"overflow-y pr-4":"")">
-        @AutoHeightContent
-    </div>
-    @FooterContent
+    @if (Card)
+    {
+        <DefaultCard Class="@("mt-6 " + CardClass)">
+            <div class="flex-height-auto @AutoClass @(Overflow?"overflow-y pr-4":"")">
+                @AutoHeightContent
+            </div>
+            @FooterContent
+        </DefaultCard>
+    }
+    else
+    {
+        <div class="flex-height-auto @AutoClass @(Overflow?"overflow-y pr-4":"")">
+            @AutoHeightContent
+        </div>
+        @FooterContent
+    }
 </div>
