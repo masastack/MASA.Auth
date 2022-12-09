@@ -59,7 +59,7 @@ public partial class CopyOrgSheet
     private void RemoveStaff(StaffDto staffDto)
     {
         Dto.Staffs.Remove(staffDto);
-        _staffs.Add(new StaffSelectDto(staffDto.Id, staffDto.JobNumber, staffDto.Name, staffDto.DisplayName, staffDto.Avatar));
+        _staffs.Add(new StaffSelectDto(staffDto.Id, staffDto.JobNumber, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.Email, staffDto.PhoneNumber));
     }
 
     private void AddStaff(StaffSelectDto staffDto)
@@ -71,7 +71,9 @@ public partial class CopyOrgSheet
             Name = staffDto.Name,
             Avatar = staffDto.Avatar,
             JobNumber = staffDto.JobNumber,
-            DisplayName = staffDto.DisplayName
+            DisplayName = staffDto.DisplayName,
+            Email = staffDto.Email,
+            PhoneNumber = staffDto.PhoneNumber
         });
     }
 

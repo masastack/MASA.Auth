@@ -15,13 +15,19 @@ public class StaffSelectDto
 
     public string Avatar { get; set; }
 
-    public StaffSelectDto(Guid id, string jobNumber, string name, string displayName, string avatar)
+    public string Email { get; set; }
+
+    public string PhoneNumber { get; set; }
+
+    public StaffSelectDto(Guid id, string jobNumber, string name, string displayName, string avatar, string email, string phoneNumber)
     {
         Id = id;
         JobNumber = jobNumber;
         Name = name;
         DisplayName = displayName;
         Avatar = avatar;
+        Email = email;
+        PhoneNumber = phoneNumber;
     }
 }
 

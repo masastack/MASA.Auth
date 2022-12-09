@@ -319,14 +319,14 @@ public class QueryHandler
             condition = condition.And(s => s.DisplayName.Contains(query.Search) || s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetListAsync(condition);
 
-        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
+        query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar, s.Email, s.PhoneNumber)).ToList();
     }
 
     [EventHandler]
     public async Task GetStaffSelectByIdsAsync(StaffSelectByIdQuery staffSelectByIdQuery)
     {
         var staffs = await _staffRepository.GetListAsync(s => staffSelectByIdQuery.Ids.Contains(s.Id));
-        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar)).ToList();
+        staffSelectByIdQuery.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar, s.Email, s.PhoneNumber)).ToList();
     }
 
     [EventHandler]
@@ -590,7 +590,10 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            var modifierName = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier))?.DisplayName ?? "";
+            //todo remove CacheKey
+            var staffModel = _multilevelCacheClient.Get<CacheStaff>(CacheKey.StaffKey(team.Modifier));
+            var userModel = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier));
+            var modifierName = staffModel?.DisplayName ?? userModel?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 

@@ -9,7 +9,7 @@ public partial class OrgSheet
     public EventCallback<UpsertDepartmentDto> OnSubmit { get; set; }
 
     [Parameter]
-    public EventCallback<Guid> OnDelete { get; set; }
+    public Func<Guid, string, Task<bool>>? OnDelete { get; set; }
 
     [Parameter]
     public List<DepartmentDto> Departments { get; set; } = new();
@@ -35,11 +35,14 @@ public partial class OrgSheet
 
     private async Task OnDeleteHandler()
     {
-        if (OnDelete.HasDelegate)
+        if (OnDelete != null)
         {
-            await OnDelete.InvokeAsync(_dto.Id);
+            var result = await OnDelete.Invoke(_dto.Id, _dto.Name);
+            if (result)
+            {
+                _visible = false;
+            }
         }
-        _visible = false;
     }
 
     public void Add(Guid parentId)

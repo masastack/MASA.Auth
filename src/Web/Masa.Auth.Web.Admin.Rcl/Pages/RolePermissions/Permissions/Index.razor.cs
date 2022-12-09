@@ -229,12 +229,12 @@ public partial class Index
         }
     }
 
-    private async Task DeletePermissionAsync(Guid id)
+    private async Task DeletePermissionAsync(PermissionDetailDto permission)
     {
-        var isConfirmed = await OpenConfirmDialog(T("Delete Permission"), T("Are you sure you want to delete this permission"), AlertTypes.Warning);
+        var isConfirmed = await OpenConfirmDialog(T("Delete Permission"), T("Are you sure to delete permission {0}", DT(permission.Name)));
         if (isConfirmed)
         {
-            await PermissionService.RemoveAsync(id);
+            await PermissionService.RemoveAsync(permission.Id);
             await InitAppPermissions();
         }
     }
