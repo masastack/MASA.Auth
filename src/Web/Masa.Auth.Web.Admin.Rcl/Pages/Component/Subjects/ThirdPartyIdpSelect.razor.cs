@@ -32,6 +32,9 @@ public partial class ThirdPartyIdpSelect
     [Parameter]
     public bool Clearable { get; set; }
 
+    [Parameter]
+    public bool FillBackground { get; set; } = true;
+
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
     protected override async Task OnInitializedAsync()

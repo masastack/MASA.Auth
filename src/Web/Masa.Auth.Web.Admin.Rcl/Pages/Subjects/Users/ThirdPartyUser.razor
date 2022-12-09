@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<AutoHeight>
+<AutoHeight Card>
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
             <div>
-                <SearchTextField @bind-Value="Search" />
+                <SearchTextField FillBackground=false @bind-Value="Search" />
             </div>           
-            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button">
+            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
                 </MIcon>
@@ -21,10 +21,10 @@
             <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
             <MRow class="ml-6">
                 <MCol Md=4>
-                    <BooleanSelect @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
+                    <BooleanSelect FillBackground=false @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
                 </MCol>
                 <MCol Md=4>
-                    <ThirdPartyIdpSelect @bind-Value="ThirdPartyId" Clearable Small Label="@T("Source")" />
+                    <ThirdPartyIdpSelect FillBackground=false @bind-Value="ThirdPartyId" Clearable Small Label="@T("Source")" />
                 </MCol>
             </MRow>
         </div>
@@ -36,8 +36,7 @@
             Headers="GetHeaders()" 
             Items="ThirdPartyUsers" 
             TItem="ThirdPartyUserDto" 
-            ItemsPerPage="PageSize" 
-            Class="mt-6">
+            ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>

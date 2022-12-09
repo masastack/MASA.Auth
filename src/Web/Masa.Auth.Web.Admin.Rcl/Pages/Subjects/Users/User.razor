@@ -8,7 +8,7 @@
             <div>
                 <SUserAutoComplete FillBackground=false @bind-Value="UserId" />
             </div>     
-            <div @onclick="() => Filter = !(Filter ?? false)" style="background-color: white;" class="ml-4 d-flex button">
+            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
                 </MIcon>
