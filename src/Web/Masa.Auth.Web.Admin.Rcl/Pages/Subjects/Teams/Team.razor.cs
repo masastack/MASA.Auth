@@ -18,7 +18,6 @@ public partial class Team
         if (firstRender)
         {
             await LoadTeams();
-            StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
     }
@@ -26,6 +25,7 @@ public partial class Team
     private async Task LoadTeams()
     {
         _teams = await TeamService.ListAsync(_search);
+        StateHasChanged();
     }
 
     private async Task SearchKeyDown(KeyboardEventArgs eventArgs)
