@@ -53,7 +53,7 @@ namespace Masa.Auth.Service.Admin.Domain.Logs.Aggregates
             Operator = @operator;
             OperatorName = operatorName;
             OperationType = operationType;
-            if(operationTime == default) operationTime = DateTime.UtcNow;
+            if (operationTime == default) operationTime = DateTime.UtcNow;
             OperationTime = operationTime;
             OperationDescription = operationDescription;
         }
