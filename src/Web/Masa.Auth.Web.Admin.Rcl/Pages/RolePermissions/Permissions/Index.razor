@@ -80,7 +80,6 @@
                                     <MCol Md=6>
                                         <DccI18nConfiger Label="@T("Name")" @bind-Name="_menuPermissionDetailDto.Name" />
                                     </MCol>
-
                                     <MCol Md=6>
                                         <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
                                                Items="MenuTreeParent(_menuPermissionDetailDto)" HideDetails="true"
@@ -88,7 +87,6 @@
                                                ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children">
                                         </MCascader>
                                     </MCol>
-
                                     <MCol Md=6>
                                         <STextField Label="@T("Icon")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
                                             <PrependContent>
