@@ -7,6 +7,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAuthApiGateways(this IServiceCollection services, Action<AuthApiOptions>? configure = null)
     {
+        services.AddSingleton<IResponseMessage, AuthResponseMessage>();
         var options = new AuthApiOptions("http://localhost:18002/");
         //Todo default option
 

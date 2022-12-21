@@ -157,12 +157,12 @@ await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    await option.SeedStandardResourcesAsync();
-    await option.SeedClientDataAsync(new List<Client>
-    {
-        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    });
-    await option.SyncCacheAsync();
+    //await option.SeedStandardResourcesAsync();
+    //await option.SeedClientDataAsync(new List<Client>
+    //{
+    //    publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
+    //});
+    //await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
@@ -182,6 +182,10 @@ app.UseMasaExceptionHandler(opt =>
         if (context.Exception is ValidationException validationException)
         {
             context.ToResult(validationException.Errors.Select(err => err.ToString()).FirstOrDefault()!);
+        }
+        else if (context.Exception is UserStatusException userStatusException)
+        {
+            context.ToResult(userStatusException.GetLocalizedMessage(), (int)MasaAuthHttpStatusCode.UserStatusException);
         }
     };
 });

@@ -74,7 +74,7 @@
                             <MForm EnableValidation Model=_menuPermissionDetailDto EnableI18n @ref="_formMenu">
                                 <MRow>
                                     <MCol Md=12>
-                                        <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                        <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}'>
                                         </STextField>
                                     </MCol>
                                     <MCol Md=6>
@@ -157,7 +157,7 @@
                         <MCardActions class="d-flex align-center mb-8 px-6">
                             <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
                             <MSpacer />
-                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete Permission")</MButton>
+                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</MButton>
                             <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</MButton>
                         </MCardActions>
                     </MCard>
@@ -174,7 +174,7 @@
                             <MForm EnableValidation Model=_apiPermissionDetailDto EnableI18n @ref="_formApi">
                                 <MRow>
                                     <MCol Md=12>
-                                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}'>
+                                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}'>
                                         </STextField>
                                     </MCol>
                                     <MCol Md=6>
@@ -198,7 +198,7 @@
                         </MCardText>
                         <MCardActions class="d-flex align-center mb-8 px-6">
                             <MSpacer />
-                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)">@T("Delete Permission")</MButton>
+                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)">@T("Delete")</MButton>
                             <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateApiPermissionAsync">@T("Save")</MButton>
                         </MCardActions>
                     </MCard>

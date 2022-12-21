@@ -6,25 +6,30 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
 public class CurrentUserCheckMiddleware : IMiddleware, IScopedDependency
 {
     readonly IUserContext _userContext;
-    readonly IUserRepository _userRepository;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
 
-    public CurrentUserCheckMiddleware(IUserContext userContext, IUserRepository userRepository)
+    public CurrentUserCheckMiddleware(IUserContext userContext, AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider)
     {
         _userContext = userContext;
-        _userRepository = userRepository;
+        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
     }
 
-    public Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var userId = _userContext.GetUserId<Guid>();
-        if (userId == Guid.Empty)
+        var user = await _multilevelCacheClient.GetUserAsync(userId);
+        if (user != null)
         {
-            return next(context);
+            if (user.IsDeleted)
+            {
+                throw new UserStatusException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+            }
+            if (!user.Enabled)
+            {
+                throw new UserStatusException(errorCode: UserFriendlyExceptionCodes.USER_FROZEN);
+            }
         }
-        if (!_userRepository.Any(u => u.Id == userId))
-        {
-            throw new NoUserException(NoUserException.Code);
-        }
-        return next(context);
+
+        await next(context);
     }
 }
