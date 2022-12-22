@@ -3,7 +3,6 @@
 
 global using AspNetCoreRateLimit;
 global using FluentValidation;
-global using FluentValidation.AspNetCore;
 global using HealthChecks.UI.Client;
 global using IdentityModel.Client;
 global using Magicodes.ExporterAndImporter.Core.Extension;
@@ -12,7 +11,6 @@ global using Mapster;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
-global using Masa.Auth.Contracts.Admin.Infrastructure.Exceptions;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Extensions;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;

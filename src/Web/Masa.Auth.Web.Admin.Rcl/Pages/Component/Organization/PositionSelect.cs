@@ -6,9 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Organization;
 public class PositionSelect : SComboBox<PositionSelectDto>
 {
     [Inject]
-    public I18n? I18n { get; set; }
-
-    [Inject]
     public AuthCaller? AuthCaller { get; set; }
 
     public PositionService PositionService => AuthCaller!.PositionService;

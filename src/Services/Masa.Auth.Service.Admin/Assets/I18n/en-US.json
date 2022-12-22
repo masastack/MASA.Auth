@@ -9,6 +9,7 @@
   "ThirdPartyIdpNameExist": "ThirdPartyIdp with name {0} already exists",
   "UserClaimNotExist": "The current userClaim does not exist",
   "UserNotExist": "The current user does not exist",
+  "UserFrozen": "The current user has been frozen",
   "InvalidEmailCaptcha": "The email captcha is invalid",
   "InvalidSMSCaptcha": "The sms captcha is invalid",
   "InvalidCaptcha": "Invalid Captcha",
