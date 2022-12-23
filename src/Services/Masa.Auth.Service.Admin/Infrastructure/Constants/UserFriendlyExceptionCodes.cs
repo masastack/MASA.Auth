@@ -68,6 +68,7 @@ public static class UserFriendlyExceptionCodes
     public const string PASSWORD_FAILED = "PasswordFailed";
     public const string INVALID_THIRD_PARTY_IDP_TYPE = "InvalidThirdPartyIdpType";
     public const string PHONE_NUMBER_AND_EMAIL_EMPTY_ERROR = "PhoneNumberAndEmailEmptyError";
+    public const string PHONE_NUMBER_MISMATCH = "PhoneNumberMismatch";
     public const string EMAIL_SENDED = "EmailSended";
     public const string GUEST_ACCOUNT_OPERATE = "GuestAccountOperate";
     public const string DEMO_ENVIRONMENT_FORBIDDEN = "DemoEnvironmentForbidden";

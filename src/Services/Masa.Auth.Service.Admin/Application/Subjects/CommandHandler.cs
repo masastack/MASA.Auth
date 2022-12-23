@@ -493,6 +493,8 @@ public class CommandHandler
                                            .FirstOrDefaultAsync(condition);
         if (exitUser is not null)
         {
+            if (string.IsNullOrEmpty(phoneNumber) is false && string.IsNullOrEmpty(exitUser.PhoneNumber) is false && phoneNumber != exitUser.PhoneNumber)
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.PHONE_NUMBER_MISMATCH, $"{exitUser.PhoneNumber}和{phoneNumber}不匹配");
             if (account != exitUser.Account && phoneNumber != exitUser.PhoneNumber && phoneNumber == exitUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
             if (throwException is false) return exitUser;

@@ -153,16 +153,18 @@ await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
     var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
     await new AuthDbContextSeed().SeedAsync(context, logger);
 });
-
+builder.Services.AddScoped<SyncCache2>();
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    //await option.SeedStandardResourcesAsync();
-    //await option.SeedClientDataAsync(new List<Client>
-    //{
-    //    publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    //});
+    await option.SeedStandardResourcesAsync();
+    await option.SeedClientDataAsync(new List<Client>
+    {
+        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
+    });
     //await option.SyncCacheAsync();
+    SyncCache2 syncCache = builder.Services.BuildServiceProvider().GetRequiredService<SyncCache2>();
+    await syncCache.ResetAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
