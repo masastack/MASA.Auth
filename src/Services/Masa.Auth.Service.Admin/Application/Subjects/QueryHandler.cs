@@ -299,7 +299,9 @@ public class QueryHandler
     {
         Expression<Func<Staff, bool>> condition = staff => true;
         if (!string.IsNullOrEmpty(query.Search))
-            condition = condition.And(s => s.DisplayName.Contains(query.Search) || s.Name.Contains(query.Search) || s.JobNumber.Contains(query.Search));
+            condition = condition.And(s => s.DisplayName.Contains(query.Search) || s.Name.Contains(query.Search)
+                || s.JobNumber.Contains(query.Search) || s.Email.Contains(query.Search)
+                || s.PhoneNumber.Contains(query.Search));
         var staffs = await _staffRepository.GetListAsync(condition);
 
         query.Result = staffs.Select(s => new StaffSelectDto(s.Id, s.JobNumber, s.Name, s.DisplayName, s.Avatar, s.Email, s.PhoneNumber)).ToList();
