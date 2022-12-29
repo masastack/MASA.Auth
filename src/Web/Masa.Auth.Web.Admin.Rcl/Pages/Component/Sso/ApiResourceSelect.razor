@@ -6,7 +6,7 @@
         @foreach (var apiResource in apiResourceChunk)
         {
             <MCol Cols="12/Chunk" Class="py-0">
-                <MCheckbox Value="Value.Contains(apiResource.Id)" ValueChanged="value => OnValueChanged(value,apiResource.Id)" Label="@apiResource.Name"></MCheckbox>
+                <SCheckbox TValue="bool" Value="Value.Contains(apiResource.Id)" ValueChanged="value => OnValueChanged(value,apiResource.Id)" Label="@apiResource.Name"></SCheckbox>
             </MCol>
         }
     </MRow>

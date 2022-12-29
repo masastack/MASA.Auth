@@ -54,8 +54,9 @@
         LanguageProvider.SetCulture(new CultureInfo(_targetCulture));
     }
 
-    async Task OnErrorAsync(Exception e){
+    async Task<bool> OnErrorAsync(Exception e){
         await PopupService.AlertAsync(e.Message, AlertTypes.Error);
         await JS.InvokeVoidAsync("console.log", $"error: {e.ToString()}");
+        return true;
     }
 }
