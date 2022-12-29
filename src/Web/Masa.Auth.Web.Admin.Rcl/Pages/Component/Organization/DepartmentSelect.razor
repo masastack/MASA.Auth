@@ -1,5 +1,0 @@
-﻿@inherits AdminCompontentBase
-
-<STextField Value=Text Readonly OnFocus="() => Visible = true" Label="@T("Department")" />
-
-<DepartmentDialog @bind-Visible="Visible" Value=Value ValueChanged=OnValueChanged Departments=Departments />
