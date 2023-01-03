@@ -43,12 +43,7 @@ public class PermissionService : ServiceBase
     private async Task CreateMenuPermissionAsync(IEventBus eventBus,
         [FromBody] MenuPermissionDetailDto menuPermissionDetailDto)
     {
-        await eventBus.PublishAsync(new AddPermissionCommand(menuPermissionDetailDto)
-        {
-            Enabled = menuPermissionDetailDto.Enabled,
-            ParentId = menuPermissionDetailDto.ParentId,
-            ApiPermissions = menuPermissionDetailDto.ApiPermissions
-        });
+        await eventBus.PublishAsync(new AddPermissionCommand(menuPermissionDetailDto));
     }
 
     private async Task CreateApiPermissionAsync(IEventBus eventBus,

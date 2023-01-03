@@ -22,4 +22,10 @@ public class PermissionDetailDto : BaseUpsertDto<Guid>
     public string Icon { get; set; } = string.Empty;
 
     public int Order { get; set; }
+
+    public bool Enabled { get; set; } = true;
+
+    public Guid ParentId { get; set; }
+
+    public List<Guid> ApiPermissions { get; set; } = new();
 }

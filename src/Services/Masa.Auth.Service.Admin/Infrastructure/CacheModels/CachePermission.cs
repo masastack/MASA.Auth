@@ -23,5 +23,7 @@ public class CachePermission
 
     public Guid ParentId { get; set; }
 
+    public bool Enabled { get; set; }
+
     public List<Guid> ApiPermissions { get; set; } = new();
 }
