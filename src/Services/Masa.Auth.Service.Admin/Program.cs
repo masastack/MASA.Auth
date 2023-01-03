@@ -148,20 +148,16 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    await new AuthDbContextSeed().SeedAsync(context, logger);
-});
+
 
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    //await option.SeedStandardResourcesAsync();
-    //await option.SeedClientDataAsync(new List<Client>
-    //{
-    //    publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    //});
+    await option.SeedStandardResourcesAsync();
+    await option.SeedClientDataAsync(new List<Client>
+    {
+        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
+    });
     //await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
@@ -171,6 +167,11 @@ var app = builder.AddServices(options =>
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
     options.GetPrefixes = new() { "Get", "Select", "Find" };
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
+});
+
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
+{
+    await new AuthSeedData().SeedAsync(context, services);
 });
 
 app.UseI18n();

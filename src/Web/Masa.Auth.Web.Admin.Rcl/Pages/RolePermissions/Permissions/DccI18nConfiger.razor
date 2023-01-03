@@ -1,6 +1,9 @@
-﻿@inherits AdminCompontentBase
+﻿@using Microsoft.Extensions.Hosting;
+@using Newtonsoft.Json.Linq;
+@inherits AdminCompontentBase
 @inject IConfigurationApiManage ConfigurationApiManage
 @inject IConfigurationApi ConfigurationApi
+@inject IHostEnvironment HostEnvironment
 
 <STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
             Required
@@ -22,7 +25,7 @@
         <MCardText>
             @foreach (var _displayName in _displayNames)
             {
-                <STextField Class="my-1" Label="@_displayName.Key" @bind-Value=_displayName.Value />
+                <STextField Class="my-2" Label="@_displayName.Key" @bind-Value=_displayName.Value />
             }
         </MCardText>
         <MCardActions>
@@ -32,7 +35,7 @@
             </SButton>
             <MSpacer></MSpacer>
             <SButton Color="primary" Width="140"
-                     OnClick="() => _dialog  = false">
+                     OnClick="Save">
                 @T("Ok")
             </SButton>
         </MCardActions>
@@ -72,11 +75,24 @@
         return Task.CompletedTask;
     }
 
-    private Task Save()
+    private async Task Save()
     {
-        //todo upsert dcc
-        //ConfigurationApiManage.UpdateAsync();
-        return Task.CompletedTask;
+        var publicSection = ConfigurationApi.GetPublic();
+        foreach (var item in publicSection.GetChildren())
+        {
+            if (item.Key.StartsWith(DynamicTranslateProvider.I18N_KEY))
+            {
+                var key = item.Key.TrimStart(DynamicTranslateProvider.I18N_KEY);
+                var _displayName = _displayNames.FirstOrDefault(d => d.Key == key);
+                if (_displayName!=null)
+                {
+                    var data = item.Get<Dictionary<string, object>>();
+                    data[Name] = _displayName.Value;
+                    await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", item.Key, System.Text.Json.JsonSerializer.Serialize(data));
+                }
+            }
+        }
+        _dialog = false;
     }
 
     public class KeyValue<TKey, TVal>

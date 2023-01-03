@@ -130,30 +130,39 @@ public class CommandHandler
             var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
             _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-                permissionBaseInfo.Description, permissionBaseInfo.Order, addPermissionCommand.Enabled);
-            _permission.SetParent(addPermissionCommand.ParentId);
-            _permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
+                permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
+            _permission.SetParent(permissionBaseInfo.ParentId);
+            _permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
             await _permissionRepository.UpdateAsync(_permission);
             return;
         }
 
-        if (!_permissionDomainService.CanAdd(addPermissionCommand.ParentId, permissionBaseInfo.Type))
+        if (!_permissionDomainService.CanAdd(permissionBaseInfo.ParentId, permissionBaseInfo.Type))
         {
             throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSION_PARENT_ADD_ERROR, permissionBaseInfo.Type);
         }
 
         if (permissionBaseInfo.Order == 0)
         {
-            permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(permissionBaseInfo.AppId, addPermissionCommand.ParentId);
+            permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(permissionBaseInfo.AppId, permissionBaseInfo.ParentId);
         }
         var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-            permissionBaseInfo.Description, permissionBaseInfo.Order, addPermissionCommand.Enabled);
-        permission.SetParent(addPermissionCommand.ParentId);
-        permission.BindApiPermission(addPermissionCommand.ApiPermissions.ToArray());
+            permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
+        permission.SetParent(permissionBaseInfo.ParentId);
+        permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
         await _permissionRepository.UnitOfWork.SaveChangesAsync();
     }
 
+    [EventHandler(1)]
+    public async Task SeedPermissionsAsync(SeedPermissionsCommand seedPermissionsCommand)
+    {
+        foreach (var permission in seedPermissionsCommand.Permissions)
+        {
+            await _permissionRepository.AddAsync(permission);
+        }
+        await _permissionRepository.UnitOfWork.SaveChangesAsync();
+    }
     #endregion
 }
