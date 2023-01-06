@@ -16,8 +16,8 @@
                            ItemValue="u => u.Identity"></MAutocomplete>
         </SSearchableExtend>
         <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
-            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}' 
-                Dense @bind-Tab="_tab">
+            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
+                           Dense @bind-Tab="@_tab" IndexTab>
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
                                Items="_menuPermissions" Open="_menuOpenNode"

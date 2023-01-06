@@ -21,7 +21,6 @@ global using Masa.Auth.Contracts.Admin.Projects;
 global using Masa.Auth.Contracts.Admin.Sso;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.BuildingBlocks.Service.Caller;
-global using Masa.BuildingBlocks.Service.Caller.Options;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.Service.Caller;
