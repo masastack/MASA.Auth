@@ -3,26 +3,30 @@
 <MRow Class="pt-4 mr-2">
     <MCol Md=12>
         <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
-                          AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
+                    AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
     </MCol>
-    @foreach (var uri in Dto.RedirectUris)
-    {
-        <MCol Md=6 Class="d-flex">
-            <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
-            <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
-        </MCol>
-    }
+    <MRow Class="ma-0">
+        @foreach (var uri in Dto.RedirectUris)
+        {
+            <MCol Md=6 Class="d-flex">
+                <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
+                <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
+            </MCol>
+        }
+    </MRow>
     <MCol Md=12>
         <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
-                          AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
+                    AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
     </MCol>
-    @foreach (var uri in Dto.PostLogoutRedirectUris)
-    {
-        <MCol Md=6 Class="d-flex">
-            <STextField HideDetails="true" Value="uri" Filled Disabled />
-            <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
-        </MCol>
-    }
+    <MRow Class="ma-0">
+        @foreach (var uri in Dto.PostLogoutRedirectUris)
+        {
+            <MCol Md=6 Class="d-flex">
+                <STextField HideDetails="true" Value="uri" Filled Disabled />
+                <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
+            </MCol>
+        }
+    </MRow>
     <MCol Md=6>
         <STextField @bind-Value="Dto.FrontChannelLogoutUri" Label="@T("FrontChannelLogoutUri")" Tooltip="@T("FrontChannelLogoutUriTips")" />
     </MCol>
@@ -36,7 +40,7 @@
         <SCheckbox @bind-Value="Dto.BackChannelLogoutSessionRequired" Label="@T("BackChannelLogoutSessionRequired")" Tooltip="@T("FrontChannelLogoutSessionRequiredTips")" />
     </MCol>
     <MCol Md=6>
-        <SNumberTextField @bind-Value="Dto.UserSsoLifetime" Label="@T("UserSsoLifetime")" Tooltip="@T("UserSsoLifetimeTips")"/>
+        <SNumberTextField @bind-Value="Dto.UserSsoLifetime" Label="@T("UserSsoLifetime")" Tooltip="@T("UserSsoLifetimeTips")" />
     </MCol>
     <MCol Md=6>
         <SCheckbox @bind-Value="Dto.EnableLocalLogin" Label="@T("EnableLocalLogin")" Tooltip="@T("EnableLocalLoginTips")" />

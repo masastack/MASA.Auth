@@ -12,14 +12,17 @@ public static class ElasticsearchAutoCompleteExtensions
                               .Value;
 
         var esBuilder = services.AddElasticsearchClient(
-                options.Name,
-                option => option.UseNodes(options.Nodes).UseDefault()
+                "",
+                option => option.UseNodes(options.Nodes)
             );
 
         esBuilder.AddAutoCompleteBySpecifyDocument<UserSelectDto>(option =>
         {
             option.UseIndexName(options.Index);
-            if (string.IsNullOrEmpty(options.Alias) is false) option.UseAlias(options.Alias);
+            if (string.IsNullOrEmpty(options.Alias) is false)
+            {
+                option.UseAlias(options.Alias);
+            }
         });
 
         return services;

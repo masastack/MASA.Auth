@@ -28,8 +28,8 @@ public partial class Index
     {
         if (firstRender)
         {
-            _tab = T("Menu Permission");
-
+            //_tab = "Menu Permission";
+            _tab = "0";
             _projectItems = await ProjectService.GetListAsync();
             if (!_projectItems.Any())
             {

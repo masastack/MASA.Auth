@@ -14,7 +14,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 #if DEBUG
-builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
+await builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
 #else
 builder.AddMasaStackComponentsForServer();
 #endif
