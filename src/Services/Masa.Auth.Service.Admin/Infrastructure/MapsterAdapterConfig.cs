@@ -7,6 +7,8 @@ public static class MapsterAdapterConfig
 {
     public static void TypeAdapter()
     {
+        TypeAdapterConfig.GlobalSettings.Default.MapToConstructor(true);
+
         TypeAdapterConfig<string, ClientGrantType>.NewConfig().MapWith(src => new ClientGrantType(src));
         TypeAdapterConfig<string, ClientRedirectUri>.NewConfig().MapWith(src => new ClientRedirectUri(src));
         TypeAdapterConfig<string, ClientPostLogoutRedirectUri>.NewConfig().MapWith(src => new ClientPostLogoutRedirectUri(src));
@@ -17,12 +19,7 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<ClientScope, string>.NewConfig().MapWith(src => src.Scope);
         TypeAdapterConfig<DateOnly?, DateTime?>.NewConfig().MapWith(src => src.HasValue ? src.Value.ToDateTime(TimeOnly.Parse("00:00")) : null);
         TypeAdapterConfig<DateTime?, DateOnly?>.NewConfig().MapWith(src => src.HasValue ? DateOnly.FromDateTime(src.Value) : null);
-
-        TypeAdapterConfig<ClientPropertyDto, ClientProperty>.NewConfig().MapToConstructor(true);
-
         TypeAdapterConfig<string, ClientGrantType>.NewConfig().MapWith(item => new ClientGrantType(item));
-        TypeAdapterConfig<ClientModel, Client>.NewConfig().MapToConstructor(true);
-        TypeAdapterConfig<AddClientDto, Client>.NewConfig().MapToConstructor(true);
 
         TypeAdapterConfig<LdapDetailDto, LdapOptions>.ForType()
             .Map(dest => dest.ServerPort, src => src.IsLdaps ? 0 : src.ServerPort)
@@ -33,7 +30,7 @@ public static class MapsterAdapterConfig
         {
             Id = ur.RoleId,
             Code = ur.Role == null ? "" : ur.Role.Code,
-            Name = ur.Role == null ? "": ur.Role.Name,
+            Name = ur.Role == null ? "" : ur.Role.Name,
         }).ToList());
 
         TypeAdapterConfig<ThirdPartyIdp, ThirdPartyIdpModel>.ForType()
