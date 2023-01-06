@@ -114,6 +114,6 @@ public partial class Index
 
     void TabChanged(StringNumber tab)
     {
-        Tab = tab.ToString();
+        Tab = tab?.ToString() ?? "";
     }
 }
