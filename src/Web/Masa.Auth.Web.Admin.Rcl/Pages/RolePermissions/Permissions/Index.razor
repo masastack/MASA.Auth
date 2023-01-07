@@ -64,7 +64,7 @@
     </MCol>
     <MCol Class="full-height ml-6">
         <MWindow Value="_tab" Reverse Class="full-height">
-            <MWindowItem Value='T("Menu Permission")' Class="full-height">
+            <MWindowItem Value='"0"' Class="full-height">
                 @if (_showMenuInfo && _menuPermissionDetailDto.Id != Guid.Empty)
                 {
                     <MCard Class="full-height d-flex flex-column">
@@ -164,7 +164,7 @@
                     </MCard>
                 }
             </MWindowItem>
-            <MWindowItem Value='T("Api Permission")' Class="full-height">
+            <MWindowItem Value='"1"' Class="full-height">
                 @if (_showApiInfo && _apiPermissionDetailDto.Id != Guid.Empty)
                 {
                     <MCard Class="full-height d-flex flex-column">

@@ -40,10 +40,10 @@ builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002");
 builder.Services.AddAuthClient(publicConfiguration);
 #endif
 
-builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
 builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
+builder.Services.AddScoped<IEventSink, IdentityServerEventSink>();
 builder.Services.AddSameSiteCookiePolicy();
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMultilevelCache(distributedCacheOptions =>
