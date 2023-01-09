@@ -9,6 +9,7 @@
   "ThirdPartyIdpNameExist": "名称为 {0} 的 ThirdPartyIdp 已存在",
   "UserClaimNotExist": "当前userClaim不存在",
   "UserNotExist": "当前user不存在",
+  "UserFrozen": "当前用户已被冻结",
   "InvalidEmailCaptcha": "邮箱验证码无效",
   "InvalidSMSCaptcha": "短信验证码无效",
   "InvalidCaptcha": "验证码无效",

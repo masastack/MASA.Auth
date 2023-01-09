@@ -17,7 +17,7 @@
         <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="@T("RequireRequestObject")"></MCheckbox>
     </MCol>
     <MCol Md=12>
-        <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="@T("AllowedCorsOrigins")" Tooltip="@T("AllowedCorsOriginsTips")"
+        <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="@T("AllowedCorsOrigins")"
                     AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddAllowedCorsOrigin" />
     </MCol>
     @foreach (var origin in Dto.AllowedCorsOrigins)

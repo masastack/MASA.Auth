@@ -147,3 +147,41 @@ deploy-prd:
     - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO -n $NAMESPACE_PRO
   retry: 2
   when: manual
+
+
+docker-build-prd-iot:
+  stage: docker-prd
+  tags:
+    - linux-shell
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  only:
+    - tags
+  script:
+    - docker build -f $DOCKER_AUTH_ADMIN_SERVER_PATH -t $IMAGE_AUTH_SERVER_ADMIN .
+    - docker push $IMAGE_AUTH_SERVER_ADMIN
+    - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER .
+    - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER
+    - docker build -f $DOCKER_AUTH_ADMIN_WEB_SSO_PATH -t $IMAGE_AUTH_WEB_ADMIN_SSO .
+    - docker push $IMAGE_AUTH_WEB_ADMIN_SSO
+  after_script:
+    - docker rmi $IMAGE_AUTH_SERVER_ADMIN  
+    - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER
+    - docker rmi $IMAGE_AUTH_WEB_ADMIN_SSO
+  
+deploy-prd-iot:
+  stage: deploy-prd
+  tags:
+    - linux-shell
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  only:
+    - tags
+  script:
+    - echo $KUBE_CONFIG_IOT   | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-service-admin masa-auth-service-admin=$IMAGE_AUTH_SERVER_ADMIN -n loncloud
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-admin-server masa-auth-web-admin-server=$IMAGE_AUTH_WEB_ADMIN_SERVER -n loncloud
+    - kubectl --kubeconfig ./config set image deployment/masa-auth-web-sso masa-auth-web-sso=$IMAGE_AUTH_WEB_ADMIN_SSO -n loncloud
+  retry: 2
+  when: manual
+

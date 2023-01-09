@@ -64,7 +64,7 @@
                  <div class="d-flex mt-6">
                     <EnableSwitch @bind-Value="User.Enabled" />
                     <MSpacer></MSpacer>
-                    <MButton Class="mr-6 btn" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete User")</MButton>
+                    <MButton Class="mr-6 btn" Text Color="error" OnClick=OpenRemoveUserDialog>@T("Delete")</MButton>
                     <SButton Color="primary" Medium OnClick="async() => await UpdateUserAsync(context)">@T("Save")</SButton>
                 </div>
             </FooterContent>

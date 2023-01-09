@@ -64,6 +64,7 @@ public static class UserFriendlyExceptionCodes
     public const string PERMISSIION_API_TYPE = "PermissiionApiType";
     public const string CUSTOM_LOGIN_ENABLE_MULTIPLE = "CustomLoginEnableMultiple";
     public const string USER_NOT_FOUND = "UserNotFound";
+    public const string USER_FROZEN = "UserFrozen";
     public const string STAFF_NOT_FOUND = "StaffNotFound";
     public const string PASSWORD_FAILED = "PasswordFailed";
     public const string INVALID_THIRD_PARTY_IDP_TYPE = "InvalidThirdPartyIdpType";

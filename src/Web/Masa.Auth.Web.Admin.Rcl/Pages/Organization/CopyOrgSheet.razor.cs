@@ -98,8 +98,7 @@ public partial class CopyOrgSheet
         }
 
         _staffLoading = true;
-        var staffs = await StaffService.GetSelectAsync(search);
-        _staffs = _staffs.UnionBy(staffs, staff => staff.Id).ToList();
+        _staffs = await StaffService.GetSelectAsync(search);
         _staffs.RemoveAll(s => Dto.Staffs.Any(ss => ss.Id == s.Id));
         _staffLoading = false;
     }

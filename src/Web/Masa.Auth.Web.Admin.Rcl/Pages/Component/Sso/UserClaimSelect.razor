@@ -6,7 +6,7 @@
         @foreach (var userClaim in userClaimChunk)
         {
             <MCol Cols="12/Chunk" Class="py-0">
-                <MCheckbox Value="Value.Contains(userClaim.Id)" ValueChanged="value => OnValueChanged(value,userClaim.Id)" HideDetails="@("auto")" Label="@userClaim.Name"></MCheckbox>
+                <SCheckbox TValue="bool" Value="Value.Contains(userClaim.Id)" ValueChanged="value => OnValueChanged(value,userClaim.Id)" HideDetails="@("auto")" Label="@userClaim.Name"></SCheckbox>
             </MCol>
         }
     </MRow>

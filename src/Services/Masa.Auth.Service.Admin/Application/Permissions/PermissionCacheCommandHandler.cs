@@ -16,8 +16,6 @@ public class PermissionCacheCommandHandler
     public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
     {
         var cachePermission = addPermissionCommand.PermissionDetail.Adapt<CachePermission>();
-        cachePermission.ApiPermissions = addPermissionCommand.ApiPermissions;
-        cachePermission.ParentId = addPermissionCommand.ParentId;
         await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(addPermissionCommand.PermissionDetail.Id), cachePermission);
     }
 
@@ -25,6 +23,16 @@ public class PermissionCacheCommandHandler
     public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
         await _multilevelCacheClient.RemoveAsync<CachePermission>(CacheKey.PermissionKey(removePermissionCommand.PermissionId));
+    }
+
+    [EventHandler(99)]
+    public async Task SeedPermissionsAsync(SeedPermissionsCommand seedPermissionsCommand)
+    {
+        foreach (var permission in seedPermissionsCommand.Permissions)
+        {
+            var cachePermission = permission.Adapt<CachePermission>();
+            await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(permission.Id), cachePermission);
+        }
     }
 
     [EventHandler]

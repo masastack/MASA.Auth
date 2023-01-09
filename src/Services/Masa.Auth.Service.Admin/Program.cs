@@ -148,12 +148,8 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    var logger = services.GetRequiredService<ILogger<AuthDbContextSeed>>();
-    await new AuthDbContextSeed().SeedAsync(context, logger);
-});
-builder.Services.AddScoped<SyncCache2>();
+
+
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
@@ -163,8 +159,6 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
         publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
     //await option.SyncCacheAsync();
-    SyncCache2 syncCache = builder.Services.BuildServiceProvider().GetRequiredService<SyncCache2>();
-    await syncCache.ResetAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
@@ -173,6 +167,11 @@ var app = builder.AddServices(options =>
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
     options.GetPrefixes = new() { "Get", "Select", "Find" };
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
+});
+
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
+{
+    await new AuthSeedData().SeedAsync(context, services);
 });
 
 app.UseI18n();
@@ -184,6 +183,10 @@ app.UseMasaExceptionHandler(opt =>
         if (context.Exception is ValidationException validationException)
         {
             context.ToResult(validationException.Errors.Select(err => err.ToString()).FirstOrDefault()!);
+        }
+        else if (context.Exception is UserStatusException userStatusException)
+        {
+            context.ToResult(userStatusException.GetLocalizedMessage(), (int)MasaAuthHttpStatusCode.UserStatusException);
         }
     };
 });

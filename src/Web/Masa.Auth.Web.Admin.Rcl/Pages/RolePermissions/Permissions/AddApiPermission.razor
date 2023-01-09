@@ -9,7 +9,7 @@
                         <DccI18nConfiger Label="@T("Name")" @bind-Name="_apiPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
-                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{"推荐Code方式，格式参考示例：resource.method"}' />
+                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' />
                     </MCol>
                     <MCol Md=12>
                         <SSelect @bind-Value="_apiPermissionDetailDto.Type" Required
@@ -26,7 +26,7 @@
                         <SNumberTextField Label="@T("Order")" @bind-Value="_apiPermissionDetailDto.Order" />
                     </MCol>
                     <MCol Md=12>
-                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize />
+                        <STextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Height="120" NoResize />
                     </MCol>
                 </MRow>
             </MForm>

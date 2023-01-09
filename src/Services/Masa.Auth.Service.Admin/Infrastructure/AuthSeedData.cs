@@ -3,11 +3,13 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
-public class AuthDbContextSeed
+public class AuthSeedData
 {
-    public async Task SeedAsync(AuthDbContext context, ILogger<AuthDbContextSeed> logger)
+    public async Task SeedAsync(AuthDbContext context, IServiceProvider serviceProvider)
     {
-        //todo change to eventbus add(can cache redis)
+        //use event bus publish seed data will cache
+        var eventBus = serviceProvider.GetRequiredService<IEventBus>();
+
         #region Auth
         var rolePermission = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "RolePermission", "RolePermission", "", "mdi-shield-half-full", 2, PermissionTypes.Menu);
         var role = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Role", "role", "role", "", 1, PermissionTypes.Menu);
@@ -42,7 +44,7 @@ public class AuthDbContextSeed
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.AUTH_SYSTEM_ID))
         {
-            context.Set<Permission>().AddRange(authMenus);
+            await eventBus.PublishAsync(new SeedPermissionsCommand(authMenus));
         }
         #endregion
 
@@ -53,7 +55,7 @@ public class AuthDbContextSeed
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.PM_SYSTEM_ID))
         {
-            context.Set<Permission>().AddRange(pmMenus);
+            await eventBus.PublishAsync(new SeedPermissionsCommand(pmMenus));
         }
         #endregion
 
@@ -66,7 +68,7 @@ public class AuthDbContextSeed
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.DCC_SYSTEM_ID))
         {
-            context.Set<Permission>().AddRange(dccMenus);
+            await eventBus.PublishAsync(new SeedPermissionsCommand(dccMenus));
         }
         #endregion
 
@@ -93,7 +95,7 @@ public class AuthDbContextSeed
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.MC_SYSTEM_ID))
         {
-            context.Set<Permission>().AddRange(mcMenus);
+            await eventBus.PublishAsync(new SeedPermissionsCommand(mcMenus));
         }
         #endregion
 
@@ -104,21 +106,36 @@ public class AuthDbContextSeed
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.SCHEDULER_SYSTEM_ID))
         {
-            context.Set<Permission>().AddRange(schedulerMenus);
+            await eventBus.PublishAsync(new SeedPermissionsCommand(schedulerMenus));
         }
         #endregion
 
         if (!context.Set<User>().Any(u => u.Account == "admin"))
         {
-            var adminUser = new User("admin", "Administrator", "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg", "admin", "admin", "Masa", "admin@masastack.com", "15185856868");
-            context.Set<User>().Add(adminUser);
+            await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
+            {
+                Name = "admin",
+                Account = "admin",
+                Password = "admin123",
+                DisplayName = "Administrator",
+                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
+                Email = "admin@masastack.com",
+                CompanyName = "Masa",
+                PhoneNumber = "15185856868",
+                Enabled = true
+            }));
         }
 
         if (!context.Set<Department>().Any())
         {
-            context.Set<Department>().Add(new Department(MasaStackConsts.ORGANIZATION_NAME, MasaStackConsts.ORGANIZATION_DESCRIPTION));
+            await eventBus.PublishAsync(new UpsertDepartmentCommand(new UpsertDepartmentDto
+            {
+                Name = MasaStackConsts.ORGANIZATION_NAME,
+                Description = MasaStackConsts.ORGANIZATION_DESCRIPTION,
+                Enabled = true
+            }));
         }
 
-        await context.SaveChangesAsync();
+        //await context.SaveChangesAsync();
     }
 }

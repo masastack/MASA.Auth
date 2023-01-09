@@ -9,7 +9,7 @@ global using Masa.Blazor;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
 global using Masa.Stack.Components;
-global using Masa.Utils.Security.Authentication.OpenIdConnect;
+global using Masa.Stack.Components.Extensions.OpenIdConnect;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 global using Microsoft.AspNetCore.Mvc;

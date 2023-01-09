@@ -17,6 +17,14 @@ public partial class Loggedout
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
             var logout = await _interaction.GetLogoutContextAsync(LogoutId);
+
+            if (bool.TryParse(logout.Parameters[PropertyConsts.REDIRECT_TO_LOGIN], out var redirectToLogin)
+                    && redirectToLogin && !string.IsNullOrWhiteSpace(logout.PostLogoutRedirectUri))
+            {
+                Navigation.NavigateTo(logout.PostLogoutRedirectUri, true);
+                return;
+            }
+
             _viewModel.AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut;
             if (logout is not null)
             {

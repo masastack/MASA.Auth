@@ -76,6 +76,11 @@ public partial class StaffSelect
         }
     }
 
+    private bool FilterItem(StaffSelectDto item, string queryText, string itemText)
+    {
+        return item.DisplayName.Contains(queryText);
+    }
+
     private async Task QuerySelectionStaff(string search)
     {
         search = search.TrimStart(' ').TrimEnd(' ');
@@ -88,7 +93,8 @@ public partial class StaffSelect
 
         _staffLoading = true;
         var staffs = await StaffService.GetSelectAsync(search);
-        Staffs = Staffs.UnionBy(staffs, staff => staff.Id).ToList();
+        var seletedItems = Staffs.Where(s => Value.Contains(s.Id)).ToList();
+        Staffs = seletedItems.UnionBy(staffs, staff => staff.Id).ToList();
         Staffs.RemoveAll(s => IgnoreValue?.Contains(s.Id) == true);
         _staffLoading = false;
     }
