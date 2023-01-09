@@ -14,4 +14,8 @@
 	  <PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <Folder Include="Properties\" />
+	</ItemGroup>
+	
 </Project>
