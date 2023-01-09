@@ -10,11 +10,11 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 });
 
 #if DEBUG
-//builder.Services.AddDaprStarter(opt =>
-//{
-//    opt.DaprHttpPort = 3600;
-//    opt.DaprGrpcPort = 3601;
-//});
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
 #endif
 
 builder.Services.AddAutoInject();
@@ -158,7 +158,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
         publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
-    //await option.SyncCacheAsync();
+    await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
