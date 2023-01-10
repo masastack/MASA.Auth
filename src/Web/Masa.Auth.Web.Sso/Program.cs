@@ -30,8 +30,6 @@ builder.WebHost.UseKestrel(option =>
 });
 #endif
 
-#endif
-
 // Add services to the container.
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {

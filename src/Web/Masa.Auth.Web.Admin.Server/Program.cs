@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 
+//todo secretstores.local.file
 #if DEBUG
 builder.WebHost.UseKestrel(option =>
 {
