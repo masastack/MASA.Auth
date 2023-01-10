@@ -7,11 +7,16 @@ public class IdentityServerEventSink : IEventSink
 {
     readonly ILogger<IdentityServerEventSink> _logger;
     readonly IDistributedCacheClient _distributedCacheClient;
+    readonly IUserSession _userSession;
 
-    public IdentityServerEventSink(ILogger<IdentityServerEventSink> logger, IDistributedCacheClient distributedCacheClient)
+    public IdentityServerEventSink(
+        ILogger<IdentityServerEventSink> logger,
+        IDistributedCacheClient distributedCacheClient,
+        IUserSession userSession)
     {
         _logger = logger;
         _distributedCacheClient = distributedCacheClient;
+        _userSession = userSession;
     }
 
     public async Task PersistAsync(Event evt)
@@ -27,13 +32,13 @@ public class IdentityServerEventSink : IEventSink
 
             if (evt.Id == EventIds.UserLoginSuccess || evt.Id == EventIds.UserLogoutSuccess)
             {
-                var loginUsers = await _distributedCacheClient.GetAsync<HashSet<string>>(GlobalVariables.LOGIN_USER_CACHE_KEY) ?? new();
                 if (evt.Id == EventIds.UserLoginSuccess)
                 {
                     var userLoginSuccessEvent = evt as UserLoginSuccessEvent;
                     if (userLoginSuccessEvent != null)
                     {
-                        loginUsers.Add(userLoginSuccessEvent.SubjectId);
+                        var key = string.Format(GlobalVariables.IDENTITY_USER_CACHE_KEY, userLoginSuccessEvent.SubjectId);
+                        await _distributedCacheClient.SetAsync(key, new LoginSession(userLoginSuccessEvent.SubjectId, await _userSession.GetSessionIdAsync()));
                     }
                 }
                 else
@@ -41,10 +46,10 @@ public class IdentityServerEventSink : IEventSink
                     var userLogoutSuccessEvent = evt as UserLogoutSuccessEvent;
                     if (userLogoutSuccessEvent != null)
                     {
-                        loginUsers.Remove(userLogoutSuccessEvent.SubjectId);
+                        var key = string.Format(GlobalVariables.IDENTITY_USER_CACHE_KEY, userLogoutSuccessEvent.SubjectId);
+                        await _distributedCacheClient.RemoveAsync(key);
                     }
                 }
-                await _distributedCacheClient.SetAsync(GlobalVariables.LOGIN_USER_CACHE_KEY, loginUsers);
             }
         }
         else
@@ -54,5 +59,18 @@ public class IdentityServerEventSink : IEventSink
                 evt.Id,
                 evt);
         }
+    }
+}
+
+internal class LoginSession
+{
+    public string Sub { get; set; }
+
+    public string Sid { get; set; }
+
+    public LoginSession(string sub, string sid)
+    {
+        Sub = sub;
+        Sid = sid;
     }
 }

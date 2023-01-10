@@ -7,5 +7,5 @@ public static class GlobalVariables
 {
     public const string ERROR_ROUTE = "error";
 
-    public const string LOGIN_USER_CACHE_KEY = "identity_login_users";
+    public const string IDENTITY_USER_CACHE_KEY = "identity_user:{0}";
 }

@@ -16,7 +16,7 @@
 	<ItemGroup>
 		<PackageReference Include="AlibabaCloud.SDK.Dypnsapi20170525" Version="1.0.6" />
 		<PackageReference Include="aliyun-net-sdk-dypnsapi" Version="1.1.8" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
+		<!--<PackageReference Include="IdentityServer4" Version="4.1.2" />-->
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.4.0" />
 		<PackageReference Include="Masa.Blazor" Version="0.7.0-alpha.1559" />
@@ -50,6 +50,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
+	  <ProjectReference Include="C:\Users\mayue\Desktop\IdentityServer4\src\IdentityServer4\src\IdentityServer4.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
