@@ -10,11 +10,11 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 });
 
 #if DEBUG
-builder.Services.AddDaprStarter(opt =>
-{
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
-});
+//builder.Services.AddDaprStarter(opt =>
+//{
+//    opt.DaprHttpPort = 3600;
+//    opt.DaprGrpcPort = 3601;
+//});
 #endif
 
 builder.Services.AddAutoInject();

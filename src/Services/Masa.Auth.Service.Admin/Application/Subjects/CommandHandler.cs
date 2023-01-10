@@ -769,14 +769,25 @@ public class CommandHandler
                 var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (existStaff is not null)
                 {
-                    if ((existStaff.JobNumber, existStaff.PhoneNumber) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber)))
+                    if(existStaff.JobNumber != syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber))
                     {
                         syncResults[i] = new()
                         {
                             JobNumber = syncStaff.JobNumber,
                             Errors = new()
                             {
-                               $"The mobile phone number of this employee is: {Convert(existStaff.PhoneNumber)}, and the job number is: {Convert(existStaff.JobNumber)}. Does not exactly match imported employee data!"
+                                $"The employee whose mobile phone number is {syncStaff.PhoneNumber} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"
+                            }
+                        };
+                    }
+                    else if (existStaff.PhoneNumber != syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber  ))
+                    {
+                        syncResults[i] = new()
+                        {
+                            JobNumber = syncStaff.JobNumber,
+                            Errors = new()
+                            {
+                                $"The employee whose job number is {syncStaff.JobNumber}, the corresponding mobile phone number is {existStaff.PhoneNumber}, which does not match the mobile phone number {syncStaff.PhoneNumber}"
                             }
                         };
                     }
