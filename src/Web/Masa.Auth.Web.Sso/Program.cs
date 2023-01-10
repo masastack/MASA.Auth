@@ -12,23 +12,23 @@ builder.WebHost.UseKestrel(option =>
     option.ConfigureHttpsDefaults(options =>
     {
         options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        options.CheckCertificateRevocation = false;
     });
 });
+
 #else
+var daprClient = new DaprClientBuilder().Build();
+var key = Environment.GetEnvironmentVariable("MASASTACK_TLS") ?? "catest";
+var config = await daprClient.GetSecretAsync("localsecretstore", key);
 builder.WebHost.UseKestrel(option =>
 {
-    option.ConfigureHttpsDefaults(async options =>
+    option.ConfigureHttpsDefaults(options =>
     {
-        Console.WriteLine("================");
-        var daprClient = new DaprClientBuilder().Build();
-        var key = builder.Configuration["MASASTACK_TLS"];
-        var config = await daprClient.GetSecretAsync("localsecretstore", "catest");
-        Console.WriteLine("================");
-        Console.WriteLine(JsonSerializer.Serialize(config));
         options.ServerCertificate = X509Certificate2.CreateFromPem(config["tls.crt"], config["tls.key"]);
         options.CheckCertificateRevocation = false;
     });
 });
+#endif
 
 #endif
 
