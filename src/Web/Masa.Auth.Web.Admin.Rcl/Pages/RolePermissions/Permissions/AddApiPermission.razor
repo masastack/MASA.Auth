@@ -6,7 +6,7 @@
             <MForm Model=_apiPermissionDetailDto EnableI18n EnableValidation @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <DccI18nConfiger Label="@T("Name")" @bind-Name="_apiPermissionDetailDto.Name" />
+                        <DccI18nConfiger @bind-Name="_apiPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
                         <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' />
