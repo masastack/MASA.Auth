@@ -62,14 +62,11 @@
     {
         _displayNames = new();
         var publicSection = ConfigurationApi.GetPublic();
-        foreach (var item in publicSection.GetChildren())
+        foreach (var culture in I18n.SupportedCultures)
         {
-            if (item.Key.StartsWith(DynamicTranslateProvider.I18N_KEY))
-            {
-                var key = item.Key.TrimStart(DynamicTranslateProvider.I18N_KEY);
-                var value = item.GetValue<string>(Name);
-                _displayNames.Add(new KeyValue<string, string>(key, value));
-            }
+            var item = publicSection.GetSection($"{DynamicTranslateProvider.I18N_KEY}.{culture.Name}");
+            var value = item.GetValue<string>(Name);
+            _displayNames.Add(new KeyValue<string, string>(item.Key, value));
         }
         _dialog = true;
         return Task.CompletedTask;
