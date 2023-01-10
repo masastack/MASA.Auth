@@ -494,7 +494,7 @@ public class CommandHandler
         if (exitUser is not null)
         {
             if (string.IsNullOrEmpty(phoneNumber) is false && string.IsNullOrEmpty(exitUser.PhoneNumber) is false && phoneNumber != exitUser.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.PHONE_NUMBER_MISMATCH, $"{exitUser.PhoneNumber}和{phoneNumber}不匹配");
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.PHONE_NUMBER_MISMATCH, exitUser.PhoneNumber, phoneNumber);
             if (account != exitUser.Account && phoneNumber != exitUser.PhoneNumber && phoneNumber == exitUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
             if (throwException is false) return exitUser;
@@ -771,7 +771,7 @@ public class CommandHandler
                 var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (existStaff is not null)
                 {
-                    if(existStaff.JobNumber != syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber))
+                    if (existStaff.JobNumber != syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber))
                     {
                         syncResults[i] = new()
                         {
@@ -782,7 +782,7 @@ public class CommandHandler
                             }
                         };
                     }
-                    else if (existStaff.PhoneNumber != syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber  ))
+                    else if (existStaff.PhoneNumber != syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber))
                     {
                         syncResults[i] = new()
                         {
