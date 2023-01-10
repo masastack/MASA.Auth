@@ -12,7 +12,9 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DAPR_GRPC_PORT": "8100",
+        "DAPR_HTTP_PORT": "8000"
       },
       "applicationUrl": "https://localhost:18100;http://localhost:18000",
       "dotnetRunMessages": true
