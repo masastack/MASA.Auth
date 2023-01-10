@@ -7,14 +7,10 @@
 
 <STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
             Required
-            Label="@Label"
+            Label="Key"
             Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
-            Type="text">
-    <PrependContent>
-        <span class="d-flex align-center justify-center" style="min-width:100px;height: 34px;">
-            @DT(Name)
-        </span>
-    </PrependContent>
+            Type="text"
+            Suffix="@DT(Name)">
 </STextField>
 
 <MDialog @bind-Value="_dialog" Width="400">
@@ -44,9 +40,6 @@
 
 @code {
     [Parameter]
-    public string Label { get; set; } = string.Empty;
-
-    [Parameter]
     public string Name { get; set; } = string.Empty;
 
     [Parameter]
@@ -62,14 +55,11 @@
     {
         _displayNames = new();
         var publicSection = ConfigurationApi.GetPublic();
-        foreach (var item in publicSection.GetChildren())
+        foreach (var culture in I18n.SupportedCultures)
         {
-            if (item.Key.StartsWith(DynamicTranslateProvider.I18N_KEY))
-            {
-                var key = item.Key.TrimStart(DynamicTranslateProvider.I18N_KEY);
-                var value = item.GetValue<string>(Name);
-                _displayNames.Add(new KeyValue<string, string>(key, value));
-            }
+            var item = publicSection.GetSection($"{DynamicTranslateProvider.I18N_KEY}{culture.Name}");
+            var value = item.GetValue<string>(Name);
+            _displayNames.Add(new KeyValue<string, string>(culture.Name, value));
         }
         _dialog = true;
         return Task.CompletedTask;
@@ -78,19 +68,12 @@
     private async Task Save()
     {
         var publicSection = ConfigurationApi.GetPublic();
-        foreach (var item in publicSection.GetChildren())
+        foreach (var _displayName in _displayNames)
         {
-            if (item.Key.StartsWith(DynamicTranslateProvider.I18N_KEY))
-            {
-                var key = item.Key.TrimStart(DynamicTranslateProvider.I18N_KEY);
-                var _displayName = _displayNames.FirstOrDefault(d => d.Key == key);
-                if (_displayName!=null)
-                {
-                    var data = item.Get<Dictionary<string, object>>();
-                    data[Name] = _displayName.Value;
-                    await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", item.Key, System.Text.Json.JsonSerializer.Serialize(data));
-                }
-            }
+            var item = publicSection.GetSection($"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}");
+            var data = item.Get<Dictionary<string, object>>();
+            data[Name] = _displayName.Value;
+            await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", item.Key, System.Text.Json.JsonSerializer.Serialize(data));
         }
         _dialog = false;
     }
