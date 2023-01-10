@@ -55,11 +55,6 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
         var value = permissions.Select(permission => new SubjectPermissionRelationDto(Guid.Parse(permission.Code), true)).ToList();
-        value = value.Where(v => EmptyPermissionMap.Values.Contains(v.PermissionId) is false).ToList();
-        foreach (var (code, parentCode) in EmptyPermissionMap)
-        {
-            if (value.Any(v => v.PermissionId == code)) value.Add(new(parentCode, true));
-        }
         foreach (var permission in RoleUnionTeamPermission)
         {
             var rolePermissionValue = value.FirstOrDefault(v => v.PermissionId == permission);
@@ -77,7 +72,11 @@ public class PermissionExtensionConfigure : PermissionsConfigure
                 }
             }
         }
-        value.AddRange(ExtensionValue.Where(value => value.Effect is false));
+        value.AddRange(ExtensionValue.Where(ev => ev.Effect is false && value.Contains(ev) is false));
+        foreach (var (code, parentCode) in EmptyPermissionMap)
+        {
+            if (value.Any(v => v.PermissionId == code)) value.Add(new(parentCode, true));
+        }
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
 
