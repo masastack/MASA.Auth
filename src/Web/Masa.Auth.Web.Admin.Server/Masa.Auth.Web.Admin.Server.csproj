@@ -12,8 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
-    <PackageReference Include="IdentityModel" Version="6.1.0-preview.1" />
-	<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="IdentityModel" Version="6.1.0-preview.1" />   
     <PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />   
     <PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.7" />
