@@ -5,7 +5,6 @@ global using AlibabaCloud.SDK.Dypnsapi20170525.Models;
 global using AlibabaCloud.TeaUtil.Models;
 global using BlazorComponent;
 global using BlazorComponent.I18n;
-global using Dapr.Client;
 global using FluentValidation;
 global using IdentityModel;
 global using IdentityServer4;
