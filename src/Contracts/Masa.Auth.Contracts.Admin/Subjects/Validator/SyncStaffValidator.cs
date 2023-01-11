@@ -7,7 +7,11 @@ public class SyncStaffValidator : AbstractValidator<SyncStaffDto>
 {
     public SyncStaffValidator()
     {
-        RuleFor(staff => staff.DisplayName).Required().ChineseLetterNumber().MinLength(2).MaxLength(50);
+        RuleFor(staff => staff.DisplayName).NotEmpty()
+                                            .WithMessage("NickName is required")
+                                            .ChineseLetterNumber()
+                                            .MinLength(2, "NickName")
+                                            .MaxLength(50, "NickName");
         RuleFor(staff => staff.Name).ChineseLetterNumber().MinLength(2).MaxLength(50);
         RuleFor(staff => staff.PhoneNumber).Required().Phone();
         RuleFor(staff => staff.Email).Email();
