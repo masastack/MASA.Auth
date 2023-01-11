@@ -17,7 +17,7 @@ builder.WebHost.UseKestrel(option =>
 });
 
 #else
-var daprClient = new DaprClientBuilder().Build();
+var daprClient = new Dapr.Client.DaprClientBuilder().Build();
 var key = Environment.GetEnvironmentVariable("TLS_NAME") ?? "catest";
 var config = await daprClient.GetSecretAsync("localsecretstore", key);
 builder.WebHost.UseKestrel(option =>
