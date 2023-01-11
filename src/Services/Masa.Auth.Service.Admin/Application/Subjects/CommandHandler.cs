@@ -488,26 +488,26 @@ public class CommandHandler
         condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
         condition = condition.And(userId is not null, user => user.Id != userId);
 
-        var exitUser = await _authDbContext.Set<User>()
+        var existUser = await _authDbContext.Set<User>()
                                            .Include(u => u.Roles)
                                            .FirstOrDefaultAsync(condition);
-        if (exitUser is not null)
+        if (existUser is not null)
         {
-            if (string.IsNullOrEmpty(phoneNumber) is false && string.IsNullOrEmpty(exitUser.PhoneNumber) is false && phoneNumber != exitUser.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.PHONE_NUMBER_MISMATCH, $"{exitUser.PhoneNumber}和{phoneNumber}不匹配");
-            if (account != exitUser.Account && phoneNumber != exitUser.PhoneNumber && phoneNumber == exitUser.Account)
+            if (string.IsNullOrEmpty(phoneNumber) is false && string.IsNullOrEmpty(existUser.PhoneNumber) is false && phoneNumber != existUser.PhoneNumber)
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.PHONE_NUMBER_MISMATCH, existUser.PhoneNumber, phoneNumber);
+            if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
-            if (throwException is false) return exitUser;
-            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
+            if (throwException is false) return existUser;
+            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
-            if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
+            if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
-            if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
+            if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
-            if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
+            if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
         }
-        return exitUser;
+        return existUser;
     }
 
     [EventHandler(1)]
@@ -771,14 +771,25 @@ public class CommandHandler
                 var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (existStaff is not null)
                 {
-                    if ((existStaff.JobNumber, existStaff.PhoneNumber) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber)))
+                    if (existStaff.JobNumber != syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber))
                     {
                         syncResults[i] = new()
                         {
                             JobNumber = syncStaff.JobNumber,
                             Errors = new()
                             {
-                               $"The mobile phone number of this employee is: {Convert(existStaff.PhoneNumber)}, and the job number is: {Convert(existStaff.JobNumber)}. Does not exactly match imported employee data!"
+                                $"The employee whose mobile phone number is {syncStaff.PhoneNumber} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"
+                            }
+                        };
+                    }
+                    else if (existStaff.PhoneNumber != syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber))
+                    {
+                        syncResults[i] = new()
+                        {
+                            JobNumber = syncStaff.JobNumber,
+                            Errors = new()
+                            {
+                                $"The employee whose job number is {syncStaff.JobNumber}, the corresponding mobile phone number is {existStaff.PhoneNumber}, which does not match the mobile phone number {syncStaff.PhoneNumber}"
                             }
                         };
                     }
