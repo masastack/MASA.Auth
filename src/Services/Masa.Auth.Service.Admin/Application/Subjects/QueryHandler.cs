@@ -185,24 +185,24 @@ public class QueryHandler
         condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
         condition = condition.And(userId is not null, user => user.Id != userId);
 
-        var exitUser = await _authDbContext.Set<User>()
+        var existUser = await _authDbContext.Set<User>()
                                            .Include(u => u.Roles)
                                            .FirstOrDefaultAsync(condition);
-        if (exitUser is not null)
+        if (existUser is not null)
         {
-            if (throwException is false) return exitUser;
-            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
+            if (throwException is false) return existUser;
+            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
-            if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
+            if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
-            if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
+            if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
-            if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
+            if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
-            if (phoneNumber == exitUser.Account)
+            if (phoneNumber == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
         }
-        return exitUser;
+        return existUser;
     }
 
     #endregion
