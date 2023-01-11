@@ -2,11 +2,33 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDaprClient();
+
+//todo secretstores.local.file
+#if DEBUG
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
-    options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
+    {
+        options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        options.CheckCertificateRevocation = false;
+    });
 });
+
+#else
+var daprClient = new DaprClientBuilder().Build();
+var key = Environment.GetEnvironmentVariable("MASASTACK_TLS") ?? "catest";
+var config = await daprClient.GetSecretAsync("localsecretstore", key);
+builder.WebHost.UseKestrel(option =>
+{
+    option.ConfigureHttpsDefaults(options =>
+    {
+        options.ServerCertificate = X509Certificate2.CreateFromPem(config["tls.crt"], config["tls.key"]);
+        options.CheckCertificateRevocation = false;
+    });
+});
+#endif
 
 builder.Services.AddObservable(builder.Logging, builder.Configuration, true);
 
@@ -14,7 +36,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 #if DEBUG
-await builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
+builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
 #else
 builder.AddMasaStackComponentsForServer();
 #endif

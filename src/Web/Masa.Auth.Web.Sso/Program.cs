@@ -4,11 +4,31 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
+builder.Services.AddDaprClient();
+
+#if DEBUG
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
-    options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
+    {
+        options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        options.CheckCertificateRevocation = false;
+    });
 });
+
+#else
+var daprClient = new DaprClientBuilder().Build();
+var key = Environment.GetEnvironmentVariable("MASASTACK_TLS") ?? "catest";
+var config = await daprClient.GetSecretAsync("localsecretstore", key);
+builder.WebHost.UseKestrel(option =>
+{
+    option.ConfigureHttpsDefaults(options =>
+    {
+        options.ServerCertificate = X509Certificate2.CreateFromPem(config["tls.crt"], config["tls.key"]);
+        options.CheckCertificateRevocation = false;
+    });
+});
+#endif
 
 // Add services to the container.
 builder.Services.AddMasaConfiguration(configurationBuilder =>
@@ -33,6 +53,9 @@ builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
+Console.WriteLine("=======publicConfiguration======");
+Console.WriteLine(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
 
 #if DEBUG
 builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002");
