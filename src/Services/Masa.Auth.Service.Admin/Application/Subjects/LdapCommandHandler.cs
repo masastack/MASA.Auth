@@ -7,24 +7,18 @@ public class LdapCommandHandler
 {
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILdapFactory _ldapFactory;
-    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly ILogger<LdapCommandHandler> _logger;
-    readonly IConfiguration _configuration;
     readonly IEventBus _eventBus;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
         ILogger<LdapCommandHandler> logger,
-        IThirdPartyUserRepository thirdPartyUserRepository,
-        IConfiguration configuration,
         IEventBus eventBus)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
         _logger = logger;
-        _thirdPartyUserRepository = thirdPartyUserRepository;
-        _configuration = configuration;
         _eventBus = eventBus;
     }
 
@@ -42,7 +36,6 @@ public class LdapCommandHandler
     [EventHandler]
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
-        var _thirdPartyIdpId = Guid.Empty;
         var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
         var ldapIdp = new LdapIdp(
                 ldapIdpDto.ServerAddress,
@@ -57,12 +50,9 @@ public class LdapCommandHandler
         if (dbItem is null)
         {
             await _ldapIdpRepository.AddAsync(ldapIdp);
-            await _ldapIdpRepository.UnitOfWork.SaveChangesAsync();
-            _thirdPartyIdpId = ldapIdp.Id;
         }
         else
         {
-            _thirdPartyIdpId = dbItem.Id;
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }

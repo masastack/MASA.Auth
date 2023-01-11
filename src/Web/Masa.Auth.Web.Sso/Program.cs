@@ -18,7 +18,7 @@ builder.WebHost.UseKestrel(option =>
 
 #else
 var daprClient = new DaprClientBuilder().Build();
-var key = Environment.GetEnvironmentVariable("MASASTACK_TLS") ?? "catest";
+var key = Environment.GetEnvironmentVariable("TLS_NAME") ?? "catest";
 var config = await daprClient.GetSecretAsync("localsecretstore", key);
 builder.WebHost.UseKestrel(option =>
 {
@@ -53,10 +53,6 @@ builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
-
-Console.WriteLine("=======publicConfiguration======");
-Console.WriteLine(publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
-
 #if DEBUG
 builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002");
 #else

@@ -37,7 +37,6 @@ public class AccountController : Controller
         try
         {
             (_environmentProvider as ISsoEnvironmentProvider)?.SetEnvironment(inputModel.Environment);
-
             UserModel? user = new();
 
             if (inputModel.PhoneLogin)

@@ -36,13 +36,18 @@ public class LdapIdp : IdentityProvider
         IsSSL = isSSL;
         BaseDn = baseDn;
         RootUserDn = rootUserDn;
-        RootUserPassword = rootUserPassword;      
+        RootUserPassword = rootUserPassword;
     }
 
     public LdapIdp(string serverAddress, int serverPort, bool isSSL, string baseDn, string rootUserDn, string rootUserPassword, string userSearchBaseDn, string groupSearchBaseDn) : this(serverAddress, serverPort, isSSL, baseDn, rootUserDn, rootUserPassword)
     {
         GroupSearchBaseDn = groupSearchBaseDn;
         UserSearchBaseDn = userSearchBaseDn;
+    }
+
+    public void SetId(Guid id)
+    {
+        Id = id;
     }
 
     public void Update(LdapIdp ldapIdp)

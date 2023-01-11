@@ -1080,17 +1080,17 @@ public class CommandHandler
         var identityProviderQuery = new IdentityProviderByTypeQuery(ThirdPartyIdpTypes.Ldap);
         await _eventBus.PublishAsync(identityProviderQuery);
         var ldap = identityProviderQuery.Result;
-        var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyIdentity, false);
+        var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyUserIdentity, false);
         if (thirdPartyUser is not null)
         {
             if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
-            thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
+            thirdPartyUser.Update(command.ThridPartyUserIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == thirdPartyUser.UserId)).Adapt<UserModel>();
         }
         else
         {
-            var addThirdPartyUserDto = new AddThirdPartyUserDto(ldap.Id, true, command.ThridPartyIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
+            var addThirdPartyUserDto = new AddThirdPartyUserDto(ldap.Id, true, command.ThridPartyUserIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
             command.Result = await AddThirdPartyUserAsync(addThirdPartyUserDto);
         }
         var upsertStaffDto = command.Adapt<UpsertStaffForLdapDto>();

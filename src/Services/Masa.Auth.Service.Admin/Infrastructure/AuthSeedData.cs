@@ -99,7 +99,7 @@ public class AuthSeedData
         }
         #endregion
 
-        #region scheduler
+        #region Scheduler
         var schedulerMenus = new List<Permission>() {
             new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"ResourceFiles","scheduler.resource","pages/resource","mdi-file-document-outline",1,PermissionTypes.Menu),
             new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"Team","Team","pages/team","mdi-account-group-outline",2,PermissionTypes.Menu),
@@ -107,6 +107,31 @@ public class AuthSeedData
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.SCHEDULER_SYSTEM_ID))
         {
             await eventBus.PublishAsync(new SeedPermissionsCommand(schedulerMenus));
+        }
+        #endregion
+
+        #region Tsc
+        var tscMenus = new List<Permission>() {
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,MasaStackConsts.TSC_SYSTEM_WEB_APP_ID,"Team","Team","team","mdi-square",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,MasaStackConsts.TSC_SYSTEM_WEB_APP_ID,"Dashboard","Dashboard","dashboard","mdi-view-dashboard",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,MasaStackConsts.TSC_SYSTEM_WEB_APP_ID,"Log","Log","dashbord/log","mdi-file-search",3,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,MasaStackConsts.TSC_SYSTEM_WEB_APP_ID,"Trace","Trace","dashbord/trace","mdi-chart-timeline-variant",4,PermissionTypes.Menu)
+        };
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.TSC_SYSTEM_ID))
+        {
+            await eventBus.PublishAsync(new SeedPermissionsCommand(tscMenus));
+        }
+        #endregion
+
+        #region Alert
+        var alertMenus = new List<Permission>() {
+            new Permission(MasaStackConsts.ALERT_SYSTEM_ID,MasaStackConsts.ALERT_SYSTEM_WEB_APP_ID,"AlarmRule","AlarmRule","alarmRules","mdi-bell-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.ALERT_SYSTEM_ID,MasaStackConsts.ALERT_SYSTEM_WEB_APP_ID,"AlarmHistory","AlarmHistory","alarmHistory","mdi-chart-box",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.ALERT_SYSTEM_ID,MasaStackConsts.ALERT_SYSTEM_WEB_APP_ID,"WebHook","WebHook","webHook","mdi-earth",3,PermissionTypes.Menu)
+        };
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.ALERT_SYSTEM_ID))
+        {
+            await eventBus.PublishAsync(new SeedPermissionsCommand(alertMenus));
         }
         #endregion
 

@@ -7,7 +7,7 @@ public record UpsertLdapUserCommand : Command
 {
     public Guid Id { get; set; }
 
-    public string ThridPartyIdentity { get; set; } = "";
+    public string ThridPartyUserIdentity { get; set; } = "";
 
     public string ExtendedData { get; set; } = "";
 
@@ -31,9 +31,9 @@ public record UpsertLdapUserCommand : Command
         JobNumber = "";
     }
 
-    public UpsertLdapUserCommand(string thridPartyIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string jobNumber)
+    public UpsertLdapUserCommand(string thridPartyUserIdentity, string extendedData, string? name, string? displayName, string phoneNumber, string? email, string? account, string jobNumber)
     {
-        ThridPartyIdentity = thridPartyIdentity;
+        ThridPartyUserIdentity = thridPartyUserIdentity;
         ExtendedData = extendedData;
         Name = name;
         DisplayName = displayName;
