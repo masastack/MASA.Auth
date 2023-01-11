@@ -45,11 +45,6 @@ public class LdapIdp : IdentityProvider
         UserSearchBaseDn = userSearchBaseDn;
     }
 
-    public void SetId(Guid id)
-    {
-        Id = id;
-    }
-
     public void Update(LdapIdp ldapIdp)
     {
         ServerAddress = ldapIdp.ServerAddress;
