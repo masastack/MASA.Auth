@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-global using AspNetCoreRateLimit;
 global using FluentValidation;
 global using HealthChecks.UI.Client;
 global using IdentityModel.Client;
@@ -74,6 +73,7 @@ global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities.Full;
 global using Masa.BuildingBlocks.Ddd.Domain.Events;
 global using Masa.BuildingBlocks.Ddd.Domain.Repositories;
+global using Masa.BuildingBlocks.Ddd.Domain.Services;
 global using Masa.BuildingBlocks.Ddd.Domain.Values;
 global using Masa.BuildingBlocks.Dispatcher.Events;
 global using Masa.BuildingBlocks.Dispatcher.IntegrationEvents;
@@ -101,7 +101,6 @@ global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.DbContexts;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Repositories;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
-global using Masa.Contrib.Ddd.Domain;
 global using Masa.Contrib.Ddd.Domain.Repository.EFCore;
 global using Masa.Contrib.Dispatcher.Events;
 global using Masa.Contrib.Dispatcher.IntegrationEvents;
@@ -109,6 +108,7 @@ global using Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore;
 global using Masa.Contrib.Isolation.UoW.EFCore;
 global using Masa.Contrib.Service.MinimalAPIs;
 global using Masa.Contrib.StackSdks.Auth.Model;
+global using Masa.Contrib.StackSdks.Tsc;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
 global using Masa.Utils.Ldap.Novell;
 global using Masa.Utils.Security.Cryptography;

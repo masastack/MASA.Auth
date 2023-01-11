@@ -18,7 +18,7 @@ builder.WebHost.UseKestrel(option =>
 
 #else
 var daprClient = new DaprClientBuilder().Build();
-var key = Environment.GetEnvironmentVariable("MASASTACK_TLS") ?? "catest";
+var key = Environment.GetEnvironmentVariable("TLS_NAME") ?? "catest";
 var config = await daprClient.GetSecretAsync("localsecretstore", key);
 builder.WebHost.UseKestrel(option =>
 {
@@ -29,8 +29,6 @@ builder.WebHost.UseKestrel(option =>
     });
 });
 #endif
-
-builder.Services.AddObservable(builder.Logging, builder.Configuration, true);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -46,6 +44,19 @@ builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = "h
 #else
 builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
 #endif
+
+builder.Services.AddObservable(builder.Logging, () =>
+{
+    return new MasaObservableOptions
+    {
+        ServiceNameSpace = builder.Environment.EnvironmentName,
+        ServiceVersion = "1.0.0",//todo global version
+        ServiceName = "auth-web"
+    };
+}, () =>
+{
+    return publicConfiguration.GetValue<string>("$public.AppSettings:OtlpUrl");
+}, true);
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();

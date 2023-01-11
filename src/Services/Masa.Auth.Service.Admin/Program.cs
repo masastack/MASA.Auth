@@ -2,14 +2,17 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
 
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
+var identityServerUrl = publicConfiguration.GetValue<string>("$public.AppSettings:IdentityServerUrl");
 
 #if DEBUG
+identityServerUrl = "http://localhost:18200";
 builder.Services.AddDaprStarter(opt =>
 {
     opt.DaprHttpPort = 3600;
@@ -20,7 +23,7 @@ builder.Services.AddDaprStarter(opt =>
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
 
-var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
@@ -28,6 +31,19 @@ builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, 
     {
         RegionId = ossOptions.RegionId
     }
+});
+
+builder.Services.AddObservable(builder.Logging, () =>
+{
+    return new MasaObservableOptions
+    {
+        ServiceNameSpace = builder.Environment.EnvironmentName,
+        ServiceVersion = "1.0.0",//todo global version
+        ServiceName = "auth-service"
+    };
+}, () =>
+{
+    return publicConfiguration.GetValue<string>("$public.AppSettings:OtlpUrl");
 });
 
 builder.Services.AddMasaIdentity(options =>
@@ -60,7 +76,7 @@ builder.Services
     .AddJwtBearer("Bearer", options =>
     {
         //todo dcc
-        options.Authority = builder.Services.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.Authority = identityServerUrl;
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
         options.TokenValidationParameters.ValidateAudience = false;
@@ -69,23 +85,16 @@ builder.Services
 
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
-// needed to load configuration from appsettings.json
-builder.Services.AddOptions();
-// needed to store rate limit counters and ip rules
-builder.Services.AddMemoryCache();
-//load general configuration from appsettings.json
-builder.Services.Configure<ClientRateLimitOptions>(builder.Services.GetMasaConfiguration().Local.GetSection("ClientRateLimiting"));
-// inject counter and rules stores
-builder.Services.AddInMemoryRateLimiting();
-// configuration (resolvers, counter key builders)
-builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
 
 var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption));
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
+{
+    multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
+    multilevel.SubscribeKeyPrefix = $"db-{redisOption.DefaultDatabase}";
+});
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 
 await builder.Services
@@ -153,13 +162,12 @@ builder.Services
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-#warning remove comment
-    //await option.SeedStandardResourcesAsync();
-    //await option.SeedClientDataAsync(new List<Client>
-    //{
-    //    publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    //});
-    //await option.SyncCacheAsync();
+    await option.SeedStandardResourcesAsync();
+    await option.SeedClientDataAsync(new List<Client>
+    {
+        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
+    });
+    await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
@@ -215,7 +223,6 @@ app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
-app.UseClientRateLimiting();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
