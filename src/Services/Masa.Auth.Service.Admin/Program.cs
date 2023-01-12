@@ -157,7 +157,10 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
+{
+    await new AuthSeedData().SeedAsync(context, services);
+});
 
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
@@ -176,11 +179,6 @@ var app = builder.AddServices(options =>
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
     options.GetPrefixes = new() { "Get", "Select", "Find" };
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
-});
-
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    await new AuthSeedData().SeedAsync(context, services);
 });
 
 app.UseI18n();
