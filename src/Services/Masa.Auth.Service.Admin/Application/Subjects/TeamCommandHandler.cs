@@ -10,23 +10,27 @@ public class TeamCommandHandler
     readonly TeamDomainService _teamDomainService;
     readonly RoleDomainService _roleDomainService;
     readonly IClient _aliyunClient;
+    readonly IUnitOfWork _unitOfWork;
 
     string _bucket = "";
     string _cdnEndpoint = "";
 
-    public TeamCommandHandler(ITeamRepository teamRepository,
-                              TeamDomainService teamDomainService,
-                              RoleDomainService roleDomainService,
-                              IMasaConfiguration masaConfiguration,
-                              IClient aliyunClient,
-                              IOptions<OssOptions> ossOptions)
+    public TeamCommandHandler(
+        ITeamRepository teamRepository,
+        TeamDomainService teamDomainService,
+        RoleDomainService roleDomainService,
+        IMasaConfiguration masaConfiguration,
+        IClient aliyunClient,
+        IOptions<OssOptions> ossOptions,
+        IUnitOfWork unitOfWork)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
         _roleDomainService = roleDomainService;
         _aliyunClient = aliyunClient;
         _bucket = ossOptions.Value.Bucket;
-        _cdnEndpoint = masaConfiguration.Local.GetValue<string>("CdnEndpoint");
+        _cdnEndpoint = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>("$public.Cdn:CdnEndpoint");
+        _unitOfWork = unitOfWork;
     }
 
     [EventHandler(1)]
@@ -50,7 +54,7 @@ public class TeamCommandHandler
 
         var team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.AddAsync(team);
-        await _teamRepository.UnitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         await _teamDomainService.SetTeamAdminAsync(team, dto.AdminStaffs, dto.AdminRoles, dto.AdminPermissions);
         await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
