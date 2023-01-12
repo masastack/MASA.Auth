@@ -9,17 +9,20 @@ public class LdapCommandHandler
     readonly ILdapFactory _ldapFactory;
     readonly ILogger<LdapCommandHandler> _logger;
     readonly IEventBus _eventBus;
+    readonly IUnitOfWork _unitOfWork;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
         ILogger<LdapCommandHandler> logger,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        IUnitOfWork unitOfWork)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
         _logger = logger;
         _eventBus = eventBus;
+        _unitOfWork = unitOfWork;
     }
 
     [EventHandler]
@@ -50,6 +53,7 @@ public class LdapCommandHandler
         if (dbItem is null)
         {
             await _ldapIdpRepository.AddAsync(ldapIdp);
+            await _unitOfWork.SaveChangesAsync();
         }
         else
         {
@@ -62,7 +66,11 @@ public class LdapCommandHandler
 
         await foreach (var ldapUser in ldapUsers)
         {
-            if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
+            if (string.IsNullOrEmpty(ldapUser.Phone))
+            {
+                continue;
+            }
+
             try
             {
                 var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
