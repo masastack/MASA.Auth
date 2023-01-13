@@ -5,30 +5,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 
-//todo secretstores.local.file
-#if DEBUG
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
     {
-        options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TLS_NAME")))
+        {
+            options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        }
+        else
+        {
+            options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
+        }
         options.CheckCertificateRevocation = false;
     });
 });
-
-#else
-var daprClient = new Dapr.Client.DaprClientBuilder().Build();
-var key = Environment.GetEnvironmentVariable("TLS_NAME") ?? "catest";
-var config = await daprClient.GetSecretAsync("localsecretstore", key);
-builder.WebHost.UseKestrel(option =>
-{
-    option.ConfigureHttpsDefaults(options =>
-    {
-        options.ServerCertificate = X509Certificate2.CreateFromPem(config["tls.crt"], config["tls.key"]);
-        options.CheckCertificateRevocation = false;
-    });
-});
-#endif
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -47,6 +38,9 @@ builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = pu
 
 builder.Services.AddObservable(builder.Logging, () =>
 {
+    //todo 
+    //var masaAppConfigureOptions = builder.Services.BuildServiceProvider().GetRequiredService<IOptions<MasaAppConfigureOptions>>();
+    //masaAppConfigureOptions.Value.AppId;
     return new MasaObservableOptions
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,

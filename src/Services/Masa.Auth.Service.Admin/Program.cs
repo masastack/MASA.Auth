@@ -7,10 +7,14 @@ builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc();
 });
+
+builder.Services.AddMasaStackConfig();
+
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
 var identityServerUrl = publicConfiguration.GetValue<string>("$public.AppSettings:IdentityServerUrl");
-
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+identityServerUrl = masaStackConfig.GetSsoDomain();
 #if DEBUG
 identityServerUrl = "http://localhost:18200";
 builder.Services.AddDaprStarter(opt =>
@@ -38,12 +42,12 @@ builder.Services.AddObservable(builder.Logging, () =>
     return new MasaObservableOptions
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
-        ServiceVersion = "1.0.0",//todo global version
+        ServiceVersion = masaStackConfig.Version,
         ServiceName = "auth-service"
     };
 }, () =>
 {
-    return publicConfiguration.GetValue<string>("$public.AppSettings:OtlpUrl");
+    return masaStackConfig.OtlpUrl;
 });
 
 builder.Services.AddMasaIdentity(options =>
@@ -98,9 +102,9 @@ builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCach
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 
 await builder.Services
-            .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
-            .AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"))
-            .AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"))
+            .AddPmClient(masaStackConfig.GetPmServiceDomain())
+            .AddSchedulerClient(masaStackConfig.GetSchedulerServiceDomain())
+            .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
             .AddElasticsearchAutoComplete()
             .AddSchedulerJobAsync();

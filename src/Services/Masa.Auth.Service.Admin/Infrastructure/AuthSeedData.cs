@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Config;
+using Masa.Contrib.StackSdks.Config;
+
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthSeedData
@@ -9,6 +12,7 @@ public class AuthSeedData
     {
         //use event bus publish seed data will cache
         var eventBus = serviceProvider.GetRequiredService<IEventBus>();
+        var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
 
         #region Auth
         var rolePermission = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "RolePermission", "RolePermission", "", "mdi-shield-half-full", 2, PermissionTypes.Menu);
@@ -161,6 +165,27 @@ public class AuthSeedData
             }));
         }
 
+        #region SSO Client
+
+        var uis = masaStackConfig.GetAllUINames();
+        var domain = masaStackConfig.DomainName.TrimEnd("/");
+        foreach (var ui in uis)
+        {
+            var uiDomain = $"{ui}.{domain}";
+            await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
+            {
+                ClientId = ui,
+                ClientName = ui,
+                ClientUri = "",
+                AllowedScopes = new List<string> { "openid", "profile" },
+                RedirectUris = new List<string> { $"{uiDomain}/signin-oidc" },
+                PostLogoutRedirectUris = new List<string> { $"{uiDomain}/signout-callback-oidc" },
+                FrontChannelLogoutUri = $"{uiDomain}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{uiDomain}/account/backchannellogout"
+            }));
+        }
+
+        #endregion
         //await context.SaveChangesAsync();
     }
 }
