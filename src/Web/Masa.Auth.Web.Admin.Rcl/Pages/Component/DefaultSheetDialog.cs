@@ -5,22 +5,14 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultSheetDialog : SSheetDialog
 {
+    bool? _oldValue;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+        EnableDomReload = true;
         ContentClass ??= "";
         if (ContentClass.Contains("sheetDialogPadding") is false)
             ContentClass += " sheetDialogPadding";
-    }
-
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
-    {
-        if (Value)
-        {
-            builder.OpenElement(0, "div");
-            builder.SetKey(Value);
-            base.BuildRenderTree(builder);
-            builder.CloseElement();
-        }
     }
 }

@@ -30,7 +30,7 @@ public class DepartmenCascader : SCascader<DepartmentDto, Guid>
     protected override void OnParametersSet()
     {
         if (string.IsNullOrEmpty(Label))
-            Label = I18n.T("Department");
+            Label = I18n?.T("Department") ?? "";
         base.OnParametersSet();
     }
 }
