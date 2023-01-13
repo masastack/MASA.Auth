@@ -171,17 +171,20 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    await new AuthSeedData().SeedAsync(context, services);
-});
-
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
-    await option.SyncCacheAsync();
 });
+
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
+{
+    await new AuthSeedData().SeedAsync(context, services);
+    //todo sync sso data
+    SyncCache syncCache = services.GetRequiredService<SyncCache>();
+    await syncCache.ResetAsync();
+});
+
 builder.Services.RemoveAll(typeof(IProcessor));
 
 var app = builder.AddServices(options =>

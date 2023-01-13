@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.StackSdks.Config;
-
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthSeedData
@@ -173,16 +171,17 @@ public class AuthSeedData
             {
                 continue;
             }
+
             await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
             {
                 ClientId = ui.Key,
                 ClientName = ui.Key.ToName(),
                 ClientUri = "",
                 AllowedScopes = new List<string> { "openid", "profile" },
-                RedirectUris = new List<string> { $"{ui.Value}/signin-oidc" },
-                PostLogoutRedirectUris = new List<string> { $"{ui.Value}/signout-callback-oidc" },
-                FrontChannelLogoutUri = $"{ui.Value}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{ui.Value}/account/backchannellogout"
+                RedirectUris = ui.Value.Select(url => $"{url}/signin-oidc").ToList(),
+                PostLogoutRedirectUris = ui.Value.Select(url => $"{url}/signout-callback-oidc").ToList(),
+                FrontChannelLogoutUri = $"{ui.Value.First()}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{ui.Value.First()}/account/backchannellogout"
             }));
         }
 

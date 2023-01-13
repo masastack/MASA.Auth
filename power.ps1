@@ -13,11 +13,13 @@ $WebServerName="masa-auth-web-admin-server"
 $SsoDockerfilePath="./src/Web/Masa.Auth.Web.Sso/Dockerfile"
 $SsoServerName="masa-auth-web-sso"
 
-docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${$ServiceDockerfilePath}:$t  -f $DockerfilePath .
-docker push registry.cn-hangzhou.aliyuncs.com/masastack/${$ServiceServerName}:$t 
+echo $SsoServerName $SsoDockerfilePath ${SsoServerName}    ${SsoServerName}
 
-docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${$WebDockerfilePath}:$t  -f $DockerfilePath .
-docker push registry.cn-hangzhou.aliyuncs.com/masastack/${$WebServerName}:$t 
+docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${ServiceServerName}:$t  -f $ServiceDockerfilePath .
+docker push registry.cn-hangzhou.aliyuncs.com/masastack/${ServiceServerName}:$t 
 
-docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${$SsoDockerfilePath}:$t  -f $DockerfilePath .
-docker push registry.cn-hangzhou.aliyuncs.com/masastack/${$SsoServerName}:$t 
+docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${WebServerName}:$t  -f $WebDockerfilePath .
+docker push registry.cn-hangzhou.aliyuncs.com/masastack/${WebServerName}:$t 
+
+docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${SsoServerName}:$t  -f $SsoDockerfilePath .
+docker push registry.cn-hangzhou.aliyuncs.com/masastack/${SsoServerName}:$t 
