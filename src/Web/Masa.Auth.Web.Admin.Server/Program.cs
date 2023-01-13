@@ -6,8 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMasaStackConfig();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
-builder.Services.AddDaprClient();
-
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
