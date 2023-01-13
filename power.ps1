@@ -11,5 +11,5 @@ switch($s)
   sso  {$DockerfilePath="./src/Web/Masa.Auth.Web.Sso/Dockerfile";$ServerName="masa-auth-web-sso"}
 }
 docker login --username=$u registry.cn-hangzhou.aliyuncs.com --password=$p
-docker build -t registry.cn-hangzhou.aliyuncs.com/masa/${ServerName}:$t  -f $DockerfilePath .
-docker push registry.cn-hangzhou.aliyuncs.com/masa/${ServerName}:$t 
+docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${ServerName}:$t  -f $DockerfilePath .
+docker push registry.cn-hangzhou.aliyuncs.com/masastack/${ServerName}:$t 
