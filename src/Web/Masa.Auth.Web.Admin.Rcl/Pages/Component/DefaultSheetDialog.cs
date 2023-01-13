@@ -5,8 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class DefaultSheetDialog : SSheetDialog
 {
-    bool? _oldValue;
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
