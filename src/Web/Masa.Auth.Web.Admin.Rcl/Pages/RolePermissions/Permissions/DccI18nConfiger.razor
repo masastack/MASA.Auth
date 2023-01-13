@@ -73,7 +73,17 @@
             var item = publicSection.GetSection($"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}");
             var data = item.Get<Dictionary<string, object>>();
             data[Name] = _displayName.Value;
-            await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", item.Key, System.Text.Json.JsonSerializer.Serialize(data));
+            if (item is null)
+            {
+                await ConfigurationApiManage.AddAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", new Dictionary<string, string>
+                {
+
+                });
+            }
+            else
+            {
+                await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", item.Key, System.Text.Json.JsonSerializer.Serialize(data));
+            }
         }
         _dialog = false;
     }
