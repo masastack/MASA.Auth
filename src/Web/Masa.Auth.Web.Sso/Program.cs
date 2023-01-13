@@ -5,11 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
 
+builder.Services.AddMasaStackConfig();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
     {
-        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TLS_NAME")))
+        if (string.IsNullOrEmpty(masaStackConfig.TlsName))
         {
             options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
         }
@@ -24,7 +27,7 @@ builder.WebHost.UseKestrel(option =>
 // Add services to the container.
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
-    configurationBuilder.UseDcc();
+    configurationBuilder.UseDcc(masaStackConfig.GetDccMiniOptions<DccOptions>());
 });
 
 builder.Services.AddRazorPages();
@@ -43,19 +46,32 @@ builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
-var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var authDomain = masaStackConfig.GetAuthServiceDomain();
+
 #if DEBUG
-builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002");
-#else
-builder.Services.AddAuthClient(publicConfiguration);
+authDomain = "http://localhost:18002";
 #endif
 
-builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
-builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
+var redisOption = new RedisConfigurationOptions
+{
+    Servers = new List<RedisServerOptions> {
+        new RedisServerOptions()
+        {
+            Host= masaStackConfig.RedisModel.RedisHost,
+            Port=   masaStackConfig.RedisModel.RedisPort
+        }
+    },
+    DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
+    Password = masaStackConfig.RedisModel.RedisPassword
+};
+
+builder.Services.AddAuthClient(authDomain, redisOption);
+
+builder.Services.AddMcClient(masaStackConfig.GetMcServiceDomain());
+builder.Services.AddPmClient(masaStackConfig.GetPmServiceDomain());
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMultilevelCache(distributedCacheOptions =>
 {
     distributedCacheOptions.UseStackExchangeRedisCache(redisOption);

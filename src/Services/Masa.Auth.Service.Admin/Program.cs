@@ -3,18 +3,18 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMasaStackConfig();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
-    configurationBuilder.UseDcc();
+    configurationBuilder.UseDcc(masaStackConfig.GetDccMiniOptions<DccOptions>());
 });
-
-builder.Services.AddMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
-var identityServerUrl = publicConfiguration.GetValue<string>("$public.AppSettings:IdentityServerUrl");
-var masaStackConfig = builder.Services.GetMasaStackConfig();
-identityServerUrl = masaStackConfig.GetSsoDomain();
+var identityServerUrl = masaStackConfig.GetSsoDomain();
+
 #if DEBUG
 identityServerUrl = "http://localhost:18200";
 builder.Services.AddDaprStarter(opt =>
@@ -43,7 +43,7 @@ builder.Services.AddObservable(builder.Logging, () =>
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
         ServiceVersion = masaStackConfig.Version,
-        ServiceName = "auth-service"
+        ServiceName = masaStackConfig.GetServiceId("auth", "server")
     };
 }, () =>
 {
@@ -92,8 +92,18 @@ builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 MapsterAdapterConfig.TypeAdapter();
 
 builder.Services.AddDccClient();
-
-var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
+var redisOption = new RedisConfigurationOptions
+{
+    Servers = new List<RedisServerOptions> {
+        new RedisServerOptions()
+        {
+            Host= masaStackConfig.RedisModel.RedisHost,
+            Port=   masaStackConfig.RedisModel.RedisPort
+        }
+    },
+    DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
+    Password = masaStackConfig.RedisModel.RedisPassword
+};
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
 {
     multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
@@ -170,10 +180,6 @@ builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
     await option.SeedStandardResourcesAsync();
-    await option.SeedClientDataAsync(new List<Client>
-    {
-        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    });
     await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));

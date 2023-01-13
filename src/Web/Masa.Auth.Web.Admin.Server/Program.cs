@@ -3,13 +3,16 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMasaStackConfig();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
 builder.Services.AddDaprClient();
 
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
     {
-        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TLS_NAME")))
+        if (string.IsNullOrEmpty(masaStackConfig.TlsName))
         {
             options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
         }
@@ -24,32 +27,26 @@ builder.WebHost.UseKestrel(option =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+var authServerUrl = masaStackConfig.GetAuthServiceDomain();
+
 #if DEBUG
-builder.AddMasaStackComponentsForServer("wwwroot/i18n", "http://localhost:18002/");
-#else
-builder.AddMasaStackComponentsForServer();
+authServerUrl = "http://localhost:18002/";
 #endif
-var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
-#if DEBUG
-builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = "http://localhost:18002/");
-#else
-builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = publicConfiguration.GetValue<string>("$public.AppSettings:AuthClient:Url"));
-#endif
+
+builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
+builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = authServerUrl);
 
 builder.Services.AddObservable(builder.Logging, () =>
 {
-    //todo 
-    //var masaAppConfigureOptions = builder.Services.BuildServiceProvider().GetRequiredService<IOptions<MasaAppConfigureOptions>>();
-    //masaAppConfigureOptions.Value.AppId;
     return new MasaObservableOptions
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
-        ServiceVersion = "1.0.0",//todo global version
-        ServiceName = "auth-web"
+        ServiceVersion = masaStackConfig.Version,
+        ServiceName = masaStackConfig.GetServiceId("auth", "ui")
     };
 }, () =>
 {
-    return publicConfiguration.GetValue<string>("$public.AppSettings:OtlpUrl");
+    return masaStackConfig.OtlpUrl;
 }, true);
 
 // Add services to the container.
@@ -60,22 +57,21 @@ builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
-MasaOpenIdConnectOptions masaOpenIdConnectOptions;
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+{
+    Authority = masaStackConfig.GetSsoDomain(),
+    ClientId = masaStackConfig.GetServiceId("auth", "ui"),
+    Scopes = new List<string> { "offline_access" }
+}; ;
 
 IdentityModelEventSource.ShowPII = true;
 
 #if DEBUG
-masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
-{
-    Authority = "http://localhost:18200",
-    ClientId = "masa.stack.web-development",
-    Scopes = new List<string> { "offline_access" }
-};
-builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
-#else
-masaOpenIdConnectOptions = publicConfiguration.GetSection("$public.OIDC").Get<MasaOpenIdConnectOptions>();
-builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+masaOpenIdConnectOptions.Authority = "http://localhost:18200";
 #endif
+
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+
 builder.Services.AddJwtTokenValidator(options =>
 {
     options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
