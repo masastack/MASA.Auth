@@ -13,8 +13,9 @@
     <MCol Md=6>
         <SUrlTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
     </MCol>
-    <MCol Md=6>
+    <MCol Md=6 Class="d-flex justify-space-around">
         <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
+        <MCheckbox @bind-Value="Dto.AllowOfflineAccess" Label="@T("AllowOfflineAccess")"></MCheckbox>
     </MCol>
 </MRow>
 <MRow>
