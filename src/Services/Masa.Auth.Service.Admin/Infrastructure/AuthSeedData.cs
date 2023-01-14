@@ -161,7 +161,7 @@ public class AuthSeedData
                 Name = "guest",
                 Account = "guest",
                 Password = "guest123",
-                DisplayName = "guest",
+                DisplayName = "Guest",
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
                 Email = "Guest@masastack.com",
                 CompanyName = "Masa",

@@ -92,11 +92,11 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
     .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>();
 
-//#if DEBUG
-//identityServerBuilder.AddDeveloperSigningCredential();
-//#else
-//identityServerBuilder.AddSigningCredential(serverCertificate);
-//#endif
+#if DEBUG
+identityServerBuilder.AddDeveloperSigningCredential();
+#else
+identityServerBuilder.AddSigningCredential(serverCertificate);
+#endif
 
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
