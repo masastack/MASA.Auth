@@ -60,7 +60,8 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             var rolePermissionValue = value.FirstOrDefault(v => v.PermissionId == permission);
             if (rolePermissionValue is null)
             {
-                value.Add(new(permission, false));
+                if(EmptyPermissionMap.ContainsValue(permission) is false)
+                    value.Add(new(permission, false));
             }
             else
             {
@@ -75,7 +76,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         value.AddRange(ExtensionValue.Where(ev => ev.Effect is false && value.Contains(ev) is false));
         foreach (var (code, parentCode) in EmptyPermissionMap)
         {
-            if (value.Any(v => v.PermissionId == code)) value.Add(new(parentCode, true));
+            if (value.Any(v => v.PermissionId == code)) value.Insert(0,new(parentCode, true));
         }
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
