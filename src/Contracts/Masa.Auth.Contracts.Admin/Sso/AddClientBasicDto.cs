@@ -19,6 +19,8 @@ public class AddClientBasicDto
 
     public bool RequireConsent { get; set; } = true;
 
+    public bool AllowOfflineAccess { get; set; }
+
     public string RedirectUri { get; set; } = string.Empty;
 
     public List<string> RedirectUris { get; set; } = new();
