@@ -1,8 +1,9 @@
 ﻿@inherits LayoutComponentBase
 @inject GlobalConfig GlobalConfig
 @inject NavigationManager Navigation
+@inject IMasaStackConfig MasaStackConfig
 
-<SLayout AppId="@MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID" OnErrorAsync="OnError"
+<SLayout AppId="@MasaStackConfig.GetUiId("auth")" OnErrorAsync="OnError"
         Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
         MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
         @Body
