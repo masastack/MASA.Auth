@@ -68,7 +68,7 @@ builder.Services
         var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
-            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServerId("auth")))
             .Build();
         options.DefaultPolicy = defaultPolicy;
     })
