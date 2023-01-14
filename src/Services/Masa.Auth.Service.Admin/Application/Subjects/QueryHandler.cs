@@ -193,11 +193,11 @@ public class QueryHandler
             if (throwException is false) return existUser;
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
-            if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
+            if (string.IsNullOrEmpty(email) is false && email.ToLower() == existUser.Email.ToLower())
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
-            if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
+            if (string.IsNullOrEmpty(idCard) is false && idCard.ToLower() == existUser.IdCard.ToLower())
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
-            if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
+            if (string.IsNullOrEmpty(account) is false && account.ToLower() == existUser.Account.ToLower())
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
             if (phoneNumber == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
