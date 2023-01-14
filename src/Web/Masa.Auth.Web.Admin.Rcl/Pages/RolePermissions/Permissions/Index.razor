@@ -5,8 +5,8 @@
     @T("Permission")
 </PageTitle>
 
-<MRow Class="full-height" NoGutters>
-    <MCol Md="@("auto")" Class="d-flex flex-column">
+<MRow Style="height: calc(100vh - 120px);" NoGutters>
+    <MCol Md="@("auto")" Class="d-flex flex-column full-height">
         <SSearchableExtend Split=true MaxWidth=300 @bind-Value="_search">
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
@@ -15,8 +15,8 @@
                            ItemText="u => u.Name"
                            ItemValue="u => u.Identity"></MAutocomplete>
         </SSearchableExtend>
-        <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
-            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
+        <MCard style="width:300px;max-height: calc(100% - 60px);" Class="flex-grow-1 mt-4 pt-4">
+            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" ItemsStyle="overflow-y: auto;" Class="full-height" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
                            Dense @bind-Tab="@_tab" IndexTab>
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
@@ -155,11 +155,13 @@
                                 </MRow>
                             </MForm>
                         </MCardText>
-                        <MCardActions class="d-flex align-center mb-8 px-6">
-                            <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
-                            <MSpacer />
-                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</MButton>
-                            <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</MButton>
+                        <MCardActions class="align-center px-6">
+                            <div class="d-flex full-width">
+                                <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
+                                <MSpacer />
+                                <SButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</SButton>
+                                <SButton Medium MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
+                            </div>
                         </MCardActions>
                     </MCard>
                 }

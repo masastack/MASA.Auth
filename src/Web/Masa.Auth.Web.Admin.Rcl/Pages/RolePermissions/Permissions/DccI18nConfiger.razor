@@ -1,5 +1,5 @@
 ﻿@using Microsoft.Extensions.Hosting;
-@using Newtonsoft.Json.Linq;
+@using System.Text.Json;
 @inherits AdminCompontentBase
 @inject IConfigurationApiManage ConfigurationApiManage
 @inject IConfigurationApi ConfigurationApi
@@ -70,10 +70,11 @@
         var publicSection = ConfigurationApi.GetPublic();
         foreach (var _displayName in _displayNames)
         {
-            var item = publicSection.GetSection($"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}");
-            var data = item.Get<Dictionary<string, object>>();
+            var itemKey = $"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}";
+            var item = publicSection.GetSection(itemKey);
+            var data = item?.Get<Dictionary<string, object>>()??new();
             data[Name] = _displayName.Value;
-            await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", item.Key, System.Text.Json.JsonSerializer.Serialize(data));
+            await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", itemKey, JsonSerializer.Serialize(data));
         }
         _dialog = false;
     }

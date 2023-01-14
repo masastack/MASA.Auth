@@ -178,7 +178,6 @@ await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
     //await new AuthSeedData().SeedAsync(context, services);
     return Task.CompletedTask;
 });
-
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
