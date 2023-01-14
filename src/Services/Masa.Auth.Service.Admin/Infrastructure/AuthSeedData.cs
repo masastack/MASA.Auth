@@ -149,7 +149,23 @@ public class AuthSeedData
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
                 Email = "admin@masastack.com",
                 CompanyName = "Masa",
-                PhoneNumber = "15185856868",
+                PhoneNumber = "15888888888",
+                Enabled = true
+            }));
+        }
+
+        if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == "guest"))
+        {
+            await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
+            {
+                Name = "guest",
+                Account = "guest",
+                Password = "guest123",
+                DisplayName = "guest",
+                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
+                Email = "Guest@masastack.com",
+                CompanyName = "Masa",
+                PhoneNumber = "15666666666",
                 Enabled = true
             }));
         }

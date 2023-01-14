@@ -4,22 +4,24 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
-
 builder.Services.AddMasaStackConfig();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
+
+X509Certificate2 serverCertificate;
+if (string.IsNullOrEmpty(masaStackConfig.TlsName))
+{
+    serverCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+}
+else
+{
+    serverCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
+}
 
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
     {
-        if (string.IsNullOrEmpty(masaStackConfig.TlsName))
-        {
-            options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
-        }
-        else
-        {
-            options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
-        }
+        options.ServerCertificate = serverCertificate;
         options.CheckCertificateRevocation = false;
     });
 });
@@ -76,13 +78,12 @@ builder.Services.AddMultilevelCache(distributedCacheOptions =>
 {
     distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
 });
-builder.Services.AddOidcCacheStorage(redisOption)
+var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
         options.Events.RaiseSuccessEvents = true;
     })
-    .AddDeveloperSigningCredential()
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
@@ -90,6 +91,12 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
     .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>();
+
+//#if DEBUG
+//identityServerBuilder.AddDeveloperSigningCredential();
+//#else
+//identityServerBuilder.AddSigningCredential(serverCertificate);
+//#endif
 
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));

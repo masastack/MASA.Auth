@@ -43,7 +43,7 @@ builder.Services.AddObservable(builder.Logging, () =>
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
         ServiceVersion = masaStackConfig.Version,
-        ServiceName = masaStackConfig.GetServiceId("auth", "server")
+        ServiceName = masaStackConfig.GetServerId("auth")
     };
 }, () =>
 {
@@ -168,7 +168,7 @@ builder.Services
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseIsolationUoW<AuthDbContext>(
         isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
-        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("auth_dev")).UseFilter())
+        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("auth")).UseFilter())
     .UseRepository<AuthDbContext>();
 });
 

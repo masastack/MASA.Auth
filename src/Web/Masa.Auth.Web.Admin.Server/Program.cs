@@ -40,7 +40,7 @@ builder.Services.AddObservable(builder.Logging, () =>
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
         ServiceVersion = masaStackConfig.Version,
-        ServiceName = masaStackConfig.GetServiceId("auth", "ui")
+        ServiceName = masaStackConfig.GetUiId("auth")
     };
 }, () =>
 {
@@ -58,7 +58,7 @@ builder.Services.AddTypeAdapter();
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {
     Authority = masaStackConfig.GetSsoDomain(),
-    ClientId = masaStackConfig.GetServiceId("auth", "ui"),
+    ClientId = masaStackConfig.GetUiId("auth"),
     Scopes = new List<string> { "offline_access" }
 };
 

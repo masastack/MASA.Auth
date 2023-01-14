@@ -23,7 +23,7 @@ public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
     public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
     {
         var user = _userContext.GetUser<MasaUser>();
-        if (_masaStackConfig.IsDemo && user?.Account == "Guest" && @event is ICommand)
+        if (_masaStackConfig.IsDemo && user?.Account?.ToLower() == "guest" && @event is ICommand)
         {
             _logger.LogWarning("Guest operation");
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.GUEST_ACCOUNT_OPERATE);
