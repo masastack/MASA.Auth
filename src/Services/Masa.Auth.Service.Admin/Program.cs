@@ -91,7 +91,7 @@ builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();
 
-builder.Services.AddDccClient();
+
 var redisOption = new RedisConfigurationOptions
 {
     Servers = new List<RedisServerOptions> {
@@ -110,14 +110,15 @@ builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCach
     multilevel.SubscribeKeyPrefix = $"db-{redisOption.DefaultDatabase}";
 });
 builder.Services.AddAuthClientMultilevelCache(redisOption);
-
-await builder.Services
+builder.Services.AddDccClient(redisOption);
+builder.Services
             .AddPmClient(masaStackConfig.GetPmServiceDomain())
             .AddSchedulerClient(masaStackConfig.GetSchedulerServiceDomain())
             .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
-            .AddElasticsearchAutoComplete()
-            .AddSchedulerJobAsync();
+            .AddElasticsearchAutoComplete();
+//todo update appsettings
+//.AddSchedulerJobAsync();
 
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
@@ -167,22 +168,24 @@ builder.Services
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseIsolationUoW<AuthDbContext>(
         isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
-        dbOptions => dbOptions.UseSqlServer().UseFilter())
+        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("auth_dev")).UseFilter())
     .UseRepository<AuthDbContext>();
+});
+
+await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
+{
+    //todo split
+    //await new AuthSeedData().SeedAsync(context, services);
+    return Task.CompletedTask;
 });
 
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
-    await option.SeedStandardResourcesAsync();
-});
+    await new AuthSeedData().SeedAsync(builder);
 
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    await new AuthSeedData().SeedAsync(context, services);
-    //todo sync sso data
-    SyncCache syncCache = services.GetRequiredService<SyncCache>();
-    await syncCache.ResetAsync();
+    await option.SeedStandardResourcesAsync();
+    await option.SyncCacheAsync();
 });
 
 builder.Services.RemoveAll(typeof(IProcessor));
@@ -230,7 +233,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseIsolation();
-app.UseMiddleware<CurrentUserCheckMiddleware>();
+#warning CurrentUserCheckMiddleware
+//app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();

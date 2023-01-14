@@ -50,4 +50,6 @@ public class AddClientDto
     #region ResourceScopes
     public List<string> AllowedScopes { get; set; } = new();
     #endregion
+
+    public bool AllowOfflineAccess { get; set; } = true;
 }

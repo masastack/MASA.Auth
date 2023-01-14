@@ -5,10 +5,12 @@ namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthSeedData
 {
-    public async Task SeedAsync(AuthDbContext context, IServiceProvider serviceProvider)
+    public async Task SeedAsync(WebApplicationBuilder builder)
     {
+        var serviceProvider = builder.Services.BuildServiceProvider();
         //use event bus publish seed data will cache
         var eventBus = serviceProvider.GetRequiredService<IEventBus>();
+        var context = serviceProvider.GetRequiredService<AuthDbContext>();
         var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
 
         #region Auth
@@ -177,6 +179,7 @@ public class AuthSeedData
                 ClientId = ui.Key,
                 ClientName = ui.Key.ToName(),
                 ClientUri = "",
+                RequireConsent = false,
                 AllowedScopes = new List<string> { "openid", "profile" },
                 RedirectUris = ui.Value.Select(url => $"{url}/signin-oidc").ToList(),
                 PostLogoutRedirectUris = ui.Value.Select(url => $"{url}/signout-callback-oidc").ToList(),

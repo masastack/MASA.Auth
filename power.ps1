@@ -13,8 +13,6 @@ $WebServerName="masa-auth-web-admin-server"
 $SsoDockerfilePath="./src/Web/Masa.Auth.Web.Sso/Dockerfile"
 $SsoServerName="masa-auth-web-sso"
 
-echo $SsoServerName $SsoDockerfilePath ${SsoServerName}    ${SsoServerName}
-
 docker build -t registry.cn-hangzhou.aliyuncs.com/masastack/${ServiceServerName}:$t  -f $ServiceDockerfilePath .
 docker push registry.cn-hangzhou.aliyuncs.com/masastack/${ServiceServerName}:$t 
 
