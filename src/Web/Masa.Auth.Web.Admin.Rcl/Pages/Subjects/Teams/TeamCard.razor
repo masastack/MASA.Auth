@@ -1,8 +1,8 @@
 ﻿@using System.Globalization
 @inherits AdminCompontentBase
 
-<MHover Context="hoverContext" Class="d-flex flex-column">
-    <MCard MinHeight=Height @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)">
+<MHover Context="hoverContext">
+    <MCard Class="d-flex flex-column" MinHeight=Height @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)">
         <MCardTitle class="pb-1 px-0 pt-1">
             <MListItem>
                 <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">

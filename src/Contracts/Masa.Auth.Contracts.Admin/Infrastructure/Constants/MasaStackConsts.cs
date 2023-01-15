@@ -14,5 +14,6 @@ public class MasaStackConsts
     public const string TSC_SYSTEM_ID = "tsc";
 
     public const string ORGANIZATION_NAME = "MasaStack";
+    public const string MASA_STACK_TEAM = "MasaStack";
     public const string ORGANIZATION_DESCRIPTION = "MasaStack Root Department";
 }

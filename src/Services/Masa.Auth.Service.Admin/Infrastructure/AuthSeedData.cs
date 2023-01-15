@@ -34,15 +34,19 @@ public class AuthSeedData
         client.SetParent(sso.Id);
         customLogin.SetParent(sso.Id);
 
+        var team = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Team", "team", "team/index", "mdi-account-multiple", 3, PermissionTypes.Menu);
+        var teadAddElement = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", "team.add", "", "", 1, PermissionTypes.Element);
+        teadAddElement.SetParent(team.Id);
+
         var authMenus = new List<Permission>() {
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"User","user","User","mdi-account-outline",1,PermissionTypes.Menu),
-            rolePermission,role,permission,
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Team","team","team/index","mdi-account-multiple",3,PermissionTypes.Menu),
+            rolePermission,role,permission,team,teadAddElement,
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-home-floor-3",6,PermissionTypes.Menu),
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
             new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetServerId(MasaStackConstant.AUTH), "TeamAdd", "api.team.create", "", "", 1, PermissionTypes.Api)
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.AUTH_SYSTEM_ID))
@@ -179,6 +183,19 @@ public class AuthSeedData
                 Enabled = true
             }));
         }
+
+        //if (!context.Set<Team>().Any())
+        //{
+        //    await eventBus.PublishAsync(new AddTeamCommand(new AddTeamDto
+        //    {
+        //        Type = TeamTypes.Ordinary,
+        //        Name = MasaStackConsts.MASA_STACK_TEAM,
+        //        Avatar = new AvatarValueDto
+        //        {
+        //            Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
+        //        }
+        //    }));
+        //}
 
         #region SSO Client
 
