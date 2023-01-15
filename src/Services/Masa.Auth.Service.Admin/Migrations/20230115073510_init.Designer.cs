@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masa.Auth.Service.Admin.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20221026034242_thirdPartyUser")]
-    partial class thirdPartyUser
+    [Migration("20230115073510_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -212,7 +212,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -220,7 +219,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Icon")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -252,7 +250,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -347,10 +344,6 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creator");
-
-                    b.HasIndex("Modifier");
-
                     b.ToTable("Role", "auth");
                 });
 
@@ -426,27 +419,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("SubjectPermissionRelation", "auth");
 
                     b.HasDiscriminator<string>("_businessType").HasValue("SubjectPermissionRelation");
-                });
-
-            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Projects.Aggregates.AppNavigationTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AppIdentity")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Tag")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppNavigationTag", "auth");
                 });
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Sso.Aggregates.CustomLogin", b =>
@@ -683,15 +655,11 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creator");
-
                     b.HasIndex("CurrentTeamId");
 
                     b.HasIndex("JobNumber")
                         .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
-
-                    b.HasIndex("Modifier");
 
                     b.HasIndex("PositionId");
 
@@ -2304,21 +2272,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("ParentPermission");
                 });
 
-            modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", b =>
-                {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
-                        .WithMany()
-                        .HasForeignKey("Creator");
-
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
-                        .WithMany()
-                        .HasForeignKey("Modifier");
-
-                    b.Navigation("CreateUser");
-
-                    b.Navigation("ModifyUser");
-                });
-
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.RoleRelation", b =>
                 {
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Permissions.Aggregates.Role", "ParentRole")
@@ -2380,17 +2333,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             modelBuilder.Entity("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Staff", b =>
                 {
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "CreateUser")
-                        .WithMany()
-                        .HasForeignKey("Creator");
-
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.Team", "CurrentTeam")
                         .WithMany()
                         .HasForeignKey("CurrentTeamId");
-
-                    b.HasOne("Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.User", "ModifyUser")
-                        .WithMany()
-                        .HasForeignKey("Modifier");
 
                     b.HasOne("Masa.Auth.Service.Admin.Domain.Organizations.Aggregates.Position", "Position")
                         .WithMany()
@@ -2434,11 +2379,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Address")
                         .IsRequired();
 
-                    b.Navigation("CreateUser");
-
                     b.Navigation("CurrentTeam");
-
-                    b.Navigation("ModifyUser");
 
                     b.Navigation("Position");
 
