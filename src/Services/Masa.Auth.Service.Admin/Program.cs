@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMasaStackConfig();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
+builder.Services.AddElasticsearchAutoComplete();
+
 builder.Services.AddMasaConfiguration(configurationBuilder =>
 {
     configurationBuilder.UseDcc(masaStackConfig.GetDccMiniOptions<DccOptions>());
