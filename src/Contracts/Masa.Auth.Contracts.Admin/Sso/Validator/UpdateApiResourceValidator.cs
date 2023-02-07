@@ -7,9 +7,9 @@ public class UpdateApiResourceValidator : AbstractValidator<UpdateApiResourceDto
 {
     public UpdateApiResourceValidator()
     {
-        RuleFor(apiResource => apiResource.Name).Required().MinLength(2).MaxLength(50);
-        RuleFor(apiResource => apiResource.DisplayName).Required().MinLength(2).MaxLength(50);
-        RuleFor(apiResource => apiResource.Description).MaxLength(255);
+        RuleFor(apiResource => apiResource.Name).Required().MinimumLength(2).MaximumLength(50);
+        RuleFor(apiResource => apiResource.DisplayName).Required().MinimumLength(2).MaximumLength(50);
+        RuleFor(apiResource => apiResource.Description).MaximumLength(255);
     }
 }
 
