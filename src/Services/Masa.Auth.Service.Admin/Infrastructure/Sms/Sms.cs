@@ -39,7 +39,7 @@ public class Sms : IScopedDependency
         });
 
         // 62 ：Prevent users from failing to submit verification codes at the last second
-        await _distributedCacheClient.SetAsync(key, code, expiration ?? TimeSpan.FromSeconds(62));
+        await _distributedCacheClient.SetAsync(key, code, expiration ?? TimeSpan.FromSeconds(300));
 
         return code;
     }
