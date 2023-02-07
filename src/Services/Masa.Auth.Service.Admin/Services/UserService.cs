@@ -286,10 +286,12 @@ public class UserService : ServiceBase
 
     [AllowAnonymous]
     [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
-    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
+    public async Task<UserModel> RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
     {
         var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);
+
+        return command.Result;
     }
 
     [AllowAnonymous]
