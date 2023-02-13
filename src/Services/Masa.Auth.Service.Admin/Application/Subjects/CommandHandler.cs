@@ -25,6 +25,7 @@ public class CommandHandler
     readonly Sms _sms;
     readonly IOptions<OidcOptions> _oidcOptions;
     readonly IHttpContextAccessor _httpContextAccessor;
+    readonly IMasaConfiguration _masaConfiguration;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -46,7 +47,8 @@ public class CommandHandler
         IEventBus eventBus,
         Sms sms,
         IOptions<OidcOptions> oidcOptions,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IMasaConfiguration masaConfiguration)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -68,6 +70,7 @@ public class CommandHandler
         _sms = sms;
         _oidcOptions = oidcOptions;
         _httpContextAccessor = httpContextAccessor;
+        _masaConfiguration = masaConfiguration;
     }
 
     #region User
@@ -371,11 +374,18 @@ public class CommandHandler
         //todo UserDomainService
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
+
+        var loginFreeze = _masaConfiguration.ConfigurationApi.GetDefault()
+            .GetValue<bool>("AppSettings:LoginFreeze", false);
         var key = CacheKey.AccountLoginKey(account);
-        var loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
-        if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+        CacheLogin? loginCache = null;
+        if (loginFreeze)
         {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
+            loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
+            if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
+            }
         }
 
         var isLdap = validateByAccountCommand.UserAccountValidateDto.IsLdap;
@@ -430,9 +440,12 @@ public class CommandHandler
         {
             if (!user.VerifyPassword(password))
             {
-                loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
-                loginCache.LoginErrorCount++;
-                await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                if (loginFreeze)
+                {
+                    loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
+                    loginCache.LoginErrorCount++;
+                    await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                }
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
             }
 
