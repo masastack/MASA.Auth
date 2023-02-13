@@ -28,7 +28,10 @@ public partial class LoginSection
             try
             {
                 var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
-                currentEnvironment = localEnvironment.Value ?? currentEnvironment;
+                if (_environments.Any(e => e.Name == localEnvironment.Value))
+                {
+                    currentEnvironment = localEnvironment.Value ?? currentEnvironment;
+                }
             }
             catch (Exception e)
             {
