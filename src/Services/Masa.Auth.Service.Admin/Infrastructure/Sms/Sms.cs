@@ -8,12 +8,18 @@ public class Sms : IScopedDependency
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly IOptions<SmsOptions> _smsOptions;
+    readonly IMasaConfiguration _masaConfiguration;
 
-    public Sms(IMcClient mcClient, IDistributedCacheClient distributedCacheClient, IOptions<SmsOptions> smsOptions)
+    public Sms(
+        IMcClient mcClient,
+        IDistributedCacheClient distributedCacheClient,
+        IOptions<SmsOptions> smsOptions,
+        IMasaConfiguration masaConfiguration)
     {
         _mcClient = mcClient;
         _distributedCacheClient = distributedCacheClient;
         _smsOptions = smsOptions;
+        _masaConfiguration = masaConfiguration;
     }
 
     public async Task<string> SendMsgCodeAsync(string key, string phoneNumber, TimeSpan? expiration = null)
@@ -37,9 +43,9 @@ public class Sms : IScopedDependency
                 ["code"] = code,
             })
         });
-
-        // 62 ：Prevent users from failing to submit verification codes at the last second
-        await _distributedCacheClient.SetAsync(key, code, expiration ?? TimeSpan.FromSeconds(300));
+        var smsCaptchaExpired = _masaConfiguration.ConfigurationApi.GetDefault()
+            .GetValue<int>("AppSettings:SmsCaptchaExpired", 300);
+        await _distributedCacheClient.SetAsync(key, code, expiration ?? TimeSpan.FromSeconds(smsCaptchaExpired));
 
         return code;
     }
