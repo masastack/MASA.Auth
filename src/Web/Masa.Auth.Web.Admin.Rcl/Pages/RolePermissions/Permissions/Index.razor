@@ -67,7 +67,7 @@
             <MWindowItem Value='"0"' Class="full-height">
                 @if (_showMenuInfo && _menuPermissionDetailDto.Id != Guid.Empty)
                 {
-                    <MCard Class="full-height d-flex flex-column">
+                    <MCard Class="full-height d-flex flex-column" Style="overflow-y: auto;">
                         <MCardTitle>
                             <h6>@T("Permission Info")</h6>
                         </MCardTitle>
@@ -149,7 +149,7 @@
                                         </SGroupBox>
                                     </MCol>
                                     <MCol Md=12>
-                                        <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                        <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                         </MTextarea>
                                     </MCol>
                                 </MRow>
@@ -169,7 +169,7 @@
             <MWindowItem Value='"1"' Class="full-height">
                 @if (_showApiInfo && _apiPermissionDetailDto.Id != Guid.Empty)
                 {
-                    <MCard Class="full-height d-flex flex-column">
+                    <MCard Class="full-height d-flex flex-column" Style="overflow-y: auto;">
                         <MCardTitle>
                             <h6>@T("Permission Info")</h6>
                         </MCardTitle>
@@ -193,7 +193,7 @@
                                         <STextField Label="@T("Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Disabled />
                                     </MCol>
                                     <MCol Md=12>
-                                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                         </MTextarea>
                                     </MCol>
                                 </MRow>
