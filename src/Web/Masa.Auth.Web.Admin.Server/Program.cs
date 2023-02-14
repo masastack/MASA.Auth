@@ -5,8 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
 
-//todo secretstores.local.file
-#if DEBUG
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
@@ -15,20 +13,6 @@ builder.WebHost.UseKestrel(option =>
         options.CheckCertificateRevocation = false;
     });
 });
-
-#else
-var daprClient = new Dapr.Client.DaprClientBuilder().Build();
-var key = Environment.GetEnvironmentVariable("TLS_NAME") ?? "catest";
-var config = await daprClient.GetSecretAsync("localsecretstore", key);
-builder.WebHost.UseKestrel(option =>
-{
-    option.ConfigureHttpsDefaults(options =>
-    {
-        options.ServerCertificate = X509Certificate2.CreateFromPem(config["tls.crt"], config["tls.key"]);
-        options.CheckCertificateRevocation = false;
-    });
-});
-#endif
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
