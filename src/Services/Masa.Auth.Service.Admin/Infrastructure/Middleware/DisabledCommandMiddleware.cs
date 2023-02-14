@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
 
-public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
+public class DisabledCommandMiddleware<TEvent> : IEventMiddleware<TEvent>
     where TEvent : notnull, IEvent
 {
     readonly ILogger<DisabledCommandMiddleware<TEvent>> _logger;
@@ -20,7 +20,9 @@ public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
         _hostEnvironment = hostEnvironment;
     }
 
-    public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
+    public bool SupportRecursive => true;
+
+    public async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
     {
         var user = _userContext.GetUser<MasaUser>();
         //todo IsDemo

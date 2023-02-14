@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.ApiGateways.Caller;
 
-public class AuthResponseMessage : DefaultResponseMessage
+public class AuthResponseMessage : JsonResponseMessage
 {
-    public AuthResponseMessage(IOptions<CallerFactoryOptions> options, ILogger<DefaultResponseMessage>? logger = null) : base(options, logger)
+    public AuthResponseMessage(ILoggerFactory? loggerFactory = null) : base(default, loggerFactory)
     {
     }
 

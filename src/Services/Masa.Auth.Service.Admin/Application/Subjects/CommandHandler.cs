@@ -982,7 +982,7 @@ public class CommandHandler
         {
             ThridPartyIdentity = model.ThridPartyIdentity,
             ExtendedData = model.ExtendedData,
-            ThirdPartyIdpType = model.ThirdPartyIdpType,
+            Scheme = model.Scheme,
             User = new AddUserModel
             {
                 Account = model.Account,
@@ -1042,11 +1042,11 @@ public class CommandHandler
     public async Task UpsertThirdPartyUserExternalAsync(UpsertThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        if (model.ThirdPartyIdpType == default)
+        if (string.IsNullOrEmpty(model.Scheme))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
         }
-        else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        else if (string.Equals(model.Scheme, LdapConsts.LDAP_NAME, StringComparison.OrdinalIgnoreCase))
         {
             var upsertThirdPartyUserForLdapCommand = new UpsertLdapUserCommand(
                     model.Id,
@@ -1064,7 +1064,7 @@ public class CommandHandler
         }
         else
         {
-            var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
@@ -1127,7 +1127,7 @@ public class CommandHandler
     public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+        var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
         await _eventBus.PublishAsync(identityProviderQuery);
         var identityProvider = identityProviderQuery.Result;
         var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
