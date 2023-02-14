@@ -146,7 +146,6 @@ builder.Services
     .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
-        eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
     //set Isolation.
