@@ -224,7 +224,7 @@ public class UserService : ServiceBase
     public async Task<bool> PostVerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
-        var command = new VerifyMsgCodeForVerifiyPhoneNumberCommand(model);
+        var command = new VerifyMsgCodeCommand(model);
         await eventBus.PublishAsync(command);
         return command.Result;
     }

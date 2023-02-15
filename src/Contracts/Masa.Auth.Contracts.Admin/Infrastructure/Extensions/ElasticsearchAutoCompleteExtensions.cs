@@ -15,7 +15,8 @@ public static class ElasticsearchAutoCompleteExtensions
         {
             option.UseElasticSearch(esOption =>
             {
-                esOption.ElasticsearchOptions.UseNodes(options.Nodes);
+                esOption.ElasticsearchOptions.UseNodes(options.Nodes).UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));
+                esOption.IndexName = options.Index;
                 if (string.IsNullOrEmpty(options.Alias) is false)
                 {
                     esOption.Alias = options.Alias;

@@ -54,7 +54,7 @@ builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 #if DEBUG
-builder.Services.AddAuthClient(publicConfiguration, "http://localhost:18002");
+builder.Services.AddAuthClient(publicConfiguration, "https://localhost:18102");
 #else
 builder.Services.AddAuthClient(publicConfiguration);
 #endif

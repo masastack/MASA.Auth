@@ -274,17 +274,50 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeCommand command)
     {
         var model = command.Model;
-        var user = await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
-        if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+        var msgCodeKey = "";
+        if (model.SendMsgCodeType == SendMsgCodeTypes.VerifiyPhoneNumber)
         {
-            var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
-            command.Result = true;
+            var user = await CheckUserExistAsync(model.UserId);
+            msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+            {
+                var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+                await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+                command.Result = true;
+            }
         }
+        else
+        {
+            ArgumentExceptionExtensions.ThrowIfNullOrEmpty(model.PhoneNumber);
+            switch (model.SendMsgCodeType)
+            {
+                case SendMsgCodeTypes.UpdatePhoneNumber:
+                    msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Login:
+                    msgCodeKey = CacheKey.MsgCodeForLoginKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Register:
+                    msgCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Bind:
+                    msgCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.ForgotPassword:
+                    msgCodeKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
+                    break;
+                default:
+                    break;
+            }
+
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+            {
+                command.Result = true;
+            }
+        }       
     }
 
     [EventHandler(1)]

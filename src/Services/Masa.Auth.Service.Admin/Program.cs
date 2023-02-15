@@ -14,12 +14,12 @@ var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationA
 var identityServerUrl = publicConfiguration.GetValue<string>("$public.AppSettings:IdentityServerUrl");
 
 #if DEBUG
-identityServerUrl = "http://localhost:18200";
-builder.Services.AddDaprStarter(opt =>
-{
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
-});
+//identityServerUrl = "http://localhost:18200";
+//builder.Services.AddDaprStarter(opt =>
+//{
+//    opt.DaprHttpPort = 3600;
+//    opt.DaprGrpcPort = 3601;
+//});
 #endif
 
 builder.Services.AddAutoInject();
