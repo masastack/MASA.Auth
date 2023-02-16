@@ -313,7 +313,7 @@ public class CommandHandler
                     break;
             }
 
-            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code, false))
             {
                 command.Result = true;
             }

@@ -43,6 +43,7 @@ public class RemoteAuthenticationDefaultsProvider : IRemoteAuthenticationDefault
             JsonKeyMap = model.JsonKeyMap,
             ClientSecret = model.ClientSecret,
             ClientId = model.ClientId,
+            ThirdPartyIdpType = model.ThirdPartyIdpType,
         };
     }
 }

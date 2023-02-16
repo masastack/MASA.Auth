@@ -12,9 +12,9 @@ public static class CreateAuthenticationHandlerInstanceUtilities
         _optionsCache = new();
     }
 
-    public static (IOptionsMonitor<Options> options, ILoggerFactory loggerFactory, UrlEncoder urlEncoder, ISystemClock systemClock) BuilderParamter<Options>(IServiceProvider provider,string schem) where Options : AuthenticationSchemeOptions, new()
+    public static (IOptionsMonitor<Options> options, ILoggerFactory loggerFactory, UrlEncoder urlEncoder, ISystemClock systemClock) BuilderParamter<Options>(IServiceProvider provider,string scheme) where Options : AuthenticationSchemeOptions, new()
     {
-        var options = (CustomOptionsMonitor<Options>)_optionsCache.GetOrAdd(schem, type => ActivatorUtilities.CreateInstance(provider, typeof(CustomOptionsMonitor<Options>)));        
+        var options = (CustomOptionsMonitor<Options>)_optionsCache.GetOrAdd(scheme, type => ActivatorUtilities.CreateInstance(provider, typeof(CustomOptionsMonitor<Options>)));        
         var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
         var urlEncoder = provider.GetRequiredService<UrlEncoder>();
         var systemClock = provider.GetRequiredService<ISystemClock>();

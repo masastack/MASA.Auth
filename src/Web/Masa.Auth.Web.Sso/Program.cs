@@ -82,7 +82,8 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
-    .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>();
+    .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>()
+    .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>();
 
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
