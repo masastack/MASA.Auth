@@ -24,15 +24,15 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         {
             throw new UserFriendlyException("must provider scheme and code");
         }
-        //var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
-        //var identity = await ThirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
+        var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
+        var identity = await ThirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
         var user = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
         {
-            ThridPartyIdentity = ""//identity.Subject
+            ThridPartyIdentity = identity.Subject
         });
         context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", GetUserClaims(user?.DisplayName ?? ""), customResponse: new()
         {
-            ["thirdPartyUserData"] = new Security.OAuth.Providers.Identity("423423423") { },//identity,
+            ["thirdPartyUserData"] = identity,
             ["registerSuccess"] = user is not null
         });
     }
