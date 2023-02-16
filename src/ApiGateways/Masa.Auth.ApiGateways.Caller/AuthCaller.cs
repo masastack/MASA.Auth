@@ -67,8 +67,6 @@ public class AuthCaller : HttpClientCallerBase
 
     protected override string BaseAddress { get; set; }
 
-    public override string Name { get; set; }
-
     public AuthCaller(
         IServiceProvider serviceProvider,
         TokenProvider tokenProvider,
@@ -76,7 +74,6 @@ public class AuthCaller : HttpClientCallerBase
         AuthApiOptions options,
         JwtTokenValidator jwtTokenValidator) : base(serviceProvider)
     {
-        Name = "AuthCaller";
         _tokenProvider = tokenProvider;
         _logger = logger;
         BaseAddress = options.AuthServiceBaseAddress;

@@ -5,7 +5,7 @@ using static AspNet.Security.OAuth.Weixin.WeixinAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
-public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
+public class WeChatBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
 {
     public string Scheme { get; } = "WeChat";
 
@@ -32,13 +32,6 @@ public class WeChatBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
             [UserClaims.Region] = "province",
         }
     };
-
-    public Identity BuildIdentity(ClaimsPrincipal principal)
-    {
-        var identity = Identity.CreaterDefault(principal);
-
-        return identity;
-    }
 
     public void Inject(AuthenticationBuilder builder, AuthenticationDefaults authenticationDefault)
     {

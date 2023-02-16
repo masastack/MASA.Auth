@@ -83,7 +83,7 @@ public class ClientConsts
 
     public static List<SelectItemDto<int>> GetTokenExpirations()
     {
-        var tokenExpirations = EnumUtil.GetList<BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums.TokenExpiration>().Select(pt => new SelectItemDto<int>
+        var tokenExpirations = EnumUtil.GetList<TokenExpiration>().Select(pt => new SelectItemDto<int>
         {
             Text = pt.Name,
             Value = pt.Value
@@ -93,7 +93,7 @@ public class ClientConsts
 
     public static List<SelectItemDto<int>> GetTokenUsage()
     {
-        var tokenUsage = EnumUtil.GetList<BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums.TokenUsage>().Select(pt => new SelectItemDto<int>
+        var tokenUsage = EnumUtil.GetList<TokenUsage>().Select(pt => new SelectItemDto<int>
         {
             Text = pt.Name,
             Value = pt.Value

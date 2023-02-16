@@ -11,18 +11,17 @@ public static class ElasticsearchAutoCompleteExtensions
                               .GetRequiredService<IOptions<UserAutoCompleteOptions>>()
                               .Value;
 
-        var esBuilder = services.AddElasticsearchClient(
-                "",
-                option => option.UseNodes(options.Nodes)
-            );
-
-        esBuilder.AddAutoCompleteBySpecifyDocument<UserSelectDto>(option =>
+        services.AddAutoCompleteBySpecifyDocument<UserSelectDto>("", option =>
         {
-            option.UseIndexName(options.Index);
-            if (string.IsNullOrEmpty(options.Alias) is false)
+            option.UseElasticSearch(esOption =>
             {
-                option.UseAlias(options.Alias);
-            }
+                esOption.ElasticsearchOptions.UseNodes(options.Nodes).UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));
+                esOption.IndexName = options.Index;
+                if (string.IsNullOrEmpty(options.Alias) is false)
+                {
+                    esOption.Alias = options.Alias;
+                }
+            });
         });
 
         return services;
