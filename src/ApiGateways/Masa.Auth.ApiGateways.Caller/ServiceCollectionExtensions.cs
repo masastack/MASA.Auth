@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
 
         configure?.Invoke(options);
         services.AddSingleton(options);
-        services.AddCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
+        services.AddAutoRegistrationCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
         return services;
     }
 
