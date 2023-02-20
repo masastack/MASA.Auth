@@ -535,9 +535,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
     {
-        //var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
         query.Result = LocalAuthenticationDefaultsProvider.GetAll()
-                                                     //.Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme) is false)
                                                      .Adapt<List<ThirdPartyIdpModel>>()
                                                      .ToList();
     }
