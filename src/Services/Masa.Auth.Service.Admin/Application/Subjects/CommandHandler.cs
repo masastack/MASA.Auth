@@ -881,12 +881,13 @@ public class CommandHandler
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
             var func = selector.Compile();
-            if (syncStaffs.Where(staff => func(staff) is not null).IsDuplicate(func, out List<SyncStaffDto>? duplicate))
+            if (syncStaffs.Where(staff => string.IsNullOrEmpty(func(staff)) is false).IsDuplicate(func, out List<SyncStaffDto>? duplicates))
             {
-                for (var i = 0; i < syncStaffs.Count; i++)
+                foreach(var duplicate in duplicates)
                 {
-                    var staff = syncStaffs[i];
-                    syncResults[i] = new()
+                    var index = syncStaffs.IndexOf(duplicate);
+                    var staff = syncStaffs[index];
+                    syncResults[index] = new()
                     {
                         JobNumber = staff.JobNumber,
                         Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }

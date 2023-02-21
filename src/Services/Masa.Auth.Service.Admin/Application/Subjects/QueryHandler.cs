@@ -522,7 +522,7 @@ public class QueryHandler
         Expression<Func<ThirdPartyIdp, bool>> condition = ThirdPartyIdp => true;
         if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
-        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled == true);
         query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Icon, tpIdp.AuthenticationType)).ToList();
         if (query.IncludeLdap)
         {

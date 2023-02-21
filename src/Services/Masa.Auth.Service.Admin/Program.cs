@@ -172,7 +172,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
         publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
-    await option.SyncCacheAsync();
+    //await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
