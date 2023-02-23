@@ -14,14 +14,14 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();
         RuleFor(user => user.IdCard).IdCard();
-        RuleFor(user => user.CompanyName).ChineseLetterNumber().MinLength(2).MaxLength(50);
-        RuleFor(user => user.Position).ChineseLetterNumber().MinLength(2).MaxLength(16);
+        RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
+        RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16);
         RuleFor(user => user.Account).Required()
                                      .Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
                                      .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")
-                                     .MinLength(8)
-                                     .MaxLength(50);
-        RuleFor(user => user.Department).ChineseLetterNumber().MinLength(2).MaxLength(16);
+                                     .MinimumLength(8)
+                                     .MaximumLength(50);
+        RuleFor(user => user.Department).ChineseLetterNumber().MinimumLength(2).MaximumLength(16);
         RuleFor(user => user.Avatar).Url().Required();
     }
 }
