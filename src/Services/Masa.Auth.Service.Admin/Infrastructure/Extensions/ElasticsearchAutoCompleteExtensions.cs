@@ -18,10 +18,10 @@ public static class ElasticsearchAutoCompleteExtensions
         esBuilder.AddAutoCompleteBySpecifyDocument<UserSelectDto>(option =>
         {
             option.UseIndexName(masaStackConfig.ElasticModel.Index);
-            //if (string.IsNullOrEmpty(masaStackConfig.ElasticModel.Alias) is false)
-            //{
-            //    option.UseAlias(masaStackConfig.ElasticModel.Alias);
-            //}
+            if (string.IsNullOrEmpty(masaStackConfig.ElasticModel.Alias) is false)
+            {
+                option.UseAlias(masaStackConfig.ElasticModel.Alias);
+            }
         });
 
         var autoCompleteFactory = services.BuildServiceProvider().GetRequiredService<IAutoCompleteFactory>();

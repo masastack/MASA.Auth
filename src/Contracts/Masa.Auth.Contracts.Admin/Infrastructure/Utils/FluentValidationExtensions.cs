@@ -5,20 +5,6 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class FluentValidationExtensions
 {
-    //todo delete 
-    public static IRuleBuilderOptions<T, string> Identity<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.IDENTIFY)
-                          .WithMessage("Can only input letter、number and . - of {PropertyName}");
-    }
-
-    //todo delete 
-    public static IRuleBuilderOptions<T, string> Email<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.EMAIL)
-                          .WithMessage("{PropertyName} format is incorrect");
-    }
-
     public static IRuleBuilderOptions<T, TProperty> RequiredIf<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, Func<T, bool> condition)
     {
         return ruleBuilder.Must((register, value) =>

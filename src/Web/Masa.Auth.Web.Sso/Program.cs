@@ -4,7 +4,10 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
-builder.Services.AddMasaStackConfig();
+
+var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
+
+builder.Services.AddMasaStackConfig(dccOptions);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 X509Certificate2 serverCertificate;
@@ -27,11 +30,6 @@ builder.WebHost.UseKestrel(option =>
 });
 
 // Add services to the container.
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc(masaStackConfig.GetDccMiniOptions<DccOptions>());
-});
-
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>

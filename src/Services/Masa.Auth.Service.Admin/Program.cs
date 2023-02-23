@@ -1,17 +1,12 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.Storage.ObjectStorage.Aliyun;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMasaStackConfig();
-var masaStackConfig = builder.Services.GetMasaStackConfig();
+var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
 
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc(masaStackConfig.GetDccMiniOptions<DccOptions>());
-});
+builder.Services.AddMasaStackConfig(dccOptions);
+var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 

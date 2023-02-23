@@ -7,6 +7,7 @@ global using Masa.Auth.Web.Admin.Rcl.Global;
 global using Masa.Auth.Web.Admin.Rcl.Shared;
 global using Masa.Blazor;
 global using Masa.BuildingBlocks.StackSdks.Config;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
 global using Masa.Contrib.StackSdks.Config;
 global using Masa.Contrib.StackSdks.Tsc;
