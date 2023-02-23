@@ -9,19 +9,15 @@ public static class ElasticsearchAutoCompleteExtensions
     {
         var masaStackConfig = services.BuildServiceProvider().GetRequiredService<IMasaStackConfig>();
 
-        var esBuilder = services.AddElasticsearchClient(
-                "",
-                option => option.UseNodes($"{masaStackConfig.ElasticModel.ESNode}:{masaStackConfig.ElasticModel.ESPort}")
-                    .UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false))
-            );
-
-        esBuilder.AddAutoCompleteBySpecifyDocument<UserSelectDto>(option =>
+        services.AddAutoCompleteBySpecifyDocument<UserSelectDto>("es", autoCompleteOptions =>
         {
-            option.UseIndexName(masaStackConfig.ElasticModel.Index);
-            if (string.IsNullOrEmpty(masaStackConfig.ElasticModel.Alias) is false)
+            autoCompleteOptions.UseElasticSearch(options =>
             {
-                option.UseAlias(masaStackConfig.ElasticModel.Alias);
-            }
+                options.ElasticsearchOptions.UseNodes($"{masaStackConfig.ElasticModel.ESNode}:{masaStackConfig.ElasticModel.ESPort}")
+                    .UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));
+                options.IndexName = masaStackConfig.ElasticModel.Index;
+                //options.Alias = masaStackConfig.ElasticModel.Alias;
+            });
         });
 
         var autoCompleteFactory = services.BuildServiceProvider().GetRequiredService<IAutoCompleteFactory>();
