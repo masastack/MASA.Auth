@@ -34,9 +34,6 @@ public partial class PermissionsConfigure
     [Parameter]
     public EventCallback<bool> PreviewChanged { get; set; }
 
-    [Parameter]
-    public string TagIdPrefix { get; set; } = "";
-
     List<Guid> _internalRoles = new();
     List<Guid> _internalTeams = new();
     Guid _internalUser;
@@ -100,12 +97,7 @@ public partial class PermissionsConfigure
                             .SelectMany(nav => nav.Children.Select(item => (Code: item.Code, ParentCode: nav.Code)))
                             .ToDictionary(item => Guid.Parse(item.Code), item => Guid.Parse(item.ParentCode));
 
-        _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category
-        {
-            Code = ag.Key.Replace(" ", ""),
-            Name = ag.Key,
-            Apps = ag.Select(a => a.Adapt<StackApp>()).ToList()
-        }).ToList();
+        _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category(ag.Key.Replace(" ", ""), ag.Key, ag.Select(a => a.Adapt<StackApp>()).ToList())).ToList();
     }
 
     private async Task GetRolePermissions()

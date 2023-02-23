@@ -3,20 +3,16 @@
 
 namespace Masa.Auth.Security.OAuth.Providers;
 
-public static class ThirdPartyIdpCallerProvider
+public class ThirdPartyIdpCallerProvider: ISingletonDependency
 {
-    readonly static List<ThirdPartyIdpCallerBase> _callers;
+    readonly IEnumerable<ThirdPartyIdpCallerBase> _callers;
 
-    static ThirdPartyIdpCallerProvider()
+    public ThirdPartyIdpCallerProvider(IEnumerable<ThirdPartyIdpCallerBase> callers)
     {
-        var callerTypes = Assembly.GetExecutingAssembly()
-                             .GetTypes()
-                             .Where(type => type.IsAbstract is false && type.IsAssignableTo(typeof(ThirdPartyIdpCallerBase)));
-
-        _callers = callerTypes.Select(type => (ThirdPartyIdpCallerBase)type.Assembly.CreateInstance(type.FullName!)!).ToList();
+        _callers = callers;
     }
 
-    public static async Task<Identity> GetIdentity(AuthenticationDefaults authenticationDefaults, string code)
+    public async Task<Identity> GetIdentity(AuthenticationDefaults authenticationDefaults, string code)
     {
         var caller = _callers.FirstOrDefault(caller => caller.ThirdPartyIdpType == authenticationDefaults.ThirdPartyIdpType) ?? throw new UserFriendlyException($"Implementation without {authenticationDefaults.ThirdPartyIdpType}");
         var options = new OAuthOptions();

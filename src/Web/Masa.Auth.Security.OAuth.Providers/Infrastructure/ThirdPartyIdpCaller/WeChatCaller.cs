@@ -5,9 +5,17 @@ namespace Masa.Auth.Security.OAuth.Providers.Infrastructure.ThirdPartyIdpCaller;
 
 public class WeChatCaller : ThirdPartyIdpCallerBase
 {
-    public override ThirdPartyIdpTypes ThirdPartyIdpType { get; } = ThirdPartyIdpTypes.WeChat;
+    readonly ILogger<WeChatCaller> _logger;
+    readonly HttpClient _httpClient;
 
-    public override async Task<ClaimsPrincipal> CreateTicketAsync(OAuthOptions options, OAuthTokenResponse tokens)
+    public WeChatCaller(ILogger<WeChatCaller> logger,IHttpClientFactory httpClientFactory)
+    {
+        _logger = logger;
+        _httpClient = httpClientFactory.CreateClient();
+    }
+    public ThirdPartyIdpTypes ThirdPartyIdpType { get; } = ThirdPartyIdpTypes.WeChat;
+
+    public async Task<ClaimsPrincipal> CreateTicketAsync(OAuthOptions options, OAuthTokenResponse tokens)
     {
         var parameters = new Dictionary<string, string?>
         {
@@ -17,18 +25,19 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
 
         var address = QueryHelpers.AddQueryString(options.UserInformationEndpoint, parameters);
 
-        using var response = await HttpClient.GetAsync(address);
+        using var response = await _httpClient.GetAsync(address);
+        var json = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
+            _logger.LogError(json);
             throw new UserFriendlyException("An error occurred while retrieving user information.");
         }
 
-        var json = await response.Content.ReadAsStringAsync();
         using var payload = JsonDocument.Parse(json);
-
         var errorCode = payload.RootElement.GetString("errcode");
         if (!string.IsNullOrEmpty(errorCode))
         {
+            _logger.LogError(json);
             throw new UserFriendlyException("An error occurred while retrieving user information.");
         }
 
@@ -46,7 +55,7 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
         return principal;
     }
 
-    public override async Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthOptions options, string code)
+    public async Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthOptions options, string code)
     {
         var tokenRequestParameters = new Dictionary<string, string?>()
         {
@@ -58,19 +67,20 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
 
         var address = QueryHelpers.AddQueryString(options.TokenEndpoint, tokenRequestParameters);
 
-        using var response = await HttpClient.GetAsync(address);
+        using var response = await _httpClient.GetAsync(address);
+        var json = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
-            throw new UserFriendlyException("An error occurred while retrieving an access token.");
+            _logger.LogError(json);
+            throw new UserFriendlyException($"An error occurred while retrieving an access token.");
         }
 
-        var json = await response.Content.ReadAsStringAsync();
         var payload = JsonDocument.Parse(json);
-
         var errorCode = payload.RootElement.GetString("errcode");
         if (!string.IsNullOrEmpty(errorCode))
         {
-            throw new UserFriendlyException("An error occurred while retrieving an access token.");
+            _logger.LogError(json);
+            throw new UserFriendlyException($"An error occurred while retrieving an access token.");
         }
 
         return OAuthTokenResponse.Success(payload);

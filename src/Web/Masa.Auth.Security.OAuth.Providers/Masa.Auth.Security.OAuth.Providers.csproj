@@ -13,6 +13,7 @@
 	  <PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="1.0.0-preview.2" />
 	  <PackageReference Include="Masa.Contrib.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
 	  <PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />
+	  <PackageReference Include="Masa.Utils.Extensions.DependencyInjection" Version="1.0.0-preview.9" />
 	</ItemGroup>
 	
 	<ItemGroup>
