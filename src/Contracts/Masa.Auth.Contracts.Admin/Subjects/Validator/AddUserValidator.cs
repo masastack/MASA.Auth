@@ -16,7 +16,10 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
         RuleFor(user => user.IdCard).IdCard();
         RuleFor(user => user.CompanyName).ChineseLetterNumber().MinLength(2).MaxLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MinLength(2).MaxLength(16);
-        RuleFor(user => user.Account).ChineseLetterNumber().MinLength(8).MaxLength(50);
+        RuleFor(user => user.Account).Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
+                                     .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")
+                                     .MinLength(8)
+                                     .MaxLength(50);
         RuleFor(user => user.Password).Required().AuthPassword();
         RuleFor(user => user.Department).ChineseLetterNumber().MinLength(2).MaxLength(16);
         RuleFor(user => user.Avatar).Url().Required();

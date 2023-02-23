@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
 {
-    public class ValidatorMiddleware<TEvent> : Middleware<TEvent>
+    public class ValidatorMiddleware<TEvent> : IEventMiddleware<TEvent>
         where TEvent : notnull, IEvent
     {
         private readonly ILogger<ValidatorMiddleware<TEvent>> _logger;
@@ -15,7 +15,9 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
             _logger = logger;
         }
 
-        public override async Task HandleAsync(TEvent action, EventHandlerDelegate next)
+        public bool SupportRecursive => true;
+
+        public async Task HandleAsync(TEvent action, EventHandlerDelegate next)
         {
             var typeName = action.GetType().FullName;
 

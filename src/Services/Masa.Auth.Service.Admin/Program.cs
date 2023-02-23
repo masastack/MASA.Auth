@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Storage.ObjectStorage.Aliyun;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMasaConfiguration(configurationBuilder =>
@@ -25,13 +27,13 @@ builder.Services.AddDaprClient();
 
 
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
-builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
+builder.Services.AddObjectStorage(option => option.UseAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
     Sts = new AliyunStsOptions()
     {
         RegionId = ossOptions.RegionId
     }
-});
+}));
 
 builder.Services.AddObservable(builder.Logging, () =>
 {
@@ -217,7 +219,6 @@ app.UseAuthorization();
 
 app.UseIsolation();
 app.UseMiddleware<CurrentUserCheckMiddleware>();
-app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
 

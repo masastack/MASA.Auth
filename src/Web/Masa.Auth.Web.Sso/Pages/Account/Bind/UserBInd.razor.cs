@@ -35,7 +35,7 @@ public partial class UserBind
         (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(_environment ?? "development");
         UserModel = new RegisterThirdPartyUserModel
         {
-            ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(identity.Issuer),
+            Scheme = identity.Issuer,
             ExtendedData = JsonSerializer.Serialize(identity),
             ThridPartyIdentity = identity.Subject,
             UserRegisterType = UserRegisterTypes.PhoneNumber,

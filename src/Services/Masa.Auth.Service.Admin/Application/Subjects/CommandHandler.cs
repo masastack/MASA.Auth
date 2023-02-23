@@ -274,17 +274,50 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeCommand command)
     {
         var model = command.Model;
-        var user = await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
-        if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+        var msgCodeKey = "";
+        if (model.SendMsgCodeType == SendMsgCodeTypes.VerifiyPhoneNumber)
         {
-            var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
-            command.Result = true;
+            var user = await CheckUserExistAsync(model.UserId);
+            msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+            {
+                var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+                await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+                command.Result = true;
+            }
         }
+        else
+        {
+            ArgumentExceptionExtensions.ThrowIfNullOrEmpty(model.PhoneNumber);
+            switch (model.SendMsgCodeType)
+            {
+                case SendMsgCodeTypes.UpdatePhoneNumber:
+                    msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Login:
+                    msgCodeKey = CacheKey.MsgCodeForLoginKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Register:
+                    msgCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Bind:
+                    msgCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.ForgotPassword:
+                    msgCodeKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
+                    break;
+                default:
+                    break;
+            }
+
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code, false))
+            {
+                command.Result = true;
+            }
+        }       
     }
 
     [EventHandler(1)]
@@ -848,12 +881,13 @@ public class CommandHandler
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
             var func = selector.Compile();
-            if (syncStaffs.Where(staff => func(staff) is not null).IsDuplicate(func, out List<SyncStaffDto>? duplicate))
+            if (syncStaffs.Where(staff => string.IsNullOrEmpty(func(staff)) is false).IsDuplicate(func, out List<SyncStaffDto>? duplicates))
             {
-                for (var i = 0; i < syncStaffs.Count; i++)
+                foreach(var duplicate in duplicates)
                 {
-                    var staff = syncStaffs[i];
-                    syncResults[i] = new()
+                    var index = syncStaffs.IndexOf(duplicate);
+                    var staff = syncStaffs[index];
+                    syncResults[index] = new()
                     {
                         JobNumber = staff.JobNumber,
                         Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }
@@ -982,7 +1016,7 @@ public class CommandHandler
         {
             ThridPartyIdentity = model.ThridPartyIdentity,
             ExtendedData = model.ExtendedData,
-            ThirdPartyIdpType = model.ThirdPartyIdpType,
+            Scheme = model.Scheme,
             User = new AddUserModel
             {
                 Account = model.Account,
@@ -1042,11 +1076,11 @@ public class CommandHandler
     public async Task UpsertThirdPartyUserExternalAsync(UpsertThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        if (model.ThirdPartyIdpType == default)
+        if (string.IsNullOrEmpty(model.Scheme))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
         }
-        else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        else if (string.Equals(model.Scheme, LdapConsts.LDAP_NAME, StringComparison.OrdinalIgnoreCase))
         {
             var upsertThirdPartyUserForLdapCommand = new UpsertLdapUserCommand(
                     model.Id,
@@ -1064,7 +1098,7 @@ public class CommandHandler
         }
         else
         {
-            var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
@@ -1127,7 +1161,7 @@ public class CommandHandler
     public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+        var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
         await _eventBus.PublishAsync(identityProviderQuery);
         var identityProvider = identityProviderQuery.Result;
         var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
