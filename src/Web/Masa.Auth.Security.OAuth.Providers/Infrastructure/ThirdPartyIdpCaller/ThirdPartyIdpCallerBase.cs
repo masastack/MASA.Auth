@@ -3,15 +3,11 @@
 
 namespace Masa.Auth.Security.OAuth.Providers.Infrastructure.ThirdPartyIdpCaller;
 
-public abstract class ThirdPartyIdpCallerBase
+public interface ThirdPartyIdpCallerBase : ISingletonDependency
 {
-    static HttpClient? _httpClient;
+    ThirdPartyIdpTypes ThirdPartyIdpType { get; }
 
-    protected static HttpClient HttpClient = _httpClient ??= new HttpClient();
+    Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthOptions options, string code);
 
-    public abstract ThirdPartyIdpTypes ThirdPartyIdpType { get; }
-
-    public abstract Task<OAuthTokenResponse> ExchangeCodeAsync(OAuthOptions options, string code);
-
-    public abstract Task<ClaimsPrincipal> CreateTicketAsync(OAuthOptions options, OAuthTokenResponse tokens);
+    Task<ClaimsPrincipal> CreateTicketAsync(OAuthOptions options, OAuthTokenResponse tokens);
 }
