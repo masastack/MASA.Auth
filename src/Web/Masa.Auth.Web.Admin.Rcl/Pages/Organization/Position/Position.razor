@@ -18,9 +18,6 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            @{
-                DataIndex = (Page-1)*PageSize+1;
-            }
             <SDataTable
                 FixedHeader
                 Height="@("calc(100vh - 288px)")"
@@ -32,13 +29,10 @@
                     <span>@header.Text</span>
                 </HeaderColContent>
                 <ItemColContent>
-                    @{
-                        if(DataIndex == Page*PageSize+1) DataIndex = (Page-1)*PageSize+1;
-                    }
                     @switch (context.Header.Value)
                     {
                         case "Index":
-                            <span>@(DataIndex++)</span>
+                            <span>@((_oldPage - 1) * PageSize + 1 + Positions.IndexOf(context.Item))</span>
                             break;
                         case nameof(PositionDto.Name):
                             <div class="hover-pointer" @onclick="()=> OpenUpdateApiResourceDialog(context.Item)">

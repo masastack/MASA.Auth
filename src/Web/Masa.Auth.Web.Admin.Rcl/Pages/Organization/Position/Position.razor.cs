@@ -7,6 +7,7 @@ public partial class Position
 {
     private string? _search;
     private int _page = 1;
+    private int _oldPage = 1;
     private int _pageSize = 10;
 
     public string Search
@@ -26,7 +27,11 @@ public partial class Position
         set
         {
             _page = value;
-            GetPositionsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            GetPositionsAsync().ContinueWith(_ =>
+            {
+                _oldPage = value;
+                InvokeAsync(StateHasChanged);
+            });      
         }
     }
 

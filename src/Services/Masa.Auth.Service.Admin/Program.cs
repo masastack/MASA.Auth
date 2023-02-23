@@ -172,7 +172,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
         publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
     });
-    await option.SyncCacheAsync();
+    //await option.SyncCacheAsync();
 });
 builder.Services.RemoveAll(typeof(IProcessor));
 
@@ -220,7 +220,6 @@ app.UseAuthorization();
 
 app.UseIsolation();
 app.UseMiddleware<CurrentUserCheckMiddleware>();
-app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
 

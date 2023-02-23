@@ -23,6 +23,9 @@ public abstract class AdminCompontentBase : ComponentBase
         }
     }
 
+    [Inject]
+    public JsInitVariables JsInitVariables { get; set; } = default!;
+
     [CascadingParameter]
     public I18n I18n
     {
