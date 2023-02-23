@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
 
-builder.Services.AddMasaStackConfig(dccOptions);
+await builder.Services.AddMasaStackConfigAsync(dccOptions);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
@@ -165,7 +165,7 @@ builder.Services
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseIsolationUoW<AuthDbContext>(
         isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
-        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("auth")).UseFilter())
+        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("auth_dev")).UseFilter())
     .UseRepository<AuthDbContext>();
 });
 

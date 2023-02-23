@@ -16,10 +16,10 @@ public static class Extensions
     {
         var services = builder.Services.BuildServiceProvider();
         var context = services.GetRequiredService<TContext>();
-        if ((await context.Database.GetPendingMigrationsAsync()).Any())
-        {
-            await context.Database.MigrateAsync();
-        }
+        //if ((await context.Database.GetPendingMigrationsAsync()).Any())
+        //{
+        //    await context.Database.MigrateAsync();
+        //}
         await seeder(context, services);
     }
 }

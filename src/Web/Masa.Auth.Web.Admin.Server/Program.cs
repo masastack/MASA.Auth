@@ -5,7 +5,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
-builder.Services.AddMasaStackConfig(dccOptions);
+await builder.Services.AddMasaStackConfigAsync(dccOptions);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 builder.WebHost.UseKestrel(option =>
