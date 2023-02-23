@@ -6,12 +6,15 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
 {
     public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
-    public IMasaStackConfig _masaStackConfig;
 
-    public DefaultRuleCodePolicyProvider(IOptions<AuthorizationOptions> options, IMasaStackConfig masaStackConfig)
+    readonly IServiceProvider _serviceProvider;
+
+    public DefaultRuleCodePolicyProvider(
+        IOptions<AuthorizationOptions> options,
+        IServiceProvider serviceProvider)
     {
         FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
-        _masaStackConfig = masaStackConfig;
+        _serviceProvider = serviceProvider;
     }
 
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => FallbackPolicyProvider.GetDefaultPolicyAsync();
@@ -25,7 +28,8 @@ public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
         if (policyName == "DefaultRuleCode")
         {
             var policy = new AuthorizationPolicyBuilder();
-            policy.AddRequirements(new DefaultRuleCodeRequirement(_masaStackConfig.GetServerId("auth")));
+            using var scope = _serviceProvider.CreateScope();
+            policy.AddRequirements(new DefaultRuleCodeRequirement(scope.ServiceProvider.GetRequiredService<IMasaStackConfig>().GetServerId("auth")));
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
         return FallbackPolicyProvider.GetPolicyAsync(policyName);
