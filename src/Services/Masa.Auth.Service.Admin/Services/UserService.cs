@@ -224,7 +224,7 @@ public class UserService : ServiceBase
     public async Task<bool> PostVerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
-        var command = new VerifyMsgCodeForVerifiyPhoneNumberCommand(model);
+        var command = new VerifyMsgCodeCommand(model);
         await eventBus.PublishAsync(command);
         return command.Result;
     }
@@ -286,10 +286,12 @@ public class UserService : ServiceBase
 
     [AllowAnonymous]
     [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
-    public async Task RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
+    public async Task<UserModel> RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
     {
         var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);
+
+        return command.Result;
     }
 
     [AllowAnonymous]

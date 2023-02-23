@@ -25,6 +25,7 @@ public class CommandHandler
     readonly Sms _sms;
     readonly IMasaStackConfig _masaStackConfig;
     readonly IHttpContextAccessor _httpContextAccessor;
+    readonly IMasaConfiguration _masaConfiguration;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -46,7 +47,8 @@ public class CommandHandler
         IEventBus eventBus,
         Sms sms,
         IMasaStackConfig masaStackConfig,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IMasaConfiguration masaConfiguration)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -68,6 +70,7 @@ public class CommandHandler
         _sms = sms;
         _masaStackConfig = masaStackConfig;
         _httpContextAccessor = httpContextAccessor;
+        _masaConfiguration = masaConfiguration;
     }
 
     #region User
@@ -271,17 +274,50 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeCommand command)
     {
         var model = command.Model;
-        var user = await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
-        if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+        var msgCodeKey = "";
+        if (model.SendMsgCodeType == SendMsgCodeTypes.VerifiyPhoneNumber)
         {
-            var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
-            command.Result = true;
+            var user = await CheckUserExistAsync(model.UserId);
+            msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+            {
+                var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+                await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+                command.Result = true;
+            }
         }
+        else
+        {
+            ArgumentExceptionExtensions.ThrowIfNullOrEmpty(model.PhoneNumber);
+            switch (model.SendMsgCodeType)
+            {
+                case SendMsgCodeTypes.UpdatePhoneNumber:
+                    msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Login:
+                    msgCodeKey = CacheKey.MsgCodeForLoginKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Register:
+                    msgCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Bind:
+                    msgCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.ForgotPassword:
+                    msgCodeKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
+                    break;
+                default:
+                    break;
+            }
+
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code, false))
+            {
+                command.Result = true;
+            }
+        }       
     }
 
     [EventHandler(1)]
@@ -371,11 +407,18 @@ public class CommandHandler
         //todo UserDomainService
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
+
+        var loginFreeze = _masaConfiguration.ConfigurationApi.GetDefault()
+            .GetValue<bool>("AppSettings:LoginFreeze", false);
         var key = CacheKey.AccountLoginKey(account);
-        var loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
-        if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+        CacheLogin? loginCache = null;
+        if (loginFreeze)
         {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
+            loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
+            if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
+            }
         }
 
         var isLdap = validateByAccountCommand.UserAccountValidateDto.IsLdap;
@@ -430,9 +473,12 @@ public class CommandHandler
         {
             if (!user.VerifyPassword(password))
             {
-                loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
-                loginCache.LoginErrorCount++;
-                await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                if (loginFreeze)
+                {
+                    loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
+                    loginCache.LoginErrorCount++;
+                    await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                }
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
             }
 
@@ -968,7 +1014,7 @@ public class CommandHandler
         {
             ThridPartyIdentity = model.ThridPartyIdentity,
             ExtendedData = model.ExtendedData,
-            ThirdPartyIdpType = model.ThirdPartyIdpType,
+            Scheme = model.Scheme,
             User = new AddUserModel
             {
                 Account = model.Account,
@@ -1028,11 +1074,11 @@ public class CommandHandler
     public async Task UpsertThirdPartyUserExternalAsync(UpsertThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        if (model.ThirdPartyIdpType == default)
+        if (string.IsNullOrEmpty(model.Scheme))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
         }
-        else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        else if (string.Equals(model.Scheme, LdapConsts.LDAP_NAME, StringComparison.OrdinalIgnoreCase))
         {
             var upsertThirdPartyUserForLdapCommand = new UpsertLdapUserCommand(
                     model.Id,
@@ -1050,7 +1096,7 @@ public class CommandHandler
         }
         else
         {
-            var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
@@ -1113,7 +1159,7 @@ public class CommandHandler
     public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+        var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
         await _eventBus.PublishAsync(identityProviderQuery);
         var identityProvider = identityProviderQuery.Result;
         var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();

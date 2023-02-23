@@ -14,20 +14,20 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
     {
-        var user = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(context.UserName, context.Password);
-        if (user != null)
+        try
         {
+            var user = await _authClient.UserService
+                                           .ValidateCredentialsByAccountAsync(context.UserName, context.Password);
             context.Result = new GrantValidationResult(
                  subject: user!.Id.ToString(),
                  authenticationMethod: OidcConstants.AuthenticationMethods.Password,
                  claims: GetUserClaims(context.UserName));
         }
-        else
+        catch (Exception ex)
         {
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
-                "invalid custom credential");
+                ex.Message);
         }
     }
 

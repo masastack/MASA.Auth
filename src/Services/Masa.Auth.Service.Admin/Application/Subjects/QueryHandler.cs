@@ -501,6 +501,15 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetIdentityProviderBySchemeAsync(IdentityProviderBySchemeQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>()
+                                                       .FirstOrDefaultAsync(ip => ip.Name == query.scheme);
+
+        query.Result = identityProvider ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_PROVIDER_NOT_FOUND);
+    }
+
+    [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
     {
         var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);
@@ -526,9 +535,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
     {
-        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
         query.Result = LocalAuthenticationDefaultsProvider.GetAll()
-                                                     .Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme) is false)
                                                      .Adapt<List<ThirdPartyIdpModel>>()
                                                      .ToList();
     }

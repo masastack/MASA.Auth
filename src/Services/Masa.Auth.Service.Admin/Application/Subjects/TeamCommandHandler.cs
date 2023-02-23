@@ -9,7 +9,7 @@ public class TeamCommandHandler
     readonly ITeamRepository _teamRepository;
     readonly TeamDomainService _teamDomainService;
     readonly RoleDomainService _roleDomainService;
-    readonly IClient _aliyunClient;
+    readonly IObjectStorageClient _aliyunClient;
     readonly IUnitOfWork _unitOfWork;
 
     string _bucket = "";
@@ -20,7 +20,7 @@ public class TeamCommandHandler
         TeamDomainService teamDomainService,
         RoleDomainService roleDomainService,
         IMasaConfiguration masaConfiguration,
-        IClient aliyunClient,
+        IObjectStorageClient aliyunClient,
         IOptions<OssOptions> ossOptions,
         IUnitOfWork unitOfWork)
     {

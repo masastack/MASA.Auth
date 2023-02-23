@@ -10,7 +10,7 @@ public class OssService : RestServiceBase
         MapGet(GetDefaultImages);
     }
 
-    private async Task<SecurityTokenDto> GetSecurityTokenAsync([FromServices] IClient client, [FromServices] IOptions<OssOptions> ossOptions)
+    private async Task<SecurityTokenDto> GetSecurityTokenAsync([FromServices] IObjectStorageClient client, [FromServices] IOptions<OssOptions> ossOptions)
     {
         var region = "oss-cn-hangzhou";
         var response = client.GetSecurityToken();

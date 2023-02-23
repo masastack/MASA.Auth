@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Security.OAuth.Providers.GitHub;
 
-public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
+public class GitHubBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
 
@@ -28,13 +28,6 @@ public class GitHubBuilder : IIdentityBuilder, ILocalAuthenticationDefaultBuilde
             [UserClaims.NickName] = "name",
         }
     };
-
-    public Identity BuildIdentity(ClaimsPrincipal principal)
-    {
-        var identity = Identity.CreaterDefault(principal);
-
-        return identity;
-    }
 
     public void Inject(AuthenticationBuilder builder, AuthenticationDefaults authenticationDefault)
     {

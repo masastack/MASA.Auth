@@ -25,6 +25,8 @@ public class AuthenticationDefaults
 
     public string ClientSecret { get; set; } = "";
 
+    public ThirdPartyIdpTypes ThirdPartyIdpType { get; set; }
+
     public Dictionary<string, string> JsonKeyMap = new();
 
     public bool MapAll { get; set; }
