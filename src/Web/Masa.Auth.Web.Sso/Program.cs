@@ -10,19 +10,21 @@ var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>(
 await builder.Services.AddMasaStackConfigAsync(dccOptions);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
+X509Certificate2 serverCertificate;
+if (string.IsNullOrEmpty(masaStackConfig.TlsName))
+{
+    serverCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+}
+else
+{
+    serverCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
+}
 
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
     {
-        if (string.IsNullOrEmpty(masaStackConfig.TlsName))
-        {
-            options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
-        }
-        else
-        {
-            options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
-        }
+        options.ServerCertificate = serverCertificate;
         options.CheckCertificateRevocation = false;
     });
 });
