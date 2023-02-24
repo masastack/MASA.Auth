@@ -8,16 +8,16 @@ public class DisabledCommandMiddleware<TEvent> : IEventMiddleware<TEvent>
 {
     readonly ILogger<DisabledCommandMiddleware<TEvent>> _logger;
     readonly IUserContext _userContext;
-    readonly IHostEnvironment _hostEnvironment;
+    readonly IMasaStackConfig _masaStackConfig;
 
     public DisabledCommandMiddleware(
         ILogger<DisabledCommandMiddleware<TEvent>> logger,
         IUserContext userContext,
-        IHostEnvironment hostEnvironment)
+        IMasaStackConfig masaStackConfig)
     {
         _logger = logger;
         _userContext = userContext;
-        _hostEnvironment = hostEnvironment;
+        _masaStackConfig = masaStackConfig;
     }
 
     public bool SupportRecursive => true;
@@ -25,8 +25,7 @@ public class DisabledCommandMiddleware<TEvent> : IEventMiddleware<TEvent>
     public async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
     {
         var user = _userContext.GetUser<MasaUser>();
-        //todo IsDemo
-        if (_hostEnvironment.IsStaging() && user?.Account == "Guest" && @event is ICommand)
+        if (_masaStackConfig.IsDemo && user?.Account?.ToLower() == "guest" && @event is ICommand)
         {
             _logger.LogWarning("Guest operation");
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.GUEST_ACCOUNT_OPERATE);

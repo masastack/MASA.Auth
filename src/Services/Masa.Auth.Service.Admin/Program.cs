@@ -1,17 +1,16 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.Storage.ObjectStorage.Aliyun;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
+var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
+
+await builder.Services.AddMasaStackConfigAsync(dccOptions);
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 
-var identityServerUrl = publicConfiguration.GetValue<string>("$public.AppSettings:IdentityServerUrl");
+var identityServerUrl = masaStackConfig.GetSsoDomain();
 
 #if DEBUG
 identityServerUrl = "http://localhost:18200";
@@ -40,12 +39,12 @@ builder.Services.AddObservable(builder.Logging, () =>
     return new MasaObservableOptions
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
-        ServiceVersion = "1.0.0",//todo global version
-        ServiceName = "auth-service"
+        ServiceVersion = masaStackConfig.Version,
+        ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH)
     };
 }, () =>
 {
-    return publicConfiguration.GetValue<string>("$public.AppSettings:OtlpUrl");
+    return masaStackConfig.OtlpUrl;
 });
 
 builder.Services.AddMasaIdentity(options =>
@@ -66,7 +65,7 @@ builder.Services
         var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
-            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServerId(MasaStackConstant.AUTH)))
             .Build();
         options.DefaultPolicy = defaultPolicy;
     })
@@ -89,23 +88,34 @@ builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();
 
-builder.Services.AddDccClient();
 
-var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
+var redisOption = new RedisConfigurationOptions
+{
+    Servers = new List<RedisServerOptions> {
+        new RedisServerOptions()
+        {
+            Host= masaStackConfig.RedisModel.RedisHost,
+            Port= masaStackConfig.RedisModel.RedisPort
+        }
+    },
+    DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
+    Password = masaStackConfig.RedisModel.RedisPassword
+};
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
 {
     multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
     multilevel.SubscribeKeyPrefix = $"db-{redisOption.DefaultDatabase}";
 });
 builder.Services.AddAuthClientMultilevelCache(redisOption);
-
-await builder.Services
-            .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
-            .AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"))
-            .AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"))
+builder.Services.AddDccClient(redisOption);
+builder.Services
+            .AddPmClient(masaStackConfig.GetPmServiceDomain())
+            .AddSchedulerClient(masaStackConfig.GetSchedulerServiceDomain())
+            .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
-            .AddElasticsearchAutoComplete()
-            .AddSchedulerJobAsync();
+            .AddElasticsearchAutoComplete();
+//todo update appsettings
+//.AddSchedulerJobAsync();
 
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
@@ -155,25 +165,25 @@ builder.Services
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseIsolationUoW<AuthDbContext>(
         isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
-        dbOptions => dbOptions.UseSqlServer().UseFilter())
+        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("auth_dev")).UseFilter())
     .UseRepository<AuthDbContext>();
 });
 
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
+await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
 {
-    await new AuthSeedData().SeedAsync(context, services);
+    //todo split
+    //await new AuthSeedData().SeedAsync(context, services);
+    return Task.CompletedTask;
 });
-
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
+    await new AuthSeedData().SeedAsync(builder);
+
     await option.SeedStandardResourcesAsync();
-    await option.SeedClientDataAsync(new List<Client>
-    {
-        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    });
-    //await option.SyncCacheAsync();
+    await option.SyncCacheAsync();
 });
+
 builder.Services.RemoveAll(typeof(IProcessor));
 
 var app = builder.AddServices(options =>
@@ -219,7 +229,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseIsolation();
-app.UseMiddleware<CurrentUserCheckMiddleware>();
+#warning CurrentUserCheckMiddleware
+//app.UseMiddleware<CurrentUserCheckMiddleware>();
+app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
 

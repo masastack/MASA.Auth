@@ -16,13 +16,13 @@
 	<ItemGroup>
 		<PackageReference Include="AlibabaCloud.SDK.Dypnsapi20170525" Version="1.0.6" />
 		<PackageReference Include="aliyun-net-sdk-dypnsapi" Version="1.1.8" />
-		<PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.4.0" />
-		<PackageReference Include="Masa.Blazor" Version="0.7.0-alpha.1726" />
+		<PackageReference Include="Masa.Blazor" Version="0.7.0-alpha.1865" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
@@ -52,15 +52,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Certificates\7348307__lonsid.cn.pfx">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="tempkey.jwk">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 	<ProjectExtensions>

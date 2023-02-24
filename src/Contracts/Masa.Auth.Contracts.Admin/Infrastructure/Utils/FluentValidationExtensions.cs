@@ -5,116 +5,6 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class FluentValidationExtensions
 {
-    public static IRuleBuilderOptions<T, string> Chinese<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.CHINESE)
-                          .WithMessage("Can only input chinese of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> Number<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.NUMBER)
-                          .WithMessage("Can only input number of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> Letter<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.LETTER)
-                          .WithMessage("Can only input letter of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> LowerLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.LOWER_LETTER)
-                          .WithMessage("Can only input lower letter of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> UpperLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.UPPER_LETTER)
-                          .WithMessage("Can only input upper letter of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> LetterNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.LETTER_NUMBER)
-                          .WithMessage("Can only input letter and number of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> Identity<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.IDENTIFY)
-                          .WithMessage("Can only input letter、number and . - of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> ChineseLetter<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.CHINESE_LETTER)
-                          .WithMessage("Can only input chinese and letter of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> ChineseLetterNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.CHINESE_LETTER_NUMBER)
-                          .WithMessage("Can only input chinese and letter and number of {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, string> NoSpace<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.NO_SPACE)
-                          .WithMessage("Cannot contain space");
-    }
-
-    public static IRuleBuilderOptions<T, string> Phone<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches<T>(RegularHelper.PHONE)
-                          .WithMessage("{PropertyName} format is incorrect");
-    }
-
-    public static IRuleBuilderOptions<T, string> Email<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.EMAIL)
-                          .WithMessage("{PropertyName} format is incorrect");
-    }
-
-    public static IRuleBuilderOptions<T, string> IdCard<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.IDCARD)
-                          .WithMessage("{PropertyName} format is incorrect");
-    }
-
-    public static IRuleBuilderOptions<T, string> Url<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.URL)
-                          .WithMessage("{PropertyName} format is incorrect");
-    }
-
-    public static IRuleBuilderOptions<T, string> MinLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength, string propertyName = "{PropertyName}")
-    {
-        return ruleBuilder.Must(value => string.IsNullOrEmpty(value) || value.Length >= minimumLength)
-                    .WithMessage($"Please enter a number greater than {minimumLength} of " + propertyName);
-    }
-
-    public static IRuleBuilderOptions<T, string> MaxLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength, string propertyName = "{PropertyName}")
-    {
-        return ruleBuilder.MaximumLength(maximumLength)
-                    .WithMessage("Please enter a number less than {MaxLength} of " + propertyName);
-    }
-
-    public static IRuleBuilderOptions<T, string> Port<T>(this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Matches(RegularHelper.PORT)
-                          .WithMessage("Is not a valid port {PropertyName}");
-    }
-
-    public static IRuleBuilderOptions<T, TProperty> Required<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder)
-    {
-        return ruleBuilder.NotNull()
-                        .WithMessage("{PropertyName} is required")
-                        .NotEmpty()
-                        .WithMessage("{PropertyName} is required");
-    }
-
     public static IRuleBuilderOptions<T, TProperty> RequiredIf<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, Func<T, bool> condition)
     {
         return ruleBuilder.Must((register, value) =>
@@ -128,11 +18,11 @@ public static class FluentValidationExtensions
                         })
                         .WithMessage("{PropertyName} is required");
     }
-
+#warning when update package delete and replace Password
     public static IRuleBuilderOptions<T, string> AuthPassword<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder.Matches(BusinessConsts.PASSWORD_REGULAR)
                           .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-                          .MaxLength(50);
+                          .MaximumLength(50);
     }
 }

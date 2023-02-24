@@ -23,7 +23,7 @@ public class CommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
     readonly Sms _sms;
-    readonly IOptions<OidcOptions> _oidcOptions;
+    readonly IMasaStackConfig _masaStackConfig;
     readonly IHttpContextAccessor _httpContextAccessor;
     readonly IMasaConfiguration _masaConfiguration;
 
@@ -46,7 +46,7 @@ public class CommandHandler
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
         Sms sms,
-        IOptions<OidcOptions> oidcOptions,
+        IMasaStackConfig masaStackConfig,
         IHttpContextAccessor httpContextAccessor,
         IMasaConfiguration masaConfiguration)
     {
@@ -68,7 +68,7 @@ public class CommandHandler
         _logger = logger;
         _eventBus = eventBus;
         _sms = sms;
-        _oidcOptions = oidcOptions;
+        _masaStackConfig = masaStackConfig;
         _httpContextAccessor = httpContextAccessor;
         _masaConfiguration = masaConfiguration;
     }
@@ -588,16 +588,15 @@ public class CommandHandler
     public async Task LoginByAccountAsync(LoginByAccountCommand command)
     {
         var httpClient = new HttpClient();
+        var docUrl = _masaStackConfig.GetSsoDomain();
 #if DEBUG
-        var docUrl = "http://localhost:18200";
-#else
-        var docUrl = _oidcOptions.Value.Authority;
+        docUrl = "http://localhost:18200";
 #endif
         var disco = await httpClient.GetDiscoveryDocumentAsync(docUrl);
         var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
         {
             Address = disco.TokenEndpoint,
-            ClientId = _oidcOptions.Value.ClientId,
+            ClientId = _masaStackConfig.GetWebId(MasaStackConstant.AUTH),
             Scope = "openid profile offline_access",
             UserName = command.Account,
             Password = command.Password

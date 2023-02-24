@@ -5,17 +5,16 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
 
 public class DisabledRouteMiddleware : IMiddleware, IScopedDependency
 {
-    readonly IHostEnvironment _hostEnvironment;
+    readonly IMasaStackConfig _masaStackConfig;
 
-    public DisabledRouteMiddleware(IHostEnvironment hostEnvironment)
+    public DisabledRouteMiddleware(IMasaStackConfig masaStackConfig)
     {
-        _hostEnvironment = hostEnvironment;
+        _masaStackConfig = masaStackConfig;
     }
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        //todo IsDemo
-        if (_hostEnvironment.IsProduction())
+        if (_masaStackConfig.IsDemo)
         {
             var endpoint = context.GetEndpoint();
             var disabledRouteAttribute = (endpoint as RouteEndpoint)?.Metadata

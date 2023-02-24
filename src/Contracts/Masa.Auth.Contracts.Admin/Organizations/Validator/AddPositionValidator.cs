@@ -7,6 +7,6 @@ public class AddPositionValidator : AbstractValidator<AddPositionDto>
 {
     public AddPositionValidator()
     {
-        RuleFor(p => p.Name).Required().ChineseLetterNumber().MinLength(2).MaxLength(20);
+        RuleFor(p => p.Name).Required().ChineseLetterNumber().MinimumLength(2).MaximumLength(20);
     }
 }

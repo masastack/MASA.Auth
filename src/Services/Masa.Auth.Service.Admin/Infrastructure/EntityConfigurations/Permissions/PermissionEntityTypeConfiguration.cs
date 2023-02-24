@@ -11,8 +11,9 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.HasIndex(p => new { p.SystemId, p.AppId, p.Code }).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(p => p.Name).HasMaxLength(40).IsRequired();
         builder.Property(p => p.Code).HasMaxLength(255).IsRequired();
-        builder.Property(p => p.Url).HasMaxLength(255).IsRequired();
-        builder.Property(p => p.Description).HasMaxLength(255);
+        builder.Property(p => p.Url).HasMaxLength(255).IsRequired(false);
+        builder.Property(p => p.Icon).IsRequired(false);
+        builder.Property(p => p.Description).HasMaxLength(255).IsRequired(false);
         builder.Property(p => p.Type).HasConversion(
             v => v.ToString(),
             v => (PermissionTypes)Enum.Parse(typeof(PermissionTypes), v)

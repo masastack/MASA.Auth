@@ -24,7 +24,7 @@ public class DepartmenCascader : SCascader<DepartmentDto, Guid>
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Items = await DepartmentService.GetListAsync();        
+        Items = await DepartmentService.GetListAsync();
     }
 
     protected override void OnParametersSet()

@@ -4,38 +4,32 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
-builder.Services.AddDaprClient();
 
-#if DEBUG
+var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
+
+await builder.Services.AddMasaStackConfigAsync(dccOptions);
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
+X509Certificate2 serverCertificate;
+if (string.IsNullOrEmpty(masaStackConfig.TlsName))
+{
+    serverCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+}
+else
+{
+    serverCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
+}
+
 builder.WebHost.UseKestrel(option =>
 {
     option.ConfigureHttpsDefaults(options =>
     {
-        options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        options.ServerCertificate = serverCertificate;
         options.CheckCertificateRevocation = false;
     });
 });
-
-#else
-var daprClient = new Dapr.Client.DaprClientBuilder().Build();
-var key = Environment.GetEnvironmentVariable("TLS_NAME") ?? "catest";
-var config = await daprClient.GetSecretAsync("localsecretstore", key);
-builder.WebHost.UseKestrel(option =>
-{
-    option.ConfigureHttpsDefaults(options =>
-    {
-        options.ServerCertificate = X509Certificate2.CreateFromPem(config["tls.crt"], config["tls.key"]);
-        options.CheckCertificateRevocation = false;
-    });
-});
-#endif
 
 // Add services to the container.
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
-
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>
@@ -52,30 +46,42 @@ builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
-var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var authDomain = masaStackConfig.GetAuthServiceDomain();
+
 #if DEBUG
-builder.Services.AddAuthClient(publicConfiguration, "https://localhost:18102");
-#else
-builder.Services.AddAuthClient(publicConfiguration);
+authDomain = "http://localhost:18002";
 #endif
 
-builder.Services.AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"));
-builder.Services.AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"));
+var redisOption = new RedisConfigurationOptions
+{
+    Servers = new List<RedisServerOptions> {
+        new RedisServerOptions()
+        {
+            Host= masaStackConfig.RedisModel.RedisHost,
+            Port=   masaStackConfig.RedisModel.RedisPort
+        }
+    },
+    DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
+    Password = masaStackConfig.RedisModel.RedisPassword
+};
+
+builder.Services.AddAuthClient(authDomain, redisOption);
+
+builder.Services.AddMcClient(masaStackConfig.GetMcServiceDomain());
+builder.Services.AddPmClient(masaStackConfig.GetPmServiceDomain());
 
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddSameSiteCookiePolicy();
-var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
 builder.Services.AddMultilevelCache(distributedCacheOptions =>
 {
     distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
 });
-builder.Services.AddOidcCacheStorage(redisOption)
+var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
         options.Events.RaiseSuccessEvents = true;
     })
-    .AddDeveloperSigningCredential()
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
@@ -84,6 +90,12 @@ builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
     .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>();
+
+#if DEBUG
+identityServerBuilder.AddDeveloperSigningCredential();
+#else
+identityServerBuilder.AddSigningCredential(serverCertificate);
+#endif
 
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
