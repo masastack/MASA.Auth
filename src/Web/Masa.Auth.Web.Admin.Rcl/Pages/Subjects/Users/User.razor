@@ -6,7 +6,7 @@
         <div class="d-flex">
             <MSpacer />
             <div>
-                <SUserAutoComplete FillBackground=false @bind-Value="UserId" />
+                <SUserAutoComplete Small FillBackground=false @bind-Value="UserId" />
             </div>     
             <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
