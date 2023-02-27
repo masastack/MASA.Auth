@@ -750,7 +750,8 @@ public class QueryHandler
     [EventHandler]
     public async Task UserSystemBizDataQueryAsync(UserSystemBusinessDataQuery userSystemBusinessData)
     {
-        userSystemBusinessData.Result = await _multilevelCacheClient.GetAsync<string>(
-            CacheKey.UserSystemDataKey(userSystemBusinessData.UserId, userSystemBusinessData.SystemId)) ?? "";
+        userSystemBusinessData.Result = (await _multilevelCacheClient.GetListAsync<string>(
+            userSystemBusinessData.UserIds.Select(id => CacheKey.UserSystemDataKey(id, userSystemBusinessData.SystemId))
+        )).Where(data => data is not null).ToList()!;
     }
 }

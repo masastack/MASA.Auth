@@ -12,11 +12,11 @@ var identityServerUrl = masaStackConfig.GetSsoDomain();
 
 #if DEBUG
 identityServerUrl = "http://localhost:18200";
-builder.Services.AddDaprStarter(opt =>
-{
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
-});
+//builder.Services.AddDaprStarter(opt =>
+//{
+//    opt.DaprHttpPort = 3600;
+//    opt.DaprGrpcPort = 3601;
+//});
 #endif
 
 builder.Services.AddAutoInject();
