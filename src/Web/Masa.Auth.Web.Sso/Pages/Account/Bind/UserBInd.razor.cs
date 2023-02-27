@@ -48,11 +48,11 @@ public partial class UserBind
         UserModel? user = default;
         if (string.IsNullOrEmpty(identity.PhoneNumber) is false)
         {
-            user = await AuthClient.UserService.FindByPhoneNumberAsync(identity.PhoneNumber);
+            user = await AuthClient.UserService.GetByPhoneNumberAsync(identity.PhoneNumber);
         }
         if (user is null && string.IsNullOrEmpty(identity.Email) is false)
         {
-            user = await AuthClient.UserService.FindByEmailAsync(identity.Email);
+            user = await AuthClient.UserService.GetByEmailAsync(identity.Email);
         }
         if (user is not null)
         {
