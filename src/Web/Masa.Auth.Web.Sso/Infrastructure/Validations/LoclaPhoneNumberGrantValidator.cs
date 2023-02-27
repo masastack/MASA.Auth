@@ -34,7 +34,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
         var (success, errorMsg) = await _localLoginByPhoneNumber.VerifyPhoneWithTokenAsync(phoneNumber, spToken);
         if (success)
         {
-            var user = await _authClient.UserService.FindByPhoneNumberAsync(phoneNumber);
+            var user = await _authClient.UserService.GetByPhoneNumberAsync(phoneNumber);
             if (user is null)
             {
                 context.Result = new GrantValidationResult
