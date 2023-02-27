@@ -264,7 +264,15 @@ public class UserService : ServiceBase
 
     public async Task<string> GetSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
     {
-        var query = new UserSystemBusinessDataQuery(userId, systemId);
+        var query = new UserSystemBusinessDataQuery(new[] { userId }, systemId);
+        await eventBus.PublishAsync(query);
+        return query.Result.First();
+    }
+
+    [RoutePattern("systemData/byIds", StartWithBaseUri = true, HttpMethod = "Get")]
+    public async Task<List<string>> GetSystemListDataAsync(IEventBus eventBus, [FromQuery] string userIds, [FromQuery] string systemId)
+    {
+        var query = new UserSystemBusinessDataQuery(userIds.Split(',').Select(userId => Guid.Parse(userId)), systemId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
