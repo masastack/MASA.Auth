@@ -7,6 +7,6 @@ public class UpdateUserPhoneNumberCommandValidator : AbstractValidator<UpdateUse
 {
     public UpdateUserPhoneNumberCommandValidator()
     {
-        RuleFor(command => command.User.PhoneNumber).Required().Phone();
+        RuleFor(command => command.User.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
     }
 }
