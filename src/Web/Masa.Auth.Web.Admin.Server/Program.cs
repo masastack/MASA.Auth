@@ -1,11 +1,9 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
-await builder.Services.AddMasaStackConfigAsync(dccOptions);
+await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 builder.WebHost.UseKestrel(option =>

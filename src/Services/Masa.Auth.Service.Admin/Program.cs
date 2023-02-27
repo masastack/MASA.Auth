@@ -3,9 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
-
-await builder.Services.AddMasaStackConfigAsync(dccOptions);
+await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();

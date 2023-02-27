@@ -5,9 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
 
-var dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
-
-await builder.Services.AddMasaStackConfigAsync(dccOptions);
+await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 X509Certificate2 serverCertificate;
