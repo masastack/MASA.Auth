@@ -18,7 +18,7 @@ public partial class SyncStaffDialog
 
     private IBrowserFile? File { get; set; }
 
-    private long MaxFileSize { get; } = 1024 * 1024 * 15;
+    private long MaxFileSize { get; } = 2;
 
     private SyncStaffResultsDto? SyncStaffResults { get; set; }
 
@@ -107,7 +107,7 @@ public partial class SyncStaffDialog
         try
         {
             await using var memoryStream = new MemoryStream();
-            using var readStream = file.OpenReadStream(MaxFileSize);
+            using var readStream = file.OpenReadStream(1024 * 1024 * MaxFileSize);
             var bytesRead = 0;
             var totalRead = 0;
             var buffer = new byte[2048];
