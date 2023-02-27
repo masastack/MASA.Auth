@@ -14,9 +14,9 @@ public class SyncStaffValidator : AbstractValidator<SyncStaffDto>
                                            .MaximumLength(50)
                                            .OverridePropertyName("NickName");
         RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
-        RuleFor(staff => staff.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
+        RuleFor(staff => staff.PhoneNumber).Required().Phone();
         RuleFor(staff => staff.Email).Email();
-        RuleFor(staff => staff.IdCard).IdCard(CultureInfo.CurrentUICulture.Name);
+        RuleFor(staff => staff.IdCard).IdCard();
         RuleFor(staff => staff.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
     }

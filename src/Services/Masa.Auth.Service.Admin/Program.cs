@@ -182,7 +182,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await new AuthSeedData().SeedAsync(builder);
 
     await option.SeedStandardResourcesAsync();
-    await option.SyncCacheAsync();
+    //await option.SyncCacheAsync();
 });
 
 builder.Services.RemoveAll(typeof(IProcessor));

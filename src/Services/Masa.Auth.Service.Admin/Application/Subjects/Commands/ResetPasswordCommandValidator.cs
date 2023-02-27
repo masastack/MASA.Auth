@@ -9,7 +9,7 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
     {
         When(x => x.ResetPasswordType == ResetPasswordTypes.PhoneNumber, () =>
         {
-            RuleFor(x => x.Voucher).NotEmpty().Phone(CultureInfo.CurrentUICulture.Name);
+            RuleFor(x => x.Voucher).NotEmpty().Phone();
         });
         When(x => x.ResetPasswordType == ResetPasswordTypes.Email, () =>
         {

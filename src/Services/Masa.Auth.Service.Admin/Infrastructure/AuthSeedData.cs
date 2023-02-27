@@ -154,7 +154,8 @@ public class AuthSeedData
                 Email = "admin@masastack.com",
                 CompanyName = "Masa",
                 PhoneNumber = "15888888888",
-                Enabled = true
+                Enabled = true,
+                IdCard = "330104202002026400"
             }));
         }
 
@@ -170,7 +171,8 @@ public class AuthSeedData
                 Email = "Guest@masastack.com",
                 CompanyName = "Masa",
                 PhoneNumber = "15666666666",
-                Enabled = true
+                Enabled = true,
+                IdCard = "330104202002020906"
             }));
         }
 
