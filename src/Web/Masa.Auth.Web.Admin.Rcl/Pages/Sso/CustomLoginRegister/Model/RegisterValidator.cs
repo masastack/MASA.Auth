@@ -29,7 +29,7 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
 
         RuleFor(register => register.PhoneNumber)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.PhoneNumber)))
-            .Phone();
+            .Phone(CultureInfo.CurrentUICulture.Name);
 
         RuleFor(register => register.Email)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Email)))
@@ -37,7 +37,7 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
 
         RuleFor(register => register.IdCard)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.IdCard)))
-            .IdCard();
+            .IdCard(CultureInfo.CurrentUICulture.Name);
     }
 }
 

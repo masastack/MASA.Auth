@@ -11,9 +11,9 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
            .NotEmpty().WithMessage("NickName is required")
            .Required().ChineseLetterNumber().MaximumLength(50).OverridePropertyName("NickName");
         RuleFor(user => user.Name).ChineseLetterNumber().MaximumLength(50);
-        RuleFor(user => user.PhoneNumber).Required().Phone();
+        RuleFor(user => user.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
         RuleFor(user => user.Email).Email();
-        RuleFor(user => user.IdCard).IdCard();
+        RuleFor(user => user.IdCard).IdCard(CultureInfo.CurrentUICulture.Name);
         RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16);
         RuleFor(user => user.Account).Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")

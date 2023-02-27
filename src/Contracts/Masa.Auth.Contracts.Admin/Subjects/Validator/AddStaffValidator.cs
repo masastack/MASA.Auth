@@ -12,9 +12,9 @@ public class AddStaffValidator : AbstractValidator<AddStaffDto>
             .NotEmpty().WithMessage("NickName is required")
             .ChineseLetterNumber().MinimumLength(2).MaximumLength(50).OverridePropertyName("NickName");
         RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
-        RuleFor(staff => staff.PhoneNumber).Required().Phone();
+        RuleFor(staff => staff.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
         RuleFor(staff => staff.Email).EmailAddress();
-        RuleFor(staff => staff.IdCard).IdCard();
+        RuleFor(staff => staff.IdCard).IdCard(CultureInfo.CurrentUICulture.Name);
         RuleFor(staff => staff.Address.Address).MinimumLength(8).MaximumLength(100);
         RuleFor(staff => staff.CompanyName).ChineseLetter().MaximumLength(50);
         RuleFor(staff => staff.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
