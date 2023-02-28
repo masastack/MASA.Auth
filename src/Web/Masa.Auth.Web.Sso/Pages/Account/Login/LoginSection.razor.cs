@@ -71,7 +71,7 @@ public partial class LoginSection
             _loginLoading = false;
             if (!string.IsNullOrEmpty(msg))
             {
-                await PopupService.AlertAsync(msg, AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(msg, AlertTypes.Error);
             }
             else
             {
@@ -86,7 +86,7 @@ public partial class LoginSection
                 }
                 else
                 {
-                    await PopupService.AlertAsync("invalid return URL", AlertTypes.Error);
+                    await PopupService.EnqueueSnackbarAsync("invalid return URL", AlertTypes.Error);
                 }
             }
         }

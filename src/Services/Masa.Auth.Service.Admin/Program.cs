@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Utils.Configuration.Json;
-
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -79,7 +77,6 @@ builder.Services
     })
     .AddJwtBearer("Bearer", options =>
     {
-        //todo dcc
         options.Authority = identityServerUrl;
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
@@ -90,7 +87,6 @@ builder.Services
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();
-
 
 var redisOption = new RedisConfigurationOptions
 {
