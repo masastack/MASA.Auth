@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 global using FluentValidation;
+global using FluentValidation.Resources;
 global using HealthChecks.UI.Client;
 global using IdentityModel.Client;
 global using Magicodes.ExporterAndImporter.Core.Extension;
@@ -100,7 +101,6 @@ global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.DbContexts;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Repositories;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
-global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Contrib.Ddd.Domain.Repository.EFCore;
 global using Masa.Contrib.Dispatcher.Events;
 global using Masa.Contrib.Dispatcher.IntegrationEvents;
@@ -131,6 +131,7 @@ global using Novell.Directory.Ldap;
 global using SixLabors.ImageSharp;
 global using System.Collections.Concurrent;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Globalization;
 global using System.Linq.Expressions;
 global using System.Reflection;
 global using System.Runtime.CompilerServices;
