@@ -7,12 +7,19 @@ public static class MultilevelCacheClientExtensions
 {
     public static async Task<(string? creator, string? modifier)> GetActionInfoAsync(this IMultilevelCacheClient client, Guid creator, Guid modifier)
     {
-        var creatorName = (await client.GetAsync<CacheStaff>(CacheKey.StaffKey(creator)).ConfigureAwait(false))?.DisplayName;
-        var modifierName = (await client.GetAsync<CacheStaff>(CacheKey.StaffKey(modifier)).ConfigureAwait(false))?.DisplayName;
-        if (creatorName is null)
-            creatorName = (await client.GetAsync<UserModel>(CacheKeyConsts.UserKey(creator)).ConfigureAwait(false))?.DisplayName;
-        if (modifierName is null)
-            modifierName = (await client.GetAsync<UserModel>(CacheKeyConsts.UserKey(modifier)).ConfigureAwait(false))?.DisplayName;
+        string? creatorName = "", modifierName = "";
+        if(creator !=  default)
+        {
+            creatorName = (await client.GetAsync<CacheStaff>(CacheKey.StaffKey(creator)).ConfigureAwait(false))?.DisplayName;
+            if (creatorName is null)
+                creatorName = (await client.GetAsync<UserModel>(CacheKeyConsts.UserKey(creator)).ConfigureAwait(false))?.DisplayName;
+        }
+        if(modifier != default)
+        {
+            modifierName = (await client.GetAsync<CacheStaff>(CacheKey.StaffKey(modifier)).ConfigureAwait(false))?.DisplayName;
+            if (modifierName is null)
+                modifierName = (await client.GetAsync<UserModel>(CacheKeyConsts.UserKey(modifier)).ConfigureAwait(false))?.DisplayName;
+        }
 
         return (creatorName, modifierName);
     }

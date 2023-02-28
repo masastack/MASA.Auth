@@ -7,6 +7,6 @@ public class UserByPhoneQueryValidator : AbstractValidator<UserByPhoneQuery>
 {
     public UserByPhoneQueryValidator()
     {
-        RuleFor(query => query.PhoneNumber).Phone();
+        RuleFor(query => query.PhoneNumber).Phone(CultureInfo.CurrentUICulture.Name);
     }
 }

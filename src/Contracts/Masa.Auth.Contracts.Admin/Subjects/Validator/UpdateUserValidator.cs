@@ -11,9 +11,9 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
            .NotEmpty().WithMessage("NickName is required")
            .Required().ChineseLetterNumber().MaximumLength(50).OverridePropertyName("NickName");
         RuleFor(user => user.Name).ChineseLetterNumber().MaximumLength(50);
-        RuleFor(user => user.PhoneNumber).Required().Phone();
+        RuleFor(user => user.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
         RuleFor(user => user.Email).Email();
-        RuleFor(user => user.IdCard).IdCard();
+        RuleFor(user => user.IdCard).IdCard(CultureInfo.CurrentUICulture.Name);
         RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
         RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16);
         RuleFor(user => user.Account).Required()
