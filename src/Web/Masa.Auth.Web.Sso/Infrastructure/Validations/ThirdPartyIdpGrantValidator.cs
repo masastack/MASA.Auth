@@ -32,18 +32,10 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         {
             ThridPartyIdentity = identity.Subject
         });
-        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", GetUserClaims(user?.DisplayName ?? ""), customResponse: new()
+        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", user?.GetUserClaims(), customResponse: new()
         {
             ["thirdPartyUserData"] = identity,
             ["registerSuccess"] = user is not null
         });
-    }
-
-    private Claim[] GetUserClaims(string name)
-    {
-        return new Claim[]
-        {
-            new Claim("username", name)
-        };
     }
 }

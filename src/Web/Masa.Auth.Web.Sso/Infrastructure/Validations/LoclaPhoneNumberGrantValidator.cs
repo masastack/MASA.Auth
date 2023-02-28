@@ -46,7 +46,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
             }
             else
             {
-                context.Result = new GrantValidationResult(user.Id.ToString(), "local", GetUserClaims(user.DisplayName));
+                context.Result = new GrantValidationResult(user.Id.ToString(), "local", user.GetUserClaims());
             }
         }
         else
@@ -56,13 +56,5 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
                 Error = errorMsg,
                 ErrorDescription = errorMsg
             };
-    }
-
-    private Claim[] GetUserClaims(string name)
-    {
-        return new Claim[]
-        {
-            new Claim("username", name)
-        };
     }
 }
