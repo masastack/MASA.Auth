@@ -10,6 +10,10 @@
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="appsettings.json~RF76d7011.TMP" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
