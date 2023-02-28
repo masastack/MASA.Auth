@@ -34,7 +34,7 @@ builder.Services.AddMasaBlazor(builder =>
 {
     builder.ConfigureTheme(theme =>
     {
-        theme.Dark = true;
+        theme.Dark = false;
         theme.Themes.Light.Primary = "#4318FF";
         theme.Themes.Light.Accent = "#4318FF";
     });
