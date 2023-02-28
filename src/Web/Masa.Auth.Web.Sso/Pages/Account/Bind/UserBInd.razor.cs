@@ -77,7 +77,7 @@ public partial class UserBind
                 PhoneNumber = UserModel.PhoneNumber,
                 SendMsgCodeType = SendMsgCodeTypes.Bind
             });
-            await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
+            await PopupService.EnqueueSnackbarAsync(T("The verification code is sent successfully"), AlertTypes.Success);
             int second = 60;
             while (second >= 0)
             {
@@ -98,11 +98,11 @@ public partial class UserBind
             {
                 await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
                 Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-                await PopupService.AlertAsync("Bind success", AlertTypes.Success);
+                await PopupService.EnqueueSnackbarAsync("Bind success", AlertTypes.Success);
             }
             catch (Exception ex)
             {
-                await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(ex.Message, AlertTypes.Error);
             }
             finally
             {

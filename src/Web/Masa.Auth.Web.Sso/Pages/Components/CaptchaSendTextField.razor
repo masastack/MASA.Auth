@@ -52,13 +52,13 @@
             var result = await (OnClick.Invoke()).ConfigureAwait(false);
             if (result)
             {
-                await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
+                await PopupService.EnqueueSnackbarAsync(T("The verification code is sent successfully"), AlertTypes.Success);
                 StartCountdownTimer();
             }
         }
         catch (Exception e)
         {
-            await PopupService.AlertAsync(e.Message,AlertTypes.Error);
+            await PopupService.EnqueueSnackbarAsync(e.Message, AlertTypes.Error);
         }
     }
 

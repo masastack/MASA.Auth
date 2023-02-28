@@ -79,7 +79,6 @@ builder.Services
     })
     .AddJwtBearer("Bearer", options =>
     {
-        //todo dcc
         options.Authority = identityServerUrl;
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
@@ -90,7 +89,6 @@ builder.Services
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();
-
 
 var redisOption = new RedisConfigurationOptions
 {

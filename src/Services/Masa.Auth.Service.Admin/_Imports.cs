@@ -112,6 +112,7 @@ global using Masa.Contrib.StackSdks.Config;
 global using Masa.Contrib.StackSdks.Tsc;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun;
 global using Masa.Contrib.Storage.ObjectStorage.Aliyun.Options;
+global using Masa.Utils.Configuration.Json;
 global using Masa.Utils.Ldap.Novell;
 global using Masa.Utils.Security.Cryptography;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;

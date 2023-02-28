@@ -141,7 +141,7 @@ public partial class RegisterSection
             var msg = await _js.InvokeAsync<string>("login", loginInputModel);
             if (!string.IsNullOrEmpty(msg))
             {
-                await PopupService.AlertAsync(msg, AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(msg, AlertTypes.Error);
             }
             else
             {
@@ -155,13 +155,13 @@ public partial class RegisterSection
                 }
                 else
                 {
-                    await PopupService.AlertAsync("invalid return url", AlertTypes.Error);
+                    await PopupService.EnqueueSnackbarAsync("invalid return url", AlertTypes.Error);
                 }
             }
         }
         catch (Exception e)
         {
-            await PopupService.AlertAsync(e.Message, AlertTypes.Error);
+            await PopupService.EnqueueSnackbarAsync(e.Message, AlertTypes.Error);
         }
         finally
         {
