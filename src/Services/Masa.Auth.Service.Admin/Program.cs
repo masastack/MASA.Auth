@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
+
 await builder.Services.AddMasaStackConfigAsync(true);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 

@@ -8,7 +8,7 @@ public class UpdateStaffBasicInfoCommandValidator : AbstractValidator<UpdateStaf
     public UpdateStaffBasicInfoCommandValidator()
     {
         RuleFor(command => command.Staff.DisplayName).Required().MaximumLength(50);
-        RuleFor(command => command.Staff.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
+        RuleFor(command => command.Staff.PhoneNumber).Required().Phone();
         RuleFor(command => command.Staff.Email).Email();
     }
 }
