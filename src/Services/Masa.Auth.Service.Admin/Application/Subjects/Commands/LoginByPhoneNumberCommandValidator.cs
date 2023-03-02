@@ -7,7 +7,7 @@ public class LoginByPhoneNumberCommandValidator : AbstractValidator<LoginByPhone
 {
     public LoginByPhoneNumberCommandValidator()
     {
-        RuleFor(command => command.Model.PhoneNumber).Required().Phone(CultureInfo.CurrentUICulture.Name);
+        RuleFor(command => command.Model.PhoneNumber).Required().Phone();
         RuleFor(command => command.Model.Code).Required();
     }
 }
