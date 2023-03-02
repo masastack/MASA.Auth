@@ -62,13 +62,13 @@
     {
         if (!Uri.TryCreate(Dto.RedirectUri, UriKind.Absolute, out var uri))
         {
-            PopupService.AlertAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Is not a valid URI address"), AlertTypes.Error);
             return;
         }
         var redirectUri = $"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}".ToLower();
         if (Dto.RedirectUris.Contains(redirectUri))
         {
-            PopupService.AlertAsync(T("Duplicate item"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Duplicate item"), AlertTypes.Error);
             return;
         }
         Dto.RedirectUris.Add(redirectUri);
@@ -79,13 +79,13 @@
     {
         if (!Uri.TryCreate(Dto.PostLogoutRedirectUri, UriKind.Absolute, out var uri))
         {
-            PopupService.AlertAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Is not a valid URI address"), AlertTypes.Error);
             return;
         }
         var postLogoutRedirectUri = $"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}";
         if (Dto.PostLogoutRedirectUris.Contains(postLogoutRedirectUri))
         {
-            PopupService.AlertAsync(T("Duplicate item"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Duplicate item"), AlertTypes.Error);
             return;
         }
         Dto.PostLogoutRedirectUris.Add(postLogoutRedirectUri);

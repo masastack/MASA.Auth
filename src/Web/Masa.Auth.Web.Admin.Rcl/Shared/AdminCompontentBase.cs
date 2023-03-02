@@ -113,22 +113,22 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public void OpenInformationMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Info);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Info);
     }
 
     public void OpenSuccessMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Success);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Success);
     }
 
     public void OpenWarningMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Warning);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Warning);
     }
 
     public void OpenErrorMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Error);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Error);
     }
 
     public List<KeyValuePair<string, TEnum>> GetEnumMap<TEnum>() where TEnum : struct, Enum
