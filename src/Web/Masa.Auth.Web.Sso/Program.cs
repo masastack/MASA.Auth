@@ -87,7 +87,8 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
     .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>()
-    .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>();
+    .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
+    .AddExtensionGrantValidator<LdapGrantValidator>();
 
 #if DEBUG
 identityServerBuilder.AddDeveloperSigningCredential();
@@ -104,6 +105,7 @@ builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
+builder.Services.AddLadpContext();
 
 var app = builder.Build();
 

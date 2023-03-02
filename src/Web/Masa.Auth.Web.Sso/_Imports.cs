@@ -42,6 +42,7 @@ global using Masa.BuildingBlocks.StackSdks.Pm.Model;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Contrib.StackSdks.Config;
+global using Masa.Utils.Ldap.Novell;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Components;
