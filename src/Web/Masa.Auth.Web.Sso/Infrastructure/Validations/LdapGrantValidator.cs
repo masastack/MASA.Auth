@@ -24,7 +24,7 @@ public class LdapGrantValidator : IExtensionGrantValidator
         var scheme = context.Request.Raw["scheme"];
         if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(scheme))
         {
-            throw new UserFriendlyException("must provider userName adn scheme");
+            throw new UserFriendlyException("must provider userName and scheme");
         }
 
         var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(scheme);
