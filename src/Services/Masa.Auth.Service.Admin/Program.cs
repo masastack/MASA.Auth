@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.StackSdks.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -158,7 +160,6 @@ builder.Services
     .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
-        eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
     //set Isolation.
@@ -168,6 +169,8 @@ builder.Services
         dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName"))).UseFilter())
     .UseRepository<AuthDbContext>();
 });
+
+builder.Services.AddStackMiddleware();
 
 await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
 {
@@ -231,9 +234,9 @@ app.UseAuthorization();
 app.UseIsolation();
 #warning CurrentUserCheckMiddleware
 //app.UseMiddleware<CurrentUserCheckMiddleware>();
-app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
+app.UseAddStackMiddleware();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
