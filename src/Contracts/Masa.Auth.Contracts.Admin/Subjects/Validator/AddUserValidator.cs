@@ -13,15 +13,15 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
         RuleFor(user => user.Name).ChineseLetterNumber().MaximumLength(50);
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();
-        RuleFor(user => user.IdCard).IdCard();
-        RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
-        RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16);
+        RuleFor(user => user.IdCard).IdCard().WithMessage("Id Card format is incorrect").When(u => !string.IsNullOrEmpty(u.IdCard));
+        RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50).When(u => !string.IsNullOrEmpty(u.CompanyName));
+        RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16).When(u => !string.IsNullOrEmpty(u.Position));
         RuleFor(user => user.Account).Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
                                      .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")
                                      .MinimumLength(8)
                                      .MaximumLength(50);
         RuleFor(user => user.Password).Required().AuthPassword();
-        RuleFor(user => user.Department).ChineseLetterNumber().MinimumLength(2).MaximumLength(16);
+        RuleFor(user => user.Department).ChineseLetterNumber().MinimumLength(2).MaximumLength(16).When(u => !string.IsNullOrEmpty(u.Department));
         RuleFor(user => user.Avatar).Url().Required();
     }
 }

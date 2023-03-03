@@ -7,13 +7,6 @@ public class UpdateStaffCommandValidator : AbstractValidator<UpdateStaffCommand>
 {
     public UpdateStaffCommandValidator()
     {
-        RuleFor(command => command.Staff.JobNumber).Required().MaximumLength(20);
-        RuleFor(command => command.Staff.DisplayName).Required().MaximumLength(50);
-        RuleFor(command => command.Staff.Name).ChineseLetter().MaximumLength(20);
-        RuleFor(command => command.Staff.PhoneNumber).Required().Phone();
-        RuleFor(command => command.Staff.Email).Email();
-        RuleFor(command => command.Staff.IdCard).IdCard();
-        RuleFor(command => command.Staff.CompanyName).ChineseLetter().MaximumLength(50);
-        RuleFor(command => command.Staff.Position).ChineseLetterNumber().MaximumLength(20);
+        RuleFor(command => command.Staff).SetValidator(new UpdateStaffValidator());
     }
 }

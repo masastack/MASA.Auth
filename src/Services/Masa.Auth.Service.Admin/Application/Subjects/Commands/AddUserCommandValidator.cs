@@ -7,14 +7,6 @@ public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
 {
     public AddUserCommandValidator()
     {
-        RuleFor(command => command.User.DisplayName).MaximumLength(50);
-        RuleFor(command => command.User.Name).ChineseLetterNumber().MaximumLength(20);
-        RuleFor(command => command.User.PhoneNumber).Phone();
-        RuleFor(command => command.User.Email).Email();
-        RuleFor(command => command.User.IdCard).IdCard();
-        RuleFor(command => command.User.CompanyName).ChineseLetterNumber().MaximumLength(50);
-        RuleFor(command => command.User.Position).ChineseLetterNumber().MaximumLength(20);
-        RuleFor(command => command.User.Account).MaximumLength(50);
-        RuleFor(command => command.User.Password).AuthPassword();
+        RuleFor(command => command.User).SetValidator(new AddUserValidator());
     }
 }
