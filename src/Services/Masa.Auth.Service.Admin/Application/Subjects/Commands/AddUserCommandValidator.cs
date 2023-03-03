@@ -12,7 +12,7 @@ public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
         RuleFor(command => command.User.PhoneNumber).Phone();
         RuleFor(command => command.User.Email).Email();
         When(command => !string.IsNullOrEmpty(command.User.IdCard), () => RuleFor(command => command.User.IdCard).IdCard());
-        When(command => !string.IsNullOrEmpty(command.User.CompanyName), () => RuleFor(command => command.User.CompanyName).ChineseLetter().MaximumLength(50));
+        When(command => !string.IsNullOrEmpty(command.User.CompanyName), () => RuleFor(command => command.User.CompanyName).ChineseLetterNumber().MaximumLength(50));
         When(command => !string.IsNullOrEmpty(command.User.Position), () => RuleFor(command => command.User.Position).ChineseLetterNumber().MaximumLength(20));
         RuleFor(command => command.User.Account).MaximumLength(50);
         RuleFor(command => command.User.Password).AuthPassword();

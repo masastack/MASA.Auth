@@ -11,7 +11,7 @@ public class AddStaffValidator : AbstractValidator<AddStaffDto>
         RuleFor(staff => staff.DisplayName)
             .NotEmpty().WithMessage("NickName is required")
             .ChineseLetterNumber().MinimumLength(2).MaximumLength(50).OverridePropertyName("NickName");
-        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(20));
+        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
         RuleFor(staff => staff.PhoneNumber).Required().Phone();
         RuleFor(staff => staff.Email).Email();
         When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
