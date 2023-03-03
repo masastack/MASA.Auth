@@ -11,14 +11,13 @@ public class UpdateStaffValidator : AbstractValidator<UpdateStaffDto>
         RuleFor(staff => staff.DisplayName)
             .NotEmpty().WithMessage("NickName is required")
             .ChineseLetterNumber().MinimumLength(2).MaximumLength(50).OverridePropertyName("NickName");
-        RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(50)
-            .When(u => !string.IsNullOrEmpty(u.Name));
+        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetter().MinimumLength(2).MaximumLength(20));
         RuleFor(staff => staff.PhoneNumber).Required().Phone();
         RuleFor(staff => staff.Email).Email();
-        RuleFor(staff => staff.IdCard).IdCard().WithMessage("Id Card format is incorrect").When(u => !string.IsNullOrEmpty(u.IdCard));
-        RuleFor(staff => staff.Address.Address).MinimumLength(8).MaximumLength(100).When(u => !string.IsNullOrEmpty(u.Address?.Address));
-        RuleFor(staff => staff.CompanyName).ChineseLetter().MinimumLength(50);
-        RuleFor(staff => staff.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(50).When(u => !string.IsNullOrEmpty(u.Position));
+        When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
+        When(staff => !string.IsNullOrEmpty(staff.Address?.Address), () => RuleFor(staff => staff.IdCard).MinimumLength(8).MaximumLength(100));
+        RuleFor(staff => staff.CompanyName).ChineseLetter().MaximumLength(50);
+        When(staff => !string.IsNullOrEmpty(staff.Position), () => RuleFor(staff => staff.Position).ChineseLetterNumber().MaximumLength(20));
         RuleFor(staff => staff.Avatar).Required().Url();
     }
 }
