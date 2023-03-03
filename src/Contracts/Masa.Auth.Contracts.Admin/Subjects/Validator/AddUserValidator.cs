@@ -10,18 +10,18 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
         RuleFor(user => user.DisplayName)
            .NotEmpty().WithMessage("NickName is required")
            .Required().ChineseLetterNumber().MaximumLength(50).OverridePropertyName("NickName");
-        RuleFor(user => user.Name).ChineseLetterNumber().MaximumLength(50);
+        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(20));
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();
-        RuleFor(user => user.IdCard).IdCard().WithMessage("Id Card format is incorrect").When(u => !string.IsNullOrEmpty(u.IdCard));
-        RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50).When(u => !string.IsNullOrEmpty(u.CompanyName));
-        RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16).When(u => !string.IsNullOrEmpty(u.Position));
+        When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
+        When(staff => !string.IsNullOrEmpty(staff.CompanyName), () => RuleFor(staff => staff.CompanyName).ChineseLetterNumber().MaximumLength(50));
+        When(staff => !string.IsNullOrEmpty(staff.Position), () => RuleFor(staff => staff.Position).ChineseLetterNumber().MaximumLength(20));
         RuleFor(user => user.Account).Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
                                      .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")
                                      .MinimumLength(8)
                                      .MaximumLength(50);
         RuleFor(user => user.Password).Required().AuthPassword();
-        RuleFor(user => user.Department).ChineseLetterNumber().MinimumLength(2).MaximumLength(16).When(u => !string.IsNullOrEmpty(u.Department));
+        When(u => !string.IsNullOrEmpty(u.Department), () => RuleFor(user => user.Department).ChineseLetterNumber().MinimumLength(2).MaximumLength(16));
         RuleFor(user => user.Avatar).Url().Required();
     }
 }

@@ -10,7 +10,7 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
         RuleFor(user => user.DisplayName)
            .NotEmpty().WithMessage("NickName is required")
            .Required().ChineseLetterNumber().MaximumLength(50).OverridePropertyName("NickName");
-        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetter().MinimumLength(2).MaximumLength(20));
+        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(20));
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();
         When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
