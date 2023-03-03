@@ -17,7 +17,7 @@ public class AddStaffValidator : AbstractValidator<AddStaffDto>
         When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
         When(staff => !string.IsNullOrEmpty(staff.Address?.Address), () => RuleFor(staff => staff.Address.Address).MinimumLength(8).MaximumLength(100));
         When(staff => !string.IsNullOrEmpty(staff.CompanyName), () => RuleFor(staff => staff.CompanyName).ChineseLetter().MaximumLength(50));
-        When(staff => !string.IsNullOrEmpty(staff.Position), () => RuleFor(staff => staff.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(20));
+        When(staff => !string.IsNullOrEmpty(staff.Position), () => RuleFor(staff => staff.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
         RuleFor(staff => staff.Password).Required().AuthPassword();
         RuleFor(staff => staff.Avatar).Required().Url();
     }
