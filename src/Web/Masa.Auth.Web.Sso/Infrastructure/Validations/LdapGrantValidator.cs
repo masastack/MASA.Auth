@@ -1,0 +1,65 @@
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
+
+public class LdapGrantValidator : IExtensionGrantValidator
+{
+    readonly IAuthClient _authClient;
+    readonly IThirdPartyIdpService _thirdPartyIdpService;
+    readonly ILdapFactory _ldapFactory;
+
+    public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LDAP;
+
+    public LdapGrantValidator(IAuthClient authClient, IThirdPartyIdpService thirdPartyIdpService, ILdapFactory ldapFactory)
+    {
+        _authClient = authClient;
+        _thirdPartyIdpService = thirdPartyIdpService;
+        _ldapFactory = ldapFactory;
+    }
+
+    public async Task ValidateAsync(ExtensionGrantValidationContext context)
+    {
+        var userName = context.Request.Raw["userName"];
+        var scheme = context.Request.Raw["scheme"];
+        if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(scheme))
+        {
+            throw new UserFriendlyException("must provider userName and scheme");
+        }
+
+        var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(scheme);
+        if (ldapOption is null)
+        {
+            throw new UserFriendlyException($"Not find ldap:{scheme}");
+        }
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOption.Adapt<LdapOptions>());
+        if (await ldapProvider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword) is false)
+        {
+            throw new UserFriendlyException($"Ldap connect error");
+        }
+        var ldapUser = await ldapProvider.GetUserByUserNameAsync(userName);
+        if (ldapUser is null)
+        {
+            throw new UserFriendlyException($"Ldap does not exist this user");
+        }
+        var authUser = await _authClient.UserService.GetByPhoneNumberAsync(ldapUser.Phone);
+        if (authUser is null)
+        {
+            authUser = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
+            {
+                Scheme = "Ldap",
+                ThridPartyIdentity = ldapUser.ObjectGuid,
+                ExtendedData = ldapUser,
+                User = new AddUserModel
+                {
+                    Name = ldapUser.Name,
+                    DisplayName = ldapUser.DisplayName,
+                    Email = ldapUser.EmailAddress,
+                    PhoneNumber = ldapUser.Phone,
+                    Account = ldapUser.SamAccountName
+                }
+            });
+        }
+        context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap", authUser.GetUserClaims());
+    }
+}

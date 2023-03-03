@@ -512,7 +512,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
     {
-        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);
+        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == query.Name);
         thirdPartyIdp?.Adapt(query.Result);
     }
 
