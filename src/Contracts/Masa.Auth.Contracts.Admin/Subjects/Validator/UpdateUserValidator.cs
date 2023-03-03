@@ -10,12 +10,12 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
         RuleFor(user => user.DisplayName)
            .NotEmpty().WithMessage("NickName is required")
            .Required().ChineseLetterNumber().MaximumLength(50).OverridePropertyName("NickName");
-        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(20));
+        When(user => !string.IsNullOrEmpty(user.Name), () => RuleFor(user => user.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(20));
         RuleFor(user => user.PhoneNumber).Required().Phone();
         RuleFor(user => user.Email).Email();
-        When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
-        When(staff => !string.IsNullOrEmpty(staff.CompanyName), () => RuleFor(staff => staff.CompanyName).ChineseLetterNumber().MaximumLength(50));
-        When(staff => !string.IsNullOrEmpty(staff.Position), () => RuleFor(staff => staff.Position).ChineseLetterNumber().MaximumLength(20));
+        When(user => !string.IsNullOrEmpty(user.IdCard), () => RuleFor(user => user.IdCard).IdCard());
+        When(user => !string.IsNullOrEmpty(user.CompanyName), () => RuleFor(user => user.CompanyName).ChineseLetterNumber().MaximumLength(50));
+        When(user => !string.IsNullOrEmpty(user.Position), () => RuleFor(user => user.Position).ChineseLetterNumber().MaximumLength(20));
         RuleFor(user => user.Account).Required()
                                      .Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
                                      .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")
