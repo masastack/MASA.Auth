@@ -81,7 +81,7 @@
             {
                 var data = itemSection.Get<Dictionary<string, object>>();
                 data[Name] = _displayName.Value;
-                await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", itemKey, JsonSerializer.Serialize(data));
+                await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", itemKey, data);
             }
         }
         _dialog = false;

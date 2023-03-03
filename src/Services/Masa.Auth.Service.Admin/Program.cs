@@ -225,6 +225,7 @@ if (!app.Environment.IsProduction())
     });
     app.UseMiddleware<SwaggerAuthentication>();
 }
+
 app.UseStaticFiles();
 app.UseRouting();
 
@@ -244,15 +245,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
-
-app.MapHealthChecks("/hc", new HealthCheckOptions()
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-app.MapHealthChecks("/liveness", new HealthCheckOptions
-{
-    Predicate = r => r.Name.Contains("self")
-});
 
 app.Run();
