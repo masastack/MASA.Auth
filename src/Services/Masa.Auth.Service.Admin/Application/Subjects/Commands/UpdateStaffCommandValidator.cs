@@ -9,11 +9,11 @@ public class UpdateStaffCommandValidator : AbstractValidator<UpdateStaffCommand>
     {
         RuleFor(command => command.Staff.JobNumber).Required().MaximumLength(20);
         RuleFor(command => command.Staff.DisplayName).Required().MaximumLength(50);
-        RuleFor(command => command.Staff.Name).ChineseLetter().MaximumLength(20);
+        When(command => !string.IsNullOrEmpty(command.Staff.Name), () => RuleFor(command => command.Staff.Name).ChineseLetter().MaximumLength(20));
         RuleFor(command => command.Staff.PhoneNumber).Required().Phone();
         RuleFor(command => command.Staff.Email).Email();
-        RuleFor(command => command.Staff.IdCard).IdCard();
+        When(command => !string.IsNullOrEmpty(command.Staff.IdCard), () => RuleFor(command => command.Staff.IdCard).IdCard());
         RuleFor(command => command.Staff.CompanyName).ChineseLetter().MaximumLength(50);
-        RuleFor(command => command.Staff.Position).ChineseLetterNumber().MaximumLength(20);
+        When(command => !string.IsNullOrEmpty(command.Staff.Position), () => RuleFor(command => command.Staff.Position).ChineseLetterNumber().MaximumLength(20));
     }
 }

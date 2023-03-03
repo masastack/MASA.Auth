@@ -10,6 +10,7 @@ public class ThirdPartyIdpService : RestServiceBase
         MapPost(LdapSaveAsync, "ldap/save");
         MapPost(LdapConnectTestAsync, "ldap/connect-test");
         MapGet(LdapDetailAsync, "ldap/detail");
+        MapGet(ldapOptionsAsync);
         MapGet(GetUserClaims);
     }
 
@@ -52,7 +53,7 @@ public class ThirdPartyIdpService : RestServiceBase
     }
 
     [AllowAnonymous]
-    private Dictionary<string,string> GetUserClaims()
+    private Dictionary<string, string> GetUserClaims()
     {
         return UserClaims.Claims;
     }
@@ -81,7 +82,7 @@ public class ThirdPartyIdpService : RestServiceBase
         [FromBody] AddThirdPartyUserModel user,
         [FromQuery] bool whenExistReturn)
     {
-        var command = new AddThirdPartyUserExternalCommand(user,whenExistReturn);
+        var command = new AddThirdPartyUserExternalCommand(user, whenExistReturn);
         await eventBus.PublishAsync(command);
         return command.Result;
     }
@@ -102,5 +103,15 @@ public class ThirdPartyIdpService : RestServiceBase
         var ldapDetailQuery = new LdapDetailQuery();
         await eventBus.PublishAsync(ldapDetailQuery);
         return ldapDetailQuery.Result;
+    }
+
+    private async Task<LdapOptionsModel?> ldapOptionsAsync(IEventBus eventBus, [FromQuery] string scheme)
+    {
+        var ldapDetailQuery = new LdapDetailQuery(scheme);
+        await eventBus.PublishAsync(ldapDetailQuery);
+        var ldap = ldapDetailQuery.Result;
+        var options = new LdapOptionsModel(ldap.ServerAddress, ldap.ServerPort, ldap.BaseDn, ldap.UserSearchBaseDn, ldap.GroupSearchBaseDn, ldap.RootUserDn, ldap.RootUserPassword);
+        options.ServerPortSsl = Convert.ToInt32(ldapDetailQuery.Result.IsLdaps);
+        return options;
     }
 }
