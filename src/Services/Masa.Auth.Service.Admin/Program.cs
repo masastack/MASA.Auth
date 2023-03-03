@@ -158,7 +158,6 @@ builder.Services
     .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
-        eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
     //set Isolation.
@@ -168,6 +167,8 @@ builder.Services
         dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName"))).UseFilter())
     .UseRepository<AuthDbContext>();
 });
+
+builder.Services.AddStackMiddleware();
 
 await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
 {
@@ -222,6 +223,7 @@ if (!app.Environment.IsProduction())
     });
     app.UseMiddleware<SwaggerAuthentication>();
 }
+
 app.UseStaticFiles();
 app.UseRouting();
 
@@ -231,9 +233,9 @@ app.UseAuthorization();
 app.UseIsolation();
 #warning CurrentUserCheckMiddleware
 //app.UseMiddleware<CurrentUserCheckMiddleware>();
-app.UseMiddleware<DisabledRouteMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
+app.UseAddStackMiddleware();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
@@ -241,15 +243,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
-
-app.MapHealthChecks("/hc", new HealthCheckOptions()
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-app.MapHealthChecks("/liveness", new HealthCheckOptions
-{
-    Predicate = r => r.Name.Contains("self")
-});
 
 app.Run();

@@ -58,7 +58,10 @@
         }
         catch (Exception e)
         {
-            await PopupService.EnqueueSnackbarAsync(e.Message, AlertTypes.Error);
+            await InvokeAsync(async () =>
+            {
+                await PopupService.EnqueueSnackbarAsync(e.Message, AlertTypes.Error);
+            });
         }
     }
 

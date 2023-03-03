@@ -186,18 +186,18 @@ public class AuthSeedData
             }));
         }
 
-        //if (!context.Set<Team>().Any())
-        //{
-        //    await eventBus.PublishAsync(new AddTeamCommand(new AddTeamDto
-        //    {
-        //        Type = TeamTypes.Ordinary,
-        //        Name = MasaStackConsts.MASA_STACK_TEAM,
-        //        Avatar = new AvatarValueDto
-        //        {
-        //            Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
-        //        }
-        //    }));
-        //}
+        if (!context.Set<Team>().Any())
+        {
+            await eventBus.PublishAsync(new AddTeamCommand(new AddTeamDto
+            {
+                Type = TeamTypes.Ordinary,
+                Name = MasaStackConsts.MASA_STACK_TEAM,
+                Avatar = new AvatarValueDto
+                {
+                    Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
+                }
+            }));
+        }
 
         #region SSO Client
 
