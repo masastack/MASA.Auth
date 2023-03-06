@@ -17,7 +17,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         {
             return ExtensionValue.Select(value =>
             {
-                if (value.Effect is false)
+                if (!value.Effect)
                 {
                     return new UniqueModel(value.PermissionId.ToString(), false, true, false);
                 }
@@ -36,12 +36,12 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             var rolePermissionValue = value.FirstOrDefault(v => v.PermissionId == permission);
             if (rolePermissionValue is null)
             {
-                if(EmptyPermissionMap.ContainsValue(permission) is false)
+                if (!EmptyPermissionMap.ContainsValue(permission))
                     value.Add(new(permission, false));
             }
             else
             {
-                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && v.Effect is true);
+                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && !v.Effect);
                 if (existValue is null)
                 {
                     value.Remove(rolePermissionValue);
@@ -49,17 +49,23 @@ public class PermissionExtensionConfigure : PermissionsConfigure
                 }
             }
         }
-        value.AddRange(ExtensionValue.Where(ev => ev.Effect is false && value.Contains(ev) is false));
+        value.AddRange(ExtensionValue.Where(ev => !ev.Effect && !value.Contains(ev)));
         foreach (var (code, parentCode) in EmptyPermissionMap)
         {
-            if (value.Any(v => v.PermissionId == code)) value.Insert(0,new(parentCode, true));
+            if (value.Any(v => v.PermissionId == code)) value.Insert(0, new(parentCode, true));
         }
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
 
     private async Task UpdateExtensionValueAsync(List<SubjectPermissionRelationDto> value)
     {
-        if (ExtensionValueChanged.HasDelegate) await ExtensionValueChanged.InvokeAsync(value);
-        else ExtensionValue = value;
+        if (ExtensionValueChanged.HasDelegate)
+        {
+            await ExtensionValueChanged.InvokeAsync(value);
+        }
+        else
+        {
+            ExtensionValue = value;
+        }
     }
 }

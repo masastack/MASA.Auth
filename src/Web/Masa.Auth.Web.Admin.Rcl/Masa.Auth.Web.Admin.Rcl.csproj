@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="Pages\Subjects\Users\DateTimeTitle.razor" />
+		<Content Remove="Pages\Subjects\Users\DateTimeTitle.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\img\org\" />
+		<Folder Include="wwwroot\img\org\" />
 	</ItemGroup>
 
 </Project>
