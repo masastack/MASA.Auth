@@ -6,7 +6,7 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto">
-                        <SLabeledRadioGroup @bind-Value="Tab" Dense>
+                        <SLabeledRadioGroup @bind-Value="Tab" Dense Class="radio-btn-default" ActiveClass="radio-btn-selected">
                             @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
                             {
                                 <SLabeledRadio Value="tab" MinWidth=70>
@@ -39,10 +39,10 @@
                             </MCol>
                         </MRow>
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Login" Class="my-12">
+                    <MWindowItem Value="CustomLoginTab.Login" Class="my-12 full-height">
                         <ConfigLogin @bind-Value="CustomLogin.ThirdPartyIdps" Logo="@CustomLoginDetail.Client.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
-                    <MWindowItem Value="CustomLoginTab.Register" Class="my-12">
+                    <MWindowItem Value="CustomLoginTab.Register" Class="my-12 full-height">
                         <ConfigRegister @bind-Value="CustomLogin.RegisterFields" Logo="@CustomLoginDetail.Client.LogoUri" Title="@CustomLogin.Title" />
                     </MWindowItem>
                 </MWindow>
@@ -53,7 +53,7 @@
                     <MSpacer></MSpacer>
                     @if (Tab != CustomLoginTab.BasicInformation)
                     {
-                        <SButton Medium OnClick="AddConfig" Class="mr-6">
+                        <SButton Medium OnClick="AddConfig" Class="mr-6" Outlined>
                             <MIcon Size=18>@IconConstants.Add</MIcon>
                             <span class="ml-2">@T("Add")</span>
                         </SButton>
