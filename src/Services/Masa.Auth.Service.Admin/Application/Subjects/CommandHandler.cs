@@ -538,9 +538,7 @@ public class CommandHandler
                                            .Include(u => u.Roles)
                                            .FirstOrDefaultAsync(condition);
         if (existUser is not null)
-        {
-            if (string.IsNullOrEmpty(phoneNumber) is false && string.IsNullOrEmpty(existUser.PhoneNumber) is false && phoneNumber != existUser.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.PHONE_NUMBER_MISMATCH, existUser.PhoneNumber, phoneNumber);
+        {          
             if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
             if (throwException is false) return existUser;
