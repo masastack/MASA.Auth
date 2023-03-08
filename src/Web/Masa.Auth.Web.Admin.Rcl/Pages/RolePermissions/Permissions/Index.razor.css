@@ -1,0 +1,61 @@
+﻿.d-index-row ::deep .d-tabs .regular2--text {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    display: flex !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.d-index-row ::deep .m-treeview .m-treeview-node .m-treeview-node:hover {
+    background: #F6F8FD;
+}
+
+.d-index-row ::deep .tree-name {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    display: flex !important;
+    align-items: center !important;
+    text-align: center !important;
+    letter-spacing: 0.25px !important;
+    color: #485585 !important;
+}
+
+.d-index-row ::deep .permission-name {
+    min-height: 48px !important;
+}
+
+.d-index-row ::deep .m-input__control {
+    min-height: 48px !important;
+}
+
+.d-index-row ::deep .m-input__slot {
+    min-height: 48px !important;
+}
+
+.d-index-row ::deep .card-title h6 {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+    line-height: 30px !important;
+    letter-spacing: 0.01em !important;
+    color: #323D6F !important;
+}
+
+.d-index-row ::deep .role-name {
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    display: flex !important;
+    align-items: center !important;
+    text-align: center !important;
+    color: #485585 !important;
+}

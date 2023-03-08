@@ -225,9 +225,10 @@
 .m-text-field--outlined input {
     font-family: 'Roboto' !important;
     font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 14px !important;
-    line-height: 20px !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    color: #7681AB !important;
 }
 
 .m-timeline {
@@ -921,4 +922,18 @@ input::-webkit-input-placeholder {
 
 .m-stepper__content {
     height: 100%;
+}
+
+.m-label.theme--light {
+    color: #A3AED0 !important;
+}
+
+.m-text-field__slot input {
+    color: #323D6F !important;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    letter-spacing: 0.25px !important;
 }
