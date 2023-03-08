@@ -37,3 +37,4 @@ global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using Util.Reflection.Expressions;
 global using Util.Reflection.Expressions.Abstractions;
+global using System.Linq.Expressions;
