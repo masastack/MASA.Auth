@@ -28,10 +28,4 @@
 		</Content>
 	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Certificates\7348307__lonsid.cn.pfx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
