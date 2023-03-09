@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex full-height" style="width:512px;">
+<div class="d-flex full-height">
     <div class="login ma-auto ml-5">
         <SlideXTransition LeaveAbsolute>
             <STabSheets 
                 Value="@T(Tab)"
                 Tabs="@(new List<string>{T(CustomLoginTab.Login),T(CustomLoginTab.Register)})"
                 Class="overflow-y"
-                Style="width:512px;max-height:824px;height: auto;">
+                        Style="width:512px;max-height:64vh;height: auto;">
                 @if (Logo is not null)
                 {
                     <div class="d-flex mb-2">
