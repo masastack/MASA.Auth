@@ -8,7 +8,7 @@
                         <DccI18nConfiger @bind-Name="_menuPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
-                    <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<s{("PermissionCodeMsg")}'Class="text-field" />
+                        <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' Class="text-field" />
                     </MCol>
                     <MCol Md=6>
                         <SSelect @bind-Value="_menuPermissionDetailDto.Type"
@@ -27,8 +27,8 @@
                     <MCol Md=12>
                         <STextField Label="@T("Icon")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
                             <PrependContent>
-                                <div class="d-flex align-center mt-n1">
-                                    <MIcon Size=30 Style="padding-top: 6px;">
+                                <div class="d-flex align-center">
+                                    <MIcon Size=30>
                                         mdi-image
                                     </MIcon>
                                 </div>
