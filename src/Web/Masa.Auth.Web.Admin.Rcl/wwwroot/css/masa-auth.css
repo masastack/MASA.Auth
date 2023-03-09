@@ -939,6 +939,7 @@ input::-webkit-input-placeholder {
     line-height: 21px !important;
     color: #7681AB !important;
 }
+
 .radio-btn-selected { /* Subtitle 2 */
 
     font-family: 'Roboto';
@@ -966,3 +967,21 @@ input::-webkit-input-placeholder {
 .m-btn-group .m-item-group .m-btn.m-btn {
     padding: 0px 28px !important;
 }
+
+.d-flex table {
+    /*height:100%;*/
+}
+
+    .d-flex table tr {
+        height: 72px;
+    }
+
+
+.d-flex .m-window-item .m-sheet {
+    padding-top: 0px !important;
+}
+
+    .d-flex .m-window-item .m-sheet .m-data-table-header th {
+        height: 56px !important;
+        border-bottom: 0.5px solid #E4E8F3 !important;
+    }

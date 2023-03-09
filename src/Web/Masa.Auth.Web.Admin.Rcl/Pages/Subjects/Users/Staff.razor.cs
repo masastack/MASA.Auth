@@ -60,7 +60,24 @@ public partial class Staff
 
     public List<int> PageSizes = new() { 10, 25, 50, 100 };
 
-    public List<StaffDto> Staffs { get; set; } = new();
+    private List<StaffDto> _staffs = new();
+    public List<StaffDto> Staffs
+    {
+        get
+        {
+            return _staffs;
+        }
+        set
+        {
+            _staffs = value?.Select((item) =>
+            {
+                item.Department = string.IsNullOrEmpty(item.Department) ? "-" : item.Department;
+                item.Position = string.IsNullOrEmpty(item.Position) ? "-" : item.Position;
+                return item;
+            })
+            .ToList() ?? new List<StaffDto>();
+        }
+    }
 
     public StaffDto CurrentStaff { get; set; } = new();
 
