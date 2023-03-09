@@ -11,37 +11,13 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     [Parameter]
     public EventCallback<List<SubjectPermissionRelationDto>> ExtensionValueChanged { get; set; }
 
-    //keep Nullable discriminate null and empty
-    [Parameter]
-    public List<SubjectPermissionRelationDto>? ScopeItems { get; set; }
-
-    [Parameter]
-    public List<Guid>? ScopeRoleItems { get; set; }
-
-    List<SubjectPermissionRelationDto> _scopeItems = new();
-    List<Guid> _scopeRoleItems = new();
-
-    protected override void OnParametersSet()
-    {
-        if (ScopeItems?.SequenceEqual(_scopeItems) == false)
-        {
-            _scopeItems = ScopeItems;
-            FilterCategories();
-        }
-        if (ScopeRoleItems?.SequenceEqual(_scopeRoleItems) == false)
-        {
-            _scopeRoleItems = ScopeRoleItems;
-            FilterCategories();
-        }
-    }
-
     protected override List<UniqueModel> ExpansionWrapperUniqueValue
     {
         get
         {
             return ExtensionValue.Select(value =>
             {
-                if (value.Effect is false)
+                if (!value.Effect)
                 {
                     return new UniqueModel(value.PermissionId.ToString(), false, true, false);
                 }
@@ -55,21 +31,17 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
         var value = permissions.Select(permission => new SubjectPermissionRelationDto(Guid.Parse(permission.Code), true)).ToList();
-        value = value.Where(v => EmptyPermissionMap.Values.Contains(v.PermissionId) is false).ToList();
-        foreach (var (code, parentCode) in EmptyPermissionMap)
-        {
-            if (value.Any(v => v.PermissionId == code)) value.Add(new(parentCode, true));
-        }
         foreach (var permission in RoleUnionTeamPermission)
         {
             var rolePermissionValue = value.FirstOrDefault(v => v.PermissionId == permission);
             if (rolePermissionValue is null)
             {
-                value.Add(new(permission, false));
+                if (!EmptyPermissionMap.ContainsValue(permission))
+                    value.Add(new(permission, false));
             }
             else
             {
-                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && v.Effect is true);
+                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && !v.Effect);
                 if (existValue is null)
                 {
                     value.Remove(rolePermissionValue);
@@ -77,56 +49,23 @@ public class PermissionExtensionConfigure : PermissionsConfigure
                 }
             }
         }
-        value.AddRange(ExtensionValue.Where(value => value.Effect is false));
+        value.AddRange(ExtensionValue.Where(ev => !ev.Effect && !value.Contains(ev)));
+        foreach (var (code, parentCode) in EmptyPermissionMap)
+        {
+            if (value.Any(v => v.PermissionId == code)) value.Insert(0, new(parentCode, true));
+        }
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
 
     private async Task UpdateExtensionValueAsync(List<SubjectPermissionRelationDto> value)
     {
-        if (ExtensionValueChanged.HasDelegate) await ExtensionValueChanged.InvokeAsync(value);
-        else ExtensionValue = value;
-    }
-
-    void FilterCategories()
-    {
-        if (ScopeItems != null)
+        if (ExtensionValueChanged.HasDelegate)
         {
-            foreach (var category in _categories)
-            {
-                foreach (var app in category.Apps)
-                {
-                    app.Navs = FilterScopePermission(app.Navs);
-                }
-            }
+            await ExtensionValueChanged.InvokeAsync(value);
         }
-
-        List<Nav> FilterScopePermission(List<Nav> navs)
+        else
         {
-            foreach (var nav in navs)
-            {
-                if (nav.Children.Any())
-                {
-                    nav.Children = FilterScopePermission(nav.Children);
-                    nav.Hiden = nav.Children.All(c => c.Hiden);
-                    continue;
-                }
-
-                if (ScopeItems.Where(p => !p.Effect).Select(p => p.PermissionId.ToString()).Contains(nav.Code))
-                {
-                    nav.IsDisabled = true;
-                    nav.Hiden = false;
-                    continue;
-                }
-
-                if (!ScopeItems.Where(p => p.Effect).Select(p => p.PermissionId.ToString()).Contains(nav.Code))
-                {
-                    nav.Hiden = true;
-                    continue;
-                }
-                nav.Hiden = false;
-            }
-            return navs;
+            ExtensionValue = value;
         }
     }
-
 }

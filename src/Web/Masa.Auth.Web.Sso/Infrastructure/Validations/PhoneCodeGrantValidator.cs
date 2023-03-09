@@ -28,7 +28,7 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
         });
         if (user != null)
         {
-            context.Result = new GrantValidationResult(user.Id.ToString(), "sms", GetUserClaims(user.DisplayName));
+            context.Result = new GrantValidationResult(user.Id.ToString(), "sms", user.GetUserClaims());
         }
         else
         {
@@ -37,13 +37,5 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
                 "invalid custom credential");
         }
 
-    }
-
-    private Claim[] GetUserClaims(string name)
-    {
-        return new Claim[]
-        {
-            new Claim("username", name)
-        };
     }
 }

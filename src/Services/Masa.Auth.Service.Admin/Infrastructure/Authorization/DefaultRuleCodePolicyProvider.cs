@@ -7,9 +7,14 @@ public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
 {
     public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
 
-    public DefaultRuleCodePolicyProvider(IOptions<AuthorizationOptions> options)
+    readonly IServiceProvider _serviceProvider;
+
+    public DefaultRuleCodePolicyProvider(
+        IOptions<AuthorizationOptions> options,
+        IServiceProvider serviceProvider)
     {
         FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
+        _serviceProvider = serviceProvider;
     }
 
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => FallbackPolicyProvider.GetDefaultPolicyAsync();
@@ -23,7 +28,8 @@ public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
         if (policyName == "DefaultRuleCode")
         {
             var policy = new AuthorizationPolicyBuilder();
-            policy.AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID));
+            using var scope = _serviceProvider.CreateScope();
+            policy.AddRequirements(new DefaultRuleCodeRequirement(scope.ServiceProvider.GetRequiredService<IMasaStackConfig>().GetServerId("auth")));
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
         return FallbackPolicyProvider.GetPolicyAsync(policyName);

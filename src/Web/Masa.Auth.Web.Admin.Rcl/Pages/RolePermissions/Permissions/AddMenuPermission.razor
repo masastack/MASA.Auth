@@ -6,7 +6,7 @@
             <MForm Model=_menuPermissionDetailDto EnableValidation EnableI18n @ref="_form">
                 <MRow>
                     <MCol Md=12>
-                        <DccI18nConfiger Label="@T("Name")" @bind-Name="_menuPermissionDetailDto.Name" />
+                        <DccI18nConfiger @bind-Name="_menuPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
                         <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' />
@@ -37,8 +37,8 @@
                         </STextField>
                     </MCol>
                     <MCol Md=12>
-                        <STextarea Class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" 
-                            Height="120" NoResize />
+                        <STextarea Class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description"
+                                   Height="120" NoResize HideDetails="@("auto")" />
                     </MCol>
                 </MRow>
             </MForm>

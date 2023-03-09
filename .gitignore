@@ -221,3 +221,7 @@ Thunbs.db
 packages/
 .vscode/
 /.vs
+/src/Web/Masa.Auth.Web.Admin.Server/Program_develop.cs
+
+.idea
+.DS_Store

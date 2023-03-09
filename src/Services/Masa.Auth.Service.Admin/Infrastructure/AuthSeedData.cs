@@ -5,25 +5,28 @@ namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class AuthSeedData
 {
-    public async Task SeedAsync(AuthDbContext context, IServiceProvider serviceProvider)
+    public async Task SeedAsync(WebApplicationBuilder builder)
     {
+        var serviceProvider = builder.Services.BuildServiceProvider();
         //use event bus publish seed data will cache
         var eventBus = serviceProvider.GetRequiredService<IEventBus>();
+        var context = serviceProvider.GetRequiredService<AuthDbContext>();
+        var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
 
         #region Auth
-        var rolePermission = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "RolePermission", "RolePermission", "", "mdi-shield-half-full", 2, PermissionTypes.Menu);
-        var role = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Role", "role", "role", "", 1, PermissionTypes.Menu);
-        var permission = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Permission", "permission", "permission/index", "", 2, PermissionTypes.Menu);
+        var rolePermission = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "RolePermission", "RolePermission", "", "mdi-shield-half-full", 2, PermissionTypes.Menu);
+        var role = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Role", "role", "role", "", 1, PermissionTypes.Menu);
+        var permission = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Permission", "permission", "permission/index", "", 2, PermissionTypes.Menu);
         role.SetParent(rolePermission.Id);
         permission.SetParent(rolePermission.Id);
 
-        var sso = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "SSO", "sso", "", "mdi-login-variant", 5, PermissionTypes.Menu);
-        var userClaim = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "UserClaim", "userClaim", "sso/userClaim", "", 1, PermissionTypes.Menu);
-        var identityResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "IdentityResource", "IdentityResource", "sso/identityResource", "", 2, PermissionTypes.Menu);
-        var apiScope = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiScope", "ApiScope", "sso/apiScope", "", 3, PermissionTypes.Menu);
-        var apiResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "ApiResource", "ApiResource", "sso/apiResource", "", 4, PermissionTypes.Menu);
-        var client = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "Client", "Client", "sso/client", "", 5, PermissionTypes.Menu);
-        var customLogin = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID, "CustomLogin", "CustomLogin", "sso/customLogin", "", 6, PermissionTypes.Menu);
+        var sso = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "SSO", "sso", "", "mdi-login-variant", 5, PermissionTypes.Menu);
+        var userClaim = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "UserClaim", "userClaim", "sso/userClaim", "", 1, PermissionTypes.Menu);
+        var identityResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "IdentityResource", "IdentityResource", "sso/identityResource", "", 2, PermissionTypes.Menu);
+        var apiScope = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "ApiScope", "ApiScope", "sso/apiScope", "", 3, PermissionTypes.Menu);
+        var apiResource = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "ApiResource", "ApiResource", "sso/apiResource", "", 4, PermissionTypes.Menu);
+        var client = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Client", "Client", "sso/client", "", 5, PermissionTypes.Menu);
+        var customLogin = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "CustomLogin", "CustomLogin", "sso/customLogin", "", 6, PermissionTypes.Menu);
         userClaim.SetParent(sso.Id);
         identityResource.SetParent(sso.Id);
         apiScope.SetParent(sso.Id);
@@ -31,15 +34,19 @@ public class AuthSeedData
         client.SetParent(sso.Id);
         customLogin.SetParent(sso.Id);
 
+        var team = new Permission(Guid.NewGuid(), MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Team", "team", "team/index", "mdi-account-multiple", 3, PermissionTypes.Menu);
+        var teadAddElement = new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", "team.add", "", "", 1, PermissionTypes.Element);
+        teadAddElement.SetParent(team.Id);
+
         var authMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"User","user","User","mdi-account-outline",1,PermissionTypes.Menu),
-            rolePermission,role,permission,
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Team","team","team/index","mdi-account-multiple",3,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"User","user","User","mdi-account-outline",1,PermissionTypes.Menu),
+            rolePermission,role,permission,team,teadAddElement,
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-home-floor-3",6,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID,"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-home-floor-3",6,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.AUTH_SYSTEM_ID, masaStackConfig.GetServerId(MasaStackConstant.AUTH), "TeamAdd", "api.team.create", "", "", 1, PermissionTypes.Api)
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.AUTH_SYSTEM_ID))
@@ -50,8 +57,8 @@ public class AuthSeedData
 
         #region Pm
         var pmMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.PM_SYSTEM_ID,MasaStackConsts.PM_SYSTEM_WEB_APP_ID,"Team","Team","Team","mdi-account-group-outline",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.PM_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.PM),"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.PM_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.PM),"Team","Team","Team","mdi-account-group-outline",2,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.PM_SYSTEM_ID))
         {
@@ -61,10 +68,10 @@ public class AuthSeedData
 
         #region Dcc
         var dccMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"PublicConfig","PublicConfig","Public","mdi-earth",2,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"LabelManagement","Label","Label","mdi-label",3,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.DCC_SYSTEM_ID,MasaStackConsts.DCC_SYSTEM_WEB_APP_ID,"Team","Team","Team","mdi-account-group-outline",4,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.DCC),"PublicConfig","PublicConfig","Public","mdi-earth",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.DCC),"LabelManagement","Label","Label","mdi-label",3,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.DCC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Team","Team","Team","mdi-account-group-outline",4,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.DCC_SYSTEM_ID))
         {
@@ -73,25 +80,25 @@ public class AuthSeedData
         #endregion
 
         #region Mc
-        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageManagement", "messageManagement", "", "fas fa-tasks", 2, PermissionTypes.Menu);
-        var sendMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "SendMessage", "sendMessage", "messageTasks/sendMessage", "", 1, PermissionTypes.Menu);
-        var messageRecord = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "", 2, PermissionTypes.Menu);
+        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fas fa-tasks", 2, PermissionTypes.Menu);
+        var sendMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "SendMessage", "sendMessage", "messageTasks/sendMessage", "", 1, PermissionTypes.Menu);
+        var messageRecord = new Permission(MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "", 2, PermissionTypes.Menu);
         sendMessage.SetParent(messageManagement.Id);
         messageRecord.SetParent(messageManagement.Id);
 
-        var messageTemplate = new Permission(Guid.NewGuid(), MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "MessageTemplate", "messageTemplate", "", "mdi-collage", 3, PermissionTypes.Menu);
-        var sms = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "Sms", "sms", "messageTemplates/smsTemplateManagement", "", 1, PermissionTypes.Menu);
-        var email = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "Email", "email", "messageTemplates/emailTemplateManagement", "", 2, PermissionTypes.Menu);
-        var websiteMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, MasaStackConsts.MC_SYSTEM_WEB_APP_ID, "WebsiteMessage", "websiteMessage", "messageTemplates/websiteMessageTemplateManagement", "", 3, PermissionTypes.Menu);
+        var messageTemplate = new Permission(Guid.NewGuid(), MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageTemplate", "messageTemplate", "", "mdi-collage", 3, PermissionTypes.Menu);
+        var sms = new Permission(MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "Sms", "sms", "messageTemplates/smsTemplateManagement", "", 1, PermissionTypes.Menu);
+        var email = new Permission(MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "Email", "email", "messageTemplates/emailTemplateManagement", "", 2, PermissionTypes.Menu);
+        var websiteMessage = new Permission(MasaStackConsts.MC_SYSTEM_ID, masaStackConfig.GetWebId(MasaStackConstant.MC), "WebsiteMessage", "websiteMessage", "messageTemplates/websiteMessageTemplateManagement", "", 3, PermissionTypes.Menu);
         sms.SetParent(messageTemplate.Id);
         email.SetParent(messageTemplate.Id);
         websiteMessage.SetParent(messageTemplate.Id);
 
         var mcMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"ChannelManagement","channelManagement","channels/channelManagement","mdi-email-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.MC),"ChannelManagement","channelManagement","channels/channelManagement","mdi-email-outline",1,PermissionTypes.Menu),
             messageManagement,sendMessage,messageRecord,
             messageTemplate,sms,email,websiteMessage,
-            new Permission(MasaStackConsts.MC_SYSTEM_ID,MasaStackConsts.MC_SYSTEM_WEB_APP_ID,"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fas fa-object-ungroup",4,PermissionTypes.Menu)
+            new Permission(MasaStackConsts.MC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fas fa-object-ungroup",4,PermissionTypes.Menu)
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.MC_SYSTEM_ID))
         {
@@ -99,14 +106,39 @@ public class AuthSeedData
         }
         #endregion
 
-        #region scheduler
+        #region Scheduler
         var schedulerMenus = new List<Permission>() {
-            new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"ResourceFiles","scheduler.resource","pages/resource","mdi-file-document-outline",1,PermissionTypes.Menu),
-            new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,MasaStackConsts.SCHEDULER_SYSTEM_WEB_APP_ID,"Team","Team","pages/team","mdi-account-group-outline",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"ResourceFiles","scheduler.resource","pages/resource","mdi-file-document-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.SCHEDULER_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"Team","Team","pages/team","mdi-account-group-outline",2,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.SCHEDULER_SYSTEM_ID))
         {
             await eventBus.PublishAsync(new SeedPermissionsCommand(schedulerMenus));
+        }
+        #endregion
+
+        #region Tsc
+        var tscMenus = new List<Permission>() {
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Team","Team","team","mdi-square",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Dashboard","Dashboard","dashboard","mdi-view-dashboard",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Log","Log","dashbord/log","mdi-file-search",3,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.TSC_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Trace","Trace","dashbord/trace","mdi-chart-timeline-variant",4,PermissionTypes.Menu)
+        };
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.TSC_SYSTEM_ID))
+        {
+            await eventBus.PublishAsync(new SeedPermissionsCommand(tscMenus));
+        }
+        #endregion
+
+        #region Alert
+        var alertMenus = new List<Permission>() {
+            new Permission(MasaStackConsts.ALERT_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.ALERT),"AlarmRule","AlarmRule","alarmRules","mdi-bell-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.ALERT_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.ALERT),"AlarmHistory","AlarmHistory","alarmHistory","mdi-chart-box",2,PermissionTypes.Menu),
+            new Permission(MasaStackConsts.ALERT_SYSTEM_ID,masaStackConfig.GetWebId(MasaStackConstant.ALERT),"WebHook","WebHook","webHook","mdi-earth",3,PermissionTypes.Menu)
+        };
+        if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConsts.ALERT_SYSTEM_ID))
+        {
+            await eventBus.PublishAsync(new SeedPermissionsCommand(alertMenus));
         }
         #endregion
 
@@ -121,8 +153,26 @@ public class AuthSeedData
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
                 Email = "admin@masastack.com",
                 CompanyName = "Masa",
-                PhoneNumber = "15185856868",
-                Enabled = true
+                PhoneNumber = "15888888888",
+                Enabled = true,
+                IdCard = "330104202002026400"
+            }));
+        }
+
+        if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == "guest"))
+        {
+            await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
+            {
+                Name = "guest",
+                Account = "guest",
+                Password = "guest123",
+                DisplayName = "Guest",
+                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
+                Email = "Guest@masastack.com",
+                CompanyName = "Masa",
+                PhoneNumber = "15666666666",
+                Enabled = true,
+                IdCard = "330104202002020906"
             }));
         }
 
@@ -136,6 +186,44 @@ public class AuthSeedData
             }));
         }
 
+        if (!context.Set<Team>().Any())
+        {
+            await eventBus.PublishAsync(new AddTeamCommand(new AddTeamDto
+            {
+                Type = TeamTypes.Ordinary,
+                Name = MasaStackConsts.MASA_STACK_TEAM,
+                Avatar = new AvatarValueDto
+                {
+                    Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
+                }
+            }));
+        }
+
+        #region SSO Client
+
+        var uis = masaStackConfig.GetAllUINames();
+        foreach (var ui in uis)
+        {
+            if (context.Set<Client>().Any(u => u.ClientId == ui.Key))
+            {
+                continue;
+            }
+
+            await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
+            {
+                ClientId = ui.Key,
+                ClientName = ui.Key.ToName(),
+                ClientUri = "",
+                RequireConsent = false,
+                AllowedScopes = new List<string> { "openid", "profile" },
+                RedirectUris = ui.Value.Select(url => $"{url}/signin-oidc").ToList(),
+                PostLogoutRedirectUris = ui.Value.Select(url => $"{url}/signout-callback-oidc").ToList(),
+                FrontChannelLogoutUri = $"{ui.Value.First()}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{ui.Value.First()}/account/backchannellogout"
+            }));
+        }
+
+        #endregion
         //await context.SaveChangesAsync();
     }
 }

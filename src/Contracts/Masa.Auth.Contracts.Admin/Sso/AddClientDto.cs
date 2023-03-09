@@ -29,6 +29,10 @@ public class AddClientDto
     /// logout url
     /// </summary>
     public List<string> PostLogoutRedirectUris { get; set; } = new();
+
+    public string FrontChannelLogoutUri { get; set; } = string.Empty;
+
+    public string BackChannelLogoutUri { get; set; } = string.Empty;
     #endregion
 
     #region Consent Screen
@@ -46,4 +50,6 @@ public class AddClientDto
     #region ResourceScopes
     public List<string> AllowedScopes { get; set; } = new();
     #endregion
+
+    public bool AllowOfflineAccess { get; set; } = true;
 }

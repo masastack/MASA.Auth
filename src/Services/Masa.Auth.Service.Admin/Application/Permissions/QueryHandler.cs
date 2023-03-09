@@ -162,10 +162,10 @@ public class QueryHandler
     [EventHandler]
     public void PermissionTypesQueryAsync(PermissionTypesQuery permissionTypesQuery)
     {
-        permissionTypesQuery.Result = Enum<PermissionTypes>.GetEnumObjectDictionary().Select(pt => new SelectItemDto<int>
+        permissionTypesQuery.Result = EnumUtil.GetList<PermissionTypes>().Select(pt => new SelectItemDto<int>
         {
-            Text = pt.Value,
-            Value = pt.Key
+            Text = pt.Name,
+            Value = pt.Value
         }).ToList();
     }
 
@@ -229,9 +229,9 @@ public class QueryHandler
             AppId = permission.AppId,
             Order = permission.Order,
             ApiPermissions = permission.ChildPermissionRelations.Select(pr => pr.ChildPermissionId).ToList(),
-            Roles = permission.RolePermissions.Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Code, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
-            Teams = permission.TeamPermissions.Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
-            Users = permission.UserPermissions.Select(up => new UserSelectDto
+            Roles = permission.RolePermissions.Where(rp => rp.Effect).Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Code, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
+            Teams = permission.TeamPermissions.Where(rp => rp.Effect).Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
+            Users = permission.UserPermissions.Where(rp => rp.Effect).Select(up => new UserSelectDto
             {
                 Id = up.User.Id,
                 Name = up.User.DisplayName,

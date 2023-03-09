@@ -16,11 +16,8 @@ public class ClientDetailDto : AddClientDto
     #endregion
 
     #region Authentication
-    public string FrontChannelLogoutUri { get; set; } = string.Empty;
 
     public bool FrontChannelLogoutSessionRequired { get; set; }
-
-    public string BackChannelLogoutUri { get; set; } = string.Empty;
 
     public bool BackChannelLogoutSessionRequired { get; set; }
 

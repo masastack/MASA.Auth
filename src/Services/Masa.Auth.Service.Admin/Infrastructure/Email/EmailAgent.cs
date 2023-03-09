@@ -8,12 +8,18 @@ public class EmailAgent : IScopedDependency
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly IOptions<EmailOptions> _emailOptions;
+    readonly IMasaConfiguration _masaConfiguration;
 
-    public EmailAgent(IMcClient mcClient, IDistributedCacheClient distributedCacheClient, IOptions<EmailOptions> emailOptions)
+    public EmailAgent(
+        IMcClient mcClient,
+        IDistributedCacheClient distributedCacheClient,
+        IOptions<EmailOptions> emailOptions,
+        IMasaConfiguration masaConfiguration)
     {
         _mcClient = mcClient;
         _distributedCacheClient = distributedCacheClient;
         _emailOptions = emailOptions;
+        _masaConfiguration = masaConfiguration;
     }
 
     public async Task SendEmailAsync(SendEmailModel sendEmailModel, TimeSpan? expiration = null)
@@ -73,7 +79,9 @@ public class EmailAgent : IScopedDependency
             })
         });
 
-        await _distributedCacheClient.SetAsync(sendValueKey, code, expiration ?? TimeSpan.FromMinutes(5));
+        var emailCaptchaExpired = _masaConfiguration.ConfigurationApi.GetDefault()
+            .GetValue<int>("AppSettings:EmailCaptchaExpired", 300);
+        await _distributedCacheClient.SetAsync(sendValueKey, code, expiration ?? TimeSpan.FromSeconds(emailCaptchaExpired));
         await _distributedCacheClient.SetAsync(sendKey, true, expiration ?? TimeSpan.FromSeconds(60));
     }
 

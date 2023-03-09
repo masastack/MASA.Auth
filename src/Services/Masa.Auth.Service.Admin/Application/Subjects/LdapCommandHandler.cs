@@ -7,25 +7,22 @@ public class LdapCommandHandler
 {
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly ILdapFactory _ldapFactory;
-    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly ILogger<LdapCommandHandler> _logger;
-    readonly IConfiguration _configuration;
     readonly IEventBus _eventBus;
+    readonly IUnitOfWork _unitOfWork;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
         ILogger<LdapCommandHandler> logger,
-        IThirdPartyUserRepository thirdPartyUserRepository,
-        IConfiguration configuration,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        IUnitOfWork unitOfWork)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
         _logger = logger;
-        _thirdPartyUserRepository = thirdPartyUserRepository;
-        _configuration = configuration;
         _eventBus = eventBus;
+        _unitOfWork = unitOfWork;
     }
 
     [EventHandler]
@@ -42,7 +39,6 @@ public class LdapCommandHandler
     [EventHandler]
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
-        var _thirdPartyIdpId = Guid.Empty;
         var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
         var ldapIdp = new LdapIdp(
                 ldapIdpDto.ServerAddress,
@@ -57,12 +53,10 @@ public class LdapCommandHandler
         if (dbItem is null)
         {
             await _ldapIdpRepository.AddAsync(ldapIdp);
-            await _ldapIdpRepository.UnitOfWork.SaveChangesAsync();
-            _thirdPartyIdpId = ldapIdp.Id;
+            await _unitOfWork.SaveChangesAsync();
         }
         else
         {
-            _thirdPartyIdpId = dbItem.Id;
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
@@ -72,7 +66,11 @@ public class LdapCommandHandler
 
         await foreach (var ldapUser in ldapUsers)
         {
-            if (string.IsNullOrEmpty(ldapUser.Phone)) continue;
+            if (string.IsNullOrEmpty(ldapUser.Phone))
+            {
+                continue;
+            }
+
             try
             {
                 var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);

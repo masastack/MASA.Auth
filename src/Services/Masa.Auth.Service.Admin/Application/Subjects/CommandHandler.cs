@@ -23,8 +23,9 @@ public class CommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
     readonly Sms _sms;
-    readonly IOptions<OidcOptions> _oidcOptions;
+    readonly IMasaStackConfig _masaStackConfig;
     readonly IHttpContextAccessor _httpContextAccessor;
+    readonly IMasaConfiguration _masaConfiguration;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -45,8 +46,9 @@ public class CommandHandler
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
         Sms sms,
-        IOptions<OidcOptions> oidcOptions,
-        IHttpContextAccessor httpContextAccessor)
+        IMasaStackConfig masaStackConfig,
+        IHttpContextAccessor httpContextAccessor,
+        IMasaConfiguration masaConfiguration)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -66,8 +68,9 @@ public class CommandHandler
         _logger = logger;
         _eventBus = eventBus;
         _sms = sms;
-        _oidcOptions = oidcOptions;
+        _masaStackConfig = masaStackConfig;
         _httpContextAccessor = httpContextAccessor;
+        _masaConfiguration = masaConfiguration;
     }
 
     #region User
@@ -271,17 +274,50 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeForVerifiyPhoneNumberCommand command)
+    public async Task VerifyMsgCodeForVerifiyPhoneNumberAsync(VerifyMsgCodeCommand command)
     {
         var model = command.Model;
-        var user = await CheckUserExistAsync(model.UserId);
-        var msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
-        if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+        var msgCodeKey = "";
+        if (model.SendMsgCodeType == SendMsgCodeTypes.VerifiyPhoneNumber)
         {
-            var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
-            await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
-            command.Result = true;
+            var user = await CheckUserExistAsync(model.UserId);
+            msgCodeKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(model.UserId.ToString(), user.PhoneNumber);
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code))
+            {
+                var resultKey = CacheKey.VerifiyUserPhoneNumberResultKey(user.Id.ToString(), user.PhoneNumber);
+                await _distributedCacheClient.SetAsync(resultKey, true, TimeSpan.FromSeconds(60 * 10));
+                command.Result = true;
+            }
         }
+        else
+        {
+            ArgumentExceptionExtensions.ThrowIfNullOrEmpty(model.PhoneNumber);
+            switch (model.SendMsgCodeType)
+            {
+                case SendMsgCodeTypes.UpdatePhoneNumber:
+                    msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Login:
+                    msgCodeKey = CacheKey.MsgCodeForLoginKey(model.UserId.ToString(), model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Register:
+                    msgCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.Bind:
+                    msgCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
+                    break;
+                case SendMsgCodeTypes.ForgotPassword:
+                    msgCodeKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
+                    break;
+                default:
+                    break;
+            }
+
+            if (await _sms.VerifyMsgCodeAsync(msgCodeKey, model.Code, false))
+            {
+                command.Result = true;
+            }
+        }       
     }
 
     [EventHandler(1)]
@@ -371,11 +407,18 @@ public class CommandHandler
         //todo UserDomainService
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
+
+        var loginFreeze = _masaConfiguration.ConfigurationApi.GetDefault()
+            .GetValue<bool>("AppSettings:LoginFreeze", false);
         var key = CacheKey.AccountLoginKey(account);
-        var loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
-        if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+        CacheLogin? loginCache = null;
+        if (loginFreeze)
         {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
+            loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
+            if (loginCache is not null && loginCache.LoginErrorCount >= 5)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
+            }
         }
 
         var isLdap = validateByAccountCommand.UserAccountValidateDto.IsLdap;
@@ -412,7 +455,7 @@ public class CommandHandler
             account = upsertThirdPartyUserCommand.Result.Account;
         }
 
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account || u.PhoneNumber == account, new List<string> {
+        var user = await _userRepository.FindWithIncludAsync(u => EF.Functions.Collate(u.Account, "SQL_Latin1_General_CP1_CS_AS") == account || u.PhoneNumber == account, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
         });
 
@@ -430,9 +473,12 @@ public class CommandHandler
         {
             if (!user.VerifyPassword(password))
             {
-                loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
-                loginCache.LoginErrorCount++;
-                await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                if (loginFreeze)
+                {
+                    loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
+                    loginCache.LoginErrorCount++;
+                    await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
+                }
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
             }
 
@@ -488,24 +534,24 @@ public class CommandHandler
         condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
         condition = condition.And(userId is not null, user => user.Id != userId);
 
-        var exitUser = await _authDbContext.Set<User>()
+        var existUser = await _authDbContext.Set<User>()
                                            .Include(u => u.Roles)
                                            .FirstOrDefaultAsync(condition);
-        if (exitUser is not null)
-        {
-            if (account != exitUser.Account && phoneNumber != exitUser.PhoneNumber && phoneNumber == exitUser.Account)
+        if (existUser is not null)
+        {          
+            if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
-            if (throwException is false) return exitUser;
-            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == exitUser.PhoneNumber)
+            if (throwException is false) return existUser;
+            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
-            if (string.IsNullOrEmpty(email) is false && email == exitUser.Email)
+            if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
-            if (string.IsNullOrEmpty(idCard) is false && idCard == exitUser.IdCard)
+            if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
-            if (string.IsNullOrEmpty(account) is false && account == exitUser.Account)
+            if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
         }
-        return exitUser;
+        return existUser;
     }
 
     [EventHandler(1)]
@@ -540,16 +586,15 @@ public class CommandHandler
     public async Task LoginByAccountAsync(LoginByAccountCommand command)
     {
         var httpClient = new HttpClient();
+        var docUrl = _masaStackConfig.GetSsoDomain();
 #if DEBUG
-        var docUrl = "http://localhost:18200";
-#else
-        var docUrl = _oidcOptions.Value.Authority;
+        docUrl = "http://localhost:18200";
 #endif
         var disco = await httpClient.GetDiscoveryDocumentAsync(docUrl);
         var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
         {
             Address = disco.TokenEndpoint,
-            ClientId = _oidcOptions.Value.ClientId,
+            ClientId = _masaStackConfig.GetWebId(MasaStackConstant.AUTH),
             Scope = "openid profile offline_access",
             UserName = command.Account,
             Password = command.Password
@@ -769,14 +814,25 @@ public class CommandHandler
                 var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (existStaff is not null)
                 {
-                    if ((existStaff.JobNumber, existStaff.PhoneNumber) != (syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber), syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber)))
+                    if (existStaff.JobNumber != syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber))
                     {
                         syncResults[i] = new()
                         {
                             JobNumber = syncStaff.JobNumber,
                             Errors = new()
                             {
-                               $"The mobile phone number of this employee is: {Convert(existStaff.PhoneNumber)}, and the job number is: {Convert(existStaff.JobNumber)}. Does not exactly match imported employee data!"
+                                $"The employee whose mobile phone number is {syncStaff.PhoneNumber} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"
+                            }
+                        };
+                    }
+                    else if (existStaff.PhoneNumber != syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber))
+                    {
+                        syncResults[i] = new()
+                        {
+                            JobNumber = syncStaff.JobNumber,
+                            Errors = new()
+                            {
+                                $"The employee whose job number is {syncStaff.JobNumber}, the corresponding mobile phone number is {existStaff.PhoneNumber}, which does not match the mobile phone number {syncStaff.PhoneNumber}"
                             }
                         };
                     }
@@ -822,12 +878,13 @@ public class CommandHandler
         void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
         {
             var func = selector.Compile();
-            if (syncStaffs.Where(staff => func(staff) is not null).IsDuplicate(func, out List<SyncStaffDto>? duplicate))
+            if (syncStaffs.Where(staff => string.IsNullOrEmpty(func(staff)) is false).IsDuplicate(func, out List<SyncStaffDto>? duplicates))
             {
-                for (var i = 0; i < syncStaffs.Count; i++)
+                foreach(var duplicate in duplicates)
                 {
-                    var staff = syncStaffs[i];
-                    syncResults[i] = new()
+                    var index = syncStaffs.IndexOf(duplicate);
+                    var staff = syncStaffs[index];
+                    syncResults[index] = new()
                     {
                         JobNumber = staff.JobNumber,
                         Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }
@@ -956,7 +1013,7 @@ public class CommandHandler
         {
             ThridPartyIdentity = model.ThridPartyIdentity,
             ExtendedData = model.ExtendedData,
-            ThirdPartyIdpType = model.ThirdPartyIdpType,
+            Scheme = model.Scheme,
             User = new AddUserModel
             {
                 Account = model.Account,
@@ -1016,11 +1073,11 @@ public class CommandHandler
     public async Task UpsertThirdPartyUserExternalAsync(UpsertThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        if (model.ThirdPartyIdpType == default)
+        if (string.IsNullOrEmpty(model.Scheme))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
         }
-        else if (model.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        else if (string.Equals(model.Scheme, LdapConsts.LDAP_NAME, StringComparison.OrdinalIgnoreCase))
         {
             var upsertThirdPartyUserForLdapCommand = new UpsertLdapUserCommand(
                     model.Id,
@@ -1038,7 +1095,7 @@ public class CommandHandler
         }
         else
         {
-            var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
             var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
@@ -1078,17 +1135,17 @@ public class CommandHandler
         var identityProviderQuery = new IdentityProviderByTypeQuery(ThirdPartyIdpTypes.Ldap);
         await _eventBus.PublishAsync(identityProviderQuery);
         var ldap = identityProviderQuery.Result;
-        var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyIdentity, false);
+        var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyUserIdentity, false);
         if (thirdPartyUser is not null)
         {
             if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
-            thirdPartyUser.Update(command.ThridPartyIdentity, command.ExtendedData);
+            thirdPartyUser.Update(command.ThridPartyUserIdentity, command.ExtendedData);
             await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == thirdPartyUser.UserId)).Adapt<UserModel>();
         }
         else
         {
-            var addThirdPartyUserDto = new AddThirdPartyUserDto(ldap.Id, true, command.ThridPartyIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
+            var addThirdPartyUserDto = new AddThirdPartyUserDto(ldap.Id, true, command.ThridPartyUserIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
             command.Result = await AddThirdPartyUserAsync(addThirdPartyUserDto);
         }
         var upsertStaffDto = command.Adapt<UpsertStaffForLdapDto>();
@@ -1101,7 +1158,7 @@ public class CommandHandler
     public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
     {
         var model = command.ThirdPartyUser;
-        var identityProviderQuery = new IdentityProviderByTypeQuery(model.ThirdPartyIdpType);
+        var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
         await _eventBus.PublishAsync(identityProviderQuery);
         var identityProvider = identityProviderQuery.Result;
         var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();

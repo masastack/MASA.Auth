@@ -11,14 +11,17 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
     readonly EndpointRowDataProvider _endpointRowDataProvider;
     readonly ILogger<MasaAuthorizeMiddleware> _logger;
+    readonly IMasaStackConfig _masaStackConfig;
 
     public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider,
         EndpointRowDataProvider endpointRowDataProvider,
-        ILogger<MasaAuthorizeMiddleware> logger)
+        ILogger<MasaAuthorizeMiddleware> logger,
+        IMasaStackConfig masaStackConfig)
     {
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
         _endpointRowDataProvider = endpointRowDataProvider;
         _logger = logger;
+        _masaStackConfig = masaStackConfig;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -56,10 +59,10 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
                 //dafault code rule
                 code = Regex.Replace(context.Request.Path, @"\\", ".");
                 code = Regex.Replace(code, "/", ".").Trim('.');
-                code = $"{MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID}.{code}";
+                code = $"{_masaStackConfig.GetServerId("auth")}.{code}";
             }
 
-            if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID)).WildCardContains(code))
+            if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(_masaStackConfig.GetServerId("auth"))).WildCardContains(code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 return;

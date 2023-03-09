@@ -7,11 +7,13 @@ public class PermissionValidator : IPermissionValidator
 {
     readonly IUserContext _userContext;
     readonly PermissionService _permissionService;
+    readonly IMasaStackConfig _masaStackConfig;
 
-    public PermissionValidator(IUserContext userContext, AuthCaller authCaller)
+    public PermissionValidator(IUserContext userContext, AuthCaller authCaller, IMasaStackConfig masaStackConfig)
     {
         _userContext = userContext;
         _permissionService = authCaller.PermissionService;
+        _masaStackConfig = masaStackConfig;
     }
 
     public bool Validate(string code, ClaimsPrincipal user)
@@ -21,7 +23,7 @@ public class PermissionValidator : IPermissionValidator
         //todo change Async and use redis
         Task.Run(async () =>
         {
-            codes = await _permissionService.GetElementPermissionsAsync(userId, MasaStackConsts.AUTH_SYSTEM_WEB_APP_ID);
+            codes = await _permissionService.GetElementPermissionsAsync(userId, _masaStackConfig.GetWebId(MasaStackConstant.AUTH));
         }).Wait();
         return codes.Contains(code);
     }

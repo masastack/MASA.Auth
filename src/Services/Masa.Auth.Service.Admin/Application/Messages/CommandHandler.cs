@@ -54,6 +54,10 @@ public class CommandHandler
                 cacheKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
                 break;
             case SendMsgCodeTypes.ForgotPassword:
+                if (_userRepository.Any(u => u.PhoneNumber == model.PhoneNumber) is false)
+                {
+                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
+                }
                 cacheKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
                 break;
             default:

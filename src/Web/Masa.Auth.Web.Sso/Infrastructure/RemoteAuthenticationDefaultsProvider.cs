@@ -5,22 +5,22 @@ namespace Masa.Auth.Web.Sso.Infrastructure;
 
 public class RemoteAuthenticationDefaultsProvider : IRemoteAuthenticationDefaultsProvider
 {
-    readonly ISsoClient _ssoClient;
+    readonly IThirdPartyIdpService _thirdPartyIdpService;
 
-    public RemoteAuthenticationDefaultsProvider(ISsoClient ssoClient)
+    public RemoteAuthenticationDefaultsProvider(IThirdPartyIdpService thirdPartyIdpService)
     {
-        _ssoClient = ssoClient;
-    }   
+        _thirdPartyIdpService = thirdPartyIdpService;
+    }
 
     public async Task<AuthenticationDefaults?> GetAsync(string scheme)
     {
-        var thirdPartyIdps = await _ssoClient.ThirdPartyIdpCacheService.GetAllAsync();
+        var thirdPartyIdps = await _thirdPartyIdpService.GetAllFromCacheAsync();
         return Convert(thirdPartyIdps.FirstOrDefault(tpIdp => tpIdp.Name == scheme));
     }
 
     public async Task<List<AuthenticationDefaults>> GetAllAsync()
     {
-        var thirdPartyIdps = await _ssoClient.ThirdPartyIdpCacheService.GetAllAsync();
+        var thirdPartyIdps = await _thirdPartyIdpService.GetAllFromCacheAsync();
         return thirdPartyIdps.Select(tpIdp => Convert(tpIdp)).ToList();
     }
 
@@ -43,6 +43,7 @@ public class RemoteAuthenticationDefaultsProvider : IRemoteAuthenticationDefault
             JsonKeyMap = model.JsonKeyMap,
             ClientSecret = model.ClientSecret,
             ClientId = model.ClientId,
+            ThirdPartyIdpType = model.ThirdPartyIdpType,
         };
     }
 }

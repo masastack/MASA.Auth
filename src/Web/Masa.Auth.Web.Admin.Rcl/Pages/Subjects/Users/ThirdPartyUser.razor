@@ -21,7 +21,7 @@
             <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
             <MRow class="ml-6">
                 <MCol Md=4>
-                    <BooleanSelect FillBackground=false @bind-Value="Enabled" Small Placeholder="@T("UserState")" />
+                    <BooleanSelect FillBackground=false @bind-Value="Enabled" Small AutoLabel=false Label="@T("UserState")" />
                 </MCol>
                 <MCol Md=4>
                     <ThirdPartyIdpSelect FillBackground=false @bind-Value="ThirdPartyId" Clearable Small Label="@T("Source")" />

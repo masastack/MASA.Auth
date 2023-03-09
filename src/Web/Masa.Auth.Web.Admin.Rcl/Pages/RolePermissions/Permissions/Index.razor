@@ -5,8 +5,8 @@
     @T("Permission")
 </PageTitle>
 
-<MRow Class="full-height" NoGutters>
-    <MCol Md="@("auto")" Class="d-flex flex-column">
+<MRow Style="height: calc(100vh - 120px);" NoGutters>
+    <MCol Md="@("auto")" Class="d-flex flex-column full-height">
         <SSearchableExtend Split=true MaxWidth=300 @bind-Value="_search">
             <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                            OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
@@ -15,8 +15,8 @@
                            ItemText="u => u.Name"
                            ItemValue="u => u.Identity"></MAutocomplete>
         </SSearchableExtend>
-        <MCard style="width:300px;" Class="flex-grow-1 mt-4 pt-4">
-            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
+        <MCard style="width:300px;max-height: calc(100% - 60px);" Class="flex-grow-1 mt-4 pt-4">
+            <SElevationTab TabMinWidth="120" ItemsClass="mt-4" ItemsStyle="overflow-y: auto;" Class="full-height" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
                            Dense @bind-Tab="@_tab" IndexTab>
                 <SElevationTabItem>
                     <MTreeview @bind-Active="_menuPermissionActive"
@@ -67,7 +67,7 @@
             <MWindowItem Value='"0"' Class="full-height">
                 @if (_showMenuInfo && _menuPermissionDetailDto.Id != Guid.Empty)
                 {
-                    <MCard Class="full-height d-flex flex-column">
+                    <MCard Class="full-height d-flex flex-column" Style="overflow-y: auto;">
                         <MCardTitle>
                             <h6>@T("Permission Info")</h6>
                         </MCardTitle>
@@ -79,7 +79,7 @@
                                         </STextField>
                                     </MCol>
                                     <MCol Md=6>
-                                        <DccI18nConfiger Label="@T("Name")" @bind-Name="_menuPermissionDetailDto.Name" />
+                                        <DccI18nConfiger @bind-Name="_menuPermissionDetailDto.Name" />
                                     </MCol>
                                     <MCol Md=6>
                                         <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
@@ -149,17 +149,19 @@
                                         </SGroupBox>
                                     </MCol>
                                     <MCol Md=12>
-                                        <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                        <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                         </MTextarea>
                                     </MCol>
                                 </MRow>
                             </MForm>
                         </MCardText>
-                        <MCardActions class="d-flex align-center mb-8 px-6">
-                            <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
-                            <MSpacer />
-                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</MButton>
-                            <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</MButton>
+                        <MCardActions class="align-center px-6">
+                            <div class="d-flex full-width">
+                                <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
+                                <MSpacer />
+                                <SButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</SButton>
+                                <SButton Medium MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
+                            </div>
                         </MCardActions>
                     </MCard>
                 }
@@ -167,7 +169,7 @@
             <MWindowItem Value='"1"' Class="full-height">
                 @if (_showApiInfo && _apiPermissionDetailDto.Id != Guid.Empty)
                 {
-                    <MCard Class="full-height d-flex flex-column">
+                    <MCard Class="full-height d-flex flex-column" Style="overflow-y: auto;">
                         <MCardTitle>
                             <h6>@T("Permission Info")</h6>
                         </MCardTitle>
@@ -179,7 +181,7 @@
                                         </STextField>
                                     </MCol>
                                     <MCol Md=6>
-                                        <DccI18nConfiger Label="@T("Name")" @bind-Name="_apiPermissionDetailDto.Name" />
+                                        <DccI18nConfiger @bind-Name="_apiPermissionDetailDto.Name" />
                                     </MCol>
                                     <MCol Md=6>
                                         <STextField Label="@T("Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
@@ -191,7 +193,7 @@
                                         <STextField Label="@T("Type")" Value="_apiPermissionDetailDto.Type.GetDescription().Description" Disabled />
                                     </MCol>
                                     <MCol Md=12>
-                                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize>
+                                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                         </MTextarea>
                                     </MCol>
                                 </MRow>

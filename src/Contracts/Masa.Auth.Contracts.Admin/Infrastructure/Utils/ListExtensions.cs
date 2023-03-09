@@ -16,7 +16,7 @@ public static class ListExtensions
     public static bool IsDuplicate<TSource, TKey>(this IEnumerable<TSource> list, Func<TSource, TKey> keySelector, [NotNullWhen(true)] out List<TSource>? duplicate)
     {
         var group = list.GroupBy(keySelector).Where(g => g.Count() > 1);
-        if (group.Count() > 1)
+        if (group.Count() > 0)
         {
             duplicate = group.SelectMany(item => item.Select(e => e)).ToList();
             return true;
@@ -28,7 +28,7 @@ public static class ListExtensions
     public static bool IsDuplicate<TSource, TKey>(this IEnumerable<TSource> list, Func<TSource, TKey> keySelector, [NotNullWhen(true)] out List<TKey>? duplicate)
     {
         var group = list.GroupBy(keySelector).Where(g => g.Count() > 1);
-        if (group.Count() > 1)
+        if (group.Count() > 0)
         {
             duplicate = group.Select(item => item.Select(keySelector).First()).ToList();
             return true;

@@ -23,6 +23,9 @@ public abstract class AdminCompontentBase : ComponentBase
         }
     }
 
+    [Inject]
+    public JsInitVariables JsInitVariables { get; set; } = default!;
+
     [CascadingParameter]
     public I18n I18n
     {
@@ -79,8 +82,11 @@ public abstract class AdminCompontentBase : ComponentBase
     public string T(string key)
     {
         if (string.IsNullOrEmpty(key)) return key;
-        if (PageName is not null) return I18n.T(PageName, key, false) ?? I18n.T(key, false);
-        else return I18n.T(key, true);
+        if (PageName is not null)
+        {
+            return I18n.T(PageName, key, false) ?? I18n.T(key, false, false) ?? key;
+        }
+        else return I18n.T(key, true, false) ?? key;
     }
 
     public string T(string formatkey, params string[] args)
@@ -110,22 +116,22 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public void OpenInformationMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Info);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Info);
     }
 
     public void OpenSuccessMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Success);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Success);
     }
 
     public void OpenWarningMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Warning);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Warning);
     }
 
     public void OpenErrorMessage(string message)
     {
-        PopupService.AlertAsync(message, AlertTypes.Error);
+        PopupService.EnqueueSnackbarAsync(message, AlertTypes.Error);
     }
 
     public List<KeyValuePair<string, TEnum>> GetEnumMap<TEnum>() where TEnum : struct, Enum

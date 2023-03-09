@@ -2,32 +2,51 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
 
-builder.Services.AddMasaConfiguration(configurationBuilder =>
-{
-    configurationBuilder.UseDcc();
-});
+ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
+GlobalValidationOptions.SetDefaultCulture("zh-CN");
+
+
+await builder.Services.AddMasaStackConfigAsync(true);
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
+var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
+var identityServerUrl = masaStackConfig.GetSsoDomain();
 
 #if DEBUG
-builder.Services.AddDaprStarter(opt =>
-{
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
-});
+identityServerUrl = "http://localhost:18200";
+//builder.Services.AddDaprStarter(opt =>
+//{
+//    opt.DaprHttpPort = 3600;
+//    opt.DaprGrpcPort = 3601;
+//});
 #endif
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
 
-var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
-builder.Services.AddAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
+builder.Services.AddObjectStorage(option => option.UseAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
 {
     Sts = new AliyunStsOptions()
     {
         RegionId = ossOptions.RegionId
     }
+}));
+
+builder.Services.AddObservable(builder.Logging, () =>
+{
+    return new MasaObservableOptions
+    {
+        ServiceNameSpace = builder.Environment.EnvironmentName,
+        ServiceVersion = masaStackConfig.Version,
+        ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH)
+    };
+}, () =>
+{
+    return masaStackConfig.OtlpUrl;
 });
 
 builder.Services.AddMasaIdentity(options =>
@@ -48,7 +67,7 @@ builder.Services
         var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
-            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackConsts.AUTH_SYSTEM_SERVICE_APP_ID))
+            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServerId(MasaStackConstant.AUTH)))
             .Build();
         options.DefaultPolicy = defaultPolicy;
     })
@@ -59,8 +78,7 @@ builder.Services
     })
     .AddJwtBearer("Bearer", options =>
     {
-        //todo dcc
-        options.Authority = builder.Services.GetMasaConfiguration().Local.GetValue<string>("IdentityServerUrl");
+        options.Authority = identityServerUrl;
         options.RequireHttpsMetadata = false;
         //options.Audience = "";
         options.TokenValidationParameters.ValidateAudience = false;
@@ -69,32 +87,35 @@ builder.Services
 
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
-// needed to load configuration from appsettings.json
-builder.Services.AddOptions();
-// needed to store rate limit counters and ip rules
-builder.Services.AddMemoryCache();
-//load general configuration from appsettings.json
-builder.Services.Configure<ClientRateLimitOptions>(builder.Services.GetMasaConfiguration().Local.GetSection("ClientRateLimiting"));
-// inject counter and rules stores
-builder.Services.AddInMemoryRateLimiting();
-// configuration (resolvers, counter key builders)
-builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-
 MapsterAdapterConfig.TypeAdapter();
 
-builder.Services.AddDccClient();
-
-var redisOption = publicConfiguration.GetSection("$public.RedisConfig").Get<RedisConfigurationOptions>();
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption));
+var redisOption = new RedisConfigurationOptions
+{
+    Servers = new List<RedisServerOptions> {
+        new RedisServerOptions()
+        {
+            Host= masaStackConfig.RedisModel.RedisHost,
+            Port= masaStackConfig.RedisModel.RedisPort
+        }
+    },
+    DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
+    Password = masaStackConfig.RedisModel.RedisPassword
+};
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
+{
+    multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
+    multilevel.SubscribeKeyPrefix = $"db-{redisOption.DefaultDatabase}";
+});
 builder.Services.AddAuthClientMultilevelCache(redisOption);
-
-await builder.Services
-            .AddPmClient(publicConfiguration.GetValue<string>("$public.AppSettings:PmClient:Url"))
-            .AddSchedulerClient(publicConfiguration.GetValue<string>("$public.AppSettings:SchedulerClient:Url"))
-            .AddMcClient(publicConfiguration.GetValue<string>("$public.AppSettings:McClient:Url"))
+builder.Services.AddDccClient(redisOption);
+builder.Services
+            .AddPmClient(masaStackConfig.GetPmServiceDomain())
+            .AddSchedulerClient(masaStackConfig.GetSchedulerServiceDomain())
+            .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
-            .AddElasticsearchAutoComplete()
-            .AddSchedulerJobAsync();
+            .AddElasticsearchAutoComplete();
+//todo update appsettings
+//.AddSchedulerJobAsync();
 
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
@@ -137,29 +158,33 @@ builder.Services
     .UseIntegrationEventBus<IntegrationEventLogService>(options => options.UseDapr().UseEventLog<AuthDbContext>())
     .UseEventBus(eventBusBuilder =>
     {
-        eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseIsolationUoW<AuthDbContext>(
         isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
-        dbOptions => dbOptions.UseSqlServer().UseFilter())
+        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName"))).UseFilter())
     .UseRepository<AuthDbContext>();
 });
 
+builder.Services.AddStackMiddleware();
 
-
+await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
+{
+    //todo split
+    //await new AuthSeedData().SeedAsync(context, services);
+    return Task.CompletedTask;
+});
 builder.Services.AddOidcCache(publicConfiguration);
 await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
 {
+    await new AuthSeedData().SeedAsync(builder);
+
     await option.SeedStandardResourcesAsync();
-    await option.SeedClientDataAsync(new List<Client>
-    {
-        publicConfiguration.GetSection("$public.Clients").Get<ClientModel>().Adapt<Client>()
-    });
     //await option.SyncCacheAsync();
 });
+
 builder.Services.RemoveAll(typeof(IProcessor));
 
 var app = builder.AddServices(options =>
@@ -167,11 +192,6 @@ var app = builder.AddServices(options =>
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
     options.GetPrefixes = new() { "Get", "Select", "Find" };
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
-});
-
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    await new AuthSeedData().SeedAsync(context, services);
 });
 
 app.UseI18n();
@@ -203,6 +223,7 @@ if (!app.Environment.IsProduction())
     });
     app.UseMiddleware<SwaggerAuthentication>();
 }
+
 app.UseStaticFiles();
 app.UseRouting();
 
@@ -210,11 +231,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseIsolation();
-app.UseMiddleware<CurrentUserCheckMiddleware>();
-app.UseMiddleware<DisabledRouteMiddleware>();
+#warning CurrentUserCheckMiddleware
+//app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
-app.UseClientRateLimiting();
+app.UseAddStackMiddleware();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
@@ -222,15 +243,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
-
-app.MapHealthChecks("/hc", new HealthCheckOptions()
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-app.MapHealthChecks("/liveness", new HealthCheckOptions
-{
-    Predicate = r => r.Name.Contains("self")
-});
 
 app.Run();

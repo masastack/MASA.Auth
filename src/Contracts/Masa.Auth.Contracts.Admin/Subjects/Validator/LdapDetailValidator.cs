@@ -11,6 +11,6 @@ public class LdapDetailValidator : AbstractValidator<LdapDetailDto>
         RuleFor(l => l.ServerAddress).Required();
         RuleFor(l => l.RootUserDn).Required();
         RuleFor(l => l.RootUserPassword).Required();
-        RuleFor(l => l.BaseDn).MinLength(3);
+        RuleFor(l => l.BaseDn).MinimumLength(3);
     }
 }
