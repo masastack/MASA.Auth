@@ -937,3 +937,12 @@ input::-webkit-input-placeholder {
     line-height: 21px !important;
     letter-spacing: 0.25px !important;
 }
+
+/*RoleDialog*/
+.d-role-tab .labeled-radio-slider-wrapper {
+    width: 113.25px;
+}
+
+.d-role-tab button {
+    width: 113.25px;
+}
