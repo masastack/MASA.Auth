@@ -8,25 +8,6 @@ builder.Services.AddAutoInject();
 await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
-X509Certificate2 serverCertificate;
-if (string.IsNullOrEmpty(masaStackConfig.TlsName))
-{
-    serverCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
-}
-else
-{
-    serverCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
-}
-
-builder.WebHost.UseKestrel(option =>
-{
-    option.ConfigureHttpsDefaults(options =>
-    {
-        options.ServerCertificate = serverCertificate;
-        options.CheckCertificateRevocation = false;
-    });
-});
-
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -90,11 +71,23 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
     .AddExtensionGrantValidator<LdapGrantValidator>();
 
-#if DEBUG
-identityServerBuilder.AddDeveloperSigningCredential();
-#else
-identityServerBuilder.AddSigningCredential(serverCertificate);
-#endif
+if (builder.Environment.IsDevelopment())
+{
+    identityServerBuilder.AddDeveloperSigningCredential();
+}
+else
+{
+    var serverCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
+    builder.WebHost.UseKestrel(option =>
+    {
+        option.ConfigureHttpsDefaults(options =>
+        {
+            options.ServerCertificate = serverCertificate;
+            options.CheckCertificateRevocation = false;
+        });
+    });
+    identityServerBuilder.AddSigningCredential(serverCertificate);
+}
 
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
@@ -110,10 +103,7 @@ builder.Services.AddLadpContext();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

@@ -21,4 +21,5 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.IdentityModel.Logging;
 global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 global using System.Diagnostics;
+global using System.Security.Authentication;
 global using System.Security.Cryptography.X509Certificates;
