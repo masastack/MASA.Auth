@@ -791,7 +791,7 @@ public class CommandHandler
                 syncResults[i] = new()
                 {
                     JobNumber = staff.JobNumber,
-                    Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
+                    Errors = result.Errors.GroupBy(error => error.PropertyName).Select(e => e.First().ErrorMessage).ToList()
                 };
             }
         }
