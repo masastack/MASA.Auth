@@ -924,6 +924,31 @@ input::-webkit-input-placeholder {
     height: 100%;
 }
 
+.fs-16 input {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #1B2559 !important;
+    line-height: 24px !important;
+}
+
+.radio-btn-default {
+    font-family: 'Roboto';
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: #7681AB !important;
+}
+.radio-btn-selected { /* Subtitle 2 */
+
+    font-family: 'Roboto';
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    color: #323D6F !important;
+}
+
 .m-label.theme--light {
     color: #A3AED0 !important;
 }

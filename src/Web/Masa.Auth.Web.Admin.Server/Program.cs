@@ -9,21 +9,17 @@ GlobalValidationOptions.SetDefaultCulture("zh-CN");
 await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
-builder.WebHost.UseKestrel(option =>
+if (!builder.Environment.IsDevelopment())
 {
-    option.ConfigureHttpsDefaults(options =>
+    builder.WebHost.UseKestrel(option =>
     {
-        if (string.IsNullOrEmpty(masaStackConfig.TlsName))
-        {
-            options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
-        }
-        else
+        option.ConfigureHttpsDefaults(options =>
         {
             options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
-        }
-        options.CheckCertificateRevocation = false;
+            options.CheckCertificateRevocation = false;
+        });
     });
-});
+}
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

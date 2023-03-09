@@ -7,11 +7,6 @@ services:
 
   masa.auth.database:
      image: mcr.microsoft.com/mssql/server:2019-latest
-     ports:
-       - "1433:1433"
-     environment:
-      - SA_PASSWORD=P@ssw0rd
-      - ACCEPT_EULA=Y
 
   masa.auth.web.admin:
     image: ${DOCKER_REGISTRY-}masaauthwebadmin
@@ -25,6 +20,11 @@ services:
       context: .
       dockerfile: src/Services/masa.Auth.Service.Admin/Dockerfile
 
-  
+  masa.auth.web.sso:
+    image: ${DOCKER_REGISTRY-}masaauthwebsso
+    build:
+      context: .
+      dockerfile: src/Web/Masa.Auth.Web.Sso/Dockerfile
+
   dapr-placement:
-    image: "daprio/dapr:1.5.1"
+    image: "daprio/dapr:1.10.2"

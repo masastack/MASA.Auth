@@ -4,8 +4,12 @@ services:
   
   redis:
     image: redis:alpine
+    container_name: masa_redis
+    ports:
+       - "6380:6379"
 
   masa.auth.database:
+     container_name: masa_database
      image: mcr.microsoft.com/mssql/server:2019-latest
      ports:
        - "1433:1433"
@@ -14,25 +18,35 @@ services:
       - ACCEPT_EULA=Y
 
   masa.auth.web.admin:
+    container_name: masa_auth
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      #- ASPNETCORE_Kestrel__Certificates__Default__Path=/com.crt
+      #- ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/com.key
     ports:
       - "18000:80"
       - "18100:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      # - "./ssl:/ssl"
+    env_file:
+      - 'variables.env'
     depends_on:
       - masa.auth.service.admin
+      - masa.auth.web.sso
 
   masa.auth.service.admin:
+    container_name: masa_service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80 #https://+:443;
     ports:
       - "18002:80"
-      - "18102:443"
+      - "18102:443" 
+    env_file:
+      - "variables.env"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -50,8 +64,23 @@ services:
       - "./dapr/components/:/components"
     network_mode: "service:masa.auth.service.admin"
 
+  masa.auth.web.sso:
+    container_name: masa_sso
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "18200:80"
+      - "18201:443"
+    env_file:
+      - "variables.env"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      # - "./ssl:/ssl"
 
   dapr-placement:
+    container_name: dapr-placement
     command: ["./placement", "-port", "50000", "-log-level", "debug"]
     ports:
       - "50000:50000"
