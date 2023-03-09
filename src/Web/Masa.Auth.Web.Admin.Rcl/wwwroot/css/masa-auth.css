@@ -966,3 +966,24 @@ input::-webkit-input-placeholder {
 .m-btn-group .m-item-group .m-btn.m-btn {
     padding: 0px 28px !important;
 }
+
+.fs-14 {
+    font-size: 14px;
+}
+
+.theme--light.m-stepper .m-stepper__label {
+    color: #A3AED0 !important;
+}
+
+.theme--light.m-stepper .m-stepper__step--active .m-stepper__label {
+    text-shadow: 0 0 0 #000;
+    color: rgba(0,0,0,.38) !important;
+}
+
+.theme--light.m-stepper .m-stepper__step:not(.m-stepper__step--active):not(.m-stepper__step--complete):not(.m-stepper__step--error) .m-stepper__step__step {
+    background: #A3AED0;
+}
+
+.theme--light.m-stepper .m-stepper__step--complete .m-stepper__label {
+    color: rgba(0,0,0,.87) !important;
+}
