@@ -34,7 +34,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
         var (success, errorMsg) = await _localLoginByPhoneNumber.VerifyPhoneWithTokenAsync(phoneNumber, spToken);
         if (success)
         {
-            var user = await _authClient.UserService.FindByPhoneNumberAsync(phoneNumber);
+            var user = await _authClient.UserService.GetByPhoneNumberAsync(phoneNumber);
             if (user is null)
             {
                 context.Result = new GrantValidationResult
@@ -46,7 +46,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
             }
             else
             {
-                context.Result = new GrantValidationResult(user.Id.ToString(), "local", GetUserClaims(user.DisplayName));
+                context.Result = new GrantValidationResult(user.Id.ToString(), "local", user.GetUserClaims());
             }
         }
         else
@@ -56,13 +56,5 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
                 Error = errorMsg,
                 ErrorDescription = errorMsg
             };
-    }
-
-    private Claim[] GetUserClaims(string name)
-    {
-        return new Claim[]
-        {
-            new Claim("username", name)
-        };
     }
 }

@@ -13,7 +13,7 @@ public class PositionSelect : SComboBox<PositionSelectDto>
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         ValueSelector = item => item.Name;
-        Label = I18n!.T("Position", true);
+        Label = I18n!.T("Position", true)!;
         MaxHeight = 250;
         await base.SetParametersAsync(parameters);
     }

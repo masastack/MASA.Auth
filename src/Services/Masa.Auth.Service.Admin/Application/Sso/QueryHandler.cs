@@ -64,7 +64,7 @@ public class QueryHandler
     [EventHandler]
     public void ClientTypeListAsync(ClientTypeListQuery clientTypeListQuery)
     {
-        clientTypeListQuery.Result = Enum<ClientTypes>.GetItems()
+        clientTypeListQuery.Result = EnumUtil.GetItems<ClientTypes>()
             .Select(ct => new ClientTypeDetailDto
             {
                 ClientType = ct,

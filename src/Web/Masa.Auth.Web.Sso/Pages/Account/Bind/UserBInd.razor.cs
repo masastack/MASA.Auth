@@ -35,7 +35,7 @@ public partial class UserBind
         (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(_environment ?? "development");
         UserModel = new RegisterThirdPartyUserModel
         {
-            ThirdPartyIdpType = Enum.Parse<ThirdPartyIdpTypes>(identity.Issuer),
+            Scheme = identity.Issuer,
             ExtendedData = JsonSerializer.Serialize(identity),
             ThridPartyIdentity = identity.Subject,
             UserRegisterType = UserRegisterTypes.PhoneNumber,
@@ -48,11 +48,11 @@ public partial class UserBind
         UserModel? user = default;
         if (string.IsNullOrEmpty(identity.PhoneNumber) is false)
         {
-            user = await AuthClient.UserService.FindByPhoneNumberAsync(identity.PhoneNumber);
+            user = await AuthClient.UserService.GetByPhoneNumberAsync(identity.PhoneNumber);
         }
         if (user is null && string.IsNullOrEmpty(identity.Email) is false)
         {
-            user = await AuthClient.UserService.FindByEmailAsync(identity.Email);
+            user = await AuthClient.UserService.GetByEmailAsync(identity.Email);
         }
         if (user is not null)
         {
@@ -77,7 +77,7 @@ public partial class UserBind
                 PhoneNumber = UserModel.PhoneNumber,
                 SendMsgCodeType = SendMsgCodeTypes.Bind
             });
-            await PopupService.AlertAsync(T("The verification code is sent successfully"), AlertTypes.Success);
+            await PopupService.EnqueueSnackbarAsync(T("The verification code is sent successfully"), AlertTypes.Success);
             int second = 60;
             while (second >= 0)
             {
@@ -98,11 +98,11 @@ public partial class UserBind
             {
                 await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
                 Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-                await PopupService.AlertAsync("Bind success", AlertTypes.Success);
+                await PopupService.EnqueueSnackbarAsync("Bind success", AlertTypes.Success);
             }
             catch (Exception ex)
             {
-                await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(ex.Message, AlertTypes.Error);
             }
             finally
             {

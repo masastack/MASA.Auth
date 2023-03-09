@@ -13,7 +13,7 @@
             Suffix="@DT(Name)">
 </STextField>
 
-<MDialog @bind-Value="_dialog" Width="400">
+<MDialog @bind-Value="_dialog" Width="400" Persistent>
     <MCard Class="pa-4">
         <MCardTitle Class="justify-center">
             @($"{Name}{T("DisplayName")}")
@@ -57,8 +57,7 @@
         var publicSection = ConfigurationApi.GetPublic();
         foreach (var culture in I18n.SupportedCultures)
         {
-            var item = publicSection.GetSection($"{DynamicTranslateProvider.I18N_KEY}{culture.Name}");
-            var value = item.GetValue<string>(Name);
+            var value = publicSection.GetValue<string>($"{DynamicTranslateProvider.I18N_KEY}{culture.Name}:{Name}", "");
             _displayNames.Add(new KeyValue<string, string>(culture.Name, value));
         }
         _dialog = true;
@@ -68,13 +67,22 @@
     private async Task Save()
     {
         var publicSection = ConfigurationApi.GetPublic();
+
         foreach (var _displayName in _displayNames)
         {
             var itemKey = $"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}";
-            var item = publicSection.GetSection(itemKey);
-            var data = item?.Get<Dictionary<string, object>>()??new();
-            data[Name] = _displayName.Value;
-            await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", itemKey, JsonSerializer.Serialize(data));
+            var itemSection = publicSection.GetSection(itemKey);
+            if (!itemSection.Exists())
+            {
+                var data = new Dictionary<string, object> { { Name, _displayName.Value } };
+                await ConfigurationApiManage.AddAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", new Dictionary<string, string> { { itemKey, JsonSerializer.Serialize(data) } });
+            }
+            else
+            {
+                var data = itemSection.Get<Dictionary<string, object>>();
+                data[Name] = _displayName.Value;
+                await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", itemKey, data);
+            }
         }
         _dialog = false;
     }

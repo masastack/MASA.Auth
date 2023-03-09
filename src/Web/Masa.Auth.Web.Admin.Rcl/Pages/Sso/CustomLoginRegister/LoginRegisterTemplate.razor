@@ -7,7 +7,7 @@
                 Value="@T(Tab)"
                 Tabs="@(new List<string>{T(CustomLoginTab.Login),T(CustomLoginTab.Register)})"
                 Class="overflow-y"
-                Style="width:512px;max-height:660px;height: auto;">
+                Style="width:512px;max-height:824px;height: auto;">
                 @if (Logo is not null)
                 {
                     <div class="d-flex mb-2">
@@ -24,14 +24,14 @@
                 }
                 <MTabItem Value="T(CustomLoginTab.Login)">
                     <MForm Model=Login EnableValidation EnableI18n>
-                        <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 mt-1" Height="58" Label="@T(nameof(Login.Account))" />
+                        <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 mt-1 fs-16" Height="58" Label="@T(nameof(Login.Account))" />
                         <SPassword @bind-Value="Login.Password" Class="mb-1" />
                         <div class="d-flex mb-13">
                             <MSpacer />
                             <span class="caption regular3--text">@T("Forgot password?")</span>
                         </div>
                         <div class="d-flex">
-                            <MButton OnClick="() => context.Validate()" Class="large-button mx-auto" Color="primary">
+                            <MButton OnClick="() => context.Validate()" Class="large-button mx-auto" Color="primary" Rounded>
                                 @T("Login")
                             </MButton>
                         </div>
@@ -46,7 +46,7 @@
                         <div class="text-center">
                             @foreach (var thirdPartyIdp in ThirdPartyIdps)
                             {
-                                <MAvatar Size="30" Class="hover-pointer ml-4">
+                                <MAvatar Size="30" Class="hover-pointer ml-6">
                                     <img src="@thirdPartyIdp.Icon" />
                                 </MAvatar>
                             }

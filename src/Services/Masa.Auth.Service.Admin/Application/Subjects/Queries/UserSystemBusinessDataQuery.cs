@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record UserSystemBusinessDataQuery(Guid UserId, string SystemId) : Query<string>
+public record UserSystemBusinessDataQuery(IEnumerable<Guid> UserIds, string SystemId) : Query<List<string>>
 {
-    public override string Result { get; set; } = string.Empty;
+    public override List<string> Result { get; set; } = new();
 }

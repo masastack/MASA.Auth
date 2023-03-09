@@ -44,7 +44,7 @@ public class AccountController : Controller
                 user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
                 {
                     PhoneNumber = inputModel.PhoneNumber,
-                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException(_i18n.T("SmsRequired")),
+                    Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException(_i18n.T("SmsRequired") ?? "SmsRequired"),
                     RegisterLogin = inputModel.RegisterLogin
                 });
                 if (user is null)
@@ -106,12 +106,12 @@ public class AccountController : Controller
             {
                 return Content(ex.Message);
             }
-            else return Content(_i18n.T("UnknownException"));
+            else return Content(_i18n.T("UnknownException") ?? "UnknownException");
         }
 
         await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.Account,
                 "invalid credentials", clientId: context?.Client.ClientId));
-        return Content(_i18n.T("LoginValidateError"));
+        return Content(_i18n.T("LoginValidateError") ?? "LoginValidateError");
     }
 
     [HttpGet]

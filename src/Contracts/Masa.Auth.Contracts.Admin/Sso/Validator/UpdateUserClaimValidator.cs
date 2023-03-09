@@ -7,8 +7,8 @@ public class UpdateUserClaimValidator : AbstractValidator<UpdateUserClaimDto>
 {
     public UpdateUserClaimValidator()
     {
-        RuleFor(UserClaim => UserClaim.Name).Required().MinLength(2).MaxLength(50);
-        RuleFor(UserClaim => UserClaim.Description).Required().MinLength(2).MaxLength(255);
+        RuleFor(UserClaim => UserClaim.Name).Required().MinimumLength(2).MaximumLength(50);
+        RuleFor(UserClaim => UserClaim.Description).Required().MinimumLength(2).MaximumLength(255);
     }
 }
 

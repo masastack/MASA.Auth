@@ -7,6 +7,6 @@ public class UpdateUserBasicInfoCommandValidator : AbstractValidator<UpdateUserB
 {
     public UpdateUserBasicInfoCommandValidator()
     {
-        RuleFor(command => command.User.DisplayName).Required().MaxLength(20);
+        RuleFor(command => command.User.DisplayName).Required().MaximumLength(20);
     }
 }

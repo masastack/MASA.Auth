@@ -501,9 +501,18 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetIdentityProviderBySchemeAsync(IdentityProviderBySchemeQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>()
+                                                       .FirstOrDefaultAsync(ip => ip.Name == query.scheme);
+
+        query.Result = identityProvider ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_PROVIDER_NOT_FOUND);
+    }
+
+    [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
     {
-        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == LdapConsts.LDAP_NAME);
+        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == query.Name);
         thirdPartyIdp?.Adapt(query.Result);
     }
 
@@ -513,7 +522,7 @@ public class QueryHandler
         Expression<Func<ThirdPartyIdp, bool>> condition = ThirdPartyIdp => true;
         if (!string.IsNullOrEmpty(query.Search))
             condition = condition.And(thirdPartyIdp => thirdPartyIdp.Name.Contains(query.Search) || thirdPartyIdp.DisplayName.Contains(query.Search));
-        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
+        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled == true);
         query.Result = thirdPartyIdps.Select(tpIdp => new ThirdPartyIdpSelectDto(tpIdp.Id, tpIdp.Name, tpIdp.DisplayName, tpIdp.ClientId, tpIdp.ClientSecret, tpIdp.Icon, tpIdp.AuthenticationType)).ToList();
         if (query.IncludeLdap)
         {
@@ -526,9 +535,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
     {
-        var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync();
         query.Result = LocalAuthenticationDefaultsProvider.GetAll()
-                                                     .Where(adp => thirdPartyIdps.Any(tpIdp => tpIdp.ThirdPartyIdpType.ToString() == adp.Scheme) is false)
                                                      .Adapt<List<ThirdPartyIdpModel>>()
                                                      .ToList();
     }
@@ -743,7 +750,8 @@ public class QueryHandler
     [EventHandler]
     public async Task UserSystemBizDataQueryAsync(UserSystemBusinessDataQuery userSystemBusinessData)
     {
-        userSystemBusinessData.Result = await _multilevelCacheClient.GetAsync<string>(
-            CacheKey.UserSystemDataKey(userSystemBusinessData.UserId, userSystemBusinessData.SystemId)) ?? "";
+        userSystemBusinessData.Result = (await _multilevelCacheClient.GetListAsync<string>(
+            userSystemBusinessData.UserIds.Select(id => CacheKey.UserSystemDataKey(id, userSystemBusinessData.SystemId))
+        )).Where(data => data is not null).ToList()!;
     }
 }

@@ -17,15 +17,15 @@ public class RegisterValidator : AbstractValidator<RegisterModel>
           .WithMessage("The password is inconsistent with the confirm password")
           .Matches(BusinessConsts.PASSWORD_REGULAR)
           .WithMessage("Password must contain numbers and letter, and not less than 6 digits")
-          .MaxLength(30);
+          .MaximumLength(30);
 
         RuleFor(register => register.DisplayName)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.DisplayName)))
-            .ChineseLetter().MaxLength(20);
+            .ChineseLetter().MaximumLength(20);
 
         RuleFor(register => register.Name)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Name)))
-            .ChineseLetter().MaxLength(20);
+            .ChineseLetter().MaximumLength(20);
 
         RuleFor(register => register.PhoneNumber)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.PhoneNumber)))

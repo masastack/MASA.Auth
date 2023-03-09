@@ -96,17 +96,17 @@
     {
         if (!Uri.TryCreate(Dto.AllowedCorsOrigin, UriKind.Absolute, out var uri))
         {
-            PopupService.AlertAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Is not a valid URI address"), AlertTypes.Error);
             return;
         }
         if (string.IsNullOrWhiteSpace(Dto.AllowedCorsOrigin))
         {
-            PopupService.AlertAsync(T("Cannot be empty"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Cannot be empty"), AlertTypes.Error);
             return;
         }
         if (Dto.AllowedCorsOrigins.Contains(Dto.AllowedCorsOrigin.Trim()))
         {
-            PopupService.AlertAsync(T("Duplicate item"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Duplicate item"), AlertTypes.Error);
             return;
         }
         Dto.AllowedCorsOrigins.Add(Dto.AllowedCorsOrigin);
@@ -117,12 +117,12 @@
     {
         if (string.IsNullOrWhiteSpace(Dto.Property.Key) || string.IsNullOrWhiteSpace(Dto.Property.Value))
         {
-            PopupService.AlertAsync(T("Cannot be empty"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Cannot be empty"), AlertTypes.Error);
             return;
         }
         if (Dto.Properties.Any(p => p.Key == Dto.Property.Key.Trim()))
         {
-            PopupService.AlertAsync(T("Duplicate key"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Duplicate key"), AlertTypes.Error);
             return;
         }
         Dto.Properties.Add(Dto.Property);

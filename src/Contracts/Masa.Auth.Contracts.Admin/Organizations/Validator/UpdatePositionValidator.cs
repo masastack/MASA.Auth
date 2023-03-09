@@ -8,6 +8,6 @@ public class UpdatePositionValidator : AbstractValidator<UpdatePositionDto>
     public UpdatePositionValidator()
     {
         RuleFor(p => p.Id).NotEmpty();
-        RuleFor(p => p.Name).Required().MinLength(2).MaxLength(20);
+        RuleFor(p => p.Name).Required().MinimumLength(2).MaximumLength(20);
     }
 }

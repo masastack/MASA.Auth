@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record LdapDetailQuery : Query<LdapDetailDto>
+public record LdapDetailQuery(string Name = LdapConsts.LDAP_NAME) : Query<LdapDetailDto>
 {
     public override LdapDetailDto Result { get; set; } = new();
 }
