@@ -8,14 +8,17 @@
                 <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">
                     <MImage Src="@Team.Avatar"></MImage>
                 </MListItemAvatar>
-                <MListItemContent class="pb-0">
+                <MListItemContent class="pb-3">
                     <MListItemTitle class="d-flex justify-space-between align-center">
-                        <span class="body2 masa-text-3-1">@T("Member") : @Team.MemberCount </span>
+                        <div>
+                            <span class="body2 masa-text-3-1">@T("Member") : @Team.MemberCount </span>
+                            <MListItemSubtitle class="h7 masa-text-1-2">@Team.Name</MListItemSubtitle>
+                        </div>
                         <MButton StopPropagation Icon OnClick="HandleEditClick">
-                            <SIcon Tooltip="@T("Edit")" >@IconConstants.Update</SIcon>
+                            <SIcon Tooltip="@T("Edit")" Color="#323D6F">@IconConstants.Update</SIcon>
                         </MButton>
                     </MListItemTitle>
-                    <MListItemSubtitle class="h6 masa-text-1-2">@Team.Name</MListItemSubtitle>
+                    
                 </MListItemContent>
             </MListItem>
         </MCardTitle>
@@ -34,9 +37,9 @@
                 }
             </div>
             <MSpacer />
-            <span class="body2 masa-text-1-2">@Team.Modifier</span>
-            <span class="mx-2" style="color:#E2E7F4">|</span>
             <span class="body2 masa-text-3-1">@T("Edit In") @Team.ModificationTime.Humanize(culture:I18n.Culture)</span>
+            <span class="mx-2" style="color:#E2E7F4">|</span>
+            <span class="body2 masa-text-1-2">@Team.Modifier</span>
         </MCardActions>
     </MCard>
 </MHover>
