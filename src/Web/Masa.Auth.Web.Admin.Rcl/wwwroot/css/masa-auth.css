@@ -225,9 +225,10 @@
 .m-text-field--outlined input {
     font-family: 'Roboto' !important;
     font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 14px !important;
-    line-height: 20px !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    color: #7681AB !important;
 }
 
 .m-timeline {
@@ -586,16 +587,16 @@ input::-webkit-input-placeholder {
     letter-spacing: 0em !important;
 }
 
-.m-input.mx-auto .m-text-field__slot input::placeholder {
-    text-align: center;
-    color: #A3AED0 !important;
-    font-family: Roboto !important;
-    font-size: 1.5rem !important;
-    font-style: normal !important;
-    font-weight: 700 !important;
-    line-height: normal !important;
-    letter-spacing: 0em !important;
-}
+    .m-input.mx-auto .m-text-field__slot input::placeholder {
+        text-align: center;
+        color: #A3AED0 !important;
+        font-family: Roboto !important;
+        font-size: 1.5rem !important;
+        font-style: normal !important;
+        font-weight: 700 !important;
+        line-height: normal !important;
+        letter-spacing: 0em !important;
+    }
 
 
 .m-data-table.table-space-v-4 > .m-data-table__wrapper > table {
@@ -836,14 +837,14 @@ input::-webkit-input-placeholder {
 
 .showAnimation {
     animation-name: show;
-    animation-duration: 0.8s;   
+    animation-duration: 0.8s;
 }
 
 @keyframes hide {
     from {
         opacity: 1;
         height: 40px;
-        margin-top:28px;
+        margin-top: 28px;
     }
 
     to {
@@ -858,7 +859,7 @@ input::-webkit-input-placeholder {
     visibility: hidden;
 }
 
-.closeAnimation {   
+.closeAnimation {
     animation-name: hide;
     animation-duration: 0.8s;
 }
@@ -880,19 +881,19 @@ input::-webkit-input-placeholder {
     margin: 0 !important;
 }
 
-.urlTextField .m-input__prepend-outer .m-select fieldset {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0!important;
-}
+    .urlTextField .m-input__prepend-outer .m-select fieldset {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
 
-.urlTextField .m-input__prepend-outer + .m-input__control .m-input__slot fieldset {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-    border-left: 0 !important;
-}
+    .urlTextField .m-input__prepend-outer + .m-input__control .m-input__slot fieldset {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+        border-left: 0 !important;
+    }
 
 .m-input__append-inner .d-flex {
-    margin-top:0 !important;
+    margin-top: 0 !important;
 }
 
 /*
@@ -904,12 +905,12 @@ input::-webkit-input-placeholder {
 }
 
 .hover-border-primary:hover {
-    border-color: #4318FF !important;   
+    border-color: #4318FF !important;
 }
 
-.hover-border-primary:hover .subtitle {
-    color: #4318FF !important;
-}
+    .hover-border-primary:hover .subtitle {
+        color: #4318FF !important;
+    }
 
 /*
     stepper
@@ -946,4 +947,22 @@ input::-webkit-input-placeholder {
     font-size: 14px !important;
     line-height: 21px !important;
     color: #323D6F !important;
+}
+
+.m-label.theme--light {
+    color: #A3AED0 !important;
+}
+
+.m-text-field__slot input {
+    color: #323D6F !important;
+    font-family: 'Roboto' !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
+    letter-spacing: 0.25px !important;
+}
+
+.m-btn-group .m-item-group .m-btn.m-btn {
+    padding: 0px 28px !important;
 }
