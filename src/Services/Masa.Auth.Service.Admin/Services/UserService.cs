@@ -262,11 +262,11 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<string?> GetSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+    public async Task<string> GetSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
     {
         var query = new UserSystemBusinessDataQuery(new[] { userId }, systemId);
         await eventBus.PublishAsync(query);
-        return query.Result.FirstOrDefault();
+        return query.Result.FirstOrDefault() ?? "";
     }
 
     [RoutePattern("systemData/byIds", StartWithBaseUri = true, HttpMethod = "Get")]
