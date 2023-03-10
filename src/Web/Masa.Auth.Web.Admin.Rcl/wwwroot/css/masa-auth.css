@@ -578,13 +578,15 @@ input::-webkit-input-placeholder {
 
 .m-input.mx-auto .m-text-field__slot input {
     text-align: center;
-    color: #A3AED0 !important;
+    color: #7681AB !important;
     font-family: Roboto !important;
     font-size: 1.5rem !important;
     font-style: normal !important;
-    font-weight: 700 !important;
+    font-weight: 400 !important;
     line-height: normal !important;
     letter-spacing: 0em !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
 }
 
     .m-input.mx-auto .m-text-field__slot input::placeholder {
@@ -658,6 +660,10 @@ input::-webkit-input-placeholder {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+    .overflow-y::-webkit-scrollbar-thumb {
+        background: #A3AED0;
+    }
 
 .sheetDialogPadding {
     padding-left: 228px;
