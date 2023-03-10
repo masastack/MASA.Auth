@@ -52,8 +52,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
-	  <ProjectReference Include="C:\Users\mayue\Desktop\IdentityServer4\src\IdentityServer4\src\IdentityServer4.csproj" />
+		<ProjectReference Include="..\..\..\..\MASA.Stack.Components\src\Masa.Stack.Components\Masa.Stack.Components.csproj" />
+		<ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
 
 	<ProjectExtensions>

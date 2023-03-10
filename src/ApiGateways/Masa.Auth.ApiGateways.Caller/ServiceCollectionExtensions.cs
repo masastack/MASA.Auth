@@ -8,25 +8,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAuthApiGateways(this IServiceCollection services, Action<AuthApiOptions>? configure = null)
     {
         services.AddSingleton<IResponseMessage, AuthResponseMessage>();
-        var options = new AuthApiOptions("http://localhost:18002/");
-        //Todo default option
-
+        var options = new AuthApiOptions();
         configure?.Invoke(options);
         services.AddSingleton(options);
         services.AddAutoRegistrationCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
-        return services;
-    }
-
-    public static IServiceCollection AddJwtTokenValidator(this IServiceCollection services,
-        Action<JwtTokenValidatorOptions> jwtTokenValidatorOptions, Action<ClientRefreshTokenOptions> clientRefreshTokenOptions)
-    {
-        var options = new JwtTokenValidatorOptions();
-        jwtTokenValidatorOptions.Invoke(options);
-        services.AddSingleton(options);
-        var refreshTokenOptions = new ClientRefreshTokenOptions();
-        clientRefreshTokenOptions.Invoke(refreshTokenOptions);
-        services.AddSingleton(refreshTokenOptions);
-        services.AddScoped<JwtTokenValidator>();
         return services;
     }
 }
