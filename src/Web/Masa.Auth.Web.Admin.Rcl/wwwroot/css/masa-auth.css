@@ -968,10 +968,6 @@ input::-webkit-input-placeholder {
     padding: 0px 28px !important;
 }
 
-.d-flex table {
-    /*height:100%;*/
-}
-
     .d-flex table tr {
         height: 72px;
     }

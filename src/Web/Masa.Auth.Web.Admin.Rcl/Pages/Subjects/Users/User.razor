@@ -1,82 +1,80 @@
 ﻿@using Masa.Stack.Components
 @inherits AdminCompontentBase
 
-<div class="d-user">
-    <AutoHeight Card>
-        <HeaderContent>
-            <div class="d-flex">
-                <MSpacer />
-                <div>
-                    <SUserAutoComplete Small FillBackground=false @bind-Value="UserId" Class="user-auto-complete" />
-                </div>
-                <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
-                    <MIcon Class="ma-auto" Color="emphasis2" Size=20>
-                        @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
-                    </MIcon>
-                </div>
-                <SButton Small Class="ml-4" OnClick=OpenAddUserDialog BorderRadiusClass="rounded-lg">
-                    <MIcon Size=18>@IconConstants.Add</MIcon>
-                    <span class="ml-2 btn">@T("Add")</span>
-                </SButton>
+<AutoHeight Card>
+    <HeaderContent>
+        <div class="d-flex">
+            <MSpacer />
+            <div>
+                <SUserAutoComplete Small FillBackground=false @bind-Value="UserId" Class="user-auto-complete" />
             </div>
-            <div id="userFilter" class="@FilterClass">
-                <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <MRow class="ml-6">
-                    <MCol Md=4>
-                        <BooleanSelect @bind-Value="Enabled" FillBackground=false AutoLabel=false Small Placeholder="@T("UserState")" />
-                        </MCol>
-                        </MRow>
-                    </div>
-                </HeaderContent>
-                <AutoHeightContent>
-                    <SDataTable Dense
-                        Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
-                        Headers="GetHeaders()"
-                        Items="Users"
-                        TItem="UserDto"
-                        ItemsPerPage="PageSize">
-                <HeaderColContent Context="header">
-                    <span>@header.Text</span>
-                </HeaderColContent>
-                <ItemColContent>
-                    @switch (context.Header.Value)
-                    {
-                        case nameof(UserDto.Avatar):
-                            <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateUserDialog(context.Item)">
-                                <MAvatar Size="40">
-                                    <img src="@context.Item.Avatar" />
-                                </MAvatar>
-                                <div class="ml-2 my-auto">
-                                    <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name,context.Item.Account)</div>
-                                    <div class="regular2--text caption">@context.Item.PhoneNumber</div>
-                                </div>
+            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
+                <MIcon Class="ma-auto" Color="emphasis2" Size=20>
+                    @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
+                </MIcon>
+            </div>
+            <SButton Small Class="ml-4" OnClick=OpenAddUserDialog BorderRadiusClass="rounded-lg">
+                <MIcon Size=18>@IconConstants.Add</MIcon>
+                <span class="ml-2 btn">@T("Add")</span>
+            </SButton>
+        </div>
+        <div id="userFilter" class="@FilterClass">
+            <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+            <MRow class="ml-6">
+                <MCol Md=4>
+                    <BooleanSelect @bind-Value="Enabled" FillBackground=false AutoLabel=false Small Placeholder="@T("UserState")" />
+                    </MCol>
+                    </MRow>
+                </div>
+            </HeaderContent>
+            <AutoHeightContent>
+                <SDataTable Dense
+                    Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
+                    Headers="GetHeaders()"
+                    Items="Users"
+                    TItem="UserDto"
+                    ItemsPerPage="PageSize">
+            <HeaderColContent Context="header">
+                <span>@header.Text</span>
+            </HeaderColContent>
+            <ItemColContent>
+                @switch (context.Header.Value)
+                {
+                    case nameof(UserDto.Avatar):
+                        <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateUserDialog(context.Item)">
+                            <MAvatar Size="40">
+                                <img src="@context.Item.Avatar" />
+                            </MAvatar>
+                            <div class="ml-2 my-auto">
+                                <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name,context.Item.Account)</div>
+                                <div class="regular2--text caption">@context.Item.PhoneNumber</div>
                             </div>
-                            break;
-                        case (nameof(UserDto.Account)):
-                            <span>@context.Item.Account</span>
-                            break;
-                        case (nameof(UserDto.CreationTime)):
-                            <SDateTimeTitle Value=context.Item.CreationTime />
-                            break;
-                        case nameof(UserDto.Enabled):
-                            <EnableChip Value=context.Item.Enabled />
-                            break;
-                        case "Action":
-                            <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</SIcon>
-                            <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
-                            break;
-                        default:
-                            <SItemCol Value="@context.Value" />
-                            break;
-                    }
-                </ItemColContent>
-            </SDataTable>
-        </AutoHeightContent>
-        <FooterContent>
-            <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
-        </FooterContent>
-    </AutoHeight>
-</div>
+                        </div>
+                        break;
+                    case (nameof(UserDto.Account)):
+                        <span>@context.Item.Account</span>
+                        break;
+                    case (nameof(UserDto.CreationTime)):
+                        <SDateTimeTitle Value=context.Item.CreationTime />
+                        break;
+                    case nameof(UserDto.Enabled):
+                        <EnableChip Value=context.Item.Enabled />
+                        break;
+                    case "Action":
+                        <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</SIcon>
+                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
+                        break;
+                    default:
+                        <SItemCol Value="@context.Value" />
+                        break;
+                }
+            </ItemColContent>
+        </SDataTable>
+    </AutoHeightContent>
+    <FooterContent>
+        <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+    </FooterContent>
+</AutoHeight>
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=OnAddUserSuccessAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=UpdateStaffAndThirdPartyUserAsync />
 <UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />
