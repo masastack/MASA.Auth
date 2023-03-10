@@ -6,20 +6,17 @@
 
 <MRow>
     <MCol Md="12" Class="d-flex justify-space-between  align-center">
-        <div class="h6 regular-secondary--text">团队</div>
-        <MRow>
-            <MCol Class="d-flex justify-end">
-                <OutlinedSearchTextField Class="mr-6" @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
-                <PermissionView Code="@ElementPermissionCodes.TeamAdd">
-                    <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
-                        <MIcon Size=18>@IconConstants.Add</MIcon>
-                        <span class="ml-2 btn">@T("Add")</span>
-                    </SButton>
-                </PermissionView>
-            </MCol>
-        </MRow>
+        <div class="h6 regular-secondary--text">@T("TeamTitle")</div>
+        <div Class="d-flex justify-end">
+            <OutlinedSearchTextField Class="mr-6" @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
+            <PermissionView Code="@ElementPermissionCodes.TeamAdd">
+                <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <span class="ml-2 btn">@T("Add")</span>
+                </SButton>
+            </PermissionView>
+        </div>
     </MCol>
-    
 </MRow>
 <MRow Style="overflow:auto;max-height: calc(100vh - 170px);">
     @foreach (var team in _teams)
