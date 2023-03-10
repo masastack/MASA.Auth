@@ -72,5 +72,5 @@
     </AutoHeight>
 </DefaultCard>
 
-<AddCustomLoginRegisterDialog @key="Guid.NewGuid()" @bind-Visible="AddCustomLoginRegisterDialogVisible" OnSubmitSuccess=GetCustomLoginsAsync />
-<UpdateCustomLoginRegisterDialog @key="Guid.NewGuid()" @bind-Visible="UpdateCustomLoginRegisterDialogVisible" CustomLoginId="CurrentCustomLoginId" OnSubmitSuccess=GetCustomLoginsAsync />
+<AddCustomLoginRegisterDialog @bind-Visible="AddCustomLoginRegisterDialogVisible" OnSubmitSuccess=GetCustomLoginsAsync />
+<UpdateCustomLoginRegisterDialog @bind-Visible="UpdateCustomLoginRegisterDialogVisible" CustomLoginId="CurrentCustomLoginId" OnSubmitSuccess=GetCustomLoginsAsync />

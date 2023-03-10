@@ -34,7 +34,7 @@ public partial class AddIdentityResourceDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             IdentityResource = new();
         }
