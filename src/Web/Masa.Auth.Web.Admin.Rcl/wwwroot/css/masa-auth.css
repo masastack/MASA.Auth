@@ -974,10 +974,23 @@ input::-webkit-input-placeholder {
     padding: 0px 28px !important;
 }
 
-    .d-flex table tr {
-        height: 72px;
-    }
+.d-flex table tr {
+    height: 72px;
+    font-size: 14px;
+}
 
+.theme--light.m-stepper .m-stepper__step--active .m-stepper__label {
+    text-shadow: 0 0 0 #000;
+    color: rgba(0,0,0,.38) !important;
+}
+
+.theme--light.m-stepper .m-stepper__step:not(.m-stepper__step--active):not(.m-stepper__step--complete):not(.m-stepper__step--error) .m-stepper__step__step {
+    background: #A3AED0;
+}
+
+.theme--light.m-stepper .m-stepper__step--complete .m-stepper__label {
+    color: rgba(0,0,0,.87) !important;
+}
 
 .d-flex .m-window-item .m-sheet {
     padding-top: 0px !important;

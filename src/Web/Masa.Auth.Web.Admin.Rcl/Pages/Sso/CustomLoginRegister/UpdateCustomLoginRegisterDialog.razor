@@ -6,7 +6,7 @@
             <HeaderContent>
                 <div class="d-flex">
                     <div class="mx-auto">
-                        <SLabeledRadioGroup @bind-Value="Tab" Dense Class="radio-btn-default" ActiveClass="radio-btn-selected">
+                        <SLabeledRadioGroup @bind-Value="Tab" Dense Class="btn regular2--text" ActiveClass="subtitle2 emphasis2--text">
                             @foreach (var tab in new List<string> { CustomLoginTab.BasicInformation, CustomLoginTab.Login, CustomLoginTab.Register })
                             {
                                 <SLabeledRadio Value="tab" MinWidth=70>

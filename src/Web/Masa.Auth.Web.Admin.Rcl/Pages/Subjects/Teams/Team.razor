@@ -5,21 +5,23 @@
 <PageTitle>@T("Team")</PageTitle>
 
 <MRow>
-    <MCol Md="12" Class="d-flex justify-space-between">
-        <OutlinedSearchTextField @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
-        <PermissionView Code="@ElementPermissionCodes.TeamAdd">
-            <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
-                <MIcon Size=18>@IconConstants.Add</MIcon>
-                <span class="ml-2 btn">@T("Add")</span>
-            </SButton>
-        </PermissionView>
+    <MCol Md="12" Class="d-flex justify-space-between  align-center">
+        <div class="h6 regular-secondary--text">@T("Team")</div>
+        <div Class="d-flex justify-end">
+            <OutlinedSearchTextField Class="mr-6" @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
+            <PermissionView Code="@ElementPermissionCodes.TeamAdd">
+                <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
+                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <span class="ml-2 btn">@T("Add")</span>
+                </SButton>
+            </PermissionView>
+        </div>
     </MCol>
-    
 </MRow>
 <MRow Style="overflow:auto;max-height: calc(100vh - 170px);">
     @foreach (var team in _teams)
     {
-        <MCol Md="4">
+        <MCol Md="4" Class="pa-2">
             <TeamCard Team=team OnEditClick="()=>EditTeamHandler(team.Id)" />
         </MCol>
     }

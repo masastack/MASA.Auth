@@ -266,7 +266,7 @@ public class UserService : ServiceBase
     {
         var query = new UserSystemBusinessDataQuery(new[] { userId }, systemId);
         await eventBus.PublishAsync(query);
-        return query.Result.First();
+        return query.Result.FirstOrDefault() ?? "";
     }
 
     [RoutePattern("systemData/byIds", StartWithBaseUri = true, HttpMethod = "Get")]
