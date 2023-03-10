@@ -52,7 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\MASA.Stack.Components\src\Masa.Stack.Components\Masa.Stack.Components.csproj" />
+		<ProjectReference Include="..\..\..\..\..\IdentityServer4-main\src\IdentityServer4\src\IdentityServer4.csproj" />
 		<ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
 
