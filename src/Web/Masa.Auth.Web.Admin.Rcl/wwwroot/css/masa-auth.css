@@ -578,13 +578,15 @@ input::-webkit-input-placeholder {
 
 .m-input.mx-auto .m-text-field__slot input {
     text-align: center;
-    color: #A3AED0 !important;
+    color: #7681AB !important;
     font-family: Roboto !important;
     font-size: 1.5rem !important;
     font-style: normal !important;
-    font-weight: 700 !important;
+    font-weight: 400 !important;
     line-height: normal !important;
     letter-spacing: 0em !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
 }
 
     .m-input.mx-auto .m-text-field__slot input::placeholder {
@@ -658,6 +660,10 @@ input::-webkit-input-placeholder {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+    .overflow-y::-webkit-scrollbar-thumb {
+        background: #A3AED0;
+    }
 
 .sheetDialogPadding {
     padding-left: 228px;
@@ -939,6 +945,7 @@ input::-webkit-input-placeholder {
     line-height: 21px !important;
     color: #7681AB !important;
 }
+
 .radio-btn-selected { /* Subtitle 2 */
 
     font-family: 'Roboto';
@@ -966,3 +973,30 @@ input::-webkit-input-placeholder {
 .m-btn-group .m-item-group .m-btn.m-btn {
     padding: 0px 28px !important;
 }
+
+.d-flex table tr {
+    height: 72px;
+    font-size: 14px;
+}
+
+.theme--light.m-stepper .m-stepper__step--active .m-stepper__label {
+    text-shadow: 0 0 0 #000;
+    color: rgba(0,0,0,.38) !important;
+}
+
+.theme--light.m-stepper .m-stepper__step:not(.m-stepper__step--active):not(.m-stepper__step--complete):not(.m-stepper__step--error) .m-stepper__step__step {
+    background: #A3AED0;
+}
+
+.theme--light.m-stepper .m-stepper__step--complete .m-stepper__label {
+    color: rgba(0,0,0,.87) !important;
+}
+
+.d-flex .m-window-item .m-sheet {
+    padding-top: 0px !important;
+}
+
+    .d-flex .m-window-item .m-sheet .m-data-table-header th {
+        height: 56px !important;
+        border-bottom: 0.5px solid #E4E8F3 !important;
+    }

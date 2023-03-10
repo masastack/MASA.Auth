@@ -56,11 +56,11 @@
                     case (nameof(ThirdPartyUserDto.IdpDetailDto)):
                         if (context.Item.IdpDetailDto.Name == LdapConsts.LDAP_NAME)
                         {
-                            <MIcon Size="40">@context.Item.IdpDetailDto.Icon</MIcon>
+                            <MIcon Size="24">@context.Item.IdpDetailDto.Icon</MIcon>
                         }
                         else
                         {
-                            <MAvatar Size=40>
+                            <MAvatar Size="24">
                                 <img src="@context.Item.IdpDetailDto.Icon" />
                             </MAvatar>
                         }
