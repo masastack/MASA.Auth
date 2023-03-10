@@ -9,24 +9,26 @@ public class UserDomainEventHandler
     readonly AuthDbContext _authDbContext;
     readonly RoleDomainService _roleDomainService;
     readonly IEventBus _eventBus;
+    readonly ILogger<UserDomainEventHandler> _logger;
 
-    public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient,
-        AuthDbContext authDbContext,
-        RoleDomainService roleDomainService,
-        IEventBus eventBus)
+    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
         _roleDomainService = roleDomainService;
         _eventBus = eventBus;
+        _logger = logger;
     }
 
     [EventHandler(1)]
     public async Task SetAutoCompleteAsync(AddUserDomainEvent userEvent)
     {
         var user = userEvent.User.Adapt<UserSelectDto>();
-        await _autoCompleteClient.SetBySpecifyDocumentAsync(user);
+        var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user);
+        if (result.IsValid is false)
+        {
+            _logger.LogError(JsonSerializer.Serialize(result));
+        }
     }
 
     [EventHandler(2)]
