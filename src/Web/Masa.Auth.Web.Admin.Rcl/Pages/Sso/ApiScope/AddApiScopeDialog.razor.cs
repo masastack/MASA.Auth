@@ -20,10 +20,6 @@ public partial class AddApiScopeDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (!visible)
-        {
-            ApiScope = new();
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -31,6 +27,14 @@ public partial class AddApiScopeDialog
         else
         {
             Visible = visible;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            ApiScope = new();
         }
     }
 

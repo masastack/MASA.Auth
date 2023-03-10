@@ -22,10 +22,6 @@ public partial class AddIdentityResourceDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (!Visible)
-        {
-            IdentityResource = new();
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -33,6 +29,14 @@ public partial class AddIdentityResourceDialog
         else
         {
             Visible = visible;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            IdentityResource = new();
         }
     }
 

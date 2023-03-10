@@ -22,10 +22,6 @@ public partial class AddPositionDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (!Visible)
-        {
-            Position = new();
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -33,6 +29,14 @@ public partial class AddPositionDialog
         else
         {
             Visible = visible;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            Position = new();
         }
     }
 

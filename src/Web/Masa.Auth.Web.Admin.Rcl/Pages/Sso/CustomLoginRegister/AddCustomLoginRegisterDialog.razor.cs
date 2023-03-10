@@ -28,11 +28,6 @@ public partial class AddCustomLoginRegisterDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (!visible)
-        {
-            CustomLogin = new();
-            Tab = CustomLoginTab.BasicInformation;
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -44,6 +39,15 @@ public partial class AddCustomLoginRegisterDialog
         if (Form is not null)
         {
             Form.ResetValidation();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            CustomLogin = new();
+            Tab = CustomLoginTab.BasicInformation;
         }
     }
 

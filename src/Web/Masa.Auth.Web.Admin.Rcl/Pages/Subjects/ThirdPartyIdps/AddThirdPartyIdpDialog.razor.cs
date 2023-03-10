@@ -27,11 +27,6 @@ public partial class AddThirdPartyIdpDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (!Visible)
-        {
-            ThirdPartyIdp = new();
-            AdvancedConfig = new();
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -39,6 +34,15 @@ public partial class AddThirdPartyIdpDialog
         else
         {
             Visible = visible;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            ThirdPartyIdp = new();
+            AdvancedConfig = new();
         }
     }
 

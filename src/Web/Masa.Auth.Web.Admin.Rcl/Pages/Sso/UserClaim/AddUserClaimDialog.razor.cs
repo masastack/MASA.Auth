@@ -22,10 +22,6 @@ public partial class AddUserClaimDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if (!visible)
-        {
-            UserClaim = new();
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -33,6 +29,14 @@ public partial class AddUserClaimDialog
         else
         {
             Visible = visible;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            UserClaim = new();
         }
     }
 

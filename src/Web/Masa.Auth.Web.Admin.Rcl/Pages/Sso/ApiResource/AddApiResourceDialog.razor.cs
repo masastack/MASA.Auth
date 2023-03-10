@@ -20,10 +20,6 @@ public partial class AddApiResourceDialog
 
     private async Task UpdateVisible(bool visible)
     {
-        if(!Visible)
-        {
-            ApiResource = new();
-        }
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
@@ -31,6 +27,14 @@ public partial class AddApiResourceDialog
         else
         {
             Visible = visible;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!Visible)
+        {
+            ApiResource = new();
         }
     }
 
