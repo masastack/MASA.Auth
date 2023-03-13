@@ -10,9 +10,8 @@ public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
         When(login => login.PhoneLogin, () =>
         {
             RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage(i18n.T("PhoneRequired"))
-            .Matches(LoginOptions.PhoneRegular);
-            RuleFor(x => x.SmsCode).NotEmpty().WithMessage(i18n.T("SmsRequired"))
-            .Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
+            .Matches(LoginOptions.PhoneRegular).WithMessage(i18n.T("PhoneSpecInvalid"));
+            RuleFor(x => x.SmsCode).NotEmpty().WithMessage(i18n.T("SmsRequired"));
         }).Otherwise(() =>
         {
             RuleFor(x => x.Account).NotEmpty().WithMessage(i18n.T("AccountRequired"));

@@ -60,12 +60,15 @@
   "SmsRequired": "短信验证码不能为空",
   "PwdRequired": "密码不能为空",
   "AccountRequired": "账号不能为空",
+  "EmailRequired": "邮箱不能为空",
+  "EmailCodeRequired": "邮箱验证码不能为空",
+  "PhoneSpecInvalid": "手机号不符合规范",
+  "EmailSpecInvalid": "邮箱不符合规范",
   "UnknownException": "未知异常，请联系管理员",
   "SmsSendTime": "{0}秒后可重发",
   "IdCard": "身份证",
   "IdCardPlaceHolder": "请输入身份证号",
   "Bind success": "绑定用户成功",
-
   "Password not equal ConfirmPassword": "两次输入密码不相同",
   "The verification code is sent successfully": "发送验证码成功",
   "Bind": "绑定"
