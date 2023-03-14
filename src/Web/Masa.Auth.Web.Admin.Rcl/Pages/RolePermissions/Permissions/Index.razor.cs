@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Text.RegularExpressions;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class Index
@@ -52,7 +54,8 @@ public partial class Index
         RemoveAll(menus, x => x.Id == menuPermissionDetailDto.Id);
         if (menuPermissionDetailDto.Type == PermissionTypes.Menu)
         {
-            RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);
+            RemoveChildElementAll(menus);
+            RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);         
         }
         return menus;
 
@@ -62,6 +65,28 @@ public partial class Index
             foreach (var menu in menus)
             {
                 RemoveAll(menu.Children, match);
+            }
+        }
+
+        void RemoveChildElementAll(List<AppPermissionsViewModel> menus)
+        {
+            foreach (var menu in menus.ToArray())
+            {
+                if (menu.Children != null && menu.Children.Any())
+                {
+                    if (menu.Children.Any(x => x.Type == PermissionTypes.Element))
+                    {
+                        RemoveAll(menus, x => x.Id == menu.Id);
+                    }
+                    else
+                    {
+                        RemoveChildElementAll(menu.Children);
+                    }
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
     }
@@ -116,7 +141,7 @@ public partial class Index
 
         _menuPermissions.ForEach(mp =>
         {
-            var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Menu && p.AppId == mp.AppId);
+            var permissions = applicationPermissions.Where(p => (p.Type == PermissionTypes.Menu || p.Type == PermissionTypes.Element) && p.AppId == mp.AppId);
             mp.Children.AddRange(permissions
                 .BuildAdapter(config)
                 .AddParameters("appUrl", mp.AppUrl)
