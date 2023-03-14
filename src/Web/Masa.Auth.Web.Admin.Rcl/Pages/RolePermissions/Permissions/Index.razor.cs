@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions.ViewModels;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class Index
@@ -23,6 +25,8 @@ public partial class Index
     PermissionService PermissionService => AuthCaller.PermissionService;
 
     ProjectService ProjectService => AuthCaller.ProjectService;
+    List<SelectItemDto<PermissionTypes>> _selectTypes = new();
+    string _showUrlPrefix = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -142,11 +146,17 @@ public partial class Index
             if (curItem.IsPermission)
             {
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
+                _selectTypes = new List<SelectItemDto<PermissionTypes>> { new SelectItemDto<PermissionTypes>() {
+                    Text = _menuPermissionDetailDto.Type.GetDescription().Description,
+                    Value = _menuPermissionDetailDto.Type
+                }};
             }
             else
             {
                 _menuPermissionDetailDto = new();
+                _selectTypes = new();
             }
+            _showUrlPrefix = curItem.AppUrl;
         }
         else
         {
@@ -163,11 +173,17 @@ public partial class Index
             if (curItem.IsPermission)
             {
                 _apiPermissionDetailDto = await PermissionService.GetApiPermissionDetailAsync(curItem.Id);
+                _selectTypes = new List<SelectItemDto<PermissionTypes>> { new SelectItemDto<PermissionTypes>() {
+                    Text = _apiPermissionDetailDto.Type.GetDescription().Description,
+                    Value = _apiPermissionDetailDto.Type
+                }};
             }
             else
             {
                 _apiPermissionDetailDto = new();
+                _selectTypes = new();
             }
+            _showUrlPrefix = curItem.AppUrl;
         }
         else
         {
