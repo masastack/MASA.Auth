@@ -83,10 +83,6 @@ public partial class Index
                         RemoveChildElementAll(menu.Children);
                     }
                 }
-                else
-                {
-                    continue;
-                }
             }
         }
     }
