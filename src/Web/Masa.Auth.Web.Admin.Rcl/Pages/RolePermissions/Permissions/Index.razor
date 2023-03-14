@@ -33,9 +33,11 @@
                                    Class="treeview-one">
                             <LabelContent>
                                 <MHover Context="hoverComtext">
-                                    <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
+                                    <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
                                         <span class="tree-name">@DT(context.Item.Name)</span>
-                                        <SIcon Style="@(hoverComtext.Hover?"display:flex":"display:none")" Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                        <span style="@(hoverComtext.Hover?"flex:1;text-align:right":"display:none")">
+                                            <SIcon  Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                        </span>
                                     </div>
                                 </MHover>
                             </LabelContent>
