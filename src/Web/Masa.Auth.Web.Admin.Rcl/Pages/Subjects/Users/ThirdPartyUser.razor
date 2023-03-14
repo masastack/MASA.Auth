@@ -93,4 +93,4 @@
 </AutoHeight>
 
 <ViewThirdPartyUserDialog @bind-Visible=ViewThirdPartyUserDialog ThirdPartyUserId=CurrentThirdPartyUserId />
-<LdapDialog @ref="ldapDialog" />
+<LdapDialog @ref="ldapDialog" OnSubmitted="GetThirdPartyUsersAsync" />
