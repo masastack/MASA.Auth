@@ -27,7 +27,7 @@ builder.Services.AddServerSideBlazor();
 var authServerUrl = masaStackConfig.GetAuthServiceDomain();
 
 #if DEBUG
-authServerUrl = "http://localhost:18002/";
+authServerUrl = "https://auth-service-develop.masastack.com/";//"http://localhost:18002/";
 #endif
 
 builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
@@ -64,7 +64,7 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 IdentityModelEventSource.ShowPII = true;
 
 #if DEBUG
-masaOpenIdConnectOptions.Authority = "http://localhost:18200";
+masaOpenIdConnectOptions.Authority = "https://sso-develop.masastack.com/";//"http://localhost:18200";
 #endif
 
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);

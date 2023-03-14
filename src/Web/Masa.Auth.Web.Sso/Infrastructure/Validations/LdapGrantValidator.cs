@@ -42,7 +42,11 @@ public class LdapGrantValidator : IExtensionGrantValidator
         {
             throw new UserFriendlyException($"Ldap does not exist this user");
         }
-        var authUser = await _authClient.UserService.GetByPhoneNumberAsync(ldapUser.Phone);
+        var authUser = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
+        {
+            ThirdPartyIdpType = ThirdPartyIdpTypes.Ldap,
+            ThridPartyIdentity = ldapUser.ObjectGuid
+        });
         if (authUser is null)
         {
             authUser = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
