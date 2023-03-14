@@ -37,8 +37,8 @@ public class IdentityServerEventSink : IEventSink
                     var userLoginSuccessEvent = evt as UserLoginSuccessEvent;
                     if (userLoginSuccessEvent != null)
                     {
-                        var key = string.Format(GlobalVariables.IDENTITY_USER_CACHE_KEY, userLoginSuccessEvent.SubjectId);
-                        await _distributedCacheClient.SetAsync(key, new LoginSession(userLoginSuccessEvent.SubjectId, await _userSession.GetSessionIdAsync()));
+                        var subjectId = userLoginSuccessEvent.SubjectId;
+                        await _distributedCacheClient.SetAsync(subjectId, new LoginSession(subjectId, await _userSession.GetSessionIdAsync()));
                     }
                 }
                 else
@@ -46,7 +46,7 @@ public class IdentityServerEventSink : IEventSink
                     var userLogoutSuccessEvent = evt as UserLogoutSuccessEvent;
                     if (userLogoutSuccessEvent != null)
                     {
-                        var key = string.Format(GlobalVariables.IDENTITY_USER_CACHE_KEY, userLogoutSuccessEvent.SubjectId);
+                        var key = string.Format(userLogoutSuccessEvent.SubjectId);
                         await _distributedCacheClient.RemoveAsync(key);
                     }
                 }

@@ -218,8 +218,8 @@ public class AuthSeedData
                 AllowedScopes = new List<string> { "openid", "profile" },
                 RedirectUris = ui.Value.Select(url => $"{url}/signin-oidc").ToList(),
                 PostLogoutRedirectUris = ui.Value.Select(url => $"{url}/signout-callback-oidc").ToList(),
-                FrontChannelLogoutUri = $"{ui.Value.First()}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{ui.Value.First()}/account/backchannellogout"
+                FrontChannelLogoutUri = $"{ui.Value.Last()}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{ui.Value.Last()}/account/backchannellogout"
             }));
         }
 

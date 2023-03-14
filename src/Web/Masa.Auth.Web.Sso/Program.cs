@@ -113,6 +113,46 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+//todo https://github.com/jsakamoto/Toolbelt.Blazor.HeadElement
+app.Use(async (context, next) =>
+{
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+    if (!context.Response.Headers.ContainsKey("X-Content-Type-Options"))
+    {
+        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+    if (!context.Response.Headers.ContainsKey("X-Frame-Options"))
+    {
+        context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+    }
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+    var csp = "default-src * 'self'; object-src 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";//frame-ancestors 'none'; 
+    // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
+    csp += "upgrade-insecure-requests;";
+    csp += "img-src * 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' * data:;style-src  'self' 'unsafe-inline' *;frame-src *";
+
+    // once for standards compliant browsers
+    if (!context.Response.Headers.ContainsKey("Content-Security-Policy"))
+    {
+        context.Response.Headers.Add("Content-Security-Policy", csp);
+    }
+    // and once again for IE
+    if (!context.Response.Headers.ContainsKey("X-Content-Security-Policy"))
+    {
+        context.Response.Headers.Add("X-Content-Security-Policy", csp);
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+    var referrer_policy = "no-referrer";
+    if (!context.Response.Headers.ContainsKey("Referrer-Policy"))
+    {
+        context.Response.Headers.Add("Referrer-Policy", referrer_policy);
+    }
+    await next();
+});
+
 app.UseCookiePolicy();
 app.UseIdentityServer();
 // This cookie policy fixes login issues with Chrome 80+ using HHTP

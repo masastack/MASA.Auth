@@ -13,6 +13,12 @@ public class SsoSectionComponentBase : ComponentBase
     [Inject]
     public IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
 
+    [Inject]
+    public NavigationManager Navigation { get; set; } = null!;
+
+    [Inject]
+    public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
+
     [CascadingParameter]
     public I18n LanguageProvider
     {

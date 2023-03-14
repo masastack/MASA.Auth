@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Grants;
 
-[SecurityHeaders]
 [Authorize]
 public partial class Index
 {

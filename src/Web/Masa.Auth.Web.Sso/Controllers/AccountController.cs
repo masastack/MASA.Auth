@@ -5,7 +5,6 @@ namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
 [AllowAnonymous]
-[SecurityHeaders]
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
@@ -16,7 +15,6 @@ public class AccountController : Controller
     readonly IUserSession _userSession;
     readonly IBackChannelLogoutService _backChannelClient;
     readonly IDistributedCacheClient _distributedCacheClient;
-    readonly IClientStore _clientStore;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
@@ -26,8 +24,7 @@ public class AccountController : Controller
         IEnvironmentProvider environmentProvider,
         IUserSession userSession,
         IBackChannelLogoutService backChannelClient,
-        IDistributedCacheClient distributedCacheClient,
-        IClientStore clientStore)
+        IDistributedCacheClient distributedCacheClient)
     {
         _interaction = interaction;
         _events = events;
@@ -37,7 +34,6 @@ public class AccountController : Controller
         _userSession = userSession;
         _backChannelClient = backChannelClient;
         _distributedCacheClient = distributedCacheClient;
-        _clientStore = clientStore;
     }
 
     [HttpPost]
@@ -168,8 +164,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task LogoutUserAsync(string subjectId)
     {
-        var key = string.Format(GlobalVariables.IDENTITY_USER_CACHE_KEY, subjectId);
-        var logoutSession = await _distributedCacheClient.GetAsync<LoginSession>(key);
+        var logoutSession = await _distributedCacheClient.GetAsync<LoginSession>(subjectId);
         if (logoutSession == null)
         {
             return;
