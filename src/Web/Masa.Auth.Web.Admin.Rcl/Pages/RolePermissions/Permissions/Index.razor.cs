@@ -55,7 +55,7 @@ public partial class Index
         if (menuPermissionDetailDto.Type == PermissionTypes.Menu)
         {
             RemoveChildElementAll(menus);
-            RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);         
+            RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);
         }
         return menus;
 
@@ -72,7 +72,7 @@ public partial class Index
         {
             foreach (var menu in menus.ToArray())
             {
-                if (menu.Children != null && menu.Children.Any())
+                if (menu.Children?.Any() == true)
                 {
                     if (menu.Children.Any(x => x.Type == PermissionTypes.Element))
                     {
