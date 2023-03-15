@@ -34,13 +34,16 @@
     }
     <MRow>
         <MCol Md="6" Class="d-flex justify-space-between">
-            <MIcon Size="16"
+            @if (_environments.Count>1)
+            {
+                <MIcon Size="16"
                    Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
-                mdi-record-circle
-            </MIcon>
-            <MSelect Value="_inputModel.Environment" ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0"
-                Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
-            </MSelect>
+                    mdi-record-circle
+                </MIcon>
+                <MSelect Value="_inputModel.Environment" ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0"
+                     Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+                </MSelect>
+            }
         </MCol>
         @if (!_inputModel.PhoneLogin)
         {
