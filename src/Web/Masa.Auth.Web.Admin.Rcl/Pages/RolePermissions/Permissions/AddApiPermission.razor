@@ -9,7 +9,7 @@
                         <DccI18nConfiger @bind-Name="_apiPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
-                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' />
+                        <STextField Label="@T("Code")" Required Prefix="@($"{_apiPermissionDetailDto.AppId}.")" Class="permission-code" @bind-Value="_apiPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' />
                     </MCol>
                     <MCol Md=12>
                         <SSelect @bind-Value="_apiPermissionDetailDto.Type" Required
