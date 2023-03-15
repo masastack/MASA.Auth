@@ -33,9 +33,11 @@
                             Class="treeview-one">
                             <LabelContent>
                                 <MHover Context="hoverComtext">
-                                    <div @attributes="hoverComtext.Attrs" class="px-2 d-flex justify-space-between align-center">
+                                    <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
                                         <span class="tree-name">@DT(context.Item.Name)</span>
-                                        <SIcon Style="@(hoverComtext.Hover?"display:flex":"display:none")" Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                        <span style="@(hoverComtext.Hover?"flex:1;text-align:right":"display:none")">
+                                            <SIcon  Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                        </span>
                                     </div>
                                 </MHover>
                             </LabelContent>
@@ -131,7 +133,7 @@
                                             <SGroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
                                                 @foreach (var role in _menuPermissionDetailDto.Roles)
                                                 {
-                                                    <MChip Small Class="mx-1 role-name">
+                                                    <MChip Small Class="mx-1 regular--text">
                                                     @role.Name
                                                     </MChip>
                                                 }
@@ -142,16 +144,22 @@
                                                 <div>
                                                     @foreach (var item in _menuPermissionDetailDto.Users)
                                                     {
-                                                        <MChip Small Class="mx-1">
-                                                        @item.Name
+                                                        <MChip Pill Small Class="mx-1 regular--text">
+                                                            <MAvatar Left>
+                                                                <MImage Src="@item.Avatar"></MImage>
+                                                            </MAvatar>
+                                                            @item.Name
                                                         </MChip>
                                                     }
                                                 </div>
                                                 <div class="mt-2">
                                                     @foreach (var item in _menuPermissionDetailDto.Teams)
                                                     {
-                                                        <MChip Small Style="background: #EBF6FF !important;color: #37A7FF;" Class="mx-1">
-                                                        @item.Name
+                                                        <MChip Pill Small Class="mx-1 info-lighten cyan--text">
+                                                            <MAvatar Left>
+                                                                <MImage Src="@item.Avatar"></MImage>
+                                                            </MAvatar>
+                                                            @item.Name
                                                         </MChip>
                                                     }
                                                 </div>
