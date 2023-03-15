@@ -8,7 +8,7 @@
                         <DccI18nConfiger @bind-Name="_menuPermissionDetailDto.Name" />
                     </MCol>
                     <MCol Md=12>
-                        <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' Class="text-field" />
+                        <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}' Class="text-field permission-code" />
                     </MCol>
                     <MCol Md=6>
                         <SSelect @bind-Value="_menuPermissionDetailDto.Type"
