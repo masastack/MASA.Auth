@@ -143,15 +143,14 @@ public partial class Index
         {
             _showMenuInfo = true;
             var curItem = activeItems.First();
+            _disableMenuUrl = false;
+            if (curItem.Children.Where(e => e.Type == PermissionTypes.Menu).Count() > 0)
+            {
+                _disableMenuUrl = true;
+            }
             if (curItem.IsPermission)
             {
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
-                _disableMenuUrl = false;
-                if (curItem.Children.Where(e => e.Type == PermissionTypes.Menu).Count() > 0)
-                {
-                    _disableMenuUrl = true;
-                    _menuPermissionDetailDto.Url = "";
-                }
             }
             else
             {
