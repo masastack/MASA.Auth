@@ -25,6 +25,7 @@ public partial class Index
     ProjectService ProjectService => AuthCaller.ProjectService;
     List<SelectItemDto<PermissionTypes>> _permissionTypes = new();
     string _showUrlPrefix = "";
+    bool _disableMenuUrl = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -145,6 +146,12 @@ public partial class Index
             if (curItem.IsPermission)
             {
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
+                _disableMenuUrl = false;
+                if (curItem.Children.Where(e => e.Type == PermissionTypes.Menu).Count() > 0)
+                {
+                    _disableMenuUrl = true;
+                    _menuPermissionDetailDto.Url = "";
+                }
             }
             else
             {
