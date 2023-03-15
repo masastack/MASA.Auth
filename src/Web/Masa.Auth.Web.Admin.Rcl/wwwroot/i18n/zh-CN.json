@@ -425,7 +425,7 @@
     "RequireRequestObject": "授权请求对象",
     "EnableLocalLogin": "允许本地账号登录",
     "Create Client": "新建客户端",
-    "Edit Client": "更新客户端",
+    "Edit Client": "编辑客户端",
     "Delete Client": "删除客户端",
     "Are you sure to delete client {0}": "确定删除客户端\"{0}\"吗",
     "AllowedCorsOrigins": "允许Cors的源",

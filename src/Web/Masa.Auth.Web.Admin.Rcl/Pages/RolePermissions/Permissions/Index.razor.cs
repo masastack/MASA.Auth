@@ -23,11 +23,14 @@ public partial class Index
     PermissionService PermissionService => AuthCaller.PermissionService;
 
     ProjectService ProjectService => AuthCaller.ProjectService;
+    List<SelectItemDto<PermissionTypes>> _permissionTypes = new();
+    string _showUrlPrefix = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            _permissionTypes = await PermissionService.GetTypesAsync();
             //_tab = "Menu Permission";
             _tab = "0";
             _projectItems = await ProjectService.GetListAsync();
@@ -147,6 +150,7 @@ public partial class Index
             {
                 _menuPermissionDetailDto = new();
             }
+            _showUrlPrefix = curItem.AppUrl;
         }
         else
         {
@@ -168,6 +172,7 @@ public partial class Index
             {
                 _apiPermissionDetailDto = new();
             }
+            _showUrlPrefix = curItem.AppUrl;
         }
         else
         {

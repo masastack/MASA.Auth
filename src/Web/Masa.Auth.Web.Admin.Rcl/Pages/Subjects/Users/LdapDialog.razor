@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@T("Configure Domain Account")">
+<SSheetDialog EnableDomReload @bind-Value=_visible Title="@T("Configure Domain Account")">
     <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
         <MCardText Class="full-height">
             <MForm Model=_ldapDetailDto EnableValidation EnableI18n @ref="_form">

@@ -970,7 +970,11 @@ input::-webkit-input-placeholder {
     padding-top: 0px !important;
 }
 
-    .d-flex .m-window-item .m-sheet .m-data-table-header th {
-        height: 56px !important;
-        border-bottom: 0.5px solid #E4E8F3 !important;
-    }
+.d-flex .m-window-item .m-sheet .m-data-table-header th {
+    height: 56px !important;
+    border-bottom: 0.5px solid #E4E8F3 !important;
+}
+
+.selevationtab .m-btn {
+    padding: 0 28px !important;
+}
