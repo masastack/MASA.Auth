@@ -145,8 +145,8 @@
                                                 <div>
                                                     @foreach (var item in _menuPermissionDetailDto.Users)
                                                     {
-                                                        <MChip Pill Small Class="mx-1 regular--text">
-                                                            <MAvatar Left>
+                                                        <MChip Pill Small Class="mx-1 regular--text mchip-avatar">
+                                                            <MAvatar Left Size="24">
                                                                 <MImage Src="@item.Avatar"></MImage>
                                                             </MAvatar>
                                                             @item.Name
@@ -156,8 +156,8 @@
                                                 <div class="mt-2">
                                                     @foreach (var item in _menuPermissionDetailDto.Teams)
                                                     {
-                                                        <MChip Pill Small Class="mx-1 info-lighten cyan--text">
-                                                            <MAvatar Left>
+                                                        <MChip Pill Small Class="mx-1 info-lighten cyan--text mchip-avatar">
+                                                            <MAvatar Left Size="24">
                                                                 <MImage Src="@item.Avatar"></MImage>
                                                             </MAvatar>
                                                             @item.Name
