@@ -3,16 +3,16 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class UpsertUserCommandValidator : AbstractValidator<UpsertUserCommand>
+public class UpsertUserCommandValidator : MasaAbstractValidator<UpsertUserCommand>
 {
     public UpsertUserCommandValidator()
     {
         RuleFor(command => command.User.DisplayName).MaximumLength(50);
-        RuleFor(command => command.User.Name).ChineseLetter().MaximumLength(20);
+        WhenNotNullOrEmpty(command => command.User.Name, roleBuilder => roleBuilder.ChineseLetterNumber().MaximumLength(20));
         RuleFor(command => command.User.PhoneNumber).Phone();
-        RuleFor(command => command.User.Email).Email();
-        RuleFor(command => command.User.IdCard).IdCard();
-        RuleFor(command => command.User.CompanyName).ChineseLetter().MaximumLength(50);
-        RuleFor(command => command.User.Position).ChineseLetterNumber().MaximumLength(20);
+        WhenNotNullOrEmpty(command => command.User.Email, roleBuilder => roleBuilder.Email());
+        WhenNotNullOrEmpty(command => command.User.IdCard, roleBuilder => roleBuilder.IdCard());
+        WhenNotNullOrEmpty(command => command.User.CompanyName, roleBuilder => roleBuilder.ChineseLetterNumber().MaximumLength(50));
+        WhenNotNullOrEmpty(command => command.User.Position, roleBuilder => roleBuilder.ChineseLetterNumber().MaximumLength(20));
     }
 }

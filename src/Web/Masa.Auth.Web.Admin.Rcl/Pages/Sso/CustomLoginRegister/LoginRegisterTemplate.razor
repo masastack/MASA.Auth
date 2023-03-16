@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex full-height" style="width:512px;">
+<div class="d-flex full-height">
     <div class="login ma-auto ml-5">
         <SlideXTransition LeaveAbsolute>
             <STabSheets 
                 Value="@T(Tab)"
                 Tabs="@(new List<string>{T(CustomLoginTab.Login),T(CustomLoginTab.Register)})"
                 Class="overflow-y"
-                Style="width:512px;max-height:824px;height: auto;">
+                        Style="width:512px;max-height:64vh;height: auto;">
                 @if (Logo is not null)
                 {
                     <div class="d-flex mb-2">
@@ -24,7 +24,7 @@
                 }
                 <MTabItem Value="T(CustomLoginTab.Login)">
                     <MForm Model=Login EnableValidation EnableI18n>
-                        <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 mt-1 fs-16" Height="58" Label="@T(nameof(Login.Account))" />
+                        <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 mt-1 btn emphasis--text" Height="58" Label="@T(nameof(Login.Account))" />
                         <SPassword @bind-Value="Login.Password" Class="mb-1" />
                         <div class="d-flex mb-13">
                             <MSpacer />

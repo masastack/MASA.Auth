@@ -32,7 +32,7 @@ public partial class AddApiResourceDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             ApiResource = new();
         }

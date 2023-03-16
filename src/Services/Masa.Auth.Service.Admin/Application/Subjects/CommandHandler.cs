@@ -317,7 +317,7 @@ public class CommandHandler
             {
                 command.Result = true;
             }
-        }       
+        }
     }
 
     [EventHandler(1)]
@@ -495,7 +495,7 @@ public class CommandHandler
     {
         UserDetailDto userDetailDto = user;
         var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
-        userDetailDto.StaffId = staff?.Id;
+        userDetailDto.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
         userDetailDto.StaffDisplayName = staff?.DisplayName;
         userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
         return userDetailDto;
@@ -538,7 +538,7 @@ public class CommandHandler
                                            .Include(u => u.Roles)
                                            .FirstOrDefaultAsync(condition);
         if (existUser is not null)
-        {          
+        {
             if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
             if (throwException is false) return existUser;
@@ -791,7 +791,7 @@ public class CommandHandler
                 syncResults[i] = new()
                 {
                     JobNumber = staff.JobNumber,
-                    Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
+                    Errors = result.Errors.GroupBy(error => error.PropertyName).Select(e => e.First().ErrorMessage).ToList()
                 };
             }
         }
@@ -880,7 +880,7 @@ public class CommandHandler
             var func = selector.Compile();
             if (syncStaffs.Where(staff => string.IsNullOrEmpty(func(staff)) is false).IsDuplicate(func, out List<SyncStaffDto>? duplicates))
             {
-                foreach(var duplicate in duplicates)
+                foreach (var duplicate in duplicates)
                 {
                     var index = syncStaffs.IndexOf(duplicate);
                     var staff = syncStaffs[index];
