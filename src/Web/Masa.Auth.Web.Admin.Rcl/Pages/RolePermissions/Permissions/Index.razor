@@ -28,7 +28,7 @@
                             Activatable Hoverable
                             ItemText="r=>r.Name"
                             ItemKey="r=>r.Id"
-                            ItemChildren="r=>r.Children"
+                            ItemChildren="(r=>r.Children.Count < 1 ? null : r.Children)"
                             ActiveClass="primary white--text rounded-lg"
                             Class="treeview-one">
                             <LabelContent>
@@ -52,7 +52,7 @@
                             Activatable Hoverable
                             ItemText="r=>r.Name"
                             ItemKey="r=>r.Id"
-                            ItemChildren="r=>r.Children"
+                            ItemChildren="(r=>r.Children.Count < 1 ? null : r.Children)"
                             ActiveClass="primary white--text rounded-lg"
                             Class="treeview-two">
                             <LabelContent>
