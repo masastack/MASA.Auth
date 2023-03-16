@@ -3,6 +3,7 @@
 
 global using FluentValidation;
 global using FluentValidation.Resources;
+global using FluentValidation.Validators;
 global using IdentityModel.Client;
 global using Magicodes.ExporterAndImporter.Core.Extension;
 global using Magicodes.ExporterAndImporter.Csv;

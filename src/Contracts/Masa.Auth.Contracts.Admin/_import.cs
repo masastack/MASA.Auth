@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 global using FluentValidation;
+global using FluentValidation.Validators;
 global using Magicodes.ExporterAndImporter.Core;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Converters;

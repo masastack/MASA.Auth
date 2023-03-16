@@ -7,6 +7,6 @@ public class SendSmsCommandValidator : MasaAbstractValidator<SendSmsCommand>
 {
     public SendSmsCommandValidator()
     {
-        WhenNotNullOrEmpty(command => command.Model.PhoneNumber, ruleBUilder => ruleBUilder.Phone());
+        WhenNotEmpty(command => command.Model.PhoneNumber, r => r.Phone());
     }
 }

@@ -3,18 +3,18 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class AddUserCommandValidator : AbstractValidator<AddUserCommand>
+public class AddUserCommandValidator : MasaAbstractValidator<AddUserCommand>
 {
     public AddUserCommandValidator()
     {
         RuleFor(command => command.User.DisplayName).MaximumLength(50);
-        When(command => !string.IsNullOrEmpty(command.User.Name), () => RuleFor(command => command.User.Name).ChineseLetterNumber().MaximumLength(20));
-        RuleFor(command => command.User.PhoneNumber).Phone();
-        RuleFor(command => command.User.Email).Email();
-        When(command => !string.IsNullOrEmpty(command.User.IdCard), () => RuleFor(command => command.User.IdCard).IdCard());
-        When(command => !string.IsNullOrEmpty(command.User.CompanyName), () => RuleFor(command => command.User.CompanyName).ChineseLetterNumber().MaximumLength(50));
-        When(command => !string.IsNullOrEmpty(command.User.Position), () => RuleFor(command => command.User.Position).ChineseLetterNumber().MaximumLength(20));
         RuleFor(command => command.User.Account).MaximumLength(50);
-        RuleFor(command => command.User.Password).AuthPassword();
+        WhenNotEmpty(command => command.User.Email, r => r.Email());
+        WhenNotEmpty(command => command.User.PhoneNumber, r => r.Phone());
+        WhenNotEmpty(command => command.User.IdCard, r => r.IdCard());
+        WhenNotEmpty(command => command.User.Password, r => r.AuthPassword());
+        WhenNotEmpty(command => command.User.Name, r => r.ChineseLetterNumber().MaximumLength(20));
+        WhenNotEmpty(command => command.User.CompanyName, r => r.ChineseLetterNumber().MaximumLength(50));
+        WhenNotEmpty(command => command.User.Position, r => r.ChineseLetterNumber().MaximumLength(20));
     }
 }

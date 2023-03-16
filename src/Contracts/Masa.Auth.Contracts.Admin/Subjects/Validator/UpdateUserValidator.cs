@@ -3,26 +3,23 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
+public class UpdateUserValidator : MasaAbstractValidator<UpdateUserDto>
 {
     public UpdateUserValidator()
     {
-        RuleFor(user => user.DisplayName)
-           .NotEmpty().WithMessage("NickName is required")
-           .Required().ChineseLetterNumber().MaximumLength(50).OverridePropertyName("NickName");
-        When(user => !string.IsNullOrEmpty(user.Name), () => RuleFor(user => user.Name).ChineseLetterNumber().MaximumLength(50));
+        RuleFor(user => user.DisplayName).Required().WithMessage("NickName is required").WithName("NickName").ChineseLetterNumber().MaximumLength(50);
         RuleFor(user => user.PhoneNumber).Required().Phone();
-        RuleFor(user => user.Email).Email();
-        When(user => !string.IsNullOrEmpty(user.IdCard), () => RuleFor(user => user.IdCard).IdCard());
-        When(user => !string.IsNullOrEmpty(user.CompanyName), () => RuleFor(user => user.CompanyName).ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
-        When(user => !string.IsNullOrEmpty(user.Position), () => RuleFor(user => user.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(16));
         RuleFor(user => user.Account).Required()
                                      .Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
                                      .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")
                                      .MinimumLength(8)
                                      .MaximumLength(50);
-        When(u => !string.IsNullOrEmpty(u.Department), () => RuleFor(user => user.Department).ChineseLetterNumber().MinimumLength(2).MaximumLength(16));
         RuleFor(user => user.Avatar).Url().Required();
+        WhenNotEmpty(user => user.Email, r => r.Email());
+        WhenNotEmpty(user => user.Name, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(user => user.IdCard, r => r.IdCard());
+        WhenNotEmpty(user => user.CompanyName, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(user => user.Position, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(16));
+        WhenNotEmpty(user => user.Department, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(16));
     }
 }
-

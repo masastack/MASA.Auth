@@ -3,11 +3,11 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-public class LdapDetailValidator : AbstractValidator<LdapDetailDto>
+public class LdapDetailValidator : MasaAbstractValidator<LdapDetailDto>
 {
     public LdapDetailValidator()
     {
-        RuleFor(l => l.ServerPort.ToString()).Port();
+        WhenNotEmpty(c => c.ServerPort.ToString(), r => r.Port());
         RuleFor(l => l.ServerAddress).Required();
         RuleFor(l => l.RootUserDn).Required();
         RuleFor(l => l.RootUserPassword).Required();
