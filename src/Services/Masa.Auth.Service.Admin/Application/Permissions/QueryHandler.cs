@@ -432,7 +432,10 @@ public class QueryHandler
                     SlidingExpiration = TimeSpan.FromSeconds(5)
                 };
             },
-            MemoryCacheEntryOptions = new CacheEntryOptions(TimeSpan.FromSeconds(5))
+            MemoryCacheEntryOptionsAction = (memoryCacheOptions) =>
+            {
+                memoryCacheOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5);
+            }
         }))!;
     }
 

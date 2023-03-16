@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.ApiGateways.Caller;
 
-public class AuthCaller : HttpClientCallerBase
+public class AuthCaller : StackHttpClientCaller
 {
     #region Field
     ThirdPartyIdpService? _thirdPartyIdpService;
@@ -24,7 +24,6 @@ public class AuthCaller : HttpClientCallerBase
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
-    ILogger<AuthCaller> _logger;
     AuthApiOptions _options;
     #endregion
 
@@ -66,38 +65,10 @@ public class AuthCaller : HttpClientCallerBase
 
     protected override string BaseAddress { get; set; }
 
-    public AuthCaller(
-        IServiceProvider serviceProvider,
-        ILogger<AuthCaller> logger,
-        AuthApiOptions options) : base(serviceProvider)
+    public AuthCaller(AuthApiOptions options)
     {
-        _logger = logger;
         BaseAddress = options.AuthServiceBaseAddress;
         _options = options;
-    }
-
-    protected override async Task ConfigHttpRequestMessageAsync(HttpRequestMessage requestMessage)
-    {
-        await base.ConfigHttpRequestMessageAsync(requestMessage);
-        _logger.LogDebug(requestMessage.Headers.Authorization?.ToString());
-    }
-
-    protected override MasaHttpClientBuilder UseHttpClient()
-    {
-
-        var httpClientBuilder = base.UseHttpClient();
-        httpClientBuilder.UseAuthentication(options =>
-        {
-            options.UseJwtBearer(jwtTokenValidatorOptions =>
-            {
-                jwtTokenValidatorOptions.AuthorityEndpoint = _options.AuthorityEndpoint;
-            }, clientRefreshTokenOptions =>
-            {
-                clientRefreshTokenOptions.ClientId = _options.ClientId;
-                clientRefreshTokenOptions.ClientSecret = _options.ClientSecret;
-            });
-        });
-        return httpClientBuilder;
     }
 }
 

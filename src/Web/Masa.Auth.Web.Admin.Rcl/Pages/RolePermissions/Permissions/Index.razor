@@ -24,7 +24,8 @@
                                OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid" MandatoryActive
-                               Search="@_search"
+                               Search="@_search" 
+                               ActiveClass="primary white--text rounded-lg"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"
@@ -45,6 +46,7 @@
                                OnActiveUpdate="ActiveApiPermission"
                                TItem="AppPermissionsViewModel"
                                TKey="Guid" MandatoryActive
+                               ActiveClass="primary white--text rounded-lg"
                                Activatable Hoverable
                                ItemText="r=>r.Name"
                                ItemKey="r=>r.Id"
