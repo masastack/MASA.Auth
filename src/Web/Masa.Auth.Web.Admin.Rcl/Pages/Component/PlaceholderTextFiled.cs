@@ -5,11 +5,17 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class PlaceholderTextFiled : MTextField<string>
 {
+    public PlaceholderTextFiled()
+    {
+        HideDetails = "auto";
+    }
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
         Class ??= "";
-        Class += " mx-auto";
-        HideDetails = "auto";
+        if (!Class.StartsWith("max-auto "))
+        {
+            Class = "max-auto " + Class;
+        }
     }
 }
