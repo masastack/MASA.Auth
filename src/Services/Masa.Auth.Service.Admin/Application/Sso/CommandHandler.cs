@@ -32,6 +32,7 @@ public class CommandHandler
     {
         var client = addClientCommand.AddClientDto.Adapt<Client>();
         client.SetClientType(addClientCommand.AddClientDto.ClientType);
+        await ValidateClientIdAsync(client.ClientId);
         await _clientRepository.AddAsync(client);
     }
 
@@ -47,6 +48,8 @@ public class CommandHandler
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CLIENT_NOT_EXIST);
         //Contrary to DDD
         updateClientCommand.ClientDetailDto.Adapt(client);
+
+        await ValidateClientIdAsync(client.ClientId, client.Id);
 
         await _clientRepository.UpdateAsync(client);
         void HashClientSharedSecret(ClientSecretDto clientSecret)
@@ -69,6 +72,16 @@ public class CommandHandler
             ?? throw new UserFriendlyException(UserFriendlyExceptionCodes.CLIENT_ID_NOT_FOUND, removeClientCommand.ClientId);
         await _clientRepository.RemoveAsync(client);
     }
+
+    private async Task ValidateClientIdAsync(string clientId, Guid? id = null)
+    {
+        var client = await _clientRepository.FindAsync(c => c.ClientId == clientId && c.Id != id);
+        if (client != null)
+        {
+            throw new UserFriendlyException($"ClientId '{clientId}' already exist.");
+        }
+    }
+
     #endregion
 
     #region IdentityResource
