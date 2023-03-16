@@ -120,6 +120,8 @@ public class CommandHandler
         var user = await VerifyUserRepeatAsync(default, userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, !command.WhenExisReturn);
         if (user is not null)
         {
+            await _eventBus.PublishAsync(new UpdateUserAvatarCommand(new UpdateUserAvatarModel(user.Id, command.User.Avatar ?? "")));
+
             command.Result = user;
             return;
         }
