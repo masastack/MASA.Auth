@@ -163,7 +163,7 @@
                                             <div class="d-flex full-width">
                                                 <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
                                                 <MSpacer />
-                                                <SButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)" Style="margin-right: 24px;">@T("Delete")</SButton>
+                                                <SButton Text Class="error--text mr-6" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</SButton>
                                                 <SButton Medium MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
                                 </div>
                                 </MCardActions>
@@ -205,7 +205,7 @@
                                             </MCardText>
                                             <MCardActions class="d-flex align-center mb-8 px-6">
                                             <MSpacer />
-                                            <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)" Style="margin-right: 24px;">@T("Delete")</MButton>
+                                            <MButton Text Class="error--text mr-6" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)">@T("Delete")</MButton>
                                 <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateApiPermissionAsync">@T("Save")</MButton>
                                 </MCardActions>
                                 </MCard>
