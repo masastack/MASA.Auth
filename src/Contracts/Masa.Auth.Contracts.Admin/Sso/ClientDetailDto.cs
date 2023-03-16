@@ -29,7 +29,6 @@ public class ClientDetailDto : AddClientDto
     #endregion
 
     #region Token
-    public bool AllowOfflineAccess { get; set; }
 
     public int IdentityTokenLifetime { get; set; }
 

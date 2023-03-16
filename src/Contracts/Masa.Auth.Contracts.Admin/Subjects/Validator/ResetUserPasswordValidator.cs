@@ -10,4 +10,3 @@ public class ResetUserPasswordValidator : AbstractValidator<ResetUserPasswordDto
         RuleFor(staff => staff.Password).Required().AuthPassword();
     }
 }
-

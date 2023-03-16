@@ -9,14 +9,14 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
     {
         When(x => x.ResetPasswordType == ResetPasswordTypes.PhoneNumber, () =>
         {
-            RuleFor(x => x.Voucher).NotEmpty().Phone();
+            RuleFor(x => x.Voucher).Required().Phone();
         });
         When(x => x.ResetPasswordType == ResetPasswordTypes.Email, () =>
         {
-            RuleFor(x => x.Voucher).NotEmpty().Email();
+            RuleFor(x => x.Voucher).Required().Email();
         });
-        RuleFor(x => x.Captcha).NotEmpty();
-        RuleFor(x => x.Password).NotEmpty();
+        RuleFor(x => x.Captcha).Required();
+        RuleFor(x => x.Password).Required();
         RuleFor(x => x.ConfirmPassword).Equal(x => x.Password);
     }
 }

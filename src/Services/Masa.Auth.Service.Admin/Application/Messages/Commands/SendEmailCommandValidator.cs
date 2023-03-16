@@ -3,10 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class SendEmailCommandValidator : AbstractValidator<SendEmailCommand>
+public class SendEmailCommandValidator : MasaAbstractValidator<SendEmailCommand>
 {
     public SendEmailCommandValidator()
     {
-        RuleFor(command => command.SendEmailModel.Email).Email();
+        WhenNotEmpty(command => command.SendEmailModel.Email, r => r.Email());
     }
 }

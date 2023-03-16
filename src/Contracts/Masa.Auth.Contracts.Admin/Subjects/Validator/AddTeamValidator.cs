@@ -7,6 +7,6 @@ public class AddTeamValidator : AbstractValidator<AddTeamDto>
 {
     public AddTeamValidator()
     {
-        RuleFor(team => team.Name).NotEmpty().WithMessage("Team name cannot be empty").MinimumLength(2).MaximumLength(50);
+        RuleFor(team => team.Name).Required().WithMessage("Team name cannot be empty").MinimumLength(2).MaximumLength(50);
     }
 }
