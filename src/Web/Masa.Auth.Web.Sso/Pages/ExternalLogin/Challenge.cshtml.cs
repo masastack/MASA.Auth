@@ -4,7 +4,6 @@
 namespace Masa.Auth.Web.Sso.Pages.ExternalLogin;
 
 [AllowAnonymous]
-[SecurityHeaders]
 public class ChallengeModel : PageModel
 {
     readonly IIdentityServerInteractionService _interactionService;

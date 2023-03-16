@@ -23,6 +23,7 @@ global using Masa.Auth.Web.Sso.Global;
 global using Masa.Auth.Web.Sso.Infrastructure;
 global using Masa.Auth.Web.Sso.Infrastructure.Aliyun;
 global using Masa.Auth.Web.Sso.Infrastructure.Environment;
+global using Masa.Auth.Web.Sso.Infrastructure.Events;
 global using Masa.Auth.Web.Sso.Infrastructure.Options;
 global using Masa.Auth.Web.Sso.Infrastructure.Services;
 global using Masa.Auth.Web.Sso.Infrastructure.Stores;

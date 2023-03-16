@@ -4,7 +4,6 @@
 namespace Masa.Auth.Web.Sso.Pages.Consent;
 
 [Authorize]
-[SecurityHeaders]
 public partial class Index
 {
     ViewModel _viewModel = new();

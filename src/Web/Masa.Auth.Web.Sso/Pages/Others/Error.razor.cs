@@ -4,7 +4,6 @@
 namespace Masa.Auth.Web.Sso.Pages.Others;
 
 [AllowAnonymous]
-[SecurityHeaders]
 public partial class Error
 {
     [Parameter]

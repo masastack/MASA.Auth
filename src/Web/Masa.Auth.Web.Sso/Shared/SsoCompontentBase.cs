@@ -3,23 +3,8 @@
 
 namespace Masa.Auth.Web.Sso.Shared;
 
-public abstract class SsoCompontentBase : ComponentBase
+public abstract class SsoCompontentBase : SsoSectionComponentBase
 {
-    private I18n? _languageProvider;
-
-    [CascadingParameter]
-    public I18n LanguageProvider
-    {
-        get
-        {
-            return _languageProvider ?? throw new Exception("please Inject I18n!");
-        }
-        set
-        {
-            _languageProvider = value;
-        }
-    }
-
     [Inject]
     public IIdentityServerInteractionService Interaction { get; set; } = null!;
 
@@ -30,16 +15,7 @@ public abstract class SsoCompontentBase : ComponentBase
     public AuthenticationStateProvider _authenticationStateProvider { get; set; } = null!;
 
     [Inject]
-    public NavigationManager Navigation { get; set; } = null!;
-
-    [Inject]
-    public IPopupService PopupService { get; set; } = null!;
-
-    [Inject]
     public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
-
-    [Inject]
-    public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
 
     protected ClaimsPrincipal User
     {
@@ -47,10 +23,5 @@ public abstract class SsoCompontentBase : ComponentBase
         {
             return _authenticationStateProvider.GetAuthenticationStateAsync().Result.User;
         }
-    }
-
-    public string T(string key)
-    {
-        return LanguageProvider.T(key) ?? key;
     }
 }

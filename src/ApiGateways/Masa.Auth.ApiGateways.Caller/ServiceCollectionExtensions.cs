@@ -5,28 +5,20 @@ namespace Masa.Auth.ApiGateways.Caller;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddAuthApiGateways(this IServiceCollection services, Action<AuthApiOptions>? configure = null)
+    public static IServiceCollection AddAuthApiGateways(this IServiceCollection services, Action<AuthApiOptions> configure)
     {
         services.AddSingleton<IResponseMessage, AuthResponseMessage>();
-        var options = new AuthApiOptions("http://localhost:18002/");
-        //Todo default option
-
-        configure?.Invoke(options);
+        var options = new AuthApiOptions();
+        configure.Invoke(options);
         services.AddSingleton(options);
-        services.AddAutoRegistrationCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
-        return services;
-    }
-
-    public static IServiceCollection AddJwtTokenValidator(this IServiceCollection services,
-        Action<JwtTokenValidatorOptions> jwtTokenValidatorOptions, Action<ClientRefreshTokenOptions> clientRefreshTokenOptions)
-    {
-        var options = new JwtTokenValidatorOptions();
-        jwtTokenValidatorOptions.Invoke(options);
-        services.AddSingleton(options);
-        var refreshTokenOptions = new ClientRefreshTokenOptions();
-        clientRefreshTokenOptions.Invoke(refreshTokenOptions);
-        services.AddSingleton(refreshTokenOptions);
-        services.AddScoped<JwtTokenValidator>();
+        services.AddStackCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"), (serviceProvider) => { return new TokenProvider(); }, jwtTokenValidatorOptions =>
+        {
+            jwtTokenValidatorOptions.AuthorityEndpoint = options.AuthorityEndpoint;
+        }, clientRefreshTokenOptions =>
+        {
+            clientRefreshTokenOptions.ClientId = options.ClientId;
+            clientRefreshTokenOptions.ClientSecret = options.ClientSecret;
+        });
         return services;
     }
 }
