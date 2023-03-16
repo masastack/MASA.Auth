@@ -168,16 +168,16 @@
                                         <MCol Md=12>
                                             <MTextarea Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                             </MTextarea>
-                                        </MCol>
-                                    </MRow>
-                                </MForm>
-                            </MCardText>
-                            <MCardActions class="align-center px-6">
-                                <div class="d-flex full-width">
-                                    <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
-                                    <MSpacer />
-                                    <SButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</SButton>
-                                    <SButton Medium MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
+                                            </MCol>
+                                            </MRow>
+                                            </MForm>
+                                            </MCardText>
+                                            <MCardActions class="align-center px-6">
+                                            <div class="d-flex full-width">
+                                                <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
+                                                <MSpacer />
+                                                <SButton Text Class="error--text mr-6" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</SButton>
+                                                <SButton Medium MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
                                 </div>
                             </MCardActions>
                         </MCard>
@@ -217,13 +217,13 @@
                                         <MCol Md=12>
                                             <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                             </MTextarea>
-                                        </MCol>
-                                    </MRow>
-                                </MForm>
-                            </MCardText>
-                            <MCardActions class="d-flex align-center mb-8 px-6">
-                                <MSpacer />
-                                <MButton Text Class="error--text" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)">@T("Delete")</MButton>
+                                            </MCol>
+                                            </MRow>
+                                            </MForm>
+                                            </MCardText>
+                                            <MCardActions class="d-flex align-center mb-8 px-6">
+                                            <MSpacer />
+                                            <MButton Text Class="error--text mr-6" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)">@T("Delete")</MButton>
                                 <MButton class="rounded-pill primary" MinWidth="100" OnClick="UpdateApiPermissionAsync">@T("Save")</MButton>
                             </MCardActions>
                         </MCard>
