@@ -811,7 +811,7 @@ public class CommandHandler
             var syncStaff = syncStaffs[i];
             try
             {
-                var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false); 
+                var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (existStaff is not null)
                 {
                     var checkResult = await CheckSyncDataAsync(existStaff, syncStaff);
