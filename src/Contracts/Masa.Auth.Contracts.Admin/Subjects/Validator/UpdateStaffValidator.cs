@@ -8,7 +8,12 @@ public class UpdateStaffValidator : MasaAbstractValidator<UpdateStaffDto>
     public UpdateStaffValidator()
     {
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
-        RuleFor(staff => staff.DisplayName).Required().WithMessage("NickName is required").WithName("NickName").ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
+        RuleFor(staff => staff.DisplayName)
+            .Required().WithMessage("NickNameBlock.Required")
+            .ChineseLetterNumber().WithMessage("NickNameBlock.ChineseLetterNumber")
+            .MaximumLength(50).WithMessage("NickNameBlock.MaxLength")
+            .MinimumLength(2).WithMessage("NickNameBlock.MinLength")
+            .WithName("NickName"); ;
         RuleFor(staff => staff.PhoneNumber).Required().Phone();
         RuleFor(staff => staff.Avatar).Required().Url();
         WhenNotEmpty(l => l.CompanyName, r => r.ChineseLetter().MaximumLength(50));
