@@ -7,7 +7,7 @@
                 <div class="d-flex">
                     <div class="mx-auto text-center">
                         <UploadAvatar @bind-Value="Staff.Avatar" WhenFileChangeUpload />
-                        <MTextField @bind-Value="Staff.DisplayName" Class="mt-0 mx-auto" HideDetails="@("auto")" Placeholder="@T("Give him a nickname!")" />
+                        <PlaceholderTextField @bind-Value="Staff.DisplayName" style="width:212px;" Placeholder="@T("Give him a nickname!")" />
                     </div>
                 </div>
             </HeaderContent>

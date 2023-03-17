@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class PlaceholderTextFiled : MTextField<string>
+public class PlaceholderTextField : MTextField<string>
 {
-    public PlaceholderTextFiled()
+    public PlaceholderTextField()
     {
         HideDetails = "auto";
     }
@@ -13,9 +13,14 @@ public class PlaceholderTextFiled : MTextField<string>
     {
         base.OnParametersSet();
         Class ??= "";
-        if (!Class.StartsWith("max-auto "))
+        if (!Class.StartsWith("mx-auto "))
         {
-            Class = "max-auto " + Class;
+            Class = "mx-auto " + Class;
+        }
+        Style ??= "";
+        if(!Style.StartsWith("color: #A3AED0 !important;"))
+        {
+            Style = "color: #A3AED0 !important;font-size: 24px !important;" + Style;
         }
     }
 }
