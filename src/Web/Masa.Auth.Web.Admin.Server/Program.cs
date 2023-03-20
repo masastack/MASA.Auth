@@ -9,6 +9,9 @@ GlobalValidationOptions.SetDefaultCulture("zh-CN");
 await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
+var authServerUrl = masaStackConfig.GetAuthServiceDomain();
+builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
+
 if (!builder.Environment.IsDevelopment())
 {
     builder.WebHost.UseKestrel(option =>
@@ -33,15 +36,15 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 
 IdentityModelEventSource.ShowPII = true;
 
-var authServerUrl = masaStackConfig.GetAuthServiceDomain();
+
 
 #if DEBUG
-authServerUrl = "http://localhost:18002/";
+//authServerUrl = "http://localhost:18002/";
 masaOpenIdConnectOptions.Authority = "http://localhost:18200";
 #endif
 
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
-builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
+
 
 builder.Services.AddAuthApiGateways(option =>
 {
