@@ -33,6 +33,8 @@ public static class CacheKey
     const string EMAIL_UPDATE_CODE_PRE = "email_update_code:";
     const string EMAIL_UPDATE_SEND_PRE = "email_update_send:";
     const string STAFF = "staff";
+    const string TEAM_CACHE_PRE = "team:";
+    const string USER_TEAM_CODE_PRE = "user_team_code:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
 
     public static string PermissionKey(Guid permissionId)
@@ -173,5 +175,15 @@ public static class CacheKey
     public static string UserApiPermissionCodeKey(Guid userId, string appId)
     {
         return $"{USER_API_PERMISSION_CODE_PRE}{userId}:{appId}";
+    }
+
+    public static string TeamKey(Guid teamId)
+    {
+        return $"{TEAM_CACHE_PRE}{teamId}";
+    }
+
+    public static string UserTeamKey(Guid userId)
+    {
+        return $"{USER_TEAM_CODE_PRE}{teamId}";
     }
 }
