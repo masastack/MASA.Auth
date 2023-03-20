@@ -79,5 +79,6 @@
   "StaffEmailExist": "Employee email {0} already exists",
   "StaffIdCardExist": "Employee IdCard {0} already exists",
   "RoleBindLimitError": "Role: {0} exceeds the binding limit, only {1} people can be bound at most, and {2} people are currently bound",
-  "PhoneNumberMismatch": "The user already exists in Auth, the phone number is {0}, which does not match with {1}"
+  "PhoneNumberMismatch": "The user already exists in Auth, the phone number is {0}, which does not match with {1}",
+  "ClientIdAlreadyExist": "ClientId '{0}' already exist"
 }

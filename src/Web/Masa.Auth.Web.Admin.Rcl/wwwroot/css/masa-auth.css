@@ -978,3 +978,8 @@ input::-webkit-input-placeholder {
 .selevationtab .m-btn {
     padding: 0 28px !important;
 }
+
+.mchip-avatar.m-chip--pill .m-avatar {
+    height: 24px !important;
+    width: 24px !important;
+}
