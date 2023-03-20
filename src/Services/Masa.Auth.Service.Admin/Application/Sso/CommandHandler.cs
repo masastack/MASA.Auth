@@ -78,7 +78,7 @@ public class CommandHandler
         var client = await _clientRepository.FindAsync(c => c.ClientId == clientId && c.Id != id);
         if (client != null)
         {
-            throw new UserFriendlyException(I18n.T("ClientIdAlreadyExist", clientId));
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.CLIENT_ID_ALREADY_EXIST, clientId);
         }
     }
 
