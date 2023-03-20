@@ -3,7 +3,7 @@
 @using Masa.Contrib.StackSdks.Caller;
 @using Microsoft.IdentityModel.Tokens;
 @using System.Globalization;
-@*@inject JwtTokenValidator JwtTokenValidator;*@
+@inject JwtTokenValidator JwtTokenValidator;
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -49,23 +49,23 @@
             return;
         }
 
-        //var tokenResponse = await JwtTokenValidator.RefreshTokenAsync(refreshToken);
-        //if (tokenResponse == null)
-        //{
-        //    await HttpContext.SignOutAsync();
-        //    return;
-        //}
-        //var newAccessToken = tokenResponse.AccessToken;
-        //var expiresInSeconds = tokenResponse.ExpiresIn;
-        //var newExpiryTime = DateTime.UtcNow.AddSeconds(expiresInSeconds).ToString(CultureInfo.InvariantCulture);
+        var tokenResponse = await JwtTokenValidator.RefreshTokenAsync(refreshToken);
+        if (tokenResponse == null)
+        {
+            await HttpContext.SignOutAsync();
+            return;
+        }
+        var newAccessToken = tokenResponse.AccessToken;
+        var expiresInSeconds = tokenResponse.ExpiresIn;
+        var newExpiryTime = DateTime.UtcNow.AddSeconds(expiresInSeconds).ToString(CultureInfo.InvariantCulture);
 
-        //var expiresAtTokenUpdated = auth.Properties!.UpdateTokenValue("expires_at", newExpiryTime);
-        //var accessTokenUpdated = auth.Properties!.UpdateTokenValue(OpenIdConnectParameterNames.AccessToken, newAccessToken);
-        //var tokensUpdatedCorrectly = expiresAtTokenUpdated && accessTokenUpdated;
-        //if (tokensUpdatedCorrectly)
-        //{
-        //    await HttpContext.SignInAsync(auth.Principal, auth.Properties);
-        //}
+        var expiresAtTokenUpdated = auth.Properties!.UpdateTokenValue("expires_at", newExpiryTime);
+        var accessTokenUpdated = auth.Properties!.UpdateTokenValue(OpenIdConnectParameterNames.AccessToken, newAccessToken);
+        var tokensUpdatedCorrectly = expiresAtTokenUpdated && accessTokenUpdated;
+        if (tokensUpdatedCorrectly)
+        {
+            await HttpContext.SignInAsync(auth.Principal, auth.Properties);
+        }
     }
 }
 

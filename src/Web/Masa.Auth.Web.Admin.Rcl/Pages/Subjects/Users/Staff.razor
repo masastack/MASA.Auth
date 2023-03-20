@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<AutoHeight Card>
+<AutoHeight Card CardClass="px-6 py-0">
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
@@ -18,8 +18,9 @@
         </div>
     </HeaderContent>
     <AutoHeightContent>
-        <SDataTable Height="@("calc(100vh - 285px)")"
+        <SDataTable Height="@("calc(100vh - 260px)")"
                     Headers="GetHeaders()"
+                        FixedHeader
                     Items="Staffs"
                     TItem="StaffDto"
                     ItemsPerPage="PageSize">

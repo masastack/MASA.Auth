@@ -114,8 +114,7 @@ builder.Services
             .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
             .AddElasticsearchAutoComplete();
-//todo update appsettings
-//.AddSchedulerJobAsync();
+await builder.Services.AddSchedulerJobAsync();
 
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -179,7 +178,7 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await new AuthSeedData().SeedAsync(builder);
 
     await option.SeedStandardResourcesAsync();
-    //await option.SyncCacheAsync();
+    await option.SyncCacheAsync();
 });
 
 builder.Services.RemoveAll(typeof(IProcessor));

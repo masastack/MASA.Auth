@@ -1,7 +1,7 @@
 ﻿@using Masa.Stack.Components
 @inherits AdminCompontentBase
 
-<AutoHeight Card>
+<AutoHeight Card CardClass="px-6 py-0">
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
@@ -29,9 +29,9 @@
             </HeaderContent>
             <AutoHeightContent>
                 <SDataTable Dense
-                    Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
+                    Height="@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)")"
                     Headers="GetHeaders()"
-                    Items="Users"
+                    Items="Users" FixedHeader
                     TItem="UserDto"
                     ItemsPerPage="PageSize">
             <HeaderColContent Context="header">

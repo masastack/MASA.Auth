@@ -698,8 +698,8 @@ input::-webkit-input-placeholder {
     box-shadow: none;
 }
 
-.permission-code .m-text-field__slot>input {
-    font-size:16px !important;
+.permission-code .m-text-field__slot > input {
+    font-size: 16px !important;
 }
 
 .px-sheet-dialog {
@@ -968,10 +968,6 @@ input::-webkit-input-placeholder {
 
 .theme--light.m-stepper .m-stepper__step--complete .m-stepper__label {
     color: rgba(0,0,0,.87) !important;
-}
-
-.d-flex .m-window-item .m-sheet {
-    padding-top: 0px !important;
 }
 
 .d-flex .m-window-item .m-sheet .m-data-table-header th {

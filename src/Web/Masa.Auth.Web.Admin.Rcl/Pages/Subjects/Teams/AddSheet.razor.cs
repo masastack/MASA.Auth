@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Auth;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Teams;
 
 public partial class AddSheet
@@ -11,6 +13,9 @@ public partial class AddSheet
     TeamDetailDto _teamDetailDto = new TeamDetailDto();
     int _step = 1;
     bool _visible;
+
+    [Inject]
+    public IAuthClient AuthClient { get; set; } = null!;
 
     private async Task OnSubmitHandler()
     {

@@ -7,9 +7,9 @@ public class RemoteAuthenticationDefaultsProvider : IRemoteAuthenticationDefault
 {
     readonly IThirdPartyIdpService _thirdPartyIdpService;
 
-    public RemoteAuthenticationDefaultsProvider(IThirdPartyIdpService thirdPartyIdpService)
+    public RemoteAuthenticationDefaultsProvider(IServiceProvider serviceProvider)
     {
-        _thirdPartyIdpService = thirdPartyIdpService;
+        _thirdPartyIdpService = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IThirdPartyIdpService>();
     }
 
     public async Task<AuthenticationDefaults?> GetAsync(string scheme)
