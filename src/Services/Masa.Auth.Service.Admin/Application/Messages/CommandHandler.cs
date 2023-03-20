@@ -47,6 +47,7 @@ public class CommandHandler
             case SendMsgCodeTypes.VerifiyPhoneNumber:
                 var user = await CheckUserExistAsync(model.UserId);
                 ArgumentExceptionExtensions.ThrowIfNullOrEmpty(user.PhoneNumber);
+                model.PhoneNumber = user.PhoneNumber;
                 cacheKey = CacheKey.MsgCodeForVerifiyUserPhoneNumberKey(user.Id.ToString(), user.PhoneNumber);
                 break;
             case SendMsgCodeTypes.UpdatePhoneNumber:
