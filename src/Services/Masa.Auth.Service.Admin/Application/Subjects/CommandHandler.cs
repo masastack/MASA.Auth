@@ -814,36 +814,21 @@ public class CommandHandler
                 var existStaff = await VerifyStaffRepeatAsync(default, syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard, false);
                 if (existStaff is not null)
                 {
-                    if (existStaff.JobNumber != syncStaff.JobNumber.WhenNullOrEmptyReplace(existStaff.JobNumber))
+                    var checkResult = await CheckSyncDataAsync(existStaff, syncStaff);
+                    if (!checkResult.State)
                     {
-                        syncResults[i] = new()
+                        if (checkResult.StaffResult != null)
                         {
-                            JobNumber = syncStaff.JobNumber,
-                            Errors = new()
-                            {
-                                $"The employee whose mobile phone number is {syncStaff.PhoneNumber} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"
-                            }
-                        };
+                            syncResults[i] = checkResult.StaffResult;
+                        }
+                        continue;
                     }
-                    else if (existStaff.PhoneNumber != syncStaff.PhoneNumber.WhenNullOrEmptyReplace(existStaff.PhoneNumber))
-                    {
-                        syncResults[i] = new()
-                        {
-                            JobNumber = syncStaff.JobNumber,
-                            Errors = new()
-                            {
-                                $"The employee whose job number is {syncStaff.JobNumber}, the corresponding mobile phone number is {existStaff.PhoneNumber}, which does not match the mobile phone number {syncStaff.PhoneNumber}"
-                            }
-                        };
-                    }
-                    else
-                    {
-                        var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
-                        await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
-                        existStaff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Email, syncStaff.IdCard, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
-                        await _staffRepository.UpdateAsync(existStaff);
-                        await _staffDomainService.UpdateAfterAsync(new(existStaff, default));
-                    }
+
+                    var updateStaffEvent = new UpdateStaffBeforeDomainEvent(syncStaff.Position);
+                    await _staffDomainService.UpdateBeforeAsync(updateStaffEvent);
+                    existStaff.UpdateBasicInfo(syncStaff.Name, syncStaff.DisplayName, syncStaff.Email, syncStaff.IdCard, syncStaff.Gender, updateStaffEvent.PositionId, syncStaff.StaffType);
+                    await _staffRepository.UpdateAsync(existStaff);
+                    await _staffDomainService.UpdateAfterAsync(new(existStaff, default));
                 }
                 else
                 {
@@ -896,6 +881,89 @@ public class CommandHandler
         string Convert(string? str)
         {
             return string.IsNullOrEmpty(str) ? "empty" : str;
+        }
+
+        SyncStaffResultsDto.SyncStaffResult Error(string jobNumber, params string[] errorMessages) =>
+            new SyncStaffResultsDto.SyncStaffResult() {
+                JobNumber = jobNumber,
+                Errors = errorMessages.ToList()
+            };
+
+        async Task<(bool State, SyncStaffResultsDto.SyncStaffResult? StaffResult)> CheckSyncDataAsync(Staff existStaff,
+            SyncStaffDto syncStaff)
+        {
+            // Do not flush to db if the sync staff info is same with exist staff. 
+            if (existStaff.PhoneNumber == syncStaff.PhoneNumber &&
+                existStaff.JobNumber == syncStaff.JobNumber &&
+                existStaff.DisplayName == syncStaff.DisplayName.WhenNullOrEmptyReplace("") &&
+                existStaff.Name == syncStaff.Name.WhenNullOrEmptyReplace("") &&
+                existStaff.Gender == syncStaff.Gender &&
+                existStaff.StaffType == syncStaff.StaffType &&
+                existStaff.Position != null &&
+                existStaff.Position.Name == syncStaff.Position.WhenNullOrEmptyReplace("") &&
+                existStaff.Email == syncStaff.Email.WhenNullOrEmptyReplace("") &&
+                existStaff.IdCard == syncStaff.IdCard.WhenNullOrEmptyReplace(""))
+            {
+                return (false, default);
+            }
+
+            // When phone number is not equals and job number is not equals, the email and id card cannot be equal! 
+            if (existStaff.PhoneNumber != syncStaff.PhoneNumber && existStaff.JobNumber != syncStaff.JobNumber)
+            {
+                if (!string.IsNullOrWhiteSpace(syncStaff.Email) && existStaff.Email == syncStaff.Email)
+                {
+                    return (false, Error(syncStaff.JobNumber,
+                        $"The employee whose email is {syncStaff.Email} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
+                }
+
+                if (!string.IsNullOrWhiteSpace(syncStaff.IdCard) && existStaff.IdCard == syncStaff.IdCard)
+                {
+                    return (false, Error(syncStaff.JobNumber,
+                        $"The employee whose id card is {syncStaff.IdCard} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
+                }
+            }
+
+            // When job number is equals, the phone number must be equal
+            if (existStaff.JobNumber == syncStaff.JobNumber && existStaff.PhoneNumber != syncStaff.PhoneNumber)
+            {
+                return (false, Error(syncStaff.JobNumber,
+                    $"The employee whose job number is {syncStaff.JobNumber}, the corresponding mobile phone number is {existStaff.PhoneNumber}, which does not match the mobile phone number {syncStaff.PhoneNumber}"));
+            }
+
+            // When phone number is equals, the job number must be equal
+            if (existStaff.PhoneNumber == syncStaff.PhoneNumber && existStaff.JobNumber != syncStaff.JobNumber)
+            {
+                return (false, Error(syncStaff.JobNumber,
+                    $"The employee whose mobile phone number is {syncStaff.PhoneNumber} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
+            }
+
+            // When job number is equal and phone number is equal, the staff whose is email or id card cannot be equal for other staff who is in database.
+            if (existStaff.PhoneNumber == syncStaff.PhoneNumber && existStaff.JobNumber == syncStaff.JobNumber)
+            {
+                if (!string.IsNullOrWhiteSpace(syncStaff.IdCard))
+                {
+                    var existIdCardStaff =
+                        await VerifyStaffRepeatAsync(default, default, default, default, syncStaff.IdCard, false);
+                    if (existIdCardStaff != null && existIdCardStaff.JobNumber != syncStaff.JobNumber)
+                    {
+                        return (false, Error(syncStaff.JobNumber,
+                            $"The employee whose id card number is {syncStaff.IdCard} has a corresponding job number of {existIdCardStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(syncStaff.Email))
+                {
+                    var existEmailStaff =
+                        await VerifyStaffRepeatAsync(default, default, default, syncStaff.Email, default, false);
+                    if (existEmailStaff != null && existEmailStaff.JobNumber != syncStaff.JobNumber)
+                    {
+                        return (false, Error(syncStaff.JobNumber,
+                            $"The employee whose email is {syncStaff.Email} has a corresponding job number of {existEmailStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
+                    }
+                }
+            }
+
+            return (true, default);
         }
     }
 
