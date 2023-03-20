@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Globalization.I18n;
+
 namespace Masa.Auth.Service.Admin.Application.Sso;
 
 public class CommandHandler
@@ -78,7 +80,7 @@ public class CommandHandler
         var client = await _clientRepository.FindAsync(c => c.ClientId == clientId && c.Id != id);
         if (client != null)
         {
-            throw new UserFriendlyException($"ClientId '{clientId}' already exist.");
+            throw new UserFriendlyException(I18n.T("ClientIdAlreadyExist", clientId));
         }
     }
 
