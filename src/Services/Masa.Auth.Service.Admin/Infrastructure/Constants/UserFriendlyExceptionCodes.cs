@@ -29,6 +29,7 @@ public static class UserFriendlyExceptionCodes
     public const string POSITION_NAMME_EXIST = "PositionNammeExist";
     public const string CLIENT_NOT_EXIST = "ClientNotExist";
     public const string CLIENT_ID_NOT_FOUND = "ClientIdNotFound";
+    public const string CLIENT_ID_ALREADY_EXIST = "ClientIdAlreadyExist";
     public const string INVALID_CAPTCHA = "InvalidCaptcha";
     public const string LDAP_ACCOUNT_NOTEXIST = "LdapAccountNotexist";
     public const string LDAP_ACCOUNT_VALIDATION_FAILED = "LdapAccountValidationFailed";
