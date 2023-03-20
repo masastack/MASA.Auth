@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Globalization.I18n;
-
 namespace Masa.Auth.Service.Admin.Application.Sso;
 
 public class CommandHandler
