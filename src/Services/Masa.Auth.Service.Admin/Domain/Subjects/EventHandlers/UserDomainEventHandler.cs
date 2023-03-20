@@ -10,14 +10,16 @@ public class UserDomainEventHandler
     readonly RoleDomainService _roleDomainService;
     readonly IEventBus _eventBus;
     readonly ILogger<UserDomainEventHandler> _logger;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
 
-    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger)
+    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger, IMultilevelCacheClient multilevelCacheClient)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
         _roleDomainService = roleDomainService;
         _eventBus = eventBus;
         _logger = logger;
+        _multilevelCacheClient = multilevelCacheClient;
     }
 
     [EventHandler(1)]
@@ -79,13 +81,8 @@ public class UserDomainEventHandler
     public async Task GetPermissions(QueryUserPermissionDomainEvent userEvent)
     {
         //todo query from cache
-        var user = await _authDbContext.Set<User>()
-                                       .FirstOrDefaultAsync(u => u.Id == userEvent.UserId);
-        if (user == null)
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
-        }
-        if (user.IsAdmin())
+        var user = await GetUserAsync(userEvent.UserId);
+        if (user.Account == "admin")
         {
             userEvent.Permissions = await _authDbContext.Set<Permission>()
                     .Select(p => p.Id).ToListAsync();
@@ -128,5 +125,21 @@ public class UserDomainEventHandler
 
         userAuthorizedDomainEvent.Authorized = teamPermissions.Contains(userAuthorizedDomainEvent.PermissionId)
                                                 || userAuthorizedDomainEvent.Authorized;
+    }
+
+    private async Task<UserModel> GetUserAsync(Guid userId)
+    {
+        var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(userId));
+        if (userModel == null)
+        {
+            var user = await _authDbContext.Set<User>()
+                                       .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+            }
+            userModel = user.Adapt<UserModel>();
+        }
+        return userModel;
     }
 }

@@ -184,6 +184,6 @@ public static class CacheKey
 
     public static string UserTeamKey(Guid userId)
     {
-        return $"{USER_TEAM_CODE_PRE}{teamId}";
+        return $"{USER_TEAM_CODE_PRE}{userId}";
     }
 }
