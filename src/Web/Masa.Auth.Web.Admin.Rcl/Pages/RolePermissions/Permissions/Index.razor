@@ -89,8 +89,10 @@
                                             </MCol>
                                             <MCol Md=6>
                                             <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                                   Items="MenuTreeParent(_menuPermissionDetailDto)" HideDetails="true"
-                                                          Dense Outlined ChangeOnSelect
+                                                   Items="MenuTreeParent(_menuPermissionDetailDto)" 
+                                                   HideDetails="true"
+                                                   ChangeOnSelect="@(_menuPermissionDetailDto.Type!=PermissionTypes.Element)"
+                                                   Dense Outlined
                                                    ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children"
                                                    Class="permission-name">
                                             </MCascader>
