@@ -1,11 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Service.Admin.Application.Permissions.Commands;
-using Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
-using Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
-
 namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class QueryHandler
@@ -15,6 +10,7 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly UserDomainService _userDomainService;
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _distributedCacheClient;
     readonly IEventBus _eventBus;
 
     public QueryHandler(
@@ -23,7 +19,8 @@ public class QueryHandler
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
         IMultilevelCacheClient multilevelCacheClient,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        IDistributedCacheClient distributedCacheClient)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -31,6 +28,7 @@ public class QueryHandler
         _userDomainService = userDomainService;
         _multilevelCacheClient = multilevelCacheClient;
         _eventBus = eventBus;
+        _distributedCacheClient = distributedCacheClient;
     }
 
     #region Role
@@ -272,11 +270,18 @@ public class QueryHandler
     public async Task AppMenuListQueryAsync(AppMenuListQuery appMenuListQuery)
     {
         var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appMenuListQuery.UserId);
-        var menus = await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
-                            && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled);
-        appMenuListQuery.Result = GetMenus(menus.ToList(), Guid.Empty);
 
-        List<MenuDto> GetMenus(List<Permission> menus, Guid parentId)
+        var menus = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        if (menus == null || menus.Count < 1)
+        {
+            menus = (await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
+                                && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled)).Adapt<List<CachePermission>>();
+        }
+        menus = menus.Where(p => p.AppId == appMenuListQuery.AppId&& p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
+
+        appMenuListQuery.Result = GetMenus(menus, Guid.Empty);
+
+        List<MenuDto> GetMenus(List<CachePermission> menus, Guid parentId)
         {
             return menus.Where(m => m.ParentId == parentId)
                 .OrderBy(m => m.Order)
@@ -471,6 +476,7 @@ public class QueryHandler
         var permissionByTeamQuery = new PermissionsByTeamQuery(teamQuery.Result);
         await _eventBus.PublishAsync(permissionByTeamQuery);
 
+        var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         var permissionIds = await GetPermissionsByCacheAsync(query.User, permissionByTeamQuery.Result);
         if (permissionIds == null || permissionIds.Count() < 1)
         {
@@ -479,18 +485,7 @@ public class QueryHandler
         query.Result.AddRange(permissionIds);
 
         //Filter out empty menus that do not have submenu permissions.
-        permissionIds = new List<Guid>();
-        var subMenus = await _permissionRepository.GetListAsync(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled);
-        foreach (var item in query.Result)
-        {
-            var itemSubMenuIds = subMenus.Where(p => p.ParentId == item).Select(e => e.Id).ToList();
-            if (itemSubMenuIds.Count > 0 && itemSubMenuIds.Intersect(query.Result).Count() < 1)
-            {
-                continue;
-            }
-            permissionIds!.Add(item);
-        }
-        query.Result = permissionIds!;
+        await FilterEmptyMenus();
 
         async Task<List<Guid>> GetPermissionsAsync(Guid userId, List<Guid> teamPermissionIds)
         {
@@ -518,6 +513,10 @@ public class QueryHandler
         async Task<List<Guid>> GetPermissionsByCacheAsync(Guid userId, List<Guid> teamPermissionIds)
         {
             var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.User));
+            if (cacheUserModel == null || cachePermissions == null)
+            {
+                return new List<Guid>();
+            }
 
             var roles = cacheUserModel!.Roles.Select(ur => ur.Id).ToList();
             var permissions = cacheUserModel.Permissions;
@@ -529,11 +528,48 @@ public class QueryHandler
                                     .Union(permissions.Select(permission => permission.PermissionId))
                                     .Union(teamPermissionIds)
                                     .Where(permission => rejectPermisisons.All(rp => rp != permission));
-            //TODO:get child permission to cache
-            var apiPermissions = await _authDbContext.Set<PermissionRelation>().AsNoTracking()
-                    .Where(pr => userPermission.Contains(pr.ParentPermissionId))
-                    .Select(pr => pr.ChildPermissionId).ToListAsync();
+
+            var apiPermissions = new List<Guid>();
+            foreach (var idItem in userPermission)
+            {
+                if (cachePermissions!.Any(e => e.Id == idItem))
+                {
+                    apiPermissions.AddRange(cachePermissions!.First(e => e.Id == idItem).ApiPermissions);
+                }
+            }
             return userPermission.Union(apiPermissions).ToList();
+        }
+
+        async Task FilterEmptyMenus()
+        {
+            permissionIds = new List<Guid>();
+            if (cachePermissions != null && cachePermissions.Count > 0)
+            {
+                var cacheSubMenus = cachePermissions!.Where(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled).ToList();
+                foreach (var item in query.Result)
+                {
+                    var itemSubMenuIds = cacheSubMenus.Where(p => p.ParentId == item).Select(e => e.Id).ToList();
+                    if (itemSubMenuIds.Count > 0 && itemSubMenuIds.Intersect(query.Result).Count() < 1)
+                    {
+                        continue;
+                    }
+                    permissionIds!.Add(item);
+                }
+            }
+            else
+            {
+                var subMenus = await _permissionRepository.GetListAsync(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled);
+                foreach (var item in query.Result)
+                {
+                    var itemSubMenuIds = subMenus.Where(p => p.ParentId == item).Select(e => e.Id).ToList();
+                    if (itemSubMenuIds.Count > 0 && itemSubMenuIds.Intersect(query.Result).Count() < 1)
+                    {
+                        continue;
+                    }
+                    permissionIds!.Add(item);
+                }
+            }
+            query.Result = permissionIds!;
         }
     }
 

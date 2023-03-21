@@ -8,4 +8,6 @@ public interface ITeamRepository : IRepository<Team, Guid>
     Task<Team> GetByIdAsync(Guid id);
 
     bool Any(Expression<Func<Team, bool>> predicate);
+
+    public Task<IReadOnlyList<Team>> GetAllAsync();
 }

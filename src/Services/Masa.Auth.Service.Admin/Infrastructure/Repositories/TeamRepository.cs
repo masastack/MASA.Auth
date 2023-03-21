@@ -24,4 +24,14 @@ public class TeamRepository : Repository<AuthDbContext, Team, Guid>, ITeamReposi
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.TEAM_NOT_EXIST);
     }
+
+    public async Task<IReadOnlyList<Team>> GetAllAsync()
+    {
+        return await Context.Set<Team>()
+            .Include(t => t.TeamPermissions)
+            .Include(t => t.TeamStaffs)
+            .Include(t => t.TeamRoles)
+            .ToListAsync()
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.TEAM_NOT_EXIST);
+    }
 }

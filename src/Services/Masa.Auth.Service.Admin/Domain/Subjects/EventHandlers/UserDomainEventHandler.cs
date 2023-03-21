@@ -11,8 +11,9 @@ public class UserDomainEventHandler
     readonly IEventBus _eventBus;
     readonly ILogger<UserDomainEventHandler> _logger;
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _distributedCacheClient;
 
-    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger, IMultilevelCacheClient multilevelCacheClient)
+    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger, IMultilevelCacheClient multilevelCacheClient, IDistributedCacheClient distributedCacheClient)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
@@ -20,6 +21,7 @@ public class UserDomainEventHandler
         _eventBus = eventBus;
         _logger = logger;
         _multilevelCacheClient = multilevelCacheClient;
+        _distributedCacheClient = distributedCacheClient;
     }
 
     [EventHandler(1)]
@@ -84,8 +86,16 @@ public class UserDomainEventHandler
         var user = await GetUserAsync(userEvent.UserId);
         if (user.Account == "admin")
         {
-            userEvent.Permissions = await _authDbContext.Set<Permission>()
-                    .Select(p => p.Id).ToListAsync();
+            var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+            if (cachePermissions == null || cachePermissions.Count() < 1)
+            {
+                userEvent.Permissions = await _authDbContext.Set<Permission>()
+                        .Select(p => p.Id).ToListAsync();
+            }
+            else
+            {
+                userEvent.Permissions = cachePermissions.Select(e => e!.Id).ToList();
+            }
         }
         else
         {
