@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Middleware;
+
 namespace Masa.Auth.Service.Admin.Services;
 
 public class MessageService : ServiceBase
@@ -10,14 +12,14 @@ public class MessageService : ServiceBase
         RouteOptions.DisableAutoMapRoute = false;
     }
 
-    [DemoDisabledRoute]
+    [DisabledRoute]
     public async Task SendSmsAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
         await eventBus.PublishAsync(new SendSmsCommand(model));
     }
 
-    [DemoDisabledRoute]
+    [DisabledRoute]
     public async Task SendEmailAsync(IEventBus eventBus,
         [FromBody] SendEmailModel sendEmailModel)
     {
