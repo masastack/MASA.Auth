@@ -11,6 +11,10 @@ public class RemoteAuthenticationDefaultsProvider : IRemoteAuthenticationDefault
     {
         _thirdPartyIdpService = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IThirdPartyIdpService>();
     }
+    //public RemoteAuthenticationDefaultsProvider(IThirdPartyIdpService thirdPartyIdpService)
+    //{
+    //    _thirdPartyIdpService = thirdPartyIdpService;
+    //}
 
     public async Task<AuthenticationDefaults?> GetAsync(string scheme)
     {

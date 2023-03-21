@@ -11,6 +11,7 @@ public class TeamCommandHandler
     readonly RoleDomainService _roleDomainService;
     readonly IObjectStorageClient _aliyunClient;
     readonly IUnitOfWork _unitOfWork;
+    readonly ILogger<TeamCommandHandler> _logger;
 
     string _bucket = "";
     string _cdnEndpoint = "";
@@ -22,7 +23,8 @@ public class TeamCommandHandler
         IMasaConfiguration masaConfiguration,
         IObjectStorageClient aliyunClient,
         IOptions<OssOptions> ossOptions,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ILogger<TeamCommandHandler> logger)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
@@ -31,6 +33,7 @@ public class TeamCommandHandler
         _bucket = ossOptions.Value.Bucket;
         _cdnEndpoint = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>("$public.Cdn:CdnEndpoint");
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     [EventHandler(1)]
@@ -49,10 +52,19 @@ public class TeamCommandHandler
         {
             color = ColorGroupConstants.DEFAULT_COLOR;
         }
-        var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
-        await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+        Team team;
+        try
+        {
+            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
+            await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+        }
 
-        var team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         await _teamRepository.AddAsync(team);
         await _unitOfWork.SaveChangesAsync();
 
