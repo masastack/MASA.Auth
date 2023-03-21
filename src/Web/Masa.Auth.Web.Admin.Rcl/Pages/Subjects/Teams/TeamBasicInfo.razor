@@ -1,26 +1,26 @@
 ﻿@inherits AdminCompontentBase
 
 <MCardText Class="py-0 full-height">
-    <PlaceholderTextFiled Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Name")" />
+    <PlaceholderTextFiled Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Name")" Class="text-field-regular2--text text-field-body2" />
     <MListItem Class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Class="lighten-5" Height=80 Width=80>
             <span style="font-size:48px; color:@Value.Avatar.Color;">@Value.Avatar.Name?.FirstOrDefault()</span>
         </MListItemAvatar>
         <MListItemContent Class="py-0">
             <MListItemTitle Class="pt-2">
-                <STextField @bind-Value="@Value.Avatar.Name" Placeholder="@T("TeamAvatarText")"></STextField>
+                <STextField @bind-Value="@Value.Avatar.Name" Placeholder="@T("TeamAvatarText")" TextColor="regular2" Class="text-field-body2"></STextField>
             </MListItemTitle>
             <MListItemSubtitle Class="mt-2">
                 <SColorGroup @bind-Value="@Value.Avatar.Color" Colors='_colors' />
             </MListItemSubtitle>
         </MListItemContent>
     </MListItem>
-    <SSelect Class="mt-12 fs-14" @bind-Value="@Value.Type" Dense
+    <SSelect Class="mt-12 fs-14 select-emphasis2--text body2" @bind-Value="@Value.Type" Dense
              Label="@T("Type")"
              Items="@_teamTypes" Required
              ItemText="u => u.Name"
              ItemValue="u => u.Id">
     </SSelect>
-    <STextarea Class="mt-12 fs-14" Label="@T("Description")" HideDetails="true" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
+    <STextarea Class="mt-12 fs-14 text-field-body2" TextColor="emphasis2" Label="@T("Description")" HideDetails="true" @bind-Value="@Value.Description" Outlined Height="120" NoResize>
     </STextarea>
 </MCardText>

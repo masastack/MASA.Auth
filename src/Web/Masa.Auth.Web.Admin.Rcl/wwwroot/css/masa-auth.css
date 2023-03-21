@@ -987,3 +987,24 @@ input::-webkit-input-placeholder {
     height: 24px !important;
     width: 24px !important;
 }
+
+.text-field-subtitle .m-input__slot .m-text-field__slot input, .text-field-subtitle .m-input__slot .m-text-field__slot input::placeholder {
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5rem !important;
+    letter-spacing: 0em !important;
+}
+
+.text-field-emphasis2--text .m-input__slot .m-text-field__slot input, .text-field-emphasis2--text .m-input__slot .m-text-field__slot input::placeholder {
+    color: #323D6F !important;
+}
+.text-field-body2 .m-input__slot .m-text-field__slot input, .text-field-body2 .m-input__slot .m-text-field__slot input::placeholder, .text-field-body2 .m-input__slot .m-text-field__slot textarea, .text-field-body2 .m-input__slot .m-text-field__slot textarea::placeholder {
+    font-size: 0.875rem !important;
+    font-weight: 400 !important;
+    line-height: 1.3125rem !important;
+    letter-spacing: 0.015625em !important;
+}
+
+.select-emphasis2--text .m-select__selections {
+    color: #323D6F !important;
+}
