@@ -567,40 +567,6 @@ input::-webkit-input-placeholder {
     border-bottom-right-radius: 20px !important;
 }
 
-.m-input.mx-auto .m-text-field__slot {
-    padding-bottom: 2px;
-}
-
-
-.m-input.mx-auto .m-input__slot::before {
-    border-color: #E2E7F4 !important;
-}
-
-.m-input.mx-auto .m-text-field__slot input {
-    text-align: center;
-    color: #7681AB !important;
-    font-family: Roboto !important;
-    font-size: 1.5rem !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    line-height: normal !important;
-    letter-spacing: 0em !important;
-    font-size: 14px !important;
-    line-height: 21px !important;
-}
-
-    .m-input.mx-auto .m-text-field__slot input::placeholder {
-        text-align: center;
-        color: #A3AED0 !important;
-        font-family: Roboto !important;
-        font-size: 1.5rem !important;
-        font-style: normal !important;
-        font-weight: 700 !important;
-        line-height: normal !important;
-        letter-spacing: 0em !important;
-    }
-
-
 .m-data-table.table-space-v-4 > .m-data-table__wrapper > table {
     border-spacing: 0px 16px !important;
 }
@@ -986,4 +952,8 @@ input::-webkit-input-placeholder {
 .mchip-avatar.m-chip--pill .m-avatar {
     height: 24px !important;
     width: 24px !important;
+}
+
+.select-emphasis2--text .m-select__selections {
+    color: #323D6F !important;
 }

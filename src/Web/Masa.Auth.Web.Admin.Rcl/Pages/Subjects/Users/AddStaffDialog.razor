@@ -11,7 +11,7 @@
                                 <ButtonGroup @bind-Value="Staff.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
                                 <br />
                                 <div class="mt-12">
-                                    <DefaultChangeImage @bind-Value="Staff.Avatar" Gender="Staff.Gender" />
+                                    <DefaultChangeImage @bind-Value="Staff.Avatar" Gender="Staff.Gender" WhenFileChangeUpload />
                                 </div>
                             </div>
                         </AutoHeightContent>
@@ -31,7 +31,7 @@
                                     <MAvatar Size=80>
                                         <img src="@Staff.Avatar" />
                                     </MAvatar>
-                                    <PlaceholderTextField @bind-Value="Staff.DisplayName" Placeholder="@T("Give him a nickname!")" style="width:212px;" />
+                                    <SNameTextField @bind-Value="Staff.DisplayName" Placeholder="@T("Give him a nickname!")" style="width:212px;" />
                                 </div>
                             </div>
                         </HeaderContent>
