@@ -38,11 +38,11 @@
                    Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                 mdi-record-circle
             </MIcon>
-            <MSelect ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0 body2" TextColor="neutral-lighten-2" Value="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Name??_environments.FirstOrDefault()?.Name)"
+            <MSelect ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0" TextColor="neutral-lighten-2" Value="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Name??_environments.FirstOrDefault()?.Name)"
                      Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
 		<SelectionContent Context="data">
 		    <div style="width:100%" class="d-flex">
-			<span>@data.Item.Name</span>
+			<span class="text-body2">@data.Item.Name</span>
 			<MDivider Class="fill--text ml-auto" Right Vertical></MDivider>
 		    </div>
 		</SelectionContent>
@@ -51,7 +51,7 @@
         </MCol>
         @if (!_inputModel.PhoneLogin)
         {
-            <MCol Md="6" Class="d-flex justify-end">
+            <MCol Md="6" Class="d-flex justify-end mt-2">
                 <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")">
                 </MCheckbox>
                 @* <MCheckbox Class="mt-1" @bind-Value="_inputModel.RememberLogin" HideDetails="true"
