@@ -38,6 +38,7 @@ public class UserCacheCommandHandler
             var userModel = user.Adapt<UserModel>();
             var staff = await _staffRepository.FindAsync(staff => staff.UserId == user.Id);
             userModel.StaffDislpayName = staff?.DisplayName ?? user.DisplayName;
+            userModel.StaffId = staff?.Id;
             await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
         }
     }
