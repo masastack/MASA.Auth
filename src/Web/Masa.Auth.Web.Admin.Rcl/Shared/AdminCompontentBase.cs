@@ -84,7 +84,7 @@ public abstract class AdminCompontentBase : ComponentBase
         if (string.IsNullOrEmpty(key)) return key;
         if (PageName is not null)
         {
-            return I18n.T(PageName, key, false) ?? I18n.T(key, false) ?? key;
+            return I18n.T(PageName, key) ?? I18n.T(key) ?? key;
         }
         else return I18n.T(key) ?? key;
     }
