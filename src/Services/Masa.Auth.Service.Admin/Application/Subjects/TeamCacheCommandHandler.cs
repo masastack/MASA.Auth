@@ -91,14 +91,14 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             {
                 foreach (var item in team.TeamStaffs.Select(e => e.StaffId).Distinct())
                 {
-                    var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<TeamDetailDto>>(CacheKey.StaffTeamKey(item));
+                    var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(item));
                     if (cacheStaffTeams == null)
                     {
-                        cacheStaffTeams = new List<TeamDetailDto>();
+                        cacheStaffTeams = new List<CacheStaffTeam>();
                     }
                     if (!cacheStaffTeams.Any(e => e.Id == team.Id))
                     {
-                        cacheStaffTeams.Add(teamDto);
+                        cacheStaffTeams.Add(new CacheStaffTeam(teamDto.Id, team.TeamStaffs.First(e => e.StaffId == item).TeamMemberType));
                     }
                     await _multilevelCacheClient.SetAsync(CacheKey.StaffTeamKey(item), cacheStaffTeams);
                 }

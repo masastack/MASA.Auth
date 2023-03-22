@@ -708,11 +708,11 @@ public class QueryHandler
         var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.UserId));
         if (cacheUserModel != null && cacheUserModel.StaffId != null)
         {
-            var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<TeamDetailDto>>(CacheKey.StaffTeamKey(cacheUserModel.StaffId.Value));
+            var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(cacheUserModel.StaffId.Value));
             if (cacheStaffTeams != null)
             {
-                query.Result = cacheStaffTeams.Where(e => e.TeamAdmin.Staffs.Any(x => x == cacheUserModel.StaffId.Value) || e.TeamMember.Staffs.Any(x => x == cacheUserModel.StaffId.Value))
-                                                .Select(e => new TeamSampleDto(e.Id, e.TeamAdmin.Staffs.Any(x => x == cacheUserModel.StaffId.Value) ? TeamMemberTypes.Admin : TeamMemberTypes.Member))
+                query.Result = cacheStaffTeams.Where(e => e.Id == cacheUserModel.StaffId.Value)
+                                                .Select(e => new TeamSampleDto(e.Id, e.TeamMemberType))
                                                 .ToList();
                 return;
             }

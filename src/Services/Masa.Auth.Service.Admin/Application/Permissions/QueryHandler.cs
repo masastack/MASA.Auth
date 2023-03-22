@@ -385,6 +385,7 @@ public class QueryHandler
         {
             permissionIds = await GetPermissionsAsync(teamIds);
         }
+
         query.Result.AddRange(permissionIds);
 
         async Task<List<Guid>> GetPermissionsAsync(IEnumerable<Guid> teamIds)
