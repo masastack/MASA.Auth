@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Linq;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
