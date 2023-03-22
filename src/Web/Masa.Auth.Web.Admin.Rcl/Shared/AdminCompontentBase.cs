@@ -86,7 +86,7 @@ public abstract class AdminCompontentBase : ComponentBase
         {
             return I18n.T(PageName, key, false) ?? I18n.T(key, false) ?? key;
         }
-        else return I18n.T(key, true) ?? key;
+        else return I18n.T(key) ?? key;
     }
 
     public string T(string formatkey, params string[] args)
