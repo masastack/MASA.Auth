@@ -231,6 +231,7 @@ public class CommandHandler
             {
                 await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
+                roles.AddRange(user.Roles.Select(role => role.RoleId));
                 user.AddRoles(roles);
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
