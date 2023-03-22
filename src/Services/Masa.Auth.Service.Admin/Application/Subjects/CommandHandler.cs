@@ -224,7 +224,9 @@ public class CommandHandler
         }
         if (userModel.Id != default)
         {
-            user = await _userRepository.FindAsync(u => u.Id == userModel.Id);
+            user = await _authDbContext.Set<User>()
+                                       .Include(u => u.Roles)
+                                       .FirstOrDefaultAsync(u => u.Id == userModel.Id);
             if (user is not null)
             {
                 await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
