@@ -5,9 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class SearchTextField : STextField<string>
 {
-    [Inject]
-    public I18n? I18n { get; set; }
-
     [Parameter]
     public bool FillBackground { get; set; } = true;
 
