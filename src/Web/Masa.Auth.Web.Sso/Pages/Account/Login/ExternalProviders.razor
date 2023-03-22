@@ -3,13 +3,13 @@
 <div class="d-flex flex-column">
     <div class="d-flex block-center mt-8 mb-4">
         <div style="background: #E9EDF7;height: 1px;width: 100%;" />
-        <div class="mx-4 text-center body2 regular3--text" style="@(LanguageProvider.Culture.ToString() == "zh-CN"?"min-width:120px":"min-width:100px")">@T("or login with")</div>
+        <div class="mx-4 text-center body2 neutral-lighten-4--text" style="@(LanguageProvider.Culture.ToString() == "zh-CN"?"min-width:120px":"min-width:100px")">@T("or login with")</div>
         <div style="background: #E9EDF7;height: 1px;width: 100%;" />
     </div>
     <div class="text-center">
         @foreach (var externalProvider in ExternalProviderList)
         {
-            <MAvatar Size="30" Class="hover-pointer mx-1">
+            <MAvatar Size="30" Class="hover-pointer mx-3">
                 <img src="@externalProvider.Icon" @onclick="() => NavigateToThirdParty(externalProvider.AuthenticationScheme)" />
             </MAvatar>
         }
