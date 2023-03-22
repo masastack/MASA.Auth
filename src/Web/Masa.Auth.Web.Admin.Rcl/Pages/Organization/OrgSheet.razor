@@ -4,7 +4,7 @@
     <MCard Class="mx-auto d-flex flex-column full-height">
         <MCardText Class="d-flex align-center full-height">
             <MForm Model="_dto" EnableValidation Class="full-width" EnableI18n @ref="_form">
-                <PlaceholderTextField @bind-Value="@_dto.Name" style="width:323px;" Placeholder="@T("Enter Name")" />
+                <SNameTextField @bind-Value="@_dto.Name" style="width:323px;" Placeholder="@T("Enter Name")" />
                 @if (_dto.ParentId != Guid.Empty)
                 {
                     <MCascader Items="Departments" Dense class="mt-6" @bind-Value="@_dto.ParentId"

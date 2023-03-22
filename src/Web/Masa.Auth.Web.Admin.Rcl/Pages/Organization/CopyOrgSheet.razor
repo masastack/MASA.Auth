@@ -6,7 +6,7 @@
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center full-height">
                     <div class="full-width">
-                        <PlaceholderTextField @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")"></PlaceholderTextField>
+                        <SNameTextField @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")"/>
                         <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">
@@ -24,7 +24,7 @@
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column full-height">
-                    <PlaceholderTextField @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")"></PlaceholderTextField>
+                    <SNameTextField @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")"/>
                     <MCascader Items="Departments" Dense Label="@T("Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId" Class="mt-6"
                                ItemValue="u => u.Id" HideDetails="@("auto")" ChangeOnSelect
