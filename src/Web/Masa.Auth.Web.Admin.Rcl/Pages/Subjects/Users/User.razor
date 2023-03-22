@@ -6,8 +6,8 @@
         <div class="d-flex">
             <MSpacer />
             <div>
-                <SUserAutoComplete Small FillBackground=false @bind-Value="UserId" />
-            </div>     
+                <SUserAutoComplete Small FillBackground=false @bind-Value="UserId" Class="user-auto-complete" />
+            </div>
             <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
                 <MIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
@@ -23,18 +23,17 @@
             <MRow class="ml-6">
                 <MCol Md=4>
                     <BooleanSelect @bind-Value="Enabled" FillBackground=false AutoLabel=false Small Placeholder="@T("UserState")" />
-                </MCol>
-            </MRow>
-        </div>
-    </HeaderContent>
-    <AutoHeightContent>
-        <SDataTable 
-            Dense
-            Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
-            Headers="GetHeaders()"
-            Items="Users" 
-            TItem="UserDto"          
-            ItemsPerPage="PageSize">
+                    </MCol>
+                    </MRow>
+                </div>
+            </HeaderContent>
+            <AutoHeightContent>
+                <SDataTable Dense
+                    Height="@(Filter is true?"calc(100vh - 350px)":"calc(100vh - 285px)")"
+                    Headers="GetHeaders()"
+                    Items="Users"
+                    TItem="UserDto"
+                    ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>
@@ -43,7 +42,7 @@
                 {
                     case nameof(UserDto.Avatar):
                         <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateUserDialog(context.Item)">
-                            <MAvatar Size=40>
+                            <MAvatar Size="40">
                                 <img src="@context.Item.Avatar" />
                             </MAvatar>
                             <div class="ml-2 my-auto">
@@ -76,7 +75,6 @@
         <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
-
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=OnAddUserSuccessAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=UpdateStaffAndThirdPartyUserAsync />
 <UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />

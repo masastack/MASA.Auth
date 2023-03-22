@@ -34,7 +34,7 @@ public partial class AddUserClaimDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             UserClaim = new();
         }

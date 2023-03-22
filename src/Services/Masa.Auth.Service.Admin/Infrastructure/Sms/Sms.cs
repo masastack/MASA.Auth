@@ -24,6 +24,8 @@ public class Sms : IScopedDependency
 
     public async Task<string> SendMsgCodeAsync(string key, string phoneNumber, TimeSpan? expiration = null)
     {
+        ArgumentExceptionExtensions.ThrowIfNullOrEmpty(phoneNumber);
+
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {

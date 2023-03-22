@@ -1,7 +1,7 @@
 ﻿@inherits SsoSectionComponentBase
 
 <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="Value.PhoneNumber" Label="@T("PhoneNumber")"
-            Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Rules="_phoneNumberRules" @ref="_phoneTextField">
+            Placeholder="@T("PhoneNumberPlaceHolder")" Outlined @ref="_phoneTextField">
 </MTextField>
 <CaptchaSendTextField Class="mt-3" @bind-Value="Value.SmsCode" OnClick="GetSmsCode" />
 
@@ -19,13 +19,7 @@
 
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
-
-    private IEnumerable<Func<string, StringBoolean>> _phoneNumberRules => new List<Func<string, StringBoolean>>
-    {
-        value => !string.IsNullOrEmpty(value) ? true : "Required.",
-        value => Regex.Match(value, LoginOptions.PhoneRegular).Success ? true : "Invalid PhoneNumber."
-    };
-
+    
     private async Task<bool> GetSmsCode()
     {
         if (_phoneTextField.Validate())

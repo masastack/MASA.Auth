@@ -32,6 +32,11 @@ public partial class SyncStaffDialog
         {
             Visible = visible;
         }
+	
+	if (!visible)
+	{
+	    File = null;
+	}
     }
 
     private void OnFileChange(InputFileChangeEventArgs e)

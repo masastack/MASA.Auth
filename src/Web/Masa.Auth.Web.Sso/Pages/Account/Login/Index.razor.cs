@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 
-[SecurityHeaders]
 [AllowAnonymous]
 public partial class Index
 {

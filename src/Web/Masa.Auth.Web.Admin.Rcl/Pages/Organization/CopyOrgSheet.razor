@@ -1,12 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@T("Copy Department")" ContentClass="px-sheet-dialog">
+<SSheetDialog EnableDomReload @bind-Value=_visible Title="@T("Copy Department")" ContentClass="px-sheet-dialog">
     <MWindow @bind-Value="_step" Class="full-height">
         <MWindowItem Value="1" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center full-height">
                     <div class="full-width">
-                        <PlaceholderTextFiled @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")"></PlaceholderTextFiled>
+                        <PlaceholderTextField @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")"></PlaceholderTextField>
                         <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">
@@ -24,7 +24,7 @@
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column full-height">
-                    <PlaceholderTextFiled @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")"></PlaceholderTextFiled>
+                    <PlaceholderTextField @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")"></PlaceholderTextField>
                     <MCascader Items="Departments" Dense Label="@T("Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId" Class="mt-6"
                                ItemValue="u => u.Id" HideDetails="@("auto")" ChangeOnSelect

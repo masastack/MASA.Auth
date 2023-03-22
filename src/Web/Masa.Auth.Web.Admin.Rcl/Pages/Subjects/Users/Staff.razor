@@ -44,13 +44,13 @@
                         <span>@context.Item.Account</span>
                         break;
                     case (nameof(StaffDto.Department)):
-                        <span>@context.Item.Department</span>
+                        <span>@(string.IsNullOrEmpty(context.Item.Department) ? "-" : context.Item.Department)</span>
                         break;
                     case nameof(StaffDto.JobNumber):
                         <span>@context.Item.JobNumber</span>
                         break;
                     case (nameof(StaffDto.Position)):
-                        <span>@context.Item.Position</span>
+                        <span>@(string.IsNullOrEmpty(context.Item.Position) ? "-" : context.Item.Position)</span>
                         break;
                     case nameof(StaffDto.Enabled):
                         <EnableChip Value="context.Item.Enabled" DisabledLabel="@T("Freeze")" />
@@ -74,4 +74,4 @@
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=UpdateUserAsync />
 <UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
 <UserAuthorizeDialog UserId=CurrentStaff.UserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
-<SyncStaffDialog @key=SyncStaffDialogVisible @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=UpdateUserAsync />
+<SyncStaffDialog @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=UpdateUserAsync />

@@ -124,12 +124,12 @@ public partial class ThirdPartyUser
 
     public List<DataTableHeader<ThirdPartyUserDto>> GetHeaders() => new()
     {
-        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
-        new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false },
-        new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false },
-        new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false },
-        new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false },
-        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false, Width = "16%" },
+        new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false, Width = "16%" },
+        new() { Text = T(nameof(ThirdPartyUserDto.Creator)), Value = nameof(ThirdPartyUserDto.Creator), Sortable = false, Width = "16%" },
+        new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false, Width = "16%" },
+        new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false, Width = "16%" },
+        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align = DataTableHeaderAlign.Center, Width = "16%" }
     };
 
     public async Task GetThirdPartyUsersAsync()

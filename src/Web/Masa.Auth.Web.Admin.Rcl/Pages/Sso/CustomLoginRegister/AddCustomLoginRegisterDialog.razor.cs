@@ -44,7 +44,7 @@ public partial class AddCustomLoginRegisterDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             CustomLogin = new();
             Tab = CustomLoginTab.BasicInformation;

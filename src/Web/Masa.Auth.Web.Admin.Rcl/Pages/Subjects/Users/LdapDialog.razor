@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@T("Configure Domain Account")">
+<SSheetDialog EnableDomReload @bind-Value=_visible Title="@T("Configure Domain Account")">
     <MCard class="pt-9 d-flex flex-column full-height" Style="margin-left:228px;margin-right:228px;">
         <MCardText Class="full-height">
             <MForm Model=_ldapDetailDto EnableValidation EnableI18n @ref="_form">
@@ -44,6 +44,9 @@
 
     ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
+    [Parameter]
+    public Func<Task>? OnSubmitted { get; set; }
+
     public async Task OpenAsync()
     {
         _ldapDetailDto = await ThirdPartyIdpService.GetLdapDetailAsync();
@@ -53,7 +56,7 @@
 
     private async Task ConnectTest()
     {
-        if (! _form.Validate())
+        if (!_form.Validate())
         {
             return;
         }
@@ -76,7 +79,7 @@
 
     private async Task LdapSubmit()
     {
-        if (! _form.Validate())
+        if (!_form.Validate())
         {
             return;
         }
@@ -85,6 +88,11 @@
         {
             await ThirdPartyIdpService.LdapUpsertAsync(_ldapDetailDto);
             OpenSuccessMessage(T("Ldap Account Synchroniz Success"));
+
+            if (OnSubmitted != null)
+            {
+                await OnSubmitted.Invoke();
+            }
         }
         catch (Exception e)
         {

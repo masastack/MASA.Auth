@@ -39,7 +39,7 @@ public partial class AddThirdPartyIdpDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             ThirdPartyIdp = new();
             AdvancedConfig = new();

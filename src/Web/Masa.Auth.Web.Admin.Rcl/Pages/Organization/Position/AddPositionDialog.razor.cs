@@ -34,7 +34,7 @@ public partial class AddPositionDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             Position = new();
         }

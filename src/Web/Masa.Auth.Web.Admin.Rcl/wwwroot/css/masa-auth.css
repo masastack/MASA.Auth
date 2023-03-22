@@ -578,13 +578,15 @@ input::-webkit-input-placeholder {
 
 .m-input.mx-auto .m-text-field__slot input {
     text-align: center;
-    color: #A3AED0 !important;
+    color: #7681AB !important;
     font-family: Roboto !important;
     font-size: 1.5rem !important;
     font-style: normal !important;
-    font-weight: 700 !important;
+    font-weight: 400 !important;
     line-height: normal !important;
     letter-spacing: 0em !important;
+    font-size: 14px !important;
+    line-height: 21px !important;
 }
 
     .m-input.mx-auto .m-text-field__slot input::placeholder {
@@ -659,6 +661,10 @@ input::-webkit-input-placeholder {
     overflow-x: hidden;
 }
 
+    .overflow-y::-webkit-scrollbar-thumb {
+        background: #A3AED0;
+    }
+
 .sheetDialogPadding {
     padding-left: 228px;
     padding-right: 228px;
@@ -690,6 +696,10 @@ input::-webkit-input-placeholder {
 
 .m-text-field.m-text-field--solo.elevation-0:not(.m-text-field--solo-flat) > .m-input__control > .m-input__slot {
     box-shadow: none;
+}
+
+.permission-code .m-text-field__slot>input {
+    font-size:16px !important;
 }
 
 .px-sheet-dialog {
@@ -942,12 +952,9 @@ input::-webkit-input-placeholder {
     padding: 0px 28px !important;
 }
 
-.fs-14 {
+.d-flex table tr {
+    height: 72px;
     font-size: 14px;
-}
-
-.theme--light.m-stepper .m-stepper__label {
-    color: #A3AED0 !important;
 }
 
 .theme--light.m-stepper .m-stepper__step--active .m-stepper__label {
@@ -961,4 +968,22 @@ input::-webkit-input-placeholder {
 
 .theme--light.m-stepper .m-stepper__step--complete .m-stepper__label {
     color: rgba(0,0,0,.87) !important;
+}
+
+.d-flex .m-window-item .m-sheet {
+    padding-top: 0px !important;
+}
+
+.d-flex .m-window-item .m-sheet .m-data-table-header th {
+    height: 56px !important;
+    border-bottom: 0.5px solid #E4E8F3 !important;
+}
+
+.selevationtab .m-btn {
+    padding: 0 28px !important;
+}
+
+.mchip-avatar.m-chip--pill .m-avatar {
+    height: 24px !important;
+    width: 24px !important;
 }

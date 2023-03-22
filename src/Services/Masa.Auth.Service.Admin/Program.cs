@@ -117,9 +117,6 @@ builder.Services
 //todo update appsettings
 //.AddSchedulerJobAsync();
 
-builder.Services.AddHealthChecks()
-    .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
-    .AddDbContextCheck<AuthDbContext>();
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 .AddEndpointsApiExplorer()
@@ -235,7 +232,7 @@ app.UseIsolation();
 //app.UseMiddleware<CurrentUserCheckMiddleware>();
 app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
-app.UseAddStackMiddleware();
+app.UseStackMiddleware();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>

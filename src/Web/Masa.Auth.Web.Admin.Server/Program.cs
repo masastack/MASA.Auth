@@ -24,14 +24,32 @@ if (!builder.Environment.IsDevelopment())
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+{
+    Authority = masaStackConfig.GetSsoDomain(),
+    ClientId = masaStackConfig.GetWebId(MasaStackConstant.AUTH),
+    Scopes = new List<string> { "offline_access" }
+};
+
+IdentityModelEventSource.ShowPII = true;
+
 var authServerUrl = masaStackConfig.GetAuthServiceDomain();
 
 #if DEBUG
-authServerUrl = "https://auth-service-develop.masastack.com/";//"http://localhost:18002/";
+authServerUrl = "http://localhost:18002/";
+masaOpenIdConnectOptions.Authority = "http://localhost:18200";
 #endif
 
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
 builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
-builder.Services.AddAuthApiGateways(option => option.AuthServiceBaseAddress = authServerUrl);
+
+builder.Services.AddAuthApiGateways(option =>
+{
+    option.AuthServiceBaseAddress = authServerUrl;
+    option.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
+    option.ClientId = masaOpenIdConnectOptions.ClientId;
+    option.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
+});
 
 builder.Services.AddObservable(builder.Logging, () =>
 {
@@ -53,30 +71,6 @@ builder.Services.AddGlobalForServer();
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
-
-MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
-{
-    Authority = masaStackConfig.GetSsoDomain(),
-    ClientId = masaStackConfig.GetWebId(MasaStackConstant.AUTH),
-    Scopes = new List<string> { "offline_access" }
-};
-
-IdentityModelEventSource.ShowPII = true;
-
-#if DEBUG
-masaOpenIdConnectOptions.Authority = "https://sso-develop.masastack.com/";//"http://localhost:18200";
-#endif
-
-builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
-
-builder.Services.AddJwtTokenValidator(options =>
-{
-    options.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
-}, refreshTokenOptions =>
-{
-    refreshTokenOptions.ClientId = masaOpenIdConnectOptions.ClientId;
-    refreshTokenOptions.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
-});
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 //builder.WebHost.UseStaticWebAssets();

@@ -3,12 +3,12 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class UpdateStaffBasicInfoCommandValidator : AbstractValidator<UpdateStaffBasicInfoCommand>
+public class UpdateStaffBasicInfoCommandValidator : MasaAbstractValidator<UpdateStaffBasicInfoCommand>
 {
     public UpdateStaffBasicInfoCommandValidator()
     {
         RuleFor(command => command.Staff.DisplayName).Required().MaximumLength(50);
         RuleFor(command => command.Staff.PhoneNumber).Required().Phone();
-        RuleFor(command => command.Staff.Email).Email();
+        WhenNotEmpty(command => command.Staff.Email, r => r.Email());
     }
 }

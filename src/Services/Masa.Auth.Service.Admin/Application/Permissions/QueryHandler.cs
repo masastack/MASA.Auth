@@ -412,6 +412,20 @@ public class QueryHandler
                 .Where(pr => userPermission.Contains(pr.ParentPermissionId))
                 .Select(pr => pr.ChildPermissionId).ToListAsync();
         query.Result.AddRange(userPermission.Union(apiPermissions));
+
+        //Filter out empty menus that do not have submenu permissions.
+        List<Guid> permissionIds = new List<Guid>();
+        var subMenus = await _permissionRepository.GetListAsync(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled);
+        foreach (var item in query.Result)
+        {
+            var itemSubMenuIds = subMenus.Where(p => p.ParentId == item).Select(e => e.Id).ToList();
+            if (itemSubMenuIds.Count > 0 && itemSubMenuIds.Intersect(query.Result).Count() < 1)
+            {
+                continue;
+            }
+            permissionIds.Add(item);
+        }
+        query.Result = permissionIds;
     }
 
     [EventHandler]
@@ -432,7 +446,10 @@ public class QueryHandler
                     SlidingExpiration = TimeSpan.FromSeconds(5)
                 };
             },
-            MemoryCacheEntryOptions = new CacheEntryOptions(TimeSpan.FromSeconds(5))
+            MemoryCacheEntryOptionsAction = (memoryCacheOptions) =>
+            {
+                memoryCacheOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5);
+            }
         }))!;
     }
 

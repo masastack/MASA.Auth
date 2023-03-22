@@ -23,12 +23,15 @@ public partial class Index
     PermissionService PermissionService => AuthCaller.PermissionService;
 
     ProjectService ProjectService => AuthCaller.ProjectService;
+    List<SelectItemDto<PermissionTypes>> _permissionTypes = new();
+    string _showUrlPrefix = "";
+    bool _disableMenuUrl = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            //_tab = "Menu Permission";
+            _permissionTypes = await PermissionService.GetTypesAsync();
             _tab = "0";
             _projectItems = await ProjectService.GetListAsync();
             if (!_projectItems.Any())
@@ -52,6 +55,7 @@ public partial class Index
         RemoveAll(menus, x => x.Id == menuPermissionDetailDto.Id);
         if (menuPermissionDetailDto.Type == PermissionTypes.Menu)
         {
+            RemoveChildElementAll(menus);
             RemoveAll(menus, p => p.Type != null && p.Type != PermissionTypes.Menu);
         }
         return menus;
@@ -62,6 +66,24 @@ public partial class Index
             foreach (var menu in menus)
             {
                 RemoveAll(menu.Children, match);
+            }
+        }
+
+        void RemoveChildElementAll(List<AppPermissionsViewModel> menus)
+        {
+            foreach (var menu in menus.ToArray())
+            {
+                if (menu.Children?.Any() == true)
+                {
+                    if (menu.Children.Any(x => x.Type == PermissionTypes.Element))
+                    {
+                        RemoveAll(menus, x => x.Id == menu.Id);
+                    }
+                    else
+                    {
+                        RemoveChildElementAll(menu.Children);
+                    }
+                }
             }
         }
     }
@@ -116,7 +138,7 @@ public partial class Index
 
         _menuPermissions.ForEach(mp =>
         {
-            var permissions = applicationPermissions.Where(p => p.Type == PermissionTypes.Menu && p.AppId == mp.AppId);
+            var permissions = applicationPermissions.Where(p => (p.Type == PermissionTypes.Menu || p.Type == PermissionTypes.Element) && p.AppId == mp.AppId);
             mp.Children.AddRange(permissions
                 .BuildAdapter(config)
                 .AddParameters("appUrl", mp.AppUrl)
@@ -139,6 +161,11 @@ public partial class Index
         {
             _showMenuInfo = true;
             var curItem = activeItems.First();
+            _disableMenuUrl = false;
+            if (curItem.Children.Where(e => e.Type == PermissionTypes.Menu).Count() > 0)
+            {
+                _disableMenuUrl = true;
+            }
             if (curItem.IsPermission)
             {
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);
@@ -147,6 +174,7 @@ public partial class Index
             {
                 _menuPermissionDetailDto = new();
             }
+            _showUrlPrefix = curItem.AppUrl;
         }
         else
         {
@@ -168,6 +196,7 @@ public partial class Index
             {
                 _apiPermissionDetailDto = new();
             }
+            _showUrlPrefix = curItem.AppUrl;
         }
         else
         {

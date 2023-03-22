@@ -3,6 +3,7 @@
 
 global using FluentValidation;
 global using FluentValidation.Resources;
+global using FluentValidation.Validators;
 global using IdentityModel.Client;
 global using Magicodes.ExporterAndImporter.Core.Extension;
 global using Magicodes.ExporterAndImporter.Csv;
@@ -140,3 +141,4 @@ global using System.Text.RegularExpressions;
 global using IdentityProvider = Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
+global using Masa.BuildingBlocks.Globalization.I18n;

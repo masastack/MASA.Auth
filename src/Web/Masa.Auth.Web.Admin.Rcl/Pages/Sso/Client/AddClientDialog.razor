@@ -1,9 +1,9 @@
 ﻿@inherits AdminCompontentBase
 
-<SSheetDialog @bind-Value=_visible Title="@T("Create Client")" ContentClass="px-sheet-dialog full-height">
+<SSheetDialog EnableDomReload @bind-Value=_visible Title="@T("Create Client")" ContentClass="px-sheet-dialog full-height">
     <MCard Style="height: calc(100vh - 140px);">
         <MCardText Class="full-height">
-            <SElevationTab Dense Class="pt-8 full-height" @bind-Tab="_tab" Tabs='_tabs' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
+            <SElevationTab Dense Class="pt-8 full-height selevationtab" @bind-Tab="_tab" Tabs='_tabs' ItemsClass="mt-8 full-height" ItemsStyle="overflow-y: auto;">
                 <SElevationTabItem>
                     <Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section.ClientType @bind-Type="_addClientDto.ClientType" />
                     <MForm Model=_addBasicDto EnableValidation Class="full-width" EnableI18n @ref="_form">

@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Diagnostics;
 
-[SecurityHeaders]
 [Authorize]
 public partial class Index
 {

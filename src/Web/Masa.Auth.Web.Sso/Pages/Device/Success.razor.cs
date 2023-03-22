@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Web.Sso.Pages.Device;
 
-[SecurityHeaders]
 [Authorize]
 public partial class Success
 {

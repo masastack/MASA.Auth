@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.ApiGateways.Caller;
 
-public class AuthCaller : HttpClientCallerBase
+public class AuthCaller : StackHttpClientCaller
 {
     #region Field
     ThirdPartyIdpService? _thirdPartyIdpService;
@@ -24,9 +24,7 @@ public class AuthCaller : HttpClientCallerBase
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
-    TokenProvider _tokenProvider;
-    ILogger<AuthCaller> _logger;
-    JwtTokenValidator _jwtTokenValidator;
+    AuthApiOptions _options;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(Caller));
@@ -67,32 +65,10 @@ public class AuthCaller : HttpClientCallerBase
 
     protected override string BaseAddress { get; set; }
 
-    public AuthCaller(
-        IServiceProvider serviceProvider,
-        TokenProvider tokenProvider,
-        ILogger<AuthCaller> logger,
-        AuthApiOptions options,
-        JwtTokenValidator jwtTokenValidator) : base(serviceProvider)
+    public AuthCaller(AuthApiOptions options)
     {
-        _tokenProvider = tokenProvider;
-        _logger = logger;
         BaseAddress = options.AuthServiceBaseAddress;
-        _jwtTokenValidator = jwtTokenValidator;
-    }
-
-    protected override async Task ConfigHttpRequestMessageAsync(HttpRequestMessage requestMessage)
-    {
-        if (!string.IsNullOrWhiteSpace(_tokenProvider.AccessToken))
-        {
-            await _jwtTokenValidator.ValidateAccessTokenAsync(_tokenProvider);
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.AccessToken);
-        }
-        else
-        {
-            _logger.LogWarning("AccessToken is empty");
-        }
-
-        await base.ConfigHttpRequestMessageAsync(requestMessage);
+        _options = options;
     }
 }
 

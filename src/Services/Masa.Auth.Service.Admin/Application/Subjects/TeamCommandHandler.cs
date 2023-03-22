@@ -70,6 +70,7 @@ public class TeamCommandHandler
             throw new UserFriendlyException(UserFriendlyExceptionCodes.TEAM_NAME_EXIST, dto.Name);
         }
         var team = await _teamRepository.GetByIdAsync(dto.Id);
+        var teamRoles = team.TeamRoles.ToArray();
         var avatarName = $"{team.Id}.png";
         if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||
                 string.IsNullOrWhiteSpace(team.Avatar.Url))
@@ -88,7 +89,7 @@ public class TeamCommandHandler
         await _teamDomainService.SetTeamAdminAsync(team, dto.AdminStaffs, dto.AdminRoles, dto.AdminPermissions);
         await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
 
-        await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles).Union(team.TeamRoles.Select(tr => tr.RoleId)));
+        await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles).Union(team.TeamRoles.Select(tr => tr.RoleId)).Union(teamRoles.Select(tr => tr.RoleId)));
     }
 
     [EventHandler(1)]

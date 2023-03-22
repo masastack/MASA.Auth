@@ -32,7 +32,7 @@ public partial class AddApiScopeDialog
 
     protected override void OnParametersSet()
     {
-        if (Visible)
+        if (!Visible)
         {
             ApiScope = new();
         }

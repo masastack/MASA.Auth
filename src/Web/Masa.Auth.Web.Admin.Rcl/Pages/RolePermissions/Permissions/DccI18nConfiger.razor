@@ -5,13 +5,15 @@
 @inject IConfigurationApi ConfigurationApi
 @inject IHostEnvironment HostEnvironment
 
-<STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
-            Required
-            Label="Key"
-            Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
-            Type="text"
-            Suffix="@DT(Name)">
-</STextField>
+<div class="i18n-configer">
+    <STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
+                    Required Class="px-2"
+                Label="Key"
+                Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
+                Type="text"
+                Suffix="@DT(Name)">
+    </STextField>
+</div>
 
 <MDialog @bind-Value="_dialog" Width="400" Persistent>
     <MCard Class="pa-4">

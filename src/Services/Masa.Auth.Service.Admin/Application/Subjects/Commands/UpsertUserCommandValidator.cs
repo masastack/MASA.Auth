@@ -8,11 +8,11 @@ public class UpsertUserCommandValidator : MasaAbstractValidator<UpsertUserComman
     public UpsertUserCommandValidator()
     {
         RuleFor(command => command.User.DisplayName).MaximumLength(50);
-        WhenNotNullOrEmpty(command => command.User.Name, roleBuilder => roleBuilder.ChineseLetterNumber().MaximumLength(20));
-        RuleFor(command => command.User.PhoneNumber).Phone();
-        WhenNotNullOrEmpty(command => command.User.Email, roleBuilder => roleBuilder.Email());
-        WhenNotNullOrEmpty(command => command.User.IdCard, roleBuilder => roleBuilder.IdCard());
-        WhenNotNullOrEmpty(command => command.User.CompanyName, roleBuilder => roleBuilder.ChineseLetterNumber().MaximumLength(50));
-        WhenNotNullOrEmpty(command => command.User.Position, roleBuilder => roleBuilder.ChineseLetterNumber().MaximumLength(20));
+        WhenNotEmpty(command => command.User.Name, r => r.ChineseLetterNumber().MaximumLength(20));
+        WhenNotEmpty(command => command.User.PhoneNumber, r => r.Phone());
+        WhenNotEmpty(command => command.User.Email, r => r.Email());
+        WhenNotEmpty(command => command.User.IdCard, r => r.IdCard());
+        WhenNotEmpty(command => command.User.CompanyName, r => r.ChineseLetterNumber().MaximumLength(50));
+        WhenNotEmpty(command => command.User.Position, r => r.ChineseLetterNumber().MaximumLength(20));
     }
 }

@@ -9,12 +9,14 @@ public class RegisterInputModelValidator : AbstractValidator<RegisterInputModel>
     {
         When(login => login.EmailRegister, () =>
         {
-            RuleFor(x => x.Email).NotEmpty().Matches(LoginOptions.EmailRegular);
-            RuleFor(x => x.EmailCode).NotEmpty().Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
+            RuleFor(x => x.Email).NotEmpty().WithMessage(i18n.T("EmailRequired"))
+		.Matches(LoginOptions.EmailRegular).WithMessage(i18n.T("EmailSpecInvalid"));
+            RuleFor(x => x.EmailCode).NotEmpty().WithMessage(i18n.T("EmailCodeRequired"));
         }).Otherwise(() =>
         {
-            RuleFor(x => x.PhoneNumber).NotEmpty().Matches(LoginOptions.PhoneRegular);
-            RuleFor(x => x.SmsCode).NotEmpty().Must(x => x >= LoginOptions.CodeMinimum && x <= LoginOptions.CodeMaximum);
+            RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage(i18n.T("PhoneRequired"))
+		.Matches(LoginOptions.PhoneRegular).WithMessage(i18n.T("PhoneSpecInvalid"));
+            RuleFor(x => x.SmsCode).NotEmpty().WithMessage(i18n.T("SmsRequired"));
         });
         When(login => !string.IsNullOrEmpty(login.Password), () =>
         {

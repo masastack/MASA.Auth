@@ -3,22 +3,25 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-public class UpdateStaffValidator : AbstractValidator<UpdateStaffDto>
+public class UpdateStaffValidator : MasaAbstractValidator<UpdateStaffDto>
 {
     public UpdateStaffValidator()
     {
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
         RuleFor(staff => staff.DisplayName)
-            .NotEmpty().WithMessage("NickName is required")
-            .ChineseLetterNumber().MinimumLength(2).MaximumLength(50).OverridePropertyName("NickName");
-        When(staff => !string.IsNullOrEmpty(staff.Name), () => RuleFor(staff => staff.Name).ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+            .Required().WithMessage("NickNameBlock.Required")
+            .ChineseLetterNumber().WithMessage("NickNameBlock.ChineseLetterNumber")
+            .MaximumLength(50).WithMessage("NickNameBlock.MaxLength")
+            .MinimumLength(2).WithMessage("NickNameBlock.MinLength")
+            .WithName("NickName"); ;
         RuleFor(staff => staff.PhoneNumber).Required().Phone();
-        RuleFor(staff => staff.Email).Email();
-        When(staff => !string.IsNullOrEmpty(staff.IdCard), () => RuleFor(staff => staff.IdCard).IdCard());
-        When(staff => !string.IsNullOrEmpty(staff.Address?.Address), () => RuleFor(staff => staff.Address.Address).MinimumLength(8).MaximumLength(100));
-        RuleFor(staff => staff.CompanyName).ChineseLetter().MaximumLength(50);
-        When(staff => !string.IsNullOrEmpty(staff.Position), () => RuleFor(staff => staff.Position).ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
         RuleFor(staff => staff.Avatar).Required().Url();
+        WhenNotEmpty(l => l.CompanyName, r => r.ChineseLetter().MaximumLength(50));
+        WhenNotEmpty(staff => staff.Email, r => r.Email());
+        WhenNotEmpty(staff => staff.Name, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(staff => staff.IdCard, r => r.IdCard());
+        WhenNotEmpty(staff => staff.Address.Address, r => r.MinimumLength(8).MaximumLength(100));
+        WhenNotEmpty(staff => staff.CompanyName, r => r.ChineseLetter().MaximumLength(50));
+        WhenNotEmpty(staff => staff.Position, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
     }
 }
-

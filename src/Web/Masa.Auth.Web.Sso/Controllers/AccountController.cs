@@ -5,7 +5,6 @@ namespace Masa.Auth.Web.Sso.Controllers;
 
 [Microsoft.AspNetCore.Mvc.Route("[action]")]
 [AllowAnonymous]
-[SecurityHeaders]
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
@@ -13,19 +12,28 @@ public class AccountController : Controller
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly I18n _i18n;
+    readonly IUserSession _userSession;
+    readonly IBackChannelLogoutService _backChannelClient;
+    readonly IDistributedCacheClient _distributedCacheClient;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
         IEventService events,
         IAuthClient authClient,
         I18n i18n,
-        IEnvironmentProvider environmentProvider)
+        IEnvironmentProvider environmentProvider,
+        IUserSession userSession,
+        IBackChannelLogoutService backChannelClient,
+        IDistributedCacheClient distributedCacheClient)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
         _i18n = i18n;
         _environmentProvider = environmentProvider;
+        _userSession = userSession;
+        _backChannelClient = backChannelClient;
+        _distributedCacheClient = distributedCacheClient;
     }
 
     [HttpPost]
@@ -151,5 +159,25 @@ public class AccountController : Controller
             }
         }
         return Redirect(redirectUrl);
+    }
+
+    [HttpGet]
+    public async Task LogoutUserAsync(string subjectId)
+    {
+        var logoutSession = await _distributedCacheClient.GetAsync<LoginSession>(subjectId);
+        if (logoutSession == null)
+        {
+            return;
+        }
+        var clientIds = await _userSession.GetClientListAsync();
+        var logoutNotificationContext = new LogoutNotificationContext()
+        {
+            SessionId = logoutSession.Sid,
+            SubjectId = subjectId,
+            ClientIds = clientIds,
+        };
+        await _backChannelClient.SendLogoutNotificationsAsync(logoutNotificationContext);
+        // raise the logout event
+        await _events.RaiseAsync(new UserLogoutSuccessEvent(subjectId, "Logout by " + User.GetDisplayName()));
     }
 }
