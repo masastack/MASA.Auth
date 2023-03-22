@@ -53,7 +53,7 @@
   "RegistrationAgreementStatement": "同意注册MASA系列产品协议",
   "RegisterError": "注册失败，请联系管理员",
   "NickNamePlaceHolder": "昵称",
-  "or login with": "或使用以下登录",
+  "or login with": "其他方式登录",
   "Register success": "注册成功",
   "LoginValidateError": "账号或密码错误",
   "PhoneRequired": "手机号不能为空",

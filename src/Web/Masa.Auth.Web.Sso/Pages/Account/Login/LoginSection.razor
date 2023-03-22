@@ -33,13 +33,21 @@
     }
     <MRow>
         <MCol Md="6" Class="d-flex justify-space-between">
-            <MIcon Size="16"
+	    <div class="fill-border d-flex rounded-lg py-2 px-2">
+            <MIcon Size="22"
                    Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                 mdi-record-circle
             </MIcon>
-            <MSelect Value="_inputModel.Environment" ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0"
-                Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+            <MSelect ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0 body2" TextColor="neutral-lighten-2" Value="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Name??_environments.FirstOrDefault()?.Name)"
+                     Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+		<SelectionContent Context="data">
+		    <div style="width:100%" class="d-flex">
+			<span>@data.Item.Name</span>
+			<MDivider Class="fill--text ml-auto" Right Vertical></MDivider>
+		    </div>
+		</SelectionContent>
             </MSelect>
+	    </div>
         </MCol>
         @if (!_inputModel.PhoneLogin)
         {

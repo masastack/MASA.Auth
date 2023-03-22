@@ -10,20 +10,20 @@
 @if (_viewModel.EnableLocalLogin)
 {
     <MCard Width=510 Height=620 MaxHeight="620">
-        <div class="tab-header">
-            <MTabs Value="Tab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow>
-                <MTab Value="@("login")">
+        <div class="tab-header login-tab">
+            <MTabs Value="Tab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow >
+                <MTab Value="@("login")" Class="neutral-lighten-4--text" Style="height:60px;">
                     <div class="full-height d-flex flex-column">
                         <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
-                        <span class="flex-grow-1 d-flex align-center mt-n1">
+                        <span class="flex-grow-1 d-flex align-center mt-n1 text-h6 neutral-lighten-4--text neutral-text">
                             @T("Login")
                         </span>
                     </div>
                 </MTab>
-                <MTab Value="@("register")">
+                <MTab Value="@("register")" Style="height:60px;">
                     <div class="full-height d-flex flex-column">
                         <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
-                        <span class="flex-grow-1 d-flex align-center mt-n1">
+                        <span class="flex-grow-1 d-flex align-center mt-n1 text-h6 neutral-lighten-4--text neutral-text">
                             @T("Register")
                         </span>
                     </div>
