@@ -778,7 +778,11 @@ input::-webkit-input-placeholder {
 
 .login-tab .m-tab--active .neutral-text {
     color: #1B2559 !important;
-}    
+}
+
+.login-tab .m-tabs-bar {
+    height: 100%;
+}
 
 .fill-border {
     border: solid 1px #E4E8F3;
