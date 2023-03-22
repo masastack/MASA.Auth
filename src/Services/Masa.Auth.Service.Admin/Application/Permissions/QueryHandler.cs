@@ -10,7 +10,6 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly UserDomainService _userDomainService;
     readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IDistributedCacheClient _distributedCacheClient;
     readonly IEventBus _eventBus;
 
     public QueryHandler(
@@ -19,8 +18,7 @@ public class QueryHandler
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
         IMultilevelCacheClient multilevelCacheClient,
-        IEventBus eventBus,
-        IDistributedCacheClient distributedCacheClient)
+        IEventBus eventBus)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -28,7 +26,6 @@ public class QueryHandler
         _userDomainService = userDomainService;
         _multilevelCacheClient = multilevelCacheClient;
         _eventBus = eventBus;
-        _distributedCacheClient = distributedCacheClient;
     }
 
     #region Role

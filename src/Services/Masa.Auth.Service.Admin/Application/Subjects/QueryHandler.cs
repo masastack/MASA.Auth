@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Linq;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -703,13 +705,17 @@ public class QueryHandler
     [EventHandler]
     public async Task GetTeamByUserAsync(TeamByUserQuery query)
     {
-        var userTeamKv = await _multilevelCacheClient.GetAsync<KeyValuePair<string, List<Team>>>(CacheKey.UserTeamKey(query.UserId));
-        if (userTeamKv.Value != null)
+        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.UserId));
+        if (cacheUserModel != null && cacheUserModel.StaffId != null)
         {
-            query.Result = userTeamKv.Value.Where(e => e.TeamStaffs.Any(x => x.UserId == query.UserId))
-                                            .Select(e => new TeamSampleDto(e.Id, e.TeamStaffs.First(x => x.UserId == query.UserId).TeamMemberType))
-                                            .ToList();
-            return;
+            var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<TeamDetailDto>>(CacheKey.StaffTeamKey(cacheUserModel.StaffId.Value));
+            if (cacheStaffTeams != null)
+            {
+                query.Result = cacheStaffTeams.Where(e => e.TeamAdmin.Staffs.Any(x => x == cacheUserModel.StaffId.Value) || e.TeamMember.Staffs.Any(x => x == cacheUserModel.StaffId.Value))
+                                                .Select(e => new TeamSampleDto(e.Id, e.TeamAdmin.Staffs.Any(x => x == cacheUserModel.StaffId.Value) ? TeamMemberTypes.Admin : TeamMemberTypes.Member))
+                                                .ToList();
+                return;
+            }
         }
         var teams = await _authDbContext.Set<TeamStaff>()
                                         .Where(ts => ts.UserId == query.UserId)

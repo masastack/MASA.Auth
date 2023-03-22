@@ -35,7 +35,7 @@ public static class CacheKey
     const string EMAIL_UPDATE_SEND_PRE = "email_update_send:";
     const string STAFF = "staff";
     const string TEAM_CACHE_PRE = "team:";
-    const string USER_TEAM_CODE_PRE = "user_team_code:";
+    const string STAFF_TEAM_CODE_PRE = "staff_team_code:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
 
     public static string PermissionPreKey()
@@ -193,8 +193,8 @@ public static class CacheKey
         return $"{TEAM_CACHE_PRE}{teamId}";
     }
 
-    public static string UserTeamKey(Guid userId)
+    public static string StaffTeamKey(Guid userId)
     {
-        return $"{USER_TEAM_CODE_PRE}{userId}";
+        return $"{STAFF_TEAM_CODE_PRE}{userId}";
     }
 }

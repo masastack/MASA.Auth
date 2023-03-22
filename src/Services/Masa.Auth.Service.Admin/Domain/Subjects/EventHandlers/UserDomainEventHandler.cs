@@ -11,9 +11,8 @@ public class UserDomainEventHandler
     readonly IEventBus _eventBus;
     readonly ILogger<UserDomainEventHandler> _logger;
     readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IDistributedCacheClient _distributedCacheClient;
 
-    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger, IMultilevelCacheClient multilevelCacheClient, IDistributedCacheClient distributedCacheClient)
+    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger, IMultilevelCacheClient multilevelCacheClient)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
@@ -21,7 +20,6 @@ public class UserDomainEventHandler
         _eventBus = eventBus;
         _logger = logger;
         _multilevelCacheClient = multilevelCacheClient;
-        _distributedCacheClient = distributedCacheClient;
     }
 
     [EventHandler(1)]

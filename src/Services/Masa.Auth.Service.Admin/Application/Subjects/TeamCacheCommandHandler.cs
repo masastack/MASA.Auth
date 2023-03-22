@@ -34,7 +34,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
 
             if (teamCache != null)
             {
-                var userIdKeys = teamCache!.TeamAdmin.Staffs.Select(e => CacheKey.UserTeamKey(e)).Union(teamCache!.TeamMember.Staffs.Select(e => CacheKey.UserTeamKey(e)));
+                var userIdKeys = teamCache!.TeamAdmin.Staffs.Select(e => CacheKey.StaffTeamKey(e)).Union(teamCache!.TeamMember.Staffs.Select(e => CacheKey.StaffTeamKey(e)));
                 var userTeamCacheDic = await _multilevelCacheClient.GetListAsync<KeyValuePair<string, List<TeamDetailDto>>>(userIdKeys);
                 foreach (var item in userTeamCacheDic)
                 {
@@ -87,26 +87,21 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
 
             await _multilevelCacheClient.SetAsync(CacheKey.TeamKey(team.Id), teamDto);
 
-            if (team.TeamStaffs.Count>0)
+            if (team.TeamStaffs.Count > 0)
             {
-                var userIdCacheKeys = team.TeamStaffs.Select(e => CacheKey.UserTeamKey(e.StaffId)).Distinct();
-                var cacheUserTeams = await _multilevelCacheClient.GetListAsync<KeyValuePair<string, List<TeamDetailDto>>>(userIdCacheKeys);
-                var cacheUserTeamDic = cacheUserTeams.Where(e => e.Value != null).ToList().ToDictionary(e => e.Key, e => e.Value);
-                cacheUserTeamDic = cacheUserTeamDic.Count() < 0 ? new Dictionary<string, List<TeamDetailDto>>() : cacheUserTeamDic;
-                foreach (var item in team.TeamStaffs)
+                foreach (var item in team.TeamStaffs.Select(e => e.StaffId).Distinct())
                 {
-                    cacheUserTeamDic.TryGetValue(CacheKey.UserTeamKey(item.StaffId), out List<TeamDetailDto>? detailDtos);
-                    if (detailDtos == null)
+                    var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<TeamDetailDto>>(CacheKey.StaffTeamKey(item));
+                    if (cacheStaffTeams == null)
                     {
-                        detailDtos = new List<TeamDetailDto>();
+                        cacheStaffTeams = new List<TeamDetailDto>();
                     }
-                    if (!detailDtos.Any(e => e.Id == team.Id))
+                    if (!cacheStaffTeams.Any(e => e.Id == team.Id))
                     {
-                        detailDtos.Add(teamDto);
+                        cacheStaffTeams.Add(teamDto);
                     }
-                    cacheUserTeamDic[CacheKey.UserTeamKey(item.StaffId)] = detailDtos;
+                    await _multilevelCacheClient.SetAsync(CacheKey.StaffTeamKey(item), cacheStaffTeams);
                 }
-                await _multilevelCacheClient.SetListAsync(cacheUserTeamDic.ToDictionary(e => e.Key, e => e)!);
             }
         }
 
