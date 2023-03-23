@@ -21,7 +21,7 @@
 <MRow Style="overflow:auto;max-height: calc(100vh - 170px);">
     @foreach (var team in _teams)
     {
-        <MCol Md="4" Class="pa-2">
+        <MCol Md="4" Xl="3" Class="pa-2">
             <TeamCard Team=team OnEditClick="()=>EditTeamHandler(team.Id)" />
         </MCol>
     }

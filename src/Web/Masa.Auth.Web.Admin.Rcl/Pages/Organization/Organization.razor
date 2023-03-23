@@ -22,7 +22,8 @@
                            Activatable Hoverable
                            ItemText="r=>r.Name"
                            ItemKey="r=>r.Id"
-                           ItemChildren="r=>r.Children">
+                           ItemChildren="(r=>r.Children.Count < 1 ? null : r.Children)"
+                           ActiveClass="primary white--text rounded-lg">
                     <LabelContent>
                         <MHover Context="hoverComtext">
                             <div @attributes="hoverComtext.Attrs" class="d-flex justify-space-between align-center">
@@ -30,7 +31,7 @@
                                 <MMenu Right Bottom class="mr-2">
                                     <ActivatorContent Context="activatorContext">
                                         <MButton style="@(hoverComtext.Hover?"display:flex":"display:none")" Icon @attributes="@activatorContext.Attrs">
-                                            <MIcon Small>fas fa-ellipsis-v</MIcon>
+                                            <MIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Small>fas fa-ellipsis-v</MIcon>
                                         </MButton>
                                     </ActivatorContent>
                                     <ChildContent>

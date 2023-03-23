@@ -7,9 +7,6 @@ public class DefaultChangeImage : UploadAvatar
 {
     private GenderTypes _gender { get; set; }
 
-    [CascadingParameter]
-    public I18n I18n { get; set; } = default!;
-
     [Inject]
     public AuthCaller AuthCaller { get; set; } = default!;
 

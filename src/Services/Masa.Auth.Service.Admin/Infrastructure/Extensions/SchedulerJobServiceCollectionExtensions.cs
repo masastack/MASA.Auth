@@ -19,11 +19,7 @@ public static class SchedulerJobServiceCollectionExtensions
 
     public static async Task AddSyncUserAutoCompleteJobAsync(this IServiceProvider serviceProvider)
     {
-        var authUrl = serviceProvider
-                          .GetRequiredService<IMasaConfiguration>()
-                          .ConfigurationApi
-                          .GetDefault()
-                          .GetValue<string>("AppSettings:AuthClient:Url");
+        var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
@@ -51,11 +47,7 @@ public static class SchedulerJobServiceCollectionExtensions
 
     public static async Task AddSyncUserRedisJobAsync(this IServiceProvider serviceProvider)
     {
-        var authUrl = serviceProvider
-                          .GetRequiredService<IMasaConfiguration>()
-                          .ConfigurationApi
-                          .GetDefault()
-                          .GetValue<string>("AppSettings:AuthClient:Url");
+        var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
@@ -83,11 +75,7 @@ public static class SchedulerJobServiceCollectionExtensions
 
     public static async Task AddSyncOidcRedisJobAsync(this IServiceProvider serviceProvider)
     {
-        var authUrl = serviceProvider
-                          .GetRequiredService<IMasaConfiguration>()
-                          .ConfigurationApi
-                          .GetDefault()
-                          .GetValue<string>("AppSettings:AuthClient:Url");
+        var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
@@ -114,11 +102,7 @@ public static class SchedulerJobServiceCollectionExtensions
 
     public static async Task AddSyncStaffRedisJobAsync(this IServiceProvider serviceProvider)
     {
-        var authUrl = serviceProvider
-                          .GetRequiredService<IMasaConfiguration>()
-                          .ConfigurationApi
-                          .GetDefault()
-                          .GetValue<string>("AppSettings:AuthClient:Url");
+        var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {

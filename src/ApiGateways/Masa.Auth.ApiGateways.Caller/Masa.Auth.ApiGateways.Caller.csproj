@@ -19,9 +19,4 @@
 		<Folder Include="Properties\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="Masa.Contrib.StackSdks.Caller">
-		</Reference>
-	</ItemGroup>
-
 </Project>

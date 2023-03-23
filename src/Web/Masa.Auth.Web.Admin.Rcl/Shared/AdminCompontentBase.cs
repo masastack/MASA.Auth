@@ -81,12 +81,17 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public string T(string key)
     {
+        var val = "";
         if (string.IsNullOrEmpty(key)) return key;
         if (PageName is not null)
         {
-            return I18n.T(PageName, key) ?? I18n.T(key) ?? key;
+            val = I18n.T(PageName, key, false);
         }
-        else return I18n.T(key) ?? key;
+        if (val.IsNullOrEmpty())
+        {
+            val = I18n.T(key);
+        }
+        return val;
     }
 
     public string T(string formatkey, params string[] args)

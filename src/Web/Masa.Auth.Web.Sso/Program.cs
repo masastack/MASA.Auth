@@ -88,6 +88,19 @@ else
         });
     });
     identityServerBuilder.AddSigningCredential(serverCertificate);
+    //tsc
+    builder.Services.AddObservable(builder.Logging, () =>
+    {
+        return new MasaObservableOptions
+        {
+            ServiceNameSpace = builder.Environment.EnvironmentName,
+            ServiceVersion = masaStackConfig.Version,
+            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.SSO)
+        };
+    }, () =>
+    {
+        return masaStackConfig.OtlpUrl;
+    }, true);
 }
 
 builder.Services.AddDataProtection()
