@@ -177,6 +177,7 @@ public class AccountController : Controller
             ClientIds = clientIds,
         };
         await _backChannelClient.SendLogoutNotificationsAsync(logoutNotificationContext);
+
         // raise the logout event
         await _events.RaiseAsync(new UserLogoutSuccessEvent(subjectId, "Logout by " + User.GetDisplayName()));
     }

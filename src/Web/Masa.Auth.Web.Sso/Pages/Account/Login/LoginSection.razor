@@ -33,17 +33,17 @@
     }
     <MRow>
         <MCol Md="6" Class="d-flex justify-space-between">
-	    <div class="fill-border d-flex rounded-lg py-2 px-2">
+	    <div class="fill-border d-flex rounded-lg pa-1">
             <MIcon Size="22"
                    Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                 mdi-record-circle
             </MIcon>
             <MSelect ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0" TextColor="neutral-lighten-2" Value="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Name??_environments.FirstOrDefault()?.Name)"
-                     Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name">
+                         Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name" MenuProps="@(props => { props.Bottom = true;props.OffsetY = true; })">
 		<SelectionContent Context="data">
 		    <div style="width:100%" class="d-flex">
 			<span class="text-body2">@data.Item.Name</span>
-			<MDivider Class="fill--text ml-auto" Right Vertical></MDivider>
+			<MDivider Class="fill--text ml-auto mr-2" Vertical></MDivider>
 		    </div>
 		</SelectionContent>
             </MSelect>
@@ -51,8 +51,8 @@
         </MCol>
         @if (!_inputModel.PhoneLogin)
         {
-            <MCol Md="6" Class="d-flex justify-end mt-2">
-                <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-1" HideDetails="true" Label="@T("LdapLogin")">
+            <MCol Md="6" Class="d-flex justify-end">
+                <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-2" HideDetails="true" Label="@T("LdapLogin")">
                 </MCheckbox>
             </MCol>
         }

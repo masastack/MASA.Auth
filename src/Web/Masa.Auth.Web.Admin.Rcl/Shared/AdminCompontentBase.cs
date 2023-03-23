@@ -89,7 +89,7 @@ public abstract class AdminCompontentBase : ComponentBase
         }
         if (val.IsNullOrEmpty())
         {
-            val = I18n.T(key) ?? key;
+            val = I18n.T(key);
         }
         return val;
     }
