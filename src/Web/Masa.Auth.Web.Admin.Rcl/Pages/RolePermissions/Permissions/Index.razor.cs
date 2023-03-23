@@ -217,7 +217,7 @@ public partial class Index
         {
             await InitAppPermissions();
         }
-        OpenSuccessMessage(T("Add menu permission data success"));
+        OpenSuccessMessage(T("New menu permission data success"));
     }
 
     private async Task AddApiPermissionAsync(ApiPermissionDetailDto dto)
@@ -233,7 +233,7 @@ public partial class Index
         {
             await InitAppPermissions();
         }
-        OpenSuccessMessage(T("Add api permission data success"));
+        OpenSuccessMessage(T("New api permission data success"));
     }
 
     private async Task UpdateMenuPermissionAsync()

@@ -45,7 +45,7 @@ public partial class AddApiResourceDialog
         {
             Loading = true;
             await ApiResourceService.AddAsync(ApiResource);
-            OpenSuccessMessage(T("Add apiScope success"));
+            OpenSuccessMessage(T("New apiResource success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

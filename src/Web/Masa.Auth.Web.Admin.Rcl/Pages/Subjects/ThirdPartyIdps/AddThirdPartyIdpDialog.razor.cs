@@ -64,7 +64,7 @@ public partial class AddThirdPartyIdpDialog
             Loading = true;
             ThirdPartyIdp.JsonKeyMap = AdvancedConfig.ToDictionary(config => config.Key,config => config.Value);
             await ThirdPartyIdpService.AddAsync(ThirdPartyIdp);
-            OpenSuccessMessage(T("Add thirdPartyIdp success"));
+            OpenSuccessMessage(T("New thirdPartyIdp success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

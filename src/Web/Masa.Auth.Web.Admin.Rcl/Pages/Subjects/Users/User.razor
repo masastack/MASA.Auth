@@ -15,7 +15,7 @@
             </div>
             <SButton Small Class="ml-4" OnClick=OpenAddUserDialog BorderRadiusClass="rounded-lg">
                 <MIcon Size=18>@IconConstants.Add</MIcon>
-                <span class="ml-2 btn">@T("Add")</span>
+                <span class="ml-2 btn">@T("New")</span>
             </SButton>
         </div>
         <div id="userFilter" class="@FilterClass">
@@ -23,17 +23,17 @@
             <MRow Class="ml-6">
                 <MCol Md=4>
                     <BooleanSelect @bind-Value="Enabled" FillBackground=false AutoLabel=false Small Placeholder="@T("UserState")" />
-                    </MCol>
-                    </MRow>
-                </div>
-            </HeaderContent>
-            <AutoHeightContent>
-                <SDataTable Dense
-                    Height="@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)")"
-                    Headers="GetHeaders()"
-                    Items="Users" FixedHeader
-                    TItem="UserDto"
-                    ItemsPerPage="PageSize">
+                </MCol>
+            </MRow>
+        </div>
+    </HeaderContent>
+    <AutoHeightContent>
+        <SDataTable Dense
+            Height="@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)")"
+            Headers="GetHeaders()"
+            Items="Users" FixedHeader
+            TItem="UserDto"
+            ItemsPerPage="PageSize">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>

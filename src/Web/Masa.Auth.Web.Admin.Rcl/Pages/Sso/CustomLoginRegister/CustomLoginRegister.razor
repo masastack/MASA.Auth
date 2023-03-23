@@ -13,17 +13,17 @@
                 <MSpacer />
                 <SButton Small OnClick="() => OpenAddCustomLoginDialog()" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
-                    <span class="ml-2 btn">@T("Add")</span>
+                    <span class="ml-2 btn">@T("New")</span>
                 </SButton>
             </div>
         </HeaderContent>
         <AutoHeightContent>
             <SDataTable Dense
-                        Height="@("calc(100vh - 288px)")"
-                        Headers="GetHeaders()"
-                        Items="CustomLogins"
-                        TItem="CustomLoginDto"
-                        ItemsPerPage="PageSize">
+                Height="@("calc(100vh - 288px)")"
+                Headers="GetHeaders()"
+                Items="CustomLogins"
+                TItem="CustomLoginDto"
+                ItemsPerPage="PageSize">
                 <HeaderColContent Context="header">
                     <span>@header.Text</span>
                 </HeaderColContent>

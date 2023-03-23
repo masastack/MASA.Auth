@@ -55,7 +55,7 @@ public partial class AddRoleDialog
         {
             Loading = true;
             await RoleService.AddAsync(Role);
-            OpenSuccessMessage(T("Add role data success"));
+            OpenSuccessMessage(T("New role data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

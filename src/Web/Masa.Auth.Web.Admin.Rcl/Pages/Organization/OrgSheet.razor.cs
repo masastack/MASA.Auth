@@ -49,7 +49,7 @@ public partial class OrgSheet
     {
         _dto = new();
         _dto.ParentId = parentId;
-        _title = T("Add Department");
+        _title = T("New Department");
         _saveTitle = T("Submit");
         _visible = true;
     }

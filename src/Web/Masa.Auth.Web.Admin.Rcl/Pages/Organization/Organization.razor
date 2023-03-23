@@ -49,7 +49,7 @@
                                             </MListItem>
                                             <MListItem OnClick="()=>_orgSheet.Add(context.Item.Id)">
                                                 <MIcon Small>@IconConstants.Add</MIcon>
-                                                <MListItemTitle Class="ml-2"> @T("AddChildDepartment") </MListItemTitle>
+                                                <MListItemTitle Class="ml-2"> @T("NewChildDepartment") </MListItemTitle>
                                             </MListItem>
                                         </MList>
                                     </ChildContent>
@@ -113,7 +113,7 @@
                                 <MSpacer />
                                 <SButton Small OnClick="()=>_addStaff=true" BorderRadiusClass="rounded-lg">
                                     <MIcon Size=18>@IconConstants.Add</MIcon>
-                                    <span class="ml-2 btn">@T("Add")</span>
+                                    <span class="ml-2 btn">@T("New")</span>
                                 </SButton>
                             </div>
                         </HeaderContent>

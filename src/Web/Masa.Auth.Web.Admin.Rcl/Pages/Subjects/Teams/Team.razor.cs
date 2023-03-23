@@ -46,7 +46,7 @@ public partial class Team
     {
         await TeamService.CreateAsync(dto);
         await LoadTeams();
-        OpenSuccessMessage(T("Add team data success"));
+        OpenSuccessMessage(T("New team data success"));
     }
 
     private async Task OnUpdate(UpdateTeamDto dto)

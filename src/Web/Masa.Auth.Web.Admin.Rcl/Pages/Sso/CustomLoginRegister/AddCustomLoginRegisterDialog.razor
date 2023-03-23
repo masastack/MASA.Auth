@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Custom Login")">
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("New Custom Login")">
     <MForm Model=CustomLogin EnableValidation @ref="Form" EnableI18n>
         <AutoHeight Overflow>
             <HeaderContent>
@@ -58,7 +58,7 @@
                     {
                         <SButton Medium OnClick="AddConfig" Class="mr-6">
                             <MIcon Size=18>@IconConstants.Add</MIcon>
-                            <span class="ml-2">@T("Add")</span>
+                            <span class="ml-2">@T("New")</span>
                         </SButton>
                     }
                     <SButton Medium OnClick="async () => await AddCustomLoginAsync(context)">@T("Submit")</SButton>
