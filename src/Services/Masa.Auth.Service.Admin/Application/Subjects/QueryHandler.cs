@@ -703,12 +703,23 @@ public class QueryHandler
     [EventHandler]
     public async Task GetTeamByUserAsync(TeamByUserQuery query)
     {
+        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.UserId));
+        if (cacheUserModel != null && cacheUserModel.StaffId != null)
+        {
+            var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(cacheUserModel.StaffId.Value));
+            if (cacheStaffTeams != null)
+            {
+                query.Result = cacheStaffTeams.Where(e => e.Id == cacheUserModel.StaffId.Value)
+                                                .Select(e => new TeamSampleDto(e.Id, e.TeamMemberType))
+                                                .ToList();
+                return;
+            }
+        }
         var teams = await _authDbContext.Set<TeamStaff>()
                                         .Where(ts => ts.UserId == query.UserId)
                                         .ToListAsync();
+        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType)).ToList();
 
-        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType))
-                            .ToList();
     }
 
     #endregion

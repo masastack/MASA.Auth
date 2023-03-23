@@ -3,7 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record AddTeamCommand(AddTeamDto AddTeamDto) : Command
+public record SyncTeamRedisCommand : Command
 {
-    public Guid Result { get; set; }
 }

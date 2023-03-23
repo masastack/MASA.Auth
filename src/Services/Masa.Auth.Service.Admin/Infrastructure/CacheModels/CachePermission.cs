@@ -5,6 +5,7 @@ namespace Masa.Auth.Service.Admin.Infrastructure.CacheModels;
 
 public class CachePermission
 {
+    public Guid Id { get; set; }
     public string Code { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
@@ -16,6 +17,8 @@ public class CachePermission
     public string SystemId { get; set; } = string.Empty;
 
     public string AppId { get; set; } = string.Empty;
+
+    public int Order { get; set; }
 
     public string Url { get; set; } = string.Empty;
 

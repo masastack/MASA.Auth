@@ -6,6 +6,7 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 public static class CacheKey
 {
     const string PERMISSION_CACHE_PRE = "permission:";
+    const string ALL_PERMISSION_CACHE_PRE = "all_permissions";
     const string ROLE_CACHE_PRE = "role:";
     const string USER_CACHE_PRE = "user:";
     const string USER_MENU_COLLECT_PRE = "menu_collect:";
@@ -33,11 +34,23 @@ public static class CacheKey
     const string EMAIL_UPDATE_CODE_PRE = "email_update_code:";
     const string EMAIL_UPDATE_SEND_PRE = "email_update_send:";
     const string STAFF = "staff";
+    const string TEAM_CACHE_PRE = "team:";
+    const string STAFF_TEAM_CODE_PRE = "staff_team_code:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
+
+    public static string PermissionPreKey()
+    {
+        return $"{PERMISSION_CACHE_PRE}";
+    }
 
     public static string PermissionKey(Guid permissionId)
     {
         return $"{PERMISSION_CACHE_PRE}{permissionId}";
+    }
+
+    public static string AllPermissionKey()
+    {
+        return $"{ALL_PERMISSION_CACHE_PRE}";
     }
 
     public static string RoleKey(Guid roleId)
@@ -173,5 +186,15 @@ public static class CacheKey
     public static string UserApiPermissionCodeKey(Guid userId, string appId)
     {
         return $"{USER_API_PERMISSION_CODE_PRE}{userId}:{appId}";
+    }
+
+    public static string TeamKey(Guid teamId)
+    {
+        return $"{TEAM_CACHE_PRE}{teamId}";
+    }
+
+    public static string StaffTeamKey(Guid userId)
+    {
+        return $"{STAFF_TEAM_CODE_PRE}{userId}";
     }
 }
