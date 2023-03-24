@@ -129,7 +129,6 @@ public static class SchedulerJobServiceCollectionExtensions
         });
     }
 
-
     public static async Task AddSyncPermissionRedisJobAsync(this IServiceProvider serviceProvider)
     {
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
