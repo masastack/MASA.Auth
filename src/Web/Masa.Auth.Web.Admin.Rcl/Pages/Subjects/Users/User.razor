@@ -1,7 +1,7 @@
 ﻿@using Masa.Stack.Components
 @inherits AdminCompontentBase
 
-<AutoHeight Card CardClass="px-6 py-0">
+<AutoHeight Card CardClass="pl-6 pr-2 py-0">
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
@@ -28,12 +28,13 @@
                 </div>
             </HeaderContent>
             <AutoHeightContent>
+                <div style="height:@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)");overflow-y:scroll;">
                 <SDataTable Dense
-                    Height="@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)")"
                     Headers="GetHeaders()"
                     Items="Users" FixedHeader
                     TItem="UserDto"
-                    ItemsPerPage="PageSize">
+                    ItemsPerPage="PageSize"
+                    Class="mr-2">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>
@@ -70,6 +71,7 @@
                 }
             </ItemColContent>
         </SDataTable>
+        </div>
     </AutoHeightContent>
     <FooterContent>
         <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
