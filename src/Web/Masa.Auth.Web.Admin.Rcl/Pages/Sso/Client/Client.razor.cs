@@ -12,8 +12,6 @@ public partial class Client
 
     ClientService _clientService => AuthCaller.ClientService;
 
-    protected override string? PageName { get; set; } = "ClientBlock";
-
     public List<DataTableHeader<ClientDto>> GetHeaders() => new()
     {
         new() { Text = T(nameof(ClientDto.ClientName)), Value = nameof(ClientDto.ClientName), Sortable = false , Width="300px"},
@@ -23,6 +21,12 @@ public partial class Client
         new() { Text = T(nameof(ClientDto.Enabled)), Value = nameof(ClientDto.Enabled), Sortable = false, Width="105px" },
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
     };
+
+    protected override void OnInitialized()
+    {
+        PageName = "ClientBlock";
+        base.OnInitialized();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

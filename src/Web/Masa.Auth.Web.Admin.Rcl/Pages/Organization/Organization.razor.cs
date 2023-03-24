@@ -34,6 +34,12 @@ public partial class Organization
         new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="80px" }
     };
 
+    protected override void OnInitialized()
+    {
+        PageName = "OrganizationBlock";
+        base.OnInitialized();
+    }
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

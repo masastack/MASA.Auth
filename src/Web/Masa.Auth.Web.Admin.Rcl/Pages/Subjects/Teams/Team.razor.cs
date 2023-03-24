@@ -13,6 +13,12 @@ public partial class Team
 
     TeamService TeamService => AuthCaller.TeamService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "TeamBlock";
+        base.OnInitialized();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

@@ -27,6 +27,12 @@ public partial class Index
     string _showUrlPrefix = "";
     bool _disableMenuUrl = false;
 
+    protected override void OnInitialized()
+    {
+        PageName = "PermissionBlock";
+        base.OnInitialized();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
