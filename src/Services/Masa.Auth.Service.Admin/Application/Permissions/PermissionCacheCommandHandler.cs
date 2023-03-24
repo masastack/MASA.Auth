@@ -6,10 +6,12 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 public class PermissionCacheCommandHandler
 {
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IPermissionRepository _permissionRepository;
 
-    public PermissionCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient)
+    public PermissionCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient, IPermissionRepository permissionRepository)
     {
         _multilevelCacheClient = multilevelCacheClient;
+        _permissionRepository = permissionRepository;
     }
 
     [EventHandler(99)]
@@ -52,6 +54,21 @@ public class PermissionCacheCommandHandler
             allPermissions.Add(cachePermission);
         }
         await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+    }
+
+    [EventHandler]
+    public async Task SyncPermissionsRedisAsync(SyncPermissionRedisCommand command)
+    {
+        var permissions = await _permissionRepository.GetListAsync();
+        var allPermissions = new List<CachePermission>();
+        foreach (var permission in permissions)
+        {
+            var cachePermission = permission.Adapt<CachePermission>();
+            await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(permission.Id), cachePermission);
+            allPermissions.Add(cachePermission);
+        }
+        await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        command.Count = permissions.Count();
     }
 
     [EventHandler]
