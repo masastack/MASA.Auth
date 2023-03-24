@@ -47,7 +47,7 @@ public partial class AddUserClaimDialog
         {
             Loading = true;
             await UserClaimService.AddAsync(UserClaim);
-            OpenSuccessMessage(T("New userClaim success"));
+            OpenSuccessMessage(T("Add userClaim success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

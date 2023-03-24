@@ -47,7 +47,7 @@ public partial class AddPositionDialog
         {
             Loading = true;
             await PositionService.AddAsync(Position);
-            OpenSuccessMessage(T("New position success"));
+            OpenSuccessMessage(T("Add position success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

@@ -47,7 +47,7 @@ public partial class AddIdentityResourceDialog
         {
             Loading = true;
             await IdentityResourceService.AddAsync(IdentityResource);
-            OpenSuccessMessage(T("New identityResource success"));
+            OpenSuccessMessage(T("Add identityResource success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

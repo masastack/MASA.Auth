@@ -74,7 +74,7 @@ public partial class AddUserDialog
         {
             Loading = true;
             await UserService.AddAsync(User);
-            OpenSuccessMessage(T("New user data success"));
+            OpenSuccessMessage(T("Add user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
             Loading = false;

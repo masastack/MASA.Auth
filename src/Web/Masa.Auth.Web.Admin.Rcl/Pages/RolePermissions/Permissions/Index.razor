@@ -36,7 +36,7 @@
                                     <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
                                         <span>@DT(context.Item.Name)</span>
                                         <span style="@(hoverComtext.Hover?"flex:1;text-align:right":"display:none")">
-                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("New")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                         </span>
                                     </div>
                                 </MHover>
@@ -60,7 +60,7 @@
                                     <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
                                         <span>@DT(context.Item.Name)</span>
                                         <span style="@((hoverComtext.Hover && !context.Item.IsPermission)?"flex:1;text-align:right":"display:none")">
-                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("New")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                         </span>
                                     </div>
                                 </MHover>
