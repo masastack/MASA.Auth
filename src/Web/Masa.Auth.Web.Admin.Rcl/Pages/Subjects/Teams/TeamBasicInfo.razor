@@ -1,7 +1,11 @@
 ﻿@inherits AdminCompontentBase
 
 <MCardText Class="py-0 full-height">
-    <SNameTextField Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Name")" />
+    <div class="d-flex mb-12">
+        <div class="mx-auto">
+            <SNameTextField Style="width:404px;" OnInput="OnNameChanged" Value="@Value.Name" Placeholder="@T("Name")" />
+        </div>
+    </div>
     <MListItem Class="mt-12 px-0 remover-ripple remover-hover" Ripple=false>
         <MListItemAvatar Color="@Value.Avatar.Color" Class="lighten-5" Height=80 Width=80>
             <span style="font-size:48px; color:@Value.Avatar.Color;">@Value.Avatar.Name?.FirstOrDefault()</span>

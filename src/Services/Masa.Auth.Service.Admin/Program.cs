@@ -164,6 +164,8 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
+//builder.Services.AddScoped<IDisabledRequestDeterminer, DisabledRequestDeterminer>();
+
 builder.Services.AddStackMiddleware();
 
 await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
@@ -241,3 +243,12 @@ app.UseEndpoints(endpoints =>
 app.UseHttpsRedirection();
 
 app.Run();
+
+
+class DisabledRequestDeterminer : IDisabledRequestDeterminer
+{
+    public bool Determiner()
+    {
+        return true;
+    }
+}

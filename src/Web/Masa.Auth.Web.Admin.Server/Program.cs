@@ -41,7 +41,6 @@ masaOpenIdConnectOptions.Authority = "http://localhost:18200";
 #endif
 
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
-builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
 
 builder.Services.AddAuthApiGateways(option =>
 {
@@ -50,6 +49,8 @@ builder.Services.AddAuthApiGateways(option =>
     option.ClientId = masaOpenIdConnectOptions.ClientId;
     option.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
 });
+
+builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
 
 builder.Services.AddObservable(builder.Logging, () =>
 {
