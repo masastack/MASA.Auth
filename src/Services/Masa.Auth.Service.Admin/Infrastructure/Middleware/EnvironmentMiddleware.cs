@@ -17,8 +17,8 @@ public class EnvironmentMiddleware : IMiddleware, IScopedDependency
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        Console.WriteLine($"=============={context.Request.Headers.Authorization}=============");
-        _logger.LogInformation("----- Current Environment Is [{0}]", _multiEnvironmentContext.CurrentEnvironment);
+        Console.WriteLine($"============Authorization=={context.Request.Headers.Authorization}=============");
+        _logger.LogDebug("----- Current Environment Is [{0}]", _multiEnvironmentContext.CurrentEnvironment);
         context.Items.Add(IsolationConsts.ENVIRONMENT, _multiEnvironmentContext.CurrentEnvironment);
         return next(context);
     }
