@@ -274,7 +274,7 @@ public class QueryHandler
             menus = (await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
                                 && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled)).Adapt<List<CachePermission>>();
         }
-        menus = menus.Where(p => p.AppId == appMenuListQuery.AppId&& p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
+        menus = menus.Where(p => p.AppId == appMenuListQuery.AppId && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
 
         appMenuListQuery.Result = GetMenus(menus, Guid.Empty);
 
@@ -358,8 +358,12 @@ public class QueryHandler
             var rolePermissons = await _multilevelCacheClient.GetListAsync<CacheRole>(roleCacheKeys);
             foreach (var rolePermisson in rolePermissons)
             {
+                if (rolePermisson == null)
+                {
+                    continue;
+                }
                 var childPermissions = new List<Guid>();
-                if (rolePermisson!.ChildrenRoles.Any())
+                if (rolePermisson.ChildrenRoles != null && rolePermisson.ChildrenRoles.Any())
                 {
                     childPermissions = await GetPermissionsByCacheAsync(rolePermisson.ChildrenRoles);
                     var rejectPermisisons = rolePermisson.Permissions.Where(p => p.Effect is false).ToList();

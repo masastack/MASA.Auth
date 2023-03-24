@@ -10,6 +10,6 @@ public class DefaultCard : MCard
         base.OnParametersSet();
         Class ??= "";
         if (Class.Contains("pa-6 full-height") is false)
-            Class += " pa-6 full-height";
+            Class = "pa-6 full-height " + Class;
     }
 }
