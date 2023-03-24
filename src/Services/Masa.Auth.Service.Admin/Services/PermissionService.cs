@@ -24,6 +24,7 @@ public class PermissionService : ServiceBase
         MapGet(GetPermissionsByRoleAsync);
         MapPost(GetPermissionsByTeamAsync);
         MapPost(GetPermissionsByTeamWithUserAsync);
+        MapPost(SyncRedisAsync);
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
@@ -139,5 +140,12 @@ public class PermissionService : ServiceBase
         var query = new PermissionsByTeamWithUserQuery(dto);
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    [AllowAnonymous]
+    public async Task SyncRedisAsync([FromServices] IEventBus eventBus)
+    {
+        var command = new SyncPermissionRedisCommand();
+        await eventBus.PublishAsync(command);
     }
 }
