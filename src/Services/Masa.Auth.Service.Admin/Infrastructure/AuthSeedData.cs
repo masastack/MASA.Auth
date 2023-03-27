@@ -148,7 +148,7 @@ public class AuthSeedData
             {
                 Name = "admin",
                 Account = "admin",
-                Password = "admin123",
+                Password = masaStackConfig.AdminPwd,
                 DisplayName = "Administrator",
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
                 Email = "admin@masastack.com",
