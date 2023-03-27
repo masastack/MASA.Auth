@@ -25,7 +25,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-userAutoComplete-job",
             Name = "SyncUserAutoCompleteJob",
             IsAlertException = true,
@@ -53,7 +53,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncUserRedis-job",
             Name = "SyncUserRedisJob",
             IsAlertException = true,
@@ -81,7 +81,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncOidcRedis-job",
             Name = "SyncOidcRedisJob",
             IsAlertException = true,
@@ -108,7 +108,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncStaffRedis-job",
             Name = "SyncStaffRedisJob",
             IsAlertException = true,
@@ -135,7 +135,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncPermissionRedis-job",
             Name = "SyncPermissionRedisJob",
             IsAlertException = true,
@@ -162,7 +162,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
         await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConsts.AUTH_SYSTEM_ID,
+            ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncTeamRedis-job",
             Name = "SyncTeamRedisJob",
             IsAlertException = true,

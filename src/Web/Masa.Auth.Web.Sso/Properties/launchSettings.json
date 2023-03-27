@@ -31,7 +31,7 @@
         "ELASTIC": "{\"ESNode\": \"http://10.10.90.189\",\"Index\": \"auth_user_development\",\"ESPort\":30200}",
         "ENVIRONMENT": "Development",
         "ADMIN_PWD": "admin_pwd",
-        "DCC_SECRET": "dcc_secret"
+        "DCC_SECRET": "masastack.com"
       }
     },
     "IIS Express": {
