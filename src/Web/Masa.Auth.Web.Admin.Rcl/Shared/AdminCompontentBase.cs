@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Stack.Components.Extensions;
+
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
@@ -106,17 +108,17 @@ public abstract class AdminCompontentBase : ComponentBase
 
     public async Task<bool> OpenConfirmDialog(string content)
     {
-        return await PopupService.ConfirmAsync(T("Operation confirmation"), content, AlertTypes.Error);
+        return await PopupService.SimpleConfirmAsync(T("Operation confirmation"), content, AlertTypes.Error);
     }
 
     public async Task<bool> OpenConfirmDialog(string title, string content)
     {
-        return await PopupService.ConfirmAsync(title, content, AlertTypes.Error);
+        return await PopupService.SimpleConfirmAsync(title, content, AlertTypes.Error);
     }
 
     public async Task<bool> OpenConfirmDialog(string title, string content, AlertTypes type)
     {
-        return await PopupService.ConfirmAsync(title, content, type);
+        return await PopupService.SimpleConfirmAsync(title, content, type);
     }
 
     public void OpenInformationMessage(string message)
