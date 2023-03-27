@@ -56,7 +56,6 @@
   "Test": "测试",
   "Authorize": "授权",
   "Resource Information": "资源信息",
-  "Add New": "新建",
   "Are you sure delete current data?": "确定要删除此数据?",
   "Preview Permissions": "预览权限",
   "Back": "返回",
@@ -176,7 +175,7 @@
   },
 
   "TeamBlock": {
-    "Create Team": "新建团队",
+    "Add Team": "新建团队",
     "Edit Team": "编辑团队",
     "Delete Team": "删除团队",
     "Are you sure to delete team {0}": "确认删除团队\"{0}\"吗",
@@ -297,7 +296,7 @@
     "Set it to the default password": "设为默认密码",
     "Succeeded in setting the password": "设置密码成功",
     "Set the default password successfully": "设置默认密码成功",
-    "New employee: the password is the default password, editing employee: the password remains the same as the original password.": "新建员工：密码为默认密码，编辑员工：密码维持原密码不变。"
+    "Add employee: the password is the default password, editing employee: the password remains the same as the original password.": "新建员工：密码为默认密码，编辑员工：密码维持原密码不变。"
   },
 
   "ThirdPartyUserBlock": {
@@ -423,7 +422,7 @@
     "DeviceCodeLifetime": "设备代码生命周期",
     "RequireRequestObject": "授权请求对象",
     "EnableLocalLogin": "允许本地账号登录",
-    "Create Client": "新建客户端",
+    "Add Client": "新建客户端",
     "Edit Client": "编辑客户端",
     "Delete Client": "删除客户端",
     "Are you sure to delete client {0}": "确定删除客户端\"{0}\"吗",
