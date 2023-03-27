@@ -53,3 +53,4 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.JSInterop;
 global using System.Security.Claims;
 global using System.Text;
+global using Masa.Stack.Components.Extensions;
