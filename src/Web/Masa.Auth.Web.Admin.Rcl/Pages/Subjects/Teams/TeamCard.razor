@@ -29,11 +29,21 @@
         </MCardText>
         <MCardActions class="px-4">
             <div class="avatar-list-stacked">
-                @foreach (var adminAvatar in Team.AdminAvatar)
+                @{var index = 1;}
+                @foreach (var adminAvatar in Team.AdminAvatar) 
                 {
-                    <MAvatar Size="24">
-                        <MImage Width="24" Height="24" Src="@adminAvatar"></MImage>
+                    <MAvatar Size="40">
+                        <MImage Width="40" Height="40" Src="@adminAvatar"></MImage>
                     </MAvatar>
+                    
+                    if (index >= _showAdminAvatarCount)
+                    {
+                        <MAvatar Size="40" Class="fill-disabled primary--text">
+                            +@(Team.AdminAvatar.Count - _showAdminAvatarCount)
+                        </MAvatar>
+                        break;
+                    }
+                    index++;
                 }
             </div>
             <MSpacer />
@@ -60,6 +70,8 @@
 
     [Parameter]
     public string? Style { get; set; }
+
+    private int _showAdminAvatarCount = 5;
 
     private async Task HandleEditClick()
     {
