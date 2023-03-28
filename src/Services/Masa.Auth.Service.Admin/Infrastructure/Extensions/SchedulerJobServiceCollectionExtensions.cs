@@ -133,7 +133,7 @@ public static class SchedulerJobServiceCollectionExtensions
     {
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
-        await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
+        var jobId = await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncPermissionRedis-job",
@@ -154,13 +154,17 @@ public static class SchedulerJobServiceCollectionExtensions
                 RequestUrl = Path.Combine(authUrl, "api/permission/SyncRedis")
             }
         });
+        await schedulerClient.SchedulerJobService.StartAsync(new SchedulerJobRequestBase
+        {
+            JobId = jobId
+        });
     }
 
     public static async Task AddSyncTeamRedisJobAsync(this IServiceProvider serviceProvider)
     {
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         var schedulerClient = serviceProvider.GetRequiredService<ISchedulerClient>();
-        await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
+        var jobId = await schedulerClient.SchedulerJobService.AddAsync(new AddSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackConstant.AUTH,
             JobIdentity = "masa-auth-sync-syncTeamRedis-job",
@@ -180,6 +184,10 @@ public static class SchedulerJobServiceCollectionExtensions
                 HttpMethod = HttpMethods.POST,
                 RequestUrl = Path.Combine(authUrl, "api/team/SyncRedis")
             }
+        });
+        await schedulerClient.SchedulerJobService.StartAsync(new SchedulerJobRequestBase
+        {
+            JobId = jobId
         });
     }
 

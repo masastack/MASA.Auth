@@ -157,6 +157,10 @@ public class AuthSeedData
                 Enabled = true,
                 IdCard = "330104202002026400"
             }));
+            await eventBus.PublishAsync(new AddStaffCommand(new AddStaffDto
+            {
+
+            }));
         }
 
         if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == "guest"))
