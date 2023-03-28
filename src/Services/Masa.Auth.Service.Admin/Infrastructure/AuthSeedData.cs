@@ -142,25 +142,63 @@ public class AuthSeedData
         }
         #endregion
 
+        var teamId = Guid.Empty;
+        var departmentId = Guid.Empty;
+
+        if (!context.Set<Department>().Any())
+        {
+            var dapertmentCommand = new UpsertDepartmentCommand(new UpsertDepartmentDto
+            {
+                Name = MasaStackConsts.ORGANIZATION_NAME,
+                Description = MasaStackConsts.ORGANIZATION_DESCRIPTION,
+                Enabled = true
+            });
+            await eventBus.PublishAsync(dapertmentCommand);
+            departmentId = dapertmentCommand.Result;
+        }
+
+        if (!context.Set<Team>().Any())
+        {
+            var addTeamCommand = new AddTeamCommand(new AddTeamDto
+            {
+                Type = TeamTypes.Ordinary,
+                Name = MasaStackConsts.MASA_STACK_TEAM,
+                Avatar = new AvatarValueDto
+                {
+                    Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
+                }
+            });
+            await eventBus.PublishAsync(addTeamCommand);
+            teamId = addTeamCommand.Result;
+        }
+
         if (!context.Set<User>().Any(u => u.Account == "admin"))
         {
-            await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
+            var addStaffDto = new AddStaffDto
             {
                 Name = "admin",
                 Account = "admin",
+                JobNumber = "9527",
+                StaffType = StaffTypes.Internal,
+                Gender = GenderTypes.Male,
                 Password = masaStackConfig.AdminPwd,
                 DisplayName = "Administrator",
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
                 Email = "admin@masastack.com",
-                CompanyName = "Masa",
+                CompanyName = "ShuShan",
                 PhoneNumber = "15888888888",
-                Enabled = true,
-                IdCard = "330104202002026400"
-            }));
-            await eventBus.PublishAsync(new AddStaffCommand(new AddStaffDto
+                Enabled = true
+            };
+            if (teamId == Guid.Empty)
             {
+                addStaffDto.Teams.Add(teamId);
+            }
+            if (departmentId != Guid.Empty)
+            {
+                addStaffDto.DepartmentId = departmentId;
+            }
 
-            }));
+            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
         }
 
         if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == "guest"))
@@ -177,29 +215,6 @@ public class AuthSeedData
                 PhoneNumber = "15666666666",
                 Enabled = true,
                 IdCard = "330104202002020906"
-            }));
-        }
-
-        if (!context.Set<Department>().Any())
-        {
-            await eventBus.PublishAsync(new UpsertDepartmentCommand(new UpsertDepartmentDto
-            {
-                Name = MasaStackConsts.ORGANIZATION_NAME,
-                Description = MasaStackConsts.ORGANIZATION_DESCRIPTION,
-                Enabled = true
-            }));
-        }
-
-        if (!context.Set<Team>().Any())
-        {
-            await eventBus.PublishAsync(new AddTeamCommand(new AddTeamDto
-            {
-                Type = TeamTypes.Ordinary,
-                Name = MasaStackConsts.MASA_STACK_TEAM,
-                Avatar = new AvatarValueDto
-                {
-                    Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
-                }
             }));
         }
 

@@ -116,6 +116,7 @@ builder.Services
             .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
             .AddElasticsearchAutoComplete();
+//todo when scheduler is unready, this code should not run
 await builder.Services.AddSchedulerJobAsync();
 
 builder.Services

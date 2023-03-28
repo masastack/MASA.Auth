@@ -7,16 +7,16 @@ public class CommandHandler
 {
     readonly IDepartmentRepository _departmentRepository;
     readonly IPositionRepository _positionRepository;
-    readonly ILogger<CommandHandler> _logger;
+    readonly IUnitOfWork _unitOfWork;
 
     public CommandHandler(
         IDepartmentRepository departmentRepository,
         IPositionRepository positionRepository,
-        ILogger<CommandHandler> logger)
+        IUnitOfWork unitOfWork)
     {
         _departmentRepository = departmentRepository;
         _positionRepository = positionRepository;
-        _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     [EventHandler(1)]
@@ -41,11 +41,14 @@ public class CommandHandler
             department.Move(parent);
             department.Update(dto.Name, dto.Description, dto.Enabled);
             await _departmentRepository.UpdateAsync(department);
+            command.Result = department!.Id;
             return;
         }
         var addDepartment = new Department(dto.Name, dto.Description, parent, dto.Enabled);
         addDepartment.SetStaffs(dto.StaffIds.ToArray());
         await _departmentRepository.AddAsync(addDepartment);
+        await _unitOfWork.SaveChangesAsync();
+        command.Result = addDepartment!.Id;
     }
 
     [EventHandler(2)]
