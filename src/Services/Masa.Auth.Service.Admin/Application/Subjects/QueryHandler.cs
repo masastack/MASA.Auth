@@ -15,6 +15,7 @@ public class QueryHandler
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IPmClient _pmClient;
+    readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -26,7 +27,8 @@ public class QueryHandler
         AuthDbContext authDbContext,
         IAutoCompleteClient autoCompleteClient,
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
-        IPmClient pmClient)
+        IPmClient pmClient,
+        IMultiEnvironmentContext multiEnvironmentContext)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -38,6 +40,7 @@ public class QueryHandler
         _autoCompleteClient = autoCompleteClient;
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
+        _multiEnvironmentContext = multiEnvironmentContext;
     }
 
     #region User
@@ -731,7 +734,8 @@ public class QueryHandler
         var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var apps = await _pmClient.AppService.GetListAsync();
+            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentContext.CurrentEnvironment);
+            var apps = projects.SelectMany(p => p.Apps);
             //todo cache
             var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
                 v => new { v.AppId, Url = v.Url.ToLower().Trim('/') }, p => new { p.AppId, Url = p.Url?.ToLower().Trim('/') ?? "" }, (v, p) => new

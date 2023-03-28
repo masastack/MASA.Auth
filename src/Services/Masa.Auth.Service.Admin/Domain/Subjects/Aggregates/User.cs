@@ -268,8 +268,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         Gender = gender;
     }
 
-    public void UpdateBasicInfo(string displayName, GenderTypes gender, string? companyName, string? department, string? position, AddressValue address)
+    public void UpdateBasicInfo(string name, string displayName, GenderTypes gender, string? companyName, string? department, string? position, AddressValue address)
     {
+        Name = name;
         DisplayName = displayName;
         Gender = gender;
         CompanyName = companyName;
