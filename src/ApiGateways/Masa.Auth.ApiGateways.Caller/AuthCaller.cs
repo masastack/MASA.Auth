@@ -24,7 +24,6 @@ public class AuthCaller : StackHttpClientCaller
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
-    AuthApiOptions _options;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(Caller));
@@ -68,7 +67,5 @@ public class AuthCaller : StackHttpClientCaller
     public AuthCaller(AuthApiOptions options)
     {
         BaseAddress = options.AuthServiceBaseAddress;
-        _options = options;
     }
 }
-

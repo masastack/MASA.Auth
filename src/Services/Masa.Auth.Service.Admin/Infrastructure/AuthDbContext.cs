@@ -3,10 +3,11 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
-public class AuthDbContext : IsolationDbContext
+public class AuthDbContext : MasaDbContext<AuthDbContext>
 {
     public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)
     {
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,14 +30,6 @@ public class AuthDbContext : IsolationDbContext
             .HasValue<UserPermission>("User")
             .HasValue<RolePermission>("Role")
             .HasValue<TeamPermission>("Team");
-
-        //foreach (var entityType in builder.Model.GetEntityTypes())
-        //{
-        //    if (!entityType.ClrType.IsAssignableTo(typeof(IdentityProvider)))
-        //    {
-        //        entityType.SetTableName(entityType.ClrType.Name.Pluralize());
-        //    }
-        //}
 
         builder.ApplyConfiguration(new IntegrationEventLogEntityTypeConfiguration());
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()!);

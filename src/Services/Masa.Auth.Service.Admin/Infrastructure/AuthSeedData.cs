@@ -189,7 +189,7 @@ public class AuthSeedData
                 PhoneNumber = "15888888888",
                 Enabled = true
             };
-            if (teamId == Guid.Empty)
+            if (teamId != Guid.Empty)
             {
                 addStaffDto.Teams.Add(teamId);
             }

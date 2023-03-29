@@ -13,7 +13,7 @@ public static class ElasticsearchAutoCompleteExtensions
         {
             autoCompleteOptions.UseElasticSearch(options =>
             {
-                options.ElasticsearchOptions.UseNodes($"{masaStackConfig.ElasticModel.ESNode}:{masaStackConfig.ElasticModel.ESPort}")
+                options.ElasticsearchOptions.UseNodes(masaStackConfig.ElasticModel.Nodes.ToArray())
                     .UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));
                 options.IndexName = masaStackConfig.ElasticModel.Index;
                 //options.Alias = masaStackConfig.ElasticModel.Alias;

@@ -7,7 +7,7 @@ ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 
-await builder.Services.AddMasaStackConfigAsync(true);
+await builder.Services.AddMasaStackConfigAsync(false);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
@@ -106,7 +106,7 @@ var redisOption = new RedisConfigurationOptions
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
 {
     multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
-    multilevel.SubscribeKeyPrefix = $"db-{redisOption.DefaultDatabase}";
+    multilevel.SubscribeKeyPrefix = $"masa.auth:-db-{redisOption.DefaultDatabase}";
 });
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 builder.Services.AddDccClient(redisOption);
@@ -161,11 +161,14 @@ builder.Services
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
-    .UseIsolationUoW<AuthDbContext>(
-        isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT),
-        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName"))).UseFilter())
+    .UseUoW<AuthDbContext>(dbOptions =>
+    {
+        dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName")));
+        dbOptions.UseFilter();
+    })
     .UseRepository<AuthDbContext>();
-});
+})
+.AddIsolation(isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT));
 
 builder.Services.AddStackMiddleware();
 

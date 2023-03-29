@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Http;
-
 namespace Masa.Auth.Web.Admin.Rcl.Global.Config
 {
     public class GlobalConfig
@@ -10,7 +8,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
         #region Field
 
         private bool _Loading;
-        private CookieStorage _cookieStorage;
 
         #endregion
 
@@ -36,16 +33,10 @@ namespace Masa.Auth.Web.Admin.Rcl.Global.Config
 
         #region event
 
-        public delegate void GlobalConfigChanged();
         public delegate void LoadingChanged(bool Loading);
 
         public event LoadingChanged? OnLoadingChanged;
 
         #endregion
-
-        public GlobalConfig(CookieStorage cookieStorage, IHttpContextAccessor httpContextAccessor)
-        {
-            _cookieStorage = cookieStorage;
-        }
     }
 }
