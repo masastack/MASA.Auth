@@ -19,7 +19,7 @@
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.4.0" />
-		<PackageReference Include="Masa.Blazor" Version="1.0.0-preview.10" />
+		<PackageReference Include="Masa.Blazor" Version="1.0.0-preview.11" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaFrameworkPackageVersion)" />
