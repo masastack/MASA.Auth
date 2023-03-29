@@ -77,7 +77,7 @@
             if (!itemSection.Exists())
             {
                 var data = new Dictionary<string, object> { { Name, _displayName.Value } };
-                await ConfigurationApiManage.AddAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", new Dictionary<string, string> { { itemKey, JsonSerializer.Serialize(data) } });
+                await ConfigurationApiManage.AddAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", new Dictionary<string, object> { { itemKey, data } });
             }
             else
             {

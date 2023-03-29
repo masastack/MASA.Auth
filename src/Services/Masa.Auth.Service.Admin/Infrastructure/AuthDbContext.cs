@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
-public class AuthDbContext : IsolationDbContext
+public class AuthDbContext : MasaDbContext<AuthDbContext>
 {
     public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)
     {
