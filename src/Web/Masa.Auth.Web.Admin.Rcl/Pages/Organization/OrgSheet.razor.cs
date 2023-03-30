@@ -21,6 +21,12 @@ public partial class OrgSheet
 
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "OrganizationBlock";
+        base.OnInitialized();
+    }
+
     private async Task OnSubmitHandler()
     {
         if (_form?.Validate() is true)

@@ -27,6 +27,12 @@ public partial class UpdateClientDialog
 
     ClientService ClientService => AuthCaller.ClientService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "ClientBlock";
+        base.OnInitialized();
+    }
+
     public async Task ShowAsync(Guid clientId)
     {
         _clientDetailDto = await ClientService.GetDetailAsync(clientId);

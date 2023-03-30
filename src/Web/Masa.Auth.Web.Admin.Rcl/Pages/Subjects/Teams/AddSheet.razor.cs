@@ -12,6 +12,12 @@ public partial class AddSheet
     int _step = 1;
     bool _visible;
 
+    protected override void OnInitialized()
+    {
+        PageName = "TeamBlock";
+        base.OnInitialized();
+    }
+
     private async Task OnSubmitHandler()
     {
         if (OnSubmit.HasDelegate)

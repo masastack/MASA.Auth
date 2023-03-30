@@ -18,6 +18,12 @@ public partial class AddMenuPermission
 
     PermissionService PermissionService => AuthCaller.PermissionService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "PermissionBlock";
+        base.OnInitialized();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

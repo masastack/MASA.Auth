@@ -18,6 +18,12 @@ public partial class UpdateSheet
     string _tab = "";
     List<string> _tabs = new();
 
+    protected override void OnInitialized()
+    {
+        PageName = "TeamBlock";
+        base.OnInitialized();
+    }
+
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
