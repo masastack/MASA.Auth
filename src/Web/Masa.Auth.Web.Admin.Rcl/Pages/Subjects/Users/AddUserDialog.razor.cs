@@ -73,7 +73,6 @@ public partial class AddUserDialog
         if (success)
         {
             Loading = true;
-            throw new Exception("1");
             await UserService.AddAsync(User);
             OpenSuccessMessage(T("Add user data success"));
             await UpdateVisible(false);
