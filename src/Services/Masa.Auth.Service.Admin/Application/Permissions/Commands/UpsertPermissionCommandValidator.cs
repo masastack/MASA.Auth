@@ -3,9 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
-public class AddPermissionCommandValidator : AbstractValidator<AddPermissionCommand>
+public class UpsertPermissionCommandValidator : AbstractValidator<UpsertPermissionCommand>
 {
-    public AddPermissionCommandValidator()
+    public UpsertPermissionCommandValidator()
     {
         RuleFor(command => command.PermissionDetail).SetValidator(new PermissionDetailValidator<PermissionDetailDto>());
     }

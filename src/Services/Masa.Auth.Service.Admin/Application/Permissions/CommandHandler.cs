@@ -9,6 +9,7 @@ public class CommandHandler
     readonly IPermissionRepository _permissionRepository;
     readonly AuthDbContext _authDbContext;
     readonly RoleDomainService _roleDomainService;
+    readonly IUnitOfWork _unitOfWork;
     readonly PermissionDomainService _permissionDomainService;
 
     public CommandHandler(
@@ -16,11 +17,13 @@ public class CommandHandler
         IPermissionRepository permissionRepository,
         AuthDbContext authDbContext,
         RoleDomainService roleDomainService,
+        IUnitOfWork unitOfWork,
         PermissionDomainService permissionDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
+        _unitOfWork = unitOfWork;
         _roleDomainService = roleDomainService;
         _permissionDomainService = permissionDomainService;
     }
@@ -52,7 +55,7 @@ public class CommandHandler
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
         await _roleRepository.AddAsync(role);
-        await _roleRepository.UnitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         command.Result = role;
     }
 
@@ -112,9 +115,9 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
+    public async Task AddPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
     {
-        var permissionBaseInfo = addPermissionCommand.PermissionDetail;
+        var permissionBaseInfo = upsertPermissionCommand.PermissionDetail;
 
         Expression<Func<Permission, bool>> predicate = d => d.Code.Equals(permissionBaseInfo.Code) &&
             d.SystemId == permissionBaseInfo.SystemId && d.AppId == permissionBaseInfo.AppId;
@@ -152,8 +155,7 @@ public class CommandHandler
         permission.SetParent(permissionBaseInfo.ParentId);
         permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
-        await _permissionRepository.UnitOfWork.SaveChangesAsync();
-        addPermissionCommand.PermissionDetail.Id = permission.Id;
+        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]
@@ -163,7 +165,7 @@ public class CommandHandler
         {
             await _permissionRepository.AddAsync(permission);
         }
-        await _permissionRepository.UnitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     #endregion
 }
