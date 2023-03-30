@@ -42,7 +42,9 @@ builder.Services.AddObservable(builder.Logging, () =>
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
         ServiceVersion = masaStackConfig.Version,
-        ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH)
+        ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH),
+        Layer = masaStackConfig.Namespace,
+        ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
     };
 }, () =>
 {
@@ -114,6 +116,7 @@ builder.Services
             .AddMcClient(masaStackConfig.GetMcServiceDomain())
             .AddLadpContext()
             .AddElasticsearchAutoComplete();
+//todo when scheduler is unready, this code should not run
 await builder.Services.AddSchedulerJobAsync();
 
 builder.Services
@@ -158,10 +161,14 @@ builder.Services
     })
     //set Isolation.
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
-    .UseUoW<AuthDbContext>(
-        dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName"))).UseFilter())
+    .UseUoW<AuthDbContext>(dbOptions =>
+    {
+        dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName")));
+        dbOptions.UseFilter();
+    })
     .UseRepository<AuthDbContext>();
-}).AddIsolation(isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT));
+})
+.AddIsolation(isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT));
 
 builder.Services.AddStackMiddleware();
 

@@ -37,6 +37,11 @@ public class AddStaffDto
 
     public string? Password { get; set; }
 
+    /// <summary>
+    /// only for create user
+    /// </summary>
+    public string? Account { get; set; }
+
     public GenderTypes Gender { get; set; } = GenderTypes.Male;
 
     public AddStaffDto()

@@ -155,7 +155,7 @@ public class QueryHandler
         return roleSelect;
     }
 
-    #endregion
+    #endregion 
 
     #region Permission
 
@@ -267,7 +267,6 @@ public class QueryHandler
     public async Task AppMenuListQueryAsync(AppMenuListQuery appMenuListQuery)
     {
         var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appMenuListQuery.UserId);
-
         var menus = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (menus == null || menus.Count < 1)
         {
@@ -275,7 +274,6 @@ public class QueryHandler
                                 && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled)).Adapt<List<CachePermission>>();
         }
         menus = menus.Where(p => p.AppId == appMenuListQuery.AppId && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
-
         appMenuListQuery.Result = GetMenus(menus, Guid.Empty);
 
         List<MenuDto> GetMenus(List<CachePermission> menus, Guid parentId)
