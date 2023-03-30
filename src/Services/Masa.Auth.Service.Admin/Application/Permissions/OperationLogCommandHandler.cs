@@ -55,7 +55,7 @@ public class OperationLogCommandHandler
     }
 
     [EventHandler(1)]
-    public async Task AddPermissionOperationLogAsync(AddPermissionCommand command)
+    public async Task AddPermissionOperationLogAsync(UpsertPermissionCommand command)
     {
         if(command.PermissionDetail.IsUpdate)
         {

@@ -44,13 +44,13 @@ public class PermissionService : ServiceBase
     private async Task CreateMenuPermissionAsync(IEventBus eventBus,
         [FromBody] MenuPermissionDetailDto menuPermissionDetailDto)
     {
-        await eventBus.PublishAsync(new AddPermissionCommand(menuPermissionDetailDto));
+        await eventBus.PublishAsync(new UpsertPermissionCommand(menuPermissionDetailDto));
     }
 
     private async Task CreateApiPermissionAsync(IEventBus eventBus,
         [FromBody] ApiPermissionDetailDto apiPermissionDetailDto)
     {
-        await eventBus.PublishAsync(new AddPermissionCommand(apiPermissionDetailDto));
+        await eventBus.PublishAsync(new UpsertPermissionCommand(apiPermissionDetailDto));
     }
 
     private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] string systemId)

@@ -275,10 +275,9 @@ public class QueryHandler
         }
         menus = menus.Where(p => p.AppId == appMenuListQuery.AppId && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
         appMenuListQuery.Result = GetMenus(menus, Guid.Empty);
-
         List<MenuDto> GetMenus(List<CachePermission> menus, Guid parentId)
         {
-            return menus.Where(m => m.ParentId == parentId)
+            return menus.Where(m => m.ParentId == parentId && m.Id != Guid.Empty)
                 .OrderBy(m => m.Order)
                 .Select(m => new MenuDto
                 {
