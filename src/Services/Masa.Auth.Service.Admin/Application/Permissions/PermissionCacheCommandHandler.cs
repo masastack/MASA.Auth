@@ -25,6 +25,11 @@ public class PermissionCacheCommandHandler
         {
             allPermissions = new List<CachePermission>();
         }
+        var existsData = allPermissions.FirstOrDefault(e => e.Id == cachePermission.Id);
+        if (existsData!=null)
+        {
+            allPermissions.Remove(existsData);
+        }
         allPermissions.Add(cachePermission);
         await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
     }
