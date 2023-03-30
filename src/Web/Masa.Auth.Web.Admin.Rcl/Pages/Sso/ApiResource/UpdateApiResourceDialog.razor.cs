@@ -23,6 +23,12 @@ public partial class UpdateApiResourceDialog
 
     private ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "ApiResourceBlock";
+        base.OnInitialized();
+    }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

@@ -25,6 +25,12 @@ public partial class AddStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "StaffBlock";
+        base.OnInitialized();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         if (Visible)
@@ -35,7 +41,7 @@ public partial class AddStaffDialog
                 Staff.DepartmentId = DepartmentId.Value;
             }
             var defaultPasswordDto = await StaffService.GetDefaultPasswordAsync();
-            Staff.Password= defaultPasswordDto.Enabled ? defaultPasswordDto.DefaultPassword : "";
+            Staff.Password = defaultPasswordDto.Enabled ? defaultPasswordDto.DefaultPassword : "";
             Step = 1;
         }
     }

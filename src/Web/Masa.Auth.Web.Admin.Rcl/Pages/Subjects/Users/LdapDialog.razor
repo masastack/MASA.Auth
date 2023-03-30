@@ -47,6 +47,12 @@
     [Parameter]
     public Func<Task>? OnSubmitted { get; set; }
 
+    protected override void OnInitialized()
+    {
+        PageName = "ThirdPartyIdpBlock";
+        base.OnInitialized();
+    }
+
     public async Task OpenAsync()
     {
         _ldapDetailDto = await ThirdPartyIdpService.GetLdapDetailAsync();

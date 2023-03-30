@@ -22,6 +22,12 @@ public partial class SyncStaffDialog
 
     private SyncStaffResultsDto? SyncStaffResults { get; set; }
 
+    protected override void OnInitialized()
+    {
+        PageName = "StaffBlock";
+        base.OnInitialized();
+    }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)
@@ -32,11 +38,11 @@ public partial class SyncStaffDialog
         {
             Visible = visible;
         }
-	
-	if (!visible)
-	{
-	    File = null;
-	}
+
+        if (!visible)
+        {
+            File = null;
+        }
     }
 
     private void OnFileChange(InputFileChangeEventArgs e)
@@ -125,13 +131,13 @@ public partial class SyncStaffDialog
             }
             return memoryStream.ToArray();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            if(ex.Message.Contains("The requested file could not be read"))
+            if (ex.Message.Contains("The requested file could not be read"))
                 throw new Exception(T("When file update,need select file again"));
             else
                 throw ex;
-        }       
+        }
     }
 }
 
