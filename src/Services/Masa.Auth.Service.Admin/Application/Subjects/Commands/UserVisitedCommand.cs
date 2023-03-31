@@ -3,4 +3,5 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
+[AllowedEvent]
 public record UserVisitedCommand(AddUserVisitedDto AddUserVisitedDto) : Command;
