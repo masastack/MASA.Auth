@@ -27,6 +27,12 @@ public partial class UserAuthorizeDialog
 
     public bool Preview { get; set; }
 
+    protected override void OnInitialized()
+    {
+        PageName = "UserBlock";
+        base.OnInitialized();
+    }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

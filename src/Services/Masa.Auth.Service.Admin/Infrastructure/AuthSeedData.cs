@@ -200,22 +200,34 @@ public class AuthSeedData
 
             await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
         }
-
         if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == "guest"))
         {
-            await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
+            var addStaffDto = new AddStaffDto
             {
                 Name = "guest",
                 Account = "guest",
+                JobNumber = "4399",
                 Password = "guest123",
+                StaffType = StaffTypes.External,
+                Gender = GenderTypes.Female,
                 DisplayName = "Guest",
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
                 Email = "Guest@masastack.com",
-                CompanyName = "Masa",
+                CompanyName = "ShuShan",
                 PhoneNumber = "15666666666",
                 Enabled = true,
                 IdCard = "330104202002020906"
-            }));
+            };
+            if (teamId != Guid.Empty)
+            {
+                addStaffDto.Teams.Add(teamId);
+            }
+            if (departmentId != Guid.Empty)
+            {
+                addStaffDto.DepartmentId = departmentId;
+            }
+
+            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
         }
 
         #region SSO Client

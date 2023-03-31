@@ -204,7 +204,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        user.UpdateBasicInfo(userModel.Name ,userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
+        user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
@@ -628,7 +628,7 @@ public class CommandHandler
 
     async Task<Staff> AddStaffAsync(AddStaffDto staffDto)
     {
-        var addUserDto = new AddUserDto(default, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, default, staffDto.Password, staffDto.Gender, default, default);
+        var addUserDto = new AddUserDto(default, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, staffDto.Account, staffDto.Password, staffDto.Gender, default, default);
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
         await _staffDomainService.AddBeforeAsync(addStaffBeforeEvent);
         var staff = new Staff(
@@ -888,7 +888,8 @@ public class CommandHandler
         }
 
         SyncStaffResultsDto.SyncStaffResult Error(string jobNumber, params string[] errorMessages) =>
-            new SyncStaffResultsDto.SyncStaffResult() {
+            new SyncStaffResultsDto.SyncStaffResult()
+            {
                 JobNumber = jobNumber,
                 Errors = errorMessages.ToList()
             };

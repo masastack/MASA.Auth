@@ -28,14 +28,14 @@ public partial class AddClientDialog
     {
         if (firstRender)
         {
-            _tabs = new List<string> { T("Basic Information"), T("Resource Information") };
+            _tabs = new List<string> { T("BasicInformation"), T("Resource Information") };
         }
         base.OnAfterRender(firstRender);
     }
 
     public void Show()
     {
-        _tab = T("Basic Information");
+        _tab = T("BasicInformation");
         _visible = true;
         _addClientDto = new();
         _addBasicDto = new();

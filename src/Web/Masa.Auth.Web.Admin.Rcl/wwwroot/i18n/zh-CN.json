@@ -77,8 +77,8 @@
   "ThirdPartyUser": "第三方用户",
   "Role": "角色",
   "UserClaim": "用户声明",
-  "Basic Information": "基础信息",
-  "Detail Information": "详细信息",
+  "BasicInformation": "基础信息",
+  "DetailInformation": "详细信息",
   "Account": "用户账号",
   "Password": "用户密码",
   "IdCard": "身份证号",
@@ -99,6 +99,10 @@
   "Order": "顺序",
   "Location": "位置",
   "Enter Name": "输入名称",
+  "Another": "换一个",
+  "Inherited Role": "角色继承",
+  "RoleOwner": "角色所有者",
+  "Bind Role": "绑定角色",
 
   "OrganizationBlock": {
     "Department": "部门",
@@ -112,7 +116,8 @@
     "Edit Department": "编辑部门",
     "Copy Department": "复制部门",
     "Relocate former department staff": "迁移原部门人员",
-    "Department deleted successfully": "部门删除成功"
+    "Department deleted successfully": "部门删除成功",
+    "Search for members": "搜索成员"
   },
 
   "ThirdPartyIdpBlock": {
@@ -250,7 +255,6 @@
     "Authorized user succeeded": "授权用户成功",
     "Failed to authorize user:": "授权用户失败:",
     "Delete user data success": "删除用户数据成功",
-    "Another": "换一个",
     "Give him a nickname!": "给Ta取个昵称吧!",
     "Successfully set user permissions": "设置用户权限成功",
     "User roles and permissions settings": "用户角色和权限设置",
@@ -317,7 +321,6 @@
     "Bind Role": "绑定角色",
     "Superior Role": "上级角色",
     "RoleOwner": "角色使用者",
-    "BasicInformation": "基础信息",
     "Limit the number of bindings": "绑定限制次数",
     "The number of bindings cannot be less than ": "绑定限制次数不能小于",
     "Failed to query roleList data:": "查询角色列表数据失败:",

@@ -47,7 +47,7 @@ public partial class UpdateClientDialog
         _clientDetailDto.Adapt(_clientScopesDto);
 
         PrepareHeader();
-        _tab = T("Basic Information");
+        _tab = T("BasicInformation");
         _visible = true;
 
         StateHasChanged();
@@ -55,7 +55,7 @@ public partial class UpdateClientDialog
 
     private void PrepareHeader()
     {
-        _tabHeader = new List<string> { T("Basic Information"), T("Consent Screen"), T("Authentication"), T("Resource Information") };
+        _tabHeader = new List<string> { T("BasicInformation"), T("Consent Screen"), T("Authentication"), T("Resource Information") };
         if (_clientDetailDto.ClientType == ClientTypes.Device)
         {
             _tabHeader.Add(T("Device Flow"));
