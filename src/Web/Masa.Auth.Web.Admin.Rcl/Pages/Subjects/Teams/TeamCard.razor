@@ -27,18 +27,18 @@
                 @Team.Description
             </span>
         </MCardText>
-        <MCardActions class="px-4">
+        <MCardActions class="pr-4 ml-4 mb-2">
             <div class="avatar-list-stacked">
                 @{var index = 1;}
                 @foreach (var adminAvatar in Team.AdminAvatar) 
                 {
-                    <MAvatar Size="40">
-                        <MImage Width="40" Height="40" Src="@adminAvatar"></MImage>
+                    <MAvatar Size="36">
+                        <MImage Width="36" Height="36" Src="@adminAvatar"></MImage>
                     </MAvatar>
                     
                     if (index >= _showAdminAvatarCount)
                     {
-                        <MAvatar Size="40" Class="fill-disabled primary--text">
+                        <MAvatar Size="36" Class="fill-disabled primary--text">
                             +@(Team.AdminAvatar.Count - _showAdminAvatarCount)
                         </MAvatar>
                         break;
