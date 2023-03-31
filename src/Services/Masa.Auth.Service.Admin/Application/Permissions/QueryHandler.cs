@@ -274,7 +274,7 @@ public class QueryHandler
             menus = (await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
                                 && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled)).Adapt<List<CachePermission>>();
         }
-        menus = menus.Where(p => p.AppId == appMenuListQuery.AppId && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
+        menus = menus.Where(p => p.AppId == appMenuListQuery.AppId && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled && p.Id != Guid.Empty).ToList();
 
         appMenuListQuery.Result = GetMenus(menus, Guid.Empty);
 
