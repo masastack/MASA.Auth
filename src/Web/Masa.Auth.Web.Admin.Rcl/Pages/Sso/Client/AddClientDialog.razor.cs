@@ -18,6 +18,12 @@ public partial class AddClientDialog
 
     ClientService ClientService => AuthCaller.ClientService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "ClientBlock";
+        base.OnInitialized();
+    }
+
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)

@@ -6,7 +6,11 @@
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex align-center full-height">
                     <div class="full-width">
-                        <SNameTextField @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")"/>
+                        <div class="d-flex mb-12">
+                            <div class="mx-auto">
+                                <SNameTextField @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")" />
+                            </div>
+                        </div>
                         <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
                             <LabelContent>
                                 <span class="secondary--text">

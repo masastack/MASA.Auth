@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public class BooleanSelect : SSelect<KeyValuePair<string, bool?>, bool?, bool?>
 {
-    [CascadingParameter]
+    [Inject]
     public I18n I18N { get; set; } = default!;
 
     [Parameter]

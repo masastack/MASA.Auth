@@ -95,7 +95,9 @@ else
         {
             ServiceNameSpace = builder.Environment.EnvironmentName,
             ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.AUTH, MasaStackConstant.SSO)
+            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.AUTH, MasaStackConstant.SSO),
+            Layer = masaStackConfig.Namespace,
+            ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
         };
     }, () =>
     {

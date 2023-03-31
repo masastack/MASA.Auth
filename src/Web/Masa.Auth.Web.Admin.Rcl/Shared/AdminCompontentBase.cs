@@ -5,7 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public abstract class AdminCompontentBase : ComponentBase
 {
-    private I18n? _i18n;
     private GlobalConfig? _globalConfig;
     private AuthCaller? _authCaller;
     private NavigationManager? _navigationManager;
@@ -26,18 +25,11 @@ public abstract class AdminCompontentBase : ComponentBase
     [Inject]
     public JsInitVariables JsInitVariables { get; set; } = default!;
 
-    [CascadingParameter]
-    public I18n I18n
-    {
-        get
-        {
-            return _i18n ?? throw new Exception("please Inject I18n!");
-        }
-        set
-        {
-            _i18n = value;
-        }
-    }
+    [CascadingParameter(Name = "Culture")]
+    private string Culture { get; set; } = null!;
+
+    [Inject]
+    public I18n I18n { get; set; } = default!;
 
     [Inject]
     public GlobalConfig GlobalConfig

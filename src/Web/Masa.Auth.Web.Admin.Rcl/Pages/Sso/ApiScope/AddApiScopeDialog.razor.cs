@@ -18,6 +18,12 @@ public partial class AddApiScopeDialog
 
     private ApiScopeService ApiScopeService => AuthCaller.ApiScopeService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "ApiScopeBlock";
+        base.OnInitialized();
+    }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

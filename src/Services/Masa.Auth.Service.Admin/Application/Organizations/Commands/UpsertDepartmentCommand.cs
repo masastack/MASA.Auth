@@ -5,5 +5,6 @@ namespace Masa.Auth.Service.Admin.Application.Organizations.Commands;
 
 public record UpsertDepartmentCommand(UpsertDepartmentDto UpsertDepartmentDto) : Command
 {
+    public Guid Result { get; set; }
 }
 

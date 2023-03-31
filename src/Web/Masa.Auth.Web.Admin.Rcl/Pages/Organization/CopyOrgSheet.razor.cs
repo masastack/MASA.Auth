@@ -22,6 +22,12 @@ public partial class CopyOrgSheet
 
     protected StaffService StaffService => AuthCaller.StaffService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "OrganizationBlock";
+        base.OnInitialized();
+    }
+
     public override Task SetParametersAsync(ParameterView parameters)
     {
         if (parameters.TryGetValue(nameof(Dto), out CopyDepartmentDto? dto) && dto != Dto)

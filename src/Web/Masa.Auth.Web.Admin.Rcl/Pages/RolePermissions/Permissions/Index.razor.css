@@ -35,3 +35,7 @@
     letter-spacing: 0.01em !important;
     color: #323D6F !important;
 }
+
+.d-index-row ::deep .prefix-mt-0 .m-text-field__prefix {
+  margin-top: 0px !important;
+}

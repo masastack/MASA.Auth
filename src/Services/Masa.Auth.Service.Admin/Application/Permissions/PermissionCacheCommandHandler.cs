@@ -15,10 +15,10 @@ public class PermissionCacheCommandHandler
     }
 
     [EventHandler(99)]
-    public async Task AddPermissionAsync(AddPermissionCommand addPermissionCommand)
+    public async Task AddPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
     {
-        var cachePermission = addPermissionCommand.PermissionDetail.Adapt<CachePermission>();
-        await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(addPermissionCommand.PermissionDetail.Id), cachePermission);
+        var cachePermission = upsertPermissionCommand.PermissionDetail.Adapt<CachePermission>();
+        await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(upsertPermissionCommand.PermissionDetail.Id), cachePermission);
 
         var allPermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (allPermissions == null)

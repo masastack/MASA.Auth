@@ -3,4 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
-public record AddPermissionCommand(PermissionDetailDto PermissionDetail) : Command();
+public record UpsertPermissionCommand(PermissionDetailDto PermissionDetail) : Command();
