@@ -27,9 +27,9 @@
         "CONNECTIONSTRING": "{\"Server\": \"10.175.171.201\", \"Port\": 32679,\"Database\":\"pm-dev\",\"UserId\": \"ss\",\"Password\":\"Hzss@123\"}",
         "MASA_SERVER": "{\"pm\":{\"server\":\"pm-service-develop\"},\"dcc\":{\"server\":\"dcc-service-develop\"},\"auth\":{\"server\":\"auth-service-develop\"},\"mc\":{\"server\":\"mc-service-develop\"},\"scheduler\":{\"server\":\"scheduler-service-server-develop\",\"worker\":\"scheduler-service-worker-develop\"},\"tsc\":{\"server\":\"tsc-service-develop\"},\"alert\":{\"server\":\"alert-service-develop\"}}",
         "MASA_UI": "{\"pm\":{\"ui\":\"pm-develop\"},\"dcc\":{\"ui\":\"dcc-develop\"},\"auth\":{\"ui\":\"auth-develop\",\"sso\":\"sso-develop\"},\"mc\":{\"ui\":\"mc-develop\"},\"scheduler\":{\"ui\":\"scheduler-develop\"},\"tsc\":{\"ui\":\"tsc-develop\"},\"alert\":{\"ui\":\"alert-develop\"}}",
-        "ELASTIC": "{\"Nodes\": [\"http://10.10.90.189:30200\"],\"Index\": \"auth_user_development\"}",
+        "ELASTIC": "{\"Nodes\": [\"http://es-dev.lonsid.cn:9200\"],\"Index\": \"auth_user_development\"}",
         "ENVIRONMENT": "Development",
-        "ADMIN_PWD": "admin_pwd",
+        "ADMIN_PWD": "admin123",
         "DCC_SECRET": "masastack.com"
       }
     },

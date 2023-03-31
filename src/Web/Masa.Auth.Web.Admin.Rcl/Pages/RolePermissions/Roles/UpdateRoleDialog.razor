@@ -14,7 +14,7 @@
             <AutoHeightContent>
                 <MWindow Value="Tab.ToString()" Class="pb-1">
                     <MWindowItem Value="UpdateRoleTabs.BasicInformation.ToString()">
-                        <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
+                        <DefaultTitle Class="mb-4">@T("BasicInformation")</DefaultTitle>
                         <STextField TValue="string" Value="Role.Name" ValueChanged="NameChanged" Class="mb-6" Label="@T("Name")" />
                         <STextField @bind-Value="Role.Code" Class="mb-6" Label="@T("Code")" />
                         <STextField @bind-Value="Role.Limit" TValue="int" OnChange=LimitChanged Class="mb-6" Label="@T("Limit the number of bindings")" />

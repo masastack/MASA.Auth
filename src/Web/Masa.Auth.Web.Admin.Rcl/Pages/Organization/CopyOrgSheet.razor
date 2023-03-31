@@ -28,7 +28,11 @@
         <MWindowItem Value="2" Class="full-height">
             <MCard Class="mx-auto d-flex flex-column full-height">
                 <MCardText Class="d-flex flex-column full-height">
-                    <SNameTextField @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")"/>
+                    <div class="d-flex mb-12">
+                        <div class="mx-auto">
+                            <SNameTextField @bind-Value="@Dto.Name" HideDetails="@("auto")" style="width:323px;" Placeholder="@T("Enter Name")" />
+                        </div>
+                    </div>
                     <MCascader Items="Departments" Dense Label="@T("Location")"
                                ItemText="u => u.Name" @bind-Value="@Dto.ParentId" Class="mt-6"
                                ItemValue="u => u.Id" HideDetails="@("auto")" ChangeOnSelect

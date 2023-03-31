@@ -23,6 +23,12 @@ public partial class UpdateStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
+    protected override void OnInitialized()
+    {
+        PageName = "StaffBlock";
+        base.OnInitialized();
+    }
+
     private async Task UpdateVisible(bool visible)
     {
         if (VisibleChanged.HasDelegate)

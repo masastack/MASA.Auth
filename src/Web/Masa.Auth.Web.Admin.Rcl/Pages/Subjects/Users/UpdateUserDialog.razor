@@ -12,7 +12,7 @@
                 </div>
             </HeaderContent>
             <AutoHeightContent>
-                <DefaultTitle Class="mb-4">@T("Basic Information")</DefaultTitle>
+                <DefaultTitle Class="mb-4">@T("BasicInformation")</DefaultTitle>
                 <div Class="mb-6">
                     <ButtonGroup @bind-Value="User.Gender" TValue="GenderTypes" />
                 </div>
@@ -40,7 +40,7 @@
                         <SCopyPassword Value="@UserPassword.Password" ValueChanged="ResetUserPasswordAsync" />
                     </MCol>
                 </MRow>
-                <DefaultTitle>@T("Detail Information")</DefaultTitle>
+                <DefaultTitle>@T("DetailInformation")</DefaultTitle>
                 <MRow>
                     <MCol>
                         <STextField @bind-Value="User.IdCard" Label="@T("IdCard")" />
