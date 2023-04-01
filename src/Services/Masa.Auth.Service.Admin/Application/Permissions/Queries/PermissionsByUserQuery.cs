@@ -5,5 +5,11 @@ namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
 public record PermissionsByUserQuery(Guid User, List<Guid>? Teams = null) : Query<List<Guid>>
 {
+    public List<KeyValuePair<Guid, bool>> UserPermissionIds { get; set; } = new();
+
+    public List<Guid> RolePermissionIds { get; set; } = new();
+
+    public List<Guid> TeamPermissionIds { get; set; } = new();
+
     public override List<Guid> Result { get; set; } = new();
 }

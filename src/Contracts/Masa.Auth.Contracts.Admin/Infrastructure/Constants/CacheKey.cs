@@ -5,7 +5,6 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public static class CacheKey
 {
-    const string PERMISSION_CACHE_PRE = "permission:";
     const string ALL_PERMISSION_CACHE_PRE = "all_permissions";
     const string ROLE_CACHE_PRE = "role:";
     const string USER_CACHE_PRE = "user:";
@@ -37,16 +36,6 @@ public static class CacheKey
     const string TEAM_CACHE_PRE = "team:";
     const string STAFF_TEAM_CODE_PRE = "staff_team_code:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
-
-    public static string PermissionPreKey()
-    {
-        return $"{PERMISSION_CACHE_PRE}";
-    }
-
-    public static string PermissionKey(Guid permissionId)
-    {
-        return $"{PERMISSION_CACHE_PRE}{permissionId}";
-    }
 
     public static string AllPermissionKey()
     {
