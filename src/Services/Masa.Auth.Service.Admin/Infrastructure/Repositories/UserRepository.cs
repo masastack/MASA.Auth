@@ -31,7 +31,13 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
 
     public async Task<List<User>> GetAllAsync()
     {
-        return await Context.Set<User>().ToListAsync();
+        return await Context.Set<User>().Where(u => !u.IsDeleted)
+            .Include(u => u.Roles)
+            .ThenInclude(ur => ur.Role)
+            .Include(u => u.Permissions)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .ToListAsync();
     }
 
     public async Task<User> GetByVoucherAsync(string voucher)
