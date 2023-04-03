@@ -8,7 +8,6 @@ public class VerifyMsgCodeCommandValidator : AbstractValidator<VerifyMsgCodeComm
     public VerifyMsgCodeCommandValidator()
     {
         RuleFor(command => command.Model.Code).Required();
-        RuleFor(command => command.Model.PhoneNumber).Required();
         RuleFor(command => command.Model.SendMsgCodeType).Required();
     }
 }
