@@ -953,3 +953,7 @@ input::-webkit-input-placeholder {
 .select-emphasis2--text .m-select__selections {
     color: #323D6F !important;
 }
+
+.m-treeview-node--active .m-treeview-node__toggle {
+    color: white;
+}
