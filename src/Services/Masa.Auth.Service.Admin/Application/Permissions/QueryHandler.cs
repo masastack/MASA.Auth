@@ -534,6 +534,24 @@ public class QueryHandler
                                     .Select(kv => kv.Key))
                                     .ToList();
 
+        //skip the first level menu without submenus
+        Dictionary<Guid, Guid> itemSubMenuIds = new();
+        var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        if (cachePermissions?.Count > 0)
+        {
+            itemSubMenuIds = cachePermissions!.Where(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled)
+                .ToDictionary(p => p.Id, p => p.ParentId);
+        }
+        else
+        {
+            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled))
+                 .ToDictionary(p => p.Id, p => p.ParentId);
+        }
+        permissionIds.RemoveAll(id =>
+        {
+            return !itemSubMenuIds.Any(sub => sub.Value == id);
+        });
+
         List<Guid> relationPermissionIds = new();
         List<Guid> cacheMissIds = new();
 
@@ -559,38 +577,6 @@ public class QueryHandler
         }
 
         query.Result = permissionIds.Union(relationPermissionIds).ToList();
-
-        //async Task FilterEmptyMenus()
-        //{
-        //    permissionIds = new List<Guid>();
-        //    if (cachePermissions != null && cachePermissions.Count > 0)
-        //    {
-        //        var cacheSubMenus = cachePermissions!.Where(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled).ToList();
-        //        foreach (var item in query.Result)
-        //        {
-        //            var itemSubMenuIds = cacheSubMenus.Where(p => p.ParentId == item).Select(e => e.Id).ToList();
-        //            if (itemSubMenuIds.Count > 0 && itemSubMenuIds.Intersect(query.Result).Count() < 1)
-        //            {
-        //                continue;
-        //            }
-        //            permissionIds!.Add(item);
-        //        }
-        //        query.Result = permissionIds!;
-        //        return;
-        //    }
-
-        //    var subMenus = await _permissionRepository.GetListAsync(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled);
-        //    foreach (var item in query.Result)
-        //    {
-        //        var itemSubMenuIds = subMenus.Where(p => p.ParentId == item).Select(e => e.Id).ToList();
-        //        if (itemSubMenuIds.Count > 0 && itemSubMenuIds.Intersect(query.Result).Count() < 1)
-        //        {
-        //            continue;
-        //        }
-        //        permissionIds!.Add(item);
-        //    }
-        //    query.Result = permissionIds!;
-        //}
     }
 
     [EventHandler]
