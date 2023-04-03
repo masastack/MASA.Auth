@@ -548,9 +548,9 @@ public class QueryHandler
                  .ToDictionary(p => p.Id, p => p.ParentId);
         }
         permissionIds.RemoveAll(id =>
-        {
-            return !itemSubMenuIds.Any(sub => sub.Value == id);
-        });
+       {
+           return !itemSubMenuIds.Any(sub => sub.Value == id);
+       });
 
         List<Guid> relationPermissionIds = new();
         List<Guid> cacheMissIds = new();
