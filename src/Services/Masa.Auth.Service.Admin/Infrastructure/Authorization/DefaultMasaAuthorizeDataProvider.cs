@@ -9,7 +9,7 @@ public class DefaultMasaAuthorizeDataProvider : IMasaAuthorizeDataProvider
     readonly IEventBus _eventBus;
 
     public DefaultMasaAuthorizeDataProvider(
-        IUserContext userContext, 
+        IUserContext userContext,
         IEventBus eventBus)
     {
         _userContext = userContext;

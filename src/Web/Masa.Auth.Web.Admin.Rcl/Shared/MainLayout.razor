@@ -3,7 +3,7 @@
 @inject NavigationManager Navigation
 @inject IMasaStackConfig MasaStackConfig
 
-<SLayout AppId="@MasaStackConfig.GetWebId(MasaStackConstant.AUTH)" OnErrorAsync="OnError"
+<SLayout AppId="@MasaStackConfig.GetWebId(MasaStackConstant.AUTH)" OnErrorAsync="OnError" IsShowEnvironmentSwitch="true"
          Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
          MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
     @Body

@@ -115,7 +115,7 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task AddPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
+    public async Task UpsertPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
     {
         var permissionBaseInfo = upsertPermissionCommand.PermissionDetail;
 

@@ -80,7 +80,6 @@ public class UserDomainEventHandler
     [EventHandler(1)]
     public async Task GetPermissions(QueryUserPermissionDomainEvent userEvent)
     {
-        //todo query from cache
         var user = await GetUserAsync(userEvent.UserId);
         if (user.Account == "admin")
         {

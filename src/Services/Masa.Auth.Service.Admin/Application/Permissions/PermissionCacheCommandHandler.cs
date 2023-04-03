@@ -15,10 +15,10 @@ public class PermissionCacheCommandHandler
     }
 
     [EventHandler(99)]
-    public async Task AddPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
+    public async Task UpsertPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
     {
         var cachePermission = upsertPermissionCommand.PermissionDetail.Adapt<CachePermission>();
-        await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(upsertPermissionCommand.PermissionDetail.Id), cachePermission);
+        await _multilevelCacheClient.SetAsync(upsertPermissionCommand.PermissionDetail.Id.ToString(), cachePermission);
 
         var allPermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (allPermissions == null)
@@ -32,7 +32,7 @@ public class PermissionCacheCommandHandler
     [EventHandler(99)]
     public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
-        await _multilevelCacheClient.RemoveAsync<CachePermission>(CacheKey.PermissionKey(removePermissionCommand.PermissionId));
+        await _multilevelCacheClient.RemoveAsync<CachePermission>(removePermissionCommand.PermissionId.ToString());
 
         var allPermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (allPermissions == null)
@@ -50,7 +50,7 @@ public class PermissionCacheCommandHandler
         foreach (var permission in seedPermissionsCommand.Permissions)
         {
             var cachePermission = permission.Adapt<CachePermission>();
-            await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(permission.Id), cachePermission);
+            await _multilevelCacheClient.SetAsync(permission.Id.ToString(), cachePermission);
             allPermissions.Add(cachePermission);
         }
         await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
@@ -64,7 +64,7 @@ public class PermissionCacheCommandHandler
         foreach (var permission in permissions)
         {
             var cachePermission = permission.Adapt<CachePermission>();
-            await _multilevelCacheClient.SetAsync(CacheKey.PermissionKey(permission.Id), cachePermission);
+            await _multilevelCacheClient.SetAsync(permission.Id.ToString(), cachePermission);
             allPermissions.Add(cachePermission);
         }
         await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
