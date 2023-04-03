@@ -3,7 +3,7 @@
 <div class="d-flex" >
     <MHover @bind-Value="Expand">
         <div @attributes="context.Attrs" class="d-flex ma-auto">
-            @if (context.Hover is false)
+            @if (!context.Hover && !Expand)
             {
                 <UploadAvatar Value="@ExternalThirdPartyIdps.FirstOrDefault(item => item.Name == Value)?.Icon" Class="mx-2 hover-pointer" Size="80" />
             }
