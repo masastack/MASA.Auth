@@ -5,8 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Subjects;
 
 public partial class ExternalThirdPartySelect
 {
-    bool _expand;
-
     [Parameter]
     public string Class { get; set; } = "";
 
@@ -25,14 +23,7 @@ public partial class ExternalThirdPartySelect
 
     public List<ThirdPartyIdpModel[]> Chunks { get; set; } = new();
 
-    public bool Expand
-    {
-        get => _expand || WaitUpload;
-        set 
-        {
-            _expand = value;
-        }
-    }
+    public bool Expand { get; set; }
 
     public bool WaitUpload { get; set; }
 
