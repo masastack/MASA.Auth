@@ -26,7 +26,7 @@ public abstract class AdminCompontentBase : ComponentBase
     public JsInitVariables JsInitVariables { get; set; } = default!;
 
     [CascadingParameter(Name = "Culture")]
-    private string Culture { get; set; } = null!;
+    protected string Culture { get; set; } = null!;
 
     [Inject]
     public I18n I18n { get; set; } = default!;

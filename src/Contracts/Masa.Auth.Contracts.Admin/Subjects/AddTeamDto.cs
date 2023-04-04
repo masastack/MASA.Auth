@@ -5,6 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class AddTeamDto
 {
+    public Guid Id { get; set; }
+
     public string Name { get; set; } = string.Empty;
 
     public AvatarValueDto Avatar { get; set; } = new();

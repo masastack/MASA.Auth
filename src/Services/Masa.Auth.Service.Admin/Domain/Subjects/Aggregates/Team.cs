@@ -43,6 +43,11 @@ public class Team : FullAggregateRoot<Guid, Guid>
     {
     }
 
+    public void SetId(Guid id)
+    {
+        Id = id;
+    }
+
     public void UpdateBasicInfo(string name, string description, TeamTypes teamType, AvatarValue avatar)
     {
         Name = name;

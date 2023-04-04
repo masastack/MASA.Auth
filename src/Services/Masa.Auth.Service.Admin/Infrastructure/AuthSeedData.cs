@@ -20,7 +20,7 @@ public class AuthSeedData
         role.SetParent(rolePermission.Id);
         permission.SetParent(rolePermission.Id);
 
-        var sso = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "SSO", "sso", "", "mdi-login-variant", 5, PermissionTypes.Menu);
+        var sso = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "SSO", "sso", "", "mdi-card-account-details-outline", 5, PermissionTypes.Menu);
         var userClaim = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "UserClaim", "userClaim", "sso/userClaim", "", 1, PermissionTypes.Menu);
         var identityResource = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "IdentityResource", "IdentityResource", "sso/identityResource", "", 2, PermissionTypes.Menu);
         var apiScope = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "ApiScope", "ApiScope", "sso/apiScope", "", 3, PermissionTypes.Menu);
@@ -39,11 +39,11 @@ public class AuthSeedData
         teadAddElement.SetParent(team.Id);
 
         var authMenus = new List<Permission>() {
-            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"User","user","User","mdi-account-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"User","user","User","mdi-account-circle",1,PermissionTypes.Menu),
             rolePermission,role,permission,team,teadAddElement,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
-            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-home-floor-3",6,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH, masaStackConfig.GetServerId(MasaStackConstant.AUTH), "TeamAdd", "api.team.create", "", "", 1, PermissionTypes.Api)
@@ -161,6 +161,7 @@ public class AuthSeedData
         {
             var addTeamCommand = new AddTeamCommand(new AddTeamDto
             {
+                Id = masaStackConfig.GetDefaultTeamId(),
                 Type = TeamTypes.Ordinary,
                 Name = MasaStackConsts.MASA_STACK_TEAM,
                 Avatar = new AvatarValueDto
@@ -169,7 +170,7 @@ public class AuthSeedData
                 }
             });
             await eventBus.PublishAsync(addTeamCommand);
-            teamId = addTeamCommand.Result;
+            teamId = masaStackConfig.GetDefaultTeamId();
         }
 
         if (!context.Set<User>().Any(u => u.Account == "admin"))
