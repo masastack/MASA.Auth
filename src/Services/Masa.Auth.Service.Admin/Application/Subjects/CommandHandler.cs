@@ -26,6 +26,7 @@ public class CommandHandler
     readonly IMasaStackConfig _masaStackConfig;
     readonly IHttpContextAccessor _httpContextAccessor;
     readonly IMasaConfiguration _masaConfiguration;
+    readonly IUnitOfWork _unitOfWork;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -48,7 +49,8 @@ public class CommandHandler
         Sms sms,
         IMasaStackConfig masaStackConfig,
         IHttpContextAccessor httpContextAccessor,
-        IMasaConfiguration masaConfiguration)
+        IMasaConfiguration masaConfiguration,
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -71,6 +73,7 @@ public class CommandHandler
         _masaStackConfig = masaStackConfig;
         _httpContextAccessor = httpContextAccessor;
         _masaConfiguration = masaConfiguration;
+        _unitOfWork = unitOfWork;
     }
 
     #region User
@@ -207,6 +210,7 @@ public class CommandHandler
         user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]
@@ -390,6 +394,8 @@ public class CommandHandler
                                     .ToListAsync();
         user.RemoveRoles(roleIds);
         await _userRepository.UpdateAsync(user);
+
+        await _eventBus.PublishAsync(new UpsertUserCacheCommand(user.Id));
     }
 
     [EventHandler(1)]
@@ -402,7 +408,10 @@ public class CommandHandler
 
         user.Disabled();
         await _userRepository.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         command.Result = true;
+
+        await _eventBus.PublishAsync(new UpsertUserCacheCommand(user.Id));
     }
 
     [EventHandler(1)]
@@ -723,6 +732,7 @@ public class CommandHandler
         {
             command.Result = await AddStaffAsync(staffDto);
         }
+        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]

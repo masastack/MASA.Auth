@@ -49,6 +49,12 @@ public class UserCacheCommandHandler
     }
 
     [EventHandler(99)]
+    public async Task UpsertUserCacheAsync(UpsertUserCacheCommand addUserCacheCommand)
+    {
+        await SetUserCacheAsync(addUserCacheCommand.Id);
+    }
+
+    [EventHandler(99)]
     public async Task AddUserAsync(AddUserCommand addUserCommand)
     {
         await SetUserCacheAsync(addUserCommand.Result.Id);
@@ -127,5 +133,17 @@ public class UserCacheCommandHandler
         await _multilevelCacheClient.SetAsync(
             CacheKey.UserSystemDataKey(userSystemData.UserId, userSystemData.SystemId),
             userSystemData.Data);
+    }
+
+    [EventHandler(99)]
+    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand  command)
+    {
+        await SetUserCacheAsync(command.User.Id);
+    }
+
+    [EventHandler(99)]
+    public async Task UpsertUserAsync(UpsertUserCommand command)
+    {
+        await SetUserCacheAsync(command.User.Id);
     }
 }
