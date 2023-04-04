@@ -64,7 +64,7 @@ public class PermissionCacheCommandHandler
     [EventHandler]
     public async Task SyncPermissionsRedisAsync(SyncPermissionRedisCommand command)
     {
-        var permissions = await _permissionRepository.GetListAsync();
+        var permissions = await _permissionRepository.GetAllAsync();
         var allPermissions = new List<CachePermission>();
         foreach (var permission in permissions)
         {

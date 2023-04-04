@@ -14,6 +14,15 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         return Context.Set<Permission>().Where(d => !d.IsDeleted).Any(predicate);
     }
 
+    public async Task<List<Permission>> GetAllAsync()
+    {
+        return await Context.Set<Permission>().Where(u => !u.IsDeleted)
+            .Include(p => p.ChildPermissionRelations)
+            .Include(p => p.ParentPermissionRelations)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<Permission> GetByIdAsync(Guid id)
     {
         return await Context.Set<Permission>()
