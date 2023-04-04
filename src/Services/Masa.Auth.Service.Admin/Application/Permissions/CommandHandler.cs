@@ -156,6 +156,7 @@ public class CommandHandler
         permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
         await _unitOfWork.SaveChangesAsync();
+        upsertPermissionCommand.PermissionDetail.Id = permission.Id;
     }
 
     [EventHandler(1)]
