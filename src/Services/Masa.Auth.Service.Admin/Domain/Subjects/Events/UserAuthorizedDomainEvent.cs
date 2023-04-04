@@ -8,6 +8,4 @@ public record UserAuthorizedDomainEvent(string AppId, string Code, Guid UserId) 
     public bool Authorized { get; set; }
 
     public Guid PermissionId { get; set; }
-
-    public List<Guid> Roles { get; set; } = new();
 }

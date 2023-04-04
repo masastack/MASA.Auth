@@ -8,38 +8,38 @@ public class UserAuthorizedDomainEventHandler
     readonly IPermissionRepository _permissionRepository;
     readonly IEventBus _eventBus;
     readonly AuthDbContext _authDbContext;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
 
     public UserAuthorizedDomainEventHandler(
         IPermissionRepository permissionRepository,
         IEventBus eventBus,
-        AuthDbContext authDbContext)
+        AuthDbContext authDbContext,
+        IMultilevelCacheClient multilevelCacheClient)
     {
         _permissionRepository = permissionRepository;
         _eventBus = eventBus;
         _authDbContext = authDbContext;
+        _multilevelCacheClient = multilevelCacheClient;
     }
 
     [EventHandler(1)]
     public async Task GetAuthorizedPermissionAsync(UserAuthorizedDomainEvent userAuthorizedDomainEvent)
     {
-        var permission = await _permissionRepository.FindAsync(p => p.AppId == userAuthorizedDomainEvent.AppId
-                            && p.Code == userAuthorizedDomainEvent.Code);
+        var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        var permission = cachePermissions?.FirstOrDefault(p => p.AppId == userAuthorizedDomainEvent.AppId && p.Code == userAuthorizedDomainEvent.Code);
         if (permission is null)
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_APP_ID_CODE_NOT_FOUND);
         }
         userAuthorizedDomainEvent.PermissionId = permission.Id;
-        userAuthorizedDomainEvent.Roles = _authDbContext.Set<UserRole>()
-                .Where(ur => ur.UserId == userAuthorizedDomainEvent.UserId && !ur.IsDeleted)
-                .Select(ur => ur.RoleId).Distinct().ToList();
     }
 
-    [EventHandler(4)]
-    public async Task AuthorizedRolePermissionAsync(UserAuthorizedDomainEvent userAuthorizedDomainEvent)
+    [EventHandler(2)]
+    public async Task AuthorizedPermissionsAsync(UserAuthorizedDomainEvent userAuthorizedDomainEvent)
     {
-        var query = new PermissionsByRoleQuery(userAuthorizedDomainEvent.Roles);
+        var query = new PermissionsByUserQuery(userAuthorizedDomainEvent.UserId);
         await _eventBus.PublishAsync(query);
-        userAuthorizedDomainEvent.Authorized = query.Result.Contains(userAuthorizedDomainEvent.PermissionId)
-                                                || userAuthorizedDomainEvent.Authorized;
+
+        userAuthorizedDomainEvent.Authorized = query.Result.Contains(userAuthorizedDomainEvent.PermissionId);
     }
 }

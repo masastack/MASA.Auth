@@ -102,38 +102,6 @@ public class UserDomainEventHandler
         }
     }
 
-    [EventHandler(2)]
-    public void AuthorizedUserPermission(UserAuthorizedDomainEvent userAuthorizedDomainEvent)
-    {
-        var userPermissions = _authDbContext.Set<UserPermission>()
-            .Where(up => up.UserId == userAuthorizedDomainEvent.UserId
-            && up.PermissionId == userAuthorizedDomainEvent.PermissionId && up.Effect && !up.IsDeleted)
-            .Select(up => up.PermissionId).ToList();
-        //permission addition
-        userAuthorizedDomainEvent.Authorized = userPermissions.Contains(userAuthorizedDomainEvent.PermissionId)
-                                                || userAuthorizedDomainEvent.Authorized;
-    }
-
-    [EventHandler(3)]
-    public void AuthorizedUserTeamPermission(UserAuthorizedDomainEvent userAuthorizedDomainEvent)
-    {
-        var teamIdAndTypes = _authDbContext.Set<TeamStaff>()
-            .Where(t => t.StaffId == userAuthorizedDomainEvent.UserId && !t.IsDeleted)
-            .Select(t => new { t.TeamId, t.TeamMemberType });
-        var teamPermissions = _authDbContext.Set<TeamPermission>()
-            .Where(t => teamIdAndTypes.Any(a => a.TeamId == t.Team.Id
-            && a.TeamMemberType == t.TeamMemberType) && t.Effect && !t.IsDeleted)
-            .Select(t => t.PermissionId).ToList();
-
-        var teamRoles = _authDbContext.Set<TeamRole>().Where(tr => teamIdAndTypes.Any(a => a.TeamId == tr.TeamId
-            && a.TeamMemberType == tr.TeamMemberType) && !tr.IsDeleted).Select(tr => tr.RoleId).ToList();
-
-        userAuthorizedDomainEvent.Roles = userAuthorizedDomainEvent.Roles.Union(teamRoles).ToList();
-
-        userAuthorizedDomainEvent.Authorized = teamPermissions.Contains(userAuthorizedDomainEvent.PermissionId)
-                                                || userAuthorizedDomainEvent.Authorized;
-    }
-
     private async Task<UserModel> GetUserAsync(Guid userId)
     {
         var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(userId));

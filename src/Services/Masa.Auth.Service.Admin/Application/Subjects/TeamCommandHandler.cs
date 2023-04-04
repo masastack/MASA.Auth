@@ -65,6 +65,11 @@ public class TeamCommandHandler
             team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
         }
 
+        if (dto.Id != Guid.Empty)
+        {
+            team.SetId(dto.Id);
+        }
+
         await _teamRepository.AddAsync(team);
         await _unitOfWork.SaveChangesAsync();
 
@@ -72,7 +77,6 @@ public class TeamCommandHandler
         await _teamDomainService.SetTeamMemberAsync(team, dto.MemberStaffs, dto.MemberRoles, dto.MemberPermissions);
         await _roleDomainService.UpdateRoleLimitAsync(dto.AdminRoles.Union(dto.MemberRoles));
         await _unitOfWork.SaveChangesAsync();
-
         addTeamCommand.Result = team!.Id;
     }
 

@@ -14,4 +14,6 @@ public interface IPermissionRepository : IRepository<Permission, Guid>
     bool Any(Expression<Func<Permission, bool>> predicate);
 
     List<string> GetPermissionCodes(Expression<Func<Permission, bool>> predicate);
+
+    Task<List<Permission>> GetAllAsync();
 }

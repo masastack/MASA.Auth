@@ -24,13 +24,13 @@ public partial class AddClientDialog
         base.OnInitialized();
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    public override Task SetParametersAsync(ParameterView parameters)
     {
-        if (firstRender)
+        if (parameters.TryGetValue(nameof(Culture), out string? culture) && culture?.Equals(Culture) == false)
         {
             _tabs = new List<string> { T("BasicInformation"), T("Resource Information") };
         }
-        base.OnAfterRender(firstRender);
+        return base.SetParametersAsync(parameters);
     }
 
     public void Show()

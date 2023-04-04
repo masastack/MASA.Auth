@@ -559,7 +559,7 @@ public class QueryHandler
 
         foreach (var permissionId in permissionIds)
         {
-            var cachePermission = await _multilevelCacheClient.GetAsync<CachePermission>(permissionId.ToString());
+            var cachePermission = cachePermissions?.FirstOrDefault(ap => ap.Id == permissionId);
             if (cachePermission == null)
             {
                 _logger.LogDebug("Permission Cache Miss:{0}", permissionId);
