@@ -84,7 +84,6 @@ public class UserDomainEventHandler
         if (user.Account == "admin")
         {
             var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
-            await Console.Out.WriteLineAsync($"cachePermissions:{JsonSerializer.Serialize(cachePermissions)}");
             if (cachePermissions == null || cachePermissions.Count() < 1)
             {
                 userEvent.Permissions = await _authDbContext.Set<Permission>()
