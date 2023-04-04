@@ -25,14 +25,14 @@
     border-radius: 10px !important;
 }
 
-.rounded-4 {
-    border-radius: 20px !important;
-}
+/* .rounded-4 { */
+/*     border-radius: 20px !important; */
+/* } */
 
-.rounded-b-4 {
-    border-bottom-left-radius: 20px !important;
-    border-bottom-right-radius: 20px !important;
-}
+/* .rounded-b-4 { */
+/*     border-bottom-left-radius: 20px !important; */
+/*     border-bottom-right-radius: 20px !important; */
+/* } */
 
 .rounded-r-1 {
     border-top-right-radius: 5px !important;
@@ -129,16 +129,6 @@
 .m-radio .mdi-radiobox-blank {
     color: #A3AED0 !important;
     caret-color: #A3AED0 !important;
-}
-
-
-.table-header-fill .m-data-table-header tr {
-    background: #F6F8FD;
-}
-
-.table-border-solid td, th {
-    border-bottom: 0 !important;
-    box-shadow: none;
 }
 
 .masa-stack-components .combox:hover {
@@ -840,14 +830,6 @@ input::-webkit-input-placeholder {
     animation-duration: 0.8s;
 }
 
-.masa-stack-components .table-border-none tr td:not(:last-child) > *:not(.description) {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 300px;
-}
-
 /*
     urlTextField
 */
@@ -934,11 +916,6 @@ input::-webkit-input-placeholder {
 
 .theme--light.m-stepper .m-stepper__step--complete .m-stepper__label {
     color: rgba(0,0,0,.87) !important;
-}
-
-.d-flex .m-window-item .m-sheet .m-data-table-header th {
-    height: 56px !important;
-    border-bottom: 0.5px solid #E4E8F3 !important;
 }
 
 .selevationtab .m-btn {
