@@ -448,8 +448,18 @@ public class QueryHandler
     {
         var tpUser = await _authDbContext.Set<ThirdPartyUser>()
                                          .Include(tpu => tpu.User)
+                                         .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
-        query.Result = tpUser?.User?.Adapt<UserModel>();
+        var userModel = tpUser?.User?.Adapt<UserModel>();
+
+        if(tpUser != null && tpUser.User != null && userModel != null)
+        {
+            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(tpUser.User.Id));
+            userModel.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
+            userModel.CurrentTeamId = staff?.CurrentTeamId;
+        }
+
+        query.Result = userModel;
     }
 
     #endregion
