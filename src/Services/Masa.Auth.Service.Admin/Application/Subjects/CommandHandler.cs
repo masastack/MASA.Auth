@@ -711,7 +711,7 @@ public class CommandHandler
         if (staff is null)
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
 
-        staff.UpdateBasicInfo(staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
+        staff.UpdateBasicInfo(staffModel.Name, staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
         await _staffRepository.UpdateAsync(staff);
         command.Result = staff;
     }
