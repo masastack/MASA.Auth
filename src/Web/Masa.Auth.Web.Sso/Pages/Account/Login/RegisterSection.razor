@@ -10,7 +10,8 @@
     @*https://github.com/BlazorComponent/MASA.Blazor/issues/811*@
     <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
         <LabelContent>
-            @T("RegistrationAgreementStatement") <a href="/protocol" target="_blank" @onclick:stopPropagation="true">《@T("RegistrationAgreement")》</a>
+            @T("RegistrationAgreementStatement")
+            <MButton Plain OnClick="()=> _protocolModalVisible = true" StopPropagation="true" Style="color:rgb(0,0,238);padding: 0;">《@T("RegistrationAgreement")》</MButton>
         </LabelContent>
     </MCheckbox>
 </MForm>
@@ -20,3 +21,4 @@
         @T("Register")
     </MButton>
 </div>
+<ProtocolModal @bind-Visible="_protocolModalVisible" OnSuccess="()=> _inputModel.Agreement = true" />
