@@ -36,6 +36,7 @@ public static class CacheKey
     const string TEAM_CACHE_PRE = "team:";
     const string STAFF_TEAM_CODE_PRE = "staff_team_code:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
+    const string MSG_VERIFIY_CODE_SEND_EXPIRED = "msg_verifiy_code_send_expired:";
 
     public static string AllPermissionKey()
     {
@@ -185,5 +186,10 @@ public static class CacheKey
     public static string StaffTeamKey(Guid userId)
     {
         return $"{STAFF_TEAM_CODE_PRE}{userId}";
+    }
+
+    public static string MsgVerifiyCodeSendExpired(string key)
+    {
+        return $"{MSG_VERIFIY_CODE_SEND_EXPIRED}{key}";
     }
 }
