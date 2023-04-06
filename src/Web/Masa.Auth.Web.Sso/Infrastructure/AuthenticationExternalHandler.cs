@@ -35,9 +35,13 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         if (userModel is not null)
         {
             ProcessLoginCallback(result, out var additionalLocalClaims, out var localSignInProps);
-            additionalLocalClaims.Add(new Claim("environment", environment));
-            additionalLocalClaims.Add(new Claim("userName", userModel.Account));
-            additionalLocalClaims.Add(new Claim("role", JsonSerializer.Serialize(userModel.Roles.Select(role => role.Code))));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.ENVIRONMENT, environment));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.ACCOUNT, userModel.Account));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(userModel.Roles.Select(role => role.Code))));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.CURRENT_TEAM, (userModel.CurrentTeamId ?? Guid.Empty).ToString()));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.STAFF, (userModel.StaffId ?? Guid.Empty).ToString()));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.PHONE_NUMBER, userModel.PhoneNumber ?? ""));
+            additionalLocalClaims.Add(new Claim(IdentityClaimConsts.EMAIL, userModel.Email ?? ""));
             var isuser = new IdentityServerUser(userModel.Id.ToString())
             {
                 DisplayName = userModel.DisplayName,
