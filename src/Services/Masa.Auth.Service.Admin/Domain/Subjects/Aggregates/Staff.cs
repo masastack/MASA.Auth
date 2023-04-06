@@ -244,8 +244,9 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Gender = gender;
     }
 
-    public void UpdateBasicInfo(string displayName, GenderTypes gender, string? phoneNumber, string? email)
+    public void UpdateBasicInfo(string? name, string displayName, GenderTypes gender, string? phoneNumber, string? email)
     {
+        Name = name;
         DisplayName = displayName;
         Gender = gender;
         VerifyPhonNumberEmail(phoneNumber, email);
