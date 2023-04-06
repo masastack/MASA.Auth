@@ -21,6 +21,8 @@ public partial class RegisterSection
 
     public bool CanRegister => _inputModel.Agreement && ValidateRegisterFields();
 
+    private bool _protocolModalVisible { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
