@@ -51,7 +51,8 @@
   "RegistrationAgreement": "User Agreement",
   "RegistrationAgreementStatement": "Agree to MASA product agreement",
   "RegisterError": "Register error,please contact administrator",
-  "NickNamePlaceHolder": "Nick Name",
+  "NickName": "Nick Name",
+  "NickNamePlaceHolder": "Place Enter Nick Name",
   "LoginValidateError": "account or password error",
   "PhoneRequired": "PhoneNumber cannot be empty",
   "SmsRequired": "SMS verification code cannot be empty",
@@ -60,6 +61,9 @@
   "UnknownException": "Unknown exception,Please contact the administrator",
   "SmsSendTime": "Replays in {0} seconds",
   "IdCard": "IdCard",
-  "IdCardPlaceHolder": "Place Enter IdCard"
+  "IdCardPlaceHolder": "Place Enter IdCard",
+  "DisplayName": "Nick Name",
+  "DisplayNamePlaceholder": "Place Enter Nick Name",
+  "Name": "Name",
+  "NamePlaceholder": "Place Enter Name"
 }
- 

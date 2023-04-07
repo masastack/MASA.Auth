@@ -21,22 +21,27 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.HasMany(p => p.UserPermissions).WithOne(up => up.Permission).HasForeignKey(up => up.PermissionId);
         builder.HasMany(p => p.RolePermissions).WithOne(rp => rp.Permission).HasForeignKey(rp => rp.PermissionId);
         builder.HasMany(p => p.TeamPermissions).WithOne(tp => tp.Permission).HasForeignKey(tp => tp.PermissionId);
-        builder.HasMany(p => p.ParentPermissions).WithMany(pi => pi.ChildPermissions)
+        builder.HasMany(p => p.LeadingPermissions).WithMany(pi => pi.AffiliationPermissions)
             .UsingEntity<PermissionRelation>(
                     configureRight => configureRight
-                    .HasOne(pr => pr.ParentPermission)
-                    .WithMany(p => p.ChildPermissionRelations)
-                    .HasForeignKey(pr => pr.ParentPermissionId),
+                    .HasOne(pr => pr.LeadingPermission)
+                    .WithMany(p => p.AffiliationPermissionRelations)
+                    .HasForeignKey(pr => pr.LeadingPermissionId),
                     configureLeft => configureLeft
-                    .HasOne(pr => pr.ChildPermission)
-                    .WithMany(p => p.ParentPermissionRelations)
-                    .HasForeignKey(pr => pr.ChildPermissionId),
+                    .HasOne(pr => pr.AffiliationPermission)
+                    .WithMany(p => p.LeadingPermissionRelations)
+                    .HasForeignKey(pr => pr.AffiliationPermissionId),
                     configureJoinEntityType =>
                     {
                         configureJoinEntityType.HasKey(pr => pr.Id);
-                        configureJoinEntityType.HasIndex(pr => new { pr.ParentPermissionId, pr.ChildPermissionId })
+                        configureJoinEntityType.HasIndex(pr => new { pr.LeadingPermissionId, pr.AffiliationPermissionId })
                             .IsUnique().HasFilter("[IsDeleted] = 0");
                     });
+        builder.HasOne(x => x.Parent)
+            .WithMany(x => x.Children)
+            .HasForeignKey(x => x.ParentId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Ignore(p => p.ReplenishCode);
     }

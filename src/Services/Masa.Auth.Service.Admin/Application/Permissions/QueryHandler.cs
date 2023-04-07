@@ -182,7 +182,7 @@ public class QueryHandler
 
     private List<AppPermissionDto> GetChildrenPermissions(Guid parentId, IEnumerable<Permission> all)
     {
-        return all.Where(p => p.ParentId == parentId)
+        return all.Where(p => p.ParentId == parentId || (parentId == Guid.Empty ? !p.ParentId.HasValue : false))
             .OrderBy(p => p.Order)
             .Select(p => new AppPermissionDto
             {
@@ -228,10 +228,10 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
-            ParentId = permission.ParentId,
+            ParentId = permission.ParentId ?? Guid.Empty,
             AppId = permission.AppId,
             Order = permission.Order,
-            ApiPermissions = permission.ChildPermissionRelations.Select(pr => pr.ChildPermissionId).ToList(),
+            ApiPermissions = permission.AffiliationPermissionRelations.Select(pr => pr.AffiliationPermissionId).ToList(),
             Roles = permission.RolePermissions.Where(rp => rp.Effect).Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Code, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
             Teams = permission.TeamPermissions.Where(rp => rp.Effect).DistinctBy(e => e.TeamId).Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),
             Users = permission.UserPermissions.Where(rp => rp.Effect).Select(up => new UserSelectDto
@@ -544,8 +544,8 @@ public class QueryHandler
         }
         else
         {
-            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled))
-                 .ToDictionary(p => p.Id, p => p.ParentId);
+            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => p.ParentId.HasValue ? query.Result.Contains(p.ParentId.Value) : false && p.Type == PermissionTypes.Menu && p.Enabled))
+                 .ToDictionary(p => p.Id, p => p.ParentId ?? Guid.Empty);
         }
         permissionIds.RemoveAll(id =>
         {
@@ -574,8 +574,8 @@ public class QueryHandler
         if (cacheMissIds.Any())
         {
             relationPermissionIds.AddRange(_authDbContext.Set<PermissionRelation>().AsNoTracking()
-                .Where(pr => cacheMissIds.Contains(pr.ParentPermissionId))
-                .Select(pr => pr.ChildPermissionId).ToList());
+                .Where(pr => cacheMissIds.Contains(pr.LeadingPermissionId))
+                .Select(pr => pr.AffiliationPermissionId).ToList());
         }
 
         query.Result = permissionIds.Union(relationPermissionIds).ToList();

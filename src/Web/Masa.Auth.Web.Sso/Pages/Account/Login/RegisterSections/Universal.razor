@@ -1,5 +1,71 @@
-﻿<h3>UnSupported</h3>
+﻿@using Masa.Auth.Web.Sso.Infrastructure.Attributes;
+@using System.Reflection;
+@inherits SsoSectionComponentBase
+
+<MTextField Label="@_label" Value="@_value" TValue="string" ValueChanged="ValueChangeHandler" Placeholder="@_placeholder"
+            Outlined Rules="_displayNameRules">
+</MTextField>
 
 @code {
 
+    [Parameter]
+    public RegisterInputModel Value { get; set; } = new();
+
+    [Parameter]
+    public string Property { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<RegisterInputModel> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; }
+
+    private IList<Func<string, StringBoolean>> _displayNameRules => new List<Func<string, StringBoolean>>();
+    string _label = "", _placeholder = "", _value = "";
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<bool>(nameof(Required), out var required) && required)
+        {
+            _displayNameRules.Add(value => !string.IsNullOrEmpty(value) ? true : "Required.");
+        }
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var propertyInfo = GetProperty();
+            if (propertyInfo!=null)
+            {
+                var labelAttribute = Attribute.GetCustomAttribute(propertyInfo, typeof(LabelAttribute)) as LabelAttribute;
+                var placeholderAttribute = Attribute.GetCustomAttribute(propertyInfo, typeof(PlaceholderAttribute)) as PlaceholderAttribute;
+                if (labelAttribute!=null)
+                {
+                    _label = T(labelAttribute.Key);
+                }
+                if (placeholderAttribute!=null) 
+                {
+                    _placeholder = T(placeholderAttribute.Key);
+                }
+            }
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    void ValueChangeHandler(string value)
+    {
+        var propertyInfo = GetProperty();
+        if (propertyInfo==null)
+        {
+            throw new UserFriendlyException("Invalid Property Parameter");
+        }
+        propertyInfo.SetValue(Value,value);
+    }
+
+    PropertyInfo? GetProperty()
+    {
+        return Value.GetType().GetProperties().FirstOrDefault(p => p.Name == Property);
+    }
 }

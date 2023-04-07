@@ -41,6 +41,6 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<AuthenticationDefaults, ThirdPartyIdpModel>.ForType()
             .Map(item => item.Name, item => item.Scheme);
 
-        TypeAdapterConfig<Permission, CachePermission>.NewConfig().Map(cache => cache.ApiPermissions, permission => permission.ChildPermissionRelations.Select(p => p.ChildPermissionId));
+        TypeAdapterConfig<Permission, CachePermission>.NewConfig().Map(cache => cache.ApiPermissions, permission => permission.AffiliationPermissionRelations.Select(p => p.AffiliationPermissionId));
     }
 }

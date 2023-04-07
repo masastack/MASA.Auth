@@ -3,7 +3,7 @@
   "$Text": "中文简体",
   "Cancel": "取消",
   "Account": "账号",
-  "AccountPlaceHolder": "请输入账号/手机号",
+  "AccountPlaceholder": "请输入账号/手机号",
   "PhoneNumber": "手机号",
   "PhoneNumberPlaceHolder": "请输入手机号",
   "SMSCode": "短信验证码",
@@ -52,7 +52,8 @@
   "RegistrationAgreement": "用户协议",
   "RegistrationAgreementStatement": "同意注册MASA系列产品协议",
   "RegisterError": "注册失败，请联系管理员",
-  "NickNamePlaceHolder": "昵称",
+  "NickName": "昵称",
+  "NickNamePlaceHolder": "请输入昵称",
   "or login with": "其他方式登录",
   "Register success": "注册成功",
   "LoginValidateError": "账号或密码错误",
@@ -71,5 +72,9 @@
   "Bind success": "绑定用户成功",
   "Password not equal ConfirmPassword": "两次输入密码不相同",
   "The verification code is sent successfully": "发送验证码成功",
-  "Bind": "绑定"
+  "Bind": "绑定",
+  "DisplayName": "昵称",
+  "DisplayNamePlaceholder": "请输入昵称",
+  "Name": "名称",
+  "NamePlaceholder": "请输入名称"
 }

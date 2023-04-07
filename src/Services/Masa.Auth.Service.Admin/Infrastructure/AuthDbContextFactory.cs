@@ -10,7 +10,6 @@ public class AuthDbContextFactory : IDesignTimeDbContextFactory<AuthDbContext>
         var optionsBuilder = new MasaDbContextOptionsBuilder<AuthDbContext>();
         var configurationBuilder = new ConfigurationBuilder();
         var configuration = configurationBuilder
-            .AddJsonFile("appsettings.json")
             .AddJsonFile("appsettings.Development.json")
             .Build();
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
