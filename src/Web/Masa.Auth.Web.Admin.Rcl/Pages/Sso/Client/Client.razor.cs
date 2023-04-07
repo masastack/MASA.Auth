@@ -60,12 +60,9 @@ public partial class Client
         await LoadData();
     }
 
-    private async Task SearchKeyHandler(KeyboardEventArgs eventArgs)
+    private async Task SearchKeyHandler()
     {
-        if (eventArgs.Key == Keyboards.Enter)
-        {
-            _clientPaginationDto.Page = 1;
-            await LoadData();
-        }
+        _clientPaginationDto.Page = 1;
+        await LoadData();
     }
 }

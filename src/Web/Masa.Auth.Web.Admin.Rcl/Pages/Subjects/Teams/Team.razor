@@ -8,7 +8,7 @@
     <MCol Md="12" Class="d-flex justify-space-between  align-center">
         <div class="h6 regular-secondary--text">@T("Team")</div>
         <div Class="d-flex justify-end">
-            <OutlinedSearchTextField Class="mr-6" @bind-Value="_search" BackgroundColor="white" OnKeyDown="SearchKeyDown" PrependInnerIcon="@IconConstants.Search" />
+            <SSearch @bind-Value="_search" BackgroundColor="#fff" Class="mr-6" OnEnter="SearchKeyDown" />
             <PermissionView Code="@ElementPermissionCodes.TeamAdd">
                 <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
@@ -19,7 +19,7 @@
     </MCol>
 </MRow>
 <MRow Style="overflow:auto;max-height: calc(100vh - 170px);">
-    @if (_teams.Any())
+    @if (!_showEmptyPlaceholder)
     { 
         foreach (var team in _teams)
         {

@@ -9,7 +9,7 @@
     <AutoHeight>
         <HeaderContent>
             <div class="d-flex mb-6">
-                <SearchTextField @bind-Value="Search" />
+                <SSearch @bind-Value="Search" Style="max-width: 340px;" />
                 <MSpacer />
                 <SButton Small Class="ml-6" OnClick="() => OpenAddApiResourceDialog()" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
