@@ -49,6 +49,11 @@ public class Sms : IScopedDependency
             .GetValue<int>("AppSettings:SmsCaptchaExpired", 300);
         await _distributedCacheClient.SetAsync(key, code, expiration ?? TimeSpan.FromSeconds(smsCaptchaExpired));
 
+        var smsCaptchaSendExpired = _masaConfiguration.ConfigurationApi.GetDefault()
+            .GetValue<int>("AppSettings:SmsCaptchaSendExpired", 60);
+        var smsSendExpiredKey = CacheKey.MsgVerifiyCodeSendExpired(key);
+        await _distributedCacheClient.SetAsync(smsSendExpiredKey, smsSendExpiredKey, TimeSpan.FromSeconds(smsCaptchaSendExpired));
+
         return code;
     }
 
@@ -65,6 +70,7 @@ public class Sms : IScopedDependency
 
     public async Task<bool> CheckAlreadySendAsync(string key)
     {
-        return await _distributedCacheClient.ExistsAsync<string>(key);
+        var smsSendExpiredKey = CacheKey.MsgVerifiyCodeSendExpired(key);
+        return await _distributedCacheClient.ExistsAsync<string>(smsSendExpiredKey);
     }
 }
