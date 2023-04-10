@@ -182,7 +182,7 @@ public class QueryHandler
 
     private List<AppPermissionDto> GetChildrenPermissions(Guid parentId, IEnumerable<Permission> all)
     {
-        return all.Where(p => p.ParentId == parentId || (parentId == Guid.Empty ? !p.ParentId.HasValue : false))
+        return all.Where(p => p.GetParentId() == parentId)
             .OrderBy(p => p.Order)
             .Select(p => new AppPermissionDto
             {
@@ -228,7 +228,7 @@ public class QueryHandler
             Type = permission.Type,
             Id = permission.Id,
             Enabled = permission.Enabled,
-            ParentId = permission.ParentId ?? Guid.Empty,
+            ParentId = permission.GetParentId(),
             AppId = permission.AppId,
             Order = permission.Order,
             ApiPermissions = permission.AffiliationPermissionRelations.Select(pr => pr.AffiliationPermissionId).ToList(),
@@ -544,8 +544,8 @@ public class QueryHandler
         }
         else
         {
-            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => p.ParentId.HasValue ? query.Result.Contains(p.ParentId.Value) : false && p.Type == PermissionTypes.Menu && p.Enabled))
-                 .ToDictionary(p => p.Id, p => p.ParentId ?? Guid.Empty);
+            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => query.Result.Contains(p.GetParentId()) && p.Type == PermissionTypes.Menu && p.Enabled))
+                 .ToDictionary(p => p.Id, p => p.GetParentId());
         }
         permissionIds.RemoveAll(id =>
         {

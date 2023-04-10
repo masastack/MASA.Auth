@@ -15,7 +15,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public string ReplenishCode => $"{AppId}.{Code}";
 
-    public Guid? ParentId { get; set; }
+    public Guid? ParentId { get; private set; }
 
     public string Url { get; private set; } = "";
 
@@ -87,6 +87,11 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Description = description;
         Enabled = enabled;
         Order = order;
+    }
+
+    public Guid GetParentId()
+    {
+        return ParentId.HasValue ? ParentId.Value : Guid.Empty;
     }
 
     public void DeleteCheck()

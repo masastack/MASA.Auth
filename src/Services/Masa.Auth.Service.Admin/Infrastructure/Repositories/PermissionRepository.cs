@@ -56,16 +56,16 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         {
             throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         }
-        if (!item.ParentId.HasValue || item.ParentId == Guid.Empty)
+        if (item.GetParentId() == Guid.Empty)
         {
             return new();
         }
-        result.Add(item.ParentId.Value);
+        result.Add(item.GetParentId());
         if (!recursive)
         {
             return result;
         }
-        result.AddRange(await GetParentAsync(item.ParentId.Value, recursive));
+        result.AddRange(await GetParentAsync(item.GetParentId(), recursive));
         return result;
     }
 
