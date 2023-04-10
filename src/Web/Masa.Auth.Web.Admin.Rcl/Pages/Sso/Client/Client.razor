@@ -9,7 +9,7 @@
     <AutoHeight>
         <HeaderContent>
             <div class="d-flex mb-6">
-                <SSearch @bind-Value="_clientPaginationDto.Search" Style="max-width: 340px;" OnEnter="SearchKeyHandler" />
+                <SSearch @bind-Value="_clientPaginationDto.Search" OnEnter="SearchKeyHandler" />
                 <MSpacer />
                 <SButton Small OnClick="_addClientDialog.Show" BorderRadiusClass="rounded-lg">
                     <MIcon Size=18>@IconConstants.Add</MIcon>
