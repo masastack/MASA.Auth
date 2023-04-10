@@ -565,6 +565,14 @@ input::-webkit-input-placeholder {
     border-spacing: 0px 8px !important;
 }
 
+.masa-stack-components .table-border-head .m-data-table__wrapper table tr td:not(:last-child) > *:not(.description) {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+}
+
 .justify-center.m-input--checkbox > .m-input__control {
     flex-grow: 0 !important;
     width: auto !important;
