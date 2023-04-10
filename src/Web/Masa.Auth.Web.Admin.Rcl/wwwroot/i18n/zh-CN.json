@@ -241,7 +241,7 @@
     "UserState": "用户状态",
     "Name": "真实姓名",
     "Avatr": "头像",
-    "User.DisplayName": "用户昵称",
+    "User.DisplayName": "昵称",
     "Position": "职位",
     "Department": "部门",
     "CompanyName": "公司名称",
@@ -480,7 +480,8 @@
 
   "CustomLogin": "自定义登录",
   "CustomLoginBlock": {
-    "Name": "名称",
+    "Name": "姓名",
+    "DisplayName": "昵称",
     "LogoUri": "LOGO",
     "ClientName": "客户端",
     "Add Custom Login": "新建自定义登录",
@@ -501,7 +502,7 @@
     "Are you sure delete custom login \"{0}\"?": "确定删除自定义登录\"{0}\"吗",
     "Delete Custom Login data success": "删除自定义登录数据成功",
     "Edit Custom Login data success": "编辑自定义登录数据成功",
-    "Name is required": "名称必须填写",
+    "Name is required": "姓名必须填写",
     "Title is required": "标题必须填写"
   },
 

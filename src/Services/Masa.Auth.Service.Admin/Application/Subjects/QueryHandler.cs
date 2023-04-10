@@ -718,11 +718,10 @@ public class QueryHandler
                 return;
             }
         }
-        var teams = await _authDbContext.Set<TeamStaff>()
+        query.Result = await _authDbContext.Set<TeamStaff>()
                                         .Where(ts => ts.UserId == query.UserId)
+                                        .Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType))
                                         .ToListAsync();
-        query.Result = teams.Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType)).ToList();
-
     }
 
     #endregion

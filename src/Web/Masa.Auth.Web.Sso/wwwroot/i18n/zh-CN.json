@@ -67,7 +67,7 @@
   "EmailSpecInvalid": "邮箱不符合规范",
   "UnknownException": "未知异常，请联系管理员",
   "SmsSendTime": "{0}秒后可重发",
-  "IdCard": "身份证",
+  "IdCard": "身份证号",
   "IdCardPlaceHolder": "请输入身份证号",
   "Bind success": "绑定用户成功",
   "Password not equal ConfirmPassword": "两次输入密码不相同",

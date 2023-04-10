@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 
 public class CustomLoginTab
 {
-    public static string BasicInformation { get; } = "Basic Information";
+    public static string BasicInformation { get; } = "BasicInformation";
 
     public static string Login { get; } = "Login";
 

@@ -423,7 +423,7 @@ public class QueryHandler
         {
             var permissionIds = new List<Guid>();
 
-            var teamIdCacheKeys = teamIds.Select(e => CacheKey.TeamKey(e));
+            var teamIdCacheKeys = teamIds.Select(teamId => CacheKey.TeamKey(teamId));
             var cacheTeams = await _multilevelCacheClient.GetListAsync<TeamDetailDto>(teamIdCacheKeys);
             if (cacheTeams != null)
             {
@@ -433,7 +433,7 @@ public class QueryHandler
                     {
                         continue;
                     }
-                    var roleIds = team!.TeamAdmin.Roles.Union(team.TeamMember.Roles).ToList();
+                    var roleIds = team.TeamAdmin.Roles.Union(team.TeamMember.Roles).ToList();
                     var permissionQuery = new PermissionsByRoleQuery(roleIds);
                     await _eventBus.PublishAsync(permissionQuery);
 
