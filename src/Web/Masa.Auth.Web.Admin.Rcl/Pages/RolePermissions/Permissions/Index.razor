@@ -15,7 +15,7 @@
                                ItemText="u => u.Name"
                                ItemValue="u => u.Identity"></MAutocomplete>
             </SSearchableExtend>
-            <MCard style="width:300px;max-height: calc(100% - 60px); padding-top:24px !important;" Class="flex-grow-1 mt-4 pt-4">
+            <MCard Style="width:300px;max-height: calc(100% - 60px); padding-top:24px !important;" Class="flex-grow-1 mt-4 pt-4">
                 <SElevationTab TabMinWidth="120" ItemsClass="mt-4" ItemsStyle="overflow-y: auto; width:252px!important;" Class="full-height" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
                                 Dense @bind-Tab="@_tab" IndexTab TabsClass="d-tabs">
                     <SElevationTabItem>
@@ -34,7 +34,14 @@
                             <LabelContent>
                                 <MHover Context="hoverComtext">
                                     <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
-                                        <span>@DT(context.Item.Name)</span>
+                                        <MTooltip Top Context="tipContext">
+                                            <ActivatorContent>
+                                                <span class="text-truncate" @attributes="@tipContext.Attrs">@DT(context.Item.Name)</span>
+                                            </ActivatorContent>
+                                            <ChildContent>
+                                                <span>@DT(context.Item.Name)</span>
+                                            </ChildContent>
+                                        </MTooltip>
                                         <span style="@(hoverComtext.Hover?"flex:1;text-align:right":"display:none")">
                                             <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                         </span>
@@ -58,7 +65,14 @@
                             <LabelContent>
                                 <MHover Context="hoverComtext">
                                     <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
-                                        <span>@DT(context.Item.Name)</span>
+                                        <MTooltip Top Context="tipContext">
+                                            <ActivatorContent>
+                                                <span class="text-truncate" @attributes="@tipContext.Attrs">@DT(context.Item.Name)</span>
+                                            </ActivatorContent>
+                                            <ChildContent>
+                                                <span>@DT(context.Item.Name)</span>
+                                            </ChildContent>
+                                        </MTooltip>
                                         <span style="@((hoverComtext.Hover && !context.Item.IsPermission)?"flex:1;text-align:right":"display:none")">
                                             <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                         </span>
