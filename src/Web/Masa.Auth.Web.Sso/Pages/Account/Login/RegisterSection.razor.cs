@@ -60,13 +60,6 @@ public partial class RegisterSection
                             ComponentParameters = componentParameters
                         };
                         break;
-                    case RegisterFieldTypes.DisplayName:
-                        _registerComponents[RegisterFieldTypes.DisplayName] = new ComponentMetadata
-                        {
-                            ComponentType = typeof(DisplayName),
-                            ComponentParameters = componentParameters
-                        };
-                        break;
                     case RegisterFieldTypes.IdCard:
                         _registerComponents[RegisterFieldTypes.IdCard] = new ComponentMetadata
                         {
@@ -75,6 +68,12 @@ public partial class RegisterSection
                         };
                         break;
                     default:
+                        componentParameters.Add(nameof(Universal.Property), registerField.RegisterFieldType.ToString());
+                        _registerComponents[registerField.RegisterFieldType] = new ComponentMetadata
+                        {
+                            ComponentType = typeof(Universal),
+                            ComponentParameters = componentParameters
+                        };
                         break;
                 }
             }

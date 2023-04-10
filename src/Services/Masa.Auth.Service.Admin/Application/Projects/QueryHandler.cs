@@ -40,7 +40,7 @@ public class QueryHandler
                 || p.Type == PermissionTypes.Element);
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
-            a.Navs = menuPermissions.Where(p => p.AppId == a.Identity && p.ParentId == Guid.Empty)
+            a.Navs = menuPermissions.Where(p => p.AppId == a.Identity && p.GetParentId() == Guid.Empty)
             .OrderBy(p => p.Order).Select(p => new PermissionNavDto
             {
                 Name = p.Name,
@@ -62,7 +62,7 @@ public class QueryHandler
         {
             a.Navs = menuPermissions.OrderBy(p => p.Order)
                 .Where(p => p.AppId == a.Identity)
-                .Where(p => p.ParentId == Guid.Empty)
+                .Where(p => p.GetParentId() == Guid.Empty)
                 .Select(p => new PermissionNavDto
                 {
                     Name = p.Name,

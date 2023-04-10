@@ -5,22 +5,22 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.Aggregates;
 
 public class PermissionRelation : FullEntity<Guid, Guid>
 {
-    public Guid ChildPermissionId { get; private set; }
+    public Guid AffiliationPermissionId { get; private set; }
 
-    public Guid ParentPermissionId { get; private set; }
+    public Guid LeadingPermissionId { get; private set; }
 
-    public Permission ChildPermission { get; private set; } = null!;
+    public Permission AffiliationPermission { get; private set; } = null!;
 
-    public Permission ParentPermission { get; private set; } = null!;
+    public Permission LeadingPermission { get; private set; } = null!;
 
     private PermissionRelation()
     {
     }
 
-    public PermissionRelation(Guid parentPermissionId, Guid childPermissionId)
+    public PermissionRelation(Guid leadingPermissionId, Guid affiliationPermissionId)
     {
-        ParentPermissionId = parentPermissionId;
-        ChildPermissionId = childPermissionId;
+        LeadingPermissionId = leadingPermissionId;
+        AffiliationPermissionId = affiliationPermissionId;
     }
 }
 

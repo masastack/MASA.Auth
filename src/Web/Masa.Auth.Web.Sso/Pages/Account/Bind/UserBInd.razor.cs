@@ -11,9 +11,6 @@ public partial class UserBind
     bool _loginLoading;
     string? _environment;
 
-    [Inject]
-    public IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
-
     public HttpContext HttpContext => HttpContextAccessor.HttpContext!;
 
     [Inject]

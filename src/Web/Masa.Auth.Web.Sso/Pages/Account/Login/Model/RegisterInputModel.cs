@@ -24,7 +24,15 @@ public class RegisterInputModel
 
     public bool Agreement { get; set; }
 
+    [Label("DisplayName")]
+    [Placeholder("DisplayNamePlaceholder")]
     public string DisplayName { get; set; } = string.Empty;
 
+    [Label("Account")]
+    [Placeholder("AccountPlaceholder")]
     public string? Account { get; set; }
+
+    [Label("Name")]
+    [Placeholder("NamePlaceholder")]
+    public string? Name { get; set; }
 }

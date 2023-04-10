@@ -109,9 +109,18 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
-        var permission = await _permissionRepository.GetByIdAsync(removePermissionCommand.PermissionId);
-        permission.DeleteCheck();
-        await _permissionRepository.RemoveAsync(permission);
+        await RemovePermissionAsync(removePermissionCommand.PermissionId);
+
+        async Task RemovePermissionAsync(Guid permissionId)
+        {
+            var permission = await _permissionRepository.GetByIdAsync(permissionId);
+            permission.DeleteCheck();
+            await _permissionRepository.RemoveAsync(permission);
+            foreach (var child in permission.Children)
+            {
+                await RemovePermissionAsync(child.Id);
+            }
+        }
     }
 
     [EventHandler(1)]

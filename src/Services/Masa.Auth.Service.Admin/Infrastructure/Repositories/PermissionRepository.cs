@@ -17,8 +17,8 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
     public async Task<List<Permission>> GetAllAsync()
     {
         return await Context.Set<Permission>().Where(u => !u.IsDeleted)
-            .Include(p => p.ChildPermissionRelations)
-            .Include(p => p.ParentPermissionRelations)
+            .Include(p => p.AffiliationPermissionRelations)
+            .Include(p => p.LeadingPermissionRelations)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -27,8 +27,9 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
     {
         return await Context.Set<Permission>()
             .Where(p => p.Id == id)
-            .Include(p => p.ChildPermissionRelations)
-            .Include(p => p.ParentPermissionRelations)
+            .Include(p => p.Children)
+            .Include(p => p.AffiliationPermissionRelations)
+            .Include(p => p.LeadingPermissionRelations)
             .Include(p => p.UserPermissions).ThenInclude(up => up.User)
             .Include(p => p.RolePermissions).ThenInclude(rp => rp.Role)
             .Include(p => p.TeamPermissions).ThenInclude(tp => tp.Team)
@@ -55,16 +56,16 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
         {
             throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
         }
-        if (item.ParentId == Guid.Empty)
+        if (item.GetParentId() == Guid.Empty)
         {
             return new();
         }
-        result.Add(item.ParentId);
+        result.Add(item.GetParentId());
         if (!recursive)
         {
             return result;
         }
-        result.AddRange(await GetParentAsync(item.ParentId, recursive));
+        result.AddRange(await GetParentAsync(item.GetParentId(), recursive));
         return result;
     }
 

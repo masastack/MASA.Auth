@@ -20,12 +20,24 @@
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
 
-    private IEnumerable<Func<string, StringBoolean>> _phoneNumberRules => new List<Func<string, StringBoolean>>
+    IEnumerable<Func<string, StringBoolean>> _phoneNumberRules = new List<Func<string, StringBoolean>>();
+
+    protected override void OnAfterRender(bool firstRender)
     {
-        value => !string.IsNullOrEmpty(value) ? true : T("PhoneRequired"),
-        value => Regex.Match(value, LoginOptions.PhoneRegular).Success ? true : T("PhoneNumberPrompt")
-    };
-    
+        if (firstRender)
+        {
+            if (!Value.EmailRegister)
+            {
+                _phoneNumberRules = new List<Func<string, StringBoolean>>
+                {
+                    value => !string.IsNullOrEmpty(value) ? true : T("PhoneRequired"),
+                    value => Regex.Match(value, LoginOptions.PhoneRegular).Success ? true : T("PhoneNumberPrompt")
+                };
+            }
+        }
+        base.OnAfterRender(firstRender);
+    }
+
     private async Task<bool> GetSmsCode()
     {
         if (_phoneTextField.Validate())

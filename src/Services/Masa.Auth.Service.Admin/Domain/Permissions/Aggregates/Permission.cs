@@ -15,7 +15,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public string ReplenishCode => $"{AppId}.{Code}";
 
-    public Guid ParentId { get; set; }
+    public Guid? ParentId { get; private set; }
 
     public string Url { get; private set; } = "";
 
@@ -29,21 +29,21 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
-    private List<Permission> childPermissions = new();
+    private List<Permission> _affiliationPermissions = new();
 
-    public IReadOnlyCollection<Permission> ChildPermissions => childPermissions;
+    public IReadOnlyCollection<Permission> AffiliationPermissions => _affiliationPermissions;
 
-    private List<PermissionRelation> _childPermissionRelations = new();
+    private List<PermissionRelation> _affiliationPermissionRelations = new();
 
-    public IReadOnlyCollection<PermissionRelation> ChildPermissionRelations => _childPermissionRelations;
+    public IReadOnlyCollection<PermissionRelation> AffiliationPermissionRelations => _affiliationPermissionRelations;
 
-    private List<Permission> parentPermissions = new();
+    private List<Permission> _leadingPermissions = new();
 
-    public IReadOnlyCollection<Permission> ParentPermissions => parentPermissions;
+    public IReadOnlyCollection<Permission> LeadingPermissions => _leadingPermissions;
 
-    private List<PermissionRelation> parentPermissionRelations = new();
+    private List<PermissionRelation> _leadingPermissionRelations = new();
 
-    public IReadOnlyCollection<PermissionRelation> ParentPermissionRelations => parentPermissionRelations;
+    public IReadOnlyCollection<PermissionRelation> LeadingPermissionRelations => _leadingPermissionRelations;
 
     private List<UserPermission> _userPermissions = new();
 
@@ -56,6 +56,12 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     private List<TeamPermission> _teamPermissions = new();
 
     public IReadOnlyCollection<TeamPermission> TeamPermissions => _teamPermissions;
+
+    public Permission? Parent { get; set; }
+
+    private List<Permission> _children = new();
+
+    public IReadOnlyCollection<Permission> Children => _children;
 
     public Permission(Guid id, string systemId, string appId, string name, string code, string url,
         string icon, int order, PermissionTypes type) : this(systemId, appId, name, code, url, icon, order, type)
@@ -83,6 +89,11 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Order = order;
     }
 
+    public Guid GetParentId()
+    {
+        return ParentId.HasValue ? ParentId.Value : Guid.Empty;
+    }
+
     public void DeleteCheck()
     {
         if (RolePermissions.Any())
@@ -93,7 +104,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETE_USER_USED_ERROR);
         }
-        if (parentPermissionRelations.Any())
+        if (_leadingPermissionRelations.Any())
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETERELATION_ERROR);
         }
@@ -105,9 +116,9 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_API_BIND_ERROR);
         }
-        _childPermissionRelations = _childPermissionRelations.MergeBy(
+        _affiliationPermissionRelations = _affiliationPermissionRelations.MergeBy(
             childrenIds.Select(childrenId => new PermissionRelation(Id, childrenId)),
-            item => item.ChildPermissionId);
+            item => item.AffiliationPermissionId);
     }
 
     public void SetParent(Guid parentId)
