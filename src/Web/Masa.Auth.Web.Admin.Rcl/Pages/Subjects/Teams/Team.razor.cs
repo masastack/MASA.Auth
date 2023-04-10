@@ -10,6 +10,7 @@ public partial class Team
     List<TeamDto> _teams = new();
     AddSheet _addSheet = null!;
     UpdateSheet _updateSheet = null!;
+    private bool _showEmptyPlaceholder = false;
 
     TeamService TeamService => AuthCaller.TeamService;
 
@@ -31,15 +32,13 @@ public partial class Team
     private async Task LoadTeams()
     {
         _teams = await TeamService.ListAsync(_search);
+        _showEmptyPlaceholder = !_teams.Any();
         StateHasChanged();
     }
 
-    private async Task SearchKeyDown(KeyboardEventArgs eventArgs)
+    private async Task SearchKeyDown()
     {
-        if (eventArgs.Key == Keyboards.Enter)
-        {
-            await LoadTeams();
-        }
+        await LoadTeams();
     }
 
     private async Task EditTeamHandler(Guid id)

@@ -83,13 +83,10 @@ public partial class Organization
         await LoadStaffsAsync();
     }
 
-    private async Task EnterSearch(KeyboardEventArgs eventArgs)
+    private async Task EnterSearch()
     {
-        if (eventArgs.Key == Keyboards.Enter)
-        {
-            _getStaffsDto.Page = 1;
-            await LoadStaffsAsync();
-        }
+        _getStaffsDto.Page = 1;
+        await LoadStaffsAsync();
     }
 
     private async Task<bool> DeleteAsync(Guid id, string name)
