@@ -63,7 +63,7 @@
                         break;
                     case "Action":
                         <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateUserDialog(context.Item)">@IconConstants.Update</SIcon>
-                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
+                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.Id)">@IconConstants.Authorize</SIcon>
                         break;
                     default:
                         <SItemCol Value="@context.Value" />
@@ -79,4 +79,4 @@
 </AutoHeight>
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=OnAddUserSuccessAsync />
 <UpdateUserDialog UserId=CurrentUserId @bind-Visible="UpdateUserDialogVisible" OnSubmitSuccess=UpdateStaffAndThirdPartyUserAsync />
-<UserAuthorizeDialog UserId=CurrentUserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetUserAsync />
+<UserAuthorizeDialog @ref="_userAuthorizeDialog" OnSubmitSuccess=GetUserAsync />

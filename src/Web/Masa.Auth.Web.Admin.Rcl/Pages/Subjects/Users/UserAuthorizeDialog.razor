@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("User roles and permissions settings")">
+<DefaultSheetDialog Value="_visible" ValueChanged=UpdateVisible Title="@T("User roles and permissions settings")">
     <AutoHeight>
         <HeaderContent>
             <div class="height:55px;">
                 <div class="mb-4 d-flex">
                     @if(User.StaffId is not null)
                     {
-                        <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged=TeamValueChanged UserId="UserId" Style="width:100%;" />
+                        <TeamSwitch Value=Teams.FirstOrDefault() ValueChanged=TeamValueChanged UserId="_userId" Style="width:100%;" />
                     }
                     else
                     {
@@ -31,7 +31,7 @@
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;max-height:calc(100vh - 380px);">
                 <PermissionExtensionConfigure
-                                User=UserId
+                                User=_userId
                                 Teams=Teams
                                 Roles=Authorization.Roles
                                 @bind-ExtensionValue=Authorization.Permissions 
