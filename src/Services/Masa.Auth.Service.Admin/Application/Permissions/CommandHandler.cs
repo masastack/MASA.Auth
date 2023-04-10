@@ -118,9 +118,7 @@ public class CommandHandler
             await _permissionRepository.RemoveAsync(permission);
             foreach (var child in permission.Children)
             {
-                permission.DeleteCheck();
                 await RemovePermissionAsync(child.Id);
-                await _permissionRepository.RemoveAsync(child);
             }
         }
     }
