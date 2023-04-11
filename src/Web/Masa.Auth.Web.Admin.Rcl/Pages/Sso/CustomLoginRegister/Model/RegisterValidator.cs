@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using FluentValidation;
-using FluentValidation.Validators;
-
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 
 public class RegisterValidator : MasaAbstractValidator<RegisterModel>
