@@ -10,8 +10,8 @@ public class AuthDbContext : MasaDbContext<AuthDbContext>
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
+    protected override void OnConfiguring(MasaDbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.DbContextOptionsBuilder
         .LogTo(Console.WriteLine, LogLevel.Warning)
         .EnableSensitiveDataLogging()
         .EnableDetailedErrors();

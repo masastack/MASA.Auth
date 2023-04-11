@@ -15,6 +15,9 @@ public static class ServiceCollectionExtensions
 
         ConfigureConnectionStrings(services);
         ConfigureRedisOptions(services);
+        //ConfigStorageOptions(services);
+
+        services.AddSingleton<EsIsolationConfigProvider>();
 
         services.AddIsolation(isolationBuilder =>
         {
@@ -70,4 +73,22 @@ public static class ServiceCollectionExtensions
             };
         });
     }
+
+    //static void ConfigStorageOptions(this IServiceCollection services)
+    //{
+    //    services.Configure<IsolationOptions<AliyunStorageConfigureOptions>>(options =>
+    //    {
+    //        options.Data = new List<IsolationConfigurationOptions<AliyunStorageConfigureOptions>>()
+    //        {
+    //            new IsolationConfigurationOptions<AliyunStorageConfigureOptions>()
+    //            {
+    //                Environment = "租户1",
+    //                Data = new AliyunStorageConfigureOptions
+    //                {
+
+    //                }
+    //            }
+    //        };
+    //    });
+    //}
 }
