@@ -7,6 +7,7 @@ public partial class UserAuthorizeDialog
 {
     private bool _visible = false;
     private Guid _userId = Guid.Empty;
+    private bool _preview = false;
 
     [Parameter]
     public EventCallback<bool> VisibleChanged { get; set; }
@@ -21,8 +22,6 @@ public partial class UserAuthorizeDialog
     public UserDetailDto User { get; set; } = new();
 
     private UserService UserService => AuthCaller.UserService;
-
-    public bool Preview { get; set; }
 
     public async Task ShowAsync(Guid userId)
     {

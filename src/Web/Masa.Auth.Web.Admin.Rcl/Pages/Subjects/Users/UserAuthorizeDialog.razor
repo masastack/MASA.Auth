@@ -35,13 +35,13 @@
                                 Teams=Teams
                                 Roles=Authorization.Roles
                                 @bind-ExtensionValue=Authorization.Permissions 
-                                @bind-Preview=Preview/>
+                                @bind-Preview=_preview/>
             </div>
         </AutoHeightContent>
         <FooterContent>
             <div class="d-flex mt-6">
                 <MSpacer></MSpacer>
-                <SButton Medium Outlined OnClick="() => Preview = true">@T("Preview")</SButton>
+                <SButton Medium Outlined OnClick="() => _preview = true">@T("Preview")</SButton>
                 <SButton Medium Class="ml-6" OnClick="async () => await UpdateAuthorizationAsync()">@T("Save")</SButton>
             </div>
         </FooterContent>
