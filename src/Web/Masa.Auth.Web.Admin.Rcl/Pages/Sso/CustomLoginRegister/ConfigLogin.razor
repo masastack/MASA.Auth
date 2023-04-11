@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex" style="height:100%;">
+<div class="d-flex" style="height: calc(100vh - 280px);">
     <LoginRegisterTemplate Tab=@CustomLoginTab.Login Logo="@Logo" Title="@Title" ThirdPartyIdps="Value.Where(value => ThirdPartyIdps.Any(item => item.Id == value.Id)).Select(value => ThirdPartyIdps.First(item => item.Id == value.Id)).ToList()" />
     <div style="border: 1px solid #E2E7F4;" class="mx-12 full-height" />
     <div class="mt-5 full-height flex-column" style="width:100%">

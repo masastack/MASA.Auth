@@ -40,5 +40,8 @@
     "MaxLength": "Nickname cannot be larger than 50 characters.",
     "MinLength": "Nickname cannot be less than 2 characters.",
     "Required": "Nickname is required."
+  },
+  "CustomLoginBlock": {
+    "TitleName": "Name"
   }
 }
