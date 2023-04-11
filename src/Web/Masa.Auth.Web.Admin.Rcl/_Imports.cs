@@ -54,3 +54,5 @@ global using Microsoft.JSInterop;
 global using System.Security.Claims;
 global using System.Text;
 global using Masa.Stack.Components.Extensions;
+global using FluentValidation.Validators;
+global using Masa.Auth.Contracts.Admin.Subjects.Validator;
