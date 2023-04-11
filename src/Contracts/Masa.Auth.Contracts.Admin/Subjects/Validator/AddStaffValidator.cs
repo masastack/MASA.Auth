@@ -1,11 +1,13 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Configuration;
+
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class AddStaffValidator : MasaAbstractValidator<AddStaffDto>
 {
-    public AddStaffValidator()
+    public AddStaffValidator(PasswordValidator passwordValidator)
     {
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
         RuleFor(staff => staff.DisplayName)
@@ -15,7 +17,7 @@ public class AddStaffValidator : MasaAbstractValidator<AddStaffDto>
             .MinimumLength(2).WithMessage("NickNameBlock.MinLength")
             .WithName("NickName");
         RuleFor(staff => staff.PhoneNumber).Required().Phone();
-        RuleFor(staff => staff.Password).Required().AuthPassword();
+        RuleFor(staff => staff.Password).SetValidator(passwordValidator);
         RuleFor(staff => staff.Avatar).Required().Url();
         WhenNotEmpty(staff => staff.Email, r => r.Email());
         WhenNotEmpty(staff => staff.Name, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));

@@ -1,15 +1,17 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Contracts.Admin.Subjects.Validator;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 
 public class RegisterValidator : AbstractValidator<RegisterModel>
 {
-    public RegisterValidator()
+    public RegisterValidator(PasswordValidator passwordValidator)
     {
         RuleFor(register => register.Account).Required().ChineseLetterNumber();
 
-        RuleFor(register => register.Password).Required().AuthPassword();
+        RuleFor(register => register.Password).SetValidator(passwordValidator);
 
         RuleFor(register => register.ConfirmPassword)
           .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.ConfirmPassword)))

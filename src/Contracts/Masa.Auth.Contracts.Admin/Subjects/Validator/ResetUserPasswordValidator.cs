@@ -3,10 +3,10 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
-public class ResetUserPasswordValidator : AbstractValidator<ResetUserPasswordDto>
+public class ResetUserPasswordValidator : MasaAbstractValidator<ResetUserPasswordDto>
 {
-    public ResetUserPasswordValidator()
+    public ResetUserPasswordValidator(PasswordValidator passwordValidator)
     {
-        RuleFor(staff => staff.Password).Required().AuthPassword();
+        RuleFor(staff => staff.Password).SetValidator(passwordValidator);
     }
 }
