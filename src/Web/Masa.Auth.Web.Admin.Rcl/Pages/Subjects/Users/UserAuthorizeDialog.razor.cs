@@ -5,17 +5,15 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 
 public partial class UserAuthorizeDialog
 {
-    [Parameter]
-    public bool Visible { get; set; }
+    private bool _visible = false;
+    private Guid _userId = Guid.Empty;
+    private bool _preview = false;
 
     [Parameter]
     public EventCallback<bool> VisibleChanged { get; set; }
 
     [Parameter]
     public EventCallback OnSubmitSuccess { get; set; }
-
-    [Parameter]
-    public Guid UserId { get; set; }
 
     public List<Guid> Teams { get; set; } = new();
 
@@ -25,7 +23,16 @@ public partial class UserAuthorizeDialog
 
     private UserService UserService => AuthCaller.UserService;
 
-    public bool Preview { get; set; }
+    public async Task ShowAsync(Guid userId)
+    {
+	_userId = userId;
+
+	User = await UserService.GetDetailAsync(_userId);
+	Authorization = new(User.Id, User.Roles.Select(role => role.Id), User.Permissions);
+	Teams = new();
+
+	_visible = true;
+    }
 
     protected override void OnInitialized()
     {
@@ -41,17 +48,7 @@ public partial class UserAuthorizeDialog
         }
         else
         {
-            Visible = visible;
-        }
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Visible)
-        {
-            User = await UserService.GetDetailAsync(UserId);
-            Authorization = new(User.Id, User.Roles.Select(role => role.Id), User.Permissions);
-            Teams = new();
+            _visible = visible;
         }
     }
 
