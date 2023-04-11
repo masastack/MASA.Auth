@@ -1,3 +1,6 @@
+// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
 using Masa.BuildingBlocks.Configuration;
 using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 using Microsoft.Extensions.Configuration;
