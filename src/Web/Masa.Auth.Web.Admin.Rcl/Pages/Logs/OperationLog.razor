@@ -9,7 +9,7 @@
         <HeaderContent>
             <div class="d-flex">
                 <SDateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <SRelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" />
+                <SRelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" Clearable/>
                 <MSpacer />
                 <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" Clearable FillBackground=false Class="ml-6" Style="width: 100px !important;" />               
                 <SUserAutoComplete @bind-Value="UserId" Label="@T("Operator")" FillBackground=false Class="ml-6" Clearable Style="width: 134px !important;" />
