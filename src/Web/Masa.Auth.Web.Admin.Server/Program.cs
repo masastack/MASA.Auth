@@ -22,7 +22,13 @@ if (!builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(option =>
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        option.DetailedErrors = true;
+    }
+});
 
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {

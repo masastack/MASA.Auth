@@ -169,8 +169,6 @@ builder.Services
     {
         eventBusBuilder.UseMiddleware(typeof(ValidatorMiddleware<>));
     })
-    //set Isolation.
-    //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseUoW<AuthDbContext>(dbOptions =>
     {
         dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName")));
