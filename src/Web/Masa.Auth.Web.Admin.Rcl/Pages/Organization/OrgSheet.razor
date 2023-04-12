@@ -25,9 +25,9 @@
             <MSpacer />
             @if (_dto.Id != Guid.Empty)
             {
-                <MButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
+                <SButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
                     @T("Delete")
-                </MButton>
+                </SButton>
             }
             <SButton Medium Disabled="@string.IsNullOrEmpty(_dto.Name.Trim())" OnClick="OnSubmitHandler">@_saveTitle</SButton>
         </MCardActions>

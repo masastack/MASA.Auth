@@ -30,9 +30,9 @@
                                 <span>@context.Item.Name</span>
                                 <MMenu Right Bottom class="mr-2">
                                     <ActivatorContent Context="activatorContext">
-                                        <MButton style="@(hoverComtext.Hover?"display:flex":"display:none")" Icon @attributes="@activatorContext.Attrs">
+                                        <SButton style="@(hoverComtext.Hover?"display:flex":"display:none")" Icon @attributes="@activatorContext.Attrs">
                                             <MIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Small>fas fa-ellipsis-v</MIcon>
-                                        </MButton>
+                                        </SButton>
                                     </ActivatorContent>
                                     <ChildContent>
                                         <MList>

@@ -31,9 +31,9 @@
                             <span class="caption regular3--text">@T("Forgot password?")</span>
                         </div>
                         <div class="d-flex">
-                            <MButton OnClick="() => context.Validate()" Class="large-button mx-auto" Color="primary" Rounded>
+                            <SButton OnClick="() => context.Validate()" Class="large-button mx-auto" Color="primary" Rounded>
                                 @T("Login")
-                            </MButton>
+                            </SButton>
                         </div>
                     </MForm>
                     @if (ThirdPartyIdps.Count > 0)
@@ -87,9 +87,9 @@
                             }
                         </div>
                         <div class="d-flex">
-                            <MButton OnClick="() => context.Validate()" Class="large-button mt-6 mx-auto" Color="primary">
+                            <SButton OnClick="() => context.Validate()" Class="large-button mt-6 mx-auto" Color="primary">
                                 @T("Register")
-                            </MButton>
+                            </SButton>
                         </div>
                     </MForm>
                 </MTabItem>
