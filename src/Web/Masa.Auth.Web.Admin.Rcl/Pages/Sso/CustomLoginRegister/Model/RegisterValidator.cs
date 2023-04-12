@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 
 public class RegisterValidator : MasaAbstractValidator<RegisterModel>
 {
-    public RegisterValidator()
+    public RegisterValidator(PasswordValidator passwordValidator)
     {
         RuleFor(register => register.PhoneNumber)
             .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.PhoneNumber))).Phone();
@@ -13,7 +13,7 @@ public class RegisterValidator : MasaAbstractValidator<RegisterModel>
         _ = WhenNotEmpty(r => r.Account, rule => rule.ChineseLetterNumber());
         RuleFor(register => register.Account).RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Account)));
 
-        _ = WhenNotEmpty(r => r.Password, rule => rule.AuthPassword());
+        _ = WhenNotEmpty(r => r.Password, rule => rule.SetValidator(passwordValidator));
         RuleFor(register => register.Password).RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Password)));
 
         _ = WhenNotEmpty(r => r.ConfirmPassword, rule => rule.Must((register, value) => 

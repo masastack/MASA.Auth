@@ -5,12 +5,12 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class AddStaffCommandValidator : MasaAbstractValidator<AddStaffCommand>
 {
-    public AddStaffCommandValidator()
+    public AddStaffCommandValidator(PasswordValidator passwordValidator)
     {
         RuleFor(command => command.Staff.JobNumber).Required().MaximumLength(20);
         RuleFor(command => command.Staff.PhoneNumber).Required().Phone();
         RuleFor(command => command.Staff.DisplayName).MaximumLength(50);
-        WhenNotEmpty(command => command.Staff.Password, r => r.AuthPassword());
+        WhenNotEmpty(command => command.Staff.Password, r => r.SetValidator(passwordValidator));
         WhenNotEmpty(command => command.Staff.Email, r => r.Email());
         WhenNotEmpty(command => command.Staff.Name, r => r.ChineseLetter().MaximumLength(20));
         WhenNotEmpty(command => command.Staff.IdCard, r => r.IdCard());

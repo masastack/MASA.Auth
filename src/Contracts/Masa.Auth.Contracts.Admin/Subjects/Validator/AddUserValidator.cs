@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class AddUserValidator : MasaAbstractValidator<AddUserDto>
 {
-    public AddUserValidator()
+    public AddUserValidator(PasswordValidator passwordValidator)
     {
         RuleFor(user => user.DisplayName)
             .Required().WithMessage("NickNameBlock.Required")
@@ -14,7 +14,7 @@ public class AddUserValidator : MasaAbstractValidator<AddUserDto>
             .WithName("NickName");
         RuleFor(user => user.Account).Matches("^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$").MinimumLength(8).MaximumLength(50);
         RuleFor(user => user.PhoneNumber).Required().Phone();
-        RuleFor(user => user.Password).Required().AuthPassword();
+        RuleFor(user => user.Password).SetValidator(passwordValidator);
         RuleFor(user => user.Avatar).Required().Url();
         WhenNotEmpty(user => user.Email, r => r.Email());
         WhenNotEmpty(user => user.IdCard, r => r.IdCard());

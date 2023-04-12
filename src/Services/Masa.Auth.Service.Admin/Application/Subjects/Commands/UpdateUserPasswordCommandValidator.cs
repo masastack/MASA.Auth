@@ -5,10 +5,10 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class UpdateUserPasswordCommandValidator : MasaAbstractValidator<UpdateUserPasswordCommand>
 {
-    public UpdateUserPasswordCommandValidator()
+    public UpdateUserPasswordCommandValidator(PasswordValidator passwordValidator)
     {
-        WhenNotEmpty(command => command.User.OldPassword, r => r.AuthPassword());
-        RuleFor(command => command.User.NewPassword).Required().AuthPassword();
+        WhenNotEmpty(command => command.User.OldPassword, r => r.SetValidator(passwordValidator));
+        RuleFor(command => command.User.NewPassword).SetValidator(passwordValidator);
         RuleFor(command => command.User.NewPassword)
                 .Required()
                 .NotEqual(command => command.User.OldPassword)
