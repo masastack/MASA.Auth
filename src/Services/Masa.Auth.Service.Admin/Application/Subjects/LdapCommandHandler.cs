@@ -62,6 +62,10 @@ public class LdapCommandHandler
         }
         var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
+        }
         var ldapUsers = ldapProvider.GetAllUserAsync();
 
         await foreach (var ldapUser in ldapUsers)
