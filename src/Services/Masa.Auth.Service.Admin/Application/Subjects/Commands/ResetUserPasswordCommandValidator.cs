@@ -3,10 +3,10 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class ResetUserPasswordCommandValidator : AbstractValidator<ResetUserPasswordCommand>
+public class ResetUserPasswordCommandValidator : MasaAbstractValidator<ResetUserPasswordCommand>
 {
-    public ResetUserPasswordCommandValidator()
+    public ResetUserPasswordCommandValidator(ResetUserPasswordValidator resetUserPasswordValidator)
     {
-        RuleFor(command => command.User).SetValidator(new ResetUserPasswordValidator());
+        RuleFor(command => command.User).SetValidator(resetUserPasswordValidator);
     }
 }

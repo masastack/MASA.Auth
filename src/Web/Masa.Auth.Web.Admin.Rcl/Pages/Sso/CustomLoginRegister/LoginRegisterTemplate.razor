@@ -7,7 +7,7 @@
                 Value="@T(Tab)"
                 Tabs="@(new List<string>{T(CustomLoginTab.Login),T(CustomLoginTab.Register)})"
                 Class="overflow-y"
-                        Style="width:512px;max-height:64vh;height: auto;">
+                Style="width:512px;max-height:64vh;height: auto;" ValueChanged="_ => {}">
                 @if (Logo is not null)
                 {
                     <div class="d-flex mb-2">

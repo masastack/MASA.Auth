@@ -161,6 +161,7 @@ builder.Services
     });
 })
 .AddValidatorsFromAssembly(Assembly.GetEntryAssembly())
+.AddValidatorsFromAssemblies(new Assembly[] { typeof(PasswordValidator).Assembly, typeof(ResetUserPasswordValidator).Assembly })
 .AddDomainEventBus(dispatcherOptions =>
 {
     dispatcherOptions

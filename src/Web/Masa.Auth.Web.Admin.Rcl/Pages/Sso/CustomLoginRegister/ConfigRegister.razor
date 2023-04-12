@@ -1,13 +1,13 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex" style="height:100%">
+<div class="d-flex" style="height: calc(100vh - 280px);">
     <LoginRegisterTemplate Tab=@CustomLoginTab.Register Logo="@Logo" Title="@Title" RegisterFields="Value.Where(v => v.RegisterFieldType!=default).ToList()" />
     <div style="border: 1px solid #E2E7F4;" class="mx-12 full-height" />
     <div class="my-5 overflow-y" style="width:100%">
         <MRow>
             <MCol Cols="6">
                 <span class="body2 regular3--text">
-                    @T("Name")
+                    @T("TitleName")
                 </span>
             </MCol>
             <MCol Cols="2">

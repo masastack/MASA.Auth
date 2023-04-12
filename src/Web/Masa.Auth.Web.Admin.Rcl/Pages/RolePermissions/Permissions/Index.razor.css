@@ -39,3 +39,7 @@
 .d-index-row ::deep .prefix-mt-0 .m-text-field__prefix {
   margin-top: 0px !important;
 }
+
+::deep .m-click-extend-item .m-input__prepend-inner {
+    padding-top: 5px;
+}

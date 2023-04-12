@@ -78,7 +78,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
-builder.Services.AddSingleton<AddStaffValidator>();
 builder.Services.AddTypeAdapter();
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);

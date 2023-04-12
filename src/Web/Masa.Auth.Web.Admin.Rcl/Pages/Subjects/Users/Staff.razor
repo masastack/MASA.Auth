@@ -4,7 +4,7 @@
     <HeaderContent>
         <div class="d-flex">
             <MSpacer />
-            <SearchTextField FillBackground=false @bind-Value="Search" />
+            <SSearch @bind-Value="Search" BackgroundColor="fff" />
             <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button white" style="width: 70px;height:40px;">
                 <div class="ma-auto">
                     <MIcon Color="emphasis2" Size=20>@IconConstants.Sync</MIcon>
@@ -59,7 +59,7 @@
                         break;
                     case "Action":
                         <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateStaffDialog(context.Item)">@IconConstants.Update</SIcon>
-                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="()=> OpenAuthorizeDialog(context.Item)">@IconConstants.Authorize</SIcon>
+                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.UserId)">@IconConstants.Authorize</SIcon>
                         break;
                     default:
                         <span class="subtitle">@context.Value</span>
@@ -76,5 +76,5 @@
 
 <AddStaffDialog @bind-Visible=AddStaffDialogVisible OnSubmitSuccess=UpdateUserAsync />
 <UpdateStaffDialog @bind-Visible=UpdateStaffDialogVisible StaffId=CurrentStaff.Id OnSubmitSuccess=GetStaffAsync />
-<UserAuthorizeDialog UserId=CurrentStaff.UserId @bind-Visible="AuthorizeDialogVisible" OnSubmitSuccess=GetStaffAsync />
+<UserAuthorizeDialog @ref="_userAuthorizeDialog" OnSubmitSuccess=GetStaffAsync />
 <SyncStaffDialog @bind-Visible=SyncStaffDialogVisible OnSubmitSuccess=UpdateUserAsync />

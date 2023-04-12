@@ -9,6 +9,7 @@ public partial class Staff
     private bool? _enabled;
     private int _page = 1;
     private int _pageSize = 10;
+    private UserAuthorizeDialog _userAuthorizeDialog = default!;
 
     [Parameter]
     public User? UserCompontent { get; set; }
@@ -68,8 +69,6 @@ public partial class Staff
 
     public bool UpdateStaffDialogVisible { get; set; }
 
-    public bool AuthorizeDialogVisible { get; set; }
-
     public bool SyncStaffDialogVisible { get; set; }
 
     private StaffService StaffService => AuthCaller.StaffService;
@@ -116,12 +115,6 @@ public partial class Staff
     {
         CurrentStaff = staff;
         UpdateStaffDialogVisible = true;
-    }
-
-    public void OpenAuthorizeDialog(StaffDto staff)
-    {
-        CurrentStaff = staff;
-        AuthorizeDialogVisible = true;
     }
 
     async Task UpdateUserAsync()

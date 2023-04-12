@@ -11,6 +11,7 @@ public partial class User
     private Guid _userId;
     private DateOnly? _startTime;
     private DateOnly? _endTime;
+    private UserAuthorizeDialog _userAuthorizeDialog = default!;
 
     [Inject]
     public IJSRuntime? Js { get; set; }
@@ -96,8 +97,6 @@ public partial class User
 
     public bool UpdateUserDialogVisible { get; set; }
 
-    public bool AuthorizeDialogVisible { get; set; }
-
     private UserService UserService => AuthCaller.UserService;
 
     [Parameter]
@@ -155,12 +154,6 @@ public partial class User
     {
         CurrentUserId = user.Id;
         UpdateUserDialogVisible = true;
-    }
-
-    public void OpenAuthorizeDialog(UserDto user)
-    {
-        CurrentUserId = user.Id;
-        AuthorizeDialogVisible = true;
     }
 
     async Task UpdateStaffAndThirdPartyUserAsync()

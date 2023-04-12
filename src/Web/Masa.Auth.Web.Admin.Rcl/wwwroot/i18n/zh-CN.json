@@ -480,6 +480,7 @@
 
   "CustomLogin": "自定义登录",
   "CustomLoginBlock": {
+    "TitleName": "名称",
     "Name": "姓名",
     "DisplayName": "昵称",
     "LogoUri": "LOGO",
