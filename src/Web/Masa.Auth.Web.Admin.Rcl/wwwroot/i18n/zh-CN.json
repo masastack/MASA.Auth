@@ -103,7 +103,8 @@
   "Inherited Role": "角色继承",
   "RoleOwner": "角色所有者",
   "Bind Role": "绑定角色",
-  "Add custom json key map": "添加自定义json键映射",
+  "Add custom JSON key map": "添加自定义JSON键映射",
+  "AvatarText": "头像文本",
 
   "OrganizationBlock": {
     "Department": "部门",
@@ -162,7 +163,7 @@
     "AuthorizationEndpoint": "身份认证地址",
     "TokenEndpoint": "获取Token地址",
     "UserInformationEndpoint": "获取用户信息地址",
-    "Map all json key": "映射所有 json 键",
+    "Map all JSON key": "映射所有 JSON 键",
     "Advanced configuration": "高级配置",
     "Please complete advanced configuration": "请完成高级配置",
     "Are you sure delete thirdPartyIdp \"{0}\"?": "确定删除第三方平台\"{0}\"吗"
