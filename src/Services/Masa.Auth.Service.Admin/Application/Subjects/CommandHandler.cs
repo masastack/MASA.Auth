@@ -658,12 +658,12 @@ public class CommandHandler
                 staffDto.Enabled,
                 staffDto.Address
             );
-        var changeTeams = staff.FindChangeTeams(staffDto.Teams);
+        var teamChanges = staff.FindChangeTeams(staffDto.Teams);
         staff.SetDepartmentStaff(staffDto.DepartmentId);
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
         await _staffDomainService.AddAfterAsync(new(staff));
-        return (staff, changeTeams);
+        return (staff, teamChanges);
     }
 
     [EventHandler(1)]
