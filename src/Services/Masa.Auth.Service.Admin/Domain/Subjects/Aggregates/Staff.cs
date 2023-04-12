@@ -287,14 +287,11 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         {
             return teamChanges;
         }
+	
+        var validTeamIds = _teamStaffs.Where(teamStaff => !teamStaff.IsDeleted).Select(teamStaff => teamStaff.TeamId);
 
-        teamChanges.AddRange(
-            _teamStaffs.Where(teamStaff => !newTeamIds.Contains(teamStaff.TeamId) && !teamStaff.IsDeleted)
-                .Select(teamStaff => teamStaff.TeamId));
-
-        teamChanges.AddRange(
-            newTeamIds.Where(newTeamId => !_teamStaffs.Exists(teamStaff => teamStaff.TeamId == newTeamId && !teamStaff.IsDeleted)));
-
+        teamChanges.AddRange(validTeamIds.Except(newTeamIds));
+        teamChanges.AddRange(newTeamIds.Except(validTeamIds));
         return teamChanges;
     }
 
