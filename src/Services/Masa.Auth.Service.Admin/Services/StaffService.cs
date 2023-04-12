@@ -116,13 +116,17 @@ public class StaffService : RestServiceBase
     private async Task AddAsync(IEventBus eventBus,
         [FromBody] AddStaffDto staff)
     {
-        await eventBus.PublishAsync(new AddStaffCommand(staff));
+        var addStaffCommand = new AddStaffCommand(staff);
+        await eventBus.PublishAsync(addStaffCommand);
+        await eventBus.PublishAsync(new UpdateTeamCacheCommand(addStaffCommand.TeamChangeResult));
     }
 
     private async Task UpdateAsync(IEventBus eventBus,
         [FromBody] UpdateStaffDto staff)
     {
-        await eventBus.PublishAsync(new UpdateStaffCommand(staff));
+        var updateStaffCommand = new UpdateStaffCommand(staff);
+        await eventBus.PublishAsync(updateStaffCommand);
+        await eventBus.PublishAsync(new UpdateTeamCacheCommand(updateStaffCommand.TeamChangeResult));
     }
 
     private async Task UpdateBasicInfoAsync(IEventBus eventBus,
