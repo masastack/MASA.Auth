@@ -48,6 +48,20 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             }
         }
 
+        [EventHandler(1)]
+        public async Task UpdateTeamCacheAsync(UpdateTeamCacheCommand command)
+        {
+            if (command.TeamIds==null)
+            {
+                return;
+            }
+
+            foreach (var teamId in command.TeamIds)
+            {
+                await SetTeamCacheAsync(teamId);
+            }
+        }
+
         private async Task SetTeamCacheAsync(Guid teamId)
         {
             var team = await _teamRepository.GetByIdAsync(teamId);

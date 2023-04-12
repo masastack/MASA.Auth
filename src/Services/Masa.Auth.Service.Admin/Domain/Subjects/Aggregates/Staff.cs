@@ -280,6 +280,20 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         CurrentTeamId = teamId;
     }
 
+    public List<Guid> FindChangeTeams(List<Guid> newTeamIds)
+    {
+        var changeTeams = new List<Guid>();
+
+        changeTeams.AddRange(
+            _teamStaffs.Where(teamStaff => !newTeamIds.Contains(teamStaff.TeamId) && !teamStaff.IsDeleted)
+                .Select(teamStaff => teamStaff.TeamId));
+
+        changeTeams.AddRange(
+            newTeamIds.Where(newTeamId => !_teamStaffs.Exists(teamStaff => teamStaff.TeamId == newTeamId && !teamStaff.IsDeleted)));
+
+        return changeTeams;
+    }
+
     [MemberNotNull(nameof(PhoneNumber))]
     [MemberNotNull(nameof(Email))]
     string VerifyPhonNumberEmail(string? phoneNumber, string? email)

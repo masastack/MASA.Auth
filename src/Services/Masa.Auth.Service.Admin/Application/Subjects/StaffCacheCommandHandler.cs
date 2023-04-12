@@ -39,6 +39,7 @@ public class StaffCacheCommandHandler
     }
 
     [EventHandler(99)]
+    [Obsolete("Please stop use or contact admin accept this.")]
     public async Task UpsertStaffAsync(UpsertStaffCommand command)
     {
         await SetStaffCacheAsync(command.Result);

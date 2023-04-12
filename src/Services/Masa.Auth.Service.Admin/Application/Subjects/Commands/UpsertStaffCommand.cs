@@ -3,6 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
+[Obsolete("Please stop use or contact admin accept this command.")]
 public record UpsertStaffCommand(UpsertStaffDto Staff) : Command
 {
     public Staff? Result { get; set; }
