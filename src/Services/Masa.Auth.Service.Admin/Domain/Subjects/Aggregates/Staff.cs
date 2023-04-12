@@ -282,16 +282,20 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     public List<Guid> FindChangeTeams(List<Guid> newTeamIds)
     {
-        var changeTeams = new List<Guid>();
+        var teamChanges = new List<Guid>();
+        if (newTeamIds == null)
+        {
+            return teamChanges;
+        }
 
-        changeTeams.AddRange(
+        teamChanges.AddRange(
             _teamStaffs.Where(teamStaff => !newTeamIds.Contains(teamStaff.TeamId) && !teamStaff.IsDeleted)
                 .Select(teamStaff => teamStaff.TeamId));
 
-        changeTeams.AddRange(
+        teamChanges.AddRange(
             newTeamIds.Where(newTeamId => !_teamStaffs.Exists(teamStaff => teamStaff.TeamId == newTeamId && !teamStaff.IsDeleted)));
 
-        return changeTeams;
+        return teamChanges;
     }
 
     [MemberNotNull(nameof(PhoneNumber))]

@@ -721,27 +721,6 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    [Obsolete("Please stop use or contact admin accept this.")]
-    public async Task UpsertStaffAsync(UpsertStaffCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, false);
-        if (staff is not null)
-        {
-            var updateStaffDto = staffDto.Adapt<UpdateStaffDto>();
-            updateStaffDto.Id = staff.Id;
-            await UpdateStaffAsync(staff, updateStaffDto);
-            command.Result = staff;
-        }
-        else
-        {
-            var addResult = await AddStaffAsync(staffDto);
-            command.Result = addResult.Staff;
-        }
-        await _unitOfWork.SaveChangesAsync();
-    }
-
-    [EventHandler(1)]
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         var staffDto = command.Staff;
