@@ -3,16 +3,16 @@
 
 <MHover Context="hoverContext">
     <MCard Class="d-flex flex-column" MinHeight=Height @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)">
-        <MCardTitle class="pb-1 px-0 pt-1">
+        <MCardTitle Class="pb-1 px-0 pt-1">
             <MListItem>
                 <MListItemAvatar Height=40 Width=40 MinHeight="40" MinWidth="40">
                     <MImage Src="@Team.Avatar"></MImage>
                 </MListItemAvatar>
-                <MListItemContent class="pb-3">
-                    <MListItemTitle class="d-flex justify-space-between align-center">
+                <MListItemContent Class="pb-3">
+                    <MListItemTitle Class="d-flex justify-space-between align-center">
                         <div>
                             <span class="body2 masa-text-3-1">@T("Member") : @Team.MemberCount </span>
-                            <MListItemSubtitle class="h7 masa-text-1-2">@Team.Name</MListItemSubtitle>
+                            <MListItemSubtitle Class="h7 masa-text-1-2">@Team.Name</MListItemSubtitle>
                         </div>
                         <MButton StopPropagation Icon OnClick="HandleEditClick">
                             <SIcon Tooltip="@T("Edit")" Class="emphasis2--text">@IconConstants.Update</SIcon>
@@ -22,12 +22,12 @@
                 </MListItemContent>
             </MListItem>
         </MCardTitle>
-        <MCardText class="flex-grow-1" style="text-align: justified;max-height:100px;">
+        <MCardText Class="flex-grow-1" Style="text-align: justify;max-height:100px;">
             <span class="subtitle masa-text-2-1" style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;">
                 @Team.Description
             </span>
         </MCardText>
-        <MCardActions class="px-4">
+        <MCardActions Class="px-4">
             <div class="avatar-list-stacked">
                 @{var index = 1;}
                 @foreach (var adminAvatar in Team.AdminAvatar) 
