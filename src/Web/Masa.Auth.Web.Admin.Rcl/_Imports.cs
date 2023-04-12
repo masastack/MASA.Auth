@@ -4,6 +4,7 @@
 global using BlazorComponent;
 global using BlazorComponent.I18n;
 global using FluentValidation;
+global using FluentValidation.Validators;
 global using Mapster;
 global using Masa.Auth.ApiGateways.Caller;
 global using Masa.Auth.ApiGateways.Caller.Services.Logs;
@@ -43,6 +44,7 @@ global using Masa.BuildingBlocks.StackSdks.Pm.Enum;
 global using Masa.Contrib.StackSdks.Caller;
 global using Masa.Contrib.StackSdks.Config;
 global using Masa.Stack.Components;
+global using Masa.Stack.Components.Extensions;
 global using Masa.Stack.Components.Infrastructure;
 global using Masa.Stack.Components.Models;
 global using Microsoft.AspNetCore.Components;

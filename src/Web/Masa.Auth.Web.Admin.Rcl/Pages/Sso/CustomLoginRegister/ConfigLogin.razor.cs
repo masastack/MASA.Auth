@@ -23,6 +23,7 @@ public partial class ConfigLogin
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "CustomLoginBlock";
         ThirdPartyIdps = await ThirdPartyIdpService.GetSelectAsync();
     }
 

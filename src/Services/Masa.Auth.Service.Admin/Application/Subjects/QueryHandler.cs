@@ -452,7 +452,7 @@ public class QueryHandler
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
 
-        if(tpUser != null && tpUser.User != null && userModel != null)
+        if (tpUser != null && tpUser.User != null && userModel != null)
         {
             var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(tpUser.User.Id));
             userModel.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
@@ -722,8 +722,7 @@ public class QueryHandler
             var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(cacheUserModel.StaffId.Value));
             if (cacheStaffTeams != null)
             {
-                query.Result = cacheStaffTeams.Where(e => e.Id == cacheUserModel.StaffId.Value)
-                                                .Select(e => new TeamSampleDto(e.Id, e.TeamMemberType))
+                query.Result = cacheStaffTeams.Select(e => new TeamSampleDto(e.Id, e.TeamMemberType))
                                                 .ToList();
                 return;
             }
