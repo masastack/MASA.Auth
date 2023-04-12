@@ -11,7 +11,7 @@
     @if (_inputModel.PhoneLogin)
     {
         <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="_inputModel.PhoneNumber" Label="@T("PhoneNumber")"
-                Placeholder="@T("PhoneNumberPlaceHolder")" Outlined Autofocus>
+                Placeholder="@T("PhoneNumberPlaceholder")" Outlined Autofocus>
     </MTextField>
         <CaptchaSendTextField Class="mt-3" @bind-Value="_inputModel.SmsCode" OnClick="GetSmsCode" />
     }
@@ -24,7 +24,7 @@
         </PrependInnerContent>
     </MTextField>
         <MTextField @bind-Value="@_inputModel.Password" Class="mt-3" Label="@T("Password")" OnKeyDown="KeyDownHandler"
-                Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceHolder")"
+                Type="@(_showPwd ? "text" : "password")" Placeholder="@T("PasswordPlaceholder")"
                 AppendIcon="@(_showPwd ? "mdi-eye" : "mdi-eye-off")" OnAppendClick="()=>_showPwd = !_showPwd" Outlined>
         <PrependInnerContent>
             <MIcon>mdi-lock</MIcon>
