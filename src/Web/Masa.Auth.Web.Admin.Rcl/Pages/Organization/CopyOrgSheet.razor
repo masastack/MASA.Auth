@@ -117,7 +117,9 @@
                                                 </MListItemSubtitle>
                                             </MListItemContent>
                                             <div style="@(hoverComtext.Hover?"display:flex":"display:none")" class="align-center">
-                                                <SIcon Size="24" OnClick="()=>RemoveStaff(staff)">mdi-close</SIcon>
+                                                <MButton Class="mr-4" Icon OnClick="()=>RemoveStaff(staff)">
+                                                    <SIcon Size="24">mdi-close</SIcon>
+                                                </MButton>
                                             </div>
                                         </MListItem>
                                     </MHover>

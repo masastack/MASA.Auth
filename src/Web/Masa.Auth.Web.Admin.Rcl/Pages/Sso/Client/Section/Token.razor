@@ -81,7 +81,9 @@
             <STextField @bind-Value="Dto.ClientClaimDto.Value" Label="@T("Value")" />
         </MCol>
         <MCol Md="@("auto")" Class="d-flex align-center">
-            <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
+            <MButton Class="mr-4" Icon OnClick="AddClaim">
+                <SIcon Size=32 Color="primary" Style="color: white;">@IconConstants.Add</SIcon>
+            </MButton>
         </MCol>
         <MCol Md=12>
             <MDataTable Headers="_headers" Items="Dto.Claims" TItem="ClientClaimDto" HideDefaultFooter DisablePagination Dense Class="margin-border">
@@ -92,7 +94,9 @@
                     @switch (context.Header.Value)
                     {
                         case "Action":
-                            <SIcon Tooltip="@T("Delete")" OnClick="()=>Dto.Claims.Remove(context.Item)">mdi-close</SIcon>
+                            <MButton Class="mr-4" Icon OnClick="()=>Dto.Claims.Remove(context.Item)">
+                                <SIcon Tooltip="@T("Delete")">mdi-close</SIcon>
+                            </MButton>
                             break;
                         default:
                             <span class="subtitle">@context.Value</span>

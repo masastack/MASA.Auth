@@ -35,10 +35,16 @@
                             </div>                           
                         </MCol>
                         <MCol Class="d-flex">
-                            <div class="my-auto">
-                                <SIcon Tooltip="@T("Up")" OnClick="async () =>await Up(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</SIcon>
-                                <SIcon Tooltip="@T("Down")" OnClick="async () =>await Down(thirdPartyIdp)" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</SIcon>
-                                <SIcon Tooltip="@T("Delete")" OnClick="async () =>await Remove(thirdPartyIdp)" Class="mr-8">mdi-delete-outline</SIcon>
+                            <div class="my-auto d-flex">
+                                <MButton Class="mr-6" Icon OnClick="async () =>await Up(thirdPartyIdp)">
+                                    <SIcon Tooltip="@T("Up")" Disabled="thirdPartyIdp.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</SIcon>
+                                </MButton>
+                                <MButton Class="mr-6" Icon OnClick="async () =>await Down(thirdPartyIdp)">
+                                    <SIcon Tooltip="@T("Down")" Disabled="thirdPartyIdp.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</SIcon>
+                                </MButton>
+                                <MButton Class="mr-6" Icon OnClick="async () =>await Remove(thirdPartyIdp)">
+                                    <SIcon Tooltip="@T("Delete")" Class="mr-8">mdi-delete-outline</SIcon>
+                                </MButton>
                             </div>
                         </MCol>
                     </MRow>
