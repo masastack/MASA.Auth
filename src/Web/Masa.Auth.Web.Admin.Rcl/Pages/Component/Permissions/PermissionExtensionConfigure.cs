@@ -28,6 +28,11 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         }
     }
 
+    protected override async Task RoleUnionTeamPermissionValueChangedAsync()
+    {
+        ExtensionValue = ExtensionValue.Where(e=>e.Effect||(e.Effect==false&&RoleUnionTeamPermission.Contains(e.PermissionId))).ToList();
+    }
+
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
         var value = permissions.Select(permission => new SubjectPermissionRelationDto(Guid.Parse(permission.Code), true)).ToList();
