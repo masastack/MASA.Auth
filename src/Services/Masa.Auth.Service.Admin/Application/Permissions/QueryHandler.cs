@@ -387,8 +387,8 @@ public class QueryHandler
         if (query.Teams.Count == 0) return;
         var teamIds = query.Teams.Select(team => team.Id).ToList();
 
-        var permissionCacheIds = await GetPermissionsByCacheAsync(teamIds);
-        if (permissionCacheIds == null || permissionCacheIds.Count < 1)
+        var permissionIds = await GetPermissionsByCacheAsync(query.Teams);
+        if (permissionIds == null || permissionIds.Count < 1)
         {
             permissionCacheIds = await GetPermissionsAsync(teamIds);
         }
@@ -422,8 +422,9 @@ public class QueryHandler
             return permissionIds;
         }
 
-        async Task<List<Guid>> GetPermissionsByCacheAsync(IEnumerable<Guid> teamEnumerableIds)
+        async Task<List<Guid>> GetPermissionsByCacheAsync(List<TeamSampleDto> teams)
         {
+            var teamIds = query.Teams.Select(team => team.Id).ToList();
             var permissionIds = new List<Guid>();
 
             var teamIdCacheKeys = teamEnumerableIds.Select(CacheKey.TeamKey);
@@ -440,12 +441,20 @@ public class QueryHandler
                     var permissionQuery = new PermissionsByRoleQuery(roleIds);
                     await _eventBus.PublishAsync(permissionQuery);
 
-                    var permissionRelations = team.TeamMember.Permissions;
-                    permissionRelations.AddRange(team.TeamAdmin.Permissions);
+                    List<SubjectPermissionRelationDto> permissionRelations = new();
+                    if (teams.Any(t => t.Id == team.Id && t.TeamMemberType == TeamMemberTypes.Member))
+                    {
+                        permissionRelations.AddRange(team.TeamMember.Permissions);
+                    }
+                    if (teams.Any(t => t.Id == team.Id && t.TeamMemberType == TeamMemberTypes.Admin))
+                    {
+                        permissionRelations.AddRange(team.TeamAdmin.Permissions);
+                    }
 
-                    var rejectPermissions = permissionRelations.Where(e => e.Effect == false).Select(tp => tp.PermissionId);
-                    var permissions = permissionQuery.Result.Union(permissionRelations.Where(tp => tp.Effect)
-                                            .Select(tp => tp.PermissionId)).Where(permission => rejectPermissions.All(rp => rp != permission));
+
+                    var rejectPermisisons = permissionRelations.Where(e => e.Effect == false).Select(tp => tp.PermissionId);
+                    var permissions = permissionQuery.Result.Union(permissionRelations.Where(tp => tp.Effect == true)
+                                           .Select(tp => tp.PermissionId)).Where(permission => rejectPermisisons.All(rp => rp != permission));
                     permissionIds.AddRange(permissions);
                 }
             }
