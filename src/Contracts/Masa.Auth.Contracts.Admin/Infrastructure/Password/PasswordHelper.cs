@@ -1,4 +1,5 @@
-
+// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Password;
 
@@ -38,9 +39,10 @@ public class PasswordHelper : ISingletonDependency
             password = string.Empty;
         }
 
-        if (!Regex.IsMatch(password, GetPasswordRule()))
+        var passwordRule = GetPasswordRule();
+        if (!Regex.IsMatch(password, passwordRule))
         {
-            var message = "PasswordValidateFailed";
+            var message = DEFAULTPASSWORDRULE.Equals(passwordRule) ? "PasswordFormatVerificationPrompt" : "PasswordValidateFailed";
             try
             {
                 message = I18n.T(message);
