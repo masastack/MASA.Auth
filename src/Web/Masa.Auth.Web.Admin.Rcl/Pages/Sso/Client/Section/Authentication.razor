@@ -1,4 +1,4 @@
-﻿@inherits AdminCompontentBase
+﻿@inherits ClientSectionCompontentBase
 
 <MRow Class="pt-4 mr-2">
     <MCol Md=12>
@@ -11,7 +11,9 @@
             {
                 <MCol Md=6 Class="d-flex">
                     <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
-                    <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
+                    <MButton Class="mr-4" Icon OnClick="()=>RemoveCallBackRedirectUri(uri)">
+                        <SIcon>mdi-close-circle</SIcon>
+                    </MButton>
                 </MCol>
             }
         </MRow>
@@ -26,7 +28,9 @@
             {
                 <MCol Md=6 Class="d-flex">
                     <STextField HideDetails="true" Value="uri" Filled Disabled />
-                    <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
+                    <MButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
+                        <SIcon>mdi-close-circle</SIcon>
+                    </MButton>
                 </MCol>
             }
         </MRow>

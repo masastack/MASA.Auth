@@ -36,6 +36,7 @@ global using Masa.Auth.Web.Admin.Rcl.Pages.Sso.Client.Section;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 global using Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users.Model;
+global using Masa.Auth.Web.Admin.Rcl.Shared;
 global using Masa.Blazor;
 global using Masa.Blazor.Presets;
 global using Masa.BuildingBlocks.Authentication.Identity;

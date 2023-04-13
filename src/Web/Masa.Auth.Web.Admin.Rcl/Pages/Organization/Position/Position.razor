@@ -11,8 +11,8 @@
             <div class="d-flex mb-6">
                 <SSearch @bind-Value="Search" />
                 <MSpacer />
-                <SButton Small Color="primary" OnClick="() => OpenAddApiResourceDialog()" BorderRadiusClass="rounded-lg">
-                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                <SButton Small Icon Color="primary" OnClick="() => OpenAddApiResourceDialog()" BorderRadiusClass="rounded-lg">
+                    <SIcon Size=18>@IconConstants.Add</SIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </SButton>
             </div>
@@ -40,8 +40,14 @@
                             </div>
                             break;
                         case "Action":
-                            <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</SIcon>
-                            <SIcon Tooltip="@T("Delete")" Class="ml-6" OnClick="()=> OpenRemovePositionDialog(context.Item)">@IconConstants.Remove</SIcon>
+                            <div class="d-flex">
+                                <MButton Class="mr-4" Icon OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
+                                </MButton>
+                                <MButton Class="mr-4" Icon OnClick="()=> OpenRemovePositionDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
+                                </MButton>
+                            </div>
                             break;
                         default:
                             <span>@context.Value</span>

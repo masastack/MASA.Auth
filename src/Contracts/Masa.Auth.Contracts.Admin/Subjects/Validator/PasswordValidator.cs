@@ -7,7 +7,6 @@ public class PasswordValidator : MasaAbstractValidator<string?>
 {
     public PasswordValidator(PasswordHelper passwordHelper)
     {
-        
         RuleFor(password => password).Required().Custom(passwordHelper.ValidatePassword);
     }
 }

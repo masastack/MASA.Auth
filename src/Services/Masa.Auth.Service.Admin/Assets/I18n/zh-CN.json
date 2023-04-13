@@ -33,7 +33,7 @@
   "ClientIdNotFound": "客户端 id = {0} 不存在",
   "LdapAccountNotexist": "域账号{0}不存在",
   "LdapAccountValidationFailed": "域账号{0}验证失败",
-  "LdapNotConfigured": "没有配置Ldap认证",
+  "LdapNotConfigured": "没有配置LDAP认证",
   "AccountDisabled": "账号已禁用",
   "AccountNotExist": "账号{0}不存在",
   "UserPhoneNumberExist": "用户手机号{0}已存在",
