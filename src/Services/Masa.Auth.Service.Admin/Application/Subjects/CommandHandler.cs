@@ -878,11 +878,6 @@ public class CommandHandler
             }
         }
 
-        string Convert(string? str)
-        {
-            return string.IsNullOrEmpty(str) ? "empty" : str;
-        }
-
         SyncStaffResultsDto.SyncStaffResult Error(string jobNumber, params string[] errorMessages) =>
             new SyncStaffResultsDto.SyncStaffResult()
             {

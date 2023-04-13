@@ -48,14 +48,11 @@ public class TeamCommandHandler
 
         var teamId = Guid.NewGuid();
         var avatarName = $"{teamId}.png";
-        if (!ColorGroupConstants.ColorGroup.TryGetValue(dto.Avatar.Color, out var color))
-        {
-            color = ColorGroupConstants.DEFAULT_COLOR;
-        }
+        var colorGroup = ColorPairHelper.GetColorGroup(dto.Avatar.Color);
         Team team;
         try
         {
-            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
+            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
             await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
             team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
         }
@@ -94,11 +91,8 @@ public class TeamCommandHandler
         if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||
                 string.IsNullOrWhiteSpace(team.Avatar.Url))
         {
-            if (!ColorGroupConstants.ColorGroup.TryGetValue(dto.Avatar.Color, out var color))
-            {
-                color = ColorGroupConstants.DEFAULT_COLOR;
-            }
-            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.White, Color.ParseHex(color), 200);
+            var colorGroup = ColorPairHelper.GetColorGroup(dto.Avatar.Color);
+            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
             await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
         }
         team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
