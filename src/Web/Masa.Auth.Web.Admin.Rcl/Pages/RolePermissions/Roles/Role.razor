@@ -51,8 +51,14 @@
                             <EnableChip Value="context.Item.Enabled" />
                             break;
                         case "Action":
-                            <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateRoleDialog(context.Item)">@IconConstants.Update</SIcon>
-                            <SIcon Tooltip="@T("Delete")" Class="ml-7" OnClick="()=> OpenRemoveRoleDialog(context.Item)">@IconConstants.Remove</SIcon>
+                            <div class="d-flex">
+                                <MButton Icon Class="mr-4" OnClick="()=> OpenUpdateRoleDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
+                                </MButton>
+                                <MButton Icon Class="mr-4" OnClick="()=> OpenRemoveRoleDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
+                                </MButton>
+                            </div>
                             break;
                         default:
                             <SItemCol Value="@context.Value"></SItemCol>

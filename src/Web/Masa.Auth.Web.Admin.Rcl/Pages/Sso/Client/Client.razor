@@ -48,7 +48,9 @@
                             <EnableChip Value=context.Item.Enabled />
                             break;
                         case "Action":
-                            <SIcon Tooltip="@T("Edit")" Size="20" Color="regular" OnClick="()=>OpenUpdateDialog(context.Item.Id)">@IconConstants.Update</SIcon>
+                            <MButton Class="mr-4" Icon OnClick="()=>OpenUpdateDialog(context.Item.Id)">
+                                <SIcon Tooltip="@T("Edit")" Size="20" Color="regular">@IconConstants.Update</SIcon>
+                            </MButton>
                             break;
                         default:
                             <span>@context.Value</span>

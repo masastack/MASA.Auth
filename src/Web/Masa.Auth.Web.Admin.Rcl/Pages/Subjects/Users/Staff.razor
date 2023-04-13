@@ -58,8 +58,14 @@
                         <EnableChip Value="context.Item.Enabled" DisabledLabel="@T("Freeze")" />
                         break;
                     case "Action":
-                        <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateStaffDialog(context.Item)">@IconConstants.Update</SIcon>
-                        <SIcon Tooltip="@T("Authorize")" Class="ml-6" OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.UserId)">@IconConstants.Authorize</SIcon>
+                        <div class="d-flex">
+                            <MButton Class="mr-4" Icon OnClick="()=> OpenUpdateStaffDialog(context.Item)">
+                                <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
+                            </MButton>
+                            <MButton Class="mr-4" Icon OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.UserId)">
+                                <SIcon Tooltip="@T("Authorize")">@IconConstants.Authorize</SIcon>
+                            </MButton>
+                        </div>
                         break;
                     default:
                         <span class="subtitle">@context.Value</span>

@@ -45,8 +45,14 @@
                             <EnableChip Value="@context.Item.Enabled" />
                             break;
                         case "Action":
-                            <SIcon Tooltip="@T("Edit")" OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">@IconConstants.Update</SIcon>
-                            <SIcon Tooltip="@T("Delete")" Class="ml-6" OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">@IconConstants.Remove</SIcon>
+                            <div class="d-flex">
+                                <MButton Class="mr-4" Icon OnClick="()=> OpenUpdateApiResourceDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Edit")" >@IconConstants.Update</SIcon>
+                                </MButton>
+                                <MButton Class="mr-4" Icon OnClick="()=> OpenRemoveApiResourceDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
+                                </MButton>
+                            </div>
                             break;
                         default:
                             <span>@context.Value</span>
