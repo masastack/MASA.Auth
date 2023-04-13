@@ -18,7 +18,6 @@ public class RegisterValidator : MasaAbstractValidator<RegisterModel>
 
         _ = WhenNotEmpty(r => r.ConfirmPassword, rule => rule.Must((register, value) => 
             register.ConfirmPassword == register.Password).WithMessage("The password is inconsistent with the confirm password")
-            .Matches(BusinessConsts.PASSWORD_REGULAR).WithMessage("Password must contain numbers and letter, and not less than 6 digits")
             .MaximumLength(30));
         RuleFor(register => register.ConfirmPassword)
           .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Password)));

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using Fare;
 global using FluentValidation;
 global using FluentValidation.Validators;
 global using Magicodes.ExporterAndImporter.Core;
@@ -8,12 +9,14 @@ global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Converters;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Password;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums;
 global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.Enums;
 global using Masa.BuildingBlocks.Configuration;
+global using Masa.BuildingBlocks.Globalization.I18n;
 global using Masa.BuildingBlocks.SearchEngine.AutoComplete;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
@@ -39,6 +42,7 @@ global using System.Runtime.CompilerServices;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
+global using System.Text.RegularExpressions;
 global using System.Linq.Expressions;
 global using Util.Reflection.Expressions;
 global using Util.Reflection.Expressions.Abstractions;
