@@ -81,7 +81,7 @@
             <STextField @bind-Value="Dto.ClientClaimDto.Value" Label="@T("Value")" />
         </MCol>
         <MCol Md="@("auto")" Class="d-flex align-center">
-            <MIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
+            <SIcon Size=32 OnClick="AddClaim" Color="primary" Style="color: white;">@IconConstants.Add</SIcon>
         </MCol>
         <MCol Md=12>
             <MDataTable Headers="_headers" Items="Dto.Claims" TItem="ClientClaimDto" HideDefaultFooter DisablePagination Dense Class="margin-border">

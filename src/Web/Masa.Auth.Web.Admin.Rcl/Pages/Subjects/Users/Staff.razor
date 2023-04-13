@@ -7,12 +7,12 @@
             <SSearch @bind-Value="Search" BackgroundColor="fff" />
             <div @onclick="() => SyncStaffDialogVisible=true" class="ml-4 d-flex button white" style="width: 70px;height:40px;">
                 <div class="ma-auto">
-                    <MIcon Color="emphasis2" Size=20>@IconConstants.Sync</MIcon>
+                    <SIcon Color="emphasis2" Size=20>@IconConstants.Sync</SIcon>
                     <span class="caption emphasis2--text">@T("Sync")</span>
                 </div>
             </div>
             <SButton Small Class="ml-4" OnClick=OpenAddStaffDialog BorderRadiusClass="rounded-lg">
-                <MIcon Size=18>@IconConstants.Add</MIcon>
+                <SIcon Size=18>@IconConstants.Add</SIcon>
                 <span class="ml-2 btn">@T("Add")</span>
             </SButton>
         </div>

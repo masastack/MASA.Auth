@@ -12,11 +12,11 @@
                 <SSearch @bind-Value="Search" />
                 <MSpacer />
                 <SButton Small OnClick="() => AddStandardIdentityResourcesAsync()" BorderRadiusClass="rounded-lg">
-                    <MIcon Size=18>@IconConstants.Setting</MIcon>
+                    <SIcon Size=18>@IconConstants.Setting</SIcon>
                     <span class="ml-2 btn">@T("Quickly create standard identity resources")</span>
                 </SButton>
                 <SButton Small Class="ml-4" OnClick="() => OpenAddRoleDialog()" BorderRadiusClass="rounded-lg">
-                    <MIcon Size=18>@IconConstants.Add</MIcon>
+                    <SIcon Size=18>@IconConstants.Add</SIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </SButton>
             </div>

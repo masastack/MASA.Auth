@@ -24,7 +24,7 @@
     {
         <MCol Md=6 Class="d-flex">
             <STextField HideDetails="true" Value="origin" Filled Disabled Class="flex-grow-1" />
-            <MIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</MIcon>
+            <SIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</SIcon>
         </MCol>
     }
     <MCol Md=12>
@@ -40,7 +40,7 @@
                 <STextField @bind-Value="@Dto.Property.Value" Label="@T("Value")" />
             </MCol>
             <MCol Md="@("auto")" Class="d-flex align-center">
-                <MIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">@IconConstants.Add</MIcon>
+                <SIcon Size=32 OnClick="AddProperty" Color="primary" Style="color: white;">@IconConstants.Add</SIcon>
             </MCol>
             <MCol Md=12>
                 <MDataTable Headers="_headers" Dense Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="margin-border">
