@@ -5,14 +5,14 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class PasswordValidator : MasaAbstractValidator<string?>
 {
-    public const string PASSWORDRULE_ConfigName = "$public.AppSettings:PasswordRule";
+    public const string PASSWORDRULE = "$public.AppSettings:PasswordRule";
 
     public PasswordValidator(IMasaConfiguration masaConfiguration)
     {
         var passwordRule = string.Empty;
-        if(masaConfiguration != null)
+        if (masaConfiguration != null)
         {
-            passwordRule = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>(PASSWORDRULE_ConfigName, string.Empty);
+            passwordRule = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>(PASSWORDRULE, string.Empty);
         }
 
         if (string.IsNullOrWhiteSpace(passwordRule))

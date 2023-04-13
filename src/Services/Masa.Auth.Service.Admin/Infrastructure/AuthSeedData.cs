@@ -108,8 +108,8 @@ public class AuthSeedData
 
         #region Scheduler
         var schedulerMenus = new List<Permission>() {
-            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"ResourceFiles","scheduler.resource","pages/resource","mdi-file-document-outline",1,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"Team","Team","pages/team","mdi-account-group-outline",2,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"ResourceFiles","scheduler.resource","resource","mdi-file-document-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"Team","Team","team","mdi-account-group-outline",2,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.SCHEDULER))
         {
