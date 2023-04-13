@@ -44,5 +44,7 @@
   },
   "CustomLoginBlock": {
     "TitleName": "Name"
-  }
+  },
+  "ConfirmChangePassword": "I confirm to change the password",
+  "PasswordValidateFailed": "Password validate failed"
 }

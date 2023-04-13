@@ -37,7 +37,7 @@
                         <STextField Required Readonly=CanUpdateAccount @bind-Value="User.Account" Label="@T("Account")" />
                     </MCol>
                     <MCol>
-                        <SCopyPassword Value="@UserPassword.Password" ValueChanged="ResetUserPasswordAsync" />
+                        <SGeneratePassword Value="@UserPassword.Password" ValueChanged="ResetUserPasswordAsync" />
                     </MCol>
                 </MRow>
                 <DefaultTitle>@T("DetailInformation")</DefaultTitle>

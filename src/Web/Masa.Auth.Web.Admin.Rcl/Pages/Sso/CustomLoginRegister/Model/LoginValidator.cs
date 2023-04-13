@@ -8,7 +8,7 @@ public class LoginValidator : MasaAbstractValidator<LoginModel>
     public LoginValidator(PasswordValidator passwordValidator)
     {
         RuleFor(login => login.Account).Required().ChineseLetterNumber();
-        RuleFor(user => user.Password).SetValidator(passwordValidator);
+        RuleFor(user => user.Password).Required().SetValidator(passwordValidator);
     }
 }
 
