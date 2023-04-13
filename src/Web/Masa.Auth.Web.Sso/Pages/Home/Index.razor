@@ -1,19 +1,43 @@
 ﻿@page "/"
+@inherits SsoCompontentBase
+@layout SimpleLayout
 
-<ul>
-    <li>
-        IdentityServer publishes a
-        <a href="/.well-known/openid-configuration">discovery document</a>
-        where you can find metadata and links to all the endpoints, key material, etc.
-    </li>
-    <li>
-        Click <a href="/diagnostics">here</a> to see the claims for your current session.
-    </li>
-    <li>
-        Click <a href="/grants">here</a> to manage your stored grants.
-    </li>
-    <li>
-        Click <a href="/ciba/all">here</a> to view your pending CIBA login requests.
-    </li>
-</ul>
+<MCard MaxWidth="512">
+    <MCardTitle Class="h5" Style="color: #1B2559;">
+        Masa Sso
+    </MCardTitle>
+    <MCardSubtitle Class="grey--text" Style="color: #7681AB !important;line-height: 24px;font-size: 16px;">
+        @T("You agree to MASA technical team to obtain your following rights regarding Tencent wechat")
+    </MCardSubtitle>
+    <MCardText Class="mt-12" Style="color: #A3AED0;font-size: 14px;">
+        <ul>
+            <li>
+                IdentityServer publishes a
+                <a href="/.well-known/openid-configuration">discovery document</a>
+                where you can find metadata and links to all the endpoints, key material, etc.
+            </li>
+            <li class="mt-7">
+                Click <a href="/diagnostics">here</a> to see the claims for your current session.
+            </li>
+            <li class="mt-7">
+                Click <a href="/grants">here</a> to manage your stored grants.
+            </li>
+            <li class="mt-7">
+                Click <a href="/ciba/all">here</a> to view your pending CIBA login requests.
+            </li>
+        </ul>
+        <div class="mt-12 d-flex flex-wrap justify-center">
+            <MButton Class="primary rounded-pill" Width="340" Height="48" OnClick="Logout">@T("LogoutOfLogin")</MButton>
+            <MButton Class="rounded-pill mt-6 mb-10" Outlined Color="#4318FF" Width="340" Height="48">
+                @T("GoToAuthorization")
+            </MButton>
+        </div>
+    </MCardText>
+</MCard>
 
+@code {
+
+    private void Logout()
+    {
+    }
+}

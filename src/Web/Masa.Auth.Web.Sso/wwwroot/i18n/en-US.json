@@ -65,5 +65,7 @@
   "DisplayName": "Nick Name",
   "DisplayNamePlaceholder": "Place Enter Nick Name",
   "Name": "Name",
-  "NamePlaceholder": "Place Enter Name"
+  "NamePlaceholder": "Place Enter Name",
+  "LogoutOfLogin": "Logout of login",
+  "GoToAuthorization": "Go to authorization"
 }
