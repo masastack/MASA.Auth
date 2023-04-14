@@ -46,5 +46,6 @@
     "TitleName": "Name"
   },
   "ConfirmChangePassword": "I confirm to change the password",
-  "PasswordValidateFailed": "Password validate failed"
+  "PasswordValidateFailed": "Password validate failed",
+  "LdapConfigure": "Ldap Config"
 }
