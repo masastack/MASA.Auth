@@ -4,21 +4,20 @@
 <PageTitle>
     @T("OperationLog")
 </PageTitle>
-<div style="height: calc(100vh - 250px);@(OperationLogs.Count<=2?"min-height: calc(100vh - 120px);":"")">
+<div style="height: calc(100vh - 250px);@(_operationLogs.Count<=2?"min-height: calc(100vh - 120px);":"")">
     <AutoHeight AutoClass="mt-6 m-sheet theme--light m-card pa-6 full-height pr-0">
         <HeaderContent>
             <div class="d-flex">
-                <SDateTimeRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
-                <SRelativeTime @bind-StartTime=StartTime @bind-EndTime=EndTime Class="ml-6" Clearable/>
+                <SDateTimeRangeToolbar StartDateTime=_startTime EndDateTime=_endTime OnUpdate="OnDateTimeUpdate" Clearable></SDateTimeRangeToolbar>
                 <MSpacer />
-                <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" Clearable FillBackground=false Class="ml-6" Style="width: 100px !important;" />               
+                <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" Clearable FillBackground=false Class="ml-6" Style="width: 100px !important;" />
                 <SUserAutoComplete @bind-Value="UserId" Label="@T("Operator")" FillBackground=false Class="ml-6" Clearable Style="width: 134px !important;" />
                 <SSearch @bind-Value="Search" BackgroundColor="#fff" Placeholder="@T("Please enter operation description")" Class="ml-6" Style="width: 134px !important;" />
-            </div>        
+            </div>
         </HeaderContent>
         <AutoHeightContent>
-            <MVirtualScroll OverscanCount=5 TItem="OperationLogDto" Items="OperationLogs">
-                <ItemContent>              
+            <MVirtualScroll OverscanCount=5 TItem="OperationLogDto" Items="_operationLogs">
+                <ItemContent>
                     <div class="d-flex mb-6" style="height:36px;">
                         <div class="mr-1 h5 regular--text">@context.OperationTime.ToString("MM-dd")</div>
                         <div class="mt-auto body regular3--text">@context.OperationTime.ToString("HH:mm:ss")</div>
@@ -26,9 +25,9 @@
                     <div>
                         @foreach (var (key, value) in new List<(string, string)>
                         {
-                            (T(nameof(OperationLogDto.Operator)),context.OperatorName),
-                            (T(nameof(OperationLogDto.OperationType)),@T(context.OperationType.ToString())),
-                            (T(nameof(OperationLogDto.OperationDescription)),@context.OperationDescription)
+                        (T(nameof(OperationLogDto.Operator)),context.OperatorName),
+                        (T(nameof(OperationLogDto.OperationType)),@T(context.OperationType.ToString())),
+                        (T(nameof(OperationLogDto.OperationDescription)),@context.OperationDescription)
                         })
                         {
                             <div class="d-flex mb-6">
@@ -44,10 +43,10 @@
                     </div>
                     <MDivider Class="mb-6" />
                 </ItemContent>
-            </MVirtualScroll>           
+            </MVirtualScroll>
         </AutoHeightContent>
         <FooterContent>
-            <SPagination Class="mt-6" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+            <SPagination Class="mt-6" @bind-Page="Page" @bind-PageSize=PageSize Total=_total />
         </FooterContent>
     </AutoHeight>
 </div>

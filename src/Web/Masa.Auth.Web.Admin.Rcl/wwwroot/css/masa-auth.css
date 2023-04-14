@@ -908,7 +908,7 @@ input::-webkit-input-placeholder {
     padding: 0px 28px !important;
 }
 
-.d-flex table tr {
+.d-flex .m-data-table tr {
     height: 72px;
     font-size: 14px;
 }

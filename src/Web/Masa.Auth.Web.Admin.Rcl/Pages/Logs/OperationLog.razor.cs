@@ -11,118 +11,124 @@ public partial class OperationLog
     private int _page = 1;
     private int _pageSize = 10;
     private Guid _userId;
-    private DateTime? _startTime;
-    private DateTime? _endTime;
+    private DateTimeOffset? _startTime;
+    private DateTimeOffset? _endTime;
     private OperationTypes _operationType;
 
     public Guid UserId
     {
-        get { return _userId; }
+        get => _userId;
         set
         {
-            _userId = value;
-            _page = 1;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            var temp = _userId;
+            if (temp != value)
+            {
+                _userId = value;
+                _page = 1;
+                OnParameterChangedAsync();
+            }
         }
     }
 
     public OperationTypes OperationType
     {
-        get { return _operationType; }
+        get => _operationType;
         set
         {
-            _operationType = value;
-            _page = 1;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            var temp = _operationType;
+            if (temp != value)
+            {
+                _operationType = value;
+                _page = 1;
+                OnParameterChangedAsync();
+            }
         }
     }
 
-    public DateTime? StartTime
+    private Task OnDateTimeUpdate((DateTimeOffset? start, DateTimeOffset? end) arg)
     {
-        get => _startTime;
-        set
-        {
-            _startTime = value;
-            _page = 1;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-        }
-    }
-
-    public DateTime? EndTime
-    {
-        get => _endTime;
-        set
-        {
-            _endTime = value;
-            _page = 1;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
-        }
+        _startTime = arg.start;
+        _endTime = arg.end;
+        return OnParameterChangedAsync();
     }
 
     public string Search
     {
-        get { return _search ?? ""; }
+        get => _search ?? "";
         set
         {
-            _search = value;
-            _page = 1;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            var temp = _search;
+            if (temp != value)
+            {
+                _search = value;
+                _page = 1;
+                OnParameterChangedAsync();
+            }
         }
     }
 
     public int Page
     {
-        get { return _page; }
+        get => _page;
         set
         {
-            _page = value;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            var temp = _page;
+            if (temp != value)
+            {
+                _page = value;
+                if (_total != 0 && _page > (_total / PageSize))
+                {
+                    _page = 1;
+                }
+                OnParameterChangedAsync();
+            }
         }
     }
 
     public int PageSize
     {
-        get { return _pageSize; }
+        get => _pageSize;
         set
         {
-            _page = 1;
-            _pageSize = value;
-            GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+            var temp = _page;
+            if (temp != value)
+            {
+                _pageSize = value;
+                _page = 1;
+                OnParameterChangedAsync();
+            }
         }
     }
 
-    public long Total { get; set; }
+    private long _total;
 
-    public List<OperationLogDto> OperationLogs { get; set; } = new();
-
-    public int CurrentOperationLogId { get; set; }
-
-    public bool ViewOperationLogDialogVisible { get; set; }
+    private List<OperationLogDto> _operationLogs = new();
 
     private OperationLogService OperationLogService => AuthCaller.OperationLogService;
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        PageName = "OperationLogBlock";
-        await GetOperationLogsAsync();
+        if (firstRender)
+        {
+            PageName = "OperationLogBlock";
+            await GetOperationLogsAsync();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
-    public List<DataTableHeader<OperationLogDto>> GetHeaders() => new()
+    private Task OnParameterChangedAsync()
     {
-        new() { Text = T(nameof(OperationLogDto.OperationTime)), Value = nameof(OperationLogDto.OperationTime), Sortable = false },
-        new() { Text = T(nameof(OperationLogDto.OperatorName)), Value = nameof(OperationLogDto.OperatorName), Sortable = false },
-        new() { Text = T(nameof(OperationLogDto.OperationType)), Value = nameof(OperationLogDto.OperationType), Sortable = false },
-        new() { Text = T(nameof(OperationLogDto.OperationDescription)), Value = nameof(OperationLogDto.OperationDescription), Sortable = false },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
+        return GetOperationLogsAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+    }
 
     public async Task GetOperationLogsAsync()
     {
         Loading = true;
-        var reuquest = new GetOperationLogsDto(Page, PageSize, UserId, StartTime, EndTime, OperationType, Search);
-        var response = await OperationLogService.GetListAsync(reuquest);
-        OperationLogs = response.Items;
-        OperationLogs.ForEach(operationLog => operationLog.OperationTime = operationLog.OperationTime.Add(JsInitVariables.TimezoneOffset));
-        Total = response.Total;
+        var request = new GetOperationLogsDto(Page, PageSize, UserId, _startTime?.UtcDateTime, _endTime?.UtcDateTime, OperationType, Search);
+        var response = await OperationLogService.GetListAsync(request);
+        _operationLogs = response.Items;
+        _operationLogs.ForEach(operationLog => operationLog.OperationTime = operationLog.OperationTime.Add(JsInitVariables.TimezoneOffset));
+        _total = response.Total;
     }
+
 }
