@@ -50,10 +50,28 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             }
         }
         value.AddRange(ExtensionValue.Where(ev => !ev.Effect && !value.Contains(ev)));
-        foreach (var (code, parentCode) in EmptyPermissionMap)
+
+        var parentValue = new List<SubjectPermissionRelationDto>();
+        foreach (var effectVal in value.IntersectBy(EmptyPermissionMap.Keys, p => p.PermissionId))
         {
-            if (value.Any(v => v.PermissionId == code)) value.Insert(0, new(parentCode, true));
+            if (!EmptyPermissionMap.TryGetValue(effectVal.PermissionId, out Guid parentCode) || parentValue.Any(p => p.PermissionId == parentCode))
+            {
+                continue;
+            }
+
+            var childsCode = EmptyPermissionMap.Where(p => p.Value == parentCode).Select(p => p.Key).ToList();
+            var childs = value.IntersectBy(childsCode, p => p.PermissionId).ToList();
+            if (childs.Count == childsCode.Count && childs.All(child => !child.Effect))
+            {
+                parentValue.Add(new(parentCode, false));
+            }
+            else
+            {
+                parentValue.Add(new(parentCode, true));
+            }
         }
+        parentValue.ForEach(p => value.Insert(0, p));
+
         await UpdateExtensionValueAsync(value.Distinct().ToList());
     }
 
