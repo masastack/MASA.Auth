@@ -93,13 +93,30 @@ public partial class Index
             }
         }
     }
+    private string? lastProjectId = null;
 
     private async Task SelectProjectItem(ProjectDto project)
     {
+        lastProjectId = _curProjectId;
         _curAppItems = project.Apps;
         _curProjectId = project.Identity;
+        if (lastProjectId != _curProjectId)
+        {
+            SetAppIds(_curAppItems);
+        }
         _childApiItems = await PermissionService.GetApiPermissionSelectAsync(_curProjectId);
         await InitAppPermissions();
+    }
+
+    private Dictionary<string, Guid> _appIds = new();
+
+    private void SetAppIds(List<AppDto> curAppItems)
+    {
+        _appIds.Clear();
+        foreach (var app in curAppItems)
+        {
+            _appIds.TryAdd(app.Identity, Guid.NewGuid());
+        }
     }
 
     private async Task InitAppPermissions()
@@ -109,7 +126,7 @@ public partial class Index
             IsPermission = false,
             AppId = a.Identity,
             AppTag = a.Tag,
-            Id = Guid.NewGuid(),
+            Id = _appIds[a.Identity],
             AppUrl = a.Url,
             Name = a.Name
         }).ToList();
@@ -124,7 +141,7 @@ public partial class Index
             IsPermission = false,
             AppId = a.Identity,
             AppTag = a.Tag,
-            Id = Guid.NewGuid(),
+            Id = _appIds[a.Identity],
             AppUrl = a.Url,
             Name = a.Name
         }).ToList();
@@ -218,10 +235,15 @@ public partial class Index
             return;
         }
         dto.SystemId = _curProjectId;
-        await PermissionService.UpsertMenuPermissionAsync(dto);
+        dto = await PermissionService.UpsertMenuPermissionAsync(dto);
         if (!dto.IsUpdate)
         {
             await InitAppPermissions();
+            _menuPermissionActive = new() { dto.Id };
+        }
+        else
+        {
+            _menuPermissionDetailDto = dto;
         }
         OpenSuccessMessage(T("Add menu permission data success"));
     }
@@ -238,6 +260,11 @@ public partial class Index
         if (!dto.IsUpdate)
         {
             await InitAppPermissions();
+            _apiPermissionActive = new() { dto.Id };
+        }
+        else
+        {
+            _apiPermissionDetailDto = dto;
         }
         OpenSuccessMessage(T("Add api permission data success"));
     }
@@ -266,11 +293,39 @@ public partial class Index
 
     private async Task DeletePermissionAsync(PermissionDetailDto permission)
     {
+        var activeIds = String.Join(",", _menuPermissionActive);
         var isConfirmed = await OpenConfirmDialog(T("Delete Permission"), T("Are you sure to delete permission {0}", DT(permission.Name)));
         if (isConfirmed)
         {
             await PermissionService.RemoveAsync(permission.Id);
+            var parentId = permission.ParentId;
+            if (parentId == Guid.Empty)
+            {
+                if (permission is MenuPermissionDetailDto)
+                {
+                    foreach (var m in _menuPermissions)
+                    {
+                        if (m.Children.Any(x => x.Id == permission.Id))
+                        {
+                            parentId = m.Id;
+                            break;
+                        }
+                    }
+                }
+            }
             await InitAppPermissions();
+            if (permission is MenuPermissionDetailDto mp)
+            {
+                _menuPermissionActive = new() { parentId };
+            }
+            else if (permission is ApiPermissionDetailDto ap)
+            {
+                if (parentId == Guid.Empty)
+                {
+                    parentId = _apiPermissions.First().Id;
+                }
+                _apiPermissionActive = new() { parentId };
+            }
         }
     }
 }

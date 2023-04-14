@@ -36,20 +36,14 @@ builder.Services.AddObjectStorage(option => option.UseAliyunStorage(new AliyunSt
     }
 }));
 
-builder.Services.AddObservable(builder.Logging, () =>
+builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {
-    return new MasaObservableOptions
-    {
-        ServiceNameSpace = builder.Environment.EnvironmentName,
-        ServiceVersion = masaStackConfig.Version,
-        ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH),
-        Layer = masaStackConfig.Namespace,
-        ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
-    };
-}, () =>
-{
-    return masaStackConfig.OtlpUrl;
-});
+    ServiceNameSpace = builder.Environment.EnvironmentName,
+    ServiceVersion = masaStackConfig.Version,
+    ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH),
+    Layer = masaStackConfig.Namespace,
+    ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
+}, () => masaStackConfig.OtlpUrl);
 
 builder.Services.AddMasaIdentity(options =>
 {

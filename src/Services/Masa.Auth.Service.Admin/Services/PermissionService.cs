@@ -41,16 +41,20 @@ public class PermissionService : ServiceBase
         return query.Result;
     }
 
-    private async Task CreateMenuPermissionAsync(IEventBus eventBus,
-        [FromBody] MenuPermissionDetailDto menuPermissionDetailDto)
+    private async Task<MenuPermissionDetailDto?> CreateMenuPermissionAsync(IEventBus eventBus,
+        [FromBody] MenuPermissionDetailDto dto)
     {
-        await eventBus.PublishAsync(new UpsertPermissionCommand(menuPermissionDetailDto));
+        var command = new UpsertPermissionCommand(dto);
+        await eventBus.PublishAsync(command);
+        return command.PermissionDetail as MenuPermissionDetailDto;
     }
 
-    private async Task CreateApiPermissionAsync(IEventBus eventBus,
+    private async Task<ApiPermissionDetailDto?> CreateApiPermissionAsync(IEventBus eventBus,
         [FromBody] ApiPermissionDetailDto apiPermissionDetailDto)
     {
-        await eventBus.PublishAsync(new UpsertPermissionCommand(apiPermissionDetailDto));
+        var command = new UpsertPermissionCommand(apiPermissionDetailDto);
+        await eventBus.PublishAsync(command);
+        return command.PermissionDetail as ApiPermissionDetailDto;
     }
 
     private async Task<List<AppPermissionDto>> GetApplicationPermissionsAsync(IEventBus eventBus, [FromQuery] string systemId)
