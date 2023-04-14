@@ -17,7 +17,6 @@ public class EnvironmentMiddleware : IMiddleware, IScopedDependency
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        _logger.LogInformation("============Headers:[{0}]=============", context.Request.Headers);
         _logger.LogInformation("----- Current Environment Is [{0}] -----", _multiEnvironmentContext.CurrentEnvironment);
         context.Items.Add(IsolationConsts.ENVIRONMENT, _multiEnvironmentContext.CurrentEnvironment);
         return next(context);
