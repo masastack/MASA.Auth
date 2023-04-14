@@ -51,7 +51,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler(1)]
         public async Task UpdateTeamCacheAsync(UpdateTeamCacheCommand command)
         {
-            if (command.TeamIds==null)
+            if (command.TeamIds == null)
             {
                 return;
             }
