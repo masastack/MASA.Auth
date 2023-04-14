@@ -32,14 +32,14 @@
                         <MSwitch @bind-Value="registerField.Required" Disabled="registerField.CannotUpdate" Class="my-auto my-0 pt-0" />
                     </MCol>
                     <MCol Class="d-flex">
-                        <div class="my-auto d-flex">
-                            <MButton Class="mr-8" Icon OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)">
+                        <div class="my-auto">
+                            <MButton Class="mr-6" Icon OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)">
                                 <SIcon Tooltip="@T("Up")">mdi-menu-up</SIcon>
                             </MButton>
-                            <MButton Class="mr-8" Icon OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)">
+                            <MButton Class="mr-6" Icon OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)">
                                 <SIcon Tooltip="@T("Down")">mdi-menu-down</SIcon>
                             </MButton>
-                            <MButton Class="mr-8" Icon OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate">
+                            <MButton Class="mr-6" Icon OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate">
                                 <SIcon Tooltip="@T("Delete")">mdi-delete-outline</SIcon>
                             </MButton>
                         </div>
