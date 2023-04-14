@@ -185,7 +185,7 @@ public partial class Index
             _showMenuInfo = true;
             var curItem = activeItems.First();
             _disableMenuUrl = false;
-            if (curItem.Children.Where(e => e.Type == PermissionTypes.Menu).Count() > 0)
+            if (curItem.Children.Any(e => e.Type == PermissionTypes.Menu))
             {
                 _disableMenuUrl = true;
             }
@@ -293,37 +293,33 @@ public partial class Index
 
     private async Task DeletePermissionAsync(PermissionDetailDto permission)
     {
-        var activeIds = String.Join(",", _menuPermissionActive);
         var isConfirmed = await OpenConfirmDialog(T("Delete Permission"), T("Are you sure to delete permission {0}", DT(permission.Name)));
         if (isConfirmed)
         {
             await PermissionService.RemoveAsync(permission.Id);
             var parentId = permission.ParentId;
+            await InitAppPermissions();
             if (parentId == Guid.Empty)
             {
                 if (permission is MenuPermissionDetailDto)
                 {
-                    foreach (var m in _menuPermissions)
+                    var m = _menuPermissions.FirstOrDefault(x => x.Children.Any(x => x.Id == permission.Id));
+                    if (m != null)
                     {
-                        if (m.Children.Any(x => x.Id == permission.Id))
-                        {
-                            parentId = m.Id;
-                            break;
-                        }
+                        parentId = m.Id;
                     }
                 }
-            }
-            await InitAppPermissions();
-            if (permission is MenuPermissionDetailDto mp)
-            {
-                _menuPermissionActive = new() { parentId };
-            }
-            else if (permission is ApiPermissionDetailDto ap)
-            {
-                if (parentId == Guid.Empty)
+                else if (permission is ApiPermissionDetailDto)
                 {
                     parentId = _apiPermissions.First().Id;
                 }
+            }
+            if (permission is MenuPermissionDetailDto)
+            {
+                _menuPermissionActive = new() { parentId };
+            }
+            else if (permission is ApiPermissionDetailDto)
+            {
                 _apiPermissionActive = new() { parentId };
             }
         }
