@@ -5,13 +5,13 @@ namespace Isolation;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddStackIsolation(this IServiceCollection services, string name, params string[] environments)
+    public static IServiceCollection AddStackIsolation(this IServiceCollection services, string name, string defaultEnvironment, params string[] environments)
     {
         services.AddSingleton((sp) => { return new EnvironmentProvider(environments.ToList()); });
 
-        ConfigureConnectionStrings(services, name);
-        ConfigureRedisOptions(services);
-        ConfigStorageOptions(services);
+        ConfigureConnectionStrings(services, name, defaultEnvironment);
+        ConfigureRedisOptions(services, defaultEnvironment);
+        ConfigStorageOptions(services, defaultEnvironment);
 
         services.AddSingleton<EsIsolationConfigProvider>();
 
@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    static void ConfigureConnectionStrings(this IServiceCollection services, string name)
+    static void ConfigureConnectionStrings(this IServiceCollection services, string name, string defaultEnvironment)
     {
         var (environments, masaStackConfig) = services.GetInternal();
         services.Configure<IsolationOptions<ConnectionStrings>>(options =>
@@ -40,9 +40,10 @@ public static class ServiceCollectionExtensions
                 });
             }
         });
+        services.Configure<ConnectionStrings>(options => new ConnectionStrings());
     }
 
-    static void ConfigureRedisOptions(this IServiceCollection services)
+    static void ConfigureRedisOptions(this IServiceCollection services, string defaultEnvironment)
     {
         var (environments, masaStackConfig) = services.GetInternal();
         services.Configure<IsolationOptions<RedisConfigurationOptions>>(options =>
@@ -71,7 +72,7 @@ public static class ServiceCollectionExtensions
         });
     }
 
-    static void ConfigStorageOptions(this IServiceCollection services)
+    static void ConfigStorageOptions(this IServiceCollection services, string defaultEnvironment)
     {
         var (environments, masaStackConfig) = services.GetInternal();
         var configurationApiClient = services.BuildServiceProvider().GetRequiredService<IConfigurationApiClient>();

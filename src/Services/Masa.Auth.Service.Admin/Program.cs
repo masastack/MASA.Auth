@@ -172,7 +172,7 @@ builder.Services
     })
     .UseUoW<AuthDbContext>(dbOptions =>
     {
-        dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName")));
+        dbOptions.UseSqlServer();
         dbOptions.UseFilter();
     })
     .UseRepository<AuthDbContext>();
