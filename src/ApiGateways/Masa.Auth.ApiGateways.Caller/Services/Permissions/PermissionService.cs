@@ -14,17 +14,13 @@ public class PermissionService : ServiceBase
 
     public async Task<MenuPermissionDetailDto> UpsertMenuPermissionAsync(MenuPermissionDetailDto dto)
     {
-        var isUpdate = dto.IsUpdate;
         var result = await PostAsync<MenuPermissionDetailDto, MenuPermissionDetailDto>($"CreateMenuPermission", dto);
-        result.SetIsUpdate(isUpdate);
         return result;
     }
 
     public async Task<ApiPermissionDetailDto> UpsertApiPermissionAsync(ApiPermissionDetailDto dto)
     {
-        var isUpdate = dto.IsUpdate;
         var result = await PostAsync<ApiPermissionDetailDto, ApiPermissionDetailDto>($"CreateApiPermission", dto);
-        result.SetIsUpdate(isUpdate);
         return result;
     }
 

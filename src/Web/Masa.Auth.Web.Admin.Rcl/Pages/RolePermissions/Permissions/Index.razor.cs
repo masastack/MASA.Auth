@@ -5,27 +5,31 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Permissions;
 
 public partial class Index
 {
-    string _tab = "", _search = "";
-    bool _showMenuInfo, _showApiInfo;
-    List<AppPermissionsViewModel> _menuPermissions = new(), _apiPermissions = new();
-    List<Guid> _menuPermissionActive = new List<Guid>(), _apiPermissionActive = new List<Guid>()
-        , _menuOpenNode = new List<Guid>(), _apiOpenNode = new List<Guid>();
-    string _curProjectId = "";
-    MenuPermissionDetailDto _menuPermissionDetailDto = new();
-    ApiPermissionDetailDto _apiPermissionDetailDto = new();
-    List<ProjectDto> _projectItems = new();
-    List<AppDto> _curAppItems = new();
-    List<SelectItemDto<Guid>> _childApiItems = new();
-    MForm _formMenu = default!, _formApi = default!;
-    AddMenuPermission _addMenuPermission = null!;
-    AddApiPermission _addApiPermission = null!;
+    private string _tab = "", _search = "";
+    private bool _showMenuInfo, _showApiInfo;
+    private List<AppPermissionsViewModel> _menuPermissions = new(), _apiPermissions = new();
 
-    PermissionService PermissionService => AuthCaller.PermissionService;
+    private List<Guid> _menuPermissionActive = new(), _apiPermissionActive = new()
+        , _menuOpenNode = new(), _apiOpenNode = new();
 
-    ProjectService ProjectService => AuthCaller.ProjectService;
-    List<SelectItemDto<PermissionTypes>> _permissionTypes = new();
-    string _showUrlPrefix = "";
-    bool _disableMenuUrl = false;
+    private string _curProjectId = "";
+    private MenuPermissionDetailDto _menuPermissionDetailDto = new();
+    private ApiPermissionDetailDto _apiPermissionDetailDto = new();
+    private List<ProjectDto> _projectItems = new();
+    private List<AppDto> _curAppItems = new();
+    private List<SelectItemDto<Guid>> _childApiItems = new();
+    private MForm _formMenu = default!, _formApi = default!;
+    private AddMenuPermission _addMenuPermission = null!;
+    private AddApiPermission _addApiPermission = null!;
+
+    private PermissionService PermissionService => AuthCaller.PermissionService;
+
+    private ProjectService ProjectService => AuthCaller.ProjectService;
+    private List<SelectItemDto<PermissionTypes>> _permissionTypes = new();
+    private string _showUrlPrefix = "";
+    private bool _disableMenuUrl = false;
+    private string? _lastProjectId = null;
+    private readonly Dictionary<string, Guid> _appIds = new();
 
     protected override void OnInitialized()
     {
@@ -33,7 +37,7 @@ public partial class Index
         base.OnInitialized();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -93,22 +97,19 @@ public partial class Index
             }
         }
     }
-    private string? lastProjectId = null;
 
     private async Task SelectProjectItem(ProjectDto project)
     {
-        lastProjectId = _curProjectId;
+        _lastProjectId = _curProjectId;
         _curAppItems = project.Apps;
         _curProjectId = project.Identity;
-        if (lastProjectId != _curProjectId)
+        if (_lastProjectId != _curProjectId)
         {
             SetAppIds(_curAppItems);
         }
         _childApiItems = await PermissionService.GetApiPermissionSelectAsync(_curProjectId);
         await InitAppPermissions();
     }
-
-    private Dictionary<string, Guid> _appIds = new();
 
     private void SetAppIds(List<AppDto> curAppItems)
     {
@@ -235,11 +236,11 @@ public partial class Index
             return;
         }
         dto.SystemId = _curProjectId;
-        dto = await PermissionService.UpsertMenuPermissionAsync(dto);
+        var resultDto = await PermissionService.UpsertMenuPermissionAsync(dto);
         if (!dto.IsUpdate)
         {
             await InitAppPermissions();
-            _menuPermissionActive = new() { dto.Id };
+            _menuPermissionActive = new() { resultDto.Id };
         }
         else
         {
@@ -256,15 +257,15 @@ public partial class Index
             return;
         }
         dto.SystemId = _curProjectId;
-        await PermissionService.UpsertApiPermissionAsync(dto);
+        var resultDto = await PermissionService.UpsertApiPermissionAsync(dto);
         if (!dto.IsUpdate)
         {
             await InitAppPermissions();
-            _apiPermissionActive = new() { dto.Id };
+            _apiPermissionActive = new() { resultDto.Id };
         }
         else
         {
-            _apiPermissionDetailDto = dto;
+            _apiPermissionDetailDto = resultDto;
         }
         OpenSuccessMessage(T("Add api permission data success"));
     }
@@ -298,7 +299,6 @@ public partial class Index
         {
             await PermissionService.RemoveAsync(permission.Id);
             var parentId = permission.ParentId;
-            await InitAppPermissions();
             if (parentId == Guid.Empty)
             {
                 if (permission is MenuPermissionDetailDto)
@@ -309,17 +309,18 @@ public partial class Index
                         parentId = m.Id;
                     }
                 }
-                else if (permission is ApiPermissionDetailDto)
-                {
-                    parentId = _apiPermissions.First().Id;
-                }
             }
+            await InitAppPermissions();
             if (permission is MenuPermissionDetailDto)
             {
                 _menuPermissionActive = new() { parentId };
             }
             else if (permission is ApiPermissionDetailDto)
             {
+                if (parentId == Guid.Empty)
+                {
+                    parentId = _apiPermissions.First().Id;
+                }
                 _apiPermissionActive = new() { parentId };
             }
         }
