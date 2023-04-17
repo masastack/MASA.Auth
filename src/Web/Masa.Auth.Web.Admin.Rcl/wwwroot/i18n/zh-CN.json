@@ -231,7 +231,6 @@
     "Permission deleted successfully": "删除权限成功",
     "Failed to delete permission": "删除权限失败",
     "Project identifier is empty": "项目标识为空",
-    "Tag or AppID is empty": "Tag或AppID为空",
     "Application Group save successed": "应用分组保存成功",
     "Support mdi and fas icon": "支持mdi-* 和 fas-* 图标",
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method"
@@ -631,6 +630,7 @@
   "Can only input chinese and letter and number of Name": "名称只可以输入中文字母数字",
   "Permission Description length must be less than 255.": "权限描述请输入小于等于255个字符",
   "The valid value of order is between 0-9999": "排序只可以输入0至9999之间的数字",
+  "AppId is required": "AppId必须填写",
   "Please enter a number greater than 2 of Display Name": "显示名称请输入大于等于两个字符",
   "Please enter a number less than 50 of Display Name": "显示名称请输入小于等于50个字符",
   "Please enter a number less than 50 of Client Name": "客户端名称请输入小于等于50个字符",
