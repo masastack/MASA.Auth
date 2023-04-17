@@ -15,7 +15,7 @@ public class AddClientBasicDto
 
     public string ClientUri { get; set; } = string.Empty;
 
-    public string LogoUri { get; set; } = string.Empty;
+    public string LogoUri { get; set; } = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
 
     public bool RequireConsent { get; set; } = true;
 
