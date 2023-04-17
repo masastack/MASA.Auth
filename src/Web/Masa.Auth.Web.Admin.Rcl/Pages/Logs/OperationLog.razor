@@ -16,11 +16,11 @@
             </div>
         </HeaderContent>
         <AutoHeightContent>
-            <MVirtualScroll OverscanCount=5 TItem="OperationLogDto" Items="_operationLogs">
+            <MVirtualScroll OverscanCount=5 TItem="OperationLogDto" Items="_operationLogs" Class="rounded-0">
                 <ItemContent>
                     <div class="d-flex mb-6" style="height:36px;">
                         <div class="mr-1 h5 regular--text">@context.OperationTime.ToString("MM-dd")</div>
-                        <div class="mt-auto body regular3--text">@context.OperationTime.ToString("HH:mm:ss")</div>
+                        <div class="body regular3--text">@context.OperationTime.ToString("HH:mm:ss")</div>
                     </div>
                     <div>
                         @foreach (var (key, value) in new List<(string, string)>

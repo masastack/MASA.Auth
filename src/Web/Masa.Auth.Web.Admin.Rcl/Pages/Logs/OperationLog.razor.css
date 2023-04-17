@@ -1,3 +1,6 @@
 ﻿::deep .s-auto-complete .m-input__control .m-input__slot {
     min-height: inherit !important;
 }
+::deep .body.regular3--text {
+    line-height: 2.25rem !important;
+}
