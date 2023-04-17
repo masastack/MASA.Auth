@@ -62,7 +62,7 @@ public partial class CustomLoginRegister
     public List<DataTableHeader<CustomLoginDto>> GetHeaders() => new()
     {
         new() { Text = T(nameof(ClientDto.LogoUri)), Value = nameof(ClientDto.LogoUri), Sortable = false, Width="105px" },
-        new() { Text = T("Name"), Value = nameof(CustomLoginDto.Name), Sortable = false},
+        new() { Text = T("TitleName"), Value = nameof(CustomLoginDto.Name), Sortable = false},
         new() { Text = T("ClientName"), Value = nameof(ClientDto.ClientName), Sortable = false},
         new() { Text = T(nameof(CustomLoginDto.CreationTime)), Value = nameof(CustomLoginDto.CreationTime), Sortable = false , Width="250px" },
         new() { Text = T(nameof(CustomLoginDto.ModificationTime)), Value = nameof(CustomLoginDto.ModificationTime), Sortable = false, Width="250px"  },
