@@ -631,7 +631,6 @@
   "Can only input chinese and letter and number of Name": "名称只可以输入中文字母数字",
   "Permission Description length must be less than 255.": "权限描述请输入小于等于255个字符",
   "The valid value of order is between 0-9999": "排序只可以输入0至9999之间的数字",
-  "AppId is required": "AppID必须填写",
   "Please enter a number greater than 2 of Display Name": "显示名称请输入大于等于两个字符",
   "Please enter a number less than 50 of Display Name": "显示名称请输入小于等于50个字符",
   "Please enter a number less than 50 of Client Name": "客户端名称请输入小于等于50个字符",
