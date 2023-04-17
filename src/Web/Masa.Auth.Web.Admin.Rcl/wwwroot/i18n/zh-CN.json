@@ -583,7 +583,6 @@
   "Client Name is required": "名称必须填写",
   "Client Id is required": "客户端ID必须填写",
   "Client Secret is required": "客户端密钥必须填写",
-  "URL is required": "URL地址必须填写",
   "Please enter a number greater than 4 of Display Name": "显示名称请输入大于等于4个字符",
   "Can only input upper chinese and letter of Name": "名称只可以输入中文字母",
   "Can only input upper chinese and letter and number of Name": "名称只可以输入中文字母数字",
