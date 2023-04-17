@@ -7,16 +7,6 @@ public class BaseUpsertDto<T> where T : IComparable
 {
     public T Id { get; set; } = default!;
 
-    public BaseUpsertDto()
-    {
-        IsUpdate = !Id.Equals(default(T));
-    }
-
-    public virtual void SetIsUpdate(bool isUpdate)
-    {
-        IsUpdate = isUpdate;
-    }
-
     [JsonIgnore]
-    public virtual bool IsUpdate { get; private set; }
+    public bool IsUpdate => !Id.Equals(default(T));
 }
