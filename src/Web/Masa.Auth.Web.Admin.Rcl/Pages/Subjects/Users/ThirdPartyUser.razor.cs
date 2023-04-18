@@ -107,10 +107,15 @@ public partial class ThirdPartyUser
 
     public string FilterClass => Filter is true ? "d-flex show showAnimation" : (Filter is false ? "d-flex close closeAnimation" : "hide");
 
+    private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
+
+    private List<ThirdPartyIdpDto> _thirdPartyIdps = new();
+
     protected override async Task OnInitializedAsync()
     {
         PageName = "ThirdPartyUser";
         await GetThirdPartyUsersAsync();
+        //await GetThirdPartyIdpsAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -157,5 +162,11 @@ public partial class ThirdPartyUser
     {
         await ldapDialog.OpenAsync();
     }
-}
 
+    public async Task GetThirdPartyIdpsAsync()
+    {
+        var request = new GetThirdPartyIdpsDto(1, 100, "");
+        var response = await ThirdPartyIdpService.GetListAsync(request);
+        _thirdPartyIdps = response.Items;
+    }
+}

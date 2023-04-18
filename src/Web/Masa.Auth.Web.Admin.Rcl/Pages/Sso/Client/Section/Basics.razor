@@ -17,14 +17,18 @@
         <MCheckbox @bind-Value="Dto.RequireRequestObject" Label="@T("RequireRequestObject")"></MCheckbox>
     </MCol>
     <MCol Md=12>
-        <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="@T("AllowedCorsOrigins")"
-                    AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddAllowedCorsOrigin" />
+        <div class="block-center">
+            <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="@T("AllowedCorsOrigins")"/>
+            <SButton Icon OnClick="AddAllowedCorsOrigin">
+                <SIcon>@IconConstants.Add</SIcon>
+            </SButton>
+        </div>
     </MCol>
     @foreach (var origin in Dto.AllowedCorsOrigins)
     {
         <MCol Md=6 Class="d-flex">
             <STextField HideDetails="true" Value="origin" Filled Disabled Class="flex-grow-1" />
-            <SIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)">mdi-close-circle</SIcon>
+            <SIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)" Tooltip="@T("删除")">mdi-close-circle</SIcon>
         </MCol>
     }
     <MCol Md=12>

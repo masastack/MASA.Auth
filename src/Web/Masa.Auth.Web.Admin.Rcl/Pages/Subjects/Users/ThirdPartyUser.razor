@@ -55,6 +55,7 @@
                     case (nameof(ThirdPartyUserDto.IdpDetailDto)):
                         if (context.Item.IdpDetailDto.Name == LdapConsts.LDAP_NAME)
                         {
+                            //var toolTip = _thirdPartyIdps.FirstOrDefault(x => x.Icon == context.Item.IdpDetailDto.Icon)?.DisplayName ?? null;
                             <SIcon Size="24">@context.Item.IdpDetailDto.Icon</SIcon>
                         }
                         else

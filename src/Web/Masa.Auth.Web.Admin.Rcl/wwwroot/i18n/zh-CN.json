@@ -646,5 +646,7 @@
   "Invalid permission type": "权限类型无效",
   "Permission Name can`t null and length must be less than 20": "权限名称不能为空且长度必须小于20",
   "Permission Description length must be less than 255": "权限描述长度不能超过255",
-  "Can only input chinese and letter and number of Description": "描述只可以输入中文字母数字"
+  "Can only input chinese and letter and number of Description": "描述只可以输入中文字母数字",
+  "Filter": "筛选",
+  "Cancel Filter": "取消筛选"
 }
