@@ -3,24 +3,23 @@
 
 namespace Isolation;
 
-internal class EsIsolationConfigProvider
+public class EsIsolationConfigProvider
 {
     readonly IMultiEnvironmentContext _multiEnvironmentContext;
     readonly EnvironmentProvider _environmentProvider;
-    readonly IMasaStackConfig _masaStackConfig;
+    readonly IMultiEnvironmentMasaStackConfig _multiEnvironmentMasaStackConfig;
     readonly ILogger<EsIsolationConfigProvider>? _logger;
 
     Dictionary<string, ElasticModel> _esOptions = new();
 
     public EsIsolationConfigProvider(
-        IMultiEnvironmentContext multiEnvironmentContext,
         EnvironmentProvider environmentProvider,
-        IMasaStackConfig masaStackConfig,
+        IServiceProvider serviceProvider,
         ILogger<EsIsolationConfigProvider>? logger)
     {
-        _multiEnvironmentContext = multiEnvironmentContext;
+        _multiEnvironmentContext = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IMultiEnvironmentContext>();
         _environmentProvider = environmentProvider;
-        _masaStackConfig = masaStackConfig;
+        _multiEnvironmentMasaStackConfig = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IMultiEnvironmentMasaStackConfig>();
         _logger = logger;
 
         InitData();
@@ -30,7 +29,7 @@ internal class EsIsolationConfigProvider
     {
         foreach (var envionment in _environmentProvider.GetEnvionments())
         {
-            var result = _esOptions.TryAdd(envionment, _masaStackConfig.ElasticModel);
+            var result = _esOptions.TryAdd(envionment, _multiEnvironmentMasaStackConfig.SetEnvironment(envionment).ElasticModel);
             if (!result)
             {
                 _logger?.LogWarning($"Duplicate key {envionment}");

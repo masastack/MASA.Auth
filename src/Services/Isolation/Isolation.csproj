@@ -7,10 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="1.0.0-preview.27" />
-		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="1.0.0-preview.27" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="1.0.0-preview.27" />
-		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="1.0.0-preview.27" />
+		<PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="1.0.0-preview.29" />
+		<PackageReference Include="Masa.Contrib.Isolation.MultiEnvironment" Version="1.0.0-preview.29" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="1.0.0-preview.29" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="1.0.0-preview.29" />
+		<PackageReference Include="Masa.Contrib.Storage.ObjectStorage.Aliyun" Version="1.0.0-preview.29" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 

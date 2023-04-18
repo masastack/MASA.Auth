@@ -5,13 +5,16 @@ namespace Isolation;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddStackIsolation(this IServiceCollection services, string name, string defaultEnvironment, params string[] environments)
+    public static async Task<IServiceCollection> AddStackIsolationAsync(this IServiceCollection services, string name)
     {
-        services.AddSingleton((sp) => { return new EnvironmentProvider(environments.ToList()); });
+        var pmClient = services.BuildServiceProvider().GetRequiredService<IPmClient>();
+        var environments = (await pmClient.EnvironmentService.GetListAsync()).Select(e => e.Name).ToList();
 
-        ConfigureConnectionStrings(services, name, defaultEnvironment);
-        ConfigureRedisOptions(services, defaultEnvironment);
-        ConfigStorageOptions(services, defaultEnvironment);
+        services.AddSingleton((sp) => { return new EnvironmentProvider(environments); });
+
+        ConfigureConnectionStrings(services, name);
+        ConfigureRedisOptions(services);
+        ConfigStorageOptions(services);
 
         services.AddSingleton<EsIsolationConfigProvider>();
 
@@ -23,9 +26,9 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    static void ConfigureConnectionStrings(this IServiceCollection services, string name, string defaultEnvironment)
+    static void ConfigureConnectionStrings(this IServiceCollection services, string name)
     {
-        var (environments, masaStackConfig) = services.GetInternal();
+        var (environments, multiEnvironmentMasaStackConfig, masaStackConfig) = services.GetInternal();
         services.Configure<IsolationOptions<ConnectionStrings>>(options =>
         {
             foreach (string environment in environments)
@@ -35,22 +38,26 @@ public static class ServiceCollectionExtensions
                     Environment = environment,
                     Data = new ConnectionStrings(new List<KeyValuePair<string, string>>()
                     {
-                        new(ConnectionStrings.DEFAULT_CONNECTION_STRING_NAME, masaStackConfig.GetConnectionString(name))
+                        new(ConnectionStrings.DEFAULT_CONNECTION_STRING_NAME, multiEnvironmentMasaStackConfig.SetEnvironment(environment).GetConnectionString(name))
                     })
                 });
             }
         });
-        services.Configure<ConnectionStrings>(options => new ConnectionStrings());
+
+        services.Configure<ConnectionStrings>(options => new List<KeyValuePair<string, string>>()
+                    {
+                        new(ConnectionStrings.DEFAULT_CONNECTION_STRING_NAME, masaStackConfig.GetConnectionString(name))
+                    });
     }
 
-    static void ConfigureRedisOptions(this IServiceCollection services, string defaultEnvironment)
+    static void ConfigureRedisOptions(this IServiceCollection services)
     {
-        var (environments, masaStackConfig) = services.GetInternal();
+        var (environments, multiEnvironmentMasaStackConfig, masaStackConfig) = services.GetInternal();
         services.Configure<IsolationOptions<RedisConfigurationOptions>>(options =>
         {
             foreach (string environment in environments)
             {
-                var redisModel = masaStackConfig.RedisModel;
+                var redisModel = multiEnvironmentMasaStackConfig.SetEnvironment(environment).RedisModel;
                 options.Data.Add(new IsolationConfigurationOptions<RedisConfigurationOptions>()
                 {
                     Environment = environment,
@@ -70,11 +77,25 @@ public static class ServiceCollectionExtensions
                 });
             }
         });
+        services.Configure<RedisConfigurationOptions>(options =>
+        {
+            var redisModel = masaStackConfig.RedisModel;
+            options.Password = redisModel.RedisPassword;
+            options.Servers = new()
+            {
+                new RedisServerOptions
+                {
+                    Host = redisModel.RedisHost,
+                    Port = redisModel.RedisPort
+                }
+            };
+            options.DefaultDatabase = redisModel.RedisDb;
+        });
     }
 
-    static void ConfigStorageOptions(this IServiceCollection services, string defaultEnvironment)
+    static void ConfigStorageOptions(this IServiceCollection services)
     {
-        var (environments, masaStackConfig) = services.GetInternal();
+        var (environments, _, masaStackConfig) = services.GetInternal();
         var configurationApiClient = services.BuildServiceProvider().GetRequiredService<IConfigurationApiClient>();
         services.Configure<IsolationOptions<AliyunStorageConfigureOptions>>(async options =>
         {
@@ -100,6 +121,12 @@ public static class ServiceCollectionExtensions
             }
         });
 
+        services.Configure<AliyunStorageConfigureOptions>(async options =>
+        {
+            var ossOptions = await configurationApiClient.GetAsync<OssOptions>(masaStackConfig.Environment, "Default", "public-$Config", "$public.OSS");
+            options = Convert(ossOptions);
+        });
+
         AliyunStorageConfigureOptions Convert(OssOptions ossOptions)
         {
             return new AliyunStorageConfigureOptions
@@ -121,10 +148,11 @@ public static class ServiceCollectionExtensions
         }
     }
 
-    static (List<string>, IMasaStackConfig) GetInternal(this IServiceCollection services)
+    static (List<string>, IMultiEnvironmentMasaStackConfig, IMasaStackConfig) GetInternal(this IServiceCollection services)
     {
         var masaStackConfig = services.BuildServiceProvider().GetRequiredService<IMasaStackConfig>();
+        var multiEnvironmentMasaStackConfig = services.BuildServiceProvider().GetRequiredService<IMultiEnvironmentMasaStackConfig>();
         var environmentProvider = services.BuildServiceProvider().GetRequiredService<EnvironmentProvider>();
-        return (environmentProvider.GetEnvionments(), masaStackConfig);
+        return (environmentProvider.GetEnvionments(), multiEnvironmentMasaStackConfig, masaStackConfig);
     }
 }

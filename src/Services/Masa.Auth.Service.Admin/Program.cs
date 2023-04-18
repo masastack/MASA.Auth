@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+using Isolation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -178,6 +179,8 @@ builder.Services
     .UseRepository<AuthDbContext>();
 })
 .AddIsolation(isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT));
+
+await builder.Services.AddStackIsolationAsync(MasaStackConstant.AUTH);
 
 builder.Services.AddStackMiddleware();
 

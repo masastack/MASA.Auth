@@ -7,6 +7,7 @@ global using Masa.BuildingBlocks.Data;
 global using Masa.BuildingBlocks.Isolation;
 global using Masa.BuildingBlocks.StackSdks.Config;
 global using Masa.BuildingBlocks.StackSdks.Config.Models;
+global using Masa.BuildingBlocks.StackSdks.Pm;
 global using Masa.BuildingBlocks.Storage.ObjectStorage;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.StackSdks.Config;

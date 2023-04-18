@@ -3,7 +3,7 @@
 
 namespace Isolation;
 
-internal class EnvironmentProvider
+public class EnvironmentProvider
 {
     List<string> _environments = new();
 
