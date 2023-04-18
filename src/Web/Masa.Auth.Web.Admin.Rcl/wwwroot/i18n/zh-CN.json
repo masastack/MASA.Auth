@@ -338,6 +338,11 @@
     "Are you sure delete role data": "确定删除角色数据"
   },
 
+  "Emphasize": "强调",
+  "ShowInDiscoveryDocument": "在文档中展示",
+  "User Claims": "用户声明",
+  "Api Scopes": "API范围",
+
   "UserClaimBlock": {
     "Name": "名称",
     "Standard": "标准",
@@ -357,8 +362,6 @@
 
   "IdentityResource": "身份资源",
   "IdentityResourceBlock": {
-    "Emphasize": "强调",
-    "ShowInDiscoveryDocument": "在文档中展示",
     "Add IdentityResource": "新建身份资源",
     "Quickly create standard identity resources": "快速新建标准身份资源",
     "Are you sure create standard identityResources": "新建标准的身份资源",
@@ -366,7 +369,6 @@
     "Edit IdentityResource": "编辑身份资源",
     "Name": "名称",
     "Required": "是否必须",
-    "User Claims": "用户声明",
     "Delete IdentityResource": "删除身份资源",
     "Add identityResource success": "新建身份资源成功",
     "Delete identityResource data success": "删除身份资源数据成功",
