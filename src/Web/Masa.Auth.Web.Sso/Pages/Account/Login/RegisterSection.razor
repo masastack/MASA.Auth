@@ -22,4 +22,4 @@
         @T("Register")
     </MButton>
 </div>
-<ProtocolModal @bind-Visible="_protocolModalVisible" OnSuccess="()=> _inputModel.Agreement = true" />
+<ProtocolModal @bind-Visible="_protocolModalVisible" OnSuccess="ProtocolModalOnSuccess" OnClose="ProtocolModalOnClose" />

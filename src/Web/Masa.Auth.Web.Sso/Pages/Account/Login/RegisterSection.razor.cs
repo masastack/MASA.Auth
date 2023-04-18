@@ -184,4 +184,15 @@ public partial class RegisterSection
             return _prefix + _suffix;
         }
     }
+
+    private void ProtocolModalOnSuccess()
+    {
+        _inputModel.Agreement = true;
+        ProtocolModalOnClose();
+    }
+
+    private void ProtocolModalOnClose()
+    {
+        _protocolModalVisible = false;
+    }
 }
