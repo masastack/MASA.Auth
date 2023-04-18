@@ -29,7 +29,8 @@
         "ELASTIC": "{\"Nodes\": [\"http://es-dev.lonsid.cn:9200\"],\"Index\": \"auth_user_development\"}",
         "ENVIRONMENT": "Development",
         "ADMIN_PWD": "admin123",
-        "DCC_SECRET": "masastack.com"
+        "DCC_SECRET": "masastack.com",
+        "SUFFIX_IDENTITY": "dev"
       },
       "applicationUrl": "https://localhost:18102;http://localhost:18002",
       "dotnetRunMessages": true

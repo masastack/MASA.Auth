@@ -55,12 +55,13 @@ public partial class ApiResource
 
     protected override async Task OnInitializedAsync()
     {
+        PageName = "ApiResourceBlock";
         await GetApiResourcesAsync();
     }
 
     public List<DataTableHeader<ApiResourceDto>> GetHeaders() => new()
     {
-        new() { Text = T("ApiResource.Name"), Value = nameof(ApiResourceDto.Name), Sortable = false, Width="250px" },
+        new() { Text = T("Name"), Value = nameof(ApiResourceDto.Name), Sortable = false, Width="250px" },
         new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false, Width="250px" },
         new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
         new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false , Width="105px"},

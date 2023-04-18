@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
-public abstract class AdminCompontentBase : ComponentBase
+public abstract class AdminCompontentBase : NextTickComponentBase
 {
     private GlobalConfig? _globalConfig;
     private AuthCaller? _authCaller;
@@ -12,14 +12,8 @@ public abstract class AdminCompontentBase : ComponentBase
     [Inject]
     public AuthCaller AuthCaller
     {
-        get
-        {
-            return _authCaller ?? throw new Exception("please Inject AuthCaller!");
-        }
-        set
-        {
-            _authCaller = value;
-        }
+        get => _authCaller ?? throw new Exception("please Inject AuthCaller!");
+        set => _authCaller = value;
     }
 
     [Inject]
@@ -34,27 +28,15 @@ public abstract class AdminCompontentBase : ComponentBase
     [Inject]
     public GlobalConfig GlobalConfig
     {
-        get
-        {
-            return _globalConfig ?? throw new Exception("please Inject GlobalConfig!");
-        }
-        set
-        {
-            _globalConfig = value;
-        }
+        get => _globalConfig ?? throw new Exception("please Inject GlobalConfig!");
+        set => _globalConfig = value;
     }
 
     [Inject]
     public NavigationManager NavigationManager
     {
-        get
-        {
-            return _navigationManager ?? throw new Exception("please Inject NavigationManager!");
-        }
-        set
-        {
-            _navigationManager = value;
-        }
+        get => _navigationManager ?? throw new Exception("please Inject NavigationManager!");
+        set => _navigationManager = value;
     }
 
     [Inject]

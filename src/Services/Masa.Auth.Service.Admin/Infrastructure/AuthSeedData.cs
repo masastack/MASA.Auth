@@ -144,6 +144,7 @@ public class AuthSeedData
 
         var teamId = Guid.Empty;
         var departmentId = Guid.Empty;
+        string system = "system", admin = "admin", guest = "guest";
 
         if (!context.Set<Department>().Any())
         {
@@ -173,12 +174,12 @@ public class AuthSeedData
             teamId = masaStackConfig.GetDefaultTeamId();
         }
 
-        if (!context.Set<User>().Any(u => u.Account == "admin"))
+        if (!context.Set<User>().Any(u => u.Account == admin))
         {
             var addStaffDto = new AddStaffDto
             {
-                Name = "admin",
-                Account = "admin",
+                Name = admin,
+                Account = admin,
                 JobNumber = "9527",
                 StaffType = StaffTypes.Internal,
                 Gender = GenderTypes.Male,
@@ -201,12 +202,12 @@ public class AuthSeedData
 
             await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
         }
-        if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == "guest"))
+        if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == guest))
         {
             var addStaffDto = new AddStaffDto
             {
-                Name = "guest",
-                Account = "guest",
+                Name = guest,
+                Account = guest,
                 JobNumber = "4399",
                 Password = "guest123",
                 StaffType = StaffTypes.External,
@@ -229,6 +230,19 @@ public class AuthSeedData
             }
 
             await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
+        }
+        if (!context.Set<User>().Any(u => u.Account == system))
+        {
+            await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
+            {
+                Id = masaStackConfig.GetDefaultUserId(),
+                Account = system,
+                Name = system,
+                DisplayName = system,
+                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.zhen.svg",
+                Email = "system@masastack.com",
+                Enabled = true
+            }));
         }
 
         #region SSO Client
@@ -256,6 +270,5 @@ public class AuthSeedData
         }
 
         #endregion
-        //await context.SaveChangesAsync();
     }
 }

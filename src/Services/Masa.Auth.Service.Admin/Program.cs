@@ -158,7 +158,7 @@ builder.Services
     //this project is physical isolation,logical isolation AggregateRoot(Entity) neet to implement interface IMultiEnvironment
     .UseUoW<AuthDbContext>(dbOptions =>
     {
-        dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(AppSettings.Get("DBName")));
+        dbOptions.UseSqlServer(masaStackConfig.GetConnectionString(MasaStackConstant.AUTH));
         dbOptions.UseFilter();
     })
     .UseRepository<AuthDbContext>();

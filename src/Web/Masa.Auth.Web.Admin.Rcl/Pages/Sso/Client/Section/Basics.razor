@@ -100,7 +100,7 @@
     {
         if (!Uri.TryCreate(Dto.AllowedCorsOrigin, UriKind.Absolute, out var uri))
         {
-            PopupService.EnqueueSnackbarAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Is not a valid URL address"), AlertTypes.Error);
             return;
         }
         if (string.IsNullOrWhiteSpace(Dto.AllowedCorsOrigin))

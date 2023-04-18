@@ -100,4 +100,6 @@ public class ClientConsts
         }).ToList();
         return tokenUsage;
     }
+
+    public const string AuthClientDefaultUri = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
 }
