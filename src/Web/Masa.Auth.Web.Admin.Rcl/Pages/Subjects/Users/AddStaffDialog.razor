@@ -81,9 +81,9 @@
                                 <MCol>
                                     <STextField @bind-Value="@Staff.Password" Required DebounceInterval=500 Label="@T("Password")">
                                         <AppendContent>
-                                            <MButton Color="primary" OnClick="async () => await SetDefaultPassword(context)" Style="margin-top:0px;margin-right:-12px;height:48px;min-width: 120px;border-radius: 0px 7px 7px 0px;">
+                                            <SButton Color="primary" OnClick="async () => await SetDefaultPassword(context)" Style="margin-top:0px;margin-right:-12px;height:48px;min-width: 120px;border-radius: 0px 7px 7px 0px;">
                                                 @T("Set it to the default password")
-                                            </MButton>
+                                            </SButton>
                                         </AppendContent>
                                     </STextField>
                                 </MCol>

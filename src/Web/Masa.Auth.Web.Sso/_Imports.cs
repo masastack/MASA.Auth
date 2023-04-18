@@ -72,3 +72,4 @@ global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using static AlibabaCloud.SDK.Dypnsapi20170525.Models.GetAuthTokenResponseBody;
+global using Masa.Auth.Web.Sso.Pages.Account.Logout;

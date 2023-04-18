@@ -29,9 +29,9 @@
   "CustomLoginEnableMultiple": "CustomLogin already exists, cannot enable multiple",
   "ClientNotExist": "The current client does not exist",
   "ClientIdNotFound": "Client id = {0} not found",
-  "LdapAccountNotexist": "ldap account {0} not exist",
-  "LdapAccountValidationFailed": "ldap account {0} validation failed",
-  "LdapNotConfigured": "Ldap authentication is not configured",
+  "LdapAccountNotexist": "LDAP account {0} not exist",
+  "LdapAccountValidationFailed": "LDAP account {0} validation failed",
+  "LdapNotConfigured": "LDAP authentication is not configured",
   "AccountDisabled": "Account Disabled",
   "AccountNotExist": "Account {0} does not exist",
   "UserPhoneNumberExist": "User phone number {0} already exists",
@@ -80,5 +80,6 @@
   "StaffIdCardExist": "Employee IdCard {0} already exists",
   "RoleBindLimitError": "Role: {0} exceeds the binding limit, only {1} people can be bound at most, and {2} people are currently bound",
   "PhoneNumberMismatch": "The user already exists in Auth, the phone number is {0}, which does not match with {1}",
-  "ClientIdAlreadyExist": "ClientId '{0}' already exist"
+  "ClientIdAlreadyExist": "ClientId '{0}' already exist",
+  "PasswordValidateFailed": "Password validte failed"
 }

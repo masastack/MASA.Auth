@@ -6,4 +6,6 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 public record AddStaffCommand(AddStaffDto Staff, bool WhenExisReturn = false) : Command
 {
     public Staff? Result { get; set; }
+
+    public List<Guid> TeamChangeResult { get; set; } = new List<Guid>();
 }

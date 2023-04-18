@@ -48,6 +48,20 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             }
         }
 
+        [EventHandler(1)]
+        public async Task UpdateTeamCacheAsync(UpdateTeamCacheCommand command)
+        {
+            if (command.TeamIds == null)
+            {
+                return;
+            }
+
+            foreach (var teamId in command.TeamIds)
+            {
+                await SetTeamCacheAsync(teamId);
+            }
+        }
+
         private async Task SetTeamCacheAsync(Guid teamId)
         {
             var team = await _teamRepository.GetByIdAsync(teamId);
@@ -73,15 +87,15 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
                 },
                 TeamAdmin = new TeamPersonnelDto
                 {
-                    Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin).Select(s => s.StaffId).ToList(),
-                    Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Admin).Select(r => r.RoleId).ToList(),
-                    Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
+                    Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin && !s.IsDeleted).Select(s => s.StaffId).ToList(),
+                    Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Admin && !r.IsDeleted).Select(r => r.RoleId).ToList(),
+                    Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Admin && !p.IsDeleted).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
                 },
                 TeamMember = new TeamPersonnelDto
                 {
-                    Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Member).Select(s => s.StaffId).ToList(),
-                    Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Member).Select(r => r.RoleId).ToList(),
-                    Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
+                    Staffs = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Member && !s.IsDeleted).Select(s => s.StaffId).ToList(),
+                    Roles = team.TeamRoles.Where(r => r.TeamMemberType == TeamMemberTypes.Member && !r.IsDeleted).Select(r => r.RoleId).ToList(),
+                    Permissions = team.TeamPermissions.Where(p => p.TeamMemberType == TeamMemberTypes.Member && !p.IsDeleted).Select(tp => (SubjectPermissionRelationDto)tp).ToList()
                 }
             };
 

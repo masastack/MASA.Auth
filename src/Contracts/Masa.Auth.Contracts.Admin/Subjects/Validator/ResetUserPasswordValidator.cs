@@ -7,6 +7,6 @@ public class ResetUserPasswordValidator : MasaAbstractValidator<ResetUserPasswor
 {
     public ResetUserPasswordValidator(PasswordValidator passwordValidator)
     {
-        RuleFor(staff => staff.Password).SetValidator(passwordValidator);
+        RuleFor(staff => staff.Password).Required().SetValidator(passwordValidator);
     }
 }

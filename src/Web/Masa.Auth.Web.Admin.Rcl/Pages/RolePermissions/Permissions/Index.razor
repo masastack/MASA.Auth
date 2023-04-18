@@ -20,20 +20,20 @@
                                 Dense @bind-Tab="@_tab" IndexTab TabsClass="d-tabs">
                     <SElevationTabItem>
                         <MTreeview @bind-Active="_menuPermissionActive"
-                                   Items="_menuPermissions" Open="_menuOpenNode"
-                                   OnActiveUpdate="(List<AppPermissionsViewModel> e)=>ActiveMenuPermission(e)"
+                                   Items="_menuPermissions" @bind-Open="_menuOpenNode"
+                                   OnActiveUpdate="ActiveMenuPermission"
                                    TItem="AppPermissionsViewModel"
                                    TKey="Guid" MandatoryActive
                                    Search="@_search"
-                                      Activatable Hoverable
+                                   Activatable Hoverable
                                    ItemText="r=>r.Name"
                                    ItemKey="r=>r.Id"
                                    ItemChildren="(r=>r.Children.Count < 1 ? null : r.Children)"
                                    ActiveClass="primary white--text rounded-lg"
                                    Class="regular--text">
                             <LabelContent>
-                                <MHover Context="hoverComtext">
-                                    <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
+                                <MHover Context="hoverContext">
+                                    <div @attributes="hoverContext.Attrs" class="px-2 d-flex align-center">
                                         <MTooltip Top Context="tipContext">
                                             <ActivatorContent>
                                                 <span class="text-truncate" @attributes="@tipContext.Attrs">@DT(context.Item.Name)</span>
@@ -42,8 +42,8 @@
                                                 <span>@DT(context.Item.Name)</span>
                                             </ChildContent>
                                         </MTooltip>
-                                        <span style="@(hoverComtext.Hover?"flex:1;text-align:right":"display:none")">
-                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                        <span style="@(hoverContext.Hover?"flex:1;text-align:right":"display:none")">
+                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" OnClickStopPropagation OnClickPreventDefault Tooltip="@T("Add")" OnClick="()=>_addMenuPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                         </span>
                                     </div>
                                 </MHover>
@@ -63,8 +63,8 @@
                                    ActiveClass="primary white--text rounded-lg"
                                    Class="regular--text">
                             <LabelContent>
-                                <MHover Context="hoverComtext">
-                                    <div @attributes="hoverComtext.Attrs" class="px-2 d-flex align-center">
+                                <MHover Context="hoverContext">
+                                    <div @attributes="hoverContext.Attrs" class="px-2 d-flex align-center">
                                         <MTooltip Top Context="tipContext">
                                             <ActivatorContent>
                                                 <span class="text-truncate" @attributes="@tipContext.Attrs">@DT(context.Item.Name)</span>
@@ -73,8 +73,8 @@
                                                 <span>@DT(context.Item.Name)</span>
                                             </ChildContent>
                                         </MTooltip>
-                                        <span style="@((hoverComtext.Hover && !context.Item.IsPermission)?"flex:1;text-align:right":"display:none")">
-                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
+                                        <span style="@((hoverContext.Hover && !context.Item.IsPermission)?"flex:1;text-align:right":"display:none")">
+                                            <SIcon Style="@(context.Active?"color:white;":"color:#7681AB;")" OnClickStopPropagation OnClickPreventDefault Tooltip="@T("Add")" OnClick="()=>_addApiPermission.Show(context.Item)">@IconConstants.Add</SIcon>
                                         </span>
                                     </div>
                                 </MHover>
@@ -119,8 +119,8 @@
                                                 <div class="d-flex align-center">
                                                     <MIcon Size=30 Style="max-height:30px;max-width:30px;">
                                                         @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon) ? "mdi-image" : _menuPermissionDetailDto.Icon)
-                                                        </MIcon>
-                                                    </div>
+                                                    </MIcon>
+                                                </div>
                                                 </PrependContent>
                                             </STextField>
                                         </MCol>
@@ -133,7 +133,7 @@
                                         </SSelect>
                                     </MCol>
                                     <MCol Md=6>
-                                        <STextField Disabled="_disableMenuUrl" Filled="_disableMenuUrl" Class="prefix-mt-0" Prefix="@_showUrlPrefix" Label="@T("Url")" @bind-Value="_menuPermissionDetailDto.Url" />
+                                        <STextField Disabled="_disableMenuUrl" Filled="_disableMenuUrl" Class="prefix-mt-0" Prefix="@_showUrlPrefix" Label="@T("URL")" @bind-Value="_menuPermissionDetailDto.Url" />
                                     </MCol>
                                     <MCol Md=6>
                                         <SNumberTextField Label="@T("Order")" @bind-Value="_menuPermissionDetailDto.Order" />
@@ -218,7 +218,7 @@
                                             <DccI18nConfiger @bind-Name="_apiPermissionDetailDto.Name" />
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Prefix="@_showUrlPrefix" Label="@T("Url")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
+                                            <STextField Prefix="@_showUrlPrefix" Label="@T("URL")" @bind-Value="_apiPermissionDetailDto.Url"></STextField>
                                         </MCol>
                                         <MCol Md=6>
                                             <SNumberTextField Label="@T("Order")" @bind-Value="_apiPermissionDetailDto.Order" />

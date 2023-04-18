@@ -39,12 +39,6 @@ public class StaffCacheCommandHandler
     }
 
     [EventHandler(99)]
-    public async Task UpsertStaffAsync(UpsertStaffCommand command)
-    {
-        await SetStaffCacheAsync(command.Result);
-    }
-
-    [EventHandler(99)]
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         await SetStaffCacheAsync(command.Result);

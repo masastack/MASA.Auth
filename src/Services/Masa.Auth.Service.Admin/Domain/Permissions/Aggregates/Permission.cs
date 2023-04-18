@@ -127,7 +127,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_API_PARENT_ERROR);
         }
-        ParentId = parentId;
+        ParentId = parentId == Guid.Empty ? null : parentId;
     }
 
     public void Update(string appId, string name, string code, string url,

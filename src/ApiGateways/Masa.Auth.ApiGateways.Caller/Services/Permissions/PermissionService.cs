@@ -12,14 +12,16 @@ public class PermissionService : ServiceBase
         BaseUrl = "api/permission";
     }
 
-    public async Task UpsertMenuPermissionAsync(MenuPermissionDetailDto dto)
+    public async Task<MenuPermissionDetailDto> UpsertMenuPermissionAsync(MenuPermissionDetailDto dto)
     {
-        await PostAsync($"CreateMenuPermission", dto);
+        var result = await PostAsync<MenuPermissionDetailDto, MenuPermissionDetailDto>($"CreateMenuPermission", dto);
+        return result;
     }
 
-    public async Task UpsertApiPermissionAsync(ApiPermissionDetailDto dto)
+    public async Task<ApiPermissionDetailDto> UpsertApiPermissionAsync(ApiPermissionDetailDto dto)
     {
-        await PostAsync($"CreateApiPermission", dto);
+        var result = await PostAsync<ApiPermissionDetailDto, ApiPermissionDetailDto>($"CreateApiPermission", dto);
+        return result;
     }
 
     public async Task<List<SelectItemDto<PermissionTypes>>> GetTypesAsync()

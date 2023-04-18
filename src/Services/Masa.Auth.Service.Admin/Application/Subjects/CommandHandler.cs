@@ -632,10 +632,12 @@ public class CommandHandler
         var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
         if (staff is not null) return;
 
-        command.Result = await AddStaffAsync(staffDto);
+        var addResult = await AddStaffAsync(staffDto);
+        command.TeamChangeResult = addResult.TeamChanges;
+        command.Result = addResult.Staff;
     }
 
-    async Task<Staff> AddStaffAsync(AddStaffDto staffDto)
+    async Task<(Staff Staff, List<Guid> TeamChanges)> AddStaffAsync(AddStaffDto staffDto)
     {
         var addUserDto = new AddUserDto(default, staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.IdCard, staffDto.CompanyName, staffDto.Enabled, staffDto.PhoneNumber, default, staffDto.Email, staffDto.Address, default, staffDto.Position, staffDto.Account, staffDto.Password, staffDto.Gender, default, default);
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
@@ -656,11 +658,12 @@ public class CommandHandler
                 staffDto.Enabled,
                 staffDto.Address
             );
+        var teamChanges = staff.FindChangeTeams(staffDto.Teams);
         staff.SetDepartmentStaff(staffDto.DepartmentId);
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.AddAsync(staff);
         await _staffDomainService.AddAfterAsync(new(staff));
-        return staff;
+        return (staff, teamChanges);
     }
 
     [EventHandler(1)]
@@ -669,6 +672,7 @@ public class CommandHandler
         var staffDto = command.Staff;
         var staff = await CheckStaffExistAsync(staffDto.Id);
         await VerifyStaffRepeatAsync(staffDto.Id, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard);
+        command.TeamChangeResult = staff.FindChangeTeams(command.Staff.Teams);
         await UpdateStaffAsync(staff, staffDto);
         command.Result = staff;
     }
@@ -717,25 +721,6 @@ public class CommandHandler
     }
 
     [EventHandler(1)]
-    public async Task UpsertStaffAsync(UpsertStaffCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, false);
-        if (staff is not null)
-        {
-            var updateStaffDto = staffDto.Adapt<UpdateStaffDto>();
-            updateStaffDto.Id = staff.Id;
-            await UpdateStaffAsync(staff, updateStaffDto);
-            command.Result = staff;
-        }
-        else
-        {
-            command.Result = await AddStaffAsync(staffDto);
-        }
-        await _unitOfWork.SaveChangesAsync();
-    }
-
-    [EventHandler(1)]
     public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
     {
         var staffDto = command.Staff;
@@ -762,7 +747,8 @@ public class CommandHandler
                 StaffType = StaffTypes.Internal
             };
             await VerifyStaffRepeatAsync(default, addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
-            command.Result = await AddStaffAsync(addStaffDto);
+            var addReslt = await AddStaffAsync(addStaffDto);
+            command.Result = addReslt.Staff;
         }
     }
 
@@ -890,11 +876,6 @@ public class CommandHandler
                     };
                 }
             }
-        }
-
-        string Convert(string? str)
-        {
-            return string.IsNullOrEmpty(str) ? "empty" : str;
         }
 
         SyncStaffResultsDto.SyncStaffResult Error(string jobNumber, params string[] errorMessages) =>

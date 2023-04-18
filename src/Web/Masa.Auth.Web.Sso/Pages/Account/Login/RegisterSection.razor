@@ -2,16 +2,17 @@
 @inherits SsoCompontentBase
 @inject IJSRuntime _js
 
-<MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 mx-12 text-center" Style="height: 430px; overflow: auto;">
+<MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 px-12 text-center" Style="height: 430px; overflow: auto;">
     @foreach (var registerItem in _registerComponents.Values)
     {
         <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
     }
+
     @*https://github.com/BlazorComponent/MASA.Blazor/issues/811*@
     <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
         <LabelContent>
             @T("RegistrationAgreementStatement")
-            <MButton Plain OnClick="()=> _protocolModalVisible = true" StopPropagation="true" Style="color:rgb(0,0,238);padding: 0;">《@T("RegistrationAgreement")》</MButton>
+            <span @onclick="_ => _protocolModalVisible = true" @onclick:preventDefault @onclick:stopPropagation style="color:rgb(0,0,238);">《@T("RegistrationAgreement")》</span>
         </LabelContent>
     </MCheckbox>
 </MForm>
@@ -21,4 +22,4 @@
         @T("Register")
     </MButton>
 </div>
-<ProtocolModal @bind-Visible="_protocolModalVisible" OnSuccess="()=> _inputModel.Agreement = true" />
+<ProtocolModal @bind-Visible="_protocolModalVisible" OnSuccess="ProtocolModalOnSuccess" OnClose="ProtocolModalOnClose" />

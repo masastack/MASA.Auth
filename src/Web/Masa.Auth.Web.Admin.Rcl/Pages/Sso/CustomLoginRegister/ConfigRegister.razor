@@ -33,9 +33,15 @@
                     </MCol>
                     <MCol Class="d-flex">
                         <div class="my-auto">
-                            <SIcon Tooltip="@T("Up")" OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)" Class="mr-8">mdi-menu-up</SIcon>
-                            <SIcon Tooltip="@T("Down")" OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)" Class="mr-8">mdi-menu-down</SIcon>
-                            <SIcon Tooltip="@T("Delete")" OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate" Class="mr-8">mdi-delete-outline</SIcon>
+                            <MButton Class="mr-6" Icon OnClick="async () =>await Up(registerField)" Disabled="registerField.Sort == Value.Min(v => v.Sort)">
+                                <SIcon Tooltip="@T("Up")">mdi-menu-up</SIcon>
+                            </MButton>
+                            <MButton Class="mr-6" Icon OnClick="async () =>await Down(registerField)" Disabled="registerField.Sort == Value.Max(v => v.Sort)">
+                                <SIcon Tooltip="@T("Down")">mdi-menu-down</SIcon>
+                            </MButton>
+                            <MButton Class="mr-6" Icon OnClick="async () =>await Remove(registerField)" Disabled="registerField.CannotUpdate">
+                                <SIcon Tooltip="@T("Delete")">mdi-delete-outline</SIcon>
+                            </MButton>
                         </div>
                     </MCol>
                 </MRow>

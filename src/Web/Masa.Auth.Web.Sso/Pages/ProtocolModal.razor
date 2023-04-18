@@ -3,7 +3,7 @@
 @inject IWebHostEnvironment _environment
 @layout SimpleLayout
 
-<PModal Persistent Title="@T("RegistrationAgreement")" OnSave="ProtocolSaveAsync" SaveText="已阅读" @bind-Value="Visible" Width="1000" BodyStyle="overflow-y:hidden">
+<PModal Persistent Title="@T("RegistrationAgreement")" OnSave="ProtocolSaveAsync" ValueChanged="OnValueChangedAsync" SaveText="已阅读" Value="Visible" Width="1000" BodyStyle="overflow-y:hidden">
     <MRow>
         <MCard Width="1000" Style="height: calc(100vh - 200px) !important;overflow-y: scroll;" Class="pa-6">
             <p style="text-align:center;"><strong><span style="font-family:等线;font-size:20px;">服务协议</span></strong></p>
@@ -202,10 +202,22 @@
     [Parameter]
     public EventCallback<bool> OnSuccess { get; set; }
 
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
     private async Task ProtocolSaveAsync()
     {
         if (OnSuccess.HasDelegate)
             await OnSuccess.InvokeAsync();
         Visible = false;
+    }
+
+    private async Task OnValueChangedAsync(bool value)
+    {
+        Visible = value;
+        if (!value && OnClose.HasDelegate)
+        {
+            await OnClose.InvokeAsync();
+        }
     }
 }

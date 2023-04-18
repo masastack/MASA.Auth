@@ -49,7 +49,7 @@ public class DefaultChangeImage : UploadAvatar
         builder.AddAttribute(1, "class", "mt-3 hover-pointer body primary--text");
         builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(this, ChangeAvayarAsync));
 
-        builder.OpenComponent<MIcon>(3);
+        builder.OpenComponent<SIcon>(3);
         builder.AddAttribute(4, "Size", (StringNumber)20);
         builder.AddAttribute(5, "Class", "primary--text");
         builder.AddAttribute(6, "ChildContent", (RenderFragment)delegate (RenderTreeBuilder builder2) {

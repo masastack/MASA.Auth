@@ -15,12 +15,14 @@
                     <ClaimsSelect Claims="UserClaims" Excludes="Value.Select(value => value.Key).ToList()" @bind-Value="item.Key" />               
                 </div>
                 <div class="ma-auto pl-1">
-                    <SIcon Color="red" OnClick="async() => await RemoveAsync(item)">mdi-close</SIcon>
+                    <MButton Class="mr-4" Icon OnClick="async() => await RemoveAsync(item)">
+                        <SIcon Color="red">mdi-close</SIcon>
+                    </MButton>
                 </div>
             </div>
         }
     </div>
     <div class="hover-pointer dashed d-flex regular2--text hover-border-primary" style="height:50px;" @onclick="AddAsync">
-        <div class="ma-auto subtitle">@T("Add custom json key map")</div>
+        <div class="ma-auto subtitle">@T("Add custom JSON key map")</div>
     </div>
 </div>

@@ -1,19 +1,92 @@
 ﻿@page "/"
+@inherits SsoCompontentBase
+@inject IIdentityServerInteractionService _interaction
+@layout SimpleLayout
 
-<ul>
-    <li>
-        IdentityServer publishes a
-        <a href="/.well-known/openid-configuration">discovery document</a>
-        where you can find metadata and links to all the endpoints, key material, etc.
-    </li>
-    <li>
-        Click <a href="/diagnostics">here</a> to see the claims for your current session.
-    </li>
-    <li>
-        Click <a href="/grants">here</a> to manage your stored grants.
-    </li>
-    <li>
-        Click <a href="/ciba/all">here</a> to view your pending CIBA login requests.
-    </li>
-</ul>
+<MCard MaxWidth="512">
+    <MCardTitle Class="h5" Style="color: #1B2559;">
+        Masa Sso
+    </MCardTitle>
+    <MCardSubtitle Class="grey--text" Style="color: #7681AB !important;line-height: 24px;font-size: 16px;">
+        @T("Welcome to Masa Stack SSO")
+    </MCardSubtitle>
+    <MCardText Class="mt-12" Style="color: #A3AED0;font-size: 14px;">
+        <ul>
+            <li>
+                IdentityServer publishes a
+                <a href="/.well-known/openid-configuration">discovery document</a>
+                where you can find metadata and links to all the endpoints, key material, etc.
+            </li>
+            <li class="mt-7">
+                Click <a href="/diagnostics">here</a> to see the claims for your current session.
+            </li>
+            <li class="mt-7">
+                Click <a href="/grants">here</a> to manage your stored grants.
+            </li>
+            <li class="mt-7">
+                Click <a href="/ciba/all">here</a> to view your pending CIBA login requests.
+            </li>
+        </ul>
+        <div class="mt-12 mb-10 d-flex flex-wrap justify-center">
+            <MButton Class="primary rounded-pill" Width="340" Height="48" OnClick="Logout">@T("LogoutOfLogin")</MButton>
+        </div>
+    </MCardText>
+</MCard>
 
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string LogoutId { get; set; } = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var showLogoutPrompt = LogoutOptions.ShowLogoutPrompt;
+
+        if (User?.Identity?.IsAuthenticated != true)
+        {
+            // if the user is not authenticated, then just show logged out page
+            showLogoutPrompt = false;
+        }
+        else
+        {
+            //Simplify flow ignore judge ShowLogoutPrompt
+            var context = await _interaction.GetLogoutContextAsync(LogoutId);
+            if (context != null)
+            {
+                showLogoutPrompt = context.ShowSignoutPrompt == true ||
+                    !context.Parameters.AllKeys.Contains(IsolationConsts.ENVIRONMENT);
+                if (bool.TryParse(context.Parameters[PropertyConsts.REDIRECT_TO_LOGIN], out var redirectToLogin)
+                        && redirectToLogin)
+                {
+                    showLogoutPrompt = !redirectToLogin;
+                }
+            }
+        }
+
+        if (firstRender && !showLogoutPrompt)
+        {
+            Logout();
+            return;
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void Logout()
+    {
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            Navigation.NavigateTo($"logout", new Dictionary<string, object?>
+            {
+                 { "logoutId",LogoutId },
+            }, true);
+        }
+        else
+        {
+            Navigation.NavigateTo($"/account/logout/loggedout", new Dictionary<string, object?>
+            {
+                 { "logoutId",LogoutId },
+            });
+        }
+    }
+}

@@ -1,7 +1,7 @@
 ﻿@inherits SsoSectionComponentBase
 
 <MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="Value.PhoneNumber" Label="@T("PhoneNumber")"
-            Placeholder="@T("PhoneNumberPlaceHolder")" Outlined @ref="_phoneTextField" Rules="_phoneNumberRules">
+            Placeholder="@T("PhoneNumberPlaceholder")" Outlined @ref="_phoneTextField" Rules="_phoneNumberRules">
 </MTextField>
 <CaptchaSendTextField Class="mt-3" @bind-Value="Value.SmsCode" OnClick="GetSmsCode" />
 

@@ -1,4 +1,4 @@
-﻿@inherits AdminCompontentBase
+﻿@inherits ClientSectionCompontentBase
 
 <MRow>
     <MCol Md=12 Class="text-center">
@@ -11,7 +11,7 @@
         <STextField Required @bind-Value="Dto.ClientName" Label="@T("ClientName")" Tooltip="@T("ClientNameTips")" />
     </MCol>
     <MCol Md=6>
-        <SUrlTextField @bind-Value="Dto.ClientUri" Label="@T("ClientUri")" />
+        <SUrlTextField @bind-Value="Dto.ClientUri" Label="@T("ClientURL")" />
     </MCol>
     <MCol Md=6 Class="d-flex justify-space-around">
         <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
@@ -26,7 +26,9 @@
         {
             <div class="d-flex mt-3">
                 <STextField Small HideDetails="true" Value="uri" Filled Disabled />
-                <MIcon Class="ml-2" OnClick="()=>RemoveCallBackRedirectUri(uri)">mdi-close-circle</MIcon>
+                <MButton Class="mr-4" Icon OnClick="()=>RemoveCallBackRedirectUri(uri)">
+                    <SIcon>mdi-close-circle</SIcon>
+                </MButton>
             </div>
         }
     </MCol>
@@ -37,7 +39,9 @@
         {
             <div class="d-flex mt-3">
                 <STextField Small HideDetails="true" Value="uri" Filled Disabled />
-                <MIcon Class="ml-2" OnClick="()=>RemoveLogoutRedirectUri(uri)">mdi-close-circle</MIcon>
+                <MButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
+                    <SIcon>mdi-close-circle</SIcon>
+                </MButton>
             </div>
         }
     </MCol>
@@ -62,7 +66,7 @@
     {
         if (!Uri.TryCreate(Dto.RedirectUri, UriKind.Absolute, out var uri))
         {
-            PopupService.EnqueueSnackbarAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Is not a valid URL address"), AlertTypes.Error);
             return;
         }
         var redirectUri = $"{Dto.RedirectUri.TrimEnd('/')}{redirectUriSuffix}".ToLower();
@@ -79,7 +83,7 @@
     {
         if (!Uri.TryCreate(Dto.PostLogoutRedirectUri, UriKind.Absolute, out var uri))
         {
-            PopupService.EnqueueSnackbarAsync(T("Is not a valid URI address"), AlertTypes.Error);
+            PopupService.EnqueueSnackbarAsync(T("Is not a valid URL address"), AlertTypes.Error);
             return;
         }
         var postLogoutRedirectUri = $"{Dto.PostLogoutRedirectUri.TrimEnd('/')}{logoutRedirectUriSuffix}";
