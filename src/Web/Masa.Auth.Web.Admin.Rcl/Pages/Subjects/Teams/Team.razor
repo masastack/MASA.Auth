@@ -11,7 +11,7 @@
             <SSearch @bind-Value="_search" BackgroundColor="#fff" Class="mr-6" OnEnter="SearchKeyDown" />
             <PermissionView Code="@ElementPermissionCodes.TeamAdd">
                 <SButton Small Class="rounded-lg" OnClick="_addSheet.Show" BorderRadiusClass="rounded-lg">
-                    <SIcon Size=18>@IconConstants.Add</SIcon>
+                    <SIcon Size=18 IsDefaultToolTip="false">@IconConstants.Add</SIcon>
                     <span class="ml-2 btn">@T("Add")</span>
                 </SButton>
             </PermissionView>
