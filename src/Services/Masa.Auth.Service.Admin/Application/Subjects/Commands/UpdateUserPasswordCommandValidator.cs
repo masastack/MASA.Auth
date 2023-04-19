@@ -7,7 +7,6 @@ public class UpdateUserPasswordCommandValidator : MasaAbstractValidator<UpdateUs
 {
     public UpdateUserPasswordCommandValidator(PasswordValidator passwordValidator)
     {
-	RuleFor(command => command.User.OldPassword).Required();
         RuleFor(command => command.User.NewPassword).SetValidator(passwordValidator);
         RuleFor(command => command.User.NewPassword)
                 .Required()
