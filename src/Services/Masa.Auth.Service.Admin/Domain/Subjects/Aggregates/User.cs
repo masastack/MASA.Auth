@@ -141,9 +141,9 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
-#pragma warning disable CS8618 // ÔÚÍË³ö¹¹Ôìº¯ÊýÊ±£¬²»¿ÉÎª null µÄ×Ö¶Î±ØÐë°üº¬·Ç null Öµ¡£Çë¿¼ÂÇÉùÃ÷Îª¿ÉÒÔÎª null¡£
+#pragma warning disable CS8618 // ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ìº¯ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª null ï¿½ï¿½ï¿½Ö¶Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ null Öµï¿½ï¿½ï¿½ë¿¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Îª nullï¿½ï¿½
     private User()
-#pragma warning restore CS8618 // ÔÚÍË³ö¹¹Ôìº¯ÊýÊ±£¬²»¿ÉÎª null µÄ×Ö¶Î±ØÐë°üº¬·Ç null Öµ¡£Çë¿¼ÂÇÉùÃ÷Îª¿ÉÒÔÎª null¡£
+#pragma warning restore CS8618 // ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ìº¯ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª null ï¿½ï¿½ï¿½Ö¶Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ null Öµï¿½ï¿½ï¿½ë¿¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Îª nullï¿½ï¿½
     {
 
     }
@@ -302,7 +302,10 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public bool VerifyPassword(string password)
     {
-        return string.IsNullOrEmpty(password) is false && Password == MD5Utils.EncryptRepeat(password ?? "");
+        if (string.IsNullOrWhiteSpace(Password) && string.IsNullOrWhiteSpace(password))
+            return true;
+
+        return Password == MD5Utils.EncryptRepeat(password ?? "");
     }
 
     public void AddRoles(IEnumerable<Guid> roleIds)
