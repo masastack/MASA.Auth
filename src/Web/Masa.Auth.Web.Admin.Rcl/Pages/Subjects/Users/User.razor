@@ -27,60 +27,60 @@
             </MRow>
         </div>
     </HeaderContent>
-            <AutoHeightContent>
-                <div style="height:@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)");overflow-y:scroll;">
-                <SDataTable Dense
-                    Headers="GetHeaders()"
-                    Items="Users" FixedHeader
-                    TItem="UserDto"
-                    ItemsPerPage="PageSize"
-                    Class="mr-2">
-            <HeaderColContent Context="header">
-                <span>@header.Text</span>
-            </HeaderColContent>
-            <ItemColContent>
-                @switch (context.Header.Value)
-                {
-                    case nameof(UserDto.Avatar):
+    <AutoHeightContent>
+        <SDataTable Dense
+		    FixedHeader="true"
+		    Headers="GetHeaders()"
+		    Height="@(Filter is true ? "calc(100vh - 325px)" : "calc(100vh - 260px)")"
+		    Items="Users"
+		    TItem="UserDto"
+		    ItemsPerPage="PageSize"
+		    Class="mr-2">
+	    <HeaderColContent Context="header">
+		<span>@header.Text</span>
+	    </HeaderColContent>
+	    <ItemColContent>
+		@switch (context.Header.Value)
+		{
+		    case nameof(UserDto.Avatar):
                         <div class="hover-pointer d-flex" @onclick="()=> OpenUpdateUserDialog(context.Item)">
-                            <MAvatar Size="40">
-                                <img src="@context.Item.Avatar" />
-                            </MAvatar>
-                            <div class="ml-2 my-auto">
-                                <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name,context.Item.Account)</div>
-                                <div class="regular2--text caption">@context.Item.PhoneNumber</div>
-                            </div>
-                        </div>
-                        break;
-                    case (nameof(UserDto.Account)):
-                        <span>@context.Item.Account</span>
-                        break;
-                    case (nameof(UserDto.CreationTime)):
-                        <SDateTimeTitle Value=context.Item.CreationTime />
-                        break;
-                    case nameof(UserDto.Enabled):
-                        <EnableChip Value=context.Item.Enabled />
-                        break;
-                    case "Action":
-                        <div class="d-flex">
-                            <MButton Class="mr-4" Icon OnClick="()=> OpenUpdateUserDialog(context.Item)">
-                                <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
-                            </MButton>
-                            <MButton Class="mr-4" Icon OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.Id)">
-                                <SIcon Tooltip="@T("Authorize")">@IconConstants.Authorize</SIcon>
-                            </MButton>
-                        </div>
-                        break;
-                    default:
-                        <SItemCol Value="@context.Value" />
-                        break;
-                }
-            </ItemColContent>
-        </SDataTable>
-        </div>
+			    <MAvatar Size="40">
+				<img src="@context.Item.Avatar" />
+			    </MAvatar>
+			    <div class="ml-2 my-auto">
+				<div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name,context.Item.Account)</div>
+				<div class="regular2--text caption">@context.Item.PhoneNumber</div>
+			    </div>
+			</div>
+			break;
+		    case (nameof(UserDto.Account)):
+			<span>@context.Item.Account</span>
+			break;
+		    case (nameof(UserDto.CreationTime)):
+			<SDateTimeTitle Value=context.Item.CreationTime />
+			break;
+		    case nameof(UserDto.Enabled):
+			<EnableChip Value=context.Item.Enabled />
+			break;
+		    case "Action":
+			<div class="d-flex">
+			    <MButton Class="mr-4" Icon OnClick="()=> OpenUpdateUserDialog(context.Item)">
+				<SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
+			    </MButton>
+			    <MButton Class="mr-4" Icon OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.Id)">
+				<SIcon Tooltip="@T("Authorize")">@IconConstants.Authorize</SIcon>
+			    </MButton>
+			</div>
+			break;
+		    default:
+			<SItemCol Value="@context.Value" />
+			break;
+		}
+	    </ItemColContent>
+	</SDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+	<SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
     </FooterContent>
 </AutoHeight>
 <AddUserDialog @bind-Visible="AddUserDialogVisible" OnSubmitSuccess=OnAddUserSuccessAsync />
