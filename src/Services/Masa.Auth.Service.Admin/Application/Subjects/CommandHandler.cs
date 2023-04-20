@@ -194,7 +194,7 @@ public class CommandHandler
     {
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
-        if (string.IsNullOrEmpty(userModel.OldPassword) is false && !user.VerifyPassword(userModel.OldPassword ?? ""))
+        if (!user.VerifyPassword(userModel.OldPassword ?? ""))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
         }

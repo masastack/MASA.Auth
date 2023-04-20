@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Infrastructure;
@@ -69,9 +69,9 @@ public class AuthSeedData
         #region Dcc
         var dccMenus = new List<Permission>() {
             new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"PublicConfig","PublicConfig","Public","mdi-earth",2,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"LabelManagement","Label","Label","mdi-label",3,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Team","Team","Team","mdi-account-group-outline",4,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Team","Team","Team","mdi-account-group-outline",2,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"PublicConfig","PublicConfig","Public","mdi-earth",3,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"LabelManagement","Label","Label","mdi-label",4,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.DCC))
         {
@@ -146,6 +146,10 @@ public class AuthSeedData
         var departmentId = Guid.Empty;
         string system = "system", admin = "admin", guest = "guest";
 
+        var userSetter = serviceProvider.GetService<IUserSetter>();
+        var auditUser = new IdentityUser() { Id = masaStackConfig.GetDefaultUserId().ToString(), UserName = system };
+        var userSetterHandle = userSetter!.Change(auditUser);
+
         if (!context.Set<Department>().Any())
         {
             var dapertmentCommand = new UpsertDepartmentCommand(new UpsertDepartmentDto
@@ -167,7 +171,8 @@ public class AuthSeedData
                 Name = MasaStackConsts.MASA_STACK_TEAM,
                 Avatar = new AvatarValueDto
                 {
-                    Url = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg"
+                    Name = MasaStackConsts.MASA_STACK_TEAM,
+                    Color = "blue"
                 }
             });
             await eventBus.PublishAsync(addTeamCommand);
@@ -248,6 +253,7 @@ public class AuthSeedData
         #region SSO Client
 
         var uis = masaStackConfig.GetAllUINames();
+        var clientDefaultLogoUrl = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
         foreach (var ui in uis)
         {
             if (context.Set<Client>().Any(u => u.ClientId == ui.Key))
@@ -265,10 +271,17 @@ public class AuthSeedData
                 RedirectUris = ui.Value.Select(url => $"{url}/signin-oidc").ToList(),
                 PostLogoutRedirectUris = ui.Value.Select(url => $"{url}/signout-callback-oidc").ToList(),
                 FrontChannelLogoutUri = $"{ui.Value.Last()}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{ui.Value.Last()}/account/backchannellogout"
+                BackChannelLogoutUri = $"{ui.Value.Last()}/account/backchannellogout",
+                LogoUri = clientDefaultLogoUrl
             }));
         }
 
         #endregion
+
+        #region all permission cache
+        await eventBus.PublishAsync(new SyncPermissionRedisCommand());
+        #endregion
+
+        userSetterHandle.Dispose();
     }
 }

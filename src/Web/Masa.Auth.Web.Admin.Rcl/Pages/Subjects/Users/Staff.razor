@@ -18,13 +18,13 @@
         </div>
     </HeaderContent>
     <AutoHeightContent>
-        <div style="height:@("calc(100vh - 260px)");overflow-y:scroll;">
         <SDataTable Headers="GetHeaders()"
-                        FixedHeader
-                    Items="Staffs"
-                    TItem="StaffDto"
-                    ItemsPerPage="PageSize"
-                    Class="mr-2">
+		    Height="@("calc(100vh - 260px)")"
+		    FixedHeader
+		    Items="Staffs"
+		    TItem="StaffDto"
+		    ItemsPerPage="PageSize"
+		    Class="mr-2">
             <HeaderColContent Context="header">
                 <span>@header.Text</span>
             </HeaderColContent>
@@ -73,7 +73,6 @@
                 }
             </ItemColContent>
         </SDataTable>
-        </div>
     </AutoHeightContent>
     <FooterContent>
         <SPagination Class="mt-5" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
