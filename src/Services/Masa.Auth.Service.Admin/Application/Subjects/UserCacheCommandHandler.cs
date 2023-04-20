@@ -136,7 +136,7 @@ public class UserCacheCommandHandler
     }
 
     [EventHandler(99)]
-    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand  command)
+    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         await SetUserCacheAsync(command.User.Id);
     }
@@ -144,6 +144,7 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpsertUserAsync(UpsertUserCommand command)
     {
+        await Console.Out.WriteLineAsync("1111111111UserCacheCommandHandler UpsertUserAsync");
         await SetUserCacheAsync(command.User.Id);
     }
 }
