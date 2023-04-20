@@ -253,7 +253,6 @@ public class CommandHandler
         else
         {
             user = await VerifyUserRepeatAsync(default, userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account, false);
-            await Console.Out.WriteLineAsync("------------------11111111111111111");
             if (user is not null)
             {
                 user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
@@ -262,7 +261,6 @@ public class CommandHandler
                 await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
                 command.Result = user.Adapt<UserModel>();
-                await Console.Out.WriteLineAsync("------------------222222222222222");
             }
             else
             {
@@ -270,7 +268,6 @@ public class CommandHandler
                 user.AddRoles(roles);
                 await AddUserAsync(user);
                 command.Result = user.Adapt<UserModel>();
-                await Console.Out.WriteLineAsync("------------------3333333333333333");
             }
         }
     }

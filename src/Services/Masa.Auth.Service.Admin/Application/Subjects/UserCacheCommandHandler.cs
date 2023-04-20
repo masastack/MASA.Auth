@@ -144,7 +144,6 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpsertUserAsync(UpsertUserCommand command)
     {
-        await Console.Out.WriteLineAsync("1111111111UserCacheCommandHandler UpsertUserAsync");
-        await SetUserCacheAsync(command.User.Id);
+        await SetUserCacheAsync(command.Result.Id);
     }
 }
