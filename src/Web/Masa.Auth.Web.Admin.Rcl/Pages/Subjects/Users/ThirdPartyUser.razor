@@ -27,12 +27,12 @@
         </div>
     </HeaderContent>
     <AutoHeightContent>
-        <div style="height:@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)");overflow-y:scroll;">
         <SDataTable
             Dense
+	    Height="@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)")"
             Headers="GetHeaders()" 
             Items="ThirdPartyUsers"
-                        FixedHeader
+            FixedHeader
             TItem="ThirdPartyUserDto" 
             ItemsPerPage="PageSize"
             Class="mr-2">
@@ -84,7 +84,6 @@
                 }
             </ItemColContent>
         </SDataTable>
-        </div>
     </AutoHeightContent>
     <FooterContent>
         <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
