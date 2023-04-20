@@ -71,7 +71,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 		<ProjectReference Include="..\..\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
-		<ProjectReference Include="..\Isolation\Isolation.csproj" />
+		<ProjectReference Include="..\Isolation\Masa.Contrib.StackSdks.Isolation.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

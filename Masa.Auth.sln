@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.ApiGateways.Calle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Security.OAuth.Providers", "src\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj", "{D58D018F-26B0-45D1-AD0B-E2777C59ED44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isolation", "src\Services\Isolation\Isolation.csproj", "{8D2D85AA-F3EA-493F-B413-025B92A253F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Contrib.StackSdks.Isolation", "src\Services\Isolation\Masa.Contrib.StackSdks.Isolation.csproj", "{8D2D85AA-F3EA-493F-B413-025B92A253F2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Stack.Components", "..\MASA.Stack.Components\src\Masa.Stack.Components\Masa.Stack.Components.csproj", "{173C9C35-7A6F-4A1C-BB95-30512DDFB766}"
 EndProject

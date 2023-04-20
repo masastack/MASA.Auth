@@ -270,8 +270,6 @@ public class QueryHandler
     public async Task AppMenuListQueryAsync(AppMenuListQuery appMenuListQuery)
     {
         var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appMenuListQuery.UserId);
-#warning delete before rc1  
-        await Console.Out.WriteLineAsync($"userPermissionIds:{JsonSerializer.Serialize(userPermissionIds)}");
         var menus = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (menus == null || menus.Count < 1)
         {
@@ -528,9 +526,6 @@ public class QueryHandler
     [EventHandler(4)]
     public async Task GroupPermissionsByUserAsync(PermissionsByUserQuery query)
     {
-#warning delete before rc1
-        await Console.Out.WriteLineAsync($"TeamPermissionIds:{JsonSerializer.Serialize(query.TeamPermissionIds)}");
-        await Console.Out.WriteLineAsync($"RolePermissionIds:{JsonSerializer.Serialize(query.RolePermissionIds)}");
         var permissionIds = query.UserPermissionIds.Where(kv => kv.Value)
                                     .Select(kv => kv.Key)
                                     .Union(query.TeamPermissionIds)

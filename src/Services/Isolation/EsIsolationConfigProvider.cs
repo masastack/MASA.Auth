@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Isolation;
+namespace Masa.Contrib.StackSdks.Isolation;
 
 public class EsIsolationConfigProvider
 {
@@ -14,12 +14,13 @@ public class EsIsolationConfigProvider
 
     public EsIsolationConfigProvider(
         EnvironmentProvider environmentProvider,
-        IServiceProvider serviceProvider,
-        ILogger<EsIsolationConfigProvider>? logger)
+        ILogger<EsIsolationConfigProvider>? logger,
+        IMultiEnvironmentContext multiEnvironmentContext,
+        IMultiEnvironmentMasaStackConfig multiEnvironmentMasaStackConfig)
     {
-        _multiEnvironmentContext = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IMultiEnvironmentContext>();
+        _multiEnvironmentContext = multiEnvironmentContext;
         _environmentProvider = environmentProvider;
-        _multiEnvironmentMasaStackConfig = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IMultiEnvironmentMasaStackConfig>();
+        _multiEnvironmentMasaStackConfig = multiEnvironmentMasaStackConfig;
         _logger = logger;
 
         InitData();

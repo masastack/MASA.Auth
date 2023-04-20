@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Masa.Auth.Service.Admin.Infrastructure.Middleware;
+namespace Masa.Contrib.StackSdks.Isolation;
 
-public class EnvironmentMiddleware : IMiddleware, IScopedDependency
+internal class EnvironmentMiddleware : IMiddleware
 {
     readonly IMultiEnvironmentContext _multiEnvironmentContext;
     readonly ILogger<EnvironmentMiddleware> _logger;
@@ -18,7 +18,6 @@ public class EnvironmentMiddleware : IMiddleware, IScopedDependency
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         _logger.LogInformation("----- Current Environment Is [{0}] -----", _multiEnvironmentContext.CurrentEnvironment);
-        context.Items.Add(IsolationConsts.ENVIRONMENT, _multiEnvironmentContext.CurrentEnvironment);
         return next(context);
     }
 }

@@ -1,14 +1,14 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-using Isolation;
+using Masa.Contrib.StackSdks.Isolation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-
-await builder.Services.AddMasaStackConfigAsync(true);
+#warning change true
+await builder.Services.AddMasaStackConfigAsync(false);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
@@ -27,15 +27,7 @@ identityServerUrl = "http://localhost:18200";
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
 
-
-var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
-builder.Services.AddObjectStorage(option => option.UseAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)
-{
-    Sts = new AliyunStsOptions()
-    {
-        RegionId = ossOptions.RegionId
-    }
-}));
+builder.Services.AddObjectStorage(option => option.UseAliyunStorage());
 
 builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {
@@ -108,7 +100,7 @@ var redisOption = new RedisConfigurationOptions
     DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
     Password = masaStackConfig.RedisModel.RedisPassword
 };
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(), multilevel =>
 {
     multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
     multilevel.SubscribeKeyPrefix = $"masa.auth:-db-{redisOption.DefaultDatabase}";
@@ -171,8 +163,7 @@ builder.Services
         dbOptions.UseFilter();
     })
     .UseRepository<AuthDbContext>();
-})
-.AddIsolation(isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT));
+});
 
 await builder.Services.AddStackIsolationAsync(MasaStackConstant.AUTH);
 
@@ -238,11 +229,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseIsolation();
 #warning CurrentUserCheckMiddleware
 //app.UseMiddleware<CurrentUserCheckMiddleware>();
-app.UseMiddleware<EnvironmentMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
+app.UseStackIsolation();
 app.UseStackMiddleware();
 
 app.UseCloudEvents();

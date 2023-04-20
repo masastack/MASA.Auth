@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Isolation;
+using Masa.Contrib.StackSdks.Isolation;
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Extensions;
 
@@ -15,7 +15,8 @@ public static class ElasticsearchAutoCompleteExtensions
         {
             autoCompleteOptions.UseElasticSearch(options =>
             {
-                var esIsolationConfigProvider = services.BuildServiceProvider().GetRequiredService<EsIsolationConfigProvider>();
+                var esIsolationConfigProvider = services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>()
+                    .HttpContext!.RequestServices.GetRequiredService<EsIsolationConfigProvider>();
                 var esOptions = esIsolationConfigProvider.GetEsOptions();
                 options.ElasticsearchOptions.UseNodes(esOptions.Nodes.ToArray())
                     .UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));

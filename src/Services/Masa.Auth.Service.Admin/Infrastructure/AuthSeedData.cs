@@ -142,6 +142,10 @@ public class AuthSeedData
         }
         #endregion
 
+        #region all permission cache
+        await eventBus.PublishAsync(new SyncPermissionRedisCommand());
+        #endregion
+
         var teamId = Guid.Empty;
         var departmentId = Guid.Empty;
         string system = "system", admin = "admin", guest = "guest";

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Web.Sso.Infrastructure.Environment;
+
 namespace Masa.Auth.Web.Sso.Infrastructure;
 
 public class AuthenticationExternalHandler : IAuthenticationExternalHandler
@@ -48,7 +50,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
 
                 IdentityProvider = scheme,
                 AdditionalClaims = additionalLocalClaims
-            };           
+            };
             await httpContext.SignInAsync(isuser, localSignInProps);
             await httpContext.SingOutExternalAsync();
 

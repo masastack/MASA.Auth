@@ -48,7 +48,6 @@ public partial class LoginSection
                     RememberLogin = LoginOptions.AllowRememberLogin
                 };
             }
-            (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(currentEnvironment);
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -57,7 +56,6 @@ public partial class LoginSection
     private void EnvironmentChanged(string environment)
     {
         _inputModel.Environment = environment;
-        (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(environment);
     }
 
     private async Task LoginHandler()

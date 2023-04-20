@@ -56,7 +56,7 @@ builder.Services.AddAuthApiGateways(option =>
     option.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
 });
 
-builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
+await builder.Services.AddMasaStackComponentsAsync("wwwroot/i18n", authServerUrl);
 
 builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {

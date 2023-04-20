@@ -1,27 +1,28 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace Isolation;
+using Masa.Contrib.StackSdks.Isolation.Models;
+
+namespace Masa.Contrib.StackSdks.Isolation;
 
 public static class ServiceCollectionExtensions
 {
     public static async Task<IServiceCollection> AddStackIsolationAsync(this IServiceCollection services, string name)
     {
+        services.AddIsolation(isolationBuilder => isolationBuilder.UseMultiEnvironment(IsolationConsts.ENVIRONMENT));
+
         var pmClient = services.BuildServiceProvider().GetRequiredService<IPmClient>();
         var environments = (await pmClient.EnvironmentService.GetListAsync()).Select(e => e.Name).ToList();
 
         services.AddSingleton((sp) => { return new EnvironmentProvider(environments); });
 
-        ConfigureConnectionStrings(services, name);
-        ConfigureRedisOptions(services);
-        ConfigStorageOptions(services);
+        services.ConfigureConnectionStrings(name);
+        services.ConfigureRedisOptions();
+        services.ConfigStorageOptions();
 
-        services.AddSingleton<EsIsolationConfigProvider>();
+        services.AddScoped<EsIsolationConfigProvider>();
 
-        services.AddIsolation(isolationBuilder =>
-        {
-            isolationBuilder.UseMultiEnvironment();
-        });
+        services.AddScoped<EnvironmentMiddleware>();
 
         return services;
     }
@@ -31,7 +32,7 @@ public static class ServiceCollectionExtensions
         var (environments, multiEnvironmentMasaStackConfig, masaStackConfig) = services.GetInternal();
         services.Configure<IsolationOptions<ConnectionStrings>>(options =>
         {
-            foreach (string environment in environments)
+            foreach (var environment in environments)
             {
                 options.Data.Add(new()
                 {
@@ -55,7 +56,7 @@ public static class ServiceCollectionExtensions
         var (environments, multiEnvironmentMasaStackConfig, masaStackConfig) = services.GetInternal();
         services.Configure<IsolationOptions<RedisConfigurationOptions>>(options =>
         {
-            foreach (string environment in environments)
+            foreach (var environment in environments)
             {
                 var redisModel = multiEnvironmentMasaStackConfig.SetEnvironment(environment).RedisModel;
                 options.Data.Add(new IsolationConfigurationOptions<RedisConfigurationOptions>()
@@ -99,25 +100,32 @@ public static class ServiceCollectionExtensions
         var configurationApiClient = services.BuildServiceProvider().GetRequiredService<IConfigurationApiClient>();
         services.Configure<IsolationOptions<AliyunStorageConfigureOptions>>(async options =>
         {
-            foreach (string environment in environments)
+            foreach (var environment in environments)
             {
-                var ossOptions = await configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS", ossOptions =>
+                try
                 {
-                    var item = options.Data.FirstOrDefault(s => s.Environment == environment);
-                    if (item != null)
+                    var ossOptions = await configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS", ossOptions =>
                     {
-                        item.Data = Convert(ossOptions);
+                        var item = options.Data.FirstOrDefault(s => s.Environment == environment);
+                        if (item != null)
+                        {
+                            item.Data = Convert(ossOptions);
+                        }
+                    });
+                    if (ossOptions == null)
+                    {
+                        continue;
                     }
-                });
-                if (ossOptions == null)
-                {
-                    continue;
+                    options.Data.Add(new IsolationConfigurationOptions<AliyunStorageConfigureOptions>()
+                    {
+                        Environment = environment,
+                        Data = Convert(ossOptions)
+                    });
                 }
-                options.Data.Add(new IsolationConfigurationOptions<AliyunStorageConfigureOptions>()
+                catch (Exception ex)
                 {
-                    Environment = environment,
-                    Data = Convert(ossOptions)
-                });
+                    await Console.Out.WriteLineAsync(ex.Message);
+                }
             }
         });
 
