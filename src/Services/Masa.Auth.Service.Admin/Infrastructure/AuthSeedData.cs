@@ -320,6 +320,5 @@ public class AuthSeedData
                 Permissions = permissions
             }));
         }
-
     }
 }
