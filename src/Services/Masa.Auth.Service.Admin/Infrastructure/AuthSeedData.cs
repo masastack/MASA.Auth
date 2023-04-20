@@ -69,9 +69,9 @@ public class AuthSeedData
         #region Dcc
         var dccMenus = new List<Permission>() {
             new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Overview","Overview","Overview","mdi-flag",1,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"PublicConfig","PublicConfig","Public","mdi-earth",2,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"LabelManagement","Label","Label","mdi-label",3,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Team","Team","Team","mdi-account-group-outline",4,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"Team","Team","Team","mdi-account-group-outline",2,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"PublicConfig","PublicConfig","Public","mdi-earth",3,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.DCC,masaStackConfig.GetWebId(MasaStackConstant.DCC),"LabelManagement","Label","Label","mdi-label",4,PermissionTypes.Menu),
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.DCC))
         {
