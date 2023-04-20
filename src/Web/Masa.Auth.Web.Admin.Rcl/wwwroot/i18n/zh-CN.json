@@ -236,6 +236,7 @@
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method"
   },
 
+  "Give him a nickname!": "给Ta取个昵称吧!",
   "UserBlock": {
     "Add User": "新建用户",
     "Edit User": "编辑用户",
@@ -257,7 +258,6 @@
     "Authorized user succeeded": "授权用户成功",
     "Failed to authorize user:": "授权用户失败:",
     "Delete user data success": "删除用户数据成功",
-    "Give him a nickname!": "给Ta取个昵称吧!",
     "Successfully set user permissions": "设置用户权限成功",
     "User roles and permissions settings": "用户角色和权限设置",
     "Are you sure delete user \"{0}\"?": "确定删除用户\"{0}\"吗"
