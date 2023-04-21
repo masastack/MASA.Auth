@@ -84,14 +84,14 @@ public class UserDomainEventHandler
         if (user.Account == "admin")
         {
             var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
-            if (cachePermissions == null || cachePermissions.Count() < 1)
+            if (cachePermissions?.Count > 0)
             {
-                userEvent.Permissions = await _authDbContext.Set<Permission>()
-                        .Select(p => p.Id).ToListAsync();
+                userEvent.Permissions = cachePermissions.Select(e => e!.Id).ToList();
             }
             else
             {
-                userEvent.Permissions = cachePermissions.Select(e => e!.Id).ToList();
+                userEvent.Permissions = await _authDbContext.Set<Permission>()
+                    .Select(p => p.Id).ToListAsync();
             }
         }
         else

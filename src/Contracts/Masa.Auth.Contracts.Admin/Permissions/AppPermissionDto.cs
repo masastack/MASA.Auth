@@ -9,7 +9,7 @@ public class AppPermissionDto
 
     public PermissionTypes Type { get; set; }
 
-    public Guid PermissonId { get; set; }
+    public Guid PermissionId { get; set; }
 
     public string PermissionName { get; set; } = string.Empty;
 
