@@ -283,7 +283,8 @@ public class QueryHandler
         {
             return allMenus.Where(m => m.ParentId == parentId && m.Id != Guid.Empty)
                 .OrderBy(m => m.Order)
-                .Select(m => new MenuDto {
+                .Select(m => new MenuDto
+                {
                     Id = m.Id,
                     Name = m.Name,
                     Code = m.Code,
@@ -390,10 +391,10 @@ public class QueryHandler
         var permissionIds = await GetPermissionsByCacheAsync(query.Teams);
         if (permissionIds == null || permissionIds.Count < 1)
         {
-            permissionCacheIds = await GetPermissionsAsync(teamIds);
+            permissionIds = await GetPermissionsAsync(teamIds);
         }
 
-        query.Result.AddRange(permissionCacheIds);
+        query.Result.AddRange(permissionIds);
 
         async Task<List<Guid>> GetPermissionsAsync(IEnumerable<Guid> teamEnumerableIds)
         {
@@ -427,7 +428,7 @@ public class QueryHandler
             var teamIds = query.Teams.Select(team => team.Id).ToList();
             var permissionIds = new List<Guid>();
 
-            var teamIdCacheKeys = teamEnumerableIds.Select(CacheKey.TeamKey);
+            var teamIdCacheKeys = teams.Select(e => e.Id).Select(CacheKey.TeamKey);
             var cacheTeams = await _multilevelCacheClient.GetListAsync<TeamDetailDto>(teamIdCacheKeys);
             if (cacheTeams != null)
             {
