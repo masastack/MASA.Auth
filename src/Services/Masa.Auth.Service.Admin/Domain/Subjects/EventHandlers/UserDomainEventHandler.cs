@@ -113,6 +113,8 @@ public class UserDomainEventHandler
 
     private async Task<UserModel> GetUserAsync(Guid userId)
     {
+#warning 缓存获取错误
+        var d = _multiEnvironmentContext.CurrentEnvironment;
         var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(userId));
         if (userModel == null)
         {
