@@ -41,7 +41,7 @@ public partial class OrgSheet
 
     private async Task OnDeleteHandler()
     {
-        if (OnDelete != null)
+        if (OnDelete != null && _dto.ParentId != Guid.Empty)
         {
             var result = await OnDelete.Invoke(_dto.Id, _dto.Name);
             if (result)
