@@ -104,12 +104,19 @@ public partial class PermissionsConfigure
     {
         RolePermissions = await PermissionService.GetPermissionsByRoleAsync(Roles);
         RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
+        await RoleUnionTeamPermissionValueChangedAsync();
     }
 
     private async Task GetTeamPermissions()
     {
         TeamPermission = await PermissionService.GetPermissionsByTeamWithUserAsync(new(User, Teams));
         RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
+        await RoleUnionTeamPermissionValueChangedAsync();
+    }
+
+    protected virtual Task RoleUnionTeamPermissionValueChangedAsync()
+    {
+        return Task.CompletedTask;
     }
 
     protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)

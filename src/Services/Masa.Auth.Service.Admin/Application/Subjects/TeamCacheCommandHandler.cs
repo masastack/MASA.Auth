@@ -101,9 +101,9 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
 
             await _multilevelCacheClient.SetAsync(CacheKey.TeamKey(team.Id), teamDto);
 
-            if (team.TeamStaffs.Count > 0)
+            if (team.TeamStaffs.Where(e=>e.IsDeleted==false).Count() > 0)
             {
-                foreach (var item in team.TeamStaffs.Select(e => e.StaffId).Distinct())
+                foreach (var item in team.TeamStaffs.Where(e => e.IsDeleted == false).Select(e => e.StaffId).Distinct())
                 {
                     var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(item));
                     if (cacheStaffTeams == null)
