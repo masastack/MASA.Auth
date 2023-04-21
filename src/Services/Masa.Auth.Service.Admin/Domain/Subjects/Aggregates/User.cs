@@ -140,6 +140,9 @@ public class User : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<UserPermission> Permissions => _permissions;
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
+    
+    private User()
+    {}
 
     public User(string? name,
                 string displayName,
