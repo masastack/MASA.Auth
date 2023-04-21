@@ -8,13 +8,13 @@
             <div>
                 <SUserAutoComplete Small FillBackground=false @bind-Value="UserId" Class="user-auto-complete" />
             </div>
-            <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
-                <SIcon Class="ma-auto" Color="emphasis2" Size=20>
+           <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 block-center justify-center button white">
+                <SIcon Class="ma-auto" Color="emphasis2" Size=20 Tooltip="@(Filter is true ? T("Cancel Filter"): T("Filter"))">
                     @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
                 </SIcon>
             </div>
             <SButton Small Class="ml-4" OnClick=OpenAddUserDialog BorderRadiusClass="rounded-lg">
-                <SIcon Size=18>@IconConstants.Add</SIcon>
+                <SIcon Size=18 IsDefaultToolTip=false>@IconConstants.Add</SIcon>
                 <span class="ml-2 btn">@T("Add")</span>
             </SButton>
         </div>

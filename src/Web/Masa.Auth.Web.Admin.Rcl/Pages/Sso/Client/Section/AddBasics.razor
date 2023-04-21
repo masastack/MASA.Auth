@@ -20,28 +20,36 @@
 </MRow>
 <MRow>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
-                          AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
+        <div class="block-center">
+            <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix" />
+            <SButton Icon OnClick="AddCallBackRedirectUri">
+                <SIcon>@IconConstants.Add</SIcon>
+            </SButton>
+        </div>
         @foreach (var uri in Dto.RedirectUris)
         {
             <div class="d-flex mt-3">
                 <STextField Small HideDetails="true" Value="uri" Filled Disabled />
                 <MButton Class="mr-4" Icon OnClick="()=>RemoveCallBackRedirectUri(uri)">
-                    <SIcon>mdi-close-circle</SIcon>
+                    <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
                 </MButton>
             </div>
         }
     </MCol>
     <MCol Md=6>
-        <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
-                          AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
+        <div class="block-center">
+            <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix" />
+            <SButton Icon OnClick="AddLogoutRedirectUri">
+                <SIcon>@IconConstants.Add</SIcon>
+            </SButton>
+        </div>
         @foreach (var uri in Dto.PostLogoutRedirectUris)
         {
             <div class="d-flex mt-3">
                 <STextField Small HideDetails="true" Value="uri" Filled Disabled />
-                <MButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
-                    <SIcon>mdi-close-circle</SIcon>
-                </MButton>
+                <SButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
+                    <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
+                </SButton>
             </div>
         }
     </MCol>

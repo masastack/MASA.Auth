@@ -2,8 +2,12 @@
 
 <MRow Class="pt-4 mr-2">
     <MCol Md=12>
-        <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix"
-                    AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddCallBackRedirectUri" />
+        <div class="block-center">
+            <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix" />
+            <SButton Icon OnClick="AddCallBackRedirectUri">
+                <SIcon>@IconConstants.Add</SIcon>
+            </SButton>
+        </div>
     </MCol>
     <MCol Md="12">
         <MRow Class="ma-0">
@@ -12,15 +16,19 @@
                 <MCol Md=6 Class="d-flex">
                     <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
                     <MButton Class="mr-4" Icon OnClick="()=>RemoveCallBackRedirectUri(uri)">
-                        <SIcon>mdi-close-circle</SIcon>
+                        <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
                     </MButton>
                 </MCol>
             }
         </MRow>
     </MCol>
     <MCol Md=12>
-        <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"
-                    AppendOuterIcon="@IconConstants.Add" OnAppendOuterClick="AddLogoutRedirectUri" />
+        <div class="block-center">
+            <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"/>
+            <SButton Icon OnClick="AddLogoutRedirectUri">
+                <SIcon>@IconConstants.Add</SIcon>
+            </SButton>
+        </div>
     </MCol>
     <MCol Md="12">
         <MRow Class="ma-0">
@@ -29,7 +37,7 @@
                 <MCol Md=6 Class="d-flex">
                     <STextField HideDetails="true" Value="uri" Filled Disabled />
                     <MButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
-                        <SIcon>mdi-close-circle</SIcon>
+                        <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
                     </MButton>
                 </MCol>
             }
