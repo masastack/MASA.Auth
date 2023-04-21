@@ -100,8 +100,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             };
 
             await _multilevelCacheClient.SetAsync(CacheKey.TeamKey(team.Id), teamDto);
-
-            if (team.TeamStaffs.Where(e=>e.IsDeleted==false).Count() > 0)
+#warning delete where when rc1 release
+            if (team.TeamStaffs.Where(e => e.IsDeleted == false).Count() > 0)
             {
                 foreach (var item in team.TeamStaffs.Where(e => e.IsDeleted == false).Select(e => e.StaffId).Distinct())
                 {
