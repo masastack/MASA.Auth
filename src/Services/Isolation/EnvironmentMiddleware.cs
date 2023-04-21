@@ -18,6 +18,7 @@ internal class EnvironmentMiddleware : IMiddleware
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         _logger.LogInformation("----- Current Environment Is [{0}] -----", _multiEnvironmentContext.CurrentEnvironment);
+        context.Items.Add(IsolationConsts.ENVIRONMENT, _multiEnvironmentContext.CurrentEnvironment);
         return next(context);
     }
 }

@@ -14,6 +14,9 @@ public partial class RegisterSection
     [Parameter]
     public List<RegisterFieldModel> RegisterFields { get; set; } = new();
 
+    [Parameter]
+    public string Environment { get; set; } = string.Empty;
+
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
     bool _registerLoading;
@@ -112,7 +115,8 @@ public partial class RegisterSection
                     Email = _inputModel.Email,
                     EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
                     Password = _inputModel.Password,
-                    DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
+                    DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName,
+                    Environment = Environment
                 });
             }
             else
@@ -123,7 +127,8 @@ public partial class RegisterSection
                     SmsCode = _inputModel.SmsCode?.ToString() ?? "",
                     Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
                     Avatar = "",
-                    DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName
+                    DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName,
+                    Environment = Environment
                 });
             }
 
@@ -133,7 +138,7 @@ public partial class RegisterSection
                 SmsCode = _inputModel.SmsCode,
                 Password = _inputModel.Password,
                 Account = _inputModel.Email ?? "",
-                Environment = EnvironmentProvider.GetEnvironment(),
+                Environment = Environment,
                 PhoneNumber = _inputModel.PhoneNumber,
                 ReturnUrl = ReturnUrl,
                 RegisterLogin = true

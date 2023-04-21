@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Sso.Infrastructure.Environment;
 
 namespace Masa.Auth.Web.Sso.Infrastructure;
 
@@ -11,15 +10,13 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly IHttpContextAccessor _contextAccessor;
-    readonly ISsoEnvironmentProvider _ssoEnvironmentProvider;
 
-    public AuthenticationExternalHandler(IAuthClient authClient, IIdentityServerInteractionService interaction, IEventService events, IHttpContextAccessor contextAccessor, IEnvironmentProvider environmentProvider)
+    public AuthenticationExternalHandler(IAuthClient authClient, IIdentityServerInteractionService interaction, IEventService events, IHttpContextAccessor contextAccessor)
     {
         _authClient = authClient;
         _interaction = interaction;
         _events = events;
         _contextAccessor = contextAccessor;
-        _ssoEnvironmentProvider = (ISsoEnvironmentProvider)environmentProvider;
     }
 
     public async Task<bool> OnHandleAuthenticateAfterAsync(AuthenticateResult result)
@@ -28,11 +25,11 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         var identity = IdentityProvider.GetIdentity(scheme, result.Principal ?? throw new UserFriendlyException("Authenticate failed"));
         result.Properties.Items.TryGetValue("environment", out var environment);
         environment ??= "development";
-        _ssoEnvironmentProvider.SetEnvironment(environment);
         var httpContext = _contextAccessor.HttpContext ?? throw new UserFriendlyException("Internal exception, please contact the administrator");
         var userModel = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
         {
-            ThridPartyIdentity = identity.Subject
+            ThridPartyIdentity = identity.Subject,
+            Environment = environment
         });
         if (userModel is not null)
         {

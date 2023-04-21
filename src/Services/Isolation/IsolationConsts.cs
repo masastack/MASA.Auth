@@ -5,5 +5,5 @@ namespace Masa.Contrib.StackSdks.Isolation;
 
 internal static class IsolationConsts
 {
-    public const string ENVIRONMENT = "env";
+    public const string ENVIRONMENT = "Environment";
 }

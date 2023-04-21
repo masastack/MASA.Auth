@@ -1,15 +1,12 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Sso.Infrastructure.Environment;
-
 namespace Masa.Auth.Web.Sso.Pages.Account.Bind;
 
 [AllowAnonymous]
 public partial class UserBind
 {
     private string? _captchaText;
-    bool _smsloading;
     bool _loginLoading;
     string? _environment;
 
@@ -31,7 +28,6 @@ public partial class UserBind
     {
         var identity = await HttpContext.GetExternalIdentityAsync();
         identity.Properties.TryGetValue("environment", out _environment);
-        (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(_environment ?? "development");
         UserModel = new RegisterThirdPartyUserModel
         {
             Scheme = identity.Issuer,
@@ -42,7 +38,8 @@ public partial class UserBind
             Email = identity.Email ?? "",
             Account = identity.Account,
             DisplayName = identity.NickName ?? identity.Name,
-            Avatar = identity.Picture
+            Avatar = identity.Picture,
+            Environment = _environment ?? ""
         };
         UserModel? user = default;
         if (string.IsNullOrEmpty(identity.PhoneNumber) is false)

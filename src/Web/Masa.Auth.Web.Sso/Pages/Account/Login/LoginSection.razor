@@ -40,7 +40,7 @@
                        Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                         mdi-record-circle
                     </MIcon>
-                    <MSelect ValueChanged="EnvironmentChanged" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0" TextColor="neutral-lighten-2" Value="@_inputModel.Environment"
+                    <MSelect ValueChanged="SelectEnvironment" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0" TextColor="neutral-lighten-2" Value="@_inputModel.Environment"
                          Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name" MenuProps="@(props => { props.Bottom = true;props.OffsetY = true; })">
                     <SelectionContent Context="data">
                         <div style="width:100%" class="d-flex">
@@ -62,7 +62,7 @@
     </MRow>
 </MForm>
 <div class="text-center mt-12">
-    <MButton Class="rounded-pill text-btn white--text" Disabled=@(string.IsNullOrEmpty(_inputModel.Environment) || _loginLoading)
+    <MButton Class="rounded-pill text-btn white--text" Disabled=_loginLoading
              OnClick="LoginHandler" Height=48 Width=340 Color="primary" Loading=_loginLoading>
         @T("Login")
     </MButton>

@@ -11,6 +11,7 @@ public class UserDomainEventHandler
     readonly IEventBus _eventBus;
     readonly ILogger<UserDomainEventHandler> _logger;
     readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
     public UserDomainEventHandler(
         IAutoCompleteClient autoCompleteClient,
@@ -18,7 +19,8 @@ public class UserDomainEventHandler
         RoleDomainService roleDomainService,
         IEventBus eventBus,
         ILogger<UserDomainEventHandler> logger,
-        IMultilevelCacheClient multilevelCacheClient)
+        IMultilevelCacheClient multilevelCacheClient,
+        IMultiEnvironmentContext multiEnvironmentContext)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
@@ -26,6 +28,7 @@ public class UserDomainEventHandler
         _eventBus = eventBus;
         _logger = logger;
         _multilevelCacheClient = multilevelCacheClient;
+        _multiEnvironmentContext = multiEnvironmentContext;
     }
 
     [EventHandler(1)]

@@ -1,8 +1,6 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Web.Sso.Infrastructure.Environment;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
@@ -25,7 +23,6 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
-builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
 var authDomain = masaStackConfig.GetAuthServiceDomain();
 
