@@ -140,13 +140,9 @@ public class User : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<UserPermission> Permissions => _permissions;
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
-
-#pragma warning disable CS8618 // ���˳����캯��ʱ������Ϊ null ���ֶα�������� null ֵ���뿼������Ϊ����Ϊ null��
+    
     private User()
-#pragma warning restore CS8618 // ���˳����캯��ʱ������Ϊ null ���ֶα�������� null ֵ���뿼������Ϊ����Ϊ null��
-    {
-
-    }
+    {}
 
     public User(string? name,
                 string displayName,
