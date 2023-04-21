@@ -454,7 +454,7 @@ public class QueryHandler
 
 
                     var rejectPermisisons = permissionRelations.Where(e => e.Effect == false).Select(tp => tp.PermissionId);
-                    var permissions = permissionQuery.Result.Union(permissionRelations.Where(tp => tp.Effect == true)
+                    var permissions = permissionQuery.Result.Union(permissionRelations.Where(tp => tp.Effect)
                                            .Select(tp => tp.PermissionId)).Where(permission => rejectPermisisons.All(rp => rp != permission));
                     permissionIds.AddRange(permissions);
                 }
