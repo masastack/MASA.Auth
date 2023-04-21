@@ -207,35 +207,8 @@ public class AuthSeedData
 
             await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
         }
-        if (masaStackConfig.IsDemo && !context.Set<User>().Any(u => u.Account == guest))
-        {
-            var addStaffDto = new AddStaffDto
-            {
-                Name = guest,
-                Account = guest,
-                JobNumber = "4399",
-                Password = "guest123",
-                StaffType = StaffTypes.External,
-                Gender = GenderTypes.Female,
-                DisplayName = "Guest",
-                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
-                Email = "Guest@masastack.com",
-                CompanyName = "ShuShan",
-                PhoneNumber = "15666666666",
-                Enabled = true,
-                IdCard = "330104202002020906"
-            };
-            if (teamId != Guid.Empty)
-            {
-                addStaffDto.Teams.Add(teamId);
-            }
-            if (departmentId != Guid.Empty)
-            {
-                addStaffDto.DepartmentId = departmentId;
-            }
-
-            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
-        }
+	
+	
         if (!context.Set<User>().Any(u => u.Account == system))
         {
             await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
@@ -248,6 +221,11 @@ public class AuthSeedData
                 Email = "system@masastack.com",
                 Enabled = true
             }));
+        }
+
+        if (masaStackConfig.IsDemo)
+        {
+            await AddDemoGuestDataAsync(context, guest, eventBus, teamId, departmentId);
         }
 
         #region SSO Client
@@ -283,5 +261,64 @@ public class AuthSeedData
         #endregion
 
         userSetterHandle.Dispose();
+    }
+
+    private async Task AddDemoGuestDataAsync(AuthDbContext context, string guest, IEventBus eventBus, Guid teamId, Guid departmentId)
+    {
+        var permissions = await context.Set<Permission>().Select(p => new SubjectPermissionRelationDto(p.Id, true)).ToListAsync();
+
+        if (!context.Set<Role>().Any(r => r.Name == guest))
+        {
+            var addRoleDto = new AddRoleDto()
+            {
+                Name = guest,
+                Code = guest,
+                Description = guest,
+                Enabled = true,
+                Limit = 0,
+                Permissions = permissions
+            };
+
+            await eventBus.PublishAsync(new AddRoleCommand(addRoleDto));
+        }
+	
+        if (!context.Set<User>().Any(u => u.Account == guest))
+        {
+            var addStaffDto = new AddStaffDto
+            {
+                Name = guest,
+                Account = guest,
+                JobNumber = "4399",
+                Password = "guest123",
+                StaffType = StaffTypes.External,
+                Gender = GenderTypes.Female,
+                DisplayName = "Guest",
+                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
+                Email = "Guest@masastack.com",
+                CompanyName = "ShuShan",
+                PhoneNumber = "15666666666",
+                Enabled = true,
+                IdCard = "330104202002020906"
+            };
+            if (teamId != Guid.Empty)
+            {
+                addStaffDto.Teams.Add(teamId);
+            }
+            if (departmentId != Guid.Empty)
+            {
+                addStaffDto.DepartmentId = departmentId;
+            }
+
+            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));   
+
+            var guestRole = await context.Set<Role>().FirstOrDefaultAsync(p => p.Code == guest);
+            var guestUser = await context.Set<User>().FirstOrDefaultAsync(u => u.Account == guest);
+            await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(new UpdateUserAuthorizationDto()
+            {
+                Id = guestUser!.Id,
+                Roles = new List<Guid>() { guestRole!.Id },
+                Permissions = permissions
+            }));
+        }
     }
 }
