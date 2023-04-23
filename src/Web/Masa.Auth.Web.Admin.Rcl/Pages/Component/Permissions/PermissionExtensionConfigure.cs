@@ -30,7 +30,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
 
     protected override async Task RoleUnionTeamPermissionValueChangedAsync()
     {
-        ExtensionValue = ExtensionValue.Where(e => e.Effect || (e.Effect == false && RoleUnionTeamPermission.Contains(e.PermissionId))).ToList();
+        ExtensionValue = ExtensionValue.Where(e => e.Effect || RoleUnionTeamPermission.Contains(e.PermissionId)).ToList();
     }
 
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
