@@ -81,5 +81,6 @@
   "RoleBindLimitError": "角色：{0} 超出绑定限制，最多只能绑定{1}人,当前已绑定{2}人",
   "PhoneNumberMismatch": "该用户在Auth中已存在，手机号为{0}，与手机号{1}不匹配",
   "ClientIdAlreadyExist": "客户端ID：{0} 已存在",
-  "PasswordValidateFailed": "密码验证规则不通过"
+  "PasswordValidateFailed": "密码验证规则不通过",
+  "PasswordFormatVerificationPrompt": "密码必须是字母和数字的组合，且长度不小于8"
 }
