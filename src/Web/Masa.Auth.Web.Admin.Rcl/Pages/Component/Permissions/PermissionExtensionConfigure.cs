@@ -66,7 +66,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
 
             var childsCode = EmptyPermissionMap.Where(p => p.Value == parentCode).Select(p => p.Key).ToList();
             var childs = value.IntersectBy(childsCode, p => p.PermissionId).ToList();
-            if (childs.Count == childsCode.Count && childs.All(child => !child.Effect))
+            if (childs.All(child => !child.Effect))
             {
                 parentValue.Add(new(parentCode, false));
             }
