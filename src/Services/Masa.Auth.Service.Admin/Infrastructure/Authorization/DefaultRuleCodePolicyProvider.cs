@@ -29,7 +29,7 @@ public class DefaultRuleCodePolicyProvider : IAuthorizationPolicyProvider
         {
             var policy = new AuthorizationPolicyBuilder();
             using var scope = _serviceProvider.CreateScope();
-            policy.AddRequirements(new DefaultRuleCodeRequirement(scope.ServiceProvider.GetRequiredService<IMasaStackConfig>().GetServerId("auth")));
+            policy.AddRequirements(new DefaultRuleCodeRequirement(scope.ServiceProvider.GetRequiredService<IMasaStackConfig>().GetServiceId(MasaStackConstant.AUTH)));
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
         return FallbackPolicyProvider.GetPolicyAsync(policyName);
