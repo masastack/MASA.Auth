@@ -46,7 +46,7 @@ public class AuthSeedData
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.AUTH, masaStackConfig.GetServerId(MasaStackConstant.AUTH), "TeamAdd", "api.team.create", "", "", 1, PermissionTypes.Api)
+            new Permission(MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", "api.team.create", "", "", 1, PermissionTypes.Api)
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.AUTH))
@@ -207,8 +207,8 @@ public class AuthSeedData
 
             await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
         }
-	
-	
+
+
         if (!context.Set<User>().Any(u => u.Account == system))
         {
             await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
@@ -234,22 +234,22 @@ public class AuthSeedData
         var clientDefaultLogoUrl = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
         foreach (var ui in uis)
         {
-            if (context.Set<Client>().Any(u => u.ClientId == ui.Key))
+            if (context.Set<Client>().Any(u => u.ClientId == ui.Item1))
             {
                 continue;
             }
 
             await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
             {
-                ClientId = ui.Key,
-                ClientName = ui.Key.ToName(),
+                ClientId = ui.Item1,
+                ClientName = ui.Item2,
                 ClientUri = "",
                 RequireConsent = false,
                 AllowedScopes = new List<string> { "openid", "profile" },
-                RedirectUris = ui.Value.Select(url => $"{url}/signin-oidc").ToList(),
-                PostLogoutRedirectUris = ui.Value.Select(url => $"{url}/signout-callback-oidc").ToList(),
-                FrontChannelLogoutUri = $"{ui.Value.Last()}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{ui.Value.Last()}/account/backchannellogout",
+                RedirectUris = new List<string> { $"{ui.Item3}/signin-oidc" },
+                PostLogoutRedirectUris = new List<string> { $"{ui.Item3}/signout-callback-oidc" },
+                FrontChannelLogoutUri = $"{ui.Item3}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{ui.Item3}/account/backchannellogout",
                 LogoUri = clientDefaultLogoUrl
             }));
         }
@@ -281,7 +281,7 @@ public class AuthSeedData
 
             await eventBus.PublishAsync(new AddRoleCommand(addRoleDto));
         }
-	
+
         if (!context.Set<User>().Any(u => u.Account == guest))
         {
             var addStaffDto = new AddStaffDto
@@ -309,7 +309,7 @@ public class AuthSeedData
                 addStaffDto.DepartmentId = departmentId;
             }
 
-            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));   
+            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
 
             var guestRole = await context.Set<Role>().FirstOrDefaultAsync(p => p.Code == guest);
             var guestUser = await context.Set<User>().FirstOrDefaultAsync(u => u.Account == guest);

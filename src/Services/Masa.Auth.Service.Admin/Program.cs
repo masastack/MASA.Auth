@@ -40,7 +40,7 @@ builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {
     ServiceNameSpace = builder.Environment.EnvironmentName,
     ServiceVersion = masaStackConfig.Version,
-    ServiceName = masaStackConfig.GetServerId(MasaStackConstant.AUTH),
+    ServiceName = masaStackConfig.GetServiceId(MasaStackConstant.AUTH),
     Layer = masaStackConfig.Namespace,
     ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
 }, () => masaStackConfig.OtlpUrl);
@@ -63,7 +63,7 @@ builder.Services
         var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
-            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServerId(MasaStackConstant.AUTH)))
+            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServiceId(MasaStackConstant.AUTH)))
             .Build();
         options.DefaultPolicy = defaultPolicy;
     })
