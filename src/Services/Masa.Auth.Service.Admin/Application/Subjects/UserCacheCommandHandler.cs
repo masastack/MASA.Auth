@@ -112,7 +112,6 @@ public class UserCacheCommandHandler
             }
         });
         visited ??= new List<CacheUserVisited>();
-        visited = visited.Where(e => e != null).ToList();
         var item = new CacheUserVisited
         {
             AppId = dto.AppId,
