@@ -8,4 +8,5 @@ public class MasaStackConsts
     public const string ORGANIZATION_NAME = "MasaStack";
     public const string MASA_STACK_TEAM = "MasaStack";
     public const string ORGANIZATION_DESCRIPTION = "MasaStack Root Department";
+    public const string TEAM_AVATAR_URL = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg";
 }

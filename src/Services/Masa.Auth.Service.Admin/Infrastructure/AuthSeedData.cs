@@ -108,14 +108,14 @@ public class AuthSeedData
 
         #region Scheduler
         var schedulerMenus = new List<Permission>() {
-            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"ResourceFiles","scheduler.resource","resource","mdi-file-document-outline",1,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"Team","Team","team","mdi-account-group-outline",2,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"Team","Team","team","mdi-account-group-outline",1,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.SCHEDULER,masaStackConfig.GetWebId(MasaStackConstant.SCHEDULER),"ResourceFiles","scheduler.resource","resource","mdi-file-document-outline",2,PermissionTypes.Menu)
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.SCHEDULER))
         {
             await eventBus.PublishAsync(new SeedPermissionsCommand(schedulerMenus));
         }
-        #endregion
+        #endregion 
 
         #region Tsc
         var tscMenus = new List<Permission>() {
@@ -316,8 +316,7 @@ public class AuthSeedData
             await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(new UpdateUserAuthorizationDto()
             {
                 Id = guestUser!.Id,
-                Roles = new List<Guid>() { guestRole!.Id },
-                Permissions = permissions
+                Roles = new List<Guid>() { guestRole!.Id }
             }));
         }
     }
