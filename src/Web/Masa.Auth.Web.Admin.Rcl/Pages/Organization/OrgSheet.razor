@@ -23,7 +23,7 @@
         <MCardActions class="d-flex align-center px-6">
             <EnableSwitch @bind-Value="_dto.Enabled" />
             <MSpacer />
-            @if (_dto.ParentId != Guid.Empty)
+            @if (_dto.ParentId != Guid.Empty && _dto.Id != Guid.Empty)
             {
                 <SButton Text Color="error" MinWidth="100" OnClick="OnDeleteHandler">
                     @T("Delete")
