@@ -31,6 +31,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     protected override async Task RoleUnionTeamPermissionValueChangedAsync()
     {
         ExtensionValue = ExtensionValue.Where(e => e.Effect || RoleUnionTeamPermission.Contains(e.PermissionId)).ToList();
+        StateHasChanged();
     }
 
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
@@ -46,7 +47,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             }
             else
             {
-                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && !v.Effect);
+                var existValue = ExtensionValue.FirstOrDefault(v => v.PermissionId == permission && v.Effect);
                 if (existValue is null)
                 {
                     value.Remove(rolePermissionValue);
