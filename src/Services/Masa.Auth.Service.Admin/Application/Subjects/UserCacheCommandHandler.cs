@@ -36,6 +36,8 @@ public class UserCacheCommandHandler
         if (user is not null)
         {
             var userModel = user.Adapt<UserModel>();
+            userModel.Roles = user.Roles.Where(e => !e.IsDeleted).Adapt<List<RoleModel>>();
+            userModel.Permissions = user.Permissions.Where(e => !e.IsDeleted).Adapt<List<SubjectPermissionRelationModel>>();
             var staff = await _staffRepository.FindAsync(staff => staff.UserId == user.Id);
             userModel.StaffDislpayName = staff?.DisplayName ?? user.DisplayName;
             userModel.StaffId = staff?.Id;
