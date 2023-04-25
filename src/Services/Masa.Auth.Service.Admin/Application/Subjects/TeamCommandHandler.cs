@@ -59,7 +59,7 @@ public class TeamCommandHandler
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, MasaStackConsts.TEAM_AVATAR_URL));
         }
 
         if (dto.Id != Guid.Empty)
