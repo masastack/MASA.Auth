@@ -76,6 +76,10 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             {
                 parentValue.Add(new(parentCode, false));
             }
+            else
+            {
+                parentValue.Add(new(parentCode, true));
+            }
         }
         parentValue.ForEach(p => value.Insert(0, p));
 
