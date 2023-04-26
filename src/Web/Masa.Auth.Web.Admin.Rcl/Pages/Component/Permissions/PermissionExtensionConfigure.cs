@@ -72,7 +72,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
             var roleUnionTeamPermissionIds = RoleUnionTeamPermission.Where(e => childsCode.Contains(e)).ToList();
 
             var notEffectChilds = childs.Where(e => e.Effect == false).Select(e => e.PermissionId).ToList();
-            if (roleUnionTeamPermissionIds.All(p => notEffectChilds.Contains(p)))
+            if (roleUnionTeamPermissionIds.Count > 0 && roleUnionTeamPermissionIds.All(p => notEffectChilds.Contains(p)))
             {
                 parentValue.Add(new(parentCode, false));
             }
