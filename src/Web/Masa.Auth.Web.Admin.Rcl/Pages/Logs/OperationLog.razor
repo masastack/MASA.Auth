@@ -8,7 +8,7 @@
     <AutoHeight AutoClass="mt-6 m-sheet theme--light m-card pa-6 full-height pr-0">
         <HeaderContent>
             <div class="d-flex">
-                <SDateTimeRangeToolbar StartDateTime=_startTime EndDateTime=_endTime OnUpdate="OnDateTimeUpdate" Clearable></SDateTimeRangeToolbar>
+                <SDateTimeRangeToolbar MaxPickerWidth=580 StartDateTime=_startTime EndDateTime=_endTime OnUpdate="OnDateTimeUpdate" Clearable></SDateTimeRangeToolbar>
                 <MSpacer />
                 <EnumAutocomplete @bind-Value="OperationType" TValue="OperationTypes" Label="@T("OperationType")" Clearable FillBackground=false Class="ml-6" Style="width: 100px !important;" />
                 <SUserAutoComplete @bind-Value="UserId" Label="@T("Operator")" FillBackground=false Class="ml-6" Clearable Style="width: 134px !important;" />
