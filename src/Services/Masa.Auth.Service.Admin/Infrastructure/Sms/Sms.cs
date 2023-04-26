@@ -63,7 +63,7 @@ public class Sms : IScopedDependency
         if (codeCache != code) return false;
         if(removeCache)
         {
-            await _distributedCacheClient.RemoveAsync(key);
+            await _distributedCacheClient.RemoveAsync<string>(key);
         }
         return true;
     }
