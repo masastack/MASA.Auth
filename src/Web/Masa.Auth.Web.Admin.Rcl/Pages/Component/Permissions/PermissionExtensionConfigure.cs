@@ -36,6 +36,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
 
     protected override async Task ValueChangedAsync(List<UniqueModel> permissions)
     {
+        // Only the permissions set for the user are obtained. not contains role,team's permission
         var value = permissions.Select(permission => new SubjectPermissionRelationDto(Guid.Parse(permission.Code), true)).ToList();
         foreach (var permission in RoleUnionTeamPermission)
         {
@@ -57,6 +58,7 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         }
         value.AddRange(ExtensionValue.Where(ev => !ev.Effect && !value.Contains(ev)));
 
+        // Filter not have child permission's parent
         var parentValue = new List<SubjectPermissionRelationDto>();
         foreach (var effectVal in value.IntersectBy(EmptyPermissionMap.Keys, p => p.PermissionId))
         {
@@ -67,13 +69,12 @@ public class PermissionExtensionConfigure : PermissionsConfigure
 
             var childsCode = EmptyPermissionMap.Where(p => p.Value == parentCode).Select(p => p.Key).ToList();
             var childs = value.IntersectBy(childsCode, p => p.PermissionId).ToList();
-            if (childs.All(child => !child.Effect))
+            var roleUnionTeamPermissionIds = RoleUnionTeamPermission.Where(e => childsCode.Contains(e)).ToList();
+
+            var notEffectChilds = childs.Where(e => e.Effect == false).Select(e => e.PermissionId).ToList();
+            if (roleUnionTeamPermissionIds.All(p => notEffectChilds.Contains(p)))
             {
                 parentValue.Add(new(parentCode, false));
-            }
-            else
-            {
-                parentValue.Add(new(parentCode, true));
             }
         }
         parentValue.ForEach(p => value.Insert(0, p));
