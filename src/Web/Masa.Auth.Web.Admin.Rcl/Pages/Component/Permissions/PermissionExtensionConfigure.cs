@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Linq;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
 public class PermissionExtensionConfigure : PermissionsConfigure
@@ -31,6 +33,17 @@ public class PermissionExtensionConfigure : PermissionsConfigure
     protected override async Task RoleUnionTeamPermissionValueChangedAsync()
     {
         ExtensionValue = ExtensionValue.Where(e => e.Effect || RoleUnionTeamPermission.Contains(e.PermissionId)).ToList();
+
+        // Remove parent menus that do not have child menu permissions
+        foreach (var item in ExtensionValue)
+        {
+            var childPermissions = EmptyPermissionMap.Where(p => item.PermissionId == p.Value).Select(p=>p.Key).ToList();
+            
+            if (!childPermissions.Any(c => ExtensionValue.Any(p => p.PermissionId == c)))
+            {
+                item.Effect = false;
+            }
+        }
         StateHasChanged();
     }
 
