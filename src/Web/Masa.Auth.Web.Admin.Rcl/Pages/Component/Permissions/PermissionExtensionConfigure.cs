@@ -33,13 +33,13 @@ public class PermissionExtensionConfigure : PermissionsConfigure
         ExtensionValue = ExtensionValue.Where(e => e.Effect || RoleUnionTeamPermission.Contains(e.PermissionId)).ToList();
 
         // Remove parent menus that do not have child menu permissions
-        foreach (var item in ExtensionValue)
+        foreach (var item in EmptyPermissionMap.IntersectBy(ExtensionValue.Select(e => e.PermissionId), p => p.Value))
         {
-            var childPermissions = EmptyPermissionMap.Where(p => item.PermissionId == p.Value).Select(p=>p.Key).ToList();
-            
+            var childPermissions = EmptyPermissionMap.Where(p => item.Value == p.Value).Select(p => p.Key).ToList();
+
             if (!childPermissions.Any(c => ExtensionValue.Any(p => p.PermissionId == c)))
             {
-                item.Effect = false;
+                ExtensionValue.First(e => e.PermissionId == item.Value).Effect = false;
             }
         }
         StateHasChanged();
