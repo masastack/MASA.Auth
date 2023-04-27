@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Linq;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
 public class PermissionExtensionConfigure : PermissionsConfigure
