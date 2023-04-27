@@ -552,12 +552,12 @@ public class QueryHandler
         var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (cachePermissions?.Count > 0)
         {
-            itemSubMenuIds = cachePermissions!.Where(p => query.Result.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled)
+            itemSubMenuIds = cachePermissions!.Where(p => permissionIds.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled)
                 .ToDictionary(p => p.Id, p => p.ParentId);
         }
         else
         {
-            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => query.Result.Contains(p.GetParentId()) && p.Type == PermissionTypes.Menu && p.Enabled))
+            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => permissionIds.Contains(p.GetParentId()) && p.Type == PermissionTypes.Menu && p.Enabled))
                  .ToDictionary(p => p.Id, p => p.GetParentId());
         }
         permissionIds.RemoveAll(id =>
