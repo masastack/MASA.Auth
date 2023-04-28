@@ -3,6 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Commands;
 
+[AllowedEvent]
 public record FavoriteMenuCommand(Guid PermissionId, Guid UserId, bool IsFavorite) : Command
 {
 }

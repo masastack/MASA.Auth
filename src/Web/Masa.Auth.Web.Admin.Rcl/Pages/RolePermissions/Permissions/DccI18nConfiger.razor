@@ -7,7 +7,7 @@
 
 <div class="i18n-configer">
     <STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
-                    Required Class="px-2"
+                Required
                 Label="Key"
                 Action="@(props => { props.Content = T("DisplayName"); props.OnClick = _ => OpenConfigDialog(); })"
                 Type="text"

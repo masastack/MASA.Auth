@@ -216,7 +216,7 @@ public class AuthSeedData
                 Id = masaStackConfig.GetDefaultUserId(),
                 Account = system,
                 Name = system,
-                DisplayName = system,
+                DisplayName = "System",
                 Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.zhen.svg",
                 Email = "system@masastack.com",
                 Enabled = true
