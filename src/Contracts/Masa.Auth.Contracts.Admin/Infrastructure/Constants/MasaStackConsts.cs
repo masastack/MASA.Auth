@@ -5,8 +5,8 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 
 public class MasaStackConsts
 {
-    public const string ORGANIZATION_NAME = "MasaStack";
-    public const string MASA_STACK_TEAM = "MasaStack";
-    public const string ORGANIZATION_DESCRIPTION = "MasaStack Root Department";
+    public const string ORGANIZATION_NAME = "MASA Stack";
+    public const string MASA_STACK_TEAM = "MASA Stack";
+    public const string ORGANIZATION_DESCRIPTION = "MASA Stack Root Department";
     public const string TEAM_AVATAR_URL = "https://cdn.masastack.com/stack/images/m.png";
 }
