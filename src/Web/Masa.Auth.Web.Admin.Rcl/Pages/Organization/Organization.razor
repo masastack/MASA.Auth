@@ -39,16 +39,16 @@
                                             @if (!context.Item.IsRoot)
                                             {
                                                 <MListItem OnClick="()=>Copy(context.Item.Id)">
-                                                    <SIcon Small>mdi-content-copy</SIcon>
+                                                    <SIcon Small IsDefaultToolTip="false">mdi-content-copy</SIcon>
                                                     <MListItemTitle Class="ml-2"> @T("Copy") </MListItemTitle>
                                                 </MListItem>
                                             }
                                             <MListItem OnClick="()=> _orgSheet.Update(context.Item.Id)">
-                                                <SIcon Small>@IconConstants.Update</SIcon>
+                                                <SIcon Small IsDefaultToolTip="false">@IconConstants.Update</SIcon>
                                                 <MListItemTitle Class="ml-2"> @T("Edit") </MListItemTitle>
                                             </MListItem>
                                             <MListItem OnClick="()=>_orgSheet.Add(context.Item.Id)">
-                                                <SIcon Small>@IconConstants.Add</SIcon>
+                                                <SIcon Small IsDefaultToolTip="false">@IconConstants.Add</SIcon>
                                                 <MListItemTitle Class="ml-2"> @T("AddChildDepartment") </MListItemTitle>
                                             </MListItem>
                                         </MList>
