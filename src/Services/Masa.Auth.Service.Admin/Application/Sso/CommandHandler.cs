@@ -89,6 +89,8 @@ public class CommandHandler
     [EventHandler]
     public async Task AddIdentityResourceAsync(AddIdentityResourceCommand command)
     {
+        await CheckExistApiScopeAndIdentityResouceNameAsync(command.IdentityResource.Name);
+
         var idrsDto = command.IdentityResource;
         var idrs = new IdentityResource(idrsDto.Name, idrsDto.DisplayName, idrsDto.Description, idrsDto.Enabled, idrsDto.Required, idrsDto.Emphasize, idrsDto.ShowInDiscoveryDocument, idrsDto.NonEditable);
         idrs.BindUserClaims(idrsDto.UserClaims);
@@ -176,6 +178,8 @@ public class CommandHandler
     [EventHandler]
     public async Task AddApiScopeAsync(AddApiScopeCommand command)
     {
+        await CheckExistApiScopeAndIdentityResouceNameAsync(command.ApiScope.Name);
+
         var apiScopeDto = command.ApiScope;
         var apiScope = new ApiScope(apiScopeDto.Name, apiScopeDto.DisplayName, apiScopeDto.Description, apiScopeDto.Required, apiScopeDto.Emphasize, apiScopeDto.ShowInDiscoveryDocument, apiScopeDto.Enabled);
         apiScope.BindUserClaims(apiScopeDto.UserClaims);
@@ -184,6 +188,7 @@ public class CommandHandler
         await _apiScopeRepository.AddAsync(apiScope);
     }
 
+    
     [EventHandler]
     public async Task UpdateApiScopeAsync(UpdateApiScopeCommand command)
     {
@@ -206,6 +211,26 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_SCOPE_NOT_EXIST);
 
         await _apiScopeRepository.RemoveAsync(apiScope);
+    }
+
+    private async Task CheckExistApiScopeAndIdentityResouceNameAsync(string? newName)
+    {
+        if(string.IsNullOrWhiteSpace(newName))
+        {
+            return;
+        }
+
+        var apiScopeNameExistCount = await _apiScopeRepository.GetCountAsync(apiScope => apiScope.Name == newName);
+        if (apiScopeNameExistCount > 0)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.API_SCOPE_NAME_EXIST);
+        }
+
+        var identityScourceNameExistCount = await _identityResourceRepository.GetCountAsync(identitySource => identitySource.Name == newName);
+        if (identityScourceNameExistCount > 0)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_SOURCE_NAME_EXIST);
+        }
     }
 
     #endregion
