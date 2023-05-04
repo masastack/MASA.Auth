@@ -89,7 +89,7 @@
                 <MWindowItem Value='"0"' Class="full-height">
                     @if (_showMenuInfo && _menuPermissionDetailDto.Id != Guid.Empty)
                     {
-                        <MCard Class="full-height d-flex flex-column" Style="overflow-y: auto;">
+                        <MCard Class="full-height d-flex flex-column px-2 pt-2" Style="overflow-y: auto;">
                             <MCardTitle Class="card-title">
                                 <h6>@T("Permission Info")</h6>
                             </MCardTitle>
@@ -191,7 +191,7 @@
                                     </MRow>
                                 </MForm>
                             </MCardText>
-                            <MCardActions Class="d-flex mb-8 px-6 align-center">
+                            <MCardActions Class="d-flex mb-8 px-4 align-center">
                                 <EnableSwitch @bind-Value="_menuPermissionDetailDto.Enabled" />
                                 <MSpacer />
                                 <SButton Text Class="error--text mr-6" MinWidth="100" OnClick="()=>DeletePermissionAsync(_menuPermissionDetailDto)">@T("Delete")</SButton>
@@ -203,7 +203,7 @@
                 <MWindowItem Value='"1"' Class="full-height">
                     @if (_showApiInfo && _apiPermissionDetailDto.Id != Guid.Empty)
                     {
-                        <MCard Class="full-height d-flex flex-column" Style="overflow-y: auto;">
+                        <MCard Class="full-height d-flex flex-column px-2 pt-2" Style="overflow-y: auto;">
                             <MCardTitle>
                                 <h6>@T("Permission Info")</h6>
                             </MCardTitle>
@@ -238,7 +238,7 @@
                                     </MRow>
                                 </MForm>
                             </MCardText>
-                            <MCardActions Class="d-flex align-center mb-8 px-6">
+                            <MCardActions Class="d-flex align-center mb-8 px-4">
                                 <MSpacer />
                                 <SButton Text Class="error--text mr-6" MinWidth="100" OnClick="()=>DeletePermissionAsync(_apiPermissionDetailDto)">@T("Delete")</SButton>
                                 <SButton MinWidth="100" OnClick="UpdateApiPermissionAsync">@T("Save")</SButton>
