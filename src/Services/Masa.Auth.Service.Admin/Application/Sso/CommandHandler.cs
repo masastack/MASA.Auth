@@ -213,13 +213,8 @@ public class CommandHandler
         await _apiScopeRepository.RemoveAsync(apiScope);
     }
 
-    private async Task CheckExistApiScopeAndIdentityResouceNameAsync(string? newName)
+    private async Task CheckExistApiScopeAndIdentityResouceNameAsync(string newName)
     {
-        if(string.IsNullOrWhiteSpace(newName))
-        {
-            return;
-        }
-
         var apiScopeNameExistCount = await _apiScopeRepository.GetCountAsync(apiScope => apiScope.Name == newName);
         if (apiScopeNameExistCount > 0)
         {
