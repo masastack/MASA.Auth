@@ -43,7 +43,9 @@
     "Required": "Nickname is required."
   },
   "CustomLoginBlock": {
-    "TitleName": "Name"
+    "TitleName": "Name",
+    "NameRequired": "Name is required",
+    "DisplayNameRequired": "DisplayName is required"
   },
   "ConfirmChangePassword": "I confirm to change the password",
   "PasswordValidateFailed": "Password validate failed",
@@ -83,5 +85,8 @@
     "AllowedCorsOrigins": "AllowedCORSOrigins",
     "PostLogoutRedirectUri": "PostLogoutRedirectURL",
     "CallBackRedirectUri": "CallBackRedirectURL"
-  }
+  },
+  "CreationTime": "Creation time",
+  "ModificationTime": "Modification time",
+  "AddChildDepartment": "Add child department"
 }
