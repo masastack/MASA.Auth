@@ -137,6 +137,7 @@ public class CommandHandler
     {
         await _userRepository.AddAsync(user);
         await _userDomainService.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]
@@ -148,6 +149,7 @@ public class CommandHandler
         user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         command.Result = user;
     }
 
