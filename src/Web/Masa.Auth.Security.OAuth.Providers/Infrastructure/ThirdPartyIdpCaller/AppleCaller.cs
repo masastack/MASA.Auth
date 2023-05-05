@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
-
 namespace Masa.Auth.Security.OAuth.Providers.Infrastructure.ThirdPartyIdpCaller;
 
 public class AppleCaller : ThirdPartyIdpCallerBase
@@ -11,12 +9,11 @@ public class AppleCaller : ThirdPartyIdpCallerBase
     readonly HttpClient _httpClient;
     readonly AppleAuthenticationOptions _options;
 
-    public AppleCaller(ILogger<AppleCaller> logger, HttpClient httpClient, AppleAuthenticationOptions options, ThirdPartyIdpTypes thirdPartyIdpType)
+    public AppleCaller(ILogger<AppleCaller> logger, IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _httpClient = httpClient;
-        _options = options;
-        ThirdPartyIdpType = thirdPartyIdpType;
+        _httpClient = httpClientFactory.CreateClient();
+        _options = ((CustomOptionsMonitor<AppleAuthenticationOptions>)ActivatorUtilities.CreateInstance(serviceProvider, typeof(CustomOptionsMonitor<AppleAuthenticationOptions>))).CurrentValue;
     }
 
     public ThirdPartyIdpTypes ThirdPartyIdpType { get; } = ThirdPartyIdpTypes.Apple;
@@ -30,6 +27,7 @@ public class AppleCaller : ThirdPartyIdpCallerBase
         }
         var configuration = await _options.ConfigurationManager!.GetConfigurationAsync(default);
         var validationParameters = _options.TokenValidationParameters.Clone();
+        validationParameters.ValidateAudience = false;
         validationParameters.IssuerSigningKeys = configuration.JsonWebKeySet.Keys;
         try
         {
@@ -49,12 +47,15 @@ public class AppleCaller : ThirdPartyIdpCallerBase
         var securityToken = _options.SecurityTokenHandler.ReadJsonWebToken(idToken);
         var identity = new ClaimsIdentity(securityToken.Claims);
         var principal = new ClaimsPrincipal(new ClaimsIdentity(identity));
-        foreach (JsonKeyClaimAction action in options.ClaimActions)
+        foreach (var action in options.ClaimActions)
         {
-            var claim = identity.FindFirst(action.JsonKey);
-            if (!string.IsNullOrEmpty(claim?.Value))
+            if(action is JsonKeyClaimAction jkAction)
             {
-                identity.AddClaim(new Claim(action.ClaimType, claim.Value, claim.ValueType, options.ClaimsIssuer));
+                var claim = identity.FindFirst(jkAction.JsonKey);
+                if (!string.IsNullOrEmpty(claim?.Value))
+                {
+                    identity.AddClaim(new Claim(action.ClaimType, claim.Value, claim.ValueType, options.ClaimsIssuer));
+                }
             }
         }
 

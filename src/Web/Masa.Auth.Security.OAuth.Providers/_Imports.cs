@@ -12,6 +12,7 @@ global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authentication.Cookies;
 global using Microsoft.AspNetCore.Authentication.OAuth;
+global using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.Extensions.DependencyInjection;

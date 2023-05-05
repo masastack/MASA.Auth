@@ -22,17 +22,32 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
     {
         var scheme = context.Request.Raw["scheme"];
         var code = context.Request.Raw["code"];
-        if(scheme is null || code is null)
+        var idToken = context.Request.Raw["idToken"];
+        if (string.IsNullOrEmpty(scheme))
         {
-            throw new UserFriendlyException("must provider scheme and code");
+            throw new UserFriendlyException("must provider scheme");
         }
         var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
-        var identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
+        Security.OAuth.Providers.Identity identity;
+        if(string.IsNullOrEmpty(code) is false)
+        {
+            identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(idToken))
+            {
+                throw new UserFriendlyException("must provider code or idToken");
+            }
+            identity = await _thirdPartyIdpCallerProvider.GetIdentityByIdToken(authenticationDefaults, idToken);
+        }
         var user = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
         {
             ThridPartyIdentity = identity.Subject
         });
-        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", user?.GetUserClaims(), customResponse: new()
+        var userClaims = user?.GetUserClaims();
+        userClaims?.TryAdd(new Claim("thirdPartyUserData", JsonSerializer.Serialize(identity)));
+        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", userClaims, customResponse: new()
         {
             ["thirdPartyUserData"] = identity,
             ["registerSuccess"] = user is not null

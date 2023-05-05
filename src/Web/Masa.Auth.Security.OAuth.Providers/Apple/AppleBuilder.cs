@@ -29,7 +29,8 @@ public class AppleBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationI
     }
 
     public void InjectForHotUpdate(IServiceCollection serviceCollection)
-    {
-        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, OAuthPostConfigureOptions<AppleAuthenticationOptions, AppleAuthenticationHandler>>());
+    {        
+       serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, ApplePostConfigureOptions>());
+       serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, OAuthPostConfigureOptions<AppleAuthenticationOptions, AppleAuthenticationHandler>>());
     }
 }
