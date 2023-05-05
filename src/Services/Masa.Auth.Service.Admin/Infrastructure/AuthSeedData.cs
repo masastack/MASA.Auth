@@ -121,8 +121,8 @@ public class AuthSeedData
         var tscMenus = new List<Permission>() {
             new Permission(MasaStackConstant.TSC,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Team","Team","team","mdi-account-group-outline",1,PermissionTypes.Menu),
             new Permission(MasaStackConstant.TSC,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Dashboard","Dashboard","dashboard","mdi-view-dashboard",2,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.TSC,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Log","Log","dashboard/log","mdi-file-search",3,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.TSC,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Trace","Trace","dashboard/trace","mdi-chart-timeline-variant",4,PermissionTypes.Menu)
+            new Permission(MasaStackConstant.TSC,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Log","Log","log","mdi-file-search",3,PermissionTypes.Menu),
+            new Permission(MasaStackConstant.TSC,masaStackConfig.GetWebId(MasaStackConstant.TSC),"Trace","Trace","trace","mdi-chart-timeline-variant",4,PermissionTypes.Menu)
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.TSC))
         {
