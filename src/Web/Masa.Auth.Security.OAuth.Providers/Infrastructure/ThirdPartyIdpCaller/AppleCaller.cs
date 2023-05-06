@@ -41,7 +41,6 @@ public class AppleCaller : ThirdPartyIdpCallerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, idToken);
-            _logger.LogError(ex, idToken);
             throw;
         }
         var securityToken = _options.SecurityTokenHandler.ReadJsonWebToken(idToken);

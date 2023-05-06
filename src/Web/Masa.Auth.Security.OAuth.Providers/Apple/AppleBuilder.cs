@@ -5,14 +5,16 @@ namespace Masa.Auth.Security.OAuth.Providers.Apple;
 
 public class AppleBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationInject
 {
-    public string Scheme { get; } = "Apple";
+    const string SCHEME = "Apple";
+
+    public string Scheme { get; } = SCHEME;
 
     public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
     {
         HandlerType = typeof(AppleAuthenticationHandler),
-        Scheme = "Apple",
+        Scheme = SCHEME,
         DisplayName = AppleAuthenticationDefaults.DisplayName,
-        Icon = "https://cdn.masastack.com/stack/auth/ico/wechat.svg",
+        Icon = "https://cdn.masastack.com/stack/auth/ico/apple.png",
         CallbackPath = AppleAuthenticationDefaults.CallbackPath,
         Issuer = AppleAuthenticationDefaults.Issuer,
         AuthorizationEndpoint = AppleAuthenticationDefaults.AuthorizationEndpoint,
