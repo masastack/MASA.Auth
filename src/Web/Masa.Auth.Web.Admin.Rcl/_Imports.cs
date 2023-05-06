@@ -52,6 +52,7 @@ global using Masa.Stack.Components.Extensions;
 global using Masa.Stack.Components.Infrastructure;
 global using Masa.Stack.Components.Models;
 global using Microsoft.AspNetCore.Components;
+global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Forms;
 global using Microsoft.AspNetCore.Components.Rendering;
 global using Microsoft.Extensions.DependencyInjection;
