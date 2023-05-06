@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="1.0.0-rc.1.1" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="$(MasaFrameworkPackageVersion)" />
