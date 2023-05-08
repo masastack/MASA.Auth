@@ -33,10 +33,7 @@
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
 
-    private IList<Func<string, StringBoolean>> _emailRules => new List<Func<string, StringBoolean>>
-    {
-        value => Regex.Match(value, LoginOptions.EmailRegular).Success ? true : "Invalid Email."
-    };
+    private IList<Func<string, StringBoolean>> _emailRules = new List<Func<string, StringBoolean>>();
 
     protected override void OnInitialized()
     {
@@ -48,13 +45,18 @@
         base.OnInitialized();
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override Task OnParametersSetAsync()
     {
-        if (firstRender && Required)
+        if (!_emailRules.Any())
         {
-            _emailRules.Add(value => !string.IsNullOrEmpty(value) ? true : "Required.");
+            _emailRules.Add(value => Regex.Match(value, LoginOptions.EmailRegular).Success ? true : T("EmailFormatError"));
         }
-        base.OnAfterRender(firstRender);
+        if (Required && _emailRules.Count == 1)
+        {
+            _emailRules.Add(value => !string.IsNullOrEmpty(value) ? true : T("EmailRequired"));
+        }
+
+        return base.OnParametersSetAsync();
     }
 
     private void EmailTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)

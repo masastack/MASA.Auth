@@ -20,16 +20,17 @@
     [Parameter]
     public bool Required { get; set; }
 
-    private IList<Func<string, StringBoolean>> _displayNameRules => new List<Func<string, StringBoolean>>();
+    private IList<Func<string, StringBoolean>> _displayNameRules = new List<Func<string, StringBoolean>>();
     string _label = "", _placeholder = "", _value = "";
 
-    public override Task SetParametersAsync(ParameterView parameters)
+    protected override Task OnParametersSetAsync()
     {
-        if (parameters.TryGetValue<bool>(nameof(Required), out var required) && required)
+        if (Required && !_displayNameRules.Any())
         {
             _displayNameRules.Add(value => !string.IsNullOrEmpty(value) ? true : "Required.");
         }
-        return base.SetParametersAsync(parameters);
+
+        return base.OnParametersSetAsync();
     }
 
     protected override void OnAfterRender(bool firstRender)

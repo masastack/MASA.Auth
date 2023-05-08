@@ -14,6 +14,7 @@ public class CustomLoginRepository : Repository<AuthDbContext, CustomLogin, int>
         var customLogin = await Context.Set<CustomLogin>()
                                 .Include(customLogin => customLogin.ThirdPartyIdps)
                                 .Include(customLogin => customLogin.RegisterFields)
+                                .AsTracking()
                                 .FirstOrDefaultAsync(customLogin => customLogin.Id == id);
 
         return customLogin;
