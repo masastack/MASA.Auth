@@ -14,6 +14,11 @@ public class AuthSeedData
         var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
 
         #region Auth
+
+        var userPermission = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "User", "user", "User", "mdi-account-circle", 1, PermissionTypes.Menu);
+        var updateAccountPermission = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "AccountUpdate", ElementPermissionCodes.UserAccountUpdate, "", "", 1, PermissionTypes.Element);
+        updateAccountPermission.SetParent(userPermission.Id);
+
         var rolePermission = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "RolePermission", "RolePermission", "", "mdi-shield-half-full", 2, PermissionTypes.Menu);
         var role = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Role", "role", "role", "", 1, PermissionTypes.Menu);
         var permission = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Permission", "permission", "permission/index", "", 2, PermissionTypes.Menu);
@@ -39,14 +44,14 @@ public class AuthSeedData
         teamAddElement.SetParent(team.Id);
 
         var authMenus = new List<Permission>() {
-            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"User","user","User","mdi-account-circle",1,PermissionTypes.Menu),
+            userPermission,
             rolePermission,role,permission,team,teamAddElement,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", "api.team.create", "", "", 1, PermissionTypes.Api)
+            new Permission(MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.TeamAdd, "", "", 1, PermissionTypes.Api)
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.AUTH))
@@ -142,8 +147,9 @@ public class AuthSeedData
         }
         #endregion
 
-        var teamId = Guid.Empty;
         var departmentId = Guid.Empty;
+        var adminStaffId = Guid.Empty;
+        var guestStaffId = Guid.Empty;
         string system = "system", admin = "admin", guest = "guest";
 
         var userSetter = serviceProvider.GetService<IUserSetter>();
@@ -160,23 +166,6 @@ public class AuthSeedData
             });
             await eventBus.PublishAsync(dapertmentCommand);
             departmentId = dapertmentCommand.Result;
-        }
-
-        if (!context.Set<Team>().Any())
-        {
-            var addTeamCommand = new AddTeamCommand(new AddTeamDto
-            {
-                Id = masaStackConfig.GetDefaultTeamId(),
-                Type = TeamTypes.Ordinary,
-                Name = MasaStackConsts.MASA_STACK_TEAM,
-                Avatar = new AvatarValueDto
-                {
-                    Name = MasaStackConsts.MASA_STACK_TEAM,
-                    Color = "blue"
-                }
-            });
-            await eventBus.PublishAsync(addTeamCommand);
-            teamId = masaStackConfig.GetDefaultTeamId();
         }
 
         if (!context.Set<User>().Any(u => u.Account == admin))
@@ -196,18 +185,14 @@ public class AuthSeedData
                 PhoneNumber = "15888888888",
                 Enabled = true
             };
-            if (teamId != Guid.Empty)
-            {
-                addStaffDto.Teams.Add(teamId);
-            }
             if (departmentId != Guid.Empty)
             {
                 addStaffDto.DepartmentId = departmentId;
             }
-
-            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
+            var addStaffCommand = new AddStaffCommand(addStaffDto);
+            await eventBus.PublishAsync(addStaffCommand);
+            adminStaffId = addStaffCommand!.Result?.Id ?? Guid.Empty;
         }
-
 
         if (!context.Set<User>().Any(u => u.Account == system))
         {
@@ -225,7 +210,31 @@ public class AuthSeedData
 
         if (masaStackConfig.IsDemo)
         {
-            await AddDemoGuestDataAsync(context, guest, eventBus, teamId, departmentId);
+            guestStaffId = await AddDemoGuestDataAsync(context, guest, eventBus, departmentId);
+        }
+
+        if (!context.Set<Team>().Any())
+        {
+            var addTeamDto = new AddTeamDto
+            {
+                Id = masaStackConfig.GetDefaultTeamId(),
+                Type = TeamTypes.Ordinary,
+                Name = MasaStackConsts.MASA_STACK_TEAM,
+                Avatar = new AvatarValueDto
+                {
+                    Name = MasaStackConsts.MASA_STACK_TEAM,
+                    Color = "blue"
+                }
+            };
+            if (adminStaffId != Guid.Empty)
+            {
+                addTeamDto.AdminStaffs.Add(adminStaffId);
+            }
+            if (guestStaffId != Guid.Empty)
+            {
+                addTeamDto.MemberStaffs.Add(guestStaffId);
+            }
+            await eventBus.PublishAsync(new AddTeamCommand(addTeamDto));
         }
 
         #region SSO Client
@@ -252,6 +261,20 @@ public class AuthSeedData
                 BackChannelLogoutUri = $"{ui.Item3}/account/backchannellogout",
                 LogoUri = clientDefaultLogoUrl
             }));
+
+            //add custom register
+            await eventBus.PublishAsync(new AddCustomLoginCommand(new AddCustomLoginDto
+            {
+                ClientId = ui.Item1,
+                Enabled = true,
+                Name = ui.Item2,
+                Title = ui.Item2,
+                RegisterFields = new List<RegisterFieldDto>
+                {
+                    new RegisterFieldDto(RegisterFieldTypes.PhoneNumber,1,true),
+                    new RegisterFieldDto(RegisterFieldTypes.DisplayName,2,false)
+                }
+            }));
         }
 
         #endregion
@@ -263,8 +286,9 @@ public class AuthSeedData
         userSetterHandle.Dispose();
     }
 
-    private async Task AddDemoGuestDataAsync(AuthDbContext context, string guest, IEventBus eventBus, Guid teamId, Guid departmentId)
+    private async Task<Guid> AddDemoGuestDataAsync(AuthDbContext context, string guest, IEventBus eventBus, Guid departmentId)
     {
+        var guestStaffId = Guid.Empty;
         var permissions = await context.Set<Permission>().Select(p => new SubjectPermissionRelationDto(p.Id, true)).ToListAsync();
 
         if (!context.Set<Role>().Any(r => r.Name == guest))
@@ -300,16 +324,16 @@ public class AuthSeedData
                 Enabled = true,
                 IdCard = "330104202002020906"
             };
-            if (teamId != Guid.Empty)
-            {
-                addStaffDto.Teams.Add(teamId);
-            }
             if (departmentId != Guid.Empty)
             {
                 addStaffDto.DepartmentId = departmentId;
             }
 
-            await eventBus.PublishAsync(new AddStaffCommand(addStaffDto));
+            var addStaffCommand = new AddStaffCommand(addStaffDto);
+
+            await eventBus.PublishAsync(addStaffCommand);
+
+            guestStaffId = addStaffCommand?.Result?.Id ?? Guid.Empty;
 
             var guestRole = await context.Set<Role>().FirstOrDefaultAsync(p => p.Code == guest);
             var guestUser = await context.Set<User>().FirstOrDefaultAsync(u => u.Account == guest);
@@ -319,5 +343,6 @@ public class AuthSeedData
                 Roles = new List<Guid>() { guestRole!.Id }
             }));
         }
+        return guestStaffId;
     }
 }

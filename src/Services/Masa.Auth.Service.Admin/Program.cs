@@ -128,8 +128,21 @@ builder.Services
 .AddEndpointsApiExplorer()
 .AddSwaggerGen(options =>
 {
-    //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    options.OrderActionsBy(o => o.GroupName);
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MASA Auth API",
+        Version = "v1",
+        Description = "",
+        TermsOfService = new Uri("https://www.masastack.com"),
+        Contact = new OpenApiContact
+        {
+            Name = "MASA Stack",
+            Url = new Uri("https://www.masastack.com/aboutus#aboutus_contactus")
+        }
+    });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -224,7 +237,7 @@ if (!app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         string path = Path.Combine(app.Environment.WebRootPath, "swagger/ui/index.html");
         if (File.Exists(path)) options.IndexStream = () => new MemoryStream(File.ReadAllBytes(path));
     });
