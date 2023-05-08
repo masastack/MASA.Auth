@@ -78,5 +78,9 @@
   "Name": "姓名",
   "NamePlaceholder": "请输入姓名",
   "LogoutOfLogin": "退出登录",
-  "Welcome to MASA Stack SSO": "欢迎使用MASA Stack"
+  "Welcome to MASA Stack SSO": "欢迎使用MASA Stack",
+  "PasswordRuleError": "密码验证规则不通过",
+  "IdCardRequired": "身份证号不能为空",
+  "EmailFormatError": "邮箱格式错误",
+  "IdCardFormatError": "身份证号格式错误"
 }
