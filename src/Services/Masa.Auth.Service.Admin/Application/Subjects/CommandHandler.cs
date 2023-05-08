@@ -1118,11 +1118,18 @@ public class CommandHandler
 
         if (user != null)
         {
-            var thirdPartyUser = _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThridPartyIdentity == model.ThridPartyIdentity);
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
+            await _eventBus.PublishAsync(identityProviderQuery);
+            var identityProvider = identityProviderQuery.Result;
 
-            if (thirdPartyUser != null)
-            {
-                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
+            if (identityProvider != null)
+            { 
+                var thirdPartyUser = _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
+
+                if (thirdPartyUser != null)
+                {
+                    throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
+                }
             }
         }
     }
