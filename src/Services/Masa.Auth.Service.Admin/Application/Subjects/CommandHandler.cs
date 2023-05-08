@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Elasticsearch.Net.Specification.MachineLearningApi;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -1094,7 +1096,7 @@ public class CommandHandler
         command.Result = addThirdPartyUserExternalCommand.Result;
     }
 
-    async Task BindVerifyAsync(RegisterByEmailModel model)
+    async Task BindVerifyAsync(RegisterThirdPartyUserModel model)
     {
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
@@ -1110,6 +1112,18 @@ public class CommandHandler
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+        }
+
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email);
+
+        if (user != null)
+        {
+            var thirdPartyUser = _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThridPartyIdentity == model.ThridPartyIdentity);
+
+            if (thirdPartyUser != null)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
+            }
         }
     }
 

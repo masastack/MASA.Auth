@@ -82,5 +82,6 @@
   "PasswordRuleError": "密码验证规则不通过",
   "IdCardRequired": "身份证号不能为空",
   "EmailFormatError": "邮箱格式错误",
-  "IdCardFormatError": "身份证号格式错误"
+  "IdCardFormatError": "身份证号格式错误",
+  "ThirdPartyUserBindExist": "此用户已经绑定"
 }
