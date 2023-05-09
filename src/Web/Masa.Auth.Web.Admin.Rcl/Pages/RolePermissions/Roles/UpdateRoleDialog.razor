@@ -24,7 +24,7 @@
                         <Record Creator="@RoleDetail.Creator" CreationTime="@RoleDetail.CreationTime" Modifier="@RoleDetail.Modifier" ModificationTime="@RoleDetail.ModificationTime" />                      
                     </MWindowItem>
                     <MWindowItem Value="UpdateRoleTabs.Permission.ToString()">
-                        <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mb-6 mt-1" />
+                        <RoleSelectForRole RoleId=RoleId @bind-Value="Role.ChildrenRoles" Class="mb-6 mt-2" />
                         <div class="global-nav" style="display: flex;max-height:calc(100vh - 370px);">
                             <PermissionExtensionConfigure 
                                 Roles=Role.ChildrenRoles 
