@@ -358,7 +358,7 @@ public class QueryHandler
         {
             roleIds = roleIds.Distinct().ToList();
             var permissions = new List<Guid>();
-            var roleCacheKeys = roleIds.Select(e=>CacheKey.RoleKey(e));
+            var roleCacheKeys = roleIds.Select(e => CacheKey.RoleKey(e));
             var rolePermissions = await _multilevelCacheClient.GetListAsync<CacheRole>(roleCacheKeys);
             foreach (var rolePermission in rolePermissions)
             {

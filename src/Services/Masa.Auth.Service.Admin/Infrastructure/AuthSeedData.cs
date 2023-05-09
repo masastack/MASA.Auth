@@ -239,36 +239,36 @@ public class AuthSeedData
 
         #region SSO Client
 
-        var uis = masaStackConfig.GetAllUINames();
+        var uiDomainPair = masaStackConfig.GetUIDomainPairs();
         var clientDefaultLogoUrl = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
-        foreach (var ui in uis)
+        foreach (var uiDomain in uiDomainPair)
         {
-            if (context.Set<Client>().Any(u => u.ClientId == ui.Item1))
+            if (context.Set<Client>().Any(u => u.ClientId == uiDomain.Key))
             {
                 continue;
             }
 
             await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
             {
-                ClientId = ui.Item1,
-                ClientName = ui.Item2,
+                ClientId = uiDomain.Key,
+                ClientName = uiDomain.Key,
                 ClientUri = "",
                 RequireConsent = false,
                 AllowedScopes = new List<string> { "openid", "profile" },
-                RedirectUris = new List<string> { $"{ui.Item3}/signin-oidc" },
-                PostLogoutRedirectUris = new List<string> { $"{ui.Item3}/signout-callback-oidc" },
-                FrontChannelLogoutUri = $"{ui.Item3}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{ui.Item3}/account/backchannellogout",
+                RedirectUris = new List<string> { $"{uiDomain.Value}/signin-oidc" },
+                PostLogoutRedirectUris = new List<string> { $"{uiDomain.Value}/signout-callback-oidc" },
+                FrontChannelLogoutUri = $"{uiDomain.Value}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{uiDomain.Value}/account/backchannellogout",
                 LogoUri = clientDefaultLogoUrl
             }));
 
             //add custom register
             await eventBus.PublishAsync(new AddCustomLoginCommand(new AddCustomLoginDto
             {
-                ClientId = ui.Item1,
+                ClientId = uiDomain.Key,
                 Enabled = true,
-                Name = ui.Item2,
-                Title = ui.Item2,
+                Name = uiDomain.Key,
+                Title = uiDomain.Key,
                 RegisterFields = new List<RegisterFieldDto>
                 {
                     new RegisterFieldDto(RegisterFieldTypes.PhoneNumber,1,true),
