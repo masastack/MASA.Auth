@@ -3,7 +3,6 @@
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
   "$DateFormat": "yyyy年MM月dd日",
-
   "Ldap": "域账号",
   "LdapConfigure": "域账号配置",
   "Favorite": "收藏",
@@ -526,6 +525,7 @@
     "Please select type": "请选择操作类型",
     "Please enter operation description": "请输入操作描述",
     "AddUser": "新建用户",
+    "RegisterUser": "注册用户",
     "EditUser": "编辑用户",
     "EditUserAuthorization": "编辑用户权限",
     "RemoveUser": "删除用户",

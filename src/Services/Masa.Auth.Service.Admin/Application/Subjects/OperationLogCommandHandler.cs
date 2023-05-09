@@ -5,8 +5,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
 {
     public class OperationLogCommandHandler
     {
-        IOperationLogRepository _operationLogRepository;
-        AuthDbContext _authDbContext;
+        private readonly IOperationLogRepository _operationLogRepository;
+        private readonly AuthDbContext _authDbContext;
 
         public OperationLogCommandHandler(IOperationLogRepository operationLogRepository, AuthDbContext authDbContext)
         {
@@ -34,7 +34,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{command.Result.Account}");
         }
 
-        async Task<string> GetUserAccountByIdAsync(Guid id)
+        private async Task<string> GetUserAccountByIdAsync(Guid id)
         {
             var account = await _authDbContext.Set<User>()
                                               .Where(user => user.Id == id)
@@ -166,7 +166,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
 
         #region ThirdPartyIdp
 
-        async Task<string> GetIdentityProviderNameByIdAsync(Guid id)
+        private async Task<string> GetIdentityProviderNameByIdAsync(Guid id)
         {
             var name = await _authDbContext.Set<IdentityProvider>()
                                               .Where(i => i.Id == id)
@@ -202,7 +202,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task LdapUpsertOperationLogAsync(LdapUpsertCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditThirdPartyIdp, $"编辑用户：{LdapConsts.LDAP_NAME}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.EditThirdPartyIdp, $"编辑第三方平台：{LdapConsts.LDAP_NAME}");
         }
         #endregion
 
@@ -224,7 +224,9 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         public async Task RemoveTeamLogAsync(RemoveTeamCommand removeTeamCommand)
         {
             if (removeTeamCommand.Result is not null)
+            {
                 await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveTeam, $"删除团队：{removeTeamCommand.Result.Name}");
+            }
         }
         #endregion
     }
