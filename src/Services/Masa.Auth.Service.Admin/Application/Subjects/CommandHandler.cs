@@ -1094,7 +1094,7 @@ public class CommandHandler
         command.Result = addThirdPartyUserExternalCommand.Result;
     }
 
-    async Task BindVerifyAsync(RegisterByEmailModel model)
+    async Task BindVerifyAsync(RegisterThirdPartyUserModel model)
     {
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
@@ -1110,6 +1110,25 @@ public class CommandHandler
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+        }
+
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email);
+
+        if (user != null)
+        {
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
+            await _eventBus.PublishAsync(identityProviderQuery);
+            var identityProvider = identityProviderQuery.Result;
+
+            if (identityProvider != null)
+            { 
+                var thirdPartyUser = _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
+
+                if (thirdPartyUser != null)
+                {
+                    throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
+                }
+            }
         }
     }
 
