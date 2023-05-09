@@ -1122,7 +1122,7 @@ public class CommandHandler
 
             if (identityProvider != null)
             { 
-                var thirdPartyUser = _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
+                var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
 
                 if (thirdPartyUser != null)
                 {

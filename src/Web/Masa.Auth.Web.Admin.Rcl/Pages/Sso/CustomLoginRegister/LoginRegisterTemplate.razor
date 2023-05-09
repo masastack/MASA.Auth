@@ -23,8 +23,8 @@
                     </div>
                 }
                 <MTabItem Value="T(CustomLoginTab.Login)">
-                    <MForm Model=Login EnableValidation EnableI18n>
-                        <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 mt-1 btn emphasis--text" Height="58" Label="@T(nameof(Login.Account))" />
+                    <MForm Model=Login EnableValidation EnableI18n Class="pt-2">
+                        <STextField Dense=false @bind-Value="Login.Account" Class="mb-13 btn emphasis--text" Height="58" Label="@T(nameof(Login.Account))" />
                         <SPassword @bind-Value="Login.Password" Class="mb-1" />
                         <div class="d-flex mb-13">
                             <MSpacer />
@@ -54,38 +54,36 @@
                     }
                 </MTabItem>
                 <MTabItem Value="T(CustomLoginTab.Register)">
-                    <MForm Model=Register EnableValidation EnableI18n>
-                        <div>
-                            @foreach (var registerField in RegisterFields)
+                    <MForm Model=Register EnableValidation EnableI18n Class="pt-2">
+                        @foreach (var registerField in RegisterFields)
+                        {
+                            switch (registerField.RegisterFieldType)
                             {
-                                switch (registerField.RegisterFieldType)
-                                {
-                                    case RegisterFieldTypes.Account:
-                                        <STextField @bind-Value="Register.Account" Label="@T(nameof(Register.Account))" Height="58" Class="mb-10 mt-1" />
-                                        break;
-                                    case RegisterFieldTypes.Password:
-                                        <SPassword @bind-Value="Register.Password" Class="mb-10" />
-                                        <SPassword @bind-Value="Register.ConfirmPassword" Label="@T(nameof(Register.ConfirmPassword))" Class="mb-10" />
-                                        break;
-                                    case RegisterFieldTypes.Name:
-                                        <STextField @bind-Value="Register.Name" Label="@T(nameof(Register.Name))" Height="58" Class="mb-10" />
-                                        break;
-                                    case RegisterFieldTypes.DisplayName:
-                                        <STextField @bind-Value="Register.DisplayName" Label="@T(nameof(Register.DisplayName))" Height="58" Class="mb-10" />
-                                        break;
-                                    case RegisterFieldTypes.IdCard:
-                                        <STextField @bind-Value="Register.IdCard" Label="@T(nameof(Register.IdCard))" Height="58" Class="mb-10" />
-                                        break;
-                                    case RegisterFieldTypes.PhoneNumber:
-                                        <STextField @bind-Value="Register.PhoneNumber" Label="@T(nameof(Register.PhoneNumber))" Height="58" Class="mb-10" />
-                                        break;
-                                    case RegisterFieldTypes.Email:
-                                        <STextField @bind-Value="Register.Email" Label="@T(nameof(Register.Email))" Class="mb-10" Height="58" />
-                                        break;
-                                    default: throw new UserFriendlyException(T(""));
-                                }
+                                case RegisterFieldTypes.Account:
+                                    <STextField @bind-Value="Register.Account" Label="@T(nameof(Register.Account))" Height="58" Class="mb-10" />
+                                    break;
+                                case RegisterFieldTypes.Password:
+                                    <SPassword @bind-Value="Register.Password" Class="mb-10" />
+                                    <SPassword @bind-Value="Register.ConfirmPassword" Label="@T(nameof(Register.ConfirmPassword))" Class="mb-10" />
+                                    break;
+                                case RegisterFieldTypes.Name:
+                                    <STextField @bind-Value="Register.Name" Label="@T(nameof(Register.Name))" Height="58" Class="mb-10" />
+                                    break;
+                                case RegisterFieldTypes.DisplayName:
+                                    <STextField @bind-Value="Register.DisplayName" Label="@T(nameof(Register.DisplayName))" Height="58" Class="mb-10" />
+                                    break;
+                                case RegisterFieldTypes.IdCard:
+                                    <STextField @bind-Value="Register.IdCard" Label="@T(nameof(Register.IdCard))" Height="58" Class="mb-10" />
+                                    break;
+                                case RegisterFieldTypes.PhoneNumber:
+                                    <STextField @bind-Value="Register.PhoneNumber" Label="@T(nameof(Register.PhoneNumber))" Height="58" Class="mb-10" />
+                                    break;
+                                case RegisterFieldTypes.Email:
+                                    <STextField @bind-Value="Register.Email" Label="@T(nameof(Register.Email))" Class="mb-10" Height="58" />
+                                    break;
+                                default: throw new UserFriendlyException(T(""));
                             }
-                        </div>
+                        }
                         <div class="d-flex">
                             <SButton OnClick="() => context.Validate()" Class="large-button mt-6 mx-auto" Color="primary">
                                 @T("Register")

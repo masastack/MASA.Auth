@@ -4,45 +4,37 @@
     <MCol Md=12>
         <div class="block-center">
             <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix" />
-            <SButton Icon OnClick="AddCallBackRedirectUri">
+            <SButton Icon OnClick="AddCallBackRedirectUri" Color="regular3">
                 <SIcon>@IconConstants.Add</SIcon>
             </SButton>
         </div>
     </MCol>
-    <MCol Md="12">
-        <MRow Class="ma-0">
-            @foreach (var uri in Dto.RedirectUris)
-            {
-                <MCol Md=6 Class="d-flex">
-                    <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
-                    <MButton Class="mr-4" Icon OnClick="()=>RemoveCallBackRedirectUri(uri)">
-                        <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
-                    </MButton>
-                </MCol>
-            }
-        </MRow>
-    </MCol>
+    @foreach (var uri in Dto.RedirectUris)
+    {
+        <MCol Md=6 Class="block-center">
+            <STextField HideDetails="true" Value="uri" Filled Disabled Class="flex-grow-1" />
+            <SButton Icon OnClick="()=>RemoveCallBackRedirectUri(uri)" Color="regular3">
+                <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
+            </SButton>
+        </MCol>
+    }
     <MCol Md=12>
         <div class="block-center">
             <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix"/>
-            <SButton Icon OnClick="AddLogoutRedirectUri">
+            <SButton Icon OnClick="AddLogoutRedirectUri" Color="regular3">
                 <SIcon>@IconConstants.Add</SIcon>
             </SButton>
         </div>
     </MCol>
-    <MCol Md="12">
-        <MRow Class="ma-0">
-            @foreach (var uri in Dto.PostLogoutRedirectUris)
-            {
-                <MCol Md=6 Class="d-flex">
-                    <STextField HideDetails="true" Value="uri" Filled Disabled />
-                    <MButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
-                        <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
-                    </MButton>
-                </MCol>
-            }
-        </MRow>
-    </MCol>
+    @foreach (var uri in Dto.PostLogoutRedirectUris)
+    {
+        <MCol Md=6 Class="block-center">
+            <STextField HideDetails="true" Value="uri" Filled Disabled />
+            <MButton Icon OnClick="()=>RemoveLogoutRedirectUri(uri)" Color="regular3">
+                <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
+            </MButton>
+        </MCol>
+    }
     <MCol Md=6>
         <STextField @bind-Value="Dto.FrontChannelLogoutUri" Label="@T("FrontChannelLogoutUri")" Tooltip="@T("FrontChannelLogoutUriTips")" />
     </MCol>
