@@ -59,7 +59,7 @@ public class TeamCommandHandler
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color));
+            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, MasaStackConsts.TEAM_AVATAR_URL));
         }
 
         if (dto.Id != Guid.Empty)
@@ -88,14 +88,16 @@ public class TeamCommandHandler
         var team = await _teamRepository.GetByIdAsync(dto.Id);
         var teamRoles = team.TeamRoles.ToArray();
         var avatarName = $"{team.Id}.png";
+        var avatarUrl = team.Avatar.Url;
         if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||
                 string.IsNullOrWhiteSpace(team.Avatar.Url))
         {
             var colorGroup = ColorPairHelper.GetColorGroup(dto.Avatar.Color);
             var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
             await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
+            avatarUrl = $"{_cdnEndpoint}{avatarName}";
         }
-        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
+        team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, avatarUrl));
         await _teamRepository.UpdateAsync(team);
 
         //todo Add update judgment

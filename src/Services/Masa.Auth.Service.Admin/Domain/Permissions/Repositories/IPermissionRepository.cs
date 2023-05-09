@@ -5,9 +5,9 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.Repositories;
 
 public interface IPermissionRepository : IRepository<Permission, Guid>
 {
-    Task<Permission> GetByIdAsync(Guid Id);
+    Task<Permission> GetByIdAsync(Guid id);
 
-    Task<List<Guid>> GetParentAsync(Guid Id, bool recursive = true);
+    Task<List<Guid>> GetParentAsync(Guid id, bool recursive = true);
 
     int GetIncrementOrder(string appId, Guid parentId);
 

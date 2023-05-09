@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.Services;
 
 public class PermissionDomainService : DomainService
 {
-    readonly IPermissionRepository _permissionRepository;
+    private readonly IPermissionRepository _permissionRepository;
 
     public PermissionDomainService(
         IDomainEventBus eventBus,

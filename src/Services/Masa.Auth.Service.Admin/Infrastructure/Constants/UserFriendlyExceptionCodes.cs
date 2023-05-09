@@ -87,4 +87,7 @@ public static class UserFriendlyExceptionCodes
     public const string STAFF_PHONE_NUMBER_EXIST = "StaffPhoneNumberExist";
     public const string THIRD_PARTY_IDP_NAME_EXIST = "ThirdPartyIdpNameExist";
     public const string ROLE_BIND_LIMIT_ERROR = "RoleBindLimitError";
+    public const string API_SCOPE_NAME_EXIST = "APIScopeNameExist";
+    public const string IDENTITY_SOURCE_NAME_EXIST = "IdentitySourceNameExist";
+    public const string THIRDPARTYUSER_BIND_EXIST = "ThirdPartyUserBindExist";
 }

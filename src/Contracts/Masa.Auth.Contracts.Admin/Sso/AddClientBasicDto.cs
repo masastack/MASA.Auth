@@ -15,7 +15,7 @@ public class AddClientBasicDto
 
     public string ClientUri { get; set; } = string.Empty;
 
-    public string LogoUri { get; set; } = string.Empty;
+    public string LogoUri { get; set; } = ClientConsts.AUTH_CLIENT_DEFAULT_URI;
 
     public bool RequireConsent { get; set; } = true;
 

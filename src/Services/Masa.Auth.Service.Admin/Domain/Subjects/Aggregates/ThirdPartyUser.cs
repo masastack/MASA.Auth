@@ -8,7 +8,7 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
     private User? _user;
     private User? _createUser;
     private User? _modifyUser;
-    private IdentityProvider? _identityProvider;
+    private IdentityProvider _identityProvider = default!;
 
     private Guid _thirdPartyIdpId;
     private Guid _userId;
@@ -47,15 +47,7 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public User? ModifyUser => _modifyUser;
 
-    public IdentityProvider IdentityProvider => (_identityProvider ?? LazyLoader?.Load(this, ref _identityProvider))
-        ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_PROVIDER_NOT_FOUND);
-
-    private ILazyLoader? LazyLoader { get; set; }
-
-    private ThirdPartyUser(ILazyLoader lazyLoader)
-    {
-        LazyLoader = lazyLoader;
-    }
+    public IdentityProvider IdentityProvider => _identityProvider;
 
     public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
     {

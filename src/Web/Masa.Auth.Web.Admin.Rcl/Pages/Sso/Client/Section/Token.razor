@@ -118,15 +118,16 @@
     List<SelectItemDto<int>> _refreshTokenUsage = ClientConsts.GetTokenUsage();
     List<SelectItemDto<int>> _accessTokenType = ClientConsts.GetAccessTokenTypes();
     List<SelectItemDto<int>> _refreshTokenExpiration = ClientConsts.GetTokenExpirations();
-    List<DataTableHeader<ClientClaimDto>> _headers { get; set; } = new()
-    {
-        new() { Text = "Type", Value = nameof(ClientClaimDto.Type), Sortable = false },
-        new() { Text = "Value", Value = nameof(ClientClaimDto.Value), Sortable = false },
-        new() { Text = "Action", Value = "Action", Sortable = false,Align = DataTableHeaderAlign.Center },
-    };
+    List<DataTableHeader<ClientClaimDto>> _headers { get; set; } = default!;
 
     protected override void OnInitialized()
     {
+        _headers = new()
+        {
+            new() { Text = T("Type"), Value = nameof(ClientClaimDto.Type), Sortable = false },
+            new() { Text = T("Value"), Value = nameof(ClientClaimDto.Value), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false,Align = DataTableHeaderAlign.Center },
+        };
         Dto.AllowedIdentityTokenSigningAlgorithmsItems = ClientConsts.SigningAlgorithms();
         base.OnInitialized();
     }

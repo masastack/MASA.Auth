@@ -36,6 +36,8 @@ public class UserCacheCommandHandler
         if (user is not null)
         {
             var userModel = user.Adapt<UserModel>();
+            userModel.Roles = user.Roles.Where(e => !e.IsDeleted).Select(e => new RoleModel { Id = e.RoleId, Name = e.Role == null ? "" : e.Role.Name, Code = e.Role == null ? "" : e.Role.Code }).ToList();
+            userModel.Permissions = user.Permissions.Where(e => !e.IsDeleted).Adapt<List<SubjectPermissionRelationModel>>();
             var staff = await _staffRepository.FindAsync(staff => staff.UserId == user.Id);
             userModel.StaffDislpayName = staff?.DisplayName ?? user.DisplayName;
             userModel.StaffId = staff?.Id;
@@ -136,7 +138,7 @@ public class UserCacheCommandHandler
     }
 
     [EventHandler(99)]
-    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand  command)
+    public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         await SetUserCacheAsync(command.User.Id);
     }
@@ -144,6 +146,6 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpsertUserAsync(UpsertUserCommand command)
     {
-        await SetUserCacheAsync(command.User.Id);
+        await SetUserCacheAsync(command.Result.Id);
     }
 }

@@ -161,7 +161,7 @@ public partial class Index
 
         var config = new TypeAdapterConfig();
         config.NewConfig<AppPermissionDto, AppPermissionsViewModel>()
-        .Map(dest => dest.Id, src => src.PermissonId)
+            .Map(dest => dest.Id, src => src.PermissionId)
             .Map(dest => dest.Name, src => src.PermissionName)
             .Map(dest => dest.IsPermission, src => true)
             .Map(dest => dest.AppUrl, src => MapContext.Current == null ? "" : MapContext.Current.Parameters["appUrl"]);
@@ -266,11 +266,7 @@ public partial class Index
         {
             _showMenuInfo = true;
             var curItem = activeItems.First();
-            _disableMenuUrl = false;
-            if (curItem.Children.Any(e => e.Type == PermissionTypes.Menu))
-            {
-                _disableMenuUrl = true;
-            }
+            _disableMenuUrl = curItem.Children.Any(e => e.Type == PermissionTypes.Menu);
             if (curItem.IsPermission)
             {
                 _menuPermissionDetailDto = await PermissionService.GetMenuPermissionDetailAsync(curItem.Id);

@@ -8,15 +8,15 @@ public partial class AddMenuPermission
     [Parameter]
     public EventCallback<MenuPermissionDetailDto> OnSubmit { get; set; }
 
-    MenuPermissionDetailDto _menuPermissionDetailDto = new();
-    MForm _form = default!;
-    bool _visible { get; set; }
-    string _showUrlPrefix = "";
-    PermissionTypes _parentType;
+    private MenuPermissionDetailDto _menuPermissionDetailDto = new();
+    private MForm _form = default!;
+    private bool _visible = false;
+    private string _showUrlPrefix = "";
+    private PermissionTypes _parentType;
 
-    List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
+    private List<SelectItemDto<PermissionTypes>> _menuPermissionTypes = new();
 
-    PermissionService PermissionService => AuthCaller.PermissionService;
+    private PermissionService PermissionService => AuthCaller.PermissionService;
 
     protected override void OnInitialized()
     {
@@ -24,7 +24,7 @@ public partial class AddMenuPermission
         base.OnInitialized();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -49,14 +49,16 @@ public partial class AddMenuPermission
     public void Show(AppPermissionsViewModel appPermissionsViewModel)
     {
         _form?.Reset();
-        _menuPermissionDetailDto = new();
-        _menuPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
-        _menuPermissionDetailDto.ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty;
+        _menuPermissionDetailDto = new()
+        {
+            AppId = appPermissionsViewModel.AppId,
+            ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty
+        };
         _showUrlPrefix = appPermissionsViewModel.AppUrl;
         _visible = true;
     }
 
-    List<SelectItemDto<PermissionTypes>> TypeList()
+    private List<SelectItemDto<PermissionTypes>> TypeList()
     {
         if (_menuPermissionDetailDto.ParentId == Guid.Empty)
         {

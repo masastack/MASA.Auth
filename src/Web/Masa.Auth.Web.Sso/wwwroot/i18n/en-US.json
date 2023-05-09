@@ -67,4 +67,9 @@
   "Name": "Name",
   "NamePlaceholder": "Place Enter Name",
   "LogoutOfLogin": "Logout of login",
+  "PasswordRuleError": "Password format does not match.",
+  "IdCardRequired": "IdCard cannot be empty",
+  "EmailFormatError": "Email format is incorrect",
+  "IdCardFormatError": "Id Card format is incorrect",
+  "ThirdPartyUserBindExist": "The user has been bound"
 }

@@ -5,12 +5,12 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class CommandHandler
 {
-    readonly IRoleRepository _roleRepository;
-    readonly IPermissionRepository _permissionRepository;
-    readonly AuthDbContext _authDbContext;
-    readonly RoleDomainService _roleDomainService;
-    readonly IUnitOfWork _unitOfWork;
-    readonly PermissionDomainService _permissionDomainService;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IPermissionRepository _permissionRepository;
+    private readonly AuthDbContext _authDbContext;
+    private readonly RoleDomainService _roleDomainService;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly PermissionDomainService _permissionDomainService;
 
     public CommandHandler(
         IRoleRepository roleRepository,
@@ -109,16 +109,16 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
-        await RemovePermissionAsync(removePermissionCommand.PermissionId);
+        await RemovePermissionLocalAsync(removePermissionCommand.PermissionId);
 
-        async Task RemovePermissionAsync(Guid permissionId)
+        async Task RemovePermissionLocalAsync(Guid permissionId)
         {
             var permission = await _permissionRepository.GetByIdAsync(permissionId);
             permission.DeleteCheck();
             await _permissionRepository.RemoveAsync(permission);
             foreach (var child in permission.Children)
             {
-                await RemovePermissionAsync(child.Id);
+                await RemovePermissionLocalAsync(child.Id);
             }
         }
     }
@@ -136,16 +136,16 @@ public class CommandHandler
         {
             throw new UserFriendlyException(UserFriendlyExceptionCodes.PERMISSION_CODE_EXIST, permissionBaseInfo.Code);
         }
-
+        Permission permission;
         if (permissionBaseInfo.IsUpdate)
         {
-            var _permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
-            _permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
+            permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
+            permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
                 permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
-            _permission.SetParent(permissionBaseInfo.ParentId);
-            _permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
-            await _permissionRepository.UpdateAsync(_permission);
+            permission.SetParent(permissionBaseInfo.ParentId);
+            permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
+            await _permissionRepository.UpdateAsync(permission);
             return;
         }
 
@@ -158,7 +158,7 @@ public class CommandHandler
         {
             permissionBaseInfo.Order = _permissionRepository.GetIncrementOrder(permissionBaseInfo.AppId, permissionBaseInfo.ParentId);
         }
-        var permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
+        permission = new Permission(permissionBaseInfo.SystemId, permissionBaseInfo.AppId, permissionBaseInfo.Name,
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
             permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
         permission.SetParent(permissionBaseInfo.ParentId);

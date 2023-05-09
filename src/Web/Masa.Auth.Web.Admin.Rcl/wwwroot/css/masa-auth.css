@@ -942,3 +942,7 @@ input::-webkit-input-placeholder {
 .m-treeview-node--active .m-treeview-node__toggle {
     color: white;
 }
+
+.m-text-field--enclosed.m-input--dense.m-text-field--outlined .m-input__prepend-inner:has(.m-input__icon--prepend-inner .mdi-calendar-month) {
+    margin-top: 12px;
+}

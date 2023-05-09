@@ -81,5 +81,8 @@
   "RoleBindLimitError": "Role: {0} exceeds the binding limit, only {1} people can be bound at most, and {2} people are currently bound",
   "PhoneNumberMismatch": "The user already exists in Auth, the phone number is {0}, which does not match with {1}",
   "ClientIdAlreadyExist": "ClientId '{0}' already exist",
-  "PasswordValidateFailed": "Password validte failed"
+  "PasswordValidateFailed": "Password validte failed",
+  "PasswordFormatVerificationPrompt": "The password must be a combination of letters and numbers, and the length must not be less than 8",
+  "APIScopeNameExist": "API Scope exist this name",
+  "IdentitySourceNameExist": "Identity Source exist this name"
 }

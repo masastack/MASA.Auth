@@ -101,5 +101,5 @@ public class ClientConsts
         return tokenUsage;
     }
 
-    public const string AuthClientDefaultUri = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
+    public const string AUTH_CLIENT_DEFAULT_URI = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
 }

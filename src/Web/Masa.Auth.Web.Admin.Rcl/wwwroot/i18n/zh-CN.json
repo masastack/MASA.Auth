@@ -177,11 +177,13 @@
     "Edit Position": "编辑职位",
     "Delete Position": "删除职位",
     "Add position success": "新建职位成功",
-    "Update position data success": "编辑职位数据成功",
+    "Edit position data success": "编辑职位数据成功",
     "Delete position data success": "删除职位数据成功",
     "Are you sure delete position \"{0}\"?": "确定删除职位\"{0}\"吗"
   },
 
+  "Team Admin": "团队管理员",
+  "Team Member": "团队成员",
   "TeamBlock": {
     "Add Team": "新建团队",
     "Edit Team": "编辑团队",
@@ -198,8 +200,6 @@
     "Fill the basic team information": "填写团队基础资料",
     "Setup team admins": "设置团队管理员",
     "Setup team members": "设置团队成员",
-    "Team Admin": "团队管理员",
-    "Team Member": "团队成员",
     "Due to the role [{0}] limit constraint, a maximum of {1} members can be selected": "由于角色:[{0}]约束限制,当前最多只能选择{1}人",
     "TeamAvatarText": "默认会根据团队首字自动生成",
     "Team name cannot be empty": "团队名不能为空"
@@ -236,6 +236,7 @@
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method"
   },
 
+  "Give him a nickname!": "给Ta取个昵称吧!",
   "UserBlock": {
     "Add User": "新建用户",
     "Edit User": "编辑用户",
@@ -257,7 +258,6 @@
     "Authorized user succeeded": "授权用户成功",
     "Failed to authorize user:": "授权用户失败:",
     "Delete user data success": "删除用户数据成功",
-    "Give him a nickname!": "给Ta取个昵称吧!",
     "Successfully set user permissions": "设置用户权限成功",
     "User roles and permissions settings": "用户角色和权限设置",
     "Are you sure delete user \"{0}\"?": "确定删除用户\"{0}\"吗"
@@ -408,6 +408,8 @@
     "Are you sure delete apiResource \"{0}\"?": "确定删除API资源\"{0}\"吗"
   },
 
+  "Expiration": "到期时间",
+  "RequireClientSecret": "需要客户端密钥",
   "Client": "客户端",
   "ClientBlock": {
     "ClientId": "客户端ID",
@@ -480,7 +482,9 @@
     "RefreshTokenExpiration": "刷新令牌过期类型",
     "RefreshTokenExpirationTips": "Absolute 刷新令牌将在固定时间点到期（由AbsoluteRefreshTokenLifetime指定） \r\nSliding刷新令牌时，将更新刷新令牌的生命周期（按SlidingRefreshTokenLifetime中指定的值）。生命周期不会超过AbsoluteRefreshTokenLifetime。",
     "AllowedIdentityTokenSigningAlgorithms": "身份令牌允许的签名算法",
-    "AllowedIdentityTokenSigningAlgorithmsTips": "身份令牌允许的签名算法列表。 如果为空，将使用服务器默认的签名算法。"
+    "AllowedIdentityTokenSigningAlgorithmsTips": "身份令牌允许的签名算法列表。 如果为空，将使用服务器默认的签名算法。",
+    "UpdateAccessTokenClaimsOnRefresh": "刷新令牌时更新访问令牌",
+    "UpdateAccessTokenClaimsOnRefreshTips": "获取或设置一个值，该值指示是否应在刷新令牌请求时更新访问令牌(及其声明)。"
   },
 
   "CustomLogin": "自定义登录",
@@ -509,7 +513,9 @@
     "Delete Custom Login data success": "删除自定义登录数据成功",
     "Edit Custom Login data success": "编辑自定义登录数据成功",
     "Name is required": "姓名必须填写",
-    "Title is required": "标题必须填写"
+    "Title is required": "标题必须填写",
+    "NameRequired": "姓名必须填写",
+    "DisplayNameRequired": "昵称必须填写"
   },
 
   "OperationLog": "操作日志",
@@ -648,5 +654,7 @@
   "Invalid permission type": "权限类型无效",
   "Permission Name can`t null and length must be less than 20": "权限名称不能为空且长度必须小于20",
   "Permission Description length must be less than 255": "权限描述长度不能超过255",
-  "Can only input chinese and letter and number of Description": "描述只可以输入中文字母数字"
+  "Can only input chinese and letter and number of Description": "描述只可以输入中文字母数字",
+  "Filter": "筛选",
+  "Cancel Filter": "取消筛选"
 }

@@ -51,11 +51,6 @@ public partial class AddClientDialog
         _addBasicDto.Adapt(_addClientDto);
         _clientScopesDto.Adapt(_addClientDto);
 
-        if (string.IsNullOrWhiteSpace(_addClientDto.LogoUri))
-        {
-            _addClientDto.LogoUri = ClientConsts.AuthClientDefaultUri;
-        }
-
         await ClientService.AddClientAsync(_addClientDto);
         _visible = false;
         if (OnSuccessed.HasDelegate)
