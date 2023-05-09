@@ -56,7 +56,10 @@ public abstract class AdminCompontentBase : NextTickComponentBase
     public string T(string key)
     {
         var val = "";
-        if (string.IsNullOrEmpty(key)) return key;
+        if (string.IsNullOrEmpty(key))
+        {
+            return key;
+        }
         if (PageName is not null)
         {
             val = I18n.T(PageName, key, false);
@@ -68,9 +71,9 @@ public abstract class AdminCompontentBase : NextTickComponentBase
         return val;
     }
 
-    public string T(string formatkey, params string[] args)
+    public string T(string formatKey, params object?[] args)
     {
-        return string.Format(T(formatkey), args);
+        return string.Format(T(formatKey), args);
     }
 
     protected string DT(string key)
