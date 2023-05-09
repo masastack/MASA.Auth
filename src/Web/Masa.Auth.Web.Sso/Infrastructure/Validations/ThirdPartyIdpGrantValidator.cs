@@ -45,7 +45,7 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         {
             ThridPartyIdentity = identity.Subject
         });
-        var userClaims = user?.GetUserClaims();
+        var userClaims = user?.GetUserClaims().ToList();
         userClaims?.TryAdd(new Claim("thirdPartyUserData", JsonSerializer.Serialize(identity)));
         context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", userClaims, customResponse: new()
         {
