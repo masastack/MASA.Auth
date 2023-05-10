@@ -5,6 +5,8 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 
 public partial class UpdateRoleDialog
 {
+    private List<Guid> _roles = new();
+    
     [Parameter]
     public bool Visible { get; set; }
 
