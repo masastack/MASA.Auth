@@ -137,6 +137,7 @@ public class CommandHandler
     {
         await _userRepository.AddAsync(user);
         await _userDomainService.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]
@@ -148,6 +149,7 @@ public class CommandHandler
         user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         command.Result = user;
     }
 
@@ -1092,7 +1094,7 @@ public class CommandHandler
         command.Result = addThirdPartyUserExternalCommand.Result;
     }
 
-    async Task BindVerifyAsync(RegisterByEmailModel model)
+    async Task BindVerifyAsync(RegisterThirdPartyUserModel model)
     {
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
@@ -1108,6 +1110,25 @@ public class CommandHandler
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+        }
+
+        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email);
+
+        if (user != null)
+        {
+            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
+            await _eventBus.PublishAsync(identityProviderQuery);
+            var identityProvider = identityProviderQuery.Result;
+
+            if (identityProvider != null)
+            { 
+                var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
+
+                if (thirdPartyUser != null)
+                {
+                    throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
+                }
+            }
         }
     }
 

@@ -45,6 +45,11 @@ public partial class OperationLog
         }
     }
 
+    public string OperationTypeDisplay(OperationTypes operationType)
+    {
+        return T(operationType.ToString());
+    }
+
     private Task OnDateTimeUpdate((DateTimeOffset? start, DateTimeOffset? end) arg)
     {
         _startTime = arg.start;

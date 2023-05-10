@@ -22,7 +22,7 @@
     <MCol Md=6>
         <div class="block-center">
             <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix" />
-            <SButton Icon OnClick="AddCallBackRedirectUri">
+            <SButton Icon OnClick="AddCallBackRedirectUri" Color="regular3">
                 <SIcon>@IconConstants.Add</SIcon>
             </SButton>
         </div>
@@ -30,16 +30,16 @@
         {
             <div class="d-flex mt-3">
                 <STextField Small HideDetails="true" Value="uri" Filled Disabled />
-                <MButton Class="mr-4" Icon OnClick="()=>RemoveCallBackRedirectUri(uri)">
+                <SButton Icon OnClick="()=>RemoveCallBackRedirectUri(uri)" Color="regular3">
                     <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
-                </MButton>
+                </SButton>
             </div>
         }
     </MCol>
     <MCol Md=6>
         <div class="block-center">
             <STextField @bind-Value="Dto.PostLogoutRedirectUri" Label="@T("PostLogoutRedirectUri")" Suffix="@logoutRedirectUriSuffix" />
-            <SButton Icon OnClick="AddLogoutRedirectUri">
+            <SButton Icon OnClick="AddLogoutRedirectUri" Color="regular3">
                 <SIcon>@IconConstants.Add</SIcon>
             </SButton>
         </div>
@@ -47,7 +47,7 @@
         {
             <div class="d-flex mt-3">
                 <STextField Small HideDetails="true" Value="uri" Filled Disabled />
-                <SButton Class="mr-4" Icon OnClick="()=>RemoveLogoutRedirectUri(uri)">
+                <SButton Icon OnClick="()=>RemoveLogoutRedirectUri(uri)" Color="regular3">
                     <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
                 </SButton>
             </div>

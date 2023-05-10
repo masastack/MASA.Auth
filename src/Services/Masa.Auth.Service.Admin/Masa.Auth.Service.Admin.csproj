@@ -8,11 +8,20 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
-		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="1.0.0-rc.1.1" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="$(MasaFrameworkPackageVersion)" />

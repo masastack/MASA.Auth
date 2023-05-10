@@ -8,7 +8,7 @@ public class RegisterValidator : MasaAbstractValidator<RegisterModel>
     public RegisterValidator(PasswordValidator passwordValidator)
     {
         RuleFor(register => register.PhoneNumber)
-            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.PhoneNumber))).Phone();
+            .Required().Phone();
 
         _ = WhenNotEmpty(r => r.Account, rule => rule.ChineseLetterNumber());
         RuleFor(register => register.Account).RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Account)));
@@ -24,11 +24,11 @@ public class RegisterValidator : MasaAbstractValidator<RegisterModel>
 
         _ = WhenNotEmpty(r => r.DisplayName, rule => rule.ChineseLetter().MaximumLength(20));
         RuleFor(register => register.DisplayName)
-            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.DisplayName)));
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.DisplayName))).WithMessage("CustomLoginBlock.DisplayNameRequired");
 
         _ = WhenNotEmpty(r => r.Name, rule => rule.ChineseLetter().MaximumLength(20));
         RuleFor(register => register.Name)
-            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Name)));
+            .RequiredIf(register => register.CheckRequired(nameof(RegisterModel.Name))).WithMessage("CustomLoginBlock.NameRequired");
 
         _ = WhenNotEmpty(r => r.Email, rule => rule.Email());
         RuleFor(register => register.Email)

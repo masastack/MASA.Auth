@@ -20,7 +20,7 @@
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.7" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
-		<PackageReference Include="Masa.Stack.Components" Version="0.0.379">
+		<PackageReference Include="Masa.Stack.Components" Version="0.0.379" />
 	</ItemGroup>
 
 	<ItemGroup>

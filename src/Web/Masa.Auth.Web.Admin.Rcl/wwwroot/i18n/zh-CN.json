@@ -3,7 +3,6 @@
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
   "$DateFormat": "yyyy年MM月dd日",
-
   "Ldap": "域账号",
   "LdapConfigure": "域账号配置",
   "Favorite": "收藏",
@@ -177,7 +176,7 @@
     "Edit Position": "编辑职位",
     "Delete Position": "删除职位",
     "Add position success": "新建职位成功",
-    "Update position data success": "编辑职位数据成功",
+    "Edit position data success": "编辑职位数据成功",
     "Delete position data success": "删除职位数据成功",
     "Are you sure delete position \"{0}\"?": "确定删除职位\"{0}\"吗"
   },
@@ -513,7 +512,9 @@
     "Delete Custom Login data success": "删除自定义登录数据成功",
     "Edit Custom Login data success": "编辑自定义登录数据成功",
     "Name is required": "姓名必须填写",
-    "Title is required": "标题必须填写"
+    "Title is required": "标题必须填写",
+    "NameRequired": "姓名必须填写",
+    "DisplayNameRequired": "昵称必须填写"
   },
 
   "OperationLog": "操作日志",
@@ -524,6 +525,7 @@
     "Please select type": "请选择操作类型",
     "Please enter operation description": "请输入操作描述",
     "AddUser": "新建用户",
+    "RegisterUser": "注册用户",
     "EditUser": "编辑用户",
     "EditUserAuthorization": "编辑用户权限",
     "RemoveUser": "删除用户",

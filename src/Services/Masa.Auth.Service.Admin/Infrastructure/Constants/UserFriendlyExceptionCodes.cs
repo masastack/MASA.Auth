@@ -89,4 +89,5 @@ public static class UserFriendlyExceptionCodes
     public const string ROLE_BIND_LIMIT_ERROR = "RoleBindLimitError";
     public const string API_SCOPE_NAME_EXIST = "APIScopeNameExist";
     public const string IDENTITY_SOURCE_NAME_EXIST = "IdentitySourceNameExist";
+    public const string THIRDPARTYUSER_BIND_EXIST = "ThirdPartyUserBindExist";
 }

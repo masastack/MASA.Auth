@@ -24,7 +24,7 @@ if (!builder.Environment.IsDevelopment())
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new()
 {
     Authority = masaStackConfig.GetSsoDomain(),
     ClientId = masaStackConfig.GetWebId(MasaStackConstant.AUTH),

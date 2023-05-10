@@ -1,6 +1,6 @@
 ﻿@inherits SsoSectionComponentBase
 
-<MTextField PrependInnerIcon="mdi-cellphone" @bind-Value="Value.PhoneNumber" Label="@T("PhoneNumber")"
+<MTextField PrependInnerIcon="mdi-cellphone" Value="Value.PhoneNumber" TValue="string" ValueChanged="ValueChangeHandler" Label="@T("PhoneNumber")"
             Placeholder="@T("PhoneNumberPlaceholder")" Outlined @ref="_phoneTextField" Rules="_phoneNumberRules">
 </MTextField>
 <CaptchaSendTextField Class="mt-3" @bind-Value="Value.SmsCode" OnClick="GetSmsCode" />
@@ -20,22 +20,20 @@
     [Inject]
     public IAuthClient AuthClient { get; set; } = null!;
 
-    IEnumerable<Func<string, StringBoolean>> _phoneNumberRules = new List<Func<string, StringBoolean>>();
+    private IList<Func<string, StringBoolean>> _phoneNumberRules = new List<Func<string, StringBoolean>>();
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override Task OnParametersSetAsync()
     {
-        if (firstRender)
+        if (!_phoneNumberRules.Any())
         {
-            if (!Value.EmailRegister)
-            {
-                _phoneNumberRules = new List<Func<string, StringBoolean>>
-                {
-                    value => !string.IsNullOrEmpty(value) ? true : T("PhoneRequired"),
-                    value => Regex.Match(value, LoginOptions.PhoneRegular).Success ? true : T("PhoneNumberPrompt")
-                };
-            }
+            _phoneNumberRules.Add(value => Regex.Match(value, LoginOptions.PhoneRegular).Success ? true : T("PhoneNumberPrompt"));
+        }        
+        if (Required && _phoneNumberRules.Count == 1)
+        {
+            _phoneNumberRules.Add(value => !string.IsNullOrEmpty(value) ? true : T("PhoneRequired"));
         }
-        base.OnAfterRender(firstRender);
+
+        return base.OnParametersSetAsync();
     }
 
     private async Task<bool> GetSmsCode()
@@ -49,5 +47,10 @@
                 });
         }
         return _phoneTextField.Validate();
+    }
+
+    void ValueChangeHandler(string value)
+    {
+        Value.PhoneNumber = value;
     }
 }

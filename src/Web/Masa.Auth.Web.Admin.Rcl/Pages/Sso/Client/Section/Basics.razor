@@ -19,16 +19,20 @@
     <MCol Md=12>
         <div class="block-center">
             <STextField @bind-Value="Dto.AllowedCorsOrigin" Label="@T("AllowedCorsOrigins")"/>
-            <SButton Icon OnClick="AddAllowedCorsOrigin">
+            <SButton Icon OnClick="AddAllowedCorsOrigin" Color="regular3">
                 <SIcon>@IconConstants.Add</SIcon>
             </SButton>
         </div>
     </MCol>
     @foreach (var origin in Dto.AllowedCorsOrigins)
     {
-        <MCol Md=6 Class="d-flex">
-            <STextField HideDetails="true" Value="origin" Filled Disabled Class="flex-grow-1" />
-            <SIcon Class="ml-2" OnClick="()=>RemoveAllowedCorsOrigin(origin)" Tooltip="@T("删除")">mdi-close-circle</SIcon>
+        <MCol Md=6>
+            <div class="block-center">
+                <STextField HideDetails="true" Value="origin" Filled Disabled Class="flex-grow-1" />
+                <SButton Icon OnClick="() => RemoveAllowedCorsOrigin(origin)" Color="regular3">
+                    <SIcon Tooltip="@T("Delete")">mdi-close-circle</SIcon>
+                </SButton>
+            </div>
         </MCol>
     }
     <MCol Md=12>
@@ -44,9 +48,9 @@
                 <STextField @bind-Value="@Dto.Property.Value" Label="@T("Value")" />
             </MCol>
             <MCol Md="@("auto")" Class="d-flex align-center">
-                <MButton Class="mr-4" Icon OnClick="AddProperty">
-                    <SIcon Size=32 Color="primary" Style="color: white;">@IconConstants.Add</SIcon>
-                </MButton>
+                <SButton Class="mr-4" Icon OnClick="AddProperty" Color="regular3">
+                    <SIcon Size=32>@IconConstants.Add</SIcon>
+                </SButton>
             </MCol>
             <MCol Md=12>
                 <MDataTable Headers="_headers" Dense Items="Dto.Properties" TItem="ClientPropertyDto" HideDefaultFooter DisablePagination Class="margin-border">
@@ -57,9 +61,9 @@
                         @switch (context.Header.Value)
                         {
                             case "Action":
-                                <MButton Class="mr-4" Icon OnClick="()=>Dto.Properties.Remove(context.Item)">
-                                    <SIcon Tooltip="@T("Delete")" Color="regular">mdi-close</SIcon>
-                                </MButton>
+                                <SButton Class="mr-4" Icon OnClick="()=>Dto.Properties.Remove(context.Item)" Color="regular">
+                                    <SIcon Tooltip="@T("Delete")">mdi-close</SIcon>
+                                </SButton>
                                 break;
                             default:
                                 <span class="subtitle">@context.Value</span>
