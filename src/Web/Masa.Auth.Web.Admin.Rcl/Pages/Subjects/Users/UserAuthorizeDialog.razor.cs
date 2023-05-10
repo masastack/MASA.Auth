@@ -8,6 +8,7 @@ public partial class UserAuthorizeDialog
     private bool _visible = false;
     private Guid _userId = Guid.Empty;
     private bool _preview = false;
+    private List<Guid> _roles = new();
 
     [Parameter]
     public EventCallback<bool> VisibleChanged { get; set; }
@@ -25,13 +26,13 @@ public partial class UserAuthorizeDialog
 
     public async Task ShowAsync(Guid userId)
     {
-	_userId = userId;
+	    _userId = userId;
 
-	User = await UserService.GetDetailAsync(_userId);
-	Authorization = new(User.Id, User.Roles.Select(role => role.Id), User.Permissions);
-	Teams = new();
+	    User = await UserService.GetDetailAsync(_userId);
+	    Authorization = new(User.Id, User.Roles.Select(role => role.Id), User.Permissions);
+	    Teams = new();
 
-	_visible = true;
+	    _visible = true;
     }
 
     protected override void OnInitialized()

@@ -1,20 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<ExpansionWrapperUnique ValueChanged="ValueChangedAsync"
-                        Value="ExpansionWrapperUniqueValue"
-                        Checkable
-                        Categories=_categories
-                        FavoriteNavs=new()
-                        Class="@Class"
-                        Style="@Style" />
+<ExpansionMenuWrapper Value="_menu" />
 
 <DefaultSheetDialog Value="Preview" ValueChanged="PreviewChanged" Title="@T("Preview Permissions")">
    <AutoHeight>
         <AutoHeightContent>
             <div class="global-nav" style="max-height:calc(100vh - 230px);">
-                <ExpansionWrapperUnique Value="ExpansionWrapperUniqueValue"
-                                        Categories=_categories
-                                        InPreview=Preview />
+                <ExpansionMenuWrapper Value="_menu" />
             </div>
         </AutoHeightContent>
         <FooterContent>

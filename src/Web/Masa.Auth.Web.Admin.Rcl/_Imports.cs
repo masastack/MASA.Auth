@@ -48,6 +48,7 @@ global using Masa.BuildingBlocks.StackSdks.Pm.Enum;
 global using Masa.Contrib.StackSdks.Caller;
 global using Masa.Contrib.StackSdks.Config;
 global using Masa.Stack.Components;
+global using Masa.Stack.Components.Shared.GlobalNavigations;
 global using Masa.Stack.Components.Extensions;
 global using Masa.Stack.Components.Infrastructure;
 global using Masa.Stack.Components.Models;

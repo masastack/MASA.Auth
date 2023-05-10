@@ -37,9 +37,9 @@
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="max-height:calc(100vh - 320px);">
-                                <PermissionExtensionConfigure Roles=Role.ChildrenRoles
-                                                              @bind-ExtensionValue=Role.Permissions
-                                                              @bind-Preview=Preview />
+                                <PermissionsConfigure Roles=Role.ChildrenRoles
+                                                     @bind-Value=Role.Permissions
+                                                     @bind-Preview=Preview />
                             </div>
                         </AutoHeightContent>
                         <FooterContent>
