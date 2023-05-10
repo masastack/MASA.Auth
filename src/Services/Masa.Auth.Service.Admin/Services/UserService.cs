@@ -345,6 +345,13 @@ public class UserService : ServiceBase
         return true;
     }
 
+    public async Task<List<UserModel>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new UsersByRoleQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)
     {
         await eventBus.PublishAsync(command);
