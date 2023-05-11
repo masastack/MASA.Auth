@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
@@ -621,6 +623,52 @@ public class CommandHandler
         {
             Expires = DateTime.Now.AddDays(7)
         });
+    }
+
+    [EventHandler]
+    public async Task BindRolesAsync(BindUserRolesCommand command)
+    {
+        var userModel = command.User;
+        if(userModel.RoleCodes.Any() is false) return;
+
+        var user = await _authDbContext.Set<User>()
+                                    .Include(u => u.Roles)
+                                    .FirstOrDefaultAsync(u => u.Id == userModel.Id);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        var roles = await _authDbContext.Set<Role>()
+                                    .Where(role => userModel.RoleCodes.Contains(role.Code))
+                                    .Select(role => role.Id)
+                                    .ToListAsync();
+        user.AddRoles(roles);
+        await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task UnbindRolesAsync(UnbindUserRolesCommand command)
+    {
+        var userModel = command.User;
+        if (userModel.RoleCodes.Any() is false) return;
+
+        var user = await _authDbContext.Set<User>()
+                                    .Include(u => u.Roles)
+                                    .FirstOrDefaultAsync(u => u.Id == userModel.Id);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        var roles = await _authDbContext.Set<Role>()
+                                    .Where(role => userModel.RoleCodes.Contains(role.Code))
+                                    .Select(role => role.Id)
+                                    .ToListAsync();
+        user.RemoveRoles(roles);
+        await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
     }
 
     #endregion
