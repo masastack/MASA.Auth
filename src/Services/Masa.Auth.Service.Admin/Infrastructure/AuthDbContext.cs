@@ -7,6 +7,7 @@ public class AuthDbContext : MasaDbContext<AuthDbContext>
 {
     public AuthDbContext(MasaDbContextOptions<AuthDbContext> options) : base(options)
     {
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
     }
 
     protected override void OnConfiguring(MasaDbContextOptionsBuilder optionsBuilder)

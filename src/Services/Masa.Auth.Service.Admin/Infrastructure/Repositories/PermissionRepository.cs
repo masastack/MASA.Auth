@@ -34,7 +34,6 @@ public class PermissionRepository : Repository<AuthDbContext, Permission, Guid>,
             .Include(p => p.RolePermissions).ThenInclude(rp => rp.Role)
             .Include(p => p.TeamPermissions).ThenInclude(tp => tp.Team)
             .AsSplitQuery()
-            .AsTracking()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_NOT_EXIST);
     }

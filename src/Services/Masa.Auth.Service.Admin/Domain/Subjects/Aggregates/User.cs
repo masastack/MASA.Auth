@@ -140,9 +140,9 @@ public class User : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<UserPermission> Permissions => _permissions;
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
-    
+
     private User()
-    {}
+    { }
 
     public User(string? name,
                 string displayName,
@@ -304,11 +304,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         return Password == MD5Utils.EncryptRepeat(password ?? "");
     }
 
-    public void AddRoles(IEnumerable<Guid> roleIds)
+    public void SetRoles(IEnumerable<Guid> roleIds)
     {
-        _roles = _roles.MergeBy(
-           roleIds.Select(roleId => new UserRole(roleId)),
-           item => item.RoleId).DistinctBy(ur => ur.RoleId).ToList();
+        _roles = roleIds.Select(roleId => new UserRole(roleId)).ToList();
     }
 
     public void RemoveRoles(IEnumerable<Guid> roleIds)
