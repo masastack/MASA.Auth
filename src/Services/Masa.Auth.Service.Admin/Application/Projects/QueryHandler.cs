@@ -73,6 +73,8 @@ public class QueryHandler
                     Children = GetChildren(p.Id, menuPermissions, a.Url ?? "")
                 }).ToList();
         });
+        //remove all empty item
+        query.Result.RemoveAll(r => r.Apps.All(a => a.Navs.Count == 0));
     }
 
     private async Task<List<ProjectDto>> GetProjectDtoListAsync(string env, params AppTypes[] appTypes)

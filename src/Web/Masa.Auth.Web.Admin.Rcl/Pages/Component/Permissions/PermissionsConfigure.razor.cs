@@ -113,6 +113,7 @@ public partial class PermissionsConfigure
 
     private async Task<ExpansionMenu> GetMenuAsync()
     {
+        //TODO repeat code with Masa.Stack.Components.Shared.GlobalNavigations.GlobalNavigation
         var apps = (await ProjectService.GetUIAndMenusAsync()).SelectMany(p => p.Apps).ToList();
         apps.RemoveAll(a => !a.Navs.Any());
         var categories = apps.GroupBy(a => a.Tag);
@@ -194,7 +195,7 @@ public partial class PermissionsConfigure
             Value.Add(permission);
         }
 
-        permission.Effect = menu.State == ExpansionMenuState.Selected;
+        permission.Effect = menu.State == ExpansionMenuState.Selected || menu.State == ExpansionMenuState.Indeterminate;
         return Task.CompletedTask;
     }
 
