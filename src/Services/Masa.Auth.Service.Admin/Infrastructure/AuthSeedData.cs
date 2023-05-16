@@ -13,6 +13,15 @@ public class AuthSeedData
         var context = serviceProvider.GetRequiredService<AuthDbContext>();
         var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
 
+        var departmentId = Guid.Empty;
+        var adminStaffId = Guid.Empty;
+        var guestStaffId = Guid.Empty;
+        string system = "system", admin = "admin", guest = "guest";
+
+        var userSetter = serviceProvider.GetService<IUserSetter>();
+        var auditUser = new IdentityUser() { Id = masaStackConfig.GetDefaultUserId().ToString(), UserName = system };
+        var userSetterHandle = userSetter!.Change(auditUser);
+
         #region Auth
 
         var userPermission = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "User", "user", "User", "mdi-account-circle", 1, PermissionTypes.Menu);
@@ -40,14 +49,14 @@ public class AuthSeedData
         customLogin.SetParent(sso.Id);
 
         var team = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Team", "team", "team/index", "mdi-account-multiple", 3, PermissionTypes.Menu);
-        var teamAddElement = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", "team.add", "", "", 1, PermissionTypes.Element);
+        var teamAddElement = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", "team.add", "", "", 1, PermissionTypes.Element);
         teamAddElement.SetParent(team.Id);
         var teamAddApi = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.TeamAdd, "", "", 1, PermissionTypes.Api);
         teamAddElement.BindApiPermission(teamAddApi.Id);
 
         var authMenus = new List<Permission>() {
             userPermission,
-            rolePermission,role,permission,team,teamAddElement,
+            rolePermission,role,permission,team,teamAddElement,teamAddApi,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
@@ -147,15 +156,6 @@ public class AuthSeedData
             await eventBus.PublishAsync(new SeedPermissionsCommand(alertMenus));
         }
         #endregion
-
-        var departmentId = Guid.Empty;
-        var adminStaffId = Guid.Empty;
-        var guestStaffId = Guid.Empty;
-        string system = "system", admin = "admin", guest = "guest";
-
-        var userSetter = serviceProvider.GetService<IUserSetter>();
-        var auditUser = new IdentityUser() { Id = masaStackConfig.GetDefaultUserId().ToString(), UserName = system };
-        var userSetterHandle = userSetter!.Change(auditUser);
 
         if (!context.Set<Department>().Any())
         {

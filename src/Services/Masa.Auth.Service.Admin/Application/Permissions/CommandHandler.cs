@@ -171,7 +171,14 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task SeedPermissionsAsync(SeedPermissionsCommand seedPermissionsCommand)
     {
-        foreach (var permission in seedPermissionsCommand.Permissions)
+        var permissions = seedPermissionsCommand.Permissions.Where(p => !p.AffiliationPermissionRelations.Any() && !p.LeadingPermissionRelations.Any()).ToList();
+        foreach (var permission in permissions)
+        {
+            await _permissionRepository.AddAsync(permission);
+        }
+        await _unitOfWork.SaveChangesAsync();
+        permissions = seedPermissionsCommand.Permissions.Where(p => p.AffiliationPermissionRelations.Any() || p.LeadingPermissionRelations.Any()).ToList();
+        foreach (var permission in permissions)
         {
             await _permissionRepository.AddAsync(permission);
         }
