@@ -5,11 +5,11 @@ namespace Masa.Auth.Service.Admin.Application.Projects;
 
 public class QueryHandler
 {
-    readonly IPmClient _pmClient;
-    readonly IDccClient _dccClient;
-    readonly IPermissionRepository _permissionRepository;
-    readonly UserDomainService _userDomainService;
-    readonly IMultiEnvironmentContext _multiEnvironmentContext;
+    private readonly IPmClient _pmClient;
+    private readonly IDccClient _dccClient;
+    private readonly IPermissionRepository _permissionRepository;
+    private readonly UserDomainService _userDomainService;
+    private readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
     public QueryHandler(
         IPmClient pmClient,
