@@ -95,7 +95,7 @@ public class AuthSeedData
         #endregion
 
         #region Mc
-        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fas fa-tasks", 2, PermissionTypes.Menu);
+        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fa:fas fa-tasks", 2, PermissionTypes.Menu);
         var sendMessage = new Permission(MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "SendMessage", "sendMessage", "messageTasks/sendMessage", "", 1, PermissionTypes.Menu);
         var messageRecord = new Permission(MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "", 2, PermissionTypes.Menu);
         sendMessage.SetParent(messageManagement.Id);
@@ -113,7 +113,7 @@ public class AuthSeedData
             new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ChannelManagement","channelManagement","channels/channelManagement","mdi-email-outline",1,PermissionTypes.Menu),
             messageManagement,sendMessage,messageRecord,
             messageTemplate,sms,email,websiteMessage,
-            new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fas fa-object-ungroup",4,PermissionTypes.Menu)
+            new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fa:fas fa-object-ungroup",4,PermissionTypes.Menu)
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.MC))
         {

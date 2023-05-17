@@ -231,7 +231,7 @@
     "Failed to delete permission": "删除权限失败",
     "Project identifier is empty": "项目标识为空",
     "Application Group save successed": "应用分组保存成功",
-    "Support mdi and fas icon": "支持mdi-* 和 fas-* 图标",
+    "Support mdi and fas icon": "支持mdi-* 和 fa:fas-* 图标",
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method"
   },
 

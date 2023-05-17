@@ -110,7 +110,7 @@ var redisOption = new RedisConfigurationOptions
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption), multilevel =>
 {
     multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
-    multilevel.SubscribeKeyPrefix = $"masa.auth:-db-{redisOption.DefaultDatabase}";
+    multilevel.SubscribeKeyPrefix = $"{masaStackConfig.Environment}:auth:db-{redisOption.DefaultDatabase}";
 });
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 builder.Services.AddDccClient(redisOption);

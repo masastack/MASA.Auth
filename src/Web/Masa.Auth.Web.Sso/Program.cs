@@ -37,7 +37,7 @@ var redisOption = new RedisConfigurationOptions
         new RedisServerOptions()
         {
             Host= masaStackConfig.RedisModel.RedisHost,
-            Port=   masaStackConfig.RedisModel.RedisPort
+            Port= masaStackConfig.RedisModel.RedisPort
         }
     },
     DefaultDatabase = masaStackConfig.RedisModel.RedisDb,

@@ -100,23 +100,21 @@ public partial class User
     private UserService UserService => AuthCaller.UserService;
 
     [Parameter]
-    public Staff? StaffCompontent { get; set; }
+    public Staff? StaffComponent { get; set; }
 
     [Parameter]
-    public ThirdPartyUser? ThirdPartyUserCompontent { get; set; }
+    public ThirdPartyUser? ThirdPartyUserComponent { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        PageName = "UserBlock";
-        await GetUserAsync();
-    }
+    protected override string? PageName => "UserBlock";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            await GetUserAsync();
             await using var businessJs = await Js!.InvokeAsync<IJSObjectReference>("import", "./_content/Masa.Auth.Web.Admin.Rcl/js/business.js");
             await businessJs.InvokeVoidAsync("onUserFileterAnimationEnd");
+            StateHasChanged();
         }
     }
 
@@ -159,13 +157,13 @@ public partial class User
     async Task UpdateStaffAndThirdPartyUserAsync()
     {
         await GetUserAsync();
-        if (StaffCompontent is not null)
+        if (StaffComponent is not null)
         {
-            await StaffCompontent.ReloadAsync();
+            await StaffComponent.ReloadAsync();
         }
-        if (ThirdPartyUserCompontent is not null)
+        if (ThirdPartyUserComponent is not null)
         {
-            await ThirdPartyUserCompontent.ReloadAsync();
+            await ThirdPartyUserComponent.ReloadAsync();
         }
     }
 

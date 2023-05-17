@@ -5,7 +5,7 @@
   "ThirdPartyIdp": "ThirdParty identity provider",
   "BasicInformation": "Basic Information",
   "DetailInformation": "Detail Information",
-  "Support mdi and fas icon": "Support like mdi-* and fa-* icons",
+  "Support mdi and fas icon": "Support like mdi-* and fa:fas-* icons",
   "ClientIdTips": "Unique ID of the client",
   "ClientNameTips": "Client display name (used for logging and consent screen)",
   "AllowedCorsOriginsTips": "CORS policy for JavaScript clients.",
