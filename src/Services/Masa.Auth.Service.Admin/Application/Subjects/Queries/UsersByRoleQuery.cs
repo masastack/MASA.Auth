@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record StaffsByRoleQuery(Guid RoleId) : Query<List<StaffDto>>
+public record UsersByRoleQuery(Guid RoleId) : Query<List<UserModel>>
 {
-    public override List<StaffDto> Result { get; set; } = new();
+    public override List<UserModel> Result { get; set; } = new();
 }
