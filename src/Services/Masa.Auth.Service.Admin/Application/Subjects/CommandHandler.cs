@@ -1113,23 +1113,27 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
         }
 
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email);
-
+        Expression<Func<User, bool>> condition = _ => false;
+        condition = condition.Or(!model.PhoneNumber.IsNullOrEmpty(), u => u.PhoneNumber == model.PhoneNumber);
+        condition = condition.Or(!model.Email.IsNullOrEmpty(), u => u.Email == model.Email);
+        var user = await _userRepository.FindAsync(condition);
         if (user != null)
         {
             var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
-
             if (identityProvider != null)
             {
                 var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
-
                 if (thirdPartyUser != null)
                 {
                     throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
                 }
             }
+        }
+        else
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
         }
     }
 
