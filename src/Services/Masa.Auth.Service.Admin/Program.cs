@@ -226,7 +226,7 @@ app.UseMasaExceptionHandler(opt =>
         }
         else if (context.Exception is UserStatusException userStatusException)
         {
-            context.ToResult(userStatusException.GetLocalizedMessage(), (int)MasaAuthHttpStatusCode.UserStatusException);
+            context.ToResult(userStatusException.Message, (int)MasaAuthHttpStatusCode.UserStatusException);
         }
     };
 });

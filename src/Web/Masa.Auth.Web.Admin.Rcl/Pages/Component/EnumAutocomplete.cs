@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class EnumAutocomplete<TValue> : SAutoComplete<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
+public class EnumAutoComplete<TValue> : SAutoComplete<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
 {
     [Inject]
     public I18n I18N { get; set; } = default!;

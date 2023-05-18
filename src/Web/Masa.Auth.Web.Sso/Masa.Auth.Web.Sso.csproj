@@ -50,6 +50,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="keys\" />
 		<Folder Include="wwwroot\js\" />
 	</ItemGroup>
 
