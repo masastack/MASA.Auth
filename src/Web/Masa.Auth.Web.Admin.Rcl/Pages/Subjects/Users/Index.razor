@@ -5,9 +5,9 @@
     @T(Title)
 </PageTitle>
 
-<SElevationTab Class="defaultTab full-height" ActiveClass="fill-background" TabsClass="white" TabMinWidth="120" Left Tabs="Tas" Dense>
+<SElevationTab Class="defaultTab full-height" ActiveClass="fill-background" TabsClass="white" TabMinWidth="120" Left Tabs="Tags" Dense>
     <SElevationTabItem>
-        <User @ref=UserRef StaffCompontent=StaffRef ThirdPartyUserCompontent=ThirdPartyUserRef />          
+        <User @ref=UserRef StaffComponent=StaffRef ThirdPartyUserComponent=ThirdPartyUserRef />          
     </SElevationTabItem>
     <SElevationTabItem>
         <ThirdPartyUser @ref=ThirdPartyUserRef />          
@@ -20,7 +20,7 @@
 @code {
     public string Title { get; set; } = PageTab.User;
 
-    List<string> Tas = new() { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff };
+    List<string> Tags = new() { PageTab.User, PageTab.ThirdPartyUser, PageTab.Staff };
 
     User? UserRef { get; set; }
 

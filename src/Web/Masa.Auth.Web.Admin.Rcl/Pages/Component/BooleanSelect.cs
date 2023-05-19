@@ -13,7 +13,7 @@ public class BooleanSelect : SSelect<KeyValuePair<string, bool?>, bool?, bool?>
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
-        await base.SetParametersAsync(parameters);
+
         Clearable = true;
         Items = new List<KeyValuePair<string, bool?>>()
         {
@@ -23,6 +23,7 @@ public class BooleanSelect : SSelect<KeyValuePair<string, bool?>, bool?, bool?>
         ItemText = kv => kv.Key;
         ItemValue = kv => kv.Value;
         BackgroundColor = FillBackground ? "fill-background" : "white";
+        await base.SetParametersAsync(parameters);
     }
 }
 

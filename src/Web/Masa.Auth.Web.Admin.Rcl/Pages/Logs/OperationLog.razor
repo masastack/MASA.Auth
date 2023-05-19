@@ -10,7 +10,7 @@
             <div class="d-flex">
                 <SDateTimeRangeToolbar StartDateTime=_startTime EndDateTime=_endTime OnUpdate="OnDateTimeUpdate" Clearable></SDateTimeRangeToolbar>
                 <MSpacer />
-                <EnumAutocomplete @bind-Value="OperationType" I18NScope="@PageName" TValue="OperationTypes" Label="@T("OperationType")" Clearable FillBackground=false Class="ml-6" Style="width: 100px !important;" />
+                <EnumAutoComplete @bind-Value="OperationType" I18NScope="@PageName" TValue="OperationTypes" Label="@T("OperationType")" Clearable FillBackground=false Class="ml-6" Style="width: 100px !important;" />
                 <SUserAutoComplete @bind-Value="UserId" Label="@T("Operator")" FillBackground=false Class="ml-6" Clearable Style="width: 134px !important;" />
                 <SSearch @bind-Value="Search" BackgroundColor="#fff" Placeholder="@T("Please enter operation description")" Class="ml-6" Style="width: 134px !important;" />
             </div>

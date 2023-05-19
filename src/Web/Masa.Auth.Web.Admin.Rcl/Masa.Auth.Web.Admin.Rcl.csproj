@@ -21,7 +21,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.7" />
 		<!--Support GB2312-->
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
-		<PackageReference Include="Masa.Stack.Components" Version="0.0.382" />
+		<PackageReference Include="Masa.Stack.Components" Version="0.0.384" />
 	</ItemGroup>
 
 	<ItemGroup>

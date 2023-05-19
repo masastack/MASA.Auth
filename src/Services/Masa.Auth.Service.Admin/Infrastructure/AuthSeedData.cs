@@ -95,7 +95,7 @@ public class AuthSeedData
         #endregion
 
         #region Mc
-        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fas fa-tasks", 2, PermissionTypes.Menu);
+        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fa:fas fa-tasks", 2, PermissionTypes.Menu);
         var sendMessage = new Permission(MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "SendMessage", "sendMessage", "messageTasks/sendMessage", "", 1, PermissionTypes.Menu);
         var messageRecord = new Permission(MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "", 2, PermissionTypes.Menu);
         sendMessage.SetParent(messageManagement.Id);
@@ -113,7 +113,7 @@ public class AuthSeedData
             new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ChannelManagement","channelManagement","channels/channelManagement","mdi-email-outline",1,PermissionTypes.Menu),
             messageManagement,sendMessage,messageRecord,
             messageTemplate,sms,email,websiteMessage,
-            new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fas fa-object-ungroup",4,PermissionTypes.Menu)
+            new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fa:fas fa-object-ungroup",4,PermissionTypes.Menu)
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.MC))
         {
@@ -240,36 +240,36 @@ public class AuthSeedData
 
         #region SSO Client
 
-        var uis = masaStackConfig.GetAllUINames();
+        var uiDomainPairs = masaStackConfig.GetUIDomainPairs();
         var clientDefaultLogoUrl = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
-        foreach (var ui in uis)
+        foreach (var uiDomainPair in uiDomainPairs)
         {
-            if (context.Set<Client>().Any(u => u.ClientId == ui.Item1))
+            if (context.Set<Client>().Any(u => u.ClientId == uiDomainPair.Key))
             {
                 continue;
             }
 
             await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
             {
-                ClientId = ui.Item1,
-                ClientName = ui.Item2,
+                ClientId = uiDomainPair.Key,
+                ClientName = uiDomainPair.Key,
                 ClientUri = "",
                 RequireConsent = false,
                 AllowedScopes = new List<string> { "openid", "profile" },
-                RedirectUris = new List<string> { $"{ui.Item3}/signin-oidc" },
-                PostLogoutRedirectUris = new List<string> { $"{ui.Item3}/signout-callback-oidc" },
-                FrontChannelLogoutUri = $"{ui.Item3}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{ui.Item3}/account/backchannellogout",
+                RedirectUris = new List<string> { $"{uiDomainPair.Value}/signin-oidc" },
+                PostLogoutRedirectUris = new List<string> { $"{uiDomainPair.Value}/signout-callback-oidc" },
+                FrontChannelLogoutUri = $"{uiDomainPair.Value}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{uiDomainPair.Value}/account/backchannellogout",
                 LogoUri = clientDefaultLogoUrl
             }));
 
             //add custom register
             await eventBus.PublishAsync(new AddCustomLoginCommand(new AddCustomLoginDto
             {
-                ClientId = ui.Item1,
+                ClientId = uiDomainPair.Key,
                 Enabled = true,
-                Name = ui.Item2,
-                Title = ui.Item2,
+                Name = uiDomainPair.Key,
+                Title = uiDomainPair.Key,
                 RegisterFields = new List<RegisterFieldDto>
                 {
                     new RegisterFieldDto(RegisterFieldTypes.PhoneNumber,1,true),

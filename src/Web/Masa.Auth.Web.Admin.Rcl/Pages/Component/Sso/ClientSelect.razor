@@ -17,10 +17,10 @@
     <ItemContent Context="data">
         <div class="d-flex" style="height:48px;">
             <MAvatar Size=30 Class="ma-auto">
-                <img src="@data.Item.LogoUri" />
+                <img src="@data.Item?.LogoUri" />
             </MAvatar>
             <div class="my-auto">
-                <span class="body2 emphasis2--text ml-2">@data.Item.ClientName</span> 
+                <span class="body2 emphasis2--text ml-2">@data.Item?.ClientName</span> 
             </div>                      
         </div>
     </ItemContent>

@@ -26,7 +26,7 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
         try
         {
             @operator ??= _userContext.GetUserId<Guid>();
-            var operatorName = (await _multilevelCacheClient.GetUserAsync(@operator.Value))?.StaffDislpayName ?? "";
+            var operatorName = (await _multilevelCacheClient.GetUserAsync(@operator.Value))?.StaffDisplayName ?? "";
             await AddAsync(new OperationLog(
                 @operator.Value, operatorName, operationType, default, operationDescription
             ));

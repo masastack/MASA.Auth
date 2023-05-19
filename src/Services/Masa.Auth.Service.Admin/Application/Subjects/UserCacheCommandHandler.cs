@@ -24,7 +24,7 @@ public class UserCacheCommandHandler
         foreach (var user in users)
         {
             var userModel = user.Adapt<UserModel>();
-            userModel.StaffDislpayName = staffs.FirstOrDefault(staff => staff.UserId == user.Id)?.DisplayName ?? user.DisplayName;
+            userModel.StaffDisplayName = staffs.FirstOrDefault(staff => staff.UserId == user.Id)?.DisplayName ?? user.DisplayName;
             map.Add(CacheKeyConsts.UserKey(user.Id), userModel);
         }
         await _multilevelCacheClient.SetListAsync(map);
@@ -39,7 +39,7 @@ public class UserCacheCommandHandler
             userModel.Roles = user.Roles.Where(e => !e.IsDeleted).Select(e => new RoleModel { Id = e.RoleId, Name = e.Role == null ? "" : e.Role.Name, Code = e.Role == null ? "" : e.Role.Code }).ToList();
             userModel.Permissions = user.Permissions.Where(e => !e.IsDeleted).Adapt<List<SubjectPermissionRelationModel>>();
             var staff = await _staffRepository.FindAsync(staff => staff.UserId == user.Id);
-            userModel.StaffDislpayName = staff?.DisplayName ?? user.DisplayName;
+            userModel.StaffDisplayName = staff?.DisplayName ?? user.DisplayName;
             userModel.StaffId = staff?.Id;
             await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
         }

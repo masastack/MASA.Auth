@@ -162,7 +162,7 @@ public class UserService : ServiceBase
             Name = user.Name,
             Account = user.Account,
             DisplayName = user.DisplayName,
-            StaffDislpayName = user.StaffDisplayName,
+            StaffDisplayName = user.StaffDisplayName,
             IdCard = user.IdCard,
             CompanyName = user.CompanyName,
             PhoneNumber = user.PhoneNumber,
@@ -343,6 +343,13 @@ public class UserService : ServiceBase
         };
         await eventBus.PublishAsync(command);
         return true;
+    }
+
+    public async Task<List<UserModel>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new UsersByRoleQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 
     public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)

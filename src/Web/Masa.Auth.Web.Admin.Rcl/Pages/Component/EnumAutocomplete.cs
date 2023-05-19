@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
-public class EnumAutocomplete<TValue> : SAutoComplete<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
+public class EnumAutoComplete<TValue> : SAutoComplete<KeyValuePair<string, TValue>, TValue, TValue> where TValue : struct, Enum
 {
     [Inject]
     public I18n I18N { get; set; } = default!;
@@ -27,7 +27,13 @@ public class EnumAutocomplete<TValue> : SAutoComplete<KeyValuePair<string, TValu
 
     protected override void OnParametersSet()
     {
-        if (Style.Contains("width:340px;height:40px;") is false) Style += "width:340px;height:40px;";
-        if (Class.Contains("rounded-2") is false) Class += " rounded-2";
+        if (Style?.Contains("width:340px;height:40px;") is false)
+        {
+            Style += "width:340px;height:40px;";
+        }
+        if (Class?.Contains("rounded-2") is false)
+        {
+            Class += " rounded-2";
+        }
     }
 }
