@@ -11,10 +11,10 @@ public class EnumSelect<TValue> : SSelect<KeyValuePair<string, TValue>, TValue, 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         Clearable = true;
-        await base.SetParametersAsync(parameters);
         Items = Enum.GetValues<TValue>().Select(e => new KeyValuePair<string, TValue>(e.ToString(), e)).ToList();
         ItemText = kv => I18N.T(kv.Key, true);
         ItemValue = kv => kv.Value;
+        await base.SetParametersAsync(parameters);
     }
 }
 

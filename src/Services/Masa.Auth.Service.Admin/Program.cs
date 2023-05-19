@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-
 await builder.Services.AddMasaStackConfigAsync(true);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
@@ -25,7 +24,6 @@ identityServerUrl = "http://localhost:18200";
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
-
 
 var ossOptions = publicConfiguration.GetSection("$public.OSS").Get<OssOptions>();
 builder.Services.AddObjectStorage(option => option.UseAliyunStorage(new AliyunStorageOptions(ossOptions.AccessId, ossOptions.AccessSecret, ossOptions.Endpoint, ossOptions.RoleArn, ossOptions.RoleSessionName)

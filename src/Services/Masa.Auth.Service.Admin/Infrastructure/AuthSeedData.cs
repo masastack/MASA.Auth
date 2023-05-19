@@ -49,13 +49,13 @@ public class AuthSeedData
         customLogin.SetParent(sso.Id);
 
         var team = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Team", "team", "team/index", "mdi-account-multiple", 3, PermissionTypes.Menu);
-        var teamAddElement = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", "team.add", "", "", 1, PermissionTypes.Element);
+        var teamAddElement = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.TeamAdd, "", "", 1, PermissionTypes.Element);
         teamAddElement.SetParent(team.Id);
-        var teamAddApi = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.TeamAdd, "", "", 1, PermissionTypes.Api);
+        var teamAddApi = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.ApiTeamAdd, "", "", 1, PermissionTypes.Api);
         teamAddElement.BindApiPermission(teamAddApi.Id);
 
         var authMenus = new List<Permission>() {
-            userPermission,
+            userPermission,updateAccountPermission,
             rolePermission,role,permission,team,teamAddElement,teamAddApi,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
@@ -249,7 +249,7 @@ public class AuthSeedData
                 continue;
             }
 
-            await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
+            var clientDto = new AddClientDto
             {
                 ClientId = uiDomainPair.Key,
                 ClientName = uiDomainPair.Key,
@@ -261,7 +261,16 @@ public class AuthSeedData
                 FrontChannelLogoutUri = $"{uiDomainPair.Value}/account/frontchannellogout",
                 BackChannelLogoutUri = $"{uiDomainPair.Value}/account/backchannellogout",
                 LogoUri = clientDefaultLogoUrl
-            }));
+            };
+
+            if (masaStackConfig.GetWebId(MasaStackConstant.AUTH) == uiDomainPair.Key && builder.Environment.IsDevelopment())
+            {
+                var urls = builder.Build().Urls;//TODO:this point, it is empty
+                clientDto.RedirectUris.AddRange(urls.Select(url => $"{url}/signin-oidc"));
+                clientDto.PostLogoutRedirectUris.AddRange(urls.Select(url => $"{url}/signout-callback-oidc"));
+            }
+
+            await eventBus.PublishAsync(new AddClientCommand(clientDto));
 
             //add custom register
             await eventBus.PublishAsync(new AddCustomLoginCommand(new AddCustomLoginDto
