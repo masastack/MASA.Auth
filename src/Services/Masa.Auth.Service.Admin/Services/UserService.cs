@@ -8,6 +8,7 @@ public class UserService : ServiceBase
     public UserService() : base("api/user")
     {
         RouteOptions.DisableAutoMapRoute = false;
+        MapGet(GetListByRoleAsync, "getListByRole");
     }
 
     public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)

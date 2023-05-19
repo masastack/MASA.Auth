@@ -18,11 +18,11 @@ public class EnumAutoComplete<TValue> : SAutoComplete<KeyValuePair<string, TValu
     {
         Flat = true;
         Solo = true;
-        await base.SetParametersAsync(parameters);
         Items = Enum.GetValues<TValue>().Select(e => new KeyValuePair<string, TValue>(e.ToString(), e)).ToList();
         ItemText = kv => I18NScope is not null ? I18N.T(I18NScope, kv.Key) : I18N.T(kv.Key, true);
         ItemValue = kv => kv.Value;
         BackgroundColor = FillBackground ? "fill-background" : "";
+        await base.SetParametersAsync(parameters);
     }
 
     protected override void OnParametersSet()
