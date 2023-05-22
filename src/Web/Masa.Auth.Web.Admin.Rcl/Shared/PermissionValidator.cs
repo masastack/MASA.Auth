@@ -20,7 +20,7 @@ public class PermissionValidator : IPermissionValidator
     {
         var userId = _userContext.GetUserId<Guid>();
         var codes = new List<string>();
-        //todo change Async and use redis
+        //TODO change Async and use Redis
         Task.Run(async () =>
         {
             codes = await _permissionService.GetElementPermissionsAsync(userId, _masaStackConfig.GetWebId(MasaStackConstant.AUTH));

@@ -345,18 +345,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task GetStaffsByRoleAsync(StaffsByRoleQuery query)
+    public async Task GetUsersByRoleAsync(UsersByRoleQuery query)
     {
-        var staffs = await _authDbContext.Set<Staff>()
-                                         .Include(s => s.Position)
-                                         .Include(staff => staff.DepartmentStaffs)
-                                         .ThenInclude(departmentStaff => departmentStaff.Department)
-                                         .Include(staff => staff.User)
-                                         .ThenInclude(user => user.Roles)
-                                         .Where(staff => staff.User.Roles.Any(role => role.RoleId == query.RoleId))
+        var users = await _authDbContext.Set<User>()
+                                         .Include(user => user.Roles)
+                                         .Where(user => user.Roles.Any(role => role.RoleId == query.RoleId))
                                          .ToListAsync();
 
-        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+        query.Result = users?.Adapt<List<UserModel>>() ?? new();
     }
 
     [EventHandler]
@@ -653,6 +649,8 @@ public class QueryHandler
         var team = await _authDbContext.Set<Team>()
                                        .Include(t => t.TeamStaffs)
                                        .ThenInclude(ts => ts.Staff)
+                                       .Include(t => t.TeamRoles)
+                                       .ThenInclude(tr => tr.Role)
                                        .AsSplitQuery()
                                        .FirstOrDefaultAsync(t => t.Id == query.TeamId);
         if (team != null)
@@ -666,6 +664,8 @@ public class QueryHandler
                 Avatar = team.Avatar.Url,
                 Admins = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Admin).Select(ts => ts.Staff.Adapt<StaffModel>()).ToList(),
                 Members = team.TeamStaffs.Where(ts => ts.TeamMemberType == TeamMemberTypes.Member).Select(ts => ts.Staff.Adapt<StaffModel>()).ToList(),
+                AdminRoles = team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Admin).Select(tr => tr.Role.Adapt<RoleModel>()).ToList(),
+                MemberRoles = team.TeamRoles.Where(tr => tr.TeamMemberType == TeamMemberTypes.Member).Select(tr => tr.Role.Adapt<RoleModel>()).ToList()
             };
         }
     }

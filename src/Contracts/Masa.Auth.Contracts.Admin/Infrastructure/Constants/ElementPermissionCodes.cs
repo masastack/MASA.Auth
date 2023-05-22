@@ -6,5 +6,6 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 public class ElementPermissionCodes
 {
     public static string TeamAdd { get; } = "team.add";
+    public static string ApiTeamAdd { get; } = "api.team.create";
     public static string UserAccountUpdate = "user.account.update";
 }

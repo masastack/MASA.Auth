@@ -26,7 +26,6 @@ namespace Masa.Auth.Service.Admin.Domain.Permissions.EventHandlers
                                     .ThenInclude(teamUser => teamUser.Team)
                                     .ThenInclude(t => t.TeamStaffs)
                                     .AsSplitQuery()
-                                    .AsTracking()
                                     .ToListAsync();
             foreach (var role in roles)
             {

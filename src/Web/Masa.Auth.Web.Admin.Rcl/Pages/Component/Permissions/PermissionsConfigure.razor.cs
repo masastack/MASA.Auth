@@ -1,18 +1,17 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
 public partial class PermissionsConfigure
 {
-    private bool _preview;
-    
     [Parameter]
     public string Style { get; set; } = "";
 
     [Parameter]
     public string Class { get; set; } = "";
 
-    [Parameter] 
+    [Parameter]
     public List<Guid> Roles { get; set; } = new();
 
     [Parameter]
@@ -21,28 +20,14 @@ public partial class PermissionsConfigure
     [Parameter]
     public Guid User { get; set; }
 
-    [Parameter] 
+    [Parameter]
     public List<SubjectPermissionRelationDto> Value { get; set; } = new();
 
     [Parameter]
     public EventCallback<List<SubjectPermissionRelationDto>> ValueChanged { get; set; }
 
     [Parameter]
-    public bool Preview
-    {
-        get => _preview;
-        set
-        {
-            if (_menu != null)
-            {
-                _menu.Metadata.Situation =
-                    value ? ExpansionMenuSituation.Preview : ExpansionMenuSituation.Authorization;
-                _menu.SetHiddenByPreview(value);
-            }
-
-            _preview = value;
-        }
-    }
+    public bool Preview { get; set; }
 
     [Parameter]
     public EventCallback<bool> PreviewChanged { get; set; }
@@ -59,6 +44,33 @@ public partial class PermissionsConfigure
 
     private ExpansionMenu? _menu;
 
+    private ExpansionMenu? Menu
+    {
+        get
+        {
+            if (_menu != null)
+            {
+                _menu.SetSituation(ExpansionMenuSituation.Authorization);
+                _menu.SetHiddenByPreview(false);
+            }
+            return _menu;
+        }
+    }
+
+    private ExpansionMenu? PreviewMenu
+    {
+        get
+        {
+            var previewMenu = (ExpansionMenu?)_menu?.Clone();
+            if (previewMenu != null)
+            {
+                previewMenu.SetSituation(ExpansionMenuSituation.Preview);
+                previewMenu.SetHiddenByPreview(true);
+            }
+            return previewMenu;
+        }
+    }
+
     private ProjectService ProjectService => AuthCaller.ProjectService;
 
     private PermissionService PermissionService => AuthCaller.PermissionService;
@@ -71,7 +83,7 @@ public partial class PermissionsConfigure
     protected override async Task OnParametersSetAsync()
     {
         var load = false;
-        
+
         if (!_internalRoles.SequenceEqual(Roles))
         {
             load = true;
@@ -101,12 +113,13 @@ public partial class PermissionsConfigure
 
     private async Task<ExpansionMenu> GetMenuAsync()
     {
+        //TODO repeat code with Masa.Stack.Components.Shared.GlobalNavigations.GlobalNavigation
         var apps = (await ProjectService.GetUIAndMenusAsync()).SelectMany(p => p.Apps).ToList();
         apps.RemoveAll(a => !a.Navs.Any());
         var categories = apps.GroupBy(a => a.Tag);
-        
-        var permissionDict = Value.Select(p => new Tuple<string,bool>(p.PermissionId.ToString(), p.Effect))
-            .Union(RoleUnionTeamPermission.Except(Value.Select(p=>p.PermissionId)).Select(p => new Tuple<string,bool>(p.ToString(), true)))
+
+        var permissionDict = Value.Select(p => new Tuple<string, bool>(p.PermissionId.ToString(), p.Effect))
+            .Union(RoleUnionTeamPermission.Except(Value.Select(p => p.PermissionId)).Select(p => new Tuple<string, bool>(p.ToString(), true)))
             .ToDictionary(p => p.Item1);
 
         var rootMenu = ExpansionMenu.CreateRootMenu(ExpansionMenuSituation.Authorization);
@@ -114,16 +127,16 @@ public partial class PermissionsConfigure
         {
             foreach (var category in categories)
             {
-                var categoryMenu = new ExpansionMenu(category.Key, category.Key, ExpansionMenuType.Category, ExpansionMenuState.Normal, rootMenu.Metadata, parent: rootMenu);
+                var categoryMenu = new ExpansionMenu(category.Key, category.Key, ExpansionMenuType.Category, ExpansionMenuState.Normal, rootMenu.MetaData, parent: rootMenu);
                 foreach (var app in category)
                 {
                     var state = GetMenuState(permissionDict, app.Id.ToString());
-                    var appMenu = new ExpansionMenu(app.Id.ToString(), app.Name, ExpansionMenuType.App, state, rootMenu.Metadata, parent: categoryMenu);
+                    var appMenu = new ExpansionMenu(app.Id.ToString(), app.Name, ExpansionMenuType.App, state, rootMenu.MetaData, parent: categoryMenu);
                     foreach (var nav in app.Navs)
                     {
                         appMenu.AddChild(ConvertForNav(nav, appMenu.Deep + 1, appMenu, permissionDict));
                     }
-                    categoryMenu.AddChild(appMenu); 
+                    categoryMenu.AddChild(appMenu);
                 }
                 rootMenu.AddChild(categoryMenu);
             }
@@ -134,8 +147,8 @@ public partial class PermissionsConfigure
 
         return rootMenu;
     }
-    
-    private ExpansionMenu ConvertForNav(PermissionNavDto navModel, int deep, ExpansionMenu parent,IDictionary<string,Tuple<string,bool>> permissionDict)
+
+    private ExpansionMenu ConvertForNav(PermissionNavDto navModel, int deep, ExpansionMenu parent, IDictionary<string, Tuple<string, bool>> permissionDict)
     {
         var state = GetMenuState(permissionDict, navModel.Code);
         var impersonal = Impersonal(permissionDict, navModel.Code);
@@ -144,7 +157,7 @@ public partial class PermissionsConfigure
         {
             type = ExpansionMenuType.Element;
         }
-        var menu = new ExpansionMenu(navModel.Code, navModel.Name, type, state, parent.Metadata, impersonal, parent: parent, stateChangedAsync: MenuStateChangedAsync);
+        var menu = new ExpansionMenu(navModel.Code, navModel.Name, type, state, parent.MetaData, impersonal, parent: parent, stateChangedAsync: MenuStateChangedAsync);
         foreach (var childrenNav in navModel.Children)
         {
             menu.AddChild(ConvertForNav(childrenNav, deep++, menu, permissionDict));
@@ -152,7 +165,7 @@ public partial class PermissionsConfigure
         return menu;
     }
 
-    private ExpansionMenuState GetMenuState(IDictionary<string, Tuple<string,bool>> permissionDict, string menuId)
+    private ExpansionMenuState GetMenuState(IDictionary<string, Tuple<string, bool>> permissionDict, string menuId)
     {
         if (!permissionDict.TryGetValue(menuId, out var permission))
         {
@@ -163,7 +176,7 @@ public partial class PermissionsConfigure
         {
             return ExpansionMenuState.Normal;
         }
-        
+
         return permission.Item2 ? ExpansionMenuState.Selected : ExpansionMenuState.Impersonal;
     }
 
@@ -182,10 +195,10 @@ public partial class PermissionsConfigure
             Value.Add(permission);
         }
 
-        permission.Effect = menu.State == ExpansionMenuState.Selected;
+        permission.Effect = menu.State == ExpansionMenuState.Selected || menu.State == ExpansionMenuState.Indeterminate;
         return Task.CompletedTask;
     }
-    
+
     private async Task GetRolePermissions()
     {
         RolePermissions = await PermissionService.GetPermissionsByRoleAsync(Roles);
