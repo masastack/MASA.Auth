@@ -642,7 +642,7 @@ public class CommandHandler
                                     .Where(role => userModel.RoleCodes.Contains(role.Code))
                                     .Select(role => role.Id)
                                     .ToListAsync();
-        user.SetRoles(roles);
+        user.AddRoles(roles);
         await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
