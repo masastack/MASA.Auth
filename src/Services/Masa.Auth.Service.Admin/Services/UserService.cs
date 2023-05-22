@@ -357,4 +357,20 @@ public class UserService : ServiceBase
     {
         await eventBus.PublishAsync(command);
     }
+
+    [AllowAnonymous]
+    [RoutePattern("bind_roles", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task BindRolesAsync(IEventBus eventBus, [FromBody] BindUserRolesModel model)
+    {
+        var command = new BindUserRolesCommand(model);
+        await eventBus.PublishAsync(command);
+    }
+
+    [AllowAnonymous]
+    [RoutePattern("unbind_roles", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task UnbindRolesAsync(IEventBus eventBus, [FromBody] UnbindUserRolesModel model)
+    {
+        var command = new UnbindUserRolesCommand(model);
+        await eventBus.PublishAsync(command);
+    }
 }
