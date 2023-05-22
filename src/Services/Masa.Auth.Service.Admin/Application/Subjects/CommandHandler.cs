@@ -628,7 +628,7 @@ public class CommandHandler
     public async Task BindRolesAsync(BindUserRolesCommand command)
     {
         var userModel = command.User;
-        if (userModel.RoleCodes.Any() is false) return;
+        if (!userModel.RoleCodes.Any()) return;
 
         var user = await _authDbContext.Set<User>()
                                     .Include(u => u.Roles)
@@ -651,7 +651,7 @@ public class CommandHandler
     public async Task UnbindRolesAsync(UnbindUserRolesCommand command)
     {
         var userModel = command.User;
-        if (userModel.RoleCodes.Any() is false) return;
+        if (!userModel.RoleCodes.Any()) return;
 
         var user = await _authDbContext.Set<User>()
                                     .Include(u => u.Roles)
