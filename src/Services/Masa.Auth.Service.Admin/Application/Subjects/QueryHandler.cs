@@ -542,7 +542,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task GetExternalThirdPartyIdpsAsync(ExternalThirdPartyIdpsQuery query)
+    public async void GetExternalThirdPartyIdps(ExternalThirdPartyIdpsQuery query)
     {
         query.Result = LocalAuthenticationDefaultsProvider.GetAll()
                                                      .Adapt<List<ThirdPartyIdpModel>>()

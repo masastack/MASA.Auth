@@ -28,6 +28,7 @@ public partial class RoleSelect
     {
         Label = T("Role");
         Roles = await RoleService.GetSelectForUserAsync();
+        await base.OnInitializedAsync();
     }
 
     protected virtual bool RoleDisabled(RoleSelectDto role) => false;

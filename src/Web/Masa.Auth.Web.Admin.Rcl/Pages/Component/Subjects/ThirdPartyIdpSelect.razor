@@ -12,7 +12,7 @@
                Style="@($"{Style}")"
                Class="@($"{Class}")">
     <ItemContent Context="data">
-        <div class="d-flex" style="height:48px;">
+        <div class="d-flex align-center" style="height:48px;">
             @if (data.Item?.Name == LdapConsts.LDAP_NAME)
             {
                 <SIcon Size="30">@data.Item?.Icon</SIcon>

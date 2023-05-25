@@ -13,7 +13,8 @@ public class RoleSelectForRole : RoleSelect
     protected override async Task OnInitializedAsync()
     {
         Label = T("Inherited Role");
-        await ReloadAsync();
+        //await ReloadAsync();
+        await base.OnInitializedAsync();
     }
 
     protected override async Task OnParametersSetAsync()

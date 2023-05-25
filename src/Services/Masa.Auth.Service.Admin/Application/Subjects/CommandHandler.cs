@@ -228,49 +228,35 @@ public class CommandHandler
                                                 .Select(role => role.Id)
                                                 .ToListAsync());
         }
+
         if (userModel.Id != default)
         {
             user = await _authDbContext.Set<User>()
                                        .Include(u => u.Roles)
                                        .FirstOrDefaultAsync(u => u.Id == userModel.Id);
-            if (user is not null)
+            if (user is null)
             {
-                await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
-                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
-                user.SetRoles(roles);
-                await _userRepository.UpdateAsync(user);
-                await _userDomainService.UpdateAsync(user);
-                command.Result = user.Adapt<UserModel>();
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_NOT_FOUND);
             }
-            else
-            {
-                var addUserDto = userModel.Adapt<AddUserDto>();
-                addUserDto.Roles.AddRange(roles);
-                var addUserCommand = new AddUserCommand(addUserDto);
-                await _eventBus.PublishAsync(addUserCommand);
-                command.Result = addUserCommand.Result.Adapt<UserModel>();
-            }
+        }
+
+        if (user != null)
+        {
+            await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account);
+            user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
+            roles.AddRange(user.Roles.Select(role => role.RoleId));
+            user.SetRoles(roles);
+            await _userRepository.UpdateAsync(user);
+            await _userDomainService.UpdateAsync(user);
+            command.Result = user.Adapt<UserModel>();
         }
         else
         {
-            user = await VerifyUserRepeatAsync(default, userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account, false);
-            if (user is not null)
-            {
-                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
-                user.SetRoles(roles);
-                await _userRepository.UpdateAsync(user);
-                await _userDomainService.UpdateAsync(user);
-                command.Result = user.Adapt<UserModel>();
-            }
-            else
-            {
-                user = new User(userModel.Id, userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, userModel.Password, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
-                user.SetRoles(roles);
-                await AddUserAsync(user);
-                command.Result = user.Adapt<UserModel>();
-            }
+            var addUserDto = userModel.Adapt<AddUserDto>();
+            addUserDto.Roles.AddRange(roles);
+            var addUserCommand = new AddUserCommand(addUserDto);
+            await _eventBus.PublishAsync(addUserCommand);
+            command.Result = addUserCommand.Result.Adapt<UserModel>();
         }
     }
 
@@ -281,6 +267,7 @@ public class CommandHandler
         var user = await CheckUserExistAsync(userDto.Id);
         user.UpdateAvatar(userDto.Avatar);
         await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
     }
 
     [EventHandler]
