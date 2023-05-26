@@ -7,7 +7,7 @@ stages:
   - deploy-prd
 
 variables:
-  IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_DOMAIN /masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
   IMAGE_AUTH_WEB_ADMIN_SERVER_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-web-admin-server:dev-$CI_PIPELINE_ID
   IMAGE_AUTH_WEB_ADMIN_SSO_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-web-sso:dev-$CI_PIPELINE_ID
 
