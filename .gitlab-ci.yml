@@ -1,7 +1,3 @@
-# include:
-#   - project: 'louzhijian/devops'
-#     ref: master
-#     file: 'devops/sonar-scanner.yml'
 stages:
   - docker-dev
   - deploy-dev
@@ -11,18 +7,22 @@ stages:
   - deploy-prd
 
 variables:
-  IMAGE_TAG: auth.image.tag
-  IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_USER/masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
-  IMAGE_AUTH_WEB_ADMIN_SERVER_DEV: $CI_ALI_REGISTRY_USER/masastack/masa-auth-web-admin-server:dev-$CI_PIPELINE_ID
-  IMAGE_AUTH_WEB_ADMIN_SSO_DEV: $CI_ALI_REGISTRY_USER/masastack/masa-auth-web-sso:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_DOMAIN /masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_WEB_ADMIN_SERVER_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-web-admin-server:dev-$CI_PIPELINE_ID
+  IMAGE_AUTH_WEB_ADMIN_SSO_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-web-sso:dev-$CI_PIPELINE_ID
 
-  IMAGE_AUTH_SERVER_ADMIN: $CI_ALI_REGISTRY_USER/masastack/masa-auth-service-admin:$CI_COMMIT_TAG
-  IMAGE_AUTH_WEB_ADMIN_SERVER: $CI_ALI_REGISTRY_USER/masastack/masa-auth-web-admin-server:$CI_COMMIT_TAG
-  IMAGE_AUTH_WEB_ADMIN_SSO: $CI_ALI_REGISTRY_USER/masastack/masa-auth-web-sso:$CI_COMMIT_TAG
+  IMAGE_AUTH_SERVER_ADMIN: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-service-admin:$CI_COMMIT_TAG
+  IMAGE_AUTH_WEB_ADMIN_SERVER: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-web-admin-server:$CI_COMMIT_TAG
+  IMAGE_AUTH_WEB_ADMIN_SSO: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-web-sso:$CI_COMMIT_TAG
 
   DOCKER_AUTH_ADMIN_SERVER_PATH: ./src/Services/Masa.Auth.Service.Admin/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_PATH: ./src/Web/Masa.Auth.Web.Admin.Server/Dockerfile
   DOCKER_AUTH_ADMIN_WEB_SSO_PATH: ./src/Web/Masa.Auth.Web.Sso/Dockerfile
+
+  NAMESPACE_DEV: masastack-dev
+  NAMESPACE_TEST: masastack-test
+  NAMESPACE_STAGING: masastack-staging
+  NAMESPACE_PRD: masastack
 
 docker-dev:
   stage: docker-dev
@@ -46,48 +46,45 @@ docker-dev:
 
 deploy-dev:
   stage: deploy-dev
-  image: registry.cn-hangzhou.aliyuncs.com/masa/library:helm3_latest
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
   only:
     - main
-  before_script:
-    - helm repo add masastack https://masastack.github.io/helm/
-    - helm repo update
-    - helm search repo masastack --devel --versions
   script:
     - echo $KUBE_CONFIG_MASA_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
-    - helm --kubeconfig ./config upgrade --install masastack masastack/masastack --version 1.0.0-rc2 -n masastack-dev --set $IMAGE_TAG=dev-$CI_PIPELINE_ID -f ./values/values-dev.yaml
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_DEV
   retry: 2
 
 deploy-test:
   stage: deploy-test
-  image: registry.cn-hangzhou.aliyuncs.com/masa/library:helm3_latest
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
   only:
     - main
-  before_script:
-    - helm repo add masastack https://masastack.github.io/helm/
-    - helm repo update
-    - helm search repo masastack --devel --versions
   script:
     - echo $KUBE_CONFIG_MASA_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
-    - helm --kubeconfig ./config upgrade --install masastack masastack/masastack --version 1.0.0-rc2 -n masastack-test --set $IMAGE_TAG=dev-$CI_PIPELINE_ID -f ./values/values-test.yaml
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_TEST
+    - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_TEST
+    - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_TEST
   retry: 2
   when: manual
 
 deploy-staging:
   stage: deploy-staging
-  image: registry.cn-hangzhou.aliyuncs.com/masa/library:helm3_latest
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
   only:
     - main
-  before_script:
-    - helm repo add masastack https://masastack.github.io/helm/
-    - helm repo update
-    - helm search repo masastack --devel --versions
   script:
     - echo $KUBE_CONFIG_MASA_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
-    - helm --kubeconfig ./config upgrade --install masastack masastack/masastack --version 1.0.0-rc2 -n masastack-staging --set $IMAGE_TAG=dev-$CI_PIPELINE_ID -f ./values/values-staging.yaml
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_STAGING
+    - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_STAGING
+    - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_STAGING
   retry: 2
   when: manual
 
@@ -113,16 +110,15 @@ docker-prd:
 
 deploy-prd:
   stage: deploy-prd
-  image: registry.cn-hangzhou.aliyuncs.com/masa/library:helm3_latest
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
   only:
     - tags
-  before_script:
-    - helm repo add masastack https://masastack.github.io/helm/
-    - helm repo update
-    - helm search repo masastack --devel --versions
   script:
     - echo $KUBE_CONFIG_MASA_PRD | base64 -d > ./config
     - echo $CI_COMMIT_TAG
-    - helm --kubeconfig ./config upgrade --install masastack masastack/masastack --version 1.0.0-rc2 -n masastack --set $IMAGE_TAG=$CI_COMMIT_TAG -f ./values/values-prd.yaml
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_SERVER_ADMIN -n $NAMESPACE_PRD
+    - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_WEB_ADMIN_SERVER -n $NAMESPACE_PRD
+    - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO -n $NAMESPACE_PRD
   retry: 2
   when: manual
