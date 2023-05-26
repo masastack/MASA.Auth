@@ -46,8 +46,7 @@ docker-dev:
 
 deploy-dev:
   stage: deploy-dev
-  before_script:
-    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
     - main
   script:
@@ -60,8 +59,7 @@ deploy-dev:
 
 deploy-test:
   stage: deploy-test
-  before_script:
-    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
     - main
   script:
@@ -75,8 +73,7 @@ deploy-test:
 
 deploy-staging:
   stage: deploy-staging
-  before_script:
-    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
     - main
   script:
@@ -92,8 +89,7 @@ docker-prd:
   stage: docker-prd
   tags:
     - linux-shell
-  before_script:
-    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
     - tags
   script:
@@ -110,8 +106,7 @@ docker-prd:
 
 deploy-prd:
   stage: deploy-prd
-  before_script:
-    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
     - tags
   script:
