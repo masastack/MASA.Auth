@@ -1164,10 +1164,6 @@ public class CommandHandler
                 }
             }
         }
-        else
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
-        }
     }
 
     [EventHandler(1)]
