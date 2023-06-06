@@ -26,7 +26,9 @@ public class AddRoleDto
         Enabled = true;
         Permissions = new();
         ChildrenRoles = new();
+        Limit = 0;
     }
+
 
     public AddRoleDto(string name, string code, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childrenRoles)
     {
