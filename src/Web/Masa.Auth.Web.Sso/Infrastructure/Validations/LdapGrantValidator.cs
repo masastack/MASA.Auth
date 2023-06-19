@@ -21,16 +21,15 @@ public class LdapGrantValidator : IExtensionGrantValidator
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
         var userName = context.Request.Raw["userName"];
-        var scheme = context.Request.Raw["scheme"];
-        if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(scheme))
+        if (string.IsNullOrEmpty(userName))
         {
-            throw new UserFriendlyException("must provider userName and scheme");
+            throw new UserFriendlyException("must provider userName");
         }
 
-        var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(scheme);
+        var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LDAP);
         if (ldapOption is null)
         {
-            throw new UserFriendlyException($"Not find ldap:{scheme}");
+            throw new UserFriendlyException($"Not find ldap");
         }
         var ldapProvider = _ldapFactory.CreateProvider(ldapOption.Adapt<LdapOptions>());
         if (await ldapProvider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword) is false)
