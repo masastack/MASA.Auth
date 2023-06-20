@@ -103,7 +103,7 @@ var redisOption = new RedisConfigurationOptions
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(), multilevel =>
 {
     multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
-    multilevel.SubscribeKeyPrefix = $"masa.auth:-db-{redisOption.DefaultDatabase}";
+    multilevel.SubscribeKeyPrefix = $"{masaStackConfig.Environment}:auth:db-{redisOption.DefaultDatabase}";
 });
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 builder.Services.AddDccClient(redisOption);
@@ -218,7 +218,7 @@ app.UseMasaExceptionHandler(opt =>
         }
         else if (context.Exception is UserStatusException userStatusException)
         {
-            context.ToResult(userStatusException.GetLocalizedMessage(), (int)MasaAuthHttpStatusCode.UserStatusException);
+            context.ToResult(userStatusException.Message, (int)MasaAuthHttpStatusCode.UserStatusException);
         }
     };
 });
@@ -230,8 +230,11 @@ if (!app.Environment.IsProduction())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        string path = Path.Combine(app.Environment.WebRootPath, "swagger/ui/index.html");
-        if (File.Exists(path)) options.IndexStream = () => new MemoryStream(File.ReadAllBytes(path));
+        var path = Path.Combine(app.Environment.WebRootPath, "swagger/ui/index.html");
+        if (File.Exists(path))
+        {
+            options.IndexStream = () => new MemoryStream(File.ReadAllBytes(path));
+        }
     });
     app.UseMiddleware<SwaggerAuthentication>();
 }

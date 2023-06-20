@@ -87,7 +87,7 @@ public partial class CopyOrgSheet
     {
         Dto = model;
         _sourceStaffs.AddRange(Dto.Staffs);
-        Dto.Name = model.Name + "副本";
+        Dto.Name = model.Name + " " + T("Duplicate");
         _step = 1;
         _staffs = new();
         _visible = true;

@@ -25,7 +25,7 @@ public partial class LoginSection
     bool _showPwd, _loginLoading;
     List<EnvironmentModel> _environments = new();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -129,9 +129,9 @@ public partial class LoginSection
 
     private async Task<bool> GetSmsCode()
     {
-        var field = _loginForm.EditContext.Field(nameof(_inputModel.PhoneNumber));
-        _loginForm.EditContext.NotifyFieldChanged(field);
-        var result = _loginForm.EditContext.GetValidationMessages(field);
+        var field = _loginForm.EditContext!.Field(nameof(_inputModel.PhoneNumber));
+        _loginForm.EditContext!.NotifyFieldChanged(field);
+        var result = _loginForm.EditContext!.GetValidationMessages(field);
         if (!result.Any())
         {
             await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel

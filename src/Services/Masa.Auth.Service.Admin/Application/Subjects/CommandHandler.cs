@@ -127,7 +127,7 @@ public class CommandHandler
             return;
         }
         user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
-        user.AddRoles(userDto.Roles);
+        user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
         await AddUserAsync(user);
         command.Result = user;
@@ -175,11 +175,11 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await _userRepository.GetDetailAsync(userDto.Id);
-        var roles = user.Roles.Select(role => role.RoleId).Union(userDto.Roles);
-        user.AddRoles(userDto.Roles);
+        user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
         await _userRepository.UpdateAsync(user);
-        await _userDomainService.UpdateAuthorizationAsync(roles);
+        await _userDomainService.UpdateAuthorizationAsync(userDto.Roles);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]
@@ -228,49 +228,35 @@ public class CommandHandler
                                                 .Select(role => role.Id)
                                                 .ToListAsync());
         }
+
         if (userModel.Id != default)
         {
             user = await _authDbContext.Set<User>()
                                        .Include(u => u.Roles)
                                        .FirstOrDefaultAsync(u => u.Id == userModel.Id);
-            if (user is not null)
+            if (user is null)
             {
-                await VerifyUserRepeatAsync(user.Id, default, default, userModel.IdCard, default);
-                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
-                user.AddRoles(roles);
-                await _userRepository.UpdateAsync(user);
-                await _userDomainService.UpdateAsync(user);
-                command.Result = user.Adapt<UserModel>();
+                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_NOT_FOUND);
             }
-            else
-            {
-                var addUserDto = userModel.Adapt<AddUserDto>();
-                addUserDto.Roles.AddRange(roles);
-                var addUserCommand = new AddUserCommand(addUserDto);
-                await _eventBus.PublishAsync(addUserCommand);
-                command.Result = addUserCommand.Result.Adapt<UserModel>();
-            }
+        }
+
+        if (user != null)
+        {
+            await VerifyUserRepeatAsync(userModel.Id, userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account);
+            user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
+            roles.AddRange(user.Roles.Select(role => role.RoleId));
+            user.SetRoles(roles);
+            await _userRepository.UpdateAsync(user);
+            await _userDomainService.UpdateAsync(user);
+            command.Result = user.Adapt<UserModel>();
         }
         else
         {
-            user = await VerifyUserRepeatAsync(default, userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account, false);
-            if (user is not null)
-            {
-                user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-                roles.AddRange(user.Roles.Select(role => role.RoleId));
-                user.AddRoles(roles);
-                await _userRepository.UpdateAsync(user);
-                await _userDomainService.UpdateAsync(user);
-                command.Result = user.Adapt<UserModel>();
-            }
-            else
-            {
-                user = new User(userModel.Id, userModel.Name, userModel.DisplayName, default, userModel.IdCard, userModel.Account, userModel.Password, userModel.CompanyName, default, default, true, userModel.PhoneNumber, default, userModel.Email, default, userModel.Gender);
-                user.AddRoles(roles);
-                await AddUserAsync(user);
-                command.Result = user.Adapt<UserModel>();
-            }
+            var addUserDto = userModel.Adapt<AddUserDto>();
+            addUserDto.Roles.AddRange(roles);
+            var addUserCommand = new AddUserCommand(addUserDto);
+            await _eventBus.PublishAsync(addUserCommand);
+            command.Result = addUserCommand.Result.Adapt<UserModel>();
         }
     }
 
@@ -281,6 +267,7 @@ public class CommandHandler
         var user = await CheckUserExistAsync(userDto.Id);
         user.UpdateAvatar(userDto.Avatar);
         await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
     }
 
     [EventHandler]
@@ -389,6 +376,7 @@ public class CommandHandler
         var userModel = command.User;
         var user = await _authDbContext.Set<User>()
                                  .Include(u => u.Roles)
+                                 .AsTracking()
                                  .FirstAsync(u => u.Id == userModel.Id);
         var roleIds = await _authDbContext.Set<Role>()
                                     .Where(role => userModel.RoleCodes.Contains(role.Code))
@@ -419,12 +407,12 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
-        //todo UserDomainService
+        //TODO UserDomainService
         var account = validateByAccountCommand.UserAccountValidateDto.Account;
         var password = validateByAccountCommand.UserAccountValidateDto.Password;
 
         var loginFreeze = _masaConfiguration.ConfigurationApi.GetDefault()
-            .GetValue<bool>("AppSettings:LoginFreeze", false);
+            .GetValue("AppSettings:LoginFreeze", false);
         var key = CacheKey.AccountLoginKey(account);
         CacheLogin? loginCache = null;
         if (loginFreeze)
@@ -621,6 +609,52 @@ public class CommandHandler
         {
             Expires = DateTime.Now.AddDays(7)
         });
+    }
+
+    [EventHandler]
+    public async Task BindRolesAsync(BindUserRolesCommand command)
+    {
+        var userModel = command.User;
+        if (!userModel.RoleCodes.Any()) return;
+
+        var user = await _authDbContext.Set<User>()
+                                    .Include(u => u.Roles)
+                                    .FirstOrDefaultAsync(u => u.Id == userModel.Id);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        var roles = await _authDbContext.Set<Role>()
+                                    .Where(role => userModel.RoleCodes.Contains(role.Code))
+                                    .Select(role => role.Id)
+                                    .ToListAsync();
+        user.AddRoles(roles);
+        await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task UnbindRolesAsync(UnbindUserRolesCommand command)
+    {
+        var userModel = command.User;
+        if (!userModel.RoleCodes.Any()) return;
+
+        var user = await _authDbContext.Set<User>()
+                                    .Include(u => u.Roles)
+                                    .FirstOrDefaultAsync(u => u.Id == userModel.Id);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        var roles = await _authDbContext.Set<Role>()
+                                    .Where(role => userModel.RoleCodes.Contains(role.Code))
+                                    .Select(role => role.Id)
+                                    .ToListAsync();
+        user.RemoveRoles(roles);
+        await _userRepository.UpdateAsync(user);
+        await _userDomainService.UpdateAsync(user);
     }
 
     #endregion
@@ -1112,18 +1146,18 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
         }
 
-        var user = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber || u.Email == model.Email);
-
+        Expression<Func<User, bool>> condition = _ => false;
+        condition = condition.Or(!model.PhoneNumber.IsNullOrEmpty(), u => u.PhoneNumber == model.PhoneNumber);
+        condition = condition.Or(!model.Email.IsNullOrEmpty(), u => u.Email == model.Email);
+        var user = await _userRepository.FindAsync(condition);
         if (user != null)
         {
             var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
-
             if (identityProvider != null)
-            { 
-                var thirdPartyUser = _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
-
+            {
+                var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
                 if (thirdPartyUser != null)
                 {
                     throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);

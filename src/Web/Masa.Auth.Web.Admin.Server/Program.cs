@@ -30,7 +30,7 @@ builder.Services.AddServerSideBlazor().AddCircuitOptions(option =>
     }
 });
 
-MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new()
 {
     Authority = masaStackConfig.GetSsoDomain(),
     ClientId = masaStackConfig.GetWebId(MasaStackConstant.AUTH),

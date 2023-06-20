@@ -98,6 +98,7 @@ public partial class UserBind
             }
             catch (Exception ex)
             {
+                await _js.InvokeVoidAsync("console.log", $"error: {ex}");
                 await PopupService.EnqueueSnackbarAsync(ex.Message, AlertTypes.Error);
             }
             finally

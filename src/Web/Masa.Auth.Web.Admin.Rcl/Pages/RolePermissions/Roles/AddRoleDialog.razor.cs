@@ -18,11 +18,9 @@ public partial class AddRoleDialog
 
     private RoleService RoleService => AuthCaller.RoleService;
 
-    private RoleSelectForRole? RoleSelect { get; set; }
-
-    public bool Preview { get; set; }
-
-    private int Step { get; set; } = 1;
+    public bool _preview;
+    private int _step = 1;
+    private RoleSelectForRole? _roleSelect;
 
     protected override string? PageName { get; set; } = "RoleBlock";
 
@@ -43,8 +41,8 @@ public partial class AddRoleDialog
         if (Visible)
         {
             Role = new();
-            if (RoleSelect is not null) await RoleSelect.ReloadAsync();
-            Step = 1;
+            if (_roleSelect is not null) await _roleSelect.ReloadAsync();
+            _step = 1;
         }
     }
 
@@ -67,7 +65,7 @@ public partial class AddRoleDialog
         var success = context.Validate();
         if (success)
         {
-            Step = 2;
+            _step = 2;
         }
     }
 

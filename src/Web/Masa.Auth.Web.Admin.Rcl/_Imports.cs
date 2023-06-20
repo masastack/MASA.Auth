@@ -51,6 +51,7 @@ global using Masa.Stack.Components;
 global using Masa.Stack.Components.Extensions;
 global using Masa.Stack.Components.Infrastructure;
 global using Masa.Stack.Components.Models;
+global using Masa.Stack.Components.Shared.GlobalNavigations;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Forms;

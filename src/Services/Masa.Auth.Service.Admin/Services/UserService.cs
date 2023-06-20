@@ -8,6 +8,7 @@ public class UserService : ServiceBase
     public UserService() : base("api/user")
     {
         RouteOptions.DisableAutoMapRoute = false;
+        MapGet(GetListByRoleAsync, "getListByRole");
     }
 
     public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -161,7 +162,7 @@ public class UserService : ServiceBase
             Name = user.Name,
             Account = user.Account,
             DisplayName = user.DisplayName,
-            StaffDislpayName = user.StaffDisplayName,
+            StaffDisplayName = user.StaffDisplayName,
             IdCard = user.IdCard,
             CompanyName = user.CompanyName,
             PhoneNumber = user.PhoneNumber,
@@ -344,8 +345,31 @@ public class UserService : ServiceBase
         return true;
     }
 
+    public async Task<List<UserModel>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new UsersByRoleQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
     public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)
     {
+        await eventBus.PublishAsync(command);
+    }
+
+    [AllowAnonymous]
+    [RoutePattern("bind_roles", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task BindRolesAsync(IEventBus eventBus, [FromBody] BindUserRolesModel model)
+    {
+        var command = new BindUserRolesCommand(model);
+        await eventBus.PublishAsync(command);
+    }
+
+    [AllowAnonymous]
+    [RoutePattern("unbind_roles", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task UnbindRolesAsync(IEventBus eventBus, [FromBody] UnbindUserRolesModel model)
+    {
+        var command = new UnbindUserRolesCommand(model);
         await eventBus.PublishAsync(command);
     }
 }

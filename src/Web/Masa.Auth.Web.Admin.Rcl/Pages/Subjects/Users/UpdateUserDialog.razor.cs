@@ -47,10 +47,14 @@ public partial class UpdateUserDialog
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var state = await AuthenticationStateTask;
-        CanUpdateAccount = !Validator.Validate(ElementPermissionCodes.UserAccountUpdate, state.User);
+        if (firstRender)
+        {
+            var state = await AuthenticationStateTask;
+            CanUpdateAccount = !Validator.Validate(ElementPermissionCodes.UserAccountUpdate, state.User);
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected override async Task OnParametersSetAsync()

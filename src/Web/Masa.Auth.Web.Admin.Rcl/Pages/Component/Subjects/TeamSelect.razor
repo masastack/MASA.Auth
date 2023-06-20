@@ -22,12 +22,12 @@
     <ItemContent Context="data">
         <MListItemAvatar>
             <MAvatar>
-                <img src="@data.Item.Avatar" />
+                <img src="@data.Item?.Avatar" />
             </MAvatar>           
         </MListItemAvatar>
         <MListItemContent>
             <MListItemTitle>
-                @data.Item.Name
+                @data.Item?.Name
             </MListItemTitle>
         </MListItemContent>
     </ItemContent>

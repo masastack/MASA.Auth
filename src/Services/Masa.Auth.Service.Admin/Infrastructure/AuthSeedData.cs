@@ -13,6 +13,15 @@ public class AuthSeedData
         var context = serviceProvider.GetRequiredService<AuthDbContext>();
         var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
 
+        var departmentId = Guid.Empty;
+        var adminStaffId = Guid.Empty;
+        var guestStaffId = Guid.Empty;
+        string system = "system", admin = "admin", guest = "guest";
+
+        var userSetter = serviceProvider.GetService<IUserSetter>();
+        var auditUser = new IdentityUser() { Id = masaStackConfig.GetDefaultUserId().ToString(), UserName = system };
+        var userSetterHandle = userSetter!.Change(auditUser);
+
         #region Auth
 
         var userPermission = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "User", "user", "User", "mdi-account-circle", 1, PermissionTypes.Menu);
@@ -40,18 +49,19 @@ public class AuthSeedData
         customLogin.SetParent(sso.Id);
 
         var team = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "Team", "team", "team/index", "mdi-account-multiple", 3, PermissionTypes.Menu);
-        var teamAddElement = new Permission(MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", "team.add", "", "", 1, PermissionTypes.Element);
+        var teamAddElement = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetWebId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.TeamAdd, "", "", 1, PermissionTypes.Element);
         teamAddElement.SetParent(team.Id);
+        var teamAddApi = new Permission(Guid.NewGuid(), MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.ApiTeamAdd, "", "", 1, PermissionTypes.Api);
+        teamAddElement.BindApiPermission(teamAddApi.Id);
 
         var authMenus = new List<Permission>() {
-            userPermission,
-            rolePermission,role,permission,team,teamAddElement,
+            userPermission,updateAccountPermission,
+            rolePermission,role,permission,team,teamAddElement,teamAddApi,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
             new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
-            new Permission(MasaStackConstant.AUTH, masaStackConfig.GetServiceId(MasaStackConstant.AUTH), "TeamAdd", ElementPermissionCodes.TeamAdd, "", "", 1, PermissionTypes.Api)
+            new Permission(MasaStackConstant.AUTH,masaStackConfig.GetWebId(MasaStackConstant.AUTH),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu)
         };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.AUTH))
@@ -85,7 +95,7 @@ public class AuthSeedData
         #endregion
 
         #region Mc
-        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fas fa-tasks", 2, PermissionTypes.Menu);
+        var messageManagement = new Permission(Guid.NewGuid(), MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageManagement", "messageManagement", "", "fa:fas fa-tasks", 2, PermissionTypes.Menu);
         var sendMessage = new Permission(MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "SendMessage", "sendMessage", "messageTasks/sendMessage", "", 1, PermissionTypes.Menu);
         var messageRecord = new Permission(MasaStackConstant.MC, masaStackConfig.GetWebId(MasaStackConstant.MC), "MessageRecord", "messageRecord", "messageRecords/messageRecordManagement", "", 2, PermissionTypes.Menu);
         sendMessage.SetParent(messageManagement.Id);
@@ -103,7 +113,7 @@ public class AuthSeedData
             new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ChannelManagement","channelManagement","channels/channelManagement","mdi-email-outline",1,PermissionTypes.Menu),
             messageManagement,sendMessage,messageRecord,
             messageTemplate,sms,email,websiteMessage,
-            new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fas fa-object-ungroup",4,PermissionTypes.Menu)
+            new Permission(MasaStackConstant.MC,masaStackConfig.GetWebId(MasaStackConstant.MC),"ReceiverGroup","receiverGroup","receiverGroups/receiverGroupManagement","fa:fas fa-object-ungroup",4,PermissionTypes.Menu)
         };
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackConstant.MC))
         {
@@ -146,15 +156,6 @@ public class AuthSeedData
             await eventBus.PublishAsync(new SeedPermissionsCommand(alertMenus));
         }
         #endregion
-
-        var departmentId = Guid.Empty;
-        var adminStaffId = Guid.Empty;
-        var guestStaffId = Guid.Empty;
-        string system = "system", admin = "admin", guest = "guest";
-
-        var userSetter = serviceProvider.GetService<IUserSetter>();
-        var auditUser = new IdentityUser() { Id = masaStackConfig.GetDefaultUserId().ToString(), UserName = system };
-        var userSetterHandle = userSetter!.Change(auditUser);
 
         if (!context.Set<Department>().Any())
         {
@@ -239,36 +240,45 @@ public class AuthSeedData
 
         #region SSO Client
 
-        var uiDomainPair = masaStackConfig.GetUIDomainPairs();
+        var uiDomainPairs = masaStackConfig.GetUIDomainPairs();
         var clientDefaultLogoUrl = "https://cdn.masastack.com/stack/auth/ico/auth-client-default.svg";
-        foreach (var uiDomain in uiDomainPair)
+        foreach (var uiDomainPair in uiDomainPairs)
         {
-            if (context.Set<Client>().Any(u => u.ClientId == uiDomain.Key))
+            if (context.Set<Client>().Any(u => u.ClientId == uiDomainPair.Key))
             {
                 continue;
             }
 
-            await eventBus.PublishAsync(new AddClientCommand(new AddClientDto
+            var clientDto = new AddClientDto
             {
-                ClientId = uiDomain.Key,
-                ClientName = uiDomain.Key,
+                ClientId = uiDomainPair.Key,
+                ClientName = uiDomainPair.Key,
                 ClientUri = "",
                 RequireConsent = false,
                 AllowedScopes = new List<string> { "openid", "profile" },
-                RedirectUris = new List<string> { $"{uiDomain.Value}/signin-oidc" },
-                PostLogoutRedirectUris = new List<string> { $"{uiDomain.Value}/signout-callback-oidc" },
-                FrontChannelLogoutUri = $"{uiDomain.Value}/account/frontchannellogout",
-                BackChannelLogoutUri = $"{uiDomain.Value}/account/backchannellogout",
+                RedirectUris = new List<string> { $"{uiDomainPair.Value}/signin-oidc" },
+                PostLogoutRedirectUris = new List<string> { $"{uiDomainPair.Value}/signout-callback-oidc" },
+                FrontChannelLogoutUri = $"{uiDomainPair.Value}/account/frontchannellogout",
+                BackChannelLogoutUri = $"{uiDomainPair.Value}/account/backchannellogout",
                 LogoUri = clientDefaultLogoUrl
-            }));
+            };
+
+            if (masaStackConfig.GetWebId(MasaStackConstant.AUTH) == uiDomainPair.Key && builder.Environment.IsDevelopment())
+            {
+                var urls = builder.Build().Urls;//TODO:this point, it is empty
+                clientDto.RedirectUris.AddRange(urls.Select(url => $"{url}/signin-oidc"));
+                clientDto.PostLogoutRedirectUris.AddRange(urls.Select(url => $"{url}/signout-callback-oidc"));
+            }
+
+            await eventBus.PublishAsync(new AddClientCommand(clientDto));
 
             //add custom register
             await eventBus.PublishAsync(new AddCustomLoginCommand(new AddCustomLoginDto
             {
-                ClientId = uiDomain.Key,
+                ClientId = uiDomainPair.Key,
                 Enabled = true,
-                Name = uiDomain.Key,
-                Title = uiDomain.Key,
+                Name = uiDomainPair.Key,
+                Title = uiDomainPair.Key,
                 RegisterFields = new List<RegisterFieldDto>
                 {
                     new RegisterFieldDto(RegisterFieldTypes.PhoneNumber,1,true),

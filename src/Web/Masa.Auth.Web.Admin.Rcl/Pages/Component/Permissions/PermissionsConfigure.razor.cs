@@ -3,8 +3,6 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Permissions;
 
-using StackApp = Stack.Components.Models.App;
-
 public partial class PermissionsConfigure
 {
     [Parameter]
@@ -23,10 +21,10 @@ public partial class PermissionsConfigure
     public Guid User { get; set; }
 
     [Parameter]
-    public List<Guid> Value { get; set; } = new();
+    public List<SubjectPermissionRelationDto> Value { get; set; } = new();
 
     [Parameter]
-    public EventCallback<List<Guid>> ValueChanged { get; set; }
+    public EventCallback<List<SubjectPermissionRelationDto>> ValueChanged { get; set; }
 
     [Parameter]
     public bool Preview { get; set; }
@@ -34,27 +32,42 @@ public partial class PermissionsConfigure
     [Parameter]
     public EventCallback<bool> PreviewChanged { get; set; }
 
-    List<Guid> _internalRoles = new();
-    List<Guid> _internalTeams = new();
-    Guid _internalUser;
-    protected List<Category> _categories = new();
+    private List<Guid> _internalRoles = new();
+    private List<Guid> _internalTeams = new();
+    private Guid _internalUser;
 
-    List<Guid> RolePermissions { get; set; } = new();
+    private List<Guid> RolePermissions { get; set; } = new();
 
-    List<Guid> TeamPermission { get; set; } = new();
+    private List<Guid> TeamPermission { get; set; } = new();
 
     protected List<Guid> RoleUnionTeamPermission { get; set; } = new();
 
-    protected Dictionary<Guid, Guid> EmptyPermissionMap { get; set; } = new();
+    private ExpansionMenu? _menu;
 
-    protected virtual List<UniqueModel> ExpansionWrapperUniqueValue
+    private ExpansionMenu? Menu
     {
         get
         {
-            var value = Value.Except(RoleUnionTeamPermission).Except(EmptyPermissionMap.Values);
-            return value.Select(value => new UniqueModel(value.ToString(), false))
-                        .Union(RoleUnionTeamPermission.Select(value => new UniqueModel(value.ToString(), true)))
-                        .ToList();
+            if (_menu != null)
+            {
+                _menu.SetSituation(ExpansionMenuSituation.Authorization);
+                _menu.SetHiddenByPreview(false);
+            }
+            return _menu;
+        }
+    }
+
+    private ExpansionMenu? PreviewMenu
+    {
+        get
+        {
+            var previewMenu = (ExpansionMenu?)_menu?.Clone();
+            if (previewMenu != null)
+            {
+                previewMenu.SetSituation(ExpansionMenuSituation.Preview);
+                previewMenu.SetHiddenByPreview(true);
+            }
+            return previewMenu;
         }
     }
 
@@ -64,74 +77,137 @@ public partial class PermissionsConfigure
 
     protected override async Task OnInitializedAsync()
     {
-        await GetCategoriesAsync();
+        _menu = await GetMenuAsync();
     }
 
     protected override async Task OnParametersSetAsync()
     {
+        var load = false;
+
         if (!_internalRoles.SequenceEqual(Roles))
         {
+            load = true;
             _internalRoles = Roles;
             await GetRolePermissions();
         }
+
         if (!_internalTeams.SequenceEqual(Teams))
         {
+            load = true;
             _internalTeams = Teams;
             await GetTeamPermissions();
         }
+
         if (User != _internalUser)
         {
+            load = true;
             _internalUser = User;
             await GetTeamPermissions();
         }
+
+        if (load)
+        {
+            _menu = await GetMenuAsync();
+        }
     }
 
-    private async Task GetCategoriesAsync()
+    private async Task<ExpansionMenu> GetMenuAsync()
     {
+        //TODO repeat code with Masa.Stack.Components.Shared.GlobalNavigations.GlobalNavigation
         var apps = (await ProjectService.GetUIAndMenusAsync()).SelectMany(p => p.Apps).ToList();
-
         apps.RemoveAll(a => !a.Navs.Any());
+        var categories = apps.GroupBy(a => a.Tag);
 
-        EmptyPermissionMap = apps.SelectMany(app => app.Navs)
-                            .Where(nav => nav.PermissionType == default && nav.Children.Any(child => child.PermissionType == PermissionTypes.Menu))
-                            .SelectMany(nav => nav.Children.Select(item => (Code: item.Code, ParentCode: nav.Code)))
-                            .ToDictionary(item => Guid.Parse(item.Code), item => Guid.Parse(item.ParentCode));
+        var permissionDict = Value.Select(p => new Tuple<string, bool>(p.PermissionId.ToString(), p.Effect))
+            .Union(RoleUnionTeamPermission.Except(Value.Select(p => p.PermissionId)).Select(p => new Tuple<string, bool>(p.ToString(), true)))
+            .ToDictionary(p => p.Item1);
 
-        _categories = apps.GroupBy(a => a.Tag).Select(ag => new Category(ag.Key.Replace(" ", ""), ag.Key, ag.Select(a => a.Adapt<StackApp>()).ToList())).ToList();
+        var rootMenu = ExpansionMenu.CreateRootMenu(ExpansionMenuSituation.Authorization);
+        try
+        {
+            foreach (var category in categories)
+            {
+                var categoryMenu = new ExpansionMenu(category.Key, category.Key, ExpansionMenuType.Category, ExpansionMenuState.Normal, rootMenu.MetaData, parent: rootMenu);
+                foreach (var app in category)
+                {
+                    var state = GetMenuState(permissionDict, app.Id.ToString());
+                    var appMenu = new ExpansionMenu(app.Id.ToString(), app.Name, ExpansionMenuType.App, state, rootMenu.MetaData, parent: categoryMenu);
+                    foreach (var nav in app.Navs)
+                    {
+                        appMenu.AddChild(ConvertForNav(nav, appMenu.Deep + 1, appMenu, permissionDict));
+                    }
+                    categoryMenu.AddChild(appMenu);
+                }
+                rootMenu.AddChild(categoryMenu);
+            }
+        }
+        catch
+        {
+        }
+
+        return rootMenu;
+    }
+
+    private ExpansionMenu ConvertForNav(PermissionNavDto navModel, int deep, ExpansionMenu parent, IDictionary<string, Tuple<string, bool>> permissionDict)
+    {
+        var state = GetMenuState(permissionDict, navModel.Code);
+        var impersonal = Impersonal(permissionDict, navModel.Code);
+        var type = ExpansionMenuType.Nav;
+        if (navModel.PermissionType == PermissionTypes.Element)
+        {
+            type = ExpansionMenuType.Element;
+        }
+        var menu = new ExpansionMenu(navModel.Code, navModel.Name, type, state, parent.MetaData, impersonal, parent: parent, stateChangedAsync: MenuStateChangedAsync);
+        foreach (var childrenNav in navModel.Children)
+        {
+            menu.AddChild(ConvertForNav(childrenNav, deep++, menu, permissionDict));
+        }
+        return menu;
+    }
+
+    private ExpansionMenuState GetMenuState(IDictionary<string, Tuple<string, bool>> permissionDict, string menuId)
+    {
+        if (!permissionDict.TryGetValue(menuId, out var permission))
+        {
+            return ExpansionMenuState.Normal;
+        }
+
+        if (!RoleUnionTeamPermission.Contains(Guid.Parse(menuId)) && !permission.Item2)
+        {
+            return ExpansionMenuState.Normal;
+        }
+
+        return permission.Item2 ? ExpansionMenuState.Selected : ExpansionMenuState.Impersonal;
+    }
+
+    private bool Impersonal(IDictionary<string, Tuple<string, bool>> permissionDict, string menuId)
+    {
+        return permissionDict.ContainsKey(menuId) && RoleUnionTeamPermission.Contains(Guid.Parse(menuId));
+    }
+
+    private Task MenuStateChangedAsync(ExpansionMenu menu)
+    {
+        var menuId = Guid.Parse(menu.Id);
+        var permission = Value.FirstOrDefault(p => p.PermissionId == menuId);
+        if (permission == null)
+        {
+            permission = new SubjectPermissionRelationDto(menuId, false);
+            Value.Add(permission);
+        }
+
+        permission.Effect = menu.State == ExpansionMenuState.Selected || menu.State == ExpansionMenuState.Indeterminate;
+        return Task.CompletedTask;
     }
 
     private async Task GetRolePermissions()
     {
         RolePermissions = await PermissionService.GetPermissionsByRoleAsync(Roles);
         RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
-        await RoleUnionTeamPermissionValueChangedAsync();
     }
 
     private async Task GetTeamPermissions()
     {
         TeamPermission = await PermissionService.GetPermissionsByTeamWithUserAsync(new(User, Teams));
         RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
-        await RoleUnionTeamPermissionValueChangedAsync();
-    }
-
-    protected virtual Task RoleUnionTeamPermissionValueChangedAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    protected virtual async Task ValueChangedAsync(List<UniqueModel> permissions)
-    {
-        var value = permissions.Select(permission => Guid.Parse(permission.Code)).Except(RoleUnionTeamPermission).ToList();
-        foreach (var (code, parentCode) in EmptyPermissionMap)
-        {
-            if (value.Contains(code)) value.Add(parentCode);
-        }
-        await UpdateValueAsync(value.Distinct().ToList());
-    }
-
-    private async Task UpdateValueAsync(List<Guid> value)
-    {
-        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value);
-        else Value = value;
     }
 }

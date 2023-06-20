@@ -5,14 +5,12 @@ namespace Masa.Auth.Security.OAuth.Providers.Infrastructure.ThirdPartyIdpCaller;
 
 public class AppleCaller : ThirdPartyIdpCallerBase
 {
-    readonly ILogger<AppleCaller> _logger;
-    readonly HttpClient _httpClient;
-    readonly AppleAuthenticationOptions _options;
+    private readonly ILogger<AppleCaller> _logger;
+    private readonly AppleAuthenticationOptions _options;
 
-    public AppleCaller(ILogger<AppleCaller> logger, IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
+    public AppleCaller(ILogger<AppleCaller> logger, IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _httpClient = httpClientFactory.CreateClient();
         _options = ((CustomOptionsMonitor<AppleAuthenticationOptions>)ActivatorUtilities.CreateInstance(serviceProvider, typeof(CustomOptionsMonitor<AppleAuthenticationOptions>))).CurrentValue;
     }
 
@@ -20,7 +18,7 @@ public class AppleCaller : ThirdPartyIdpCallerBase
 
     public async Task<ClaimsPrincipal> CreateTicketAsync(OAuthOptions options, OAuthTokenResponse tokens)
     {
-        string? idToken = tokens.Response!.RootElement.GetString("id_token");
+        var idToken = tokens.Response!.RootElement.GetString("id_token");
         if (string.IsNullOrWhiteSpace(idToken))
         {
             throw new UserFriendlyException("No Apple ID token was returned in the OAuth token response.");
@@ -48,7 +46,7 @@ public class AppleCaller : ThirdPartyIdpCallerBase
         var principal = new ClaimsPrincipal(new ClaimsIdentity(identity));
         foreach (var action in options.ClaimActions)
         {
-            if(action is JsonKeyClaimAction jkAction)
+            if (action is JsonKeyClaimAction jkAction)
             {
                 var claim = identity.FindFirst(jkAction.JsonKey);
                 if (!string.IsNullOrEmpty(claim?.Value))

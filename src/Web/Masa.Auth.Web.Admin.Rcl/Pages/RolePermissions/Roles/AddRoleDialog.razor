@@ -2,7 +2,7 @@
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Role")">
     <MForm Model="Role" EnableValidation EnableI18n>
-        <MStepper Value="Step">
+        <MStepper Value="_step">
             <MStepperItems>
                 <MStepperContent Step="1">
                     <AutoHeight Overflow AutoClass="d-flex">
@@ -32,22 +32,22 @@
                     <AutoHeight Overflow>
                         <HeaderContent>
                             <div class="mb-6 mt-2">
-                                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="RoleSelect" />
+                                <RoleSelectForRole @bind-Value="Role.ChildrenRoles" @ref="_roleSelect" />
                             </div>                         
                         </HeaderContent>
                         <AutoHeightContent>
                             <div class="global-nav" style="max-height:calc(100vh - 320px);">
-                                <PermissionExtensionConfigure Roles=Role.ChildrenRoles
-                                                              @bind-ExtensionValue=Role.Permissions
-                                                              @bind-Preview=Preview />
+                                <PermissionsConfigure Roles=Role.ChildrenRoles
+                                                     @bind-Value=Role.Permissions
+                                                     @bind-Preview=_preview />
                             </div>
                         </AutoHeightContent>
                         <FooterContent>
                             <div class="d-flex mt-6">
                                 <EnableSwitch Class="ml-1" @bind-Value="Role.Enabled" />
                                 <MSpacer></MSpacer>
-                                <SButton Medium OnClick="()=>Step=1" Outlined>@T("Previous step")</SButton>
-                                <SButton Medium Outlined OnClick="() => Preview = true" Class="ml-6">@T("Preview")</SButton>
+                                <SButton Medium OnClick="()=>_step=1" Outlined>@T("Previous step")</SButton>
+                                <SButton Medium Outlined OnClick="() => _preview = true" Class="ml-6">@T("Preview")</SButton>
                                 <SButton Medium Class="ml-6" OnClick="async () => await AddRoleAsync(context)">@T("Submit")</SButton>
                             </div>
                         </FooterContent>

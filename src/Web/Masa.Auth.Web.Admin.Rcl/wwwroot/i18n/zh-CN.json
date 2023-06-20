@@ -3,7 +3,6 @@
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
   "$DateFormat": "yyyy年MM月dd日",
-
   "Ldap": "域账号",
   "LdapConfigure": "域账号配置",
   "Favorite": "收藏",
@@ -119,6 +118,7 @@
     "Add Department": "新建部门",
     "Edit Department": "编辑部门",
     "Copy Department": "复制部门",
+    "Duplicate": "副本",
     "Relocate former department staff": "迁移原部门人员",
     "Department deleted successfully": "部门删除成功",
     "Search for members": "搜索成员"
@@ -232,7 +232,7 @@
     "Failed to delete permission": "删除权限失败",
     "Project identifier is empty": "项目标识为空",
     "Application Group save successed": "应用分组保存成功",
-    "Support mdi and fas icon": "支持mdi-* 和 fas-* 图标",
+    "Support mdi and fas icon": "支持mdi-* 和 fa:fas-* 图标",
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method"
   },
 
@@ -526,6 +526,7 @@
     "Please select type": "请选择操作类型",
     "Please enter operation description": "请输入操作描述",
     "AddUser": "新建用户",
+    "RegisterUser": "注册用户",
     "EditUser": "编辑用户",
     "EditUserAuthorization": "编辑用户权限",
     "RemoveUser": "删除用户",
