@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Masa.Contrib.StackSdks.Isolation.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Masa.Contrib.StackSdks.Isolation;
 
@@ -23,6 +24,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<EsIsolationConfigProvider>();
 
         services.AddScoped<EnvironmentMiddleware>();
+
+        services.AddMasaConfiguration(builder => builder.UseDccIsolation());
 
         return services;
     }
