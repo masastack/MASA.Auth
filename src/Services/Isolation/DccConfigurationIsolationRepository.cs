@@ -62,8 +62,8 @@ public class DccConfigurationIsolationRepository : AbstractConfigurationReposito
             ConfigurationTypes.Properties => SecondaryFormat(environment, appId, configObject, JsonSerializer.Deserialize<Dictionary<string, string>>(raw)!),
             ConfigurationTypes.Text => new Dictionary<string, string>
             {
-                    { $"{environment}{ConfigurationPath.KeyDelimiter}{appId}{ConfigurationPath.KeyDelimiter}{configObject}" , raw }
-                },
+                { $"{environment}{ConfigurationPath.KeyDelimiter}{appId}{ConfigurationPath.KeyDelimiter}{configObject}" , raw }
+            },
             ConfigurationTypes.Xml => SecondaryFormat(environment, appId, configObject, JsonConfigurationParser.Parse(raw)),
             ConfigurationTypes.Yaml => SecondaryFormat(environment, appId, configObject, JsonConfigurationParser.Parse(raw)),
             _ => throw new NotSupportedException(nameof(configurationType)),

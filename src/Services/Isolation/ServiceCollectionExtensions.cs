@@ -1,8 +1,10 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Configuration;
 using Masa.Contrib.StackSdks.Isolation.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Masa.Contrib.StackSdks.Isolation;
 
@@ -25,7 +27,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<EnvironmentMiddleware>();
 
-        services.AddMasaConfiguration(builder => builder.UseDccIsolation());
+        services.AddDccIsolation(builder => builder.UseDccIsolation());
 
         return services;
     }
@@ -157,6 +159,18 @@ public static class ServiceCollectionExtensions
                 }
             };
         }
+    }
+
+    public static void AddDccIsolation(this IServiceCollection services, Action<IMasaConfigurationBuilder> configureDelegate)
+    {
+        services.Replace(new ServiceDescriptor(typeof(IConfigurationApi), typeof(IsolationConfigurationApi), ServiceLifetime.Singleton));
+        var sourceConfiguration = services.BuildServiceProvider().GetService<IConfiguration>();
+
+        var configurationBuilder = sourceConfiguration as IConfigurationBuilder ??
+            (sourceConfiguration == null ? new ConfigurationBuilder() : new ConfigurationBuilder().AddConfiguration(sourceConfiguration));
+
+        MasaConfigurationBuilder masaConfigurationBuilder = new MasaConfigurationBuilder(services, new ConfigurationBuilder());
+        configureDelegate?.Invoke(masaConfigurationBuilder);
     }
 
     static (List<string>, IMultiEnvironmentMasaStackConfig, IMasaStackConfig) GetInternal(this IServiceCollection services)
