@@ -597,7 +597,7 @@ public class CommandHandler
         var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
         {
             Address = disco.TokenEndpoint,
-            ClientId = _masaStackConfig.GetWebId(MasaStackConstant.AUTH),
+            ClientId = _masaStackConfig.GetWebId(MasaStackProject.Auth),
             Scope = "openid profile offline_access",
             UserName = command.Account,
             Password = command.Password

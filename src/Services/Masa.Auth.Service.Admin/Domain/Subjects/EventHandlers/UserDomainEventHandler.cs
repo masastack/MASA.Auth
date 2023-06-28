@@ -11,7 +11,6 @@ public class UserDomainEventHandler
     readonly IEventBus _eventBus;
     readonly ILogger<UserDomainEventHandler> _logger;
     readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
     public UserDomainEventHandler(
         IAutoCompleteClient autoCompleteClient,
@@ -19,8 +18,7 @@ public class UserDomainEventHandler
         RoleDomainService roleDomainService,
         IEventBus eventBus,
         ILogger<UserDomainEventHandler> logger,
-        IMultilevelCacheClient multilevelCacheClient,
-        IMultiEnvironmentContext multiEnvironmentContext)
+        IMultilevelCacheClient multilevelCacheClient)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
@@ -28,7 +26,6 @@ public class UserDomainEventHandler
         _eventBus = eventBus;
         _logger = logger;
         _multilevelCacheClient = multilevelCacheClient;
-        _multiEnvironmentContext = multiEnvironmentContext;
     }
 
     [EventHandler(1)]
@@ -113,8 +110,6 @@ public class UserDomainEventHandler
 
     private async Task<UserModel> GetUserAsync(Guid userId)
     {
-#warning 缓存获取错误
-        var d = _multiEnvironmentContext.CurrentEnvironment;
         var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(userId));
         if (userModel == null)
         {

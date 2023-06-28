@@ -100,30 +100,26 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             };
 
             await _multilevelCacheClient.SetAsync(CacheKey.TeamKey(team.Id), teamDto);
-#warning delete where when rc1 release
-            if (team.TeamStaffs.Count() > 0)
+            foreach (var item in team.TeamStaffs)
             {
-                foreach (var item in team.TeamStaffs)
+                var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(item.StaffId));
+                if (cacheStaffTeams == null)
                 {
-                    var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(item.StaffId));
-                    if (cacheStaffTeams == null)
-                    {
-                        cacheStaffTeams = new List<CacheStaffTeam>();
-                    }
-
-                    if (item.IsDeleted)
-                    {
-                        cacheStaffTeams = cacheStaffTeams.Where(e => e.Id != team.Id).ToList();
-                    }
-                    else
-                    {
-                        if (!cacheStaffTeams.Any(e => e.Id == team.Id))
-                        {
-                            cacheStaffTeams.Add(new CacheStaffTeam(teamDto.Id, team.TeamStaffs.First(e => e.StaffId == item.StaffId).TeamMemberType));
-                        }
-                    }
-                    await _multilevelCacheClient.SetAsync(CacheKey.StaffTeamKey(item.StaffId), cacheStaffTeams);
+                    cacheStaffTeams = new List<CacheStaffTeam>();
                 }
+
+                if (item.IsDeleted)
+                {
+                    cacheStaffTeams = cacheStaffTeams.Where(e => e.Id != team.Id).ToList();
+                }
+                else
+                {
+                    if (!cacheStaffTeams.Any(e => e.Id == team.Id))
+                    {
+                        cacheStaffTeams.Add(new CacheStaffTeam(teamDto.Id, team.TeamStaffs.First(e => e.StaffId == item.StaffId).TeamMemberType));
+                    }
+                }
+                await _multilevelCacheClient.SetAsync(CacheKey.StaffTeamKey(item.StaffId), cacheStaffTeams);
             }
         }
 

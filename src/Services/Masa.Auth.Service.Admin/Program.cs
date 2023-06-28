@@ -1,14 +1,12 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-using Masa.Contrib.StackSdks.Isolation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-#warning change true
-await builder.Services.AddMasaStackConfigAsync(false);
+await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackApp.Service, true);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
@@ -33,7 +31,7 @@ builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {
     ServiceNameSpace = builder.Environment.EnvironmentName,
     ServiceVersion = masaStackConfig.Version,
-    ServiceName = masaStackConfig.GetServiceId(MasaStackConstant.AUTH),
+    ServiceName = masaStackConfig.GetServiceId(MasaStackProject.Auth),
     Layer = masaStackConfig.Namespace,
     ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
 }, () => masaStackConfig.OtlpUrl);
@@ -56,7 +54,7 @@ builder.Services
         var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
-            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServiceId(MasaStackConstant.AUTH)))
+            .AddRequirements(new DefaultRuleCodeRequirement(masaStackConfig.GetServiceId(MasaStackProject.Auth)))
             .Build();
         options.DefaultPolicy = defaultPolicy;
     })
@@ -100,11 +98,7 @@ var redisOption = new RedisConfigurationOptions
     DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
     Password = masaStackConfig.RedisModel.RedisPassword
 };
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(), multilevel =>
-{
-    multilevel.SubscribeKeyType = SubscribeKeyType.SpecificPrefix;
-    multilevel.SubscribeKeyPrefix = $"{masaStackConfig.Environment}:auth:db-{redisOption.DefaultDatabase}";
-});
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache());
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 builder.Services.AddDccClient(redisOption);
 builder.Services
@@ -178,7 +172,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-await builder.Services.AddStackIsolationAsync(MasaStackConstant.AUTH);
+await builder.Services.AddStackIsolationAsync(MasaStackProject.Auth.Name);
 
 builder.Services.AddStackMiddleware();
 
@@ -245,8 +239,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-#warning CurrentUserCheckMiddleware
-//app.UseMiddleware<CurrentUserCheckMiddleware>();
 //app.UseMiddleware<MasaAuthorizeMiddleware>();
 app.UseStackIsolation();
 app.UseStackMiddleware();

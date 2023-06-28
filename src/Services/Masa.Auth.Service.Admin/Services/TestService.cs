@@ -10,8 +10,10 @@ public class TestService : ServiceBase
         MapGet(GetConf, "conf");
     }
 
-    public string GetConf([FromServices] IMasaConfiguration masaConfiguration, string Environment = "")
+    public string GetConf([FromServices] IMasaConfiguration masaConfiguration, [FromServices] IConfiguration configuration, string Environment = "")
     {
+        var d = configuration.GetSection(SectionTypes.ConfigurationApi.ToString()).GetSection("Test").GetSection("public-$Config");
+        var ddd = d.GetSection("$public.OSS").Get(typeof(OssOptions));
         var suffix = masaConfiguration.ConfigurationApi.GetPublic()
             .GetValue("$public.DefaultConfig:SUFFIX_IDENTITY", "empty");
         return suffix;

@@ -59,10 +59,10 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
                 //dafault code rule
                 code = Regex.Replace(context.Request.Path, @"\\", ".");
                 code = Regex.Replace(code, "/", ".").Trim('.');
-                code = $"{_masaStackConfig.GetServiceId(MasaStackConstant.AUTH)}.{code}";
+                code = $"{_masaStackConfig.GetServiceId(MasaStackProject.Auth)}.{code}";
             }
 
-            if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(_masaStackConfig.GetServiceId(MasaStackConstant.AUTH))).WildCardContains(code))
+            if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(_masaStackConfig.GetServiceId(MasaStackProject.Auth))).WildCardContains(code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 return;

@@ -1,14 +1,8 @@
 ﻿@inherits LayoutComponentBase
 @inject GlobalConfig GlobalConfig
 @inject NavigationManager Navigation
-@inject IMultiEnvironmentMasaStackConfig MultiEnvironmentMasaStackConfig
-@inject IMultiEnvironmentUserContext MultiEnvironmentUserContext
 
-@{
-    var appId = MultiEnvironmentMasaStackConfig.SetEnvironment(MultiEnvironmentUserContext.Environment??"").GetWebId(MasaStackConstant.AUTH);
-}
-
-<SLayout AppId="@appId" OnErrorAsync="OnError" IsShowEnvironmentSwitch="true"
+<SLayout OnErrorAsync="OnError" IsShowEnvironmentSwitch="true"
          Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
          MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
     @Body
