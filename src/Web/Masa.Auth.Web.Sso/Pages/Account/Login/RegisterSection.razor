@@ -9,7 +9,7 @@
     }
 
     @*https://github.com/BlazorComponent/MASA.Blazor/issues/811*@
-    <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true">
+    <MCheckbox @bind-Value="_inputModel.Agreement" Class="mt-1" HideDetails="true" TValue="bool">
         <LabelContent>
             @T("RegistrationAgreementStatement")
             <span @onclick="_ => _protocolModalVisible = true" @onclick:preventDefault @onclick:stopPropagation style="color:rgb(0,0,238);">《@T("RegistrationAgreement")》</span>

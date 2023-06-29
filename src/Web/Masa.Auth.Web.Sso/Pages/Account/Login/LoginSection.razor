@@ -55,8 +55,7 @@
         @if (!_inputModel.PhoneLogin)
         {
             <MCol Md="6" Class="d-flex justify-end">
-                <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-2" HideDetails="true" Label="@T("LdapLogin")">
-                </MCheckbox>
+                <MCheckbox @bind-Value="_inputModel.LdapLogin" Class="mt-2" HideDetails="true" Label="@T("LdapLogin")" TValue="bool"/>
             </MCol>
         }
     </MRow>
