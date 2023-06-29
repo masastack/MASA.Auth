@@ -16,4 +16,4 @@
     <None Include=".dockerignore" />
     <None Include="variables.env" />
   </ItemGroup>
-</Project>
+</Project> 

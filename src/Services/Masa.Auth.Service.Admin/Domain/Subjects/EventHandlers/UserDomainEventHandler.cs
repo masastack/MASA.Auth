@@ -12,7 +12,13 @@ public class UserDomainEventHandler
     readonly ILogger<UserDomainEventHandler> _logger;
     readonly IMultilevelCacheClient _multilevelCacheClient;
 
-    public UserDomainEventHandler(IAutoCompleteClient autoCompleteClient, AuthDbContext authDbContext, RoleDomainService roleDomainService, IEventBus eventBus, ILogger<UserDomainEventHandler> logger, IMultilevelCacheClient multilevelCacheClient)
+    public UserDomainEventHandler(
+        IAutoCompleteClient autoCompleteClient,
+        AuthDbContext authDbContext,
+        RoleDomainService roleDomainService,
+        IEventBus eventBus,
+        ILogger<UserDomainEventHandler> logger,
+        IMultilevelCacheClient multilevelCacheClient)
     {
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;

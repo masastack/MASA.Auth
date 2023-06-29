@@ -57,11 +57,11 @@ public class Sms : IScopedDependency
         return code;
     }
 
-    public async Task<bool> VerifyMsgCodeAsync(string key, string code,bool removeCache = true)
+    public async Task<bool> VerifyMsgCodeAsync(string key, string code, bool removeCache = true)
     {
         var codeCache = await _distributedCacheClient.GetAsync<string>(key);
         if (codeCache != code) return false;
-        if(removeCache)
+        if (removeCache)
         {
             await _distributedCacheClient.RemoveAsync<string>(key);
         }

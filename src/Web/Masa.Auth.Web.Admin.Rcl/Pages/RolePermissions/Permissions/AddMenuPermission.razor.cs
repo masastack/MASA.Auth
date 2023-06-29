@@ -54,7 +54,7 @@ public partial class AddMenuPermission
             AppId = appPermissionsViewModel.AppId,
             ParentId = appPermissionsViewModel.IsPermission ? appPermissionsViewModel.Id : Guid.Empty
         };
-        _showUrlPrefix = appPermissionsViewModel.AppUrl;
+        _showUrlPrefix = appPermissionsViewModel.AppUrl.EnsureTrailingSlash();
         _visible = true;
     }
 

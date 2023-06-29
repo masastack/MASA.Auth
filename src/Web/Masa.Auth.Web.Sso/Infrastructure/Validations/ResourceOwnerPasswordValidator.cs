@@ -16,8 +16,12 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         try
         {
-            var user = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(context.UserName, context.Password);
+            var user = await _authClient.UserService.ValidateAccountAsync(new ValidateAccountModel
+            {
+                Account = context.UserName,
+                Password = context.Password,
+                Environment = context.Request.Raw.Get(nameof(IEnvironmentModel.Environment)) ?? ""
+            });
             context.Result = new GrantValidationResult(
                  subject: user!.Id.ToString(),
                  authenticationMethod: OidcConstants.AuthenticationMethods.Password,

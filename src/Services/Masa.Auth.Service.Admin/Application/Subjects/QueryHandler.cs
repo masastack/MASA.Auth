@@ -12,7 +12,6 @@ public class QueryHandler
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     readonly ILdapIdpRepository _ldapIdpRepository;
     readonly AuthDbContext _authDbContext;
-    readonly IAutoCompleteClient _autoCompleteClient;
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IPmClient _pmClient;
     readonly IMultiEnvironmentContext _multiEnvironmentContext;
@@ -25,7 +24,6 @@ public class QueryHandler
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
-        IAutoCompleteClient autoCompleteClient,
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient,
         IMultiEnvironmentContext multiEnvironmentContext)
@@ -37,7 +35,6 @@ public class QueryHandler
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
-        _autoCompleteClient = autoCompleteClient;
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
         _multiEnvironmentContext = multiEnvironmentContext;
@@ -80,6 +77,7 @@ public class QueryHandler
         query.Result.Creator = creator?.DisplayName;
         query.Result.Modifier = modifier?.DisplayName;
     }
+
 
     [EventHandler]
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
@@ -137,10 +135,14 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task GetUserSelectAsync(UserSelectQuery query)
+    public async Task GetUserSelectAsync(UserSelectQuery query, IAutoCompleteClient autoCompleteClient)
     {
-        var response = await _autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectDto>(
-            query.Search.TrimStart(' ').TrimEnd(' ')
+        var response = await autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectDto>(
+            query.Search.TrimStart(' ').TrimEnd(' '), new AutoCompleteOptions
+            {
+                Page = query.Page,
+                PageSize = query.PageSize,
+            }
         );
         query.Result = response.Data;
     }
@@ -542,7 +544,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async void GetExternalThirdPartyIdps(ExternalThirdPartyIdpsQuery query)
+    public void GetExternalThirdPartyIdps(ExternalThirdPartyIdpsQuery query)
     {
         query.Result = LocalAuthenticationDefaultsProvider.GetAll()
                                                      .Adapt<List<ThirdPartyIdpModel>>()

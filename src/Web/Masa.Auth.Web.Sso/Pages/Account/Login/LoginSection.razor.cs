@@ -14,6 +14,12 @@ public partial class LoginSection
     [Parameter]
     public IEnumerable<ViewModel.ExternalProvider> ExternalProviderList { get; set; } = Enumerable.Empty<ViewModel.ExternalProvider>();
 
+    [Parameter]
+    public string Environment { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> EnvironmentChanged { get; set; }
+
     LoginInputModel _inputModel = new();
     MForm _loginForm = null!;
     bool _showPwd, _loginLoading;
@@ -24,13 +30,12 @@ public partial class LoginSection
         if (firstRender)
         {
             _environments = await _pmClient.EnvironmentService.GetListAsync();
-            var currentEnvironment = _environments.FirstOrDefault()?.Name ?? "";
             try
             {
                 var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
                 if (_environments.Any(e => e.Name == localEnvironment.Value))
                 {
-                    currentEnvironment = localEnvironment.Value ?? currentEnvironment;
+                    Environment = localEnvironment.Value ?? _environments.FirstOrDefault()?.Name ?? "";
                 }
             }
             catch (Exception e)
@@ -44,20 +49,19 @@ public partial class LoginSection
                 {
                     ReturnUrl = ReturnUrl,
                     Account = LoginHint,
-                    Environment = currentEnvironment,
-                    RememberLogin = LoginOptions.AllowRememberLogin
+                    RememberLogin = LoginOptions.AllowRememberLogin,
+                    Environment = Environment
                 };
             }
-            (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(currentEnvironment);
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private void EnvironmentChanged(string environment)
+    void SelectEnvironment(string environment)
     {
         _inputModel.Environment = environment;
-        (EnvironmentProvider as ISsoEnvironmentProvider)!.SetEnvironment(environment);
+        Environment = environment;
     }
 
     private async Task LoginHandler()

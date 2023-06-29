@@ -23,18 +23,12 @@
             </MStepperContent>
             <MStepperContent class="full-height" Step="2">
                 <MCard Class="mx-auto d-flex flex-column full-height">
-                    @if (_step == 2)
-                    {
-                        <TeamAdmin IgnoreStaffIds="_teamDetailDto.TeamMember.Staffs" @bind-Value="_teamDetailDto.TeamAdmin" />
-                    }
+                    <TeamAdmin IgnoreStaffIds="_teamDetailDto.TeamMember.Staffs" @bind-Value="_teamDetailDto.TeamAdmin" />
                 </MCard>
             </MStepperContent>
             <MStepperContent class="full-height" Step="3">
                 <MCard Class="mx-auto d-flex flex-column full-height">
-                    @if (_step == 3)
-                    {
-                        <TeamMember IgnoreStaffIds="_teamDetailDto.TeamAdmin.Staffs" @bind-Value="_teamDetailDto.TeamMember" />
-                    }
+                    <TeamMember IgnoreStaffIds="_teamDetailDto.TeamAdmin.Staffs" @bind-Value="_teamDetailDto.TeamMember" />
                 </MCard>
             </MStepperContent>
         </MStepperItems>

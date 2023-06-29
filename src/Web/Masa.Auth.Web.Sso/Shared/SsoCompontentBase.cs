@@ -14,9 +14,6 @@ public abstract class SsoCompontentBase : SsoSectionComponentBase
     [Inject]
     public AuthenticationStateProvider _authenticationStateProvider { get; set; } = null!;
 
-    [Inject]
-    public IEnvironmentProvider EnvironmentProvider { get; set; } = default!;
-
     protected ClaimsPrincipal User
     {
         get

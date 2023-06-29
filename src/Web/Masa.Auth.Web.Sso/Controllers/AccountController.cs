@@ -8,7 +8,6 @@ namespace Masa.Auth.Web.Sso.Controllers;
 public class AccountController : Controller
 {
     readonly IAuthClient _authClient;
-    readonly IEnvironmentProvider _environmentProvider;
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly I18n _i18n;
@@ -21,7 +20,6 @@ public class AccountController : Controller
         IEventService events,
         IAuthClient authClient,
         I18n i18n,
-        IEnvironmentProvider environmentProvider,
         IUserSession userSession,
         IBackChannelLogoutService backChannelClient,
         IDistributedCacheClient distributedCacheClient)
@@ -30,7 +28,6 @@ public class AccountController : Controller
         _events = events;
         _authClient = authClient;
         _i18n = i18n;
-        _environmentProvider = environmentProvider;
         _userSession = userSession;
         _backChannelClient = backChannelClient;
         _distributedCacheClient = distributedCacheClient;
@@ -44,7 +41,6 @@ public class AccountController : Controller
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
         {
-            (_environmentProvider as ISsoEnvironmentProvider)?.SetEnvironment(inputModel.Environment);
             UserModel? user = new();
 
             if (inputModel.PhoneLogin)
@@ -53,7 +49,9 @@ public class AccountController : Controller
                 {
                     PhoneNumber = inputModel.PhoneNumber,
                     Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException(_i18n.T("SmsRequired") ?? "SmsRequired"),
-                    RegisterLogin = inputModel.RegisterLogin
+                    RegisterLogin = inputModel.RegisterLogin,
+                    Environment = inputModel.Environment
+
                 });
                 if (user is null)
                 {
@@ -63,8 +61,13 @@ public class AccountController : Controller
             }
             else
             {
-                user = await _authClient.UserService
-                                           .ValidateCredentialsByAccountAsync(inputModel.Account, inputModel.Password, inputModel.LdapLogin);
+                user = await _authClient.UserService.ValidateAccountAsync(new ValidateAccountModel
+                {
+                    Account = inputModel.Account,
+                    Password = inputModel.Password,
+                    LdapLogin = inputModel.LdapLogin,
+                    Environment = inputModel.Environment
+                });
             }
 
             if (user != null)

@@ -5,9 +5,9 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 {
-    private User? _user;
-    private User? _createUser;
-    private User? _modifyUser;
+    private readonly User? _user;
+    private readonly User? _createUser;
+    private readonly User? _modifyUser;
     private IdentityProvider _identityProvider = default!;
 
     private Guid _thirdPartyIdpId;

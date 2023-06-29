@@ -10,8 +10,8 @@ public class Role : FullAggregateRoot<Guid, Guid>
     private List<RoleRelation> _parentRoles = new();
     private List<UserRole> _users = new();
     private List<TeamRole> _teams = new();
-    private User? _createUser;
-    private User? _modifyUser;
+    private readonly User? _createUser;
+    private readonly User? _modifyUser;
     private string _name = "";
     private string _code = "";
     private string _description = "";

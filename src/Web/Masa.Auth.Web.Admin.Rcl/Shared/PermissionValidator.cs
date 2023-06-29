@@ -23,7 +23,7 @@ public class PermissionValidator : IPermissionValidator
         //TODO change Async and use Redis
         Task.Run(async () =>
         {
-            codes = await _permissionService.GetElementPermissionsAsync(userId, _masaStackConfig.GetWebId(MasaStackConstant.AUTH));
+            codes = await _permissionService.GetElementPermissionsAsync(userId, _masaStackConfig.GetWebId(MasaStackProject.Auth));
         }).Wait();
         return codes.Contains(code);
     }

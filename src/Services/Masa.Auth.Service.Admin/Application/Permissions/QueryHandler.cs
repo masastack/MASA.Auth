@@ -288,7 +288,7 @@ public class QueryHandler
                     Id = m.Id,
                     Name = m.Name,
                     Code = m.Code,
-                    Url = m.Url,
+                    Url = m.Url.EnsureLeadingSlash(),
                     Icon = m.Icon,
                     Children = GetMenus(allMenus, m.Id)
                 }).ToList();
@@ -358,7 +358,7 @@ public class QueryHandler
         {
             roleIds = roleIds.Distinct().ToList();
             var permissions = new List<Guid>();
-            var roleCacheKeys = roleIds.Select(e=>CacheKey.RoleKey(e));
+            var roleCacheKeys = roleIds.Select(e => CacheKey.RoleKey(e));
             var rolePermissions = await _multilevelCacheClient.GetListAsync<CacheRole>(roleCacheKeys);
             foreach (var rolePermission in rolePermissions)
             {

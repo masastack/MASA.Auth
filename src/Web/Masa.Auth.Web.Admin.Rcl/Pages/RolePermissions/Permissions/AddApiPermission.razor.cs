@@ -49,7 +49,7 @@ public partial class AddApiPermission
         _form?.Reset();
         _apiPermissionDetailDto = new();
         _apiPermissionDetailDto.AppId = appPermissionsViewModel.AppId;
-        _showUrlPrefix = appPermissionsViewModel.AppUrl;
+        _showUrlPrefix = appPermissionsViewModel.AppUrl.EnsureTrailingSlash();
         _visible = true;
     }
 }

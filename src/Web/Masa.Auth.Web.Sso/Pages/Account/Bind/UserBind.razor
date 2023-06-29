@@ -15,7 +15,7 @@
         <MTextField @bind-Value="UserModel.SmsCode" Class="mt-3" Outlined Label="@T("Captcha")">
             <AppendContent>
                 <MButton Style="margin-top:-16px;margin-right:-12px;height:54px;min-width: 120px;"
-                         Class="primary rounded-r-lg" Disabled="@((_captchaText == "0" || _captchaText == null) is false)" Loading=_smsloading OnClick="()=> SendCaptcha(context)">
+                         Class="primary rounded-r-lg" Disabled="@((_captchaText == "0" || _captchaText == null) is false)" OnClick="()=> SendCaptcha(context)">
                     @CaptchaText
                 </MButton>
             </AppendContent>

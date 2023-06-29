@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-await builder.Services.AddMasaStackConfigAsync();
+await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackApp.WEB);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())
@@ -22,12 +22,18 @@ if (!builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(option =>
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        option.DetailedErrors = true;
+    }
+});
 
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new()
 {
     Authority = masaStackConfig.GetSsoDomain(),
-    ClientId = masaStackConfig.GetWebId(MasaStackConstant.AUTH),
+    ClientId = masaStackConfig.GetWebId(MasaStackProject.Auth),
     Scopes = new List<string> { "offline_access" }
 };
 
@@ -50,13 +56,13 @@ builder.Services.AddAuthApiGateways(option =>
     option.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
 });
 
-builder.AddMasaStackComponentsForServer("wwwroot/i18n", authServerUrl);
+await builder.Services.AddMasaStackComponentsAsync(MasaStackProject.Auth, "wwwroot/i18n", authServerUrl);
 
 builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {
     ServiceNameSpace = builder.Environment.EnvironmentName,
     ServiceVersion = masaStackConfig.Version,
-    ServiceName = masaStackConfig.GetWebId(MasaStackConstant.AUTH),
+    ServiceName = masaStackConfig.GetWebId(MasaStackProject.Auth),
     Layer = masaStackConfig.Namespace,
     ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
 }, () => masaStackConfig.OtlpUrl, true);

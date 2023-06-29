@@ -34,7 +34,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConstant.AUTH,
+            ProjectIdentity = MasaStackProject.Auth.Name,
             JobIdentity = "masa-auth-sync-userAutoComplete-job",
             Name = "SyncUserAutoCompleteJob",
             IsAlertException = true,
@@ -61,7 +61,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConstant.AUTH,
+            ProjectIdentity = MasaStackProject.Auth.Name,
             JobIdentity = "masa-auth-sync-syncUserRedis-job",
             Name = "SyncUserRedisJob",
             IsAlertException = true,
@@ -88,7 +88,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConstant.AUTH,
+            ProjectIdentity = MasaStackProject.Auth.Name,
             JobIdentity = "masa-auth-sync-syncOidcRedis-job",
             Name = "SyncOidcRedisJob",
             IsAlertException = true,
@@ -114,7 +114,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConstant.AUTH,
+            ProjectIdentity = MasaStackProject.Auth.Name,
             JobIdentity = "masa-auth-sync-syncStaffRedis-job",
             Name = "SyncStaffRedisJob",
             IsAlertException = true,
@@ -140,7 +140,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConstant.AUTH,
+            ProjectIdentity = MasaStackProject.Auth.Name,
             JobIdentity = "masa-auth-sync-syncPermissionRedis-job",
             Name = "SyncPermissionRedisJob",
             IsAlertException = true,
@@ -166,7 +166,7 @@ public static class SchedulerJobServiceCollectionExtensions
         var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
-            ProjectIdentity = MasaStackConstant.AUTH,
+            ProjectIdentity = MasaStackProject.Auth.Name,
             JobIdentity = "masa-auth-sync-syncTeamRedis-job",
             Name = "SyncTeamRedisJob",
             IsAlertException = true,

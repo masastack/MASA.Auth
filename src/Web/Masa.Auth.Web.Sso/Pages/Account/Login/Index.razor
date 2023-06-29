@@ -33,12 +33,12 @@
         <MTabsItems Value="@Tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
-                    <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders" />
+                <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders" @bind-Environment="_environment" />
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">
                 <CascadingValue Value="@ReturnUrl">
-                    <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()" />
+                <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()" Environment="@_environment" />
                 </CascadingValue>
             </MTabItem>
         </MTabsItems>

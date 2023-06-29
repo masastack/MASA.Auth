@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
 
-await builder.Services.AddMasaStackConfigAsync();
+await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackApp.SSO);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 // Add services to the container.
@@ -23,7 +23,6 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
-builder.Services.AddScoped<IEnvironmentProvider, SsoEnvironmentProvider>();
 
 var authDomain = masaStackConfig.GetAuthServiceDomain();
 
@@ -95,7 +94,7 @@ else
         {
             ServiceNameSpace = builder.Environment.EnvironmentName,
             ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.AUTH) + "-sso",
+            ServiceName = masaStackConfig.GetId(MasaStackProject.Auth, MasaStackApp.SSO),
             Layer = masaStackConfig.Namespace,
             ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
         };

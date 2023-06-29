@@ -7,8 +7,7 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 public partial class Index
 {
     ViewModel _viewModel = new();
-    string _loginHint = "";
-    string _tab = "login";
+    string _loginHint = "", _tab = "login", _environment = "";
 
     [Parameter]
     public string Tab

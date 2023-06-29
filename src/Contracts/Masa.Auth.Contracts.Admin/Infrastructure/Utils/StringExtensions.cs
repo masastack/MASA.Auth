@@ -142,4 +142,22 @@ public static class StringExtensions
     {
         return string.IsNullOrEmpty(target) ? replace : target;
     }
+
+    public static string EnsureTrailingSlash(this string str)
+    {
+        if (!str.EndsWith("/"))
+        {
+            str += "/";
+        }
+        return str;
+    }
+
+    public static string EnsureLeadingSlash(this string str)
+    {
+        if (!str.StartsWith("/"))
+        {
+            str = "/" + str;
+        }
+        return str;
+    }
 }
