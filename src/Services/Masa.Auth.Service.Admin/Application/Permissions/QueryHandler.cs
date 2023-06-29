@@ -288,7 +288,7 @@ public class QueryHandler
                     Id = m.Id,
                     Name = m.Name,
                     Code = m.Code,
-                    Url = m.Url,
+                    Url = m.Url.EnsureLeadingSlash(),
                     Icon = m.Icon,
                     Children = GetMenus(allMenus, m.Id)
                 }).ToList();

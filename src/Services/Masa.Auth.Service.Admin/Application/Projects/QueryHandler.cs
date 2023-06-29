@@ -67,7 +67,7 @@ public class QueryHandler
                 {
                     Name = p.Name,
                     Icon = p.Icon,
-                    Url = $"{a.Url?.TrimEnd('/')}/{p.Url?.TrimStart('/')}",
+                    Url = $"{a.Url?.EnsureTrailingSlash()}{p.Url?.TrimStart('/')}",
                     Code = p.Id.ToString(),
                     PermissionType = p.Type,
                     Children = GetChildren(p.Id, menuPermissions, a.Url ?? "")
@@ -112,7 +112,7 @@ public class QueryHandler
             {
                 Name = p.Name,
                 Icon = p.Icon,
-                Url = $"{domain?.TrimEnd('/')}/{p.Url?.TrimStart('/')}",
+                Url = $"{domain?.EnsureTrailingSlash()}{p.Url?.TrimStart('/')}",
                 Code = p.Id.ToString(),
                 PermissionType = p.Type,
                 Children = GetChildren(p.Id, all, domain ?? "")

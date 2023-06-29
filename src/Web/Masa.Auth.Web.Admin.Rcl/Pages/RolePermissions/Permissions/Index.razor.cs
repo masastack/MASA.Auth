@@ -275,7 +275,7 @@ public partial class Index
             {
                 _menuPermissionDetailDto = new();
             }
-            _showUrlPrefix = curItem.AppUrl;
+            _showUrlPrefix = curItem.AppUrl.EnsureTrailingSlash();
         }
         else
         {
@@ -297,7 +297,7 @@ public partial class Index
             {
                 _apiPermissionDetailDto = new();
             }
-            _showUrlPrefix = curItem.AppUrl;
+            _showUrlPrefix = curItem.AppUrl.EnsureTrailingSlash();
         }
         else
         {
