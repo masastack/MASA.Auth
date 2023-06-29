@@ -8,10 +8,10 @@
         <SUrlTextField @bind-Value="Dto.ClientUri" Label="@T("ClientURL")" />
     </MCol>
     <MCol Md=12 Class="py-0">
-        <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
+        <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")" TValue="bool"></MCheckbox>
     </MCol>
     <MCol Md=12 Class="pt-0">
-        <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")"></MCheckbox>
+        <MCheckbox @bind-Value="Dto.AllowRememberConsent" Label="@T("AllowRememberConsent")" TValue="bool"/>
     </MCol>
     <MCol Md=12>
         <STextField @bind-Value="Dto.ConsentLifetime" Tooltip="@T("ConsentLifetimeTips")" Type="number" Label="@T("ConsentLifetime")" Clearable=false />

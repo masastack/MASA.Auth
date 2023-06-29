@@ -11,7 +11,7 @@
                                 <SNameTextField @bind-Value="@Dto.Name" Class="mb-12" style="width:323px;" HideDetails="@("auto")" Placeholder="@T("Enter Name")" />
                             </div>
                         </div>
-                        <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff">
+                        <MCheckbox Class="d-flex justify-center" @bind-Value="@Dto.MigrateStaff" TValue="bool">
                             <LabelContent>
                                 <span class="secondary--text">
                                     @T("Relocate former department staff")

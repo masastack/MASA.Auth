@@ -19,9 +19,9 @@
                     </MCol>
                 </MRow>            
                 <div class="d-flex mb-10">
-                    <MCheckbox @bind-Value="ApiScope.Required" Class="pt-0 mt-0" Label="@T(nameof(ApiScope.Required))" HideDetails="@("auto")" />
-                    <MCheckbox @bind-Value="ApiScope.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.Emphasize))" HideDetails="@("auto")" />
-                    <MCheckbox @bind-Value="ApiScope.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.ShowInDiscoveryDocument))" HideDetails="@("auto")" />
+                    <MCheckbox @bind-Value="ApiScope.Required" Class="pt-0 mt-0" Label="@T(nameof(ApiScope.Required))" HideDetails="@("auto")" TValue="bool"/>
+                    <MCheckbox @bind-Value="ApiScope.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.Emphasize))" HideDetails="@("auto")" TValue="bool" />
+                    <MCheckbox @bind-Value="ApiScope.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(ApiScope.ShowInDiscoveryDocument))" HideDetails="@("auto")" TValue="bool" />
                 </div>
                 <DefaultTitle Class="mb-2">@T("User Claims")</DefaultTitle>
                 <UserClaimSelect @bind-Value=ApiScope.UserClaims />
