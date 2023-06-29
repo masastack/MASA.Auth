@@ -1,5 +1,5 @@
 ﻿
-<MCheckbox @bind-Value="ScopeViewModel.Checked" Disabled="ScopeViewModel.Required">
+<MCheckbox @bind-Value="ScopeViewModel.Checked" Disabled="ScopeViewModel.Required" TValue="bool">
     <LabelContent>
         <strong>@ScopeViewModel.DisplayName</strong>
         @if (ScopeViewModel.Emphasize)
