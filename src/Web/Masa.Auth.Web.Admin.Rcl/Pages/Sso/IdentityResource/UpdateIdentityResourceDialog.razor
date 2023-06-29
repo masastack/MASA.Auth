@@ -19,9 +19,9 @@
                     </MCol>
                 </MRow>
                 <div class="d-flex mb-10">
-                    <MCheckbox @bind-Value="IdentityResource.Required" Class="pt-0 mt-0" Label="@T(nameof(IdentityResource.Required))" HideDetails="@("auto")" />
-                    <MCheckbox @bind-Value="IdentityResource.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.Emphasize))" HideDetails="@("auto")" />
-                    <MCheckbox @bind-Value="IdentityResource.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.ShowInDiscoveryDocument))" HideDetails="@("auto")" />
+                    <MCheckbox @bind-Value="IdentityResource.Required" Class="pt-0 mt-0" Label="@T(nameof(IdentityResource.Required))" HideDetails="@("auto")" TValue="bool"/>
+                    <MCheckbox @bind-Value="IdentityResource.Emphasize" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.Emphasize))" HideDetails="@("auto")" TValue="bool" />
+                    <MCheckbox @bind-Value="IdentityResource.ShowInDiscoveryDocument" Class="ml-12 pt-0 mt-0" Label="@T(nameof(IdentityResource.ShowInDiscoveryDocument))" HideDetails="@("auto")" TValue="bool" />
                 </div>
                 <DefaultTitle Class="mb-2">@T("User Claims")</DefaultTitle>
                 <UserClaimSelect @bind-Value=IdentityResource.UserClaims />

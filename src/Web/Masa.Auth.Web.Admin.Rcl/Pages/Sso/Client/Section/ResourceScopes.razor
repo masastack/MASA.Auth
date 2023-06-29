@@ -9,7 +9,7 @@
             @foreach (var identityScope in Dto.IdentityResources)
             {
                 <MCol Md=6 Class="py-0">
-                    <MCheckbox Disabled="ClientConsts.MandatoryResource.Contains(identityScope.Id)" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue"></MCheckbox>
+                    <MCheckbox Disabled="ClientConsts.MandatoryResource.Contains(identityScope.Id)" @bind-Value="@identityScope.Selected" Label="@identityScope.DisplayValue" TValue="bool"/>
                 </MCol>
             }
         </MRow>
@@ -23,7 +23,7 @@
             @foreach (var apiScope in Dto.ApiScopes)
             {
                 <MCol Md=6 Class="py-0">
-                    <MCheckbox @bind-Value="@apiScope.Selected" Label="@apiScope.DisplayValue"></MCheckbox>
+                    <MCheckbox @bind-Value="@apiScope.Selected" Label="@apiScope.DisplayValue" TValue="bool"/>
                 </MCol>
             }
         </MRow>

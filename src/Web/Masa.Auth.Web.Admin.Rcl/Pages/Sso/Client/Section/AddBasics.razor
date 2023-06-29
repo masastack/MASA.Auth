@@ -14,8 +14,8 @@
         <SUrlTextField @bind-Value="Dto.ClientUri" Label="@T("ClientURL")" />
     </MCol>
     <MCol Md=6 Class="d-flex justify-space-around">
-        <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")"></MCheckbox>
-        <MCheckbox @bind-Value="Dto.AllowOfflineAccess" Label="@T("AllowOfflineAccess")"></MCheckbox>
+        <MCheckbox @bind-Value="Dto.RequireConsent" Label="@T("RequireConsent")" TValue="bool"/>
+        <MCheckbox @bind-Value="Dto.AllowOfflineAccess" Label="@T("AllowOfflineAccess")" TValue="bool"/>
     </MCol>
 </MRow>
 <MRow>
