@@ -3,10 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Events;
 
-public record AddStaffBeforeDomainEvent(AddUserDto User, string? Position) : Event
-{
-    public Guid UserId { get; set; }
-
-    public Guid PositionId { get; set; }
-}
-
+public record AddRangeUserDomainEvent(IEnumerable<User> Users) : Event;

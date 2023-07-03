@@ -148,7 +148,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     [JsonConstructor]
     public Staff(
-        Guid userId,
         string? name,
         string? displayName,
         string? avatar,
@@ -169,7 +168,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Address = address;
         PositionId = positionId;
         Enabled = enabled;
-        UserId = userId;
         JobNumber = jobNumber;
         StaffType = staffType == default ? StaffTypes.External : staffType;
         Gender = gender == default ? GenderTypes.Male : gender;
@@ -179,7 +177,6 @@ public class Staff : FullAggregateRoot<Guid, Guid>
     }
 
     public Staff(
-        Guid userId,
         string? name,
         string displayName,
         string? avatar,
@@ -191,7 +188,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         string jobNumber,
         Guid? positionId,
         StaffTypes staffType,
-        bool enabled) : this(userId, name, displayName, avatar, idCard, companyName, gender, phoneNumber, email, jobNumber, positionId, staffType, enabled, new())
+        bool enabled) : this(name, displayName, avatar, idCard, companyName, gender, phoneNumber, email, jobNumber, positionId, staffType, enabled, new())
     {
     }
 
@@ -287,7 +284,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         {
             return teamChanges;
         }
-	
+
         var validTeamIds = _teamStaffs.Where(teamStaff => !teamStaff.IsDeleted).Select(teamStaff => teamStaff.TeamId);
 
         teamChanges.AddRange(validTeamIds.Except(newTeamIds));

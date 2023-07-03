@@ -72,7 +72,7 @@
   "ThirdPartyUserNotFound": "ThirdPartyUser该数据不存在",
   "ThirdPartyUserExist": "ThirdPartyUser:{0} 已存在该第三方平台",
   "RoleLimitError": "由于角色 Limit 限制，此操作无法完成",
-  "IdentityProviderNotFound": "identityProvider数据不存在",
+  "IdentityProviderNotFound": "IdentityProvider数据不存在",
   "ValueIsEmpty": "{0}的值不能为空",
   "StaffPhoneNumberExist": "员工手机号{0}已存在",
   "StaffJobNumberExist": "员工工号{0}已存在",

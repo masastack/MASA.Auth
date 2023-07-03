@@ -10,7 +10,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
         builder.HasKey(s => s.Id);
         builder.HasIndex(s => s.JobNumber).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.Property(s => s.JobNumber).HasMaxLength(20);
-        builder.HasOne(s => s.User).WithOne().HasForeignKey<Staff>(s => s.UserId);
+        builder.HasOne(s => s.User).WithOne(user => user.Staff).HasForeignKey<Staff>(s => s.UserId);
         builder.HasOne(s => s.Position).WithMany().HasForeignKey(s => s.PositionId).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasMany(s => s.DepartmentStaffs).WithOne(a => a.Staff).HasForeignKey(ds => ds.StaffId);
         builder.HasMany(s => s.TeamStaffs).WithOne(ts => ts.Staff).HasForeignKey(ts => ts.StaffId);

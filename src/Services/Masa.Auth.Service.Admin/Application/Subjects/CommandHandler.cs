@@ -13,7 +13,6 @@ public class CommandHandler
     readonly AuthDbContext _authDbContext;
     readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
-    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
     readonly IUserContext _userContext;
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IDistributedCacheClient _distributedCacheClient;
@@ -37,7 +36,6 @@ public class CommandHandler
         AuthDbContext authDbContext,
         StaffDomainService staffDomainService,
         UserDomainService userDomainService,
-        ThirdPartyUserDomainService thirdPartyUserDomainService,
         IMultilevelCacheClient multilevelCacheClient,
         IDistributedCacheClient distributedCacheClient,
         IUserContext userContext,
@@ -60,7 +58,6 @@ public class CommandHandler
         _authDbContext = authDbContext;
         _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
-        _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _multilevelCacheClient = multilevelCacheClient;
         _distributedCacheClient = distributedCacheClient;
         _userContext = userContext;
@@ -679,7 +676,6 @@ public class CommandHandler
         var addStaffBeforeEvent = new AddStaffBeforeDomainEvent(addUserDto, staffDto.Position);
         await _staffDomainService.AddBeforeAsync(addStaffBeforeEvent);
         var staff = new Staff(
-                addStaffBeforeEvent.UserId,
                 staffDto.Name,
                 staffDto.DisplayName,
                 staffDto.Avatar,
@@ -804,9 +800,7 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        var staff = await CheckStaffExistAsync(command.Staff.Id);
-        await _staffRepository.RemoveAsync(staff);
-        await _staffDomainService.RemoveAsync(new(staff));
+        await _staffDomainService.RemoveAsync(command.Staff);
         command.Result = staff;
     }
 

@@ -3,32 +3,37 @@
 
 public class StaffDomainService : DomainService
 {
-    public StaffDomainService(IDomainEventBus eventBus) : base(eventBus)
+    readonly UserDomainService _userDomainService;
+
+    public StaffDomainService(UserDomainService userDomainService)
     {
+        _userDomainService = userDomainService;
     }
 
-    public async Task AddBeforeAsync(AddStaffBeforeDomainEvent staffEvent)
+    public async Task RemoveAsync(RemoveStaffDto staff)
     {
-        await EventBus.PublishAsync(staffEvent);
+        await EventBus.PublishAsync(new RemoveStaffDomainEvent(staff));
     }
 
-    public async Task AddAfterAsync(AddStaffAfterDomainEvent staffEvent)
+    public async Task<Staff> AddAsync(AddStaffDto staffDto)
     {
-        await EventBus.PublishAsync(staffEvent);
-    }
-
-    public async Task UpdateBeforeAsync(UpdateStaffBeforeDomainEvent staffEvent)
-    {
-        await EventBus.PublishAsync(staffEvent);
-    }
-
-    public async Task UpdateAfterAsync(UpdateStaffAfterDomainEvent staffEvent)
-    {
-        await EventBus.PublishAsync(staffEvent);
-    }
-
-    public async Task RemoveAsync(RemoveStaffDomainEvent staffEvent)
-    {
-        await EventBus.PublishAsync(staffEvent);
+        var staff = new Staff(
+                staffDto.Name,
+                staffDto.DisplayName,
+                staffDto.Avatar,
+                staffDto.IdCard,
+                staffDto.CompanyName,
+                staffDto.Gender,
+                staffDto.PhoneNumber,
+                staffDto.Email,
+                staffDto.JobNumber,
+                null,
+                staffDto.StaffType,
+                staffDto.Enabled,
+                staffDto.Address
+            );
+        await _userDomainService.AddAsync(new User(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.Account,
+            staffDto.Password, staffDto.CompanyName, staffDto.Email, staffDto.PhoneNumber, staff));
+        return staff;
     }
 }

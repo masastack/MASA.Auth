@@ -111,7 +111,6 @@ public class StaffService : RestServiceBase
     {
         var addStaffCommand = new AddStaffCommand(staff);
         await eventBus.PublishAsync(addStaffCommand);
-        await eventBus.PublishAsync(new UpdateTeamCacheCommand(addStaffCommand.TeamChangeResult));
     }
 
     private async Task UpdateAsync(IEventBus eventBus,
@@ -119,7 +118,6 @@ public class StaffService : RestServiceBase
     {
         var updateStaffCommand = new UpdateStaffCommand(staff);
         await eventBus.PublishAsync(updateStaffCommand);
-        await eventBus.PublishAsync(new UpdateTeamCacheCommand(updateStaffCommand.TeamChangeResult));
     }
 
     private async Task UpdateBasicInfoAsync(IEventBus eventBus,
@@ -140,21 +138,6 @@ public class StaffService : RestServiceBase
         var deleteCommand = new RemoveStaffCommand(staff);
         await eventBus.PublishAsync(deleteCommand);
     }
-
-    //private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, HttpRequest request)
-    //{
-    //    if (request.HasFormContentType is false) throw new Exception("Only supported formContent");
-    //    var form = await request.ReadFormAsync();
-    //    if (form.Files.Count <= 0) throw new UserFriendlyException("File not found");
-    //    var file = form.Files.First();
-    //    ICsvImporter importer = new CsvImporter();
-    //    using var stream = file.OpenReadStream();
-    //    var import = await importer.Import<SyncStaffDto>(stream);
-    //    if (import.HasError) throw new UserFriendlyException("Read file data failed");
-    //    var syncCommand = new SyncStaffCommand(import.Data.ToList());
-    //    await eventBus.PublishAsync(syncCommand);
-    //    return syncCommand.Result;
-    //}
 
     private async Task<SyncStaffResultsDto> SyncAsync(IEventBus eventBus, UploadFileDto file)
     {

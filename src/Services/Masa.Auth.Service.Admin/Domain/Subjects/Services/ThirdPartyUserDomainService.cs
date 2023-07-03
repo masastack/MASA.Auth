@@ -1,14 +1,22 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+namespace Masa.Auth.Service.Admin.Domain.Subjects.Services;
+
 public class ThirdPartyUserDomainService : DomainService
 {
-    public ThirdPartyUserDomainService(IDomainEventBus eventBus) : base(eventBus)
+
+    readonly UserDomainService _userDomainService;
+
+    public ThirdPartyUserDomainService(UserDomainService userDomainService)
     {
+        _userDomainService = userDomainService;
     }
 
-    public async Task AddBeforeAsync(AddThirdPartyUserBeforeDomainEvent userEvent)
+    public async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
     {
-        await EventBus.PublishAsync(userEvent);
+        var addUserCommand = new AddUserCommand(dto.User, true);
+        await EventBus.PublishAsync(addUserCommand);
+        return addUserCommand.Result.Adapt<UserModel>();
     }
 }

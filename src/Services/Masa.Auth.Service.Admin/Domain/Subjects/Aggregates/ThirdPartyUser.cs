@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 {
-    private readonly User? _user;
+    private User? _user;
     private readonly User? _createUser;
     private readonly User? _modifyUser;
     private IdentityProvider _identityProvider = default!;
@@ -49,20 +49,27 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public IdentityProvider IdentityProvider => _identityProvider;
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
+    public ThirdPartyUser(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
-        UserId = userId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
     }
 
-    public void Update(bool enabled, string thridPartyIdentity, string extendedData)
+    public void Update(string extendedData)
     {
-        Enabled = enabled;
-        ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
+    }
+
+    public void Enable()
+    {
+        Enabled = true;
+    }
+
+    public void Disable()
+    {
+        Enabled = false;
     }
 
     public void Update(string thridPartyIdentity, string extendedData)

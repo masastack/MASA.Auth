@@ -22,6 +22,16 @@ public class UserDomainService : DomainService
         await EventBus.PublishAsync(new RemoveUserDomainEvent(user));
     }
 
+    public async Task AddRangeAsync(IEnumerable<User> users)
+    {
+        await EventBus.PublishAsync(new AddRangeUserDomainEvent(users));
+    }
+
+    public async Task UpdateRangeAsync(IEnumerable<User> users)
+    {
+        await EventBus.PublishAsync(new UpdateRangeUserDomainEvent(users));
+    }
+
     public async Task UpdateAuthorizationAsync(IEnumerable<Guid> roles)
     {
         await EventBus.PublishAsync(new UpdateUserAuthorizationDomainEvent(roles));
