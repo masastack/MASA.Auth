@@ -345,7 +345,7 @@ public class CommandHandler
     {
         var model = command.Model;
         var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == model.PhoneNumber, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
         if (user is null)
         {
@@ -364,7 +364,7 @@ public class CommandHandler
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
         }
-        command.Result = await UserSplicingDataAsync(user);
+        command.Result = _userDomainService.UserSplicingData(user);
     }
 
     [EventHandler]
@@ -456,7 +456,7 @@ public class CommandHandler
         }
 
         var user = await _userRepository.FindWithIncludAsync(u => EF.Functions.Collate(u.Account, "SQL_Latin1_General_CP1_CS_AS") == account || u.PhoneNumber == account, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
 
         if (user == null)
@@ -488,17 +488,7 @@ public class CommandHandler
             }
         }
 
-        validateByAccountCommand.Result = await UserSplicingDataAsync(user);
-    }
-
-    async Task<UserDetailDto> UserSplicingDataAsync(User user)
-    {
-        UserDetailDto userDetailDto = user;
-        var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
-        userDetailDto.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
-        userDetailDto.StaffDisplayName = staff?.DisplayName;
-        userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
-        return userDetailDto;
+        validateByAccountCommand.Result = _userDomainService.UserSplicingData(user);
     }
 
     [EventHandler]
@@ -523,35 +513,6 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
 
         return user;
-    }
-
-    private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
-    {
-        Expression<Func<User, bool>> condition = user => false;
-        condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);
-        condition = condition.Or(!string.IsNullOrEmpty(phoneNumber), user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
-        condition = condition.Or(!string.IsNullOrEmpty(email), user => user.Email == email);
-        condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
-        condition = condition.And(userId is not null, user => user.Id != userId);
-
-        var existUser = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .FirstOrDefaultAsync(condition);
-        if (existUser is not null)
-        {
-            if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
-            if (throwException is false) return existUser;
-            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
-            if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
-            if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
-            if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
-        }
-        return existUser;
     }
 
     [EventHandler(1)]
@@ -661,13 +622,7 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task AddStaffAsync(AddStaffCommand command)
     {
-        var staffDto = command.Staff;
-        var staff = await VerifyStaffRepeatAsync(default, staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, !command.WhenExisReturn);
-        if (staff is not null) return;
-
-        var addResult = await AddStaffAsync(staffDto);
-        command.TeamChangeResult = addResult.TeamChanges;
-        command.Result = addResult.Staff;
+        await _staffDomainService.AddAsync(command.Staff);
     }
 
     async Task<(Staff Staff, List<Guid> TeamChanges)> AddStaffAsync(AddStaffDto staffDto)
@@ -800,8 +755,7 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveStaffAsync(RemoveStaffCommand command)
     {
-        await _staffDomainService.RemoveAsync(command.Staff);
-        command.Result = staff;
+        command.Result = await _staffDomainService.RemoveAsync(command.Staff.Id);
     }
 
     [EventHandler(1)]
@@ -1171,15 +1125,6 @@ public class CommandHandler
             return;
         }
         command.Result = await AddThirdPartyUserAsync(thirdPartyUserDto);
-    }
-
-    async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
-    {
-        var thirdPartyUseEvent = new AddThirdPartyUserBeforeDomainEvent(dto.User);
-        await _thirdPartyUserDomainService.AddBeforeAsync(thirdPartyUseEvent);
-        var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, thirdPartyUseEvent.Result.Id, true, dto.ThridPartyIdentity, dto.ExtendedData);
-        await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
-        return thirdPartyUseEvent.Result;
     }
 
     [EventHandler(1)]

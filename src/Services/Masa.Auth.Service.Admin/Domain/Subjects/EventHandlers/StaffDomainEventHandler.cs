@@ -23,25 +23,6 @@ public class StaffDomainEventHandler
     }
 
     [EventHandler(1)]
-    public async Task AddUserAsync(AddStaffBeforeDomainEvent staffEvent)
-    {
-        var command = new AddUserCommand(staffEvent.User, true);
-        await _eventBus.PublishAsync(command);
-        staffEvent.UserId = command.Result.Id;
-    }
-
-    [EventHandler(2)]
-    public async Task UpsertPositionAsync(AddStaffBeforeDomainEvent staffEvent)
-    {
-        if (string.IsNullOrEmpty(staffEvent.Position) is false)
-        {
-            var command = new UpsertPositionCommand(new(staffEvent.Position));
-            await _eventBus.PublishAsync(command);
-            staffEvent.PositionId = command.Result;
-        }
-    }
-
-    [EventHandler(1)]
     public async Task UpdateRoleLimitAsync(AddStaffAfterDomainEvent staffEvent)
     {
         var teams = staffEvent.Staff.TeamStaffs.Select(team => team.TeamId).ToList();
@@ -52,30 +33,12 @@ public class StaffDomainEventHandler
     }
 
     [EventHandler(1)]
-    public async Task UpsertPositionAsync(UpdateStaffBeforeDomainEvent staffEvent)
-    {
-        if (string.IsNullOrEmpty(staffEvent.Position) is false)
-        {
-            var command = new UpsertPositionCommand(new(staffEvent.Position));
-            await _eventBus.PublishAsync(command);
-            staffEvent.PositionId = command.Result;
-        }
-    }
-
-    [EventHandler(1)]
     public async Task UpdateRoleLimitAsync(UpdateStaffAfterDomainEvent staffEvent)
     {
         if (staffEvent.Teams?.Count > 0)
         {
             await UpdateRoleLimitAsync(staffEvent.Teams);
         }
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateRoleLimitAsync(RemoveStaffDomainEvent staffEvent)
-    {
-        var teams = staffEvent.Staff.TeamStaffs.Select(team => team.TeamId).ToList();
-        await UpdateRoleLimitAsync(teams);
     }
 
     async Task UpdateRoleLimitAsync(List<Guid> teams)

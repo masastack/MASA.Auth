@@ -143,10 +143,10 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task UpsertPositionAsync(UpsertPositionCommand command)
     {
-        var position = await _positionRepository.FindAsync(p => p.Name == command.Position.Name);
+        var position = await _positionRepository.FindAsync(p => p.Name == command.Name);
         if (position is null)
         {
-            position = new(command.Position.Name);
+            position = new(command.Name);
             await _positionRepository.AddAsync(position);
         }
         command.Result = position.Id;

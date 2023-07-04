@@ -18,18 +18,18 @@ public class StaffRepository : Repository<AuthDbContext, Staff, Guid>, IStaffRep
         return staff;
     }
 
-    public async Task<Staff?> GetByUserIdAsync(Guid id)
+    public async Task<Staff> GetByUserIdAsync(Guid userId)
     {
         return await Context.Set<Staff>()
-                                .FirstOrDefaultAsync(s => s.UserId == id);
+                                .FirstOrDefaultAsync(s => s.UserId == userId) ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_FOUND);
     }
 
-    public async Task<Staff?> GetDetailByIdAsync(Guid id)
+    public async Task<Staff> GetDetailByIdAsync(Guid id)
     {
         var staff = await Context.Set<Staff>()
                                 .Include(s => s.DepartmentStaffs)
                                 .Include(s => s.TeamStaffs)
-                                .FirstOrDefaultAsync(s => s.Id == id);
+                                .FirstOrDefaultAsync(s => s.Id == id) ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_FOUND);
 
         return staff;
     }

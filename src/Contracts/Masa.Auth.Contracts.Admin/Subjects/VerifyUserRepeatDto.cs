@@ -5,8 +5,6 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class VerifyUserRepeatDto : FromUri<VerifyUserRepeatDto>
 {
-    public Guid? Id { get; set; }
-
     public string? IdCard { get; set; }
 
     public string? PhoneNumber { get; set; }
