@@ -26,11 +26,6 @@ public partial class Index
             {
                 showLogoutPrompt = context.ShowSignoutPrompt == true ||
                     !context.Parameters.AllKeys.Contains(IsolationConsts.ENVIRONMENT);
-                if (bool.TryParse(context.Parameters[PropertyConsts.REDIRECT_TO_LOGIN], out var redirectToLogin)
-                        && redirectToLogin)
-                {
-                    showLogoutPrompt = !redirectToLogin;
-                }
             }
         }
 
