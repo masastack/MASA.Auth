@@ -147,7 +147,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler(99)]
         public async Task RemoveStaffOperationLogAsync(RemoveStaffCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveStaff, $"删除员工：{command.Staff.DisplayName}");
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveStaff, $"删除员工：{command.Result.DisplayName}");
         }
 
         [EventHandler]

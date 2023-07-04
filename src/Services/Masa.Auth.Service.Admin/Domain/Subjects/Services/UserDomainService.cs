@@ -55,7 +55,7 @@ public class UserDomainService : DomainService
         return query.Authorized;
     }
 
-    public async Task VerifyRepeatAsync(string? phoneNumber, string? email, string? idCard, string? account, Guid? curUserId)
+    public async Task VerifyRepeatAsync(string? phoneNumber, string? email, string? idCard, string? account, Guid? curUserId = default)
     {
         Expression<Func<User, bool>> condition = user => false;
         condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);

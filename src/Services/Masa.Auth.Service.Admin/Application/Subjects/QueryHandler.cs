@@ -16,6 +16,7 @@ public class QueryHandler
     readonly IPmClient _pmClient;
     readonly IMultiEnvironmentContext _multiEnvironmentContext;
     readonly UserDomainService _userDomainService;
+    readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -28,7 +29,8 @@ public class QueryHandler
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient,
         IMultiEnvironmentContext multiEnvironmentContext,
-        UserDomainService userDomainService)
+        UserDomainService userDomainService,
+        OperaterProvider operaterProvider)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -41,6 +43,7 @@ public class QueryHandler
         _pmClient = pmClient;
         _multiEnvironmentContext = multiEnvironmentContext;
         _userDomainService = userDomainService;
+        _operaterProvider = operaterProvider;
     }
 
     #region User
@@ -73,8 +76,8 @@ public class QueryHandler
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
-        var creator = await _multilevelCacheClient.GetUserAsync(user.Creator);
-        var modifier = await _multilevelCacheClient.GetUserAsync(user.Modifier);
+        var creator = await _operaterProvider.GetUserAsync(user.Creator);
+        var modifier = await _operaterProvider.GetUserAsync(user.Modifier);
         var userDetail = _userDomainService.UserSplicingData(user);
         query.Result = userDetail!;
         query.Result.Creator = creator?.DisplayName;
@@ -148,7 +151,7 @@ public class QueryHandler
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
-            var userCache = await _multilevelCacheClient.GetUserAsync(userId);
+            var userCache = await _operaterProvider.GetUserAsync(userId);
             if (userCache != null)
             {
                 userPortraitsQuery.Result.Add(userCache);
@@ -166,7 +169,7 @@ public class QueryHandler
     public async Task VerifyUserRepeatAsync(VerifyUserRepeatQuery command)
     {
         var user = command.User;
-        await _userDomainService.VerifyRepeatAsync(user.PhoneNumber, user.Email, user.IdCard, user.Account);
+        await _userDomainService.VerifyRepeatAsync(user.PhoneNumber, user.Email, user.IdCard, user.Account, user.Id);
         command.Result = true;
     }
 
@@ -230,7 +233,7 @@ public class QueryHandler
 
         query.Result = staff;
 
-        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(staff.Creator, staff.Modifier);
+        var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(staff.Creator, staff.Modifier);
         query.Result.Creator = creator;
         query.Result.Modifier = modifier;
     }
@@ -381,7 +384,7 @@ public class QueryHandler
         query.Result = new(total, tpus.Select(tpu =>
         {
             var dto = (ThirdPartyUserDto)tpu;
-            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
+            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
             dto.Creator = creator;
             dto.Modifier = modifier;
             return dto;
@@ -396,7 +399,7 @@ public class QueryHandler
 
         query.Result = tpu;
 
-        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(tpu.Creator, tpu.Modifier);
+        var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(tpu.Creator, tpu.Modifier);
         query.Result.User.Creator = creator;
         query.Result.User.Modifier = modifier;
     }

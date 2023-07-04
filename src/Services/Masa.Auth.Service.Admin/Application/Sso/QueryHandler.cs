@@ -14,7 +14,7 @@ public class QueryHandler
     readonly DbContext _oidcDbContext;
     readonly AuthDbContext _authDbContext;
     readonly IClientCache _clientCache;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IClientRepository clientRepository,
@@ -26,7 +26,7 @@ public class QueryHandler
         OidcDbContext oidcDbContext,
         AuthDbContext authDbContext,
         IClientCache clientCache,
-        IMultilevelCacheClient multilevelCacheClient)
+        OperaterProvider operaterProvider)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -37,7 +37,7 @@ public class QueryHandler
         _oidcDbContext = oidcDbContext;
         _authDbContext = authDbContext;
         _clientCache = clientCache;
-        _multilevelCacheClient = multilevelCacheClient;
+        _operaterProvider = operaterProvider;
     }
 
     #region Client
@@ -349,7 +349,7 @@ public class QueryHandler
         var clients = await _clientCache.GetListAsync(customLogins.Select(customLogin => customLogin.ClientId));
         var customLoginDtos = customLogins.Select(customLogin =>
         {
-            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
+            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
             var customLoginDto = new CustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, creator, modifier);
             var client = clients.FirstOrDefault(client => client.ClientId == customLogin.ClientId);
             if (client is not null)

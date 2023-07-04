@@ -52,9 +52,13 @@ public class StaffDomainService : DomainService
     /// </summary>
     /// <param name="staffDto"></param>
     /// <returns></returns>
-    public async Task UpdateAsync(UpdateStaffDto staffDto)
+    public async Task<Staff> UpdateAsync(UpdateStaffDto staffDto)
     {
-        await VerifyRepeatAsync(staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, staffDto.Id);
+        var (_, exception) = await VerifyRepeatAsync(staffDto.JobNumber, staffDto.PhoneNumber, staffDto.Email, staffDto.IdCard, staffDto.Id);
+        if (exception != null)
+        {
+            throw exception;
+        }
         var staff = await _staffRepository.GetDetailByIdAsync(staffDto.Id);
         staff.Update(
             await GetPositonId(staffDto.Position), staffDto.StaffType, staffDto.Enabled, staffDto.Name,
@@ -63,6 +67,7 @@ public class StaffDomainService : DomainService
         staff.SetDepartmentStaff(staffDto.DepartmentId);
         staff.SetTeamStaff(staffDto.Teams);
         await _staffRepository.UpdateAsync(staff);
+        return staff;
     }
 
     async Task<Guid?> GetPositonId(string? position)
@@ -77,7 +82,7 @@ public class StaffDomainService : DomainService
         return positionId;
     }
 
-    public async Task VerifyRepeatAsync(string? jobNumber, string? phoneNumber, string? email, string? idCard, Guid? curStaffId)
+    public async Task<(Staff?, UserFriendlyException?)> VerifyRepeatAsync(string? jobNumber, string? phoneNumber, string? email, string? idCard, Guid? curStaffId = default)
     {
         Expression<Func<Staff, bool>> condition = staff => false;
         condition = condition.Or(!string.IsNullOrEmpty(jobNumber), staff => staff.JobNumber == jobNumber);
@@ -87,16 +92,18 @@ public class StaffDomainService : DomainService
         condition = condition.And(curStaffId is not null, staff => staff.Id != curStaffId);
 
         var existStaff = await _staffRepository.FindAsync(condition);
+        UserFriendlyException? exception = null;
         if (existStaff is not null)
         {
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existStaff.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_PHONE_NUMBER_EXIST, phoneNumber);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == existStaff.Email)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_EMAIL_EXIST, email);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_EMAIL_EXIST, email);
             if (string.IsNullOrEmpty(idCard) is false && idCard == existStaff.IdCard)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_ID_CARD_EXIST, idCard);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_ID_CARD_EXIST, idCard);
             if (string.IsNullOrEmpty(jobNumber) is false && jobNumber == existStaff.JobNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_JOB_NUMBER_EXIST, jobNumber);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.STAFF_JOB_NUMBER_EXIST, jobNumber);
         }
+        return (existStaff, exception);
     }
 }

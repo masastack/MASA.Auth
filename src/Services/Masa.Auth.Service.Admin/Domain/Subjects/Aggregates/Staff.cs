@@ -206,39 +206,19 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         return new StaffDto(staff.Id, staff.UserId, department, staff.Position?.Name ?? "", staff.JobNumber, staff.Enabled, staff.StaffType, staff.Name, staff.DisplayName, staff.Avatar, staff.IdCard, staff.CompanyName, staff.PhoneNumber, staff.Email, staff.Address, staff.CreationTime, staff.Gender);
     }
 
-    public void Update(Guid? positionId, StaffTypes staffType, bool enabled, string? name, string displayName, string avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValue? address, GenderTypes gender)
+    public void Update(Guid? positionId, StaffTypes staffType, bool? enabled, string? name, string displayName, string avatar, string? idCard, string? companyName, string? phoneNumber, string? email, AddressValue? address, GenderTypes gender)
     {
-        Name = name;
-        PositionId = positionId;
-        Enabled = enabled;
-        Name = name;
-        IdCard = idCard;
-        Avatar = avatar;
-        CompanyName = companyName;
-        Enabled = enabled;
-        Address = address;
-        DisplayName = displayName;
-        StaffType = staffType;
-        Gender = gender;
+        PositionId = positionId ?? PositionId;
+        Enabled = enabled ?? Enabled;
+        Name = name.IsNullOrEmpty() ? Name : name;
+        IdCard = idCard.IsNullOrEmpty() ? IdCard : idCard;
+        Avatar = avatar.IsNullOrEmpty() ? Avatar : avatar;
+        CompanyName = companyName.IsNullOrEmpty() ? CompanyName : companyName;
+        Address = address ?? Address;
+        DisplayName = displayName.IsNullOrEmpty() ? DisplayName : displayName;
+        StaffType = staffType == default ? StaffType : staffType;
+        Gender = gender == default ? Gender : gender;
         VerifyPhonNumberEmail(phoneNumber, email);
-    }
-
-    public void UpdateForLdap(string? name, string displayName, string phoneNumber, string? email)
-    {
-        Name = name;
-        DisplayName = displayName;
-        VerifyPhonNumberEmail(phoneNumber, email);
-    }
-
-    public void UpdateBasicInfo(string? name, string displayName, string? email, string? idCard, GenderTypes gender, Guid? positionId, StaffTypes staffType)
-    {
-        Name = name;
-        PositionId = positionId;
-        DisplayName = displayName;
-        Email = email;
-        IdCard = idCard;
-        StaffType = staffType;
-        Gender = gender;
     }
 
     public void UpdateBasicInfo(string? name, string displayName, GenderTypes gender, string? phoneNumber, string? email)

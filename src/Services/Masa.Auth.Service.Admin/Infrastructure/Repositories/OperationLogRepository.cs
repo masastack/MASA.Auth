@@ -7,18 +7,18 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
 {
     readonly IUserContext _userContext;
     readonly ILogger<OperationLogRepository> _logger;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly OperaterProvider _operaterProvider;
 
     public OperationLogRepository(
         AuthDbContext context,
         ILogger<OperationLogRepository> logger,
         IUnitOfWork unitOfWork,
         IUserContext userContext,
-        AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider) : base(context, unitOfWork)
+        OperaterProvider operaterProvider) : base(context, unitOfWork)
     {
         _userContext = userContext;
         _logger = logger;
-        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
+        _operaterProvider = operaterProvider;
     }
 
     public async Task AddDefaultAsync(OperationTypes operationType, string operationDescription, Guid? @operator = null)
@@ -26,7 +26,7 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
         try
         {
             @operator ??= _userContext.GetUserId<Guid>();
-            var operatorName = (await _multilevelCacheClient.GetUserAsync(@operator.Value))?.StaffDisplayName ?? "";
+            var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.StaffDisplayName ?? "";
             await AddAsync(new OperationLog(
                 @operator.Value, operatorName, operationType, default, operationDescription
             ));

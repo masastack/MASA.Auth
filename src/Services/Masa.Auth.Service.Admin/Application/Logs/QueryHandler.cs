@@ -6,12 +6,12 @@ namespace Masa.Auth.Service.Admin.Application.Logs;
 public class QueryHandler
 {
     readonly IOperationLogRepository _operationLogRepository;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IStaffRepository _staffRepository;
 
-    public QueryHandler(IOperationLogRepository operationLogRepository, IMultilevelCacheClient multilevelCacheClient)
+    public QueryHandler(IOperationLogRepository operationLogRepository, IStaffRepository staffRepository)
     {
         _operationLogRepository = operationLogRepository;
-        _multilevelCacheClient = multilevelCacheClient;
+        _staffRepository = staffRepository;
     }
 
     [EventHandler]
@@ -39,11 +39,14 @@ public class QueryHandler
             operationLog.Adapt<OperationLogDto>()
         ).ToList());
 
-        var staffs = await _multilevelCacheClient.GetListAsync<CacheStaff>(query.Result.Items.Select(item => CacheKey.StaffKey(item.Operator)));
+        var staffs = await _staffRepository.GetListAsync(staff => query.Result.Items.Any(item => item.Operator == staff.UserId));
         query.Result.Items.ForEach(item =>
         {
             var staff = staffs.FirstOrDefault(staff => staff?.UserId == item.Operator);
-            if (staff is not null && string.IsNullOrEmpty(staff.DisplayName) is false) item.OperatorName = staff.DisplayName;
+            if (staff is not null && !string.IsNullOrEmpty(staff.DisplayName))
+            {
+                item.OperatorName = staff.DisplayName;
+            }
         });
     }
 
