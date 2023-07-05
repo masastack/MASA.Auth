@@ -120,7 +120,6 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account);
         var user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
         user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
@@ -133,7 +132,6 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, userDto.Id);
         user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
         await _userDomainService.UpdateAsync(user);
         command.Result = user;
@@ -215,7 +213,6 @@ public class CommandHandler
 
         if (user != null)
         {
-            await _userDomainService.VerifyRepeatAsync(userModel.PhoneNumber, userModel.Email, userModel.IdCard, userModel.Account, userModel.Id);
             user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
             roles.AddRange(user.Roles.Select(role => role.RoleId));
             user.SetRoles(roles);
@@ -304,7 +301,6 @@ public class CommandHandler
             var key = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(userDto.Id.ToString(), userDto.PhoneNumber);
             if (await _sms.VerifyMsgCodeAsync(key, userDto.VerificationCode))
             {
-                await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, default, default, default, user.Id);
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
                 await _userDomainService.UpdateAsync(user);
                 await _distributedCacheClient.RemoveAsync<bool>(resultKey);

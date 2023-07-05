@@ -20,17 +20,35 @@ public class LdapDomainService : DomainService
 
         var thirdPartyUsers = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id)
             .Include(tpu => tpu.User).ThenInclude(user => user.Staff).ToListAsync();
-#warning 字段赋值
         var existLdapUsers = ldapUsers.Where(ldapUser => thirdPartyUsers.Any(thirdPartyUser => thirdPartyUser.ThridPartyIdentity == ldapUser.ObjectGuid));
         var unExistLdapUsers = ldapUsers.ExceptBy(existLdapUsers.Select(user => user.ObjectGuid), user => user.ObjectGuid);
 
-        var addUsers = unExistLdapUsers.Select(ldapUser => new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", "", ldapUser.EmailAddress, ldapUser.Phone,
+        var addUsers = unExistLdapUsers.Select(ldapUser => new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", "", GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.Phone, null, StaffTypes.Internal, true)));
+            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true)));
         await _userDomainService.AddRangeAsync(addUsers);
 
-#warning update
+        thirdPartyUsers.ForEach(tpu =>
+        {
+            var ldapUser = existLdapUsers.FirstOrDefault(ldapUser => ldapUser.ObjectGuid == tpu.ThridPartyIdentity);
+            if (ldapUser != null)
+            {
+                tpu.User.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, "", "", "", new());
+                tpu.User.Staff!.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
+            }
+        });
         await _userDomainService.UpdateRangeAsync(thirdPartyUsers.Select(tpu => tpu.User));
+    }
+
+    string GetRelativeId(string objectSid)
+    {
+        var parts = objectSid.Split('-');
+        if (parts.Length < 3)
+        {
+            return "";
+        }
+
+        return parts[parts.Length - 1];
     }
 
     public async Task UpsertLdapUserAsync(LdapUser ldapUser)
@@ -40,15 +58,15 @@ public class LdapDomainService : DomainService
             .Include(tpu => tpu.User).ThenInclude(user => user.Staff).Select(tpu => tpu.User).FirstOrDefaultAsync();
         if (user != null)
         {
-#warning update
+            user.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, "", "", "", new());
+            user.Staff!.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
             await _userDomainService.UpdateAsync(user);
         }
         else
         {
-#warning 字段赋值
-            await _userDomainService.AddAsync(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", "", ldapUser.EmailAddress, ldapUser.Phone,
+            await _userDomainService.AddAsync(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", "", GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.Phone, null, StaffTypes.Internal, true)));
+            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true)));
         }
     }
 

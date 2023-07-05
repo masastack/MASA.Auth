@@ -64,7 +64,6 @@ public class LdapCommandHandler
         if (dbItem is null)
         {
             await _ldapIdpRepository.AddAsync(ldapIdp);
-            await _unitOfWork.SaveChangesAsync();
         }
         else
         {

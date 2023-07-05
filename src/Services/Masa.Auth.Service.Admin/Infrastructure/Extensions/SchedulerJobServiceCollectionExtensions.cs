@@ -77,8 +77,7 @@ public static class SchedulerJobServiceCollectionExtensions
             HttpConfig = new SchedulerJobHttpConfig()
             {
                 HttpMethod = HttpMethods.POST,
-                RequestUrl = Path.Combine(authUrl, "api/user/SyncRedis/"),
-                HttpBody = JsonSerializer.Serialize(new SyncUserRedisDto { OnceExecuteCount = 1000 }),
+                RequestUrl = Path.Combine(authUrl, "api/user/SyncRedis/")
             }
         });
     }

@@ -9,6 +9,8 @@ public class UserDomainService : DomainService
     readonly IUserContext _userContext;
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly RoleDomainService _roleDomainService;
+    readonly AuthDbContext _dbContext;
+    readonly IUnitOfWork _unitOfWork;
 
     public UserDomainService(
         IUserRepository userRepository,
@@ -16,7 +18,9 @@ public class UserDomainService : DomainService
         ILogger<UserDomainService> logger,
         IUserContext userContext,
         IMultilevelCacheClient multilevelCacheClient,
-        RoleDomainService roleDomainService)
+        RoleDomainService roleDomainService,
+        AuthDbContext dbContext,
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -24,16 +28,28 @@ public class UserDomainService : DomainService
         _userContext = userContext;
         _multilevelCacheClient = multilevelCacheClient;
         _roleDomainService = roleDomainService;
+        _dbContext = dbContext;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task AddAsync(User user)
     {
+        var (_, exception) = await VerifyRepeatAsync(user.PhoneNumber, user.Email, user.IdCard, user.Account);
+        if (exception != null)
+        {
+            throw exception;
+        }
         user = await _userRepository.AddAsync(user);
         await SyncUserAsync(user.Id);
     }
 
     public async Task UpdateAsync(User user)
     {
+        var (_, exception) = await VerifyRepeatAsync(user.PhoneNumber, user.Email, user.IdCard, user.Account, user.Id);
+        if (exception != null)
+        {
+            throw exception;
+        }
         await _userRepository.UpdateAsync(user);
         await SyncUserAsync(user.Id);
     }
@@ -51,6 +67,37 @@ public class UserDomainService : DomainService
             userModel.StaffId = staff?.Id;
 
             await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
+
+            var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
+            if (!result.IsValid)
+            {
+                _logger.LogError(JsonSerializer.Serialize(result));
+            }
+
+            await _roleDomainService.UpdateRoleLimitAsync(user.Roles.Select(r => r.RoleId));
+        }
+    }
+
+    public async Task SyncUserAsync(IEnumerable<Guid> userIds)
+    {
+        var users = await _dbContext.Set<User>().Where(u => userIds.Contains(u.Id))
+            .Include(u => u.Roles)
+            .ThenInclude(ur => ur.Role)
+            .Include(u => u.Permissions)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .ToListAsync();
+
+        foreach (var user in users)
+        {
+            var userModel = user.Adapt<UserModel>();
+            userModel.Roles = user.Roles.Where(e => !e.IsDeleted).Select(e => new RoleModel { Id = e.RoleId, Name = e.Role == null ? "" : e.Role.Name, Code = e.Role == null ? "" : e.Role.Code }).ToList();
+            userModel.Permissions = user.Permissions.Where(e => !e.IsDeleted).Adapt<List<SubjectPermissionRelationModel>>();
+            var staff = user.Staff;
+            userModel.StaffDisplayName = staff?.DisplayName;
+            userModel.StaffId = staff?.Id;
+
+            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(user.Id), userModel);
 
             var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
             if (!result.IsValid)
@@ -97,12 +144,17 @@ public class UserDomainService : DomainService
 
     public async Task AddRangeAsync(IEnumerable<User> users)
     {
-        await EventBus.PublishAsync(new AddRangeUserDomainEvent(users));
+        await _userRepository.AddRangeAsync(users);
+        await _unitOfWork.SaveChangesAsync();
+        var userIds = await _dbContext.Set<User>().Where(u => users.Select(user => user.Account).Contains(u.Account))
+            .Select(u => u.Id).ToListAsync();
+        await SyncUserAsync(userIds);
     }
 
     public async Task UpdateRangeAsync(IEnumerable<User> users)
     {
-        await EventBus.PublishAsync(new UpdateRangeUserDomainEvent(users));
+        await _userRepository.UpdateRangeAsync(users);
+        await SyncUserAsync(users.Select(u => u.Id));
     }
 
     public async Task UpdateAuthorizationAsync(IEnumerable<Guid> roles)
@@ -125,7 +177,7 @@ public class UserDomainService : DomainService
         return query.Authorized;
     }
 
-    public async Task VerifyRepeatAsync(string? phoneNumber, string? email, string? idCard, string? account, Guid? curUserId = default)
+    public async Task<(User?, UserFriendlyException?)> VerifyRepeatAsync(string? phoneNumber, string? email, string? idCard, string? account, Guid? curUserId = default)
     {
         Expression<Func<User, bool>> condition = user => false;
         condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);
@@ -135,19 +187,21 @@ public class UserDomainService : DomainService
         condition = condition.And(curUserId is not null, user => user.Id != curUserId);
 
         var existUser = await _userRepository.FindAsync(condition);
+        UserFriendlyException? exception = default;
         if (existUser is not null)
         {
             if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
             if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
             if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
         }
+        return (existUser, exception);
     }
 
     public UserDetailDto? UserSplicingData(User? user)
