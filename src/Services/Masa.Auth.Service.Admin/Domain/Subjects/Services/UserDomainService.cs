@@ -12,11 +12,13 @@ public class UserDomainService : DomainService
 
     public async Task AddAsync(User user)
     {
+        await _userRepository.AddAsync(user);
         await EventBus.PublishAsync(new AddUserDomainEvent(user));
     }
 
     public async Task UpdateAsync(User user)
     {
+        await _userRepository.UpdateAsync(user);
         await EventBus.PublishAsync(new UpdateUserDomainEvent(user));
     }
 
