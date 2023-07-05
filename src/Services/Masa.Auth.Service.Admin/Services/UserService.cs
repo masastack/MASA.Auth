@@ -286,9 +286,9 @@ public class UserService : ServiceBase
 
     [AllowAnonymous]
     [RoutePattern("SyncRedis", StartWithBaseUri = true, HttpMethod = "Post")]
-    public async Task SyncRedisAsync(IEventBus eventBus, [FromBody] SyncUserRedisDto dto)
+    public async Task SyncRedisAsync(IEventBus eventBus)
     {
-        var command = new SyncUserRedisCommand(dto);
+        var command = new SyncUserRedisCommand();
         await eventBus.PublishAsync(command);
     }
 

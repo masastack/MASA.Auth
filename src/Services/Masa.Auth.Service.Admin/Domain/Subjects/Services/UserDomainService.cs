@@ -4,27 +4,95 @@
 public class UserDomainService : DomainService
 {
     readonly IUserRepository _userRepository;
+    readonly IAutoCompleteClient _autoCompleteClient;
+    readonly ILogger<UserDomainService> _logger;
+    readonly IUserContext _userContext;
+    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly RoleDomainService _roleDomainService;
 
-    public UserDomainService(IUserRepository userRepository)
+    public UserDomainService(
+        IUserRepository userRepository,
+        IAutoCompleteClient autoCompleteClient,
+        ILogger<UserDomainService> logger,
+        IUserContext userContext,
+        IMultilevelCacheClient multilevelCacheClient,
+        RoleDomainService roleDomainService)
     {
         _userRepository = userRepository;
+        _autoCompleteClient = autoCompleteClient;
+        _logger = logger;
+        _userContext = userContext;
+        _multilevelCacheClient = multilevelCacheClient;
+        _roleDomainService = roleDomainService;
     }
 
     public async Task AddAsync(User user)
     {
-        await _userRepository.AddAsync(user);
-        await EventBus.PublishAsync(new AddUserDomainEvent(user));
+        user = await _userRepository.AddAsync(user);
+        await SyncUserAsync(user.Id);
     }
 
     public async Task UpdateAsync(User user)
     {
         await _userRepository.UpdateAsync(user);
-        await EventBus.PublishAsync(new UpdateUserDomainEvent(user));
+        await SyncUserAsync(user.Id);
     }
 
-    public async Task RemoveAsync(User user)
+    public async Task SyncUserAsync(Guid userId)
     {
-        await EventBus.PublishAsync(new RemoveUserDomainEvent(user));
+        var user = await _userRepository.GetDetailAsync(userId);
+        if (user is not null)
+        {
+            var userModel = user.Adapt<UserModel>();
+            userModel.Roles = user.Roles.Where(e => !e.IsDeleted).Select(e => new RoleModel { Id = e.RoleId, Name = e.Role == null ? "" : e.Role.Name, Code = e.Role == null ? "" : e.Role.Code }).ToList();
+            userModel.Permissions = user.Permissions.Where(e => !e.IsDeleted).Adapt<List<SubjectPermissionRelationModel>>();
+            var staff = user.Staff;
+            userModel.StaffDisplayName = staff?.DisplayName;
+            userModel.StaffId = staff?.Id;
+
+            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
+
+            var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
+            if (!result.IsValid)
+            {
+                _logger.LogError(JsonSerializer.Serialize(result));
+            }
+
+            await _roleDomainService.UpdateRoleLimitAsync(user.Roles.Select(r => r.RoleId));
+        }
+    }
+
+    public async Task SyncUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+        var userIds = users.Select(u => u.Id).ToList();
+        var map = new Dictionary<string, UserModel?>();
+        foreach (var user in users)
+        {
+            var userModel = user.Adapt<UserModel>();
+            userModel.StaffDisplayName = user.Staff?.DisplayName ?? "";
+            userModel.StaffId = user.Staff?.Id;
+            map.Add(CacheKeyConsts.UserKey(user.Id), userModel);
+            await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
+        }
+        await _multilevelCacheClient.SetListAsync(map);
+    }
+
+    public async Task RemoveAsync(Guid userId)
+    {
+        var user = await _userRepository.GetDetailAsync(userId);
+        if (user.IsAdmin())
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ADMINISTRATOR_DELETE_ERROR);
+        }
+        if (user.Id == _userContext.GetUserId<Guid>())
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CURRENT_USER_DELETE_ERROR);
+        }
+
+        await _userRepository.RemoveAsync(user);
+        await _autoCompleteClient.DeleteAsync(userId);
+        await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKeyConsts.UserKey(userId));
     }
 
     public async Task AddRangeAsync(IEnumerable<User> users)

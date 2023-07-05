@@ -124,15 +124,8 @@ public class CommandHandler
         var user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
         user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
-        await AddUserAsync(user);
-        command.Result = user;
-    }
-
-    async Task AddUserAsync(User user)
-    {
-        await _userRepository.AddAsync(user);
         await _userDomainService.AddAsync(user);
-        await _unitOfWork.SaveChangesAsync();
+        command.Result = user;
     }
 
     [EventHandler(1)]
@@ -142,27 +135,14 @@ public class CommandHandler
         var user = await CheckUserExistAsync(userDto.Id);
         await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, userDto.IdCard, userDto.Account, userDto.Id);
         user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
-        await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
-        await _unitOfWork.SaveChangesAsync();
         command.Result = user;
     }
 
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
-        var user = await _userRepository.GetDetailAsync(command.User.Id);
-        if (user.IsAdmin())
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ADMINISTRATOR_DELETE_ERROR);
-        }
-        if (user.Id == _userContext.GetUserId<Guid>())
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CURRENT_USER_DELETE_ERROR);
-        }
-
-        await _userRepository.RemoveAsync(user);
-        await _userDomainService.RemoveAsync(user);
+        await _userDomainService.RemoveAsync(command.User.Id);
     }
 
     [EventHandler(1)]
@@ -205,9 +185,7 @@ public class CommandHandler
         var userModel = command.User;
         var user = await CheckUserExistAsync(userModel.Id);
         user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
-        await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
-        await _unitOfWork.SaveChangesAsync();
     }
 
     [EventHandler(1)]
@@ -241,7 +219,6 @@ public class CommandHandler
             user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
             roles.AddRange(user.Roles.Select(role => role.RoleId));
             user.SetRoles(roles);
-            await _userRepository.UpdateAsync(user);
             await _userDomainService.UpdateAsync(user);
             command.Result = user.Adapt<UserModel>();
         }
@@ -261,7 +238,6 @@ public class CommandHandler
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
         user.UpdateAvatar(userDto.Avatar);
-        await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
 
@@ -330,7 +306,6 @@ public class CommandHandler
             {
                 await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, default, default, default, user.Id);
                 user.UpdatePhoneNumber(userDto.PhoneNumber);
-                await _userRepository.UpdateAsync(user);
                 await _userDomainService.UpdateAsync(user);
                 await _distributedCacheClient.RemoveAsync<bool>(resultKey);
                 command.Result = true;
@@ -378,9 +353,7 @@ public class CommandHandler
                                     .Select(role => role.Id)
                                     .ToListAsync();
         user.RemoveRoles(roleIds);
-        await _userRepository.UpdateAsync(user);
-
-        await _eventBus.PublishAsync(new UpsertUserCacheCommand(user.Id));
+        await _userDomainService.UpdateAsync(user);
     }
 
     [EventHandler(1)]
@@ -392,11 +365,8 @@ public class CommandHandler
             throw new UserFriendlyException(UserFriendlyExceptionCodes.ACCOUNT_NOT_EXIST, userModel.Account);
 
         user.Disabled();
-        await _userRepository.UpdateAsync(user);
-        await _unitOfWork.SaveChangesAsync();
+        await _userDomainService.UpdateAsync(user);
         command.Result = true;
-
-        await _eventBus.PublishAsync(new UpsertUserCacheCommand(user.Id));
     }
 
     [EventHandler(1)]
@@ -586,7 +556,6 @@ public class CommandHandler
                                     .Select(role => role.Id)
                                     .ToListAsync();
         user.AddRoles(roles);
-        await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
 
@@ -609,7 +578,6 @@ public class CommandHandler
                                     .Select(role => role.Id)
                                     .ToListAsync();
         user.RemoveRoles(roles);
-        await _userRepository.UpdateAsync(user);
         await _userDomainService.UpdateAsync(user);
     }
 
