@@ -142,8 +142,9 @@ public class UserDomainService : DomainService
         await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKeyConsts.UserKey(userId));
     }
 
-    public async Task AddRangeAsync(IEnumerable<User> users)
+    public async Task AddRangeAsync(List<User> users)
     {
+        await Filter(users);
         await _userRepository.AddRangeAsync(users);
         await _unitOfWork.SaveChangesAsync();
         var userIds = await _dbContext.Set<User>().Where(u => users.Select(user => user.Account).Contains(u.Account))
@@ -151,8 +152,32 @@ public class UserDomainService : DomainService
         await SyncUserAsync(userIds);
     }
 
-    public async Task UpdateRangeAsync(IEnumerable<User> users)
+    private async Task Filter(List<User> users)
     {
+        var dbUsers = await _userRepository.GetListAsync(user =>
+                users.Select(u => u.Account).Contains(user.Account) ||
+                users.Select(u => u.PhoneNumber).Contains(user.PhoneNumber) ||
+                users.Select(u => u.Email).Contains(user.Email)
+            );
+
+        var existingUsers = dbUsers.ToHashSet();
+
+        var illegalItems = users.Where(user => existingUsers.Any(u => (user.Account == u.Account || (user.PhoneNumber == u.PhoneNumber && !user.PhoneNumber.IsNullOrEmpty())
+                || (user.Email == u.Email && !user.Email.IsNullOrEmpty())) && user.Id != u.Id)).ToList();
+
+        if (illegalItems.Any())
+        {
+            foreach (var illegalItem in illegalItems)
+            {
+                _logger.LogError("There is duplicate data, check Account:{Account},PhoneNumber:{PhoneNumber},Email:{Email}.", illegalItem.Account, illegalItem.PhoneNumber, illegalItem.Email);
+            }
+            users.RemoveAll(user => illegalItems.Any(u => u.Account == user.Account));
+        }
+    }
+
+    public async Task UpdateRangeAsync(List<User> users)
+    {
+        await Filter(users);
         await _userRepository.UpdateRangeAsync(users);
         await SyncUserAsync(users.Select(u => u.Id));
     }

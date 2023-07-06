@@ -5,28 +5,53 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Services;
 
 public class LdapDomainService : DomainService
 {
-    readonly AuthDbContext _authDbContext;
-    readonly UserDomainService _userDomainService;
+    private readonly AuthDbContext _authDbContext;
+    private readonly UserDomainService _userDomainService;
+    private readonly ILogger<LdapDomainService> _logger;
 
-    public LdapDomainService(AuthDbContext authDbContext, UserDomainService userDomainService)
+    public LdapDomainService(
+        AuthDbContext authDbContext,
+        UserDomainService userDomainService,
+        ILogger<LdapDomainService> logger)
     {
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
+        _logger = logger;
     }
 
-    public async Task SyncLdapUserAsync(IEnumerable<LdapUser> ldapUsers)
+    public async Task SyncLdapUserAsync(IList<LdapUser> ldapUsers)
     {
+        //清除重复数据
+        var duplicates = ldapUsers.GroupBy(x => x.Phone)
+                       .Where(g => g.Count() > 1 && !g.Key.IsNullOrEmpty());
+
+        if (duplicates.Any())
+        {
+            _logger.LogWarning("Duplicate phone numbers filtered.---- {data}.", string.Join(',', duplicates.Select(i => i.Key)));
+            ldapUsers.RemoveAll(duplicates.SelectMany(g => g).ToList());
+        }
+
+        //清除手机号和邮箱同时为空的数据
+        var illegalItems = ldapUsers.Where(ldapUser => ldapUser.EmailAddress.IsNullOrEmpty() && ldapUser.Phone.IsNullOrEmpty()).ToList();
+
+        if (illegalItems.Count > 0)
+        {
+            _logger.LogWarning("There are {N} pieces of illegal data, both phone number and email are empty.---- {data}.",
+                illegalItems.Count, string.Join(',', illegalItems.Select(i => i.DisplayName)));
+            ldapUsers.RemoveAll(illegalItems);
+        }
+
         var ldap = await GetIdentityProviderAsync();
 
         var thirdPartyUsers = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id)
             .Include(tpu => tpu.User).ThenInclude(user => user.Staff).ToListAsync();
         var existLdapUsers = ldapUsers.Where(ldapUser => thirdPartyUsers.Any(thirdPartyUser => thirdPartyUser.ThridPartyIdentity == ldapUser.ObjectGuid));
-        var unExistLdapUsers = ldapUsers.ExceptBy(existLdapUsers.Select(user => user.ObjectGuid), user => user.ObjectGuid);
+        var unExistLdapUsers = ldapUsers.ExceptBy(existLdapUsers.Select(user => user.ObjectGuid), user => user.ObjectGuid).ToList();
 
         var addUsers = unExistLdapUsers.Select(ldapUser => new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, true, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
             new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true)));
-        await _userDomainService.AddRangeAsync(addUsers);
+        await _userDomainService.AddRangeAsync(addUsers.ToList());
 
         thirdPartyUsers.ForEach(tpu =>
         {
@@ -37,7 +62,7 @@ public class LdapDomainService : DomainService
                 tpu.User.Staff!.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
             }
         });
-        await _userDomainService.UpdateRangeAsync(thirdPartyUsers.Select(tpu => tpu.User));
+        await _userDomainService.UpdateRangeAsync(thirdPartyUsers.Select(tpu => tpu.User).ToList());
     }
 
     string GetRelativeId(string objectSid)

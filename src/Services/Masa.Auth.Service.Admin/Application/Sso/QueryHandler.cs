@@ -5,16 +5,16 @@ namespace Masa.Auth.Service.Admin.Application.Sso;
 
 public class QueryHandler
 {
-    readonly IClientRepository _clientRepository;
-    readonly IIdentityResourceRepository _identityResourceRepository;
-    readonly IApiResourceRepository _apiResourceRepository;
-    readonly IApiScopeRepository _apiScopeRepository;
-    readonly IUserClaimRepository _userClaimRepository;
-    readonly ICustomLoginRepository _customLoginRepository;
-    readonly DbContext _oidcDbContext;
-    readonly AuthDbContext _authDbContext;
-    readonly IClientCache _clientCache;
-    readonly OperaterProvider _operaterProvider;
+    private readonly IClientRepository _clientRepository;
+    private readonly IIdentityResourceRepository _identityResourceRepository;
+    private readonly IApiResourceRepository _apiResourceRepository;
+    private readonly IApiScopeRepository _apiScopeRepository;
+    private readonly IUserClaimRepository _userClaimRepository;
+    private readonly ICustomLoginRepository _customLoginRepository;
+    private readonly DbContext _oidcDbContext;
+    private readonly AuthDbContext _authDbContext;
+    private readonly IClientCache _clientCache;
+    private readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IClientRepository clientRepository,
