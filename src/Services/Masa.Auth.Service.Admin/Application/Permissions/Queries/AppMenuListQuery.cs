@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Permissions.Queries;
 
-public record AppMenuListQuery(string AppId, Guid UserId) : Query<List<MenuDto>>
+public record AppMenuListQuery(string AppId, Guid UserId) : Query<List<MenuModel>>
 {
-    public override List<MenuDto> Result { get; set; } = new();
+    public override List<MenuModel> Result { get; set; } = new();
 }

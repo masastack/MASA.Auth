@@ -150,5 +150,9 @@
   },
   "CreationTime": "Creation time",
   "ModificationTime": "Modification time",
-  "AddChildDepartment": "Add child department"
+  "AddChildDepartment": "Add child department",
+  "PermissionBlock": {
+    "MatchPattern": "Match Pattern",
+    "MatchPatternTip": "Used in special cases when auto-match left menu is highlighted"
+  }
 }

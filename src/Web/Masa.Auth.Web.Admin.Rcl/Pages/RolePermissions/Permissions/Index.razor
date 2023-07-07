@@ -10,14 +10,14 @@
             <SSearchableExtend Split=true MaxWidth=300 @bind-Value="_search">
                 <MAutocomplete HideDetails=true TItemValue="string" TItem="ProjectDto" TValue="string"
                                OnSelectedItemUpdate="SelectProjectItem" Value="_curProjectId"
-                               Solo Class="elevation-0"
+                                      Solo Class="elevation-0"
                                Items="@_projectItems"
                                ItemText="u => u.Name"
                                ItemValue="u => u.Identity"></MAutocomplete>
             </SSearchableExtend>
             <MCard Style="width:300px;max-height: calc(100% - 60px); padding-top:24px !important;" Class="flex-grow-1 mt-4 pt-4">
                 <SElevationTab TabMinWidth="120" ItemsClass="mt-4" ItemsStyle="overflow-y: auto; width:252px!important;" Class="full-height" Tabs='new List<string>{T("Menu Permission"),T("Api Permission")}'
-                                Dense @bind-Tab="@_tab" IndexTab TabsClass="d-tabs">
+                                      Dense @bind-Tab="@_tab" IndexTab TabsClass="d-tabs">
                     <SElevationTabItem>
                         <MTreeview @bind-Active="_menuPermissionActive"
                                    Items="_menuPermissions" @bind-Open="_menuOpenNode"
@@ -25,7 +25,7 @@
                                    TItem="AppPermissionsViewModel"
                                    TKey="Guid" MandatoryActive
                                    Search="@_search"
-                                   Activatable Hoverable
+                                      Activatable Hoverable
                                    ItemText="r=>r.Name"
                                    ItemKey="r=>r.Id"
                                    ItemChildren="(r=>r.Children.Count < 1 ? null : r.Children)"
@@ -96,44 +96,33 @@
                             <MCardText Class="full-height">
                                 <MForm EnableValidation Model=_menuPermissionDetailDto EnableI18n @ref="_formMenu">
                                     <MRow>
-                                        <MCol Md=12>
-                                            <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" Class="permission-code" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}'>
-                                            </STextField>
-                                        </MCol>
                                         <MCol Md=6>
                                             <DccI18nConfiger @bind-Name="_menuPermissionDetailDto.Name" />
                                         </MCol>
                                         <MCol Md=6>
                                             <MCascader @bind-Value="_menuPermissionDetailDto.ParentId"
-                                                   Items="MenuTreeParent(_menuPermissionDetailDto)"
-                                                   HideDetails="true"
-                                                   ChangeOnSelect="@(_menuPermissionDetailDto.Type!=PermissionTypes.Element)"
-                                                          Dense Outlined
-                                                   ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children"
-                                                   Class="permission-name">
+                                                       Items="MenuTreeParent(_menuPermissionDetailDto)"
+                                                       HideDetails="true"
+                                                       ChangeOnSelect="@(_menuPermissionDetailDto.Type!=PermissionTypes.Element)"
+                                                       Dense Outlined
+                                                       ItemText="u => u.Name" ItemValue="u => u.Id" ItemChildren="u => u.Children"
+                                                       Class="permission-name">
                                             </MCascader>
                                         </MCol>
                                         <MCol Md=6>
-                                            <STextField Label="@T("Icon")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
-                                            <PrependContent>
-                                                <div class="d-flex align-center">
-                                                    <MIcon Size=30 Style="max-height:30px;max-width:30px;">
-                                                        @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon) ? "mdi-image" : _menuPermissionDetailDto.Icon)
-                                                    </MIcon>
-                                                </div>
-                                                </PrependContent>
+                                            <STextField Label="@T("Code")" Required Prefix="@($"{_menuPermissionDetailDto.AppId}.")" Class="permission-code" @bind-Value="_menuPermissionDetailDto.Code" Messages='new List<string>{T("PermissionCodeMsg")}'>
                                             </STextField>
                                         </MCol>
                                         <MCol Md=6>
+                                            <STextField Disabled="_disableMenuUrl" Filled="_disableMenuUrl" Class="prefix-mt-0" Prefix="@_showUrlPrefix" Label="@T("URL")" @bind-Value="_menuPermissionDetailDto.Url" />
+                                        </MCol>
+                                        <MCol Md=6>
                                             <SSelect Value="_menuPermissionDetailDto.Type"
-                                                 Label="@T("Type")"
-                                                 Items="_permissionTypes"
-                                                 ItemText="u => u.Text"
-                                                 ItemValue="u => u.Value" Disabled>
+                                                     Label="@T("Type")"
+                                                     Items="_permissionTypes"
+                                                     ItemText="u => u.Text"
+                                                     ItemValue="u => u.Value" Disabled>
                                         </SSelect>
-                                    </MCol>
-                                    <MCol Md=6>
-                                        <STextField Disabled="_disableMenuUrl" Filled="_disableMenuUrl" Class="prefix-mt-0" Prefix="@_showUrlPrefix" Label="@T("URL")" @bind-Value="_menuPermissionDetailDto.Url" />
                                     </MCol>
                                     <MCol Md=6>
                                         <SNumberTextField Label="@T("Order")" @bind-Value="_menuPermissionDetailDto.Order" />
@@ -143,10 +132,10 @@
                                                        Items="_childApiItems"
                                                        ItemText="r=>r.Text"
                                                        ItemValue="r=>r.Value"
-                                                       Chips
-                                                       SmallChips
-                                                       Label="@T("Mount Api Permission")"
-                                                       Multiple />
+                                                                  Chips
+                                                                  SmallChips
+                                                           Label="@T("Mount Api Permission")"
+                                                                  Multiple />
                                         </MCol>
                                         <MCol Md=12>
                                             <SGroupBox Title="@T("Permission Role")" Style="min-height: 48px;">
@@ -189,6 +178,23 @@
                                             </MTextarea>
                                         </MCol>
                                     </MRow>
+                                    <MDivider Left Class="my-6">@("UI")</MDivider>
+                                        <MRow>
+                                            <MCol Md=6>
+                                                <STextField Label="@T("Icon")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
+                                                    <PrependContent>
+                                                        <div class="d-flex align-center">
+                                                            <MIcon Size=30 Style="max-height:30px;max-width:30px;">
+                                                                @(string.IsNullOrWhiteSpace(_menuPermissionDetailDto.Icon) ? "mdi-image" : _menuPermissionDetailDto.Icon)
+                                                        </MIcon>
+                                                    </div>
+                                                </PrependContent>
+                                            </STextField>
+                                        </MCol>
+                                        <MCol Md=6>
+                                            <STextField Label="@T("MatchPattern")" @bind-Value="_menuPermissionDetailDto.MatchPattern" Tooltip="@T("MatchPatternTip")" />
+                                        </MCol>
+                                    </MRow>
                                 </MForm>
                             </MCardText>
                             <MCardActions Class="d-flex mb-8 px-4 align-center">
@@ -225,14 +231,14 @@
                                         </MCol>
                                         <MCol Md=6>
                                             <SSelect Value="_apiPermissionDetailDto.Type"
-                                                 Label="@T("Type")"
-                                                 Items="_permissionTypes"
-                                                 ItemText="u => u.Text"
-                                                 ItemValue="u => u.Value" Disabled>
-                                            </SSelect>
-                                        </MCol>
-                                        <MCol Md=12>
-                                            <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
+                                                     Label="@T("Type")"
+                                                     Items="_permissionTypes"
+                                                     ItemText="u => u.Text"
+                                                     ItemValue="u => u.Value" Disabled>
+                                        </SSelect>
+                                    </MCol>
+                                    <MCol Md=12>
+                                        <MTextarea class="mt-6" Label="@T("Description")" @bind-Value="_apiPermissionDetailDto.Description" Outlined Height="120" NoResize HideDetails="@("auto")">
                                             </MTextarea>
                                         </MCol>
                                     </MRow>

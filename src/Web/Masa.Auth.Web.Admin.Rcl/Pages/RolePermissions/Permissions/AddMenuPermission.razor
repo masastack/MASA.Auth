@@ -25,6 +25,13 @@
                         <STextField Prefix="@_showUrlPrefix" Label="@T("URL")" @bind-Value="_menuPermissionDetailDto.Url" />
                     </MCol>
                     <MCol Md=12>
+                        <STextarea Class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description"
+                                   Height="120" NoResize HideDetails="@("auto")" />
+                    </MCol>
+                </MRow>
+                <MDivider Left Class="my-6">@("UI")</MDivider>
+                <MRow>
+                    <MCol Md=6>
                         <STextField Label="@T("Icon")" Placeholder="@T("Support mdi and fas icon")" @bind-Value="_menuPermissionDetailDto.Icon">
                             <PrependContent>
                                 <div class="d-flex align-center">
@@ -35,9 +42,8 @@
                             </PrependContent>
                         </STextField>
                     </MCol>
-                    <MCol Md=12>
-                        <STextarea Class="mt-6" Label="@T("Description")" @bind-Value="_menuPermissionDetailDto.Description"
-                                   Height="120" NoResize HideDetails="@("auto")" />
+                    <MCol Md=6>
+                            <STextField Label="@T("MatchPattern")" @bind-Value="_menuPermissionDetailDto.MatchPattern" Tooltip="@T("MatchPatternTip")" />
                     </MCol>
                 </MRow>
             </MForm>

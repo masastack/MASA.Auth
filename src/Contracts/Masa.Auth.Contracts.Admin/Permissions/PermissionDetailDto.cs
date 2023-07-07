@@ -28,4 +28,9 @@ public class PermissionDetailDto : BaseUpsertDto<Guid>
     public Guid ParentId { get; set; }
 
     public List<Guid> ApiPermissions { get; set; } = new();
+
+    /// <summary>
+    /// Used in special cases when auto-match left menu is highlighted
+    /// </summary>
+    public string MatchPattern { get; set; } = string.Empty;
 }
