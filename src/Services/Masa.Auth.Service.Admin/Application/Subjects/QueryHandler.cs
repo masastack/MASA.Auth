@@ -5,18 +5,18 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
 {
-    readonly IUserRepository _userRepository;
-    readonly ITeamRepository _teamRepository;
-    readonly IStaffRepository _staffRepository;
-    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
-    readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
-    readonly ILdapIdpRepository _ldapIdpRepository;
-    readonly AuthDbContext _authDbContext;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IPmClient _pmClient;
-    readonly IMultiEnvironmentContext _multiEnvironmentContext;
-    readonly UserDomainService _userDomainService;
-    readonly OperaterProvider _operaterProvider;
+    private readonly IUserRepository _userRepository;
+    private readonly ITeamRepository _teamRepository;
+    private readonly IStaffRepository _staffRepository;
+    private readonly IThirdPartyUserRepository _thirdPartyUserRepository;
+    private readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    private readonly ILdapIdpRepository _ldapIdpRepository;
+    private readonly AuthDbContext _authDbContext;
+    private readonly IMultilevelCacheClient _multilevelCacheClient;
+    private readonly IPmClient _pmClient;
+    private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
+    private readonly UserDomainService _userDomainService;
+    private readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -28,7 +28,7 @@ public class QueryHandler
         AuthDbContext authDbContext,
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient,
-        IMultiEnvironmentContext multiEnvironmentContext,
+        IMultiEnvironmentUserContext multiEnvironmentUserContext,
         UserDomainService userDomainService,
         OperaterProvider operaterProvider)
     {
@@ -41,7 +41,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
-        _multiEnvironmentContext = multiEnvironmentContext;
+        _multiEnvironmentUserContext = multiEnvironmentUserContext;
         _userDomainService = userDomainService;
         _operaterProvider = operaterProvider;
     }
@@ -694,7 +694,7 @@ public class QueryHandler
         var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentContext.CurrentEnvironment);
+            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? "");
             var apps = projects.SelectMany(p => p.Apps);
             //todo cache
             var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
