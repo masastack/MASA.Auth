@@ -1,6 +1,14 @@
 ﻿@inherits ClientSectionCompontentBase
 
-<MRow Class="pt-4 mr-2">
+<MRow Class="pt-4 mr-1">
+    <MCol Md=12>
+        <SGroupBox Title="@T("GrantType")" Style="display: flex;flex-wrap: wrap;">
+            @foreach (var grantType in Dto.GrantTypes)
+            {
+                <MCheckbox @bind-Value="@grantType.Selected" Label="@grantType.DisplayValue" TValue="bool" Style="width:340px;"/>
+            }
+        </SGroupBox>
+    </MCol>
     <MCol Md=12>
         <div class="block-center">
             <STextField @bind-Value="Dto.RedirectUri" Label="@T("CallBackRedirectUri")" Suffix="@redirectUriSuffix" />

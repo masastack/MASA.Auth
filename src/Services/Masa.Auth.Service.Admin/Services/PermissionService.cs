@@ -83,7 +83,7 @@ public class PermissionService : ServiceBase
         await eventBus.PublishAsync(new RemovePermissionCommand(id));
     }
 
-    private async Task<List<MenuDto>> GetMenusAsync(IEventBus eventBus, [FromQuery] string appId, [FromQuery] Guid userId)
+    private async Task<List<MenuModel>> GetMenusAsync(IEventBus eventBus, [FromQuery] string appId, [FromQuery] Guid userId)
     {
         var query = new AppMenuListQuery(appId, userId);
         await eventBus.PublishAsync(query);

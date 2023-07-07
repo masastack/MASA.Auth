@@ -14,7 +14,7 @@ public class QueryHandler
     readonly AuthDbContext _authDbContext;
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IPmClient _pmClient;
-    readonly IMultiEnvironmentContext _multiEnvironmentContext;
+    readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -26,7 +26,7 @@ public class QueryHandler
         AuthDbContext authDbContext,
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient,
-        IMultiEnvironmentContext multiEnvironmentContext)
+        IMultiEnvironmentUserContext multiEnvironmentUserContext)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -37,7 +37,7 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
-        _multiEnvironmentContext = multiEnvironmentContext;
+        _multiEnvironmentUserContext = multiEnvironmentUserContext;
     }
 
     #region User
@@ -744,7 +744,7 @@ public class QueryHandler
         var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentContext.CurrentEnvironment);
+            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? "");
             var apps = projects.SelectMany(p => p.Apps);
             //todo cache
             var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
@@ -775,8 +775,7 @@ public class QueryHandler
     [EventHandler]
     public async Task UserSystemBizDataQueryAsync(UserSystemBusinessDataQuery userSystemBusinessData)
     {
-        userSystemBusinessData.Result = (await _multilevelCacheClient.GetListAsync<string>(
-            userSystemBusinessData.UserIds.Select(id => CacheKey.UserSystemDataKey(id, userSystemBusinessData.SystemId))
-        )).Where(data => data is not null).ToList()!;
+        userSystemBusinessData.Result = await _authDbContext.Set<UserSystemBusinessData>().Where(data => data.SystemId == userSystemBusinessData.SystemId
+            && userSystemBusinessData.UserIds.Contains(data.UserId)).ToDictionaryAsync(item => item.UserId.ToString(), item => item.Data);
     }
 }

@@ -145,6 +145,7 @@ public class CommandHandler
                 permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
             permission.SetParent(permissionBaseInfo.ParentId);
             permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
+            permission.SetPattern(permissionBaseInfo.MatchPattern);
             await _permissionRepository.UpdateAsync(permission);
             return;
         }
@@ -162,6 +163,7 @@ public class CommandHandler
             permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
             permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
         permission.SetParent(permissionBaseInfo.ParentId);
+        permission.SetPattern(permissionBaseInfo.MatchPattern);
         permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
         await _permissionRepository.AddAsync(permission);
         await _unitOfWork.SaveChangesAsync();

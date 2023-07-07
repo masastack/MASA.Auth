@@ -9,32 +9,32 @@ public class QueryHandler
     private readonly IDccClient _dccClient;
     private readonly IPermissionRepository _permissionRepository;
     private readonly UserDomainService _userDomainService;
-    private readonly IMultiEnvironmentContext _multiEnvironmentContext;
+    private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
 
     public QueryHandler(
         IPmClient pmClient,
         IPermissionRepository permissionRepository,
         UserDomainService userDomainService,
         IDccClient dccClient,
-        IMultiEnvironmentContext multiEnvironmentContext)
+        IMultiEnvironmentUserContext multiEnvironmentUserContext)
     {
         _pmClient = pmClient;
         _permissionRepository = permissionRepository;
         _userDomainService = userDomainService;
         _dccClient = dccClient;
-        _multiEnvironmentContext = multiEnvironmentContext;
+        _multiEnvironmentUserContext = multiEnvironmentUserContext;
     }
 
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(_multiEnvironmentContext.CurrentEnvironment, AppTypes.UI, AppTypes.Service);
+        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment ?? "", AppTypes.UI, AppTypes.Service);
     }
 
     [EventHandler]
     public async Task GetProjectUIAppListAsync(ProjectUIAppListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(_multiEnvironmentContext.CurrentEnvironment, AppTypes.UI);
+        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment ?? "", AppTypes.UI);
 
         var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
                 || p.Type == PermissionTypes.Element);
@@ -53,7 +53,7 @@ public class QueryHandler
     [EventHandler]
     public async Task NavigationListQueryAsync(NavigationListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(_multiEnvironmentContext.CurrentEnvironment, AppTypes.UI);
+        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment ?? "", AppTypes.UI);
 
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
         var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu

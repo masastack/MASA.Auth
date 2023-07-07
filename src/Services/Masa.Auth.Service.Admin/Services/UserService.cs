@@ -262,17 +262,10 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<string> GetSystemDataAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string systemId)
+    [RoutePattern("systemData/byIds", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<Dictionary<string, string>> SystemListDataAsync(IEventBus eventBus, [FromBody] GetSystemDataModel model)
     {
-        var query = new UserSystemBusinessDataQuery(new[] { userId }, systemId);
-        await eventBus.PublishAsync(query);
-        return query.Result.FirstOrDefault() ?? "";
-    }
-
-    [RoutePattern("systemData/byIds", StartWithBaseUri = true, HttpMethod = "Get")]
-    public async Task<List<string>> GetSystemListDataAsync(IEventBus eventBus, [FromQuery] string userIds, [FromQuery] string systemId)
-    {
-        var query = new UserSystemBusinessDataQuery(userIds.Split(',').Select(userId => Guid.Parse(userId)), systemId);
+        var query = new UserSystemBusinessDataQuery(model.UserIds, model.SystemId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

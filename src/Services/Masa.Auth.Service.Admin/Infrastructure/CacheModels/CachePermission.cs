@@ -24,6 +24,8 @@ public class CachePermission
 
     public string Icon { get; set; } = string.Empty;
 
+    public string MatchPattern { get; set; } = string.Empty;
+
     public Guid ParentId { get; set; }
 
     public bool Enabled { get; set; }

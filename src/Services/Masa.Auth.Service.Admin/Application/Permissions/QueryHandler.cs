@@ -122,8 +122,10 @@ public class QueryHandler
 
         List<Guid> FindParentRoles(List<RoleRelation> roleRelations, Guid roleId)
         {
-            var parentRoles = new List<Guid>();
-            parentRoles.Add(roleId);
+            var parentRoles = new List<Guid>
+            {
+                roleId
+            };
             foreach (var roleRelation in roleRelations)
             {
                 if (roleRelation.RoleId == roleId)
@@ -223,6 +225,7 @@ public class QueryHandler
             Name = permission.Name,
             Description = permission.Description,
             Icon = permission.Icon,
+            MatchPattern = permission.MatchPattern,
             Code = permission.Code,
             Url = permission.Url,
             Type = permission.Type,
@@ -279,17 +282,18 @@ public class QueryHandler
         menus = menus.Where(p => p.AppId == appMenuListQuery.AppId && p.Type == PermissionTypes.Menu && userPermissionIds.Contains(p.Id) && p.Enabled).ToList();
         appMenuListQuery.Result = GetMenus(menus, Guid.Empty);
 
-        List<MenuDto> GetMenus(List<CachePermission> allMenus, Guid parentId)
+        List<MenuModel> GetMenus(List<CachePermission> allMenus, Guid parentId)
         {
             return allMenus.Where(m => m.ParentId == parentId && m.Id != Guid.Empty)
                 .OrderBy(m => m.Order)
-                .Select(m => new MenuDto
+                .Select(m => new MenuModel
                 {
                     Id = m.Id,
                     Name = m.Name,
                     Code = m.Code,
                     Url = m.Url.EnsureLeadingSlash(),
                     Icon = m.Icon,
+                    MatchPattern = m.MatchPattern,
                     Children = GetMenus(allMenus, m.Id)
                 }).ToList();
         }
