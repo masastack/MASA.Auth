@@ -235,7 +235,8 @@
     "Support mdi and fas icon": "支持mdi-* 和 fa:fas-* 图标",
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method",
     "MatchPattern": "匹配正则",
-    "MatchPatternTip": "特定情况下自动匹配左侧菜单高亮、面包屑时使用"
+    "MatchPatternTip": "特定情况下自动匹配左侧菜单高亮、面包屑时使用",
+    "UI": "界面"
   },
 
   "Give him a nickname!": "给Ta取个昵称吧!",
