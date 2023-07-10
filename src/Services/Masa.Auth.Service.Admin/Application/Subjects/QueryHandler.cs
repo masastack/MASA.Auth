@@ -5,16 +5,18 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
 {
-    readonly IUserRepository _userRepository;
-    readonly ITeamRepository _teamRepository;
-    readonly IStaffRepository _staffRepository;
-    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
-    readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
-    readonly ILdapIdpRepository _ldapIdpRepository;
-    readonly AuthDbContext _authDbContext;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IPmClient _pmClient;
-    readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
+    private readonly IUserRepository _userRepository;
+    private readonly ITeamRepository _teamRepository;
+    private readonly IStaffRepository _staffRepository;
+    private readonly IThirdPartyUserRepository _thirdPartyUserRepository;
+    private readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
+    private readonly ILdapIdpRepository _ldapIdpRepository;
+    private readonly AuthDbContext _authDbContext;
+    private readonly IMultilevelCacheClient _multilevelCacheClient;
+    private readonly IPmClient _pmClient;
+    private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
+    private readonly UserDomainService _userDomainService;
+    private readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -26,7 +28,9 @@ public class QueryHandler
         AuthDbContext authDbContext,
         AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
         IPmClient pmClient,
-        IMultiEnvironmentUserContext multiEnvironmentUserContext)
+        IMultiEnvironmentUserContext multiEnvironmentUserContext,
+        UserDomainService userDomainService,
+        OperaterProvider operaterProvider)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -38,6 +42,8 @@ public class QueryHandler
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
         _pmClient = pmClient;
         _multiEnvironmentUserContext = multiEnvironmentUserContext;
+        _userDomainService = userDomainService;
+        _operaterProvider = operaterProvider;
     }
 
     #region User
@@ -70,9 +76,9 @@ public class QueryHandler
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
         if (user is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
-        var creator = await _multilevelCacheClient.GetUserAsync(user.Creator);
-        var modifier = await _multilevelCacheClient.GetUserAsync(user.Modifier);
-        var userDetail = await UserSplicingDataAsync(user);
+        var creator = await _operaterProvider.GetUserAsync(user.Creator);
+        var modifier = await _operaterProvider.GetUserAsync(user.Modifier);
+        var userDetail = _userDomainService.UserSplicingData(user);
         query.Result = userDetail!;
         query.Result.Creator = creator?.DisplayName;
         query.Result.Modifier = modifier?.DisplayName;
@@ -83,9 +89,9 @@ public class QueryHandler
     public async Task FindUserByAccountAsync(FindUserByAccountQuery query)
     {
         var user = await _userRepository.FindWithIncludAsync(user => user.Account == query.Account, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
-        query.Result = await UserSplicingDataAsync(user);
+        query.Result = _userDomainService.UserSplicingData(user);
     }
 
     [EventHandler]
@@ -106,32 +112,18 @@ public class QueryHandler
     public async Task FindUserByEmailAsync(FindUserByEmailQuery query)
     {
         var user = await _userRepository.FindWithIncludAsync(user => user.Email == query.Email, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
-        query.Result = await UserSplicingDataAsync(user);
+        query.Result = _userDomainService.UserSplicingData(user);
     }
 
     [EventHandler]
     public async Task FindUserByPhoneNumberAsync(FindUserByPhoneNumberQuery query)
     {
         var user = await _userRepository.FindWithIncludAsync(user => user.PhoneNumber == query.PhoneNumber, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}"
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
-        query.Result = await UserSplicingDataAsync(user);
-    }
-
-    async Task<UserDetailDto?> UserSplicingDataAsync(User? user)
-    {
-        UserDetailDto? userDetailDto = null;
-        if (user != null)
-        {
-            userDetailDto = user;
-            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(user.Id));
-            userDetailDto.StaffId = staff?.Id;
-            userDetailDto.StaffDisplayName = staff?.DisplayName;
-            userDetailDto.CurrentTeamId = staff?.CurrentTeamId;
-        }
-        return userDetailDto;
+        query.Result = _userDomainService.UserSplicingData(user);
     }
 
     [EventHandler]
@@ -159,7 +151,7 @@ public class QueryHandler
     {
         foreach (var userId in userPortraitsQuery.UserIds)
         {
-            var userCache = await _multilevelCacheClient.GetUserAsync(userId);
+            var userCache = await _operaterProvider.GetUserAsync(userId);
             if (userCache != null)
             {
                 userPortraitsQuery.Result.Add(userCache);
@@ -177,37 +169,8 @@ public class QueryHandler
     public async Task VerifyUserRepeatAsync(VerifyUserRepeatQuery command)
     {
         var user = command.User;
-        await VerifyUserRepeatAsync(user.Id, user.PhoneNumber, user.Email, user.IdCard, user.Account);
+        await _userDomainService.VerifyRepeatAsync(user.PhoneNumber, user.Email, user.IdCard, user.Account, user.Id);
         command.Result = true;
-    }
-
-    private async Task<User?> VerifyUserRepeatAsync(Guid? userId, string? phoneNumber, string? email, string? idCard, string? account, bool throwException = true)
-    {
-        Expression<Func<User, bool>> condition = user => false;
-        condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);
-        condition = condition.Or(!string.IsNullOrEmpty(phoneNumber), user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
-        condition = condition.Or(!string.IsNullOrEmpty(email), user => user.Email == email);
-        condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
-        condition = condition.And(userId is not null, user => user.Id != userId);
-
-        var existUser = await _authDbContext.Set<User>()
-                                           .Include(u => u.Roles)
-                                           .FirstOrDefaultAsync(condition);
-        if (existUser is not null)
-        {
-            if (throwException is false) return existUser;
-            if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
-            if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, email);
-            if (string.IsNullOrEmpty(idCard) is false && idCard == existUser.IdCard)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ID_CARD_EXIST, idCard);
-            if (string.IsNullOrEmpty(account) is false && account == existUser.Account)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_EXIST, account);
-            if (phoneNumber == existUser.Account)
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
-        }
-        return existUser;
     }
 
     #endregion
@@ -270,7 +233,7 @@ public class QueryHandler
 
         query.Result = staff;
 
-        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(staff.Creator, staff.Modifier);
+        var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(staff.Creator, staff.Modifier);
         query.Result.Creator = creator;
         query.Result.Modifier = modifier;
     }
@@ -421,7 +384,7 @@ public class QueryHandler
         query.Result = new(total, tpus.Select(tpu =>
         {
             var dto = (ThirdPartyUserDto)tpu;
-            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
+            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
             dto.Creator = creator;
             dto.Modifier = modifier;
             return dto;
@@ -436,7 +399,7 @@ public class QueryHandler
 
         query.Result = tpu;
 
-        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(tpu.Creator, tpu.Modifier);
+        var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(tpu.Creator, tpu.Modifier);
         query.Result.User.Creator = creator;
         query.Result.User.Modifier = modifier;
     }
@@ -446,13 +409,13 @@ public class QueryHandler
     {
         var tpUser = await _authDbContext.Set<ThirdPartyUser>()
                                          .Include(tpu => tpu.User)
-                                         .Include(tpu => tpu.User.Roles)
+                                         .ThenInclude(user => new { user.Roles, user.Staff })
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
 
         if (tpUser != null && tpUser.User != null && userModel != null)
         {
-            var staff = await _multilevelCacheClient.GetAsync<CacheStaff>(CacheKey.StaffKey(tpUser.User.Id));
+            var staff = tpUser.User.Staff;
             userModel.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
             userModel.CurrentTeamId = staff?.CurrentTeamId;
         }
@@ -584,8 +547,8 @@ public class QueryHandler
         }
         var teams = await _authDbContext.Set<Team>()
                                         .Include(t => t.TeamStaffs)
-                                        .Include(team => team.TeamRoles)
-                                        .ThenInclude(tr => tr.Role)
+                                        //.Include(team => team.TeamRoles)
+                                        //.ThenInclude(tr => tr.Role)
                                         .Where(condition)
                                         .AsSplitQuery()
                                         .OrderByDescending(t => t.ModificationTime)
@@ -593,10 +556,8 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            //todo remove CacheKey
-            var staffModel = _multilevelCacheClient.Get<CacheStaff>(CacheKey.StaffKey(team.Modifier));
             var userModel = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier));
-            var modifierName = staffModel?.DisplayName ?? userModel?.DisplayName ?? "";
+            var modifierName = userModel?.StaffDisplayName ?? userModel?.DisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 
@@ -718,17 +679,6 @@ public class QueryHandler
     [EventHandler]
     public async Task GetTeamByUserAsync(TeamByUserQuery query)
     {
-        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.UserId));
-        if (cacheUserModel != null && cacheUserModel.StaffId != null)
-        {
-            var cacheStaffTeams = await _multilevelCacheClient.GetAsync<List<CacheStaffTeam>>(CacheKey.StaffTeamKey(cacheUserModel.StaffId.Value));
-            if (cacheStaffTeams != null)
-            {
-                query.Result = cacheStaffTeams.Select(e => new TeamSampleDto(e.Id, e.TeamMemberType))
-                                                .ToList();
-                return;
-            }
-        }
         query.Result = await _authDbContext.Set<TeamStaff>()
                                         .Where(ts => ts.UserId == query.UserId)
                                         .Select(team => new TeamSampleDto(team.TeamId, team.TeamMemberType))

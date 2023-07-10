@@ -3,6 +3,6 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record SyncUserRedisCommand(SyncUserRedisDto Dto) : Command
+public record SyncUserRedisCommand : Command
 {
 }

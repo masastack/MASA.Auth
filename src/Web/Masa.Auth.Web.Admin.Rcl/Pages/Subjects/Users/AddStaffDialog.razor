@@ -1,7 +1,7 @@
 ﻿@inherits AdminCompontentBase
 
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Staff")">
-    <MForm Model="Staff" EnableValidation EnableI18n>
+    <MForm Model="Staff" EnableValidation EnableI18n @ref="_mForm">
         <MStepper Value="Step">
             <MStepperItems>
                 <MStepperContent Step="1">
@@ -79,13 +79,7 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <STextField @bind-Value="@Staff.Password" Required DebounceInterval=500 Label="@T("Password")">
-                                        <AppendContent>
-                                            <SButton Color="primary" OnClick="async () => await SetDefaultPassword(context)" Style="margin-top:0px;margin-right:-12px;height:48px;min-width: 120px;border-radius: 0px 7px 7px 0px;">
-                                                @T("Set it to the default password")
-                                            </SButton>
-                                        </AppendContent>
-                                    </STextField>
+                                    <STextField @bind-Value="@Staff.Password" Required DebounceInterval=500 Label="@T("Password")" Action="SetDefaultPwdAction"/>
                                 </MCol>
                             </MRow>
                         </AutoHeightContent>

@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Organizations.Commands;
 
-public record UpsertPositionCommand(UpsertPositionDto Position) : Command
+public record UpsertPositionCommand(string Name) : Command
 {
     public Guid Result { get; set; }
 }

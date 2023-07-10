@@ -5,5 +5,5 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public record RemoveStaffCommand(RemoveStaffDto Staff) : Command
 {
-    public Staff? Result { get; set; }
+    public Staff Result { get; set; } = default!;
 }

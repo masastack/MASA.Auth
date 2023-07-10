@@ -6,98 +6,26 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 public class UserCacheCommandHandler
 {
     readonly IMultilevelCacheClient _multilevelCacheClient;
-    readonly IUserRepository _userRepository;
-    readonly IStaffRepository _staffRepository;
+    readonly UserDomainService _userDomainService;
 
-    public UserCacheCommandHandler(AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider, IUserRepository userRepository, IStaffRepository staffRepository)
+    public UserCacheCommandHandler(
+        AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
+        UserDomainService userDomainService)
     {
         _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
-        _userRepository = userRepository;
-        _staffRepository = staffRepository;
-    }
-
-    async Task SetUserListCacheAsync(IEnumerable<User> users)
-    {
-        var userIds = users.Select(u => u.Id).ToList();
-        var staffs = await _staffRepository.GetListAsync(staff => userIds.Contains(staff.UserId));
-        var map = new Dictionary<string, UserModel>();
-        foreach (var user in users)
-        {
-            var userModel = user.Adapt<UserModel>();
-            userModel.StaffDisplayName = staffs.FirstOrDefault(staff => staff.UserId == user.Id)?.DisplayName ?? user.DisplayName;
-            map.Add(CacheKeyConsts.UserKey(user.Id), userModel);
-        }
-        await _multilevelCacheClient.SetListAsync(map);
-    }
-
-    async Task SetUserCacheAsync(Guid userId)
-    {
-        var user = await _userRepository.GetDetailAsync(userId);
-        if (user is not null)
-        {
-            var userModel = user.Adapt<UserModel>();
-            userModel.Roles = user.Roles.Where(e => !e.IsDeleted).Select(e => new RoleModel { Id = e.RoleId, Name = e.Role == null ? "" : e.Role.Name, Code = e.Role == null ? "" : e.Role.Code }).ToList();
-            userModel.Permissions = user.Permissions.Where(e => !e.IsDeleted).Adapt<List<SubjectPermissionRelationModel>>();
-            var staff = await _staffRepository.FindAsync(staff => staff.UserId == user.Id);
-            userModel.StaffDisplayName = staff?.DisplayName ?? user.DisplayName;
-            userModel.StaffId = staff?.Id;
-            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
-        }
-    }
-
-    async Task RemoveUserCahceAsync(Guid userId)
-    {
-        await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKeyConsts.UserKey(userId));
-    }
-
-    [EventHandler(99)]
-    public async Task UpsertUserCacheAsync(UpsertUserCacheCommand addUserCacheCommand)
-    {
-        await SetUserCacheAsync(addUserCacheCommand.Id);
-    }
-
-    [EventHandler(99)]
-    public async Task AddUserAsync(AddUserCommand addUserCommand)
-    {
-        await SetUserCacheAsync(addUserCommand.Result.Id);
-    }
-
-    [EventHandler(99, IsCancel = true)]
-    public async Task FailAddUserAsync(AddUserCommand addUserCommand)
-    {
-        await RemoveUserCahceAsync(addUserCommand.Result.Id);
-    }
-
-    [EventHandler(99)]
-    public async Task UpdateUserAsync(UpdateUserCommand updateUserCommand)
-    {
-        await SetUserCacheAsync(updateUserCommand.User.Id);
+        _userDomainService = userDomainService;
     }
 
     [EventHandler(99)]
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand updateUserAuthorizationCommand)
     {
-        await SetUserCacheAsync(updateUserAuthorizationCommand.User.Id);
-    }
-
-    [EventHandler(99)]
-    public async Task RemoveUserAsync(RemoveUserCommand removeUserCommand)
-    {
-        await RemoveUserCahceAsync(removeUserCommand.User.Id);
+        await _userDomainService.SyncUserAsync(updateUserAuthorizationCommand.User.Id);
     }
 
     [EventHandler]
     public async Task SyncUserRedisAsync(SyncUserRedisCommand command)
     {
-        var users = await _userRepository.GetAllAsync();
-        var syncCount = 0;
-        while (syncCount < users.Count)
-        {
-            var syncUsers = users.Skip(syncCount)
-                                .Take(command.Dto.OnceExecuteCount);
-            await SetUserListCacheAsync(syncUsers);
-            syncCount += command.Dto.OnceExecuteCount;
-        }
+        await _userDomainService.SyncUsersAsync();
     }
 
     [EventHandler]
@@ -140,12 +68,12 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
-        await SetUserCacheAsync(command.User.Id);
+        await _userDomainService.SyncUserAsync(command.User.Id);
     }
 
     [EventHandler(99)]
     public async Task UpsertUserAsync(UpsertUserCommand command)
     {
-        await SetUserCacheAsync(command.Result.Id);
+        await _userDomainService.SyncUserAsync(command.Result.Id);
     }
 }

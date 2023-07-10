@@ -10,19 +10,22 @@ public class LdapCommandHandler
     readonly ILogger<LdapCommandHandler> _logger;
     readonly IEventBus _eventBus;
     readonly IUnitOfWork _unitOfWork;
+    readonly LdapDomainService _ldapDomainService;
 
     public LdapCommandHandler(
         ILdapIdpRepository ldapIdpRepository,
         ILdapFactory ldapFactory,
         ILogger<LdapCommandHandler> logger,
         IEventBus eventBus,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        LdapDomainService ldapDomainService)
     {
         _ldapIdpRepository = ldapIdpRepository;
         _ldapFactory = ldapFactory;
         _logger = logger;
         _eventBus = eventBus;
         _unitOfWork = unitOfWork;
+        _ldapDomainService = ldapDomainService;
     }
 
     [EventHandler]
@@ -40,6 +43,14 @@ public class LdapCommandHandler
     public async Task LdapUpsertAsync(LdapUpsertCommand ldapUpsertCommand)
     {
         var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
+
+        var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
+        }
+
         var ldapIdp = new LdapIdp(
                 ldapIdpDto.ServerAddress,
                 ldapIdpDto.ServerPort,
@@ -53,37 +64,14 @@ public class LdapCommandHandler
         if (dbItem is null)
         {
             await _ldapIdpRepository.AddAsync(ldapIdp);
-            await _unitOfWork.SaveChangesAsync();
         }
         else
         {
             dbItem.Update(ldapIdp);
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
-        var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
-        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
-        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
-        }
-        var ldapUsers = ldapProvider.GetAllUserAsync();
 
-        await foreach (var ldapUser in ldapUsers)
-        {
-            if (string.IsNullOrEmpty(ldapUser.Phone))
-            {
-                continue;
-            }
-
-            try
-            {
-                var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
-                await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "LdapUser Name = {0},Email = {1},PhoneNumber={2}", ldapUser.Name, ldapUser.EmailAddress, ldapUser.Phone);
-            }
-        }
+        var ldapUsers = await ldapProvider.GetAllUserAsync().ToListAsync();
+        await _ldapDomainService.SyncLdapUserAsync(ldapUsers);
     }
 }

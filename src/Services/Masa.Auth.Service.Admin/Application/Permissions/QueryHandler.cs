@@ -12,6 +12,7 @@ public class QueryHandler
     private readonly IMultilevelCacheClient _multilevelCacheClient;
     private readonly IEventBus _eventBus;
     private readonly ILogger<QueryHandler> _logger;
+    private readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IRoleRepository roleRepository,
@@ -20,7 +21,8 @@ public class QueryHandler
         UserDomainService userDomainService,
         IMultilevelCacheClient multilevelCacheClient,
         IEventBus eventBus,
-        ILogger<QueryHandler> logger)
+        ILogger<QueryHandler> logger,
+        OperaterProvider operaterProvider)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -29,6 +31,7 @@ public class QueryHandler
         _multilevelCacheClient = multilevelCacheClient;
         _eventBus = eventBus;
         _logger = logger;
+        _operaterProvider = operaterProvider;
     }
 
     #region Role
@@ -53,7 +56,7 @@ public class QueryHandler
         query.Result = new(total, roles.Select(role =>
         {
             var dto = (RoleDto)role;
-            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier).Result;
+            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(role.Creator, role.Modifier).Result;
             dto.Creator = creator;
             dto.Modifier = modifier;
             return dto;
@@ -67,7 +70,7 @@ public class QueryHandler
         if (role is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         query.Result = role;
-        var (creator, modifier) = await _multilevelCacheClient.GetActionInfoAsync(role.Creator, role.Modifier);
+        var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(role.Creator, role.Modifier);
         query.Result.Creator = creator;
         query.Result.Modifier = modifier;
     }
@@ -392,12 +395,7 @@ public class QueryHandler
         if (query.Teams.Count == 0) return;
         var teamIds = query.Teams.Select(team => team.Id).ToList();
 
-        var permissionIds = await GetPermissionsByCacheAsync(query.Teams);
-        if (permissionIds == null || permissionIds.Count < 1)
-        {
-            permissionIds = await GetPermissionsAsync(teamIds);
-        }
-
+        var permissionIds = await GetPermissionsAsync(teamIds);
         query.Result.AddRange(permissionIds);
 
         async Task<List<Guid>> GetPermissionsAsync(IEnumerable<Guid> teamEnumerableIds)
@@ -423,45 +421,6 @@ public class QueryHandler
                                        .Select(tp => tp.PermissionId)
                     ).Where(permission => rejectPermissions.All(rp => rp != permission));
                 permissionIds.AddRange(permissions);
-            }
-            return permissionIds;
-        }
-
-        async Task<List<Guid>> GetPermissionsByCacheAsync(List<TeamSampleDto> teams)
-        {
-            var teamIds = query.Teams.Select(team => team.Id).ToList();
-            var permissionIds = new List<Guid>();
-
-            var teamIdCacheKeys = teams.Select(e => e.Id).Select(CacheKey.TeamKey);
-            var cacheTeams = await _multilevelCacheClient.GetListAsync<TeamDetailDto>(teamIdCacheKeys);
-            if (cacheTeams != null)
-            {
-                foreach (var team in cacheTeams)
-                {
-                    if (team == null)
-                    {
-                        continue;
-                    }
-                    var roleIds = team.TeamAdmin.Roles.Union(team.TeamMember.Roles).ToList();
-                    var permissionQuery = new PermissionsByRoleQuery(roleIds);
-                    await _eventBus.PublishAsync(permissionQuery);
-
-                    List<SubjectPermissionRelationDto> permissionRelations = new();
-                    if (teams.Any(t => t.Id == team.Id && t.TeamMemberType == TeamMemberTypes.Member))
-                    {
-                        permissionRelations.AddRange(team.TeamMember.Permissions);
-                    }
-                    if (teams.Any(t => t.Id == team.Id && t.TeamMemberType == TeamMemberTypes.Admin))
-                    {
-                        permissionRelations.AddRange(team.TeamAdmin.Permissions);
-                    }
-
-
-                    var rejectPermisisons = permissionRelations.Where(e => e.Effect == false).Select(tp => tp.PermissionId);
-                    var permissions = permissionQuery.Result.Union(permissionRelations.Where(tp => tp.Effect)
-                                           .Select(tp => tp.PermissionId)).Where(permission => rejectPermisisons.All(rp => rp != permission));
-                    permissionIds.AddRange(permissions);
-                }
             }
             return permissionIds;
         }

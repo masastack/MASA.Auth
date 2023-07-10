@@ -5,76 +5,21 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandlers;
 
 public class UserDomainEventHandler
 {
-    readonly IAutoCompleteClient _autoCompleteClient;
     readonly AuthDbContext _authDbContext;
     readonly RoleDomainService _roleDomainService;
     readonly IEventBus _eventBus;
-    readonly ILogger<UserDomainEventHandler> _logger;
     readonly IMultilevelCacheClient _multilevelCacheClient;
 
     public UserDomainEventHandler(
-        IAutoCompleteClient autoCompleteClient,
         AuthDbContext authDbContext,
         RoleDomainService roleDomainService,
         IEventBus eventBus,
-        ILogger<UserDomainEventHandler> logger,
         IMultilevelCacheClient multilevelCacheClient)
     {
-        _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
         _roleDomainService = roleDomainService;
         _eventBus = eventBus;
-        _logger = logger;
         _multilevelCacheClient = multilevelCacheClient;
-    }
-
-    [EventHandler(1)]
-    public async Task SetAutoCompleteAsync(AddUserDomainEvent userEvent)
-    {
-        var user = userEvent.User.Adapt<UserSelectDto>();
-        var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user);
-        if (result.IsValid is false)
-        {
-            _logger.LogError(JsonSerializer.Serialize(result));
-        }
-    }
-
-    [EventHandler(2)]
-    public async Task UpdateRoleLimitAsync(AddUserDomainEvent userEvent)
-    {
-        var roles = userEvent.User.Roles.Select(user => user.RoleId);
-        await _roleDomainService.UpdateRoleLimitAsync(roles);
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateUserAsync(UpdateUserDomainEvent userEvent)
-    {
-        var user = userEvent.User.Adapt<UserSelectDto>();
-        await _autoCompleteClient.SetBySpecifyDocumentAsync(user);
-    }
-
-    [EventHandler(1)]
-    public async Task RemoveStaffAsync(RemoveUserDomainEvent userEvent)
-    {
-        var staff = await _authDbContext.Set<Staff>()
-                                        .FirstOrDefaultAsync(staff => userEvent.User.Id == staff.UserId);
-        if (staff is not null)
-        {
-            await _eventBus.PublishAsync(new RemoveStaffCommand(new(staff.Id)));
-        }
-    }
-
-    [EventHandler(2)]
-    public async Task UpdateRoleLimitAsync(RemoveUserDomainEvent userEvent)
-    {
-        var roles = userEvent.User.Roles.Select(user => user.RoleId);
-        await _roleDomainService.UpdateRoleLimitAsync(roles);
-    }
-
-    [EventHandler(99)]
-    public async Task RemoveAutoCompleteUserAsync(RemoveUserDomainEvent userEvent)
-    {
-        await _autoCompleteClient.DeleteAsync(userEvent.User.Id);
     }
 
     [EventHandler(1)]

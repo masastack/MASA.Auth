@@ -53,6 +53,7 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
                            .ThenInclude(ur => ur.Role)
                            .Include(u => u.Permissions)
                            .Include(u => u.ThirdPartyUsers)
+                           .Include(u => u.Staff)
                            .FirstOrDefaultAsync(u => u.Id == id);
 
         return user ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);

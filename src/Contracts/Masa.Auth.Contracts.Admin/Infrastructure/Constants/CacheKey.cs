@@ -32,9 +32,6 @@ public static class CacheKey
     const string MSG_CODE_FORGOT_PASSWORD_SEND_PRE = "msg_forgot_password_send:";
     const string EMAIL_UPDATE_CODE_PRE = "email_update_code:";
     const string EMAIL_UPDATE_SEND_PRE = "email_update_send:";
-    const string STAFF = "staff";
-    const string TEAM_CACHE_PRE = "team:";
-    const string STAFF_TEAM_CODE_PRE = "staff_team_code:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
     const string MSG_VERIFIY_CODE_SEND_EXPIRED = "msg_verifiy_code_send_expired:";
 
@@ -51,11 +48,6 @@ public static class CacheKey
     public static string UserKey(Guid userId)
     {
         return $"{USER_CACHE_PRE}{userId}";
-    }
-
-    public static string StaffKey(Guid staffId)
-    {
-        return $"{STAFF}{staffId}";
     }
 
     public static string UserMenuCollectKey(Guid userId)
@@ -176,16 +168,6 @@ public static class CacheKey
     public static string UserApiPermissionCodeKey(Guid userId, string appId)
     {
         return $"{USER_API_PERMISSION_CODE_PRE}{userId}:{appId}";
-    }
-
-    public static string TeamKey(Guid teamId)
-    {
-        return $"{TEAM_CACHE_PRE}{teamId}";
-    }
-
-    public static string StaffTeamKey(Guid userId)
-    {
-        return $"{STAFF_TEAM_CODE_PRE}{userId}";
     }
 
     public static string MsgVerifiyCodeSendExpired(string key)

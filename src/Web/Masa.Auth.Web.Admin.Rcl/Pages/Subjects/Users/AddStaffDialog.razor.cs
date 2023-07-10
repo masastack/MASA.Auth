@@ -25,6 +25,8 @@ public partial class AddStaffDialog
 
     private StaffService StaffService => AuthCaller.StaffService;
 
+    private MForm _mForm = default!;
+
     protected override void OnInitialized()
     {
         PageName = "StaffBlock";
@@ -72,11 +74,11 @@ public partial class AddStaffDialog
         }
     }
 
-    public async Task SetDefaultPassword(FormContext context)
+    public async Task SetDefaultPassword(EditContext context)
     {
-        var field = context.EditContext.Field(nameof(Staff.Password));
-        context.EditContext.NotifyFieldChanged(field);
-        var result = context.EditContext.GetValidationMessages(field);
+        var field = context.Field(nameof(Staff.Password));
+        context.NotifyFieldChanged(field);
+        var result = context.GetValidationMessages(field);
         if (result.Any() is false)
         {
             DefaultPasswordDto.DefaultPassword = Staff.Password!;
@@ -84,6 +86,12 @@ public partial class AddStaffDialog
             await StaffService.UpdateDefaultPasswordAsync(DefaultPasswordDto);
             OpenSuccessMessage(T("Set the default password successfully"));
         }
+    }
+
+    private void SetDefaultPwdAction(DefaultTextfieldAction action)
+    {
+        action.Content = T("Set it to the default password");
+        action.OnClick = async (_) => await SetDefaultPassword(_mForm.EditContext!);
     }
 }
 

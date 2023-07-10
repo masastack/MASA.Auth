@@ -5,16 +5,16 @@ namespace Masa.Auth.Service.Admin.Application.Sso;
 
 public class QueryHandler
 {
-    readonly IClientRepository _clientRepository;
-    readonly IIdentityResourceRepository _identityResourceRepository;
-    readonly IApiResourceRepository _apiResourceRepository;
-    readonly IApiScopeRepository _apiScopeRepository;
-    readonly IUserClaimRepository _userClaimRepository;
-    readonly ICustomLoginRepository _customLoginRepository;
-    readonly DbContext _oidcDbContext;
-    readonly AuthDbContext _authDbContext;
-    readonly IClientCache _clientCache;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    private readonly IClientRepository _clientRepository;
+    private readonly IIdentityResourceRepository _identityResourceRepository;
+    private readonly IApiResourceRepository _apiResourceRepository;
+    private readonly IApiScopeRepository _apiScopeRepository;
+    private readonly IUserClaimRepository _userClaimRepository;
+    private readonly ICustomLoginRepository _customLoginRepository;
+    private readonly DbContext _oidcDbContext;
+    private readonly AuthDbContext _authDbContext;
+    private readonly IClientCache _clientCache;
+    private readonly OperaterProvider _operaterProvider;
 
     public QueryHandler(
         IClientRepository clientRepository,
@@ -26,7 +26,7 @@ public class QueryHandler
         OidcDbContext oidcDbContext,
         AuthDbContext authDbContext,
         IClientCache clientCache,
-        IMultilevelCacheClient multilevelCacheClient)
+        OperaterProvider operaterProvider)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -37,7 +37,7 @@ public class QueryHandler
         _oidcDbContext = oidcDbContext;
         _authDbContext = authDbContext;
         _clientCache = clientCache;
-        _multilevelCacheClient = multilevelCacheClient;
+        _operaterProvider = operaterProvider;
     }
 
     #region Client
@@ -349,7 +349,7 @@ public class QueryHandler
         var clients = await _clientCache.GetListAsync(customLogins.Select(customLogin => customLogin.ClientId));
         var customLoginDtos = customLogins.Select(customLogin =>
         {
-            var (creator, modifier) = _multilevelCacheClient.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
+            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
             var customLoginDto = new CustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, creator, modifier);
             var client = clients.FirstOrDefault(client => client.ClientId == customLogin.ClientId);
             if (client is not null)

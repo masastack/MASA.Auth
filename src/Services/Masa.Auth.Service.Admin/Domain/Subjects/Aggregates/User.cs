@@ -8,6 +8,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     private List<UserRole> _roles = new();
     private List<UserPermission> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
+    private Staff? _staff;
 
     private string _name = "";
     private string _displayName = "";
@@ -141,6 +142,8 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
+    public Staff? Staff => _staff;
+
     private User()
     { }
 
@@ -154,6 +157,49 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string phoneNumber) :
         this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, email, GenderTypes.Male)
     {
+    }
+
+    public User(string? name,
+                string displayName,
+                string? avatar,
+                string? account,
+                string? password,
+                string? companyName,
+                string? email,
+                string phoneNumber,
+                ThirdPartyUser thirdPartyUser) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber)
+    {
+        _thirdPartyUsers.Add(thirdPartyUser);
+    }
+
+    public User(string? name,
+                string displayName,
+                string? avatar,
+                string? account,
+                string? password,
+                string? companyName,
+                string? email,
+                string phoneNumber,
+                ThirdPartyUser thirdPartyUser,
+                Staff staff) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, thirdPartyUser)
+    {
+        _staff = staff;
+    }
+
+    public User(string? name,
+                string displayName,
+                string? avatar,
+                string? account,
+                string? password,
+                string? companyName,
+                string? email,
+                string phoneNumber,
+                Staff staff) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber)
+    {
+        _staff = staff;
     }
 
     public User(Guid id,
@@ -250,7 +296,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Gender = gender;
         Landline = landline;
         DisplayName = displayName;
-        Avatar = avatar;
+        UpdateAvatar(avatar);
         VerifyPhonNumberEmail(phoneNumber, email);
     }
 
