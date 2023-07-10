@@ -21,6 +21,8 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public string Icon { get; private set; }
 
+    public string MatchPattern { get; private set; }
+
     public int Order { get; set; }
 
     public PermissionTypes Type { get; private set; }
@@ -87,6 +89,12 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Description = description;
         Enabled = enabled;
         Order = order;
+        MatchPattern = "";
+    }
+
+    public void SetPattern(string matchPattern)
+    {
+        MatchPattern = matchPattern;
     }
 
     public Guid GetParentId()

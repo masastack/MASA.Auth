@@ -725,8 +725,7 @@ public class QueryHandler
     [EventHandler]
     public async Task UserSystemBizDataQueryAsync(UserSystemBusinessDataQuery userSystemBusinessData)
     {
-        userSystemBusinessData.Result = (await _multilevelCacheClient.GetListAsync<string>(
-            userSystemBusinessData.UserIds.Select(id => CacheKey.UserSystemDataKey(id, userSystemBusinessData.SystemId))
-        )).Where(data => data is not null).ToList()!;
+        userSystemBusinessData.Result = await _authDbContext.Set<UserSystemBusinessData>().Where(data => data.SystemId == userSystemBusinessData.SystemId
+            && userSystemBusinessData.UserIds.Contains(data.UserId)).ToDictionaryAsync(item => item.UserId.ToString(), item => item.Data);
     }
 }
