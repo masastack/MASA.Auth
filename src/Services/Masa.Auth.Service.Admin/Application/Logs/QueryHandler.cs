@@ -39,7 +39,9 @@ public class QueryHandler
             operationLog.Adapt<OperationLogDto>()
         ).ToList());
 
-        var staffs = await _staffRepository.GetListAsync(staff => query.Result.Items.Any(item => item.Operator == staff.UserId));
+        var operatorIds = query.Result.Items.Select(o => o.Operator);
+        var staffs = await _staffRepository.GetListAsync(staff => operatorIds.Contains(staff.UserId));
+
         query.Result.Items.ForEach(item =>
         {
             var staff = staffs.FirstOrDefault(staff => staff?.UserId == item.Operator);
