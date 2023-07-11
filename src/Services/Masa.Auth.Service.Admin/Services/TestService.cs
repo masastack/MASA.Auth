@@ -8,6 +8,7 @@ public class TestService : ServiceBase
     public TestService() : base("api/test")
     {
         MapGet(GetConf, "conf");
+        MapGet(SetCache, "cache");
     }
 
     public string GetConf([FromServices] IMasaConfiguration masaConfiguration, [FromServices] IConfiguration configuration, string Environment = "")
@@ -17,5 +18,10 @@ public class TestService : ServiceBase
         var suffix = masaConfiguration.ConfigurationApi.GetPublic()
             .GetValue("$public.DefaultConfig:SUFFIX_IDENTITY", "empty");
         return suffix;
+    }
+
+    public void SetCache([FromServices] IMultilevelCacheClient multilevelCacheClient, string Environment = "")
+    {
+        multilevelCacheClient.Set<string>("test", "11111");
     }
 }
