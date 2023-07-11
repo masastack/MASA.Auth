@@ -40,6 +40,7 @@ public class UserDomainService : DomainService
             throw exception;
         }
         user = await _userRepository.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         await SyncUserAsync(user.Id);
     }
 
@@ -51,6 +52,7 @@ public class UserDomainService : DomainService
             throw exception;
         }
         await _userRepository.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         await SyncUserAsync(user.Id);
     }
 
@@ -179,6 +181,7 @@ public class UserDomainService : DomainService
     {
         await Filter(users);
         await _userRepository.UpdateRangeAsync(users);
+        await _unitOfWork.SaveChangesAsync();
         await SyncUserAsync(users.Select(u => u.Id));
     }
 

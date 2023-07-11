@@ -27,6 +27,7 @@ public class CommandHandler
     readonly IHttpContextAccessor _httpContextAccessor;
     readonly IMasaConfiguration _masaConfiguration;
     readonly IUnitOfWork _unitOfWork;
+    readonly LdapDomainService _ldapDomainService;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -50,7 +51,8 @@ public class CommandHandler
         IHttpContextAccessor httpContextAccessor,
         IMasaConfiguration masaConfiguration,
         IUnitOfWork unitOfWork,
-        ThirdPartyUserDomainService thirdPartyUserDomainService)
+        ThirdPartyUserDomainService thirdPartyUserDomainService,
+        LdapDomainService ldapDomainService)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -74,6 +76,7 @@ public class CommandHandler
         _masaConfiguration = masaConfiguration;
         _unitOfWork = unitOfWork;
         _thirdPartyUserDomainService = thirdPartyUserDomainService;
+        _ldapDomainService = ldapDomainService;
     }
 
     #region User
@@ -369,8 +372,8 @@ public class CommandHandler
     public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
         //TODO UserDomainService
-        var account = validateByAccountCommand.UserAccountValidateDto.Account;
-        var password = validateByAccountCommand.UserAccountValidateDto.Password;
+        var account = validateByAccountCommand.ValidateAccountModel.Account;
+        var password = validateByAccountCommand.ValidateAccountModel.Password;
 
         var loginFreeze = _masaConfiguration.ConfigurationApi.GetDefault()
             .GetValue("AppSettings:LoginFreeze", false);
@@ -385,7 +388,7 @@ public class CommandHandler
             }
         }
 
-        var isLdap = validateByAccountCommand.UserAccountValidateDto.IsLdap;
+        var isLdap = validateByAccountCommand.ValidateAccountModel.LdapLogin;
         if (isLdap)
         {
             var ldaps = await _ldapIdpRepository.GetListAsync();
@@ -413,10 +416,9 @@ public class CommandHandler
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_VALIDATION_FAILED, account);
             }
 
-            var upsertThirdPartyUserCommand = new UpsertLdapUserCommand(ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser), ldapUser.Name, ldapUser.DisplayName, ldapUser.Phone, ldapUser.EmailAddress, ldapUser.SamAccountName, ldapUser.Phone);
-            await _eventBus.PublishAsync(upsertThirdPartyUserCommand);
+            await _ldapDomainService.UpsertLdapUserAsync(ldapUser);
             //get real user account
-            account = upsertThirdPartyUserCommand.Result.Account;
+            account = ldapUser.SamAccountName;
         }
 
         var user = await _userRepository.FindWithIncludAsync(u => EF.Functions.Collate(u.Account, "SQL_Latin1_General_CP1_CS_AS") == account || u.PhoneNumber == account, new List<string> {
@@ -618,39 +620,6 @@ public class CommandHandler
         staff.UpdateBasicInfo(staffModel.Name, staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
         await _staffRepository.UpdateAsync(staff);
         command.Result = staff;
-    }
-
-    [EventHandler(1)]
-    public async Task UpsertStaffForLdapAsync(UpsertStaffForLdapCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
-        if (staff is not null)
-        {
-            command.Result = await _staffDomainService.UpdateAsync(new UpdateStaffDto
-            {
-                Id = staff.Id,
-                Name = staffDto.Name,
-                DisplayName = staffDto.DisplayName,
-                PhoneNumber = staffDto.PhoneNumber,
-                Email = staffDto.Email
-            });
-        }
-        else
-        {
-            var addStaffDto = new AddStaffDto
-            {
-                Name = staffDto.Name,
-                DisplayName = staffDto.DisplayName,
-                Enabled = true,
-                Email = staffDto.Email,
-                PhoneNumber = staffDto.PhoneNumber,
-                JobNumber = staffDto.JobNumber,
-                StaffType = StaffTypes.Internal
-            };
-            await _staffDomainService.VerifyRepeatAsync(addStaffDto.JobNumber, addStaffDto.PhoneNumber, addStaffDto.Email, addStaffDto.IdCard);
-            command.Result = await _staffDomainService.AddAsync(addStaffDto);
-        }
     }
 
     [EventHandler(1)]
@@ -1019,22 +988,6 @@ public class CommandHandler
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
         }
-        else if (string.Equals(model.Scheme, LdapConsts.LDAP_NAME, StringComparison.OrdinalIgnoreCase))
-        {
-            var upsertThirdPartyUserForLdapCommand = new UpsertLdapUserCommand(
-                    model.Id,
-                    model.ThridPartyIdentity,
-                    JsonSerializer.Serialize(model.ExtendedData),
-                    model.Name,
-                    model.DisplayName,
-                    model.PhoneNumber!,
-                    model.Email,
-                    model.Account,
-                    model.PhoneNumber!
-                );
-            await _eventBus.PublishAsync(upsertThirdPartyUserForLdapCommand);
-            command.Result = upsertThirdPartyUserForLdapCommand.Result;
-        }
         else
         {
             var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
@@ -1077,31 +1030,6 @@ public class CommandHandler
             thirdPartyUser.Disable();
         }
         await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-    }
-
-    [EventHandler(1)]
-    public async Task UpsertLdapUserAsync(UpsertLdapUserCommand command)
-    {
-        var identityProviderQuery = new IdentityProviderByTypeQuery(ThirdPartyIdpTypes.Ldap);
-        await _eventBus.PublishAsync(identityProviderQuery);
-        var ldap = identityProviderQuery.Result;
-        var thirdPartyUser = await VerifyUserRepeatAsync(ldap.Id, command.ThridPartyUserIdentity, false);
-        if (thirdPartyUser is not null)
-        {
-            if (command.Id != default && thirdPartyUser.UserId != command.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
-            thirdPartyUser.Update(command.ThridPartyUserIdentity, command.ExtendedData);
-            await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-            command.Result = (await _authDbContext.Set<User>().FirstAsync(u => u.Id == thirdPartyUser.UserId)).Adapt<UserModel>();
-        }
-        else
-        {
-            var addThirdPartyUserDto = new AddThirdPartyUserDto(ldap.Id, true, command.ThridPartyUserIdentity, command.ExtendedData, command.Adapt<AddUserDto>());
-            command.Result = await _thirdPartyUserDomainService.AddThirdPartyUserAsync(addThirdPartyUserDto);
-        }
-        var upsertStaffDto = command.Adapt<UpsertStaffForLdapDto>();
-        upsertStaffDto.UserId = command.Result.Id;
-        var upsertStaffCommand = new UpsertStaffForLdapCommand(upsertStaffDto);
-        await _eventBus.PublishAsync(upsertStaffCommand);
     }
 
     [EventHandler]

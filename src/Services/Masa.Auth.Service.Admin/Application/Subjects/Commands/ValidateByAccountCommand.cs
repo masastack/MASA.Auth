@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record ValidateByAccountCommand(UserAccountValidateDto UserAccountValidateDto) : Command
+public record ValidateByAccountCommand(ValidateAccountModel ValidateAccountModel) : Command
 {
     public UserDetailDto? Result { get; set; }
 }
