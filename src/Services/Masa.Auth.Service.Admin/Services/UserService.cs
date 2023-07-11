@@ -107,9 +107,9 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
-    public async Task<UserModel?> PostValidateByAccountAsync(IEventBus eventBus, [FromBody] UserAccountValidateDto accountValidateDto)
+    public async Task<UserModel?> PostValidateByAccountAsync(IEventBus eventBus, [FromBody] ValidateAccountModel validateAccountModel)
     {
-        var validateCommand = new ValidateByAccountCommand(accountValidateDto);
+        var validateCommand = new ValidateByAccountCommand(validateAccountModel);
         await eventBus.PublishAsync(validateCommand);
         return ConvertToModel(validateCommand.Result);
     }
