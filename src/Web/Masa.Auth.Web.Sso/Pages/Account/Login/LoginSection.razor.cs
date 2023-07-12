@@ -30,29 +30,26 @@ public partial class LoginSection
         if (firstRender)
         {
             _environments = await _pmClient.EnvironmentService.GetListAsync();
-            try
+            if (_environments.Any())
             {
-                var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
-                if (_environments.Any(e => e.Name == localEnvironment.Value))
+                try
                 {
+                    var localEnvironment = await _localStorage.GetAsync<string>(nameof(_inputModel.Environment));
                     Environment = localEnvironment.Value ?? _environments.FirstOrDefault()?.Name ?? "";
                 }
-            }
-            catch (Exception e)
-            {
-                await _js.InvokeVoidAsync("console.log", $"ProtectedLocalStorage Get error: {e.Message}");
-                await _localStorage.DeleteAsync(nameof(_inputModel.Environment));
-            }
-            finally
-            {
-                _inputModel = new LoginInputModel
+                catch (Exception e)
                 {
-                    ReturnUrl = ReturnUrl,
-                    Account = LoginHint,
-                    RememberLogin = LoginOptions.AllowRememberLogin,
-                    Environment = Environment
-                };
+                    await _js.InvokeVoidAsync("console.log", $"ProtectedLocalStorage Get error: {e.Message}");
+                    await _localStorage.DeleteAsync(nameof(_inputModel.Environment));
+                }
             }
+            _inputModel = new LoginInputModel
+            {
+                ReturnUrl = ReturnUrl,
+                Account = LoginHint,
+                RememberLogin = LoginOptions.AllowRememberLogin,
+                Environment = Environment
+            };
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
