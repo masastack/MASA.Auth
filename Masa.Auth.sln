@@ -16,6 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F3986DD3-0372-4929-B72A-09D93196541E}"
+	ProjectSection(SolutionItems) = preProject
+		src\Services\Masa.Auth.Service.Admin\Program.cs = src\Services\Masa.Auth.Service.Admin\Program.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{32774681-0D67-48A6-A379-D57015094F85}"
 EndProject

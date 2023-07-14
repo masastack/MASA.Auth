@@ -58,15 +58,6 @@ builder.Services.AddAuthApiGateways(option =>
 
 await builder.Services.AddMasaStackComponentsAsync(MasaStackProject.Auth, "wwwroot/i18n", authServerUrl);
 
-builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
-{
-    ServiceNameSpace = builder.Environment.EnvironmentName,
-    ServiceVersion = masaStackConfig.Version,
-    ServiceName = masaStackConfig.GetWebId(MasaStackProject.Auth),
-    Layer = masaStackConfig.Namespace,
-    ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
-}, () => masaStackConfig.OtlpUrl, true);
-
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
