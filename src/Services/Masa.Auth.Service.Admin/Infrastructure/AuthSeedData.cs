@@ -135,7 +135,7 @@ public class AuthSeedData
         #region Tsc
         var tscMenus = new List<Permission>() {
             new Permission(MasaStackProject.TSC.Name,masaStackConfig.GetWebId(MasaStackProject.TSC),"Team","Team","team","mdi-account-group-outline",1,PermissionTypes.Menu),
-            new Permission(MasaStackProject.TSC.Name,masaStackConfig.GetWebId(MasaStackProject.TSC),"Dashboard","Dashboard","dashboard","mdi-view-dashboard",2,PermissionTypes.Menu),
+            //new Permission(MasaStackProject.TSC.Name,masaStackConfig.GetWebId(MasaStackProject.TSC),"Dashboard","Dashboard","dashboard","mdi-view-dashboard",2,PermissionTypes.Menu),
             new Permission(MasaStackProject.TSC.Name,masaStackConfig.GetWebId(MasaStackProject.TSC),"Log","Log","log","mdi-file-search",3,PermissionTypes.Menu),
             new Permission(MasaStackProject.TSC.Name,masaStackConfig.GetWebId(MasaStackProject.TSC),"Trace","Trace","trace","mdi-chart-timeline-variant",4,PermissionTypes.Menu)
         };

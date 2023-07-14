@@ -191,8 +191,6 @@ await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     await option.SyncCacheAsync();
 });
 
-builder.Services.RemoveAll(typeof(IProcessor));
-
 var app = builder.AddServices(options =>
 {
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0

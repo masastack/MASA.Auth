@@ -4,13 +4,10 @@
 global using FluentValidation;
 global using FluentValidation.Resources;
 global using Masa.Auth.ApiGateways.Caller;
-global using Masa.Auth.Contracts.Admin.Subjects.Validator;
 global using Masa.Auth.Web.Admin.Rcl.Global;
 global using Masa.Auth.Web.Admin.Rcl.Shared;
 global using Masa.Blazor;
-global using Masa.BuildingBlocks.StackSdks.Config;
 global using Masa.Contrib.StackSdks.Config;
-global using Masa.Contrib.StackSdks.Tsc;
 global using Masa.Stack.Components;
 global using Masa.Stack.Components.Extensions.OpenIdConnect;
 global using Microsoft.AspNetCore.Authentication;
