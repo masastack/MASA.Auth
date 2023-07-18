@@ -56,12 +56,10 @@ public partial class UpdateUserClaimDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await UserClaimService.UpdateAsync(UserClaim);
             OpenSuccessMessage(T("Edit userClaim data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

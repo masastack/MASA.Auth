@@ -76,16 +76,6 @@ public class ThirdPartyIdpService : RestServiceBase
     {
         await eventBus.PublishAsync(new RemoveThirdPartyIdpCommand(dto));
     }
-
-    private async Task<UserModel> AddThirdPartyUserAsync(
-        IEventBus eventBus,
-        [FromBody] AddThirdPartyUserModel user,
-        [FromQuery] bool whenExistReturn)
-    {
-        var command = new AddThirdPartyUserExternalCommand(user, whenExistReturn);
-        await eventBus.PublishAsync(command);
-        return command.Result;
-    }
     #endregion
 
     private async Task LdapSaveAsync(IEventBus eventBus, [FromBody] LdapDetailDto ldapDetailDto)

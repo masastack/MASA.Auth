@@ -56,12 +56,10 @@ public partial class UpdateIdentityResourceDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await IdentityResourceService.UpdateAsync(IdentityResource);
             OpenSuccessMessage(T("Edit identityResource data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

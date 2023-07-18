@@ -51,12 +51,10 @@ public partial class AddRoleDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await RoleService.AddAsync(Role);
             OpenSuccessMessage(T("Add role data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 

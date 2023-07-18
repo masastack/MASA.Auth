@@ -45,12 +45,10 @@ public partial class AddIdentityResourceDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await IdentityResourceService.AddAsync(IdentityResource);
             OpenSuccessMessage(T("Add identityResource success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

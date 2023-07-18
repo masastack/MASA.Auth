@@ -83,5 +83,6 @@
   "IdCardRequired": "身份证号不能为空",
   "EmailFormatError": "邮箱格式错误",
   "IdCardFormatError": "身份证号格式错误",
-  "ThirdPartyUserBindExist": "此用户已经绑定"
+  "ThirdPartyUserBindExist": "此用户已经绑定",
+  "BindSuccess": "绑定成功"
 }

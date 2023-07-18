@@ -970,11 +970,16 @@ public class CommandHandler
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
     {
         var thirdPartyUserDto = command.ThirdPartyUser;
-        var thirdPartyUser = await VerifyUserRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity, command.WhenExisReturn);
-        if (thirdPartyUser is not null)
+        var (thirdPartyUser, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
+
+        if (command.WhenExisReturn && thirdPartyUser != null)
         {
             command.Result = thirdPartyUser.User.Adapt<UserModel>();
             return;
+        }
+        if (exception is not null)
+        {
+            throw exception;
         }
 
         command.Result = await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDto);
@@ -993,7 +998,7 @@ public class CommandHandler
             var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
             await _eventBus.PublishAsync(identityProviderQuery);
             var identityProvider = identityProviderQuery.Result;
-            var thirdPartyUser = await VerifyUserRepeatAsync(identityProvider.Id, model.ThridPartyIdentity, false);
+            var (thirdPartyUser, _) = await _thirdPartyUserDomainService.VerifyRepeatAsync(identityProvider.Id, model.ThridPartyIdentity);
             if (thirdPartyUser is not null)
             {
                 if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
@@ -1019,7 +1024,11 @@ public class CommandHandler
         if (thirdPartyUser is null)
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
 
-        await VerifyUserRepeatAsync(thirdPartyUser.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
+        var (_, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUser.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
+        if (exception is not null)
+        {
+            throw exception;
+        }
         thirdPartyUser.Update(thirdPartyUserDto.ThridPartyIdentity, thirdPartyUserDto.ExtendedData);
         if (thirdPartyUserDto.Enabled)
         {
@@ -1050,19 +1059,6 @@ public class CommandHandler
     public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyUserCommand command)
     {
         await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId);
-    }
-
-    private async Task<ThirdPartyUser?> VerifyUserRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity, bool throwException = true)
-    {
-        var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
-                                                 .Include(tpu => tpu.User)
-                                                 .ThenInclude(user => user.Roles)
-                                                 .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
-        if (thirdPartyUser != null && throwException)
-        {
-            throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_USER_EXIST, thridPartyIdentity);
-        }
-        return thirdPartyUser;
     }
 
     #endregion

@@ -81,12 +81,10 @@ public partial class UpdateCustomLoginRegisterDialog
             return;
         }
 
-        Loading = true;
         await CustomLoginService.UpdateAsync(CustomLogin);
         OpenSuccessMessage(T("Edit Custom Login data success"));
         await UpdateVisible(false);
         await OnSubmitSuccess.InvokeAsync();
-        Loading = false;
     }
 
     public void AddConfig()

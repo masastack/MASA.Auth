@@ -77,12 +77,10 @@ public partial class UpdateUserDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await UserService.UpdateAsync(User);
             OpenSuccessMessage(T("Edit user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 
@@ -101,12 +99,10 @@ public partial class UpdateUserDialog
 
     public async Task RemoveUserAsync()
     {
-        Loading = true;
         await UserService.RemoveAsync(UserId);
         OpenSuccessMessage(T("Delete user data success"));
         await UpdateVisible(false);
         await OnSubmitSuccess.InvokeAsync();
-        Loading = false;
     }
 }
 

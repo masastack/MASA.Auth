@@ -89,7 +89,6 @@ public partial class SyncStaffDialog
     {
         if (File is not null)
         {
-            Loading = true;
             var fileContent = await ReadFile(File);
             if (FileEncoderHelper.GetTextFileEncodingType(fileContent) != Encoding.UTF8)
             {
@@ -108,7 +107,6 @@ public partial class SyncStaffDialog
             {
                 OpenErrorMessage(T("Sync staff failed"));
             }
-            Loading = false;
         }
         else OpenWarningMessage(T("Please upload CSV file"));
     }

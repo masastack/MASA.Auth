@@ -71,12 +71,10 @@ public partial class IdentityResource
 
     public async Task GetIdentityResourcesAsync()
     {
-        Loading = true;
         var reuquest = new GetIdentityResourcesDto(Page, PageSize, Search);
         var response = await IdentityResourceService.GetListAsync(reuquest);
         IdentityResources = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     private async Task AddStandardIdentityResourcesAsync()
@@ -84,11 +82,9 @@ public partial class IdentityResource
         var confirm = await OpenConfirmDialog(T("Operation confirmation"), T("Are you sure create standard identityResources"), AlertTypes.Info);
         if (confirm)
         {
-            Loading = true;
             await IdentityResourceService.AddStandardIdentityResourcesAsync();
             OpenSuccessMessage(T("Add standard identityResource data success"));
             await GetIdentityResourcesAsync();
-            Loading = false;
         }
     }
 
@@ -111,11 +107,9 @@ public partial class IdentityResource
 
     public async Task RemoveIdentityResourceAsync(Guid identityResourceId)
     {
-        Loading = true;
         await IdentityResourceService.RemoveAsync(identityResourceId);
         OpenSuccessMessage(T("Delete identityResource data success"));
         await GetIdentityResourcesAsync();
-        Loading = false;
     }
 }
 

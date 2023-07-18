@@ -409,7 +409,8 @@ public class QueryHandler
     {
         var tpUser = await _authDbContext.Set<ThirdPartyUser>()
                                          .Include(tpu => tpu.User)
-                                         .ThenInclude(user => new { user.Roles, user.Staff })
+                                         .Include(tpu => tpu.User.Staff)
+                                         .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
 

@@ -128,12 +128,10 @@ public partial class OperationLog
 
     public async Task GetOperationLogsAsync()
     {
-        Loading = true;
         var request = new GetOperationLogsDto(Page, PageSize, UserId, _startTime?.UtcDateTime, _endTime?.UtcDateTime, OperationType, Search);
         var response = await OperationLogService.GetListAsync(request);
         _operationLogs = response.Items;
         _operationLogs.ForEach(operationLog => operationLog.OperationTime = operationLog.OperationTime.Add(JsInitVariables.TimezoneOffset));
-        _total = response.Total;
     }
 
 }

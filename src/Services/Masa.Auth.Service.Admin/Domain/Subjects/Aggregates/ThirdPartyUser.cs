@@ -57,6 +57,12 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         ExtendedData = extendedData;
     }
 
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
+            : this(thirdPartyIdpId, enabled, thridPartyIdentity, extendedData)
+    {
+        UserId = userId;
+    }
+
     public void Update(string extendedData)
     {
         ExtendedData = extendedData;

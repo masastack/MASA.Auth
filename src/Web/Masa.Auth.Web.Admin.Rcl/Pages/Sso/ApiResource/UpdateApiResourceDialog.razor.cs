@@ -60,12 +60,10 @@ public partial class UpdateApiResourceDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await ApiResourceService.UpdateAsync(ApiResource);
             OpenSuccessMessage(T("Edit apiResource data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

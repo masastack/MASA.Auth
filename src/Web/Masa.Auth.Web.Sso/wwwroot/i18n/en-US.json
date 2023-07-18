@@ -71,5 +71,6 @@
   "IdCardRequired": "IdCard cannot be empty",
   "EmailFormatError": "Email format is incorrect",
   "IdCardFormatError": "Id Card format is incorrect",
-  "ThirdPartyUserBindExist": "The user has been bound"
+  "ThirdPartyUserBindExist": "The user has been bound",
+  "BindSuccess": "Bind Successed"
 }

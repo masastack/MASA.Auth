@@ -60,12 +60,10 @@ public partial class UpdateApiScopeDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await ApiScopeService.UpdateAsync(ApiScope);
             OpenSuccessMessage(T("Edit apiScope data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

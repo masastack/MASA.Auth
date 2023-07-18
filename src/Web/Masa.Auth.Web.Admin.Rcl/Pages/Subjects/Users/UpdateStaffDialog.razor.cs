@@ -60,12 +60,10 @@ public partial class UpdateStaffDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await StaffService.UpdateAsync(Staff);
             OpenSuccessMessage(T("Edit staff data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 
@@ -77,12 +75,10 @@ public partial class UpdateStaffDialog
 
     public async Task RemoveStaffAsync()
     {
-        Loading = true;
         await StaffService.RemoveAsync(StaffId);
         OpenSuccessMessage(T("Delete staff data success"));
         await UpdateVisible(false);
         await OnSubmitSuccess.InvokeAsync();
-        Loading = false;
     }
 }
 

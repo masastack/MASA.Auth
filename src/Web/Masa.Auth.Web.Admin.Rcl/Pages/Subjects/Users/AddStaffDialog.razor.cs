@@ -65,12 +65,10 @@ public partial class AddStaffDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await StaffService.AddAsync(Staff);
             OpenSuccessMessage(T("Add staff data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 
