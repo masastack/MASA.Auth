@@ -27,7 +27,7 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
         private set => _userId = ArgumentExceptionExtensions.ThrowIfDefault(value, nameof(UserId));
     }
 
-    public bool Enabled { get; private set; }
+    public bool Enabled { get; private set; } = true;
 
     public string ThridPartyIdentity
     {
@@ -49,16 +49,15 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public IdentityProvider IdentityProvider => _identityProvider;
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData)
+    public ThirdPartyUser(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
-        Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
     }
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, bool enabled, string thridPartyIdentity, string extendedData)
-            : this(thirdPartyIdpId, enabled, thridPartyIdentity, extendedData)
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, string thridPartyIdentity, string extendedData)
+            : this(thirdPartyIdpId, thridPartyIdentity, extendedData)
     {
         UserId = userId;
     }

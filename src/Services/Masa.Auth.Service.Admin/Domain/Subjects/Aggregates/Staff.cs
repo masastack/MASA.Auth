@@ -234,6 +234,16 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         Avatar = avatar;
     }
 
+    public void Enable()
+    {
+        Enabled = true;
+    }
+
+    public void Disable()
+    {
+        Enabled = false;
+    }
+
     public void SetDepartmentStaff(Guid departmentId)
     {
         if (departmentId != default)

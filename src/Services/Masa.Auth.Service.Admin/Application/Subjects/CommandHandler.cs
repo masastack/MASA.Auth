@@ -7,15 +7,8 @@ public class CommandHandler
 {
     readonly IUserRepository _userRepository;
     readonly IAutoCompleteClient _autoCompleteClient;
-    readonly IStaffRepository _staffRepository;
-    readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
-    readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     readonly AuthDbContext _authDbContext;
-    readonly StaffDomainService _staffDomainService;
     readonly UserDomainService _userDomainService;
-    readonly ThirdPartyUserDomainService _thirdPartyUserDomainService;
-    readonly IUserContext _userContext;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
     readonly ILdapFactory _ldapFactory;
@@ -32,15 +25,9 @@ public class CommandHandler
     public CommandHandler(
         IUserRepository userRepository,
         IAutoCompleteClient autoCompleteClient,
-        IStaffRepository staffRepository,
-        IThirdPartyIdpRepository thirdPartyIdpRepository,
-        IThirdPartyUserRepository thirdPartyUserRepository,
         AuthDbContext authDbContext,
-        StaffDomainService staffDomainService,
         UserDomainService userDomainService,
-        IMultilevelCacheClient multilevelCacheClient,
         IDistributedCacheClient distributedCacheClient,
-        IUserContext userContext,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
         ILdapFactory ldapFactory,
         ILdapIdpRepository ldapIdpRepository,
@@ -51,20 +38,13 @@ public class CommandHandler
         IHttpContextAccessor httpContextAccessor,
         IMasaConfiguration masaConfiguration,
         IUnitOfWork unitOfWork,
-        ThirdPartyUserDomainService thirdPartyUserDomainService,
         LdapDomainService ldapDomainService)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
-        _staffRepository = staffRepository;
-        _thirdPartyIdpRepository = thirdPartyIdpRepository;
-        _thirdPartyUserRepository = thirdPartyUserRepository;
         _authDbContext = authDbContext;
-        _staffDomainService = staffDomainService;
         _userDomainService = userDomainService;
-        _multilevelCacheClient = multilevelCacheClient;
         _distributedCacheClient = distributedCacheClient;
-        _userContext = userContext;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
         _ldapFactory = ldapFactory;
         _ldapIdpRepository = ldapIdpRepository;
@@ -75,7 +55,6 @@ public class CommandHandler
         _httpContextAccessor = httpContextAccessor;
         _masaConfiguration = masaConfiguration;
         _unitOfWork = unitOfWork;
-        _thirdPartyUserDomainService = thirdPartyUserDomainService;
         _ldapDomainService = ldapDomainService;
     }
 
@@ -123,7 +102,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
+        var user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
         user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
         await _userDomainService.AddAsync(user);
@@ -135,7 +114,15 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await CheckUserExistAsync(userDto.Id);
-        user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.Enabled, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
+        user.Update(userDto.Account, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.CompanyName, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Department, userDto.Position, userDto.Gender);
+        if (userDto.Enabled)
+        {
+            user.Enable();
+        }
+        else
+        {
+            user.Disable();
+        }
         await _userDomainService.UpdateAsync(user);
         command.Result = user;
     }
@@ -363,7 +350,7 @@ public class CommandHandler
         if (user is null)
             throw new UserFriendlyException(UserFriendlyExceptionCodes.ACCOUNT_NOT_EXIST, userModel.Account);
 
-        user.Disabled();
+        user.Disable();
         await _userDomainService.UpdateAsync(user);
         command.Result = true;
     }
@@ -577,488 +564,6 @@ public class CommandHandler
                                     .ToListAsync();
         user.RemoveRoles(roles);
         await _userDomainService.UpdateAsync(user);
-    }
-
-    #endregion
-
-    #region Staff
-
-    [EventHandler(1)]
-    public async Task AddStaffAsync(AddStaffCommand command)
-    {
-        await _staffDomainService.AddAsync(command.Staff);
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateStaffAsync(UpdateStaffCommand command)
-    {
-        command.Result = await _staffDomainService.UpdateAsync(command.Staff);
-    }
-
-    [EventHandler(1)]
-    public async Task ChangeStaffCurrentTeamAsync(UpdateStaffCurrentTeamCommand updateStaffCurrentTeamCommand)
-    {
-        var staff = await _staffRepository.FindAsync(s => s.UserId == updateStaffCurrentTeamCommand.UserId);
-        if (staff == null)
-        {
-            _logger.LogError($"Can`t find staff by UserId = {updateStaffCurrentTeamCommand.UserId}");
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
-        }
-        staff.SetCurrentTeam(updateStaffCurrentTeamCommand.TeamId);
-        await _staffRepository.UpdateAsync(staff);
-        updateStaffCurrentTeamCommand.Result = staff;
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateStaffBasicInfoAsync(UpdateStaffBasicInfoCommand command)
-    {
-        var staffModel = command.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.UserId == command.Staff.UserId);
-        if (staff is null)
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
-
-        staff.UpdateBasicInfo(staffModel.Name, staffModel.DisplayName, staffModel.Gender, staffModel.PhoneNumber, staffModel.Email);
-        await _staffRepository.UpdateAsync(staff);
-        command.Result = staff;
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateStaffAvatarAsync(UpdateStaffAvatarCommand command)
-    {
-        var staffDto = command.Staff;
-        var staff = await _staffRepository.FindAsync(s => s.UserId == staffDto.UserId);
-        if (staff is null)
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.STAFF_NOT_EXIST);
-
-        staff.UpdateAvatar(staffDto.Avatar);
-        await _staffRepository.UpdateAsync(staff);
-        command.Result = staff;
-    }
-
-    [EventHandler(1)]
-    public async Task RemoveStaffAsync(RemoveStaffCommand command)
-    {
-        command.Result = await _staffDomainService.RemoveAsync(command.Staff.Id);
-    }
-
-    [EventHandler(1)]
-    public async Task SyncStaffAsync(SyncStaffCommand command)
-    {
-        var syncResults = new SyncStaffResultsDto();
-        command.Result = syncResults;
-        var syncStaffs = command.Staffs;
-        //validation
-        var validator = new SyncStaffValidator();
-        for (var i = 0; i < syncStaffs.Count; i++)
-        {
-            var staff = syncStaffs[i];
-            var result = validator.Validate(staff);
-            if (result.IsValid is false)
-            {
-                syncResults[i] = new()
-                {
-                    JobNumber = staff.JobNumber,
-                    Errors = result.Errors.GroupBy(error => error.PropertyName).Select(e => e.First().ErrorMessage).ToList()
-                };
-            }
-        }
-        //check duplicate
-        CheckDuplicate(Staff => Staff.PhoneNumber);
-        CheckDuplicate(Staff => Staff.JobNumber);
-        CheckDuplicate(Staff => Staff.Email);
-        CheckDuplicate(Staff => Staff.IdCard);
-        if (syncResults.IsValid) return;
-
-        var defaultPasswordQuery = new StaffDefaultPasswordQuery();
-        await _eventBus.PublishAsync(defaultPasswordQuery);
-        string defaultPassword = defaultPasswordQuery.Result.DefaultPassword.WhenNullOrEmptyReplace(DefaultUserAttributes.Password);
-        //sync user
-        for (var i = 0; i < syncStaffs.Count; i++)
-        {
-            var syncStaff = syncStaffs[i];
-            try
-            {
-                var (existStaff, _) = await _staffDomainService.VerifyRepeatAsync(syncStaff.JobNumber, syncStaff.PhoneNumber, syncStaff.Email, syncStaff.IdCard);
-                if (existStaff is not null)
-                {
-                    var checkResult = await CheckSyncDataAsync(existStaff, syncStaff);
-                    if (!checkResult.State)
-                    {
-                        if (checkResult.StaffResult != null)
-                        {
-                            syncResults[i] = checkResult.StaffResult;
-                        }
-                        continue;
-                    }
-                    await _staffDomainService.UpdateAsync(new UpdateStaffDto
-                    {
-                        Id = existStaff.Id,
-                        Name = syncStaff.Name,
-                        DisplayName = syncStaff.DisplayName,
-                        Email = syncStaff.Email,
-                        IdCard = syncStaff.IdCard,
-                        Gender = syncStaff.Gender,
-                        StaffType = syncStaff.StaffType,
-                        Position = syncStaff.Position
-                    });
-                }
-                else
-                {
-                    var addStaffDto = new AddStaffDto
-                    {
-                        Name = syncStaff.Name,
-                        DisplayName = syncStaff.DisplayName,
-                        Enabled = true,
-                        Email = syncStaff.Email,
-                        Password = defaultPassword,
-                        PhoneNumber = syncStaff.PhoneNumber,
-                        JobNumber = syncStaff.JobNumber,
-                        IdCard = syncStaff.IdCard,
-                        Position = syncStaff.Position,
-                        Gender = syncStaff.Gender,
-                        StaffType = syncStaff.StaffType,
-                    };
-                    await _staffDomainService.AddAsync(addStaffDto);
-                }
-            }
-            catch (Exception ex)
-            {
-                var errorMsg = ex is UserFriendlyException ? ex.Message : "Unknown exception, please contact the administrator";
-                syncResults[i] = new()
-                {
-                    JobNumber = syncStaff.JobNumber,
-                    Errors = new() { errorMsg }
-                };
-            }
-        }
-
-        void CheckDuplicate(Expression<Func<SyncStaffDto, string?>> selector)
-        {
-            var func = selector.Compile();
-            if (syncStaffs.Where(staff => string.IsNullOrEmpty(func(staff)) is false).IsDuplicate(func, out List<SyncStaffDto>? duplicates))
-            {
-                foreach (var duplicate in duplicates)
-                {
-                    var index = syncStaffs.IndexOf(duplicate);
-                    var staff = syncStaffs[index];
-                    syncResults[index] = new()
-                    {
-                        JobNumber = staff.JobNumber,
-                        Errors = new() { $"{(selector.Body as MemberExpression)!.Member.Name}:{func(staff)} - duplicate" }
-                    };
-                }
-            }
-        }
-
-        SyncStaffResultsDto.SyncStaffResult Error(string jobNumber, params string[] errorMessages) =>
-            new SyncStaffResultsDto.SyncStaffResult()
-            {
-                JobNumber = jobNumber,
-                Errors = errorMessages.ToList()
-            };
-
-        async Task<(bool State, SyncStaffResultsDto.SyncStaffResult? StaffResult)> CheckSyncDataAsync(Staff existStaff,
-            SyncStaffDto syncStaff)
-        {
-            // Do not flush to db if the sync staff info is same with exist staff. 
-            if (existStaff.PhoneNumber == syncStaff.PhoneNumber &&
-                existStaff.JobNumber == syncStaff.JobNumber &&
-                existStaff.DisplayName == syncStaff.DisplayName.WhenNullOrEmptyReplace("") &&
-                existStaff.Name == syncStaff.Name.WhenNullOrEmptyReplace("") &&
-                existStaff.Gender == syncStaff.Gender &&
-                existStaff.StaffType == syncStaff.StaffType &&
-                existStaff.Position != null &&
-                existStaff.Position.Name == syncStaff.Position.WhenNullOrEmptyReplace("") &&
-                existStaff.Email == syncStaff.Email.WhenNullOrEmptyReplace("") &&
-                existStaff.IdCard == syncStaff.IdCard.WhenNullOrEmptyReplace(""))
-            {
-                return (false, default);
-            }
-
-            // When phone number is not equals and job number is not equals, the email and id card cannot be equal! 
-            if (existStaff.PhoneNumber != syncStaff.PhoneNumber && existStaff.JobNumber != syncStaff.JobNumber)
-            {
-                if (!string.IsNullOrWhiteSpace(syncStaff.Email) && existStaff.Email == syncStaff.Email)
-                {
-                    return (false, Error(syncStaff.JobNumber,
-                        $"The employee whose email is {syncStaff.Email} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
-                }
-
-                if (!string.IsNullOrWhiteSpace(syncStaff.IdCard) && existStaff.IdCard == syncStaff.IdCard)
-                {
-                    return (false, Error(syncStaff.JobNumber,
-                        $"The employee whose id card is {syncStaff.IdCard} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
-                }
-            }
-
-            // When job number is equals, the phone number must be equal
-            if (existStaff.JobNumber == syncStaff.JobNumber && existStaff.PhoneNumber != syncStaff.PhoneNumber)
-            {
-                return (false, Error(syncStaff.JobNumber,
-                    $"The employee whose job number is {syncStaff.JobNumber}, the corresponding mobile phone number is {existStaff.PhoneNumber}, which does not match the mobile phone number {syncStaff.PhoneNumber}"));
-            }
-
-            // When phone number is equals, the job number must be equal
-            if (existStaff.PhoneNumber == syncStaff.PhoneNumber && existStaff.JobNumber != syncStaff.JobNumber)
-            {
-                return (false, Error(syncStaff.JobNumber,
-                    $"The employee whose mobile phone number is {syncStaff.PhoneNumber} has a corresponding job number of {existStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
-            }
-
-            // When job number is equal and phone number is equal, the staff whose is email or id card cannot be equal for other staff who is in database.
-            if (existStaff.PhoneNumber == syncStaff.PhoneNumber && existStaff.JobNumber == syncStaff.JobNumber)
-            {
-                if (!string.IsNullOrWhiteSpace(syncStaff.IdCard))
-                {
-                    var (existIdCardStaff, _) = await _staffDomainService.VerifyRepeatAsync(default, default, default, syncStaff.IdCard);
-                    if (existIdCardStaff != null && existIdCardStaff.JobNumber != syncStaff.JobNumber)
-                    {
-                        return (false, Error(syncStaff.JobNumber,
-                            $"The employee whose id card number is {syncStaff.IdCard} has a corresponding job number of {existIdCardStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
-                    }
-                }
-
-                if (!string.IsNullOrWhiteSpace(syncStaff.Email))
-                {
-                    var (existEmailStaff, _) = await _staffDomainService.VerifyRepeatAsync(default, default, syncStaff.Email, default);
-                    if (existEmailStaff != null && existEmailStaff.JobNumber != syncStaff.JobNumber)
-                    {
-                        return (false, Error(syncStaff.JobNumber,
-                            $"The employee whose email is {syncStaff.Email} has a corresponding job number of {existEmailStaff.JobNumber}, which does not match the job number of {syncStaff.JobNumber}"));
-                    }
-                }
-            }
-
-            return (true, default);
-        }
-    }
-
-    #endregion
-
-    #region ThirdPartyIdp
-
-    [EventHandler(1)]
-    public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
-    {
-        var thirdPartyIdpDto = command.ThirdPartyIdp;
-        var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
-        if (exist)
-            throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NAME_EXIST, thirdPartyIdpDto.Name);
-
-        var thirdPartyIdp = new ThirdPartyIdp(
-            thirdPartyIdpDto.Name,
-            thirdPartyIdpDto.DisplayName,
-            thirdPartyIdpDto.Icon,
-            thirdPartyIdpDto.Enabled,
-            thirdPartyIdpDto.ThirdPartyIdpType,
-            thirdPartyIdpDto.ClientId,
-            thirdPartyIdpDto.ClientSecret,
-            thirdPartyIdpDto.CallbackPath,
-            thirdPartyIdpDto.AuthorizationEndpoint,
-            thirdPartyIdpDto.TokenEndpoint,
-            thirdPartyIdpDto.UserInformationEndpoint,
-            thirdPartyIdpDto.AuthenticationType,
-            thirdPartyIdpDto.MapAll,
-            JsonSerializer.Serialize(thirdPartyIdpDto.JsonKeyMap));
-
-        await _thirdPartyIdpRepository.AddAsync(thirdPartyIdp);
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateThirdPartyIdpAsync(UpdateThirdPartyIdpCommand command)
-    {
-        var thirdPartyIdpDto = command.ThirdPartyIdp;
-        var thirdPartyIdp = await _thirdPartyIdpRepository.FindAsync(thirdPartyIdp => thirdPartyIdp.Id == thirdPartyIdpDto.Id);
-        if (thirdPartyIdp is null)
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
-
-        thirdPartyIdp.Update(
-            thirdPartyIdpDto.DisplayName,
-            thirdPartyIdpDto.Icon,
-            thirdPartyIdpDto.Enabled,
-            thirdPartyIdpDto.ClientId,
-            thirdPartyIdpDto.ClientSecret,
-            thirdPartyIdpDto.CallbackPath,
-            thirdPartyIdpDto.AuthorizationEndpoint,
-            thirdPartyIdpDto.TokenEndpoint,
-            thirdPartyIdpDto.UserInformationEndpoint,
-            thirdPartyIdpDto.MapAll,
-            thirdPartyIdpDto.JsonKeyMap);
-        await _thirdPartyIdpRepository.UpdateAsync(thirdPartyIdp);
-    }
-
-    [EventHandler(1)]
-    public async Task RemoveThirdPartyIdpAsync(RemoveThirdPartyIdpCommand command)
-    {
-        var thirdPartyIdp = await _authDbContext.Set<ThirdPartyIdp>()
-                                                .FirstOrDefaultAsync(tpIdp => tpIdp.Id == command.ThirdPartyIdp.Id);
-        if (thirdPartyIdp == null)
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
-
-        await _thirdPartyIdpRepository.RemoveAsync(thirdPartyIdp);
-        var removeThirdUserComman = new RemoveThirdPartyUserCommand(thirdPartyIdp.Id);
-        await _eventBus.PublishAsync(removeThirdUserComman);
-    }
-
-    #endregion
-
-    #region ThirdPartyUser
-
-    [EventHandler]
-    public async Task RegisterThirdPartyUserAsync(RegisterThirdPartyUserCommand command)
-    {
-        var model = command.Model;
-        await BindVerifyAsync(model);
-        var addThirdPartyUserExternalCommand = new AddThirdPartyUserExternalCommand(new AddThirdPartyUserModel
-        {
-            ThridPartyIdentity = model.ThridPartyIdentity,
-            ExtendedData = model.ExtendedData,
-            Scheme = model.Scheme,
-            User = new AddUserModel
-            {
-                Account = model.Account,
-                DisplayName = model.DisplayName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                Avatar = model.Avatar,
-                Password = model.Password
-            }
-        }, true);
-        await _eventBus.PublishAsync(addThirdPartyUserExternalCommand);
-        command.Result = addThirdPartyUserExternalCommand.Result;
-    }
-
-    async Task BindVerifyAsync(RegisterThirdPartyUserModel model)
-    {
-        if (model.UserRegisterType == UserRegisterTypes.Email)
-        {
-            var emailCodeKey = CacheKey.EmailCodeBindKey(model.Email);
-            var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
-            if (!model.EmailCode.Equals(emailCode))
-            {
-                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
-            }
-        }
-        var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
-        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
-        if (!model.SmsCode.Equals(smsCode))
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
-        }
-
-        Expression<Func<User, bool>> condition = _ => false;
-        condition = condition.Or(!model.PhoneNumber.IsNullOrEmpty(), u => u.PhoneNumber == model.PhoneNumber);
-        condition = condition.Or(!model.Email.IsNullOrEmpty(), u => u.Email == model.Email);
-        var user = await _userRepository.FindAsync(condition);
-        if (user != null)
-        {
-            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
-            await _eventBus.PublishAsync(identityProviderQuery);
-            var identityProvider = identityProviderQuery.Result;
-            if (identityProvider != null)
-            {
-                var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(t => t.UserId == user.Id && t.ThirdPartyIdpId == identityProvider.Id);
-                if (thirdPartyUser != null)
-                {
-                    throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRDPARTYUSER_BIND_EXIST);
-                }
-            }
-        }
-    }
-
-    [EventHandler(1)]
-    public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
-    {
-        var thirdPartyUserDto = command.ThirdPartyUser;
-        var (thirdPartyUser, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
-
-        if (command.WhenExisReturn && thirdPartyUser != null)
-        {
-            command.Result = thirdPartyUser.User.Adapt<UserModel>();
-            return;
-        }
-        if (exception is not null)
-        {
-            throw exception;
-        }
-
-        command.Result = await _thirdPartyUserDomainService.AddThirdPartyUserAsync(thirdPartyUserDto);
-    }
-
-    [EventHandler(1)]
-    public async Task UpsertThirdPartyUserExternalAsync(UpsertThirdPartyUserExternalCommand command)
-    {
-        var model = command.ThirdPartyUser;
-        if (string.IsNullOrEmpty(model.Scheme))
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_THIRD_PARTY_IDP_TYPE);
-        }
-        else
-        {
-            var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
-            await _eventBus.PublishAsync(identityProviderQuery);
-            var identityProvider = identityProviderQuery.Result;
-            var (thirdPartyUser, _) = await _thirdPartyUserDomainService.VerifyRepeatAsync(identityProvider.Id, model.ThridPartyIdentity);
-            if (thirdPartyUser is not null)
-            {
-                if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
-                thirdPartyUser.Update(model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData));
-                await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-                var upsertUserCommand = new UpsertUserCommand(model.Adapt<UpsertUserModel>());
-                await _eventBus.PublishAsync(upsertUserCommand);
-                command.Result = upsertUserCommand.Result;
-            }
-            else
-            {
-                var addThirdPartyUserDto = new AddThirdPartyUserDto(identityProvider.Id, true, model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData), command.ThirdPartyUser.Adapt<AddUserDto>());
-                command.Result = await _thirdPartyUserDomainService.AddThirdPartyUserAsync(addThirdPartyUserDto);
-            }
-        }
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateThirdPartyUserAsync(UpdateThirdPartyUserCommand command)
-    {
-        var thirdPartyUserDto = command.ThirdPartyUser;
-        var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.Id == thirdPartyUserDto.Id);
-        if (thirdPartyUser is null)
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NOT_EXIST);
-
-        var (_, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUser.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
-        if (exception is not null)
-        {
-            throw exception;
-        }
-        thirdPartyUser.Update(thirdPartyUserDto.ThridPartyIdentity, thirdPartyUserDto.ExtendedData);
-        if (thirdPartyUserDto.Enabled)
-        {
-            thirdPartyUser.Enable();
-        }
-        else
-        {
-            thirdPartyUser.Disable();
-        }
-        await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-    }
-
-    [EventHandler]
-    public async Task AddThirdPartyUserExternalAsync(AddThirdPartyUserExternalCommand command)
-    {
-        var model = command.ThirdPartyUser;
-        var identityProviderQuery = new IdentityProviderBySchemeQuery(model.Scheme);
-        await _eventBus.PublishAsync(identityProviderQuery);
-        var identityProvider = identityProviderQuery.Result;
-        var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
-        addThirdPartyUserDto.ThirdPartyIdpId = identityProvider.Id;
-        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn);
-        await _eventBus.PublishAsync(addThirdPartyUserCommand);
-        command.Result = addThirdPartyUserCommand.Result;
-    }
-
-    [EventHandler]
-    public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyUserCommand command)
-    {
-        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId);
     }
 
     #endregion

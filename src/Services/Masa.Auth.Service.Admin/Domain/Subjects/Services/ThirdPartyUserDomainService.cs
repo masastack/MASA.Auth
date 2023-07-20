@@ -23,11 +23,11 @@ public class ThirdPartyUserDomainService : DomainService
     {
         var userDto = dto.User;
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar, userDto.Account, userDto.Password, "", userDto.Email, userDto.PhoneNumber ?? "",
-             new ThirdPartyUser(dto.ThirdPartyIdpId, true, dto.ThridPartyIdentity, dto.ExtendedData));
+             new ThirdPartyUser(dto.ThirdPartyIdpId, dto.ThridPartyIdentity, dto.ExtendedData));
         var (existUser, _) = await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, default, userDto.Account);
         if (existUser != null)
         {
-            var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, true, dto.ThridPartyIdentity, dto.ExtendedData);
+            var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, dto.ThridPartyIdentity, dto.ExtendedData);
             await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
             return existUser.Adapt<UserModel>();
         }
