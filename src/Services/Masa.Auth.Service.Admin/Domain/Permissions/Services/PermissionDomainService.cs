@@ -24,7 +24,7 @@ public class PermissionDomainService : DomainService
         {
             //menu and element can`t sibling node,element can`t menu parent
             return !_permissionRepository.Any(p => (p.ParentId == parentId && p.Type == PermissionTypes.Element)
-                || (p.Id == parentId && p.Type == PermissionTypes.Element));
+                || (p.Id == parentId && (p.Type == PermissionTypes.Element || p.Type == PermissionTypes.Data)));
         }
         if (permissionType == PermissionTypes.Api)
         {

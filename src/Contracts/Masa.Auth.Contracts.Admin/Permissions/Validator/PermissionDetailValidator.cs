@@ -11,9 +11,9 @@ public class PermissionDetailValidator<T> : MasaAbstractValidator<T> where T : P
         RuleFor(p => p.Name).ChineseLetterNumber()
             .Must(name => !string.IsNullOrWhiteSpace(name) && name.Length <= 20)
             .WithMessage("Permission Name can`t null and length must be less than 20");
-        WhenNotEmpty(p=>p.Description,builder=>builder.ChineseLetterNumber().MaximumLength(255).WithMessage("Permission Description length must be less than 255"));
+        WhenNotEmpty(p => p.Description, builder => builder.MaximumLength(255).WithMessage("Permission Description length must be less than 255"));
         RuleFor(p => p.AppId).Required();
-        RuleFor(p => p.Code).Required();
+        RuleFor(p => p.Code).LetterNumberUnderline().Required();
         RuleFor(p => p.Type).IsInEnum().WithMessage("Invalid permission type");
         RuleFor(p => p.Order).NotNull().Must(order => order >= BusinessConsts.PERMISSION_ORDER_MIN_VALUE
             && order <= BusinessConsts.PERMISSION_ORDER_MAX_VALUE)
