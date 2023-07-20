@@ -13,6 +13,7 @@ public class QueryHandler
     private readonly ILdapIdpRepository _ldapIdpRepository;
     private readonly AuthDbContext _authDbContext;
     private readonly IMultilevelCacheClient _multilevelCacheClient;
+    private readonly IDistributedCacheClient _distributedCacheClient;
     private readonly IPmClient _pmClient;
     private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
     private readonly UserDomainService _userDomainService;
@@ -26,7 +27,8 @@ public class QueryHandler
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
-        AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
+        IMultilevelCacheClient multilevelCacheClient,
+        IDistributedCacheClient distributedCacheClient,
         IPmClient pmClient,
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
         UserDomainService userDomainService,
@@ -39,11 +41,12 @@ public class QueryHandler
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
-        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
+        _multilevelCacheClient = multilevelCacheClient;
         _pmClient = pmClient;
         _multiEnvironmentUserContext = multiEnvironmentUserContext;
         _userDomainService = userDomainService;
         _operaterProvider = operaterProvider;
+        _distributedCacheClient = distributedCacheClient;
     }
 
     #region User
@@ -75,7 +78,10 @@ public class QueryHandler
     public async Task GetUserDetailAsync(UserDetailQuery query)
     {
         var user = await _userRepository.GetDetailAsync(query.UserId);
-        if (user is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
         var creator = await _operaterProvider.GetUserAsync(user.Creator);
         var modifier = await _operaterProvider.GetUserAsync(user.Modifier);
         var userDetail = _userDomainService.UserSplicingData(user);
@@ -354,7 +360,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetDefaultPasswordAsync(StaffDefaultPasswordQuery query)
     {
-        var defaultPasswordDto = await _multilevelCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF_DEFAULT_PASSWORD);
+        var defaultPasswordDto = await _distributedCacheClient.GetAsync<StaffDefaultPasswordDto>(CacheKey.STAFF_DEFAULT_PASSWORD);
         query.Result = defaultPasswordDto ?? new();
     }
 
@@ -409,7 +415,8 @@ public class QueryHandler
     {
         var tpUser = await _authDbContext.Set<ThirdPartyUser>()
                                          .Include(tpu => tpu.User)
-                                         .ThenInclude(user => new { user.Roles, user.Staff })
+                                         .Include(tpu => tpu.User.Staff)
+                                         .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
 
@@ -547,8 +554,6 @@ public class QueryHandler
         }
         var teams = await _authDbContext.Set<Team>()
                                         .Include(t => t.TeamStaffs)
-                                        //.Include(team => team.TeamRoles)
-                                        //.ThenInclude(tr => tr.Role)
                                         .Where(condition)
                                         .AsSplitQuery()
                                         .OrderByDescending(t => t.ModificationTime)
@@ -557,7 +562,7 @@ public class QueryHandler
         foreach (var team in teams.ToList())
         {
             var userModel = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier));
-            var modifierName = userModel?.StaffDisplayName ?? userModel?.DisplayName ?? "";
+            var modifierName = userModel?.RealDisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 
@@ -654,22 +659,28 @@ public class QueryHandler
         {
             condition = condition.And(team => team.Name.Contains(query.Name));
         }
-        Expression<Func<Team, bool>> teamStaffCondition = _ => true;
         if (query.UserId != default)
         {
-            teamStaffCondition = teamStaffCondition.And(team => team.TeamStaffs.Any(ts => ts.UserId == query.UserId));
+            condition = condition.And(team => team.TeamStaffs.Any(ts => ts.UserId == query.UserId));
         }
         var teams = await _authDbContext.Set<Team>()
                                         .Where(condition)
                                         .Include(team => team.TeamStaffs)
-                                        .Where(teamStaffCondition)
                                         .Include(team => team.TeamRoles)
                                         .ThenInclude(tr => tr.Role)
                                         .ToListAsync();
         foreach (var team in teams)
         {
-            var roles = team.TeamRoles
-                            .Where(tr => tr.TeamMemberType == TeamMemberTypes.Member)
+            var teamRoles = team.TeamRoles.ToList();
+            if (query.UserId != default)
+            {
+                var memberType = team.TeamStaffs.FirstOrDefault(ts => ts.UserId == query.UserId)?.TeamMemberType;
+                if (memberType != null)
+                {
+                    teamRoles = teamRoles.Where(tr => tr.TeamMemberType == memberType).ToList();
+                }
+            }
+            var roles = teamRoles.DistinctBy(r => r.RoleId)
                             .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Code, tr.Role.Limit, tr.Role.AvailableQuantity))
                             .ToList();
             query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
@@ -691,7 +702,7 @@ public class QueryHandler
     public async Task UserVisitedListQueryAsync(UserVisitedListQuery userVisitedListQuery)
     {
         var key = CacheKey.UserVisitKey(userVisitedListQuery.UserId);
-        var visited = await _multilevelCacheClient.GetAsync<List<CacheUserVisited>>(key);
+        var visited = await _distributedCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
             var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? "");

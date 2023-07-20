@@ -70,12 +70,10 @@ public partial class ApiResource
 
     public async Task GetApiResourcesAsync()
     {
-        Loading = true;
         var reuquest = new GetApiResourcesDto(Page, PageSize, Search);
         var response = await ApiResourceService.GetListAsync(reuquest);
         ApiResources = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public void OpenAddApiResourceDialog()
@@ -97,11 +95,9 @@ public partial class ApiResource
 
     public async Task RemoveApiResourceAsync(Guid apiResourceId)
     {
-        Loading = true;
         await ApiResourceService.RemoveAsync(apiResourceId);
         OpenSuccessMessage(T("Delete apiResource data success"));
         await GetApiResourcesAsync();
-        Loading = false;
     }
 }
 

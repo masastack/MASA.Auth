@@ -6,16 +6,16 @@
             <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
         </SElevationTabItem>
         <SElevationTabItem>
-            @if (_visible)
-            {
+           @* @if (_visible)
+            {*@
                 <TeamAdmin IgnoreStaffIds="Dto.TeamMember.Staffs" @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
-            }
+            @*}*@
         </SElevationTabItem>
         <SElevationTabItem>
-            @if (_visible)
-            {
+            @*@if (_visible)
+            {*@
                 <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
-            }
+            @*}*@
         </SElevationTabItem>
     </SElevationTab>
     <MCardActions class="d-flex align-center px-6">

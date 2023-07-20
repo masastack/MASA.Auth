@@ -69,12 +69,10 @@ public partial class UserClaim
 
     public async Task GetUserClaimsAsync()
     {
-        Loading = true;
         var reuquest = new GetUserClaimsDto(Page, PageSize, Search);
         var response = await UserClaimService.GetListAsync(reuquest);
         UserClaims = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     private async Task AddStandardUserClaimsAsync()
@@ -82,11 +80,9 @@ public partial class UserClaim
         var confirm = await OpenConfirmDialog(T("Operation confirmation"), T("Are you sure create standard userClaims"), AlertTypes.Info);
         if (confirm)
         {
-            Loading = true;
             await UserClaimService.AddStandardUserClaimsAsync();
             OpenSuccessMessage(T("Add standard userClaim data success"));
             await GetUserClaimsAsync();
-            Loading = false;
         }
     }
 
@@ -109,11 +105,9 @@ public partial class UserClaim
 
     public async Task RemoveUserClaimAsync(Guid UserClaimId)
     {
-        Loading = true;
         await UserClaimService.RemoveAsync(UserClaimId);
         OpenSuccessMessage(T("Delete userClaim data success"));
         await GetUserClaimsAsync();
-        Loading = false;
     }
 }
 

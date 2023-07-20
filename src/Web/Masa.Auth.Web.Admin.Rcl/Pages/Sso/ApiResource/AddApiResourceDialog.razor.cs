@@ -49,12 +49,10 @@ public partial class AddApiResourceDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await ApiResourceService.AddAsync(ApiResource);
             OpenSuccessMessage(T("Add apiResource success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

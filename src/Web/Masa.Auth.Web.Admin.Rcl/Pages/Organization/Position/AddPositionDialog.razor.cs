@@ -45,12 +45,10 @@ public partial class AddPositionDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await PositionService.AddAsync(Position);
             OpenSuccessMessage(T("Add position success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

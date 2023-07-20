@@ -109,13 +109,10 @@ public partial class ThirdPartyUser
 
     private ThirdPartyIdpService ThirdPartyIdpService => AuthCaller.ThirdPartyIdpService;
 
-    private List<ThirdPartyIdpDto> _thirdPartyIdps = new();
-
     protected override async Task OnInitializedAsync()
     {
         PageName = "ThirdPartyUser";
         await GetThirdPartyUsersAsync();
-        //await GetThirdPartyIdpsAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -138,12 +135,11 @@ public partial class ThirdPartyUser
 
     public async Task GetThirdPartyUsersAsync()
     {
-        Loading = true;
         var request = new GetThirdPartyUsersDto(Page, PageSize, Search, ThirdPartyId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
         var response = await ThirdPartyUserService.GetListAsync(request);
         ThirdPartyUsers = response.Items;
         Total = response.Total;
-        Loading = false;
+        StateHasChanged();
     }
 
     public async Task ReloadAsync()
@@ -161,12 +157,5 @@ public partial class ThirdPartyUser
     public async Task OpenLdapDialog()
     {
         await ldapDialog.OpenAsync();
-    }
-
-    public async Task GetThirdPartyIdpsAsync()
-    {
-        var request = new GetThirdPartyIdpsDto(1, 100, "");
-        var response = await ThirdPartyIdpService.GetListAsync(request);
-        _thirdPartyIdps = response.Items;
     }
 }

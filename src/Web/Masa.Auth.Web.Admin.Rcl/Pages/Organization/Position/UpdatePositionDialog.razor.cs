@@ -56,12 +56,10 @@ public partial class UpdatePositionDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await PositionService.UpdateAsync(Position);
             OpenSuccessMessage(T("Edit position data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

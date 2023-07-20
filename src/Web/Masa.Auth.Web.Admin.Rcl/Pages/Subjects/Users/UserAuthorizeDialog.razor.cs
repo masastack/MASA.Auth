@@ -51,12 +51,10 @@ public partial class UserAuthorizeDialog
 
     private async Task UpdateAuthorizationAsync()
     {
-        Loading = true;
         await UserService.UpdateAuthorizationAsync(Authorization);
         OpenSuccessMessage(T("Successfully set user permissions"));
         await UpdateVisible(false);
         await OnSubmitSuccess.InvokeAsync();
-        Loading = false;
     }
 
     public void TeamValueChanged(Guid value)

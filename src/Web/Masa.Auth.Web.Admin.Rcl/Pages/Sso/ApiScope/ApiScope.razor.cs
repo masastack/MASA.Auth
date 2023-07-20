@@ -71,12 +71,10 @@ public partial class ApiScope
 
     public async Task GetApiScopesAsync()
     {
-        Loading = true;
         var reuquest = new GetApiScopesDto(Page, PageSize, Search);
         var response = await ApiScopeService.GetListAsync(reuquest);
         ApiScopes = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public void OpenAddApiResourceDialog()
@@ -98,11 +96,9 @@ public partial class ApiScope
 
     public async Task RemoveApiScopeAsync(Guid apiScopeId)
     {
-        Loading = true;
         await ApiScopeService.RemoveAsync(apiScopeId);
         OpenSuccessMessage(T("Delete apiScope data success"));
         await GetApiScopesAsync();
-        Loading = false;
     }
 }
 

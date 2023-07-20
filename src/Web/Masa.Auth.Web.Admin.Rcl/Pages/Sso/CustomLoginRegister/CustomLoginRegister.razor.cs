@@ -73,12 +73,10 @@ public partial class CustomLoginRegister
 
     public async Task GetCustomLoginsAsync()
     {
-        Loading = true;
         var reuquest = new GetCustomLoginsDto(Page, PageSize, Search);
         var response = await CustomLoginService.GetListAsync(reuquest);
         CustomLogins = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public void OpenAddCustomLoginDialog()
@@ -100,11 +98,9 @@ public partial class CustomLoginRegister
 
     public async Task RemoveCustomLoginAsync(int CustomLoginId)
     {
-        Loading = true;
         await CustomLoginService.RemoveAsync(CustomLoginId);
         OpenSuccessMessage(T("Delete Custom Login data success"));
         await GetCustomLoginsAsync();
-        Loading = false;
     }
 }
 

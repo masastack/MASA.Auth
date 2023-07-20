@@ -90,7 +90,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         private set => _position = value ?? "";
     }
 
-    public bool Enabled { get; private set; }
+    public bool Enabled { get; private set; } = true;
 
     public GenderTypes Gender
     {
@@ -155,7 +155,7 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? companyName,
                 string? email,
                 string phoneNumber) :
-        this(name, displayName, avatar, default, account, password, companyName, default, default, true, phoneNumber, default, email, GenderTypes.Male)
+        this(name, displayName, avatar, default, account, password, companyName, default, default, phoneNumber, default, email, GenderTypes.Male)
     {
     }
 
@@ -212,7 +212,6 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? companyName,
                 string? department,
                 string? position,
-                bool enabled,
                 string? phoneNumber,
                 string? landline,
                 string? email,
@@ -225,7 +224,6 @@ public class User : FullAggregateRoot<Guid, Guid>
         CompanyName = companyName;
         Department = department;
         Position = position;
-        Enabled = enabled;
         Address = address;
         Landline = landline;
         Gender = gender == default ? GenderTypes.Male : gender;
@@ -245,7 +243,6 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? companyName,
                 string? department,
                 string? position,
-                bool enabled,
                 string phoneNumber,
                 string? landline,
                 string? email,
@@ -260,7 +257,6 @@ public class User : FullAggregateRoot<Guid, Guid>
                companyName,
                department,
                position,
-               enabled,
                phoneNumber,
                landline,
                email,
@@ -283,13 +279,12 @@ public class User : FullAggregateRoot<Guid, Guid>
         return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline);
     }
 
-    public void Update(string account, string? name, string displayName, string avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
+    public void Update(string account, string? name, string displayName, string avatar, string? idCard, string? companyName, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
     {
         Account = account;
         Name = name;
         IdCard = idCard;
         CompanyName = companyName;
-        Enabled = enabled;
         Address = address;
         Department = department;
         Position = position;
@@ -331,9 +326,23 @@ public class User : FullAggregateRoot<Guid, Guid>
         PhoneNumber = phoneNumber;
     }
 
-    public void Disabled()
+    public void Disable()
     {
         Enabled = false;
+        Staff?.Disable();
+        _thirdPartyUsers.ForEach(thirdUser =>
+        {
+            thirdUser.Disable();
+        });
+    }
+
+    public void Enable()
+    {
+        Enabled = true;
+        _thirdPartyUsers.ForEach(thirdUser =>
+        {
+            thirdUser.Enable();
+        });
     }
 
     [MemberNotNull(nameof(Password))]
@@ -378,6 +387,11 @@ public class User : FullAggregateRoot<Guid, Guid>
                oldValue.Update(newValue.Effect);
                return oldValue;
            });
+    }
+
+    public void Bind(Staff staff)
+    {
+        _staff = staff;
     }
 
     public bool IsAdmin()

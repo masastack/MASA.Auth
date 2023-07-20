@@ -53,7 +53,7 @@ public partial class AddThirdPartyIdpDialog
             OpenErrorMessage(T("Please upload ThirdPartyIdp icon"));
             return;
         }
-        if(AdvancedConfig.Any(config => config.IsDefault()))
+        if (AdvancedConfig.Any(config => config.IsDefault()))
         {
             OpenErrorMessage(T("Please complete advanced configuration"));
             return;
@@ -61,13 +61,11 @@ public partial class AddThirdPartyIdpDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
-            ThirdPartyIdp.JsonKeyMap = AdvancedConfig.ToDictionary(config => config.Key,config => config.Value);
+            ThirdPartyIdp.JsonKeyMap = AdvancedConfig.ToDictionary(config => config.Key, config => config.Value);
             await ThirdPartyIdpService.AddAsync(ThirdPartyIdp);
             OpenSuccessMessage(T("Add thirdPartyIdp success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 
@@ -82,7 +80,7 @@ public partial class AddThirdPartyIdpDialog
         ThirdPartyIdp.TokenEndpoint = value.TokenEndpoint;
         ThirdPartyIdp.UserInformationEndpoint = value.UserInformationEndpoint;
         ThirdPartyIdp.MapAll = value.MapAll;
-        AdvancedConfig = value.JsonKeyMap.Select(kv => new KeyValue 
+        AdvancedConfig = value.JsonKeyMap.Select(kv => new KeyValue
         {
             Key = kv.Key,
             Value = kv.Value

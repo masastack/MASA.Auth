@@ -29,7 +29,7 @@ public class AuthDbContext : MasaDbContext<AuthDbContext>
             .HasDiscriminator<string>("_businessType")
             .HasValue<UserPermission>("User")
             .HasValue<RolePermission>("Role")
-            .HasValue<TeamPermission>("Team");
+        .HasValue<TeamPermission>("Team");
 
         builder.ApplyConfiguration(new IntegrationEventLogEntityTypeConfiguration());
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()!);

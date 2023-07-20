@@ -9,10 +9,10 @@ public class UserCacheCommandHandler
     readonly UserDomainService _userDomainService;
 
     public UserCacheCommandHandler(
-        AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
+        IMultilevelCacheClient multilevelCacheClient,
         UserDomainService userDomainService)
     {
-        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
+        _multilevelCacheClient = multilevelCacheClient;
         _userDomainService = userDomainService;
     }
 

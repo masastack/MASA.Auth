@@ -31,7 +31,7 @@ public partial class Position
             {
                 _oldPage = value;
                 InvokeAsync(StateHasChanged);
-            });      
+            });
         }
     }
 
@@ -74,12 +74,10 @@ public partial class Position
 
     public async Task GetPositionsAsync()
     {
-        Loading = true;
         var reuquest = new GetPositionsDto(Page, PageSize, Search);
         var response = await PositionService.GetListAsync(reuquest);
         Positions = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public void OpenAddApiResourceDialog()
@@ -101,11 +99,9 @@ public partial class Position
 
     public async Task RemovePositionAsync(Guid positionId)
     {
-        Loading = true;
         await PositionService.RemoveAsync(positionId);
         OpenSuccessMessage(T("Delete position data success"));
         await GetPositionsAsync();
-        Loading = false;
     }
 }
 

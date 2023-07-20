@@ -49,12 +49,10 @@ public partial class AddApiScopeDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await ApiScopeService.AddAsync(ApiScope);
             OpenSuccessMessage(T("Add apiScope success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

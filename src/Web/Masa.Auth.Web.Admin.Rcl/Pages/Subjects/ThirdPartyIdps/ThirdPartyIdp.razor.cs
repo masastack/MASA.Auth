@@ -87,12 +87,10 @@ public partial class ThirdPartyIdp
 
     public async Task GetThirdPartyIdpsAsync()
     {
-        Loading = true;
         var request = new GetThirdPartyIdpsDto(Page, PageSize, Search);
         var response = await ThirdPartyIdpService.GetListAsync(request);
         ThirdPartyIdps = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public void OpenAddThirdPartyIdpDialog()
@@ -111,10 +109,8 @@ public partial class ThirdPartyIdp
         var confirm = await OpenConfirmDialog(T("Delete ThirdPartyIdp"), T("Are you sure delete thirdPartyIdp \"{0}\"?", thirdPartyIdp.Name));
         if (confirm)
         {
-            Loading = true;
             await ThirdPartyIdpService.RemoveAsync(thirdPartyIdp.Id);
             OpenSuccessMessage(T("Delete thirdPartyIdp data success"));
-            Loading = false;
             await GetThirdPartyIdpsAsync();
         }
     }

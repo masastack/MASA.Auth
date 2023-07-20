@@ -6,7 +6,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.RolePermissions.Roles;
 public partial class UpdateRoleDialog
 {
     private List<Guid> _roles = new();
-    
+
     [Parameter]
     public bool Visible { get; set; }
 
@@ -65,12 +65,10 @@ public partial class UpdateRoleDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await RoleService.UpdateAsync(Role);
             OpenSuccessMessage(T("Edit role data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 

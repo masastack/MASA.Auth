@@ -45,12 +45,10 @@ public partial class AddUserClaimDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await UserClaimService.AddAsync(UserClaim);
             OpenSuccessMessage(T("Add userClaim success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

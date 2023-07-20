@@ -60,7 +60,6 @@ await builder.Services.AddMasaStackComponentsAsync(MasaStackProject.Auth, "wwwro
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddGlobalForServer();
 
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddTypeAdapter();

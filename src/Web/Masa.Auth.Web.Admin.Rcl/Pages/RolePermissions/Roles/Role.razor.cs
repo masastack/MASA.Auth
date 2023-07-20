@@ -86,12 +86,10 @@ public partial class Role
 
     public async Task GetRolesAsync()
     {
-        Loading = true;
         var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
         var response = await RoleService.GetListAsync(reuquest);
         Roles = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public void OpenAddRoleDialog()
@@ -113,11 +111,9 @@ public partial class Role
 
     public async Task RemoveRoleAsync(Guid roleId)
     {
-        Loading = true;
         await RoleService.RemoveAsync(roleId);
         OpenSuccessMessage(T("Delete role data success"));
         await GetRolesAsync();
-        Loading = false;
     }
 }
 

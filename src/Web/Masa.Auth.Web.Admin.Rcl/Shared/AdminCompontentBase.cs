@@ -5,7 +5,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public abstract class AdminCompontentBase : NextTickComponentBase
 {
-    private GlobalConfig? _globalConfig;
     private AuthCaller? _authCaller;
     private NavigationManager? _navigationManager;
 
@@ -26,13 +25,6 @@ public abstract class AdminCompontentBase : NextTickComponentBase
     public I18n I18n { get; set; } = default!;
 
     [Inject]
-    public GlobalConfig GlobalConfig
-    {
-        get => _globalConfig ?? throw new Exception("please Inject GlobalConfig!");
-        set => _globalConfig = value;
-    }
-
-    [Inject]
     public NavigationManager NavigationManager
     {
         get => _navigationManager ?? throw new Exception("please Inject NavigationManager!");
@@ -44,12 +36,6 @@ public abstract class AdminCompontentBase : NextTickComponentBase
 
     [Inject]
     public IPopupService PopupService { get; set; } = default!;
-
-    public bool Loading
-    {
-        get => GlobalConfig.Loading;
-        set => GlobalConfig.Loading = value;
-    }
 
     protected virtual string? PageName { get; set; }
 

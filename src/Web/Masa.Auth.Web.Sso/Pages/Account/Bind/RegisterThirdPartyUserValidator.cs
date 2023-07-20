@@ -5,18 +5,16 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Bind;
 
 public class RegisterThirdPartyUserValidator : AbstractValidator<RegisterThirdPartyUserModel>
 {
-    public RegisterThirdPartyUserValidator()
+    public RegisterThirdPartyUserValidator(I18n i18n)
     {
         RuleFor(user => user.PhoneNumber)
             .NotEmpty()
-            .WithMessage("phone number cannot be empty")
-            .Matches(@"^\s{0}$|^((\+86)|(86))?(1[3-9][0-9])\d{8}$")
-            .WithMessage("{PropertyName} format is incorrect");
+            .WithMessage(i18n.T("PhoneRequired"))
+            .Matches(LoginOptions.PhoneRegular)
+            .WithMessage(i18n.T("PhoneSpecInvalid"));
 
         RuleFor(user => user.SmsCode)
             .NotEmpty()
-            .WithMessage("captcha cannot be empty")
-            .Length(6)
-            .WithMessage("captcha length is six");
+            .WithMessage(i18n.T("SmsRequired"));
     }
 }

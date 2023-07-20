@@ -94,7 +94,7 @@ public partial class UserBind
             {
                 await AuthClient.UserService.RegisterThirdPartyUserAsync(UserModel);
                 Navigation.NavigateTo(AuthenticationExternalConstants.CallbackEndpoint, true);
-                await PopupService.EnqueueSnackbarAsync("Bind success", AlertTypes.Success);
+                await PopupService.EnqueueSnackbarAsync("BindSuccess", AlertTypes.Success);
             }
             catch (Exception ex)
             {

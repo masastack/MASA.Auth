@@ -72,12 +72,10 @@ public partial class AddUserDialog
         var success = context.Validate();
         if (success)
         {
-            Loading = true;
             await UserService.AddAsync(User);
             OpenSuccessMessage(T("Add user data success"));
             await UpdateVisible(false);
             await OnSubmitSuccess.InvokeAsync();
-            Loading = false;
         }
     }
 }

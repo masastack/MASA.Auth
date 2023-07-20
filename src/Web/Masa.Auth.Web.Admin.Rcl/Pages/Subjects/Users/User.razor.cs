@@ -129,12 +129,10 @@ public partial class User
 
     public async Task GetUserAsync()
     {
-        Loading = true;
         var request = new GetUsersDto(Page, PageSize, UserId, Enabled, StartTime?.ToDateTime(TimeOnly.MinValue), EndTime?.ToDateTime(TimeOnly.MaxValue));
         var response = await UserService.GetListAsync(request);
         Users = response.Items;
         Total = response.Total;
-        Loading = false;
     }
 
     public async Task ReloadAsync()

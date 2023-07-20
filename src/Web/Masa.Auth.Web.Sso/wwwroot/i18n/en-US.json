@@ -1,7 +1,7 @@
 {
   "$Text": "English",
   "Cancel": "Cancel",
-  "Account": "Acount",
+  "Account": "Account",
   "AccountPlaceholder": "Place Enter Account/Phone Number",
   "Password": "Password",
   "PasswordPlaceholder": "Place Enter Password",
@@ -71,5 +71,6 @@
   "IdCardRequired": "IdCard cannot be empty",
   "EmailFormatError": "Email format is incorrect",
   "IdCardFormatError": "Id Card format is incorrect",
-  "ThirdPartyUserBindExist": "The user has been bound"
+  "ThirdPartyUserBindExist": "The user has been bound",
+  "BindSuccess": "Bind Successed"
 }
