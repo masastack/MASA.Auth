@@ -104,11 +104,11 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public void DeleteCheck()
     {
-        if (RolePermissions.Any())
+        if (RolePermissions.Any(rp => rp.Effect))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETE_ROLE_USED_ERROR);
         }
-        if (UserPermissions.Any())
+        if (UserPermissions.Any(up => up.Effect))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSION_DELETE_USER_USED_ERROR);
         }
