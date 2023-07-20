@@ -27,7 +27,7 @@ public class QueryHandler
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
-        AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider,
+        IMultilevelCacheClient multilevelCacheClient,
         IDistributedCacheClient distributedCacheClient,
         IPmClient pmClient,
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
@@ -41,7 +41,7 @@ public class QueryHandler
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
-        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
+        _multilevelCacheClient = multilevelCacheClient;
         _pmClient = pmClient;
         _multiEnvironmentUserContext = multiEnvironmentUserContext;
         _userDomainService = userDomainService;
@@ -554,8 +554,6 @@ public class QueryHandler
         }
         var teams = await _authDbContext.Set<Team>()
                                         .Include(t => t.TeamStaffs)
-                                        //.Include(team => team.TeamRoles)
-                                        //.ThenInclude(tr => tr.Role)
                                         .Where(condition)
                                         .AsSplitQuery()
                                         .OrderByDescending(t => t.ModificationTime)
@@ -564,7 +562,7 @@ public class QueryHandler
         foreach (var team in teams.ToList())
         {
             var userModel = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier));
-            var modifierName = userModel?.StaffDisplayName ?? userModel?.DisplayName ?? "";
+            var modifierName = userModel?.RealDisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);
 

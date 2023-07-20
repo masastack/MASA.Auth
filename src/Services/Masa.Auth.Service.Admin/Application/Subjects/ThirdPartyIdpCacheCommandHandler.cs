@@ -8,9 +8,9 @@ public class ThirdPartyIdpCacheCommandHandler
     readonly IMultilevelCacheClient _multilevelCacheClient;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
 
-    public ThirdPartyIdpCacheCommandHandler(AuthClientMultilevelCacheProvider authClientMultilevelCacheProvider, IThirdPartyIdpRepository thirdPartyIdpRepository)
+    public ThirdPartyIdpCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient, IThirdPartyIdpRepository thirdPartyIdpRepository)
     {
-        _multilevelCacheClient = authClientMultilevelCacheProvider.GetMultilevelCacheClient();
+        _multilevelCacheClient = multilevelCacheClient;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
     }
 
