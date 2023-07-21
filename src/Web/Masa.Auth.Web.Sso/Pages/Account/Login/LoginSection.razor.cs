@@ -19,12 +19,14 @@ public partial class LoginSection
     {
         get
         {
-            return _environment;
+            return _inputModel.Environment;
         }
         set
         {
-            _environment = value;
-            _inputModel.Environment = _environment;
+            if (!value.IsNullOrEmpty())
+            {
+                _inputModel.Environment = value;
+            }
         }
     }
 
@@ -33,7 +35,6 @@ public partial class LoginSection
 
     LoginInputModel _inputModel = new();
     MForm _loginForm = null!;
-    string _environment = "";
     bool _showPwd, _loginLoading;
     List<EnvironmentModel> _environments = new();
 
