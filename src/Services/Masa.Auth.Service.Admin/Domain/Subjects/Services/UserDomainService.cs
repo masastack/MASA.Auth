@@ -185,12 +185,6 @@ public class UserDomainService : DomainService
         await SyncUserAsync(users.Select(u => u.Id));
     }
 
-    public async Task UpdateAuthorizationAsync(IEnumerable<Guid> roles)
-    {
-        await EventBus.PublishAsync(new UpdateUserAuthorizationDomainEvent(roles));
-    }
-
-
     public async Task<List<Guid>> GetPermissionIdsAsync(Guid userId, List<Guid>? teams = null)
     {
         var query = new QueryUserPermissionDomainEvent(userId, teams);

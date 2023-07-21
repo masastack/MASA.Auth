@@ -22,7 +22,7 @@
             </SElevationTab>
         </MCardText>
         <MCardActions class="d-flex justify-space-between">
-            <SButton OnClick="DeleteAsync" Text Color="error">@T("Delete")</SButton>
+            <EnableSwitch @bind-Value="_basicDto.Enabled" />
             <SButton OnClick="SaveAsync" class="rounded-pill primary" MinWidth="100">@T("Save")</SButton>
         </MCardActions>
     </MCard>

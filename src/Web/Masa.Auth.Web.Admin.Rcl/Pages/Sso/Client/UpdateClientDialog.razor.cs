@@ -8,9 +8,6 @@ public partial class UpdateClientDialog
     [Parameter]
     public EventCallback OnSuccessed { get; set; }
 
-    [Parameter]
-    public EventCallback OnDeleted { get; set; }
-
     List<string> _tabHeader = new();
     string _tab = "";
     ClientDetailDto _clientDetailDto = new();
@@ -97,20 +94,6 @@ public partial class UpdateClientDialog
         if (OnSuccessed.HasDelegate)
         {
             await OnSuccessed.InvokeAsync();
-        }
-    }
-
-    private async Task DeleteAsync()
-    {
-        var isConfirmed = await OpenConfirmDialog(T("Delete Client"), T("Are you sure to delete client {0}", _clientDetailDto.ClientName));
-        if (isConfirmed)
-        {
-            await ClientService.RemoveClientAsync(_clientDetailDto.Id);
-            _visible = false;
-            if (OnDeleted.HasDelegate)
-            {
-                await OnDeleted.InvokeAsync();
-            }
         }
     }
 }

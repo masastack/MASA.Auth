@@ -5,22 +5,23 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class CommandHandler
 {
-    readonly IUserRepository _userRepository;
-    readonly IAutoCompleteClient _autoCompleteClient;
-    readonly AuthDbContext _authDbContext;
-    readonly UserDomainService _userDomainService;
-    readonly IDistributedCacheClient _distributedCacheClient;
-    readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
-    readonly ILdapFactory _ldapFactory;
-    readonly ILdapIdpRepository _ldapIdpRepository;
-    readonly ILogger<CommandHandler> _logger;
-    readonly IEventBus _eventBus;
-    readonly Sms _sms;
-    readonly IMasaStackConfig _masaStackConfig;
-    readonly IHttpContextAccessor _httpContextAccessor;
-    readonly IMasaConfiguration _masaConfiguration;
-    readonly IUnitOfWork _unitOfWork;
-    readonly LdapDomainService _ldapDomainService;
+    private readonly IUserRepository _userRepository;
+    private readonly IAutoCompleteClient _autoCompleteClient;
+    private readonly AuthDbContext _authDbContext;
+    private readonly UserDomainService _userDomainService;
+    private readonly IDistributedCacheClient _distributedCacheClient;
+    private readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
+    private readonly ILdapFactory _ldapFactory;
+    private readonly ILdapIdpRepository _ldapIdpRepository;
+    private readonly ILogger<CommandHandler> _logger;
+    private readonly IEventBus _eventBus;
+    private readonly Sms _sms;
+    private readonly IMasaStackConfig _masaStackConfig;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMasaConfiguration _masaConfiguration;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly LdapDomainService _ldapDomainService;
+    private readonly RoleDomainService _roleDomainService;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -38,7 +39,8 @@ public class CommandHandler
         IHttpContextAccessor httpContextAccessor,
         IMasaConfiguration masaConfiguration,
         IUnitOfWork unitOfWork,
-        LdapDomainService ldapDomainService)
+        LdapDomainService ldapDomainService,
+        RoleDomainService roleDomainService)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -56,6 +58,7 @@ public class CommandHandler
         _masaConfiguration = masaConfiguration;
         _unitOfWork = unitOfWork;
         _ldapDomainService = ldapDomainService;
+        _roleDomainService = roleDomainService;
     }
 
     #region User
@@ -138,11 +141,14 @@ public class CommandHandler
     {
         var userDto = command.User;
         var user = await _userRepository.GetDetailAsync(userDto.Id);
+
+        var oldRoleIds = user.Roles.Select(r => r.RoleId);
+
         user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
         await _userRepository.UpdateAsync(user);
-        await _userDomainService.UpdateAuthorizationAsync(userDto.Roles);
         await _unitOfWork.SaveChangesAsync();
+        await _roleDomainService.UpdateRoleLimitAsync(oldRoleIds.Except(userDto.Roles));
     }
 
     [EventHandler(1)]

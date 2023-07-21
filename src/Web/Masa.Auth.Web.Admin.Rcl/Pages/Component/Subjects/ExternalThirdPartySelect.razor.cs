@@ -21,23 +21,21 @@ public partial class ExternalThirdPartySelect
 
     public List<ThirdPartyIdpModel> ExternalThirdPartyIdps { get; set; } = new();
 
-    public List<ThirdPartyIdpModel[]> Chunks { get; set; } = new();
-
     public bool Expand { get; set; }
 
     public bool WaitUpload { get; set; }
 
-    public bool Even { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        ExternalThirdPartyIdps = await AuthCaller.ThirdPartyIdpService.GetExternalThirdPartyIdpsAsync();
-        ExternalThirdPartyIdps.Add(new ThirdPartyIdpModel
+        if (firstRender)
         {
-            Name = ThirdPartyIdpTypes.Customize.ToString()
-        });
-        Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
-        Even = ExternalThirdPartyIdps.Count % 2 == 0;
+            ExternalThirdPartyIdps = await AuthCaller.ThirdPartyIdpService.GetExternalThirdPartyIdpsAsync();
+            //ExternalThirdPartyIdps.Add(new ThirdPartyIdpModel
+            //{
+            //    Name = ThirdPartyIdpTypes.Customize.ToString()
+            //});
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected override void OnParametersSet()
@@ -48,12 +46,11 @@ public partial class ExternalThirdPartySelect
             var value = ExternalThirdPartyIdps.FirstOrDefault(v => v.Name == InternalValue);
             if (value != null)
             {
-                var middle = ((ExternalThirdPartyIdps.Count <= 11 ? ExternalThirdPartyIdps.Count : 11) + 1) / 2;
+                var middle = ExternalThirdPartyIdps.Count / 2;
                 ExternalThirdPartyIdps.Remove(value);
-                ExternalThirdPartyIdps.Insert(middle - 1, value);
-                Chunks = ExternalThirdPartyIdps.Chunk(11).ToList();
+                ExternalThirdPartyIdps.Insert(middle, value);
             }
-            Expand = false;            
+            Expand = false;
         }
         WaitUpload = false;
     }
@@ -64,7 +61,7 @@ public partial class ExternalThirdPartySelect
         {
             await ValueChanged.InvokeAsync(value);
         }
-        else Value = value.Name;       
+        else Value = value.Name;
     }
 
     public void OnUploadChang()

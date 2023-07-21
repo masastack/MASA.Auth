@@ -40,12 +40,12 @@
                        Color="@(_environments.FirstOrDefault(e=>e.Name == _inputModel.Environment)?.Color??"primary")">
                         mdi-record-circle
                     </MIcon>
-                    <MSelect ValueChanged="SelectEnvironment" TItem="EnvironmentModel" TItemValue="string" TValue="string" Solo Dense HideDetails="true" Class="elevation-0" TextColor="neutral-lighten-2" Value="@_inputModel.Environment"
+                    <MSelect @bind-Value="Environment" Solo Dense HideDetails="true" Class="elevation-0" TextColor="neutral-lighten-2"
                          Items="@_environments" ItemText="u => u.Name" ItemValue="u => u.Name" MenuProps="@(props => { props.Bottom = true;props.OffsetY = true; })">
                     <SelectionContent Context="data">
                         <div style="width:100%" class="d-flex">
                             <span class="text-body2">@data.Item.Name</span>
-                            <MDivider Class="fill--text ml-auto mr-2" Vertical></MDivider>
+                                <MDivider Class="fill--text ml-auto mr-2" Vertical></MDivider>
                             </div>
                         </SelectionContent>
                     </MSelect>

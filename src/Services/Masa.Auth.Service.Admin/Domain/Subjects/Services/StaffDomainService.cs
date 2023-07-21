@@ -42,6 +42,7 @@ public class StaffDomainService : DomainService
                 staffDto.Enabled,
                 staffDto.Address
             );
+        staff.SetDepartmentStaff(staffDto.DepartmentId);
         await _userDomainService.AddAsync(new User(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.Account,
             staffDto.Password, staffDto.CompanyName, staffDto.Email, staffDto.PhoneNumber, staff));
         return staff;
