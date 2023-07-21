@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<div class="d-flex" >
+<div class="d-flex">
     <MHover @bind-Value="Expand">
         <div @attributes="context.Attrs" class="d-flex ma-auto">
             @if (!context.Hover && !WaitUpload)
@@ -9,43 +9,36 @@
             }
             else
             {
-                @foreach (var chunk in Chunks)
+                @foreach (var item in ExternalThirdPartyIdps)
                 {
-                    @foreach (var item in chunk)
-                    {
-                        <MTooltip Bottom>
-                            <ActivatorContent Context="TooltipContext">
-                                @if(Even && item.Name == Value)
+                    <MTooltip Bottom>
+                    <ActivatorContent Context="TooltipContext">
+                        <div @attributes="@TooltipContext.Attrs" class="mx-2 hover-pointer">
+                            @if (item.Name == ThirdPartyIdpTypes.Customize.ToString())
                                 {
-                                    <div style="width:100px;"></div>
-                                }
-                                <div @attributes="@TooltipContext.Attrs" class="mx-2 hover-pointer" >
-                                    @if (item.Name == ThirdPartyIdpTypes.Customize.ToString())
-                                    {
-                                        if (string.IsNullOrEmpty(item.Icon) is false && item.Name != Value)
-                                        {
-                                            <MAvatar Size="80" @onclick="async() => await UpdateValueAsync(item)">
-                                                <img src="@item.Icon" />
-                                            </MAvatar>
-                                        }
-                                        else
-                                        {
-                                            <UploadAvatar Size="80" OnChange="OnUploadChang" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
-                                        }
-                                    }
-                                    else
+                                    if (string.IsNullOrEmpty(item.Icon) is false && item.Name != Value)
                                     {
                                         <MAvatar Size="80" @onclick="async() => await UpdateValueAsync(item)">
                                             <img src="@item.Icon" />
                                         </MAvatar>
                                     }
-                                </div>
-                            </ActivatorContent>
-                            <ChildContent>
-                                <span>@item.Name</span>
-                            </ChildContent>
-                        </MTooltip>
-                    }
+                                    else
+                                    {
+                                        <UploadAvatar Size="80" OnChange="OnUploadChang" Value="@item.Icon" ValueChanged="async value => {item.Icon =value;await UpdateValueAsync(item);}" WhenFileChangeUpload />
+                                    }
+                                }
+                                else
+                                {
+                                    <MAvatar Size="80" @onclick="async() => await UpdateValueAsync(item)">
+                                        <img src="@item.Icon" />
+                                    </MAvatar>
+                                }
+                            </div>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <span>@item.Name</span>
+                        </ChildContent>
+                    </MTooltip>
                 }
             }
         </div>

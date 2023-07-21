@@ -48,9 +48,14 @@
                             <EnableChip Value=context.Item.Enabled />
                             break;
                         case "Action":
-                            <MButton Class="mr-4" Icon OnClick="()=>OpenUpdateDialog(context.Item.Id)">
-                                <SIcon Tooltip="@T("Edit")" Size="20" Color="regular">@IconConstants.Update</SIcon>
-                            </MButton>
+                            <div class="d-flex">
+                                <MButton Class="mr-4" Icon OnClick="()=>OpenUpdateDialog(context.Item.Id)">
+                                    <SIcon Tooltip="@T("Edit")" Size="20" Color="regular">@IconConstants.Update</SIcon>
+                                </MButton>
+                                <MButton Class="mr-4" Icon OnClick="()=> OpenRemoveDialog(context.Item)">
+                                    <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
+                                </MButton>
+                            </div>
                             break;
                         default:
                             <span>@context.Value</span>
@@ -67,4 +72,4 @@
 </DefaultCard>
 
 <AddClientDialog @ref="_addClientDialog" OnSuccessed="LoadData" />
-<UpdateClientDialog @ref="_updateClientDialog" OnSuccessed="LoadData" OnDeleted="LoadData" />
+<UpdateClientDialog @ref="_updateClientDialog" OnSuccessed="LoadData"/>

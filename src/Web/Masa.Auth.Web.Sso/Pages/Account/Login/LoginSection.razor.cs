@@ -15,7 +15,20 @@ public partial class LoginSection
     public IEnumerable<ViewModel.ExternalProvider> ExternalProviderList { get; set; } = Enumerable.Empty<ViewModel.ExternalProvider>();
 
     [Parameter]
-    public string Environment { get; set; } = string.Empty;
+    public string Environment
+    {
+        get
+        {
+            return _inputModel.Environment;
+        }
+        set
+        {
+            if (!value.IsNullOrEmpty())
+            {
+                _inputModel.Environment = value;
+            }
+        }
+    }
 
     [Parameter]
     public EventCallback<string> EnvironmentChanged { get; set; }
@@ -53,12 +66,6 @@ public partial class LoginSection
             StateHasChanged();
         }
         await base.OnAfterRenderAsync(firstRender);
-    }
-
-    void SelectEnvironment(string environment)
-    {
-        _inputModel.Environment = environment;
-        Environment = environment;
     }
 
     private async Task LoginHandler()

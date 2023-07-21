@@ -65,4 +65,14 @@ public partial class Client
         _clientPaginationDto.Page = 1;
         await LoadData();
     }
+
+    private async Task OpenRemoveDialog(ClientDto clientDto)
+    {
+        var isConfirmed = await OpenConfirmDialog(T("Delete Client"), T("Are you sure to delete client {0}", clientDto.ClientName));
+        if (isConfirmed)
+        {
+            await _clientService.RemoveClientAsync(clientDto.Id);
+            await LoadData();
+        }
+    }
 }

@@ -6,26 +6,17 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.EventHandlers;
 public class UserDomainEventHandler
 {
     readonly AuthDbContext _authDbContext;
-    readonly RoleDomainService _roleDomainService;
     readonly IEventBus _eventBus;
     readonly IMultilevelCacheClient _multilevelCacheClient;
 
     public UserDomainEventHandler(
         AuthDbContext authDbContext,
-        RoleDomainService roleDomainService,
         IEventBus eventBus,
         IMultilevelCacheClient multilevelCacheClient)
     {
         _authDbContext = authDbContext;
-        _roleDomainService = roleDomainService;
         _eventBus = eventBus;
         _multilevelCacheClient = multilevelCacheClient;
-    }
-
-    [EventHandler(1)]
-    public async Task UpdateRoleLimitAsync(UpdateUserAuthorizationDomainEvent userEvent)
-    {
-        await _roleDomainService.UpdateRoleLimitAsync(userEvent.Roles);
     }
 
     [EventHandler(1)]
