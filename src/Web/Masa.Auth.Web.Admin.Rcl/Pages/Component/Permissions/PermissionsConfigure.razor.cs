@@ -122,7 +122,7 @@ public partial class PermissionsConfigure
             await GetTeamPermissions();
         }
 
-        if (load)
+        if (load || _menu is null)
         {
             _menu = await GetMenuAsync();
             _shouldRender = true;
