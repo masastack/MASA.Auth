@@ -5,10 +5,10 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Authorization;
 
 public class DefaultRuleCodeRequirement : IAuthorizationRequirement
 {
-    public string AppId { get; }
+    public MasaStackProject Project { get; }
 
-    public DefaultRuleCodeRequirement(string appId)
+    public DefaultRuleCodeRequirement(MasaStackProject project)
     {
-        AppId = appId;
+        Project = project;
     }
 }

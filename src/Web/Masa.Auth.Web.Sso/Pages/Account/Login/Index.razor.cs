@@ -7,7 +7,8 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 public partial class Index
 {
     ViewModel _viewModel = new();
-    string _loginHint = "", _tab = "login", _environment = "";
+    string _loginHint = "", _tab = "login";
+    string _clientId = "";
 
     [Parameter]
     public string Tab
@@ -19,6 +20,11 @@ public partial class Index
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        EnvironmentData.EnvironmentChanged += EnvironmentChanged;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -71,12 +77,12 @@ public partial class Index
                 DisplayName = x.DisplayName ?? x.Name,
                 AuthenticationScheme = x.Name
             }).ToList();
-        List<RegisterFieldModel> registerFields = new();
 
         var allowLocal = true;
         if (context?.Client.ClientId != null)
         {
-            var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
+            _clientId = context.Client.ClientId;
+            var client = await _clientStore.FindEnabledClientByIdAsync(_clientId);
             if (client != null)
             {
                 allowLocal = client.EnableLocalLogin;
@@ -86,32 +92,40 @@ public partial class Index
                     providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
                 }
             }
-
-            var customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(context.Client.ClientId);
-            if (customLoginModel != null)
-            {
-                providers = customLoginModel.ThirdPartyIdps.Select(idp => new ViewModel.ExternalProvider
-                {
-                    DisplayName = idp.DisplayName ?? idp.Name,
-                    AuthenticationScheme = idp.Name,
-                    Icon = idp.Icon
-                }).ToList();
-
-                registerFields = customLoginModel.RegisterFields;
-            }
         }
 
         _viewModel = new ViewModel
         {
             AllowRememberLogin = LoginOptions.AllowRememberLogin,
             EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
-            ExternalProviders = providers.ToArray(),
-            RegisterFields = registerFields
+            ExternalProviders = providers.ToArray()
         };
     }
 
     void TabChanged(StringNumber tab)
     {
         Tab = tab?.ToString() ?? "";
+    }
+
+    async void EnvironmentChanged(object? sender, EnvironmentDataEventArgs e)
+    {
+        var customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(e.Value, _clientId);
+        if (customLoginModel != null)
+        {
+            var providers = customLoginModel.ThirdPartyIdps.Select(idp => new ViewModel.ExternalProvider
+            {
+                DisplayName = idp.DisplayName ?? idp.Name,
+                AuthenticationScheme = idp.Name,
+                Icon = idp.Icon
+            }).ToList();
+
+            _viewModel.RegisterFields = customLoginModel.RegisterFields;
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        EnvironmentData.EnvironmentChanged -= EnvironmentChanged;
     }
 }

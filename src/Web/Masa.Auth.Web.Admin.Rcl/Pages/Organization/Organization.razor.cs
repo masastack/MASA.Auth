@@ -56,6 +56,7 @@ public partial class Organization
         _openNode = _departments.Select(c => c.Id).ToList();
         _departmentActive = _departments.Select(d => d.Id).ToList();
         _departmentChildrenCountDto = await DepartmentService.GetCountAsync();
+        StateHasChanged();
     }
 
     private async Task LoadStaffsAsync(Guid departmentId)

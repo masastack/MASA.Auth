@@ -14,7 +14,6 @@ public partial class LoginSection
     [Parameter]
     public IEnumerable<ViewModel.ExternalProvider> ExternalProviderList { get; set; } = Enumerable.Empty<ViewModel.ExternalProvider>();
 
-    [Parameter]
     public string Environment
     {
         get
@@ -23,15 +22,13 @@ public partial class LoginSection
         }
         set
         {
-            if (!value.IsNullOrEmpty())
+            if (!value.IsNullOrEmpty() && !_inputModel.Environment.Equals(value))
             {
                 _inputModel.Environment = value;
+                EnvironmentData.Environment = value;
             }
         }
     }
-
-    [Parameter]
-    public EventCallback<string> EnvironmentChanged { get; set; }
 
     LoginInputModel _inputModel = new();
     MForm _loginForm = null!;
@@ -141,7 +138,8 @@ public partial class LoginSection
             await _authClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
             {
                 SendMsgCodeType = SendMsgCodeTypes.Login,
-                PhoneNumber = _inputModel.PhoneNumber
+                PhoneNumber = _inputModel.PhoneNumber,
+                Environment = _inputModel.Environment
             });
         }
         return !result.Any();

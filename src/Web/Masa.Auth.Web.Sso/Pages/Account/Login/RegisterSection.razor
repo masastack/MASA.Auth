@@ -1,6 +1,7 @@
 ﻿@using Masa.Auth.Web.Sso.Pages.Account.Login.RegisterSections
 @inherits SsoCompontentBase
 @inject IJSRuntime _js
+@inject EnvironmentDataService EnvironmentData
 
 <MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 px-12 text-center" Style="height: 430px; overflow: auto;">
     @foreach (var registerItem in _registerComponents.Values)

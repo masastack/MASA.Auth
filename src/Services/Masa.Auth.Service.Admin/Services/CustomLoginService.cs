@@ -25,9 +25,16 @@ namespace Masa.Auth.Service.Admin.Services
 
         [AllowAnonymous]
         public async Task<CustomLoginModel?> GetByClientIdAsync(
-            [FromServices] IEventBus eventBus, 
-            [FromQuery] string clientId)
+            [FromServices] IEventBus eventBus,
+            [FromServices] IMultiEnvironmentSetter environmentSetter,
+            [FromQuery] string clientId,
+            [FromQuery] string environment)
         {
+            //todo add middleware
+            if (!environment.IsNullOrEmpty())
+            {
+                environmentSetter.SetEnvironment(environment);
+            }
             var query = new CustomLoginByClientIdQuery(clientId);
             await eventBus.PublishAsync(query);
             return query.Result;

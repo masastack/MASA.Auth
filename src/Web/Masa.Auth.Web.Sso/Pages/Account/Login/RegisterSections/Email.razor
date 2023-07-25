@@ -1,4 +1,5 @@
 ﻿@inherits SsoSectionComponentBase
+@inject EnvironmentDataService EnvironmentData
 @implements IDisposable
 
 <MTextField @bind-Value="Value.Email" Label="@T("Email")" Placeholder="@T("EmailPlaceholder")"
@@ -23,7 +24,7 @@
     public EventCallback<RegisterInputModel> ValueChanged { get; set; }
 
     [Parameter]
-    public bool Required { get; set; } 
+    public bool Required { get; set; }
 
     bool _canEmailCode = true;
     int _emailCodeTime = LoginOptions.GetEmailCodeInterval;
@@ -79,10 +80,11 @@
         if (_emailTextField.Validate())
         {
             await AuthClient.UserService.SendEmailAsync(new SendEmailModel
-                {
-                    Email = Value.Email,
-                    SendEmailType = SendEmailTypes.Register
-                });
+            {
+                Email = Value.Email,
+                SendEmailType = SendEmailTypes.Register,
+                Environment = EnvironmentData.Environment
+            });
 
             await PopupService.EnqueueSnackbarAsync(T("The verification code is sent successfully"), AlertTypes.Success);
             _canEmailCode = false;

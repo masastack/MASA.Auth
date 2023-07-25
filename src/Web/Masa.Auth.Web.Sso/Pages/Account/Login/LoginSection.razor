@@ -6,6 +6,7 @@
 @inject IDistributedCacheClient _distributedCacheClient
 @inject IAuthenticationSchemeProvider _schemeProvider
 @inject ProtectedLocalStorage _localStorage
+@inject EnvironmentDataService EnvironmentData
 
 <MForm Model="_inputModel" @ref="_loginForm" EnableValidation class="mt-12 mx-12 text-center">
     @if (_inputModel.PhoneLogin)

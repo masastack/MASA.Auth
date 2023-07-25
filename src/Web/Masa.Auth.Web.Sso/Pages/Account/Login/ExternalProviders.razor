@@ -1,4 +1,5 @@
 ﻿@inherits SsoCompontentBase
+@inject EnvironmentDataService EnvironmentData
 
 <div class="d-flex flex-column mb-12">
     <div class="d-flex block-center mt-8 mb-4 mx-12">
@@ -23,10 +24,6 @@
 
     [EditorRequired]
     [Parameter]
-    public string Environment { get; set; } = string.Empty;
-
-    [EditorRequired]
-    [Parameter]
     public IEnumerable<ViewModel.ExternalProvider> ExternalProviderList { get; set; } = Enumerable.Empty<ViewModel.ExternalProvider>();
 
     private void NavigateToThirdParty(string scheme)
@@ -35,7 +32,7 @@
             {
                 ["returnUrl"] = ReturnUrl,
                 ["scheme"] = scheme,
-                ["environment"] = Environment
+                ["environment"] = EnvironmentData.Environment
             });
         Navigation.NavigateTo(challenge, true);
     }

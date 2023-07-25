@@ -11,17 +11,20 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
     readonly EndpointRowDataProvider _endpointRowDataProvider;
     readonly ILogger<MasaAuthorizeMiddleware> _logger;
-    readonly IMasaStackConfig _masaStackConfig;
+    readonly IMultiEnvironmentMasaStackConfig _multiEnvironmentMasaStackConfig;
+    readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
 
     public MasaAuthorizeMiddleware(IMasaAuthorizeDataProvider masaAuthorizeDataProvider,
         EndpointRowDataProvider endpointRowDataProvider,
         ILogger<MasaAuthorizeMiddleware> logger,
-        IMasaStackConfig masaStackConfig)
+        IMultiEnvironmentMasaStackConfig multiEnvironmentMasaStackConfig,
+        IMultiEnvironmentUserContext multiEnvironmentUserContext)
     {
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
         _endpointRowDataProvider = endpointRowDataProvider;
         _logger = logger;
-        _masaStackConfig = masaStackConfig;
+        _multiEnvironmentMasaStackConfig = multiEnvironmentMasaStackConfig;
+        _multiEnvironmentUserContext = multiEnvironmentUserContext;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -53,6 +56,7 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
                     return;
                 }
             }
+            var _masaStackConfig = _multiEnvironmentMasaStackConfig.SetEnvironment(_multiEnvironmentUserContext.Environment ?? "");
             var code = masaAuthorizeAttribute?.Code;
             if (string.IsNullOrWhiteSpace(code))
             {
@@ -61,7 +65,6 @@ public class MasaAuthorizeMiddleware : IMiddleware, IScopedDependency
                 code = Regex.Replace(code, "/", ".").Trim('.');
                 code = $"{_masaStackConfig.GetServiceId(MasaStackProject.Auth)}.{code}";
             }
-
             if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(_masaStackConfig.GetServiceId(MasaStackProject.Auth))).WildCardContains(code))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
