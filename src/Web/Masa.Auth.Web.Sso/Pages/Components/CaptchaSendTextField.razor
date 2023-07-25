@@ -41,24 +41,25 @@
     string ActionContent => _counter > 0 ? string.Format(T("SmsSendTime"), _counter) : T("GetSmsCode");
     System.Timers.Timer? _timer;
 
-    CancellationTokenSource? cancellationTokenSource;
+    CancellationTokenSource? _cancellationTokenSource;
 
     private async Task ClickHandler()
     { 
         try
         {
-            cancellationTokenSource?.Cancel();
-            if (cancellationTokenSource?.IsCancellationRequested is true)
-            {
-                cancellationTokenSource = null;
-                return;
-            }
-           
-            cancellationTokenSource = new CancellationTokenSource();
             if (OnClick==null)
             {
                 return;
             }
+
+            _cancellationTokenSource?.Cancel();
+            if (_cancellationTokenSource?.IsCancellationRequested is true)
+            {
+                _cancellationTokenSource = null;
+                return;
+            }
+            _cancellationTokenSource = new CancellationTokenSource();
+            
             var result = await (OnClick.Invoke()).ConfigureAwait(false);
             if (result)
             {
@@ -106,6 +107,7 @@
 
     public void Dispose()
     {
+        _cancellationTokenSource?.Dispose();
         _timer?.Dispose();
         _timer = null;
     }
