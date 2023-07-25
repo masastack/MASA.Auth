@@ -36,6 +36,9 @@ public partial class PermissionsConfigure
     private List<Guid> _internalTeams = new();
     private Guid _internalUser;
 
+    private bool _shouldRender = true;
+    private List<Guid> _prevEffectIds = new();
+    private List<Guid> _prevNoEffectIds = new();
     private List<Guid> RolePermissions { get; set; } = new();
 
     private List<Guid> TeamPermission { get; set; } = new();
@@ -53,6 +56,7 @@ public partial class PermissionsConfigure
                 _menu.SetSituation(ExpansionMenuSituation.Authorization);
                 _menu.SetHiddenByPreview(false);
             }
+
             return _menu;
         }
     }
@@ -67,6 +71,7 @@ public partial class PermissionsConfigure
                 previewMenu.SetSituation(ExpansionMenuSituation.Preview);
                 previewMenu.SetHiddenByPreview(true);
             }
+
             return previewMenu;
         }
     }
@@ -75,17 +80,27 @@ public partial class PermissionsConfigure
 
     private PermissionService PermissionService => AuthCaller.PermissionService;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _menu = await GetMenuAsync();
-    }
-
-    protected override async Task OnParametersSetAsync()
+    protected async override Task OnParametersSetAsync()
     {
         var load = false;
 
+        var effectIds = Value.Where(u => u.Effect).Select(u => u.PermissionId).ToList();
+        if (!_prevEffectIds.SequenceEqual(effectIds))
+        {
+            _prevEffectIds = effectIds;
+            _shouldRender = true;
+        }
+
+        var noEffectIds = Value.Where(u => u.Effect == false).Select(u => u.PermissionId).ToList();
+        if (!_prevNoEffectIds.SequenceEqual(noEffectIds))
+        {
+            _prevNoEffectIds = noEffectIds;
+            _shouldRender = true;
+        }
+
         if (!_internalRoles.SequenceEqual(Roles))
         {
+            _shouldRender = true;
             load = true;
             _internalRoles = Roles;
             await GetRolePermissions();
@@ -93,6 +108,7 @@ public partial class PermissionsConfigure
 
         if (!_internalTeams.SequenceEqual(Teams))
         {
+            _shouldRender = true;
             load = true;
             _internalTeams = Teams;
             await GetTeamPermissions();
@@ -100,14 +116,31 @@ public partial class PermissionsConfigure
 
         if (User != _internalUser)
         {
+            _shouldRender = true;
             load = true;
             _internalUser = User;
             await GetTeamPermissions();
         }
 
-        if (load)
+        if (load || _menu is null)
         {
             _menu = await GetMenuAsync();
+            _shouldRender = true;
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        return _shouldRender;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (_shouldRender)
+        {
+            _shouldRender = false;
         }
     }
 
