@@ -56,7 +56,6 @@ public partial class Organization
         _openNode = _departments.Select(c => c.Id).ToList();
         _departmentActive = _departments.Select(d => d.Id).ToList();
         _departmentChildrenCountDto = await DepartmentService.GetCountAsync();
-        StateHasChanged();
     }
 
     private async Task LoadStaffsAsync(Guid departmentId)
@@ -97,6 +96,7 @@ public partial class Organization
         {
             await DepartmentService.RemoveAsync(id);
             await LoadDepartmentsAsync();
+            StateHasChanged();
             OpenSuccessMessage(T("Department deleted successfully"));
         }
         return confirm;
