@@ -8,8 +8,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Logs;
 public partial class OperationLog
 {
     private string? _search;
-    private int _page = 1;
-    private int _pageSize = 10;
+    private int _page = 1, _pageSize = 20;
     private Guid _userId;
     private DateTimeOffset? _startTime;
     private DateTimeOffset? _endTime;

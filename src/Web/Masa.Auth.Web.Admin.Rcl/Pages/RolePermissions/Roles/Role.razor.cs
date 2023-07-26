@@ -7,8 +7,7 @@ public partial class Role
 {
     private string? _search;
     private bool? _enabled;
-    private int _page = 1;
-    private int _pageSize = 10;
+    private int _page = 1, _pageSize = 20;
 
     public string Search
     {
@@ -55,8 +54,6 @@ public partial class Role
 
     public long Total { get; set; }
 
-    public List<int> PageSizes = new() { 10, 25, 50, 100 };
-
     public List<RoleDto> Roles { get; set; } = new();
 
     public Guid CurrentRoleId { get; set; }
@@ -67,10 +64,15 @@ public partial class Role
 
     private RoleService RoleService => AuthCaller.RoleService;
 
-    protected override async Task OnInitializedAsync()
+    protected override string? PageName => "RoleBlock";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        PageName = "RoleBlock";
-        await GetRolesAsync();
+        if (firstRender)
+        {
+            await GetRolesAsync();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     public List<DataTableHeader<RoleDto>> GetHeaders() => new()

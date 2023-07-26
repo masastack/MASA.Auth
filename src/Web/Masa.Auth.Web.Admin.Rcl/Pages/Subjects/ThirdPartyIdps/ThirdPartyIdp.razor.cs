@@ -7,8 +7,7 @@ public partial class ThirdPartyIdp
 {
     private string? _search;
     private bool _enabled;
-    private int _page = 1;
-    private int _pageSize = 10;
+    private int _page = 1, _pageSize = 20;
 
     public string Search
     {
