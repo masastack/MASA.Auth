@@ -6,8 +6,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.ApiScope;
 public partial class ApiScope
 {
     private string? _search;
-    private int _page = 1;
-    private int _pageSize = 10;
+    private int _page = 1, _pageSize = 20;
 
     public string Search
     {

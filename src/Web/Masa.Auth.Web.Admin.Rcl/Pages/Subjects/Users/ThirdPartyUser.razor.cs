@@ -6,8 +6,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 public partial class ThirdPartyUser
 {
     private bool? _enabled;
-    private int _page = 1;
-    private int _pageSize = 10;
+    private int _page = 1, _pageSize = 20;
     private string? _search;
     private Guid _thirdPartyId;
     private DateOnly? _startTime;

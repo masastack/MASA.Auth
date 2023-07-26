@@ -7,8 +7,7 @@ public partial class Position
 {
     private string? _search;
     private int _page = 1;
-    private int _oldPage = 1;
-    private int _pageSize = 10;
+    private int _oldPage = 1, _pageSize = 20;
 
     public string Search
     {

@@ -13,7 +13,7 @@ public partial class Organization
     DepartmentChildrenCountDto _departmentChildrenCountDto = new();
     PaginationDto<StaffDto> _paginationStaffs = new();
     CopyDepartmentDto _copyDepartmentDto = new();
-    GetStaffsDto _getStaffsDto = new GetStaffsDto(1, 10, "", Guid.Empty);
+    GetStaffsDto _getStaffsDto = new GetStaffsDto(1, 20, "", Guid.Empty);
     CopyOrgSheet _copyOrgSheet = null!;
     OrgSheet _orgSheet = null!;
     string _searchName = string.Empty;

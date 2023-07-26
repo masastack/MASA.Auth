@@ -6,8 +6,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Subjects.Users;
 public partial class User
 {
     private bool? _enabled;
-    private int _page = 1;
-    private int _pageSize = 10;
+    private int _page = 1, _pageSize = 20;
     private Guid _userId;
     private DateOnly? _startTime;
     private DateOnly? _endTime;
