@@ -41,7 +41,7 @@
     string ActionContent => _counter > 0 ? string.Format(T("SmsSendTime"), _counter) : T("GetSmsCode");
     System.Timers.Timer? _timer;
 
-    CancellationTokenSource? _cancellationTokenSource;
+    CancellationTokenSource _cancellationTokenSource = new();
 
     private async Task ClickHandler()
     {
@@ -50,10 +50,7 @@
             return;
         }
 
-        if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
-        {
-            _cancellationTokenSource.Cancel();
-        }
+        _cancellationTokenSource.Cancel();
         _cancellationTokenSource = new CancellationTokenSource();
 
         try

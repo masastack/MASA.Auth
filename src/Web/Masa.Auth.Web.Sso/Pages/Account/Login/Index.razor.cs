@@ -23,7 +23,7 @@ public partial class Index
 
     protected override void OnInitialized()
     {
-        EnvironmentData.EnvironmentChanged += EnvironmentChanged;
+        _environmentData.EnvironmentChanged += EnvironmentChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -120,12 +120,12 @@ public partial class Index
             }).ToList();
 
             _viewModel.RegisterFields = customLoginModel.RegisterFields;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 
     public void Dispose()
     {
-        EnvironmentData.EnvironmentChanged -= EnvironmentChanged;
+        _environmentData.EnvironmentChanged -= EnvironmentChanged;
     }
 }

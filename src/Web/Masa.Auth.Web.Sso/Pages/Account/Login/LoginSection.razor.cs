@@ -25,7 +25,7 @@ public partial class LoginSection
             if (!value.IsNullOrEmpty() && !_inputModel.Environment.Equals(value))
             {
                 _inputModel.Environment = value;
-                EnvironmentData.Environment = value;
+                _environmentData.Environment = value;
             }
         }
     }

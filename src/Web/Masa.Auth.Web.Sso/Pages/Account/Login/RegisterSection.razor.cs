@@ -33,9 +33,9 @@ public partial class RegisterSection
             foreach (var registerField in registerFields)
             {
                 var componentParameters = new Dictionary<string, object>() {
-                                { "Required",registerField.Required },
-                                { "Value",_inputModel }
-                            };
+                    { "Required",registerField.Required },
+                    { "Value",_inputModel }
+                };
                 switch (registerField.RegisterFieldType)
                 {
                     case RegisterFieldTypes.Email:
@@ -113,7 +113,7 @@ public partial class RegisterSection
                     EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
                     Password = _inputModel.Password,
                     DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName,
-                    Environment = EnvironmentData.Environment
+                    Environment = _environmentData.Environment
                 });
             }
             else
@@ -125,7 +125,7 @@ public partial class RegisterSection
                     Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
                     Avatar = "",
                     DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName,
-                    Environment = EnvironmentData.Environment
+                    Environment = _environmentData.Environment
                 });
             }
 
@@ -135,7 +135,7 @@ public partial class RegisterSection
                 SmsCode = _inputModel.SmsCode,
                 Password = _inputModel.Password,
                 Account = _inputModel.Email ?? "",
-                Environment = EnvironmentData.Environment,
+                Environment = _environmentData.Environment,
                 PhoneNumber = _inputModel.PhoneNumber,
                 ReturnUrl = ReturnUrl,
                 RegisterLogin = true
