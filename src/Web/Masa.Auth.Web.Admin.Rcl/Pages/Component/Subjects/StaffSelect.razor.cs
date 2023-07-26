@@ -38,7 +38,7 @@ public partial class StaffSelect
     protected override async Task OnInitializedAsync()
     {
         Label = T("Staff");
-        Staffs = await StaffService.GetSelectAsync();
+        Staffs = await StaffService.SelectByIdsAsync(Value);
     }
 
     protected override void OnParametersSet()

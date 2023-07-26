@@ -49,7 +49,6 @@
   },
   "ConfirmChangePassword": "I confirm to change the password",
   "PasswordValidateFailed": "Password validate failed",
-  "LdapConfigure": "LDAP Config",
   "AppId is required": "AppID is required",
   "ApiScopes": "API Scopes",
   "ApiScope": "API Scope",
