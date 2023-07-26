@@ -4,9 +4,9 @@
 <MTextField Class="@Class"
             Value="Value"
             ValueChanged="ValueChanged"
-            ValueExpression="ValueExpression" 
+            ValueExpression="ValueExpression"
             Outlined Label="@T("SMSCode")"
-            Placeholder="@T("SMSCodePlaceholder")" 
+            Placeholder="@T("SMSCodePlaceholder")"
             Type="number"
             NumberProps="@(prop=> { prop.HideControl = true; })">
     <AppendContent>
@@ -44,22 +44,23 @@
     CancellationTokenSource? _cancellationTokenSource;
 
     private async Task ClickHandler()
-    { 
+    {
+        if (OnClick == null)
+        {
+            return;
+        }
+
+        if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+        {
+            _cancellationTokenSource.Cancel();
+        }
+        _cancellationTokenSource = new CancellationTokenSource();
+
         try
         {
-            if (OnClick==null)
-            {
-                return;
-            }
-
-            _cancellationTokenSource?.Cancel();
-            if (_cancellationTokenSource?.IsCancellationRequested is true)
-            {
-                _cancellationTokenSource = null;
-                return;
-            }
-            _cancellationTokenSource = new CancellationTokenSource();
-            
+            await Task.Delay(TimeSpan.FromMilliseconds(500), _cancellationTokenSource.Token);
+            Console.WriteLine("11111111111111");
+            return;
             var result = await (OnClick.Invoke()).ConfigureAwait(false);
             if (result)
             {
@@ -69,6 +70,10 @@
                 });
                 StartCountdownTimer();
             }
+        }
+        catch (TaskCanceledException)
+        {
+            // ignore
         }
         catch (Exception e)
         {
