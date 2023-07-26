@@ -444,7 +444,7 @@ public class QueryHandler
     [EventHandler(1)]
     public async Task GetPermissionsByUserAsync(PermissionsByUserQuery query)
     {
-        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.User));
+        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
         if (cacheUserModel != null)
         {
             query.UserPermissionIds = cacheUserModel.Permissions.Select(tp =>
@@ -480,7 +480,7 @@ public class QueryHandler
     public async Task GetPermissionsByUserRoleAsync(PermissionsByUserQuery query)
     {
         List<Guid> roles = new();
-        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(query.User));
+        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
         if (cacheUserModel != null)
         {
             roles = cacheUserModel!.Roles.Select(ur => ur.Id).ToList();

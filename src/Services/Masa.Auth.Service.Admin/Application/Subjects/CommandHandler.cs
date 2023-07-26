@@ -467,7 +467,7 @@ public class CommandHandler
 
     private async Task<User> CheckUserExistAsync(Guid userId)
     {
-        var user = await _userRepository.FindAsync(u => u.Id == userId);
+        var user = await _userRepository.GetDetailAsync(userId);
         if (user is null)
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
 

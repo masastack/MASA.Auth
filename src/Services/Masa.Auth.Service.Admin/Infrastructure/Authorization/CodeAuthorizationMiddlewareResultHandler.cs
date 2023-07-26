@@ -11,11 +11,19 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
     readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
     readonly IMasaAuthorizeDataProvider _masaAuthorizeDataProvider;
     readonly ILogger<CodeAuthorizationMiddlewareResultHandler> _logger;
+    readonly IMultiEnvironmentMasaStackConfig _multiEnvironmentMasaStackConfig;
+    readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
 
-    public CodeAuthorizationMiddlewareResultHandler(IMasaAuthorizeDataProvider masaAuthorizeDataProvider, ILogger<CodeAuthorizationMiddlewareResultHandler> logger)
+    public CodeAuthorizationMiddlewareResultHandler(
+        IMasaAuthorizeDataProvider masaAuthorizeDataProvider,
+        ILogger<CodeAuthorizationMiddlewareResultHandler> logger,
+        IMultiEnvironmentMasaStackConfig multiEnvironmentMasaStackConfig,
+        IMultiEnvironmentUserContext multiEnvironmentUserContext)
     {
         _masaAuthorizeDataProvider = masaAuthorizeDataProvider;
         _logger = logger;
+        _multiEnvironmentMasaStackConfig = multiEnvironmentMasaStackConfig;
+        _multiEnvironmentUserContext = multiEnvironmentUserContext;
     }
 
     public async Task HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
@@ -35,18 +43,18 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
         }
         var code = masaAuthorizeAttribute?.Code;
         var appId = string.Empty;
+        var requirement = policy.Requirements.Where(r => r is DefaultRuleCodeRequirement)
+                .Select(r => r as DefaultRuleCodeRequirement).FirstOrDefault();
+        if (requirement != null)
+        {
+            appId = _multiEnvironmentMasaStackConfig.SetEnvironment(_multiEnvironmentUserContext.Environment ?? "").GetServiceId(requirement.Project);
+        }
         if (string.IsNullOrWhiteSpace(code))
         {
             //dafault code rule
             code = Regex.Replace(context.Request.Path, @"\\", ".");
             code = Regex.Replace(code, "/", ".").Trim('.').ToLower();
-            var requirement = policy.Requirements.Where(r => r is DefaultRuleCodeRequirement)
-                .Select(r => r as DefaultRuleCodeRequirement).FirstOrDefault();
-            if (requirement != null)
-            {
-                code = $"{requirement.AppId}.{code}";
-                appId = requirement.AppId;
-            }
+            code = $"{appId}.{code}";
         }
 
         if (!(await _masaAuthorizeDataProvider.GetAllowCodesAsync(appId)).WildCardContains(code))

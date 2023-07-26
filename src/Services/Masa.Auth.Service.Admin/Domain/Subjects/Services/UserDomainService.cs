@@ -68,7 +68,7 @@ public class UserDomainService : DomainService
             userModel.StaffDisplayName = staff?.DisplayName;
             userModel.StaffId = staff?.Id;
 
-            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(userId), userModel);
+            await _multilevelCacheClient.SetAsync(CacheKey.UserKey(userId), userModel);
 
             var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
             if (!result.IsValid)
@@ -99,7 +99,7 @@ public class UserDomainService : DomainService
             userModel.StaffDisplayName = staff?.DisplayName;
             userModel.StaffId = staff?.Id;
 
-            await _multilevelCacheClient.SetAsync(CacheKeyConsts.UserKey(user.Id), userModel);
+            await _multilevelCacheClient.SetAsync(CacheKey.UserKey(user.Id), userModel);
 
             var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
             if (!result.IsValid)
@@ -121,7 +121,7 @@ public class UserDomainService : DomainService
             var userModel = user.Adapt<UserModel>();
             userModel.StaffDisplayName = user.Staff?.DisplayName ?? "";
             userModel.StaffId = user.Staff?.Id;
-            map.Add(CacheKeyConsts.UserKey(user.Id), userModel);
+            map.Add(CacheKey.UserKey(user.Id), userModel);
             await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
         }
         await _multilevelCacheClient.SetListAsync(map);
@@ -141,7 +141,7 @@ public class UserDomainService : DomainService
 
         await _userRepository.RemoveAsync(user);
         await _autoCompleteClient.DeleteAsync(userId);
-        await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKeyConsts.UserKey(userId));
+        await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKey.UserKey(userId));
     }
 
     public async Task AddRangeAsync(List<User> users)

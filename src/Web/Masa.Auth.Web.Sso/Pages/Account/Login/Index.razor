@@ -5,7 +5,9 @@
 @inject IClientStore _clientStore
 @inject IAuthenticationSchemeProvider _schemeProvider
 @inject IAuthClient _authClient
+@inject EnvironmentDataService _environmentData
 @layout SimpleLayout
+@implements IDisposable
 
 @if (_viewModel.EnableLocalLogin)
 {
@@ -33,12 +35,12 @@
         <MTabsItems Value="@Tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
-                <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders" @bind-Environment="_environment" />
+                <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders"/>
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">
                 <CascadingValue Value="@ReturnUrl">
-                <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()" Environment="@_environment" />
+                <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()" />
                 </CascadingValue>
             </MTabItem>
         </MTabsItems>
@@ -48,7 +50,7 @@ else
 {
     @if (_viewModel.VisibleExternalProviders.Any())
     {
-        <ExternalProviders ExternalProviderList="@_viewModel.VisibleExternalProviders" Environment="" ReturnUrl="@ReturnUrl" />
+        <ExternalProviders ExternalProviderList="@_viewModel.VisibleExternalProviders" ReturnUrl="@ReturnUrl" />
     }
     else
     {

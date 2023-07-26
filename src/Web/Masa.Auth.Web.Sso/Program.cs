@@ -9,6 +9,7 @@ await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackA
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 // Add services to the container.
+builder.Services.AddScoped<EnvironmentDataService>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>

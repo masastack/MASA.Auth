@@ -21,13 +21,13 @@ public class OperaterProvider : IScopedDependency
         {
             creatorName = (await _staffRepository.FindAsync(creator).ConfigureAwait(false))?.DisplayName;
             if (creatorName is null)
-                creatorName = (await _cacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(creator)).ConfigureAwait(false))?.DisplayName;
+                creatorName = (await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(creator)).ConfigureAwait(false))?.DisplayName;
         }
         if (modifier != default)
         {
             modifierName = (await _staffRepository.FindAsync(modifier).ConfigureAwait(false))?.DisplayName;
             if (modifierName is null)
-                modifierName = (await _cacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(modifier)).ConfigureAwait(false))?.DisplayName;
+                modifierName = (await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(modifier)).ConfigureAwait(false))?.DisplayName;
         }
 
         return (creatorName, modifierName);
@@ -35,6 +35,6 @@ public class OperaterProvider : IScopedDependency
 
     public async Task<UserModel?> GetUserAsync(Guid userId)
     {
-        return await _cacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(userId));
+        return await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(userId));
     }
 }

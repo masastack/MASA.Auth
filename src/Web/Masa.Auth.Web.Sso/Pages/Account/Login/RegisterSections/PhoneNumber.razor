@@ -1,4 +1,5 @@
 ﻿@inherits SsoSectionComponentBase
+@inject EnvironmentDataService EnvironmentData
 
 <MTextField PrependInnerIcon="mdi-cellphone" Value="Value.PhoneNumber" TValue="string" ValueChanged="ValueChangeHandler" Label="@T("PhoneNumber")"
             Placeholder="@T("PhoneNumberPlaceholder")" Outlined @ref="_phoneTextField" Rules="_phoneNumberRules">
@@ -41,10 +42,11 @@
         if (_phoneTextField.Validate())
         {
             await AuthClient.UserService.SendMsgCodeAsync(new SendMsgCodeModel
-                {
-                    SendMsgCodeType = SendMsgCodeTypes.Register,
-                    PhoneNumber = Value.PhoneNumber
-                });
+            {
+                SendMsgCodeType = SendMsgCodeTypes.Register,
+                PhoneNumber = Value.PhoneNumber,
+                Environment = EnvironmentData.Environment
+            });
         }
         return _phoneTextField.Validate();
     }

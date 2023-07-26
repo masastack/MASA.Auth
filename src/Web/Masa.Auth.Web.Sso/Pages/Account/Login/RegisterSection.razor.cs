@@ -14,9 +14,6 @@ public partial class RegisterSection
     [Parameter]
     public List<RegisterFieldModel> RegisterFields { get; set; } = new();
 
-    [Parameter]
-    public string Environment { get; set; } = string.Empty;
-
     RegisterInputModel _inputModel = new();
     MForm _registerForm = null!;
     bool _registerLoading;
@@ -26,20 +23,19 @@ public partial class RegisterSection
 
     private bool _protocolModalVisible { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public override Task SetParametersAsync(ParameterView parameters)
     {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
+        if (parameters.TryGetValue(nameof(RegisterFields), out List<RegisterFieldModel>? registerFields) && registerFields?.SequenceEqual(RegisterFields) == false)
         {
-            var registerFields = RegisterFields.OrderBy(r => r.Sort).ToList();
-
+            RegisterFields = registerFields;
+            registerFields = RegisterFields.OrderBy(r => r.Sort).ToList();
+            _registerComponents = new();
             foreach (var registerField in registerFields)
             {
                 var componentParameters = new Dictionary<string, object>() {
-                                { "Required",registerField.Required },
-                                { "Value",_inputModel }
-                            };
+                    { "Required",registerField.Required },
+                    { "Value",_inputModel }
+                };
                 switch (registerField.RegisterFieldType)
                 {
                     case RegisterFieldTypes.Email:
@@ -82,8 +78,9 @@ public partial class RegisterSection
             }
 
             _inputModel.EmailRegister = _registerComponents.ContainsKey(RegisterFieldTypes.Email);
-            StateHasChanged();
         }
+
+        return base.SetParametersAsync(parameters);
     }
 
     private bool ValidateRegisterFields()
@@ -116,7 +113,7 @@ public partial class RegisterSection
                     EmailCode = _inputModel.EmailCode.ToString() ?? throw new UserFriendlyException("Emai code is required"),
                     Password = _inputModel.Password,
                     DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName,
-                    Environment = Environment
+                    Environment = _environmentData.Environment
                 });
             }
             else
@@ -128,7 +125,7 @@ public partial class RegisterSection
                     Account = string.IsNullOrEmpty(_inputModel.Account) ? _inputModel.PhoneNumber : _inputModel.Account,
                     Avatar = "",
                     DisplayName = string.IsNullOrEmpty(_inputModel.DisplayName) ? GenerateDisplayName(_inputModel) : _inputModel.DisplayName,
-                    Environment = Environment
+                    Environment = _environmentData.Environment
                 });
             }
 
@@ -138,7 +135,7 @@ public partial class RegisterSection
                 SmsCode = _inputModel.SmsCode,
                 Password = _inputModel.Password,
                 Account = _inputModel.Email ?? "",
-                Environment = Environment,
+                Environment = _environmentData.Environment,
                 PhoneNumber = _inputModel.PhoneNumber,
                 ReturnUrl = ReturnUrl,
                 RegisterLogin = true

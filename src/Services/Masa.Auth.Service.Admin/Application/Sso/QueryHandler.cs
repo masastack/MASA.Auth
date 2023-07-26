@@ -15,6 +15,8 @@ public class QueryHandler
     private readonly AuthDbContext _authDbContext;
     private readonly IClientCache _clientCache;
     private readonly OperaterProvider _operaterProvider;
+    private readonly ILogger<QueryHandler> _logger;
+    private readonly IMultiEnvironmentContext _environmentContext;
 
     public QueryHandler(
         IClientRepository clientRepository,
@@ -26,7 +28,9 @@ public class QueryHandler
         OidcDbContext oidcDbContext,
         AuthDbContext authDbContext,
         IClientCache clientCache,
-        OperaterProvider operaterProvider)
+        OperaterProvider operaterProvider,
+        ILogger<QueryHandler> logger,
+        IMultiEnvironmentContext environmentContext)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -38,6 +42,8 @@ public class QueryHandler
         _authDbContext = authDbContext;
         _clientCache = clientCache;
         _operaterProvider = operaterProvider;
+        _logger = logger;
+        _environmentContext = environmentContext;
     }
 
     #region Client
@@ -406,6 +412,7 @@ public class QueryHandler
 
         if (customLogin is null)
         {
+            _logger.LogWarning("the {Environment} and {ClientId} no data matched!", _environmentContext.CurrentEnvironment, query.ClientId);
             query.Result = new CustomLoginModel()
             {
                 ClientId = query.ClientId,

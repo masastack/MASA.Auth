@@ -96,6 +96,7 @@ public partial class Organization
         {
             await DepartmentService.RemoveAsync(id);
             await LoadDepartmentsAsync();
+            StateHasChanged();
             OpenSuccessMessage(T("Department deleted successfully"));
         }
         return confirm;
