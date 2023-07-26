@@ -33,12 +33,20 @@ public partial class StaffSelect
 
     protected StaffService StaffService => AuthCaller.StaffService;
 
-    public string Search { get; set; } = "";
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Label = T("Staff");
-        Staffs = await StaffService.SelectByIdsAsync(Value);
+        base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Staffs = await StaffService.SelectByIdsAsync(Value);
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected override void OnParametersSet()
@@ -83,10 +91,9 @@ public partial class StaffSelect
 
     private async Task QuerySelectionStaff(string search)
     {
-        search = search.TrimStart(' ').TrimEnd(' ');
-        Search = search;
+        search = search.Trim(' ');
         await Task.Delay(300);
-        if (search != Search)
+        if (search.IsNullOrEmpty())
         {
             return;
         }
