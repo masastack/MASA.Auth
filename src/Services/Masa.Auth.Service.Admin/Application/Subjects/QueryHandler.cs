@@ -561,7 +561,7 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            var userModel = _multilevelCacheClient.Get<UserModel>(CacheKeyConsts.UserKey(team.Modifier));
+            var userModel = _multilevelCacheClient.Get<UserModel>(CacheKey.UserKey(team.Modifier));
             var modifierName = userModel?.RealDisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);

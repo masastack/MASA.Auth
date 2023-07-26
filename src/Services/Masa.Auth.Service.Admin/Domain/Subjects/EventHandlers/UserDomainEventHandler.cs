@@ -46,7 +46,7 @@ public class UserDomainEventHandler
 
     private async Task<UserModel> GetUserAsync(Guid userId)
     {
-        var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKeyConsts.UserKey(userId));
+        var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKey.UserKey(userId));
         if (userModel == null)
         {
             var user = await _authDbContext.Set<User>()
