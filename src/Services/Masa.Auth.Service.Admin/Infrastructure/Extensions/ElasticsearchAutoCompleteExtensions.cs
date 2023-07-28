@@ -13,8 +13,12 @@ public static class ElasticsearchAutoCompleteExtensions
         {
             autoCompleteOptions.UseElasticSearch(options =>
             {
-                var esIsolationConfigProvider = services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>()
-                    .HttpContext!.RequestServices.GetRequiredService<EsIsolationConfigProvider>();
+                var esIsolationConfigProvider = services.BuildServiceProvider().GetService<IHttpContextAccessor>()
+                    ?.HttpContext!.RequestServices.GetRequiredService<EsIsolationConfigProvider>();
+                if (esIsolationConfigProvider == null)
+                {
+                    esIsolationConfigProvider = services.BuildServiceProvider().GetRequiredService<EsIsolationConfigProvider>();
+                }
                 var esOptions = esIsolationConfigProvider.GetEsOptions();
                 options.ElasticsearchOptions.UseNodes(esOptions.Nodes.ToArray())
                     .UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));

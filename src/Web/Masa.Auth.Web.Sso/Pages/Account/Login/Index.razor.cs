@@ -112,7 +112,7 @@ public partial class Index
         var customLoginModel = await _authClient.CustomLoginService.GetCustomLoginByClientIdAsync(e.Value, _clientId);
         if (customLoginModel != null)
         {
-            var providers = customLoginModel.ThirdPartyIdps.Select(idp => new ViewModel.ExternalProvider
+            _viewModel.ExternalProviders = customLoginModel.ThirdPartyIdps.Select(idp => new ViewModel.ExternalProvider
             {
                 DisplayName = idp.DisplayName ?? idp.Name,
                 AuthenticationScheme = idp.Name,
