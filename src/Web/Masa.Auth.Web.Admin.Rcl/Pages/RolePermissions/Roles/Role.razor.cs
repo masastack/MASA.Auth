@@ -92,6 +92,7 @@ public partial class Role
         var response = await RoleService.GetListAsync(reuquest);
         Roles = response.Items;
         Total = response.Total;
+        StateHasChanged();
     }
 
     public void OpenAddRoleDialog()

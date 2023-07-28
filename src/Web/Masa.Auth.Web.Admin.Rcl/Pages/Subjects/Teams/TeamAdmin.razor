@@ -5,8 +5,6 @@
     <RoleSelectForTeam @bind-Value="Value.Roles" TeamUserCount=Value.Staffs.Count RoleLimitChanged="value => RoleLimit=value" Class="mb-6" Label="@T("Role")" />
     <div class="global-nav" style="max-height:calc(100vh - 450px);">
         <PermissionsConfigure Roles=Value.Roles
-                              @bind-Value="Value.Permissions"
-                              Preview=Preview
-                              PreviewChanged=PreviewChanged />
+                              @bind-Value="Value.Permissions"/>
     </div>
 </MCardText>
