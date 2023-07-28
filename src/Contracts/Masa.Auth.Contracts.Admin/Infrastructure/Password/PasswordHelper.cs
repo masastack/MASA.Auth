@@ -25,9 +25,21 @@ public class PasswordHelper : ISingletonDependency
     public string GetPasswordRule()
     {
         var passwordRule = DEFAULTPASSWORDRULE;
-        if(_masaConfiguration != null)
+        if (_masaConfiguration != null)
         {
-            passwordRule = _masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>(PASSWORDRULECONFIGNAME, DEFAULTPASSWORDRULE);
+            try
+            {
+                passwordRule = _masaConfiguration.ConfigurationApi.GetPublic().GetValue(PASSWORDRULECONFIGNAME, DEFAULTPASSWORDRULE);
+            }
+            catch
+            {
+                //ignore
+            }
+            finally
+            {
+                passwordRule = DEFAULTPASSWORDRULE;
+            }
+
         }
         return passwordRule;
     }
@@ -47,7 +59,7 @@ public class PasswordHelper : ISingletonDependency
             {
                 message = I18n.T(message);
             }
-            catch(Exception){}
+            catch (Exception) { }
             finally
             {
                 context.AddFailure(message);
