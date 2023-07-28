@@ -84,6 +84,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Update="Assets\I18n\en-US.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Assets\I18n\supportedCultures.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Assets\I18n\zh-CN.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Assets\Fonts\SourceHanSansCN-Normal.ttf">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
