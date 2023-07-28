@@ -14,7 +14,7 @@ public partial class UpdateSheet
     [Parameter]
     public Func<Guid, string, Task<bool>>? OnDelete { get; set; }
 
-    bool _adminPreview, _memberPreview, _visible;
+    bool _visible;
     string _tab = "";
     List<string> _tabs = new();
 
@@ -32,18 +32,6 @@ public partial class UpdateSheet
         }
 
         base.OnAfterRender(firstRender);
-    }
-
-    private void OnPreview()
-    {
-        if (_tab == T("Setup team admins"))
-        {
-            _adminPreview = true;
-        }
-        else
-        {
-            _memberPreview = true;
-        }
     }
 
     public void Show(TeamDetailDto model)

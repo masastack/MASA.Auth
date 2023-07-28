@@ -30,18 +30,15 @@
         </HeaderContent>
         <AutoHeightContent>
             <div class="global-nav" style="display: flex;max-height:calc(100vh - 380px);">
-                <PermissionsConfigure
-                    User=_userId
+                <PermissionsConfigure User=_userId
                     Teams=Teams
                     Roles=Authorization.Roles
-                    @bind-Value=Authorization.Permissions
-                    @bind-Preview=_preview/>
+                    @bind-Value=Authorization.Permissions/>
             </div>
         </AutoHeightContent>
         <FooterContent>
             <div class="d-flex mt-6">
                 <MSpacer></MSpacer>
-                <SButton Medium Outlined OnClick="() => _preview = true">@T("Preview")</SButton>
                 <SButton Medium Class="ml-6" OnClick="async () => await UpdateAuthorizationAsync()">@T("Save")</SButton>
             </div>
         </FooterContent>

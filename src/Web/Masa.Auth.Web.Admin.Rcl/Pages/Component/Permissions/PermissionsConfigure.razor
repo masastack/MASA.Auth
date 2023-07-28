@@ -1,21 +1,28 @@
 ﻿@inherits AdminCompontentBase
 
-<ExpansionMenuWrapper Value="Menu" />
+@if (HasPreview)
+{
+    <ExpansionMenuWrapper Value="Menu" />
 
-<DefaultSheetDialog Value="Preview" ValueChanged="PreviewChanged" Title="@T("Preview Permissions")">
-   <AutoHeight>
-        <AutoHeightContent>
-            <div class="global-nav" style="max-height:calc(100vh - 230px);">
-                <ExpansionMenuWrapper Value="PreviewMenu" />
-            </div>
-        </AutoHeightContent>
-        <FooterContent>
-            <div class="d-flex mt-6">
-                <MSpacer />
-                <SButton OnClick="async() => await PreviewChanged.InvokeAsync(false)" Medium Outlined>
-                    @T("Back")
-                </SButton>
-            </div>
-        </FooterContent>
-    </AutoHeight>
-</DefaultSheetDialog>
+    <DefaultSheetDialog Value="Preview" ValueChanged="PreviewChanged" Title="@T("Preview Permissions")">
+        <AutoHeight>
+            <AutoHeightContent>
+                <div class="global-nav" style="max-height:calc(100vh - 230px);">
+                    <ExpansionMenuWrapper Value="PreviewMenu" />
+                </div>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <MSpacer />
+                    <SButton OnClick="async() => await PreviewChanged.InvokeAsync(false)" Medium Outlined>
+                        @T("Back")
+                    </SButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
+    </DefaultSheetDialog>
+}
+else
+{
+    <ExpansionMenuWrapper Value="PreviewMenu" />
+}

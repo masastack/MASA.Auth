@@ -27,6 +27,9 @@ public partial class PermissionsConfigure
     public EventCallback<List<SubjectPermissionRelationDto>> ValueChanged { get; set; }
 
     [Parameter]
+    public bool HasPreview { get; set; }
+
+    [Parameter]
     public bool Preview { get; set; }
 
     [Parameter]
@@ -127,6 +130,15 @@ public partial class PermissionsConfigure
             _menu = await GetMenuAsync();
             _shouldRender = true;
         }
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue(nameof(Preview), out bool preview) && preview != Preview)
+        {
+            _shouldRender = true;
+        }
+        return base.SetParametersAsync(parameters);
     }
 
     protected override bool ShouldRender()

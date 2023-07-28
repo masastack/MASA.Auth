@@ -6,10 +6,10 @@
             <TeamBasicInfo @bind-Value="Dto.TeamBasicInfo" />
         </SElevationTabItem>
         <SElevationTabItem>
-            <TeamAdmin IgnoreStaffIds="Dto.TeamMember.Staffs" @bind-Preview=_adminPreview @bind-Value="Dto.TeamAdmin" />
+            <TeamAdmin IgnoreStaffIds="Dto.TeamMember.Staffs" @bind-Value="Dto.TeamAdmin" />
         </SElevationTabItem>
         <SElevationTabItem>
-            <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Preview=_memberPreview @bind-Value="Dto.TeamMember" />
+            <TeamMember IgnoreStaffIds="Dto.TeamAdmin.Staffs" @bind-Value="Dto.TeamMember" />
         </SElevationTabItem>
     </SElevationTab>
     <MCardActions class="d-flex align-center px-6">
@@ -17,10 +17,6 @@
             @T("Delete")
         </SButton>
         <MSpacer />
-        @if (_tabs.IndexOf(_tab)>0)  
-        {
-            <SButton Outlined Medium Class="mr-4" OnClick="OnPreview">@T("Preview")</SButton>
-        }
         <SButton Medium MinWidth="100" OnClick="OnUpdateHandler">@T("Save")</SButton>
     </MCardActions>
 </DefaultSheetDialog>

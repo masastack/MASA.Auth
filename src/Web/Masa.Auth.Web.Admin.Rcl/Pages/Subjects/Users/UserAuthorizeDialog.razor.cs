@@ -7,8 +7,6 @@ public partial class UserAuthorizeDialog
 {
     private bool _visible = false;
     private Guid _userId = Guid.Empty;
-    private bool _preview = false;
-    private List<Guid> _roles = new();
 
     [Parameter]
     public EventCallback<bool> VisibleChanged { get; set; }
