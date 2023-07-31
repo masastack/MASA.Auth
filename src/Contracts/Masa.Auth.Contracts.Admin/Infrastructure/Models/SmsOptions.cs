@@ -3,15 +3,11 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Models;
 
-public class SmsOptions : ConfigurationApiMasaConfigurationOptions
+public class SmsOptions
 {
-    [JsonIgnore]
-    public override string AppId => "public-$Config";
-
-    [JsonIgnore]
-    public override string? ObjectName { get; } = "$public.Sms";
-
     public string ChannelCode { get; set; } = "";
 
     public string TemplateCode { get; set; } = "";
+
+    public readonly static string Key = "$public.Sms";
 }

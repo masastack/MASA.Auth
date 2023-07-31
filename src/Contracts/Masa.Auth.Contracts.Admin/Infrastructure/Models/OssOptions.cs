@@ -3,14 +3,8 @@
 
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Models;
 
-public class OssOptions : ConfigurationApiMasaConfigurationOptions
+public class OssOptions
 {
-    [JsonIgnore]
-    public override string AppId => "public-$Config";
-
-    [JsonIgnore]
-    public override string? ObjectName { get; } = "$public.OSS";
-
     public string AccessId { get; set; } = "";
 
     public string AccessSecret { get; set; } = "";
@@ -24,4 +18,6 @@ public class OssOptions : ConfigurationApiMasaConfigurationOptions
     public string RoleSessionName { get; set; } = "";
 
     public string RegionId { get; set; } = "";
+
+    public readonly static string Key = "$public.OSS";
 }

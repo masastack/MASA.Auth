@@ -10,14 +10,14 @@ public class OssService : RestServiceBase
         MapGet(GetDefaultImages);
     }
 
-    private async Task<SecurityTokenDto> GetSecurityTokenAsync([FromServices] IObjectStorageClient client, [FromServices] IOptions<OssOptions> ossOptions)
+    private async Task<SecurityTokenDto> GetSecurityTokenAsync([FromServices] IObjectStorageClient client, [FromServices] IMasaConfiguration masaConfiguration)
     {
         var region = "oss-cn-hangzhou";
         var response = client.GetSecurityToken();
         var stsToken = response.SessionToken;
         var accessId = response.AccessKeyId;
         var accessSecret = response.AccessKeySecret;
-        var bucket = ossOptions.Value.Bucket;
+        var bucket = masaConfiguration.ConfigurationApi.GetPublic().GetSection(OssOptions.Key).Get<OssOptions>().Bucket;
         return await Task.FromResult(new SecurityTokenDto(region, accessId, accessSecret, stsToken, bucket));
     }
 

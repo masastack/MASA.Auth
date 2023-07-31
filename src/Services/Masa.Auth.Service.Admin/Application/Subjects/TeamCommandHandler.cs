@@ -22,18 +22,29 @@ public class TeamCommandHandler
         RoleDomainService roleDomainService,
         IMasaConfiguration masaConfiguration,
         IObjectStorageClient aliyunClient,
-        IOptions<OssOptions> ossOptions,
         IUnitOfWork unitOfWork,
-        ILogger<TeamCommandHandler> logger)
+        ILogger<TeamCommandHandler> logger,
+        IConfigurationApiClient configurationApiClient,
+        IMasaStackConfig masaStackConfig,
+        IMultiEnvironmentContext multiEnvironmentContext)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
         _roleDomainService = roleDomainService;
         _aliyunClient = aliyunClient;
-        _bucket = ossOptions.Value.Bucket;
-        _cdnEndpoint = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>("$public.Cdn:CdnEndpoint");
         _unitOfWork = unitOfWork;
         _logger = logger;
+
+        var environment = multiEnvironmentContext.CurrentEnvironment;
+        if (environment.IsNullOrEmpty())
+        {
+            environment = masaStackConfig.Environment;
+        }
+        _bucket = configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS").Result.Bucket;
+        _cdnEndpoint = configurationApiClient.GetDynamicAsync(environment, "Default", "public-$Config", "$public.Cdn").Result.CdnEndpoint;
+        //TODO:mf stack isolation sdk is issue,update package use the following code
+        //_bucket = masaConfiguration.ConfigurationApi.GetPublic().GetSection(OssOptions.Key).Get<OssOptions>().Bucket;
+        //_cdnEndpoint = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>("$public.Cdn:CdnEndpoint");
     }
 
     [EventHandler(1)]

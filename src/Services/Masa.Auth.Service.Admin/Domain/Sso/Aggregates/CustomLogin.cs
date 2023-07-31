@@ -18,8 +18,6 @@ namespace Masa.Auth.Service.Admin.Domain.Sso.Aggregates
 
         public bool Enabled { get; private set; }
 
-        public Client? Client { get; set; }
-
         public IReadOnlyCollection<CustomLoginThirdPartyIdp> ThirdPartyIdps => _thirdPartyIdps;
 
         public IReadOnlyCollection<RegisterField> RegisterFields => _registerFields;
