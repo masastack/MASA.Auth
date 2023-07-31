@@ -13,7 +13,6 @@ public class QueryHandler
     private readonly ICustomLoginRepository _customLoginRepository;
     private readonly DbContext _oidcDbContext;
     private readonly AuthDbContext _authDbContext;
-    private readonly IClientCache _clientCache;
     private readonly OperaterProvider _operaterProvider;
     private readonly ILogger<QueryHandler> _logger;
     private readonly IMultiEnvironmentContext _environmentContext;
@@ -27,7 +26,6 @@ public class QueryHandler
         ICustomLoginRepository customLoginRepository,
         OidcDbContext oidcDbContext,
         AuthDbContext authDbContext,
-        IClientCache clientCache,
         OperaterProvider operaterProvider,
         ILogger<QueryHandler> logger,
         IMultiEnvironmentContext environmentContext)
@@ -40,7 +38,6 @@ public class QueryHandler
         _customLoginRepository = customLoginRepository;
         _oidcDbContext = oidcDbContext;
         _authDbContext = authDbContext;
-        _clientCache = clientCache;
         _operaterProvider = operaterProvider;
         _logger = logger;
         _environmentContext = environmentContext;
@@ -351,8 +348,8 @@ public class QueryHandler
                                            .Skip((query.Page - 1) * query.PageSize)
                                            .Take(query.PageSize)
                                            .ToListAsync();
-
-        var clients = await _clientCache.GetListAsync(customLogins.Select(customLogin => customLogin.ClientId));
+        var clientIds = customLogins.Select(customLogin => customLogin.ClientId).ToList();
+        var clients = await _oidcDbContext.Set<Client>().Where(client => clientIds.Contains(client.ClientId)).ToListAsync();
         var customLoginDtos = customLogins.Select(customLogin =>
         {
             var (creator, modifier) = _operaterProvider.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
@@ -384,7 +381,7 @@ public class QueryHandler
         var thirdPartyIdps = customLogin.ThirdPartyIdps.Select(tp => new CustomLoginThirdPartyIdpDto(tp.ThirdPartyIdpId, tp.Sort)).ToList();
         var registerFields = customLogin.RegisterFields.Select(rf => new RegisterFieldDto(rf.RegisterFieldType, rf.Sort, rf.Required)).ToList();
         var customLoginDetail = new CustomLoginDetailDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, customLogin.CreateUser?.Name ?? "", customLogin.ModifyUser?.Name ?? "", thirdPartyIdps, registerFields);
-        var client = await _clientCache.GetAsync(customLogin.ClientId);
+        var client = await _oidcDbContext.Set<Client>().FirstOrDefaultAsync(client => client.ClientId == customLogin.ClientId);
         if (client is not null)
         {
             customLoginDetail.Client = new ClientDto

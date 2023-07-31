@@ -7,18 +7,15 @@ public class EmailAgent : IScopedDependency
 {
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
-    readonly IOptions<EmailOptions> _emailOptions;
     readonly IMasaConfiguration _masaConfiguration;
 
     public EmailAgent(
         IMcClient mcClient,
         IDistributedCacheClient distributedCacheClient,
-        IOptions<EmailOptions> emailOptions,
         IMasaConfiguration masaConfiguration)
     {
         _mcClient = mcClient;
         _distributedCacheClient = distributedCacheClient;
-        _emailOptions = emailOptions;
         _masaConfiguration = masaConfiguration;
     }
 
@@ -59,12 +56,14 @@ public class EmailAgent : IScopedDependency
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.EMAIL_SENDED);
         }
 
+        var _emailOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(EmailOptions.Key).Get<EmailOptions>();
+
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {
-            ChannelCode = _emailOptions.Value.ChannelCode,
+            ChannelCode = _emailOptions.ChannelCode,
             ChannelType = ChannelTypes.Email,
-            TemplateCode = _emailOptions.Value.TemplateCode,
+            TemplateCode = _emailOptions.TemplateCode,
             ReceiverType = SendTargets.Assign,
             Receivers = new List<ExternalReceiverModel>
             {

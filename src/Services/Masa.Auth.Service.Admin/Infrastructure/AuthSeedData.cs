@@ -12,6 +12,9 @@ public class AuthSeedData
         var eventBus = serviceProvider.GetRequiredService<IEventBus>();
         var context = serviceProvider.GetRequiredService<AuthDbContext>();
         var masaStackConfig = serviceProvider.GetRequiredService<IMasaStackConfig>();
+        var _multiEnvironmentSetter = serviceProvider.GetRequiredService<IMultiEnvironmentSetter>();
+
+        _multiEnvironmentSetter.SetEnvironment(masaStackConfig.Environment);
 
         var departmentId = Guid.Empty;
         var adminStaffId = Guid.Empty;

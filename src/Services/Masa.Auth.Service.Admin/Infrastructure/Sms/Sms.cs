@@ -7,31 +7,29 @@ public class Sms : IScopedDependency
 {
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
-    readonly IOptions<SmsOptions> _smsOptions;
     readonly IMasaConfiguration _masaConfiguration;
 
     public Sms(
         IMcClient mcClient,
         IDistributedCacheClient distributedCacheClient,
-        IOptions<SmsOptions> smsOptions,
         IMasaConfiguration masaConfiguration)
     {
         _mcClient = mcClient;
         _distributedCacheClient = distributedCacheClient;
-        _smsOptions = smsOptions;
         _masaConfiguration = masaConfiguration;
     }
 
     public async Task<string> SendMsgCodeAsync(string key, string phoneNumber, TimeSpan? expiration = null)
     {
         ArgumentExceptionExtensions.ThrowIfNullOrEmpty(phoneNumber);
+        var _smsOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(SmsOptions.Key).Get<SmsOptions>();
 
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {
-            ChannelCode = _smsOptions.Value.ChannelCode,
+            ChannelCode = _smsOptions.ChannelCode,
             ChannelType = ChannelTypes.Sms,
-            TemplateCode = _smsOptions.Value.TemplateCode,
+            TemplateCode = _smsOptions.TemplateCode,
             ReceiverType = SendTargets.Assign,
             Receivers = new List<ExternalReceiverModel>
             {
