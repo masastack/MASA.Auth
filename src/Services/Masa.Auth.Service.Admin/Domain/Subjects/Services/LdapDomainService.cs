@@ -76,7 +76,7 @@ public class LdapDomainService : DomainService
         return parts[parts.Length - 1];
     }
 
-    public async Task UpsertLdapUserAsync(LdapUser ldapUser)
+    public async Task<string> UpsertLdapUserAsync(LdapUser ldapUser)
     {
         var ldap = await GetIdentityProviderAsync();
         var user = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id && tpu.ThridPartyIdentity == ldapUser.ObjectGuid)
@@ -95,12 +95,14 @@ public class LdapDomainService : DomainService
             }
 
             await _userDomainService.UpdateAsync(user);
+            return user.Account;
         }
         else
         {
             await _userDomainService.AddAsync(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
             new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true)));
+            return ldapUser.SamAccountName;
         }
     }
 
