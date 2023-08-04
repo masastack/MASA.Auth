@@ -210,8 +210,7 @@ public class CommandHandler
         if (user != null)
         {
             user.Update(userModel.Name, userModel.DisplayName!, userModel.IdCard, userModel.CompanyName, userModel.Department, userModel.Gender);
-            roles.AddRange(user.Roles.Select(role => role.RoleId));
-            user.SetRoles(roles);
+            user.SetRoles(roles.Union(user.Roles.Select(role => role.RoleId)));
             await _userDomainService.UpdateAsync(user);
             command.Result = user.Adapt<UserModel>();
         }
