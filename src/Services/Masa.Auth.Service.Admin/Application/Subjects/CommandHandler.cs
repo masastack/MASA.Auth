@@ -411,7 +411,7 @@ public class CommandHandler
             account = await _ldapDomainService.UpsertLdapUserAsync(ldapUser);
         }
 
-        var user = await _userRepository.FindWithIncludAsync(u => EF.Functions.Collate(u.Account, "SQL_Latin1_General_CP1_CS_AS") == account, new List<string> {
+        var user = await _userRepository.FindWithIncludAsync(u => EF.Functions.Collate(u.Account, "SQL_Latin1_General_CP1_CS_AS") == account || u.PhoneNumber == account, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
 
