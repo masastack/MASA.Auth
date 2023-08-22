@@ -60,7 +60,20 @@ public class CommandHandler
             }
             else
             {
-                clientSecret.Value = SHA512Utils.Encrypt(clientSecret.Value);
+                clientSecret.Value = Sha512(clientSecret.Value);
+            }
+        }
+
+        string Sha512(string input)
+        {
+            if (input.IsNullOrEmpty()) return string.Empty;
+
+            using (var sha = SHA512.Create())
+            {
+                var bytes = Encoding.UTF8.GetBytes(input);
+                var hash = sha.ComputeHash(bytes);
+
+                return Convert.ToBase64String(hash);
             }
         }
     }
@@ -188,7 +201,7 @@ public class CommandHandler
         await _apiScopeRepository.AddAsync(apiScope);
     }
 
-    
+
     [EventHandler]
     public async Task UpdateApiScopeAsync(UpdateApiScopeCommand command)
     {

@@ -16,12 +16,7 @@ public class ClientScopesDto
         get
         {
             var allScopes = IdentityResources.Union(ApiScopes);
-            var allowedScopes = _AllowedScopes.Where(x => allScopes.Any(s => s.Selected && s.Id == x)).ToList();
-            if (allowedScopes.Any())
-            {
-                return allScopes.Where(s => s.Selected).Select(s => s.Id).Union(allowedScopes).ToList();
-            }
-            return _AllowedScopes;
+            return allScopes.Where(s => s.Selected).Select(s => s.Id).ToList(); ;
         }
         set
         {

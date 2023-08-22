@@ -24,8 +24,7 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             });
             context.Result = new GrantValidationResult(
                  subject: user!.Id.ToString(),
-                 authenticationMethod: OidcConstants.AuthenticationMethods.Password,
-                 claims: user.GetUserClaims());
+                 authenticationMethod: OidcConstants.AuthenticationMethods.Password);
         }
         catch (Exception ex)
         {

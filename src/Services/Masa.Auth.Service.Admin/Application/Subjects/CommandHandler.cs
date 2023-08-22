@@ -589,4 +589,20 @@ public class CommandHandler
         }
     }
     #endregion
+
+    [EventHandler]
+    public async Task SaveUserClaimValuesAsync(SaveUserClaimValuesCommand saveUserClaimValuesCommand)
+    {
+        var user = await _authDbContext.Set<User>()
+                                            .Include(u => u.UserClaims)
+                                            .FirstOrDefaultAsync(u => u.Id == saveUserClaimValuesCommand.UserId);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        user.UserClaimValues(saveUserClaimValuesCommand.ClaimValues);
+
+        await _userDomainService.UpdateAsync(user);
+    }
 }

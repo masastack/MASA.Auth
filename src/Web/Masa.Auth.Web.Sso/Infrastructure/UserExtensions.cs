@@ -10,5 +10,6 @@ public static class UserExtensions
         new Claim("account", user.Account),
         new Claim("username", user.DisplayName),
         new Claim("phoneNumber", user.PhoneNumber!),
+        new Claim("phoneNumber333", user.PhoneNumber!)
     };
 }

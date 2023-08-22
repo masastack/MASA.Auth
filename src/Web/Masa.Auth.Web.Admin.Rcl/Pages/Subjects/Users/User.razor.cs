@@ -11,6 +11,7 @@ public partial class User
     private DateOnly? _startTime;
     private DateOnly? _endTime;
     private UserAuthorizeDialog _userAuthorizeDialog = default!;
+    private UserClaimsDialog _userClaimsDialog = default!;
 
     [Inject]
     public IJSRuntime? Js { get; set; }
