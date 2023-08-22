@@ -21,7 +21,10 @@ public class UserProfileService : IProfileService
         if (subjectId != null && Guid.TryParse(subjectId.Value, out var userId))
         {
             var claimValues = await _authClient.UserService.GetGetClaimValuesAsync(userId);
-
+            foreach (var claimValue in claimValues)
+            {
+                context.IssuedClaims.TryAdd(new Claim(claimValue.Key, claimValue.Value));
+            }
         }
     }
 

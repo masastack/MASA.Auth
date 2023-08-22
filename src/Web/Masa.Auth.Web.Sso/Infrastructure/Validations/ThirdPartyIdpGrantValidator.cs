@@ -29,7 +29,7 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         }
         var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
         Security.OAuth.Providers.Identity identity;
-        if(string.IsNullOrEmpty(code) is false)
+        if (string.IsNullOrEmpty(code) is false)
         {
             identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
         }
@@ -45,9 +45,7 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         {
             ThridPartyIdentity = identity.Subject
         });
-        var userClaims = user?.GetUserClaims().ToList();
-        userClaims?.TryAdd(new Claim("thirdPartyUserData", JsonSerializer.Serialize(identity)));
-        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", userClaims, customResponse: new()
+        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", customResponse: new()
         {
             ["thirdPartyUserData"] = identity,
             ["registerSuccess"] = user is not null

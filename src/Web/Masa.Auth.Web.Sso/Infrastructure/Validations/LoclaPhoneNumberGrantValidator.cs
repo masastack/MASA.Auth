@@ -46,7 +46,7 @@ public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
             }
             else
             {
-                context.Result = new GrantValidationResult(user.Id.ToString(), "local", user.GetUserClaims());
+                context.Result = new GrantValidationResult(user.Id.ToString(), "local");
             }
         }
         else

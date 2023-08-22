@@ -51,8 +51,8 @@ public class AccountController : Controller
                     Code = inputModel.SmsCode?.ToString() ?? throw new UserFriendlyException(_i18n.T("SmsRequired") ?? "SmsRequired"),
                     RegisterLogin = inputModel.RegisterLogin,
                     Environment = inputModel.Environment
-
                 });
+
                 if (user is null)
                 {
                     //todo auto register user
