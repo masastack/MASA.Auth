@@ -81,7 +81,6 @@ builder.Services
             { return true; }
         };
     });
-
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();

@@ -129,6 +129,7 @@ public partial class OperationLog
     {
         var request = new GetOperationLogsDto(Page, PageSize, UserId, _startTime?.UtcDateTime, _endTime?.UtcDateTime, OperationType, Search);
         var response = await OperationLogService.GetListAsync(request);
+        _total = response.Total;
         _operationLogs = response.Items;
         _operationLogs.ForEach(operationLog => operationLog.OperationTime = operationLog.OperationTime.Add(JsInitVariables.TimezoneOffset));
     }
