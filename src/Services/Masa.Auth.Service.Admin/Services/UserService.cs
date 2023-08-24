@@ -365,4 +365,17 @@ public class UserService : ServiceBase
         var command = new UnbindUserRolesCommand(model);
         await eventBus.PublishAsync(command);
     }
+
+    public async Task<Dictionary<string, string>> GetClaimValuesAsync(IEventBus eventBus, Guid Id)
+    {
+        var query = new UserClaimValuesQuery(Id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    public async Task SaveClaimValuesAsync(IEventBus eventBus, UserClaimValuesDto userClaimValues)
+    {
+        var command = new SaveUserClaimValuesCommand(userClaimValues.UserId, userClaimValues.ClaimValues);
+        await eventBus.PublishAsync(command);
+    }
 }

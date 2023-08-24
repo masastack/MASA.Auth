@@ -6,6 +6,7 @@ namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 public class User : FullAggregateRoot<Guid, Guid>
 {
     private List<UserRole> _roles = new();
+    private List<UserClaimValue> _userClaims = new();
     private List<UserPermission> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
     private Staff? _staff;
@@ -141,6 +142,8 @@ public class User : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<UserPermission> Permissions => _permissions;
 
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
+
+    public IReadOnlyCollection<UserClaimValue> UserClaims => _userClaims;
 
     public Staff? Staff => _staff;
 
@@ -364,6 +367,11 @@ public class User : FullAggregateRoot<Guid, Guid>
         _roles = _roles.MergeBy(
            roleIds.Select(roleId => new UserRole(roleId)),
            item => item.RoleId).DistinctBy(ur => ur.RoleId).ToList();
+    }
+
+    public void UserClaimValues(Dictionary<string, string> claimValues)
+    {
+        _userClaims = claimValues.Select(claimValue => new UserClaimValue(claimValue.Key, claimValue.Value)).ToList();
     }
 
     public void SetRoles(IEnumerable<Guid> roleIds)

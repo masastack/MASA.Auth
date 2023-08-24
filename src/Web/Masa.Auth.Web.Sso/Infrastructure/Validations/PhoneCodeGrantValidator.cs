@@ -28,7 +28,7 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
         });
         if (user != null)
         {
-            context.Result = new GrantValidationResult(user.Id.ToString(), "sms", user.GetUserClaims());
+            context.Result = new GrantValidationResult(user.Id.ToString(), "sms");
         }
         else
         {

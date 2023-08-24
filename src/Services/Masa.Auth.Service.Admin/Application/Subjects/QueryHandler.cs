@@ -739,4 +739,12 @@ public class QueryHandler
         userSystemBusinessData.Result = await _authDbContext.Set<UserSystemBusinessData>().Where(data => data.SystemId == userSystemBusinessData.SystemId
             && userSystemBusinessData.UserIds.Contains(data.UserId)).ToDictionaryAsync(item => item.UserId.ToString(), item => item.Data);
     }
+
+    [EventHandler]
+    public async Task UserClaimValuesQueryAsync(UserClaimValuesQuery userClaimValuesQuery)
+    {
+        userClaimValuesQuery.Result = await _authDbContext.Set<UserClaimValue>()
+            .Where(c => c.UserId == userClaimValuesQuery.UserId)
+            .ToDictionaryAsync(c => c.Name, c => c.Value);
+    }
 }

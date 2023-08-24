@@ -660,5 +660,8 @@
   "Permission Description length must be less than 255": "权限描述长度不能超过255",
   "Can only input chinese and letter and number of Description": "描述只可以输入中文字母数字",
   "Filter": "筛选",
-  "Cancel Filter": "取消筛选"
+  "Cancel Filter": "取消筛选",
+  "RepeatAdd": "重复添加",
+  "Add Claim": "添加声明",
+  "Claim": "声明"
 }
