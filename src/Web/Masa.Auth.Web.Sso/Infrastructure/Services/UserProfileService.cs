@@ -16,14 +16,17 @@ public class UserProfileService : IProfileService
     {
         var claims = context.Subject.Claims.ToList();
         context.IssuedClaims.AddRange(claims);
-
-        var subjectId = context.Subject.Claims.FirstOrDefault(c => c.Type == "sub");
-        if (subjectId != null && Guid.TryParse(subjectId.Value, out var userId))
+        //ClaimsProviderAccessToken
+        //if (context.Caller == "ClaimsProviderIdentityToken" || context.Caller == "UserInfoEndpoint")
         {
-            var claimValues = await _authClient.UserService.GetGetClaimValuesAsync(userId);
-            foreach (var claimValue in claimValues)
+            var subjectId = context.Subject.Claims.FirstOrDefault(c => c.Type == "sub");
+            if (subjectId != null && Guid.TryParse(subjectId.Value, out var userId))
             {
-                context.IssuedClaims.TryAdd(new Claim(claimValue.Key, claimValue.Value));
+                var claimValues = await _authClient.UserService.GetGetClaimValuesAsync(userId);
+                foreach (var claimValue in claimValues)
+                {
+                    context.IssuedClaims.TryAdd(new Claim(claimValue.Key, claimValue.Value));
+                }
             }
         }
     }
