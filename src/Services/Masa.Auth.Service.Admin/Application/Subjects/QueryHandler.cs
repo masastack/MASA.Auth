@@ -746,5 +746,13 @@ public class QueryHandler
         userClaimValuesQuery.Result = await _authDbContext.Set<UserClaimValue>()
             .Where(c => c.UserId == userClaimValuesQuery.UserId)
             .ToDictionaryAsync(c => c.Name, c => c.Value);
+        var user = await _userRepository.FindAsync(u => u.Id == userClaimValuesQuery.UserId);
+        if (user != null)
+        {
+            //compatible
+            userClaimValuesQuery.Result.TryAdd("phoneNumber", user.PhoneNumber);
+            userClaimValuesQuery.Result.TryAdd("account", user.Account);
+            userClaimValuesQuery.Result.TryAdd("user_name", user.DisplayName);
+        }
     }
 }
