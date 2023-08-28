@@ -68,7 +68,7 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
-    .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>()
+    .AddExtensionGrantValidator<LocalPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
     .AddExtensionGrantValidator<LdapGrantValidator>();
 
