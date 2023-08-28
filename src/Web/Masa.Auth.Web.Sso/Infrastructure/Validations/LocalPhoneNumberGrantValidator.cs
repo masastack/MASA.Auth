@@ -3,14 +3,14 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
-public class LoclaPhoneNumberGrantValidator : IExtensionGrantValidator
+public class LocalPhoneNumberGrantValidator : IExtensionGrantValidator
 {
     IAuthClient _authClient;
     LocalLoginByPhoneNumberAgent _localLoginByPhoneNumber;
 
     public string GrantType { get; } = "local_phone";
 
-    public LoclaPhoneNumberGrantValidator(IAuthClient authClient, LocalLoginByPhoneNumberAgent localLoginByPhoneNumber)
+    public LocalPhoneNumberGrantValidator(IAuthClient authClient, LocalLoginByPhoneNumberAgent localLoginByPhoneNumber)
     {
         _authClient = authClient;
         _localLoginByPhoneNumber = localLoginByPhoneNumber;

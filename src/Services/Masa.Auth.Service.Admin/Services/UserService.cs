@@ -9,6 +9,7 @@ public class UserService : ServiceBase
     {
         RouteOptions.DisableAutoMapRoute = false;
         MapGet(GetListByRoleAsync, "getListByRole");
+        MapPost(SaveClaimValuesAsync, "claim-values");
     }
 
     public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -366,6 +367,7 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
+    [RoutePattern("claim-values", StartWithBaseUri = true, HttpMethod = "Get")]
     public async Task<Dictionary<string, string>> GetClaimValuesAsync(IEventBus eventBus, Guid Id)
     {
         var query = new UserClaimValuesQuery(Id);
