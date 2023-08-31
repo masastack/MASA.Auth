@@ -15,7 +15,6 @@ public class TeamService : ServiceBase
         MapPost(CreateAsync);
         MapPost(UpdateAsync);
         MapDelete(RemoveAsync);
-        MapPost(SyncRedisAsync);
     }
 
     [Authorize]
@@ -72,12 +71,5 @@ public class TeamService : ServiceBase
     private async Task RemoveAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         await eventBus.PublishAsync(new RemoveTeamCommand(id));
-    }
-
-    [AllowAnonymous]
-    public async Task SyncRedisAsync([FromServices] IEventBus eventBus)
-    {
-        var command = new SyncTeamRedisCommand();
-        await eventBus.PublishAsync(command);
     }
 }
