@@ -8,7 +8,7 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
     readonly ILogger<WeChatCaller> _logger;
     readonly HttpClient _httpClient;
 
-    public WeChatCaller(ILogger<WeChatCaller> logger,IHttpClientFactory httpClientFactory)
+    public WeChatCaller(ILogger<WeChatCaller> logger, IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
         _httpClient = httpClientFactory.CreateClient();
@@ -42,9 +42,9 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
         }
 
         var identity = new ClaimsIdentity();
-        (var openId, var unionId) =  (payload.RootElement.GetString("openid"), payload.RootElement.GetString("unionid"));
+        (var openId, var unionId) = (payload.RootElement.GetString("openid"), payload.RootElement.GetString("unionid"));
         var nameIdentifier = !string.IsNullOrWhiteSpace(unionId) ? unionId : openId ?? throw new UserFriendlyException("Get weChat identifier failed.");
-        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, nameIdentifier, ClaimValueTypes.String, options.ClaimsIssuer));     
+        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, nameIdentifier, ClaimValueTypes.String, options.ClaimsIssuer));
 
         var principal = new ClaimsPrincipal(identity);
         foreach (var action in options.ClaimActions)
@@ -62,6 +62,7 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
             ["appid"] = options.ClientId,
             ["secret"] = options.ClientSecret,
             ["code"] = code,
+            ["js_code"] = code,//compatible weixin mini program
             ["grant_type"] = "authorization_code",
         };
 

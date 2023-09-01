@@ -93,7 +93,7 @@ public partial class StaffSelect
     {
         search = search.Trim(' ');
         await Task.Delay(300);
-        if (search.IsNullOrEmpty())
+        if (search.Length < 2)
         {
             return;
         }

@@ -22,7 +22,7 @@ public class UserProfileService : IProfileService
             var subjectId = context.Subject.Claims.FirstOrDefault(c => c.Type == "sub");
             if (subjectId != null && Guid.TryParse(subjectId.Value, out var userId))
             {
-                var claimValues = await _authClient.UserService.GetGetClaimValuesAsync(userId);
+                var claimValues = await _authClient.UserService.GetClaimValuesAsync(userId);
                 foreach (var claimValue in claimValues)
                 {
                     context.IssuedClaims.TryAdd(new Claim(claimValue.Key, claimValue.Value));
