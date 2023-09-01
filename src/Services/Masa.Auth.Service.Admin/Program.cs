@@ -175,19 +175,17 @@ await builder.Services.AddStackIsolationAsync(MasaStackProject.Auth.Name);
 
 builder.Services.AddStackMiddleware();
 
-await builder.MigrateDbContextAsync<AuthDbContext>((context, services) =>
+await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
 {
-    //todo split
-    //await new AuthSeedData().SeedAsync(context, services);
-    return Task.CompletedTask;
-});
-builder.Services.AddOidcCache(publicConfiguration);
-await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
-{
-    await new AuthSeedData().SeedAsync(builder);
+    await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
+    {
+        builder.Services.AddOidcCache(publicConfiguration);
 
-    await option.SeedStandardResourcesAsync();
-    await option.SyncCacheAsync();
+        await new AuthSeedData().SeedAsync(builder);
+
+        await option.SeedStandardResourcesAsync();
+        await option.SyncCacheAsync();
+    });
 });
 
 var app = builder.AddServices(options =>
