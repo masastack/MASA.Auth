@@ -8,14 +8,20 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
     IAuthClient _authClient;
     IRemoteAuthenticationDefaultsProvider _remoteAuthenticationDefaultsProvider;
     ThirdPartyIdpCallerProvider _thirdPartyIdpCallerProvider;
+    WeChatMiniProgramCaller _weChatMiniProgramCaller;
 
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.THIRD_PARTY_IDP;
 
-    public ThirdPartyIdpGrantValidator(IAuthClient authClient, IRemoteAuthenticationDefaultsProvider remoteAuthenticationDefaultsProvider, ThirdPartyIdpCallerProvider thirdPartyIdpCallerProvider)
+    public ThirdPartyIdpGrantValidator(
+        IAuthClient authClient,
+        IRemoteAuthenticationDefaultsProvider remoteAuthenticationDefaultsProvider,
+        ThirdPartyIdpCallerProvider thirdPartyIdpCallerProvider,
+        WeChatMiniProgramCaller weChatMiniProgramCaller)
     {
         _authClient = authClient;
         _remoteAuthenticationDefaultsProvider = remoteAuthenticationDefaultsProvider;
         _thirdPartyIdpCallerProvider = thirdPartyIdpCallerProvider;
+        _weChatMiniProgramCaller = weChatMiniProgramCaller;
     }
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
@@ -23,32 +29,55 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         var scheme = context.Request.Raw["scheme"];
         var code = context.Request.Raw["code"];
         var idToken = context.Request.Raw["idToken"];
+        var wechatMini = context.Request.Raw["wechat_mini"];//ogin by wechat mini program,temporary addition
+
         if (string.IsNullOrEmpty(scheme))
         {
             throw new UserFriendlyException("must provider scheme");
         }
         var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
-        Security.OAuth.Providers.Identity identity;
-        if (string.IsNullOrEmpty(code) is false)
+        Security.OAuth.Providers.Identity? identity = null;
+
+        string? thridPartyIdentity;
+        if (bool.TryParse(wechatMini, out bool mini) && mini)
         {
-            identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new UserFriendlyException("must provider code");
+            }
+            var options = new OAuthOptions();
+            authenticationDefaults.BindOAuthOptions(options);
+            thridPartyIdentity = await _weChatMiniProgramCaller.GetOpenIdAsync(options, code);
         }
         else
         {
-            if (string.IsNullOrEmpty(idToken))
+            if (!string.IsNullOrEmpty(code))
             {
-                throw new UserFriendlyException("must provider code or idToken");
+                identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
             }
-            identity = await _thirdPartyIdpCallerProvider.GetIdentityByIdToken(authenticationDefaults, idToken);
+            else
+            {
+                if (string.IsNullOrEmpty(idToken))
+                {
+                    throw new UserFriendlyException("must provider code or idToken");
+                }
+                identity = await _thirdPartyIdpCallerProvider.GetIdentityByIdToken(authenticationDefaults, idToken);
+            }
+            thridPartyIdentity = identity.Subject;
         }
+
         var user = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
         {
-            ThridPartyIdentity = identity.Subject
+            ThridPartyIdentity = thridPartyIdentity
         });
-        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp", customResponse: new()
+        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp");
+        if (identity != null)
         {
-            ["thirdPartyUserData"] = identity,
-            ["registerSuccess"] = user is not null
-        });
+            context.Result.CustomResponse = new()
+            {
+                ["thirdPartyUserData"] = identity,
+                ["registerSuccess"] = user is not null
+            };
+        }
     }
 }

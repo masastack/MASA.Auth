@@ -62,7 +62,6 @@ public class WeChatCaller : ThirdPartyIdpCallerBase
             ["appid"] = options.ClientId,
             ["secret"] = options.ClientSecret,
             ["code"] = code,
-            ["js_code"] = code,//compatible weixin mini program
             ["grant_type"] = "authorization_code",
         };
 
