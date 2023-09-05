@@ -18,6 +18,7 @@ public class QueryHandler
     private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
     private readonly UserDomainService _userDomainService;
     private readonly OperaterProvider _operaterProvider;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -32,7 +33,8 @@ public class QueryHandler
         IPmClient pmClient,
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
         UserDomainService userDomainService,
-        OperaterProvider operaterProvider)
+        OperaterProvider operaterProvider,
+        IWebHostEnvironment webHostEnvironment)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -47,6 +49,7 @@ public class QueryHandler
         _userDomainService = userDomainService;
         _operaterProvider = operaterProvider;
         _distributedCacheClient = distributedCacheClient;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     #region User
@@ -705,7 +708,7 @@ public class QueryHandler
         var visited = await _distributedCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? "");
+            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? _webHostEnvironment.EnvironmentName);
             var apps = projects.SelectMany(p => p.Apps);
             //todo cache
             var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
