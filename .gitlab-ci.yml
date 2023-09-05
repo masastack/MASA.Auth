@@ -110,7 +110,7 @@ deploy-prd:
   only:
     - tags
   script:
-    - echo $KUBE_CONFIG_MASA_PRD | base64 -d > ./config
+    - echo $KUBE_CONFIG_LSD_PRD_YDY | base64 -d > ./config
     - echo $CI_COMMIT_TAG
     - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER -n $NAMESPACE_PRD
     - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_SERVER_ADMIN -n $NAMESPACE_PRD
