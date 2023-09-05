@@ -35,11 +35,6 @@ public class PasswordHelper : ISingletonDependency
             {
                 //ignore
             }
-            finally
-            {
-                passwordRule = DEFAULTPASSWORDRULE;
-            }
-
         }
         return passwordRule;
     }
