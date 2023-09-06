@@ -92,7 +92,6 @@ public class QueryHandler
         var result = new List<ProjectDto>();
         var projects = await _pmClient.ProjectService.GetProjectAppsAsync(env);
         var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
-        _logger.LogWarning(JsonSerializer.Serialize(tags));
         if (projects.Any())
         {
             result = projects.Select(p => new ProjectDto
