@@ -9,6 +9,7 @@ public class RoleService : RestServiceBase
     public RoleService(ILogger<RoleService> logger) : base("api/role")
     {
         _logger = logger;
+        MapGet(GetDetailExternalAsync, "external");
     }
 
     private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus, GetRolesDto role)
@@ -49,6 +50,13 @@ public class RoleService : RestServiceBase
     private async Task<RoleDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new RoleDetailQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<RoleSimpleDetailDto?> GetDetailExternalAsync(IEventBus eventBus, [FromQuery] Guid id)
+    {
+        var query = new RoleDetailExternalQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
