@@ -755,7 +755,7 @@ public class QueryHandler
             //compatible
             userClaimValuesQuery.Result.TryAdd("phoneNumber", user.PhoneNumber);
             userClaimValuesQuery.Result.TryAdd("account", user.Account);
-            userClaimValuesQuery.Result.TryAdd("user_name", user.DisplayName);
+            userClaimValuesQuery.Result.TryAdd("userName", user.DisplayName);
         }
     }
 }
