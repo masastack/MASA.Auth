@@ -1,0 +1,99 @@
+﻿@inherits AdminCompontentBase
+
+<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Add Webhook")">
+    <MForm Model=_webhookDetail EnableValidation EnableI18n>
+        <AutoHeight Overflow AutoClass="mt-6">
+             <AutoHeightContent>
+                    <MRow>
+                    <MCol Md=12>
+                         <STextField @bind-Value="_webhookDetail.Name" Required Label="@T("Name")" />
+                    </MCol>
+                     <MCol Md=12>
+                         <STextField Label="@T("URL")" @bind-Value="_webhookDetail.Url" />
+                     </MCol>
+                    <MCol Md=6>
+                        <EnumSelect @bind-Value=_webhookDetail.Event TValue="WebhookEvent" Clearable=false Label="@T("WebhookEvent")" />
+                    </MCol>
+                    <MCol Md=6>
+                         <SSelect @bind-Value="_webhookDetail.HttpMethod"
+                                  Label="@T("HttpMethod")" Required Disabled
+                                  Items="GetHttpMethod()"
+                                  ItemText="u => u"
+                                  ItemValue="u => u">
+                         </SSelect>
+                    </MCol>
+                    <MCol Md=12>
+                         <STextarea Label="@T("Description")" @bind-Value="_webhookDetail.Description"
+                                   Height="120" NoResize HideDetails="@("auto")" />
+                    </MCol>
+                </MRow>
+
+             </AutoHeightContent>
+             <FooterContent>
+                 <div class="d-flex align-center">
+                     <EnableSwitch @bind-Value="_webhookDetail.IsActive" />
+                     <MSpacer />
+                     <SButton Medium OnClick="async () => await SaveAsync(context)">@T("Submit")</SButton>
+                 </div>
+             </FooterContent>
+        </AutoHeight>
+    </MForm>
+</DefaultSheetDialog>
+
+    @code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> VisibleChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnSubmitSuccess { get; set; }
+
+    WebhookService _webhookService => AuthCaller.WebhookService;
+
+    private WebhookDetailDto _webhookDetail { get; set; } = new WebhookDetailDto();
+
+    private async Task SaveAsync(FormContext context)
+    {
+        var success = context.Validate();
+        if (success)
+        {
+            await _webhookService.SaveAsync(_webhookDetail);
+            await UpdateVisible(false);
+            await OnSubmitSuccess.InvokeAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task UpdateVisible(bool visible)
+    {
+        if (VisibleChanged.HasDelegate)
+        {
+            await VisibleChanged.InvokeAsync(visible);
+        }
+        else
+        {
+            Visible = visible;
+        }
+    }
+
+    public async Task ShowAsync(Guid id)
+    {
+        if (id!=Guid.Empty)
+        {
+            _webhookDetail = await _webhookService.GetDetailAsync(id);
+        }
+        else
+        {
+            _webhookDetail = new();
+        }
+        await UpdateVisible(true);
+        StateHasChanged();
+    }
+
+    List<string> GetHttpMethod()
+    {
+        return new List<string>{"POST","Get","DELETE","PUT" };
+    }
+}
