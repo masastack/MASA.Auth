@@ -44,6 +44,7 @@ public class AuthSeedData
         var apiResource = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "ApiResource", "ApiResource", "sso/apiResource", "", 4, PermissionTypes.Menu);
         var client = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "Client", "Client", "sso/client", "", 5, PermissionTypes.Menu);
         var customLogin = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "CustomLogin", "CustomLogin", "sso/customLogin", "", 6, PermissionTypes.Menu);
+
         userClaim.SetParent(sso.Id);
         identityResource.SetParent(sso.Id);
         apiScope.SetParent(sso.Id);
@@ -60,12 +61,13 @@ public class AuthSeedData
         var authMenus = new List<Permission>() {
             userPermission,updateAccountPermission,
             rolePermission,role,permission,team,teamAddElement,teamAddApi,
-            new Permission(MasaStackProject.Auth.Name,masaStackConfig.GetWebId(MasaStackProject.Auth),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
+            new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
-            new Permission(MasaStackProject.Auth.Name,masaStackConfig.GetWebId(MasaStackProject.Auth),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
-            new Permission(MasaStackProject.Auth.Name,masaStackConfig.GetWebId(MasaStackProject.Auth),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
-            new Permission(MasaStackProject.Auth.Name,masaStackConfig.GetWebId(MasaStackProject.Auth),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu)
-        };
+            new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
+            new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"Position","position","organization/position","mdi-post",7,PermissionTypes.Menu),
+            new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"OperationLog","operationLog","operationLog","mdi-record-circle",8,PermissionTypes.Menu),
+            new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "Webhook", "Webhook", "webhook", "mdi-webhook", 9, PermissionTypes.Menu)
+    };
 
         if (!context.Set<Permission>().Any(p => p.SystemId == MasaStackProject.Auth.Name))
         {

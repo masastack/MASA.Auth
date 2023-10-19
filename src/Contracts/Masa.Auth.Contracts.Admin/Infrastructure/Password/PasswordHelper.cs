@@ -6,7 +6,7 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Password;
 public class PasswordHelper : ISingletonDependency
 {
     public const string PASSWORDRULECONFIGNAME = "$public.AppSettings:PasswordRule";
-    public const string DEFAULTPASSWORDRULE = "^\\S*(?=\\S{6,})(?=\\S*\\d)(?=\\S*[A-Za-z])\\S*$";
+    public const string DEFAULTPASSWORDRULE = "^\\S*(?=\\S{6})(?=\\S*\\d)(?=\\S*[A-Za-z])\\S*$";
 
     private readonly IMasaConfiguration _masaConfiguration;
 

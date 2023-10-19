@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.ApiGateways.Caller.Services.Webhooks;
+
 namespace Masa.Auth.ApiGateways.Caller;
 
 public class AuthCaller : StackHttpClientCaller
@@ -24,6 +26,7 @@ public class AuthCaller : StackHttpClientCaller
     PositionService? _positionService;
     OssService? _ossService;
     OperationLogService? _operationLogService;
+    WebhookService? _webhookService;
     #endregion
 
     public ThirdPartyIdpService ThirdPartyIdpService => _thirdPartyIdpService ?? (_thirdPartyIdpService = new(Caller));
@@ -61,6 +64,8 @@ public class AuthCaller : StackHttpClientCaller
     public OssService OssService => _ossService ?? (_ossService = new OssService(Caller));
 
     public OperationLogService OperationLogService => _operationLogService ?? (_operationLogService = new OperationLogService(Caller));
+
+    public WebhookService WebhookService => _webhookService ?? (_webhookService = new WebhookService(Caller));
 
     protected override string BaseAddress { get; set; }
 

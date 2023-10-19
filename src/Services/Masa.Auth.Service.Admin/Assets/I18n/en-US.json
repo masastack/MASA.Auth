@@ -84,5 +84,6 @@
   "PasswordValidateFailed": "Password validte failed",
   "PasswordFormatVerificationPrompt": "The password must be a combination of letters and numbers, and the length must not be less than 6",
   "APIScopeNameExist": "API Scope exist this name",
-  "IdentitySourceNameExist": "Identity Source exist this name"
+  "IdentitySourceNameExist": "Identity Source exist this name",
+  "WebhookNotExist": "The Webhook does not exist"
 }

@@ -11,6 +11,7 @@ public class UserDomainService : DomainService
     readonly RoleDomainService _roleDomainService;
     readonly AuthDbContext _dbContext;
     readonly IUnitOfWork _unitOfWork;
+    readonly WebhookDomainService _webhookDomainService;
 
     public UserDomainService(
         IUserRepository userRepository,
@@ -20,7 +21,8 @@ public class UserDomainService : DomainService
         IMultilevelCacheClient multilevelCacheClient,
         RoleDomainService roleDomainService,
         AuthDbContext dbContext,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        WebhookDomainService webhookDomainService)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -30,6 +32,7 @@ public class UserDomainService : DomainService
         _roleDomainService = roleDomainService;
         _dbContext = dbContext;
         _unitOfWork = unitOfWork;
+        _webhookDomainService = webhookDomainService;
     }
 
     public async Task AddAsync(User user)
@@ -42,6 +45,8 @@ public class UserDomainService : DomainService
         user = await _userRepository.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
         await SyncUserAsync(user.Id);
+
+        await _webhookDomainService.TriggerAsync(WebhookEvent.AddUser, user);
     }
 
     public async Task UpdateAsync(User user)
@@ -54,6 +59,8 @@ public class UserDomainService : DomainService
         await _userRepository.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
         await SyncUserAsync(user.Id);
+
+        await _webhookDomainService.TriggerAsync(WebhookEvent.UpdateUser, user);
     }
 
     public async Task SyncUserAsync(Guid userId)
@@ -142,6 +149,8 @@ public class UserDomainService : DomainService
         await _userRepository.RemoveAsync(user);
         await _autoCompleteClient.DeleteAsync(userId);
         await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKey.UserKey(userId));
+
+        await _webhookDomainService.TriggerAsync(WebhookEvent.DeleteUser, user);
     }
 
     public async Task AddRangeAsync(List<User> users)
