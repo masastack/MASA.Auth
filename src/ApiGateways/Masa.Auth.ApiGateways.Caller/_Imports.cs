@@ -8,6 +8,7 @@ global using Masa.Auth.ApiGateways.Caller.Services.Permissions;
 global using Masa.Auth.ApiGateways.Caller.Services.Projects;
 global using Masa.Auth.ApiGateways.Caller.Services.Sso;
 global using Masa.Auth.ApiGateways.Caller.Services.Subjects;
+global using Masa.Auth.ApiGateways.Caller.Services.Webhooks;
 global using Masa.Auth.Contracts.Admin;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
