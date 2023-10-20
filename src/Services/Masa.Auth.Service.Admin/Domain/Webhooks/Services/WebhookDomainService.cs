@@ -8,6 +8,11 @@ public class WebhookDomainService : DomainService
     private readonly ILogger<WebhookDomainService> _logger;
     private readonly IWebhookRepository _webhookRepository;
 
+    static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+    {
+        ReferenceHandler = ReferenceHandler.Preserve,
+    };
+
     public WebhookDomainService(ILogger<WebhookDomainService> logger, IWebhookRepository webhookRepository)
     {
         _logger = logger;
@@ -27,7 +32,7 @@ public class WebhookDomainService : DomainService
         };
 
         var request = new HttpRequestMessage();
-        request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+        request.Content = new StringContent(JsonSerializer.Serialize(payload, _jsonSerializerOptions), Encoding.UTF8, "application/json");
         request.Method = HttpMethod.Post;
 
         foreach (var webhook in webhooks)
@@ -49,7 +54,7 @@ public class WebhookDomainService : DomainService
                 {
                     _logger.LogWarning($"Failed to trigger webhook. Response status code: {response.StatusCode}");
                 }
-                webhook.AddLog(new WebhookLog(JsonSerializer.Serialize(data)));
+                webhook.AddLog(new WebhookLog(JsonSerializer.Serialize(data, _jsonSerializerOptions)));
             }
             catch (Exception e)
             {
