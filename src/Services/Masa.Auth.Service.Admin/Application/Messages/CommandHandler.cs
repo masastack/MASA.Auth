@@ -31,18 +31,13 @@ public class CommandHandler
                 {
                     throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, model.PhoneNumber);
                 }
-                cacheKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                cacheKey = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
                 break;
             case SendMsgCodeTypes.Bind:
                 cacheKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
                 break;
             case SendMsgCodeTypes.Login:
-                var loginUser = await _userRepository.FindAsync(u => u.PhoneNumber == model.PhoneNumber);
-                if (loginUser == null)
-                {
-                    throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
-                }
-                cacheKey = CacheKey.MsgCodeForLoginKey(loginUser.Id.ToString(), model.PhoneNumber);
+                cacheKey = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
                 break;
             case SendMsgCodeTypes.VerifiyPhoneNumber:
                 var user = await CheckUserExistAsync(model.UserId);

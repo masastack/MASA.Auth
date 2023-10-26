@@ -13,8 +13,7 @@ public static class CacheKey
     const string ACCOUNT_LOGIN_PRE = "account_login:";
     const string USER_SYSTEM_DATA_PRE = "user_system_data:";
     const string MSG_CODE_FOR_UPDATE_USER_PHONENUMBER = "msg_code_update_user_phoneNumber:";
-    const string MSG_CODE_FOR_LOGIN = "msg_code_login:";
-    const string MSG_CODE_FOR_REGISTER = "msg_code_register:";
+    const string MSG_CODE_REGISTER_LOGIN = "msg_code_register_and_login:";
     const string MSG_CODE_FOR_BIND = "msg_code_bind:";
     const string MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER = "msg_code_verifiy_user_phoneNumber:";
     const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_result:";
@@ -23,7 +22,6 @@ public static class CacheKey
     const string EMAIL_BIND_CODE_PRE = "email_bind_code:";
     const string EMAIL_BIND_SEND_CODE_PRE = "email_bind_send_code:";
     const string EMAIL_REGISTER_SEND_PRE = "email_register_send:";
-    const string SMS_REGISTER_SEND_PRE = "sms_register_send:";
     const string EMAIL_VERIFIY_CODE_PRE = "email_verifiy_code:";
     const string EMAIL_VERIFIY_SEND_PRE = "email_verifiy_send:";
     const string EMAIL_FORGOT_PASSWORD_CODE_PRE = "email_forgot_password_code:";
@@ -75,24 +73,14 @@ public static class CacheKey
         return $"{MSG_CODE_FOR_UPDATE_USER_PHONENUMBER}{userId}{phoneNumber}";
     }
 
-    public static string MsgCodeForLoginKey(string userId, string phoneNumber)
+    public static string MsgCodeRegisterAndLoginKey(string phoneNumber)
     {
-        return $"{MSG_CODE_FOR_LOGIN}{userId}{phoneNumber}";
-    }
-
-    public static string MsgCodeForRegisterKey(string phoneNumber)
-    {
-        return $"{MSG_CODE_FOR_REGISTER}{phoneNumber}";
+        return $"{MSG_CODE_REGISTER_LOGIN}{phoneNumber}";
     }
 
     public static string MsgCodeForBindKey(string phoneNumber)
     {
         return $"{MSG_CODE_FOR_BIND}{phoneNumber}";
-    }
-
-    public static string MsgCodeForRegisterSendKey(string phoneNumber)
-    {
-        return $"{SMS_REGISTER_SEND_PRE}{phoneNumber}";
     }
 
     public static string EmailCodeRegisterSendKey(string email)
