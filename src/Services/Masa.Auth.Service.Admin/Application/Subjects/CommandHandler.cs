@@ -320,6 +320,7 @@ public class CommandHandler
             await _eventBus.PublishAsync(registerUserCommand);
             command.Result = new UserDetailDto
             {
+                Id = registerUserCommand.Result.Id,
                 Account = registerUserCommand.Result.Account,
                 PhoneNumber = registerUserCommand.Result.PhoneNumber,
                 Avatar = registerUserCommand.Result.Avatar,
