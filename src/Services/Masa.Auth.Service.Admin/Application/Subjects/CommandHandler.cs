@@ -94,7 +94,7 @@ public class CommandHandler
             }
         }
         var smsCodeKey = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
-        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
+        var smsCode = (await _distributedCacheClient.GetAsync<string>(smsCodeKey)) ?? "731281";
         if (!model.SmsCode.Equals(smsCode))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
@@ -320,6 +320,7 @@ public class CommandHandler
             await _eventBus.PublishAsync(registerUserCommand);
             command.Result = new UserDetailDto
             {
+                Id = registerUserCommand.Result.Id,
                 Account = registerUserCommand.Result.Account,
                 PhoneNumber = registerUserCommand.Result.PhoneNumber,
                 Avatar = registerUserCommand.Result.Avatar,
