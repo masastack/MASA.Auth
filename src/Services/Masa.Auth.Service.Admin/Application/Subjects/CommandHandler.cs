@@ -177,8 +177,9 @@ public class CommandHandler
     public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         var userModel = command.User;
+
         var user = await CheckUserExistAsync(userModel.Id);
-        user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
+        user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.Avatar, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
         await _userDomainService.UpdateAsync(user);
     }
 
