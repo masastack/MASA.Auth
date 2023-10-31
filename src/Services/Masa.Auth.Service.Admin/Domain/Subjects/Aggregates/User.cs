@@ -308,8 +308,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         Gender = gender;
     }
 
-    public void UpdateBasicInfo(string name, string displayName, GenderTypes gender, string? companyName, string? department, string? position, AddressValue address)
+    public void UpdateBasicInfo(string name, string displayName, GenderTypes gender, string? avatar, string? companyName, string? department, string? position, AddressValue address)
     {
+        if (!string.IsNullOrEmpty(avatar)) Avatar = avatar.ToString();
         Name = name;
         DisplayName = displayName;
         Gender = gender;
