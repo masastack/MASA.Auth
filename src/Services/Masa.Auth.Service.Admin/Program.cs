@@ -175,19 +175,27 @@ await builder.Services.AddStackIsolationAsync(MasaStackProject.Auth.Name);
 
 builder.Services.AddStackMiddleware();
 
-await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
-{
-    await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
+//await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
+//{
+//    await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
+//    {
+//        builder.Services.AddOidcCache(publicConfiguration);
+
+//        await new AuthSeedData().SeedAsync(builder);
+
+//        await option.SeedStandardResourcesAsync();
+//        await option.SyncCacheAsync();
+//    });
+//});
+await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
         builder.Services.AddOidcCache(publicConfiguration);
 
-        await new AuthSeedData().SeedAsync(builder);
+        //await new AuthSeedData().SeedAsync(builder);
 
         await option.SeedStandardResourcesAsync();
         await option.SyncCacheAsync();
     });
-});
-
 var app = builder.AddServices(options =>
 {
     options.DisableAutoMapRoute = true; // todo :remove it before v1.0
