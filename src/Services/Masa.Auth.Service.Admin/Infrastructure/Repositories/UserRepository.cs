@@ -33,7 +33,7 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
     {
         var result = new List<User>();
         var pageSize = 5000;
-        for (int i = 0; i < 50; i++)
+        for (int i = 1; i < 50; i++)
         {
             var users = await Context.Set<User>().Where(u => !u.IsDeleted).Skip((i - 1) * pageSize).Take(pageSize)
             .Include(u => u.Roles)
