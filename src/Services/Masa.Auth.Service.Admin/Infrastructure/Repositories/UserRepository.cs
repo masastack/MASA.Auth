@@ -42,9 +42,11 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
             .AsNoTracking()
             .AsSplitQuery()
             .ToListAsync();
-            if (users.Count == 0)
-                break;
             result.AddRange(users);
+            if (users.Count < pageSize)
+            {
+                break;
+            }
         }
 
         return result;
