@@ -31,13 +31,25 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
 
     public async Task<List<User>> GetAllAsync()
     {
-        return await Context.Set<User>().Where(u => !u.IsDeleted)
+        var result = new List<User>();
+        var pageIndex = 0;
+        var pageSize = 5000;
+        for (int i = 0; i < 50; i++)
+        {
+            var users = await Context.Set<User>().Where(u => !u.IsDeleted).Skip(pageIndex).Take(pageSize)
             .Include(u => u.Roles)
             .ThenInclude(ur => ur.Role)
             .Include(u => u.Permissions)
             .AsNoTracking()
             .AsSplitQuery()
             .ToListAsync();
+            if (users.Count == 0)
+                break;
+            pageIndex += pageSize;
+            result.AddRange(users);
+        }
+
+        return result;
     }
 
     public async Task<User> GetByVoucherAsync(string voucher)
