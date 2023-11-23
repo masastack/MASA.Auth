@@ -18,6 +18,12 @@
                         <STextField @bind-Value="ApiResource.Description" Label="@T("Description")" />
                     </MCol>
                 </MRow>
+                <MRow Class="mb-6">
+                     <MCol>
+                         <DefaultTitle class="mb-2">@T("User Claims")</DefaultTitle>
+                         <DynamicComponent Type="@_otherType" Parameters=_componentMetadata />
+                    </MCol>
+                </MRow>
                 <div class="d-flex mb-10">
                     <MCheckbox @bind-Value="ApiResource.ShowInDiscoveryDocument" Class="pt-0 mt-0" Label="@T(nameof(ApiResource.ShowInDiscoveryDocument))" TValue="bool"/>
                 </div>
