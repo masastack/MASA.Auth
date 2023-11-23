@@ -25,9 +25,9 @@ public partial class UpdateApiResourceDialog
 
     private ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
-    Type _otherType = null!;
-    Dictionary<string, object> _componentMetadata = new();
-    ClientCredentialDto _clientCredentialDto = new();
+    private Type _otherType = null!;
+    private Dictionary<string, object> _componentMetadata = new();
+    private ClientCredentialDto _clientCredentialDto = new();
 
     protected override void OnInitialized()
     {
