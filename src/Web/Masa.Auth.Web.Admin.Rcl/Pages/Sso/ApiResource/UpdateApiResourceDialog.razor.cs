@@ -25,24 +25,10 @@ public partial class UpdateApiResourceDialog
 
     private ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
-    private Type _otherType = null!;
-    private Dictionary<string, object> _componentMetadata = new();
-    private ClientCredentialDto _clientCredentialDto = new();
-
     protected override void OnInitialized()
     {
         PageName = "ApiResourceBlock";
-        PrepareHeader();
         base.OnInitialized();
-    }
-
-    private void PrepareHeader()
-    {
-
-        _otherType = typeof(ClientSecret);
-        _componentMetadata = new Dictionary<string, object>{
-                { "Dto",_clientCredentialDto }
-            };
     }
 
     private async Task UpdateVisible(bool visible)
