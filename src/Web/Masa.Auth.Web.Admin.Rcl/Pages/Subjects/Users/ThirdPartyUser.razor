@@ -3,8 +3,8 @@
 <AutoHeight Card CardClass="pl-6 pr-2 py-0">
     <HeaderContent>
         <div class="d-flex">
-            <MSpacer />
-            <SSearch @bind-Value="Search" BackgroundColor="#fff" />        
+            <MSpacer/>
+            <SSearch @bind-Value="Search" BackgroundColor="#fff"/>
             <div @onclick="() => Filter = !(Filter ?? false)" class="ml-4 d-flex button white">
                 <SIcon Class="ma-auto" Color="emphasis2" Size=20>
                     @(Filter is true ? IconConstants.FilterOff : IconConstants.Filter)
@@ -15,13 +15,13 @@
             </SButton>
         </div>
         <div id="thirdPartyUserFilter" class="@FilterClass">
-            <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime />
+            <SDateRangePicker @bind-StartTime=StartTime @bind-EndTime=EndTime/>
             <MRow class="ml-6">
                 <MCol Md=4>
-                    <BooleanSelect FillBackground=false @bind-Value="Enabled" Small AutoLabel=false Label="@T("UserState")" />
+                    <BooleanSelect FillBackground=false @bind-Value="Enabled" Small AutoLabel=false Label="@T("UserState")"/>
                 </MCol>
                 <MCol Md=4>
-                    <ThirdPartyIdpSelect FillBackground=false @bind-Value="ThirdPartyId" Clearable Small Label="@T("Source")" />
+                    <ThirdPartyIdpSelect FillBackground=false @bind-Value="ThirdPartyId" Clearable Small Label="@T("Source")"/>
                 </MCol>
             </MRow>
         </div>
@@ -29,11 +29,11 @@
     <AutoHeightContent>
         <SDataTable
             Dense
-	    Height="@(Filter is true?"calc(100vh - 325px)":"calc(100vh - 260px)")"
-            Headers="GetHeaders()" 
+            Height="@(Filter is true ? "calc(100vh - 325px)" : "calc(100vh - 260px)")"
+            Headers="GetHeaders()"
             Items="ThirdPartyUsers"
             FixedHeader
-            TItem="ThirdPartyUserDto" 
+            TItem="ThirdPartyUserDto"
             ItemsPerPage="PageSize"
             Class="mr-2">
             <HeaderColContent Context="header">
@@ -43,12 +43,12 @@
                 @switch (context.Header.Value)
                 {
                     case nameof(UserDto.Avatar):
-                        <div class="hover-pointer d-flex" @onclick="()=> OpenViewThirdPartyUserDialog(context.Item)">
+                        <div class="hover-pointer d-flex" @onclick="() => OpenViewThirdPartyUserDialog(context.Item)">
                             <MAvatar Size=40>
-                                <img src="@context.Item.User.Avatar" />
+                                <img src="@context.Item.User.Avatar"/>
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div>@ReturnNotNullValue(context.Item.User.DisplayName,context.Item.User.Name,context.Item.User.Account)</div>
+                                <div>@ReturnNotNullValue(context.Item.User.DisplayName, context.Item.User.Name, context.Item.User.Account)</div>
                             </div>
                         </div>
                         break;
@@ -61,22 +61,25 @@
                         else
                         {
                             <MAvatar Size="24">
-                                <img src="@context.Item.IdpDetailDto.Icon" />
+                                <img src="@context.Item.IdpDetailDto.Icon"/>
                             </MAvatar>
                         }
                         break;
                     case (nameof(ThirdPartyUserDto.CreationTime)):
-                        <SDateTimeTitle Value=context.Item.CreationTime />
+                        <SDateTimeTitle Value=context.Item.CreationTime/>
                         break;
                     case (nameof(ThirdPartyUserDto.ModificationTime)):
-                        <SDateTimeTitle Value=context.Item.ModificationTime />
+                        <SDateTimeTitle Value=context.Item.ModificationTime/>
                         break;
                     case nameof(UserDto.Enabled):
-                        <EnableChip Value=context.Item.Enabled />
+                        <EnableChip Value=context.Item.Enabled/>
                         break;
                     case "Action":
-                        <MButton Class="mr-4" Icon OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">
-                            <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
+                          @*<MButton Class="mr-4" Icon OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">
+                                <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
+                            </MButton> *@
+                        <MButton Class="mr-4" Icon OnClick="() => OpenRemoveDialog(context.Item)">
+                            <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
                         </MButton>
                         break;
                     default:
@@ -87,9 +90,9 @@
         </SDataTable>
     </AutoHeightContent>
     <FooterContent>
-        <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total />
+        <SPagination Class="mt-4" @bind-Page="Page" @bind-PageSize=PageSize Total=Total/>
     </FooterContent>
 </AutoHeight>
 
-<ViewThirdPartyUserDialog @bind-Visible=ViewThirdPartyUserDialog ThirdPartyUserId=CurrentThirdPartyUserId />
-<LdapDialog @ref="ldapDialog" OnSubmitted="ReloadAsync" />
+<ViewThirdPartyUserDialog @bind-Visible=ViewThirdPartyUserDialog ThirdPartyUserId=CurrentThirdPartyUserId/>
+<LdapDialog @ref="ldapDialog" OnSubmitted="ReloadAsync"/>
