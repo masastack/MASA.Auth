@@ -188,6 +188,12 @@ public class ThirdPartyCommandHandler
         await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId);
     }
 
+    [EventHandler]
+    public async Task RemoveThirdPartyUserByIdAsync(RemoveThirdPartyUserByIdCommand command)
+    {
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.Id == command.Id);
+    }
+
     #region ThirdPartyIdp
 
     [EventHandler(1)]

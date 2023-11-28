@@ -75,9 +75,12 @@
                         <EnableChip Value=context.Item.Enabled />
                         break;
                     case "Action":
-                        <MButton Class="mr-4" Icon OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">
+@*                         <MButton Class="mr-4" Icon OnClick="()=> OpenViewThirdPartyUserDialog(context.Item)">
                             <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
-                        </MButton>
+                            </MButton> *@
+                        <MButton Class="mr-4" Icon OnClick="()=> OpenRemoveDialog(context.Item)">
+                             <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
+                            </MButton>
                         break;
                     default:
                         <SItemCol Value="@context.Value"></SItemCol>
