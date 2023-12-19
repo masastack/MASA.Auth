@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Humanizer;
+
 namespace Masa.Auth.Service.Admin.Services;
 
 public class ThirdPartyUserService : RestServiceBase
@@ -62,5 +64,10 @@ public class ThirdPartyUserService : RestServiceBase
     private async Task RemoveAsync(IEventBus eventBus, [FromBody] RemoveThirdPartyUserDto dto)
     {
         await eventBus.PublishAsync(new RemoveThirdPartyUserByIdCommand(dto.Id));
+    }
+
+    private async Task RemoveByThridPartyIdentityAsync(IEventBus eventBus, [FromBody] RemoveThirdPartyUserByThridPartyIdentityDto dto)
+    {
+        await eventBus.PublishAsync(new RemoveThirdPartyUserByThridPartyIdentityCommand(dto.ThridPartyIdentity));
     }
 }
