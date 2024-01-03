@@ -30,7 +30,7 @@
                                 Roles=Role.ChildrenRoles 
                                 HasPreview
                                 @bind-Value=Role.Permissions
-                                @bind-Preview=Preview/>
+                                @bind-Preview=@Preview/>
                         </div>
                     </MWindowItem>
                 </MWindow>
@@ -41,9 +41,9 @@
                     <MSpacer></MSpacer>
                     @if(Tab == UpdateRoleTabs.Permission)
                     {
-                        <SButton Medium Outlined Class="mr-6" OnClick="() => Preview = true">@T("Preview")</SButton>
+                        <SButton Medium Outlined Class="mr-6" OnClick="@(() => Preview = true)">@T("Preview")</SButton>
                     }
-                    <SButton Medium OnClick="async () => await UpdateRoleAsync(context)">@T("Save")</SButton>
+                    <SButton Medium OnClick="@(() => UpdateRoleAsync(context!))">@T("Save")</SButton>
                 </div>
             </FooterContent>
         </AutoHeight>
