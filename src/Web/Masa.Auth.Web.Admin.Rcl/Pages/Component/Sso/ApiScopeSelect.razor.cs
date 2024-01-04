@@ -6,12 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Sso;
 public partial class ApiScopeSelect
 {
     [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
-    public string Style { get; set; } = "";
-
-    [Parameter]
     public int Chunk { get; set; } = 5;
 
     [Parameter]

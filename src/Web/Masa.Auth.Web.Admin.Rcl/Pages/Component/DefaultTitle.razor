@@ -8,6 +8,10 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    [Parameter]
-    public string Class { get; set; } = "mb-4 mt-6";
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Class = "mb-4 mt-6";
+    }
 }
