@@ -17,9 +17,6 @@ public partial class TeamRoleSelect
     [Parameter]
     public EventCallback<List<Guid>> RolesChanged { get; set; }
 
-    [Parameter]
-    public string Class { get; set; } = "";
-
     private List<TeamRoleSelectDto> Teams { get; set; } = new();
 
     private TeamService TeamService => AuthCaller.TeamService;

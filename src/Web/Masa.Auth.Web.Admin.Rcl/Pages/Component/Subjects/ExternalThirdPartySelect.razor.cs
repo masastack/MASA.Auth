@@ -6,12 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Subjects;
 public partial class ExternalThirdPartySelect
 {
     [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
-    public string Style { get; set; } = "";
-
-    [Parameter]
     public string Value { get; set; } = "";
 
     private string InternalValue { get; set; } = "";

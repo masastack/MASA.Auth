@@ -1,36 +1,55 @@
 ﻿@inherits AdminCompontentBase
 
-<SGroupBox Class="@Class" Style="Style" Title="@T("RoleOwner")">
+<SGroupBox Class="@Class" Style="@Style" Title="@T("RoleOwner")">
     <div style="min-height:48px;">
-         @if (Role.Users.Count > 0)
+        @if (Role.Users.Count > 0)
         {
             <div class="caption">@T("Member")</div>
             <div class="ml-4 mt-3">
-                @foreach (var user in Role.Users)
+                @foreach (var user in Role.Users.Take(5))
                 {
-                    <MChip Class="mr-3 pl-0" Style="height:28px;">
-                        <MAvatar Size=24>
-                            <img src="@user.Avatar" />
-                        </MAvatar>
-                        <span class="body2 regular--text ml-1">@user.DisplayName</span>
-                    </MChip>
+                    @RenderChip(user.Avatar, user.DisplayName)
                 }
+
+                @RenderMore(Role.Users.Count)
             </div>
         }
+
         @if (Role.Teams.Count > 0)
         {
             <div class="caption mt-3">@T("Team")</div>
             <div class="ml-4 mt-3">
-                @foreach (var team in Role.Teams)
+                @foreach (var team in Role.Teams.Take(5))
                 {
-                    <MChip Class="mr-3" Style="height:28px;">
-                        <MAvatar Left Size=24>
-                            <img src="@team.Avatar" />
-                        </MAvatar>
-                        <span class="body2 regular--text">@team.Name</span>
-                    </MChip>
+                    @RenderChip(team.Avatar, team.Name)
                 }
+
+                @RenderMore(Role.Teams.Count)
             </div>
         }
     </div>
 </SGroupBox>
+
+@code {
+
+    private RenderFragment RenderChip(string avatar, string displayName) => __builder =>
+    {
+        <MChip Class="mr-3 pl-0" Style="height:28px;">
+            <MAvatar Size=24>
+                <img src="@avatar" />
+            </MAvatar>
+            <span class="body2 regular--text ml-1">@displayName</span>
+        </MChip>
+    };
+
+    private RenderFragment RenderMore(int count) => __builder =>
+    {
+        if (count > 5)
+        {
+            <span class="grey--text text-caption">
+                (+@(count - 5) @T("More"))
+            </span>
+        }
+    };
+
+}

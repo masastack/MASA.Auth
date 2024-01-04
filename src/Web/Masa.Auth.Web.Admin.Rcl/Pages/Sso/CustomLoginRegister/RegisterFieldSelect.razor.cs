@@ -6,12 +6,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister;
 public partial class RegisterFieldSelect
 {
     [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
-    public string Style { get; set; } = "";
-
-    [Parameter]
     public RegisterFieldTypes Value { get; set; } = new();
 
     [Parameter]

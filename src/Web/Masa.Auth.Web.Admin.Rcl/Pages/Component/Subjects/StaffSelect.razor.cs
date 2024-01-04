@@ -21,9 +21,6 @@ public partial class StaffSelect
     public bool Readonly { get; set; }
 
     [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
     public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 
     bool _staffLoading;
