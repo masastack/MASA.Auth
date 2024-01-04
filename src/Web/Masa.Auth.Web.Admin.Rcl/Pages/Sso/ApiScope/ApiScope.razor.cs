@@ -55,18 +55,20 @@ public partial class ApiScope
     protected override async Task OnInitializedAsync()
     {
         PageName = "ApiScopeBlock";
+        
+        _headers = new List<DataTableHeader<ApiScopeDto>> {
+            new() { Text = T("Name"), Value = nameof(ApiScopeDto.Name), Sortable = false, Width="250px" },
+            new() { Text = T(nameof(ApiScopeDto.DisplayName)), Value = nameof(ApiScopeDto.DisplayName), Sortable = false , Width="250px"},
+            new() { Text = T("Required"), Value = nameof(ApiScopeDto.Required), Sortable = false, Width="105px" },
+            new() { Text = T(nameof(ApiScopeDto.Description)), Value = nameof(ApiScopeDto.Description), Sortable = false },
+            new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false, Width="105px" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        }; 
+        
         await GetApiScopesAsync();
     }
 
-    public List<DataTableHeader<ApiScopeDto>> GetHeaders() => new()
-    {
-        new() { Text = T("Name"), Value = nameof(ApiScopeDto.Name), Sortable = false, Width="250px" },
-        new() { Text = T(nameof(ApiScopeDto.DisplayName)), Value = nameof(ApiScopeDto.DisplayName), Sortable = false , Width="250px"},
-        new() { Text = T("Required"), Value = nameof(ApiScopeDto.Required), Sortable = false, Width="105px" },
-        new() { Text = T(nameof(ApiScopeDto.Description)), Value = nameof(ApiScopeDto.Description), Sortable = false },
-        new() { Text = T("State"), Value = nameof(ApiScopeDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
+    private List<DataTableHeader<ApiScopeDto>> _headers = new();
 
     public async Task GetApiScopesAsync()
     {

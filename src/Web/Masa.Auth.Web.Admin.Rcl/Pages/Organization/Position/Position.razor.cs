@@ -57,19 +57,21 @@ public partial class Position
     public bool UpdatePositionDialogVisible { get; set; }
 
     private PositionService PositionService => AuthCaller.PositionService;
+    
+    private List<DataTableHeader<PositionDto>> _headers = new();
 
     protected override async Task OnInitializedAsync()
     {
         PageName = "PositionBlock";
+
+        _headers = new List<DataTableHeader<PositionDto>>() {
+            new() { Text = T("Index"), Value = "Index", Sortable = false, Width = "105px" },
+            new() { Text = T("Name"), Value = nameof(PositionDto.Name), Sortable = false },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width = "105px" },
+        };
+        
         await GetPositionsAsync();
     }
-
-    public List<DataTableHeader<PositionDto>> GetHeaders() => new()
-    {
-        new() { Text = T("Index"), Value = "Index", Sortable = false , Width="105px" },
-        new() { Text = T("Name"), Value = nameof(PositionDto.Name), Sortable = false },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
 
     public async Task GetPositionsAsync()
     {
