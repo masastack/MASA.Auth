@@ -8,12 +8,6 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Component.Sso;
 public partial class ClientSelect
 {
     [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
-    public string Style { get; set; } = "";
-
-    [Parameter]
     public bool Disabled { get; set; }
 
     [Parameter]

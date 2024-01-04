@@ -10,12 +10,6 @@ public partial class RoleOwner
 
     private Guid OldRoleId { get; set; }
 
-    [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
-    public string Style { get; set; } = "";
-
     protected RoleOwnerDto Role { get; set; } = new();
 
     protected RoleService RoleService => AuthCaller.RoleService;
