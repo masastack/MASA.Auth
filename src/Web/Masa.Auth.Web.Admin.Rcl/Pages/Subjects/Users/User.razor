@@ -30,7 +30,7 @@
     <AutoHeightContent>
         <SDataTable Dense
                     FixedHeader="true"
-                    Headers="GetHeaders()"
+                    Headers="@_headers"
                     Height="@(Filter is true ? "calc(100vh - 325px)" : "calc(100vh - 260px)")"
                     Items="Users"
                     TItem="UserDto"

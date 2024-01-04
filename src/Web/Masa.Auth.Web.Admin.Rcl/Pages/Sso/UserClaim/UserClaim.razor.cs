@@ -55,16 +55,18 @@ public partial class UserClaim
     protected override async Task OnInitializedAsync()
     {
         PageName = "UserClaimBlock";
+        
+        _headers = new List<DataTableHeader<UserClaimDto>> {
+            new() { Text = T("Name"), Value = nameof(UserClaimDto.Name), Sortable = false, Width="250px" },
+            new() { Text = T(nameof(UserClaimDto.Description)), Value = nameof(UserClaimDto.Description), Sortable = false },
+            new() { Text = T("Type"), Value = nameof(UserClaimDto.UserClaimType), Sortable = false, Width="105px" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        };
+        
         await GetUserClaimsAsync();
     }
 
-    public List<DataTableHeader<UserClaimDto>> GetHeaders() => new()
-    {
-        new() { Text = T("Name"), Value = nameof(UserClaimDto.Name), Sortable = false, Width="250px" },
-        new() { Text = T(nameof(UserClaimDto.Description)), Value = nameof(UserClaimDto.Description), Sortable = false },
-        new() { Text = T("Type"), Value = nameof(UserClaimDto.UserClaimType), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
+    private List<DataTableHeader<UserClaimDto>> _headers = new();
 
     public async Task GetUserClaimsAsync()
     {

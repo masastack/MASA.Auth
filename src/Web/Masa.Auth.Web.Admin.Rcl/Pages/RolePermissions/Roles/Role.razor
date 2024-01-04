@@ -20,7 +20,7 @@
         <AutoHeightContent>
             <SDataTable Dense
                 Height="@("calc(100vh - 288px)")"
-                Headers="GetHeaders()"
+                Headers="@_headers"
                 Items="Roles"
                 TItem="RoleDto"
                 ItemsPerPage="PageSize">

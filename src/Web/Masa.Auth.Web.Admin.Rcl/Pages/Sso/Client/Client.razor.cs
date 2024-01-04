@@ -12,19 +12,21 @@ public partial class Client
 
     ClientService _clientService => AuthCaller.ClientService;
 
-    public List<DataTableHeader<ClientDto>> GetHeaders() => new()
-    {
-        new() { Text = T(nameof(ClientDto.ClientName)), Value = nameof(ClientDto.ClientName), Sortable = false , Width="300px"},
-        new() { Text = T(nameof(ClientDto.ClientId)), Value = nameof(ClientDto.ClientId), Sortable = false, Width="300px" },
-        new() { Text = T(nameof(ClientDto.ClientType)), Value = nameof(ClientDto.ClientType), Sortable = false, Width="105px" },
-        new() { Text = T(nameof(ClientDto.Description)), Value = nameof(ClientDto.Description), Sortable = false },
-        new() { Text = T(nameof(ClientDto.Enabled)), Value = nameof(ClientDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
+    private List<DataTableHeader<ClientDto>> _headers = new();
 
     protected override void OnInitialized()
     {
         PageName = "ClientBlock";
+        
+        _headers = new List<DataTableHeader<ClientDto>> {
+            new() { Text = T(nameof(ClientDto.ClientName)), Value = nameof(ClientDto.ClientName), Sortable = false , Width="300px"},
+            new() { Text = T(nameof(ClientDto.ClientId)), Value = nameof(ClientDto.ClientId), Sortable = false, Width="300px" },
+            new() { Text = T(nameof(ClientDto.ClientType)), Value = nameof(ClientDto.ClientType), Sortable = false, Width="105px" },
+            new() { Text = T(nameof(ClientDto.Description)), Value = nameof(ClientDto.Description), Sortable = false },
+            new() { Text = T(nameof(ClientDto.Enabled)), Value = nameof(ClientDto.Enabled), Sortable = false, Width="105px" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        };
+        
         base.OnInitialized();
     }
 

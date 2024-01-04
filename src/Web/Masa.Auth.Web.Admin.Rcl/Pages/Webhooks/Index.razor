@@ -19,7 +19,7 @@
         </HeaderContent>
         <AutoHeightContent>
             <SDataTable Height="@("calc(100vh - 288px)")"
-                        Headers="GetHeaders()"
+                        Headers="_headers"
                         Items="_paginationDto.Items"
                         TItem="WebhookItemDto"
                         ItemsPerPage="_getWebhookPaginationDto.PageSize">

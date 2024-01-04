@@ -7,6 +7,7 @@ public partial class IdentityResource
 {
     private string? _search;
     private int _page = 1, _pageSize = 20;
+    private List<DataTableHeader<IdentityResourceDto>> _headers = new();
 
     public string Search
     {
@@ -55,18 +56,20 @@ public partial class IdentityResource
     protected override async Task OnInitializedAsync()
     {
         PageName = "IdentityResourceBlock";
+
+        _headers = new List<DataTableHeader<IdentityResourceDto>> {
+            new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false, Width = "250px" },
+            new() {
+                Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false, Width = "250px"
+            },
+            new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false, Width = "105px" },
+            new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
+            new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false, Width = "105px" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width = "105px" },
+        };
+
         await GetIdentityResourcesAsync();
     }
-
-    public List<DataTableHeader<IdentityResourceDto>> GetHeaders() => new()
-    {
-        new() { Text = T("Name"), Value = nameof(IdentityResourceDto.Name), Sortable = false, Width="250px"},
-        new() { Text = T(nameof(IdentityResourceDto.DisplayName)), Value = nameof(IdentityResourceDto.DisplayName), Sortable = false, Width="250px" },
-        new() { Text = T("Required"), Value = nameof(IdentityResourceDto.Required), Sortable = false, Width="105px" },
-        new() { Text = T(nameof(IdentityResourceDto.Description)), Value = nameof(IdentityResourceDto.Description), Sortable = false },
-        new() { Text = T("State"), Value = nameof(IdentityResourceDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
 
     public async Task GetIdentityResourcesAsync()
     {
@@ -100,7 +103,8 @@ public partial class IdentityResource
 
     public async Task OpenRemoveIdentityResourceDialog(IdentityResourceDto identityResource)
     {
-        var confirm = await OpenConfirmDialog(T("Delete IdentityResource"), T("Are you sure delete identityResource \"{0}\"?", identityResource.Name));
+        var confirm = await OpenConfirmDialog(T("Delete IdentityResource"),
+            T("Are you sure delete identityResource \"{0}\"?", identityResource.Name));
         if (confirm) await RemoveIdentityResourceAsync(identityResource.Id);
     }
 
@@ -111,4 +115,3 @@ public partial class IdentityResource
         await GetIdentityResourcesAsync();
     }
 }
-
