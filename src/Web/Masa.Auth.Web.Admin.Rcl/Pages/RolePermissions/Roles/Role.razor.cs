@@ -99,8 +99,10 @@ public partial class Role
 
     public async Task GetRolesAsync()
     {
-        var reuquest = new GetRolesDto(Page, PageSize, Search, Enabled);
-        var response = await RoleService.GetListAsync(reuquest);
+        PopupService.ShowProgressLinear();
+        var request = new GetRolesDto(Page, PageSize, Search, Enabled);
+        var response = await RoleService.GetListAsync(request);
+        PopupService.HideProgressLinear();
         Roles = response.Items;
         Total = response.Total;
         StateHasChanged();
