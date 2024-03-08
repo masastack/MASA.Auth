@@ -422,12 +422,13 @@ public class QueryHandler
                                          .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
-
+        
         if (tpUser != null && tpUser.User != null && userModel != null)
         {
             var staff = tpUser.User.Staff;
             userModel.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
             userModel.CurrentTeamId = staff?.CurrentTeamId;
+            userModel.ClaimData = tpUser.ClaimData;
         }
 
         query.Result = userModel;

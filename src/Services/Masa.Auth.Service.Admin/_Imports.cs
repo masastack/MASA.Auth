@@ -74,6 +74,7 @@ global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Repositorie
 global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.Constans;
 global using Masa.BuildingBlocks.Caching;
 global using Masa.BuildingBlocks.Configuration;
+global using Masa.BuildingBlocks.Data.Contracts;
 global using Masa.BuildingBlocks.Data.UoW;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities.Auditing;
@@ -147,3 +148,4 @@ global using System.Text.RegularExpressions;
 global using IdentityProvider = Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
+

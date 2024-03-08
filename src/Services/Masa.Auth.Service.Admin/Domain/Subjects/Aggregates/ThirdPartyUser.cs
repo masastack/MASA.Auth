@@ -49,6 +49,8 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public IdentityProvider IdentityProvider => _identityProvider;
 
+    public Dictionary<string, string> ClaimData { get; private set; } = new();
+
     public ThirdPartyUser(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
@@ -81,6 +83,11 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
     {
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
+    }
+
+    public void UpdateClaimData(Dictionary<string, string> claimData)
+    {
+        ClaimData = claimData;
     }
 
     public static implicit operator ThirdPartyUserDetailDto(ThirdPartyUser tpu)
