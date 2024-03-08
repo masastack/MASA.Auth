@@ -12,12 +12,12 @@
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="1.0.1-preview.11" />
+	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="1.0.1-preview.12" />
 	<!--<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />-->
     <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
 	<PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />
 	<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />
+	<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="1.0.1-preview.12" />
     <PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

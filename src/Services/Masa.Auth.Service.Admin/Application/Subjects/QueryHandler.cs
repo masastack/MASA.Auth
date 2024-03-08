@@ -434,6 +434,22 @@ public class QueryHandler
         query.Result = userModel;
     }
 
+    [EventHandler]
+    public async Task GetThirdPartyUserByUserIdAsync(ThirdPartyUserByUserIdQuery query)
+    {
+        var tpUser = await _authDbContext.Set<ThirdPartyUser>()
+                                         .Include(tpu => tpu.User)
+                                         .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == query.ThirdPartyIdpId && tpu.UserId == query.UserId);
+        var userModel = tpUser?.User?.Adapt<UserModel>();
+
+        if (tpUser != null && tpUser.User != null && userModel != null)
+        {
+            userModel.ClaimData = tpUser.ClaimData;
+        }
+
+        query.Result = userModel;
+    }
+
     #endregion
 
     #region ThirdPartyIdp
