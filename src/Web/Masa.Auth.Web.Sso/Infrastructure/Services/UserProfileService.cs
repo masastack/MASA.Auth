@@ -25,7 +25,10 @@ public class UserProfileService : IProfileService
                 var claimValues = await _authClient.UserService.GetClaimValuesAsync(userId);
                 foreach (var claimValue in claimValues)
                 {
-                    context.IssuedClaims.TryAdd(new Claim(claimValue.Key, claimValue.Value));
+                    if (!context.IssuedClaims.Any(x=>x.Type == claimValue.Key))
+                    {
+                        context.IssuedClaims.TryAdd(new Claim(claimValue.Key, claimValue.Value));
+                    }
                 }
             }
         }
