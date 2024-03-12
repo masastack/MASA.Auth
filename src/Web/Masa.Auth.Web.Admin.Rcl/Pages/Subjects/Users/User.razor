@@ -67,12 +67,15 @@
                             <MButton Icon OnClick="()=> OpenUpdateUserDialog(context.Item)">
                                 <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>
                             </MButton>
-                            <MButton Class="mx-4" Icon OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.Id)">
+                            <MButton Class="ml-4" Icon OnClick="async ()=> await _userAuthorizeDialog.ShowAsync(context.Item.Id)">
                                 <SIcon Tooltip="@T("Authorize")">@IconConstants.Authorize</SIcon>
                             </MButton>
-                            <MButton Icon OnClick="async ()=> await _userClaimsDialog.ShowAsync(context.Item.Id)">
+                             <MButton Class="ml-4" Icon OnClick="async ()=> await _userClaimsDialog.ShowAsync(context.Item.Id)">
                                 <SIcon Tooltip="@T("Claim")">@IconConstants.Claim</SIcon>
                             </MButton>
+                             <MButton Class="ml-4" Icon OnClick="async ()=> await _userClaimsDialog.ShowAsync(context.Item.Id)">
+                                 <SIcon Tooltip="@T("ImpersonationLogin")">mdi-login-variant</SIcon>
+                             </MButton>
                         </div>
                         break;
                     default:

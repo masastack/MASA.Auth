@@ -775,4 +775,19 @@ public class QueryHandler
             userClaimValuesQuery.Result.TryAdd("userName", user.DisplayName);
         }
     }
+
+    [EventHandler]
+    public async Task GetImpersonatedUserAsync(ImpersonatedUserQuery query)
+    {
+        var key = CacheKey.ImpersonationUserKey(query.ImpersonationToken);
+        var cacheItem = await _distributedCacheClient.GetAsync<ImpersonationCacheItem>(key);
+        if (cacheItem == null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IMPERSONATION_TOKEN_ERROR_MESSAGE);
+        }
+
+        query.Result = cacheItem;
+
+        await _distributedCacheClient.RemoveAsync(key);
+    }
 }

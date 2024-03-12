@@ -32,6 +32,7 @@ public static class CacheKey
     const string EMAIL_UPDATE_SEND_PRE = "email_update_send:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
     const string MSG_VERIFIY_CODE_SEND_EXPIRED = "msg_verifiy_code_send_expired:";
+    const string IMPERSONATION_USER= "impersonation_user:";
 
     public static string AllPermissionKey()
     {
@@ -161,5 +162,10 @@ public static class CacheKey
     public static string MsgVerifiyCodeSendExpired(string key)
     {
         return $"{MSG_VERIFIY_CODE_SEND_EXPIRED}{key}";
+    }
+
+    public static string ImpersonationUserKey(string impersonationToken)
+    {
+        return $"{IMPERSONATION_USER}{impersonationToken}";
     }
 }

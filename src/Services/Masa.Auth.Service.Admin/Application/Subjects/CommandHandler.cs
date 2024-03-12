@@ -22,6 +22,7 @@ public class CommandHandler
     private readonly IUnitOfWork _unitOfWork;
     private readonly LdapDomainService _ldapDomainService;
     private readonly RoleDomainService _roleDomainService;
+    private readonly IUserContext _userContext;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -40,7 +41,8 @@ public class CommandHandler
         IMasaConfiguration masaConfiguration,
         IUnitOfWork unitOfWork,
         LdapDomainService ldapDomainService,
-        RoleDomainService roleDomainService)
+        RoleDomainService roleDomainService,
+        IUserContext userContext)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -59,6 +61,7 @@ public class CommandHandler
         _unitOfWork = unitOfWork;
         _ldapDomainService = ldapDomainService;
         _roleDomainService = roleDomainService;
+        _userContext = userContext;
     }
 
     #region User
@@ -614,5 +617,32 @@ public class CommandHandler
         user.UserClaimValues(saveUserClaimValuesCommand.ClaimValues);
 
         await _userDomainService.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task ImpersonateAsync(ImpersonateUserCommand command)
+    {
+        var userId = _userContext.GetUserId<Guid>();
+        if (userId == default)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+        var cacheItem = new ImpersonationCacheItem(
+                command.UserId,
+                command.IsBackToImpersonator
+            );
+
+        if (!command.IsBackToImpersonator)
+        {
+            cacheItem.ImpersonatorUserId = userId;
+        }
+
+        var token = Guid.NewGuid().ToString();
+        var key = CacheKey.ImpersonationUserKey(token);
+        await _distributedCacheClient.SetAsync(key, cacheItem, TimeSpan.FromMinutes(1));
+
+        command.Result = new ImpersonateOutput {
+            ImpersonationToken = token
+        };
     }
 }
