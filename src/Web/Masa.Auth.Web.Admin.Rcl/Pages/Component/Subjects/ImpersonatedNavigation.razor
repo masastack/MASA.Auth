@@ -1,0 +1,127 @@
+﻿@using Masa.BuildingBlocks.StackSdks.Auth;
+@using Masa.BuildingBlocks.StackSdks.Pm;
+@using Microsoft.AspNetCore.Hosting;
+@inherits AdminCompontentBase
+@inject IMultiEnvironmentUserContext MultiEnvironmentUserContext
+@inject IWebHostEnvironment WebHostEnvironment
+@inject IMasaStackConfig MasaStackConfig
+@inject IPmClient PmClient
+@inject IAuthClient AuthClient
+
+<MDialog Value="_visible"
+         ValueChanged="VisibleChanged"
+         Fullscreen
+         Transition="dialog-top-transition">
+    <ActivatorContent>
+        @ActivatorContent?.Invoke(context)
+    </ActivatorContent>
+    <ChildContent>
+        <MCard>
+            <div class="global-nav">
+                <div class="global-nav-left">
+                    <div class="global-nav-left__content">
+                        <div class="global-nav-left__group">
+                            <div class="global-nav-left__title">
+                                @T("Favorites")
+                            </div>
+                            <div class="full-width mt-3">
+                                @if (_favorites == null)
+                                {
+                                    <MSkeletonLoader Class="transparent" Type="list-item@3" />
+                                }
+                                else
+                                {
+                                    @foreach (var item in _favorites)
+                                    {
+                                        <MListItem Dense
+                                                   Class="mb-1 full-width rounded-2 masa-text-2-2"
+                                                   OnClick="@(() => NavigateTo(item.GetData(MENU_URL_NAME)))">
+                                            <MListItemContent>
+                                                <MListItemTitle>@DT(item.Name)</MListItemTitle>
+                                            </MListItemContent>
+                                            <MListItemAction Class="ma-0">
+                                                <SAutoLoadingButton Icon Small Color="#FFB547"
+                                                                    OnClick="@(() => FavoriteRemoveAsync(item))"
+                                                                    OnClickStopPropagation>
+                                                    <SIcon Small Tooltip="@T("CancelFavorite")">mdi-star</SIcon>
+                                                </SAutoLoadingButton>
+                                            </MListItemAction>
+                                        </MListItem>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="global-nav-left__group">
+                            <div class="global-nav-left__title">
+                                @T("PlatformTools")
+                            </div>
+                            <div>
+                                @if (_recommendApps == null)
+                                {
+                                    <MSkeletonLoader Class="transparent" Type="list-item@3" />
+                                }
+                                else
+                                {
+                                    foreach (var item in _recommendApps)
+                                    {
+                                        <MListItem Dense
+                                                   Class="mb-1 full-width rounded-2 masa-text-2-2"
+                                                   Href="@item.Value">
+                                            <MListItemContent>
+                                                <MListItemTitle>@DT(item.Key)</MListItemTitle>
+                                            </MListItemContent>
+                                        </MListItem>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="global-nav-right">
+                    <div class="global-nav-header">
+                        <div class="d-flex">
+                            <span class="global-nav-header__title">@T("GlobalNavigation")</span>
+                            <MSpacer />
+                            <SSearch Dense Class="mr-6" ValueChanged="SearchChanged" />
+                            <MButton Icon OnClick="() => _visible = false">
+                                <MIcon>mdi-close</MIcon>
+                            </MButton>
+                        </div>
+                        <div class="mt-4">
+                            <span class="masa-text-3-1 mb-2">@T("RecentVisits")</span>
+
+                            @if (_recentVisits == null)
+                            {
+                                <MSkeletonLoader Class="d-flex transparent" Type="chip@3" />
+                            }
+                            else
+                            {
+                                foreach (var (name, url) in _recentVisits)
+                                {
+                                    <MChip Class="masa-text-2-1 ml-4" Color="#F6F8FD" OnClick="() => NavigateTo(url)">@DT(name)</MChip>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="global-nav-content">
+                        @if (_menu is null)
+                        {
+                            <MSkeletonLoader Type="image,image,image" Class="global-nav-content__loader"></MSkeletonLoader>
+                            <MSkeletonLoader Type="image" Class="global-nav-content__toc-loader"></MSkeletonLoader>
+                        }
+                        else
+                        {
+                            <ExpansionMenuWrapper Value="_menu" OnItemClick="MenuItemClickAsync" OnItemOperClick="MenuItemOperClickAsync" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </MCard>
+    </ChildContent>
+</MDialog>
+
+
+@code {
+
+}
