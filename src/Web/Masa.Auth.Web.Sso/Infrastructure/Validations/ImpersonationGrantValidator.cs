@@ -6,7 +6,7 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 public class ImpersonationGrantValidator : IExtensionGrantValidator
 {
     IAuthClient _authClient;
-    public string GrantType { get; } = "impersonation";
+    public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.IMPERSONATION;
 
     const string IMPERSONATOR_USER_ID = "http://Lonsid.org/identity/claims/impersonatorUserId";
 
