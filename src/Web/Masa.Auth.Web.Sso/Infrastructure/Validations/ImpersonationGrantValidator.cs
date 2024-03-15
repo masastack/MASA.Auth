@@ -18,6 +18,7 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
         var impersonationToken = context.Request.Raw["impersonationToken"];
+        var environment = context.Request.Raw["environment"] ?? string.Empty;
         if (string.IsNullOrEmpty(impersonationToken))
         {
             context.Result = new GrantValidationResult
@@ -29,7 +30,13 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
             return;
         }
 
-        var cacheItem = await _authClient.UserService.GetImpersonatedUserAsync(impersonationToken);
+        var input = new GetImpersonateInputModel
+        {
+            ImpersonationToken = impersonationToken,
+            Environment = environment
+        };
+
+        var cacheItem = await _authClient.UserService.GetImpersonateAsync(input);
         if (cacheItem is null)
         {
             context.Result = new GrantValidationResult

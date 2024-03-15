@@ -394,7 +394,7 @@ public class UserService : ServiceBase
 
     [AllowAnonymous]
     [RoutePattern("impersonate", StartWithBaseUri = true, HttpMethod = "Get")]
-    public async Task<ImpersonationCacheItem> GetImpersonatedUserAsync([FromServices] IEventBus eventBus, [FromQuery] string impersonationToken)
+    public async Task<ImpersonationCacheItem> GetImpersonatedAsync([FromServices] IEventBus eventBus, [FromQuery] string impersonationToken)
     {
         var query = new ImpersonatedUserQuery(impersonationToken);
         await eventBus.PublishAsync(query);

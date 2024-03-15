@@ -24,7 +24,7 @@
 		<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="1.0.1-preview.10.2" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="1.0.1-preview.10.3" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaFrameworkPackageVersion)" />

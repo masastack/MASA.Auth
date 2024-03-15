@@ -56,7 +56,12 @@ public partial class ImpersonatedNavigation : AdminCompontentBase
 
     private async Task GetImpersonationToken()
     {
-        var impersonate = await AuthClient.UserService.ImpersonateAsync(UserId);
+        var input = new ImpersonateInputModel
+        {
+            UserId = UserId
+        };
+
+        var impersonate = await AuthClient.UserService.ImpersonateAsync(input);
         if (impersonate != null)
         {
             impersonationToken = impersonate.ImpersonationToken;

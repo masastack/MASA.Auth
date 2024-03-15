@@ -787,7 +787,6 @@ public class QueryHandler
         }
 
         query.Result = cacheItem;
-
-        await _distributedCacheClient.RemoveAsync(key);
+        //await _distributedCacheClient.RemoveAsync(key);
     }
 }

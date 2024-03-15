@@ -639,7 +639,7 @@ public class CommandHandler
 
         var token = Guid.NewGuid().ToString();
         var key = CacheKey.ImpersonationUserKey(token);
-        await _distributedCacheClient.SetAsync(key, cacheItem, TimeSpan.FromMinutes(1));
+        await _distributedCacheClient.SetAsync(key, cacheItem, TimeSpan.FromMinutes(10));
 
         command.Result = new ImpersonateOutput {
             ImpersonationToken = token
