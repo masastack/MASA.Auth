@@ -105,7 +105,23 @@ public partial class User
     [Parameter]
     public ThirdPartyUser? ThirdPartyUserComponent { get; set; }
 
+    private List<DataTableHeader<UserDto>> _headers = new();
+
     protected override string? PageName => "UserBlock";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _headers = new()
+        {
+            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
+            new() { Text = T(nameof(UserDto.Account)), Value = nameof(UserDto.Account), Sortable = false },
+            new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
+            new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Width="105px" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        };
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -117,15 +133,6 @@ public partial class User
             StateHasChanged();
         }
     }
-
-    public List<DataTableHeader<UserDto>> GetHeaders() => new()
-    {
-        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
-        new() { Text = T(nameof(UserDto.Account)), Value = nameof(UserDto.Account), Sortable = false },
-        new() { Text = T(nameof(UserDto.CreationTime)), Value = nameof(UserDto.CreationTime), Sortable = false },
-        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Width="105px" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
 
     public async Task GetUserAsync()
     {

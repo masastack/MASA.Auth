@@ -52,20 +52,22 @@ public partial class ApiResource
 
     private ApiResourceService ApiResourceService => AuthCaller.ApiResourceService;
 
+    private List<DataTableHeader<ApiResourceDto>> _headers = new();
+    
     protected override async Task OnInitializedAsync()
     {
         PageName = "ApiResourceBlock";
+
+        _headers = new List<DataTableHeader<ApiResourceDto>> {
+            new() { Text = T("Name"), Value = nameof(ApiResourceDto.Name), Sortable = false, Width = "250px" },
+            new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false, Width = "250px" },
+            new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
+            new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false, Width = "105px" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width = "105px" },
+        };   
+        
         await GetApiResourcesAsync();
     }
-
-    public List<DataTableHeader<ApiResourceDto>> GetHeaders() => new()
-    {
-        new() { Text = T("Name"), Value = nameof(ApiResourceDto.Name), Sortable = false, Width="250px" },
-        new() { Text = T(nameof(ApiResourceDto.DisplayName)), Value = nameof(ApiResourceDto.DisplayName), Sortable = false, Width="250px" },
-        new() { Text = T(nameof(ApiResourceDto.Description)), Value = nameof(ApiResourceDto.Description), Sortable = false },
-        new() { Text = T("State"), Value = nameof(ApiResourceDto.Enabled), Sortable = false , Width="105px"},
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
 
     public async Task GetApiResourcesAsync()
     {

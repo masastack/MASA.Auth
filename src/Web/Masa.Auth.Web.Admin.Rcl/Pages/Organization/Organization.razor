@@ -121,7 +121,7 @@
                             <SDataTable
                                 Dense
                                 Height="@("calc(100vh - 420px)")"
-                                Headers="GetHeaders()" 
+                                Headers="@_headers" 
                                 Items="@_paginationStaffs.Items" 
                                 TItem="StaffDto">
                                 <HeaderColContent Context="header">

@@ -30,7 +30,7 @@
         <SDataTable
             Dense
             Height="@(Filter is true ? "calc(100vh - 325px)" : "calc(100vh - 260px)")"
-            Headers="GetHeaders()"
+            Headers="@_headers"
             Items="ThirdPartyUsers"
             FixedHeader
             TItem="ThirdPartyUserDto"
