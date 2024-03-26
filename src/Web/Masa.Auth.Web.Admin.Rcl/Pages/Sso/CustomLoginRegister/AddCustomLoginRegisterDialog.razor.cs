@@ -85,6 +85,12 @@ public partial class AddCustomLoginRegisterDialog
             OpenErrorMessage(T("Register configuration items are required"));
             return;
         }
+        if (!CustomLogin.RegisterFields.Any(r => (r.RegisterFieldType == RegisterFieldTypes.PhoneNumber || r.RegisterFieldType == RegisterFieldTypes.Email) && r.Required))
+        {
+            Tab = CustomLoginTab.Register;
+            OpenErrorMessage(T("PhoneNumberAndEmailEmptyError"));
+            return;
+        }
 
         await CustomLoginService.AddAsync(CustomLogin);
         OpenSuccessMessage(T("Add Custom Login success"));
