@@ -55,6 +55,20 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
             claims.Add(new Claim(IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
         }
 
+        var authUser = await _authClient.UserService.GetThirdPartyUserByUserIdAsync(new GetThirdPartyUserByUserIdModel
+        {
+            Scheme = "Psso",
+            UserId = cacheItem.TargetUserId
+        });
+
+        if (authUser != null)
+        {
+            foreach (var item in authUser.ClaimData)
+            {
+                claims.Add(new Claim(item.Key, item.Value));
+            }
+        }
+
         context.Result = new GrantValidationResult(cacheItem.TargetUserId.ToString(), "impersonation", claims);
     }
 }
