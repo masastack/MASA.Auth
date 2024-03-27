@@ -131,7 +131,7 @@ public partial class RegisterSection
 
             var loginInputModel = new LoginInputModel
             {
-                PhoneLogin = true,
+                PhoneLogin = RegisterFields.Any(x => x.RegisterFieldType == RegisterFieldTypes.PhoneNumber),
                 SmsCode = _inputModel.SmsCode,
                 Password = _inputModel.Password,
                 Account = _inputModel.Email ?? "",
