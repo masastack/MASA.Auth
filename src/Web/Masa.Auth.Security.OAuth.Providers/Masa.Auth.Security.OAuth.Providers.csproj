@@ -10,7 +10,7 @@
 	  <PackageReference Include="AspNet.Security.OAuth.Apple" Version="6.0.15" />
 	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.10" />
 	  <PackageReference Include="AspNet.Security.OAuth.Weixin" Version="6.0.11" />
-	  <PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="1.0.1-preview.10.3" />
+	  <PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="1.0.1-preview.10.4" />
 	  <PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="1.0.1-preview.10.3" />
 	  <PackageReference Include="Masa.Contrib.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
 	  <PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />

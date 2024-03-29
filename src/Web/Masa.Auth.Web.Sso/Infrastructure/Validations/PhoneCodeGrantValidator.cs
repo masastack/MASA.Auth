@@ -18,6 +18,7 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
     {
         var phoneNumber = context.Request.Raw["PhoneNumber"];
         var code = context.Request.Raw["Code"];
+        var scheme = context.Request.Raw["scheme"];
         if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(code))
             throw new UserFriendlyException("must provider phone number and msg code");
 
@@ -28,7 +29,26 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
         });
         if (user != null)
         {
-            context.Result = new GrantValidationResult(user.Id.ToString(), "sms");
+            var claims = new List<Claim>();
+
+            if (!string.IsNullOrEmpty(scheme))
+            {
+                var authUser = await _authClient.UserService.GetThirdPartyUserByUserIdAsync(new GetThirdPartyUserByUserIdModel
+                {
+                    Scheme = scheme,
+                    UserId = user.Id
+                });
+
+                if (authUser != null)
+                {
+                    foreach (var item in authUser.ClaimData)
+                    {
+                        claims.Add(new Claim(item.Key, item.Value));
+                    }
+                }
+            }
+
+            context.Result = new GrantValidationResult(user.Id.ToString(), "sms", claims);
         }
         else
         {

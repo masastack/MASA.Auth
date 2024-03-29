@@ -26,15 +26,23 @@ public class LdapGrantValidator : IExtensionGrantValidator
             throw new UserFriendlyException("must provider userName");
         }
 
+        var password = context.Request.Raw["password"] ?? string.Empty;
+
         var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LDAP);
         if (ldapOption is null)
         {
             throw new UserFriendlyException($"Not find ldap");
         }
-        var ldapProvider = _ldapFactory.CreateProvider(ldapOption.Adapt<LdapOptions>());
+        var ldapOptions = ldapOption.Adapt<LdapOptions>();
+        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
         if (await ldapProvider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword) is false)
         {
             throw new UserFriendlyException($"Ldap connect error");
+        }
+        var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
+        if (!await ldapProvider.AuthenticateAsync($"{dc}\\{userName}", password))
+        {
+            throw new UserFriendlyException($"LDAP account {userName} validation failed");
         }
         var ldapUser = await ldapProvider.GetUserByUserNameAsync(userName);
         if (ldapUser is null)

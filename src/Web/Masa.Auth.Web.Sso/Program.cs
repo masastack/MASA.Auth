@@ -71,7 +71,6 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<LocalPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
     .AddExtensionGrantValidator<LdapGrantValidator>()
-    .AddExtensionGrantValidator<PssoPhoneCodeGrantValidator>()
     .AddExtensionGrantValidator<ImpersonationGrantValidator>();
 
 if (builder.Environment.IsDevelopment())

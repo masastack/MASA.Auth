@@ -18,6 +18,7 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
         var impersonationToken = context.Request.Raw["impersonationToken"];
+        var scheme = context.Request.Raw["scheme"] ?? string.Empty;
         var environment = context.Request.Raw["environment"] ?? string.Empty;
         if (string.IsNullOrEmpty(impersonationToken))
         {
@@ -55,17 +56,20 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
             claims.Add(new Claim(IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
         }
 
-        var authUser = await _authClient.UserService.GetThirdPartyUserByUserIdAsync(new GetThirdPartyUserByUserIdModel
+        if (!string.IsNullOrEmpty(scheme))
         {
-            Scheme = "Psso",
-            UserId = cacheItem.TargetUserId
-        });
-
-        if (authUser != null)
-        {
-            foreach (var item in authUser.ClaimData)
+            var authUser = await _authClient.UserService.GetThirdPartyUserByUserIdAsync(new GetThirdPartyUserByUserIdModel
             {
-                claims.Add(new Claim(item.Key, item.Value));
+                Scheme = scheme,
+                UserId = cacheItem.TargetUserId
+            });
+
+            if (authUser != null)
+            {
+                foreach (var item in authUser.ClaimData)
+                {
+                    claims.Add(new Claim(item.Key, item.Value));
+                }
             }
         }
 

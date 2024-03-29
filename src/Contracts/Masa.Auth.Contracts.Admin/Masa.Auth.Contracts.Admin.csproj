@@ -11,7 +11,7 @@
     <PackageReference Include="FluentValidation" Version="11.4.0" />
 	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="1.0.1-preview.10.3" />
+	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="1.0.1-preview.10.4" />
 	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="1.0.1-preview.10.3" />
 	<!--<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaFrameworkPackageVersion)" />-->
     <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
