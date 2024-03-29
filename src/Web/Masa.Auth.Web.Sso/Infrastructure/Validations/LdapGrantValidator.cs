@@ -39,11 +39,16 @@ public class LdapGrantValidator : IExtensionGrantValidator
         {
             throw new UserFriendlyException($"Ldap connect error");
         }
-        var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
-        if (!await ldapProvider.AuthenticateAsync($"{dc}\\{userName}", password))
+
+        if (!string.IsNullOrEmpty(password))
         {
-            throw new UserFriendlyException($"LDAP account {userName} validation failed");
+            var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
+            if (!await ldapProvider.AuthenticateAsync($"{dc}\\{userName}", password))
+            {
+                throw new UserFriendlyException($"LDAP account {userName} validation failed");
+            }
         }
+        
         var ldapUser = await ldapProvider.GetUserByUserNameAsync(userName);
         if (ldapUser is null)
         {
