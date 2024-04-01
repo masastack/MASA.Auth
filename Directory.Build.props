@@ -4,6 +4,6 @@
 		<WarningsAsErrors>
 			$(WarningsAsErrors);CS8600;CS8601;CS8602;CS8603;CS8604;CS8609;CS8610;CS8614;CS8616;CS8618;CS8619;CS8622;CS8625
 		</WarningsAsErrors>
-		<MasaFrameworkPackageVersion>1.0.1-preview.10</MasaFrameworkPackageVersion>
+		<MasaFrameworkPackageVersion>1.0.1-preview.16</MasaFrameworkPackageVersion>
 	</PropertyGroup>
 </Project>
