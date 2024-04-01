@@ -45,7 +45,8 @@
   "CustomLoginBlock": {
     "TitleName": "Name",
     "NameRequired": "Name is required",
-    "DisplayNameRequired": "DisplayName is required"
+    "DisplayNameRequired": "DisplayName is required",
+    "PhoneNumberAndEmailEmptyError": "One of phone number and email must have a value"
   },
   "ConfirmChangePassword": "I confirm to change the password",
   "PasswordValidateFailed": "Password validate failed",

@@ -518,7 +518,8 @@
     "Name is required": "姓名必须填写",
     "Title is required": "标题必须填写",
     "NameRequired": "姓名必须填写",
-    "DisplayNameRequired": "昵称必须填写"
+    "DisplayNameRequired": "昵称必须填写",
+    "PhoneNumberAndEmailEmptyError": "电话号码和邮件其中一个必须有值"
   },
 
   "OperationLog": "操作日志",
