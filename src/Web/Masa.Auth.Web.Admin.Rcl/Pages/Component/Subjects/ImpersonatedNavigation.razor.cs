@@ -220,9 +220,4 @@ public partial class ImpersonatedNavigation : AdminCompontentBase
             await OnFavoriteAdd.Invoke(nav.Id);
         }
     }
-
-    private async Task OnOutsideClick()
-    {
-        var a = 1;
-    }
 }

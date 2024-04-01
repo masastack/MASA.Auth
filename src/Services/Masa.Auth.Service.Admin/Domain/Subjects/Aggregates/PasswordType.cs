@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Identity;
-
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Aggregates;
 
 public class PasswordType : Enumeration
@@ -31,7 +29,6 @@ public class PasswordType : Enumeration
 
     public static PasswordType StartNew(string type) => type switch
     {
-
         nameof(MD5) => new MD5PasswordType(),
         nameof(HashPassword) => new HashPasswordType(),
         _ => new PasswordType()
