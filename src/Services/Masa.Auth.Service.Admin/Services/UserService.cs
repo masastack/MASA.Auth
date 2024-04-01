@@ -381,4 +381,21 @@ public class UserService : ServiceBase
         var command = new SaveUserClaimValuesCommand(userClaimValues.UserId, userClaimValues.ClaimValues);
         await eventBus.PublishAsync(command);
     }
+
+    [RoutePattern("impersonate", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<ImpersonateOutput> ImpersonateAsync(IEventBus eventBus, [FromBody] ImpersonateInput input)
+    {
+        var command = new ImpersonateUserCommand(input.UserId, false);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
+
+    [AllowAnonymous]
+    [RoutePattern("impersonate", StartWithBaseUri = true, HttpMethod = "Get")]
+    public async Task<ImpersonationCacheItem> GetImpersonatedAsync([FromServices] IEventBus eventBus, [FromQuery] string impersonationToken)
+    {
+        var query = new ImpersonatedUserQuery(impersonationToken);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 }

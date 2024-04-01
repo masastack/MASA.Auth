@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Humanizer;
-
 namespace Masa.Auth.Service.Admin.Services;
 
 public class ThirdPartyUserService : RestServiceBase
@@ -31,6 +29,18 @@ public class ThirdPartyUserService : RestServiceBase
     private async Task<UserModel?> GetAsync(IEventBus eventBus, [FromQuery] string thridPartyIdentity)
     {
         var query = new ThirdPartyUserQuery(thridPartyIdentity);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    [AllowAnonymous]
+    private async Task<UserModel?> GetByUserIdAsync(IEventBus eventBus, [FromQuery] string scheme, Guid userId)
+    {
+        var identityProviderQuery = new IdentityProviderBySchemeQuery(scheme);
+        await eventBus.PublishAsync(identityProviderQuery);
+        var identityProvider = identityProviderQuery.Result;
+
+        var query = new ThirdPartyUserByUserIdQuery(userId, identityProvider.Id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

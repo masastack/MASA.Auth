@@ -664,5 +664,6 @@
   "Cancel Filter": "取消筛选",
   "RepeatAdd": "重复添加",
   "Add Claim": "添加声明",
-  "Claim": "声明"
+  "Claim": "声明",
+  "ImpersonationLogin": "模拟登录"
 }

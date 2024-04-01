@@ -422,12 +422,29 @@ public class QueryHandler
                                          .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
-
+        
         if (tpUser != null && tpUser.User != null && userModel != null)
         {
             var staff = tpUser.User.Staff;
             userModel.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
             userModel.CurrentTeamId = staff?.CurrentTeamId;
+            userModel.ClaimData = tpUser.ClaimData;
+        }
+
+        query.Result = userModel;
+    }
+
+    [EventHandler]
+    public async Task GetThirdPartyUserByUserIdAsync(ThirdPartyUserByUserIdQuery query)
+    {
+        var tpUser = await _authDbContext.Set<ThirdPartyUser>()
+                                         .Include(tpu => tpu.User)
+                                         .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == query.ThirdPartyIdpId && tpu.UserId == query.UserId);
+        var userModel = tpUser?.User?.Adapt<UserModel>();
+
+        if (tpUser != null && tpUser.User != null && userModel != null)
+        {
+            userModel.ClaimData = tpUser.ClaimData;
         }
 
         query.Result = userModel;
@@ -757,5 +774,19 @@ public class QueryHandler
             userClaimValuesQuery.Result.TryAdd("account", user.Account);
             userClaimValuesQuery.Result.TryAdd("userName", user.DisplayName);
         }
+    }
+
+    [EventHandler]
+    public async Task GetImpersonatedUserAsync(ImpersonatedUserQuery query)
+    {
+        var key = CacheKey.ImpersonationUserKey(query.ImpersonationToken);
+        var cacheItem = await _distributedCacheClient.GetAsync<ImpersonationCacheItem>(key);
+        if (cacheItem == null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IMPERSONATION_TOKEN_ERROR_MESSAGE);
+        }
+
+        query.Result = cacheItem;
+        //await _distributedCacheClient.RemoveAsync(key);
     }
 }
