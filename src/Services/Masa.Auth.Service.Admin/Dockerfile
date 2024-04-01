@@ -4,7 +4,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_sdk:6.0.403 AS publish
 WORKDIR /src
 COPY . .
 ENV CSPROJ="src/Services/Masa.Auth.Service.Admin/Masa.Auth.Service.Admin.csproj"
-RUN dotnet restore $CSPROJ -s "http://devops.lonsid.cn:8080/nuget;https://repo.huaweicloud.com/repository/nuget/v3/index.json" && dotnet publish $CSPROJ -c Release -o /app/publish
+RUN dotnet restore $CSPROJ && dotnet publish $CSPROJ -c Release -o /app/publish
 
 
 FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_aspnet:6.0.4
