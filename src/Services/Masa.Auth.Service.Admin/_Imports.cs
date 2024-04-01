@@ -131,6 +131,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.EntityFrameworkCore.Infrastructure;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Microsoft.Extensions.Options;
 global using Microsoft.OpenApi.Models;
 global using Novell.Directory.Ldap;
@@ -148,4 +149,3 @@ global using System.Text.RegularExpressions;
 global using IdentityProvider = Masa.Auth.Service.Admin.Domain.Subjects.Aggregates.IdentityProvider;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using Event = Masa.BuildingBlocks.Dispatcher.Events.Event;
-
