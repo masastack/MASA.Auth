@@ -17,6 +17,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     private string _idCard = "";
     private string _account = "";
     private string _password = "";
+    private PasswordType _passwordType = default!;
     private string _companyName = "";
     private string _department = "";
     private string _position = "";
@@ -65,9 +66,16 @@ public class User : FullAggregateRoot<Guid, Guid>
         private set
         {
             if (string.IsNullOrEmpty(value) is false)
-                _password = MD5Utils.EncryptRepeat(value);
+                _password = _passwordType.EncryptPassword(this, value);
             else _password = "";
         }
+    }
+
+    [AllowNull]
+    public PasswordType PasswordType
+    {
+        get => _passwordType;
+        private set => _passwordType = value ?? PasswordType.MD5;
     }
 
     [AllowNull]
@@ -157,8 +165,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? password,
                 string? companyName,
                 string? email,
-                string phoneNumber) :
-        this(name, displayName, avatar, default, account, password, companyName, default, default, phoneNumber, default, email, GenderTypes.Male)
+                string phoneNumber,
+                PasswordType? passwordType = null) :
+        this(name, displayName, avatar, default, account, password, companyName, default, default, phoneNumber, default, email, GenderTypes.Male, passwordType)
     {
     }
 
@@ -170,8 +179,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? companyName,
                 string? email,
                 string phoneNumber,
-                ThirdPartyUser thirdPartyUser) :
-        this(name, displayName, avatar, account, password, companyName, email, phoneNumber)
+                ThirdPartyUser thirdPartyUser,
+                PasswordType? passwordType = null) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, passwordType)
     {
         _thirdPartyUsers.Add(thirdPartyUser);
     }
@@ -185,8 +195,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? email,
                 string phoneNumber,
                 ThirdPartyUser thirdPartyUser,
-                Staff staff) :
-        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, thirdPartyUser)
+                Staff staff,
+                PasswordType? passwordType = null) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, thirdPartyUser, passwordType)
     {
         _staff = staff;
     }
@@ -199,8 +210,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? companyName,
                 string? email,
                 string phoneNumber,
-                Staff staff) :
-        this(name, displayName, avatar, account, password, companyName, email, phoneNumber)
+                Staff staff,
+                PasswordType? passwordType = null) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, passwordType)
     {
         _staff = staff;
     }
@@ -219,7 +231,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? landline,
                 string? email,
                 AddressValue? address,
-                GenderTypes gender)
+                GenderTypes gender,
+                PasswordType? passwordType = null)
     {
         Id = id;
         Name = name;
@@ -235,6 +248,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         var value = VerifyPhonNumberEmail(phoneNumber, email);
         Account = string.IsNullOrEmpty(account) ? value : account;
         DisplayName = string.IsNullOrEmpty(displayName) ? value : displayName;
+        PasswordType = passwordType ?? PasswordType.MD5;
     }
 
     public User(string? name,
@@ -249,7 +263,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string phoneNumber,
                 string? landline,
                 string? email,
-                GenderTypes gender)
+                GenderTypes gender,
+                PasswordType? passwordType = null)
         : this(default,
                name,
                displayName,
@@ -264,7 +279,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                landline,
                email,
                new(),
-               gender)
+               gender,
+               passwordType)
     {
     }
 
@@ -359,8 +375,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     {
         if (string.IsNullOrWhiteSpace(Password) && string.IsNullOrWhiteSpace(password))
             return true;
-
-        return Password == MD5Utils.EncryptRepeat(password ?? "");
+        return _passwordType.VerifyPassword(this, Password, password ?? "");
     }
 
     public void AddRoles(IEnumerable<Guid> roleIds)

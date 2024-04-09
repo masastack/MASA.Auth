@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects;
 
 public class UpsertThirdPartyUserDto : AddThirdPartyUserDto
 {
-    public UpsertThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user) : base(thirdPartyIdpId, enabled, thridPartyIdentity, extendedData, user)
+    public UpsertThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user, Dictionary<string, string> claimData) : base(thirdPartyIdpId, enabled, thridPartyIdentity, extendedData, user, claimData)
     {
     }
 }
