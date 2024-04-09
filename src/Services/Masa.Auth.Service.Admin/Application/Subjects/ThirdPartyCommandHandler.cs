@@ -137,7 +137,7 @@ public class ThirdPartyCommandHandler
             }
             else
             {
-                var addThirdPartyUserDto = new AddThirdPartyUserDto(identityProvider.Id, true, model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData), command.ThirdPartyUser.Adapt<AddUserDto>());
+                var addThirdPartyUserDto = new AddThirdPartyUserDto(identityProvider.Id, true, model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData), command.ThirdPartyUser.Adapt<AddUserDto>(), model.ClaimData);
                 command.Result = await _thirdPartyUserDomainService.AddThirdPartyUserAsync(addThirdPartyUserDto);
             }
         }

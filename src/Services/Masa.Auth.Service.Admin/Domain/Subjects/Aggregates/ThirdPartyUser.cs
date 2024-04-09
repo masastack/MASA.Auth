@@ -51,15 +51,15 @@ public class ThirdPartyUser : FullAggregateRoot<Guid, Guid>
 
     public Dictionary<string, string> ClaimData { get; private set; } = new();
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData)
+    public ThirdPartyUser(Guid thirdPartyIdpId, string thridPartyIdentity, string extendedData, Dictionary<string, string>? claimData = null)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
+        ClaimData = claimData ?? new();
     }
 
-    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, string thridPartyIdentity, string extendedData)
-            : this(thirdPartyIdpId, thridPartyIdentity, extendedData)
+    public ThirdPartyUser(Guid thirdPartyIdpId, Guid userId, string thridPartyIdentity, string extendedData, Dictionary<string, string>? claimData = null): this(thirdPartyIdpId, thridPartyIdentity, extendedData, claimData)
     {
         UserId = userId;
     }

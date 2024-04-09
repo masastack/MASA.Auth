@@ -41,15 +41,18 @@ public class AddUserDto
 
     public List<SubjectPermissionRelationDto> Permissions { get; set; }
 
+    public PasswordTypes PasswordType { get; set; }
+
     public AddUserDto()
     {
         Address = new();
         Gender = GenderTypes.Male;
         Roles = new();
         Permissions = new();
+        PasswordType = PasswordTypes.MD5;
     }
 
-    public AddUserDto(Guid id,string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions)
+    public AddUserDto(Guid id,string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions, PasswordTypes passwordType)
     {
         Id = id;
         Name = name;
@@ -69,5 +72,6 @@ public class AddUserDto
         Gender = gender;
         Roles = roles ?? new();
         Permissions = permissions ?? new();
+        PasswordType = passwordType;
     }
 }

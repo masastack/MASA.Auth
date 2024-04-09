@@ -23,6 +23,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.ThirdPartyUsers).WithOne(tpu => tpu.User).HasForeignKey(tpu => tpu.UserId);
         builder.HasMany(u => u.UserClaims).WithOne(uc => uc.User).HasForeignKey(uc => uc.UserId);
         builder.HasIndex(u => new { u.CreationTime, u.ModificationTime });//.IsDescending(); supported 7.0
+        builder.Property(u => u.PasswordType).HasConversion(v => v.Id, v => Enumeration.FromValue<PasswordType>(v)).HasDefaultValue(PasswordType.MD5);
     }
 }
 

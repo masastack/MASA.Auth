@@ -27,7 +27,7 @@ public class ThirdPartyUserDomainService : DomainService
         var userDto = dto.User;
         _logger.LogWarning("AddThirdPartyUserAsync user {0}", JsonSerializer.Serialize(userDto));
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar, userDto.Account, userDto.Password, "", userDto.Email, userDto.PhoneNumber ?? "",
-             new ThirdPartyUser(dto.ThirdPartyIdpId, dto.ThridPartyIdentity, dto.ExtendedData));
+             new ThirdPartyUser(dto.ThirdPartyIdpId, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData), Enumeration.FromValue<PasswordType>((int)userDto.PasswordType));
         var (existUser, e) = await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, default, userDto.Account);
         if (e != null)
         {
@@ -35,7 +35,7 @@ public class ThirdPartyUserDomainService : DomainService
         }
         if (existUser != null)
         {
-            var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, dto.ThridPartyIdentity, dto.ExtendedData);
+            var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData);
             await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
             return existUser.Adapt<UserModel>();
         }
