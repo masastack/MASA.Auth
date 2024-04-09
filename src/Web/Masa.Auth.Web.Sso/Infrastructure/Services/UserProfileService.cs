@@ -6,22 +6,47 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Services;
 public class UserProfileService : IProfileService
 {
     readonly IAuthClient _authClient;
+    readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserProfileService(IAuthClient authClient)
+    public UserProfileService(IAuthClient authClient, IHttpContextAccessor httpContextAccessor)
     {
         _authClient = authClient;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var claims = context.Subject.Claims.ToList();
         context.IssuedClaims.AddRange(claims);
+
         //ClaimsProviderAccessToken
         //if (context.Caller == "ClaimsProviderIdentityToken" || context.Caller == "UserInfoEndpoint")
         {
             var subjectId = context.Subject.Claims.FirstOrDefault(c => c.Type == "sub");
             if (subjectId != null && Guid.TryParse(subjectId.Value, out var userId))
             {
+                var request = _httpContextAccessor.HttpContext?.Request;
+                if (request != null)
+                {
+                    var scheme = request.Form["scheme"];
+                    if (!string.IsNullOrEmpty(scheme))
+                    {
+                        var authUser = await _authClient.UserService.GetThirdPartyUserByUserIdAsync(new GetThirdPartyUserByUserIdModel
+                        {
+                            Scheme = scheme,
+                            UserId = userId
+                        });
+
+                        if (authUser != null)
+                        {
+                            foreach (var item in authUser.ClaimData)
+                            {
+                                context.IssuedClaims.TryAdd(new Claim(item.Key, item.Value));
+                            }
+                        }
+                    }
+                }
+
                 var claimValues = await _authClient.UserService.GetClaimValuesAsync(userId);
                 foreach (var claimValue in claimValues)
                 {
