@@ -8,7 +8,7 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
     IAuthClient _authClient;
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.IMPERSONATION;
 
-    const string IMPERSONATOR_USER_ID = "http://Lonsid.org/identity/claims/impersonatorUserId";
+    const string IMPERSONATOR_USER_ID = "https://masastack.com/security/identity/claims/impersonatorUserId";
 
     public ImpersonationGrantValidator(IAuthClient authClient)
     {
@@ -55,6 +55,6 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
             claims.Add(new Claim(IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
         }
 
-        context.Result = new GrantValidationResult(cacheItem.TargetUserId.ToString(), "impersonation");
+        context.Result = new GrantValidationResult(cacheItem.TargetUserId.ToString(), "impersonation", claims);
     }
 }

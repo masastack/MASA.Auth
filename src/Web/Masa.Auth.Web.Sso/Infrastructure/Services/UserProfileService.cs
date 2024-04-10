@@ -28,8 +28,7 @@ public class UserProfileService : IProfileService
                 var request = _httpContextAccessor.HttpContext?.Request;
                 if (request != null)
                 {
-                    var scheme = request.Form["scheme"];
-                    if (!string.IsNullOrEmpty(scheme))
+                    if (request.HasFormContentType && request.Form.TryGetValue("scheme", out var scheme))
                     {
                         var authUser = await _authClient.UserService.GetThirdPartyUserByUserIdAsync(new GetThirdPartyUserByUserIdModel
                         {
