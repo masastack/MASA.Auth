@@ -244,11 +244,11 @@ public class User : FullAggregateRoot<Guid, Guid>
         Landline = landline;
         Gender = gender == default ? GenderTypes.Male : gender;
         Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
+        PasswordType = passwordType ?? PasswordType.MD5;
         Password = password;
         var value = VerifyPhonNumberEmail(phoneNumber, email);
         Account = string.IsNullOrEmpty(account) ? value : account;
         DisplayName = string.IsNullOrEmpty(displayName) ? value : displayName;
-        PasswordType = passwordType ?? PasswordType.MD5;
     }
 
     public User(string? name,
