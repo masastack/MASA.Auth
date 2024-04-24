@@ -108,6 +108,10 @@ builder.Services
             .AddElasticsearchAutoComplete();
 //todo when scheduler is unready, this code should not run
 await builder.Services.AddSchedulerJobAsync();
+builder.Services.AddBackgroundJob(options =>
+{
+    options.UseInMemoryDatabase();
+});
 
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
