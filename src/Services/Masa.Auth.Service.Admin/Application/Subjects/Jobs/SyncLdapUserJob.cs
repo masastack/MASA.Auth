@@ -6,6 +6,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Jobs;
 public class SyncLdapUserJob : BackgroundJobBase<SyncLdapUserArgs>
 {
     private readonly LdapDomainService _ldapDomainService;
+
     public SyncLdapUserJob(LdapDomainService ldapDomainService)
     {
         _ldapDomainService = ldapDomainService;

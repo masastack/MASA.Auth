@@ -77,12 +77,6 @@ public class LdapGrantValidator : IExtensionGrantValidator
             });
         }
 
-        var claims = new List<Claim>();
-        foreach (var item in authUser.ClaimData)
-        {
-            claims.Add(new Claim(item.Key, item.Value));
-        }
-
-        context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap", claims);
+        context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap");
     }
 }

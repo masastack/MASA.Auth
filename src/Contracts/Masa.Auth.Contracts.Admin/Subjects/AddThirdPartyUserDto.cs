@@ -17,6 +17,8 @@ public class AddThirdPartyUserDto
 
     public Dictionary<string, string> ClaimData { get; set; } = new();
 
+    public bool IsLdap { get; set; }
+
     public AddThirdPartyUserDto()
     {
 

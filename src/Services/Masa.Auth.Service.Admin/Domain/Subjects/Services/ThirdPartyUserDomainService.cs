@@ -28,6 +28,21 @@ public class ThirdPartyUserDomainService : DomainService
         _logger.LogWarning("AddThirdPartyUserAsync user {0}", JsonSerializer.Serialize(userDto));
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar, userDto.Account, userDto.Password, "", userDto.Email, userDto.PhoneNumber ?? "",
              new ThirdPartyUser(dto.ThirdPartyIdpId, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData), Enumeration.FromValue<PasswordType>((int)userDto.PasswordType));
+
+        if (dto.IsLdap)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var ldapUser = JsonSerializer.Deserialize<LdapUser>(dto.ExtendedData, options);
+            if (ldapUser != null)
+            {
+                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true);
+                user.Bind(staff);
+            }
+            
+        }
         var (existUser, e) = await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, default, userDto.Account);
         if (e != null)
         {
@@ -42,11 +57,10 @@ public class ThirdPartyUserDomainService : DomainService
         await _userDomainService.AddAsync(user);
         return user.Adapt<UserModel>();
     }
-
     public async Task<(ThirdPartyUser?, UserFriendlyException?)> VerifyRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity)
     {
         var thirdPartyUser = await _authDbContext.Set<ThirdPartyUser>()
-                                                 .Include(tpu => tpu.User)
+        .Include(tpu => tpu.User)
                                                  .ThenInclude(user => user.Roles)
                                                  .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == thirdPartyIdpId && tpu.ThridPartyIdentity == thridPartyIdentity);
         UserFriendlyException? exception = null;
@@ -55,5 +69,16 @@ public class ThirdPartyUserDomainService : DomainService
             exception = new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_USER_EXIST, thridPartyIdentity);
         }
         return (thirdPartyUser, exception);
+    }
+
+    string GetRelativeId(string objectSid)
+    {
+        var parts = objectSid.Split('-');
+        if (parts.Length < 3)
+        {
+            return "";
+        }
+
+        return parts[parts.Length - 1];
     }
 }
