@@ -94,7 +94,7 @@
         {
             await ThirdPartyIdpService.LdapUpsertAsync(_ldapDetailDto);
             OpenSuccessMessage(T("LDAPAccountSynchronizPrompt"));
-
+            _visible = false;
             if (OnSubmitted != null)
             {
                 await OnSubmitted.Invoke();
