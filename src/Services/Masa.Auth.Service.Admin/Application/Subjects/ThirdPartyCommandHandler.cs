@@ -177,6 +177,12 @@ public class ThirdPartyCommandHandler
         var identityProvider = identityProviderQuery.Result;
         var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
         addThirdPartyUserDto.ThirdPartyIdpId = identityProvider.Id;
+
+        if (identityProvider.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        {
+            addThirdPartyUserDto.IsLdap = true;
+        }
+
         var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn);
         await _eventBus.PublishAsync(addThirdPartyUserCommand);
         command.Result = addThirdPartyUserCommand.Result;
