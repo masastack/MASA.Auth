@@ -59,7 +59,15 @@ public class LdapDomainService : DomainService
             if (ldapUser != null)
             {
                 tpu.User.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, "", "", "", "", new());
-                tpu.User.Staff!.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
+
+                if (tpu.User.Staff == null)
+                {
+                    tpu.User.Bind(new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true));
+                }
+                else
+                {
+                    tpu.User.Staff.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
+                }
             }
         });
         await _userDomainService.UpdateRangeAsync(thirdPartyUsers.Select(tpu => tpu.User).ToList());

@@ -158,6 +158,7 @@
     "Connect Success": "连接成功",
     "Connect Error": "连接失败",
     "LDAP Account Synchroniz Success": "域账户同步成功",
+    "LDAPAccountSynchronizPrompt": "域账户同步已在后台执行，请稍后查看",
     "AuthenticationType": "认证类型",
     "PlatformType": "平台类型",
     "Icon": "图标",

@@ -155,5 +155,8 @@
     "MatchPattern": "Match Pattern",
     "MatchPatternTip": "Used in special cases when auto-match left menu is highlighted"
   },
-  "RepeatAdd": "Add Repeatedly"
+  "RepeatAdd": "Add Repeatedly",
+  "ThirdPartyIdpBlock": {
+    "LDAPAccountSynchronizPrompt": "LDAP account synchronization has been executed in the background, please check later"
+  }
 }
