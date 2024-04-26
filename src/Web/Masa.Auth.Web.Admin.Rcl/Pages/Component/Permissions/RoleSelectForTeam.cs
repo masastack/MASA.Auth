@@ -59,7 +59,7 @@ public partial class RoleSelectForTeam : RoleSelect
         return base.OnParametersSetAsync();
     }
 
-    protected override bool RoleDisabled(RoleSelectDto role) => role.Limit != 0 && role.AvailableQuantity < TeamUserCount;
+    protected override bool RoleDisabled(RoleSelectDto? role) => role != null && role.Limit != 0 && role.AvailableQuantity < TeamUserCount;
 
     public async Task ReloadAsync()
     {
