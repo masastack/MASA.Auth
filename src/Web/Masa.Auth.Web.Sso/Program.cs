@@ -56,6 +56,7 @@ builder.Services.AddMultilevelCache(distributedCacheOptions =>
 {
     distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
 });
+builder.Services.AddScoped<CookieStorage>();
 var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {

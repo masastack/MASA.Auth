@@ -141,6 +141,9 @@ public class AccountController : Controller
 
             foreach (var cookies in HttpContext.Request.Cookies)
             {
+                if (cookies.Key == CookieKeyConfig.LangCookieKey)
+                    continue;
+
                 HttpContext.Response.Cookies.Delete(cookies.Key);
             }
 

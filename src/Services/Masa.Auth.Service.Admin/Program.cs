@@ -181,10 +181,9 @@ builder.Services.AddStackMiddleware();
 
 await builder.MigrateDbContextAsync<AuthDbContext>(async (context, services) =>
 {
+    builder.Services.AddOidcCache(publicConfiguration);
     await builder.Services.AddOidcDbContext<AuthDbContext>(async option =>
     {
-        builder.Services.AddOidcCache(publicConfiguration);
-
         await new AuthSeedData().SeedAsync(builder);
 
         await option.SeedStandardResourcesAsync();
