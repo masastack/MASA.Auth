@@ -99,11 +99,21 @@ public class ThirdPartyCommandHandler
         var thirdPartyUserDto = command.ThirdPartyUser;
         var (thirdPartyUser, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
 
-        if (command.WhenExisReturn && thirdPartyUser != null)
+        if (thirdPartyUser != null)
         {
-            command.Result = thirdPartyUser.User.Adapt<UserModel>();
-            return;
+            if (command.WhenExisUpdateClaimData)
+            {
+                thirdPartyUser.UpdateClaimData(thirdPartyUserDto.ClaimData);
+                await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
+            }
+
+            if (command.WhenExisReturn)
+            {
+                command.Result = thirdPartyUser.User.Adapt<UserModel>();
+                return;
+            }
         }
+
         if (exception is not null)
         {
             throw exception;
@@ -183,7 +193,7 @@ public class ThirdPartyCommandHandler
             addThirdPartyUserDto.IsLdap = true;
         }
 
-        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn);
+        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn, command.WhenExisUpdateClaimData);
         await _eventBus.PublishAsync(addThirdPartyUserCommand);
         command.Result = addThirdPartyUserCommand.Result;
     }
