@@ -41,8 +41,8 @@ public class QueryHandler
     public async Task GetProjectUIAppListAsync(ProjectUIAppListQuery query)
     {
         query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment, AppTypes.UI);
-        var menuPermissions = await _permissionRepository.GetListAsync(p => p.Enabled && p.Type == PermissionTypes.Menu
-                || p.Type == PermissionTypes.Element);
+        var menuPermissions = await _permissionRepository.GetListAsync(p => p.Enabled && (p.Type == PermissionTypes.Menu
+                || p.Type == PermissionTypes.Element));
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
             a.Navs = menuPermissions.Where(p => p.AppId == a.Identity && p.GetParentId() == Guid.Empty)
