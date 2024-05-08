@@ -52,8 +52,6 @@ public partial class CustomLoginRegister
 
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
-    protected new string? PageName = "CustomLoginBlock";
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -66,8 +64,10 @@ public partial class CustomLoginRegister
 
     protected override void OnInitialized()
     {
+        PageName = "CustomLoginBlock";
+
         base.OnInitialized();
-        
+
         _headers = new List<DataTableHeader<CustomLoginDto>> {
             new() { Text = T(nameof(ClientDto.LogoUri)), Value = nameof(ClientDto.LogoUri), Sortable = false, Width="105px" },
             new() { Text = T("TitleName"), Value = nameof(CustomLoginDto.Name), Sortable = false},
