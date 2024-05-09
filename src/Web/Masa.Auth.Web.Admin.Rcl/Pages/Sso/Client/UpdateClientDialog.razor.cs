@@ -61,7 +61,7 @@ public partial class UpdateClientDialog
                 { "Dto",_deviceFlowDto }
             };
         }
-        else if (_clientDetailDto.ClientType == ClientTypes.Machine || _clientDetailDto.ClientType == ClientTypes.Web)
+        else if (_clientDetailDto.ClientType == ClientTypes.Machine)
         {
             _tabHeader.Add(T("Client Secret"));
             _otherType = typeof(ClientSecret);
