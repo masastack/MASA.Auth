@@ -11,18 +11,12 @@ public class RegisterFieldDto
 
     public bool Required { get; set; }
 
-    public bool CannotUpdate { get; private set; }
-
     [JsonConstructor]
     public RegisterFieldDto(RegisterFieldTypes registerFieldType, int sort, bool required)
     {
         RegisterFieldType = registerFieldType;
         Sort = sort;
         Required = required;
-        if (RegisterFieldType is RegisterFieldTypes.PhoneNumber)
-        {
-            CannotUpdate = true;
-        }
     }
 }
 

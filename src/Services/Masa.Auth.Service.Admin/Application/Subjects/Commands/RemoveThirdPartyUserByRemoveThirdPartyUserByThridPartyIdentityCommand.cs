@@ -3,7 +3,4 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record SyncStaffCacheCommand() : Command
-{
-    public SyncStaffResultsDto Result { get; set; } = new();
-}
+public record RemoveThirdPartyUserByThridPartyIdentityCommand(string ThridPartyIdentity) : Command;

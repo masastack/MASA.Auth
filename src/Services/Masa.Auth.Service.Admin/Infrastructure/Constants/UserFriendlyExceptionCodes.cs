@@ -90,4 +90,6 @@ public static class UserFriendlyExceptionCodes
     public const string API_SCOPE_NAME_EXIST = "APIScopeNameExist";
     public const string IDENTITY_SOURCE_NAME_EXIST = "IdentitySourceNameExist";
     public const string THIRDPARTYUSER_BIND_EXIST = "ThirdPartyUserBindExist";
+    public const string WEBHOOK_NOT_EXIST = "WebhookNotExist";
+    public const string IMPERSONATION_TOKEN_ERROR_MESSAGE = "ImpersonationTokenErrorMessage";
 }

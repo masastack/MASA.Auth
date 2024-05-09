@@ -71,7 +71,14 @@ public class LdapCommandHandler
             await _ldapIdpRepository.UpdateAsync(dbItem);
         }
 
+        await _unitOfWork.SaveChangesAsync();
         var ldapUsers = await ldapProvider.GetAllUserAsync().ToListAsync();
-        await _ldapDomainService.SyncLdapUserAsync(ldapUsers);
+
+        var args = new SyncLdapUserArgs()
+        {
+            LdapUsers = ldapUsers
+        };
+
+        await BackgroundJobManager.EnqueueAsync(args);
     }
 }

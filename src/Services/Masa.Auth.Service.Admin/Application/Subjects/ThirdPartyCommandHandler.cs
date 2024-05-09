@@ -99,11 +99,21 @@ public class ThirdPartyCommandHandler
         var thirdPartyUserDto = command.ThirdPartyUser;
         var (thirdPartyUser, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
 
-        if (command.WhenExisReturn && thirdPartyUser != null)
+        if (thirdPartyUser != null)
         {
-            command.Result = thirdPartyUser.User.Adapt<UserModel>();
-            return;
+            if (command.WhenExisUpdateClaimData)
+            {
+                thirdPartyUser.UpdateClaimData(thirdPartyUserDto.ClaimData);
+                await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
+            }
+
+            if (command.WhenExisReturn)
+            {
+                command.Result = thirdPartyUser.User.Adapt<UserModel>();
+                return;
+            }
         }
+
         if (exception is not null)
         {
             throw exception;
@@ -137,7 +147,7 @@ public class ThirdPartyCommandHandler
             }
             else
             {
-                var addThirdPartyUserDto = new AddThirdPartyUserDto(identityProvider.Id, true, model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData), command.ThirdPartyUser.Adapt<AddUserDto>());
+                var addThirdPartyUserDto = new AddThirdPartyUserDto(identityProvider.Id, true, model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData), command.ThirdPartyUser.Adapt<AddUserDto>(), model.ClaimData);
                 command.Result = await _thirdPartyUserDomainService.AddThirdPartyUserAsync(addThirdPartyUserDto);
             }
         }
@@ -177,7 +187,13 @@ public class ThirdPartyCommandHandler
         var identityProvider = identityProviderQuery.Result;
         var addThirdPartyUserDto = model.Adapt<AddThirdPartyUserDto>();
         addThirdPartyUserDto.ThirdPartyIdpId = identityProvider.Id;
-        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn);
+
+        if (identityProvider.ThirdPartyIdpType == ThirdPartyIdpTypes.Ldap)
+        {
+            addThirdPartyUserDto.IsLdap = true;
+        }
+
+        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn, command.WhenExisUpdateClaimData);
         await _eventBus.PublishAsync(addThirdPartyUserCommand);
         command.Result = addThirdPartyUserCommand.Result;
     }
@@ -186,6 +202,18 @@ public class ThirdPartyCommandHandler
     public async Task RemoveThirdPartyUserAsync(RemoveThirdPartyUserCommand command)
     {
         await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId);
+    }
+
+    [EventHandler]
+    public async Task RemoveThirdPartyUserByIdAsync(RemoveThirdPartyUserByIdCommand command)
+    {
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.Id == command.Id);
+    }
+
+    [EventHandler]
+    public async Task RemoveThirdPartyUserByThridPartyIdentityAsync(RemoveThirdPartyUserByThridPartyIdentityCommand command)
+    {
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThridPartyIdentity == command.ThridPartyIdentity);
     }
 
     #region ThirdPartyIdp

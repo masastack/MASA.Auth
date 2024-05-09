@@ -8,7 +8,7 @@ public class PasswordHelper : ISingletonDependency
     public const string PASSWORDRULECONFIGNAME = "$public.AppSettings:PasswordRule";
     public const string DEFAULTPASSWORDRULE = "^\\S*(?=\\S{6,})(?=\\S*\\d)(?=\\S*[A-Za-z])\\S*$";
 
-    private IMasaConfiguration _masaConfiguration;
+    private readonly IMasaConfiguration _masaConfiguration;
 
     public PasswordHelper(IMasaConfiguration masaConfiguration)
     {
@@ -35,11 +35,6 @@ public class PasswordHelper : ISingletonDependency
             {
                 //ignore
             }
-            finally
-            {
-                passwordRule = DEFAULTPASSWORDRULE;
-            }
-
         }
         return passwordRule;
     }

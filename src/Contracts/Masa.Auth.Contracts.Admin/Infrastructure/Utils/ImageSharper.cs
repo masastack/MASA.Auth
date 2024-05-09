@@ -5,34 +5,31 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class ImageSharper
 {
-    public static MemoryStream GeneratePortrait(char show, Color textColor, Color backgroundColor, int size)
+    static Image<Rgba32> Generate(char show, Color textColor, Color backgroundColor, int size)
     {
-        var ms = new MemoryStream();
         using var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(GetFontFamily(), (int)(size * 0.6)))
+        var textOptions = new RichTextOptions(new Font(GetFontFamily(), (int)(size * 0.6)))
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             Origin = new Vector2(size / 2, size / 2)
         };
         image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
-        image.SaveAsPng(ms);
+        return image;
+    }
+
+    public static MemoryStream GeneratePortrait(char show, Color textColor, Color backgroundColor, int size)
+    {
+        var ms = new MemoryStream();
+        using var image = Generate(show, textColor, backgroundColor, size);
         ms.Seek(0, SeekOrigin.Begin);
         return ms;
     }
 
     public static void GeneratePortrait(char show, Color textColor, Color backgroundColor, int size, string path)
     {
-        using var image = new Image<Rgba32>(size, size);
-        image.Mutate(x => x.BackgroundColor(backgroundColor));
-        var textOptions = new TextOptions(new Font(GetFontFamily(), (int)(size * 0.6)))
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Origin = new Vector2(size / 2, size / 2)
-        };
-        image.Mutate(x => x.DrawText(textOptions, show.ToString(), textColor));
+        using var image = Generate(show, textColor, backgroundColor, size);
         image.SaveAsPng(path);
     }
 

@@ -26,9 +26,21 @@ public class ThirdPartyUserService : RestServiceBase
     }
 
     [AllowAnonymous]
-    private async Task<UserModel?> GetAsync(IEventBus eventBus, [FromQuery]string thridPartyIdentity)
+    private async Task<UserModel?> GetAsync(IEventBus eventBus, [FromQuery] string thridPartyIdentity)
     {
         var query = new ThirdPartyUserQuery(thridPartyIdentity);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    [AllowAnonymous]
+    private async Task<UserModel?> GetByUserIdAsync(IEventBus eventBus, [FromQuery] string scheme, Guid userId)
+    {
+        var identityProviderQuery = new IdentityProviderBySchemeQuery(scheme);
+        await eventBus.PublishAsync(identityProviderQuery);
+        var identityProvider = identityProviderQuery.Result;
+
+        var query = new ThirdPartyUserByUserIdQuery(userId, identityProvider.Id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -44,9 +56,10 @@ public class ThirdPartyUserService : RestServiceBase
     private async Task<UserModel> AddThirdPartyUserAsync(
         IEventBus eventBus,
         [FromQuery] bool whenExistReturn,
+        [FromQuery] bool whenExisUpdateClaimData,
         AddThirdPartyUserModel model)
     {
-        var query = new AddThirdPartyUserExternalCommand(model, whenExistReturn);
+        var query = new AddThirdPartyUserExternalCommand(model, whenExistReturn, whenExisUpdateClaimData);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
@@ -57,5 +70,15 @@ public class ThirdPartyUserService : RestServiceBase
         var query = new RegisterThirdPartyUserCommand(model);
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    private async Task RemoveAsync(IEventBus eventBus, [FromBody] RemoveThirdPartyUserDto dto)
+    {
+        await eventBus.PublishAsync(new RemoveThirdPartyUserByIdCommand(dto.Id));
+    }
+
+    private async Task RemoveByThridPartyIdentityAsync(IEventBus eventBus, [FromBody] RemoveThirdPartyUserByThridPartyIdentityDto dto)
+    {
+        await eventBus.PublishAsync(new RemoveThirdPartyUserByThridPartyIdentityCommand(dto.ThridPartyIdentity));
     }
 }

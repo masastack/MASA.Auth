@@ -17,6 +17,7 @@ public partial class Organization
     CopyOrgSheet _copyOrgSheet = null!;
     OrgSheet _orgSheet = null!;
     string _searchName = string.Empty;
+    private List<DataTableHeader<StaffDto>> _headers = new();
 
     DepartmentService DepartmentService => AuthCaller.DepartmentService;
 
@@ -25,18 +26,18 @@ public partial class Organization
     [Parameter]
     public Guid DepartmentId { get; set; } = Guid.Empty;
 
-    public List<DataTableHeader<StaffDto>> GetHeaders() => new()
-    {
-        new() { Text = T(nameof(Staff)), Value = nameof(StaffDto.Name), CellClass = "body-medium emphasis2--text" },
-        new() { Text = T(nameof(StaffDto.Account)), Value = nameof(StaffDto.Account), CellClass = "subtitle" },
-        new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), CellClass = "subtitle" },
-        new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="80px" }
-    };
-
     protected override void OnInitialized()
     {
         PageName = "OrganizationBlock";
+
+        _headers = new List<DataTableHeader<StaffDto>> {
+            new() { Text = T(nameof(Staff)), Value = nameof(StaffDto.Name), CellClass = "body-medium emphasis2--text" },
+            new() { Text = T(nameof(StaffDto.Account)), Value = nameof(StaffDto.Account), CellClass = "subtitle" },
+            new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), CellClass = "subtitle" },
+            new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), CellClass = "subtitle" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width = "80px" }
+        };
+        
         base.OnInitialized();
     }
 

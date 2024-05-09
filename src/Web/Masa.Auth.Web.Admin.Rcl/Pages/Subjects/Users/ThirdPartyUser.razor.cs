@@ -111,6 +111,16 @@ public partial class ThirdPartyUser
     protected override async Task OnInitializedAsync()
     {
         PageName = "ThirdPartyUser";
+        
+        _headers = new List<DataTableHeader<ThirdPartyUserDto>> {
+            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false, Width = "20%" },
+            new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false, Width = "20%" },
+            new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false, Width = "20%" },
+            new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false, Width = "20%" },
+            new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align = DataTableHeaderAlign.Center, Width = "20%" },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px"}
+        };;
+        
         await GetThirdPartyUsersAsync();
     }
 
@@ -123,14 +133,7 @@ public partial class ThirdPartyUser
         }
     }
 
-    public List<DataTableHeader<ThirdPartyUserDto>> GetHeaders() => new()
-    {
-        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false, Width = "20%" },
-        new() { Text = T("Source"), Value = nameof(ThirdPartyUserDto.IdpDetailDto), Sortable = false, Width = "20%" },
-        new() { Text = T(nameof(ThirdPartyUserDto.CreationTime)), Value = nameof(ThirdPartyUserDto.CreationTime), Sortable = false, Width = "20%" },
-        new() { Text = T(nameof(ThirdPartyUserDto.ModificationTime)), Value = nameof(ThirdPartyUserDto.ModificationTime), Sortable = false, Width = "20%" },
-        new() { Text = T("State"), Value = nameof(UserDto.Enabled), Sortable = false, Align = DataTableHeaderAlign.Center, Width = "20%" }
-    };
+    private List<DataTableHeader<ThirdPartyUserDto>> _headers = new(); 
 
     public async Task GetThirdPartyUsersAsync()
     {
@@ -156,5 +159,15 @@ public partial class ThirdPartyUser
     public async Task OpenLdapDialog()
     {
         await ldapDialog.OpenAsync();
+    }
+
+    private async Task OpenRemoveDialog(ThirdPartyUserDto thirdPartyUserDto)
+    {
+        var isConfirmed = await OpenConfirmDialog(T("Delete ThirdPartyUser"), T("Are you sure to delete thirdPartyUser {0}", thirdPartyUserDto.User.DisplayName));
+        if (isConfirmed)
+        {
+            await ThirdPartyUserService.RemoveAsync(thirdPartyUserDto.Id);
+            await ReloadAsync();
+        }
     }
 }

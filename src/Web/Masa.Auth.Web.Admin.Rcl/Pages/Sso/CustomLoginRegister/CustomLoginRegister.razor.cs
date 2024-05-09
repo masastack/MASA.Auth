@@ -52,8 +52,6 @@ public partial class CustomLoginRegister
 
     private CustomLoginService CustomLoginService => AuthCaller.CustomLoginService;
 
-    protected new string? PageName = "CustomLoginBlock";
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -64,17 +62,25 @@ public partial class CustomLoginRegister
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    public List<DataTableHeader<CustomLoginDto>> GetHeaders() => new()
+    protected override void OnInitialized()
     {
-        new() { Text = T(nameof(ClientDto.LogoUri)), Value = nameof(ClientDto.LogoUri), Sortable = false, Width="105px" },
-        new() { Text = T("TitleName"), Value = nameof(CustomLoginDto.Name), Sortable = false},
-        new() { Text = T("ClientName"), Value = nameof(ClientDto.ClientName), Sortable = false},
-        new() { Text = T(nameof(CustomLoginDto.CreationTime)), Value = nameof(CustomLoginDto.CreationTime), Sortable = false , Width="250px" },
-        new() { Text = T(nameof(CustomLoginDto.ModificationTime)), Value = nameof(CustomLoginDto.ModificationTime), Sortable = false, Width="250px"  },
-        new() { Text = T(nameof(CustomLoginDto.Modifier)), Value = nameof(CustomLoginDto.Modifier), Sortable = false, Width="105px" },
-        new() { Text = T("State"), Value = nameof(CustomLoginDto.Enabled), Sortable = false , Width="105px"},
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
+        PageName = "CustomLoginBlock";
+
+        base.OnInitialized();
+
+        _headers = new List<DataTableHeader<CustomLoginDto>> {
+            new() { Text = T(nameof(ClientDto.LogoUri)), Value = nameof(ClientDto.LogoUri), Sortable = false, Width="105px" },
+            new() { Text = T("TitleName"), Value = nameof(CustomLoginDto.Name), Sortable = false},
+            new() { Text = T("ClientName"), Value = nameof(ClientDto.ClientName), Sortable = false},
+            new() { Text = T(nameof(CustomLoginDto.CreationTime)), Value = nameof(CustomLoginDto.CreationTime), Sortable = false , Width="250px" },
+            new() { Text = T(nameof(CustomLoginDto.ModificationTime)), Value = nameof(CustomLoginDto.ModificationTime), Sortable = false, Width="250px"  },
+            new() { Text = T(nameof(CustomLoginDto.Modifier)), Value = nameof(CustomLoginDto.Modifier), Sortable = false, Width="105px" },
+            new() { Text = T("State"), Value = nameof(CustomLoginDto.Enabled), Sortable = false , Width="105px"},
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        };
+    }
+
+    private List<DataTableHeader<CustomLoginDto>> _headers = new();
 
     public async Task GetCustomLoginsAsync()
     {

@@ -158,6 +158,7 @@
     "Connect Success": "连接成功",
     "Connect Error": "连接失败",
     "LDAP Account Synchroniz Success": "域账户同步成功",
+    "LDAPAccountSynchronizPrompt": "域账户同步已在后台执行，请稍后查看",
     "AuthenticationType": "认证类型",
     "PlatformType": "平台类型",
     "Icon": "图标",
@@ -518,7 +519,8 @@
     "Name is required": "姓名必须填写",
     "Title is required": "标题必须填写",
     "NameRequired": "姓名必须填写",
-    "DisplayNameRequired": "昵称必须填写"
+    "DisplayNameRequired": "昵称必须填写",
+    "PhoneNumberAndEmailEmptyError": "电话号码和邮件其中一个必须有值"
   },
 
   "OperationLog": "操作日志",
@@ -663,5 +665,6 @@
   "Cancel Filter": "取消筛选",
   "RepeatAdd": "重复添加",
   "Add Claim": "添加声明",
-  "Claim": "声明"
+  "Claim": "声明",
+  "ImpersonationLogin": "模拟登录"
 }

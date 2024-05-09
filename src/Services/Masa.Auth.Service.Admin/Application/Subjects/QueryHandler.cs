@@ -18,6 +18,7 @@ public class QueryHandler
     private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
     private readonly UserDomainService _userDomainService;
     private readonly OperaterProvider _operaterProvider;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -32,7 +33,8 @@ public class QueryHandler
         IPmClient pmClient,
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
         UserDomainService userDomainService,
-        OperaterProvider operaterProvider)
+        OperaterProvider operaterProvider,
+        IWebHostEnvironment webHostEnvironment)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -47,6 +49,7 @@ public class QueryHandler
         _userDomainService = userDomainService;
         _operaterProvider = operaterProvider;
         _distributedCacheClient = distributedCacheClient;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     #region User
@@ -419,12 +422,29 @@ public class QueryHandler
                                          .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
-
+        
         if (tpUser != null && tpUser.User != null && userModel != null)
         {
             var staff = tpUser.User.Staff;
             userModel.StaffId = (staff == null || !staff.Enabled) ? Guid.Empty : staff.Id;
             userModel.CurrentTeamId = staff?.CurrentTeamId;
+            userModel.ClaimData = tpUser.ClaimData;
+        }
+
+        query.Result = userModel;
+    }
+
+    [EventHandler]
+    public async Task GetThirdPartyUserByUserIdAsync(ThirdPartyUserByUserIdQuery query)
+    {
+        var tpUser = await _authDbContext.Set<ThirdPartyUser>()
+                                         .Include(tpu => tpu.User)
+                                         .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == query.ThirdPartyIdpId && tpu.UserId == query.UserId);
+        var userModel = tpUser?.User?.Adapt<UserModel>();
+
+        if (tpUser != null && tpUser.User != null && userModel != null)
+        {
+            userModel.ClaimData = tpUser.ClaimData;
         }
 
         query.Result = userModel;
@@ -705,7 +725,7 @@ public class QueryHandler
         var visited = await _distributedCacheClient.GetAsync<List<CacheUserVisited>>(key);
         if (visited != null)
         {
-            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? "");
+            var projects = await _pmClient.ProjectService.GetProjectAppsAsync(_multiEnvironmentUserContext.Environment ?? _webHostEnvironment.EnvironmentName);
             var apps = projects.SelectMany(p => p.Apps);
             //todo cache
             var menus = visited.GroupJoin(_authDbContext.Set<Permission>().Where(p => p.Type == PermissionTypes.Menu).AsEnumerable(),
@@ -752,7 +772,21 @@ public class QueryHandler
             //compatible
             userClaimValuesQuery.Result.TryAdd("phoneNumber", user.PhoneNumber);
             userClaimValuesQuery.Result.TryAdd("account", user.Account);
-            userClaimValuesQuery.Result.TryAdd("user_name", user.DisplayName);
+            userClaimValuesQuery.Result.TryAdd("userName", user.DisplayName);
         }
+    }
+
+    [EventHandler]
+    public async Task GetImpersonatedUserAsync(ImpersonatedUserQuery query)
+    {
+        var key = CacheKey.ImpersonationUserKey(query.ImpersonationToken);
+        var cacheItem = await _distributedCacheClient.GetAsync<ImpersonationCacheItem>(key);
+        if (cacheItem == null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IMPERSONATION_TOKEN_ERROR_MESSAGE);
+        }
+
+        query.Result = cacheItem;
+        //await _distributedCacheClient.RemoveAsync(key);
     }
 }

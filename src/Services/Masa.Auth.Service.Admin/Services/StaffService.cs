@@ -168,10 +168,4 @@ public class StaffService : RestServiceBase
         var command = new UpdateStaffDefaultPasswordCommand(dto);
         await eventBus.PublishAsync(command);
     }
-
-    private async Task SyncCacheAsync(IEventBus eventBus)
-    {
-        var command = new SyncStaffCacheCommand();
-        await eventBus.PublishAsync(command);
-    }
 }

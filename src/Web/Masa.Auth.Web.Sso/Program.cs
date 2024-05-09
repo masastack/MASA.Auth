@@ -9,7 +9,7 @@ await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackA
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 // Add services to the container.
-builder.Services.AddScoped<EnvironmentDataService>();
+builder.Services.AddSingleton<EnvironmentDataService>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMasaBlazor(builder =>
@@ -56,6 +56,7 @@ builder.Services.AddMultilevelCache(distributedCacheOptions =>
 {
     distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
 });
+builder.Services.AddScoped<CookieStorage>();
 var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
@@ -68,9 +69,10 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddProfileService<UserProfileService>()
     .AddCustomTokenRequestValidator<CustomTokenRequestValidator>()
     .AddExtensionGrantValidator<PhoneCodeGrantValidator>()
-    .AddExtensionGrantValidator<LoclaPhoneNumberGrantValidator>()
+    .AddExtensionGrantValidator<LocalPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
-    .AddExtensionGrantValidator<LdapGrantValidator>();
+    .AddExtensionGrantValidator<LdapGrantValidator>()
+    .AddExtensionGrantValidator<ImpersonationGrantValidator>();
 
 if (builder.Environment.IsDevelopment())
 {

@@ -9,6 +9,7 @@ public partial class Staff
     private bool? _enabled;
     private int _page = 1, _pageSize = 20;
     private UserAuthorizeDialog _userAuthorizeDialog = default!;
+    private List<DataTableHeader<StaffDto>> _headers = new();
 
     [Parameter]
     public User? UserCompontent { get; set; }
@@ -75,19 +76,19 @@ public partial class Staff
     protected override async Task OnInitializedAsync()
     {
         PageName = "StaffBlock";
+
+        _headers = new List<DataTableHeader<StaffDto>> {
+            new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
+            new() { Text = T(nameof(UserDto.Account)), Value = nameof(UserDto.Account), Sortable = false },
+            new() { Text = T(nameof(StaffDto.Department)), Value = nameof(StaffDto.Department), Sortable = false },
+            new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
+            new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
+            new() { Text = T("State"), Value = nameof(StaffDto.Enabled), Sortable = false , Width="105px"},
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
+        };
+
         await GetStaffAsync();
     }
-
-    public List<DataTableHeader<StaffDto>> GetHeaders() => new()
-    {
-        new() { Text = T("User"), Value = nameof(UserDto.Avatar), Sortable = false },
-        new() { Text = T(nameof(UserDto.Account)), Value = nameof(UserDto.Account), Sortable = false },
-        new() { Text = T(nameof(StaffDto.Department)), Value = nameof(StaffDto.Department), Sortable = false },
-        new() { Text = T(nameof(StaffDto.JobNumber)), Value = nameof(StaffDto.JobNumber), Sortable = false },
-        new() { Text = T(nameof(StaffDto.Position)), Value = nameof(StaffDto.Position), Sortable = false },
-        new() { Text = T("State"), Value = nameof(StaffDto.Enabled), Sortable = false , Width="105px"},
-        new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width="105px" },
-    };
 
     public async Task GetStaffAsync()
     {

@@ -82,7 +82,8 @@
   "PhoneNumberMismatch": "该用户在Auth中已存在，手机号为{0}，与手机号{1}不匹配",
   "ClientIdAlreadyExist": "客户端ID：{0} 已存在",
   "PasswordValidateFailed": "密码验证规则不通过",
-  "PasswordFormatVerificationPrompt": "密码必须是字母和数字的组合，且长度不小于8",
+  "PasswordFormatVerificationPrompt": "密码必须是字母和数字的组合，且长度不小于6",
   "APIScopeNameExist": "API 范围已存在该名称",
-  "IdentitySourceNameExist": "身份资源已存在该名称"
+  "IdentitySourceNameExist": "身份资源已存在该名称",
+  "WebhookNotExist": "Webhook记录不存在"
 }

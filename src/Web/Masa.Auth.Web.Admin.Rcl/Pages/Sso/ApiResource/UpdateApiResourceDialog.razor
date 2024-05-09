@@ -3,19 +3,19 @@
 <DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("Edit ApiResource")">
     <MForm Model=ApiResource EnableValidation EnableI18n>
         <AutoHeight Overflow>
-        <AutoHeightContent>
-            <DefaultTitle Class="mb-4">@T("BasicInformation")</DefaultTitle>
+            <AutoHeightContent>
+                <DefaultTitle Class="mb-4">@T("BasicInformation")</DefaultTitle>
                 <MRow Class="mt-6">
                     <MCol>
-                        <STextField @bind-Value="ApiResource.DisplayName" Required Label="@T("DisplayName")" />
+                        <STextField @bind-Value="ApiResource.DisplayName" Required Label="@T("DisplayName")"/>
                     </MCol>
                     <MCol>
-                        <STextField Disabled Value="ApiResource.Name" Required Label="@T("Name")" />
+                        <STextField Disabled Value="ApiResource.Name" Required Label="@T("Name")"/>
                     </MCol>
                 </MRow>
                 <MRow Class="mb-6">
                     <MCol>
-                        <STextField @bind-Value="ApiResource.Description" Label="@T("Description")" />
+                        <STextField @bind-Value="ApiResource.Description" Label="@T("Description")"/>
                     </MCol>
                 </MRow>
                 <div class="d-flex mb-10">
@@ -24,21 +24,21 @@
                 <div class="d-flex full-height">
                     <div class="pr-6" style="width:50%">
                         <DefaultTitle class="mb-2">@T("User Claims")</DefaultTitle>
-                        <UserClaimSelect @bind-Value=ApiResource.UserClaims Chunk="3" Class="mt-4" />
+                        <UserClaimSelect @bind-Value=ApiResource.UserClaims Chunk="3" Class="mt-4"/>
                     </div>
                     <div class="pl-6" style="width:50%">
                         <DefaultTitle class="mb-2">@T("Api Scopes")</DefaultTitle>
-                        <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Chunk="3" Class="mt-4" />
+                        <ApiScopeSelect @bind-Value=ApiResource.ApiScopes Chunk="3" Class="mt-4"/>
                     </div>
                 </div>
-        </AutoHeightContent>
-        <FooterContent>
-            <div class="d-flex mt-6">
-                <EnableSwitch @bind-Value="ApiResource.Enabled" />
-                <MSpacer></MSpacer> 
-                <SButton Medium OnClick="async () => await UpdatetApiResourceAsync(context)">@T("Save")</SButton>
-            </div>
-        </FooterContent>
-    </AutoHeight>      
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <EnableSwitch @bind-Value="ApiResource.Enabled"/>
+                    <MSpacer></MSpacer>
+                    <SButton Medium OnClick="async () => await UpdatetApiResourceAsync(context)">@T("Save")</SButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
     </MForm>
 </DefaultSheetDialog>

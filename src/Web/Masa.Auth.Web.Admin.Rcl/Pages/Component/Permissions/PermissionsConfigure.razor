@@ -2,19 +2,27 @@
 
 @if (HasPreview)
 {
-    <ExpansionMenuWrapper Value="Menu" />
+    @if (_menu is null)
+    {
+        <MSkeletonLoader Type="image,image,image" Class="global-nav-content__loader"></MSkeletonLoader>
+        <MSkeletonLoader Type="image" Class="global-nav-content__toc-loader"></MSkeletonLoader>
+    }
+    else
+    {
+        <ExpansionMenuWrapper CssForScroll="permission-view" Value="Menu" />
+    }
 
     <DefaultSheetDialog Value="Preview" ValueChanged="PreviewChanged" Title="@T("Preview Permissions")">
         <AutoHeight>
             <AutoHeightContent>
                 <div class="global-nav" style="max-height:calc(100vh - 230px);">
-                    <ExpansionMenuWrapper Value="PreviewMenu" />
+                    <ExpansionMenuWrapper CssForScroll="permission-view3" Value="PreviewMenu" />
                 </div>
             </AutoHeightContent>
             <FooterContent>
                 <div class="d-flex mt-6">
                     <MSpacer />
-                    <SButton OnClick="async() => await PreviewChanged.InvokeAsync(false)" Medium Outlined>
+                    <SButton OnClick="@(() => PreviewChanged.InvokeAsync(false))" Medium Outlined>
                         @T("Back")
                     </SButton>
                 </div>
@@ -24,5 +32,5 @@
 }
 else
 {
-    <ExpansionMenuWrapper Value="PreviewMenu" />
+    <ExpansionMenuWrapper CssForScroll="permission-view2" Value="PreviewMenu" />
 }

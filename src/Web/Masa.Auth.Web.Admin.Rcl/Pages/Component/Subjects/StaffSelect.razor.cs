@@ -21,9 +21,6 @@ public partial class StaffSelect
     public bool Readonly { get; set; }
 
     [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
     public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 
     bool _staffLoading;
@@ -93,7 +90,7 @@ public partial class StaffSelect
     {
         search = search.Trim(' ');
         await Task.Delay(300);
-        if (search.IsNullOrEmpty())
+        if (search.Length < 2)
         {
             return;
         }

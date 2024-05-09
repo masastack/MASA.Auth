@@ -45,7 +45,8 @@
   "CustomLoginBlock": {
     "TitleName": "Name",
     "NameRequired": "Name is required",
-    "DisplayNameRequired": "DisplayName is required"
+    "DisplayNameRequired": "DisplayName is required",
+    "PhoneNumberAndEmailEmptyError": "One of phone number and email must have a value"
   },
   "ConfirmChangePassword": "I confirm to change the password",
   "PasswordValidateFailed": "Password validate failed",
@@ -154,5 +155,8 @@
     "MatchPattern": "Match Pattern",
     "MatchPatternTip": "Used in special cases when auto-match left menu is highlighted"
   },
-  "RepeatAdd": "Add Repeatedly"
+  "RepeatAdd": "Add Repeatedly",
+  "ThirdPartyIdpBlock": {
+    "LDAPAccountSynchronizPrompt": "LDAP account synchronization has been executed in the background, please check later"
+  }
 }

@@ -21,5 +21,15 @@ public class ThirdPartyUserService : ServiceBase
     {
         return await SendAsync<object, ThirdPartyUserDetailDto>(nameof(GetDetailAsync), new { id });
     }
+
+    public async Task RemoveAsync(Guid id)
+    {
+        await DeleteAsync(nameof(RemoveAsync), new { id });
+    }
+
+    public async Task RemoveByThridPartyIdentityAsync(string thridPartyIdentity)
+    {
+        await DeleteAsync(nameof(RemoveByThridPartyIdentityAsync), new { thridPartyIdentity });
+    }
 }
 

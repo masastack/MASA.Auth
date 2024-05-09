@@ -22,6 +22,7 @@ public class CommandHandler
     private readonly IUnitOfWork _unitOfWork;
     private readonly LdapDomainService _ldapDomainService;
     private readonly RoleDomainService _roleDomainService;
+    private readonly IUserContext _userContext;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -40,7 +41,8 @@ public class CommandHandler
         IMasaConfiguration masaConfiguration,
         IUnitOfWork unitOfWork,
         LdapDomainService ldapDomainService,
-        RoleDomainService roleDomainService)
+        RoleDomainService roleDomainService,
+        IUserContext userContext)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -59,6 +61,7 @@ public class CommandHandler
         _unitOfWork = unitOfWork;
         _ldapDomainService = ldapDomainService;
         _roleDomainService = roleDomainService;
+        _userContext = userContext;
     }
 
     #region User
@@ -93,11 +96,15 @@ public class CommandHandler
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
         }
-        var smsCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
-        if (!model.SmsCode.Equals(smsCode))
+
+        if (model.UserRegisterType == UserRegisterTypes.PhoneNumber || !string.IsNullOrEmpty(model.PhoneNumber))
         {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            var smsCodeKey = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
+            var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
+            if (!model.SmsCode.Equals(smsCode))
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            }
         }
     }
 
@@ -177,8 +184,9 @@ public class CommandHandler
     public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
         var userModel = command.User;
+
         var user = await CheckUserExistAsync(userModel.Id);
-        user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
+        user.UpdateBasicInfo(userModel.Name, userModel.DisplayName, userModel.Gender, userModel.Avatar, userModel.CompanyName, userModel.Department, userModel.Position, new AddressValue(userModel.Address.Address, "", "", ""));
         await _userDomainService.UpdateAsync(user);
     }
 
@@ -258,10 +266,8 @@ public class CommandHandler
                     msgCodeKey = CacheKey.MsgCodeForUpdateUserPhoneNumberKey(model.UserId.ToString(), model.PhoneNumber);
                     break;
                 case SendMsgCodeTypes.Login:
-                    msgCodeKey = CacheKey.MsgCodeForLoginKey(model.UserId.ToString(), model.PhoneNumber);
-                    break;
                 case SendMsgCodeTypes.Register:
-                    msgCodeKey = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
+                    msgCodeKey = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
                     break;
                 case SendMsgCodeTypes.Bind:
                     msgCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
@@ -313,17 +319,28 @@ public class CommandHandler
         });
         if (user is null)
         {
-            throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_NOT_EXIST, model.PhoneNumber);
+            var registerUserCommand = new RegisterUserCommand(new RegisterByEmailModel
+            {
+                PhoneNumber = model.PhoneNumber,
+                SmsCode = model.Code,
+                UserRegisterType = UserRegisterTypes.PhoneNumber
+            });
+            await _eventBus.PublishAsync(registerUserCommand);
+            command.Result = new UserDetailDto
+            {
+                Id = registerUserCommand.Result.Id,
+                Account = registerUserCommand.Result.Account,
+                PhoneNumber = registerUserCommand.Result.PhoneNumber,
+                Avatar = registerUserCommand.Result.Avatar,
+                CreationTime = registerUserCommand.Result.CreationTime,
+                DisplayName = registerUserCommand.Result.DisplayName,
+                Name = registerUserCommand.Result.Name,
+                Enabled = registerUserCommand.Result.Enabled,
+                Gender = registerUserCommand.Result.Gender
+            };
+            return;
         }
-        var key = "";
-        if (model.RegisterLogin)
-        {
-            key = CacheKey.MsgCodeForRegisterKey(model.PhoneNumber);
-        }
-        else
-        {
-            key = CacheKey.MsgCodeForLoginKey(user.Id.ToString(), model.PhoneNumber);
-        }
+        var key = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
         if (!await _sms.VerifyMsgCodeAsync(key, model.Code))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
@@ -604,5 +621,32 @@ public class CommandHandler
         user.UserClaimValues(saveUserClaimValuesCommand.ClaimValues);
 
         await _userDomainService.UpdateAsync(user);
+    }
+
+    [EventHandler]
+    public async Task ImpersonateAsync(ImpersonateUserCommand command)
+    {
+        var userId = _userContext.GetUserId<Guid>();
+        if (userId == default)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+        var cacheItem = new ImpersonationCacheItem(
+                command.UserId,
+                command.IsBackToImpersonator
+            );
+
+        if (!command.IsBackToImpersonator)
+        {
+            cacheItem.ImpersonatorUserId = userId;
+        }
+
+        var token = Guid.NewGuid().ToString();
+        var key = CacheKey.ImpersonationUserKey(token);
+        await _distributedCacheClient.SetAsync(key, cacheItem, TimeSpan.FromMinutes(10));
+
+        command.Result = new ImpersonateOutput {
+            ImpersonationToken = token
+        };
     }
 }

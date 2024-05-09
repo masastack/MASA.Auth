@@ -10,34 +10,39 @@ public class QueryHandler
     private readonly IPermissionRepository _permissionRepository;
     private readonly UserDomainService _userDomainService;
     private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
+    private readonly ILogger<QueryHandler> _logger;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public QueryHandler(
         IPmClient pmClient,
         IPermissionRepository permissionRepository,
         UserDomainService userDomainService,
         IDccClient dccClient,
-        IMultiEnvironmentUserContext multiEnvironmentUserContext)
+        IMultiEnvironmentUserContext multiEnvironmentUserContext,
+        ILogger<QueryHandler> logger,
+        IWebHostEnvironment webHostEnvironment)
     {
         _pmClient = pmClient;
         _permissionRepository = permissionRepository;
         _userDomainService = userDomainService;
         _dccClient = dccClient;
         _multiEnvironmentUserContext = multiEnvironmentUserContext;
+        _logger = logger;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     [EventHandler]
     public async Task GetProjectListAsync(ProjectListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment ?? "", AppTypes.UI, AppTypes.Service);
+        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment, AppTypes.UI, AppTypes.Service);
     }
 
     [EventHandler]
     public async Task GetProjectUIAppListAsync(ProjectUIAppListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment ?? "", AppTypes.UI);
-
-        var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
-                || p.Type == PermissionTypes.Element);
+        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment, AppTypes.UI);
+        var menuPermissions = await _permissionRepository.GetListAsync(p => p.Enabled && (p.Type == PermissionTypes.Menu
+                || p.Type == PermissionTypes.Element));
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
             a.Navs = menuPermissions.Where(p => p.AppId == a.Identity && p.GetParentId() == Guid.Empty)
@@ -53,8 +58,7 @@ public class QueryHandler
     [EventHandler]
     public async Task NavigationListQueryAsync(NavigationListQuery query)
     {
-        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment ?? "", AppTypes.UI);
-
+        query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment, AppTypes.UI);
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
         var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
                                 && permissionIds.Contains(p.Id) && p.Enabled);
@@ -77,8 +81,14 @@ public class QueryHandler
         query.Result.RemoveAll(r => r.Apps.All(a => a.Navs.Count == 0));
     }
 
-    private async Task<List<ProjectDto>> GetProjectDtoListAsync(string env, params AppTypes[] appTypes)
+    private async Task<List<ProjectDto>> GetProjectDtoListAsync(string? env, params AppTypes[] appTypes)
     {
+        if (env.IsNullOrEmpty())
+        {
+            env = _webHostEnvironment.EnvironmentName;
+            _logger.LogWarning($"User context environment is empty,use system environment {env}");
+        }
+
         var result = new List<ProjectDto>();
         var projects = await _pmClient.ProjectService.GetProjectAppsAsync(env);
         var tags = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");

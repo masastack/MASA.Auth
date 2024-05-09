@@ -17,12 +17,6 @@ public partial class TeamSwitch
     [Parameter]
     public EventCallback<List<Guid>> RolesChanged { get; set; }
 
-    [Parameter]
-    public string Class { get; set; } = "";
-
-    [Parameter]
-    public string Style { get; set; } = "";
-
     private List<TeamRoleSelectDto> Teams { get; set; } = new();
 
     private TeamRoleSelectDto? CurrentTeam => Teams.FirstOrDefault(team => team.Id == Value);

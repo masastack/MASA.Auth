@@ -76,6 +76,28 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetDetailExternalAsync(RoleDetailExternalQuery query)
+    {
+        var role = await _roleRepository.GetByIdAsync(query.RoleId);
+        var result = new RoleSimpleDetailDto
+        {
+            Id = role.Id,
+            Name = role.Name,
+            Code = role.Code,
+            Enabled = role.Enabled
+        };
+        var childrenIds = role.ChildrenRoles.Select(x => x.RoleId);
+        result.Children = (await _roleRepository.GetListAsync(r => childrenIds.Contains(r.Id))).Select(r => new RoleSimpleDetailDto
+        {
+            Id = r.Id,
+            Name = r.Name,
+            Code = r.Code,
+            Enabled = r.Enabled
+        }).ToList();
+        query.Result = result;
+    }
+
+    [EventHandler]
     public async Task GetRoleOwnerAsync(RoleOwnerQuery query)
     {
         var role = await _authDbContext.Set<Role>()

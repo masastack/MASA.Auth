@@ -15,17 +15,22 @@ public class AddThirdPartyUserDto
 
     public AddUserDto User { get; set; } = new();
 
+    public Dictionary<string, string> ClaimData { get; set; } = new();
+
+    public bool IsLdap { get; set; }
+
     public AddThirdPartyUserDto()
     {
 
     }
 
-    public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user)
+    public AddThirdPartyUserDto(Guid thirdPartyIdpId, bool enabled, string thridPartyIdentity, string extendedData, AddUserDto user, Dictionary<string, string> claimData)
     {
         ThirdPartyIdpId = thirdPartyIdpId;
         Enabled = enabled;
         ThridPartyIdentity = thridPartyIdentity;
         ExtendedData = extendedData;
         User = user;
+        ClaimData = claimData;
     }
 }
