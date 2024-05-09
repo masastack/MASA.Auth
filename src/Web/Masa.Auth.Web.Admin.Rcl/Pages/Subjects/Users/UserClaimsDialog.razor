@@ -1,45 +1,62 @@
 ﻿@inherits AdminCompontentBase
-
-<SSimpleModal @bind-Value="_visible" Title="@T("Claim")" OnSave="Save" OnCancel="Cancel">
-    <MRow Class="py-4">
-        <MCol Md="6">
-            <SAutoComplete @bind-Value="@_claimKey" Required
-                     Label="@T("Type")"
-                     Items="@_claims"
-                     ItemText="u => u.Name"
-                     ItemValue="u => u.Name">
-            </SAutoComplete>
-        </MCol>
-        <MCol Md="6">
-            <STextField Label="@T("Value")" @bind-Value="@_claimValue" Required />
-        </MCol>
-        <MCol Md="12">
-            <SButton Block OnClick="AddClaim">
-                <SIcon Left>
-                    @IconConstants.Add
-                </SIcon>
-                @T("Add Claim")
-            </SButton>
-        </MCol>
-        @foreach (var _claimValue in _claimValues)
-        {
-            <MCol Md="12">
-                <STextField Value="@_claimValue.Value" ValueChanged="v=> ValueChanged(_claimValue.Key,v)" TValue="string" Class="claim-value">
-                    <PrependInnerContent>
-                        <span>
-                            @_claimValue.Key
-                        </span>
-                    </PrependInnerContent> 
-                    <AppendOuterContent>
-                        <MButton OnClick="()=>RemoveItem(_claimValue.Key)">
-                            <SIcon Color="error">@IconConstants.Remove</SIcon>
-                        </MButton>
-                    </AppendOuterContent>
-                </STextField>
-            </MCol>
-        }
-    </MRow>
-</SSimpleModal>
+<DefaultSheetDialog @bind-Value="_visible" Title="@T("Claim")">
+    <MForm>
+        <AutoHeight Overflow>
+            <AutoHeightContent>
+                <MRow Class="py-4">
+                    <MCol Md="6">
+                        <SAutoComplete @bind-Value="@_claimKey" Required
+                                       Label="@T("Type")"
+                                       Items="@_claims"
+                                       ItemText="@(u => $"{u.Name}({u.Description})")"
+                                       ItemValue="u => u.Name">
+                        </SAutoComplete>
+                    </MCol>
+                    <MCol Md="6">
+                        <STextField Label="@T("Value")" @bind-Value="@_claimValue" Required />
+                    </MCol>
+                    <MCol Md="12">
+                        <SButton Block OnClick="AddClaim">
+                            <SIcon Left>
+                                @IconConstants.Add
+                            </SIcon>
+                            @T("Add Claim")
+                        </SButton>
+                    </MCol>
+                    @foreach (var _claimValue in _claimValues)
+                    {
+                        <MCol Md="12">
+                            <STextField Value="@_claimValue.Value" ValueChanged="v=> ValueChanged(_claimValue.Key,v)" TValue="string" Class="claim-value">
+                                <PrependInnerContent>
+                                    <span>
+                                        @_claimValue.Key
+                                    </span>
+                                    @if (_claims.Any(x => x.Name == _claimValue.Key))
+                                    {
+                                        <span>
+                                            (@(_claims.Find(x => x.Name == _claimValue.Key)?.Description))
+                                        </span>
+                                    }
+                                </PrependInnerContent>
+                                <AppendOuterContent>
+                                    <MButton OnClick="()=>RemoveItem(_claimValue.Key)">
+                                        <SIcon Color="error">@IconConstants.Remove</SIcon>
+                                    </MButton>
+                                </AppendOuterContent>
+                            </STextField>
+                        </MCol>
+                    }
+                </MRow>
+            </AutoHeightContent>
+            <FooterContent>
+                <div class="d-flex mt-6">
+                    <MSpacer></MSpacer>
+                    <SButton Medium OnClick="Save">@T("Save")</SButton>
+                </div>
+            </FooterContent>
+        </AutoHeight>
+    </MForm>
+</DefaultSheetDialog>
 
 @code {
 
