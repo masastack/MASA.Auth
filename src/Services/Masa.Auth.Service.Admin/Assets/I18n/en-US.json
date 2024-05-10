@@ -85,5 +85,10 @@
   "PasswordFormatVerificationPrompt": "The password must be a combination of letters and numbers, and the length must not be less than 6",
   "APIScopeNameExist": "API Scope exist this name",
   "IdentitySourceNameExist": "Identity Source exist this name",
-  "WebhookNotExist": "The Webhook does not exist"
+  "WebhookNotExist": "The Webhook does not exist",
+  "WebClientDescription": "Server-side applications where authentication and tokens are handled on the server (for example, Go, Java, ASP.Net, Node.js, PHP)",
+  "NativeClientDescription": "Desktop or mobile applications that run natively on a device and redirect users to a non-HTTP callback (for example, iOS, Android, React Native)",
+  "SpaClientDescription": "Single-page web applications that run in the browser where the client receives tokens (for example, Javascript, Angular, React, Vue)",
+  "DeviceClientDescription": "Input-constrained devices such as a smart TV, IoT device, or printer.",
+  "MachineClientDescription": "Interact with APIs using the scoped OAuth 2.0 access tokens for machine-to-machine authentication."
 }

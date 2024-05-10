@@ -9,7 +9,7 @@
                     <MCard Color="@(context.Active ? "hover-background" : "")" Height="244"
                        OnClick="()=>{ context.Toggle();TypeChanged.InvokeAsync(_clientType.ClientType); }">
                         <MCardTitle Class="d-flex justify-center h5">
-                            <SIcon Size=24 Class="mr-2">@_clientType.Icon</SIcon> @_clientType.ClientType.ToString()
+                            <SIcon Size=24 Class="mr-2">@_clientType.Icon</SIcon> @T(_clientType.ClientType.ToString())
                         </MCardTitle>
                         <MCardText>
                             @_clientType.Description
