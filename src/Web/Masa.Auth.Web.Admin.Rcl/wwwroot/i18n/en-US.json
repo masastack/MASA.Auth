@@ -44,6 +44,8 @@
   },
   "CustomLoginBlock": {
     "TitleName": "Name",
+    "LogoUri": "Logo uri",
+    "ClientName": "Client name",
     "NameRequired": "Name is required",
     "DisplayNameRequired": "DisplayName is required",
     "PhoneNumberAndEmailEmptyError": "One of phone number and email must have a value"
@@ -143,6 +145,16 @@
   "Client": "Client",
   "ClientBlock": {
     "ClientId": "Client ID",
+    "ClientName": "Client name",
+    "ClientURL": "Client url",
+    "ClientType": "Client type",
+    "RequireConsent": "Require consent",
+    "AllowRememberConsent": "Allow remember consent",
+    "ConsentLifetime": "Consent lifetime",
+    "UserCodeType": "User code type",
+    "DeviceCodeLifetime": "Device code lifetime",
+    "RequireRequestObject": "Require request object",
+    "EnableLocalLogin": "Enable local login",
     "UserSsoLifetime": "User SSO lifetime",
     "AllowedCorsOrigins": "Allowed CORS origins",
     "PostLogoutRedirectUri": "Post logout redirect URL",
@@ -157,6 +169,37 @@
   },
   "RepeatAdd": "Add Repeatedly",
   "ThirdPartyIdpBlock": {
+    "DisplayName": "Display name",
+    "ClientId": "Client id",
+    "ClientSecret": "Client secret",
+    "AuthenticationTypes": "Authentication types",
+    "VerifyFile": "Verify file",
+    "AuthenticationType": "Authentication type",
+    "PlatformType": "Platform type",
+    "CallbackPath": "Callback path",
+    "AuthorizationEndpoint": "Authorization endpoint",
+    "TokenEndpoint": "Token endpoint",
+    "UserInformationEndpoint": "User information endpoint",
     "LDAPAccountSynchronizPrompt": "LDAP account synchronization has been executed in the background, please check later"
+  },
+  "ThirdPartyUser": "Third party user",
+  "UserBlock": {
+    "UserState": "User state",
+    "CompanyName": "Company name"
+  },
+  "StaffBlock": {
+    "JobNumber": "Job number",
+    "StaffType": "Staff type",
+    "StaffSyncTemplate": "Staff sync template"
+  },
+  "RoleBlock": {
+    "RoleOwner": "Role owner"
+  },
+  "IdentityResourceBlock": {
+    "DisplayName": "Display name"
+  },
+  "Webhook": {
+    "WebhookEvent": "Webhook event",
+    "IsActive": "Is active"
   }
 }

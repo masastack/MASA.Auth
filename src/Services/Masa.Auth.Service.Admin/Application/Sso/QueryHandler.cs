@@ -74,11 +74,11 @@ public class QueryHandler
                 Description = ct switch
                 {
                     //todo: i18n
-                    ClientTypes.Web => "Server-side applications where authentication and tokens are handled on the server (for example, Go, Java, ASP.Net, Node.js, PHP)",
-                    ClientTypes.Native => "Desktop or mobile applications that run natively on a device and redirect users to a non-HTTP callback (for example, iOS, Android, React Native)",
-                    ClientTypes.Spa => "Single-page web applications that run in the browser where the client receives tokens (for example, Javascript, Angular, React, Vue)",
-                    ClientTypes.Device => "Input-constrained devices such as a smart TV, IoT device, or printer.",
-                    ClientTypes.Machine => "Interact with APIs using the scoped OAuth 2.0 access tokens for machine-to-machine authentication.",
+                    ClientTypes.Web => I18n.T("WebClientDescription"),
+                    ClientTypes.Native => I18n.T("NativeClientDescription"),
+                    ClientTypes.Spa => I18n.T("SpaClientDescription"),
+                    ClientTypes.Device => I18n.T("DeviceClientDescription"),
+                    ClientTypes.Machine => I18n.T("MachineClientDescription"),
                     _ => ""
                 },
                 Icon = ct switch
