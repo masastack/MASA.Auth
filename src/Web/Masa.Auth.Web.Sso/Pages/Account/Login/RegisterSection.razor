@@ -3,7 +3,7 @@
 @inject IJSRuntime _js
 @inject EnvironmentDataService _environmentData
 
-<MForm Model="_inputModel" @ref="_registerForm" EnableValidation class="mt-6 pt-6 px-12 text-center" Style="height: 430px; overflow: auto;">
+<MForm Model="_inputModel" @ref="_registerForm" EnableValidation EnableI18n class="mt-6 pt-6 px-12 text-center" Style="height: 430px; overflow: auto;">
     @foreach (var registerItem in _registerComponents.Values)
     {
         <DynamicComponent Type="@registerItem.ComponentType" Parameters="@registerItem.ComponentParameters" />
