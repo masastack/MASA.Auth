@@ -8,6 +8,9 @@ public partial class Index
 {
     ViewModel _viewModel = new();
 
+    [CascadingParameter(Name = "Culture")]
+    private string? Culture { get; set; }
+
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; } = string.Empty;

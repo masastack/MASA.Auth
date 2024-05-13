@@ -13,34 +13,33 @@
 {
     <MCard Width=510 Height=640 MaxHeight="640">
         <div class="tab-header login-tab">
-            <MTabs Value="Tab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow >
+            <MTabs Value="@ComputedTab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow>
                 <MTab Value="@("login")" Class="neutral-lighten-4--text" Style="height:60px;">
-                    <div class="full-height d-flex flex-column">
-                        <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
+                    <MBorder Border="Borders.Top" Size="4" Class="full-height d-flex flex-column" Value="@(ComputedTab == "login")">
                         <span class="flex-grow-1 d-flex align-center mt-n1 text-h6 neutral-lighten-4--text neutral-text">
                             @T("Login")
                         </span>
-                    </div>
+                    </MBorder>
                 </MTab>
                 <MTab Value="@("register")" Style="height:60px;">
-                    <div class="full-height d-flex flex-column">
-                        <span style="height:4px;background: #4318FF;visibility: hidden;" class="tab-top-slider full-width rounded rounded-t-0" />
+                    <MBorder Border="Borders.Top" Size="4" Class="full-height d-flex flex-column" Value="@(ComputedTab == "register")">
                         <span class="flex-grow-1 d-flex align-center mt-n1 text-h6 neutral-lighten-4--text neutral-text">
                             @T("Register")
                         </span>
-                    </div>
+                    </MBorder>
+
                 </MTab>
             </MTabs>
         </div>
         <MTabsItems Value="@Tab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
-                <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders"/>
+                    <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders"/>
                 </CascadingValue>
             </MTabItem>
             <MTabItem Value="@("register")">
                 <CascadingValue Value="@ReturnUrl">
-                <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()" />
+                    <RegisterSection RegisterFields="@_viewModel.RegisterFields.ToList()"/>
                 </CascadingValue>
             </MTabItem>
         </MTabsItems>
@@ -50,7 +49,7 @@ else
 {
     @if (_viewModel.VisibleExternalProviders.Any())
     {
-        <ExternalProviders ExternalProviderList="@_viewModel.VisibleExternalProviders" ReturnUrl="@ReturnUrl" />
+        <ExternalProviders ExternalProviderList="@_viewModel.VisibleExternalProviders" ReturnUrl="@ReturnUrl"/>
     }
     else
     {

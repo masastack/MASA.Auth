@@ -20,94 +20,6 @@
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(170 168 168)), color-stop(0.72, rgb(170 168 168)), color-stop(0.86, rgb(170 168 168)));
 }
 
-.h1, .text-h1, h1 {
-    /* Headline 1 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: 300 !important;
-    font-size: 6rem !important;
-    line-height: 7rem !important;
-    /* identical to box height */
-    letter-spacing: -0.093755em !important;
-    /* default color */
-    color: #1B2559;
-}
-
-.h2, .text-h2, h2 {
-    /* Headline 2 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: 900 !important;
-    font-size: 3.75rem !important;
-    line-height: 4.375rem !important;
-    /* identical to box height */
-    letter-spacing: -0.03125em !important;
-    /* default color */
-    color: #323D6F;
-}
-
-.h3, .text-h3, h3 {
-    /* Headline 3 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: 900 !important;
-    font-size: 3rem !important;
-    line-height: 3.5rem !important;
-    /* default color */
-    color: #323D6F;
-}
-
-.h4, .text-h4, h4 {
-    /* Headline 4 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    font-size: 2.125rem !important;
-    line-height: 2.625rem !important;
-    /* identical to box height */
-    letter-spacing: 0.02em !important;
-    /* default color */
-    color: #323D6F;
-}
-
-.h5, .text-h5, h5 {
-    /* Headline 5 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    font-size: 1.5rem !important;
-    line-height: 2.25rem !important;
-    /* identical to box height */
-    /* default color */
-    color: #1B2559;
-}
-
-.h6, .text-h6, h6 {
-    /* Headline 6 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    font-size: 1.25rem !important;
-    line-height: 1.875rem !important;
-    /* identical to box height */
-    letter-spacing: 0.01em !important;
-    /* default color */
-    color: #1B2559;
-}
-
-.h7, .text-h7, h7 {
-    /* Headline 6 */
-    font-family: Roboto !important;
-    font-style: normal !important;
-    font-weight: 500 !important;
-    font-size: 1.125rem !important;
-    line-height: 1.6875rem !important;
-    /* identical to box height */
-    letter-spacing: 0.01em !important;
-    /* default color */
-    color: #323D6F;
-}
-
 .text-subtitle {
     /* Subtitle 1-副标题 1 */
     font-family: Roboto !important;
@@ -771,10 +683,6 @@ input::-webkit-input-placeholder {
         line-height: 20px;
         color: #4318FF;
     }
-
-.m-tab--active .tab-top-slider {
-    visibility: visible !important;
-}
 
 .login-tab .m-tab--active .neutral-text {
     color: #1B2559 !important;
