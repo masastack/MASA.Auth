@@ -770,9 +770,9 @@ public class QueryHandler
         if (user != null)
         {
             //compatible
-            userClaimValuesQuery.Result.TryAdd("phoneNumber", user.PhoneNumber);
-            userClaimValuesQuery.Result.TryAdd("account", user.Account);
-            userClaimValuesQuery.Result.TryAdd("userName", user.DisplayName);
+            userClaimValuesQuery.Result.AddOrUpdate("phoneNumber", user.PhoneNumber);
+            userClaimValuesQuery.Result.AddOrUpdate("account", user.Account);
+            userClaimValuesQuery.Result.AddOrUpdate("userName", user.DisplayName);
         }
     }
 
