@@ -17,7 +17,7 @@ public partial class Index
 
     [Parameter] [SupplyParameterFromQuery] public string ReturnUrl { get; set; } = string.Empty;
 
-    private string? ComputedTab => Tab?.ToString();
+    private string? ComputedTab => Tab?.ToLower();
 
     protected override void OnInitialized()
     {
