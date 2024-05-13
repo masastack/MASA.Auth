@@ -7,30 +7,15 @@ public class SsoSectionComponentBase : ComponentBase
 {
     I18n? _languageProvider;
 
-    [Inject]
-    public IPopupService PopupService { get; set; } = null!;
+    [Inject] public IPopupService PopupService { get; set; } = null!;
 
-    [Inject]
-    public IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
+    [Inject] public IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
 
-    [Inject]
-    public NavigationManager Navigation { get; set; } = null!;
+    [Inject] public NavigationManager Navigation { get; set; } = null!;
 
-    [Inject]
-    public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
+    [Inject] public SsoAuthenticationStateCache SsoAuthenticationStateCache { get; set; } = null!;
 
-    [CascadingParameter]
-    public I18n LanguageProvider
-    {
-        get
-        {
-            return _languageProvider ?? throw new Exception("please Inject I18n!");
-        }
-        set
-        {
-            _languageProvider = value;
-        }
-    }
+    [Inject] public I18n LanguageProvider { get; set; } = null!;
 
     public string T(string key)
     {

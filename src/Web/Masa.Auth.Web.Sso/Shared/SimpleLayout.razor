@@ -3,7 +3,7 @@
 @inject IJSRuntime JS
 @inject CookieStorage CookieStorage
 
-<CascadingValue Value="LanguageProvider">
+<CascadingValue Value="LanguageProvider.Culture.Name" Name="Culture">
     <MApp>
         <MErrorHandler OnHandle=OnErrorAsync>
             <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">

@@ -7,26 +7,24 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Login;
 public partial class Index
 {
     ViewModel _viewModel = new();
-    string _loginHint = "", _tab = "login";
+    private string _loginHint = "";
     string _clientId = "";
+    private static readonly string[] AcceptTabs = { "login", "register" };
 
-    [Parameter]
-    public string Tab
-    {
-        get => _tab.ToLower();
-        set => _tab = value;
-    }
+    [CascadingParameter(Name = "Culture")] private string? Culture { get; set; }
 
-    [Parameter]
-    [SupplyParameterFromQuery]
-    public string ReturnUrl { get; set; } = string.Empty;
+    [Parameter] public string? Tab { get; set; }
+
+    [Parameter] [SupplyParameterFromQuery] public string ReturnUrl { get; set; } = string.Empty;
+
+    private string? ComputedTab => Tab?.ToString();
 
     protected override void OnInitialized()
     {
         _environmentData.EnvironmentChanged += EnvironmentChanged;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -35,11 +33,12 @@ public partial class Index
             {
                 // we only have one option for logging in and it's an external provider
                 Navigation.NavigateTo(AuthenticationExternalConstants.ChallengeEndpoint, new Dictionary<string, object?> {
-                    {"scheme", _viewModel.ExternalLoginScheme},
-                    {"returnUrl", ReturnUrl}
+                    { "scheme", _viewModel.ExternalLoginScheme },
+                    { "returnUrl", ReturnUrl }
                 });
                 return;
             }
+
             StateHasChanged();
         }
 
@@ -54,8 +53,7 @@ public partial class Index
             var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
             // this is meant to short circuit the UI and only trigger the one external IdP
-            _viewModel = new ViewModel
-            {
+            _viewModel = new ViewModel {
                 EnableLocalLogin = local,
             };
 
@@ -63,8 +61,10 @@ public partial class Index
 
             if (!local)
             {
-                _viewModel.ExternalProviders = new[] { new ViewModel.ExternalProvider { AuthenticationScheme = context?.IdP ?? "" } };
+                _viewModel.ExternalProviders = new[]
+                    { new ViewModel.ExternalProvider { AuthenticationScheme = context?.IdP ?? "" } };
             }
+
             return;
         }
 
@@ -72,8 +72,7 @@ public partial class Index
 
         var providers = schemes
             .Where(x => x.DisplayName != null)
-            .Select(x => new ViewModel.ExternalProvider
-            {
+            .Select(x => new ViewModel.ExternalProvider {
                 DisplayName = x.DisplayName ?? x.Name,
                 AuthenticationScheme = x.Name
             }).ToList();
@@ -89,22 +88,27 @@ public partial class Index
                 //todo IdentityProviderRestrictions linkage auth ThirdPartyIdps
                 if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
                 {
-                    providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
+                    providers = providers.Where(provider =>
+                        client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
                 }
             }
         }
 
-        _viewModel = new ViewModel
-        {
+        _viewModel = new ViewModel {
             AllowRememberLogin = LoginOptions.AllowRememberLogin,
             EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
             ExternalProviders = providers.ToArray()
         };
     }
 
-    void TabChanged(StringNumber tab)
+    private void TabChanged(StringNumber? tab)
     {
-        Tab = tab?.ToString() ?? "";
+        Tab = tab?.ToString();
+
+        if (AcceptTabs.Contains(Tab))
+        {
+            Navigation.Replace($"/account/{Tab}");
+        }
     }
 
     async void EnvironmentChanged(object? sender, EnvironmentDataEventArgs e)
@@ -118,7 +122,7 @@ public partial class Index
                 AuthenticationScheme = idp.Name,
                 Icon = idp.Icon
             }).ToList();
-
+        
             _viewModel.RegisterFields = customLoginModel.RegisterFields;
             await InvokeAsync(StateHasChanged);
         }
