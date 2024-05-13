@@ -5,6 +5,9 @@ namespace Masa.Auth.Web.Sso.Pages.Account.Logout;
 
 public partial class Index
 {
+    [CascadingParameter(Name = "Culture")]
+    private string? Culture { get; set; }
+    
     [Parameter]
     [SupplyParameterFromQuery]
     public string LogoutId { get; set; } = string.Empty;

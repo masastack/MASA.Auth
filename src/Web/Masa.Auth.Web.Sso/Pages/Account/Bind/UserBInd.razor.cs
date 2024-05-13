@@ -14,6 +14,9 @@ public partial class UserBind
 
     [Inject]
     public IAuthClient AuthClient { get; set; } = default!;
+    
+    [CascadingParameter(Name = "Culture")]
+    private string? Culture { get; set; }
 
     public RegisterThirdPartyUserModel UserModel { get; set; } = new();
 

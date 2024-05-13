@@ -5,23 +5,9 @@ namespace Masa.Auth.Web.Sso.Shared;
 
 public class SsoLayoutComponentBase : LayoutComponentBase
 {
-    private I18n? _languageProvider;
+    [Inject] public I18n LanguageProvider { get; set; } = null!;
 
-    [Inject]
-    public I18n LanguageProvider
-    {
-        get
-        {
-            return _languageProvider ?? throw new Exception("please Inject I18n!");
-        }
-        set
-        {
-            _languageProvider = value;
-        }
-    }
-
-    [Inject]
-    public IPopupService PopupService { get; set; } = null!;
+    [Inject] public IPopupService PopupService { get; set; } = null!;
 
     public string T(string key)
     {
