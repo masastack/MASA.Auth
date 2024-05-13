@@ -31,7 +31,7 @@
                 </MTab>
             </MTabs>
         </div>
-        <MTabsItems Value="@Tab">
+        <MTabsItems Value="@ComputedTab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">
                     <LoginSection LoginHint="@_loginHint" ExternalProviderList="@_viewModel.VisibleExternalProviders"/>
