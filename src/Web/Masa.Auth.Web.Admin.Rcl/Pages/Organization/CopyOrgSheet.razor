@@ -53,36 +53,10 @@
                                        OnSelectedItemUpdate="AddStaff"
                                        Clearable
                                        Style="max-width:340px;"
-                                       Label="@T("Search for members")">
+                                       Label="@T("Search for members")"
+                                       MenuProps="m => m.MaxWidth = 340">
                             <ItemContent Context="data">
-                                <MListItem Style="max-width:340px;" Class="px-0">
-                                    @if (!string.IsNullOrEmpty(data.Item?.Avatar))
-                                    {
-                                        <MListItemAvatar>
-                                            <img src="@data.Item.Avatar">
-                                        </MListItemAvatar>
-                                    }
-                                    <MListItemContent>
-                                        <MListItemTitle>
-                                            <span class="subtitle2 emphasis2--text">
-                                                @data.Item?.DisplayName
-                                            </span>
-                                            <MDivider Vertical Class="mx-1" Style="@((!string.IsNullOrEmpty(data.Item?.DisplayName) && !string.IsNullOrEmpty(data.Item?.JobNumber))?"height:12px;":"height:0px;")" />
-                                            <span class="caption regular2--text">
-                                                @data.Item?.JobNumber
-                                            </span>
-                                        </MListItemTitle>
-                                        <MListItemSubtitle>
-                                            <span class="body2 regular2--text">
-                                                @data.Item?.PhoneNumber
-                                            </span>
-                                            <MDivider Vertical Class="mx-1" Style="@((!string.IsNullOrEmpty(data.Item?.PhoneNumber) && !string.IsNullOrEmpty(data.Item?.Email))?"height:12px;":"height:0px;")" />
-                                            <span class="body2 regular2--text">
-                                                @data.Item?.Email
-                                            </span>
-                                        </MListItemSubtitle>
-                                    </MListItemContent>
-                                </MListItem>
+                                @RenderFragments.UserSelectItem(data.Item.Avatar, data.Item.DisplayName, data.Item.JobNumber, data.Item.PhoneNumber, data.Item.Email)
                             </ItemContent>
                         </SAutoComplete>
                     </div>
