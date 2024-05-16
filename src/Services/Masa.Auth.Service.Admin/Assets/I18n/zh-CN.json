@@ -90,5 +90,6 @@
   "NativeClientDescription": "在设备上本地运行并将用户重定向到非HTTP回调的桌面或移动应用程序（例如，iOS、Android、React Native）",
   "SpaClientDescription": "在客户端接收令牌的浏览器中运行的单页web应用程序（例如，Javascript、Angular、React、Vue）",
   "DeviceClientDescription": "输入受限的设备，如智能电视、物联网设备或打印机。",
-  "MachineClientDescription": "使用作用域OAuth 2.0访问令牌与API交互以进行机器对机器身份验证。"
+  "MachineClientDescription": "使用作用域OAuth 2.0访问令牌与API交互以进行机器对机器身份验证。",
+  "ThirdPartyUserBindExist": "此用户已经绑定"
 }
