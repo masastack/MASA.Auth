@@ -71,4 +71,10 @@ public class AuthCaller : StackHttpClientCaller
     {
         BaseAddress = options.AuthServiceBaseAddress;
     }
+
+    protected override void UseHttpClientPost(MasaHttpClientBuilder masaHttpClientBuilder)
+    {
+        masaHttpClientBuilder.UseI18n();
+        base.UseHttpClientPost(masaHttpClientBuilder);
+    }
 }

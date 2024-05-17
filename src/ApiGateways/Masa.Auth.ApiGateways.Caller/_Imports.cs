@@ -25,6 +25,7 @@ global using Masa.BuildingBlocks.Service.Caller;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.StackSdks.Caller;
+global using Masa.Contrib.Service.Caller.HttpClient;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using System.Net;
