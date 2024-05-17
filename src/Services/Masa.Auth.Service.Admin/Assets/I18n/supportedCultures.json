@@ -6,5 +6,9 @@
   {
     "Culture": "en-US",
     "DisplayName": "English (United States)"
+  },
+  {
+    "Culture": "ru-RU",
+    "DisplayName": "Русский (Россия)"
   }
 ]
