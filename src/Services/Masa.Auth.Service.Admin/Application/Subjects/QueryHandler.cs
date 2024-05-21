@@ -143,6 +143,7 @@ public class QueryHandler
             {
                 Page = query.Page,
                 PageSize = query.PageSize,
+                Field = default!
             }
         );
         query.Result = response.Data;
