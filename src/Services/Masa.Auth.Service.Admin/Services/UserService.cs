@@ -177,7 +177,10 @@ public class UserService : ServiceBase
             Position = user.Position,
             Address = new AddressValueModel
             {
-                Address = user.Address.Address
+                Address = user.Address.Address,
+                ProvinceCode = user.Address.ProvinceCode,
+                CityCode = user.Address.CityCode,
+                DistrictCode = user.Address.DistrictCode
             },
             Roles = user.Roles,
             StaffId = user.StaffId,
