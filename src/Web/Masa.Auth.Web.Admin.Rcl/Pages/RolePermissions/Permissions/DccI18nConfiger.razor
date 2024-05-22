@@ -4,6 +4,7 @@
 @inject IConfigurationApiManage ConfigurationApiManage
 @inject IConfigurationApi ConfigurationApi
 @inject IHostEnvironment HostEnvironment
+@inject IMultiEnvironmentUserContext MultiEnvironmentUserContext
 
 <div class="i18n-configer">
     <STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
@@ -69,7 +70,7 @@
     private async Task Save()
     {
         var publicSection = ConfigurationApi.GetPublic();
-
+        var environment = MultiEnvironmentUserContext.Environment ?? HostEnvironment.EnvironmentName;
         foreach (var _displayName in _displayNames)
         {
             var itemKey = $"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}";
@@ -77,13 +78,13 @@
             if (!itemSection.Exists())
             {
                 var data = new Dictionary<string, object> { { Name, _displayName.Value } };
-                await ConfigurationApiManage.AddAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", new Dictionary<string, object> { { itemKey, data } });
+                await ConfigurationApiManage.AddAsync(environment, "Default", "public-$Config", new Dictionary<string, object> { { itemKey, data } });
             }
             else
             {
                 var data = itemSection.Get<Dictionary<string, object>>();
                 data[Name] = _displayName.Value;
-                await ConfigurationApiManage.UpdateAsync(HostEnvironment.EnvironmentName, "Default", "public-$Config", itemKey, data);
+                await ConfigurationApiManage.UpdateAsync(environment, "Default", "public-$Config", itemKey, data);
             }
         }
         _dialog = false;
