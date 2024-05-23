@@ -60,8 +60,9 @@
         var publicSection = ConfigurationApi.GetPublic();
         foreach (var culture in I18n.SupportedCultures)
         {
-            var value = publicSection.GetValue<string>($"{DynamicTranslateProvider.I18N_KEY}{culture.Name}:{Name}", "");
-            _displayNames.Add(new KeyValue<string, string>(culture.Name, value));
+            var cultureName = culture.Name.ToLower();
+            var value = publicSection.GetValue<string>($"{DynamicTranslateProvider.I18N_KEY}{cultureName}:{Name}", "");
+            _displayNames.Add(new KeyValue<string, string>(cultureName, value));
         }
         _dialog = true;
         return Task.CompletedTask;
