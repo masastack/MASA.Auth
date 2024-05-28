@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using FluentValidation.Validators;
-using Masa.Auth.Contracts.Admin.Infrastructure.Phone;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class StaffCommandHandler

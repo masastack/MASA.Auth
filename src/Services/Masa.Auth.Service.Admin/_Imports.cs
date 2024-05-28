@@ -12,6 +12,7 @@ global using Masa.Auth.Contracts.Admin;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Phone;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Models;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 global using Masa.Auth.Contracts.Admin.Logs;
