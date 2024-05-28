@@ -13,22 +13,19 @@ public class PhoneHelper : ISingletonDependency
         _masaConfiguration = masaConfiguration;
     }
 
-    public string GetPhoneRule()
+    private string GetPhoneRule()
     {
-        var passwordRule = string.Empty;
-        if (_masaConfiguration != null)
+        var rule = string.Empty;
+        try
         {
-            try
-            {
-                var key = $"{PHONERULECONFIGNAME}:{GlobalValidationOptions.DefaultCulture}";
-                passwordRule = _masaConfiguration.ConfigurationApi.GetPublic().GetValue(key, string.Empty);
-            }
-            catch
-            {
-                //ignore
-            }
+            var key = $"{PHONERULECONFIGNAME}:{GlobalValidationOptions.DefaultCulture}";
+            rule = _masaConfiguration.ConfigurationApi.GetPublic().GetValue(key, string.Empty);
         }
-        return passwordRule;
+        catch
+        {
+            //ignore
+        }
+        return rule;
     }
 
     public void ValidatePhone(string? phone, ValidationContext<string?> context)
