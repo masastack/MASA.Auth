@@ -5,11 +5,11 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class UpsertUserCommandValidator : MasaAbstractValidator<UpsertUserCommand>
 {
-    public UpsertUserCommandValidator()
+    public UpsertUserCommandValidator(PhoneNumberValidator phoneValidator)
     {
         RuleFor(command => command.User.DisplayName).MaximumLength(50);
         WhenNotEmpty(command => command.User.Name, r => r.ChineseLetterNumber().MaximumLength(20));
-        WhenNotEmpty(command => command.User.PhoneNumber, r => r.Phone());
+        WhenNotEmpty(command => command.User.PhoneNumber, r => r.SetValidator(phoneValidator));
         WhenNotEmpty(command => command.User.Email, r => r.Email());
         WhenNotEmpty(command => command.User.IdCard, r => r.IdCard());
         WhenNotEmpty(command => command.User.CompanyName, r => r.ChineseLetterNumber().MaximumLength(50));

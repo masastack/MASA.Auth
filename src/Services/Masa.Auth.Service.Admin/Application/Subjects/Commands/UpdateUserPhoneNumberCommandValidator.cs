@@ -5,8 +5,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class UpdateUserPhoneNumberCommandValidator : AbstractValidator<UpdateUserPhoneNumberCommand>
 {
-    public UpdateUserPhoneNumberCommandValidator()
+    public UpdateUserPhoneNumberCommandValidator(PhoneNumberValidator phoneValidator)
     {
-        RuleFor(command => command.User.PhoneNumber).Required().Phone();
+        RuleFor(command => command.User.PhoneNumber).Required().SetValidator(phoneValidator);
     }
 }

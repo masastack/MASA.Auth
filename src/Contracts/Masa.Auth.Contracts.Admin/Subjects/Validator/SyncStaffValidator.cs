@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class SyncStaffValidator : MasaAbstractValidator<SyncStaffDto>
 {
-    public SyncStaffValidator()
+    public SyncStaffValidator(PhoneNumberValidator phoneValidator)
     {
         RuleFor(staff => staff.DisplayName)
             .Required().WithMessage("NickNameBlock.Required")
@@ -13,7 +13,7 @@ public class SyncStaffValidator : MasaAbstractValidator<SyncStaffDto>
             .MaximumLength(50).WithMessage("NickNameBlock.MaxLength")
             .MinimumLength(2).WithMessage("NickNameBlock.MinLength")
             .WithName("NickName");
-        RuleFor(staff => staff.PhoneNumber).Required().Phone();
+        RuleFor(staff => staff.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
         WhenNotEmpty(staff => staff.Name, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
         WhenNotEmpty(staff => staff.Email, r => r.Email());

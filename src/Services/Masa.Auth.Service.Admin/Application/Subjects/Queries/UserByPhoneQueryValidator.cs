@@ -5,8 +5,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
 public class UserByPhoneQueryValidator : MasaAbstractValidator<UserByPhoneQuery>
 {
-    public UserByPhoneQueryValidator()
+    public UserByPhoneQueryValidator(PhoneNumberValidator phoneValidator)
     {
-        RuleFor(query => query.PhoneNumber).Required().Phone();
+        RuleFor(query => query.PhoneNumber).Required().SetValidator(phoneValidator);
     }
 }

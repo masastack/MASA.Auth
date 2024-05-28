@@ -5,14 +5,14 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class UpdateUserValidator : MasaAbstractValidator<UpdateUserDto>
 {
-    public UpdateUserValidator()
+    public UpdateUserValidator(PhoneNumberValidator phoneValidator)
     {
         RuleFor(user => user.DisplayName)
             .Required().WithMessage("NickNameBlock.Required")
             .ChineseLetterNumber().WithMessage("NickNameBlock.ChineseLetterNumber")
             .MaximumLength(50).WithMessage("NickNameBlock.MaxLength")
             .WithName("NickName"); ;
-        RuleFor(user => user.PhoneNumber).Required().Phone();
+        RuleFor(user => user.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(user => user.Account).Required()
                                      .Matches("^\\s{0}$|^[\u4e00-\u9fa5_a-zA-Z0-9@.]+$")
                                      .WithMessage("Can only input chinese and letter and number and @ of {PropertyName}")

@@ -5,8 +5,8 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class SendSmsCommandValidator : MasaAbstractValidator<SendSmsCommand>
 {
-    public SendSmsCommandValidator()
+    public SendSmsCommandValidator(PhoneNumberValidator phoneValidator)
     {
-        WhenNotEmpty(command => command.Model.PhoneNumber, r => r.Phone());
+        WhenNotEmpty(command => command.Model.PhoneNumber, r => r.SetValidator(phoneValidator));
     }
 }
