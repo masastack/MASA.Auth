@@ -5,7 +5,7 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class UpdateStaffValidator : MasaAbstractValidator<UpdateStaffDto>
 {
-    public UpdateStaffValidator()
+    public UpdateStaffValidator(PhoneNumberValidator phoneValidator)
     {
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
         RuleFor(staff => staff.DisplayName)
@@ -14,7 +14,7 @@ public class UpdateStaffValidator : MasaAbstractValidator<UpdateStaffDto>
             .MaximumLength(50).WithMessage("NickNameBlock.MaxLength")
             .MinimumLength(2).WithMessage("NickNameBlock.MinLength")
             .WithName("NickName"); ;
-        RuleFor(staff => staff.PhoneNumber).Required().Phone();
+        RuleFor(staff => staff.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(staff => staff.Avatar).Required().Url();
         WhenNotEmpty(l => l.CompanyName, r => r.ChineseLetter().MaximumLength(50));
         WhenNotEmpty(staff => staff.Email, r => r.Email());

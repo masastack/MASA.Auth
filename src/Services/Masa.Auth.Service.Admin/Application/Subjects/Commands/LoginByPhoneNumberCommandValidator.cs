@@ -5,9 +5,9 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class LoginByPhoneNumberCommandValidator : AbstractValidator<LoginByPhoneNumberCommand>
 {
-    public LoginByPhoneNumberCommandValidator()
+    public LoginByPhoneNumberCommandValidator(PhoneNumberValidator phoneValidator)
     {
-        RuleFor(command => command.Model.PhoneNumber).Required().Phone();
+        RuleFor(command => command.Model.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(command => command.Model.Code).Required();
     }
 }

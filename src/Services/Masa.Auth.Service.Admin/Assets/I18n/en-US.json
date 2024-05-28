@@ -91,5 +91,6 @@
   "SpaClientDescription": "Single-page web applications that run in the browser where the client receives tokens (for example, Javascript, Angular, React, Vue)",
   "DeviceClientDescription": "Input-constrained devices such as a smart TV, IoT device, or printer.",
   "MachineClientDescription": "Interact with APIs using the scoped OAuth 2.0 access tokens for machine-to-machine authentication.",
-  "ThirdPartyUserBindExist": "The user has been bound"
+  "ThirdPartyUserBindExist": "The user has been bound",
+  "PhoneValidateFailed": "It must be a valid mobile phone number."
 }

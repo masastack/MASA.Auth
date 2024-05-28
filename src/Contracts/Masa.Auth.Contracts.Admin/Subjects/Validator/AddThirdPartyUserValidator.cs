@@ -5,9 +5,9 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class AddThirdPartyUserValidator : AbstractValidator<AddThirdPartyUserDto>
 {
-    public AddThirdPartyUserValidator(PasswordValidator passwordValidator)
+    public AddThirdPartyUserValidator(PasswordValidator passwordValidator, PhoneNumberValidator phoneValidator)
     {
-        RuleFor(tpu => tpu.User).SetValidator(new AddUserValidator(passwordValidator));
+        RuleFor(tpu => tpu.User).SetValidator(new AddUserValidator(passwordValidator, phoneValidator));
         RuleFor(tpu => tpu.ThridPartyIdentity).Required();
     }
 }

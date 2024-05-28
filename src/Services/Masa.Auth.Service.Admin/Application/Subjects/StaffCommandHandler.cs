@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using FluentValidation.Validators;
+using Masa.Auth.Contracts.Admin.Infrastructure.Phone;
+
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class StaffCommandHandler
@@ -10,19 +13,22 @@ public class StaffCommandHandler
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
+    readonly PhoneHelper _phoneHelper;
 
     public StaffCommandHandler(
         IStaffRepository staffRepository,
         StaffDomainService staffDomainService,
         IDistributedCacheClient distributedCacheClient,
         ILogger<CommandHandler> logger,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        PhoneHelper phoneHelper)
     {
         _staffRepository = staffRepository;
         _staffDomainService = staffDomainService;
         _distributedCacheClient = distributedCacheClient;
         _logger = logger;
         _eventBus = eventBus;
+        _phoneHelper = phoneHelper;
     }
 
     [EventHandler(1)]
@@ -90,7 +96,7 @@ public class StaffCommandHandler
         command.Result = syncResults;
         var syncStaffs = command.Staffs;
         //validation
-        var validator = new SyncStaffValidator();
+        var validator = new SyncStaffValidator(new PhoneNumberValidator(_phoneHelper));
         for (var i = 0; i < syncStaffs.Count; i++)
         {
             var staff = syncStaffs[i];

@@ -5,11 +5,11 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
 {
-    public ResetPasswordCommandValidator()
+    public ResetPasswordCommandValidator(PhoneNumberValidator phoneValidator)
     {
         When(x => x.ResetPasswordType == ResetPasswordTypes.PhoneNumber, () =>
         {
-            RuleFor(x => x.Voucher).Required().Phone();
+            RuleFor(x => x.Voucher).Required().SetValidator(phoneValidator);
         });
         When(x => x.ResetPasswordType == ResetPasswordTypes.Email, () =>
         {
