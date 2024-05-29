@@ -93,5 +93,5 @@
   "MachineClientDescription": "Interact with APIs using the scoped OAuth 2.0 access tokens for machine-to-machine authentication.",
   "ThirdPartyUserBindExist": "The user has been bound",
   "PhoneValidateFailed": "It must be a valid mobile phone number.",
-  "PasswordSame": "Old and new passwords cannot be the same"
+  "PasswordSame": "The new password cannot be the same as the old one."
 }
