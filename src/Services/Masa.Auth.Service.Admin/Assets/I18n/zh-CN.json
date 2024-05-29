@@ -92,5 +92,6 @@
   "DeviceClientDescription": "输入受限的设备，如智能电视、物联网设备或打印机。",
   "MachineClientDescription": "使用作用域OAuth 2.0访问令牌与API交互以进行机器对机器身份验证。",
   "ThirdPartyUserBindExist": "此用户已经绑定",
-  "PhoneValidateFailed": "必须是一个合法的手机号码。"
+  "PhoneValidateFailed": "必须是一个合法的手机号码。",
+  "PasswordSame": "新旧密码不能相同"
 }
