@@ -11,6 +11,6 @@ public class UpdateUserPasswordCommandValidator : MasaAbstractValidator<UpdateUs
         RuleFor(command => command.User.NewPassword)
                 .Required()
                 .NotEqual(command => command.User.OldPassword)
-                .WithMessage("Old and new passwords cannot be the same");
+                .WithMessage(I18n.T("PasswordSame"));
     }
 }

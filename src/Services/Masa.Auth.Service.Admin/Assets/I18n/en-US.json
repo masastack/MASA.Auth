@@ -92,5 +92,6 @@
   "DeviceClientDescription": "Input-constrained devices such as a smart TV, IoT device, or printer.",
   "MachineClientDescription": "Interact with APIs using the scoped OAuth 2.0 access tokens for machine-to-machine authentication.",
   "ThirdPartyUserBindExist": "The user has been bound",
-  "PhoneValidateFailed": "It must be a valid mobile phone number."
+  "PhoneValidateFailed": "It must be a valid mobile phone number.",
+  "PasswordSame": "The new password cannot be the same as the old one."
 }
