@@ -957,3 +957,7 @@ input::-webkit-input-placeholder {
     align-items: center;
     margin-right: 12px !important;
 }
+
+.permission-view2{
+    height:100%;
+}
