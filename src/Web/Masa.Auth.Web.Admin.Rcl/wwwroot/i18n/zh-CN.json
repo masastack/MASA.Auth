@@ -287,6 +287,8 @@
     "Male/Female": "男/女",
     "Delete Staff": "删除员工",
     "Freeze": "冻结",
+    "AddUser": "新建用户",
+    "BindUser": "绑定用户",
     "InternalStaff/ExternalStaff": "内部员工/外部员工",
     "Default to internal staff": "默认为内部员工",
     "Failed to query staffList data:": "获取员工列表数据失败:",

@@ -190,7 +190,9 @@
   "StaffBlock": {
     "JobNumber": "Job number",
     "StaffType": "Staff type",
-    "StaffSyncTemplate": "Staff sync template"
+    "StaffSyncTemplate": "Staff sync template",
+    "AddUser": "Add user",
+    "BindUser": "Bind user"
   },
   "RoleBlock": {
     "RoleOwner": "Role owner"

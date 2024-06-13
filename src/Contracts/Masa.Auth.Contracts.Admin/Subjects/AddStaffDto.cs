@@ -44,6 +44,8 @@ public class AddStaffDto
 
     public GenderTypes Gender { get; set; } = GenderTypes.Male;
 
+    public Guid UserId { get; set; }
+
     public AddStaffDto()
     {
         JobNumber = "";
@@ -53,7 +55,7 @@ public class AddStaffDto
         Avatar = "";
     }
 
-    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string? position, List<Guid> teams, string? name, string displayName, string avatar, string? idCard, string? companyName, string phoneNumber, string? landline, string? email, AddressValueDto address, string? password, GenderTypes gender)
+    public AddStaffDto(string jobNumber, StaffTypes staffType, bool enabled, Guid departmentId, string? position, List<Guid> teams, string? name, string displayName, string avatar, string? idCard, string? companyName, string phoneNumber, string? landline, string? email, AddressValueDto address, string? password, GenderTypes gender, Guid userId = default)
     {
         JobNumber = jobNumber;
         StaffType = staffType;
@@ -72,5 +74,6 @@ public class AddStaffDto
         Address = address;
         Password = password;
         Gender = gender;
+        UserId = userId;
     }
 }

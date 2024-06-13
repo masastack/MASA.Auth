@@ -43,6 +43,7 @@
   "UserEmailNotExist": "用户邮箱{0}不存在",
   "UserIdCardExist": "用户身份证{0}已存在",
   "UserAccountExist": "用户账号{0}已存在",
+  "UserStaffExist": "用户已绑定员工",
   "AdministratorDeleteError": "超级管理员无法删除",
   "CurrentUserDeleteError": "当前用户不能删除自己",
   "LoginFreeze": "您连续输错密码5次,登录已冻结，请三十分钟后再次尝试",

@@ -40,6 +40,7 @@
   "UserEmailNotExist": "User email {0} does not exist",
   "UserIdCardExist": "User idCard {0} already exists",
   "UserAccountExist": "User account {0} already exists",
+  "UserStaffExist": "User bound to staff",
   "UserAccountPhoneNumberExist": "An account exists with the same phone number {0}",
   "AdministratorDeleteError": "administrator cannot delete",
   "CurrentUserDeleteError": "The current user cannot delete itself",
