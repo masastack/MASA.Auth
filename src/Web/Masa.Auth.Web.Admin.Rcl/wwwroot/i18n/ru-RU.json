@@ -286,6 +286,8 @@
     "Male/Female": "Мужчина/Женщина",
     "Delete Staff": "Удалить сотрудника",
     "Freeze": "Заморозить",
+    "AddUser": "Новые пользователи",
+    "BindUser": "Связанные пользователи",
     "InternalStaff/ExternalStaff": "Внутренний/Внешний сотрудник",
     "Default to internal staff": "По умолчанию внутренний сотрудник",
     "Failed to query staffList data:": "Не удалось запросить данные списка сотрудников:",

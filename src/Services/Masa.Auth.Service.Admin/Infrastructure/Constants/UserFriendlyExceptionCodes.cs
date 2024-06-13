@@ -43,6 +43,7 @@ public static class UserFriendlyExceptionCodes
     public const string USER_ID_CARD_EXIST = "UserIdCardExist";
     public const string USER_ACCOUNT_EXIST = "UserAccountExist";
     public const string USER_ACCOUNT_PHONE_NUMBER_EXIST = "UserAccountPhoneNumberExist";
+    public const string USER_STAFF_EXIST = "UserStaffExist";
     public const string THIRD_PARTY_IDP_NOT_EXIST = "ThirdPartyIdpNotExist";
     public const string ADMINISTRATOR_DELETE_ERROR = "AdministratorDeleteError";
     public const string CURRENT_USER_DELETE_ERROR = "CurrentUserDeleteError";

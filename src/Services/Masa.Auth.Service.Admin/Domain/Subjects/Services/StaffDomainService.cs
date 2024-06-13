@@ -5,11 +5,13 @@ public class StaffDomainService : DomainService
 {
     readonly UserDomainService _userDomainService;
     readonly IStaffRepository _staffRepository;
+    readonly IUserRepository _userRepository;
 
-    public StaffDomainService(UserDomainService userDomainService, IStaffRepository staffRepository)
+    public StaffDomainService(UserDomainService userDomainService, IStaffRepository staffRepository, IUserRepository userRepository)
     {
         _userDomainService = userDomainService;
         _staffRepository = staffRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<Staff> RemoveAsync(Guid Id)
@@ -43,8 +45,28 @@ public class StaffDomainService : DomainService
                 staffDto.Address
             );
         staff.SetDepartmentStaff(staffDto.DepartmentId);
-        await _userDomainService.AddAsync(new User(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.Account,
+
+        if (staffDto.UserId != default)
+        {
+            var user = await _userRepository.FindAsync(x => x.Id == staffDto.UserId);
+            if (user == null)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
+            }
+            if (user.Staff != null)
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_STAFF_EXIST);
+            }
+
+            user.Bind(staff);
+            await _userRepository.UpdateAsync(user);
+        }
+        else
+        {
+            await _userDomainService.AddAsync(new User(staffDto.Name, staffDto.DisplayName, staffDto.Avatar, staffDto.Account,
             staffDto.Password, staffDto.CompanyName, staffDto.Email, staffDto.PhoneNumber, staff));
+        }
+
         return staff;
     }
 

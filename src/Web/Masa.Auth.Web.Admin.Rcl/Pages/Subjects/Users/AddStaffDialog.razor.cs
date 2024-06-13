@@ -27,6 +27,10 @@ public partial class AddStaffDialog
 
     private MForm _mForm = default!;
 
+    private bool? _isBindUser;
+
+    private string _cardCss = "d-flex flex-column justify-center align-center ma-auto";
+
     protected override void OnInitialized()
     {
         PageName = "StaffBlock";
@@ -58,6 +62,8 @@ public partial class AddStaffDialog
         {
             Visible = visible;
         }
+
+        _isBindUser = null;
     }
 
     public async Task AddStaffAsync(FormContext context)
@@ -90,6 +96,16 @@ public partial class AddStaffDialog
     {
         action.Content = T("Set it to the default password");
         action.OnClick = async (_) => await SetDefaultPassword(_mForm.EditContext!);
+    }
+
+    private void SelectUser(UserSelectModel user)
+    {
+        Staff.Name = user.Name;
+        Staff.DisplayName = user.DisplayName;
+        Staff.Avatar = user.Avatar;
+        Staff.Account = user.Account;
+        Staff.Email = user.Email;
+        Staff.PhoneNumber = user.PhoneNumber ?? string.Empty;
     }
 }
 

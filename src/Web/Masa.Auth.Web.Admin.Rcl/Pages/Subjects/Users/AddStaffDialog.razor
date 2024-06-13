@@ -7,13 +7,51 @@
                 <MStepperContent Step="1">
                     <AutoHeight AutoClass="d-flex">
                         <AutoHeightContent>
-                            <div class="ma-auto text-center">
-                                <ButtonGroup @bind-Value="Staff.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
-                                <br />
-                                <div class="mt-12">
-                                    <DefaultChangeImage @bind-Value="Staff.Avatar" Gender="Staff.Gender" WhenFileChangeUpload />
+                            @if (!_isBindUser.HasValue)
+                            {
+                                <div class="d-flex justify-center align-center full-width full-height" style="gap:100px">
+                                    <div>
+                                        <MHover Context="hoverContext">
+                                            <MCard @attributes="hoverContext.Attrs" Height="480" Width="480" Class="@($"{_cardCss} {(hoverContext.Hover ? "primary" : "fill-background")}")" OnClick="()=>_isBindUser=true">
+                                                <SIcon Size="hoverContext.Hover?54:36" Color="@(hoverContext.Hover?"fill":"emphasis2")">
+                                                    mdi-account-check
+                                                </SIcon>
+                                                <div class="h6 @(hoverContext.Hover?"pt-10 fill--text":"pt-12 regular--text")">
+                                                    @T("BindUser")
+                                                </div>
+                                            </MCard>
+                                        </MHover>
+                                    </div>
+                                    <div>
+                                        <MHover Context="hoverContext">
+                                            <MCard @attributes="hoverContext.Attrs" Height="480" Width="480" Class="@($"{_cardCss} {(hoverContext.Hover ? "primary" : "fill-background")}")" OnClick="()=>_isBindUser=false">
+                                                <SIcon Size="hoverContext.Hover?54:36" Color="@(hoverContext.Hover?"fill":"emphasis2")">
+                                                    mdi-account-plus-outline
+                                                </SIcon>
+                                                <div class="h6 @(hoverContext.Hover?"pt-10 fill--text":"pt-12 regular--text")">
+                                                    @T("AddUser")
+                                                </div>
+                                            </MCard>
+                                        </MHover>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+                            else if (_isBindUser == false)
+                            {
+                                <div class="ma-auto text-center">
+                                    <ButtonGroup @bind-Value="Staff.Gender" StyleType=StyleTypes.Toggle TValue="GenderTypes" />
+                                    <br />
+                                    <div class="mt-12">
+                                        <DefaultChangeImage @bind-Value="Staff.Avatar" Gender="Staff.Gender" WhenFileChangeUpload />
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="ma-auto text-center">
+                                    <SUserAutoComplete Small @bind-Value="Staff.UserId" OnSelectedItemUpdate="SelectUser" />
+                                </div>
+                            }
                         </AutoHeightContent>
                         <FooterContent>
                             <div class="d-flex">
@@ -79,7 +117,7 @@
                             </MRow>
                             <MRow Class="mt-4">
                                 <MCol>
-                                    <STextField @bind-Value="@Staff.Password" Required DebounceInterval=500 Label="@T("Password")" Action="SetDefaultPwdAction"/>
+                                    <STextField @bind-Value="@Staff.Password" Required DebounceInterval=500 Label="@T("Password")" Action="SetDefaultPwdAction" />
                                 </MCol>
                             </MRow>
                         </AutoHeightContent>
