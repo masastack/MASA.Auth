@@ -18,43 +18,52 @@ public class LocalPhoneNumberGrantValidator : IExtensionGrantValidator
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
-        var phoneNumber = context.Request.Raw["PhoneNumber"];
-        var spToken = context.Request.Raw["SpToken"];
-        if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(spToken))
+        try
         {
-            context.Result = new GrantValidationResult
-            {
-                IsError = true,
-                Error = "Must provide phone number and spToken",
-                ErrorDescription = "Must provide phone number and spToken"
-            };
-            return;
-        }
-
-        var (success, errorMsg) = await _localLoginByPhoneNumber.VerifyPhoneWithTokenAsync(phoneNumber, spToken);
-        if (success)
-        {
-            var user = await _authClient.UserService.GetByPhoneNumberAsync(phoneNumber);
-            if (user is null)
+            var phoneNumber = context.Request.Raw["PhoneNumber"];
+            var spToken = context.Request.Raw["SpToken"];
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(spToken))
             {
                 context.Result = new GrantValidationResult
                 {
                     IsError = true,
-                    Error = $"User {phoneNumber} does not exist",
-                    ErrorDescription = errorMsg
+                    Error = "Must provide phone number and spToken",
+                    ErrorDescription = "Must provide phone number and spToken"
                 };
+                return;
+            }
+
+            var (success, errorMsg) = await _localLoginByPhoneNumber.VerifyPhoneWithTokenAsync(phoneNumber, spToken);
+            if (success)
+            {
+                var user = await _authClient.UserService.GetByPhoneNumberAsync(phoneNumber);
+                if (user is null)
+                {
+                    context.Result = new GrantValidationResult
+                    {
+                        IsError = true,
+                        Error = $"User {phoneNumber} does not exist",
+                        ErrorDescription = errorMsg
+                    };
+                }
+                else
+                {
+                    context.Result = new GrantValidationResult(user.Id.ToString(), "local");
+                }
             }
             else
-            {
-                context.Result = new GrantValidationResult(user.Id.ToString(), "local");
-            }
+                context.Result = new GrantValidationResult
+                {
+                    IsError = true,
+                    Error = errorMsg,
+                    ErrorDescription = errorMsg
+                };
         }
-        else
-            context.Result = new GrantValidationResult
-            {
-                IsError = true,
-                Error = errorMsg,
-                ErrorDescription = errorMsg
-            };
+        catch (Exception ex)
+        {
+            context.Result = new GrantValidationResult(
+                TokenRequestErrors.InvalidGrant,
+                ex.Message);
+        }
     }
 }

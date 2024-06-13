@@ -17,44 +17,53 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
-        var impersonationToken = context.Request.Raw["impersonationToken"];
-        var environment = context.Request.Raw["environment"] ?? string.Empty;
-        if (string.IsNullOrEmpty(impersonationToken))
+        try
         {
-            context.Result = new GrantValidationResult
+            var impersonationToken = context.Request.Raw["impersonationToken"];
+            var environment = context.Request.Raw["environment"] ?? string.Empty;
+            if (string.IsNullOrEmpty(impersonationToken))
             {
-                IsError = true,
-                Error = "Must provide impersonationToken",
-                ErrorDescription = "Must provide impersonationToken"
-            };
-            return;
-        }
+                context.Result = new GrantValidationResult
+                {
+                    IsError = true,
+                    Error = "Must provide impersonationToken",
+                    ErrorDescription = "Must provide impersonationToken"
+                };
+                return;
+            }
 
-        var input = new GetImpersonateInputModel
-        {
-            ImpersonationToken = impersonationToken,
-            Environment = environment
-        };
-
-        var cacheItem = await _authClient.UserService.GetImpersonateAsync(input);
-        if (cacheItem is null)
-        {
-            context.Result = new GrantValidationResult
+            var input = new GetImpersonateInputModel
             {
-                IsError = true,
-                Error = "Impersonated user does not exist",
-                ErrorDescription = "Impersonated user does not exist",
+                ImpersonationToken = impersonationToken,
+                Environment = environment
             };
-            return;
+
+            var cacheItem = await _authClient.UserService.GetImpersonateAsync(input);
+            if (cacheItem is null)
+            {
+                context.Result = new GrantValidationResult
+                {
+                    IsError = true,
+                    Error = "Impersonated user does not exist",
+                    ErrorDescription = "Impersonated user does not exist",
+                };
+                return;
+            }
+
+            var claims = new List<Claim>();
+
+            if (!cacheItem.IsBackToImpersonator)
+            {
+                claims.Add(new Claim(IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
+            }
+
+            context.Result = new GrantValidationResult(cacheItem.TargetUserId.ToString(), "impersonation", claims);
         }
-
-        var claims = new List<Claim>();
-
-        if (!cacheItem.IsBackToImpersonator)
+        catch (Exception ex)
         {
-            claims.Add(new Claim(IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
+            context.Result = new GrantValidationResult(
+                TokenRequestErrors.InvalidGrant,
+                ex.Message);
         }
-
-        context.Result = new GrantValidationResult(cacheItem.TargetUserId.ToString(), "impersonation", claims);
     }
 }

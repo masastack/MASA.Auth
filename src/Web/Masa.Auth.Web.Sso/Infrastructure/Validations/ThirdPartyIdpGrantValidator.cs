@@ -26,58 +26,67 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
-        var scheme = context.Request.Raw["scheme"];
-        var code = context.Request.Raw["code"];
-        var idToken = context.Request.Raw["idToken"];
-        var wechatMini = context.Request.Raw["wechat_mini"];//ogin by wechat mini program,temporary addition
-
-        if (string.IsNullOrEmpty(scheme))
+        try
         {
-            throw new UserFriendlyException("must provider scheme");
-        }
-        var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
-        Security.OAuth.Providers.Identity? identity = null;
+            var scheme = context.Request.Raw["scheme"];
+            var code = context.Request.Raw["code"];
+            var idToken = context.Request.Raw["idToken"];
+            var wechatMini = context.Request.Raw["wechat_mini"];//ogin by wechat mini program,temporary addition
 
-        string? thridPartyIdentity;
-        if (bool.TryParse(wechatMini, out bool mini) && mini)
-        {
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(scheme))
             {
-                throw new UserFriendlyException("must provider code");
+                throw new UserFriendlyException("must provider scheme");
             }
-            var options = new OAuthOptions();
-            authenticationDefaults.BindOAuthOptions(options);
-            thridPartyIdentity = await _weChatMiniProgramCaller.GetOpenIdAsync(options, code);
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(code))
+            var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
+            Security.OAuth.Providers.Identity? identity = null;
+
+            string? thridPartyIdentity;
+            if (bool.TryParse(wechatMini, out bool mini) && mini)
             {
-                identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
+                if (string.IsNullOrEmpty(code))
+                {
+                    throw new UserFriendlyException("must provider code");
+                }
+                var options = new OAuthOptions();
+                authenticationDefaults.BindOAuthOptions(options);
+                thridPartyIdentity = await _weChatMiniProgramCaller.GetOpenIdAsync(options, code);
             }
             else
             {
-                if (string.IsNullOrEmpty(idToken))
+                if (!string.IsNullOrEmpty(code))
                 {
-                    throw new UserFriendlyException("must provider code or idToken");
+                    identity = await _thirdPartyIdpCallerProvider.GetIdentity(authenticationDefaults, code);
                 }
-                identity = await _thirdPartyIdpCallerProvider.GetIdentityByIdToken(authenticationDefaults, idToken);
+                else
+                {
+                    if (string.IsNullOrEmpty(idToken))
+                    {
+                        throw new UserFriendlyException("must provider code or idToken");
+                    }
+                    identity = await _thirdPartyIdpCallerProvider.GetIdentityByIdToken(authenticationDefaults, idToken);
+                }
+                thridPartyIdentity = identity.Subject;
             }
-            thridPartyIdentity = identity.Subject;
-        }
 
-        var user = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
-        {
-            ThridPartyIdentity = thridPartyIdentity
-        });
-        context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp");
-        if (identity != null)
-        {
-            context.Result.CustomResponse = new()
+            var user = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
             {
-                ["thirdPartyUserData"] = identity,
-                ["registerSuccess"] = user is not null
-            };
+                ThridPartyIdentity = thridPartyIdentity
+            });
+            context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp");
+            if (identity != null)
+            {
+                context.Result.CustomResponse = new()
+                {
+                    ["thirdPartyUserData"] = identity,
+                    ["registerSuccess"] = user is not null
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            context.Result = new GrantValidationResult(
+                TokenRequestErrors.InvalidGrant,
+                ex.Message);
         }
     }
 }

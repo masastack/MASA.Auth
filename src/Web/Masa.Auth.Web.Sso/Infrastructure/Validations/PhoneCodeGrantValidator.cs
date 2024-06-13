@@ -16,26 +16,34 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
-        var phoneNumber = context.Request.Raw["PhoneNumber"];
-        var code = context.Request.Raw["Code"];
-        if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(code))
-            throw new UserFriendlyException("must provider phone number and msg code");
+        try
+        {
+            var phoneNumber = context.Request.Raw["PhoneNumber"];
+            var code = context.Request.Raw["Code"];
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(code))
+                throw new UserFriendlyException("must provider phone number and msg code");
 
-        var user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
-        {
-            PhoneNumber = phoneNumber,
-            Code = code
-        });
-        if (user != null)
-        {
-            context.Result = new GrantValidationResult(user.Id.ToString(), "sms");
+            var user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
+            {
+                PhoneNumber = phoneNumber,
+                Code = code
+            });
+            if (user != null)
+            {
+                context.Result = new GrantValidationResult(user.Id.ToString(), "sms");
+            }
+            else
+            {
+                context.Result = new GrantValidationResult(
+                    TokenRequestErrors.InvalidGrant,
+                    "invalid custom credential");
+            }
         }
-        else
+        catch (Exception ex)
         {
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
-                "invalid custom credential");
+                ex.Message);
         }
-
     }
 }
