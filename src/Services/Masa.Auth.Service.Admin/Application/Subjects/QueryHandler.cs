@@ -85,12 +85,9 @@ public class QueryHandler
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }
-        var creator = await _operaterProvider.GetUserAsync(user.Creator);
-        var modifier = await _operaterProvider.GetUserAsync(user.Modifier);
+
         var userDetail = _userDomainService.UserSplicingData(user);
         query.Result = userDetail!;
-        query.Result.Creator = creator?.DisplayName;
-        query.Result.Modifier = modifier?.DisplayName;
     }
 
 
