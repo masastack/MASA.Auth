@@ -26,7 +26,7 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
         try
         {
             @operator ??= _userContext.GetUserId<Guid>();
-            var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.StaffDisplayName ?? "";
+            var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? "";
             await AddAsync(new OperationLog(
                 @operator.Value, operatorName, operationType, default, operationDescription
             ));
