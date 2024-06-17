@@ -668,5 +668,8 @@
   "RepeatAdd": "重复添加",
   "Add Claim": "添加声明",
   "Claim": "声明",
-  "ImpersonationLogin": "模拟登录"
+  "ImpersonationLogin": "模拟登录",
+  "VisibleType": "可见范围",
+  "AllVisible": "全部可见",
+  "AllInvisible": "全部不可见"
 }

@@ -667,5 +667,8 @@
   "RepeatAdd": "Повторное добавление",
   "Add Claim": "Добавить утверждение",
   "Claim": "Утверждение",
-  "ImpersonationLogin": "Логин под чужим именем"
+  "ImpersonationLogin": "Логин под чужим именем",
+  "VisibleType": "Видимый диапазон",
+  "AllVisible": "Все видно",
+  "AllInvisible": "Ничего не видно"
 }

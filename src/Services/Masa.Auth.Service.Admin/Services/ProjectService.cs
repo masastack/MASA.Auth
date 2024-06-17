@@ -26,9 +26,9 @@ public class ProjectService : ServiceBase
         return query.Result;
     }
 
-    private async Task<List<ProjectDto>> GetNavigationListAsync(IEventBus eventBus, [FromQuery] Guid userId)
+    private async Task<List<ProjectDto>> GetNavigationListAsync(IEventBus eventBus, [FromQuery] Guid userId, [FromQuery] string? clientId)
     {
-        var query = new NavigationListQuery(userId);
+        var query = new NavigationListQuery(userId, clientId ?? string.Empty);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

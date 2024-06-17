@@ -12,6 +12,7 @@ public class QueryHandler
     private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
     private readonly ILogger<QueryHandler> _logger;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IGlobalNavVisibleRepository _globalNavVisibleRepository;
 
     public QueryHandler(
         IPmClient pmClient,
@@ -20,7 +21,8 @@ public class QueryHandler
         IDccClient dccClient,
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
         ILogger<QueryHandler> logger,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        IGlobalNavVisibleRepository globalNavVisibleRepository)
     {
         _pmClient = pmClient;
         _permissionRepository = permissionRepository;
@@ -29,6 +31,7 @@ public class QueryHandler
         _multiEnvironmentUserContext = multiEnvironmentUserContext;
         _logger = logger;
         _webHostEnvironment = webHostEnvironment;
+        _globalNavVisibleRepository = globalNavVisibleRepository;
     }
 
     [EventHandler]
@@ -60,8 +63,18 @@ public class QueryHandler
     {
         query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment, AppTypes.UI);
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
-        var menuPermissions = await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
-                                && permissionIds.Contains(p.Id) && p.Enabled);
+        var menuPermissions = (await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
+                                && permissionIds.Contains(p.Id) && p.Enabled)).ToList();
+
+        if (query.ClientId.IsNullOrEmpty())
+        {
+            var hideAppIds = await _globalNavVisibleRepository.GetAppIds(x => string.IsNullOrEmpty(x.ClientId) && !x.Visible);
+            menuPermissions.RemoveAll(x => hideAppIds.Contains(x.AppId));
+
+            var clientAppIds = await _globalNavVisibleRepository.GetAppIds(x => query.ClientId == x.ClientId && x.Visible);
+            menuPermissions.RemoveAll(x => !clientAppIds.Contains(x.AppId));
+        }
+
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
             a.Navs = menuPermissions.OrderBy(p => p.Order)

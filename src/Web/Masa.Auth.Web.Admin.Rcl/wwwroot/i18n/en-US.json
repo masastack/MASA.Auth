@@ -203,5 +203,8 @@
   "Webhook": {
     "WebhookEvent": "Webhook event",
     "IsActive": "Is active"
-  }
+  },
+  "VisibleType": "Visible type",
+  "AllVisible": "All visible",
+  "AllInvisible": "All invisible"
 }

@@ -205,6 +205,33 @@
                             </MCardActions>
                         </MCard>
                     }
+                    else if (_showMenuInfo)
+                    {
+                        <MCard Class="full-height d-flex flex-column px-2 pt-2" Style="overflow-y: auto;">
+                            <MCardTitle Class="card-title">
+                                <h6>应用菜单可见范围</h6>
+                            </MCardTitle>
+                            <MCardText Class="full-height">
+                                <MForm EnableValidation Model=_appGlobalNavVisibleDto EnableI18n @ref="_formMenuApp">
+                                    <MRow>
+                                        <MCol Cols="6">
+                                            <EnumSelect @bind-Value="_appGlobalNavVisibleDto.VisibleType" TValue="GlobalNavVisibleTypes" Clearable=false Label="@T("VisibleType")" />
+                                        </MCol>
+                                        @if (_appGlobalNavVisibleDto.VisibleType == GlobalNavVisibleTypes.Client)
+                                        {
+                                            <MCol Cols="12">
+                                                <ClientMultipleSelect Value="@_appGlobalNavVisibleDto.ClientIds" />
+                                            </MCol>
+                                        }
+                                    </MRow>
+                                </MForm>
+                            </MCardText>
+                            <MCardActions Class="d-flex mb-6 px-4 align-center">
+                                <MSpacer />
+                                <SButton MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
+                            </MCardActions>
+                        </MCard>
+                    }
                 </MWindowItem>
                 <MWindowItem Value='"1"' Class="full-height">
                     @if (_showApiInfo && _apiPermissionDetailDto.Id != Guid.Empty)
