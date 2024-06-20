@@ -12,10 +12,11 @@ public class CommandHandler
         _repository = repository;
     }
 
+    [EventHandler]
     public async Task SaveAppGlobalNavVisibleAsync(SaveAppGlobalNavVisibleCommand command)
     {
         var dto = command.visibleDto;
-
+        await _repository.RemoveAsync(x => x.AppId == dto.AppId);
         switch (dto.VisibleType)
         {
             case GlobalNavVisibleTypes.AllVisible:
@@ -25,7 +26,7 @@ public class CommandHandler
                 await _repository.AddAsync(new GlobalNavVisible(dto.AppId, string.Empty, false));
                 break;
             case GlobalNavVisibleTypes.Client:
-                foreach (var item in dto.ClientIds)
+                foreach (var item in dto.ClientIds.Where(x => !string.IsNullOrEmpty(x)))
                 {
                     await _repository.AddAsync(new GlobalNavVisible(dto.AppId, item, true));
                 }

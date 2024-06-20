@@ -276,6 +276,11 @@ public partial class Index
             else
             {
                 _menuPermissionDetailDto = new();
+
+                if (!curItem.AppId.IsNullOrEmpty())
+                {
+                    _appGlobalNavVisibleDto = await PermissionService.GetAppGlobalNavVisibleAsync(curItem.AppId);
+                }
             }
             _showUrlPrefix = curItem.AppUrl.EnsureTrailingSlash();
         }
@@ -352,6 +357,15 @@ public partial class Index
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
             OpenSuccessMessage(T("Edit api permission data success"));
             await InitAppPermissionsAsync();
+        }
+    }
+
+    private async Task SaveAppGlobalNavVisibleAsync()
+    {
+        if (_formMenuApp.Validate())
+        {
+            await PermissionService.SaveAppGlobalNavVisibleAsync(_appGlobalNavVisibleDto);
+            OpenSuccessMessage(T("SaveAppGlobalNavVisibleSuccess"));
         }
     }
 

@@ -19,6 +19,7 @@ public class QueryHandler
 
         var dto = new AppGlobalNavVisibleDto
         {
+            AppId = query.AppId,
             ClientIds = list.Select(x => x.ClientId).ToList(),
         };
         

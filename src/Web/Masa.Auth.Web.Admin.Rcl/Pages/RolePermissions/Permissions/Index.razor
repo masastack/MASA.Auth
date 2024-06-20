@@ -205,11 +205,11 @@
                             </MCardActions>
                         </MCard>
                     }
-                    else if (_showMenuInfo)
+                    else if (_showMenuInfo && !_appGlobalNavVisibleDto.AppId.IsNullOrEmpty())
                     {
                         <MCard Class="full-height d-flex flex-column px-2 pt-2" Style="overflow-y: auto;">
                             <MCardTitle Class="card-title">
-                                <h6>应用菜单可见范围</h6>
+                                <h6>@T("AppVisible")</h6>
                             </MCardTitle>
                             <MCardText Class="full-height">
                                 <MForm EnableValidation Model=_appGlobalNavVisibleDto EnableI18n @ref="_formMenuApp">
@@ -220,7 +220,7 @@
                                         @if (_appGlobalNavVisibleDto.VisibleType == GlobalNavVisibleTypes.Client)
                                         {
                                             <MCol Cols="12">
-                                                <ClientMultipleSelect Value="@_appGlobalNavVisibleDto.ClientIds" />
+                                                <ClientMultipleSelect @bind-Value="@_appGlobalNavVisibleDto.ClientIds" />
                                             </MCol>
                                         }
                                     </MRow>
@@ -228,7 +228,7 @@
                             </MCardText>
                             <MCardActions Class="d-flex mb-6 px-4 align-center">
                                 <MSpacer />
-                                <SButton MinWidth="100" OnClick="UpdateMenuPermissionAsync">@T("Save")</SButton>
+                                <SButton MinWidth="100" OnClick="SaveAppGlobalNavVisibleAsync">@T("Save")</SButton>
                             </MCardActions>
                         </MCard>
                     }

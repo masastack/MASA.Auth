@@ -66,13 +66,9 @@ public class QueryHandler
         var menuPermissions = (await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
                                 && permissionIds.Contains(p.Id) && p.Enabled)).ToList();
 
-        if (query.ClientId.IsNullOrEmpty())
+        if (!query.ClientId.IsNullOrEmpty())
         {
-            var hideAppIds = await _globalNavVisibleRepository.GetAppIds(x => string.IsNullOrEmpty(x.ClientId) && !x.Visible);
-            menuPermissions.RemoveAll(x => hideAppIds.Contains(x.AppId));
-
-            var clientAppIds = await _globalNavVisibleRepository.GetAppIds(x => query.ClientId == x.ClientId && x.Visible);
-            menuPermissions.RemoveAll(x => !clientAppIds.Contains(x.AppId));
+            await RemoveInvisibleMenu(query.ClientId, menuPermissions);
         }
 
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
@@ -140,5 +136,29 @@ public class QueryHandler
                 PermissionType = p.Type,
                 Children = GetChildren(p.Id, all, domain ?? "")
             }).ToList();
+    }
+
+    private async Task RemoveInvisibleMenu(string clientId, List<Permission> menuPermissions)
+    {
+        var appIds = menuPermissions.Select(p => p.AppId).Distinct();
+        var appNavVisibles = await _globalNavVisibleRepository.GetListAsync(x => appIds.Contains(x.AppId));
+        var hideAppIds = appNavVisibles.GroupBy(x => x.AppId).Where(x =>
+        {
+            if (x.Any(x => string.IsNullOrEmpty(x.ClientId) && x.Visible))
+            {
+                return false;
+            }
+            else if (x.Any(x => string.IsNullOrEmpty(x.ClientId) && !x.Visible))
+            {
+                return true;
+            }
+            else if (x.Count() > 0)
+            {
+                return !x.Any(x => x.ClientId == clientId);
+            }
+            return false;
+        }).Select(x => x.Key);
+
+        menuPermissions.RemoveAll(x => hideAppIds.Contains(x.AppId));
     }
 }

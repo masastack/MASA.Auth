@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Domain.GlobalNavs.Aggregates;
 
-public class GlobalNavVisible : FullAggregateRoot<Guid, Guid>
+public class GlobalNavVisible : AuditAggregateRoot<Guid, Guid>
 {
     public string AppId { get; private set; }
 

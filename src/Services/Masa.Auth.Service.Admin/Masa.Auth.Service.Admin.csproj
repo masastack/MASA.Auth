@@ -21,9 +21,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Isolation" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Isolation" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.BuildingBlocks.Service.Contracts" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
@@ -38,9 +38,9 @@
 		<PackageReference Include="Masa.Contrib.Data.Contracts" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="FluentValidation" Version="11.4.0" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />

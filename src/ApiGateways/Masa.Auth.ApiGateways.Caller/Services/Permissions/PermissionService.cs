@@ -73,4 +73,14 @@ public class PermissionService : ServiceBase
     {
         return await PostAsync<GetPermissionsByTeamWithUserDto, List<Guid>>(nameof(GetPermissionsByTeamWithUserAsync), dto);
     }
+
+    public async Task<AppGlobalNavVisibleDto> GetAppGlobalNavVisibleAsync(string appId)
+    {
+        return await GetAsync<AppGlobalNavVisibleDto>($"GetAppGlobalNavVisibleAsync?appId={appId}");
+    }
+
+    public async Task SaveAppGlobalNavVisibleAsync(AppGlobalNavVisibleDto visibleDto)
+    {
+        await PostAsync("SaveAppGlobalNavVisible", visibleDto);
+    }
 }

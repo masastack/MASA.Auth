@@ -8,7 +8,7 @@ public class GlobalNavDisplayEntityTypeConfiguration : IEntityTypeConfiguration<
     public void Configure(EntityTypeBuilder<GlobalNavVisible> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.HasIndex(x => x.ClientId).HasFilter("[IsDeleted] = 0");
-        builder.HasIndex(x => x.AppId).HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(x => x.ClientId);
+        builder.HasIndex(x => x.AppId);
     }
 }

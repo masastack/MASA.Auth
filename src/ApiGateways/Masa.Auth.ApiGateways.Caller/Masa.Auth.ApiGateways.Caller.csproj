@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 
