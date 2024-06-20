@@ -165,7 +165,9 @@
   "AddChildDepartment": "Add child department",
   "PermissionBlock": {
     "MatchPattern": "Match Pattern",
-    "MatchPatternTip": "Used in special cases when auto-match left menu is highlighted"
+    "MatchPatternTip": "Used in special cases when auto-match left menu is highlighted",
+    "AppVisible": "Application visible range",
+    "SaveAppGlobalNavVisibleSuccess": "Successfully saved the visible range of the application"
   },
   "RepeatAdd": "Add Repeatedly",
   "ThirdPartyIdpBlock": {
@@ -203,5 +205,8 @@
   "Webhook": {
     "WebhookEvent": "Webhook event",
     "IsActive": "Is active"
-  }
+  },
+  "VisibleType": "Visible type",
+  "AllVisible": "All visible",
+  "AllInvisible": "All invisible"
 }

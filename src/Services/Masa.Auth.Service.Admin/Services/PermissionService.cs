@@ -25,6 +25,8 @@ public class PermissionService : ServiceBase
         MapPost(GetPermissionsByTeamAsync);
         MapPost(GetPermissionsByTeamWithUserAsync);
         MapPost(SyncRedisAsync);
+        MapGet(GetAppGlobalNavVisibleAsync);
+        MapPost(SaveAppGlobalNavVisibleAsync);
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
@@ -150,6 +152,20 @@ public class PermissionService : ServiceBase
     public async Task SyncRedisAsync([FromServices] IEventBus eventBus)
     {
         var command = new SyncPermissionRedisCommand();
+        await eventBus.PublishAsync(command);
+    }
+
+    private async Task<AppGlobalNavVisibleDto> GetAppGlobalNavVisibleAsync(IEventBus eventBus, [FromQuery] string appId)
+    {
+        var query = new AppGlobalNavVisibleQuery(appId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task SaveAppGlobalNavVisibleAsync(IEventBus eventBus,
+        [FromBody] AppGlobalNavVisibleDto dto)
+    {
+        var command = new SaveAppGlobalNavVisibleCommand(dto);
         await eventBus.PublishAsync(command);
     }
 }

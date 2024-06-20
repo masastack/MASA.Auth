@@ -20,13 +20,15 @@ public partial class Index
 
     private ApiPermissionDetailDto _apiPermissionDetailDto = new();
 
+    private AppGlobalNavVisibleDto _appGlobalNavVisibleDto = new();
+
     private List<ProjectDto> _projectItems = new();
 
     private List<AppDto> _curAppItems = new();
 
     private List<SelectItemDto<Guid>> _childApiItems = new();
 
-    private MForm _formMenu = default!, _formApi = default!;
+    private MForm _formMenu = default!, _formApi = default!, _formMenuApp = default!;
 
     private AddMenuPermission _addMenuPermission = null!;
 
@@ -274,6 +276,11 @@ public partial class Index
             else
             {
                 _menuPermissionDetailDto = new();
+
+                if (!curItem.AppId.IsNullOrEmpty())
+                {
+                    _appGlobalNavVisibleDto = await PermissionService.GetAppGlobalNavVisibleAsync(curItem.AppId);
+                }
             }
             _showUrlPrefix = curItem.AppUrl.EnsureTrailingSlash();
         }
@@ -350,6 +357,15 @@ public partial class Index
             await PermissionService.UpsertApiPermissionAsync(_apiPermissionDetailDto);
             OpenSuccessMessage(T("Edit api permission data success"));
             await InitAppPermissionsAsync();
+        }
+    }
+
+    private async Task SaveAppGlobalNavVisibleAsync()
+    {
+        if (_formMenuApp.Validate())
+        {
+            await PermissionService.SaveAppGlobalNavVisibleAsync(_appGlobalNavVisibleDto);
+            OpenSuccessMessage(T("SaveAppGlobalNavVisibleSuccess"));
         }
     }
 

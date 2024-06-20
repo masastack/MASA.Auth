@@ -1,0 +1,42 @@
+﻿@inherits AdminCompontentBase
+
+<SAutoComplete Value="Value"
+               ValueChanged="UpdateValueAsync"
+               ValueExpression="ValueExpression"
+               Items="Clients"
+               Label="@T("Client")"
+               ItemText="client => client.ClientName"
+               ItemValue="client => client.ClientId"
+               Disabled=Disabled
+               TValue="List<string>"
+               TItem="ClientSelectDto"
+               TItemValue="string"
+               TValue="string"
+               Required
+               Multiple
+               Style="@($"{Style}")"
+               Class="@($"{Class}")">
+    <SelectionContent Context="data">
+        <MChip>
+            @if (!string.IsNullOrEmpty(data.Item.LogoUri))
+            {
+                <MAvatar Left>
+                    <MImage Src="@data.Item.LogoUri"></MImage>
+                </MAvatar>
+            }
+            <span class="body2 regular--text">
+                @data.Item.ClientName
+            </span>
+        </MChip>
+    </SelectionContent>
+    <ItemContent Context="data">
+        <div class="d-flex" style="height:48px;">
+            <MAvatar Size=30 Class="ma-auto">
+                <img src="@data.Item?.LogoUri" />
+            </MAvatar>
+            <div class="my-auto">
+                <span class="body2 emphasis2--text ml-2">@data.Item?.ClientName</span>
+            </div>
+        </div>
+    </ItemContent>
+</SAutoComplete>

@@ -118,7 +118,7 @@ public partial class ImpersonatedNavigation : AdminCompontentBase
         var menu = ExpansionMenu.CreateRootMenu(ExpansionMenuSituation.Favorite);
         try
         {
-            var apps = (await AuthClient.ProjectService.GetGlobalNavigations()).SelectMany(p => p.Apps).ToList();
+            var apps = (await AuthClient.ProjectService.GetGlobalNavigations(string.Empty)).SelectMany(p => p.Apps).ToList();
             var categories = apps.GroupBy(a => a.Tag).ToList();
             var favorites = await FetchFavorites();
 

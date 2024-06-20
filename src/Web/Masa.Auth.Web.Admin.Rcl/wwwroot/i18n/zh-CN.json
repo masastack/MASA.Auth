@@ -237,7 +237,9 @@
     "PermissionCodeMsg": "推荐Code方式，格式参考示例：resource.method",
     "MatchPattern": "匹配正则",
     "MatchPatternTip": "特定情况下自动匹配左侧菜单高亮、面包屑时使用",
-    "UI": "界面"
+    "UI": "界面",
+    "AppVisible": "应用可见范围",
+    "SaveAppGlobalNavVisibleSuccess": "保存应用可见范围成功"
   },
 
   "Give him a nickname!": "给Ta取个昵称吧!",
@@ -668,5 +670,8 @@
   "RepeatAdd": "重复添加",
   "Add Claim": "添加声明",
   "Claim": "声明",
-  "ImpersonationLogin": "模拟登录"
+  "ImpersonationLogin": "模拟登录",
+  "VisibleType": "可见范围",
+  "AllVisible": "全部可见",
+  "AllInvisible": "全部不可见"
 }
