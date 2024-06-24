@@ -8,7 +8,7 @@ public class PermissionDetailValidator<T> : MasaAbstractValidator<T> where T : P
     public PermissionDetailValidator()
     {
         RuleFor(p => p).NotNull().WithMessage($"Parameter error");
-        RuleFor(p => p.Name).ChineseLetterNumber()
+        RuleFor(p => p.Name)
             .Must(name => !string.IsNullOrWhiteSpace(name) && name.Length <= 20)
             .WithMessage("Permission Name can`t null and length must be less than 20");
         WhenNotEmpty(p => p.Description, builder => builder.MaximumLength(255).WithMessage("Permission Description length must be less than 255"));
