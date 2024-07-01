@@ -76,7 +76,12 @@ public class PermissionService : ServiceBase
 
     public async Task<AppGlobalNavVisibleDto> GetAppGlobalNavVisibleAsync(string appId)
     {
-        return await GetAsync<AppGlobalNavVisibleDto>($"GetAppGlobalNavVisibleAsync?appId={appId}");
+        return await GetAsync<AppGlobalNavVisibleDto>($"GetAppGlobalNavVisible?appId={appId}");
+    }
+
+    public async Task<List<AppGlobalNavVisibleDto>> GetAppGlobalNavVisibleListAsync(string appIds)
+    {
+        return await GetAsync<List<AppGlobalNavVisibleDto>>($"GetAppGlobalNavVisibleList?appIds={appIds}");
     }
 
     public async Task SaveAppGlobalNavVisibleAsync(AppGlobalNavVisibleDto visibleDto)

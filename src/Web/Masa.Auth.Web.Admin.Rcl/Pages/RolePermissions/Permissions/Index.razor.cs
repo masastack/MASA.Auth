@@ -48,6 +48,17 @@ public partial class Index
 
     private bool _disableMenuUrl = false;
 
+    private string VisibleTypeIcon(GlobalNavVisibleTypes visibleType)
+    {
+        return visibleType switch
+        {
+            GlobalNavVisibleTypes.AllVisible => "mdi-eye-outline",
+            GlobalNavVisibleTypes.AllInvisible => "mdi-eye-off-outline",
+            GlobalNavVisibleTypes.Client => "mdi-eye-minus-outline",
+            _ => ""
+        };
+    }
+
     protected override void OnInitialized()
     {
         PageName = "PermissionBlock";
@@ -168,9 +179,12 @@ public partial class Index
             .Map(dest => dest.IsPermission, src => true)
             .Map(dest => dest.AppUrl, src => MapContext.Current == null ? "" : MapContext.Current.Parameters["appUrl"]);
 
+        var appVisibleDtos = await PermissionService.GetAppGlobalNavVisibleListAsync(string.Join(",", menuPermissions.Select(x => x.AppId)));
+
         menuPermissions.ForEach(mp =>
         {
             var permissions = applicationPermissions.Where(p => (p.Type == PermissionTypes.Menu || p.Type == PermissionTypes.Element) && p.AppId == mp.AppId);
+            mp.VisibleType = appVisibleDtos.FirstOrDefault(x => x.AppId == mp.AppId)?.VisibleType ?? GlobalNavVisibleTypes.AllVisible;
             mp.Children.AddRange(permissions
                 .BuildAdapter(config)
                 .AddParameters("appUrl", mp.AppUrl)

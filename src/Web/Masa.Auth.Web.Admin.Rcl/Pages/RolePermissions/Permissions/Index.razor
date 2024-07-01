@@ -37,6 +37,12 @@
                                         <MTooltip Top Context="tipContext">
                                             <ActivatorContent>
                                                 <span class="text-truncate" @attributes="@tipContext.Attrs">@DT(context.Item.Name)</span>
+                                                @if (context.Item.VisibleType.HasValue)
+                                                {
+                                                    <span style="@(!hoverContext.Hover?"flex:1;text-align:right":"display:none")">
+                                                        <SIcon Class="@(context.Active?"fill--text":"regular2--text")">@VisibleTypeIcon(context.Item.VisibleType.Value)</SIcon>
+                                                    </span>
+                                                }
                                             </ActivatorContent>
                                             <ChildContent>
                                                 <span>@DT(context.Item.Name)</span>
