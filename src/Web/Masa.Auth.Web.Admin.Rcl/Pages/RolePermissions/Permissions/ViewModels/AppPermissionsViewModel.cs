@@ -37,6 +37,8 @@ public class AppPermissionsViewModel : ICloneable
 
     public List<AppPermissionsViewModel> Children { get; set; } = new();
 
+    public GlobalNavVisibleTypes? VisibleType { get; set; }
+
     public object Clone()
     {
         return new AppPermissionsViewModel(Id, AppId, AppTag, AppUrl, Name, IsPermission,
