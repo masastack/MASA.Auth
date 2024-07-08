@@ -291,7 +291,8 @@ public class User : FullAggregateRoot<Guid, Guid>
         var roles = user.Roles.Select(ur => new RoleModel
         {
             Id = ur.RoleId,
-            Code = ur.Role?.Code ?? ""
+            Code = ur.Role?.Code ?? "",
+            Name = ur.Role?.Name ?? ""
         }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
