@@ -41,7 +41,7 @@ public class ThirdPartyUserDomainService : DomainService
                 var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true);
                 user.Bind(staff);
             }
-            
+
         }
         var (existUser, e) = await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, default, userDto.Account);
         if (e != null)
@@ -50,8 +50,17 @@ public class ThirdPartyUserDomainService : DomainService
         }
         if (existUser != null)
         {
-            var thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData);
-            await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
+            var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(x=>x.ThridPartyIdentity == dto.ThridPartyIdentity);
+            if (thirdPartyUser == null)
+            {
+                thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData);
+                await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
+            }
+            else
+            {
+                thirdPartyUser.Update(dto.ThridPartyIdentity, dto.ExtendedData);
+            }
+            
             return existUser.Adapt<UserModel>();
         }
         await _userDomainService.AddAsync(user);
