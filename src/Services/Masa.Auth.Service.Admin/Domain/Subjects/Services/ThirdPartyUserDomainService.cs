@@ -58,6 +58,7 @@ public class ThirdPartyUserDomainService : DomainService
             else
             {
                 thirdPartyUser.Update(dto.ThridPartyIdentity, dto.ExtendedData);
+                await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             }
             
             return existUser.Adapt<UserModel>();
