@@ -41,7 +41,6 @@ public class ThirdPartyUserDomainService : DomainService
                 var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true);
                 user.Bind(staff);
             }
-
         }
         var (existUser, e) = await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, default, userDto.Account);
         if (e != null)
