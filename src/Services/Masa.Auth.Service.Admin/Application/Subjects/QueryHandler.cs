@@ -448,6 +448,14 @@ public class QueryHandler
         query.Result = userModel;
     }
 
+    [EventHandler]
+    public async Task GetThridPartyIdentityAsync(ThridPartyIdentityQuery query)
+    {
+        var tpUser = await _thirdPartyUserRepository.FindAsync(tpu => tpu.ThirdPartyIdpId == query.ThirdPartyIdpId && tpu.UserId == query.UserId);
+
+        query.Result = tpUser?.ThridPartyIdentity;
+    }
+
     #endregion
 
     #region ThirdPartyIdp
