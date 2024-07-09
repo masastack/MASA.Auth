@@ -49,7 +49,7 @@ public class ThirdPartyUserDomainService : DomainService
         }
         if (existUser != null)
         {
-            var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(x=>x.ThridPartyIdentity == dto.ThridPartyIdentity);
+            var thirdPartyUser = await _thirdPartyUserRepository.FindAsync(x => x.ThirdPartyIdpId == dto.ThirdPartyIdpId && x.UserId == existUser.Id);
             if (thirdPartyUser == null)
             {
                 thirdPartyUser = new ThirdPartyUser(dto.ThirdPartyIdpId, existUser.Id, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData);
@@ -60,7 +60,7 @@ public class ThirdPartyUserDomainService : DomainService
                 thirdPartyUser.Update(dto.ThridPartyIdentity, dto.ExtendedData);
                 await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
             }
-            
+
             return existUser.Adapt<UserModel>();
         }
         await _userDomainService.AddAsync(user);
