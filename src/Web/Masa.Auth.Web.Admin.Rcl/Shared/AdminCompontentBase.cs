@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
-public abstract class AdminCompontentBase : NextTickComponentBase
+public abstract class AdminCompontentBase : Blazor.Core.MasaComponentBase
 {
     private AuthCaller? _authCaller;
     private NavigationManager? _navigationManager;
