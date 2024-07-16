@@ -1,14 +1,16 @@
 ﻿ @inherits AdminCompontentBase
 
-<SAutoComplete Value="Value"
+ <SAutoComplete Value="Value"
                ValueChanged="async value => await UpdateValueAsync(value)"
                TValue="List<Guid>"
                TItem="StaffSelectDto"
                TItemValue="Guid"
+               AutoSelectFirst
                Items="Staffs"
-               Chips
-               Filter="FilterItem" NoFilter
                OnSearchInputUpdate="QuerySelectionStaff"
+               CacheItems
+               Chips
+               Filter="FilterItem"
                Loading="_staffLoading"
                Disabled=Readonly
                Label="@Label"
@@ -17,7 +19,9 @@
                Multiple
                Class="@Class">
     <SelectionContent Context="data">
-        <MChip Close Style="height:28px;" OnCloseClick="()=>RemoveStaff(data.Item)">
+        <MChip Close Style="height:28px;"
+               IsActive="@data.Selected"
+               OnCloseClick="()=>RemoveStaff(data.Item)">
             @if (!string.IsNullOrEmpty(data.Item.Avatar))
             {
                 <MAvatar Left>
