@@ -23,8 +23,9 @@ public partial class StaffSelect
     [Parameter]
     public RoleLimitModel RoleLimit { get; set; } = new("", int.MaxValue);
 
-    bool _staffLoading;
-    List<Guid> _ignoreValue = new();
+    private bool _staffLoading;
+    private List<Guid> _ignoreValue = new();
+    private CancellationTokenSource? _cts;
 
     protected List<StaffSelectDto> Staffs { get; set; } = new();
 
@@ -83,24 +84,36 @@ public partial class StaffSelect
 
     private bool FilterItem(StaffSelectDto item, string queryText, string itemText)
     {
-        return item.DisplayName.Contains(queryText);
+        return item.DisplayName.Contains(queryText, StringComparison.OrdinalIgnoreCase);
     }
 
     private async Task QuerySelectionStaff(string search)
     {
-        search = search.Trim(' ');
-        await Task.Delay(300);
-        if (search.Length < 2)
+        _cts?.Cancel();
+        _cts = new();
+        try
         {
-            return;
-        }
+            await Task.Delay(300, _cts.Token);
 
-        _staffLoading = true;
-        var staffs = await StaffService.GetSelectAsync(search);
-        var seletedItems = Staffs.Where(s => Value.Contains(s.Id)).ToList();
-        Staffs = seletedItems.UnionBy(staffs, staff => staff.Id).ToList();
-        Staffs.RemoveAll(s => IgnoreValue?.Contains(s.Id) == true);
-        _staffLoading = false;
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                return;
+            }
+
+            search = search.Trim();
+            _staffLoading = true;
+            StateHasChanged();
+            
+            var staffs = await StaffService.GetSelectAsync(search);
+            var selectedItems = Staffs.Where(s => Value.Contains(s.Id)).ToList();
+            Staffs = selectedItems.UnionBy(staffs, staff => staff.Id).ToList();
+            Staffs.RemoveAll(s => IgnoreValue?.Contains(s.Id) == true);
+            _staffLoading = false;
+        }
+        catch (TaskCanceledException)
+        {
+            // ignore
+        }
     }
 }
 
