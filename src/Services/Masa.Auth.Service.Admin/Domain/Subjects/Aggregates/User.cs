@@ -381,9 +381,7 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public void AddRoles(IEnumerable<Guid> roleIds)
     {
-        _roles = _roles.MergeBy(
-           roleIds.Select(roleId => new UserRole(roleId)),
-           item => item.RoleId).DistinctBy(ur => ur.RoleId).ToList();
+        _roles = _roles.MergeDistinctBy(roleIds.Select(roleId => new UserRole(roleId)), item => item.RoleId).ToList();
     }
 
     public void UserClaimValues(Dictionary<string, string> claimValues)

@@ -55,8 +55,12 @@ public static class ListExtensions
         merge.RemoveAll(data => removes.Contains(data));
         var newMerge = merge.Select(item => replace(item, target.First(t => keySelector(item).Equals(keySelector(t))))).ToList();
         newMerge.AddRange(adds);
-
         return newMerge;
+    }
+
+    public static List<TSource> MergeDistinctBy<TSource, TKey>(this IEnumerable<TSource> firstList, IEnumerable<TSource> secondList, Func<TSource, TKey> keySelector)
+    {
+        return firstList.UnionBy(secondList, keySelector).ToList();
     }
 }
 
