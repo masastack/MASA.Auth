@@ -21,9 +21,13 @@ public static class ElasticsearchAutoCompleteExtensions
                 }
                 var esOptions = esIsolationConfigProvider.GetEsOptions();
                 options.ElasticsearchOptions.UseNodes(esOptions.Nodes.ToArray())
-                    .UseConnectionSettings(setting => setting.EnableApiVersioningHeader(false));
+                    .UseConnectionSettings(setting =>
+                    {
+                        setting.EnableApiVersioningHeader(false);
+                        if (!string.IsNullOrEmpty(esOptions.UserName) && !string.IsNullOrEmpty(esOptions.Password))
+                            setting.BasicAuthentication(esOptions.UserName, esOptions.Password);
+                    });
                 options.IndexName = esOptions.Index;
-                //options.Alias = esOptions.Alias;
 
                 if (!_indexes.Contains(esOptions.Index))
                 {
