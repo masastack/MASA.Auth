@@ -9,6 +9,7 @@ public class ThirdPartyUserService : RestServiceBase
     {
         MapGet(GetAsync, "");
         MapPost(RegisterAsync, "register");
+        MapPost(LdapUsersAccountAsync, "ldapUsersAccount");
     }
 
     private async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(IEventBus eventBus, GetThirdPartyUsersDto tpu)
@@ -91,5 +92,12 @@ public class ThirdPartyUserService : RestServiceBase
     private async Task RemoveByThridPartyIdentityAsync(IEventBus eventBus, [FromBody] RemoveThirdPartyUserByThridPartyIdentityDto dto)
     {
         await eventBus.PublishAsync(new RemoveThirdPartyUserByThridPartyIdentityCommand(dto.ThridPartyIdentity));
+    }
+
+    private async Task<Dictionary<Guid, string>> LdapUsersAccountAsync(IEventBus eventBus, [FromBody] GetLdapUsersAccountDto dto)
+    {
+        var query = new LdapUsersAccountQuery(dto.UserIds);
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 }

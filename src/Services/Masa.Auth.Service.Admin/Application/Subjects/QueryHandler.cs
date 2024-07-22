@@ -795,4 +795,24 @@ public class QueryHandler
         query.Result = cacheItem;
         //await _distributedCacheClient.RemoveAsync(key);
     }
+
+    [EventHandler]
+    public async Task GetLdapUsersAccountAsync(LdapUsersAccountQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>().FirstOrDefaultAsync(x => x.Name == "Ldap");
+        MasaArgumentException.ThrowIfNull(identityProvider, nameof(IdentityProvider));
+
+        var tpUsers = await _thirdPartyUserRepository.GetListAsync(x => x.ThirdPartyIdpId == identityProvider.Id && query.UserIds.Contains(x.UserId));
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        query.Result = tpUsers.ToDictionary(x => x.UserId, x =>
+        {
+            var ldapUser = JsonSerializer.Deserialize<LdapUser>(x.ExtendedData, options);
+            return ldapUser?.SamAccountName ?? string.Empty;
+        });
+    }
 }
