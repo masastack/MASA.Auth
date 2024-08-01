@@ -420,7 +420,7 @@ public class QueryHandler
                                          .Include(tpu => tpu.User.Roles)
                                          .FirstOrDefaultAsync(tpu => tpu.ThridPartyIdentity == query.ThridPartyIdentity);
         var userModel = tpUser?.User?.Adapt<UserModel>();
-        
+
         if (tpUser != null && tpUser.User != null && userModel != null)
         {
             var staff = tpUser.User.Staff;
@@ -813,6 +813,46 @@ public class QueryHandler
         {
             var ldapUser = JsonSerializer.Deserialize<LdapUser>(x.ExtendedData, options);
             return ldapUser?.SamAccountName ?? string.Empty;
+        });
+    }
+
+    [EventHandler]
+    public async Task GetThirdPartyUserFieldValueAsync(ThirdPartyUserFieldValueQuery query)
+    {
+        var identityProvider = await _authDbContext.Set<IdentityProvider>().FirstOrDefaultAsync(x => x.Name == query.Scheme);
+        MasaArgumentException.ThrowIfNull(identityProvider, nameof(IdentityProvider));
+
+        var tpUsers = await _thirdPartyUserRepository.GetListAsync(x => x.ThirdPartyIdpId == identityProvider.Id && query.UserIds.Contains(x.UserId));
+
+        if (query.Field.IsNullOrEmpty())
+        {
+            query.Result = tpUsers.ToDictionary(x => x.UserId, x => x.ThridPartyIdentity);
+            return;
+        }
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        query.Result = tpUsers.ToDictionary(x => x.UserId, x =>
+        {
+            var fieldValue = string.Empty;
+            try
+            {
+                using var doc = JsonDocument.Parse(x.ExtendedData);
+                var root = doc.RootElement;
+
+                if (root.TryGetProperty(query.Field, out var fieldElement))
+                {
+                    fieldValue = fieldElement.GetString();
+                }
+            }
+            catch (JsonException ex)
+            {
+                return string.Empty;
+            }
+            return fieldValue ?? string.Empty;
         });
     }
 }

@@ -10,6 +10,7 @@ public class ThirdPartyUserService : RestServiceBase
         MapGet(GetAsync, "");
         MapPost(RegisterAsync, "register");
         MapPost(LdapUsersAccountAsync, "ldapUsersAccount");
+        MapPost(ThirdPartyUserFieldValueAsync, "thirdPartyUserFieldValue");
     }
 
     private async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(IEventBus eventBus, GetThirdPartyUsersDto tpu)
@@ -97,6 +98,13 @@ public class ThirdPartyUserService : RestServiceBase
     private async Task<Dictionary<Guid, string>> LdapUsersAccountAsync(IEventBus eventBus, [FromBody] GetLdapUsersAccountDto dto)
     {
         var query = new LdapUsersAccountQuery(dto.UserIds);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    public async Task<Dictionary<Guid, string>> ThirdPartyUserFieldValueAsync(IEventBus eventBus, [FromBody] GetThirdPartyUserFieldValueDto dto)
+    {
+        var query = new ThirdPartyUserFieldValueQuery(dto.Scheme, dto.UserIds, dto.Field);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
