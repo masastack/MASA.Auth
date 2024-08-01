@@ -830,11 +830,6 @@ public class QueryHandler
             return;
         }
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
         query.Result = tpUsers.ToDictionary(x => x.UserId, x =>
         {
             var fieldValue = string.Empty;
