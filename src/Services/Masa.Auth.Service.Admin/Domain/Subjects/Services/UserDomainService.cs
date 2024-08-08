@@ -141,10 +141,6 @@ public class UserDomainService : DomainService
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ADMINISTRATOR_DELETE_ERROR);
         }
-        if (user.Id == _userContext.GetUserId<Guid>())
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CURRENT_USER_DELETE_ERROR);
-        }
 
         await _userRepository.RemoveAsync(user);
         await _autoCompleteClient.DeleteAsync(userId);

@@ -140,6 +140,11 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task RemoveUserAsync(RemoveUserCommand command)
     {
+        if (command.User.Id == _userContext.GetUserId<Guid>())
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CURRENT_USER_DELETE_ERROR);
+        }
+
         await _userDomainService.RemoveAsync(command.User.Id);
     }
 
