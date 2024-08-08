@@ -56,6 +56,9 @@ public class CommandHandler
                 }
                 cacheKey = CacheKey.MsgCodeForgotPasswordKey(model.PhoneNumber);
                 break;
+            case SendMsgCodeTypes.DeleteAccount:
+                cacheKey = CacheKey.MsgCodeDeleteAccountKey(model.PhoneNumber);
+                break;
             default:
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SEND_MSG_CODE_TYPE);
         }
