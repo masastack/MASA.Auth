@@ -16,6 +16,7 @@ public static class CacheKey
     const string MSG_CODE_REGISTER_LOGIN = "msg_code_register_and_login:";
     const string MSG_CODE_FOR_BIND = "msg_code_bind:";
     const string MSG_CODE_FOR_VERIFIY_USER_PHONENUMBER = "msg_code_verifiy_user_phoneNumber:";
+    const string MSG_CODE_DELETE_ACCOUNT = "msg_code_delete_account:";
     const string VERIFIY_USER_PHONENUMBER_RESULT = "verifiy_user_phoneNumber_result:";
     const string USER_API_PERMISSION_CODE_PRE = "user_api_permission_code:";
     const string EMAIL_REGISTER_CODE_PRE = "email_register_code:";
@@ -82,6 +83,11 @@ public static class CacheKey
     public static string MsgCodeForBindKey(string phoneNumber)
     {
         return $"{MSG_CODE_FOR_BIND}{phoneNumber}";
+    }
+
+    public static string MsgCodeDeleteAccountKey(string phoneNumber)
+    {
+        return $"{MSG_CODE_DELETE_ACCOUNT}{phoneNumber}";
     }
 
     public static string EmailCodeRegisterSendKey(string email)

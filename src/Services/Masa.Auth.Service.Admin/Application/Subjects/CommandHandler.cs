@@ -645,8 +645,29 @@ public class CommandHandler
         var key = CacheKey.ImpersonationUserKey(token);
         await _distributedCacheClient.SetAsync(key, cacheItem, TimeSpan.FromMinutes(10));
 
-        command.Result = new ImpersonateOutput {
+        command.Result = new ImpersonateOutput
+        {
             ImpersonationToken = token
         };
+    }
+
+    [EventHandler]
+    public async Task DeleteAccountAsync(DeleteAccountCommand command)
+    {
+        var userId = _userContext.GetUserId<Guid>();
+        var user = await _userRepository.FindAsync(x => x.Id == userId);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        var smsCodeKey = CacheKey.MsgCodeDeleteAccountKey(user.PhoneNumber);
+        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
+        if (!command.SmsCode.Equals(smsCode))
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+        }
+
+        await _userDomainService.RemoveAsync(user.Id);
     }
 }
