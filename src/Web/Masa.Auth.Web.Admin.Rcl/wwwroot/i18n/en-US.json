@@ -197,7 +197,9 @@
     "BindUser": "Bind user"
   },
   "RoleBlock": {
-    "RoleOwner": "Role owner"
+    "RoleOwner": "Role owner",
+    "AddRoleUserSuccess": "Add role user success",
+    "ConfirmDeleteRoleUser \"{0}\"?": "Are you sure to delete the role user\"{0}\""
   },
   "IdentityResourceBlock": {
     "DisplayName": "Display name"

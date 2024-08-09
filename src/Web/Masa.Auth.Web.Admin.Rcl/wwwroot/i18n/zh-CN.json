@@ -18,6 +18,8 @@
   "Disabled": "禁用",
   "Action": "操作",
   "Add": "新建",
+  "AddRoleUser": "添加角色用户",
+  "RoleUser": "角色用户",
   "Submit": "提交",
   "Save": "保存",
   "Delete": "删除",
@@ -343,7 +345,9 @@
     "Delete Role": "删除角色",
     "Delete role data success": "删除角色数据成功",
     "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作",
-    "Are you sure delete role data": "确定删除角色数据"
+    "Are you sure delete role data": "确定删除角色数据",
+    "AddRoleUserSuccess": "添加角色用户成功",
+    "ConfirmDeleteRoleUser \"{0}\"?": "确定删除角色用户\"{0}\"吗"
   },
 
   "Emphasize": "强调",

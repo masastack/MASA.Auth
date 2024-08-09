@@ -1,6 +1,10 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Dispatcher.Events;
+using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Permissions;
 
 public class RoleService : ServiceBase
@@ -61,6 +65,21 @@ public class RoleService : ServiceBase
     public async Task RemoveAsync(Guid id)
     {
         await SendAsync(nameof(RemoveAsync), new RemoveRoleDto(id));
+    }
+
+    public async Task AddUserAsync(Guid id, List<Guid> userIds)
+    {
+        await PostAsync($"{id}/user", userIds);
+    }
+
+    public async Task RemoveUserAsync(Guid id, List<Guid> userIds)
+    {
+        await DeleteAsync($"{id}/user", userIds);
+    }
+
+    public async Task<PaginationDto<UserSelectModel>> GetUsersAsync(Guid id, PaginatedOptionsDto options)
+    {
+        return await GetAsync<object, PaginationDto<UserSelectModel>>($"{id}/user", options);
     }
 }
 

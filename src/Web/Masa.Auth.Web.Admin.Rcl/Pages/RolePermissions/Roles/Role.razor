@@ -58,6 +58,9 @@
                                 <MButton Icon Class="mr-4" OnClick="()=> OpenRemoveRoleDialog(context.Item)">
                                     <SIcon Tooltip="@T("Delete")">@IconConstants.Remove</SIcon>
                                 </MButton>
+                                <MButton Icon Class="mr-4" OnClick="()=> OpenRoleUsersDialog(context.Item)">
+                                    <SIcon Tooltip="@T("User")">mdi-account</SIcon>
+                                </MButton>
                             </div>
                             break;
                         default:
@@ -75,3 +78,4 @@
 
 <AddRoleDialog @bind-Visible="AddRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
 <UpdateRoleDialog RoleId=CurrentRoleId @bind-Visible="UpdateRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
+<RoleUsersDialog RoleId=CurrentRoleId @bind-Visible="RoleUsersDialogVisible" />
