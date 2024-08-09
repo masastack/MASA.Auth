@@ -347,6 +347,7 @@
     "This operation cannot be completed due to role cardinality constraint": "由于角色基数约束，无法完成此操作",
     "Are you sure delete role data": "确定删除角色数据",
     "AddRoleUserSuccess": "添加角色用户成功",
+    "DeleteRoleUserSuccess": "删除角色用户成功",
     "ConfirmDeleteRoleUser \"{0}\"?": "确定删除角色用户\"{0}\"吗"
   },
 

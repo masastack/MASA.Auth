@@ -1,5 +1,5 @@
 ﻿@inherits AdminCompontentBase
-<SSimpleModal Value="@Visible" ValueChanged="UpdateVisible" Title="@T("AddRoleUser")" HeaderClass="mr-4" OnSave="HandleSaveAsync">
+<SSimpleModal Value="@Visible" ValueChanged="VisibleChanged" Title="@T("AddRoleUser")" HeaderClass="mr-4" OnSave="HandleSaveAsync">
     <div class="ma-auto text-center">
         <SUserAutoComplete Small @bind-Value="_userId" />
     </div>
@@ -24,18 +24,6 @@
 
     protected override string? PageName { get; set; } = "RoleBlock";
 
-    private async Task UpdateVisible(bool visible)
-    {
-        if (VisibleChanged.HasDelegate)
-        {
-            await VisibleChanged.InvokeAsync(visible);
-        }
-        else
-        {
-            Visible = visible;
-        }
-    }
-
     private async Task HandleSaveAsync()
     {
         if (_userId == Guid.Empty)
@@ -44,7 +32,8 @@
         }
         await AuthCaller.RoleService.AddUserAsync(RoleId, new List<Guid> { _userId });
         OpenSuccessMessage(T("AddRoleUserSuccess"));
-        await UpdateVisible(false);
+        Visible = false;
+        await VisibleChanged.InvokeAsync(false);
         await OnSuccess.InvokeAsync();
         _userId = Guid.Empty;
     }

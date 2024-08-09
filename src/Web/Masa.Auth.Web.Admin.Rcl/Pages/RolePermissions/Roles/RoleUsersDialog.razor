@@ -1,13 +1,12 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog Value="Visible" ValueChanged=UpdateVisible Title="@T("RoleUser")">
+<DefaultSheetDialog Value="Visible" ValueChanged=VisibleChanged Title="@T("RoleUser")">
     <AutoHeight Overflow AutoClass="mt-6">
         <HeaderContent>
             <div class="d-flex">
                 <MSpacer />
                 <SButton Small BorderRadiusClass="rounded-lg" OnClick="() => _addRoleUserModalVisible = true">
-                    <SIcon Size=18 IsDefaultToolTip="false">@IconConstants.Add</SIcon>
-                    <span class="ml-2 btn">@T("AddRoleUser")</span>
+                    <SIcon Size=18 IsDefaultToolTip="false" Left>@IconConstants.Add</SIcon> @T("AddRoleUser")
                 </SButton>
             </div>
         </HeaderContent>
@@ -81,18 +80,6 @@
         }
     }
 
-    private async Task UpdateVisible(bool visible)
-    {
-        if (VisibleChanged.HasDelegate)
-        {
-            await VisibleChanged.InvokeAsync(visible);
-        }
-        else
-        {
-            Visible = visible;
-        }
-    }
-
     private async Task LoadData()
     {
         PopupService.ShowProgressLinear();
@@ -133,6 +120,7 @@
     private async Task RemoveRoleUserAsync(Guid userId)
     {
         await AuthCaller.RoleService.RemoveUserAsync(RoleId, new List<Guid> { userId });
+        OpenSuccessMessage(T("DeleteRoleUserSuccess"));
         await LoadData();
     }
 }

@@ -199,6 +199,7 @@
   "RoleBlock": {
     "RoleOwner": "Role owner",
     "AddRoleUserSuccess": "Add role user success",
+    "DeleteRoleUserSuccess": "Delete role user success",
     "ConfirmDeleteRoleUser \"{0}\"?": "Are you sure to delete the role user\"{0}\""
   },
   "IdentityResourceBlock": {

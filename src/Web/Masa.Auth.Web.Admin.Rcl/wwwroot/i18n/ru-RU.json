@@ -344,6 +344,7 @@
     "This operation cannot be completed due to role cardinality constraint": "Эта операция не может быть завершена из-за ограничений кардинальности роли",
     "Are you sure delete role data": "Вы уверены, что хотите удалить данные роли",
     "AddRoleUserSuccess": "Добавить роль пользователя успешно",
+    "DeleteRoleUserSuccess": "Удалить роль пользователя успешно",
     "ConfirmDeleteRoleUser \"{0}\"?": "Определить пользователя для удаления роли\"{0}\"?"
   },
 
