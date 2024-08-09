@@ -1,10 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Dispatcher.Events;
-using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
-
 namespace Masa.Auth.ApiGateways.Caller.Services.Permissions;
 
 public class RoleService : ServiceBase
