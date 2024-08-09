@@ -34,4 +34,13 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
     }
+
+    public async Task<Role> GetWithUsersAsync(Guid id)
+    {
+        return await Context.Set<Role>()
+            .Where(r => r.Id == id)
+            .Include(r => r.Users)
+            .FirstOrDefaultAsync()
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
+    }
 }

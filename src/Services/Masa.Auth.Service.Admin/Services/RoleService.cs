@@ -5,10 +5,9 @@ namespace Masa.Auth.Service.Admin.Services;
 
 public class RoleService : RestServiceBase
 {
-    readonly ILogger<RoleService> _logger;
-    public RoleService(ILogger<RoleService> logger) : base("api/role")
+    public RoleService() : base("api/role")
     {
-        _logger = logger;
+        RouteOptions.DisableAutoMapRoute = false;
         MapGet(GetDetailExternalAsync, "external");
     }
 
@@ -87,6 +86,26 @@ public class RoleService : RestServiceBase
         [FromBody] RemoveRoleDto role)
     {
         await eventBus.PublishAsync(new RemoveRoleCommand(role));
+    }
+
+    [RoutePattern("{id}/user", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task AddUserAsync([FromServices] IEventBus eventBus, Guid id, [FromBody] List<Guid> userIds)
+    {
+        await eventBus.PublishAsync(new AddRoleUserCommand(id, userIds));
+    }
+
+    [RoutePattern("{id}/user", StartWithBaseUri = true, HttpMethod = "Delete")]
+    public async Task RemoveUserAsync([FromServices] IEventBus eventBus, Guid id, [FromBody] List<Guid> userIds)
+    {
+        await eventBus.PublishAsync(new RemoveRoleUserCommand(id, userIds));
+    }
+
+    [RoutePattern("{id}/user", StartWithBaseUri = true, HttpMethod = "Get")]
+    public async Task<PaginationDto<UserSelectModel>> GetUsersAsync([FromServices] IEventBus eventBus, Guid id, [FromQuery] int page = 1, [FromQuery] int pagesize = 10)
+    {
+        var query = new RoleUsersQuery(id, page, pagesize);
+        await eventBus.PublishAsync(query);
+        return query.Result;
     }
 }
 

@@ -177,6 +177,24 @@ public class QueryHandler
         query.Result = roleSelect;
     }
 
+    [EventHandler]
+    public async Task GetUsersAsync(RoleUsersQuery query)
+    {
+        Expression<Func<UserRole, bool>> condition = x => x.RoleId == query.RoleId;
+
+        var userRoleQuery = _authDbContext.Set<UserRole>().Include(x => x.User).Where(condition);
+        var total = await userRoleQuery.LongCountAsync();
+        var users = await userRoleQuery.OrderByDescending(s => s.ModificationTime)
+                                   .ThenByDescending(s => s.CreationTime)
+                                   .Skip((query.Page - 1) * query.PageSize)
+                                   .Take(query.PageSize)
+                                   .Select(x => x.User)
+                                   .ToListAsync();
+        var dtos = users.Adapt<List<UserSelectModel>>();
+        query.Result = new(total, dtos);
+    }
+
+
     private async Task<List<RoleSelectDto>> GetRoleSelectAsync()
     {
         var roleSelect = await _authDbContext.Set<Role>()

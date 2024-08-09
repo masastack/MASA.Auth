@@ -1,0 +1,126 @@
+﻿@inherits AdminCompontentBase
+
+<DefaultSheetDialog Value="Visible" ValueChanged=VisibleChanged Title="@T("RoleUser")">
+    <AutoHeight Overflow AutoClass="mt-6">
+        <HeaderContent>
+            <div class="d-flex">
+                <MSpacer />
+                <SButton Small BorderRadiusClass="rounded-lg" OnClick="() => _addRoleUserModalVisible = true">
+                    <SIcon Size=18 IsDefaultToolTip="false" Left>@IconConstants.Add</SIcon> @T("AddRoleUser")
+                </SButton>
+            </div>
+        </HeaderContent>
+        <AutoHeightContent>
+            <SDataTable Headers="_headers" Items="_entities.Items" TItem="UserSelectModel" ItemsPerPage="_queryParam.PageSize" HideDefaultFooter Class="d-flex full-height flex-column">
+                <HeaderColContent Context="header">
+                    <span class="text-btn">@header.Text</span>
+                </HeaderColContent>
+                <ItemColContent>
+                    @switch (context.Header.Value)
+                    {
+                        case nameof(UserSelectModel.Avatar):
+                            <div>
+                                <MAvatar>
+                                    <MImage Src="@(context.Item.Avatar)" Alt="Jack"></MImage>
+                                </MAvatar>
+                                <span class="ml-2">@context.Item.DisplayName</span>
+                            </div>
+                            break;
+                        case "Action":
+                            <SIcon Small Color="emphasis2" Tooltip="@(T("Delete"))" OnClick="() => OpenRemoveRoleUserDialog(context.Item)">@IconConstants.Remove</SIcon>
+                            break;
+                        default:
+                            <SItemCol Value="@context.Value" />
+                            break;
+                    }
+                </ItemColContent>
+                <FooterContent>
+                    <SPagination Class="mt-3 mx-6 pb-6" Page="@_queryParam.Page" PageSize="@_queryParam.PageSize" Total="_entities.Total" PageChanged="HandlePageChanged" PageSizeChanged="HandlePageSizeChanged" />
+                </FooterContent>
+            </SDataTable>
+        </AutoHeightContent>
+    </AutoHeight>
+</DefaultSheetDialog>
+
+<AddRoleUserModal RoleId="RoleId" @bind-Visible="_addRoleUserModalVisible" OnSuccess="LoadData" />
+
+@code {
+
+    [Parameter]
+    public Guid RoleId { get; set; }
+
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> VisibleChanged { get; set; }
+
+    public bool _addRoleUserModalVisible;
+
+    private List<DataTableHeader<UserSelectModel>> _headers = new();
+
+    private PaginatedOptionsDto _queryParam = new();
+
+    private PaginationDto<UserSelectModel> _entities = new();
+
+    protected override string? PageName { get; set; } = "RoleBlock";
+
+    protected async override Task OnInitializedAsync()
+    {
+        LoadHeaders();
+
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Visible)
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task LoadData()
+    {
+        PopupService.ShowProgressLinear();
+        _entities = await AuthCaller.RoleService.GetUsersAsync(RoleId, _queryParam);
+        PopupService.HideProgressLinear();
+        StateHasChanged();
+    }
+
+    private void LoadHeaders()
+    {
+        _headers = new List<DataTableHeader<UserSelectModel>> {
+            new() { Text = T("User"), Value = nameof(UserDto.Avatar)},
+            new() { Text = T(nameof(UserSelectModel.Account)), Value = nameof(UserSelectModel.Account)},
+            new() { Text = T(nameof(UserSelectModel.PhoneNumber)), Value = nameof(UserSelectModel.PhoneNumber)},
+            new() { Text = T(nameof(UserSelectModel.Email)), Value = nameof(UserSelectModel.Email) },
+            new() { Text = T("Action"), Value = "Action", Sortable = false, Align = DataTableHeaderAlign.Center, Width = "80px" }
+        };
+    }
+
+    private async Task HandlePageChanged(int page)
+    {
+        _queryParam.Page = page;
+        await LoadData();
+    }
+
+    private async Task HandlePageSizeChanged(int pageSize)
+    {
+        _queryParam.PageSize = pageSize;
+        await LoadData();
+    }
+
+    private async Task OpenRemoveRoleUserDialog(UserSelectModel user)
+    {
+        var confirm = await OpenConfirmDialog(T("ConfirmDeleteRoleUser \"{0}\"?", user.Name));
+        if (confirm) await RemoveRoleUserAsync(user.Id);
+    }
+
+    private async Task RemoveRoleUserAsync(Guid userId)
+    {
+        await AuthCaller.RoleService.RemoveUserAsync(RoleId, new List<Guid> { userId });
+        OpenSuccessMessage(T("DeleteRoleUserSuccess"));
+        await LoadData();
+    }
+}

@@ -126,4 +126,15 @@ public class Role : FullAggregateRoot<Guid, Guid>
     {
         AvailableQuantity = availableQuantity;
     }
+
+    public void AddUsers(IEnumerable<Guid> userIds)
+    {
+        _users = _users.MergeDistinctBy(userIds.Select(userId => new UserRole(userId, Id)), item => item.UserId).ToList();
+    }
+
+    public void RemoveUsers(IEnumerable<Guid> userIds)
+    {
+        _users = _users.Where(user => userIds.Any(userId => user.UserId == userId) is false)
+                       .ToList();
+    }
 }

@@ -62,5 +62,20 @@ public class RoleService : ServiceBase
     {
         await SendAsync(nameof(RemoveAsync), new RemoveRoleDto(id));
     }
+
+    public async Task AddUserAsync(Guid id, List<Guid> userIds)
+    {
+        await PostAsync($"{id}/user", userIds);
+    }
+
+    public async Task RemoveUserAsync(Guid id, List<Guid> userIds)
+    {
+        await DeleteAsync($"{id}/user", userIds);
+    }
+
+    public async Task<PaginationDto<UserSelectModel>> GetUsersAsync(Guid id, PaginatedOptionsDto options)
+    {
+        return await GetAsync<object, PaginationDto<UserSelectModel>>($"{id}/user", options);
+    }
 }
 
