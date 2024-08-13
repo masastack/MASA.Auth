@@ -666,7 +666,7 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }
 
-        if (!command.SmsCode.IsNullOrEmpty())
+        if (command.SmsCode is not null)
         {
             var smsCodeKey = CacheKey.MsgCodeDeleteAccountKey(user.PhoneNumber);
             var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
