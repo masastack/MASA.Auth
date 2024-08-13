@@ -666,11 +666,14 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }
 
-        var smsCodeKey = CacheKey.MsgCodeDeleteAccountKey(user.PhoneNumber);
-        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
-        if (!command.SmsCode.Equals(smsCode))
+        if (!command.SmsCode.IsNullOrEmpty())
         {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            var smsCodeKey = CacheKey.MsgCodeDeleteAccountKey(user.PhoneNumber);
+            var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
+            if (!command.SmsCode.Equals(smsCode))
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            }
         }
 
         await _userDomainService.RemoveAsync(user.Id);
