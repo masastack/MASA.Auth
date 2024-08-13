@@ -102,6 +102,30 @@ public class CommandHandler
         await _roleRepository.RemoveAsync(role);
     }
 
+    [EventHandler]
+    public async Task AddUserAsync(AddRoleUserCommand command)
+    {
+        var role = await _roleRepository.GetWithUsersAsync(command.RoleId);
+        if (role is null)
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
+
+        role.AddUsers(command.UserIds);
+
+        await _roleRepository.UpdateAsync(role);
+    }
+
+    [EventHandler]
+    public async Task RemoveUserAsync(RemoveRoleUserCommand command)
+    {
+        var role = await _roleRepository.GetWithUsersAsync(command.RoleId);
+        if (role is null)
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
+
+        role.RemoveUsers(command.UserIds);
+
+        await _roleRepository.UpdateAsync(role);
+    }
+
     #endregion
 
     #region Permission

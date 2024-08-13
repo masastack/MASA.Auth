@@ -53,7 +53,7 @@ public class QueryHandler
         {
             dto.VisibleType = GlobalNavVisibleTypes.Client;
         }
-        else if (!list.Any(x => x.Visible))
+        else if (list.Any(x => x.ClientId.IsNullOrEmpty() && !x.Visible))
         {
             dto.VisibleType = GlobalNavVisibleTypes.AllInvisible;
         }

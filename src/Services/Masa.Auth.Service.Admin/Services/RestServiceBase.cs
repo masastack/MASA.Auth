@@ -13,7 +13,7 @@ public abstract class RestServiceBase : ServiceBase
         var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         foreach (var method in methods)
         {
-            if (method.Name.EndsWith("Async"))
+            if (!method.CustomAttributes.Any(x => x.AttributeType.Name == nameof(RoutePatternAttribute)) && method.Name.EndsWith("Async"))
             {
                 var @delegate = TypeDescriptor.ConvertToDelegateType(method, this);
                 if (method.Name.StartsWith("Get")) MapGet(@delegate);

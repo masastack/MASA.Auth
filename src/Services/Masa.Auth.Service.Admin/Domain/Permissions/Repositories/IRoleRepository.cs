@@ -8,4 +8,6 @@ public interface IRoleRepository : IRepository<Role, Guid>
     Task<Role> GetByIdAsync(Guid Id);
 
     Task<Role> GetDetailAsync(Guid id);
+
+    Task<Role> GetWithUsersAsync(Guid id);
 }

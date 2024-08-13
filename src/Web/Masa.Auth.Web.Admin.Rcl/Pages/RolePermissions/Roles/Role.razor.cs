@@ -62,6 +62,8 @@ public partial class Role
 
     public bool UpdateRoleDialogVisible { get; set; }
 
+    public bool RoleUsersDialogVisible { get; set; }
+
     private RoleService RoleService => AuthCaller.RoleService;
 
     protected override string? PageName => "RoleBlock";
@@ -117,6 +119,12 @@ public partial class Role
     {
         CurrentRoleId = role.Id;
         UpdateRoleDialogVisible = true;
+    }
+
+    public void OpenRoleUsersDialog(RoleDto role)
+    {
+        CurrentRoleId = role.Id;
+        RoleUsersDialogVisible = true;
     }
 
     public async Task OpenRemoveRoleDialog(RoleDto role)
