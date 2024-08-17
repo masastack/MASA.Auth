@@ -22,7 +22,7 @@ public class UserProfileService : IProfileService
         //ClaimsProviderAccessToken
         //if (context.Caller == "ClaimsProviderIdentityToken" || context.Caller == "UserInfoEndpoint")
         {
-            var subjectId = context.Subject.Claims.FirstOrDefault(c => c.Type == "sub");
+            var subjectId = context.Subject.Claims.FirstOrDefault(c => c.Type == IdentityClaimConsts.USER_ID);
             if (subjectId != null && Guid.TryParse(subjectId.Value, out var userId))
             {
                 var claimValues = await _authClient.UserService.GetClaimValuesAsync(userId);

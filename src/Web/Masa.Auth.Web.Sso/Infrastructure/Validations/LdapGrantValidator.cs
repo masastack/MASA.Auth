@@ -81,7 +81,7 @@ public class LdapGrantValidator : IExtensionGrantValidator
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypeConsts.DOMAIN_NAME, ldapUser.SamAccountName)
+                new Claim(IdentityClaimConsts.DOMAIN_NAME, ldapUser.SamAccountName)
             };
 
             context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap", claims);
