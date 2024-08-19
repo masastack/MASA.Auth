@@ -88,7 +88,7 @@ public class AccountController : Controller
                 {
                     DisplayName = user.DisplayName
                 };
-
+                isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.USER_NAME, user.DisplayName));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ACCOUNT, user.Account));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ENVIRONMENT, inputModel.Environment));
                 isuser.AdditionalClaims.Add(new Claim(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(user.Roles.Select(r => r.Code))));

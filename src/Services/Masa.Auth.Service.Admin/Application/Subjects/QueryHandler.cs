@@ -776,9 +776,9 @@ public class QueryHandler
         if (user != null)
         {
             //compatible
-            userClaimValuesQuery.Result.AddOrUpdate("phoneNumber", user.PhoneNumber);
-            userClaimValuesQuery.Result.AddOrUpdate("account", user.Account);
-            userClaimValuesQuery.Result.AddOrUpdate("userName", user.DisplayName);
+            userClaimValuesQuery.Result.AddOrUpdate(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber);
+            userClaimValuesQuery.Result.AddOrUpdate(IdentityClaimConsts.ACCOUNT, user.Account);
+            userClaimValuesQuery.Result.AddOrUpdate(IdentityClaimConsts.USER_NAME, user.DisplayName);
         }
     }
 

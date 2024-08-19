@@ -52,7 +52,7 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
 
             if (!cacheItem.IsBackToImpersonator)
             {
-                claims.Add(new Claim(ClaimTypeConsts.IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
+                claims.Add(new Claim(IdentityClaimConsts.IMPERSONATOR_USER_ID, cacheItem.ImpersonatorUserId.ToString()));
             }
 
             context.Result = new GrantValidationResult(cacheItem.TargetUserId.ToString(), "impersonation", claims);
