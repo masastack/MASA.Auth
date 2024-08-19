@@ -103,6 +103,7 @@ global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Consts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.BuildingBlocks.StackSdks.Config;
+global using Masa.BuildingBlocks.StackSdks.Config.Consts;
 global using Masa.BuildingBlocks.StackSdks.Dcc;
 global using Masa.BuildingBlocks.StackSdks.Mc;
 global using Masa.BuildingBlocks.StackSdks.Mc.Enum;
