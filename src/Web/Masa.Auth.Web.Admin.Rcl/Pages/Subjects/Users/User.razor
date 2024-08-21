@@ -48,13 +48,13 @@
                                 <img src="@context.Item.Avatar" />
                             </MAvatar>
                             <div class="ml-2 my-auto">
-                                <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name,context.Item.Account)</div>
-                                <div class="regular2--text caption">@context.Item.PhoneNumber</div>
+                                <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name,context.Item.Account.MaskAccount())</div>
+                                <div class="regular2--text caption">@context.Item.PhoneNumber?.MaskPhoneNumber()</div>
                             </div>
                         </div>
                         break;
                     case (nameof(UserDto.Account)):
-                        <span>@context.Item.Account</span>
+                        <span>@context.Item.Account.MaskAccount()</span>
                         break;
                     case (nameof(UserDto.CreationTime)):
                         <SDateTimeTitle Value=context.Item.CreationTime />
