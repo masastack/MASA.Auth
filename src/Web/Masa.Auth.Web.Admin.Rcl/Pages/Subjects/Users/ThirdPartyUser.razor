@@ -48,7 +48,7 @@
                                 <img src="@context.Item.User.Avatar"/>
                             </MAvatar>
                             <div class="ml-2 block-center">
-                                <div>@ReturnNotNullValue(context.Item.User.DisplayName, context.Item.User.Name, context.Item.User.Account)</div>
+                                <div>@ReturnNotNullValue(context.Item.User.DisplayName, context.Item.User.Name, context.Item.User.Account.MaskAccount())</div>
                             </div>
                         </div>
                         break;

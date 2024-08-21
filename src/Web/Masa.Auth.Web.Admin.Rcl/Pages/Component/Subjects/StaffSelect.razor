@@ -34,6 +34,6 @@
         </MChip>
     </SelectionContent>
     <ItemContent Context="data">
-        @RenderFragments.UserSelectItem(data.Item.Avatar, data.Item.DisplayName, data.Item.JobNumber, data.Item.PhoneNumber, data.Item.Email)
+        @RenderFragments.UserSelectItem(data.Item.Avatar, data.Item.DisplayName, data.Item.JobNumber, data.Item.PhoneNumber.MaskPhoneNumber(), data.Item.Email)
     </ItemContent>
 </SAutoComplete>

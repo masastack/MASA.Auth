@@ -138,6 +138,9 @@
                                                 <span class="ml-2">@context.Item.DisplayName</span>
                                             </div>
                                             break;
+                                        case nameof(UserDto.Account):
+                                            <span>@context.Item.Account.MaskAccount()</span>
+                                            break;
                                         case "Action":
                                             <MButton Class="mr-4" Icon OnClick="()=>UpdateStaff(context.Item.Id)">
                                                 <SIcon Tooltip="@T("Edit")">@IconConstants.Update</SIcon>

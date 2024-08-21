@@ -38,12 +38,12 @@
                             </MAvatar>
                             <div class="ml-2 my-auto">
                                 <div>@ReturnNotNullValue(context.Item.DisplayName,context.Item.Name)</div>
-                                <div class="regular2--text caption">@context.Item.PhoneNumber</div>
+                                <div class="regular2--text caption">@context.Item.PhoneNumber.MaskPhoneNumber()</div>
                             </div>
                         </div>
                         break;
                     case (nameof(StaffDto.Account)):
-                        <span>@context.Item.Account</span>
+                        <span>@context.Item.Account.MaskAccount()</span>
                         break;
                     case (nameof(StaffDto.Department)):
                         <span>@(string.IsNullOrEmpty(context.Item.Department) ? "-" : context.Item.Department)</span>
