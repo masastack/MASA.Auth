@@ -18,5 +18,19 @@ public class PermissionDetailValidator<T> : MasaAbstractValidator<T> where T : P
         RuleFor(p => p.Order).NotNull().Must(order => order >= BusinessConsts.PERMISSION_ORDER_MIN_VALUE
             && order <= BusinessConsts.PERMISSION_ORDER_MAX_VALUE)
             .WithMessage($"The valid value of order is between {BusinessConsts.PERMISSION_ORDER_MIN_VALUE}-{BusinessConsts.PERMISSION_ORDER_MAX_VALUE}");
+        RuleFor(p => p.MatchPattern).Must(IsValidRegex).WithMessage("Invalid regex pattern");
+    }
+    
+    private bool IsValidRegex(string pattern)
+    {
+        try
+        {
+            _ = Regex.Match(string.Empty, pattern);
+            return true;
+        }
+        catch (RegexParseException)
+        {
+            return false;
+        }
     }
 }
