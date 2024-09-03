@@ -78,4 +78,4 @@
 
 <AddRoleDialog @bind-Visible="AddRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
 <UpdateRoleDialog RoleId=CurrentRoleId @bind-Visible="UpdateRoleDialogVisible" OnSubmitSuccess=GetRolesAsync />
-<RoleUsersDialog RoleId=CurrentRoleId @bind-Visible="RoleUsersDialogVisible" />
+<RoleUsersDialog RoleId=CurrentRoleId @bind-Visible="RoleUsersDialogVisible" OnClosed="GetRolesAsync" />
