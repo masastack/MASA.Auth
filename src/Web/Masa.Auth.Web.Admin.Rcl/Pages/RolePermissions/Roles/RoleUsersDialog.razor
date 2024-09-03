@@ -1,6 +1,6 @@
 ﻿@inherits AdminCompontentBase
 
-<DefaultSheetDialog Value="Visible" ValueChanged=VisibleChanged Title="@T("RoleUser")">
+<DefaultSheetDialog Value="Visible" ValueChanged=VisibleChanged Title="@T("RoleUser")" OnClosed="OnClosed">
     <AutoHeight Overflow AutoClass="mt-6">
         <HeaderContent>
             <div class="d-flex">
@@ -54,6 +54,9 @@
 
     [Parameter]
     public EventCallback<bool> VisibleChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnClosed { get; set; }
 
     public bool _addRoleUserModalVisible;
 
