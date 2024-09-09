@@ -118,6 +118,8 @@ builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 builder.Services.AddLadpContext();
 
+builder.Services.AddValidatorsFromAssembly(Assembly.GetEntryAssembly());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
