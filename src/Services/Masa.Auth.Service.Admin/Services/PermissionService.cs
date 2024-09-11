@@ -7,6 +7,11 @@ public class PermissionService : ServiceBase
 {
     public PermissionService() : base("api/permission")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapGet(GetApplicationPermissionsAsync);
         MapGet(GetTypesAsync);
         MapGet(GetApiPermissionSelectAsync);

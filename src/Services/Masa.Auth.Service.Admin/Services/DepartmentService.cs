@@ -7,6 +7,11 @@ public class DepartmentService : ServiceBase
 {
     public DepartmentService() : base("api/department")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapGet(GetAsync);
         MapGet(ListAsync);
         MapGet(CountAsync);

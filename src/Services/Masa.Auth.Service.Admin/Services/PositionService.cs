@@ -7,7 +7,10 @@ public class PositionService : RestServiceBase
 {
     public PositionService() : base("api/position")
     {
-
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
     }
 
     private async Task<PaginationDto<PositionDto>> GetListAsync(IEventBus eventBus, GetPositionsDto position)

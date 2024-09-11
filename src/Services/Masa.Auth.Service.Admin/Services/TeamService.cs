@@ -7,6 +7,11 @@ public class TeamService : ServiceBase
 {
     public TeamService() : base("api/team")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapGet(GetAsync);
         MapGet(GetDetailForExternalAsync, "detail");
         MapGet(ListAsync);
@@ -17,7 +22,7 @@ public class TeamService : ServiceBase
         MapDelete(RemoveAsync);
     }
 
-    [Authorize]
+    [MasaAuthorize]
     private async Task CreateAsync(IEventBus eventBus, [FromBody] AddTeamDto addTeamDto)
     {
         await eventBus.PublishAsync(new AddTeamCommand(addTeamDto));

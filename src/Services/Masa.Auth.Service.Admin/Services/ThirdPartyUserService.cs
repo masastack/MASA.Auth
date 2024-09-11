@@ -7,6 +7,11 @@ public class ThirdPartyUserService : RestServiceBase
 {
     public ThirdPartyUserService() : base("api/thirdPartyUser")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapGet(GetAsync, "");
         MapPost(RegisterAsync, "register");
         MapPost(LdapUsersAccountAsync, "ldapUsersAccount");

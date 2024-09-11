@@ -31,6 +31,13 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
         //Enhance the default challenge or forbid responses.
         var endpoint = context.GetEndpoint();
         var masaAuthorizeAttribute = endpoint?.Metadata.GetMetadata<MasaAuthorizeAttribute>();
+
+        if (masaAuthorizeAttribute == null && context.User.Identity?.IsAuthenticated is true)
+        {
+            await next(context);
+            return;
+        }
+
         if (masaAuthorizeAttribute != null)
         {
             if (masaAuthorizeAttribute.Roles?.Split(',').ToList()
@@ -41,6 +48,7 @@ public class CodeAuthorizationMiddlewareResultHandler : IAuthorizationMiddleware
                 return;
             }
         }
+        
         var code = masaAuthorizeAttribute?.Code;
         var appId = string.Empty;
         var requirement = policy.Requirements.Where(r => r is DefaultRuleCodeRequirement)
