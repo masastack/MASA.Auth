@@ -47,7 +47,7 @@ public class ThirdPartyUserService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<string?> GetThridPartyIdentityAsync(IEventBus eventBus, [FromQuery] string scheme, Guid userId)
+    private async Task<string> GetThridPartyIdentityAsync(IEventBus eventBus, [FromQuery] string scheme, Guid userId)
     {
         var identityProviderQuery = new IdentityProviderBySchemeQuery(scheme);
         await eventBus.PublishAsync(identityProviderQuery);
@@ -55,7 +55,7 @@ public class ThirdPartyUserService : RestServiceBase
 
         var query = new ThridPartyIdentityQuery(userId, identityProvider.Id);
         await eventBus.PublishAsync(query);
-        return query.Result;
+        return query.Result ?? string.Empty;
     }
 
     private async Task<UserModel> UpsertThirdPartyUserExternalAsync(IEventBus eventBus, UpsertThirdPartyUserModel model)
