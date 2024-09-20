@@ -232,6 +232,7 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
+    [AllowAnonymous]
     public async Task<bool> PostVerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
