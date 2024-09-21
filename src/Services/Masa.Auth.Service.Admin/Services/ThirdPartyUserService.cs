@@ -69,10 +69,10 @@ public class ThirdPartyUserService : RestServiceBase
     private async Task<UserModel> AddThirdPartyUserAsync(
         IEventBus eventBus,
         [FromQuery] bool whenExistReturn,
-        [FromQuery] bool whenExisUpdateClaimData,
+        [FromQuery] bool? whenExisUpdateClaimData,
         AddThirdPartyUserModel model)
     {
-        var query = new AddThirdPartyUserExternalCommand(model, whenExistReturn, whenExisUpdateClaimData);
+        var query = new AddThirdPartyUserExternalCommand(model, whenExistReturn, whenExisUpdateClaimData ?? false);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
