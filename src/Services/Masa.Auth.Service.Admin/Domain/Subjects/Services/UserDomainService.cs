@@ -7,7 +7,7 @@ public class UserDomainService : DomainService
     readonly IAutoCompleteClient _autoCompleteClient;
     readonly ILogger<UserDomainService> _logger;
     readonly IUserContext _userContext;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _cacheClient;
     readonly RoleDomainService _roleDomainService;
     readonly AuthDbContext _dbContext;
     readonly IUnitOfWork _unitOfWork;
@@ -18,7 +18,7 @@ public class UserDomainService : DomainService
         IAutoCompleteClient autoCompleteClient,
         ILogger<UserDomainService> logger,
         IUserContext userContext,
-        IMultilevelCacheClient multilevelCacheClient,
+        IDistributedCacheClient cacheClient,
         RoleDomainService roleDomainService,
         AuthDbContext dbContext,
         IUnitOfWork unitOfWork,
@@ -28,7 +28,7 @@ public class UserDomainService : DomainService
         _autoCompleteClient = autoCompleteClient;
         _logger = logger;
         _userContext = userContext;
-        _multilevelCacheClient = multilevelCacheClient;
+        _cacheClient = cacheClient;
         _roleDomainService = roleDomainService;
         _dbContext = dbContext;
         _unitOfWork = unitOfWork;
@@ -75,7 +75,7 @@ public class UserDomainService : DomainService
             userModel.StaffDisplayName = staff?.DisplayName;
             userModel.StaffId = staff?.Id;
 
-            await _multilevelCacheClient.SetAsync(CacheKey.UserKey(userId), userModel);
+            await _cacheClient.SetAsync(CacheKey.UserKey(userId), userModel);
 
             var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
             if (!result.IsValid)
@@ -106,7 +106,7 @@ public class UserDomainService : DomainService
             userModel.StaffDisplayName = staff?.DisplayName;
             userModel.StaffId = staff?.Id;
 
-            await _multilevelCacheClient.SetAsync(CacheKey.UserKey(user.Id), userModel);
+            await _cacheClient.SetAsync(CacheKey.UserKey(user.Id), userModel);
 
             var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
             if (!result.IsValid)
@@ -131,7 +131,7 @@ public class UserDomainService : DomainService
             map.Add(CacheKey.UserKey(user.Id), userModel);
             await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
         }
-        await _multilevelCacheClient.SetListAsync(map);
+        await _cacheClient.SetListAsync(map);
     }
 
     public async Task RemoveAsync(Guid userId)
@@ -144,7 +144,7 @@ public class UserDomainService : DomainService
 
         await _userRepository.RemoveAsync(user);
         await _autoCompleteClient.DeleteAsync(userId);
-        await _multilevelCacheClient.RemoveAsync<UserModel>(CacheKey.UserKey(userId));
+        await _cacheClient.RemoveAsync<UserModel>(CacheKey.UserKey(userId));
 
         await _webhookDomainService.TriggerAsync(WebhookEvent.DeleteUser, user);
     }

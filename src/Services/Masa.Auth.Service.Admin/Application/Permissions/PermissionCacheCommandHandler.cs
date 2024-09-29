@@ -5,12 +5,12 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class PermissionCacheCommandHandler
 {
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _cacheClient;
     readonly IPermissionRepository _permissionRepository;
 
-    public PermissionCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient, IPermissionRepository permissionRepository)
+    public PermissionCacheCommandHandler(IDistributedCacheClient cacheClient, IPermissionRepository permissionRepository)
     {
-        _multilevelCacheClient = multilevelCacheClient;
+        _cacheClient = cacheClient;
         _permissionRepository = permissionRepository;
     }
 
@@ -18,9 +18,9 @@ public class PermissionCacheCommandHandler
     public async Task UpsertPermissionAsync(UpsertPermissionCommand upsertPermissionCommand)
     {
         var cachePermission = upsertPermissionCommand.PermissionDetail.Adapt<CachePermission>();
-        await _multilevelCacheClient.SetAsync(upsertPermissionCommand.PermissionDetail.Id.ToString(), cachePermission);
+        await _cacheClient.SetAsync(upsertPermissionCommand.PermissionDetail.Id.ToString(), cachePermission);
 
-        var allPermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        var allPermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (allPermissions == null)
         {
             allPermissions = new List<CachePermission>();
@@ -31,21 +31,21 @@ public class PermissionCacheCommandHandler
             allPermissions.Remove(existsData);
         }
         allPermissions.Add(cachePermission);
-        await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
     }
 
     [EventHandler(99)]
     public async Task RemovePermissionAsync(RemovePermissionCommand removePermissionCommand)
     {
-        await _multilevelCacheClient.RemoveAsync<CachePermission>(removePermissionCommand.PermissionId.ToString());
+        await _cacheClient.RemoveAsync<CachePermission>(removePermissionCommand.PermissionId.ToString());
 
-        var allPermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        var allPermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (allPermissions == null)
         {
             allPermissions = new List<CachePermission>();
         }
         allPermissions = allPermissions.Where(e => e.Id != removePermissionCommand.PermissionId).ToList();
-        await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
     }
 
     [EventHandler(99)]
@@ -55,10 +55,10 @@ public class PermissionCacheCommandHandler
         foreach (var permission in seedPermissionsCommand.Permissions)
         {
             var cachePermission = permission.Adapt<CachePermission>();
-            await _multilevelCacheClient.SetAsync(permission.Id.ToString(), cachePermission);
+            await _cacheClient.SetAsync(permission.Id.ToString(), cachePermission);
             allPermissions.Add(cachePermission);
         }
-        await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
     }
 
     [EventHandler]
@@ -69,10 +69,10 @@ public class PermissionCacheCommandHandler
         foreach (var permission in permissions)
         {
             var cachePermission = permission.Adapt<CachePermission>();
-            await _multilevelCacheClient.SetAsync(permission.Id.ToString(), cachePermission);
+            await _cacheClient.SetAsync(permission.Id.ToString(), cachePermission);
             allPermissions.Add(cachePermission);
         }
-        await _multilevelCacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
         command.Count = permissions.Count();
     }
 
@@ -80,7 +80,7 @@ public class PermissionCacheCommandHandler
     public async Task CollectMenuAsync(FavoriteMenuCommand favoriteMenuCommand)
     {
         var key = CacheKey.UserMenuCollectKey(favoriteMenuCommand.UserId);
-        var menus = (await _multilevelCacheClient.GetAsync<HashSet<Guid>>(key)) ?? new HashSet<Guid>();
+        var menus = (await _cacheClient.GetAsync<HashSet<Guid>>(key)) ?? new HashSet<Guid>();
         if (favoriteMenuCommand.IsFavorite)
         {
             menus.Add(favoriteMenuCommand.PermissionId);
@@ -89,6 +89,6 @@ public class PermissionCacheCommandHandler
         {
             menus.Remove(favoriteMenuCommand.PermissionId);
         }
-        await _multilevelCacheClient.SetAsync(key, menus);
+        await _cacheClient.SetAsync(key, menus);
     }
 }

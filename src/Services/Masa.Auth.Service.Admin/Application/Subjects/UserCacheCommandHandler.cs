@@ -5,14 +5,14 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class UserCacheCommandHandler
 {
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _cacheClient;
     readonly UserDomainService _userDomainService;
 
     public UserCacheCommandHandler(
-        IMultilevelCacheClient multilevelCacheClient,
+        IDistributedCacheClient cacheClient,
         UserDomainService userDomainService)
     {
-        _multilevelCacheClient = multilevelCacheClient;
+        _cacheClient = cacheClient;
         _userDomainService = userDomainService;
     }
 
@@ -34,12 +34,9 @@ public class UserCacheCommandHandler
         var dto = userVisitedCommand.AddUserVisitedDto;
         //todo zset
         var key = CacheKey.UserVisitKey(dto.UserId);
-        var visited = await _multilevelCacheClient.GetOrSetAsync(key, new CombinedCacheEntry<List<CacheUserVisited>>
+        var visited = await _cacheClient.GetOrSetAsync(key, () =>
         {
-            DistributedCacheEntryFunc = () =>
-            {
-                return new CacheEntry<List<CacheUserVisited>>(new List<CacheUserVisited>());
-            }
+            return new CacheEntry<List<CacheUserVisited>>(new List<CacheUserVisited>());
         });
         visited ??= new List<CacheUserVisited>();
         var item = new CacheUserVisited
@@ -53,14 +50,14 @@ public class UserCacheCommandHandler
         {
             visited = visited.GetRange(0, 10);
         }
-        await _multilevelCacheClient.SetAsync(key, visited);
+        await _cacheClient.SetAsync(key, visited);
     }
 
     [EventHandler(99)]
     public async Task SaveUserSystemBusinessDataAsync(SaveUserSystemBusinessDataCommand saveUserSystemBusinessDataCommand)
     {
         var userSystemData = saveUserSystemBusinessDataCommand.UserSystemData;
-        await _multilevelCacheClient.SetAsync(
+        await _cacheClient.SetAsync(
             CacheKey.UserSystemDataKey(userSystemData.UserId, userSystemData.SystemId),
             userSystemData.Data);
     }

@@ -5,10 +5,10 @@ namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public class OperaterProvider : IScopedDependency
 {
-    IMultilevelCacheClient _cacheClient;
+    IDistributedCacheClient _cacheClient;
     IStaffRepository _staffRepository;
 
-    public OperaterProvider(IMultilevelCacheClient cacheClient, IStaffRepository staffRepository)
+    public OperaterProvider(IDistributedCacheClient cacheClient, IStaffRepository staffRepository)
     {
         _cacheClient = cacheClient;
         _staffRepository = staffRepository;

@@ -7,16 +7,16 @@ public class UserDomainEventHandler
 {
     readonly AuthDbContext _authDbContext;
     readonly IEventBus _eventBus;
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _cacheClient;
 
     public UserDomainEventHandler(
         AuthDbContext authDbContext,
         IEventBus eventBus,
-        IMultilevelCacheClient multilevelCacheClient)
+        IDistributedCacheClient cacheClient)
     {
         _authDbContext = authDbContext;
         _eventBus = eventBus;
-        _multilevelCacheClient = multilevelCacheClient;
+        _cacheClient = cacheClient;
     }
 
     [EventHandler(1)]
@@ -25,7 +25,7 @@ public class UserDomainEventHandler
         var user = await GetUserAsync(userEvent.UserId);
         if (user.Account == "admin")
         {
-            var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+            var cachePermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
             if (cachePermissions?.Count > 0)
             {
                 userEvent.Permissions = cachePermissions.Select(e => e!.Id).ToList();
@@ -46,7 +46,7 @@ public class UserDomainEventHandler
 
     private async Task<UserModel> GetUserAsync(Guid userId)
     {
-        var userModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKey.UserKey(userId));
+        var userModel = await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(userId));
         if (userModel == null)
         {
             var user = await _authDbContext.Set<User>()

@@ -12,7 +12,6 @@ public class QueryHandler
     private readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
     private readonly ILdapIdpRepository _ldapIdpRepository;
     private readonly AuthDbContext _authDbContext;
-    private readonly IMultilevelCacheClient _multilevelCacheClient;
     private readonly IDistributedCacheClient _distributedCacheClient;
     private readonly IPmClient _pmClient;
     private readonly IMultiEnvironmentUserContext _multiEnvironmentUserContext;
@@ -28,7 +27,6 @@ public class QueryHandler
         IThirdPartyIdpRepository thirdPartyIdpRepository,
         ILdapIdpRepository ldapIdpRepository,
         AuthDbContext authDbContext,
-        IMultilevelCacheClient multilevelCacheClient,
         IDistributedCacheClient distributedCacheClient,
         IPmClient pmClient,
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
@@ -43,7 +41,6 @@ public class QueryHandler
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
         _ldapIdpRepository = ldapIdpRepository;
         _authDbContext = authDbContext;
-        _multilevelCacheClient = multilevelCacheClient;
         _pmClient = pmClient;
         _multiEnvironmentUserContext = multiEnvironmentUserContext;
         _userDomainService = userDomainService;
@@ -587,7 +584,7 @@ public class QueryHandler
 
         foreach (var team in teams.ToList())
         {
-            var userModel = _multilevelCacheClient.Get<UserModel>(CacheKey.UserKey(team.Modifier));
+            var userModel = _distributedCacheClient.Get<UserModel>(CacheKey.UserKey(team.Modifier));
             var modifierName = userModel?.RealDisplayName ?? "";
             var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
                     .Select(s => s.StaffId);

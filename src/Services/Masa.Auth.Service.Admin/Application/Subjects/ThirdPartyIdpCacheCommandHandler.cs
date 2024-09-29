@@ -5,12 +5,12 @@ namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class ThirdPartyIdpCacheCommandHandler
 {
-    readonly IMultilevelCacheClient _multilevelCacheClient;
+    readonly IDistributedCacheClient _cacheClient;
     readonly IThirdPartyIdpRepository _thirdPartyIdpRepository;
 
-    public ThirdPartyIdpCacheCommandHandler(IMultilevelCacheClient multilevelCacheClient, IThirdPartyIdpRepository thirdPartyIdpRepository)
+    public ThirdPartyIdpCacheCommandHandler(IDistributedCacheClient cacheClient, IThirdPartyIdpRepository thirdPartyIdpRepository)
     {
-        _multilevelCacheClient = multilevelCacheClient;
+        _cacheClient = cacheClient;
         _thirdPartyIdpRepository = thirdPartyIdpRepository;
     }
 
@@ -35,6 +35,6 @@ public class ThirdPartyIdpCacheCommandHandler
     async Task SyncCacheAsync()
     {
         var thirdPartyIdps = await _thirdPartyIdpRepository.GetListAsync(tpIdp => tpIdp.Enabled);
-        await _multilevelCacheClient.SetAsync(CacheKeyConsts.ALL_THIRD_PARTY_IDP, thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>());
+        await _cacheClient.SetAsync(CacheKeyConsts.ALL_THIRD_PARTY_IDP, thirdPartyIdps.Adapt<List<ThirdPartyIdpModel>>());
     }
 }
