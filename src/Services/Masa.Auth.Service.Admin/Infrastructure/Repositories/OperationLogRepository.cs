@@ -26,10 +26,14 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
         try
         {
             @operator ??= _userContext.GetUserId<Guid>();
-            var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? "";
-            await AddAsync(new OperationLog(
-                @operator.Value, operatorName, operationType, default, operationDescription
-            ));
+
+            if (@operator is not null && @operator != Guid.Empty)
+            {
+                var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? "";
+                await AddAsync(new OperationLog(
+                    @operator.Value, operatorName, operationType, default, operationDescription
+                ));
+            }
         }
         catch (Exception ex)
         {
