@@ -95,7 +95,8 @@ var redisOption = new RedisConfigurationOptions
         }
     },
     DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
-    Password = masaStackConfig.RedisModel.RedisPassword
+    Password = masaStackConfig.RedisModel.RedisPassword,
+    ClientName = masaStackConfig.GetServiceId(MasaStackProject.Auth)
 };
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache());
 builder.Services.AddAuthClientMultilevelCache(redisOption);
