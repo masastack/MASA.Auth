@@ -7,6 +7,10 @@ public class UserClaimService : RestServiceBase
 {
     public UserClaimService() : base("api/sso/userClaim")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
     }
 
     private async Task<PaginationDto<UserClaimDto>> GetListAsync(IEventBus eventBus, GetUserClaimsDto userClaim)

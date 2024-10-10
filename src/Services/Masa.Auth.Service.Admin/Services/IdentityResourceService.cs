@@ -7,6 +7,10 @@ namespace Masa.Auth.Service.Admin.Services
     {
         public IdentityResourceService() : base("api/sso/identityResource")
         {
+            RouteHandlerBuilder = builder =>
+            {
+                builder.RequireAuthorization();
+            };
         }
 
         private async Task<PaginationDto<IdentityResourceDto>> GetListAsync(IEventBus eventBus, GetIdentityResourcesDto idrs)

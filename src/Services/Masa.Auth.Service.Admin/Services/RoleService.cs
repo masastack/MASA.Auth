@@ -7,6 +7,11 @@ public class RoleService : RestServiceBase
 {
     public RoleService() : base("api/role")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         RouteOptions.DisableAutoMapRoute = false;
         MapGet(GetDetailExternalAsync, "external");
     }

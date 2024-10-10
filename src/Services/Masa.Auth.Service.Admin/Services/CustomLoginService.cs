@@ -7,6 +7,10 @@ namespace Masa.Auth.Service.Admin.Services
     {
         public CustomLoginService() : base("api/sso/customLogin")
         {
+            RouteHandlerBuilder = builder =>
+            {
+                builder.RequireAuthorization();
+            };
         }
 
         private async Task<PaginationDto<CustomLoginDto>> GetListAsync(IEventBus eventBus, GetCustomLoginsDto customLogin)

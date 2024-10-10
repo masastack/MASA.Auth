@@ -11,6 +11,7 @@ public class MessageService : ServiceBase
     }
 
     [DisabledRoute]
+    [AllowAnonymous]
     public async Task SendSmsAsync(IEventBus eventBus,
         [FromBody] SendMsgCodeModel model)
     {
@@ -18,6 +19,7 @@ public class MessageService : ServiceBase
     }
 
     [DisabledRoute]
+    [AllowAnonymous]
     public async Task SendEmailAsync(IEventBus eventBus,
         [FromBody] SendEmailModel sendEmailModel)
     {

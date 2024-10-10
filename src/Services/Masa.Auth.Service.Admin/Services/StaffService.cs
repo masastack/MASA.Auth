@@ -7,6 +7,11 @@ public class StaffService : RestServiceBase
 {
     public StaffService() : base("api/staff")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapPost(SyncAsync);
         MapPost(SelectByIdsAsync, "SelectByIds");
     }

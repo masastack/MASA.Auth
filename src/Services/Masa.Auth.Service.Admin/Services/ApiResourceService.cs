@@ -7,6 +7,10 @@ namespace Masa.Auth.Service.Admin.Services
     {
         public ApiResourceService() : base("api/sso/apiResource")
         {
+            RouteHandlerBuilder = builder =>
+            {
+                builder.RequireAuthorization();
+            };
         }
 
         private async Task<PaginationDto<ApiResourceDto>> GetListAsync(IEventBus eventBus, GetApiResourcesDto apiResource)

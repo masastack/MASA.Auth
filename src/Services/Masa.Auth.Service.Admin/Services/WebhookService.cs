@@ -7,6 +7,11 @@ public class WebhookService : ServiceBase
 {
     public WebhookService() : base("api/webhook")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapGet(GetAsync);
         MapGet(ListAsync);
         MapDelete(RemoveAsync);

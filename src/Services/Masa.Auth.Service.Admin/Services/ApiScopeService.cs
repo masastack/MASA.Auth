@@ -7,6 +7,10 @@ namespace Masa.Auth.Service.Admin.Services
     {
         public ApiScopeService() : base("api/sso/apiScope")
         {
+            RouteHandlerBuilder = builder =>
+            {
+                builder.RequireAuthorization();
+            };
         }
 
         private async Task<PaginationDto<ApiScopeDto>> GetListAsync(IEventBus eventBus, GetApiScopesDto apiScope)
