@@ -1,13 +1,13 @@
 stages:
   - docker-dev
   - deploy-dev
-  - deploy-sec
+  #- deploy-sec
+  - deploy-new-prd
   - deploy-test
   #- deploy-staging
   - docker-prd
   - deploy-prd
   
-  - deploy-new-prd
 
 variables:
   IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
@@ -62,7 +62,7 @@ deploy-dev:
   retry: 2
     
 deploy-sec:
-  stage: deploy-sec
+  stage: deploy-dev
   image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
     - main
@@ -92,7 +92,7 @@ deploy-new-prd:
   stage: deploy-new-prd
   image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
   only:
-    - tags
+    - main
   script:
     - echo $KUBE_CONFIG_LSD_PRD_YDY | base64 -d > ./config
     - echo $CI_COMMIT_TAG
