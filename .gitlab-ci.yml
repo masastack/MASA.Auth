@@ -1,10 +1,13 @@
 stages:
   - docker-dev
   - deploy-dev
+  - deploy-sec
   - deploy-test
   #- deploy-staging
   - docker-prd
   - deploy-prd
+  
+  - deploy-new-prd
 
 variables:
   IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
