@@ -85,6 +85,8 @@ builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();
 
+var clientName = builder.Configuration.GetValue<string>("HOSTNAME") ?? masaStackConfig.GetServiceId(MasaStackProject.Auth);
+
 var redisOption = new RedisConfigurationOptions
 {
     Servers = new List<RedisServerOptions> {
@@ -95,9 +97,14 @@ var redisOption = new RedisConfigurationOptions
         }
     },
     DefaultDatabase = masaStackConfig.RedisModel.RedisDb,
-    Password = masaStackConfig.RedisModel.RedisPassword
+    Password = masaStackConfig.RedisModel.RedisPassword,
+    ClientName = clientName
 };
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache());
+
+var multilevelCacheRedisOptions = builder.Configuration.GetMultilevelCacheRedisOptions(clientName);
+multilevelCacheRedisOptions ??= redisOption;
+
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(multilevelCacheRedisOptions));
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 builder.Services.AddDccClient(redisOption);
 builder.Services

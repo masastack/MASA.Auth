@@ -9,7 +9,7 @@ public class QueryHandler
     private readonly IPermissionRepository _permissionRepository;
     private readonly AuthDbContext _authDbContext;
     private readonly UserDomainService _userDomainService;
-    private readonly IMultilevelCacheClient _multilevelCacheClient;
+    private readonly IDistributedCacheClient _cacheClient;
     private readonly IEventBus _eventBus;
     private readonly ILogger<QueryHandler> _logger;
     private readonly OperaterProvider _operaterProvider;
@@ -19,7 +19,7 @@ public class QueryHandler
         IPermissionRepository permissionRepository,
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
-        IMultilevelCacheClient multilevelCacheClient,
+        IDistributedCacheClient cacheClient,
         IEventBus eventBus,
         ILogger<QueryHandler> logger,
         OperaterProvider operaterProvider)
@@ -28,7 +28,7 @@ public class QueryHandler
         _permissionRepository = permissionRepository;
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
-        _multilevelCacheClient = multilevelCacheClient;
+        _cacheClient = cacheClient;
         _eventBus = eventBus;
         _logger = logger;
         _operaterProvider = operaterProvider;
@@ -316,7 +316,7 @@ public class QueryHandler
     public async Task AppMenuListQueryAsync(AppMenuListQuery appMenuListQuery)
     {
         var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appMenuListQuery.UserId);
-        var menus = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        var menus = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (menus == null || menus.Count < 1)
         {
             menus = (await _permissionRepository.GetListAsync(p => p.AppId == appMenuListQuery.AppId
@@ -406,7 +406,7 @@ public class QueryHandler
             roleIds = roleIds.Distinct().ToList();
             var permissions = new List<Guid>();
             var roleCacheKeys = roleIds.Select(e => CacheKey.RoleKey(e));
-            var rolePermissions = await _multilevelCacheClient.GetListAsync<CacheRole>(roleCacheKeys);
+            var rolePermissions = await _cacheClient.GetListAsync<CacheRole>(roleCacheKeys);
             foreach (var rolePermission in rolePermissions)
             {
                 if (rolePermission == null)
@@ -484,7 +484,7 @@ public class QueryHandler
     [EventHandler(1)]
     public async Task GetPermissionsByUserAsync(PermissionsByUserQuery query)
     {
-        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
+        var cacheUserModel = await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
         if (cacheUserModel != null)
         {
             query.UserPermissionIds = cacheUserModel.Permissions.Select(tp =>
@@ -520,7 +520,7 @@ public class QueryHandler
     public async Task GetPermissionsByUserRoleAsync(PermissionsByUserQuery query)
     {
         List<Guid> roles = new();
-        var cacheUserModel = await _multilevelCacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
+        var cacheUserModel = await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
         if (cacheUserModel != null)
         {
             roles = cacheUserModel!.Roles.Select(ur => ur.Id).ToList();
@@ -552,7 +552,7 @@ public class QueryHandler
 
         //skip the first level menu without submenus
         Dictionary<Guid, Guid> itemSubMenuIds;
-        var cachePermissions = await _multilevelCacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+        var cachePermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
         if (cachePermissions?.Count > 0)
         {
             itemSubMenuIds = cachePermissions!.Where(p => permissionIds.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled)
@@ -604,21 +604,14 @@ public class QueryHandler
         var appId = userApiPermissionCodeQuery.AppId;
         var cacheKey = CacheKey.UserApiPermissionCodeKey(userId, appId);
 
-        userApiPermissionCodeQuery.Result = (await _multilevelCacheClient.GetOrSetAsync(cacheKey, new CombinedCacheEntry<List<string>>
+        userApiPermissionCodeQuery.Result = (await _cacheClient.GetOrSetAsync(cacheKey, () =>
         {
-            DistributedCacheEntryFunc = () =>
+            var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
+            return new CacheEntry<List<string>>(_permissionRepository.GetPermissionCodes(p => p.AppId == appId
+                                && p.Type == PermissionTypes.Api && userPermissionIds.Contains(p.Id) && p.Enabled))
             {
-                var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
-                return new CacheEntry<List<string>>(_permissionRepository.GetPermissionCodes(p => p.AppId == appId
-                                    && p.Type == PermissionTypes.Api && userPermissionIds.Contains(p.Id) && p.Enabled))
-                {
-                    SlidingExpiration = TimeSpan.FromSeconds(5)
-                };
-            },
-            MemoryCacheEntryOptionsAction = (memoryCacheOptions) =>
-            {
-                memoryCacheOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5);
-            }
+                SlidingExpiration = TimeSpan.FromSeconds(5)
+            };
         }))!;
     }
 
@@ -627,7 +620,7 @@ public class QueryHandler
     [EventHandler]
     public async Task CollectMenuListQueryAsync(FavoriteMenuListQuery favoriteMenuListQuery)
     {
-        var permissionIds = await _multilevelCacheClient.GetAsync<HashSet<Guid>>(CacheKey.UserMenuCollectKey(favoriteMenuListQuery.UserId));
+        var permissionIds = await _cacheClient.GetAsync<HashSet<Guid>>(CacheKey.UserMenuCollectKey(favoriteMenuListQuery.UserId));
         if (permissionIds == null)
         {
             return;
