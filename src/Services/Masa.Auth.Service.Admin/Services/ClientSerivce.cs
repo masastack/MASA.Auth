@@ -7,6 +7,11 @@ public class ClientSerivce : ServiceBase
 {
     public ClientSerivce() : base("api/sso/client")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapGet(GetListAsync);
         MapGet(GetDetailAsync);
         MapGet(GetClientTypeListAsync);

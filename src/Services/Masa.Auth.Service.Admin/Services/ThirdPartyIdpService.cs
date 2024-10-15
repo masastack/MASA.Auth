@@ -7,6 +7,11 @@ public class ThirdPartyIdpService : RestServiceBase
 {
     public ThirdPartyIdpService() : base("api/thirdPartyIdp")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         MapPost(LdapSaveAsync, "ldap/save");
         MapPost(LdapConnectTestAsync, "ldap/connect-test");
         MapGet(LdapDetailAsync, "ldap/detail");

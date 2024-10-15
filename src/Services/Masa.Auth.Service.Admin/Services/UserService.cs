@@ -7,6 +7,11 @@ public class UserService : ServiceBase
 {
     public UserService() : base("api/user")
     {
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
+
         RouteOptions.DisableAutoMapRoute = false;
         MapGet(GetListByRoleAsync, "getListByRole");
         MapGet(GetClaimValuesAsync, "claim-values/{id}");
@@ -227,6 +232,7 @@ public class UserService : ServiceBase
         return command.Result;
     }
 
+    [AllowAnonymous]
     public async Task<bool> PostVerifyMsgCodeAsync(IEventBus eventBus,
         [FromBody] VerifyMsgCodeModel model)
     {
@@ -351,6 +357,7 @@ public class UserService : ServiceBase
         return query.Result;
     }
 
+    [AllowAnonymous]
     public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)
     {
         await eventBus.PublishAsync(command);
