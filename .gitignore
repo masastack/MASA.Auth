@@ -225,3 +225,4 @@ packages/
 
 .idea
 .DS_Store
+/power.ps1
