@@ -629,6 +629,28 @@ public class CommandHandler
     }
 
     [EventHandler]
+    public async Task SaveUserClaimValueAsync(SaveUserClaimValueCommand command)
+    {
+        var userClaimValue = await _authDbContext.Set<UserClaimValue>().FirstOrDefaultAsync(u => u.UserId == command.UserId && u.Name == command.ClaimName);
+
+        if (userClaimValue is null)
+        {
+            userClaimValue = new UserClaimValue(command.ClaimName, command.ClaimValue)
+            {
+                UserId = command.UserId
+            };
+
+            await _authDbContext.Set<UserClaimValue>().AddAsync(userClaimValue);
+        }
+        else
+        {
+            userClaimValue.UpdateValue(command.ClaimValue);
+        }
+
+        await _authDbContext.SaveChangesAsync();
+    }
+
+    [EventHandler]
     public async Task ImpersonateAsync(ImpersonateUserCommand command)
     {
         var userId = _userContext.GetUserId<Guid>();

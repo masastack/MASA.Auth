@@ -18,4 +18,9 @@ public class UserClaimValue : AuditEntity<Guid, Guid>
         Name = name;
         Value = value;
     }
+
+    public void UpdateValue(string value)
+    {
+        Value = value;
+    }
 }

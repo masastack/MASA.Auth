@@ -17,6 +17,7 @@ public class UserService : ServiceBase
         MapGet(GetClaimValuesAsync, "claim-values/{id}");
         MapGet(GetClaimValuesAsync, "claim-values");
         MapPost(SaveClaimValuesAsync, "claim-values");
+        MapPost(SaveClaimValueAsync, "claim-value");
     }
 
     public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)
@@ -389,6 +390,12 @@ public class UserService : ServiceBase
     public async Task SaveClaimValuesAsync(IEventBus eventBus, UserClaimValuesDto userClaimValues)
     {
         var command = new SaveUserClaimValuesCommand(userClaimValues.UserId, userClaimValues.ClaimValues);
+        await eventBus.PublishAsync(command);
+    }
+
+    public async Task SaveClaimValueAsync(IEventBus eventBus, SaveClaimValueInput input)
+    {
+        var command = new SaveUserClaimValueCommand(input.UserId, input.ClaimName, input.ClaimValue);
         await eventBus.PublishAsync(command);
     }
 
