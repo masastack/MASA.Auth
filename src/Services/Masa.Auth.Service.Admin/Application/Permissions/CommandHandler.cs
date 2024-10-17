@@ -11,6 +11,7 @@ public class CommandHandler
     private readonly RoleDomainService _roleDomainService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly PermissionDomainService _permissionDomainService;
+    private readonly UserDomainService _userDomainService;
 
     public CommandHandler(
         IRoleRepository roleRepository,
@@ -18,7 +19,8 @@ public class CommandHandler
         AuthDbContext authDbContext,
         RoleDomainService roleDomainService,
         IUnitOfWork unitOfWork,
-        PermissionDomainService permissionDomainService)
+        PermissionDomainService permissionDomainService,
+        UserDomainService userDomainService)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -26,6 +28,7 @@ public class CommandHandler
         _unitOfWork = unitOfWork;
         _roleDomainService = roleDomainService;
         _permissionDomainService = permissionDomainService;
+        _userDomainService = userDomainService;
     }
 
     #region Role
@@ -110,8 +113,14 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
         role.AddUsers(command.UserIds);
-
         await _roleRepository.UpdateAsync(role);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        foreach (var userId in command.UserIds)
+        {
+            await _userDomainService.SyncUserAsync(userId);
+        }
     }
 
     [EventHandler]
@@ -124,6 +133,13 @@ public class CommandHandler
         role.RemoveUsers(command.UserIds);
 
         await _roleRepository.UpdateAsync(role);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        foreach (var userId in command.UserIds)
+        {
+            await _userDomainService.SyncUserAsync(userId);
+        }
     }
 
     #endregion
