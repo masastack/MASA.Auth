@@ -6,10 +6,12 @@ namespace Masa.Auth.Service.Admin.Application.Permissions;
 public class RoleCacheCommandHandler
 {
     readonly IDistributedCacheClient _cacheClient;
+    readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
-    public RoleCacheCommandHandler(IDistributedCacheClient cacheClient)
+    public RoleCacheCommandHandler(IDistributedCacheClient cacheClient, IMultiEnvironmentContext multiEnvironmentContext)
     {
         _cacheClient = cacheClient;
+        _multiEnvironmentContext = multiEnvironmentContext;
     }
 
     [EventHandler(99)]
@@ -30,5 +32,17 @@ public class RoleCacheCommandHandler
     public async Task RemoveRoleAsync(RemoveRoleCommand removeRoleCommand)
     {
         await _cacheClient.RemoveAsync<CachePermission>(CacheKey.RoleKey(removeRoleCommand.Role.Id));
+    }
+
+
+    [EventHandler]
+    public async Task SyncRoleRedisAsync(SyncRoleRedisCommand command)
+    {
+        var args = new SyncRoleRedisArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+        };
+
+        await BackgroundJobManager.EnqueueAsync(args);
     }
 }

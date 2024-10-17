@@ -43,4 +43,13 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
     }
+
+    public async Task<List<Role>> GetListWithPermissionsAsync()
+    {
+        return await Context.Set<Role>()
+            .Include(r => r.ChildrenRoles)
+            .Include(r => r.Permissions)
+            .AsSplitQuery()
+            .ToListAsync();
+    }
 }

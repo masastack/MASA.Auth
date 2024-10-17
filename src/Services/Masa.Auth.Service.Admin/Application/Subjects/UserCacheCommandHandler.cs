@@ -7,13 +7,16 @@ public class UserCacheCommandHandler
 {
     readonly IDistributedCacheClient _cacheClient;
     readonly UserDomainService _userDomainService;
+    readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
     public UserCacheCommandHandler(
         IDistributedCacheClient cacheClient,
-        UserDomainService userDomainService)
+        UserDomainService userDomainService,
+        IMultiEnvironmentContext multiEnvironmentContext)
     {
         _cacheClient = cacheClient;
         _userDomainService = userDomainService;
+        _multiEnvironmentContext = multiEnvironmentContext;
     }
 
     [EventHandler(99)]
@@ -25,7 +28,12 @@ public class UserCacheCommandHandler
     [EventHandler]
     public async Task SyncUserRedisAsync(SyncUserRedisCommand command)
     {
-        await _userDomainService.SyncUsersAsync();
+        var args = new SyncUserRedisArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+        };
+
+        await BackgroundJobManager.EnqueueAsync(args);
     }
 
     [EventHandler]
