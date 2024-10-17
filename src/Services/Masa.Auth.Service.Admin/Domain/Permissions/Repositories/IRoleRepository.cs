@@ -10,4 +10,6 @@ public interface IRoleRepository : IRepository<Role, Guid>
     Task<Role> GetDetailAsync(Guid id);
 
     Task<Role> GetWithUsersAsync(Guid id);
+
+    Task<List<Role>> GetListWithPermissionsAsync();
 }

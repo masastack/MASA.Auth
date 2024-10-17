@@ -112,5 +112,13 @@ public class RoleService : RestServiceBase
         await eventBus.PublishAsync(query);
         return query.Result;
     }
+
+    [AllowAnonymous]
+    [RoutePattern("SyncRedis", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task SyncRedisAsync(IEventBus eventBus)
+    {
+        var command = new SyncRoleRedisCommand();
+        await eventBus.PublishAsync(command);
+    }
 }
 
