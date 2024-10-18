@@ -23,6 +23,7 @@ public class PermissionService : ServiceBase
         MapGet(GetMenusAsync, "menus");
         MapGet(AuthorizedAsync);
         MapGet(GetElementPermissionsAsync, "element-permissions");
+        MapGet(GetAppPermissionsAsync, "app-permissions");
         MapPut(AddFavoriteMenuAsync);
         MapPut(RemoveFavoriteMenuAsync);
         MapGet(GetFavoriteMenuListAsync, "menu-favorite-list");
@@ -101,6 +102,13 @@ public class PermissionService : ServiceBase
     private async Task<List<string>> GetElementPermissionsAsync(IEventBus eventBus, [FromQuery] string appId, [FromQuery] Guid userId)
     {
         var query = new AppElementPermissionCodeListQuery(appId, userId);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<List<string>> GetAppPermissionsAsync(IEventBus eventBus, [FromQuery] string appId, [FromQuery] Guid userId)
+    {
+        var query = new AppPermissionCodeListQuery(appId, userId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

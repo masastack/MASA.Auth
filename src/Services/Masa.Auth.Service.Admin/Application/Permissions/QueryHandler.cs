@@ -352,6 +352,15 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task AppPermissionListQueryAsync(AppPermissionCodeListQuery appPermissionCodeListQuery)
+    {
+        var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(appPermissionCodeListQuery.UserId);
+        var elements = await _permissionRepository.GetListAsync(p => p.AppId == appPermissionCodeListQuery.AppId
+                            && userPermissionIds.Contains(p.Id) && p.Enabled);
+        appPermissionCodeListQuery.Result = elements.Select(e => e.Code).ToList();
+    }
+
+    [EventHandler]
     public async Task AppPermissionAuthorizedQueryAsync(AppPermissionAuthorizedQuery appPermissionAuthorizedQuery)
     {
         appPermissionAuthorizedQuery.Result = await _userDomainService.AuthorizedAsync(appPermissionAuthorizedQuery.AppId,
@@ -481,24 +490,24 @@ public class QueryHandler
         query.Result.AddRange(permissionByTeamQuery.Result);
     }
 
-    [EventHandler(1)]
-    public async Task GetPermissionsByUserAsync(PermissionsByUserQuery query)
-    {
-        var cacheUserModel = await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
-        if (cacheUserModel != null)
-        {
-            query.UserPermissionIds = cacheUserModel.Permissions.Select(tp =>
-                KeyValuePair.Create(tp.PermissionId, value: tp.Effect)).ToList();
-            return;
-        }
+    //[EventHandler(1)]
+    //public async Task GetPermissionsByUserAsync(PermissionsByUserQuery query)
+    //{
+    //    var cacheUserModel = await _cacheClient.GetAsync<UserModel>(CacheKey.UserKey(query.User));
+    //    if (cacheUserModel != null)
+    //    {
+    //        query.UserPermissionIds = cacheUserModel.Permissions.Select(tp =>
+    //            KeyValuePair.Create(tp.PermissionId, value: tp.Effect)).ToList();
+    //        return;
+    //    }
 
-        query.UserPermissionIds = await _authDbContext.Set<UserPermission>().AsNoTracking()
-                                                  .Where(up => up.UserId == query.User)
-                                                  .Select(tp => KeyValuePair.Create(
-                                                      tp.PermissionId,
-                                                      tp.Effect
-                                                  )).ToListAsync();
-    }
+    //    query.UserPermissionIds = await _authDbContext.Set<UserPermission>().AsNoTracking()
+    //                                              .Where(up => up.UserId == query.User)
+    //                                              .Select(tp => KeyValuePair.Create(
+    //                                                  tp.PermissionId,
+    //                                                  tp.Effect
+    //                                              )).ToListAsync();
+    //}
 
     [EventHandler(2)]
     public async Task GetPermissionsByUserTeamAsync(PermissionsByUserQuery query)
@@ -539,63 +548,63 @@ public class QueryHandler
         query.RolePermissionIds = permissionByRoleQuery.Result;
     }
 
-    [EventHandler(4)]
-    public async Task GroupPermissionsByUserAsync(PermissionsByUserQuery query)
-    {
-        var permissionIds = query.UserPermissionIds.Where(kv => kv.Value)
-                                    .Select(kv => kv.Key)
-                                    .Union(query.TeamPermissionIds)
-                                    .Union(query.RolePermissionIds)
-                                    .Except(query.UserPermissionIds.Where(kv => !kv.Value)
-                                    .Select(kv => kv.Key))
-                                    .ToList();
+    //[EventHandler(4)]
+    //public async Task GroupPermissionsByUserAsync(PermissionsByUserQuery query)
+    //{
+    //    var permissionIds = query.UserPermissionIds.Where(kv => kv.Value)
+    //                                .Select(kv => kv.Key)
+    //                                .Union(query.TeamPermissionIds)
+    //                                .Union(query.RolePermissionIds)
+    //                                .Except(query.UserPermissionIds.Where(kv => !kv.Value)
+    //                                .Select(kv => kv.Key))
+    //                                .ToList();
 
-        //skip the first level menu without submenus
-        Dictionary<Guid, Guid> itemSubMenuIds;
-        var cachePermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
-        if (cachePermissions?.Count > 0)
-        {
-            itemSubMenuIds = cachePermissions!.Where(p => permissionIds.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled)
-                .ToDictionary(p => p.Id, p => p.ParentId);
-        }
-        else
-        {
-            itemSubMenuIds = (await _permissionRepository.GetListAsync(p => permissionIds.Contains(p.GetParentId()) && p.Type == PermissionTypes.Menu && p.Enabled))
-                 .ToDictionary(p => p.Id, p => p.GetParentId());
-        }
-        permissionIds.RemoveAll(id =>
-        {
-            var currentSubMenusIds = itemSubMenuIds.Where(p => p.Value == id)
-                        .Select(e => e.Key)
-                        .ToList();
-            return currentSubMenusIds.Count > 0 && !currentSubMenusIds.Intersect(permissionIds).Any();
-        });
-        List<Guid> relationPermissionIds = new();
-        List<Guid> cacheMissIds = new();
+    //    //skip the first level menu without submenus
+    //    Dictionary<Guid, Guid> itemSubMenuIds;
+    //    var cachePermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
+    //    if (cachePermissions?.Count > 0)
+    //    {
+    //        itemSubMenuIds = cachePermissions!.Where(p => permissionIds.Contains(p.ParentId) && p.Type == PermissionTypes.Menu && p.Enabled)
+    //            .ToDictionary(p => p.Id, p => p.ParentId);
+    //    }
+    //    else
+    //    {
+    //        itemSubMenuIds = (await _permissionRepository.GetListAsync(p => permissionIds.Contains(p.GetParentId()) && p.Type == PermissionTypes.Menu && p.Enabled))
+    //             .ToDictionary(p => p.Id, p => p.GetParentId());
+    //    }
+    //    permissionIds.RemoveAll(id =>
+    //    {
+    //        var currentSubMenusIds = itemSubMenuIds.Where(p => p.Value == id)
+    //                    .Select(e => e.Key)
+    //                    .ToList();
+    //        return currentSubMenusIds.Count > 0 && !currentSubMenusIds.Intersect(permissionIds).Any();
+    //    });
+    //    List<Guid> relationPermissionIds = new();
+    //    List<Guid> cacheMissIds = new();
 
-        foreach (var permissionId in permissionIds)
-        {
-            var cachePermission = cachePermissions?.FirstOrDefault(ap => ap.Id == permissionId);
-            if (cachePermission == null)
-            {
-                _logger.LogDebug("Permission Cache Miss:{0}", permissionId);
-                cacheMissIds.Add(permissionId);
-            }
-            else
-            {
-                relationPermissionIds.AddRange(cachePermission.ApiPermissions);
-            }
-        }
+    //    foreach (var permissionId in permissionIds)
+    //    {
+    //        var cachePermission = cachePermissions?.FirstOrDefault(ap => ap.Id == permissionId);
+    //        if (cachePermission == null)
+    //        {
+    //            _logger.LogDebug("Permission Cache Miss:{0}", permissionId);
+    //            cacheMissIds.Add(permissionId);
+    //        }
+    //        else
+    //        {
+    //            relationPermissionIds.AddRange(cachePermission.ApiPermissions);
+    //        }
+    //    }
 
-        if (cacheMissIds.Any())
-        {
-            relationPermissionIds.AddRange(_authDbContext.Set<PermissionRelation>().AsNoTracking()
-                .Where(pr => cacheMissIds.Contains(pr.LeadingPermissionId))
-                .Select(pr => pr.AffiliationPermissionId).ToList());
-        }
+    //    if (cacheMissIds.Any())
+    //    {
+    //        relationPermissionIds.AddRange(_authDbContext.Set<PermissionRelation>().AsNoTracking()
+    //            .Where(pr => cacheMissIds.Contains(pr.LeadingPermissionId))
+    //            .Select(pr => pr.AffiliationPermissionId).ToList());
+    //    }
 
-        query.Result = permissionIds.Union(relationPermissionIds).ToList();
-    }
+    //    query.Result = permissionIds.Union(relationPermissionIds).ToList();
+    //}
 
     [EventHandler]
     public async Task GetUserApiPermissionCodeQueryAsync(UserApiPermissionCodeQuery userApiPermissionCodeQuery)
