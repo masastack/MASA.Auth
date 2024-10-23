@@ -249,4 +249,9 @@ public partial class PermissionsConfigure
         TeamPermission = await PermissionService.GetPermissionsByTeamWithUserAsync(new(User, Teams));
         RoleUnionTeamPermission = TeamPermission.Union(RolePermissions).ToList();
     }
+
+    public void Reset()
+    {
+        _menu = null;
+    }
 }
