@@ -120,6 +120,12 @@ builder.Services.AddBackgroundJob(options =>
     options.UseInMemoryDatabase();
 });
 
+builder.Services.AddSingleton(service =>
+{
+    var connection = StackExchange.Redis.ConnectionMultiplexer.Connect(multilevelCacheRedisOptions);
+    return connection;
+});
+
 builder.Services
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 .AddEndpointsApiExplorer()

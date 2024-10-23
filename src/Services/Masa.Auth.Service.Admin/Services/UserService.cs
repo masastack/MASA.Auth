@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Caching;
+using StackExchange.Redis;
+
 namespace Masa.Auth.Service.Admin.Services;
 
 public class UserService : ServiceBase
@@ -421,5 +424,20 @@ public class UserService : ServiceBase
     {
         var command = new DeleteAccountCommand(model.SmsCode);
         await eventBus.PublishAsync(command);
+    }
+
+    [AllowAnonymous]
+    public async Task<UserModel?> GetUserAsync([FromServices] IDistributedCacheClient cacheClient, Guid userId)
+    {
+        var userModel = await cacheClient.GetAsync<UserModel>(CacheKey.UserKey(userId));
+        return userModel;
+    }
+
+    [AllowAnonymous]
+    public async Task<string> GetUser2Async([FromServices] ConnectionMultiplexer connect, Guid userId)
+    {
+        var _redis = connect.GetDatabase();
+        var json = await _redis.HashGetAsync("UserModel." + CacheKey.UserKey(userId), "data");
+        return json;
     }
 }
