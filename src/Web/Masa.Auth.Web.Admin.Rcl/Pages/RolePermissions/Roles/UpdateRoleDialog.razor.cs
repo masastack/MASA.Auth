@@ -31,7 +31,7 @@ public partial class UpdateRoleDialog
 
     private UpdateRoleTabs Tab { get; set; } = UpdateRoleTabs.BasicInformation;
 
-    private PermissionsConfigure _permissionsConfigureRef = default!;
+    private PermissionsConfigure? _permissionsConfigureRef;
 
     protected override string? PageName { get; set; } = "RoleBlock";
 
@@ -39,7 +39,7 @@ public partial class UpdateRoleDialog
     {
         if (!visible)
         {
-            _permissionsConfigureRef.Reset();
+            _permissionsConfigureRef?.Reset();
         }
 
         if (VisibleChanged.HasDelegate)
