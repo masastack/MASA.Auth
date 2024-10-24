@@ -31,10 +31,17 @@ public partial class UpdateRoleDialog
 
     private UpdateRoleTabs Tab { get; set; } = UpdateRoleTabs.BasicInformation;
 
+    private PermissionsConfigure _permissionsConfigureRef = default!;
+
     protected override string? PageName { get; set; } = "RoleBlock";
 
     private async Task UpdateVisible(bool visible)
     {
+        if (!visible)
+        {
+            _permissionsConfigureRef.Reset();
+        }
+
         if (VisibleChanged.HasDelegate)
         {
             await VisibleChanged.InvokeAsync(visible);
