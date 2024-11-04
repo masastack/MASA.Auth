@@ -319,9 +319,10 @@ public class CommandHandler
     public async Task LoginByPhoneNumberAsync(LoginByPhoneNumberCommand command)
     {
         var model = command.Model;
-        var user = await _userRepository.FindWithIncludAsync(u => u.PhoneNumber == model.PhoneNumber, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
-        });
+        var user = await _userRepository.GetQueryable()
+            .Include(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Staff)
+            .FirstOrDefaultAsync(u => u.PhoneNumber == model.PhoneNumber);
         if (user is null)
         {
             var registerUserCommand = new RegisterUserCommand(new RegisterByEmailModel
