@@ -15,5 +15,5 @@ public interface IUserRepository : IRepository<User>
 
     Task<User> GetByVoucherAsync(string voucher);
 
-    IQueryable<User> GetQueryable();
+    IQueryable<User> AsQueryable();
 }
