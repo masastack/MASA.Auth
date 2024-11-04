@@ -14,4 +14,6 @@ public interface IUserRepository : IRepository<User>
     bool Any(Expression<Func<User, bool>> predicate);
 
     Task<User> GetByVoucherAsync(string voucher);
+
+    IQueryable<User> GetQueryable();
 }
