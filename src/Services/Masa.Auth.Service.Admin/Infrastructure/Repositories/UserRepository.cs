@@ -15,7 +15,7 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
         return Context.Set<User>().Where(d => !d.IsDeleted).Any(predicate);
     }
 
-    public IQueryable<User> GetQueryable()
+    public IQueryable<User> AsQueryable()
     {
         return Context.Set<User>().AsQueryable();
     }
