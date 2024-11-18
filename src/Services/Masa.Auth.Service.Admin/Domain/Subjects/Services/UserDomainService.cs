@@ -217,8 +217,8 @@ public class UserDomainService : DomainService
         UserFriendlyException? exception = default;
         if (existUser is not null)
         {
-            if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && phoneNumber == existUser.Account)
-                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber);
+            if (account != existUser.Account && phoneNumber != existUser.PhoneNumber && (phoneNumber == existUser.Account || account == existUser.PhoneNumber))
+                exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_ACCOUNT_PHONE_NUMBER_EXIST, phoneNumber ?? account!);
             if (string.IsNullOrEmpty(phoneNumber) is false && phoneNumber == existUser.PhoneNumber)
                 exception = new UserFriendlyException(UserFriendlyExceptionCodes.USER_PHONE_NUMBER_EXIST, phoneNumber);
             if (string.IsNullOrEmpty(email) is false && email == existUser.Email)
