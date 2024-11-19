@@ -207,7 +207,7 @@ public class UserDomainService : DomainService
     public async Task<(User?, UserFriendlyException?)> VerifyRepeatAsync(string? phoneNumber, string? email, string? idCard, string? account, Guid? curUserId = default)
     {
         Expression<Func<User, bool>> condition = user => false;
-        condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account);
+        condition = condition.Or(!string.IsNullOrEmpty(account), user => user.Account == account || user.PhoneNumber == account);
         condition = condition.Or(!string.IsNullOrEmpty(phoneNumber), user => user.PhoneNumber == phoneNumber || user.Account == phoneNumber);
         condition = condition.Or(!string.IsNullOrEmpty(email), user => user.Email == email);
         condition = condition.Or(!string.IsNullOrEmpty(idCard), user => user.IdCard == idCard);
