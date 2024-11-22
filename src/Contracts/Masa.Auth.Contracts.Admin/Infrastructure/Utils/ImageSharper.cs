@@ -1,13 +1,16 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Magicodes.IE.Core;
+using System.IO;
+
 namespace Masa.Auth.Contracts.Admin.Infrastructure.Utils;
 
 public static class ImageSharper
 {
     static Image<Rgba32> Generate(char show, Color textColor, Color backgroundColor, int size)
     {
-        using var image = new Image<Rgba32>(size, size);
+        var image = new Image<Rgba32>(size, size);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
         var textOptions = new RichTextOptions(new Font(GetFontFamily(), (int)(size * 0.6)))
         {
@@ -22,7 +25,8 @@ public static class ImageSharper
     public static MemoryStream GeneratePortrait(char show, Color textColor, Color backgroundColor, int size)
     {
         var ms = new MemoryStream();
-        using var image = Generate(show, textColor, backgroundColor, size);
+        using var image = Generate(show, textColor, backgroundColor, size);       
+        image.Save(ms, SixLabors.ImageSharp.Formats.Png.PngFormat.Instance);
         ms.Seek(0, SeekOrigin.Begin);
         return ms;
     }
