@@ -33,7 +33,7 @@ builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
     ServiceVersion = masaStackConfig.Version,
     ServiceName = masaStackConfig.GetServiceId(MasaStackProject.Auth),
     Layer = masaStackConfig.Namespace,
-    ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")
+    ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")!
 }, () => masaStackConfig.OtlpUrl);
 
 builder.Services.AddMasaIdentity(options =>

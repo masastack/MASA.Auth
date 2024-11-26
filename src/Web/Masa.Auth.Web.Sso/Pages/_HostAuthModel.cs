@@ -26,7 +26,7 @@ public class _HostAuthModel : PageModel
                 if (HttpContext.Request.Query.ContainsKey("ReturnUrl"))
                 {
                     var returnUrl = HttpContext.Request.Query["ReturnUrl"];
-                    _ssoAuthenticationStateCache.AddAuthorizationContext(returnUrl, await _identityServerInteractionService.GetAuthorizationContextAsync(returnUrl));
+                    _ssoAuthenticationStateCache.AddAuthorizationContext(returnUrl!, await _identityServerInteractionService.GetAuthorizationContextAsync(returnUrl));
                 }
                 break;
             case "/grants":
