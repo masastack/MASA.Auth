@@ -62,7 +62,7 @@
         {
             var cultureName = culture.Name.ToLower();
             var value = publicSection.GetValue<string>($"{DynamicTranslateProvider.I18N_KEY}{cultureName}:{Name}", "");
-            _displayNames.Add(new KeyValue<string, string>(cultureName, value));
+            _displayNames.Add(new KeyValue<string, string>(cultureName, value ?? string.Empty));
         }
         _dialog = true;
         return Task.CompletedTask;
@@ -84,6 +84,7 @@
             else
             {
                 var data = itemSection.Get<Dictionary<string, object>>();
+                MasaArgumentException.ThrowIfNull(data);
                 data[Name] = _displayName.Value;
                 await ConfigurationApiManage.UpdateAsync(environment, "Default", "public-$Config", itemKey, data);
             }

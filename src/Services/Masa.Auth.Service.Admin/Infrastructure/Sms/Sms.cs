@@ -23,6 +23,7 @@ public class Sms : IScopedDependency
     {
         ArgumentExceptionExtensions.ThrowIfNullOrEmpty(phoneNumber);
         var _smsOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(SmsOptions.Key).Get<SmsOptions>();
+        MasaArgumentException.ThrowIfNull(_smsOptions, nameof(SmsOptions));
 
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel

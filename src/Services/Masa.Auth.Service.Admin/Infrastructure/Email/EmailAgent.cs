@@ -57,6 +57,7 @@ public class EmailAgent : IScopedDependency
         }
 
         var _emailOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(EmailOptions.Key).Get<EmailOptions>();
+        MasaArgumentException.ThrowIfNull(_emailOptions, nameof(EmailOptions));
 
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
