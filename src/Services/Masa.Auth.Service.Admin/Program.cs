@@ -8,9 +8,7 @@ GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackApp.Service, true);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
-
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
-
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
 #if DEBUG
@@ -176,7 +174,7 @@ builder.Services
     })
     .UseUoW<AuthDbContext>(dbOptions =>
     {
-        dbOptions.UseSqlServer();
+        dbOptions.UseDbSql(masaStackConfig.GetDbType());
         dbOptions.UseFilter();
     })
     .UseRepository<AuthDbContext>();
