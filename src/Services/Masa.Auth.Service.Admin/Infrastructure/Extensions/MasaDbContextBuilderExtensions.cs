@@ -13,11 +13,11 @@ public static class MasaDbContextBuilderExtensions
         {
             case "PostgreSql":
                 AuthDbContext.RegisterAssembly(typeof(AuthPostgreSqlDbContextFactory).Assembly);
-                builder.UseNpgsql();
+                builder.UseNpgsql(b => b.MigrationsAssembly("Masa.Auth.EntityFrameworkCore.PostgreSql"));
                 break;
             default:
                 AuthDbContext.RegisterAssembly(typeof(AuthSqlServerDbContextFactory).Assembly);
-                builder.UseSqlServer();
+                builder.UseSqlServer(b => b.MigrationsAssembly("Masa.Auth.EntityFrameworkCore.SqlServer"));
                 break;
         }
         return builder;

@@ -11,7 +11,7 @@ public class AuthSqlServerDbContextFactory : IDesignTimeDbContextFactory<AuthDbC
         var optionsBuilder = new MasaDbContextOptionsBuilder<AuthDbContext>();
         var configurationBuilder = new ConfigurationBuilder();
         var configuration = configurationBuilder
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.SqlServer.json")
             .Build();
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection")!, b => b.MigrationsAssembly("Masa.Auth.EntityFrameworkCore.SqlServer"));
 

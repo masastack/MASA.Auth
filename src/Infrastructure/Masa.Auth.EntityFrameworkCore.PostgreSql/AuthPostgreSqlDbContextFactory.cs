@@ -14,7 +14,7 @@ public class AuthPostgreSqlDbContextFactory : IDesignTimeDbContextFactory<AuthDb
         var optionsBuilder = new MasaDbContextOptionsBuilder<AuthDbContext>();
         var configurationBuilder = new ConfigurationBuilder();
         var configuration = configurationBuilder
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.PostgreSql.json")
             .Build();
         optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection")!, b => b.MigrationsAssembly("Masa.Auth.EntityFrameworkCore.PostgreSql"));
 
