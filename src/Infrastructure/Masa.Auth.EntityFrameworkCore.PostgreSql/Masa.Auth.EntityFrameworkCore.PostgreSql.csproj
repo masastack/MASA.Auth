@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore.PostgreSql" Version="$(MasaFrameworkPackageVersion)" />
+	<PackageReference Include="Masa.Contrib.Data.EFCore.PostgreSql" Version="$(MasaFrameworkPackageVersion)" />
+    <ProjectReference Include="..\Masa.Auth.EntityFrameworkCore\Masa.Auth.EntityFrameworkCore.csproj" />
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(MicrosoftPackageVersion)" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.PostgreSql.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
