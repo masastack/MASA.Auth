@@ -30,7 +30,7 @@ public class LdapGrantValidator : IExtensionGrantValidator
 
             var password = context.Request.Raw["password"] ?? string.Empty;
 
-            var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LDAP);
+            var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(LdapConsts.LDAP_NAME);
             if (ldapOption is null)
             {
                 throw new UserFriendlyException($"Not find ldap");
@@ -65,7 +65,7 @@ public class LdapGrantValidator : IExtensionGrantValidator
             {
                 authUser = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
                 {
-                    Scheme = "Ldap",
+                    Scheme = LdapConsts.LDAP_NAME,
                     ThridPartyIdentity = ldapUser.ObjectGuid,
                     ExtendedData = ldapUser,
                     User = new AddUserModel
