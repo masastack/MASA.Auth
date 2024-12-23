@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Webhooks;
 
-public class GetWebhookPaginationDto : Pagination<GetWebhookPaginationDto>
+public class GetWebhookPaginationDto : Pagination
 {
     public string Name { get; set; } = string.Empty;
 }

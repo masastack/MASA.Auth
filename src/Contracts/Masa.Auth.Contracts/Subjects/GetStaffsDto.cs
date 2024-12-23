@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Subjects;
 
-public class GetStaffsDto : Pagination<GetStaffsDto>
+public class GetStaffsDto : Pagination
 {
     public string Search { get; set; }
 

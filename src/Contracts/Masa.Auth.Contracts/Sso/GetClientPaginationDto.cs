@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Sso;
 
-public class GetClientPaginationDto : Pagination<GetClientPaginationDto>
+public class GetClientPaginationDto : Pagination
 {
     public string Search { get; set; } = string.Empty;
 }

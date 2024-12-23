@@ -3,11 +3,11 @@
 
 namespace Masa.Auth.Contracts.Admin.Sso;
 
-public class GetApiScopesDto : Pagination<GetApiScopesDto>
+public class GetApiResourcesDto : Pagination
 {
     public string Search { get; set; }
 
-    public GetApiScopesDto(int page, int pageSize, string search)
+    public GetApiResourcesDto(int page, int pageSize, string search)
     {
         Search = search;
         Page = page;

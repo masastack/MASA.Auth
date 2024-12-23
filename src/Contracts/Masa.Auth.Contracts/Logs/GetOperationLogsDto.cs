@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.Logs;
 
-public class GetOperationLogsDto : Pagination<GetOperationLogsDto>
+public class GetOperationLogsDto : Pagination
 {
     public Guid Operator { get; set; }
 

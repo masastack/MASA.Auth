@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="11.4.0" />
+		<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Util.Reflection" Version="1.0.3" />
+		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Mc" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Pm" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Utils.Extensions.DependencyInjection" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.BuildingBlocks.StackSdks.Dcc" Version="$(MasaStackSdksPackageVersion)" />
+	</ItemGroup>
+</Project>

@@ -7,12 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaStackSdksPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Caller.Wasm" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
+	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts\Masa.Auth.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>
