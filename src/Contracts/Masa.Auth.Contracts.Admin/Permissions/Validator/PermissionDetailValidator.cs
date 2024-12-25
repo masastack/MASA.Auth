@@ -21,8 +21,13 @@ public class PermissionDetailValidator<T> : MasaAbstractValidator<T> where T : P
         RuleFor(p => p.MatchPattern).Must(IsValidRegex).WithMessage("Invalid regex pattern");
     }
     
-    private bool IsValidRegex(string pattern)
+    private bool IsValidRegex(string? pattern)
     {
+        if (pattern is null)
+        {
+            return true;
+        }
+
         try
         {
             _ = Regex.Match(string.Empty, pattern);

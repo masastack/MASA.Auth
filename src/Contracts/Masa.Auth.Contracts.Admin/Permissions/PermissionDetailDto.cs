@@ -32,5 +32,5 @@ public class PermissionDetailDto : BaseUpsertDto<Guid>
     /// <summary>
     /// Used in special cases when auto-match left menu is highlighted
     /// </summary>
-    public string MatchPattern { get; set; } = string.Empty;
+    public string? MatchPattern { get; set; } = string.Empty;
 }
