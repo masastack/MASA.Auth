@@ -8,8 +8,8 @@ public class DepartmentEntityTypeConfiguration : IEntityTypeConfiguration<Depart
     public void Configure(EntityTypeBuilder<Department> builder)
     {
         builder.HasKey(d => d.Id);
-        builder.HasIndex(d => new { d.Name, d.ParentId }).IsUnique().HasFilter("[IsDeleted] = 0");
-        builder.HasIndex(d => d.Level).IsUnique().HasFilter("Level = 1");
+        builder.HasIndex(d => new { d.Name, d.ParentId });
+        builder.HasIndex(d => d.Level);
         builder.Property(d => d.Name).HasMaxLength(20).IsRequired();
         builder.Property(d => d.Description).HasMaxLength(255);
         builder.Property(d => d.Level).HasDefaultValue(1);

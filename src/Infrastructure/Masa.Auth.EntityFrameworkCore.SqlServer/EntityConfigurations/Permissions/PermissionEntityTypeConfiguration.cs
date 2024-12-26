@@ -8,7 +8,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
         builder.HasKey(p => p.Id);
-        builder.HasIndex(p => new { p.SystemId, p.AppId, p.Code }).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(p => new { p.SystemId, p.AppId, p.Code });
         builder.Property(p => p.Name).HasMaxLength(40).IsRequired();
         builder.Property(p => p.Code).HasMaxLength(255).IsRequired();
         builder.Property(p => p.Url).HasMaxLength(255).IsRequired(false);
@@ -35,8 +35,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
                     configureJoinEntityType =>
                     {
                         configureJoinEntityType.HasKey(pr => pr.Id);
-                        configureJoinEntityType.HasIndex(pr => new { pr.LeadingPermissionId, pr.AffiliationPermissionId })
-                            .IsUnique().HasFilter("[IsDeleted] = 0");
+                        configureJoinEntityType.HasIndex(pr => new { pr.LeadingPermissionId, pr.AffiliationPermissionId });
                     });
         builder.HasOne(x => x.Parent)
             .WithMany(x => x.Children)

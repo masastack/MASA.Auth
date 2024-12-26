@@ -8,7 +8,7 @@ public class PositionEntityTypeConfiguration : IEntityTypeConfiguration<Position
     public void Configure(EntityTypeBuilder<Position> builder)
     {
         builder.HasKey(p => p.Id);
-        builder.HasIndex(p => p.Name).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(p => p.Name);
         builder.Property(d => d.Name).HasMaxLength(20);
     }
 }
