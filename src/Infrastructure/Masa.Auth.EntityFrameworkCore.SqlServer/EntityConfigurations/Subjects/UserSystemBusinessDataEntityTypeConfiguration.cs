@@ -8,6 +8,6 @@ public class UserSystemBusinessDataEntityTypeConfiguration : IEntityTypeConfigur
     public void Configure(EntityTypeBuilder<UserSystemBusinessData> builder)
     {
         builder.HasKey(u => u.Id);
-        builder.HasIndex(u => new { u.UserId, u.SystemId }).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(u => new { u.UserId, u.SystemId });
     }
 }

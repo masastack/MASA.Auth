@@ -10,11 +10,11 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
         //mysql use ForMySQLHasCollation("utf8_bin") link https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core-charset.html
         //builder.Property(c => c.Account).UseCollation("SQL_Latin1_General_CP1_CS_AS");
-        builder.HasIndex(u => u.Account).IsUnique().HasFilter("NOT \"IsDeleted\"");
+        builder.HasIndex(u => u.Account);
         builder.HasIndex(u => u.Name);
-        builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("NOT \"IsDeleted\" and \"IdCard\"!=''");
-        builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("NOT \"IsDeleted\" and \"PhoneNumber\"!=''");
-        builder.HasIndex(u => u.Email).IsUnique().HasFilter("NOT \"IsDeleted\" and \"Email\"!=''");
+        builder.HasIndex(u => u.IdCard);
+        builder.HasIndex(u => u.PhoneNumber);
+        builder.HasIndex(u => u.Email);
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
         builder.OwnsOne(u => u.Address);
