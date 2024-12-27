@@ -1,21 +1,23 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Services;
 
 public class LdapDomainService : DomainService
 {
     private readonly AuthDbContext _authDbContext;
     private readonly UserDomainService _userDomainService;
+    private readonly IThirdPartyUserRepository _thirdPartyUserRepository;
     private readonly ILogger<LdapDomainService> _logger;
 
     public LdapDomainService(
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
+        IThirdPartyUserRepository thirdPartyUserRepository,
         ILogger<LdapDomainService> logger)
     {
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
+        _thirdPartyUserRepository = thirdPartyUserRepository;
         _logger = logger;
     }
 
@@ -89,6 +91,12 @@ public class LdapDomainService : DomainService
         var ldap = await GetIdentityProviderAsync();
         var user = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id && tpu.ThridPartyIdentity == ldapUser.ObjectGuid)
             .Include(tpu => tpu.User).ThenInclude(user => user.Staff).Select(tpu => tpu.User).FirstOrDefaultAsync();
+
+        if (user is null && !ldapUser.Phone.IsNullOrEmpty())
+        {
+            user = await BindLdapUserByPhone(ldapUser, ldap.Id);
+        }
+
         if (user != null)
         {
             user.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, "", "", "", "", new());
@@ -119,5 +127,17 @@ public class LdapDomainService : DomainService
         var identityProviderQuery = new IdentityProviderByTypeQuery(ThirdPartyIdpTypes.Ldap);
         await EventBus.PublishAsync(identityProviderQuery);
         return identityProviderQuery.Result;
+    }
+
+    private async Task<User?> BindLdapUserByPhone(LdapUser ldapUser, Guid ldapId)
+    {
+        var user = await _authDbContext.Set<User>().Include(x => x.Staff).Include(x => x.ThirdPartyUsers).FirstOrDefaultAsync(x => x.PhoneNumber == ldapUser.Phone);
+        if (user is not null && !user.ThirdPartyUsers.Any(x => x.ThirdPartyIdpId == ldapId))
+        {
+            var thirdPartyUser = new ThirdPartyUser(ldapId, user.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser));
+            await _thirdPartyUserRepository.AddAsync(thirdPartyUser);
+        }
+
+        return user;
     }
 }

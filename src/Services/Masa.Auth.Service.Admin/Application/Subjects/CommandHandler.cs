@@ -434,7 +434,10 @@ public class CommandHandler
             account = await _ldapDomainService.UpsertLdapUserAsync(ldapUser);
         }
 
-        var user = await _userRepository.FindWithIncludAsync(u => u.Account == account || u.PhoneNumber == account, new List<string> {
+        Expression<Func<User, bool>> condition = u => u.Account == account;
+        condition = condition.Or(!isLdap, u => u.PhoneNumber == account);
+
+        var user = await _userRepository.FindWithIncludAsync(condition, new List<string> {
             $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
         });
 
