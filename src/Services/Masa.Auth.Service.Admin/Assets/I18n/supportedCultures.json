@@ -10,5 +10,9 @@
   {
     "Culture": "ru-RU",
     "DisplayName": "Русский (Россия)"
+  },
+  {
+    "Culture": "ja-JP",
+    "DisplayName": "Japanese (Japan)"
   }
 ]
