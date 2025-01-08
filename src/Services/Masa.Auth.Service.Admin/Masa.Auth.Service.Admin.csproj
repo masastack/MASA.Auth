@@ -78,6 +78,9 @@
 	  <Content Update="Assets\I18n\ru-RU.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
+	  <Content Update="Assets\I18n\ja-JP.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Update="Assets\I18n\zh-CN.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
