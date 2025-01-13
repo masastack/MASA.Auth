@@ -34,7 +34,6 @@ builder.Services.AddMasaStackComponent(MasaStackProject.Auth, $"{builder.HostEnv
 builder.Services.AddScoped<IPermissionValidator, PermissionValidator>();
 builder.Services.AddTypeAdapter();
 
-
 var host = builder.Build();
 await host.Services.InitializeMasaStackApplicationAsync();
 await host.RunAsync();

@@ -2,8 +2,8 @@
 @inject NavigationManager Navigation
 
 <SLayout IsShowEnvironmentSwitch="true" Class="fill-height"
-         Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
-         MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
+Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
+MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
     @Body
 </SLayout>
 
@@ -13,6 +13,9 @@
 
     [Inject]
     public I18n I18N { get; set; } = default!;
+
+    [Inject]
+    public IClientScopeServiceProviderAccessor ClientScopeServiceProviderAccessor { get; set; } = default!;
 
     protected bool TranslateFluentValidationProperty { get; set; } = true;
 
@@ -36,5 +39,11 @@
             UsingI18nToResolveFluentValidationDisplayName(I18N);
         }
         return base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await ClientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<PermissionCodesCache>().InitializeAsync();
     }
 }

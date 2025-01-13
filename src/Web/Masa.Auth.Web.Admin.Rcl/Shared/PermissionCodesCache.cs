@@ -23,6 +23,6 @@ public class PermissionCodesCache : ISingletonDependency
     public virtual async Task InitializeAsync()
     {
         var userId = _userContext.GetUserId<Guid>();
-        //Codes = await _permissionService.GetElementPermissionsAsync(userId, _multiEnvironmentMasaStackConfig.SetEnvironment(_environment).GetWebId(MasaStackProject.Auth));
+        Codes = await _permissionService.GetElementPermissionsAsync(userId, _multiEnvironmentMasaStackConfig.SetEnvironment(_environment).GetWebId(MasaStackProject.Auth));
     }
 }
