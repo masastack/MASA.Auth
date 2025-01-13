@@ -34,9 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Service.Admin", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{99DF0538-B88E-444B-AA99-D92641592F49}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Contracts.Admin", "src\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj", "{4E4040FE-959E-4C83-B0FD-262E0C5F3D72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Contracts.Service", "src\Contracts\Masa.Auth.Contracts.Service\Masa.Auth.Contracts.Service.csproj", "{4E4040FE-959E-4C83-B0FD-262E0C5F3D72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Wasm", "src\Web\Masa.Auth.Web.Admin.Wasm\Masa.Auth.Web.Admin.Wasm.csproj", "{22B7338C-5AB5-4263-8949-8942D868B3EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.WebAssembly", "src\Web\Masa.Auth.Web.Admin.WebAssembly\Masa.Auth.Web.Admin.WebAssembly.csproj", "{22B7338C-5AB5-4263-8949-8942D868B3EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masa.Auth.Web.Admin.Rcl", "src\Web\Masa.Auth.Web.Admin.Rcl\Masa.Auth.Web.Admin.Rcl.csproj", "{467A32FE-58CB-4F0E-896E-834F52C4248C}"
 EndProject
@@ -59,6 +59,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masa.Auth.EntityFrameworkCore.SqlServer", "src\Infrastructure\Masa.Auth.EntityFrameworkCore.SqlServer\Masa.Auth.EntityFrameworkCore.SqlServer.csproj", "{46DED059-F0B4-4AA4-B522-4F376D7AA1AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masa.Auth.Contracts", "src\Contracts\Masa.Auth.Contracts\Masa.Auth.Contracts.csproj", "{0614084E-AFE6-4BF4-BA1E-CE39E4917A91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masa.Auth.Contracts.Web", "src\Contracts\Masa.Auth.Contracts.Web\Masa.Auth.Contracts.Web.csproj", "{34967FBF-EA2A-40A0-9543-28854B2F3891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -180,6 +182,14 @@ Global
 		{0614084E-AFE6-4BF4-BA1E-CE39E4917A91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0614084E-AFE6-4BF4-BA1E-CE39E4917A91}.Release|x86.ActiveCfg = Release|Any CPU
 		{0614084E-AFE6-4BF4-BA1E-CE39E4917A91}.Release|x86.Build.0 = Release|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Debug|x86.Build.0 = Debug|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Release|x86.ActiveCfg = Release|Any CPU
+		{34967FBF-EA2A-40A0-9543-28854B2F3891}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -205,6 +215,7 @@ Global
 		{5729C4EF-9C4D-4FF3-A945-EA02CDD6600E} = {B34AEA8B-C012-4DEE-BA8E-CECC3C6ED556}
 		{46DED059-F0B4-4AA4-B522-4F376D7AA1AA} = {B34AEA8B-C012-4DEE-BA8E-CECC3C6ED556}
 		{0614084E-AFE6-4BF4-BA1E-CE39E4917A91} = {99DF0538-B88E-444B-AA99-D92641592F49}
+		{34967FBF-EA2A-40A0-9543-28854B2F3891} = {99DF0538-B88E-444B-AA99-D92641592F49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B83BA2BA-19E5-41FB-A92A-16A03DA229E4}

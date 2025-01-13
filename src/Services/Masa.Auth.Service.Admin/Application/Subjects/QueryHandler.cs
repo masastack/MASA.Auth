@@ -132,7 +132,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUserSelectAsync(UserSelectQuery query, IAutoCompleteClient autoCompleteClient)
     {
-        var response = await autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectDto>(
+        var response = await autoCompleteClient.GetBySpecifyDocumentAsync<UserSelectAutoCompleteDto>(
             query.Search.TrimStart(' ').TrimEnd(' '), new AutoCompleteOptions
             {
                 Page = query.Page,

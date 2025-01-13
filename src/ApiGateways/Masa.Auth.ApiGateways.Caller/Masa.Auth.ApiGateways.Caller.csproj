@@ -12,7 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts\Masa.Auth.Contracts.csproj" />
+	  <ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Web\Masa.Auth.Contracts.Web.csproj" />
 	</ItemGroup>
 
 </Project>

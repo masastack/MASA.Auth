@@ -1,10 +1,7 @@
-﻿@using Microsoft.Extensions.Hosting;
+﻿@using Masa.Auth.Contracts.Permissions
 @using System.Text.Json;
 @inherits AdminCompontentBase
-@inject IConfigurationApiManage ConfigurationApiManage
-@inject IConfigurationApi ConfigurationApi
-@inject IHostEnvironment HostEnvironment
-@inject IMultiEnvironmentUserContext MultiEnvironmentUserContext
+@inject AuthCaller AuthCaller
 
 <div class="i18n-configer">
     <STextField Value="Name" ValueChanged="NameChanged" ValueExpression="NameExpression"
@@ -52,55 +49,23 @@
     public Expression<Func<string>>? NameExpression { get; set; }
 
     bool _dialog;
-    List<KeyValue<string, string>> _displayNames = new();
+    List<PermissionI18NDisplayNameDto> _displayNames = new();
 
-    private Task OpenConfigDialog()
+    private async Task OpenConfigDialog()
     {
-        _displayNames = new();
-        var publicSection = ConfigurationApi.GetPublic();
-        foreach (var culture in I18n.SupportedCultures)
-        {
-            var cultureName = culture.Name.ToLower();
-            var value = publicSection.GetValue<string>($"{DynamicTranslateProvider.I18N_KEY}{cultureName}:{Name}", "");
-            _displayNames.Add(new KeyValue<string, string>(cultureName, value ?? string.Empty));
-        }
+        var cultureNames = I18n.SupportedCultures.Select(x => x.Name.ToLower()).ToList();
+        _displayNames = await AuthCaller.PermissionService.GetI18NDisplayNameAsync(cultureNames, Name);
         _dialog = true;
-        return Task.CompletedTask;
     }
 
     private async Task Save()
     {
-        var publicSection = ConfigurationApi.GetPublic();
-        var environment = MultiEnvironmentUserContext.Environment ?? HostEnvironment.EnvironmentName;
-        foreach (var _displayName in _displayNames)
-        {
-            var itemKey = $"{DynamicTranslateProvider.I18N_KEY}{_displayName.Key}";
-            var itemSection = publicSection.GetSection(itemKey);
-            if (!itemSection.Exists())
+        var input = new SaveI18NDisplayNamesInput
             {
-                var data = new Dictionary<string, object> { { Name, _displayName.Value } };
-                await ConfigurationApiManage.AddAsync(environment, "Default", "public-$Config", new Dictionary<string, object> { { itemKey, data } });
-            }
-            else
-            {
-                var data = itemSection.Get<Dictionary<string, object>>();
-                MasaArgumentException.ThrowIfNull(data);
-                data[Name] = _displayName.Value;
-                await ConfigurationApiManage.UpdateAsync(environment, "Default", "public-$Config", itemKey, data);
-            }
-        }
+                DisplayNames = _displayNames,
+                Name = Name
+            };
+        await AuthCaller.PermissionService.SaveI18NDisplayNameAsync(input);
         _dialog = false;
-    }
-
-    public class KeyValue<TKey, TVal>
-    {
-        public TKey Key { get; set; }
-        public TVal Value { get; set; }
-
-        public KeyValue(TKey key, TVal value)
-        {
-            this.Key = key;
-            this.Value = value;
-        }
     }
 }

@@ -44,7 +44,7 @@ public partial class ImpersonatedNavigation : AdminCompontentBase
         var environment = MultiEnvironmentUserContext.Environment;
         if (environment.IsNullOrEmpty())
         {
-            environment = WebHostEnvironment.EnvironmentName;
+            environment = WebHostEnvironment.Environment;
         }
 
         var projects = await PmClient.ProjectService.GetProjectAppsAsync(environment);

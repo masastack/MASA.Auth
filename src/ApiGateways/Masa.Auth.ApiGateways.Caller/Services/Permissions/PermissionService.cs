@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Contracts.Permissions;
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Permissions;
 
 public class PermissionService : ServiceBase
@@ -87,5 +89,15 @@ public class PermissionService : ServiceBase
     public async Task SaveAppGlobalNavVisibleAsync(AppGlobalNavVisibleDto visibleDto)
     {
         await PostAsync("SaveAppGlobalNavVisible", visibleDto);
+    }
+
+    public async Task<List<PermissionI18NDisplayNameDto>> GetI18NDisplayNameAsync(List<string> cultureName, string name)
+    {
+        return await GetAsync<List<PermissionI18NDisplayNameDto>>($"i18n-display-name?cultureName={string.Join(",", cultureName)}&name={name}");
+    }
+
+    public async Task SaveI18NDisplayNameAsync(SaveI18NDisplayNamesInput input)
+    {
+        await PostAsync("i18n-display-name", input);
     }
 }

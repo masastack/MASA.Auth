@@ -1,0 +1,10 @@
+﻿global using Masa.Auth.Web.Admin.Rcl;
+global using Masa.Contrib.StackSdks.Config;
+global using Masa.Stack.Components.Extensions.OpenIdConnect;
+global using Microsoft.AspNetCore.Components.Web;
+global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using Masa.Auth.ApiGateways.Caller;
+global using Masa.Stack.Components;
+global using Masa.Auth.Web.Admin.Rcl.Global;
+global using Masa.Auth.Web.Admin.Rcl.Shared;
+global using Masa.Blazor;

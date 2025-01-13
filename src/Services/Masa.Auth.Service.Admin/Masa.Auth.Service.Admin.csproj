@@ -60,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
+		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Service\Masa.Auth.Contracts.Service.csproj" />
 		<ProjectReference Include="..\..\Domain\Masa.Auth.Domain\Masa.Auth.Domain.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Masa.Auth.EntityFrameworkCore.PostgreSql\Masa.Auth.EntityFrameworkCore.PostgreSql.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Masa.Auth.EntityFrameworkCore.SqlServer\Masa.Auth.EntityFrameworkCore.SqlServer.csproj" />

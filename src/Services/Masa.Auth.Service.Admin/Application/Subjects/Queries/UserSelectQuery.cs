@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record UserSelectQuery(string Search, int Page = 1, int PageSize = 10) : Query<List<UserSelectDto>>
+public record UserSelectQuery(string Search, int Page = 1, int PageSize = 10) : Query<List<UserSelectAutoCompleteDto>>
 {
-    public override List<UserSelectDto> Result { get; set; } = new();
+    public override List<UserSelectAutoCompleteDto> Result { get; set; } = new();
 }

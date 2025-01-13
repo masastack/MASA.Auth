@@ -5,7 +5,7 @@ namespace Masa.Auth.Web.Admin.Rcl.Pages.Sso.CustomLoginRegister.Model;
 
 public class LoginValidator : MasaAbstractValidator<LoginModel>
 {
-    public LoginValidator(PasswordValidator passwordValidator)
+    public LoginValidator()
     {
         RuleFor(login => login.Account).Required().ChineseLetterNumber();
         RuleFor(user => user.Password).Required();

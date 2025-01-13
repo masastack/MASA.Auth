@@ -34,7 +34,7 @@ public class UserService : ServiceBase
         return query.Result;
     }
 
-    public async Task<List<UserSelectDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
+    public async Task<List<UserSelectAutoCompleteDto>> GetSelectAsync([FromServices] IEventBus eventBus, [FromQuery] string search)
     {
         var query = new UserSelectQuery(search);
         await eventBus.PublishAsync(query);
@@ -421,5 +421,13 @@ public class UserService : ServiceBase
     {
         var command = new DeleteAccountCommand(model.SmsCode);
         await eventBus.PublishAsync(command);
+    }
+
+    [RoutePattern("generate-password", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<string> GenerateNewPasswordAsync([FromServices] IEventBus eventBus)
+    {
+        var command = new GenerateNewPasswordCommand();
+        await eventBus.PublishAsync(command);
+        return command.Result;
     }
 }

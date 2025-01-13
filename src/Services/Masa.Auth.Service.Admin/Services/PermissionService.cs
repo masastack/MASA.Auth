@@ -34,6 +34,8 @@ public class PermissionService : ServiceBase
         MapGet(GetAppGlobalNavVisibleAsync);
         MapGet(GetAppGlobalNavVisibleListAsync);
         MapPost(SaveAppGlobalNavVisibleAsync);
+        MapGet(GetI18NDisplayNameAsync, "i18n-display-name");
+        MapPost(SaveI18NDisplayNameAsync, "i18n-display-name");
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
@@ -187,6 +189,19 @@ public class PermissionService : ServiceBase
         [FromBody] AppGlobalNavVisibleDto dto)
     {
         var command = new SaveAppGlobalNavVisibleCommand(dto);
+        await eventBus.PublishAsync(command);
+    }
+
+    private async Task<List<PermissionI18NDisplayNameDto>> GetI18NDisplayNameAsync(IEventBus eventBus, string cultureName, string name)
+    {
+        var query = new GetI18NDisplayNameQuery(cultureName.Split(','), name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task SaveI18NDisplayNameAsync(IEventBus eventBus, SaveI18NDisplayNamesInput input)
+    {
+        var command = new SaveI18NDisplayNameCommand(input);
         await eventBus.PublishAsync(command);
     }
 }

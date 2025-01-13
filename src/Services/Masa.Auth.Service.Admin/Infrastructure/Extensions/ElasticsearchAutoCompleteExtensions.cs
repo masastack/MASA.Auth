@@ -9,7 +9,7 @@ public static class ElasticsearchAutoCompleteExtensions
 
     public static IServiceCollection AddElasticsearchAutoComplete(this IServiceCollection services)
     {
-        services.AddAutoCompleteBySpecifyDocument<UserSelectDto>("es", autoCompleteOptions =>
+        services.AddAutoCompleteBySpecifyDocument<UserSelectAutoCompleteDto>("es", autoCompleteOptions =>
         {
             autoCompleteOptions.UseElasticSearch(options =>
             {

@@ -1,9 +1,8 @@
 ﻿@using Masa.BuildingBlocks.StackSdks.Auth;
 @using Masa.BuildingBlocks.StackSdks.Pm;
-@using Microsoft.AspNetCore.Hosting;
 @inherits AdminCompontentBase
 @inject IMultiEnvironmentUserContext MultiEnvironmentUserContext
-@inject IWebHostEnvironment WebHostEnvironment
+@inject IWebAssemblyHostEnvironment WebHostEnvironment
 @inject IMasaStackConfig MasaStackConfig
 @inject IPmClient PmClient
 @inject IAuthClient AuthClient

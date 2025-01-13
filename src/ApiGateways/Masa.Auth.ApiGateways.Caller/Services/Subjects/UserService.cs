@@ -66,5 +66,9 @@ public class UserService : ServiceBase
     {
         await PostAsync(nameof(SaveClaimValuesAsync), userClaimValuesDto);
     }
-}
 
+    public async Task<string> GenerateNewPasswordAsync()
+    {
+        return await PostAsync<object, string>("generate-password", new {});
+    }
+}

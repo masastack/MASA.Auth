@@ -77,7 +77,7 @@ public class UserDomainService : DomainService
 
             await _cacheClient.SetAsync(CacheKey.UserKey(userId), userModel);
 
-            var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
+            var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectAutoCompleteDto>());
             if (!result.IsValid)
             {
                 _logger.LogError(JsonSerializer.Serialize(result));
@@ -108,7 +108,7 @@ public class UserDomainService : DomainService
 
             await _cacheClient.SetAsync(CacheKey.UserKey(user.Id), userModel);
 
-            var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
+            var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectAutoCompleteDto>());
             if (!result.IsValid)
             {
                 _logger.LogError(JsonSerializer.Serialize(result));
@@ -129,7 +129,7 @@ public class UserDomainService : DomainService
             userModel.StaffDisplayName = user.Staff?.DisplayName ?? "";
             userModel.StaffId = user.Staff?.Id;
             map.Add(CacheKey.UserKey(user.Id), userModel);
-            await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
+            await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectAutoCompleteDto>());
         }
         await _cacheClient.SetListAsync(map);
     }

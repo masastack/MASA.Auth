@@ -1,3 +1,5 @@
+using Masa.Auth.ApiGateways.Caller;
+
 namespace Masa.Auth.Web.Admin.Rcl.Pages.Component;
 
 public partial class SGeneratePassword : STextField<string>
@@ -6,7 +8,7 @@ public partial class SGeneratePassword : STextField<string>
     public bool DisableConfirmDialog { get; set; } = false;
 
     [Inject]
-    public PasswordHelper PasswordHelper { get; set; } = null!;
+    public AuthCaller AuthCaller { get; set; } = null!;
 
     private bool ConfirmDialogVisible { get; set; } = false;
 
@@ -44,7 +46,7 @@ public partial class SGeneratePassword : STextField<string>
     public async Task ResetPasswordAsync()
     {
         Type = "text";
-        var value = PasswordHelper.GenerateNewPassword();
+        var value = await AuthCaller.UserService.GenerateNewPasswordAsync();
         if (ValueChanged.HasDelegate)
             await ValueChanged.InvokeAsync(value);
         else Value = value;

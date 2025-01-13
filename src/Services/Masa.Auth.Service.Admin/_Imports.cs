@@ -152,3 +152,7 @@ global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using IdentityProvider = Masa.Auth.Domain.Subjects.Aggregates.IdentityProvider;
+global using Masa.Auth.Contracts.Subjects;
+global using VerifyUserRepeatDto = Masa.Auth.Contracts.Admin.Subjects.VerifyUserRepeatDto;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Password;
+global using Masa.Auth.Contracts.Permissions;

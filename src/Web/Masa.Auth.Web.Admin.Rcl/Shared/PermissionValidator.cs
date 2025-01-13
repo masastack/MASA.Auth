@@ -5,34 +5,15 @@ namespace Masa.Auth.Web.Admin.Rcl.Shared;
 
 public class PermissionValidator : IPermissionValidator
 {
-    private readonly IUserContext _userContext;
-    private readonly PermissionService _permissionService;
-    private readonly IMultiEnvironmentMasaStackConfig _multiEnvironmentMasaStackConfig;
+    protected PermissionCodesCache Cache { get; }
 
-    private string _environment = "";
-
-    public PermissionValidator(
-        IUserContext userContext,
-        AuthCaller authCaller,
-        IMultiEnvironmentMasaStackConfig multiEnvironmentMasaStackConfig,
-        IMultiEnvironmentUserContext multiEnvironmentUserContext)
+    public PermissionValidator(IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor)
     {
-        _userContext = userContext;
-        _permissionService = authCaller.PermissionService;
-        _multiEnvironmentMasaStackConfig = multiEnvironmentMasaStackConfig;
-
-        _environment = multiEnvironmentUserContext.Environment ?? _environment;
+        Cache = clientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<PermissionCodesCache>();
     }
 
     public bool Validate(string code, ClaimsPrincipal user)
     {
-        var userId = _userContext.GetUserId<Guid>();
-        var codes = new List<string>();
-        //TODO change Async and use Redis
-        Task.Run(async () =>
-        {
-            codes = await _permissionService.GetElementPermissionsAsync(userId, _multiEnvironmentMasaStackConfig.SetEnvironment(_environment).GetWebId(MasaStackProject.Auth));
-        }).Wait();
-        return codes.Contains(code);
+        return Cache.Codes.Contains(code);
     }
 }

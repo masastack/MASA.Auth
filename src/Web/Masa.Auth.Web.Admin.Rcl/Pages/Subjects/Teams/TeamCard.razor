@@ -45,7 +45,7 @@
             }
         </div>
         <MSpacer />
-        <span class="body2 masa-text-3-1">@T("Edit In") @Team.ModificationTime.Humanize(culture:I18n.Culture)</span>
+        <span class="body2 masa-text-3-1">@T("Edit In") @Team.ModificationTime?.TimeAgo(I18n.Culture)</span>
         <span class="mx-2" style="color:#E2E7F4">|</span>
         <span class="body2 masa-text-1-2">@Team.Modifier</span>
     </MCardActions>

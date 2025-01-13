@@ -1,5 +1,8 @@
-﻿@inject TokenProvider TokenProvider
-
+﻿@using Masa.Blazor
+@using Masa.Stack.Components
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Reflection
+@using Microsoft.AspNetCore.Components.Routing
 <CascadingAuthenticationState>
     <Microsoft.AspNetCore.Components.Routing.Router AppAssembly="@typeof(App).Assembly"
                                                     AdditionalAssemblies='new List<Assembly>(){ Assembly.Load("Masa.Stack.Components")}'>
@@ -15,14 +18,5 @@
     </Microsoft.AspNetCore.Components.Routing.Router>
 </CascadingAuthenticationState>
 @code {
-    [Parameter]
-    public TokenProvider InitialState { get; set; } = null!;
 
-    protected override Task OnInitializedAsync()
-    {
-        TokenProvider.AccessToken = InitialState.AccessToken;
-        TokenProvider.RefreshToken = InitialState.RefreshToken;
-        TokenProvider.IdToken = InitialState.IdToken;
-        return base.OnInitializedAsync();
-    }
 }

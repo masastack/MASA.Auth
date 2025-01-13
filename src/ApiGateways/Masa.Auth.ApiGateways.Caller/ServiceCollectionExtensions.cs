@@ -12,14 +12,7 @@ public static class ServiceCollectionExtensions
         configure.Invoke(options);
         services.AddSingleton(options);
 
-        services.AddStackCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"), jwtTokenValidatorOptions =>
-        {
-            jwtTokenValidatorOptions.AuthorityEndpoint = options.AuthorityEndpoint;
-        }, clientRefreshTokenOptions =>
-        {
-            clientRefreshTokenOptions.ClientId = options.ClientId;
-            clientRefreshTokenOptions.ClientSecret = options.ClientSecret;
-        });
+        services.AddStackCaller(Assembly.Load("Masa.Auth.ApiGateways.Caller"));
 
         return services;
     }
