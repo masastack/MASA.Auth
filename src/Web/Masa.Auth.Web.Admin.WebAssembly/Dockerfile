@@ -1,7 +1,7 @@
-FROM registry.cn-hangzhou.aliyuncs.com/masa/sdk:8.0.203 AS publish
+FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_sdk:6.0.403 AS publish
 WORKDIR /src
 COPY . .
-ENV CSPROJ="src/Web/Masa.Auth.Web.Admin.WebAssembly/Masa.Alert.Web.Admin.WebAssembly.csproj"
+ENV CSPROJ="src/Web/Masa.Auth.Web.Admin.WebAssembly/Masa.Auth.Web.Admin.WebAssembly.csproj"
 RUN dotnet nuget add source http://devops.lonsid.cn:8080/nuget
 RUN dotnet restore $CSPROJ && dotnet publish $CSPROJ -c Release -o /app/publish
 

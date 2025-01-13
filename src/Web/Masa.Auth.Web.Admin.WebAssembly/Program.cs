@@ -1,8 +1,6 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.Authentication.Identity.Core;
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddSingleton(sp => builder.Configuration);
 
@@ -39,5 +37,4 @@ builder.Services.AddTypeAdapter();
 
 var host = builder.Build();
 await host.Services.InitializeMasaStackApplicationAsync();
-await host.Services.GetRequiredService<IClientScopeServiceProviderAccessor>().ServiceProvider.GetRequiredService<PermissionCodesCache>().InitializeAsync();
 await host.RunAsync();
