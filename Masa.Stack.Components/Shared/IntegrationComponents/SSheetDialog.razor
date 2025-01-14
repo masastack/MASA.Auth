@@ -1,0 +1,154 @@
+﻿@namespace Masa.Stack.Components
+@inherits NextTickComponentBase
+
+<MBottomSheet HideOverlay
+              ContentClass="m-sheet-dialog full-height elevation-0 transparent m-dialog--fullscreen"
+              Value=Value
+              ValueChanged="SheetValueChangedAsync">
+    <MHover>
+        <div @attributes="context.Attrs" style="@($"padding-right:{Padding}px;padding-left:{Padding}px")" class="m-sheet-dialog-overlay d-flex flex-column full-height" @onclick="OnClose" @onclick:stopPropagation>
+            @if (HeaderContent is null)
+            {
+                <div @onclick="OnClose" @onclick:stopPropagation class="m-sheet-dialog-header d-flex align-center justify-space-between px-3" style="@($"height:{HeaderHeight}px;")">
+                    <div class="d-flex align-center">
+                        <MIcon Size=16 Color="@(IconColor)">
+                            @Icon
+                        </MIcon>
+                        <label class="white--text ml-2" style="font-style: normal;font-weight: 700;font-size: 20px;line-height: 30px;">@Title</label>
+                    </div>
+                    <MIcon Color="white" OnClick="OnClose" Class="close-icon" OnClickStopPropagation>mdi-close</MIcon>
+                </div>
+            }
+            else
+            {
+                @HeaderContent
+            }
+        </div>
+    </MHover>
+    <MSheet Class="@($"m-sheet-dialog-content flex-grow-1 rounded-5 rounded-b-0 {ContentClass}")"
+            Style="@($"position: absolute;top: 0;left: {Padding}px;right: {Padding}px;top: {HeaderHeight}px;height: calc(100% - {HeaderHeight}px);width: calc(100% - {2 * Padding}px); {ContentStyle}")">
+        @if (ContentLoading.Loading)
+        {
+            <div class="d-flex align-center justify-center" style="height: 100%">
+                <MProgressCircular Indeterminate="@ContentLoading.Indeterminate"
+                                   Size="@ContentLoading.Size"
+                                   Width="@ContentLoading.Width"
+                                   Color="@ContentLoading.Color">
+                </MProgressCircular>
+            </div>
+        }
+        else
+        {
+            if (EnableDomReload)
+            {
+                if (Value)
+                {
+                    @ChildContent
+                }
+            }
+            else
+            {
+                @ChildContent
+            }
+        }
+    </MSheet>
+</MBottomSheet>
+
+@code {
+
+    public class MProgressInfo
+    {
+        public bool Loading { get; set; } = false;
+
+        public int Width { get; set; } = 8;
+
+        public int Size { get; set; } = 80;
+
+        public bool Indeterminate { get; set; } = true;
+
+        public string Color { get; set; } = "primary";
+    }
+
+    [Parameter]
+    public MProgressInfo ContentLoading { get; set; } = new();
+
+    [Parameter]
+    public string? ContentClass { get; set; }
+
+    [Parameter]
+    public string? ContentStyle { get; set; }
+
+    [Parameter]
+    public int HeaderHeight { get; set; } = 64;
+
+    [Parameter]
+    public string IconColor { get; set; } = "#05CD99";
+
+    [Parameter]
+    public string Icon { get; set; } = "mdi-circle";
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Value { get; set; }
+
+    [Parameter]
+    public int Padding { get; set; } = 72;
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? HeaderContent { get; set; }
+
+    [Parameter]
+    public bool EnableDomReload { get; set; }
+
+    [Parameter]
+    public EventCallback OnClosed { get; set; }
+
+    private async Task OnClose()
+    {
+        if (ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(false);
+        }
+        else
+        {
+            Value = false;
+        }
+        if (OnClosed.HasDelegate)
+        {
+            NextTick(async () =>
+            {
+                await Task.Delay(150);
+                await OnClosed.InvokeAsync();
+            });
+        }
+    }
+
+    private async Task SheetValueChangedAsync(bool val)
+    {
+        if (ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(val);
+        }
+        else
+        {
+            Value = val;
+        }
+        if (!val && OnClosed.HasDelegate)
+        {
+            NextTick(async () =>
+            {
+                await Task.Delay(150);
+                await OnClosed.InvokeAsync();
+            });
+        }
+    }
+
+}

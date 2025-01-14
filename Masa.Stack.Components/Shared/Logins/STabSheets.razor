@@ -1,0 +1,91 @@
+﻿@using Masa.Stack.Components.Logins
+@namespace Masa.Stack.Components
+
+<SDefaultSheet Class="@($"tab-sheets {Class}")"
+              Style="@Style"
+              Height="Height"
+              Width="Width"
+              MaxHeight="MaxHeight"
+              MaxWidth="MaxWidth">
+    <MItemGroup Value="Value" ValueChanged="UpdateValueAsync" Mandatory Class="tab-sheets__tabs">
+        @foreach (var tab in Tabs)
+        {
+            <MItem Value="tab">
+                <MBorder Color="primary" Border="Borders.Top"
+                         Width="4" Value="@context.Active">
+                    <MButton Class="h6 emphasis2--text pt-4 pb-1 px-1"
+                             Height="50"
+                             Text OnClick="context.Toggle">
+                        @tab
+                    </MButton>
+                </MBorder>
+            </MItem>
+        }
+    </MItemGroup>
+
+    <MTabsItems Value="Value" Class="tab-sheets__items">
+        @ChildContent
+    </MTabsItems>
+</SDefaultSheet>
+
+@code {
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public StringNumber? Height { get; set; }
+
+    [Parameter]
+    public StringNumber? Width { get; set; }
+
+    [Parameter]
+    public StringNumber? MaxHeight { get; set; }
+
+    [Parameter]
+    public StringNumber? MaxWidth { get; set; }
+
+    [Parameter, EditorRequired]
+    public IEnumerable<string> Tabs { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<string>? TabItemContent { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnChange { get; set; }
+
+    [Parameter]
+    public string Value { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+        Tabs ??= Enumerable.Empty<string>();
+    }
+
+    private async Task UpdateValueAsync(StringNumber value)
+    {
+        if (ValueChanged.HasDelegate) await ValueChanged.InvokeAsync(value.ToString());
+        else Value = value.ToString();
+    }
+    //private void ValueChanged(StringNumber val)
+    //{
+    //    _value = val;
+
+    //    if (OnChange.HasDelegate)
+    //    {
+    //        _ = OnChange.InvokeAsync(val?.ToString());
+    //    }
+    //}
+}

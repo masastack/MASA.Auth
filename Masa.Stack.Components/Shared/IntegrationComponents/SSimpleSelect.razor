@@ -1,0 +1,25 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+@typeparam TValue
+
+<MMenu OffsetY Bottom @bind-Value="MenuState">
+    <ActivatorContent>
+        <MTextField Readonly Class="@("relativeTime px-4 py-2 " + Class)" Attributes="context.Attrs" Style="Style" @bind-Value="Text" Clearable=Clearable>
+            <AppendContent>
+                 <div class="icon d-flex">
+                    <MIcon Class="ma-auto" Color="regular3">@Icon</MIcon>
+                </div>
+            </AppendContent>
+        </MTextField>
+    </ActivatorContent>
+    <ChildContent>
+        <div style="overflow:auto;max-height:304px;">
+            @foreach(var (value,text) in ValueTexts)
+            {
+               <div class="px-4 py-3 body2 emphasis--text combox @(value?.Equals(Value) is true ? "hoverBg primary--text":"")" @onclick="async ()=> await UpdateValueAsync(value)">
+                    @text
+                </div>
+            }
+        </div>    
+    </ChildContent>
+</MMenu>

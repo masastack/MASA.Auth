@@ -1,0 +1,55 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<MDialog @bind-Value="Visible" Width="400" Persistent ContentClass="confirm">
+    <MCard Class="pa-2">
+        <MCardTitle>
+            @if (!string.IsNullOrEmpty(Icon))
+            {
+                <MIcon Color="@IconColor" Style="margin-right: 8px">@Icon</MIcon>
+            }
+            <span>@Title</span>
+        </MCardTitle>
+
+        @if (ChildContent != default)
+        {
+            <MCardText>
+                @ChildContent
+            </MCardText>
+        }
+
+        <MCardActions>
+            <MSpacer />
+            @if (ActionContent != default)
+            {
+                @ActionContent
+            }
+            else
+            {
+                @if (OnCancel.HasDelegate)
+                {
+                    if(CancelContent is not null)
+                    {
+                        @CancelContent(HandleOnCancel)
+                    }
+                    else
+                    {
+                        <SButton Outlined Small Color="red" OnClick="HandleOnCancel">@T("Cancle")</SButton>
+                    }
+                }
+
+                @if (OnOk.HasDelegate)
+                {
+                    if (OkContent is not null)
+                    {
+                        @OkContent(HandleOnOk)
+                    }
+                    else
+                    {
+                        <SButton Small OnClick=HandleOnOk>@T("Confirm")</SButton>
+                    }
+                }
+            }
+        </MCardActions>
+    </MCard>
+</MDialog>

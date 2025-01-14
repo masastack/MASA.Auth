@@ -1,0 +1,55 @@
+﻿@namespace Masa.Stack.Components.NotificationCenters
+@inherits MasaComponentBase
+@inject IMcClient McClient
+
+<MCard Class="@($"full-height rounded-5 {(Visible?"":"d-none")}")">
+    <MCardTitle>
+        <div class="d-flex full-width align-center" style="height: 40px !important;">
+            <SButton Outlined Fab Small Icon Color="fill-line" @onclick="HandleOnBack">
+                <MIcon Class="ma-auto" Color="emphasis2" Size=20>
+                    mdi-arrow-left
+                </MIcon>
+            </SButton>
+            <div class="ml-4" style="width: 0px;height:24px;border: 1px solid #E2E7F4;"></div>
+            <MListItem OnClick="HandleOnChannelClick">
+                <MListItemAvatar Class="overflow-visible">
+                    @if (Channel == null)
+                    {
+                        <NotificationAvatar />
+                    }
+                    else
+                    {
+                        <SEmptyAvatar Value="@Channel?.DisplayName" />
+                    }
+                </MListItemAvatar>
+                <MListItemContent>
+                    <MListItemTitle Class="h7 emphasis--text">@(Channel!=null?Channel.DisplayName:T("DisplayName.AllWebsiteMessage"))</MListItemTitle>
+                </MListItemContent>
+            </MListItem>
+            <MSpacer />
+
+            <SIcon Class="mr-2" Color="neutral-lighten-1" Size=20 OnClick="HandleDelAsync">
+                mdi-delete-outline
+            </SIcon>
+        </div>
+    </MCardTitle>
+    <MCardText Class="d-flex align-end flex-column" Style="height: calc(100% - 72px) !important">
+        <div class="detail-box pt-4">
+            <span class="h7 emphasis2--text">@_entity.Title</span>
+            <div class="body2 regular2--text pt-2">
+                <span>@_entity.SendTime.ToOffset(JsInitVariables.TimezoneOffset).ToString(T("$MonthDayFormat"))</span>
+            </div>
+            <div class="content body regular2--text">
+                @((MarkupString)_entity.Content)
+            </div>
+        </div>
+        <div class="mt-auto">
+            <span @onclick="()=>HandlePrevAndNext(_entity.PrevId)">
+                <SIcon Class="hover-pointer" Disabled="_entity.PrevId==default" Size=24>mdi-chevron-left</SIcon>
+            </span>
+            <span @onclick="()=>HandlePrevAndNext(_entity.NextId)">
+                <SIcon Class="hover-pointer" Disabled="_entity.NextId==default" Size=24>mdi-chevron-right</SIcon>
+            </span>
+        </div>
+    </MCardText>
+</MCard>

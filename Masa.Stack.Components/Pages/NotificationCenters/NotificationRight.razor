@@ -1,0 +1,109 @@
+﻿@namespace Masa.Stack.Components.NotificationCenters
+@inherits MasaComponentBase
+@inject IMcClient McClient
+
+<div class="message-right full-height @(Visible?"":"d-none")">
+    <MCard Class="d-flex full-height flex-column rounded-5">
+        <MCardTitle Class="pl-2 pt-6">
+            <div class="d-flex full-width" style="height: 40px !important;">
+                <MListItem>
+                    <MListItemAvatar Class="overflow-visible">
+                        @if (Channel == null)
+                        {
+                            <NotificationAvatar Dot="_entities.Result != null && _entities.Result.Any(x => !x.IsRead)" />
+                        }
+                        else if (_entities.Result != null && _entities.Result.Any(x => !x.IsRead))
+                        {
+                            <MBadge Bordered Dot Color="pink" OffsetX="10" OffsetY="10">
+                                <SEmptyAvatar Value="@Channel?.DisplayName" />
+                            </MBadge>
+                        }
+                        else
+                        {
+                            <SEmptyAvatar Value="@Channel?.DisplayName" />
+                        }
+                    </MListItemAvatar>
+                    <MListItemContent>
+                        <MListItemTitle Class="h7 emphasis--text">@(Channel!=null?Channel.DisplayName:T("DisplayName.AllWebsiteMessage"))</MListItemTitle>
+                    </MListItemContent>
+                </MListItem>
+                <MSpacer />
+                <SSearch @bind-Value="_queryParam.Filter" Class="rounded-2 search" Dense Style="flex: none;width:300px" OnEnter="RefreshAsync"></SSearch>
+                <SSelect Small Class="ml-6" @bind-Value="@_queryParam.FilterType" Style="flex: none;width:136px"
+                         Items="@_filterTypeItems"
+                         Label="@T("DisplayName.WebsiteMessageFilterType")"
+                         ItemText="@(item => T($"DisplayName.WebsiteMessageFilterType.{item.ToString()}"))"
+                         ItemValue="item => item"
+                         Dense
+                         Outlined
+                         HideDetails="@("auto")"
+                         TItem="WebsiteMessageFilterType"
+                         TItemValue="WebsiteMessageFilterType"
+                         TValue="WebsiteMessageFilterType?"
+                         OnSelectedItemUpdate="RefreshAsync">
+                </SSelect>
+                <MMenu OffsetY Left NudgeRight="16">
+                    <ActivatorContent>
+                        <SButton Outlined Fab Small Icon Color="fill-line" Class="ml-6" @attributes="@context.Attrs">
+                            <SIcon Class="ma-auto" Color="emphasis2" Size=20>
+                                mdi-dots-horizontal
+                            </SIcon>
+                        </SButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MList>
+                            <MListItem Link OnClick="HandleMarkAllRead" Class="mx-2 rounded-sm-before body emphasis2--text" >
+                                <MListItemContent>
+                                    <MListItemTitle>
+					@T("DisplayName.WebsiteMessageAction.MarkAllRead")
+                                    </MListItemTitle>
+                                </MListItemContent>
+                            </MListItem>
+                            <MListItem Link OnClick="HandleShowAll" Class="mx-2 rounded-sm-before body emphasis2--text">
+                                <MListItemContent>
+                                    <MListItemTitle>
+                                        @T("DisplayName.WebsiteMessageAction.ShowAll")
+                                    </MListItemTitle>
+                                </MListItemContent>
+                            </MListItem>
+                            <MListItem Link OnClick="HandleShowUnread" Class="mx-2  rounded-sm-before body emphasis2--text">
+                                <MListItemContent>
+                                    <MListItemTitle>
+                                        @T("DisplayName.WebsiteMessageAction.ShowUnread")
+                                    </MListItemTitle>
+                                </MListItemContent>
+                            </MListItem>
+                        </MList>
+                    </ChildContent>
+                </MMenu>
+            </div>
+        </MCardTitle>
+        <MCardText Class="mt-6 overflow-y-auto full-height">
+            <MList Subheader Height=0 TwoLine>
+                @foreach (var item in _entities.Result)
+                {
+                    <MListItem Link OnClick="()=>HandleOnClick(item)">
+                        <MListItemContent Class="pt-0">
+                            <MListItemTitle Class="py-2 h7 emphasis2--text">@item.Title</MListItemTitle>
+
+                            <MListItemSubtitle Class="body2 regular2--text text-truncate" Style="width:400px">
+                                @if (!item.IsRead)
+                                {
+                                    <MAvatar Color="red" Size="8" Class="mr-2">
+                                    </MAvatar>
+                                }
+                                @item.Abstract
+                            </MListItemSubtitle>
+                        </MListItemContent>
+                        <MListItemAction Class="align-self-start">
+                            <MListItemActionText Class="caption regular2--text">@item.SendTime.ToOffset(JsInitVariables.TimezoneOffset).ToString(T("$MonthDayFormat"))</MListItemActionText>
+                        </MListItemAction>
+                    </MListItem>
+                }
+            </MList>
+        </MCardText>
+        <MCardActions>
+            <SPagination Class="ma-5 full-width" Page="@_queryParam.Page" PageSize="@_queryParam.PageSize" Total="_entities.Total" PageChanged="HandlePageChanged" PageSizeChanged="HandlePageSizeChanged" />
+        </MCardActions>
+    </MCard>
+</div>

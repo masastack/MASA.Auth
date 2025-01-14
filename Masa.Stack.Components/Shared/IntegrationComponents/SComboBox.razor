@@ -1,0 +1,32 @@
+﻿@namespace Masa.Stack.Components
+@typeparam TItem
+@inherits STextField<string>
+
+@{
+   var items = Items.Where(item => Value is null ? true : ConvertValue(item).Contains(Value)).ToList();
+}
+<MMenu OffsetY Bottom Class="@(items.Count == 0 ?"border-none":"")">
+    <ActivatorContent>
+        <Element @attributes="context.Attrs">
+            @base.BuildRenderTree
+        </Element>
+    </ActivatorContent>
+    <ChildContent>
+        <MVirtualScroll MaxHeight="MaxHeight" OverscanCount=5 TItem="TItem" Items="items" Style="background: #FFFFFF;">
+            <ItemContent>
+                <div @onclick="async ()=> await SelectAsync(ConvertValue(context))">
+                    @if (ItemContent is not null)
+                    {
+                        @ItemContent
+                    }
+                    else
+                    {
+                        <div class="px-4 py-3 btn emphasis2--text combox">
+                            @ConvertValue(context)
+                        </div>
+                    }
+                </div>
+            </ItemContent>
+        </MVirtualScroll>
+    </ChildContent>
+</MMenu>

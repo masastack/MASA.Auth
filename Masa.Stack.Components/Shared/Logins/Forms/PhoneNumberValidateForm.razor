@@ -1,0 +1,30 @@
+﻿@using FluentValidation
+@using System.Text.RegularExpressions
+@namespace Masa.Stack.Components.Forms
+@inherits MasaComponentBase
+
+<MForm Model="_resetPasswordByPhoneModel" EnableValidation
+       Class="full-height d-flex flex-column justify-space-between"
+       OnValidSubmit="HandleOnValidSubmit"
+       @ref="_form">
+    <div class="mt-2">
+        <STextField @bind-Value="_resetPasswordByPhoneModel.PhoneNumber"
+                    HideDetails="false" Class="mb-2" Readonly
+                    Label="@T("PhoneNumber")">
+        </STextField>
+
+        <SCaptchaSendTextField @bind-Value="_resetPasswordByPhoneModel.Code" 
+            Class="mb-2" OnClick="SendCaptcha"/>
+
+        <STextField @bind-Value="_resetPasswordByPhoneModel.Password"
+                    Label="@T("NewPassword")" Class="mb-2"
+                    HideDetails="false">
+        </STextField>
+
+        <STextField @bind-Value="_resetPasswordByPhoneModel.ConfirmPassword"
+                    Label="@T("ConfirmNewPassword")" Class="mb-2"
+                    HideDetails="false">
+        </STextField>
+    </div>
+    <SButton Class="align-self-center" Disabled=_reseting Loading=_reseting Large Type="submit">@T("Ok")</SButton>
+</MForm>

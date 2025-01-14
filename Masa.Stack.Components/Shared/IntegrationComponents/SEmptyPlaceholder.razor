@@ -1,0 +1,29 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<MCard Width="@Width" Height="@Height" Class="@Class" Style="@Style">
+    <MCardText Class="full-height d-flex align-center justify-center flex-column">
+        <MImage Width="350" Height="200" MaxHeight="200" Src="./_content/Masa.Stack.Components/img/status/empty.png" />
+        <span class="s-empty-placeholder mt-12">@Placeholder</span>
+    </MCardText>
+</MCard>
+
+@code {
+    [Parameter]
+    public string Placeholder { get; set; } = "";
+
+    [Parameter]
+    public string Width { get; set; } = "100%";
+
+    [Parameter]
+    public string Height { get; set; } = "100%";
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrEmpty(Placeholder))
+        {
+            Placeholder = T("EmptyPlaceholder");
+        }
+        return base.OnParametersSetAsync();
+    }
+}

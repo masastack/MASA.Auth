@@ -1,0 +1,173 @@
+﻿@namespace Masa.Stack.Components
+@inherits NextTickComponentBase
+@using Masa.Blazor.Extensions
+@typeparam TValue
+
+<MButtonGroup Value="_selectedKey"
+              ValueChanged="SelectedKeyChanged"
+              Borderless
+              Mandatory
+              Dense="@Dense"
+              Class="@($"labeled-radio-group {Class}")"
+              Style="@ComputedStyle"
+              ActiveClass="@ActiveClass"
+              @ref="ButtonGroup">
+    <div class="labeled-radio-slider-wrapper" style="@CurrentHeightStyle;@CurrentWidthStyle;@LeftStyle">
+        <div class="labeled-radio-slider white" style="@($"border-radius:{BorderRadius}px")"></div>
+    </div>
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</MButtonGroup>
+
+@code {
+
+    [Inject]
+    private IJSRuntime Js { get; set; } = null!;
+
+    [Inject]
+    private JsDotNetInvoker JsDotNetInvoker { get; set; } = null!;
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public string? Style { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? ActiveClass { get; set; }
+
+    [Parameter]
+    public int BorderRadius { get; set; } = 8;
+
+    [Parameter]
+    public bool Dense { get; set; }
+
+    [Parameter]
+    public TValue? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<TValue> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnChange { get; set; }
+
+    private TValue? _prevValue;
+    private StringNumber? _selectedKey;
+
+    private MButtonGroup? ButtonGroup { get; set; }
+
+    private List<SLabeledRadio<TValue>> Items { get; set; } = new();
+
+    private double CurrentItemHeight { get; set; }
+    private double CurrentItemWidth { get; set; }
+    private double CurrentItemOffsetLeft { get; set; }
+
+    private string CurrentHeightStyle => $"height:{CurrentItemHeight}px";
+    private string CurrentWidthStyle => $"width:{CurrentItemWidth}px";
+    private string LeftStyle => $"left:{CurrentItemOffsetLeft}px";
+
+    private string ComputedStyle => $"border-radius:{BorderRadius + 2}px; {Style}";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        if (!EqualityComparer<TValue>.Default.Equals(_prevValue, Value))
+        {
+            _prevValue = Value;
+            await Intersection();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && ButtonGroup?.Ref.Context is not null)
+        {
+            await JsDotNetInvoker.IntersectionObserver(ButtonGroup.Ref.GetSelector(), Intersection);
+        }
+    }
+
+    public async Task CallSlider()
+    {
+        // TODO: merge to one js call
+        foreach (var item in Items)
+        {
+            await UpdateItemClientRect(item);
+        }
+
+        var radio = Items.FirstOrDefault(item => item.Instance?.Value == _selectedKey);
+        if (radio is not null)
+        {
+            CurrentItemHeight = radio.Height;
+            CurrentItemWidth = radio.Width;
+            CurrentItemOffsetLeft = radio.OffsetLeft;
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task Intersection()
+    {
+        var item = Value is null
+            ? Items.FirstOrDefault()
+            : Items.FirstOrDefault(l => EqualityComparer<TValue>.Default.Equals(l.Value, Value));
+
+        if (item != null)
+        {
+            _selectedKey = item.Instance?.Value;
+            await SelectedKeyChanged(_selectedKey);
+        }
+
+        await CallSlider();
+    }
+
+    private async Task SelectedKeyChanged(StringNumber? val)
+    {
+        _selectedKey = val;
+
+        var item = Items.FirstOrDefault(item => item.Instance?.Value == val);
+
+        if (item is not null)
+        {
+            UpdateSlider(item);
+
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(item.Value);
+            }
+            else
+            {
+                Value = item.Value;
+            }
+
+            if (OnChange.HasDelegate) await OnChange.InvokeAsync();
+        }
+    }
+
+    private void UpdateSlider(SLabeledRadio<TValue> radio)
+    {
+        CurrentItemHeight = radio.Height;
+        CurrentItemWidth = radio.Width;
+        CurrentItemOffsetLeft = radio.OffsetLeft;
+    }
+
+    internal void AddRadio(SLabeledRadio<TValue> radio)
+    {
+        if (!Items.Contains(radio))
+        {
+            Items.Add(radio);
+        }
+    }
+
+    private async Task UpdateItemClientRect(SLabeledRadio<TValue> radio)
+    {
+        var rect = await Js.InvokeAsync<Masa.Blazor.JSInterop.Element>(JsInteropConstants.GetDomInfo, radio.Instance!.Ref);
+
+        radio.Height = rect.ClientHeight;
+        radio.Width = rect.ClientWidth;
+        radio.OffsetLeft = rect.OffsetLeft;
+    }
+
+}

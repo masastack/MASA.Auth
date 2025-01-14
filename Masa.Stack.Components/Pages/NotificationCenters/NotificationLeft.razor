@@ -1,0 +1,53 @@
+﻿@namespace Masa.Stack.Components.NotificationCenters
+@using Masa.BuildingBlocks.StackSdks.Mc
+@inherits MasaComponentBase
+@inject IMcClient McClient
+@inject GlobalConfig GlobalConfig
+<MCard Class="mx-auto d-flex full-height flex-column rounded-5">
+    <MCardTitle Class="h5 emphasis2--text pa-6">
+        @T("Permission.WebsiteMessageManagement")
+    </MCardTitle>
+    <MCardText Class="pa-0 overflow-y-auto full-height">
+        <MList Subheader
+               TwoLine Height=0>
+            <MListItem Link OnClick="()=>HandleOnClick(null)" Class="pl-8 mx-4 rounded-sm-before">
+                <MListItemAvatar Class="overflow-visible">
+                    <NotificationAvatar Dot="_channels.Any(x => !x.IsRead)" />
+                </MListItemAvatar>
+
+                <MListItemContent>
+                    <MListItemTitle Class="subtitle emphasis--text">@T("DisplayName.AllWebsiteMessage")</MListItemTitle>
+                </MListItemContent>
+            </MListItem>
+
+
+            @foreach (var item in _channels)
+            {
+                <MListItem Link OnClick="()=>HandleOnClick(item)" Class="pl-8 mx-4 rounded-sm-before">
+                    <MListItemAvatar Class="overflow-visible">
+                        @if (item.NoReading == 0)
+                        {
+                            <SEmptyAvatar Value="@item.Channel?.DisplayName" />
+                        }
+                        else
+                        {
+                            <MBadge Bordered Color="pink" Dot OffsetX="10" OffsetY="10">
+                                <SEmptyAvatar Value="@item.Channel?.DisplayName" />
+                            </MBadge>
+                        }
+                    </MListItemAvatar>
+
+                    <MListItemContent Class="pt-0">
+                        <MListItemTitle Class="py-2 subtitle emphasis--text">@item.Channel?.DisplayName</MListItemTitle>
+
+                        <MListItemSubtitle Class="caption regular2--text">@item.Title</MListItemSubtitle>
+                    </MListItemContent>
+
+                    <MListItemAction Class="align-self-start">
+                        <MListItemActionText Class="overline regular2--text">@item.SendTime.DateTime.TimeAgo(GlobalConfig.Culture)</MListItemActionText>
+                    </MListItemAction>
+                </MListItem>
+            }
+        </MList>
+    </MCardText>
+</MCard>

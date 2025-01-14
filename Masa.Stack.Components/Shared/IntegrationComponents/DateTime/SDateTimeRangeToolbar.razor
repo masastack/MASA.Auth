@@ -1,0 +1,333 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<div class="d-inline-flex align-center rounded-lg px-2 @Class"
+     style="border:1px solid #E4E8F3; height: 40px; background-color:white; min-width: min-content">
+    <SDateTimeRangePicker Style="@_quickPickerStyle"
+                          StartTimeLimit="StartTimeLimit"
+                          EndTimeLimit="EndTimeLimit"
+                          @bind-StartDateTime="StartDateTime"
+                          @bind-EndDateTime="EndDateTime"
+                          OnConfirm="() => OnAbsoluteDateTimeUpdated()"
+                          OnClear="OnClear"
+                          MaxPickerWidth="MaxPickerWidth"
+                          OnTimeZoneInfoChange="OnTimeZoneInfoChange"
+                          ShowTimeZoneSelector="ShowTimeZoneSelector"
+                          Clearable="Clearable" />
+    @if (ShowQuickChange)
+    {
+        <MDivider Vertical Class="mx-2"></MDivider>
+        <div style="min-width:min-content;margin:0 auto" class="d-flex align-center">
+            <SDropdown @bind-Value="_selectedQuickRangeKey"
+                   Items="QuickRangeItems"
+                   ItemText="item => T(scope: DateTimeRangeScope, item.Key.ToString())"
+                   ItemValue="item => item.Key"
+                   ItemDisabled="item => item.Disabled"
+                   TItem="QuickRange"
+                   TValue="QuickRangeKey"
+                   OnItemClick="OnRelatedTimeSpanSelected">
+                <ActivatorContent>
+                    <MButton Small Text Class="text-capitalize quickchange" @attributes="@context.Attrs">
+                        @T(scope: DateTimeRangeScope, _selectedQuickRangeKey.ToString())
+                        <MIcon Right>mdi-menu-down</MIcon>
+                    </MButton>
+                </ActivatorContent>
+            </SDropdown>
+        </div>
+    }
+    @if (ShowInterval)
+    {
+        <MDivider Vertical Class="mx-2" />
+        <div style="width: 115px;">
+            <SDropdown Items="IntervalItem.Items"
+                   ItemValue="item => item"
+                   ItemText="item => T(scope: DateTimeRangeScope, item.Text)"
+                   @bind-Value="Interval"
+                   TItem="IntervalItem"
+                   TValue="IntervalItem"
+                   OnItemClick="OnIntervalSelected">
+                <PrependContent>
+                    <MButton Icon Small OnClick="Refresh">
+                        <MIcon Small>mdi-refresh</MIcon>
+                    </MButton>
+                </PrependContent>
+                <ActivatorContent>
+                    <MButton Text Small Icon="false"
+                         @attributes="@context.Attrs">
+                        <span class="mr-1">@T(scope: DateTimeRangeScope, Interval.Text)</span>
+                        <MIcon Small Right="@false">mdi-menu-down</MIcon>
+                    </MButton>
+                </ActivatorContent>
+            </SDropdown>
+        </div>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public StringNumber? MaxPickerWidth { get; set; } = "768px";
+
+    [Parameter]
+    public QuickRangeKey? DefaultQuickRange { get; set; } = QuickRangeKey.Last12Hours;
+
+    [Parameter]
+    public EventCallback<QuickRangeKey?> DefaultQuickRangeChanged { get; set; }
+
+    [Parameter]
+    public TimeSpan Offset { get; set; }
+
+    [Parameter]
+    public EventCallback<(DateTimeOffset?, DateTimeOffset?)> OnUpdate { get; set; }
+
+    [Parameter]
+    public EventCallback<(DateTimeOffset?, DateTimeOffset?)> OnAutoUpdate { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeZoneInfo> OnTimeZoneUpdate { get; set; }
+
+    [Parameter]
+    public Func<DateOnly?, DateOnly?, bool>? StartTimeLimit { get; set; } = null;
+
+    [Parameter]
+    public Func<DateOnly?, DateOnly?, bool>? EndTimeLimit { get; set; } = null;
+
+    [Parameter]
+    public bool ShowInterval { get; set; } = false;
+
+    [Parameter]
+    public bool ShowTimeZoneSelector { get; set; } = false;
+
+    [Parameter]
+    public DateTimeOffset? StartDateTime { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTimeOffset?> StartDateTimeChanged { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDateTime { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTimeOffset?> EndDateTimeChanged { get; set; }
+
+    [Parameter]
+    public bool UseAbsoluteTime { get; set; } = false;
+
+    [Parameter]
+    public bool ShowQuickChange { get; set; } = true;
+
+    [Parameter]
+    public bool Clearable { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> UseAbsoluteTimeChanged { get; set; }
+
+    [Parameter]
+    public IntervalItem Interval { get; set; } = IntervalItem.Off;
+
+    [Parameter]
+    public EventCallback<IntervalItem?> IntervalChanged { get; set; }
+
+    [Parameter]
+    public List<QuickRange>? QuickRangeItems
+    {
+        get => _quickRangeItems;
+        set => _quickRangeItems = (value?.Any() is not true) ? QuickRange.DefaultQuickRanges : value.ToList();
+    }
+
+    [Inject]
+    public IUserContext UserContext { get; set; } = default!;
+
+    [Inject]
+    public JsInitVariables JsInitVariables { get; set; } = default!;
+
+    private Timer? _timer;
+    private QuickRangeKey _selectedQuickRangeKey = QuickRangeKey.Off;
+
+    private QuickRange _quickRange = QuickRange.DefaultQuickRange;
+
+    private List<QuickRange> _quickRangeItems = QuickRange.DefaultQuickRanges;
+    private string _quickPickerStyle = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOffset();
+        if (ShowQuickChange)
+        {
+            _quickRange = _quickRangeItems.FirstOrDefault(item => item.Key == DefaultQuickRange) ?? QuickRange.DefaultQuickRange;
+            _selectedQuickRangeKey = _quickRange.Key;
+        }
+        else
+        {
+            _selectedQuickRangeKey = QuickRangeKey.Off;
+        }
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            SetQuickPickerStyle();
+            if (StartDateTime.HasValue && StartDateTime != DateTimeOffset.MinValue
+                && EndDateTime.HasValue && EndDateTime != DateTimeOffset.MinValue)
+            {
+                if (UseAbsoluteTime)
+                    await OnAbsoluteDateTimeUpdated();
+            }
+            else
+            {
+                if (ShowQuickChange)
+                    await OnRelatedTimeSpanSelected(_quickRange);
+            }
+            if (ShowInterval)
+                HandleIntervalUpdate(Interval);
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void SetQuickPickerStyle()
+    {
+        _quickPickerStyle = "width: calc(100% - 200px)";
+        if (ShowQuickChange && !ShowInterval)
+        {
+            _quickPickerStyle = "width: calc(100% - 85px)";
+        }
+        if (!ShowQuickChange && ShowInterval)
+        {
+            _quickPickerStyle = "width: calc(100% - 115px)";
+        }
+        if (!ShowQuickChange && !ShowInterval)
+        {
+            _quickPickerStyle = "width: 100%";
+        }
+    }
+
+    private async Task OnTimeZoneInfoChange(TimeZoneInfo timeZoneInfo)
+    {
+        JsInitVariables.TimezoneOffset = timeZoneInfo.BaseUtcOffset;
+        Offset = JsInitVariables.TimezoneOffset;
+        if (ShowQuickChange)
+        {
+            _quickRange = _quickRangeItems.FirstOrDefault(item => item.Key == DefaultQuickRange) ?? QuickRange.DefaultQuickRange;
+            _selectedQuickRangeKey = _quickRange.Key;
+
+            if (_quickRange.TryGetRange(Offset, out var value))
+            {
+                StartDateTime = value.start;
+                EndDateTime = value.end;
+            }
+        }
+        if (OnTimeZoneUpdate.HasDelegate)
+            await OnTimeZoneUpdate.InvokeAsync(timeZoneInfo);
+        StateHasChanged();
+    }
+
+    private async Task GetOffset()
+    {
+        if (Math.Floor(JsInitVariables.TimezoneOffset.TotalMinutes) == 0)
+            await JsInitVariables.SetTimezoneOffset();
+        Offset = JsInitVariables.TimezoneOffset;
+    }
+
+    private async Task UpdateRangeDateTimeToLatest(bool autoUpdate = false)
+    {
+        var offset = Offset;
+        if (_quickRange.TryGetRange(offset, out var value))
+        {
+            StartDateTime = value.start;
+            EndDateTime = value.end;
+        }
+        await OnAbsoluteDateTimeUpdated(autoUpdate);
+    }
+
+    private async Task OnAbsoluteDateTimeUpdated(bool autoUpdate = false)
+    {
+        if (OnUpdate.HasDelegate)
+        {
+            if (autoUpdate)
+            {
+                await OnAutoUpdate.InvokeAsync((StartDateTime, EndDateTime));
+            }
+            else
+            {
+                await OnUpdate.InvokeAsync((StartDateTime, EndDateTime));
+            }
+        }
+    }
+
+    private Task OnClear()
+    {
+        return OnAbsoluteDateTimeUpdated();
+    }
+
+    private async Task OnRelatedTimeSpanSelected(QuickRange item)
+    {
+        _quickRange = item;
+        await UpdateUseAbsoluteTimeState(false);
+        await UpdateRangeDateTimeToLatest();
+        if (DefaultQuickRangeChanged.HasDelegate)
+            await DefaultQuickRangeChanged.InvokeAsync(item.Key);
+    }
+
+    private async Task OnIntervalSelected(IntervalItem item)
+    {
+        Interval = item;
+        if (IntervalChanged.HasDelegate)
+        {
+            await IntervalChanged.InvokeAsync(Interval);
+        }
+
+        HandleIntervalUpdate(Interval);
+    }
+
+    private void HandleIntervalUpdate(IntervalItem item)
+    {
+        if (item.TimeSpan == TimeSpan.Zero)
+        {
+            _timer?.Stop();
+            return;
+        }
+
+        if (_timer == null)
+        {
+            _timer = new()
+                {
+                    Interval = item.TimeSpan.TotalMilliseconds
+                };
+
+            _timer.Elapsed += TimerOnElapsed;
+        }
+        else
+        {
+            _timer.Stop();
+            _timer.Interval = item.TimeSpan.TotalMilliseconds;
+        }
+
+        _timer.Start();
+    }
+
+    private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        _ = UpdateRangeDateTimeToLatest(true);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task UpdateUseAbsoluteTimeState(bool useAbsoluteTime)
+    {
+        UseAbsoluteTime = true;
+
+        if (UseAbsoluteTimeChanged.HasDelegate)
+        {
+            await UseAbsoluteTimeChanged.InvokeAsync(useAbsoluteTime);
+        }
+    }
+
+    private Task Refresh() => UpdateRangeDateTimeToLatest();
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}

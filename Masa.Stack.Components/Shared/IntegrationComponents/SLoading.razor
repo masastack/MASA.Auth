@@ -1,0 +1,49 @@
+﻿@implements IDisposable
+@inject GlobalConfig GlobalConfig;
+
+<MOverlay ZIndex=9999999 Value="Loading" Class="@Class" Style="@Style" Color="@Color">
+    <div class="d-flex flex-column">
+        <MProgressCircular Indeterminate Width="@Width" Size="@Size" Class="align-self-center"></MProgressCircular>
+        <div class="mt-1">@LoadingText</div>
+    </div>
+</MOverlay>
+
+@code {
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public string LoadingText { get; set; } = string.Empty;
+
+    [Parameter]
+    public StringNumber? Size { get; set; } = 64;
+
+    [Parameter]
+    public StringNumber? Width { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public string? Color { get; set; }
+
+    void Changed(bool loading, string loadingText)
+    {
+        Loading = loading;
+        LoadingText = loadingText;
+        base.StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        GlobalConfig.OnLoadingChanged += Changed;
+    }
+
+    public void Dispose()
+    {
+        GlobalConfig.OnLoadingChanged -= Changed;
+    }
+}

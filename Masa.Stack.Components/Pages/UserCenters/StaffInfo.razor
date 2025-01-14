@@ -1,0 +1,146 @@
+﻿@namespace Masa.Stack.Components.UserCenters
+@inherits MasaComponentBase
+
+<PageTitle>
+    @T("User center")
+</PageTitle>
+
+<MCard Class="user-info rounded-5">
+    <div class="user-info__left">
+        <div class="avatar">
+            <UploadAvatar Size="140"
+                          Class="mb-6"
+                          Value="@UpdateStaffAvatar.Avatar"
+                          ValueChanged="UpdateAvatarAsync"
+                                    WhenFileChangeUpload />
+            @if(!UpdateUserNameVisible)
+            {
+                <PBlockText Primary="@StaffDetail.Name"
+                            PrimaryClass="font-20-bold emphasis2--text"
+                            Secondary="@StaffDetail.Account"
+                            SecondaryClass="regular3--text font-14 full-width"
+                        Style="height:40px;flex-wrap: wrap;">
+                    <SecondaryContent>
+                        <MButton Icon Small OnClick="EnableUpdateName" Style="height:24px">
+                            <SIcon Size="15" Class="regular--text">mdi-pencil</SIcon>
+                        </MButton>
+                    </SecondaryContent>
+                </PBlockText>
+                <SButton Text OnClick="NavigateToUser" Class="mt-6">@T("Switch to user")</SButton>
+            }
+            else
+            {
+                <PBlockText PrimaryClass="font-20-bold emphasis2--text"
+                        SecondaryClass="regular3--text font-14 full-width"
+                        Style="height:40px;flex-wrap: wrap;">
+                        <SecondaryContent>
+                        <MRow Class="mb-2 align-center">
+                                <MCol Cols="8">
+                                    <STextField @bind-Value="@UpdateStaff.Name" Label="@T("Name")" />
+                                </MCol>
+                                <MCol Cols="2">
+                                <MButton Class="mr-4" OnClickStopPropagation Icon OnClick="UpdateNameCancelAsync">
+                                    <SIcon Tooltip="@T("Cancel")" Color="#323D6F">mdi-close-thick</SIcon>
+                                </MButton>
+                                </MCol>
+                                <MCol Cols="2">
+                                <MButton Icon OnClickStopPropagation OnClick="UpdateNameConfirmAsync">
+                                    <SIcon Color="success">mdi-check</SIcon>
+                                    </MButton>
+                                </MCol>
+                            </MRow>
+                        </SecondaryContent>
+                </PBlockText>
+            }
+        </div>
+        <ThirdAuths />
+    </div>
+
+    <MDivider Vertical Class="mx-6"></MDivider>
+
+    <div class="user-info__right">
+        <MWindow Value="_windowValue">
+            <MWindowItem>
+                <div class="d-flex mb-4" style="justify-content: space-between;">
+                    <PBlockText Primary="@StaffDetail.DisplayName"
+                                PrimaryClass="font-20-bold regular--text"
+                                SecondaryClass="caption regular3--text d-flex"
+                                SecondaryStyle="align-items:center;">
+                        <SecondaryContent>
+                            @T(StaffDetail.Gender.ToString())
+                        </SecondaryContent>
+                    </PBlockText>
+                    <MButton Icon Small OnClick="() => _windowValue=1">
+                        <SIcon Size="15" Class="regular--text">mdi-pencil</SIcon>
+                    </MButton>
+                </div>
+                <SDefinitions Items="@PreviewItems"
+                              Colon=""
+                              Cols="12"
+                              Sm="12"
+                              Md="12"
+                              NoGutters
+                              ItemStyle="@(_ => "justify-content: space-between; align-items: center;min-height: 56px;")"
+                              TermClass="@(_ => "font-14 regular--text")"
+                              DetailClass="@(_ => "overline regular3--text")">
+                    <TermContent>
+                        @{
+                            var (icon, value) = (ValueTuple<string, string>)context.Value;
+                            <MIcon Size="13" Class="regular3--text mr-2">@icon</MIcon>
+                            <span>@value</span>
+                        }
+                    </TermContent>
+                    <DetailContent>@T(context.Key)</DetailContent>
+                </SDefinitions>
+            </MWindowItem>
+            <MWindowItem Class="mb-n2">
+                <div class="d-flex mb-4" style="justify-content: space-between;align-items: center;">
+                    <SLabeledRadioGroup @bind-Value="@UpdateStaff.Gender" Dense>
+                        <SLabeledRadio Value="GenderTypes.Female" Style="height:36px">@T(GenderTypes.Female.ToString())</SLabeledRadio>
+                        <SLabeledRadio Value="GenderTypes.Male" Style="height:36px">@T(GenderTypes.Male.ToString())</SLabeledRadio>
+                    </SLabeledRadioGroup>
+                    <span>
+                        <MButton Rounded Plain Height="40" Width="100" OnClick="() => Cancel()">@T("Cancel")</MButton>
+                        <SAutoLoadingButton Rounded
+                                            Disabled="@(string.IsNullOrWhiteSpace(UpdateStaff.DisplayName))"
+                                            Height="40"
+                                            Width="100"
+                                            OnClick="UpdateBasicInfoAsync">
+                            @T("Save")
+                        </SAutoLoadingButton>
+                    </span>
+                </div>
+                <MRow Class="mb-2">
+                    <MCol Cols="12">
+                        <STextField @bind-Value="@UpdateStaff.DisplayName" Label="@T("Nickname")" />
+                    </MCol>
+                    <MCol Cols="6">
+                        <STextField @bind-Value="UpdateStaff.PhoneNumber" Label="@T("PhoneNumber")" />
+                    </MCol>
+                    <MCol Cols="6">
+                        <STextField @bind-Value="UpdateStaff.Email" Label="@T("Email")" />
+                    </MCol>
+                </MRow>
+            </MWindowItem>
+        </MWindow>
+        <SDefinitions Items="@Items"
+                      Colon=""
+                      Cols="12"
+                      Sm="12"
+                      Md="12"
+                      NoGutters
+                      ItemStyle="@(_ => "justify-content: space-between; align-items: center;min-height: 56px;")"
+                      TermClass="@(_ => "font-14 regular--text")"
+                      DetailClass="@(_ => "overline regular3--text")">
+            <TermContent>
+                @{
+                    var (icon, value) = (ValueTuple<string, string>)context.Value;
+                    <MIcon Size="13" Class="regular3--text mr-2">@icon</MIcon>
+                    <span>@T(value)</span>
+                }
+            </TermContent>
+            <DetailContent>@T(context.Key)</DetailContent>
+        </SDefinitions>
+
+    </div>
+</MCard>

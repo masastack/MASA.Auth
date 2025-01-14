@@ -1,0 +1,20 @@
+﻿.m-sheet-dialog-overlay {
+    background-color: #141726 !important;
+    opacity: 0.8;
+    transition: .2s ease opacity;
+}
+
+    .m-sheet-dialog-overlay:hover {
+        background-color: #141726 !important;
+        opacity: 0.9;
+    }
+
+    .m-sheet-dialog-overlay ::deep .close-icon {
+        border-radius: 50%;
+    }
+    
+    .m-sheet-dialog-overlay:hover ::deep .close-icon {
+        background: white;
+        border-radius: 50%;
+        color: #141726 !important;
+    }

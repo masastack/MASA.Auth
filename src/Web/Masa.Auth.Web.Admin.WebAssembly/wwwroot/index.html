@@ -36,13 +36,35 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
     <script src="_content/Masa.Blazor/js/masa-blazor.js"></script>
     <script src="_content/Masa.Stack.Components/js/components.js"></script>c
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="https://cdn.masastack.com/npm/aliyun/aliyun-oss-sdk.min.js"></script>
     <script src="_content/Masa.Stack.Components/js/oss/upload.js"></script>
     <script src="https://cdn.masastack.com/npm/masonry/masonry.pkgd.min.js"></script>
+    <script type="module">
+        import { BrotliDecode } from './decode.min.js';
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration') {
+                    return (async function () {
+                        const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        const originalResponseBuffer = await response.arrayBuffer();
+                        const originalResponseArray = new Int8Array(originalResponseBuffer);
+                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
+                        const contentType = type ===
+                            'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
+                        return new Response(decompressedResponseArray,
+                            { headers: { 'content-type': contentType } });
+                    })();
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

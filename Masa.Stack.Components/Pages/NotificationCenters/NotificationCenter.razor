@@ -1,0 +1,23 @@
+﻿@page "/notification-center/{MessageId}"
+@page "/notification-center"
+
+@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+@inject IMcClient McClient
+
+<PageTitle>
+    @T("Permission.WebsiteMessageManagement")
+</PageTitle>
+
+<MRow Class="full-height" NoGutters>
+    <MCol Md="4">
+        <NotificationLeft @ref="_messageLeftRef" OnItemClick="HandleChannelClick" />
+    </MCol>
+    <MCol Md="8" Class="pl-6">
+        @if (_messageId != default)
+        {
+            <NotificationDetail Visible="_detailShow" MessageId="_messageId" Channel="_channel" OnBack="HandleDetailBack" OnChannelClick="HandleChannelClick" OnOk="HandleOnOk" />
+        }
+        <NotificationRight @ref="_messageRightRef" Visible="!_detailShow" Channel="_channel" OnItemClick="HandleListItemClick" OnAllRead="HandleAllRead" />
+    </MCol>
+</MRow>

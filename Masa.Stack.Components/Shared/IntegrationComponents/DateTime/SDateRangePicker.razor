@@ -1,0 +1,35 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<div class="d-flex px-2 fill dateRangePicker @Class" style="@Style;">
+    <div class="my-auto d-inline-flex" style="height:20px; min-width: 194px; width: 100%">
+        <MIcon Size=20 Color="emphasis2">mdi-calendar-month</MIcon>
+        <div class="ml-2 d-flex align-center" style="width: calc(100% - 28px)">
+            <MMenu @bind-Value="StartTimeVisible" CloseOnContentClick="false" OffsetY Transition="scale-transition" MaxWidth="290" Attach="Attach">
+                <ActivatorContent>
+                    <MButton Text Small Class="@_datetimeStartTextCss"
+                             Style="width: calc(50% - 8px)"
+                             @attributes="@context.Attrs">
+                        @(StartTime?.ToString(T("$DateFormat")) ?? T("Start time"))
+                    </MButton>
+                </ActivatorContent>
+                <ChildContent>
+                    <SDatePicker Value=StartTime Max=EndTime ValueChanged=UpdateStartTimeAsync TValue="DateOnly?" OnInput="() => StartTimeVisible = false"/>
+                </ChildContent>
+            </MMenu>
+            <MDivider Vertical Class="mx-2" Style="align-self: auto; height: 14px;"/>
+            <MMenu @bind-Value="EndTimeVisible" CloseOnContentClick="false" OffsetY Transition="scale-transition" MaxWidth="290" Attach="Attach">
+                <ActivatorContent>
+                    <MButton Text Small Class="@_datetimeEndTextCss"
+                             Style="width: calc(50% - 8px)"
+                             @attributes="@context.Attrs">
+                        @(EndTime?.ToString(T("$DateFormat")) ?? T("End time"))
+                    </MButton>
+                </ActivatorContent>
+                <ChildContent>
+                    <SDatePicker Value=EndTime Min=StartTime ValueChanged=UpdateEndTimeAsync TValue="DateOnly?" OnInput="() => EndTimeVisible = false"/>
+                </ChildContent>
+            </MMenu>
+        </div>
+    </div>
+</div>

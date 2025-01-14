@@ -1,0 +1,90 @@
+﻿@namespace Masa.Stack.Components
+
+@using System.Timers
+@inherits MasaComponentBase
+@implements IDisposable
+
+<STextField Value="Value"
+            ValueChanged="ValueChanged"
+            ValueExpression="ValueExpression"
+            Label="@T("Captcha")"
+            HideDetails="false" 
+            Class="@Class"
+            Style="@Style"
+            Action="@(props => { props.Content = ActionContent; props.Disabled = ActionDisabled; props.OnClick = _ => ClickHandler(); })">
+</STextField>
+
+@code {
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<string>> ValueExpression { get; set; }
+
+    [Parameter]
+    public Func<Task<bool>> OnClick { get; set; }
+
+    int _counter = 0;
+    bool ActionDisabled => _counter > 0;
+    string ActionContent => _counter > 0 ? string.Format(T("SmsSendTime"), _counter) : T("GetCaptcha");
+    private System.Timers.Timer? _timer;
+
+    private async Task ClickHandler()
+    { 
+        try
+        {
+            if (OnClick==null)
+            {
+                return;
+            }
+            var result = await (OnClick.Invoke()).ConfigureAwait(false);
+            if (result)
+            {
+                await InvokeAsync(async () => await PopupService.EnqueueSnackbarAsync(T("The verification code is sent successfully"), AlertTypes.Success));
+                StartCountdownTimer();
+            }
+        }
+        catch (Exception e)
+        {
+            await InvokeAsync(async () =>
+            {
+                await PopupService.EnqueueSnackbarAsync(e, false);
+            });
+        }
+    }
+
+    private void StartCountdownTimer()
+    {
+        _counter = 60;
+        if (_timer is null)
+        {
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += CountdownTimer;
+        }
+
+        _timer.Enabled = true;
+    }
+
+    private void CountdownTimer(object? sender, ElapsedEventArgs e)
+    {
+        if (_counter > 0)
+        {
+            _counter -= 1;
+        }
+        else
+        {
+            _timer!.Enabled = false;
+        }
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+        _timer = null;
+    }
+}

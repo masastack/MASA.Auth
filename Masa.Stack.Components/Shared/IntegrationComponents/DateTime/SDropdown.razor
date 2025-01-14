@@ -1,0 +1,53 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+@typeparam TItem
+@typeparam TValue
+
+<MMenu OffsetY NudgeBottom="8" Left NudgeRight="4" @attributes="@Attributes">
+    <ActivatorContent>
+        <div class="d-inline-flex align-center">
+            @if (PrependContent is not null)
+            {
+                @PrependContent
+
+                <MDivider Vertical Class="mx-2" Style="align-self:auto;height:14px" />
+            }
+            @if (ActivatorContent is not null)
+            {
+                @ActivatorContent.Invoke(context)
+            }
+            else
+            {
+                <span @attributes="@context.Attrs">@ChildContent</span>
+            }
+        </div>
+    </ActivatorContent>
+    <ChildContent>
+        <MList Dense Class="overflow-y" MaxHeight="300">
+            <MListItemGroup Value="@_itemValue" ValueChanged="ItemValueChanged" Mandatory>
+                @foreach (var item in Items)
+                {
+                    <MListItem Disabled="ItemDisabled.Invoke(item)" OnClick="() => HandleOnItemClick(item)">
+                        @if (ItemTemplate is null)
+                        {
+                            @if (ItemIcon is not null)
+                            {
+                                <MListItemIcon>
+                                    <MIcon>@ItemIcon.Invoke(item)</MIcon>
+                                </MListItemIcon>
+                            }
+                            <MListItemContent>
+                                <MListItemTitle>@ItemText.Invoke(item)</MListItemTitle>
+                            </MListItemContent>
+                        }
+                        else
+                        {
+                            @ItemTemplate.Invoke(item)
+                        }
+                    </MListItem>
+                }
+            </MListItemGroup>
+        </MList>
+    </ChildContent>
+</MMenu>

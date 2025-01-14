@@ -1,0 +1,16 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+@if(DateTime)
+{
+    <div class="@(Class??"body regular--text")">@Value?.ToString(T("$DateTimeFormat"))</div>
+}
+@if(Date)
+{
+   <div class="body regular--text">@Value?.ToString(T("$DateFormat"))</div> 
+}
+@if(Time)
+{
+    <div class="body2 regular3--text">@Value?.ToString("HH:mm:ss")</div>
+}
+

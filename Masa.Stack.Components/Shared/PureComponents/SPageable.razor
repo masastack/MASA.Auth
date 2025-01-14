@@ -1,0 +1,152 @@
+﻿@namespace Masa.Stack.Components
+@typeparam TItem
+@using Masa.Blazor.JSInterop
+@implements IDisposable
+
+<div class="pageable-items mb-6" @ref="_div">
+    <MRow>
+        @foreach (var item in VisibleItems)
+        {
+            <MCol Cols="@Cols">
+                @ChildContent?.Invoke(item)
+            </MCol>
+        }
+    </MRow>
+</div>
+
+<MPagination @bind-Value="_page"
+             Class="@($"pageable {SizeClass} {Class}")"
+             Length="@Length"
+             Circle="Circle" />
+
+@code {
+
+    [Inject]
+    private IJSRuntime Js { get; set; } = null!;
+
+    [Inject]
+    private MasaBlazor MasaBlazor { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment<TItem>? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public IEnumerable<TItem>? Items { get; set; }
+
+    [Parameter]
+    public int ItemsPerPage { get; set; }
+
+    [Parameter]
+    public bool Circle { get; set; }
+
+    [Parameter]
+    public bool Large { get; set; }
+
+    [Parameter]
+    public bool Small { get; set; }
+
+    [Parameter]
+    public bool XSmall { get; set; }
+
+    private int _page = 1;
+    private ElementReference _div;
+
+    private int Length { get; set; }
+
+    private int Cols { get; set; }
+
+    private IEnumerable<TItem> VisibleItems =>
+        Items is null ? Enumerable.Empty<TItem>() : Items.Skip((_page - 1) * ItemsPerPage).Take(ItemsPerPage);
+
+    private string SizeClass
+    {
+        get
+        {
+            if (XSmall)
+                return "pageable-size--x-small";
+            if (Small)
+                return "pageable-size--small";
+            if (Large)
+                return "pageable-size--large";
+
+            return "pageable-size--default";
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // TODO: should resize the div element.
+        MasaBlazor.BreakpointChanged += MasaBlazorOnBreakpointChanged;
+    }
+
+    private void MasaBlazorOnBreakpointChanged(object? sender, BreakpointChangedEventArgs e)
+    {
+        InvokeAsync(ComputeCols);
+    }
+
+    protected override void OnParametersSet()
+    {
+        Items ??= new List<TItem>();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ComputeCols();
+        }
+    }
+
+    private async Task ComputeCols()
+    {
+        var divDomInfo = await Js.InvokeAsync<Element>(JsInteropConstants.GetDomInfo, _div);
+        var clientWidth = divDomInfo.ClientWidth;
+
+        if (clientWidth >= MasaBlazor.Breakpoint.Thresholds.Lg)
+        {
+            UpdateParameters(3);
+        }
+        else if (clientWidth >= MasaBlazor.Breakpoint.Thresholds.Md)
+        {
+            UpdateParameters(4);
+        }
+        else if (clientWidth >= MasaBlazor.Breakpoint.Thresholds.Sm)
+        {
+            UpdateParameters(6);
+        }
+        else if (clientWidth >= MasaBlazor.Breakpoint.Thresholds.Xs)
+        {
+            UpdateParameters(12);
+        }
+        else
+        {
+            UpdateParameters(12);
+        }
+        
+        StateHasChanged();
+    }
+
+    private void UpdateParameters(int cols)
+    {
+        Cols = cols;
+        ItemsPerPage = 12 / cols;
+
+        Length = Items!.Count() / ItemsPerPage;
+        if (Length == 0)
+        {
+            Length = 1;
+        }
+    }
+
+    public void Dispose()
+    {
+        MasaBlazor.BreakpointChanged -= MasaBlazorOnBreakpointChanged;
+    }
+    
+}

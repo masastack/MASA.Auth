@@ -1,0 +1,30 @@
+﻿@namespace Masa.Stack.Components
+@inherits SUpload
+@inject IJSRuntime JS
+
+<label class="uploadImage">
+    <Microsoft.AspNetCore.Components.Forms.InputFile @ref="InputFileRef" OnChange=OnInputFileChange accept="@Accept" multiple=@Multiple />
+    <div>
+        @if (ChildContent is not null)
+        {
+            @ChildContent(MultipleValue)
+	    }
+            else
+            {
+	    @foreach (var imageUrl in getSrcList())
+	    {
+	    <MHover Disabled=@(!IsOverlay) OpenDelay=@OverlayOpenDelay CloseDelay=@OverlayCloseDelay>
+		<MImage @attributes="context.Attrs" Class="@GetClass()" Src="@imageUrl" style="@GetStyle()">
+		    <ExpandTransition>
+			<IfTransitionElement Value="@context.Hover"
+					     Style="height:100%; width:100%;"
+					     Class="d-flex justify-center align-center avatar-overlay-tips white--text overline">
+			    <i class="mdi mdi-upload"></i><span class="font-weight-medium">@OverlayTips</span>
+			</IfTransitionElement>
+		    </ExpandTransition>
+		</MImage>
+	    </MHover>
+	    }
+	    }
+    </div>
+</label>

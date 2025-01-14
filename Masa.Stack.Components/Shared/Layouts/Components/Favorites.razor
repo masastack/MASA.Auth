@@ -1,0 +1,75 @@
+﻿@namespace Masa.Stack.Components.Layouts
+@inherits MasaComponentBase
+@inject GlobalConfig GlobalConfig
+
+<MMenu Value="_menuValue"
+       ValueChanged="MenuValueChanged"
+       Bottom
+       CloseOnContentClick="false"
+       MinWidth="@("auto")"
+       OffsetY>
+    <ActivatorContent>
+        <MTooltip Color="primary" Bottom>
+            <ActivatorContent Context="tooltipContext">
+                @{
+                    var attrs = new Dictionary<string, object>();
+                    foreach (var (key, value) in context.Attrs)
+                    {
+                        attrs.Add(key, value);
+                    }
+                    foreach (var (key, value) in tooltipContext.Attrs)
+                    {
+                        if (attrs.ContainsKey(key) is false) attrs.Add(key, value);
+                    }
+                }
+                <MButton Icon Class="emphasis2--text mr-6" @attributes="@attrs">
+                    <MIcon Size="20">
+                        mdi-star
+                    </MIcon>
+                </MButton>
+            </ActivatorContent>
+            <ChildContent>
+                <span>@T("Favorite")</span>
+            </ChildContent>
+        </MTooltip>
+    </ActivatorContent> 
+    <ChildContent>
+        <MList Class="pb-1" Style="min-width:320px;">
+            <MListItem Class="mb-1">
+                <MTextField @bind-Value="_searchKey"
+                            Class="rounded-2"
+                            HideDetails="@("auto")"
+                            Outlined Dense
+                            BackgroundColor="emphasis2--text"
+                            Placeholder="@T("search")"
+                            Clearable
+                            OnKeyDown="HandleOnSearchKeyDown"
+                            OnClearClick="() => SearchNavs(null)">
+                </MTextField>
+            </MListItem>
+            @foreach (var item in SearchedMenus)
+            {
+                <MListItem Dense
+                           Class="px-4"
+                           OnClick="() => NavigateTo(item.Nav.Url)"
+                           IsActive="IsMenuActive(item.Nav)"
+                           ActiveClass="primary--text">
+                    <MListItemAction Class="mr-3">
+                        <MIcon Size=20 Color="default-lighten-3">@item.Nav.Icon</MIcon>
+                    </MListItemAction>
+                    <MListItemContent>
+                        <span Class="btn">@T(item.Nav.Name)</span>
+                    </MListItemContent>
+                    <MListItemIcon Class="my-1">
+                        <MButton Color="@(item.Favorite ? "#FFB547" : "")"
+                                  OnClickStopPropagation
+                                 Icon
+                                 OnClick="() => ToggleFavorite(item.Nav.Code)">
+                            <SIcon Size=20>@(item.Favorite ? "mdi-star" : "mdi-star-outline")</SIcon>
+                        </MButton>
+                    </MListItemIcon>
+                </MListItem>
+            }
+        </MList>
+    </ChildContent>
+</MMenu>

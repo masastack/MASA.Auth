@@ -1,0 +1,24 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<STextField 
+    Value="TextValue" 
+    ValueChanged="ValueTextUpdateAsync"
+    ValueExpression="ValueExpression"
+    TValue="string"
+    Class="urlTextField"
+    ErrorMessages="ErrorMessage"
+    Required=Required
+    Label="@Label">
+    <PrependContent>
+        <SSelect                   
+            Items="Items" 
+            ItemText="v => v"
+            ItemValue="v => v"
+            TItem="string"
+            TItemValue="string" 
+            TValue="string"
+            Value="Protocol"
+            ValueChanged="ProtocolUpdateAsync" />
+    </PrependContent>
+</STextField>

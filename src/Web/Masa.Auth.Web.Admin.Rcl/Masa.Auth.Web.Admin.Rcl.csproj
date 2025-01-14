@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="Masa.Stack.Components" Version="1.0.0-wasm9" />
+		<PackageReference Include="Masa.Stack.Components" Version="1.0.0-wasm11" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftPackageVersion)" />
 		<!--Support GB2312-->
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />

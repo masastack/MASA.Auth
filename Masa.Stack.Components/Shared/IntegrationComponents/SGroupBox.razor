@@ -1,0 +1,28 @@
+﻿@namespace Masa.Stack.Components
+
+<div class="@($"m-label--border")">
+    <fieldset class="@($"{@Class}")" style="@Style">
+        <legend class="@TitleClass" style="@TitleStyle">@Title</legend>
+        @ChildContent
+    </fieldset>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? TitleClass { get; set; }
+
+    [Parameter]
+    public string? TitleStyle { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+}

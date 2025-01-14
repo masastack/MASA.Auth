@@ -1,0 +1,25 @@
+﻿@namespace Masa.Stack.Components.NotificationCenters
+
+@if (Dot)
+{
+    <MBadge Bordered Dot Color="pink" OffsetX="10" OffsetY="10">
+        <MAvatar Color="primary">
+            <MIcon Dark>
+                mdi-bell-outline
+            </MIcon>
+        </MAvatar>
+    </MBadge>
+}
+else
+{
+    <MAvatar Color="primary">
+        <MIcon Dark>
+            mdi-bell-outline
+        </MIcon>
+    </MAvatar>
+}
+
+@code {
+    [Parameter]
+    public bool Dot { get; set; }
+}

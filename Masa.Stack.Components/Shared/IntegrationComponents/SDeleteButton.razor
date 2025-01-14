@@ -1,0 +1,12 @@
+﻿@namespace Masa.Stack.Components
+
+<SButton OnClick="OnClick" Left Icon Color="#FF5252" Depressed Class="delete-btn">
+    <SIcon>mdi-delete</SIcon>
+</SButton>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+
+}

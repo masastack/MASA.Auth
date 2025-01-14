@@ -1,0 +1,54 @@
+﻿@using Masa.Stack.Components.Layouts
+@using Microsoft.Extensions.Logging
+@namespace Masa.Stack.Components
+@implements IDisposable
+@inject GlobalConfig GlobalConfig
+@inject IAuthClient AuthClient
+@inject ILogger<SLayout> Logger
+
+<CascadingValue Value="this" IsFixed>
+    <CascadingValue Value="@I18n.Culture.ToString()" Name="Culture">
+        <MApp Class="masa masa-stack-components">
+            <MErrorHandler ErrorContent="@ErrorContent" OnHandle="@OnErrorHandleAsync">
+                <MAppBar App
+                         Class="mx-6 masa-app-bar"
+                         Elevation="0"
+                         Height="96">
+                    <GlobalNavigation ClientId="@ClientId" OnFavoriteAdd="AddFavoriteMenu"
+                                      OnFavoriteRemove="RemoveFavoriteMenu">
+                        <ActivatorContent>
+                            <MButton Icon
+                                     Class="white emphasis2--text"
+                                     Style="z-index: 1; border: 8px solid #F0F3FA !important;"
+                                     Width="64"
+                                     Height="64"
+                                     @attributes="@context.Attrs">
+                                <MIcon>mdi-view-dashboard</MIcon>
+                            </MButton>
+                        </ActivatorContent>
+                    </GlobalNavigation>
+                    <Breadcrumbs FlattenedNavs="FlattenedAllNavs" @ref="BreadcrumbsComp"></Breadcrumbs>
+                    <MSpacer />
+                    <Languages OnChange="() => { }" />
+                    <MSheet Class="d-flex align-center justify-space-around rounded-6 pa-1 mr-n4" Width="100">
+                        <Notification />
+                        <User />
+                    </MSheet>
+                </MAppBar>
+
+                <Navigation Items="NavItems"
+                            Logo="@Logo"
+                            MiniLogo="@MiniLogo"
+                            IsShowEnvironmentSwitch="@IsShowEnvironmentSwitch" />
+
+                <MMain Class="masa-main">
+                    <div class="@($"px-6 pb-6 max-width {@Class}")" style="@Style">
+                        <MErrorHandler ErrorContent="@ErrorContent" OnHandle="@OnErrorHandleAsync" OnAfterHandle="OnErrorAfterHandle">
+                            @ChildContent
+                        </MErrorHandler>
+                    </div>
+                </MMain>
+            </MErrorHandler>
+        </MApp>
+    </CascadingValue>
+</CascadingValue>

@@ -1,0 +1,18 @@
+﻿@namespace Masa.Stack.Components.Forms
+@inherits MasaComponentBase
+
+<MForm Model="this" EnableValidation
+       Class="full-height d-flex flex-column justify-space-between"
+       OnValidSubmit="HandleOnValidSubmit"
+       @ref="_form">
+    <div style="margin-top: 50%; transform: translateY(-50%);">
+        <STextField @bind-Value="EmailAddress" Readonly
+                          Label="@T("EmailAddress")"
+                          HideDetails="false">
+        </STextField>
+    </div>
+    <span>
+        功能开发中
+    </span>
+    <SButton Disabled Class="align-self-center" Large Type="submit">@T("Ok")</SButton>
+</MForm>

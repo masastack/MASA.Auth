@@ -1,0 +1,89 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<div class="@Class d-flex">
+    <div class="d-flex" style="height: 30px !important;">
+        <SPaginationSelect Value="PageSize"
+                           ValueChanged="HandlePageSizeChanged"
+                           Items="@PageSizeSelect" />
+        <div class="ml-2 mt-1 block-center caption regular3--text">
+            @T("Rows per page")
+        </div>
+        <div class="ml-2 mt-1 block-center caption regular3--text">
+            <span>@T("Total") @Total @T("Item")</span>
+        </div>
+    </div>
+    <div class="ml-auto d-flex">
+        <MButton IconName="mdi-chevron-left" Disabled="PreviousDisabled" OnClick="@Previous"></MButton>
+        <div class="mx-4 my-auto regular--text overline">@Page/@TotalPage</div>
+        <MButton IconName="mdi-chevron-right" Disabled="NextDisabled" OnClick="@Next"></MButton>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int Page { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageChanged { get; set; }
+
+    [Parameter]
+    public int PageSize { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageSizeChanged { get; set; }
+
+    [Parameter]
+    public long Total { get; set; }
+
+    [Parameter]
+    public List<int> PageSizeSelect { get; set; } = new() { 20, 50, 100 };
+
+    [Parameter]
+    public EventCallback<(int page, int pageSize)> OnChange { get; set; }
+
+    private int TotalPage
+    {
+        get
+        {
+            var totalPage = (int)((Total + PageSize - 1) / PageSize);
+            return totalPage == 0 ? 1 : totalPage;
+        }
+    }
+
+    bool NextDisabled => Page == TotalPage;
+
+    bool PreviousDisabled => Page == 1;
+
+    async Task Next()
+    {
+        if (NextDisabled)
+            return;
+
+        ++Page;
+        await PageChanged.InvokeAsync(Page);
+
+        await OnChange.InvokeAsync((Page, PageSize));
+    }
+
+    async Task Previous()
+    {
+        if (PreviousDisabled)
+            return;
+
+        --Page;
+        await PageChanged.InvokeAsync(Page);
+
+        await OnChange.InvokeAsync((Page, PageSize));
+    }
+
+    async Task HandlePageSizeChanged(int val)
+    {
+        PageSize = val;
+        await PageSizeChanged.InvokeAsync(val);
+
+        await OnChange.InvokeAsync((Page, PageSize));
+    }
+
+}

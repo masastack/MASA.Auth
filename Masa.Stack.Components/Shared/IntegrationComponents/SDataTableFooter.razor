@@ -1,0 +1,28 @@
+﻿@namespace Masa.Stack.Components
+
+<div class="d-flex justify-space-between @Class" style="@Style">
+    <div class="d-flex justify-end align-center">
+        <MSelect @bind-Value="PageSize"
+                 TItemValue="int" TValue="int" TItem="int"
+                 OnSelectedItemUpdate="OnPageSzieChanged"
+                 Color="primary"
+                 Style="max-width:120px;"
+                 Dense
+                 HideDetails="true"
+                 Outlined
+                 Items="PageSizes"
+                 ItemText="u => u.ToString()"
+                 ItemValue="u => u">
+        </MSelect>
+        <span class="ml-2">@PageSizeText</span>
+    </div>
+    <div class="d-flex justify-end align-center">
+        @if (!HideTotal)
+        {
+            <span class="mr-4">@string.Format(TotalStringFormat, Total)</span>
+        }
+        <MIcon Size="24" OnClick="OnPrev" Disabled=!OnPrev.HasDelegate>@PrevIcon</MIcon>
+        <span class="mx-4">@((Page-1) * PageSize + 1) - @(Page*PageSize) of @Total</span>
+        <MIcon Size="24" OnClick="OnNext" Disabled=!OnNext.HasDelegate>@NexIcon</MIcon>
+    </div>
+</div>

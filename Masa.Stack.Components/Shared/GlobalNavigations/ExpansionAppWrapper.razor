@@ -1,0 +1,149 @@
+@namespace Masa.Stack.Components.Shared.GlobalNavigations
+@inherits MasaComponentBase
+
+@{
+    var disableAppOper = Value.MetaData.Situation == ExpansionMenuSituation.Preview || Value.MetaData.Situation == ExpansionMenuSituation.Favorite;
+    var indeterminate = Value.State == ExpansionMenuState.Indeterminate;
+    var appSelected = Value.State == ExpansionMenuState.Selected;
+}
+<div class="app"
+     style="@GetIsDisplayStyle(!Value.Hidden)">
+    <div class="d-flex align-center mx-2 expansion-app @(indeterminate || appSelected ? "active" : null)">
+        <span class="masa-text-2-2 d-inline-block t ext-truncate">
+            @Value.Name
+        </span>
+        @if (!disableAppOper)
+        {
+            <MSpacer />
+
+            var icon = appSelected ? "mdi-check" : (indeterminate ? "mdi-minus-box" : "mdi-checkbox-blank-outline");
+
+            <MIcon Small
+                   Color="primary"
+                   OnClick="@ItemOperClick"
+                   Style="height: 16px"
+                   Class="@($"expansion-nav__action mdi {icon}")">
+            </MIcon>
+        }
+    </div>
+    <div Class="mt-4">
+        @foreach (var navGroup in Value.Children)
+        {
+            <div class="nav m-list--dense" style="background:white; @GetIsDisplayStyle(!navGroup.Hidden)">
+                @RenderNestNav(navGroup)
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    private RenderFragment RenderNestNav(ExpansionMenu menu, int layer = 1) => __builder =>
+    {
+        @RenderNav(menu)
+
+        if (RenderLayer && GlobalConfig.NavLayer <= layer)
+        {
+            return;
+        }
+
+        if (menu.Children.Count != 0)
+        {
+            foreach (var child in menu.Children)
+            {
+                layer++;
+                @RenderNestNav(child, layer)
+            }
+        }
+    };
+
+    private RenderFragment RenderNav(ExpansionMenu menu) => __builder =>
+    {
+        var indeterminate = menu.State == ExpansionMenuState.Indeterminate;
+        var selected = menu.State == ExpansionMenuState.Selected;
+        var isFavorite = menu.State == ExpansionMenuState.Favorite;
+
+        var classBuilder = new StringBuilder();
+        classBuilder.Append("expansion-nav ");
+        if (menu.Type == ExpansionMenuType.Element)
+        {
+            classBuilder.Append("expansion-element ");
+        }
+
+        if (menu.MetaData.Situation == ExpansionMenuSituation.Preview)
+        {
+            classBuilder.Append("preview ");
+        }
+
+        if (indeterminate || selected || isFavorite)
+        {
+            classBuilder.Append("active ");
+        }
+
+        // if (menu.Disabled)
+        // {
+        //     classBuilder.Append("disabled ");
+        // }
+
+        <div class="@classBuilder.ToString()"
+             style="@GetIsDisplayStyle(!menu.Hidden)">
+            @if (menu.Type == ExpansionMenuType.Nav)
+            {
+                <a class="m-list-item theme--light @(menu.Disabled ? "m-list-item--disabled" : "") @GetClass(menu)"
+                   @onclick="@(() => OnItemClick.InvokeAsync(menu))">
+                    <div class="d-flex align-center full-width">
+                        <div style="font-weight: 500; font-size: 14px; @(menu.State == ExpansionMenuState.Selected ? "color: #323D6F;" : "")">
+                            @DT(menu.Name)
+                        </div>
+                        <MSpacer />
+                        @if (menu.MetaData.Situation == ExpansionMenuSituation.Authorization)
+                        {
+                            var icon = selected ? "mdi-check" : (indeterminate ? "mdi-minus-box" : "mdi-checkbox-blank-outline");
+
+                            <MIcon Small
+                                   Color="primary"
+                                   Class="@($"expansion-nav__action mdi {icon}")">
+                            </MIcon>
+                        }
+                        else if (menu.MetaData.Situation == ExpansionMenuSituation.Favorite && !menu.Children.Any())
+                        {
+                            <MIcon Small
+                                   Color="@(isFavorite ? "#FFB547" : "")"
+                                   Class="expansion-nav__action"
+                                   OnClick="@(() => OnItemOperClick.InvokeAsync(menu))"
+                                   OnClickStopPropagation>
+                                mdi-star
+                            </MIcon>
+                        }
+                    </div>
+                </a>
+            }
+            else if (menu.Type == ExpansionMenuType.Element)
+            {
+                <div class="m-list-item theme--light @(menu.Disabled ? "m-list-item--disabled" : "") @GetClass(menu)"
+                     style="@GetIsDisplayStyle(menu.MetaData.Situation == ExpansionMenuSituation.Authorization)"
+                     @onclick="@(() => OnItemClick.InvokeAsync(menu))">
+                    <div class="d-flex align-center full-width">
+                        <div style="font-weight: 500; font-size: 14px; @(menu.State == ExpansionMenuState.Selected ? "color: #323D6F;" : "")">
+                            @DT(menu.Name)
+                        </div>
+                        <MSpacer />
+                        @if (!menu.Disabled && menu.MetaData.Situation == ExpansionMenuSituation.Authorization)
+                        {
+                            <MIcon Small
+                                   Color="primary"
+                                   Class="@($"expansion-nav__action mdi {(selected ? "mdi-check" : "mdi-checkbox-blank-outline")}")">
+                            </MIcon>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (menu.GetNavDeep() == 0 && menu.Children.Any(child => !child.Hidden))
+            {
+                <div class="mx-2" data-count="@menu.Children.Count(child => !child.Hidden)" style="border: 1px dashed #E4E8F3;"></div>
+            }
+        </div>
+    };
+
+}

@@ -1,0 +1,57 @@
+﻿@namespace Masa.Stack.Components.Standalone
+
+<MMenu ActivatorContent="@ActivatorContent"
+       OffsetY
+       Transition="slide-y-transition">
+    <ChildContent>
+        <MDefaultsProvider Defaults="@_defaults">
+            <div class="actions-menu @Class"
+                 style="@Style"
+                 @attributes="@Attributes">
+                @ChildContent
+            </div>
+        </MDefaultsProvider>
+    </ChildContent>
+</MMenu>
+
+@code {
+
+    private readonly Dictionary<string, IDictionary<string, object?>?> _defaults = new()
+    {
+        {
+            nameof(MButton), new Dictionary<string, object?>
+            {
+                { nameof(MButton.Block), true },
+                { nameof(MButton.Small), false },
+                { nameof(MButton.Text), true },
+            }
+        },
+    };
+
+    private bool _prevDense;
+
+    [Parameter] public RenderFragment<ActivatorProps>? ActivatorContent { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Style { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public bool Dense { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (_prevDense != Dense)
+        {
+            _prevDense = Dense;
+            _defaults[nameof(MButton)]![nameof(MButton.Small)] = Dense;
+        }
+    }
+
+}

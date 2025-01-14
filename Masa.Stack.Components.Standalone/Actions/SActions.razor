@@ -1,0 +1,37 @@
+﻿@namespace Masa.Stack.Components.Standalone
+
+<div class="d-flex align-center @Class"
+     style="@Style"
+     @attributes="@Attributes">
+    @ChildContent
+
+    @if (DropdownContent is not null)
+    {
+        <SActionsMenu ChildContent="@DropdownContent"
+                      Dense="@Dense">
+            <ActivatorContent>
+                <MButton IconName="mdi-dots-horizontal"
+                         Small="@Dense"
+                         Class="ml-1"
+                         @attributes="@context.Attrs"/>
+            </ActivatorContent>
+        </SActionsMenu>
+    }
+</div>
+
+@code {
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public RenderFragment? DropdownContent { get; set; }
+
+    [Parameter] public bool Dense { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public string? Style { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+
+}

@@ -1,0 +1,22 @@
+﻿.m-label--border fieldset {
+    border-collapse: collapse;
+    border-color: #E2E7F4;
+    border-style: solid;
+    border-width: 1px;
+    transition-duration: 0.15s;
+    transition-property: color;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.38);
+    padding: 10px;
+}
+
+
+.m-label--border legend {
+    line-height: 11px;
+    padding: 0;
+    margin-left:2px;
+    color:#7681AB;
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+}

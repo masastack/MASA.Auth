@@ -1,0 +1,13 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+<MAvatar Color="primary" Size="Size" Class="@Class">
+    <span class="white--text">@(string.IsNullOrEmpty(Value)?"":Value.Substring(0,1))</span>
+</MAvatar>
+
+@code {
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public StringNumber Size { get; set; } = 48;
+}

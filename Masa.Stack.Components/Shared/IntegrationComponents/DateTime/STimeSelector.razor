@@ -1,0 +1,136 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<div class="time-selector d-flex">
+    <MAutocomplete Value="hour"
+                   ValueChanged="OnHourSelect"
+                   Items="ValidHours"
+                   ItemText='item => item.ToString("00")'
+                   ItemValue="item => item"
+                   TItem="int"
+                   TValue="int"
+                   TItemValue="int"
+                          Dense
+                          Outlined
+                   HideDetails="true">
+    </MAutocomplete>
+    <span class="mx-2">:</span>
+    <MAutocomplete Value="minute"
+                   ValueChanged="OnMinuteSelect"
+                   Items="ValidSeconds"
+                   ItemText='item => item.ToString("00")'
+                   ItemValue="item => item"
+                   TItem="int"
+                   TValue="int"
+                   TItemValue="int"
+                          Dense
+                          Outlined
+                   HideDetails="true">
+    </MAutocomplete>
+    <span class="mx-2">:</span>
+    <MAutocomplete Value="second"
+                   ValueChanged="OnSecondSelect"
+                   Items="ValidSeconds"
+                   ItemText='item => item.ToString("00")'
+                   ItemValue="item => item"
+                   TItem="int"
+                   TValue="int"
+                   TItemValue="int"
+                          Dense
+                          Outlined
+                   HideDetails="true">
+    </MAutocomplete>
+</div>
+
+@code {
+
+    private static readonly int[] ValidSeconds = Enumerable.Range(0, 60).ToArray();
+    private static readonly int[] ValidHours = Enumerable.Range(0, 24).ToArray();
+
+    private int hour;
+    private int minute;
+    private int second;
+
+    private TimeOnly _prevValue;
+
+    [Parameter]
+    public TimeOnly Value { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeOnly> ValueChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        hour = Value.Hour;
+        minute = Value.Minute;
+        second = Value.Second;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (_prevValue != Value)
+        {
+            _prevValue = Value;
+
+            hour = Value.Hour;
+            minute = Value.Minute;
+            second = Value.Second;
+        }
+    }
+
+    private async Task OnHourSelect(int val)
+    {
+        hour = val;
+
+        var time = new TimeOnly(val, minute, second);
+        _prevValue = time;
+
+        if (ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(time);
+        }
+        else
+        {
+            Value = time;
+        }
+    }
+
+    private async Task OnMinuteSelect(int val)
+    {
+        minute = val;
+
+        var time = new TimeOnly(hour, val, second);
+        _prevValue = time;
+
+        if (ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(time);
+        }
+        else
+        {
+            Value = time;
+        }
+    }
+
+    private async Task OnSecondSelect(int val)
+    {
+        second = val;
+
+        var time = new TimeOnly(hour, minute, val);
+        _prevValue = time;
+
+        if (ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(time);
+        }
+        else
+        {
+            Value = time;
+        }
+    }
+
+}

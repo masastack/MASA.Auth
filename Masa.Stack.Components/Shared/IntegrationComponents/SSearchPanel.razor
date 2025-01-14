@@ -1,0 +1,147 @@
+﻿<div class="d-flex @Class">
+    @ChildContent
+    <MSpacer></MSpacer>
+    <div class="d-flex">
+        <SSearch Value="@Value" ValueChanged="ValueChanged" BackgroundColor="white" OnEnter="OnEnter" OnClearClick="OnClearClick" />
+        @if (Advanced)
+        {
+            <div @onclick="ToggleAdvanced" class="ml-6 d-flex filter-button fill">
+                <SIcon Class="ma-auto" Color="emphasis2" Size=20>
+                    @(_advanced ? IconConstants.FilterOff : IconConstants.Filter)
+                </SIcon>
+            </div>
+        }
+        @if (ButtonContent != null)
+        {
+            @ButtonContent
+        }
+        else if (OnClick.HasDelegate)
+        {
+            <SButton Small BorderRadiusClass="rounded-lg" Class="ml-6" OnClick="OnClick">
+                <SIcon Size=18 IsDefaultToolTip=false>@IconConstants.Add</SIcon>
+                <span class="ml-2 btn">@ComputedButtonText</span>
+            </SButton>
+        }
+    </div>
+</div>
+@if (Advanced)
+{
+    if (string.IsNullOrEmpty(EnterAnimate))
+    {
+        <ExpandTransition>
+            <ShowTransitionElement Value="_advanced">
+                <MRow Class="@($"{ComputedAdvancedClass} flex-none")" NoGutters="AdvancedNoGutters">
+                    @AdvancedContent
+                </MRow>
+            </ShowTransitionElement>
+        </ExpandTransition>
+    }
+    else
+    {
+        @if (_advanced)
+        {
+            <MRow Class="@($"{ComputedAdvancedClass} flex-none animate__animated {_animate}")" NoGutters="AdvancedNoGutters">
+                @AdvancedContent
+            </MRow>
+        }
+    }
+}
+
+@code {
+    [Inject]
+    public I18n I18n { get; set; } = default!;
+
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Advanced { get; set; }
+
+    [Parameter]
+    public string AdvancedClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool AdvancedNoGutters { get; set; }
+
+    [Parameter]
+    public int DelayLeave { get; set; }
+
+    [Parameter]
+    public string ButtonText { get; set; } = string.Empty;
+
+    [Parameter]
+    public string EnterAnimate { get; set; } = string.Empty;
+
+    [Parameter]
+    public string LeaveAnimate { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? AdvancedContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? ButtonContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnEnter { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClearClick { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    private bool _advanced;
+
+    private string _animate = string.Empty;
+
+    public async Task ToggleAdvanced()
+    {
+        if (_advanced)
+        {
+            _animate = LeaveAnimate;
+
+            await Task.Delay(DelayLeave);
+            _advanced = false;
+        }
+        else
+        {
+            _animate = EnterAnimate;
+            _advanced = true;
+        }
+    }
+
+    public string ComputedButtonText
+    {
+        get
+        {
+            if (!string.IsNullOrWhiteSpace(ButtonText))
+            {
+                return ButtonText;
+            }
+
+            return I18n.T("Create");
+        }
+    }
+
+    public string ComputedAdvancedClass
+    {
+        get
+        {
+            if (!string.IsNullOrWhiteSpace(AdvancedClass))
+            {
+                return AdvancedClass;
+            }
+
+            return AdvancedNoGutters ? "mt-6" : "mt-3";
+        }
+    }
+}

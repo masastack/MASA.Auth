@@ -1,0 +1,21 @@
+﻿@namespace Masa.Stack.Components.GlobalUsers
+
+<MIcon Size="20"
+       Class="@Css"
+       OnClick="OnClick">
+    @ChildContent
+</MIcon>
+
+@code {
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsAuthenticated { get; set; }
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private string Css => IsAuthenticated ? "emphasis2--text" : "fill-line--text";
+}

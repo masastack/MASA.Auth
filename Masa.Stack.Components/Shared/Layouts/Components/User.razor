@@ -1,0 +1,207 @@
+﻿@namespace Masa.Stack.Components.Layouts
+@inherits MasaComponentBase
+@implements IAsyncDisposable
+@inject GlobalConfig GlobalConfig
+@inject IJSRuntime JS
+@inject ILogger<User> Logger
+@inject AuthenticationStateManager AuthenticationStateManager
+@inject SignOutSessionStateManager SignOutManager
+
+<MMenu @bind-Value="@MenuVisible" OffsetY NudgeTop="-8" CloseOnContentClick="false"
+       ContentClass="px-4 py-2" MaxWidth="280" MinWidth="280">
+    <ActivatorContent>
+        <MAvatar @attributes="@context.Attrs" Size=40>
+            <MImage Src="@avatar"></MImage>
+        </MAvatar>
+    </ActivatorContent>
+    <ChildContent>
+        <MList>
+            <SListItem Medium Href="/user-center" OnClick="() => { MenuVisible = false; }">
+                <MListItemIcon Class="mr-4">
+                    <SIcon Color="emphasis2" IsDefaultToolTip="false">mdi-account-circle</SIcon>
+                </MListItemIcon>
+                <MListItemContent>
+                    <MListItemTitle>
+                        <span class="regular--text body">@T("UserInfo")</span>
+                    </MListItemTitle>
+                </MListItemContent>
+            </SListItem>
+            <SListItem Medium OnClick="() => { UpdatePasswordDialogVisible = true; MenuVisible = false; }">
+                <MListItemIcon Class="mr-4">
+                    <SIcon Color="emphasis2" IsDefaultToolTip="false">mdi-pencil</SIcon>
+                </MListItemIcon>
+                <MListItemContent>
+                    <MListItemTitle>
+                        <span class="regular--text body">@T("UpdatePassword")</span>
+                    </MListItemTitle>
+                </MListItemContent>
+            </SListItem>
+            @if (MasaUser.IsStaff && _teams.Any())
+            {
+                <MDivider></MDivider>
+                <MListGroup @bind-Value="_showChangeTeam" NoAction Style="">
+                    <PrependIconContent>
+                        <MAvatar Width="24" Height="24" MinHeight="24" MinWidth="24" Style="margin-right: 10px;">
+                            <MImage Src="@CurrentTeam.Avatar"></MImage>
+                        </MAvatar>
+                    </PrependIconContent>
+                    <ActivatorContent>
+                        <MListItemContent>
+                            <MListItemTitle>@CurrentTeam.Name</MListItemTitle>
+                        </MListItemContent>
+                    </ActivatorContent>
+                    <ChildContent>
+                        @if (_teams.Count > 5)
+                        {
+                            <SSearch @bind-Value="@_teamSearchKey" MaxWidth="250" Class="py-2" />
+                        }
+                        <MVirtualScroll Items="_teams.Where(t => t.Name.Contains(_teamSearchKey)).ToList()"
+                                        ItemSize="48"
+                                        Height=@(48*(Math.Min(5,_teams.Count(t=>t.Name.Contains(_teamSearchKey)))))
+                                        OverscanCount="0">
+                            <ItemContent>
+                                <MListItem IsActive="@(MasaUser.CurrentTeamId == context.Id)" OnClick="() => CurrentTeamChanged(context.Id)">
+                                    <MListItemAvatar Width="24" Height="24" MinHeight="24" MinWidth="24">
+                                        <MImage Src="@context.Avatar"></MImage>
+                                    </MListItemAvatar>
+                                    <MListItemContent>
+                                        <MListItemTitle>@context.Name</MListItemTitle>
+                                    </MListItemContent>
+                                    @if (MasaUser.CurrentTeamId == context.Id)
+                                    {
+                                        <MListItemAction>
+                                            <MIcon>mdi-checkbox-marked-circle-outline</MIcon>
+                                        </MListItemAction>
+                                    }
+                                </MListItem>
+                            </ItemContent>
+                        </MVirtualScroll>
+                    </ChildContent>
+                </MListGroup>
+            }
+            <MDivider></MDivider>
+            <SListItem Medium OnClick="HandleSignOut">
+                <MListItemIcon Class="mr-4">
+                    <SIcon Color="emphasis2" IsDefaultToolTip="false">mdi-logout</SIcon>
+                </MListItemIcon>
+                <MListItemContent>
+                    <MListItemTitle>
+                        <span class="regular--text body">@T("Logout")</span>
+                    </MListItemTitle>
+                </MListItemContent>
+            </SListItem>
+        </MList>
+    </ChildContent>
+</MMenu>
+
+<UpdatePasswordModal @bind-value="UpdatePasswordDialogVisible" />
+
+@code {
+
+    [CascadingParameter]
+    public SLayout Layout { get; set; } = null!;
+
+    public bool UpdatePasswordDialogVisible { get; set; }
+    string avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg";
+    string _teamSearchKey = string.Empty;
+    bool _menuVisible = false, _showChangeTeam;
+    List<TeamModel> _teams = new();
+    IJSObjectReference _module;
+
+    public bool MenuVisible
+    {
+        get { return _menuVisible; }
+        set
+        {
+            _menuVisible = value;
+            if (!_menuVisible)
+            {
+                _showChangeTeam = false;
+                _teamSearchKey = string.Empty;
+            }
+        }
+    }
+
+    public TeamModel CurrentTeam => _teams.FirstOrDefault(t => t.Id == MasaUser.CurrentTeamId) ?? new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Masa.Stack.Components/js/http.js");
+
+            try
+            {
+                var user = await AuthClient.UserService.GetCurrentUserAsync();
+                if (!string.IsNullOrWhiteSpace(user?.Avatar))
+                {
+                    avatar = user.Avatar;
+                }
+                //TODO remove current team id in token,otherwise every time current team changed should revoked token
+                MasaUser.CurrentTeamId = user?.CurrentTeamId ?? Guid.Empty;
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "AuthClient.UserService.GetCurrentUserAsync");
+            }
+
+            try
+            {
+                _teams = await AuthClient.TeamService.GetUserTeamsAsync();
+                if (MasaUser.CurrentTeamId == Guid.Empty && _teams.Any())
+                {
+                    await CurrentTeamChanged(_teams.First().Id);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "AuthClient.TeamService.GetUserTeamsAsync");
+            }
+
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task HandleSignOut()
+    {
+        if (Layout.OnSignOut != null && Layout.OnSignOut.Invoke())
+        {
+            return;
+        }
+
+        await SignOutManager.SetSignOutState();
+        Layout.NavigationManager.NavigateTo("/authentication/logout");
+    }
+
+    private async Task CurrentTeamChanged(Guid teamId)
+    {
+        //guest account change current team not persist to db
+        if (MasaUser.Account?.ToLower() != "guest")
+        {
+            await AuthClient.UserService.SetCurrentTeamAsync(teamId);
+        }
+
+        await AuthenticationStateManager.UpsertClaimAsync(IdentityClaimConsts.CURRENT_TEAM, teamId.ToString());
+        GlobalConfig.CurrentTeamId = teamId;
+        MasaUser.CurrentTeamId = teamId;
+        _showChangeTeam = false;
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        try
+        {
+            if (_module is not null)
+            {
+                await _module.DisposeAsync();
+            }
+        }
+        catch (JSDisconnectedException)
+        {
+            //This is as designed.
+            //https://github.com/dotnet/aspnetcore/issues/33336
+        }
+    }
+
+}

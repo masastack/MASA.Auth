@@ -1,0 +1,50 @@
+﻿@namespace Masa.Stack.Components
+@using static Masa.Stack.Components.JsInitVariables
+@inherits MasaComponentBase
+
+@if (Value is Enum @enum)
+{
+    var desc = @enum.GetDescription().Description;
+
+    <span class="@EnumClass">
+        @if (ChippedEnum && !string.IsNullOrEmpty(desc))
+        {
+            <SColorChip Color="@GetColor(@enum)" Small="SmallChip" @key="@(@enum)">@desc</SColorChip>
+        }
+        else
+        {
+            @desc
+        }
+    </span>
+}
+else if (Value is DateTime dateTime)
+{
+    @if (DateTimeRule!.Invoke(dateTime))
+    {
+        if (dateTime.Kind != DateTimeKind.Local)
+        {
+            dateTime = dateTime.Add(JsInitVariables.TimezoneOffset);
+        }
+
+        var major = @DateOnly.FromDateTime(dateTime).ToString(DateFormat);
+        string? minor = null;
+        if (!IgnoreTime)
+        {
+            minor = @TimeOnly.FromDateTime(dateTime).ToString(TimeFormat);
+        }
+
+        <PBlockText Class="@DateTimeClass" Primary="@major" Secondary="@minor" />
+    }
+}
+else if (Value is bool b)
+{
+    <span class="@BoolClass">
+        @BoolFormatter!.Invoke(b)
+    </span>
+}
+else
+{
+    <span class="@DefaultClass">
+        @Value
+    </span>
+}

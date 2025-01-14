@@ -1,0 +1,35 @@
+﻿@namespace Masa.Stack.Components.UserCenters
+@inherits MasaComponentBase
+
+<MRow>
+    @foreach (var team in Teams)
+    {
+        <MCol Md="4" Xl="3" >
+            <MCard Class="team rounded-5 pa-6" Height="230">
+                <div class="d-flex mb-1" style="align-items: center">
+                    <MAvatar Class="mr-3" Size="40">
+                        <MImage Src="@team.Avatar" alt="avatar"></MImage>
+                    </MAvatar>
+                    <PBlockText Primary="@team.Name"
+                            PrimaryClass="emphasis--text font-18-medium"
+                            Secondary="@($"{T("NumberOfPeople")}：{team.MemberCount}")"
+                            SecondaryClass="regular3--text font-14">
+                    </PBlockText>
+                </div>
+                <div class="body2 regular2--text">
+                    @team.Description
+                </div>
+
+                @if (!string.IsNullOrEmpty(team.Role)) //for admin
+                {
+                    <MChip Style="position:absolute; bottom:24px; right:24px;"
+                        Label 
+                        Small
+                        Class="fill-background emphasis2--text">
+                        @team.Role
+                    </MChip>
+                }
+            </MCard>
+        </MCol>
+    }
+</MRow>

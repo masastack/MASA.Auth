@@ -1,0 +1,45 @@
+﻿@using System.Globalization
+@namespace Masa.Stack.Components.Layouts
+@inject GlobalConfig GlobalConfig
+@inject I18n I18n
+
+<MMenu OffsetY Bottom>
+    <ActivatorContent>
+        <MButton Icon Class="emphasis2--text mr-6" @attributes="@context.Attrs">
+            <MIcon Size="20">
+                mdi-google-translate
+            </MIcon>
+        </MButton>
+    </ActivatorContent>
+    <ChildContent>
+        <MList Class="py-0">
+            <MListItemGroup ActiveClass="primary" Value="GlobalConfig.Culture?.Name">
+                @foreach (var culture in I18n.SupportedCultures)
+                {
+                    <MListItem OnClick="async () => await OnLanguageChangeAsync(culture)" Value="(StringNumber)culture.Name">
+                        <ItemContent>
+                            <MListItemContent>
+                                <span Class="@(context.Active ? "white--text" : "default-lighten-4--text") btn">
+                                    @culture.NativeName
+                                </span>
+                            </MListItemContent>
+                        </ItemContent>
+                    </MListItem>
+                }
+            </MListItemGroup>
+        </MList>
+    </ChildContent>
+</MMenu>
+
+@code {
+
+    [Parameter]
+    public EventCallback<CultureInfo> OnChange { get; set; }
+
+    async Task OnLanguageChangeAsync(CultureInfo culture)
+    {
+        GlobalConfig.Culture = culture;
+        if (OnChange.HasDelegate) await OnChange.InvokeAsync(culture);
+    }
+
+}

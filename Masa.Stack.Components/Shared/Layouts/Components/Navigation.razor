@@ -1,0 +1,248 @@
+﻿@namespace Masa.Stack.Components.Layouts
+@inherits MasaComponentBase
+@inject GlobalConfig GlobalConfig
+@inject IMultiEnvironmentUserContext MultiEnvironmentUserContext
+@inject ILogger<Navigation> Logger
+@inject SignOutSessionStateManager SignOutManager
+
+<MNavigationDrawer App
+                   Class="navigation"
+                   Permanent
+                   MiniVariantWidth="96"
+                   Width="300"
+                   MiniVariant="GlobalConfig.Mini">
+
+    <div style="height:96px;"
+         class="d-flex justify-space-around align-center px-3">
+        @if (GlobalConfig.Mini)
+        {
+            <img height="40" width="40" src="@MiniLogo" alt="mini_log"
+                 style="cursor: pointer" @onclick="NavigateToIndex" />
+        }
+        else
+        {
+            <img width="200" src="@Logo" alt="logo" style="cursor: pointer" @onclick="NavigateToIndex" />
+        }
+    </div>
+
+    <MDivider />
+
+    <MList Nav Routable Class="pa-6 subtitle2">
+        @foreach (var nav in Items!)
+        {
+            if (!nav.HasChildren)
+            {
+                <STooltip Disabled="!GlobalConfig.Mini">
+                    <ActivatorContent Context="tooltipContext">
+                        <SListItem Medium Class="mb-2 rounded-2"
+                                   ActiveClass="primary"
+                                   Href="@nav.Url"
+                                   Exact="@nav.Exact"
+                                   MatchPattern="@nav.MatchPattern"
+                                   @attributes="@tooltipContext.Attrs">
+                            <ItemContent>
+                                <MListItemIcon>
+                                    <MIcon Dense
+                                           Style="margin-left:6px"
+                                           Color="@(context.Active ? "white" : "regular3--text")">
+                                        @nav.Icon
+                                    </MIcon>
+                                </MListItemIcon>
+                                <MListItemContent>
+                                    <div class="ml-1 text-truncate @(context.Active ? "white--text" : "regular2--text")">
+                                        @DT(nav.Name)
+                                    </div>
+                                </MListItemContent>
+                            </ItemContent>
+                        </SListItem>
+                    </ActivatorContent>
+                    <ChildContent>
+                        @DT(nav.Name)
+                    </ChildContent>
+                </STooltip>
+            }
+            else
+            {
+                <MMenu Disabled="!GlobalConfig.Mini" OffsetY OpenOnHover CloseOnContentClick="false" ContentClass="white pa-2 subtitle2" MinWidth="250">
+                    <ActivatorContent Context="menuContext">
+                        <MListGroup Group="@GenGroup(nav.Children)"
+                                    NoAction
+                                    ActiveClass="primary--text"
+                                    AppendIcon="mdi-menu-down"
+                                    @attributes="@menuContext.Attrs">
+                            <ActivatorContent>
+                                <MListItemContent>
+                                    <div class="ml-1 text-truncate regular2--text">@DT(nav.Name)</div>
+                                </MListItemContent>
+                            </ActivatorContent>
+                            <PrependIconContent>
+                                <MIcon Dense Style="margin-left: 6px">@nav.Icon</MIcon>
+                            </PrependIconContent>
+                            <ChildContent>
+                                <NavItems Data="@nav" Class="@(GlobalConfig.Mini ? "" : "ml-6")"></NavItems>
+                            </ChildContent>
+                        </MListGroup>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MList Nav Routable>
+                            <NavItems Data="@nav" Class="@(GlobalConfig.Mini ? "" : "ml-6")"></NavItems>
+                        </MList>
+                    </ChildContent>
+                </MMenu>
+            }
+        }
+    </MList>
+    <div class="isolation text-center">
+        @if (IsShowEnvironmentSwitch && _environments.Count > 1)
+        {
+            <STooltip>
+                <ActivatorContent>
+                    <span @attributes="@context.Attrs">
+                        <MMenu OffsetY NudgeLeft="15" NudgeTop="4" Top>
+                            <ActivatorContent Context="mContext">
+                                <MIcon @attributes="@mContext.Attrs" Large Color="@(_environments.FirstOrDefault(e => e.Name == _currentEnvironment)?.Color ?? "primary")">
+                                    mdi-record-circle
+                                </MIcon>
+                            </ActivatorContent>
+                            <ChildContent>
+                                <MList>
+                                    @foreach (var environment in _environments.Where(e => e.Name != _currentEnvironment))
+                                    {
+                                        <STooltip>
+                                            <ActivatorContent Context="itemContext">
+                                                <MListItem @attributes="@itemContext.Attrs" OnClick="() => SwitchEnvironmentAsync(environment.Name)">
+                                                    <MListItemContent>
+                                                        <MIcon Large Color="@(environment.Color ?? "primary")">
+                                                            mdi-record-circle
+                                                        </MIcon>
+                                                    </MListItemContent>
+                                                </MListItem>
+                                            </ActivatorContent>
+                                            <ChildContent>
+                                                @environment.Name
+                                            </ChildContent>
+                                        </STooltip>
+                                    }
+                                </MList>
+                            </ChildContent>
+                        </MMenu>
+                    </span>
+                </ActivatorContent>
+                <ChildContent>
+                    @_currentEnvironment
+                </ChildContent>
+            </STooltip>
+        }
+        @if (!GlobalConfig.Mini)
+        {
+            <p>
+                <MChip Class="mt-3" Small Color="regular2--text" Outlined>
+                    @(string.IsNullOrEmpty(ProjectApp.ServiceVersion) ? MasaStackConfig.Version : ProjectApp.ServiceVersion)
+                </MChip>
+            </p>
+        }
+    </div>
+</MNavigationDrawer>
+
+<SIconBtn Class="nav-trigger medium-button white"
+          Style="@($"{(GlobalConfig.Mini ? "left:76px;" : "left:280px;")}")"
+          OnClick="() => GlobalConfig.Mini = !GlobalConfig.Mini">
+    <MIcon Color="primary">
+        @(GlobalConfig.Mini ? "mdi-chevron-right" : "mdi-chevron-left")
+    </MIcon>
+</SIconBtn>
+
+@code {
+    [Inject]
+    internal ProjectAppOptions ProjectApp { get; set; } = default!;
+
+    [Inject]
+    public CookieStorage CookieStorage { get; set; } = default!;
+
+    [Parameter]
+    public string? DefaultRoute { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public List<Nav>? Items { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public string? Logo { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public string? MiniLogo { get; set; }
+
+    [Parameter]
+    public bool IsShowEnvironmentSwitch { get; set; } = false;
+
+    List<EnvironmentModel> _environments = new();
+    string _currentEnvironment = "";
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        Items ??= new List<Nav>();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                _environments = await PmClient.EnvironmentService.GetListAsync();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "PmClient.EnvironmentService.GetListAsync");
+            }
+            _currentEnvironment = MultiEnvironmentUserContext.Environment ?? "";
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private List<string> GenGroup(List<Nav> navs)
+    {
+        if (!navs.Any())
+        {
+            return new List<string>();
+        }
+
+        List<string> groups = new();
+
+        foreach (var menu in navs)
+        {
+            groups.AddRange(GenGroup(menu.Children));
+
+            if (string.IsNullOrEmpty(menu.Url)) continue;
+
+            groups.Add(menu.Url);
+        }
+
+        return groups;
+    }
+
+    private void NavigateToIndex()
+    {
+        NavigationManager.NavigateTo(Items!.GetDefaultRoute());
+    }
+
+    private async Task SwitchEnvironmentAsync(string environment)
+    {
+        var currentUser = await AuthClient.UserService.GetCurrentUserAsync();
+        var isIn = await AuthClient.UserService.HasPhoneNumberInEnvAsync(environment, currentUser?.PhoneNumber);
+        if (!isIn)
+        {
+            await PopupService.EnqueueSnackbarAsync(T("EnvironmentSwitchTips"), AlertTypes.Warning);
+            return;
+        }
+
+        CookieStorage.SetAsync(Consts.ENVIRONMENT, environment);
+        await SignOutManager.SetSignOutState();
+        NavigationManager.NavigateTo($"/authentication/logout?environment={environment}", true);
+    }
+
+}

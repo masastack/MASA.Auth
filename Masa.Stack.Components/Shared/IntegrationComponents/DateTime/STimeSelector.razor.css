@@ -1,0 +1,9 @@
+﻿.time-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.time-selector ::deep .m-autocomplete.m-select.m-input--is-focused input {
+    min-width: unset;
+}

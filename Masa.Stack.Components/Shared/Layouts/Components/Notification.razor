@@ -1,0 +1,82 @@
+﻿@namespace Masa.Stack.Components.Layouts
+@using Masa.BuildingBlocks.StackSdks.Mc
+@inherits MasaComponentBase
+@inject IMcClient McClient
+@inject ILogger<Notification> Logger
+
+<div class="notice">
+    <MMenu OffsetY Bottom @bind-Value="_showMenu">
+        <ActivatorContent>
+            <MButton Icon
+                     Width="40"
+                     Height="40"
+                     Class="emphasis2--text"
+                     OnClick="HandleOpenOnClick"
+                     @attributes="@(_showMenu?context.Attrs:null)">
+                @if (!NoticeState.IsRead)
+                {
+                    <MBadge Bordered OverLap Dot Color="red">
+                        <MIcon>
+                            mdi-bell
+                        </MIcon>
+                    </MBadge>
+                }
+                else
+                {
+                    <MIcon>
+                        mdi-bell
+                    </MIcon>
+                }
+            </MButton>
+        </ActivatorContent>
+        <ChildContent>
+            <MCard Width="400">
+                <MToolbar Color="primary"
+                          Dark Style="box-shadow: none;">
+                    <MButton Icon Class="ml-0" Small>
+                        <MIcon>mdi-bell-outline</MIcon>
+                    </MButton>
+                    <MToolbarTitle Class="h7 fill--text pl-2">@T("DisplayName.Notice.Title")</MToolbarTitle>
+                    <MSpacer></MSpacer>
+                </MToolbar>
+
+                <MList ThreeLine>
+                    @foreach (var item in NoticeState.Notices)
+                    {
+                        <MListItem Link Href="@($"/notification-center/{item.Id}")">
+                            <MListItemAvatar Class="mt-2">
+                                @if (item.IsRead)
+                                {
+                                    <SEmptyAvatar Value="@item.Channel?.DisplayName" Size="40" />
+                                }
+                                else
+                                {
+                                    <MBadge Bordered Color="pink" Dot OffsetX="10" OffsetY="10">
+                                        <SEmptyAvatar Value="@item.Channel?.DisplayName" Size="40" />
+                                    </MBadge>
+                                }
+                            </MListItemAvatar>
+
+                            <MListItemContent>
+                                <MListItemTitle Class="btn emphasis--text">@item.Channel?.DisplayName</MListItemTitle>
+                                <MListItemSubtitle Class="caption regular2--text mt-1">@item.Title</MListItemSubtitle>
+                                <MListItemSubtitle Class="overline regular3--text mt-1">@item.SendTime.ToOffset(JsInitVariables.TimezoneOffset).ToString(T("$MonthDayFormat"))</MListItemSubtitle>
+                            </MListItemContent>
+                        </MListItem>
+                    }
+                </MList>
+                <MList Dense>
+                    <MListItem Link Href="/notification-center" Class="pt-2" Style="box-shadow: inset 0px 1px 0px #E9EDF7">
+                        <MListItemIcon Class="mr-0">
+                            <MIcon Size="16" Color="regular2" Class="pr-3">mdi-keyboard-backspace</MIcon>
+                        </MListItemIcon>
+
+                        <MListItemContent>
+                            <MListItemTitle Class="caption regular2--text">@T("Description.Notice.MoreTips")</MListItemTitle>
+                        </MListItemContent>
+                    </MListItem>
+                </MList>
+            </MCard>
+        </ChildContent>
+    </MMenu>
+</div>

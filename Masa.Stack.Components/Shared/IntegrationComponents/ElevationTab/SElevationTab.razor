@@ -1,0 +1,162 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<CascadingValue Value="this" IsFixed>
+    @ChildContent
+    <div Class="@($"d-flex flex-column {AlignItems} {Class}")" Style="@Style">
+        <SLabeledRadioGroup Class="@TabsClass"
+                            ActiveClass="@ActiveClass"
+                            Dense="Dense"
+                            Style="@($"width: fit-content; {TabsStyle}")"
+                            TValue="string"
+                            Value="Tab"
+                            ValueChanged="ValueChanged">
+            @for (var i = 0; i < Tabs!.Count; i++)
+            {
+                var tab = Tabs[i];
+                <SLabeledRadio MinWidth="@TabMinWidth" Value="@(IndexTab ? i.ToString() : tab)">
+                    <span class="@(Tab == tab ? "subtitle2 emphasis2--text" : "btn regular2--text")">@T(tab)</span>
+                </SLabeledRadio>
+            }
+        </SLabeledRadioGroup>
+
+        <MWindow Class="@($"full-width mx-1 {ItemsClass}")"
+                 Style="@ItemsStyle"
+                 Value="Tab">
+            @for (var i = 0; i < Tabs!.Count; i++)
+            {
+                var item = _elevationTabItems.ElementAtOrDefault(i);
+                if (item is not null)
+                {
+                    var tab = Tabs[i];
+                    var value = IndexTab ? i.ToString() : tab;
+
+                    if (NoTransition)
+                    {
+                        <MWindowItem Class="full-height" Value="@value" Transition="">
+                            @item.ChildContent
+                        </MWindowItem>
+                    }
+                    else
+                    {
+                        <MWindowItem Class="full-height" Value="@value">
+                            @item.ChildContent
+                        </MWindowItem>
+                    }
+                }
+            }
+        </MWindow>
+    </div>
+</CascadingValue>
+
+@code {
+    private List<string> _tabs = new();
+
+    [Parameter]
+    public string? ItemsClass { get; set; }
+
+    [Parameter]
+    public string? ActiveClass { get; set; }
+
+    [Parameter]
+    public string? ItemsStyle { get; set; }
+
+    [Parameter]
+    public bool Left { get; set; }
+
+    [Parameter]
+    public bool Right { get; set; }
+
+    [Parameter]
+    public string? TabsClass { get; set; }
+
+    [Parameter]
+    public string? TabsStyle { get; set; }
+
+    [Parameter]
+    public bool IndexTab { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public List<string> Tabs
+    {
+        get => _tabs;
+        set
+        {
+            if (value.Count != _tabs.Count || value.Except(_tabs).Any())
+            {
+                _tabs = value;
+                if (_tabs.Contains(Tab) is false)
+                {
+                    Tab = _tabs.First();
+                }
+            }
+        }
+    }
+
+    [Parameter]
+    public bool Dense { get; set; }
+
+    [Parameter]
+    public StringNumber? TabMinWidth { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Tab { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<string> TabChanged { get; set; }
+
+    [Parameter]
+    public bool NoTransition { get; set; }
+
+    List<SElevationTabItem> _elevationTabItems = new();
+
+    internal int TabIndex { get; private set; } = -1;
+
+    private string AlignItems
+    {
+        get
+        {
+            if (Left)
+            {
+                return "align-start";
+            }
+
+            if (Right)
+            {
+                return "align-end";
+            }
+
+            return "align-center";
+        }
+    }
+
+    internal int AddTabItem(SElevationTabItem tabItem)
+    {
+        _elevationTabItems.Add(tabItem);
+        return _elevationTabItems.Count - 1;
+    }
+
+    internal void RemoveTabItem(SElevationTabItem tabItem)
+    {
+        _elevationTabItems.Remove(tabItem);
+    }
+
+    private async Task ValueChanged(string v)
+    {
+        TabIndex = Tabs.IndexOf(v);
+
+        if (TabChanged.HasDelegate)
+        {
+            await TabChanged.InvokeAsync(v);
+        }
+        else
+        {
+            Tab = v;
+        }
+    }
+
+}

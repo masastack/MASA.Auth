@@ -1,0 +1,23 @@
+.actions-menu {
+  padding: 8px 0;
+  min-width: 36px;
+  width: 180px;
+}
+
+.actions-menu ::deep > .m-divider__wrapper > .m-divider {
+  margin: 4px 0;
+}
+
+.actions-menu ::deep > * {
+  width: 100%;
+}
+
+.actions-menu ::deep > .m-btn {
+  overflow: hidden;
+  justify-content: start;
+  border-radius: 0;
+}
+
+.actions-menu ::deep > .m-btn > .m-btn__content {
+  text-transform: capitalize;
+}

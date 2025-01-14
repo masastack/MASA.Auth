@@ -1,0 +1,101 @@
+﻿@inherits MasaComponentBase
+@namespace Masa.Stack.Components.Layouts
+
+@foreach (var subNav in Data.Children)
+{
+    @if (subNav.HasChildren)
+    {
+        <div class="d-flex align-star @Class" style="position: relative">
+            <img src="https://cdn.masastack.com/stack/images/component/nav-sub-before.png" width="18" height="48" alt="line" />
+            <MListGroup Group="@GenGroup(subNav.Children)"
+                        Class="full-width"
+                        ActiveClass="primary--text"
+                        AppendIcon="mdi-menu-down">
+                <ActivatorContent>
+                    <MListItemContent>
+                        <div class="text-truncate regular2--text">@T(subNav.Name)</div>
+                    </MListItemContent>
+                </ActivatorContent>
+                <ChildContent>
+                    @foreach (var lastNav in subNav.Children)
+                    {
+                        <div class="d-flex align-center">
+                            <img src="https://cdn.masastack.com/stack/images/component/nav-sub-sub-before.png" height="48" alt="line"
+                                 style="position: absolute;left: 0;" />
+                            <SListItem Medium
+                                       Class="mb-0 rounded-2"
+                                       ActiveClass="primary"
+                                       Href="@lastNav.Url"
+                                       Exact="@lastNav.Exact"
+                                       MatchPattern="@lastNav.MatchPattern">
+                                <ItemContent>
+                                    <MListItemContent>
+                                        <div class="text-truncate ml-3 @(context.Active ? "white--text" : "text-btn regular2--text")">
+                                            @DT(lastNav.Name)
+                                        </div>
+                                    </MListItemContent>
+                                </ItemContent>
+                            </SListItem>
+                        </div>
+                    }
+                </ChildContent>
+            </MListGroup>
+        </div>
+    }
+    else
+    {
+        if (Data.Children.IndexOf(subNav) == 0)
+        {
+            <div class="d-flex align-center @Class">
+                <img src="https://cdn.masastack.com/stack/images/component/nav-before-first-sub.png" height="8"
+                     alt="first-sub-before" />
+            </div>
+        }
+
+        <div class="d-flex align-center @Class">
+            <img src="https://cdn.masastack.com/stack/images/component/nav-sub-before.png" width="18" height="48" alt="line" />
+
+            <SListItem Medium Class="mb-0 rounded-2"
+                       ActiveClass="primary"
+                       Href="@subNav.Url"
+                       Exact="@subNav.Exact"
+                       MatchPattern="@subNav.MatchPattern">
+                <ItemContent>
+                    <MListItemContent>
+                        <div class="text-truncate @(context.Active ? "white--text" : "text-btn regular2--text")">
+                            @DT(subNav.Name)
+                        </div>
+                    </MListItemContent>
+                </ItemContent>
+            </SListItem>
+        </div>
+    }
+}
+
+@code {
+
+    [Parameter, EditorRequired]
+    public Nav Data { get; set; } = null!;
+
+    private List<string> GenGroup(List<Nav> navs)
+    {
+        if (!navs.Any())
+        {
+            return new List<string>();
+        }
+
+        List<string> groups = new();
+
+        foreach (var menu in navs)
+        {
+            groups.AddRange(GenGroup(menu.Children));
+
+            if (string.IsNullOrEmpty(menu.Url)) continue;
+
+            groups.Add(menu.Url);
+        }
+
+        return groups;
+    }
+
+}

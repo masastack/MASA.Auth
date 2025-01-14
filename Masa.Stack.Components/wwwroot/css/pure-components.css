@@ -1,0 +1,55 @@
+.labeled-radio-group {
+    background-color: #F0F3FA !important;
+    padding: 2px;
+}
+
+.labeled-radio-group .theme--light.m-btn--active:hover::before, .labeled-radio-group .theme--light.m-btn--active::before {
+    opacity: 0;
+}
+
+.labeled-radio-group > .m-btn:not(:last-child) {
+    margin-right: 4px;
+}
+
+.labeled-radio-group .labeled-radio-slider-wrapper {
+    margin: 0 !important;
+    position: absolute;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+
+.labeled-radio-group .labeled-radio-slider {
+    height: 100%;
+    width: 100%;
+}
+
+.pageable.pageable-size--large .m-pagination__navigation, .pageable.pageable-size--large .m-pagination__item {
+    height: 44px;
+    width: 44px;
+    min-width: 44px;
+}
+
+.pageable.pageable-size--default .m-pagination__navigation, .pageable.pageable-size--default .m-pagination__item {
+    height: 36px;
+    width: 36px;
+    min-width: 36px;
+}
+
+.pageable.pageable-size--small .m-pagination__navigation, .pageable.pageable-size--small .m-pagination__item {
+    height: 28px;
+    width: 28px;
+    min-width: 28px;
+}
+
+.pageable.pageable-size--x-small .m-pagination__navigation, .pageable.pageable-size--x-small .m-pagination__item {
+    height: 20px;
+    width: 20px;
+    min-width: 20px;
+}
+
+.delete-btn:hover {
+    color: #FF8A80 !important;
+}
+
+.delete-btn:active {
+    color: #B71C1C !important;
+}

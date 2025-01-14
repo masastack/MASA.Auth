@@ -1,0 +1,38 @@
+﻿@namespace Masa.Stack.Components
+
+@if (Split)
+{
+    <div class="@($"m-click-extend full-width {Class}")" style="@($"max-width:{(MaxWidth.IsT0?$"{MaxWidth}":$"{MaxWidth}px")}; {Style}")">
+        <div style="@ChildStyle" class="d-flex align-center full-width">
+            <MCard Class="m-click-extend-child flex-grow-1" Style="border-radius: 8px !important;">@ChildContent</MCard>
+            <MCard Class="ml-4 m-click-extend-trigger" Style="border-radius: 8px !important;display: flex;flex-direction: row;justify-content: center;align-items: center;padding: 0px;width: 48px;min-width: 48px;height: 48px;">
+                <SIcon Size=24 OnClick="()=> { IsExpanded = true; }">@TriggerIcon</SIcon>
+            </MCard>
+        </div>
+        <MCard Style="@CardStyle" Class="m-click-extend-item">
+            <MTextField Autofocus Value="Value" ValueChanged="ValueChanged" OnBlur="OnBlurHandler" Outlined Dense Placeholder="@I18n.T("Search")"
+                    HideDetails=true PrependInnerIcon="mdi-magnify" OnKeyDown="OnKeyDownHandler">
+            </MTextField>
+        </MCard>
+    </div>
+}
+else
+{
+    <MCard Class="@($"m-click-extend full-width {Class}")" Style="@($"max-width:{(MaxWidth.IsT0?$"{MaxWidth}":$"{MaxWidth}px")}; {Style}")">
+        <div style="@ChildStyle" class="d-flex align-center full-width">
+            <div Class="m-click-extend-child flex-grow-1">
+                @ChildContent
+            </div>
+            <div class="m-click-extend-trigger">
+                <MIcon Size=24 OnClick="()=> { IsExpanded = true; }">@TriggerIcon</MIcon>
+            </div>
+        </div>
+        <div style="@CardStyle" class="m-click-extend-item">
+            <MTextField Autofocus Value="Value" ValueChanged="ValueChanged" OnBlur="OnBlurHandler" Outlined Dense Placeholder="@I18n.T("Search")"
+                    HideDetails=true PrependInnerIcon="mdi-magnify" OnKeyDown="OnKeyDownHandler">
+            </MTextField>
+        </div>
+    </MCard>
+}
+
+

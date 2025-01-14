@@ -1,0 +1,26 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<MMenu OffsetY Top @bind-Value="MenuState">
+    <ActivatorContent>
+        <div @attributes="context.Attrs" class="page-select d-flex">
+            <div class="ma-auto">
+                <span class="body2 emphasis--text">@Value</span>
+            </div>
+            <div class="icon d-flex">
+                <MIcon Class="ma-auto" Color="regular3">@Icon</MIcon>
+            </div>
+        </div>
+    </ActivatorContent>
+    <ChildContent>
+        @foreach(var item in Items)
+        {
+           <div class="px-3 py-2 body2 emphasis--text combox @(item == Value ? "hoverBg primary--text":"")" @onclick="async ()=> await SelectAsync(item)">
+                @item
+            </div>
+        }
+    </ChildContent>
+</MMenu>
+
+
+

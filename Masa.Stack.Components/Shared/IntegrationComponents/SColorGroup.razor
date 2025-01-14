@@ -1,0 +1,28 @@
+﻿@namespace Masa.Stack.Components
+
+<MItemGroup Mandatory
+            Value="Value"
+            ValueChanged="HandleValueChanged"
+            Class="@($"m-color-group d-flex { (SpaceBetween?"justify-space-between":"") } mx-n1 {@Class}")"
+            Style="@Style">
+    @foreach (var color in Colors)
+    {
+        <div @key="color">
+            <MItem Value="color">
+                <MCard Elevation="@Elevation"
+                   Class="mx-1 rounded-pill"
+                   Style="@(context.Active ? $"background-color: {color} !important;" : $"border: 2px solid {color}; background-color: transparent !important;")"
+                   OnClick="()=>OnClickHandler(context,color)"
+                   Width=Size
+                   Height=Size>
+                </MCard>
+                @if (ItemAppendContent is not null)
+                {
+                    <div class="m-color-item-append d-flex align-center mr-1">
+                        @ItemAppendContent(color)
+                    </div>
+                }
+            </MItem>
+        </div>
+    }
+</MItemGroup>

@@ -1,0 +1,149 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<MDialog Value="Value"
+         ValueChanged="ValueChanged"
+         Persistent="_persistent"
+         Class="pa-6"
+         ContentClass="pa-6 white rounded-5"
+         Width="400">
+    @if (!HideCloseIcon)
+    {
+        <div class="d-flex justify-end">
+            <MButton Small Icon Color="emphasis" OnClick="HandleOnCancel">
+                <SIcon IsDefaultToolTip="false">mdi-close</SIcon>
+            </MButton>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(IconOfTitle) || !string.IsNullOrWhiteSpace(Title))
+    {
+        <div class="d-flex flex-column justify-center align-center my-@Size @HeaderClass">
+            @if (!string.IsNullOrWhiteSpace(IconOfTitle))
+            {
+                <span class="primary d-flex justify-center align-center mb-3"
+              style="height: 52px;width: 52px;border-radius: 50%;border: 4px solid #ECE8FF !important;">
+                    <MIcon Color="white">@IconOfTitle</MIcon>
+                </span>
+            }
+            <span class="h6 emphasis2--text">
+                @Title
+            </span>
+        </div>
+    }
+
+    @if (ChildContent != default)
+    {
+        <div class="py-@Size">
+            @ChildContent
+        </div>
+    }
+
+    @if (OnOk.HasDelegate)
+    {
+        <div class="d-flex justify-space-around align-center my-@Size">
+            @if (!HideCancel)
+            {
+                <SAutoLoadingButton Color="primary" Large="!Dense" Rounded Outlined Width="140" OnClick="HandleOnCancel">@ComputedCancelText</SAutoLoadingButton>
+            }
+            <SAutoLoadingButton Color="@OkColor" Class="@OkClass" Rounded Large="!Dense" Disabled="OkDisabled" Width="140" OnClick="HandleOnOk">@ComputedOkText</SAutoLoadingButton>
+        </div>
+    }
+</MDialog>
+
+@code {
+
+    [Parameter]
+    public bool Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? IconOfTitle { get; set; }
+
+    [Parameter]
+    public bool HideCloseIcon { get; set; }
+
+    [Parameter]
+    public string? HeaderClass { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; }
+
+    [Parameter]
+    public bool Dense { get; set; }
+
+    [Parameter]
+    public string? CancelText { get; set; }
+
+    [Parameter]
+    public string? OkText { get; set; }
+
+    [Parameter]
+    public bool OkDisabled { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback OnOk { get; set; }
+
+    [Parameter]
+    public string OkColor { get; set; } = "primary";
+
+    [Parameter]
+    public string OkClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool HideCancel { get; set; }
+
+    private int Size => Dense ? 4 : 6;
+
+    private bool _okLoading;
+    private bool _persistent;
+
+    private string ComputedCancelText => CancelText ?? T("Cancel");
+    private string ComputedOkText => OkText ?? T("Ok");
+
+    protected override void OnParametersSet()
+    {
+        if (OnOk.HasDelegate)
+        {
+            _persistent = true;
+        }
+    }
+
+    private async Task HandleOnCancel()
+    {
+        if (OnCancel.HasDelegate)
+        {
+            await OnCancel.InvokeAsync();
+        }
+
+        await UpdateValue(false);
+    }
+
+    private async Task HandleOnOk()
+    {
+        if (OnOk.HasDelegate)
+        {
+            await OnOk.InvokeAsync();
+        }
+    }
+
+    private async Task UpdateValue(bool val)
+    {
+        if (ValueChanged.HasDelegate)
+        {
+            await ValueChanged.InvokeAsync(val);
+        }
+        else
+        {
+            Value = val;
+        }
+    }
+
+}

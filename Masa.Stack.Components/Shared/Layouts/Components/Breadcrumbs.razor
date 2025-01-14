@@ -1,0 +1,19 @@
+﻿@namespace Masa.Stack.Components.Layouts
+@inherits MasaComponentBase
+
+@if (Items.Any())
+{
+    <MBreadcrumbs Divider="" Class="ms-breadcrumbs">
+        <ChildContent>
+            @for (var i = 0; i < Items.Count; i++)
+            {
+                var item = Items[i];
+                var isLast = i == Items.Count - 1;
+                <MBreadcrumbsItem @key="@item"
+                                  Href="@(isLast ? null : item.Href)">
+                    @DT(item.Text)
+                </MBreadcrumbsItem>
+            }
+        </ChildContent>
+    </MBreadcrumbs>
+}

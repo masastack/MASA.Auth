@@ -1,0 +1,38 @@
+@namespace Masa.Stack.Components.Shared.GlobalNavigations
+@inherits MasaComponentBase
+
+@if (Value != null)
+{
+    <div class="global-nav-content__wrapper @CssForScroll">
+        <div class="global-nav-content__main ">
+            @foreach (var category in Value.Children)
+            {
+                <div class="apps" style="@GetIsDisplayStyle(!category.Hidden)">
+                    <div class="masa-text-1-2__title title_category py-4" id="@($"{idPrefix}_{category.Id}")">@category.Name</div>
+                    <div class="category_title_app @($"{idPrefix}_{category.Id}")">
+                        @foreach (var app in category.Children)
+                        {
+                            <ExpansionAppWrapper RenderLayer="RenderLayer" Value="app" OnItemClick="ItemClick" OnItemOperClick="ItemOperClick" />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="global-nav-content__side">
+        <MNavigationDrawer Value="true" HideOverlay Floating Right Width="256" Class="toc">
+            <ul>
+                @foreach (var category in Value.Children)
+                {
+                    <li class="masa-text-2-2 pl-3 py-2 category_side" id="@($"{idPrefix}_{category.Id}_side")" style="@GetIsDisplayStyle(!category.Hidden)"
+                        @onclick="@(() => ScrollTo($"{idPrefix}_{category.Id}", $".global-nav-content__wrapper{CssSelectorForScroll}"))">
+                        <MIcon Color="primary" Class="dot" Size="20">mdi-checkbox-blank-circle</MIcon>
+                        <span>
+                            @TranslateProvider.DT(category.Name)
+                        </span>
+                    </li>
+                }
+            </ul>
+        </MNavigationDrawer>
+    </div>
+}

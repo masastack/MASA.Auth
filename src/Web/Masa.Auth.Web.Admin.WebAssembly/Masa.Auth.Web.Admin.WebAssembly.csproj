@@ -4,6 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<PublishTrimmed>true</PublishTrimmed>
+	<!--<PublishAot>true</PublishAot>-->
+	<BlazorWebAssemblyPreloadAssemblies>true</BlazorWebAssemblyPreloadAssemblies>
 	<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 

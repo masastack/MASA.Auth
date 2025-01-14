@@ -1,0 +1,29 @@
+﻿@namespace Masa.Stack.Components
+@inherits MIcon
+
+@{
+    InitDefaultToolTip();
+}
+
+@if (string.IsNullOrWhiteSpace(Tooltip))
+{
+    @((RenderFragment)base.BuildRenderTree)
+}
+else
+{
+    <MTooltip Top>
+        <ActivatorContent>
+            @{
+                @foreach (var attr in context.Attrs)
+                {
+                    Attributes[attr.Key] = attr.Value;
+                }
+            }
+
+            @((RenderFragment)base.BuildRenderTree)
+        </ActivatorContent>
+        <ChildContent>
+            <span style="white-space: pre;">@Tooltip</span>
+        </ChildContent>
+    </MTooltip>
+}

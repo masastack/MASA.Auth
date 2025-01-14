@@ -1,0 +1,66 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<SSelect Value="Value"
+         ValueChanged="ValueChanged"
+         Items="_thirdPartyIdps"
+         Label="@T(Label??"")"
+         ItemText="e => e.DisplayName"
+         ItemValue="e => e.Name"
+         Small=Small
+         Clearable=Clearable
+         BackgroundColor="@(FillBackground?"fill-background":"white")"
+         Style="@($"{Style}")"
+         Class="@($"{Class}")"
+         Tooltip="@Tooltip">
+    <ItemContent Context="data">
+        <div class="d-flex align-center" style="height:48px;">
+            <MAvatar Size=30>
+                <img src="@data.Item?.Icon" />
+            </MAvatar>
+            <div class="my-auto">
+                <span class="body2 emphasis2--text ml-2">@data.Item?.Name</span>
+            </div>
+        </div>
+    </ItemContent>
+</SSelect>
+
+@code {
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool Small { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public bool Clearable { get; set; }
+
+    [Parameter]
+    public bool FillBackground { get; set; } = true;
+
+    [Parameter]
+    public bool IncludeLdap { get; set; } = true;
+
+    [Parameter]
+    public string? Tooltip { get; set; }
+
+    private List<ThirdPartyIdpSelectModel>? _thirdPartyIdps = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "ThirdPartyIdp";
+
+        await InitThirdPartyIdps();
+    }
+
+    public async Task InitThirdPartyIdps()
+    {
+        _thirdPartyIdps = await AuthClient.ThirdPartyIdpService.GetSelectAsync(default, IncludeLdap);
+    }
+}

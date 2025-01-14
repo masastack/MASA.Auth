@@ -1,0 +1,75 @@
+﻿@namespace Masa.Stack.Components
+@typeparam TValue
+
+<MButton @ref="Instance"
+         Text
+         MinWidth="@MinWidth"
+         Class="@Class"
+         Style="@($"border-radius:{LabeledRadioGroup?.BorderRadius}px; {Style}")"
+         Large="Large"
+         XLarge="XLarge"
+         Small="Small"
+         XSmall="XSmall"
+         OnClick="HandleOnClick">
+    @ChildContent
+</MButton>
+
+@code {
+
+    [CascadingParameter]
+    public SLabeledRadioGroup<TValue>? LabeledRadioGroup { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public StringNumber? MinWidth { get; set; }
+
+    [Parameter]
+    public TValue? Value { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public bool Large { get; set; }
+
+    [Parameter]
+    public bool XLarge { get; set; }
+
+    [Parameter]
+    public bool Small { get; set; }
+
+    [Parameter]
+    public bool XSmall { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    internal MButton? Instance { get; private set; }
+
+    internal double Height { get; set; }
+    internal double Width { get; set; }
+    internal double OffsetLeft { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender && LabeledRadioGroup is not null)
+        {
+            LabeledRadioGroup.AddRadio(this);
+        }
+    }
+
+    private Task HandleOnClick(MouseEventArgs args)
+    {
+        return OnClick.HasDelegate
+            ? OnClick.InvokeAsync(args)
+            : Task.CompletedTask;
+    }
+
+}

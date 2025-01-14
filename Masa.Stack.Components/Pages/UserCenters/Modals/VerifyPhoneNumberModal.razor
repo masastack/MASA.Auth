@@ -1,0 +1,15 @@
+﻿@namespace Masa.Stack.Components.UserCenters
+@inherits MasaComponentBase
+
+<SSimpleDialog @bind-Value="Visible"
+               Title="@T("Verify PhoneNumber")"
+               IconOfTitle="mdi-phone"
+               CancelText="@T("Cancel")"
+               OkText="@T("Ok")"
+               HideCloseIcon
+               OnCancel="HandleOnCancel"
+               OnOk="HandleOnOk">
+    <MForm EnableI18n EnableValidation Model="VerifyMsgCode" @ref="FormRef">
+        <SCaptchaSendTextField @bind-Value="VerifyMsgCode.Code" OnClick="SendCaptcha"/>
+    </MForm>
+</SSimpleDialog>

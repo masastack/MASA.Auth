@@ -1,0 +1,113 @@
+﻿@namespace Masa.Stack.Components
+
+<MRow Align="AlignTypes.Center"
+      Class="@Class"
+      Dense="@Dense"
+      NoGutters="@NoGutters"
+      Style="@Style">
+    @foreach (var item in Items!)
+    {
+        <MCol Cols="@Cols" Sm="@Sm" Md="@Md">
+            <dl class="d-flex align-items-start @ItemClass?.Invoke(item)" style="@ItemStyle?.Invoke(item)">
+                <dt class="mr-1 d-inline-flex @TermClass?.Invoke(item)" style="white-space: nowrap;@TermStyle?.Invoke(item)">
+                    @if (TermContent == null)
+                    {
+                        @item.Key
+                    }
+                    else
+                    {
+                        @TermContent(item)
+                    }
+                    @Colon
+                </dt>
+                <dd class="@DetailClass?.Invoke(item)" style="@DetailStyle?.Invoke(item)">
+                    @if (DetailContent == null)
+                    {
+                        @item.Value
+                    }
+                    else
+                    {
+                        @DetailContent(item)
+                    }
+                </dd>
+            </dl>
+        </MCol>
+    }
+</MRow>
+
+@code
+{
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Colon { get; set; }
+
+    [Parameter]
+    public StringNumber? Cols { get; set; }
+
+    [Parameter]
+    public bool Dense { get; set; }
+
+    [Parameter]
+    public Func<KeyValuePair<string, object>, string>? DetailClass { get; set; }
+
+    [Parameter]
+    public RenderFragment<KeyValuePair<string, object>>? DetailContent { get; set; }
+
+    [Parameter]
+    public Func<KeyValuePair<string, object>, string>? DetailStyle { get; set; }
+
+    [Parameter]
+    public Func<KeyValuePair<string, object>, string>? ItemClass { get; set; }
+
+    [Parameter, Obsolete("Use DetailContent")]
+    public RenderFragment<KeyValuePair<string, object>>? ItemContent { get; set; }
+
+    [Parameter, EditorRequired]
+    public Dictionary<string, object>? Items { get; set; }
+
+    [Parameter]
+    public Func<KeyValuePair<string, object>, string>? ItemStyle { get; set; }
+
+    [Parameter]
+    public RenderFragment<KeyValuePair<string, object>>? TermContent { get; set; }
+
+    [Parameter]
+    public StringNumber? Md { get; set; }
+
+    [Parameter]
+    public bool NoGutters { get; set; }
+
+    [Parameter]
+    public StringNumber? Sm { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public Func<KeyValuePair<string, object>, string>? TermClass { get; set; }
+
+    [Parameter]
+    public Func<KeyValuePair<string, object>, string>? TermStyle { get; set; }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        Cols = 12;
+        Sm = 6;
+        Md = 4;
+        Colon = ":";
+        Dense = true;
+
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        Items ??= new Dictionary<string, object>();
+
+        DetailContent ??= ItemContent;
+    }
+}

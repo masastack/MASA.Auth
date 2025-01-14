@@ -1,0 +1,19 @@
+﻿@page "/user-center/{mode?}"
+@namespace Masa.Stack.Components
+
+<div class="mb-6" style="height: calc(100vh - 460px);min-height:600px;">
+    @if(Mode == "staff")
+    {
+        <StaffInfo />
+    }
+    else
+    {
+        <UserInfo />
+    }   
+</div>
+<UserTeams />
+
+@code {
+    [Parameter]
+    public string? Mode { get; set; }
+}

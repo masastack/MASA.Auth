@@ -1,0 +1,24 @@
+﻿.date-time-range-picker__content ::deep .m-date-picker-table {
+    height: unset;
+    padding: 0;
+}
+
+    .date-time-range-picker__content ::deep .m-date-picker-table tr {
+        height: unset;
+    }
+
+.date-time-range-picker__content ::deep .m-card__actions {
+    padding-bottom: 0;
+}
+
+.datetimetext {
+    width: calc(50% - 20px);
+    padding: 0;
+    font-family: 'Roboto';
+    line-height: 21px;
+    color: #485585;
+    font-size: 14px;
+    display: inline-flex;
+    justify-content: center;
+    text-align: center;
+}

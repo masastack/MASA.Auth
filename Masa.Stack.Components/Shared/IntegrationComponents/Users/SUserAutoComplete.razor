@@ -1,0 +1,32 @@
+﻿@namespace Masa.Stack.Components
+@inherits MasaComponentBase
+
+<SAutoComplete Value="Value"
+               ValueChanged="ValueChanged"
+               OnSelectedItemUpdate="OnSelectedItemUpdate"
+               OnSearchInputUpdate=OnSearchChanged
+               Items="UserSelect"
+               Color="primary"
+               Label="@I18nLabel"
+               ItemText="u=>TextView(u)"
+               ItemValue="u=>u.Id"
+               Filter="(item,search,value) => true"
+               Flat="@Flat"
+               Dense="@Dense"
+               Solo="@Solo"
+               Outlined="@Outlined"
+               Small="@Small"
+               Medium="@Medium"
+               Large="@Large"
+               Placeholder="@Placeholder"
+               PersistentPlaceholder="@PersistentPlaceholder"
+               BackgroundColor="@(FillBackground?"fill-background":"")"
+               HideDetails="@("auto")"
+               Style="@($"width:340px;height:40px;{Style}")"
+               Class="@($"{Class} rounded-2 s-auto-complete")"
+               Clearable=Clearable
+               PrependInnerIcon="mdi-magnify">
+    <ItemContent Context="data">
+        @RenderFragments.UserSelectItem(data.Item.Avatar, data.Item.DisplayName, data.Item.PhoneNumber?.MaskPhoneNumber(), data.Item.Account.MaskAccount(), data.Item.Email)
+    </ItemContent>
+</SAutoComplete>

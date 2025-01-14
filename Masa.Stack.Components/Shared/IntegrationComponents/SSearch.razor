@@ -1,0 +1,78 @@
+﻿@namespace Masa.Stack.Components
+
+<MTextField Value="Value"
+            ValueChanged="ValueChanged"
+            BackgroundColor="@BackgroundColor"
+            Class="@($"s-search {Class}")"
+            Dense="@Dense"
+            Flat
+            Clearable
+            Placeholder="@I18n.T("Search")"
+            HideDetails="true"
+            OnKeyDown="HandleOnKeyDown"
+            Solo
+            ClearIcon="mdi-close-circle"
+            Height="Height"
+            MinHeight="MinHeight"
+            PrependInnerIcon="mdi-magnify"
+            Style="@($"border-radius:10px; mix-blend-mode: normal;{Style}{styleMaxWidth}")"
+            OnClearClick="OnClearClick"
+            @attributes="@Attributes">
+</MTextField>
+
+@code {
+    [Inject]
+    public I18n I18n { get; set; } = null!;
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+
+    [Parameter]
+    public string BackgroundColor { get; set; } = "#F0F3FA";
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public bool Dense { get; set; }
+
+    [Parameter]
+    public EventCallback OnEnter { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClearClick { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public StringNumber? Height { get; set; }
+
+    [Parameter]
+    public StringNumber? MinHeight { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new();
+
+    [Parameter]
+    public int MaxWidth { get; set; } = 300;
+
+    private string styleMaxWidth = string.Empty;
+
+    private async Task HandleOnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter" && OnEnter.HasDelegate)
+        {
+            await OnEnter.InvokeAsync();
+        }
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        styleMaxWidth = MaxWidth > 0 ? $"max-width:{MaxWidth}px;width:{MaxWidth}px" : string.Empty;
+        return base.OnParametersSetAsync();
+    }
+}

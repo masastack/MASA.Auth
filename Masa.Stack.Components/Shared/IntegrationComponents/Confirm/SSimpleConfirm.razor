@@ -1,0 +1,149 @@
+﻿@inherits Masa.Blazor.Popup.Components.AlertingPopupComponentBase
+
+<MDialog @bind-Value="@Visible"
+         Class="pa-6"
+         ContentClass="pa-6 white rounded-5"
+         Width="400">
+    <div class="d-flex justify-space-between">
+        <div class="d-flex">
+            @if (!string.IsNullOrWhiteSpace(ComputedIcon))
+            {
+                <MIcon Color="@ComputedIconColor" Class="mr-3">@ComputedIcon</MIcon>
+            }
+            <span class="h6 emphasis2--text">
+                @(Title ?? T("OperationConfirmation"))
+            </span>
+        </div>
+        @if (!HideCloseIcon)
+        {
+            <div class="d-flex">
+                <MButton Small Icon Color="emphasis" OnClick="HandleOnCancel">
+                    <SIcon>mdi-close</SIcon>
+                </MButton>
+            </div>
+        } 
+    </div>
+    <div class="regular2--text btn text-start my-3 px-9 @ContentClass">
+        @Content
+    </div>
+
+    <div class="d-flex justify-space-around align-center mt-9">
+        @if (!HideCancel)
+        {
+            <SAutoLoadingButton Color="primary" Large Rounded Outlined Width="150" OnClick="HandleOnCancel">@ComputedCancelText</SAutoLoadingButton>
+        }
+        <SAutoLoadingButton Color="@ComputedIconColor" Class="fill--text" Rounded Large Width="150" OnClick="HandleOnOk">@ComputedOkText</SAutoLoadingButton>
+    </div>
+
+</MDialog>
+
+    @code {
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Content { get; set; }
+
+    [Parameter]
+    public bool HideCloseIcon { get; set; }
+
+    [Parameter]
+    public bool HideCancel { get; set; }
+
+    [Parameter]
+    public string? CancelText { get; set; }
+
+    [Parameter]
+    public string? OkText { get; set; }
+
+    [Parameter]
+    public string OkClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ContentClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback OnOk { get; set; }
+
+    private I18n? _languageProvider;
+    private string ComputedCancelText => CancelText ?? T("Cancel");
+    private string ComputedOkText => OkText ?? T("Ok");
+
+    public virtual async Task HandleOnCancel()
+    {
+        if (OnCancel.HasDelegate)
+        {
+            await OnCancel.InvokeAsync();
+        }
+
+        Visible = false;
+        await SetResult(false);
+    }
+
+    public virtual async Task HandleOnOk()
+    {
+        PopupOkEventArgs<bool> args = new(true);
+
+        if (OnOk.HasDelegate)
+        {
+            await OnOk.InvokeAsync(args);
+        }
+
+        Visible = false;
+        await SetResult(true);
+    }
+
+    protected override string? ComputedIcon
+    {
+        get
+        {
+            if (!string.IsNullOrWhiteSpace(Icon))
+            {
+                return Icon;
+            }
+
+            return Type switch
+            {
+                AlertTypes.Success => "mdi-check-circle-outline",
+                AlertTypes.Error => "mdi-close-circle-outline",
+                AlertTypes.Info => "mdi-information-outline",
+                AlertTypes.Warning => "mdi-alert-outline",
+                _ => null
+            };
+        }
+    }
+
+    protected override string? ComputedIconColor
+    {
+        get
+        {
+            if (!string.IsNullOrWhiteSpace(IconColor))
+            {
+                return IconColor;
+            }
+
+            return Type switch
+            {
+                AlertTypes.Success => "success",
+                AlertTypes.Info => "info",
+                AlertTypes.Warning => "red",
+                AlertTypes.Error => "error",
+                _ => "primary"
+            };
+        }
+    }
+
+    private string T(string key)
+    {
+        return I18n.T(key);
+    }
+
+    private async Task SetResult(bool value)
+    {
+        await ClosePopupAsync(value);
+    }
+}
