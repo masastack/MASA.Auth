@@ -27,6 +27,8 @@ public class PermissionDetailDto : BaseUpsertDto<Guid>
 
     public Guid ParentId { get; set; }
 
+    public string Legend { get; set; } = string.Empty;
+
     public List<Guid> ApiPermissions { get; set; } = new();
 
     /// <summary>

@@ -31,6 +31,8 @@ public class Permission : FullAggregateRoot<Guid, Guid>
 
     public bool Enabled { get; private set; }
 
+    public string Legend { get; private set; }
+
     private List<Permission> _affiliationPermissions = new();
 
     public IReadOnlyCollection<Permission> AffiliationPermissions => _affiliationPermissions;
@@ -77,7 +79,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     }
 
     public Permission(string systemId, string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description, int order, bool enabled)
+        string icon, PermissionTypes type, string description, int order, bool enabled, string legend = "")
     {
         SystemId = systemId;
         AppId = appId;
@@ -90,6 +92,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
         Order = order;
         MatchPattern = "";
+        Legend = legend;
     }
 
     public void SetPattern(string matchPattern)
@@ -139,7 +142,7 @@ public class Permission : FullAggregateRoot<Guid, Guid>
     }
 
     public void Update(string appId, string name, string code, string url,
-        string icon, PermissionTypes type, string description, int order, bool enabled)
+        string icon, PermissionTypes type, string description, int order, bool enabled, string legend)
     {
         appId.ThrowIfEmpty();
         name.ThrowIfEmpty();
@@ -153,5 +156,6 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Description = description;
         Order = order;
         Enabled = enabled;
+        Legend = legend;
     }
 }
