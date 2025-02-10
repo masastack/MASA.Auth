@@ -15,6 +15,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
         builder.Property(p => p.MatchPattern).HasMaxLength(255).IsRequired(false);
         builder.Property(p => p.Icon).IsRequired(false);
         builder.Property(p => p.Description).HasMaxLength(255).IsRequired(false);
+        builder.Property(p => p.Legend).IsRequired(false);
         builder.Property(p => p.Type).HasConversion(
             v => v.ToString(),
             v => (PermissionTypes)Enum.Parse(typeof(PermissionTypes), v)

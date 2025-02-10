@@ -277,6 +277,7 @@ public class QueryHandler
             ParentId = permission.GetParentId(),
             AppId = permission.AppId,
             Order = permission.Order,
+            Legend = permission.Legend,
             ApiPermissions = permission.AffiliationPermissionRelations.Select(pr => pr.AffiliationPermissionId).ToList(),
             Roles = permission.RolePermissions.Where(rp => rp.Effect).Select(rp => new RoleSelectDto(rp.Role.Id, rp.Role.Name, rp.Role.Code, rp.Role.Limit, rp.Role.AvailableQuantity)).ToList(),
             Teams = permission.TeamPermissions.Where(rp => rp.Effect).DistinctBy(e => e.TeamId).Select(tp => new TeamSelectDto(tp.Team.Id, tp.Team.Name, tp.Team.Avatar.Url)).ToList(),

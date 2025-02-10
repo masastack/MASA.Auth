@@ -182,7 +182,7 @@ public class CommandHandler
             permission = await _permissionRepository.GetByIdAsync(permissionBaseInfo.Id);
             permission.Update(permissionBaseInfo.AppId, permissionBaseInfo.Name,
                 permissionBaseInfo.Code, permissionBaseInfo.Url, permissionBaseInfo.Icon, permissionBaseInfo.Type,
-                permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled);
+                permissionBaseInfo.Description, permissionBaseInfo.Order, permissionBaseInfo.Enabled, permissionBaseInfo.Legend);
             permission.SetParent(permissionBaseInfo.ParentId);
             permission.BindApiPermission(permissionBaseInfo.ApiPermissions.ToArray());
             permission.SetPattern(permissionBaseInfo.MatchPattern ?? string.Empty);
