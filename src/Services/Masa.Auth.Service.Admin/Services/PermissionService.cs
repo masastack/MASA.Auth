@@ -189,4 +189,17 @@ public class PermissionService : ServiceBase
         var command = new SaveAppGlobalNavVisibleCommand(dto);
         await eventBus.PublishAsync(command);
     }
+
+    private async Task<List<PermissionI18NDisplayNameDto>> GetI18NDisplayNameAsync(IEventBus eventBus, string cultureName, string name)
+    {
+        var query = new GetI18NDisplayNameQuery(cultureName.Split(','), name);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task SaveI18NDisplayNameAsync(IEventBus eventBus, SaveI18NDisplayNamesInput input)
+    {
+        var command = new SaveI18NDisplayNameCommand(input);
+        await eventBus.PublishAsync(command);
+    }
 }
