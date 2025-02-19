@@ -12,6 +12,9 @@ public class CommandHandler
     private readonly IUnitOfWork _unitOfWork;
     private readonly PermissionDomainService _permissionDomainService;
     private readonly UserDomainService _userDomainService;
+    private readonly IConfigurationApi _configurationApi;
+    private readonly IMultiEnvironmentContext _multiEnvironmentContext;
+    private readonly IConfigurationApiManage _configurationApiManage;
 
     public CommandHandler(
         IRoleRepository roleRepository,
@@ -20,7 +23,10 @@ public class CommandHandler
         RoleDomainService roleDomainService,
         IUnitOfWork unitOfWork,
         PermissionDomainService permissionDomainService,
-        UserDomainService userDomainService)
+        UserDomainService userDomainService,
+        IConfigurationApi configurationApi,
+        IMultiEnvironmentContext multiEnvironmentContext,
+        IConfigurationApiManage configurationApiManage)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -29,6 +35,9 @@ public class CommandHandler
         _roleDomainService = roleDomainService;
         _permissionDomainService = permissionDomainService;
         _userDomainService = userDomainService;
+        _configurationApi = configurationApi;
+        _multiEnvironmentContext = multiEnvironmentContext;
+        _configurationApiManage = configurationApiManage;
     }
 
     #region Role
@@ -227,4 +236,28 @@ public class CommandHandler
         await _unitOfWork.SaveChangesAsync();
     }
     #endregion
+
+    [EventHandler]
+    public async Task SaveI18NDisplayNameAsync(SaveI18NDisplayNameCommand command)
+    {
+        var publicSection = _configurationApi.GetPublic();
+        var environment = _multiEnvironmentContext.CurrentEnvironment;
+        foreach (var displayName in command.Input.DisplayNames)
+        {
+            var itemKey = $"{BusinessConsts.I18N_KEY}{displayName.Key}";
+            var itemSection = publicSection.GetSection(itemKey);
+            if (!itemSection.Exists())
+            {
+                var data = new Dictionary<string, object> { { command.Input.Name, displayName.Value } };
+                await _configurationApiManage.AddAsync(environment, "Default", "public-$Config", new Dictionary<string, object> { { itemKey, data } });
+            }
+            else
+            {
+                var data = itemSection.Get<Dictionary<string, object>>();
+                MasaArgumentException.ThrowIfNull(data);
+                data[command.Input.Name] = displayName.Value;
+                await _configurationApiManage.UpdateAsync(environment, "Default", "public-$Config", itemKey, data);
+            }
+        }
+    }
 }

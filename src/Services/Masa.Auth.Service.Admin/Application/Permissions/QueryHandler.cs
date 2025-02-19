@@ -13,6 +13,7 @@ public class QueryHandler
     private readonly IEventBus _eventBus;
     private readonly ILogger<QueryHandler> _logger;
     private readonly OperaterProvider _operaterProvider;
+    private readonly IConfigurationApi _configurationApi;
 
     public QueryHandler(
         IRoleRepository roleRepository,
@@ -22,7 +23,8 @@ public class QueryHandler
         IDistributedCacheClient cacheClient,
         IEventBus eventBus,
         ILogger<QueryHandler> logger,
-        OperaterProvider operaterProvider)
+        OperaterProvider operaterProvider,
+        IConfigurationApi configurationApi)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
@@ -32,6 +34,7 @@ public class QueryHandler
         _eventBus = eventBus;
         _logger = logger;
         _operaterProvider = operaterProvider;
+        _configurationApi = configurationApi;
     }
 
     #region Role
@@ -641,5 +644,21 @@ public class QueryHandler
                 Value = p.Id,
                 Text = p.Name
             }).ToList();
+    }
+
+    [EventHandler]
+    public async Task GetI18NDisplayNameAsync(GetI18NDisplayNameQuery query)
+    {
+        var publicSection = _configurationApi.GetPublic();
+
+        foreach (var culture in query.CultureName)
+        {
+            var value = publicSection.GetValue<string>($"{BusinessConsts.I18N_KEY}{culture}:{query.Name}", "");
+            query.Result.Add(new PermissionI18NDisplayNameDto
+            {
+                Key = culture,
+                Value = value ?? string.Empty
+            });
+        }
     }
 }
