@@ -34,6 +34,8 @@ public class PermissionService : ServiceBase
         MapGet(GetAppGlobalNavVisibleAsync);
         MapGet(GetAppGlobalNavVisibleListAsync);
         MapPost(SaveAppGlobalNavVisibleAsync);
+        MapGet(GetI18NDisplayNameAsync, "i18n-display-name");
+        MapPost(SaveI18NDisplayNameAsync, "i18n-display-name");
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)
