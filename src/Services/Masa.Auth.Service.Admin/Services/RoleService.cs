@@ -18,7 +18,7 @@ public class RoleService : RestServiceBase
 
     private async Task<PaginationDto<RoleDto>> GetListAsync([FromServices] IEventBus eventBus, GetRolesDto role)
     {
-        var query = new GetRolesQuery(role.Page, role.PageSize, role.Search, role.Enabled);
+        var query = new GetRolesQuery(role.Page, role.PageSize, role.Search, role.Enabled, role.ClientId);
         await eventBus.PublishAsync(query);
         return query.Result;
     }

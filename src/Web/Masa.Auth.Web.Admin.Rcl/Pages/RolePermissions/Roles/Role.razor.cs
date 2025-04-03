@@ -7,6 +7,7 @@ public partial class Role
 {
     private string? _search;
     private bool? _enabled;
+    private string _clientId = string.Empty;
     private int _page = 1, _pageSize = 20;
 
     public string Search
@@ -26,6 +27,17 @@ public partial class Role
         set
         {
             _enabled = value;
+            _page = 1;
+            GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
+        }
+    }
+
+    public string ClientId
+    {
+        get { return _clientId; }
+        set
+        {
+            _clientId = value;
             _page = 1;
             GetRolesAsync().ContinueWith(_ => InvokeAsync(StateHasChanged));
         }
@@ -102,7 +114,7 @@ public partial class Role
     public async Task GetRolesAsync()
     {
         PopupService.ShowProgressLinear();
-        var request = new GetRolesDto(Page, PageSize, Search, Enabled);
+        var request = new GetRolesDto(Page, PageSize, Search, Enabled, ClientId);
         var response = await RoleService.GetListAsync(request);
         PopupService.HideProgressLinear();
         Roles = response.Items;

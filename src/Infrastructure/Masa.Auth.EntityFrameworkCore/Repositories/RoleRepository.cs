@@ -30,6 +30,7 @@ public class RoleRepository : Repository<AuthDbContext, Role, Guid>, IRoleReposi
             .Include(r => r.Users)
             .ThenInclude(u => u.User)
             .Include(r => r.Teams)
+            .Include(r => r.Clients)
             .AsSplitQuery()
             .FirstOrDefaultAsync()
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);

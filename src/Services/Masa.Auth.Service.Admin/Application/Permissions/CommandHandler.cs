@@ -63,9 +63,10 @@ public class CommandHandler
             }
         }
 
-        role = new Role(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role = new Role(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit, roleDto.Type);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
+        role.BindClients(roleDto.Clients);
         await _roleRepository.AddAsync(role);
         await _unitOfWork.SaveChangesAsync();
         command.Result = role;
@@ -88,9 +89,10 @@ public class CommandHandler
         if (role is null)
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
 
-        role.Update(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit);
+        role.Update(roleDto.Name, roleDto.Code, roleDto.Description, roleDto.Enabled, roleDto.Limit, roleDto.Type);
         role.BindChildrenRoles(roleDto.ChildrenRoles);
         role.BindPermissions(roleDto.Permissions);
+        role.BindClients(roleDto.Clients);
         await _roleRepository.UpdateAsync(role);
         // update and check role limit
         var influenceRoles = new List<Guid> { role.Id };

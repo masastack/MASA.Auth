@@ -4,6 +4,7 @@ using Masa.Auth.Domain.Subjects.Aggregates;
 using Masa.Auth.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329035010_AddRoleClient")]
+    partial class AddRoleClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -386,19 +388,6 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role", "auth");
-                });
-
-            modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleClient", b =>
-                {
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ClientId")
-                        .HasColumnType("text");
-
-                    b.HasKey("RoleId", "ClientId");
-
-                    b.ToTable("RoleClient", "auth");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleRelation", b =>
@@ -2443,13 +2432,33 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                     b.Navigation("LeadingPermission");
                 });
 
-            modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleClient", b =>
+            modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.Role", b =>
                 {
-                    b.HasOne("Masa.Auth.Domain.Permissions.Aggregates.Role", null)
-                        .WithMany("Clients")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.OwnsMany("Masa.Auth.Domain.Permissions.Aggregates.RoleClient", "Clients", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("ClientId")
+                                .IsRequired()
+                                .HasMaxLength(128)
+                                .HasColumnType("character varying(128)");
+
+                            b1.Property<Guid>("RoleId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("RoleId");
+
+                            b1.ToTable("RoleClient", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RoleId");
+                        });
+
+                    b.Navigation("Clients");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleRelation", b =>
@@ -3033,8 +3042,6 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
             modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.Role", b =>
                 {
                     b.Navigation("ChildrenRoles");
-
-                    b.Navigation("Clients");
 
                     b.Navigation("ParentRoles");
 

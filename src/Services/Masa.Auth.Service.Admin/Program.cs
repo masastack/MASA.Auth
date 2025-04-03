@@ -1,24 +1,32 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-await builder.Services.AddMasaStackConfigAsync(MasaStackProject.Auth, MasaStackApp.Service, true);
+var init = true;
+
+#if DEBUG
+init = false;
+#endif
+
+var project = MasaStackProject.Auth;
+var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
+var webId = defaultStackConfig.GetWebId(project);
+var ssoDomain = defaultStackConfig.GetSsoDomain();
+
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, false, null, callerAction =>
+{
+    callerAction.UseClientAuthentication(webId, ssoDomain);
+});
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
-#if DEBUG
-identityServerUrl = "http://localhost:18200";
-//builder.Services.AddDaprStarter(opt =>
-//{
-//    opt.DaprHttpPort = 3600;
-//    opt.DaprGrpcPort = 3601;
-//});
-#endif
+//#if DEBUG
+//identityServerUrl = "http://localhost:18200";
+//#endif
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
@@ -29,7 +37,7 @@ builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
 {
     ServiceNameSpace = builder.Environment.EnvironmentName,
     ServiceVersion = masaStackConfig.Version,
-    ServiceName = masaStackConfig.GetServiceId(MasaStackProject.Auth),
+    ServiceName = masaStackConfig.GetServiceId(project),
     Layer = masaStackConfig.Namespace,
     ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")!
 }, () => masaStackConfig.OtlpUrl);
@@ -52,7 +60,7 @@ builder.Services
         var defaultPolicy = new AuthorizationPolicyBuilder()
             // Remove if you don't need the user to be authenticated
             .RequireAuthenticatedUser()
-            .AddRequirements(new DefaultRuleCodeRequirement(MasaStackProject.Auth))
+            .AddRequirements(new DefaultRuleCodeRequirement(project))
             .Build();
         options.DefaultPolicy = defaultPolicy;
     })
@@ -83,7 +91,7 @@ builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 MapsterAdapterConfig.TypeAdapter();
 
-var clientName = builder.Configuration.GetValue<string>("HOSTNAME") ?? masaStackConfig.GetServiceId(MasaStackProject.Auth);
+var clientName = builder.Configuration.GetValue<string>("HOSTNAME") ?? masaStackConfig.GetServiceId(project);
 
 var redisOption = new RedisConfigurationOptions
 {
@@ -180,7 +188,7 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-await builder.Services.AddStackIsolationAsync(MasaStackProject.Auth.Name);
+await builder.Services.AddStackIsolationAsync(project.Name);
 
 builder.Services.AddStackMiddleware();
 
