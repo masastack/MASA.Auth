@@ -12,6 +12,7 @@ public class UserDomainService : DomainService
     readonly AuthDbContext _dbContext;
     readonly IUnitOfWork _unitOfWork;
     readonly WebhookDomainService _webhookDomainService;
+    readonly IMultiEnvironmentContext _multiEnvironmentContext;
 
     public UserDomainService(
         IUserRepository userRepository,
@@ -22,7 +23,8 @@ public class UserDomainService : DomainService
         RoleDomainService roleDomainService,
         AuthDbContext dbContext,
         IUnitOfWork unitOfWork,
-        WebhookDomainService webhookDomainService)
+        WebhookDomainService webhookDomainService,
+        IMultiEnvironmentContext multiEnvironmentContext)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -33,6 +35,7 @@ public class UserDomainService : DomainService
         _dbContext = dbContext;
         _unitOfWork = unitOfWork;
         _webhookDomainService = webhookDomainService;
+        _multiEnvironmentContext = multiEnvironmentContext;
     }
 
     public async Task AddAsync(User user)
@@ -44,7 +47,11 @@ public class UserDomainService : DomainService
         }
         user = await _userRepository.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
-        await SyncUserAsync(user.Id);
+        await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+            UserId = user.Id
+        });
 
         await _webhookDomainService.TriggerAsync(WebhookEvent.AddUser, user);
     }
@@ -58,7 +65,12 @@ public class UserDomainService : DomainService
         }
         await _userRepository.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
-        await SyncUserAsync(user.Id);
+
+        await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+            UserId = user.Id
+        });
 
         await _webhookDomainService.TriggerAsync(WebhookEvent.UpdateUser, user);
     }
@@ -74,9 +86,7 @@ public class UserDomainService : DomainService
             var staff = user.Staff;
             userModel.StaffDisplayName = staff?.DisplayName;
             userModel.StaffId = staff?.Id;
-
             await _cacheClient.SetAsync(CacheKey.UserKey(userId), userModel);
-
             var result = await _autoCompleteClient.SetBySpecifyDocumentAsync(user.Adapt<UserSelectDto>());
             if (!result.IsValid)
             {

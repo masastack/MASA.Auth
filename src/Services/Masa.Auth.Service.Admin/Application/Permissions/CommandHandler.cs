@@ -128,7 +128,11 @@ public class CommandHandler
 
         foreach (var userId in command.UserIds)
         {
-            await _userDomainService.SyncUserAsync(userId);
+            await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+            {
+                Environment = _multiEnvironmentContext.CurrentEnvironment,
+                UserId = userId
+            });
         }
     }
 
@@ -147,7 +151,11 @@ public class CommandHandler
 
         foreach (var userId in command.UserIds)
         {
-            await _userDomainService.SyncUserAsync(userId);
+            await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+            {
+                Environment = _multiEnvironmentContext.CurrentEnvironment,
+                UserId = userId
+            });
         }
     }
 
