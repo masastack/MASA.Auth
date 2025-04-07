@@ -17,9 +17,9 @@ public class TeamService : ServiceBase
         MapGet(ListAsync);
         MapGet(SelectAsync);
         MapGet(GetTeamRoleSelectAsync);
-        MapPost(CreateAsync);
-        MapPost(UpdateAsync);
-        MapDelete(RemoveAsync);
+        MapPost(CreateAsync).RequireAuthorization();
+        MapPost(UpdateAsync).RequireAuthorization();
+        MapDelete(RemoveAsync).RequireAuthorization();
     }
 
     [MasaAuthorize]

@@ -16,8 +16,8 @@ public class UserService : ServiceBase
         MapGet(GetListByRoleAsync, "getListByRole");
         MapGet(GetClaimValuesAsync, "claim-values/{id}");
         MapGet(GetClaimValuesAsync, "claim-values");
-        MapPost(SaveClaimValuesAsync, "claim-values");
-        MapPost(SaveClaimValueAsync, "claim-value");
+        MapPost(SaveClaimValuesAsync, "claim-values").RequireAuthorization();
+        MapPost(SaveClaimValueAsync, "claim-value").RequireAuthorization();
     }
 
     public async Task<PaginationDto<UserDto>> GetListAsync(IEventBus eventBus, GetUsersDto user)

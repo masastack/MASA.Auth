@@ -17,15 +17,15 @@ public class PermissionService : ServiceBase
         MapGet(GetApiPermissionSelectAsync);
         MapGet(GetMenuPermissionAsync);
         MapGet(GetApiPermissionAsync);
-        MapPost(CreateMenuPermissionAsync);
-        MapPost(CreateApiPermissionAsync);
-        MapDelete(DeleteAsync);
+        MapPost(CreateMenuPermissionAsync).RequireAuthorization();
+        MapPost(CreateApiPermissionAsync).RequireAuthorization();
+        MapDelete(DeleteAsync).RequireAuthorization();
         MapGet(GetMenusAsync, "menus");
         MapGet(AuthorizedAsync);
         MapGet(GetElementPermissionsAsync, "element-permissions");
         MapGet(GetAppPermissionsAsync, "app-permissions");
-        MapPut(AddFavoriteMenuAsync);
-        MapPut(RemoveFavoriteMenuAsync);
+        MapPut(AddFavoriteMenuAsync).RequireAuthorization();
+        MapPut(RemoveFavoriteMenuAsync).RequireAuthorization();
         MapGet(GetFavoriteMenuListAsync, "menu-favorite-list");
         MapGet(GetPermissionsByRoleAsync);
         MapPost(GetPermissionsByTeamAsync);
@@ -33,9 +33,9 @@ public class PermissionService : ServiceBase
         MapPost(SyncRedisAsync);
         MapGet(GetAppGlobalNavVisibleAsync);
         MapGet(GetAppGlobalNavVisibleListAsync);
-        MapPost(SaveAppGlobalNavVisibleAsync);
+        MapPost(SaveAppGlobalNavVisibleAsync).RequireAuthorization();
         MapGet(GetI18NDisplayNameAsync, "i18n-display-name");
-        MapPost(SaveI18NDisplayNameAsync, "i18n-display-name");
+        MapPost(SaveI18NDisplayNameAsync, "i18n-display-name").RequireAuthorization();
     }
 
     private async Task<List<SelectItemDto<int>>> GetTypesAsync(IEventBus eventBus)

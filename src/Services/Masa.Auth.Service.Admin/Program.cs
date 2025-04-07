@@ -5,28 +5,32 @@ var builder = WebApplication.CreateBuilder(args);
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-var init = true;
-
-#if DEBUG
-init = false;
-#endif
+var init = false;
 
 var project = MasaStackProject.Auth;
-var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
-var webId = defaultStackConfig.GetWebId(project);
-var ssoDomain = defaultStackConfig.GetSsoDomain();
 
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, init, null, callerAction =>
+if (init)
 {
-    callerAction.UseClientAuthentication(webId, ssoDomain);
-});
+    var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
+    var webId = defaultStackConfig.GetWebId(project);
+    var ssoDomain = defaultStackConfig.GetSsoDomain();
+    await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, init, null, callerAction =>
+    {
+        callerAction.UseClientAuthentication(webId, ssoDomain);
+    });
+}
+else
+{
+    await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service);
+}
+
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
-//#if DEBUG
-//identityServerUrl = "http://localhost:18200";
-//#endif
+#if DEBUG
+identityServerUrl = "http://localhost:18200";
+#endif
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();

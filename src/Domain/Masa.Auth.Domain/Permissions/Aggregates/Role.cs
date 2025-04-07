@@ -160,7 +160,7 @@ public class Role : FullAggregateRoot<Guid, Guid>
     {
         _clients = _clients.MergeBy(
             clientIds.Select(clientId => new RoleClient(Id, clientId)),
-            item => item.RoleId);
+            item => item.ClientId);
     }
 
     public void AddClients(IEnumerable<string> clientIds)

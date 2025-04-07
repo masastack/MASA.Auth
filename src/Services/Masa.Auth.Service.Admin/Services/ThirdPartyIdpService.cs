@@ -12,8 +12,8 @@ public class ThirdPartyIdpService : RestServiceBase
             builder.RequireAuthorization();
         };
 
-        MapPost(LdapSaveAsync, "ldap/save");
-        MapPost(LdapConnectTestAsync, "ldap/connect-test");
+        MapPost(LdapSaveAsync, "ldap/save").RequireAuthorization();
+        MapPost(LdapConnectTestAsync, "ldap/connect-test").RequireAuthorization();
         MapGet(LdapDetailAsync, "ldap/detail");
         MapGet(ldapOptionsAsync);
         MapGet(GetUserClaims);

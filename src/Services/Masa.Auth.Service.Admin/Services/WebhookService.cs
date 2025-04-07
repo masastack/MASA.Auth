@@ -14,8 +14,8 @@ public class WebhookService : ServiceBase
 
         MapGet(GetAsync);
         MapGet(ListAsync);
-        MapDelete(RemoveAsync);
-        MapPost(SaveAsync);
+        MapDelete(RemoveAsync).RequireAuthorization();
+        MapPost(SaveAsync).RequireAuthorization();
     }
 
     private async Task SaveAsync(IEventBus eventBus, [FromBody] WebhookDetailDto webhookDto)
