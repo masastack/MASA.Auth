@@ -19,6 +19,10 @@ public class AddRoleDto
 
     public List<Guid> ChildrenRoles { get; set; }
 
+    public RoleTypes Type { get; set; }
+
+    public List<string> Clients { get; set; }
+
     public AddRoleDto()
     {
         Name = "";
@@ -26,19 +30,23 @@ public class AddRoleDto
         Enabled = true;
         Permissions = new();
         ChildrenRoles = new();
+        Clients = new();
         Limit = 0;
+        Type = RoleTypes.Domain;
     }
 
 
-    public AddRoleDto(string name, string code, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childrenRoles)
+    public AddRoleDto(string name, string code, string? description, bool enabled, int limit, RoleTypes type, List<SubjectPermissionRelationDto> permissions, List<Guid> childrenRoles, List<string> clients)
     {
         Name = name;
         Code = code;
         Description = description;
         Enabled = enabled;
         Limit = limit;
+        Type = type;
         Permissions = permissions;
         ChildrenRoles = childrenRoles;
+        Clients = clients;
     }
 }
 

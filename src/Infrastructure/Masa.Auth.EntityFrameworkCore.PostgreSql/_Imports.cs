@@ -13,3 +13,4 @@ global using Masa.BuildingBlocks.Data.Contracts;
 global using Masa.Auth.Contracts.Admin.Webhooks;
 global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.Extensions.Configuration;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;

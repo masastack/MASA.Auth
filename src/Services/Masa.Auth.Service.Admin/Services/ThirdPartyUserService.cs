@@ -13,9 +13,9 @@ public class ThirdPartyUserService : RestServiceBase
         };
 
         MapGet(GetAsync, "");
-        MapPost(RegisterAsync, "register");
-        MapPost(LdapUsersAccountAsync, "ldapUsersAccount");
-        MapPost(ThirdPartyUserFieldValueAsync, "thirdPartyUserFieldValue");
+        MapPost(RegisterAsync, "register").RequireAuthorization();
+        MapPost(LdapUsersAccountAsync, "ldapUsersAccount").RequireAuthorization();
+        MapPost(ThirdPartyUserFieldValueAsync, "thirdPartyUserFieldValue").RequireAuthorization();
     }
 
     private async Task<PaginationDto<ThirdPartyUserDto>> GetListAsync(IEventBus eventBus, GetThirdPartyUsersDto tpu)

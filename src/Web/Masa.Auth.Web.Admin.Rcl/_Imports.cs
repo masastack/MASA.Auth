@@ -62,3 +62,4 @@ global using Microsoft.JSInterop;
 global using System.Security.Claims;
 global using System.Text;
 global using System.Linq.Expressions;
+global using ClientTypes = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums.ClientTypes;

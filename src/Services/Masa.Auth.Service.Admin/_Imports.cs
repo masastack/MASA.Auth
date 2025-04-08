@@ -149,6 +149,8 @@ global using System.Security.Cryptography;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
+global using System.Text.Json.Nodes;
 global using System.Text.RegularExpressions;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using IdentityProvider = Masa.Auth.Domain.Subjects.Aggregates.IdentityProvider;
+global using ClientTypes = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums.ClientTypes;

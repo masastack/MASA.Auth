@@ -46,9 +46,18 @@ public class QueryHandler
         if (query.Enabled is not null)
             condition = condition.And(role => role.Enabled == query.Enabled);
         if (!string.IsNullOrEmpty(query.Search))
-            condition = condition.And(user => user.Name.Contains(query.Search));
+            condition = condition.And(role => role.Name.Contains(query.Search));
+        if (!string.IsNullOrEmpty(query.ClientId))
+            condition = condition.And(role => role.Clients.Any(c => c.ClientId == query.ClientId));
 
-        var roleQuery = _authDbContext.Set<Role>().Where(condition);
+        var roleQuery = _authDbContext.Set<Role>().AsQueryable();
+
+        if (!string.IsNullOrEmpty(query.ClientId))
+        {
+            roleQuery = roleQuery.Include(x => x.Clients);
+        }
+
+        roleQuery = roleQuery.Where(condition);
         var total = await roleQuery.LongCountAsync();
         var roles = await roleQuery.OrderByDescending(s => s.ModificationTime)
                                    .ThenByDescending(s => s.CreationTime)

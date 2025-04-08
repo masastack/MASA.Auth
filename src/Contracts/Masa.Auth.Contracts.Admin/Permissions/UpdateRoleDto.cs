@@ -21,29 +21,36 @@ public class UpdateRoleDto
 
     public List<Guid> ChildrenRoles { get; set; }
 
+    public RoleTypes Type { get; set; }
+
+    public List<string> Clients { get; set; }
+
     public UpdateRoleDto()
     {
         Name = "";
         Code = "";
         Permissions = new();
         ChildrenRoles = new();
+        Clients = new();
     }
 
-    public UpdateRoleDto(Guid id, string name,string code, string? description, bool enabled, int limit, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles)
+    public UpdateRoleDto(Guid id, string name,string code, string? description, bool enabled, int limit, RoleTypes type, List<SubjectPermissionRelationDto> permissions, List<Guid> childRoles, List<string> clients)
     {
         Id = id;
         Name = name;
         Code = code;
         Description = description;
         Enabled = enabled;
+        Type = type;
         Permissions = permissions;
         ChildrenRoles = childRoles;
         Limit = limit;
+        Clients = clients;
     }
 
     public static implicit operator UpdateRoleDto(RoleDetailDto role)
     {
-        return new UpdateRoleDto(role.Id, role.Name, role.Code, role.Description, role.Enabled, role.Limit, role.Permissions, role.ChildrenRoles);
+        return new UpdateRoleDto(role.Id, role.Name, role.Code, role.Description, role.Enabled, role.Limit, role.Type, role.Permissions, role.ChildrenRoles, role.Clients);
     }
 }
 

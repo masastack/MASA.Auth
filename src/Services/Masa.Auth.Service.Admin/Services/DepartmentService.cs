@@ -15,9 +15,9 @@ public class DepartmentService : ServiceBase
         MapGet(GetAsync);
         MapGet(ListAsync);
         MapGet(CountAsync);
-        MapPost(SaveAsync);
-        MapPost(CopyAsync);
-        MapDelete(RemoveAsync);
+        MapPost(SaveAsync).RequireAuthorization();
+        MapPost(CopyAsync).RequireAuthorization();
+        MapDelete(RemoveAsync).RequireAuthorization();
     }
 
     private async Task SaveAsync([FromServices] IEventBus eventBus,

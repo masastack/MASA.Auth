@@ -17,10 +17,10 @@ public class ClientSerivce : ServiceBase
         MapGet(GetClientTypeListAsync);
         MapGet(GetClientSelectAsync);
         MapGet(GetClientSelectForCustomLoginAsync);
-        MapPost(AddClientAsync);
-        MapPost(UpdateClientAsync);
-        MapDelete(RemoveClientAsync);
-        MapPost(SyncOidcAsync);
+        MapPost(AddClientAsync).RequireAuthorization();
+        MapPost(UpdateClientAsync).RequireAuthorization();
+        MapDelete(RemoveClientAsync).RequireAuthorization();
+        MapPost(SyncOidcAsync).RequireAuthorization();
     }
 
     private async Task<PaginationDto<ClientDto>> GetListAsync(IEventBus eventBus, GetClientPaginationDto clientPaginationDto)

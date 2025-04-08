@@ -9,12 +9,15 @@ public class GetRolesDto : Pagination<GetRolesDto>
 
     public bool? Enabled { get; set; }
 
-    public GetRolesDto(int page, int pageSize, string search, bool? enabled)
+    public string ClientId { get; set; }
+
+    public GetRolesDto(int page, int pageSize, string search, bool? enabled, string clientId)
     {
         Page = page;
         PageSize = pageSize;
         Search = search;
         Enabled = enabled;
+        ClientId = clientId;
     }
 }
 

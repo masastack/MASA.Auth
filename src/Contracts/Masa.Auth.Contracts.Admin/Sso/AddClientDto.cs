@@ -6,7 +6,7 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 public class AddClientDto
 {
     #region Basic
-    public ClientTypes ClientType { get; set; } = ClientTypes.Web;
+    public BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums.ClientTypes ClientType { get; set; } = ClientTypes.Web;
 
     public string ClientId { get; set; } = string.Empty;
 
