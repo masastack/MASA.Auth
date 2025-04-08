@@ -22,7 +22,11 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpdateUserAuthorizationAsync(UpdateUserAuthorizationCommand updateUserAuthorizationCommand)
     {
-        await _userDomainService.SyncUserAsync(updateUserAuthorizationCommand.User.Id);
+        await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+            UserId = updateUserAuthorizationCommand.User.Id
+        });
     }
 
     [EventHandler]
@@ -73,12 +77,20 @@ public class UserCacheCommandHandler
     [EventHandler(99)]
     public async Task UpdateUserBasicInfoAsync(UpdateUserBasicInfoCommand command)
     {
-        await _userDomainService.SyncUserAsync(command.User.Id);
+        await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+            UserId = command.User.Id
+        });
     }
 
     [EventHandler(99)]
     public async Task UpsertUserAsync(UpsertUserCommand command)
     {
-        await _userDomainService.SyncUserAsync(command.Result.Id);
+        await BackgroundJobManager.EnqueueAsync(new SyncUserArgs()
+        {
+            Environment = _multiEnvironmentContext.CurrentEnvironment,
+            UserId = command.Result.Id
+        });
     }
 }
