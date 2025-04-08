@@ -5,24 +5,15 @@ var builder = WebApplication.CreateBuilder(args);
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-var init = false;
-
 var project = MasaStackProject.Auth;
 
-if (init)
+var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
+var webId = defaultStackConfig.GetWebId(project);
+var ssoDomain = defaultStackConfig.GetSsoDomain();
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, true, null, callerAction =>
 {
-    var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
-    var webId = defaultStackConfig.GetWebId(project);
-    var ssoDomain = defaultStackConfig.GetSsoDomain();
-    await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, init, null, callerAction =>
-    {
-        callerAction.UseClientAuthentication(webId, ssoDomain);
-    });
-}
-else
-{
-    await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service);
-}
+    callerAction.UseClientAuthentication(webId, ssoDomain);
+});
 
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
