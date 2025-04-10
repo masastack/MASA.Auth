@@ -6,9 +6,13 @@ namespace Masa.Auth.Domain.DynamicRoles.Aggregates;
 public class DynamicRuleCondition : ValueObject
 {
     public LogicalOperator LogicalOperator { get; private set; }
+
     public string FieldName { get; private set; } = default!;
+
     public OperatorType OperatorType { get; private set; }
+
     public string Value { get; private set; } = string.Empty;
+
     public DynamicRoleDataType DataType { get; private set; }
 
     public DynamicRuleCondition(LogicalOperator logicalOperator, string fieldName, OperatorType operatorType, string value, DynamicRoleDataType dataType)
