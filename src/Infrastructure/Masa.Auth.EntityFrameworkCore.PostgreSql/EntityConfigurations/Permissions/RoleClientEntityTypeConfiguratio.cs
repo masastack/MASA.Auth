@@ -9,6 +9,6 @@ public class RoleClientEntityTypeConfiguratio : IEntityTypeConfiguration<RoleCli
     {
         builder.HasKey(rc => new { rc.RoleId, rc.ClientId });
         builder.Property(rc => rc.RoleId).IsRequired();
-        builder.Property(rc => rc.ClientId).IsRequired();
+        builder.Property(rc => rc.ClientId).IsRequired().HasMaxLength(128);
     }
 }

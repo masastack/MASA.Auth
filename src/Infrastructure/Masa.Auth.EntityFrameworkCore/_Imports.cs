@@ -32,3 +32,5 @@ global using Microsoft.Extensions.Logging;
 global using Masa.Auth.Domain.Webhooks.Repositories;
 global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using System.Text.Json;
+global using Masa.Auth.Domain.DynamicRoles.Aggregates;
+global using Masa.Auth.Domain.DynamicRoles.Repositories;
