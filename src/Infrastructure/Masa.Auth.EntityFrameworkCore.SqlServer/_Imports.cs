@@ -14,3 +14,4 @@ global using Masa.Auth.Contracts.Admin.Webhooks;
 global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.Extensions.Configuration;
 global using Masa.Auth.EntityFrameworkCore;
+global using Masa.Auth.Domain.DynamicRoles.Aggregates;

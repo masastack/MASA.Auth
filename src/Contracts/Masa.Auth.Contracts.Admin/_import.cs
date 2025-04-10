@@ -45,4 +45,3 @@ global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using Util.Reflection.Expressions;
 global using Util.Reflection.Expressions.Abstractions;
-global using ClientTypes = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums.ClientTypes;
