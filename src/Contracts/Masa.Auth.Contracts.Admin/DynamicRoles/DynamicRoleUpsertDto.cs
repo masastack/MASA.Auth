@@ -19,5 +19,5 @@ public class DynamicRoleUpsertDto
 
     public DateTime ModificationTime { get; set; }
 
-    public List<DynamicRuleConditionDto> Conditions { get; set; } = new();
+    public List<DynamicRuleConditionUpsertDto> Conditions { get; set; } = new();
 }

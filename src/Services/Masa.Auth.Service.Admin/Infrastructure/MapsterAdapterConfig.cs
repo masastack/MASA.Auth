@@ -45,8 +45,16 @@ public static class MapsterAdapterConfig
 
         TypeAdapterConfig<Permission, CachePermission>.NewConfig().Map(cache => cache.ApiPermissions, permission => permission.AffiliationPermissionRelations.Select(p => p.AffiliationPermissionId));
 
-        TypeAdapterConfig<DynamicRole, DynamicRoleDto>.NewConfig().MapToConstructor(true);
-        TypeAdapterConfig<DynamicRoleUpsertDto, DynamicRole>.NewConfig().MapToConstructor(true);
-        TypeAdapterConfig<DynamicRuleConditionDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true);
+        TypeAdapterConfig<DynamicRoleUpsertDto, DynamicRole>.NewConfig()
+            .MapToConstructor(true)
+            .Map(dest => dest.Conditions, src =>
+                src.Conditions.Select((dto, index) => new DynamicRuleCondition(
+                    dto.LogicalOperator,
+                    dto.FieldName,
+                    dto.OperatorType,
+                    dto.Value,
+                    dto.DataType,
+                    index)).ToList());
+        TypeAdapterConfig<DynamicRuleConditionUpsertDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true);
     }
 }

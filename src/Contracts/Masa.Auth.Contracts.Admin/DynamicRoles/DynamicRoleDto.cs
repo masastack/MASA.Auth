@@ -26,4 +26,11 @@ public class DynamicRoleDto
     public string? Modifier { get; set; }
 
     public List<DynamicRuleConditionDto> Conditions { get; set; } = new();
+
+    public void SortConditions()
+    {
+        if (Conditions == null) return;
+
+        Conditions = Conditions.OrderBy(x => x.Order).ToList();
+    }
 }

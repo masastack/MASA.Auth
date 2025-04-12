@@ -15,13 +15,16 @@ public class DynamicRuleCondition : ValueObject
 
     public DynamicRoleDataType DataType { get; private set; }
 
-    public DynamicRuleCondition(LogicalOperator logicalOperator, string fieldName, OperatorType operatorType, string value, DynamicRoleDataType dataType)
+    public int Order { get; private set; }
+
+    public DynamicRuleCondition(LogicalOperator logicalOperator, string fieldName, OperatorType operatorType, string value, DynamicRoleDataType dataType, int order)
     {
         LogicalOperator = logicalOperator;
         FieldName = fieldName;
         OperatorType = operatorType;
         Value = value;
         DataType = dataType;
+        Order = order;
     }
 
     protected override IEnumerable<object> GetEqualityValues()
@@ -29,6 +32,12 @@ public class DynamicRuleCondition : ValueObject
         yield return LogicalOperator;
         yield return FieldName;
         yield return OperatorType;
+        yield return Value;
         yield return DataType;
+    }
+
+    public void UpdateOrder(int newOrder)
+    {
+        Order = newOrder;
     }
 }
