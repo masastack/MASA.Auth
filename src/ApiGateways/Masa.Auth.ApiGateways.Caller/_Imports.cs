@@ -24,6 +24,7 @@ global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Contracts.Admin.Webhooks;
 global using Masa.BuildingBlocks.Service.Caller;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.StackSdks.Caller;
 global using Masa.Contrib.Service.Caller.HttpClient;
