@@ -22,7 +22,10 @@ public class QueryHandler
         var entity = await _repository.FindAsync(x => x.Id == query.Id);
         MasaArgumentException.ThrowIfNull(entity, _i18n.T("DynamicRole"));
 
-        query.Result = entity.Adapt<DynamicRoleDto>();
+        var dto = entity.Adapt<DynamicRoleDto>();
+        dto.SortConditions();
+
+        query.Result = dto;
     }
 
     [EventHandler]
@@ -46,6 +49,7 @@ public class QueryHandler
             var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(x.Creator, x.Modifier);
             dto.Creator = creator;
             dto.Modifier = modifier;
+            dto.SortConditions();
             return dto;
         }));
 

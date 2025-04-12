@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Contracts.Admin.DynamicRoles;
 
-public class DynamicRuleConditionDto
+public class DynamicRuleConditionUpsertDto
 {
     public LogicalOperator LogicalOperator { get; set; }
 
@@ -14,6 +14,4 @@ public class DynamicRuleConditionDto
     public string Value { get; set; } = string.Empty;
 
     public DynamicRoleDataType DataType { get; set; }
-
-    public int Order { get; set; }
 }
