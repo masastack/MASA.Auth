@@ -10,7 +10,7 @@ var project = MasaStackProject.Auth;
 var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
 var webId = defaultStackConfig.GetWebId(project);
 var ssoDomain = defaultStackConfig.GetSsoDomain();
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, false, null, callerAction =>
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, true, null, callerAction =>
 {
     callerAction.UseClientAuthentication(webId, ssoDomain);
 });
