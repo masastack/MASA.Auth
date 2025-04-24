@@ -1,8 +1,6 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Reflection;
-
 namespace Masa.Auth.Domain.Subjects.Aggregates;
 
 public class User : FullAggregateRoot<Guid, Guid>

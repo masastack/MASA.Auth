@@ -1,10 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-
-using Humanizer;
-using System.Linq;
-
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public static class MapsterAdapterConfig
