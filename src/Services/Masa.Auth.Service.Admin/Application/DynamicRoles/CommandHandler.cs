@@ -7,15 +7,13 @@ public class CommandHandler
 {
     private readonly IDynamicRoleRepository _repository;
     private readonly II18n<DefaultResource> _i18n;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserRepository _userRepository;
     private readonly IUserContext _userContext;
 
-    public CommandHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, IHttpContextAccessor httpContextAccessor, IUserRepository userRepository, IUserContext userContext)
+    public CommandHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, IUserRepository userRepository, IUserContext userContext)
     {
         _repository = repository;
         _i18n = i18n;
-        _httpContextAccessor = httpContextAccessor;
         _userRepository = userRepository;
         _userContext = userContext;
     }
