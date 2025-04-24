@@ -9,11 +9,11 @@ public class DynamicRuleConditionDto
 
     public string FieldName { get; set; } = string.Empty;
 
-    public OperatorType OperatorType { get; set; }
+    public OperatorTypes OperatorType { get; set; }
 
     public string Value { get; set; } = string.Empty;
 
-    public DynamicRoleDataType DataType { get; set; }
+    public DynamicRoleDataTypes DataType { get; set; }
 
     public int Order { get; set; }
 }

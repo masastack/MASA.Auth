@@ -8,12 +8,14 @@ public class QueryHandler
     private readonly IDynamicRoleRepository _repository;
     private readonly II18n<DefaultResource> _i18n;
     private readonly OperaterProvider _operaterProvider;
+    private readonly IUserRepository _userRepository;
 
-    public QueryHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, OperaterProvider operaterProvider)
+    public QueryHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, OperaterProvider operaterProvider, IUserRepository userRepository)
     {
         _repository = repository;
         _i18n = i18n;
         _operaterProvider = operaterProvider;
+        _userRepository = userRepository;
     }
 
     [EventHandler]
@@ -33,7 +35,7 @@ public class QueryHandler
     {
         var options = query.Options;
         var condition = await CreateFilteredPredicate(options);
-        var resultList = await _repository.GetPaginatedListAsync(condition, new PaginatedOptions
+        var pageList = await _repository.GetPaginatedListAsync(condition, new PaginatedOptions
         {
             Page = options.Page,
             PageSize = options.PageSize,
@@ -43,17 +45,26 @@ public class QueryHandler
             }
         });
 
-        var dtos = await Task.WhenAll(resultList.Result.Select(async x =>
+        var creatorIds = pageList.Result.Select(x => x.Creator).Distinct().ToList();
+        var modifierIds = pageList.Result.Select(x => x.Modifier).Distinct().ToList();
+        var userIds = creatorIds.Union(modifierIds).ToList();
+
+        var users = await _userRepository.AsQueryable().AsNoTracking()
+            .Where(x => userIds.Contains(x.Id))
+            .ToListAsync();
+
+        var dtos = pageList.Result.Select(x =>
         {
             var dto = x.Adapt<DynamicRoleDto>();
-            var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(x.Creator, x.Modifier);
-            dto.Creator = creator;
-            dto.Modifier = modifier;
+            var creator = users.FirstOrDefault(u => u.Id == x.Creator)?.DisplayName;
+            var modifier = users.FirstOrDefault(u => u.Id == x.Modifier)?.DisplayName;
+            dto.Creator = creator ?? string.Empty;
+            dto.Modifier = modifier ?? string.Empty;
             dto.SortConditions();
             return dto;
-        }));
+        });
 
-        var result = new PaginationDto<DynamicRoleDto>(resultList.Total, dtos.ToList());
+        var result = new PaginationDto<DynamicRoleDto>(pageList.Total, dtos.ToList());
         query.Result = result;
     }
 
