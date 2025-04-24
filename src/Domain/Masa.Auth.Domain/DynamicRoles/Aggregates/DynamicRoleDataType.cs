@@ -24,7 +24,6 @@ public class DynamicRoleDataType : Enumeration
 
     public static DynamicRoleDataType StartNew(string type) => type switch
     {
-
         nameof(UserInfo) => new UserInfoData(),
         nameof(UserClaim) => new UserClaimData(),
         _ => new DynamicRoleDataType()
