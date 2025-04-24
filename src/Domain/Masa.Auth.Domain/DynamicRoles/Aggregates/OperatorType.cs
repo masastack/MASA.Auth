@@ -56,7 +56,6 @@ public class OperatorType : Enumeration
 
     public static OperatorType StartNew(string type) => type switch
     {
-
         nameof(GreaterThan) => new GreaterThanOperator(),
         nameof(GreaterThanOrEqual) => new GreaterThanOrEqualOperator(),
         nameof(LessThan) => new LessThanOperator(),
