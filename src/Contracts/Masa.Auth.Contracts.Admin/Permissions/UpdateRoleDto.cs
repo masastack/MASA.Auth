@@ -29,6 +29,7 @@ public class UpdateRoleDto
     {
         Name = "";
         Code = "";
+        Type = RoleTypes.Domain;
         Permissions = new();
         ChildrenRoles = new();
         Clients = new();
