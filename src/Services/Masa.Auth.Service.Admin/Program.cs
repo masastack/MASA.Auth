@@ -10,7 +10,11 @@ var project = MasaStackProject.Auth;
 var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
 var webId = defaultStackConfig.GetWebId(project);
 var ssoDomain = defaultStackConfig.GetSsoDomain();
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, true, null, callerAction =>
+var init = true;
+#if DEBUG
+init = false;
+#endif
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, init, null, callerAction =>
 {
     callerAction.UseClientAuthentication(webId, ssoDomain);
 });
@@ -19,9 +23,9 @@ var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
-#if DEBUG
-identityServerUrl = "http://localhost:18200";
-#endif
+//#if DEBUG
+//identityServerUrl = "http://localhost:18200";
+//#endif
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
@@ -119,6 +123,17 @@ await builder.Services.AddSchedulerJobAsync();
 builder.Services.AddBackgroundJob(options =>
 {
     options.UseInMemoryDatabase();
+});
+
+// 添加 CORS 服务
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("https://localhost:18100") // 允许的来源
+              .AllowAnyHeader()                      // 允许任何请求头
+              .AllowAnyMethod();                     // 允许任何 HTTP 方法
+    });
 });
 
 builder.Services
@@ -241,6 +256,9 @@ if (!app.Environment.IsProduction())
 
 app.UseStaticFiles();
 app.UseRouting();
+
+// 使用 CORS 中间件
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
