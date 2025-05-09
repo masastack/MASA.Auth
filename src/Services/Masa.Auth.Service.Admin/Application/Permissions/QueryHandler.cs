@@ -350,6 +350,7 @@ public class QueryHandler
                     Url = m.Url.EnsureLeadingSlash(),
                     Icon = m.Icon,
                     MatchPattern = m.MatchPattern,
+                    Legend = m.Legend,
                     Children = GetMenus(allMenus, m.Id)
                 }).ToList();
         }
