@@ -26,6 +26,8 @@ public class CachePermission
 
     public string MatchPattern { get; set; } = string.Empty;
 
+    public string Legend { get; set; } = string.Empty;
+
     public Guid ParentId { get; set; }
 
     public bool Enabled { get; set; }
