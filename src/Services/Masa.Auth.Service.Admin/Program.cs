@@ -125,14 +125,13 @@ builder.Services.AddBackgroundJob(options =>
     options.UseInMemoryDatabase();
 });
 
-// 添加 CORS 服务
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("https://localhost:18100") // 允许的来源
-              .AllowAnyHeader()                      // 允许任何请求头
-              .AllowAnyMethod();                     // 允许任何 HTTP 方法
+        policy.WithOrigins("https://localhost:18100") //support wasm client 
+              .AllowAnyHeader()                      
+              .AllowAnyMethod();                     
     });
 });
 
@@ -257,7 +256,6 @@ if (!app.Environment.IsProduction())
 app.UseStaticFiles();
 app.UseRouting();
 
-// 使用 CORS 中间件
 app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
