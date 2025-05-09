@@ -9,11 +9,11 @@ public class DynamicRuleCondition : ValueObject
 
     public string FieldName { get; private set; } = default!;
 
-    public OperatorType OperatorType { get; private set; }
+    public OperatorType OperatorType { get; private set; } = default!;
 
     public string Value { get; private set; } = string.Empty;
 
-    public DynamicRoleDataType DataType { get; private set; }
+    public DynamicRoleDataType DataType { get; private set; } = default!;
 
     public int Order { get; private set; }
 
@@ -39,5 +39,24 @@ public class DynamicRuleCondition : ValueObject
     public void UpdateOrder(int newOrder)
     {
         Order = newOrder;
+    }
+
+    public bool EvaluateCondition(User user)
+    {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        var value = GetValueFromUser(user);
+
+        return EvaluateCondition(value);
+    }
+
+    private string? GetValueFromUser(User user)
+    {
+        return DataType.GetValueFromUser(user, FieldName);
+    }
+
+    private bool EvaluateCondition(string? data)
+    {
+        return OperatorType.EvaluateCondition(data, Value);
     }
 }

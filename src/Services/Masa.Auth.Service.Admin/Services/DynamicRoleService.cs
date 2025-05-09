@@ -46,4 +46,20 @@ public class DynamicRoleService : ServiceBase
         var command = new DeleteDynamicRoleCommand(id);
         await eventBus.PublishAsync(command);
     }
+
+    [RoutePattern("{id}/validate", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<List<DynamicRoleValidateDto>> ValidateAsync(IEventBus eventBus, Guid id)
+    {
+        var command = new ValidateDynamicRoleCommand(new List<Guid> { id });
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
+
+    [RoutePattern("validate", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<List<DynamicRoleValidateDto>> ValidateAsync(IEventBus eventBus, DynamicRoleValidateInput input)
+    {
+        var command = new ValidateDynamicRoleCommand(input.RoleIds);
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
 }

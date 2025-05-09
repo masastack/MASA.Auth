@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public static class MapsterAdapterConfig
@@ -51,10 +50,15 @@ public static class MapsterAdapterConfig
                 src.Conditions.Select((dto, index) => new DynamicRuleCondition(
                     dto.LogicalOperator,
                     dto.FieldName,
-                    dto.OperatorType,
+                    Enumeration.FromValue<OperatorType>((int)dto.OperatorType),
                     dto.Value,
-                    dto.DataType,
+                     Enumeration.FromValue<DynamicRoleDataType>((int)dto.DataType),
                     index)).ToList());
-        TypeAdapterConfig<DynamicRuleConditionUpsertDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true);
+        TypeAdapterConfig<DynamicRuleConditionUpsertDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true).Map(dest => dest.OperatorType, src => Enumeration.FromValue<OperatorType>((int)src.OperatorType));
+
+        TypeAdapterConfig<OperatorType, OperatorTypes>.NewConfig().MapWith(src => (OperatorTypes)src.Id);
+        TypeAdapterConfig<OperatorTypes, OperatorType>.NewConfig().MapWith(src => Enumeration.FromValue<OperatorType>((int)src));
+        TypeAdapterConfig<DynamicRoleDataType, DynamicRoleDataTypes>.NewConfig().MapWith(src => (DynamicRoleDataTypes)src.Id);
+        TypeAdapterConfig<DynamicRoleDataTypes, DynamicRoleDataType>.NewConfig().MapWith(src => Enumeration.FromValue<DynamicRoleDataType>((int)src));
     }
 }
