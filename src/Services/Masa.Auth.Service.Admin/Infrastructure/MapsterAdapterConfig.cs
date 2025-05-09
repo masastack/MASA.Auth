@@ -21,7 +21,7 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<DateOnly?, DateTime?>.NewConfig().MapWith(src => src.HasValue ? src.Value.ToDateTime(TimeOnly.Parse("00:00")) : null);
         TypeAdapterConfig<DateTime?, DateOnly?>.NewConfig().MapWith(src => src.HasValue ? DateOnly.FromDateTime(src.Value) : null);
         TypeAdapterConfig<string, ClientGrantType>.NewConfig().MapWith(item => new ClientGrantType(item));
-        TypeAdapterConfig<ClientDetailDto, Client>.NewConfig().IgnoreIf((src, dest) => dest.AllowedScopes.Any(), dest => dest.AllowedScopes);
+        //TypeAdapterConfig<ClientDetailDto, Client>.NewConfig().IgnoreIf((src, dest) => dest.AllowedScopes.Any(), dest => dest.AllowedScopes);
 
         TypeAdapterConfig<LdapDetailDto, LdapOptions>.ForType()
             .Map(dest => dest.ServerPort, src => src.IsLdaps ? 0 : src.ServerPort)

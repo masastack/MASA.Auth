@@ -10,7 +10,11 @@ var project = MasaStackProject.Auth;
 var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
 var webId = defaultStackConfig.GetWebId(project);
 var ssoDomain = defaultStackConfig.GetSsoDomain();
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, true, null, callerAction =>
+var init = true;
+#if DEBUG
+init = false;
+#endif
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, init, null, callerAction =>
 {
     callerAction.UseClientAuthentication(webId, ssoDomain);
 });
@@ -119,6 +123,16 @@ await builder.Services.AddSchedulerJobAsync();
 builder.Services.AddBackgroundJob(options =>
 {
     options.UseInMemoryDatabase();
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("https://localhost:18100") //support wasm client 
+              .AllowAnyHeader()                      
+              .AllowAnyMethod();                     
+    });
 });
 
 builder.Services
@@ -241,6 +255,8 @@ if (!app.Environment.IsProduction())
 
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
