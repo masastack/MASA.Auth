@@ -24,8 +24,7 @@ public class CommandHandler
         ICustomLoginRepository customLoginRepository,
         IUserClaimExtendRepository userClaimExtendRepository,
         IEventBus eventBus,
-        SyncCache syncCache,
-        MasaDbContext dbContext)
+        SyncCache syncCache)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;

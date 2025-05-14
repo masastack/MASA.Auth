@@ -24,6 +24,55 @@ namespace Masa.Auth.Service.Admin.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Masa.Auth.Domain.DynamicRoles.Aggregates.DynamicRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DynamicRole", "auth");
+                });
+
             modelBuilder.Entity("Masa.Auth.Domain.GlobalNavs.Aggregates.GlobalNavVisible", b =>
                 {
                     b.Property<Guid>("Id")
@@ -255,6 +304,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Legend")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MatchPattern")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -375,9 +428,28 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
                     b.HasKey("Id");
 
                     b.ToTable("Role", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleClient", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClientId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("RoleId", "ClientId");
+
+                    b.ToTable("RoleClient", "auth");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleRelation", b =>
@@ -2375,6 +2447,52 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasDiscriminator().HasValue("User");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Domain.DynamicRoles.Aggregates.DynamicRole", b =>
+                {
+                    b.OwnsMany("Masa.Auth.Domain.DynamicRoles.Aggregates.DynamicRuleCondition", "Conditions", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("DataType")
+                                .HasColumnType("int");
+
+                            b1.Property<Guid>("DynamicRoleId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("FieldName")
+                                .IsRequired()
+                                .HasMaxLength(128)
+                                .HasColumnType("nvarchar(128)");
+
+                            b1.Property<int>("LogicalOperator")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("OperatorType")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Order")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(512)
+                                .HasColumnType("nvarchar(512)");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("DynamicRoleId");
+
+                            b1.ToTable("DynamicRuleCondition", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DynamicRoleId");
+                        });
+
+                    b.Navigation("Conditions");
+                });
+
             modelBuilder.Entity("Masa.Auth.Domain.Organizations.Aggregates.DepartmentStaff", b =>
                 {
                     b.HasOne("Masa.Auth.Domain.Organizations.Aggregates.Department", "Department")
@@ -2421,6 +2539,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("AffiliationPermission");
 
                     b.Navigation("LeadingPermission");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleClient", b =>
+                {
+                    b.HasOne("Masa.Auth.Domain.Permissions.Aggregates.Role", null)
+                        .WithMany("Clients")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.RoleRelation", b =>
@@ -3004,6 +3131,8 @@ namespace Masa.Auth.Service.Admin.Migrations
             modelBuilder.Entity("Masa.Auth.Domain.Permissions.Aggregates.Role", b =>
                 {
                     b.Navigation("ChildrenRoles");
+
+                    b.Navigation("Clients");
 
                     b.Navigation("ParentRoles");
 

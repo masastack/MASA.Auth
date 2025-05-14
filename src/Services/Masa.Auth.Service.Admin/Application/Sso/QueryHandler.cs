@@ -305,12 +305,17 @@ public class QueryHandler
         var userClaim = await _userClaimRepository.GetDetailAsync(query.UserClaimId);
         if (userClaim is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_CLAIM_NOT_EXIST);
 
+        var userClaimExtend = await _authDbContext.Set<UserClaimExtend>()
+            .AsNoTracking().FirstOrDefaultAsync(u => u.UserClaimId == query.UserClaimId);
+
         query.Result = new UserClaimDetailDto()
         {
             Id = userClaim.Id,
             Name = userClaim.Name,
             Description = userClaim.Description,
             UserClaimType = StandardUserClaims.Claims.ContainsKey(userClaim.Name) ? UserClaimType.Standard : UserClaimType.Customize
+            DataSourceType = userClaimExtend?.DataSourceType ?? DataSourceTypes.None,
+            DataSourceValue = userClaimExtend?.DataSourceValue ?? ""
         };
     }
 
@@ -322,10 +327,22 @@ public class QueryHandler
                                 .ThenByDescending(userClaim => userClaim.CreationTime)
                                 .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description))
                                 .ToListAsync();
+
+        var userClaimIds = userClaimSelect.Select(uc => uc.Id).ToList();
+        var userClaimExtends = await _authDbContext.Set<UserClaimExtend>().AsNoTracking()
+            .Where(uce => userClaimIds.Contains(uce.UserClaimId))
+            .ToListAsync();
+
         userClaimSelect.ForEach(userClaim =>
         {
-            if (StandardUserClaims.Claims.ContainsKey(userClaim.Name)) userClaim.UserClaimType = UserClaimType.Standard;
-            else userClaim.UserClaimType = UserClaimType.Customize;
+            if (StandardUserClaims.Claims.ContainsKey(userClaim.Name))
+                userClaim.UserClaimType = UserClaimType.Standard;
+            else
+                userClaim.UserClaimType = UserClaimType.Customize;
+            var userClaimExtend = userClaimExtends.FirstOrDefault(ue => ue.UserClaimId == userClaim.Id);
+
+            userClaim.DataSourceValue = userClaimExtend?.DataSourceValue ?? "";
+            userClaim.DataSourceType = userClaimExtend?.DataSourceType ?? DataSourceTypes.None;
         });
         query.Result = userClaimSelect;
     }

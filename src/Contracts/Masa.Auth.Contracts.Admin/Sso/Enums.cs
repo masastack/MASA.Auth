@@ -35,6 +35,9 @@ public enum CspLevel
     Two = 1
 }
 
+/// <summary>
+/// 数据源类型
+/// </summary>
 public enum DataSourceTypes
 {
     /// <summary>

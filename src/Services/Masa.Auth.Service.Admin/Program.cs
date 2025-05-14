@@ -23,9 +23,9 @@ var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
-#if DEBUG
-identityServerUrl = "http://localhost:18200";
-#endif
+//#if DEBUG
+//identityServerUrl = "http://localhost:18200";
+//#endif
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
@@ -130,8 +130,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
         policy.WithOrigins("https://localhost:18100") //support wasm client 
-              .AllowAnyHeader()                      
-              .AllowAnyMethod();                     
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 

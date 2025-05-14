@@ -5,6 +5,10 @@ namespace Masa.Auth.Contracts.Admin.Sso;
 
 public class UserClaimSelectDto : UserClaimDto
 {
+    public DataSourceTypes DataSourceType { get; set; }
+
+    public string DataSourceValue { get; set; } = "";
+
     public UserClaimSelectDto(Guid id, string name, string description) : base(id, name, description, default)
     {
     }
