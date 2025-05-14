@@ -56,6 +56,7 @@ public class CommandHandler
         {
             HashClientSharedSecret(secret);
         });
+
         var client = await _clientRepository.GetDetailAsync(id)
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CLIENT_NOT_EXIST);
         //Contrary to DDD

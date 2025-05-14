@@ -7,11 +7,15 @@ public class CommandHandler
 {
     private readonly IDynamicRoleRepository _repository;
     private readonly II18n<DefaultResource> _i18n;
+    private readonly IUserRepository _userRepository;
+    private readonly IUserContext _userContext;
 
-    public CommandHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n)
+    public CommandHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, IUserRepository userRepository, IUserContext userContext)
     {
         _repository = repository;
         _i18n = i18n;
+        _userRepository = userRepository;
+        _userContext = userContext;
     }
 
     [EventHandler]
@@ -39,5 +43,25 @@ public class CommandHandler
         MasaArgumentException.ThrowIfNull(entity, _i18n.T("DynamicRole"));
 
         await _repository.RemoveAsync(entity);
+    }
+
+    [EventHandler]
+    public async Task ValidateAsync(ValidateDynamicRoleCommand command)
+    {
+        if (command.RoleIds == null || !command.RoleIds.Any())
+        {
+            command.Result = new();
+            return;
+        }
+
+        var userId = _userContext.GetUserId<Guid>();
+        var user = await _userRepository.AsQueryable().Include(x=>x.UserClaims).FirstOrDefaultAsync(x=>x.Id == userId);
+        MasaArgumentException.ThrowIfNull(user, _i18n.T(nameof(User)));
+
+        var entitys = await _repository.GetListAsync(x => command.RoleIds.Contains(x.Id));
+
+        var dtos = entitys.Select(x=> new DynamicRoleValidateDto(x.Id, x.EvaluateConditions(user)));
+
+        command.Result = dtos.ToList();
     }
 }
