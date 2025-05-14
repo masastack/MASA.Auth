@@ -11,7 +11,9 @@ public class UpdateUserClaimDto : AddUserClaimDto
     {
     }
 
-    public UpdateUserClaimDto(Guid id, string name, string description, UserClaimType userClaimType) : base(name, description, userClaimType)
+    public UpdateUserClaimDto(Guid id, string name, string description, UserClaimType userClaimType,
+        DataSourceTypes dataSourceType = DataSourceTypes.None, string dataSourceValue = "")
+        : base(name, description, userClaimType, dataSourceType, dataSourceValue)
     {
         Id = id;
     }

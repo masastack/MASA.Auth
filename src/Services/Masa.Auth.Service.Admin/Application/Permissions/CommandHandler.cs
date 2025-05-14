@@ -11,7 +11,6 @@ public class CommandHandler
     private readonly RoleDomainService _roleDomainService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly PermissionDomainService _permissionDomainService;
-    private readonly UserDomainService _userDomainService;
     private readonly IConfigurationApi _configurationApi;
     private readonly IMultiEnvironmentContext _multiEnvironmentContext;
     private readonly IConfigurationApiManage _configurationApiManage;
@@ -23,7 +22,6 @@ public class CommandHandler
         RoleDomainService roleDomainService,
         IUnitOfWork unitOfWork,
         PermissionDomainService permissionDomainService,
-        UserDomainService userDomainService,
         IConfigurationApi configurationApi,
         IMultiEnvironmentContext multiEnvironmentContext,
         IConfigurationApiManage configurationApiManage)
@@ -34,7 +32,6 @@ public class CommandHandler
         _unitOfWork = unitOfWork;
         _roleDomainService = roleDomainService;
         _permissionDomainService = permissionDomainService;
-        _userDomainService = userDomainService;
         _configurationApi = configurationApi;
         _multiEnvironmentContext = multiEnvironmentContext;
         _configurationApiManage = configurationApiManage;

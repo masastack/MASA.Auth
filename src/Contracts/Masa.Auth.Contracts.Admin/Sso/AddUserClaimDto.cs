@@ -11,15 +11,30 @@ public class AddUserClaimDto
 
     public UserClaimType UserClaimType { get; set; }
 
+    /// <summary>
+    /// 数据源类型
+    /// </summary>
+    public DataSourceTypes DataSourceType { get; set; } = DataSourceTypes.None;
+
+    /// <summary>
+    /// 数据源值
+    /// 当DataSourceType为FixedJson时，存储JSON字符串，如：[{key:123,value:233}]
+    /// 当DataSourceType为Api时，存储API地址
+    /// </summary>
+    public string DataSourceValue { get; set; } = "";
+
     public AddUserClaimDto()
     {
     }
 
-    public AddUserClaimDto(string name, string description, UserClaimType userClaimType)
+    public AddUserClaimDto(string name, string description, UserClaimType userClaimType,
+        DataSourceTypes dataSourceType = DataSourceTypes.None, string dataSourceValue = "")
     {
         Name = name;
         Description = description;
         UserClaimType = userClaimType;
+        DataSourceType = dataSourceType;
+        DataSourceValue = dataSourceValue;
     }
 }
 
