@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+using static Masa.Auth.Contracts.Admin.UserClaimValuesDto;
+
 namespace Masa.Auth.ApiGateways.Caller.Services.Subjects;
 
 public class UserService : ServiceBase
@@ -56,9 +58,9 @@ public class UserService : ServiceBase
         return await GetAsync<VerifyUserRepeatDto, bool>(nameof(VerifyRepeatAsync), user);
     }
 
-    public async Task<Dictionary<string, string>> GetClaimValuesAsync(Guid userId)
+    public async Task<List<ClaimValue>> GetClaimValuesAsync(Guid userId)
     {
-        return await GetAsync<Dictionary<string, string>>($"ClaimValues/{userId}");
+        return await GetAsync<List<ClaimValue>>($"ClaimValues/{userId}");
     }
 
     public async Task SaveClaimValuesAsync(UserClaimValuesDto userClaimValuesDto)
